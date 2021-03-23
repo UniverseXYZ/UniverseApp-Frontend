@@ -1,0 +1,125 @@
+@import '../../assets/scss/variables';
+
+header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .nav {
+        ul {
+            display: flex;
+            align-items: center;
+
+            li {
+                position: relative;
+
+                &:last-child {
+                    margin-left: 16px;
+                }
+                
+                a {
+                    padding: 14px 16px;
+                    text-transform: uppercase;
+                    font-family: $sharpGroteskFont;
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 12px;
+                    color: $black;
+                }
+
+                .connect__wallet__btn {
+                    padding: 15px;
+                    text-align: center;
+                    width: 200px;
+                    background: 
+                        linear-gradient($white, $white) padding-box,
+                        linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+                    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                    border-radius: 12px;
+                    border: 2px solid transparent;
+                    font-family: $sharpGroteskFont;
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    color: $black;
+                }
+
+                .dropdown {
+                    position: absolute;
+                    left: 0;
+                    top: 60px;
+                    width: 100%;
+                    background: $white;
+                    border-radius: 10px;
+                    filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
+
+                    &__header {
+                        position: relative;
+                        padding: 15px 20px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        &::before {
+                            content: '';
+                            height: 15px;
+                            width: 15px;
+                            background-color: $white;
+                            position: absolute;
+                            top: -7px;
+                            right: 20px;
+                            transform: rotate(45deg);
+                        }
+
+                        .diamond {
+                            border: 1px solid #E6E6E6;
+                            border-radius: 50%;
+                            padding: 5px 6px;
+                        }
+                        .ethereum__address {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 16px;
+                            color: $black;
+                        }
+                        .copy {
+                            cursor: pointer;
+                        }
+                    }
+
+                    &__body {
+                        button {
+                            width: 100%;
+                            padding-left: 20px;
+                            padding-right: 20px;
+                            background-color: $white;
+                            text-align: left;
+                            font-family: $sharpGroteskFont;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 10px;
+                            text-transform: uppercase;
+
+                            &:first-child {
+                                color: $black;
+                                padding-top: 24px;
+                                padding-bottom: 15px;
+                            }
+                            &:last-child {
+                                color: #FF4949;
+                                padding-top: 15px;
+                                padding-bottom: 26px;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+}

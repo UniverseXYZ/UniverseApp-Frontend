@@ -1,0 +1,20 @@
+@import '../../assets/scss/variables';
+
+.light-button {
+   padding: 15px 26px 15px 26px;
+   background: $primary-bg-color;
+   box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+   border-radius: 12px;
+   align-items: center;
+}
+.light-border-button{
+   padding: 15px 26px 15px 26px;
+   border: 1px solid;
+   border-image-source: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+   border-radius: 12px;
+   background: linear-gradient(#fff,#fff) padding-box,
+   linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+}
+button:disabled{
+   background: #E6E6E6;
+}

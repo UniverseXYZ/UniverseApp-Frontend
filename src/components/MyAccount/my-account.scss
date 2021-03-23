@@ -1,0 +1,113 @@
+@import '../../assets/scss/variables';
+
+.my-account {
+    margin: 0 165px 0 165px;
+
+    .my-account-title {
+        margin-top: 60px;
+        margin-bottom: 16px;
+        font-weight: 600;
+        font-size: 32px;
+        line-height: 140%;
+        color: black;
+    }
+    .my-account-description {
+        width: 511px;
+        font-size: 18px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 40px;
+    }
+
+    .account-grid-container{
+        display: grid;
+        grid-template-columns: auto;
+
+        .account-name{
+            display: flex;
+            width: 100%;
+            height: 80px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+            button{
+                width: 120px;
+            }
+            
+        }
+
+        .account-cover-image {
+            display: flex;
+            width: 100%;
+            height: 120px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            
+            .account-picture{
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                margin-right: 127px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+
+                img{
+                    padding-left: 23px;
+                    padding-top: 23px;
+                }
+            }
+
+            button{
+                width: 157px;
+            }
+        }
+
+        .account-website-link {
+            display: flex;
+            width: 100%;
+            height: 80px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+            button{
+                width: 120px;
+            }
+        }
+
+        .account-grid-name{
+            display: flex;
+            width: 200px;
+            align-items: center;
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .account-grid-input {
+            display: flex;
+            align-items: center;
+            width: 725px;
+
+            input{
+                width: 540px;
+                height: 50px;
+                border: 1px solid #00EAEA;
+                border-radius: 12px;
+            }
+        }
+
+        .account-grid-button {
+            display: grid;
+            align-items: center;
+            justify-content: end;
+            width: 186px;
+
+            button {
+                height: 42px;
+                background: $white;
+                border: 2px solid #00EAEA;
+                border-radius: 12px;
+
+                img{
+                    padding-left: 5px;
+                }
+            }
+        }
+    }
+}

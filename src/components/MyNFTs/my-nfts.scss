@@ -1,0 +1,188 @@
+@import '../../assets/scss/variables';
+
+.mynfts__page {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+
+        h1.title {
+            font-family: $sharpGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            color: $black;
+        }
+
+        button {
+            background: $primary-bg-color;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            font-family: $sharpGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $black;
+            padding: 15px 25px;
+        }
+    }
+
+    &__body {
+        ul.tabs {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+
+            li {
+                margin-right: 40px;
+                font-family: $sharpGroteskFont;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+                text-transform: uppercase;
+                color: rgba(0, 0, 0, 0.4);
+                padding-bottom: 9px;
+                cursor: pointer;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+
+                &.active {
+                    color: $black;
+                    border-bottom: 1px solid $black;
+                }
+            }
+        }
+
+        .tab__wallet {
+            .filtration {
+                position: relative;
+                display: grid;
+                grid-template-columns: auto 255px;
+                grid-gap: 30px;
+
+                .filter__by__collection {
+                    &__label {
+                        margin-bottom: 15px;
+
+                        label {
+                            font-family: $sharpGroteskFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            letter-spacing: 0.2px;
+                            color: $black;
+                            margin-right: 15px;
+                        }
+                        button {
+                            background: none;
+                            border: none;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 14px;
+                            text-decoration: underline;
+                            color: $black;
+                        }
+                    }
+                    &__input {
+                        input {
+                            background: $white;
+                            border: 1px solid #D4D4D4;
+                            box-sizing: border-box;
+                            border-radius: 12px;
+                            width: 100%;
+                            padding: 15px;
+
+                            &::placeholder {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 16px;
+                                color: #CACACA;
+                            }
+                        }
+                    }
+                }
+
+                .search__by__name {
+                    &__label {
+                        margin-bottom: 15px;
+
+                        label {
+                            font-family: $sharpGroteskFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            letter-spacing: 0.2px;
+                            color: $black;
+                            margin-right: 15px;
+                        }
+                    }
+                    &__input {
+                        input {
+                            background: $white;
+                            border: 1px solid #D4D4D4;
+                            box-sizing: border-box;
+                            border-radius: 12px;
+                            width: 100%;
+                            padding: 15px;
+
+                            &::placeholder {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 16px;
+                                color: #CACACA;
+                            }
+                        }
+                    }
+                }
+
+                .collections__dropdown {
+                    background: $white;
+                    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
+                    border-radius: 12px;
+                    padding: 30px;
+                    display: flex;
+                    align-items: center;
+                    position: absolute;
+                    left: 0;
+                    top: 90px;
+                    width: 100%;
+
+                    button {
+                        background: rgba(0, 0, 0, 0.02);
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        border-radius: 10px;
+                        padding: 6px 14px;
+                        display: flex;
+                        align-items: center;
+
+                        span {
+                            font-family: $sharpGroteskFont;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 12px;
+                            text-transform: uppercase;
+                            color: $black;
+                            margin-left: 15px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .tab__saved__nfts {
+
+        }
+
+        .tab__saved__collections {
+
+        }
+    }
+}

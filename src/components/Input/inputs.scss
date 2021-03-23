@@ -1,0 +1,34 @@
+@import '../../assets/scss/variables';
+
+.inp{
+  background: #FFFFFF;
+  border: 1px solid #D4D4D4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  height: 50px;
+}
+.inp-light-border{
+  border: 2px solid;
+  border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
+  background: linear-gradient($white, $white) padding-box,
+  linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+
+}
+.intup-l{
+  display: inline-grid;
+}
+.inp-label{
+  padding-bottom: 5px;
+}
+.error-inp{
+  border: 1px solid red!important;
+}
+.error-message{
+  font-family: Space Grotesk;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 150%;
+  color: #FF4949;
+    
+}
