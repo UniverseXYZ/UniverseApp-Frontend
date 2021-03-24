@@ -1,6 +1,52 @@
 @import '../../assets/scss/variables';
 
 .mynfts__page {
+
+    .empty__nfts {
+        h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            text-align: center;
+            color: $black;
+            margin-bottom: 130px;
+        }
+        h3 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 22px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 16px;
+        }
+        p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.6);
+            max-width: 440px;
+            margin: 0 auto 40px;
+        }
+        button {
+            display: block;
+            margin: 0 auto;
+            background: $primary-bg-color;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $black;
+            padding: 15px 25px;
+        }
+    }
+
     &__header {
         display: flex;
         justify-content: space-between;
@@ -104,6 +150,16 @@
                                 font-size: 16px;
                                 color: #CACACA;
                             }
+
+                            &.focused {
+                                background: 
+                                    linear-gradient($white, $white) padding-box,
+                                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                                border: 1px solid transparent;
+                            }
+                            &.focused::placeholder {
+                                color: transparent;
+                            }
                         }
                     }
                 }
@@ -138,6 +194,16 @@
                                 font-size: 16px;
                                 color: #CACACA;
                             }
+
+                            &:focus {
+                                background: 
+                                    linear-gradient($white, $white) padding-box,
+                                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                                border: 1px solid transparent;
+                            }
+                            &:focus::placeholder {
+                                color: transparent;
+                            }
                         }
                     }
                 }
@@ -149,10 +215,13 @@
                     padding: 30px;
                     display: flex;
                     align-items: center;
+                    flex-wrap: wrap;
+                    gap: 12px;
                     position: absolute;
                     left: 0;
                     top: 90px;
                     width: 100%;
+                    z-index: 1;
 
                     button {
                         background: rgba(0, 0, 0, 0.02);
@@ -162,6 +231,26 @@
                         padding: 6px 14px;
                         display: flex;
                         align-items: center;
+                        position: relative;
+
+                        &.selected {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                            border: 1px solid transparent;
+
+                            &::after {
+                                content: '\2716';
+                                background-color: $black;
+                                color: $white;
+                                position: absolute;
+                                top: -7px;
+                                right: -7px;
+                                border-radius: 50%;
+                                padding: 0px 3px;
+                            }
+                        }
 
                         span {
                             font-family: $sharpGroteskMediumFont;
@@ -172,6 +261,144 @@
                             color: $black;
                             margin-left: 15px;
                         }
+                    }
+                }
+            }
+
+            .selected__filters {
+                margin-top: 40px;
+                margin-bottom: 40px;
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+
+                > div {
+                    background: 
+                        linear-gradient($white, $white) padding-box,
+                        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                    border: 1px solid transparent;
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 6px 14px;
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+
+                    span {
+                        font-family: $sharpGroteskMediumFont;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        color: $black;
+                        margin-left: 15px;
+                    }
+
+                    button {
+                        background-color: $black;
+                        color: $white;
+                        position: absolute;
+                        top: -7px;
+                        right: -7px;
+                        border-radius: 50%;
+                        padding: 0px 3px;
+                    }
+                }
+            }
+
+            .nfts__lists {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-gap: 30px;
+
+                .nft__box {
+                    background: $white;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 12px;
+                    position: relative;
+
+                    &__image {
+                        margin-bottom: 12px;
+                    }
+
+                    &__name {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+
+                        h3 {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                        }
+                        span {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                    }
+
+                    &__footer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        .collection__details {
+                            img {
+                                height: 20px;
+                                width: 20px;
+                                object-fit: cover;
+                            }
+                            span {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: 300;
+                                font-size: 12px;
+                                color: $black;
+                                margin-left: 6px;
+                            }
+                        }
+                        .collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                        }
+                    }
+
+                    &__highlight__one {
+                        position: absolute;
+                        bottom: -8px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-left: 1px solid rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom-left-radius: 150px;
+                        border-bottom-right-radius: 150px;
+                        width: 95%;
+                        height: 8px;
+                        left: 8px;
+                    }
+                    &__highlight__two {
+                        position: absolute;
+                        bottom: -16px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-left: 1px solid rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom-left-radius: 150px;
+                        border-bottom-right-radius: 150px;
+                        width: 90%;
+                        height: 8px;
+                        left: 16px;
                     }
                 }
             }
