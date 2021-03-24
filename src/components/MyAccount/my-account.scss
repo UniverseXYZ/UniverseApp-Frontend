@@ -32,6 +32,19 @@
             button{
                 width: 120px;
             }
+            .account-name-default-text{
+                font-size: 16px;
+                line-height: 20px;
+                color: rgba(0, 0, 0, 0.4);
+            }
+            .account-profile-name{
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+            }
+            h5{
+                font-size: 14px;
+            }
             
         }
 
@@ -45,7 +58,7 @@
                 width: 80px;
                 height: 80px;
                 border-radius: 50%;
-                margin-right: 127px;
+                // margin-right: 127px;
                 border: 1px solid rgba(0, 0, 0, 0.1);
 
                 img{
@@ -57,6 +70,18 @@
             button{
                 width: 157px;
             }
+
+            p{
+                display: flex;
+                text-align: right;
+                font-size: 14px;
+                line-height: 22px;
+                font-weight: 500;
+                color: rgba(0, 0, 0, 0.6);
+            }
+            h5{
+                font-size: 14px;
+            }
         }
 
         .account-website-link {
@@ -65,15 +90,26 @@
             height: 80px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            line-height: 20px;
 
             button{
                 width: 120px;
+            }
+            .link-default-text{
+                color: rgba(0, 0, 0, 0.4);
+            }
+            link-account-text{
+                color: $black;
+            }
+            h5{
+                font-size: 14px;
             }
         }
 
         .account-grid-name{
             display: flex;
-            width: 200px;
+            width: 285px;
             align-items: center;
             font-size: 14px;
             line-height: 22px;
@@ -82,14 +118,21 @@
         .account-grid-input {
             display: flex;
             align-items: center;
-            width: 725px;
+            width: 660px;
 
             input{
                 width: 540px;
                 height: 50px;
-                border: 1px solid #00EAEA;
+                // border: 1px solid #00EAEA;
                 border-radius: 12px;
             }
+            h5{
+                font-size: 16px;
+            }
+            
+        }
+        .cover{
+            justify-content: space-between;
         }
 
         .account-grid-button {
@@ -99,10 +142,10 @@
             width: 186px;
 
             button {
-                height: 42px;
-                background: $white;
-                border: 2px solid #00EAEA;
-                border-radius: 12px;
+                // height: 42px;
+                // background: $white;
+                // border: 2px solid #00EAEA;
+                // border-radius: 12px;
 
                 img{
                     padding-left: 5px;
