@@ -1,23 +1,17 @@
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import AppContext from '../../ContextAPI';
 
-const ItemsPerPageDropdown = ({perPage, setPerPage}) => {
+const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
+    const { handleClickOutside } = useContext(AppContext);
     const [showDropdown, setShowDropdown] = useState(false);
     const itemsPerPage = [8, 12, 24, 48, 96];
     const ref = useRef(null);
 
-    const handleClickOutside = (event) => {
-        if (!event.target.classList.contains('items__per__page')) {
-            if (ref.current && !ref.current.contains(event.target)) {
-                setShowDropdown(false);
-            }
-        }
-    };
-
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true);
+        document.addEventListener('click', (e) => handleClickOutside(e, 'items__per__page', ref, setShowDropdown), true);
         return () => {
-            document.removeEventListener('click', handleClickOutside, true);
+            document.removeEventListener('click', (e) => handleClickOutside(e, 'items__per__page', ref, setShowDropdown), true);
         };
     })
 

@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
 import Lists from './Lists';
 import '../Pagination/pagination.scss';
 import ItemsPerPageDropdown from '../Pagination/ItemsPerPageDropdown';
 import Pagination from '../Pagination';
+import AppContext from '../../ContextAPI';
 
-const Wallet = ({data}) => {
+const Wallet = ({ data }) => {
+    const { handleClickOutside } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [offset, setOffset] = useState(0);
     const [perPage, setPerPage] = useState(8);
@@ -73,18 +75,10 @@ const Wallet = ({data}) => {
         },
     ]);
 
-    const handleClickOutside = (event) => {
-        if (!event.target.classList.contains('target')) {
-            if (ref.current && !ref.current.contains(event.target)) {
-                setIsCollectionDropdownOpened(false);
-            }
-        }
-    };
-
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true);
+        document.addEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
         return () => {
-            document.removeEventListener('click', handleClickOutside, true);
+            document.removeEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
         };
     })
 

@@ -1,12 +1,12 @@
-import nft1Image from '../../assets/images/nft1.png';
-import nft2Image from '../../assets/images/nft2.png';
-import nft3Image from '../../assets/images/nft3.png';
-import nft4Image from '../../assets/images/nft4.png';
-import nft5Image from '../../assets/images/nft5.png';
-import nft6Image from '../../assets/images/nft6.png';
-import nft7Image from '../../assets/images/nft7.png';
-import nft8Image from '../../assets/images/nft8.png';
-import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
+import nft1Image from '../assets/images/nft1.png';
+import nft2Image from '../assets/images/nft2.png';
+import nft3Image from '../assets/images/nft3.png';
+import nft4Image from '../assets/images/nft4.png';
+import nft5Image from '../assets/images/nft5.png';
+import nft6Image from '../assets/images/nft6.png';
+import nft7Image from '../assets/images/nft7.png';
+import nft8Image from '../assets/images/nft8.png';
+import testCollectionAvatar from '../assets/images/test-collection-avatar.svg';
 
 export const PLACEHOLDER_NFTS = [
     {

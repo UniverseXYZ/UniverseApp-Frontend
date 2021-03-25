@@ -27,3 +27,68 @@
         @content;
     }
 }
+
+// Custom Checkbox
+
+@mixin css-checkbox(
+        $size,
+        $selectedColor,
+        $checkColor,
+        $valign: 'middle'
+    ) {
+	display: none;
+
+	&:checked + i {
+		background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+		border-color: transparent;
+
+		&:hover:after { opacity: 1; }
+
+		&:after {
+			opacity: 1;
+            border-color: $white;
+		}
+	}
+
+    + i {
+        box-sizing: border-box;
+
+        &:before, &:after {
+            box-sizing: border-box;
+        }
+    }
+	+ i {
+		position: relative;
+		display: inline-block;
+		top: -1px;
+		width: #{$size};
+		height: #{$size};
+		margin: 0;
+        vertical-align: #{$valign};
+		border: 1px solid #E0E0E0;
+        transition: background 200ms ease;
+        border-radius: 8px;    
+		background: $white;
+		font-size: #{$size};
+		cursor: pointer;
+        margin-right: 10px;
+
+		&:hover:after { opacity: .2; }
+
+		&:after {
+			content: '';
+			opacity: 0;
+			transform: translateZ(1px) rotate(-45deg);
+            outline: 1px solid transparent;
+			position: absolute;
+			top: 22%;
+			left: 15%;
+			width: .68em;
+			height: .4em;
+			border: .15em solid #222;
+			border-top: none;
+			border-right: none;
+			background: rgba(0, 0, 0, 0);
+		}
+	}
+}

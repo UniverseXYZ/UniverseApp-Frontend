@@ -1,29 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import diamondIcon from '../../assets/images/diamond.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import AppContext from '../../ContextAPI';
 
 const Nav = () => {
-    const PLACEHOLDER_ETHEREUM_ADDRESS = '0x...7923';
+    const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
     const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-    const [isWalletConnected, setIsWalletConnected] = useState(true);
     const [copied, setCopied] = useState(false);
     const history = useHistory();
     const ref = useRef(null);
-
-    const handleClickOutside = (event) => {
-        if (!event.target.classList.contains('dropdown__opened')) {
-            if (ref.current && !ref.current.contains(event.target)) {
-                setIsDropdownOpened(false);
-            }
-        }
-    };
+    const PLACEHOLDER_ETHEREUM_ADDRESS = '0x...7923';
 
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true);
+        document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsDropdownOpened), true);
         return () => {
-            document.removeEventListener('click', handleClickOutside, true);
+            document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsDropdownOpened), true);
         };
     })
 
