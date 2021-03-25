@@ -1,9 +1,17 @@
+import React, {useRef, useEffect} from 'react';
 import './inputs.scss';
+
 const Input = ({ label, error, className, ...restProps }) => {
+    const ref = useRef(null);
+
+    useEffect(() => {
+        ref.current.focus();
+    })
+
     return (
         <div className="intup-l">
             {label && <label class='inp-label'>{label}</label>}
-            <input className={`${className} ${error ? 'error-inp' : ''}`} {...restProps} />
+            <input ref={ref} className={`${className} ${error ? 'error-inp' : ''}`} {...restProps} />
             {error && <p className="error-message">{error}</p>}
         </div>
     )
