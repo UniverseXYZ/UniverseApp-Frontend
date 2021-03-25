@@ -1,27 +1,24 @@
 @import '../../assets/scss/variables';
 
 .my-account {
-    margin: 0 165px 0 165px;
-
     .my-account-title {
-        margin-top: 60px;
         margin-bottom: 16px;
+        font-family: $sharpGroteskSemiBoldFont;
         font-weight: 600;
         font-size: 32px;
         line-height: 140%;
         color: black;
     }
     .my-account-description {
-        width: 511px;
+        max-width: 511px;
+        font-family: $spaceGroteskFont;
         font-size: 18px;
         line-height: 150%;
         color: rgba(0, 0, 0, 0.6);
         margin-bottom: 40px;
     }
 
-    .account-grid-container{
-        display: grid;
-        grid-template-columns: auto;
+    .account-grid-container {
 
         .account-name{
             display: flex;
@@ -31,6 +28,28 @@
 
             button{
                 width: 120px;
+                &.light-border-button {
+                    background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                    border: 1px solid transparent;
+                }
+            }
+            .account-name-default-text{
+                font-family: $spaceGroteskFont;
+                font-size: 16px;
+                line-height: 20px;
+                color: rgba(0, 0, 0, 0.4);
+            }
+            .account-profile-name{
+                font-family: $spaceGroteskFont;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+            }
+            h5{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
             }
             .account-name-default-text{
                 font-size: 16px;
@@ -58,17 +77,33 @@
                 width: 80px;
                 height: 80px;
                 border-radius: 50%;
-                // margin-right: 127px;
                 border: 1px solid rgba(0, 0, 0, 0.1);
 
-                img{
+                .default-img{
                     padding-left: 23px;
                     padding-top: 23px;
+                    
+                }
+                .cover-img{
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    object-fit: cover;
                 }
             }
 
-            button{
-                width: 157px;
+            p{
+                display: flex;
+                text-align: right;
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+                line-height: 22px;
+                font-weight: 500;
+                color: rgba(0, 0, 0, 0.6);
+            }
+            h5{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
             }
 
             p{
@@ -90,11 +125,28 @@
             height: 80px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            font-family: $spaceGroteskFont;
             font-size: 16px;
             line-height: 20px;
 
-            button{
+            button {
                 width: 120px;
+                &.light-border-button {
+                    background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                    border: 1px solid transparent;
+                }
+            }
+            .link-default-text{
+                color: rgba(0, 0, 0, 0.4);
+            }
+            .link-account-text{
+                color: $black;
+            }
+            h5{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
             }
             .link-default-text{
                 color: rgba(0, 0, 0, 0.4);
@@ -111,6 +163,7 @@
             display: flex;
             width: 285px;
             align-items: center;
+            font-family: $spaceGroteskFont;
             font-size: 14px;
             line-height: 22px;
         }
@@ -123,10 +176,15 @@
             input{
                 width: 540px;
                 height: 50px;
-                // border: 1px solid #00EAEA;
                 border-radius: 12px;
+                padding: 15px;
+                background: 
+                        linear-gradient($white, $white) padding-box,
+                        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 2px solid transparent;
             }
             h5{
+                font-family: $spaceGroteskFont;
                 font-size: 16px;
             }
             
@@ -142,11 +200,12 @@
             width: 186px;
 
             button {
-                // height: 42px;
-                // background: $white;
-                // border: 2px solid #00EAEA;
-                // border-radius: 12px;
-
+                &.light-border-button {
+                    background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                    border: 1px solid transparent;
+                }
                 img{
                     padding-left: 5px;
                 }

@@ -3,7 +3,7 @@ import Button from '../Button'
 import Input from '../Input'
 import pencilIcon from '../../assets/images/pencil.png';
 import defaultImage from '../../assets/images/default-image.png'
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const MyAccount = () => {
 
@@ -12,21 +12,26 @@ const MyAccount = () => {
 
     const [accountName, setAccountName] = useState("")
     const [linkName, setLinkName] = useState("")
+    const [coverImage, setCoverImage] = useState(null)
+
+    const inputFile = useRef(null)
+
     const changeDisplay = () =>{
-        if (displayName.buttonName == "EDIT") {
-            // setDisplayName(previousDisplayName => ({ ...previousDisplayName,  buttonName:"SAVE" }))
-            setDisplayName({buttonName:"SAVE", buttonStyle:"light-button", inputStyle:"inp-light-border", textHide:true, nameHide:true, imjHide:true})
-            // setAccountName("")
+        if (displayName.buttonName === "EDIT") {
+            setDisplayName({buttonName:"SAVE", buttonStyle:"light-button", inputStyle:"inp-light-border", textHide:true, nameHide:true, imgHide:true})
         }
-        else if(accountName.length > 0) {
+        else if (accountName.length > 0) {
             setDisplayName({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", textHide:true, nameHide:false, imgHide:false})
+        }
+        else {
+            setDisplayName({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", textHide:false, nameHide:true, imgHide:false})
         }
     }
 
     const changeWebsiteLink = () =>{
-        if (websiteLink.buttonName == "EDIT") {
+        if (websiteLink.buttonName === "EDIT") {
             setWebsiteLink({buttonName:"SAVE", buttonStyle:"light-button", inputStyle:"inp-light-border", hide:true, textHide:true})
-            if (linkName.length == 0) {
+            if (linkName.length === 0) {
                 setLinkName("universe.xyz/")
             }
             else{
@@ -37,11 +42,15 @@ const MyAccount = () => {
             setWebsiteLink({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", hide:false, textHide:true})
             setLinkName(linkName.substring(13))
         }
+        else {
+            setWebsiteLink({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", hide:false, textHide:false})
+            setLinkName("")
+        }
     }
 
     return (
-        <div className="my-account">
-            <h1 className="my-account-title">My Account</h1>
+        <div className="container my-account">
+            <h1 className="my-account-title">My account</h1>
             <p className="my-account-description">You can set preffered display name, create your branded profile URL and manage other personal settings</p>
 
             <div className="account-grid-container">
@@ -56,7 +65,7 @@ const MyAccount = () => {
                     </div>
                     <div className="account-grid-button">
                         <Button className={displayName.buttonStyle} onClick={()=>changeDisplay()} >{displayName.buttonName}
-                        <img hidden={displayName.imgHide} src={pencilIcon}/></Button>
+                        <img hidden={displayName.imgHide} src={pencilIcon} alt='Edit Icon' /></Button>
                     </div>
                 </div>
 
@@ -66,13 +75,16 @@ const MyAccount = () => {
                     </div>
                     <div className="account-grid-input cover">
                         <div className="account-picture">
-                            <img src={defaultImage}/>
+                            {coverImage ? 
+                                <img className="cover-img" src={URL.createObjectURL(coverImage)} alt='Cover' />
+                            :
+                                <img className="default-img" src={defaultImage} alt='Cover' />}
                         </div>
                         <p>We recommend an image of a least 400x400px. Gifs works too</p>
-                        <input className="inp-disable"></input>
+                        <input type="file" className="inp-disable" ref={inputFile} onChange={(e)=>setCoverImage(e.target.files[0])}></input>
                     </div>
                     <div className="account-grid-button">
-                        <Button className="light-border-button">CHOOSE FILE</Button>
+                        <Button className="light-border-button" onClick={()=>inputFile.current.click()}>CHOOSE FILE</Button>
                     </div>
                 </div>
 
@@ -88,7 +100,7 @@ const MyAccount = () => {
                     </div>
                     <div className="account-grid-button">
                         <Button className={websiteLink.buttonStyle} onClick={()=>changeWebsiteLink()}>{websiteLink.buttonName}
-                        <img hidden={websiteLink.hide} src={pencilIcon}/></Button>
+                        <img hidden={websiteLink.hide} src={pencilIcon} alt='Edit Icon' /></Button>
                     </div>
                 </div>
             </div>
