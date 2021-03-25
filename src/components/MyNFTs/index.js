@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import './my-nfts.scss';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
 import Modal from '../Modal';
-import { PLACEHOLDER_NFTS } from './NFTsDummyData';
+import { PLACEHOLDER_NFTS } from '../../dummydata/NFTsDummyData';
+import AppContext from '../../ContextAPI';
 
 const MyNFTs = () => {
-    const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-    const [showModal, setShowModal] = useState(false);
+    const { savedNfts, selectedTabIndex, setSelectedTabIndex, showModal, setShowModal } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const handleClose = () => setShowModal(false);
+
+    const checkSelectedSavedNfts = () => {
+        const res = savedNfts.filter(nft => nft.selected)
+
+        return res.length ? false : true;
+    }
         
     return (
         <div className='container mynfts__page'>
@@ -18,7 +24,12 @@ const MyNFTs = () => {
                 <>
                     <div className='mynfts__page__header'>
                         <h1 className='title'>My NFTs</h1>
-                        <button onClick={() => setShowModal(true)}>Mint NFT</button>
+                        <div>
+                            {selectedTabIndex === 1 &&
+                                <button disabled={checkSelectedSavedNfts()}>Mint selected</button>
+                            }
+                            <button onClick={() => setShowModal(true)}>Mint NFT</button>
+                        </div>
                         <Modal open={showModal} onClose={handleClose}></Modal>
                     </div>
 
