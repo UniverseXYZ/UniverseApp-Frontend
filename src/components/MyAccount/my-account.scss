@@ -52,16 +52,19 @@
                 font-size: 14px;
             }
             .account-name-default-text{
+                font-family: $spaceGroteskFont;
                 font-size: 16px;
                 line-height: 20px;
                 color: rgba(0, 0, 0, 0.4);
             }
             .account-profile-name{
+                font-family: $spaceGroteskFont;
                 font-size: 16px;
                 line-height: 20px;
                 color: $black;
             }
             h5{
+                font-family: $spaceGroteskFont;
                 font-size: 14px;
             }
             
@@ -109,12 +112,14 @@
             p{
                 display: flex;
                 text-align: right;
+                font-family: $spaceGroteskFont;
                 font-size: 14px;
                 line-height: 22px;
                 font-weight: 500;
                 color: rgba(0, 0, 0, 0.6);
             }
             h5{
+                font-family: $spaceGroteskFont;
                 font-size: 14px;
             }
         }
@@ -155,6 +160,7 @@
                 color: $black;
             }
             h5{
+                font-family: $spaceGroteskFont;
                 font-size: 14px;
             }
         }

@@ -202,3 +202,324 @@ line-height: 22px;
   text-align: center;
   text-transform: uppercase;
 }
+
+
+.nft-collectible {
+  margin-left: 100px;
+  margin-top: 20px;
+
+  .nft-coll-title{
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 36px;
+    letter-spacing: 0.2px;      
+    color: $black;
+  }
+
+  .nft-coll-content {
+    display: flex;
+    margin-top: 40px;
+
+    h5{
+      font-family: $spaceGroteskFont;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+      .nft-coll-upload{
+        width: 445px;
+        margin-right: 30px; 
+
+        .nft-coll-upload-file{
+          text-align: center;
+          width: 445px;
+          height: 169px;            
+          border: 1px dashed #D4D4D4;
+          border-radius: 12px;
+
+          p{
+            margin-top: 48px;
+            margin-bottom: 11px;
+            font-family: $spaceGroteskFont;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 22px;
+            color: rgba(0, 0, 0, 0.6);
+          }
+
+          button{
+            &.light-border-button {
+              background: 
+              linear-gradient($white, $white) padding-box,                    
+              linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+              border: 1px solid transparent;
+            }
+          }
+        }
+
+        .nft-coll-name {
+          margin-top: 20px;
+          width: 445px;
+          height: 73px;
+
+          input{
+            &.inp {
+              width: 445px;
+            }
+          }
+        }
+
+        .nft-coll-description {
+          margin-top: 20px;
+          width: 445px;
+          height: 119px;
+
+          input{
+            &.inp {
+              width: 445px;
+              height: 95px;
+            }
+          }
+        }
+
+        .nft-coll-editions {
+          position: relative;
+          margin-top: 20px;
+          width: 445px;            
+          height: 73px;
+
+          .info-text {
+            position: absolute;
+            background: $white;                
+            color: $black;
+            box-shadow: 0px 10px 20px 
+              rgba(136, 120, 172, 0.2);
+              border-radius: 12px;
+              width: 194px;
+              height: 88px;
+              padding: 16px;
+              font-size: 12px;
+              font-family: $spaceGroteskFont;
+              top: -88px;
+              left: 48px;
+          }
+
+          input{
+            &.inp {
+              width: 445px;
+            }
+          }
+        }
+
+        .nft-coll-buttons {
+          margin-top: 40px;
+          width: 457px;
+          height: 42px;
+
+          button{
+            &.light-button {
+              width: 211;
+              height: 42px;
+              margin-right: 21px;
+            }
+
+            &.light-border-button {
+              background: 
+                linear-gradient($white, $white) padding-box,
+                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 1px solid transparent;
+                width: 225px;
+                height: 42px;
+            }
+          }
+        }
+      }
+
+    .nft-coll-preview {
+      width: 255px;
+      height: 285px;
+
+      .nft-coll-picture {
+        width: 255px;
+        height: 263px;              
+        background: $white;
+        border: 1px solid #D4D4D4;
+        box-sizing: border-box;
+        border-radius: 12px;
+
+        .default-image {
+          width: 85px;              
+          height: 85px;
+          margin-left: 85px;
+          margin-top: 89px;
+        }
+
+        .preview-image {
+          width: 255px;
+          height: 263px;              
+          border-radius: 12px;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}
+
+.single-nft-title{
+  font-family: $sharpGroteskSemiBoldFont;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 36px;
+  letter-spacing: 0.2px;
+  color: $black;
+}
+.single-nft-content{
+  display: flex;
+  margin-top: 40px;
+  margin-left: 100px;
+
+  h5{
+    font-family: $spaceGroteskFont;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .single-nft-upload {
+    width: 445px;
+    margin-right: 30px;
+
+    .single-nft-upload-file {
+      text-align: center;
+      width: 445px;
+      height: 169px;
+      border: 1px dashed #D4D4D4;
+      border-radius: 12px;
+
+      p{
+        margin-top: 48px;
+        margin-bottom: 11px;
+        font-family: $spaceGroteskFont;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+
+    button{
+      &.light-border-button {
+          background: 
+          linear-gradient($white, $white) padding-box,
+          linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+          border: 1px solid transparent;
+      }
+    }
+
+    .single-nft-name{
+      margin-top: 20px;
+      width: 445px;
+      height: 73px;
+
+      input{
+        &.inp {
+          width: 445px;
+        }
+      }
+    }
+
+    .single-nft-description{
+      margin-top: 20px;
+      width: 445px;
+      height: 119px;
+
+      input {
+        &.inp {
+          width: 445px;
+          height: 95px;
+        }
+      }
+    }
+
+    .single-nft-editions{
+      position: relative;
+      margin-top: 20px;
+      width: 445px;
+      height: 73px;
+
+      input{
+        &.inp {
+          width: 445px;
+        }
+      }
+
+      .info-text {
+        position: absolute;
+        background: $white;                
+        color: $black;
+        box-shadow: 0px 10px 20px 
+          rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          width: 224px;
+          height: 106px;
+          padding: 16px;
+          font-size: 12px;
+          font-family: $spaceGroteskFont;
+          top: -106px;
+          left: 17px;
+      }
+    }
+
+    .single-nft-buttons {
+      margin-top: 40px;
+
+      button{
+        &.light-button {
+          width: 134;
+          height: 42px;
+          margin-right: 12px;
+        }
+
+        &.light-border-button {
+          background: 
+            linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            border: 1px solid transparent;
+            width: 179px;
+            height: 42px;
+        }
+      }
+    }
+  }
+
+  .single-nft-preview {
+    width: 255px;
+
+    .single-nft-picture {
+      width: 255px;
+      height: 263px;              
+      background: $white;
+      border: 1px solid #D4D4D4;
+      box-sizing: border-box;
+      border-radius: 12px;
+
+      .default-image {
+        width: 85px;              
+        height: 85px;
+        margin-left: 85px;
+        margin-top: 89px;
+      }
+
+      .preview-image {
+        width: 255px;
+        height: 263px;              
+        border-radius: 12px;
+        object-fit: cover;
+      }
+    }
+  }
+}
