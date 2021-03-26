@@ -10,7 +10,15 @@ import AppContext from '../../ContextAPI';
 const MyNFTs = () => {
     const { savedNfts, selectedTabIndex, setSelectedTabIndex, showModal, setShowModal } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
-    const handleClose = () => setShowModal(false);
+    const handleClose = () => {
+        document.body.classList.remove('no__scroll');
+        setTimeout(() => { setShowModal(false) }, 500);
+    }
+
+    const handleOpen = () => {
+        setShowModal(true);
+        document.body.classList.add('no__scroll')
+    }
 
     const checkSelectedSavedNfts = () => {
         const res = savedNfts.filter(nft => nft.selected)
@@ -33,7 +41,7 @@ const MyNFTs = () => {
                             {selectedTabIndex === 1 &&
                                 <button className='mint__btn' disabled={checkSelectedSavedNfts()}>Mint selected</button>
                             }
-                            <button className='mint__btn' onClick={() => setShowModal(true)}>Mint NFT</button>
+                            <button className='mint__btn' onClick={handleOpen}>Mint NFT</button>
                         </div>
                         {showModal &&
                             <MintModal open={showModal} onClose={handleClose}></MintModal>
@@ -63,7 +71,7 @@ const MyNFTs = () => {
                     <h1 className='title'>My NFTs</h1>
                     <h3>No NFTs found</h3>
                     <p className='desc'>Create NFTs or NFT collections with our platform by clicking the button below</p>
-                    <button onClick={() => setShowModal(true)}>Mint NFT</button>
+                    <button className='mint__btn' onClick={handleOpen}>Mint NFT</button>
                     {showModal &&
                         <MintModal open={showModal} onClose={handleClose}></MintModal>
                     }
