@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import './my-nfts.scss';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
@@ -17,6 +17,11 @@ const MyNFTs = () => {
 
         return res.length ? false : true;
     }
+
+    useEffect(() => {
+        document.title = 'Universe Minting - My NFTs'
+        return () => { document.title = 'Universe Minting' };
+    }, [])
         
     return (
         <div className='container mynfts__page'>
