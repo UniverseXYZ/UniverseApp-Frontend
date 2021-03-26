@@ -1,0 +1,201 @@
+@import '../../assets/scss/variables';
+
+.mod-div{
+  position: absolute;
+  width: 60%;
+  height: 100%;
+  right: 0;
+  top: 0px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
+}
+.whole-modal{
+  z-index: 100;
+  width: 100%;
+  left: 0;
+  top: 0;
+  position: fixed;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+}
+.modal-close{
+  box-shadow: 0px 10px 20px 0px rgba(136, 120, 172, 0.2);
+  position: absolute;
+  top: 28px;
+  left: -3%;
+  border-radius: 50%;
+  background: #fff;
+  padding: 7px;
+}       
+.mintNft-div>h2{
+  position: relative;
+  margin-left: 100px;
+  margin-top: 80px;
+  font-family: $sharpGroteskSemiBoldFont;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 36px;
+  color: #000;
+  letter-spacing: 0.2px;
+
+}
+.mintNft-div>p{
+  padding: 0;
+  text-indent: 0;
+  position: relative;
+  font-size: 18px;
+  left: 100px;
+  margin-right: 45%;
+  top: 16px;
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 27px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.ntfs{
+  margin-left: 100px;
+  width: 50%;
+  height: 60%;
+  margin-top: 8%;
+  bottom: 10.5%;
+  display: flex;
+}
+.ntfs > img{
+  cursor: pointer;
+  margin-left: 1%;
+  width: 48%;
+}
+.back-nft{
+  margin-left: 100px;
+  margin-top: 80px;
+  
+}
+.back-nft>span{
+  text-align: center;
+  text-transform: uppercase;
+  color: #000000;
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+}
+.mintNftCollection-div>h2{
+  margin-left: 100px;
+  margin-top: 20px; 
+  font-family: $sharpGroteskSemiBoldFont;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 36px;
+  letter-spacing: 0.2px;
+  color: #000000;
+}
+.back-nft{
+  cursor: pointer;
+}
+.name-image{
+  display: flex;
+  min-height: 73px;
+  margin-top: 40px;
+  margin-left: 100px;
+  position: relative;
+}
+.name-image > .input-l{
+  width: 40%;
+}
+.create-col{
+  padding: 0;
+  position: absolute;
+  width: 22%;
+  height: 32%;
+  top: 42%;
+  border: 1px solid;
+  border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
+  background: linear-gradient($white, $white) padding-box,
+  linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+  left: 100px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.input-cover>input{
+  display: none;
+}
+.inp-picture{
+  margin-top: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid #D4D4D4;
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+.inp-picture>div{
+  text-align: center;
+  align-items: center;
+}
+.input-cover{
+  margin-left: 3%;
+  width: 8%;
+}
+.input-cover>p{
+font-family: $spaceGroteskFont;
+font-style: normal;
+font-weight: bold;
+font-size: 14px;
+line-height: 22px;
+}
+.inp-picture>img{
+  width: 100%;
+  height: 100%;
+}
+.icon-div{
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.collection-buttons{
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  left: 100px;
+  top: 80%;
+}
+.collection-buttons>:first-child{
+  margin-right: 16px;
+}
+.plus-icon{
+  text-align: center;
+  padding-top: 76px;
+  align-items: center;
+}
+.collection-t{
+  position: absolute;
+  height: 68px;
+  left: 100px;
+  bottom: 28%;
+  font-family: Sharp Grotesk;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  text-align: center;
+  line-height: 20px;
+  width: 22%;
+}
+.collection-t>p{
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}

@@ -3,7 +3,7 @@ import './my-nfts.scss';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
-import Modal from '../Modal';
+import MintModal from '../MintModal';
 import { PLACEHOLDER_NFTS } from '../../dummydata/NFTsDummyData';
 import AppContext from '../../ContextAPI';
 
@@ -31,11 +31,13 @@ const MyNFTs = () => {
                         <h1 className='title'>My NFTs</h1>
                         <div>
                             {selectedTabIndex === 1 &&
-                                <button disabled={checkSelectedSavedNfts()}>Mint selected</button>
+                                <button className='mint__btn' disabled={checkSelectedSavedNfts()}>Mint selected</button>
                             }
-                            <button onClick={() => setShowModal(true)}>Mint NFT</button>
+                            <button className='mint__btn' onClick={() => setShowModal(true)}>Mint NFT</button>
                         </div>
-                        <Modal open={showModal} onClose={handleClose}></Modal>
+                        {showModal &&
+                            <MintModal open={showModal} onClose={handleClose}></MintModal>
+                        }
                     </div>
 
                     <div className='mynfts__page__body'>
@@ -62,7 +64,9 @@ const MyNFTs = () => {
                     <h3>No NFTs found</h3>
                     <p className='desc'>Create NFTs or NFT collections with our platform by clicking the button below</p>
                     <button onClick={() => setShowModal(true)}>Mint NFT</button>
-                    <Modal open={showModal} onClose={handleClose}></Modal>
+                    {showModal &&
+                        <MintModal open={showModal} onClose={handleClose}></MintModal>
+                    }
                 </div>
             }
         </div>
