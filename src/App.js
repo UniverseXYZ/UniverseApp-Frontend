@@ -51,6 +51,32 @@ const App = () => {
             selected: false,
         },
     ]);
+    const [savedCollections, setSavedCollections] = useState([
+        {
+            id: 1,
+            bgImage: nft1Image,
+            name: 'Collection name',
+            avatar: nft1Image,
+        },
+        {
+            id: 2,
+            bgImage: nft2Image,
+            name: 'Mooncat Rescue',
+            avatar: nft2Image,
+        },
+        {
+            id: 3,
+            bgImage: nft3Image,
+            name: 'Crazy Collection',
+            avatar: nft3Image,
+        },
+        {
+            id: 4,
+            bgImage: nft4Image,
+            name: 'HashMasks',
+            avatar: nft4Image,
+        },
+    ]);
 
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -72,6 +98,8 @@ const App = () => {
                 setSelectedTabIndex,
                 showModal,
                 setShowModal,
+                savedCollections,
+                setSavedCollections,
             }}
         >
             <Routes>
