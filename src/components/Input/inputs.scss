@@ -5,7 +5,9 @@
   border: 1px solid #D4D4D4;
   box-sizing: border-box;
   border-radius: 12px;
-  height: 50px;
+  // height: 50px;
+  padding: 15px;
+  width: 100%;
 }
 .inp-light-border{
   border: 2px solid;
@@ -16,9 +18,17 @@
 }
 .intup-l{
   display: inline-grid;
+
+  input {
+    width: 445px;
+  }
 }
 .inp-label{
-  padding-bottom: 5px;
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: $black;
 }
 .error-inp{
   border: 1px solid red!important;

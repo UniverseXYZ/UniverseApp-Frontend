@@ -51,6 +51,22 @@
                 font-family: $spaceGroteskFont;
                 font-size: 14px;
             }
+            .account-name-default-text{
+                font-family: $spaceGroteskFont;
+                font-size: 16px;
+                line-height: 20px;
+                color: rgba(0, 0, 0, 0.4);
+            }
+            .account-profile-name{
+                font-family: $spaceGroteskFont;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+            }
+            h5{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+            }
             
         }
 
@@ -92,6 +108,20 @@
                 font-family: $spaceGroteskFont;
                 font-size: 14px;
             }
+
+            p{
+                display: flex;
+                text-align: right;
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+                line-height: 22px;
+                font-weight: 500;
+                color: rgba(0, 0, 0, 0.6);
+            }
+            h5{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+            }
         }
 
         .account-website-link {
@@ -117,6 +147,16 @@
                 color: rgba(0, 0, 0, 0.4);
             }
             .link-account-text{
+                color: $black;
+            }
+            h5{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+            }
+            .link-default-text{
+                color: rgba(0, 0, 0, 0.4);
+            }
+            link-account-text{
                 color: $black;
             }
             h5{

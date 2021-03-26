@@ -4,7 +4,7 @@ import MintNft from './mintNft';
 import MintNftCollection from './mintNftCollection';
 import MintSingleNft from './mintSingleNft';
 import CreateNftCol from './createNftCol';
-import Popup from './popup';  
+import PopupComponent from './popup';  
 
 const MintModal = ({ open, onClose, ...restProps }) => {
     const [activeView, setActiveView] = useState(null);
@@ -17,13 +17,12 @@ const MintModal = ({ open, onClose, ...restProps }) => {
     return (
         <div className="whole-modal">
             <div {...restProps} className='mod-div'>
-                <Popup onClose={onClose} />
+                <PopupComponent onClose={onClose} />
                 {activeView === null && <MintNft onClick={handleNtfClick} />}
                 {activeView === 'collection' && <MintNftCollection onClick={handleNtfClick} collections={collections} />}
                 {activeView === 'single' && <MintSingleNft onClick={handleNtfClick} />}
                 {activeView === 'create-col' && <CreateNftCol onClick={handleNtfClick} />}
             </div>
-            
         </div>
     )
 }

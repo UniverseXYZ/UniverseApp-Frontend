@@ -66,22 +66,27 @@ const App = () => {
         },
         {
             id: 3,
-            bgImage: nft3Image,
+            bgImage: '#BBDEFB',
             name: 'Crazy Collection',
-            avatar: nft3Image,
+            avatar: '#BBDEFB',
         },
         {
             id: 4,
-            bgImage: nft4Image,
+            bgImage: '#FFF9C4',
             name: 'HashMasks',
-            avatar: nft4Image,
+            avatar: '#FFF9C4',
         },
     ]);
 
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
             if (ref.current && !ref.current.contains(event.target)) {
-                cb(false);
+                if (className === 'mod-div') {
+                    document.body.classList.remove('no__scroll');
+                    setTimeout(() => { cb(false) }, 500);
+                } else {
+                    cb(false);
+                }
             }
         }
     };

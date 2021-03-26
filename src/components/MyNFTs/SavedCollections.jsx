@@ -31,10 +31,16 @@ const SavedCollections = () => {
                     return (
                         <div className='saved__collection__box' key={collection.id}>
                             <div className='saved__collection__box__header'>
-                                <img src={collection.bgImage} alt={collection.name} />
+                                {!collection.bgImage.startsWith('#') ? 
+                                    <img src={collection.bgImage} alt={collection.name} /> :
+                                    <div className='random__bg__color' style={{ backgroundColor: collection.bgImage }}></div>
+                                }
                             </div>
                             <div className='saved__collection__box__body'>
-                                <img className='collection__avatar' src={collection.avatar} alt={collection.name} />
+                                {!collection.avatar.startsWith('#') ? 
+                                    <img className='collection__avatar' src={collection.avatar} alt={collection.name} /> :
+                                    <div className='random__avatar__color' style={{ backgroundColor: collection.bgImage }}>{collection.name.charAt(0)}</div>
+                                }
                                 <h3 className='collection__name'>{collection.name}</h3>
                                 <button className='three__dots' onClick={() => { setShowDropdown(!showDropdown); setDropdownID(collection.id); }}>
                                     <span></span>
