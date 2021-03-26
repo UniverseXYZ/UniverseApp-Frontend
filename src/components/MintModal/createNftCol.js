@@ -1,5 +1,3 @@
-// import Collection from '../../assets/images/Collection.svg';
-// import Collection1 from '../../assets/images/Collection1.svg';
 import Button from '../Button'
 import Input from '../Input'
 import defaultImage from '../../assets/images/default-image.png'
@@ -38,7 +36,7 @@ const CreateNftCol = ({ onClick }) =>{
                         <div className="nft-coll-editions">
                             <h5>Number of editions <img onMouseOver={()=>setHideIcon(false)} 
                                     onMouseLeave={()=>setHideIcon(true)} 
-                                    src={infoIcon}/>
+                                    src={infoIcon} alt='Info Icon' />
                             </h5>
                             <div hidden={hideIcon} className="info-text">
                                 <p>Total amount of NFTs that will be distributed to the current revard tier winners</p>
