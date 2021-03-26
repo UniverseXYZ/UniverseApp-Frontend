@@ -202,6 +202,9 @@ line-height: 22px;
   text-align: center;
   text-transform: uppercase;
 }
+.popup-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
 .popup-div{
   width: 540px;
   position: absolute;
@@ -215,7 +218,8 @@ line-height: 22px;
 .popup-close{
   cursor: pointer;
   padding: 2px 8px;
-  margin-top: -14px;
+  margin-top: -12px;
+  margin-right: -12px;
   line-height: 2em;
   background-color: #ffffff;
   border-radius: 50%;
