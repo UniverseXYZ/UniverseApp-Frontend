@@ -66,15 +66,15 @@ const App = () => {
         },
         {
             id: 3,
-            bgImage: nft3Image,
+            bgImage: '#BBDEFB',
             name: 'Crazy Collection',
-            avatar: nft3Image,
+            avatar: '#BBDEFB',
         },
         {
             id: 4,
-            bgImage: nft4Image,
+            bgImage: '#FFF9C4',
             name: 'HashMasks',
-            avatar: nft4Image,
+            avatar: '#FFF9C4',
         },
     ]);
 

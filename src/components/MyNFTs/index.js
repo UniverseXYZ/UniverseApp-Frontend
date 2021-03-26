@@ -71,7 +71,7 @@ const MyNFTs = () => {
                     <h1 className='title'>My NFTs</h1>
                     <h3>No NFTs found</h3>
                     <p className='desc'>Create NFTs or NFT collections with our platform by clicking the button below</p>
-                    <button onClick={() => setShowModal(true)}>Mint NFT</button>
+                    <button className='mint__btn' onClick={handleOpen}>Mint NFT</button>
                     {showModal &&
                         <MintModal open={showModal} onClose={handleClose}></MintModal>
                     }
