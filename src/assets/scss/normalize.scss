@@ -130,6 +130,10 @@ input::-webkit-outer-spin-button {
     appearance: none;
 }
 
+textarea {
+    resize: none;
+}
+
 a {
     display: inline-block;
     text-decoration: none;
