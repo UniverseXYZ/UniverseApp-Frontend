@@ -1,5 +1,6 @@
 @import '_fonts.scss';
 @import '_variables.scss';
+@import '_animations.scss';
 
 html,
 body,
@@ -156,6 +157,17 @@ body {
     margin: 0;
     padding: 0;
     background-color: #FCFEFD;
+
+    &.no__scroll {
+        overflow: hidden;
+
+        .whole-modal {
+            animation: fadeIn .3s ease-in-out forwards;
+        }
+        .mod-div {
+            animation: slideIn .3s ease-in-out forwards;
+        }
+    }
 }
 
 .container {
