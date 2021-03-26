@@ -12,7 +12,7 @@ const MyNFTs = () => {
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const handleClose = () => {
         document.body.classList.remove('no__scroll');
-        setTimeout(() => { setShowModal(false) }, 500);
+        setShowModal(false);
     }
 
     const handleOpen = () => {
