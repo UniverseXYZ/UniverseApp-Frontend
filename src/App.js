@@ -81,7 +81,12 @@ const App = () => {
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
             if (ref.current && !ref.current.contains(event.target)) {
-                cb(false);
+                if (className === 'mod-div') {
+                    document.body.classList.remove('no__scroll');
+                    setTimeout(() => { cb(false) }, 500);
+                } else {
+                    cb(false);
+                }
             }
         }
     };

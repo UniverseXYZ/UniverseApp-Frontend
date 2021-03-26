@@ -1,28 +1,31 @@
 @import '../../assets/scss/variables';
 
-.mod-div{
+.mod-div {
   position: absolute;
-  width: 60%;
+  width: 0;
   height: 100%;
   right: 0;
   top: 0px;
   background: #FFFFFF;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
+  animation: slideOut .3s ease-in-out forwards;
 }
-.whole-modal{
+.whole-modal {
   z-index: 100;
   width: 100%;
   left: 0;
   top: 0;
   position: fixed;
   height: 100%;
+  opacity: 0;
   background: rgba(0, 0, 0, 0.1);
+  animation: fadeOut .3s ease-in-out forwards;
 }
 .modal-close{
   box-shadow: 0px 10px 20px 0px rgba(136, 120, 172, 0.2);
   position: absolute;
   top: 28px;
-  left: -3%;
+  left: -38px;
   border-radius: 50%;
   background: #fff;
   padding: 7px;
