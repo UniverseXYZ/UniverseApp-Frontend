@@ -29,11 +29,11 @@ const CreateNftCol = ({ onClick }) =>{
                         </div>
                         <div className="nft-coll-name">
                             <h5>Name</h5>
-                            <Input className="inp"/>
+                            <Input className="inp" placeholder="Enter NFT name" />
                         </div>
                         <div className="nft-coll-description">
                             <h5>Description (optional)</h5>
-                            <Input className="inp"/>
+                            <textarea rows="5" placeholder="Example copy" className="inp"></textarea>
                         </div>
                         <div className="nft-coll-editions">
                             <h5>Number of editions <img onMouseOver={()=>setHideIcon(false)} 
@@ -43,7 +43,7 @@ const CreateNftCol = ({ onClick }) =>{
                             <div hidden={hideIcon} className="info-text">
                                 <p>Total amount of NFTs that will be distributed to the current revard tier winners</p>
                             </div>
-                            <Input className="inp"/>
+                            <Input className="inp" placeholder="Enter Number of Editions" />
                         </div>
                         <div className="nft-coll-buttons">
                             <Button className="light-button">ADD TO COLLECTION</Button>

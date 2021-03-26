@@ -85,6 +85,7 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 12px;
+  margin-left: 10px;
 }
 .mintNftCollection-div>h2{
   margin-left: 100px;
@@ -113,9 +114,9 @@
 .create-col{
   padding: 0;
   position: absolute;
-  width: 22%;
-  height: 32%;
-  top: 42%;
+  width: 32%;
+  height: 30%;
+  top: 34%;
   border: 1px solid;
   border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
   background: linear-gradient($white, $white) padding-box,
@@ -145,7 +146,6 @@
 }
 .input-cover{
   margin-left: 3%;
-  width: 8%;
 }
 .input-cover>p{
 font-family: $spaceGroteskFont;
@@ -170,7 +170,7 @@ line-height: 22px;
   margin: 0;
   position: absolute;
   left: 100px;
-  top: 80%;
+  top: 70%;
 }
 .collection-buttons>:first-child{
   margin-right: 16px;
@@ -184,14 +184,14 @@ line-height: 22px;
   position: absolute;
   height: 68px;
   left: 100px;
-  bottom: 28%;
+  bottom: 40%;
   font-family: Sharp Grotesk;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
   text-align: center;
   line-height: 20px;
-  width: 22%;
+  width: 32%;
 }
 .collection-t>p{
   font-family: $sharpGroteskMediumFont;
@@ -317,12 +317,9 @@ line-height: 22px;
         .nft-coll-buttons {
           margin-top: 40px;
           width: 457px;
-          height: 42px;
 
           button{
             &.light-button {
-              width: 211;
-              height: 42px;
               margin-right: 21px;
             }
 
@@ -331,8 +328,6 @@ line-height: 22px;
                 linear-gradient($white, $white) padding-box,
                 linear-gradient(to right, #BCEB00, #00EAEA) border-box;
                 border: 1px solid transparent;
-                width: 225px;
-                height: 42px;
             }
           }
         }

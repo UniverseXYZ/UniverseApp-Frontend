@@ -26,11 +26,11 @@ const MintSingleNft = ({onClick}) => {
                 </div>
                 <div className="single-nft-name">
                     <h5>Name</h5>
-                    <Input className="inp"/>
+                    <Input className="inp" placeholder="Enter NFT name" />
                 </div>
                 <div className="single-nft-description">
                     <h5>Description (optional)</h5>
-                    <Input className="inp"/>
+                    <textarea rows="5" placeholder="Example copy" className="inp"></textarea>
                 </div>
                 <div className="single-nft-editions">
                     <h5>Number of editions <img src={infoIcon} onMouseOver={()=>setHideIcon(false)}
@@ -38,7 +38,7 @@ const MintSingleNft = ({onClick}) => {
                     <div hidden={hideIcon} className="info-text">
                         <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead</p>
                     </div>    
-                    <Input className="inp"/>
+                    <Input className="inp" placeholder="Enter Number of Editions" />
                 </div>
                 <div className="single-nft-buttons">
                     <Button className="light-button">MINT NOW</Button>
