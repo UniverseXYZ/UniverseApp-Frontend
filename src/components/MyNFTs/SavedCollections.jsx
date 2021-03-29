@@ -26,44 +26,46 @@ const SavedCollections = () => {
 
     return (
         <div className='tab__saved__collections'>
-            <div className='saved__collections__lists'>
-                {savedCollections.map(collection => {
-                    return (
-                        <div className='saved__collection__box' key={collection.id}>
-                            <div className='saved__collection__box__header'>
-                                {!collection.bgImage.startsWith('#') ? 
-                                    <img src={collection.bgImage} alt={collection.name} /> :
-                                    <div className='random__bg__color' style={{ backgroundColor: collection.bgImage }}></div>
-                                }
-                            </div>
-                            <div className='saved__collection__box__body'>
-                                {!collection.avatar.startsWith('#') ? 
-                                    <img className='collection__avatar' src={collection.avatar} alt={collection.name} /> :
-                                    <div className='random__avatar__color' style={{ backgroundColor: collection.bgImage }}>{collection.name.charAt(0)}</div>
-                                }
-                                <h3 className='collection__name'>{collection.name}</h3>
-                                <button className='three__dots' onClick={() => { setShowDropdown(!showDropdown); setDropdownID(collection.id); }}>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    {(dropdownID === collection.id && showDropdown) &&
-                                        <ul ref={ref} className='edit__remove'>
-                                            <li className='edit' onClick={() => handleEdit(collection.id)}>
-                                                <p>Edit</p>
-                                                <img src={editIcon} alt='Edit Icon' />
-                                            </li>
-                                            <li className='remove' onClick={() => handleRemove(collection.id)}>
-                                                <p>Remove</p>
-                                                <img src={removeIcon} alt='Remove Icon' />
-                                            </li>
-                                        </ul>
+            {savedCollections.length ? 
+                <div className='saved__collections__lists'>
+                    {savedCollections.map(collection => {
+                        return (
+                            <div className='saved__collection__box' key={collection.id}>
+                                <div className='saved__collection__box__header'>
+                                    {!collection.bgImage.startsWith('#') ? 
+                                        <img src={collection.bgImage} alt={collection.name} /> :
+                                        <div className='random__bg__color' style={{ backgroundColor: collection.bgImage }}></div>
                                     }
-                                </button>
+                                </div>
+                                <div className='saved__collection__box__body'>
+                                    {!collection.avatar.startsWith('#') ? 
+                                        <img className='collection__avatar' src={collection.avatar} alt={collection.name} /> :
+                                        <div className='random__avatar__color' style={{ backgroundColor: collection.bgImage }}>{collection.name.charAt(0)}</div>
+                                    }
+                                    <h3 className='collection__name'>{collection.name}</h3>
+                                    <button className='three__dots' onClick={() => { setShowDropdown(!showDropdown); setDropdownID(collection.id); }}>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        {(dropdownID === collection.id && showDropdown) &&
+                                            <ul ref={ref} className='edit__remove'>
+                                                <li className='edit' onClick={() => handleEdit(collection.id)}>
+                                                    <p>Edit</p>
+                                                    <img src={editIcon} alt='Edit Icon' />
+                                                </li>
+                                                <li className='remove' onClick={() => handleRemove(collection.id)}>
+                                                    <p>Remove</p>
+                                                    <img src={removeIcon} alt='Remove Icon' />
+                                                </li>
+                                            </ul>
+                                        }
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )
-                })}
-            </div>
+                        )
+                    })}
+                </div> : <div className='empty__nfts'><h3>No Saved Collections found</h3></div>
+            }
         </div>
     )
 }
