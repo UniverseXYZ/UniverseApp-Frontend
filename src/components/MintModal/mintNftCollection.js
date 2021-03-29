@@ -3,9 +3,10 @@ import Button from '../Button';
 import arrow from '../../assets/images/Arrow.png';
 import union from '../../assets/images/Union.svg';
 import upload from '../../assets/images/Upload.png';
+import RemovePopup from '../Popups/removeNftPopup';  
 import { useRef, useState } from 'react';
 
-const MintNftCollection = ({ onClick, collections }) =>{
+const MintNftCollection = ({ onClick, onClose, collections }) =>{
 
 const [coverImage, setCoverImage] = useState(null)
 const inputFile = useRef(null)
