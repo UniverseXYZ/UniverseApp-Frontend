@@ -6,13 +6,16 @@ import SavedCollections from './SavedCollections';
 import MintModal from '../MintModal';
 import { PLACEHOLDER_NFTS } from '../../dummydata/NFTsDummyData';
 import AppContext from '../../ContextAPI';
+import CongratsPopup from '../Popups/congratsPopup';
+import LoadingPopup from '../Popups/loadingPopup';
+import '../MintModal/modals.scss';
 
-const MyNFTs = () => {
+const MyNFTs = ({onClose}) => {
     const { savedNfts, selectedTabIndex, setSelectedTabIndex, showModal, setShowModal } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const handleClose = () => {
         document.body.classList.remove('no__scroll');
-        setShowModal(false);
+        setTimeout(() => { setShowModal(false) }, 500);
     }
 
     const handleOpen = () => {
