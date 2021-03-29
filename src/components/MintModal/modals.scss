@@ -6,7 +6,7 @@
   height: 100%;
   right: 0;
   top: 0px;
-  background: #FFFFFF;
+  background: $white;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
   animation: slideOut .3s ease-in-out forwards;
 }
@@ -61,10 +61,107 @@
 .ntfs{
   margin-left: 100px;
   width: 50%;
-  height: 60%;
   margin-top: 8%;
-  bottom: 10.5%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+
+  .nft-box {
+    background: $white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 12px 12px 27px;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      background: 
+        linear-gradient($white, $white) padding-box,
+        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+      border: 1px solid transparent;
+
+      .nft-box-highlight-one {
+        background: 
+          linear-gradient($white, $white) padding-box,
+          linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+        border-bottom: 1px solid transparent;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+        bottom: -9px;
+      }
+      .nft-box-highlight-two {
+        background: 
+          linear-gradient($white, $white) padding-box,
+          linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+        border-bottom: 1px solid transparent;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+        bottom: -17px;
+      }
+    }
+
+    .image-container {
+      background: $white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 5px;
+      width: 230px;
+      height: 230px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+
+      img {
+        width: 85px;
+        height: 85px;
+      }
+    }
+    .nft-title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      text-align: center;
+      letter-spacing: 0.2px;
+      color: $black;
+      margin-bottom: 10px;
+    }
+    .nft-desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 14px;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    &-highlight-one {
+      position: absolute;
+      bottom: -8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom-left-radius: 150px;
+      border-bottom-right-radius: 150px;
+      width: 95%;
+      height: 8px;
+      left: 8px;
+    }
+    &-highlight-two {
+      position: absolute;
+      bottom: -16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom-left-radius: 150px;
+      border-bottom-right-radius: 150px;
+      width: 90%;
+      height: 8px;
+      left: 16px;
+    }
+  }
 }
 .ntfs > img{
   cursor: pointer;
@@ -133,7 +230,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #FFFFFF;
+  background: $white;
   border: 1px solid #D4D4D4;
   box-sizing: border-box;
   display: inline-block;
@@ -185,7 +282,7 @@ line-height: 22px;
   height: 68px;
   left: 100px;
   bottom: 40%;
-  font-family: Sharp Grotesk;
+  font-family: $sharpGroteskMediumFont;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -472,8 +569,6 @@ line-height: 22px;
 
       button{
         &.light-button {
-          width: 134;
-          height: 42px;
           margin-right: 12px;
         }
 
@@ -482,8 +577,6 @@ line-height: 22px;
             linear-gradient($white, $white) padding-box,
             linear-gradient(to right, #BCEB00, #00EAEA) border-box;
             border: 1px solid transparent;
-            width: 179px;
-            height: 42px;
         }
       }
     }
