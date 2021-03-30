@@ -10,7 +10,7 @@ import uuid from 'react-uuid'
 
 const MintSingleNft = ({ onClick }) => {
     
-    const { savedNfts, setSavedNfts, setShowModal } = useContext(AppContext);
+    const { savedNfts, setSavedNfts, setShowModal, savedNFTsID } = useContext(AppContext);
 
     const [errors, setErrors] = useState({
         name: '',
@@ -53,27 +53,59 @@ const MintSingleNft = ({ onClick }) => {
         }
     }
 
+    const validateEdition = (e) => {
+        const value = e.target.value.replace(/[^\d]/,''); 
+        if (parseInt(value) !== 0) {
+            setEditions(value)
+        }
+    }
+
+    useEffect(() => {
+        if (savedNFTsID) {
+            const res = savedNfts.filter(item => item.id === savedNFTsID);
+            setName(res[0].name);
+            setDescription(res[0].description);
+            setEditions(res[0].numberOfEditions);
+            setPreviewImage(res[0].previewImage);
+        }
+    }, [])
+
     useEffect(() => {
         if (saveForLateClick) {
             if (!errors.name && !errors.edition && !errors.previewImage) {
                 setShowModal(false);
-                setSavedNfts([...savedNfts, {
-                    id: uuid(),
-                    bgImage: testNFTImage, // This is just for testing, here should be previewImage.name
-                    name: name,
-                    description: description,
-                    numberOfEditions: editions,
-                    type: 'single',
-                    selected: false,
-                }])
+                var generatedEditions = [];
+
+                for(let i = 0; i < editions; i++) {
+                    generatedEditions.push(uuid().split('-')[0]);
+                }
+                if (!savedNFTsID) {
+                    setSavedNfts([...savedNfts, {
+                        id: uuid(),
+                        bgImage: testNFTImage, // This is just for testing
+                        previewImage: previewImage,
+                        name: name,
+                        description: description,
+                        numberOfEditions: editions,
+                        generatedEditions: generatedEditions,
+                        type: 'single',
+                        selected: false,
+                    }])
+                } else {
+                    setSavedNfts(savedNfts.map(item => 
+                        item.id === savedNFTsID ?
+                            { ...item, bgImage: testNFTImage, name: name, description: description, numberOfEditions: editions, generatedEditions: generatedEditions, }
+                            : item
+                    ))
+                }
             }
         }
     }, [errors, saveForLateClick, savedNfts])
 
     return (
     <div className="mintNftCollection-div">
-        <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>MINT NFT</span></div>
-        <h2 className="single-nft-title">Mint Single NFT</h2>
+        <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>Create NFT</span></div>
+        <h2 className="single-nft-title">Create Single NFT</h2>
         <div className="single-nft-content">
             <div className="single-nft-upload">
                 <h5>Upload file</h5>
@@ -98,11 +130,11 @@ const MintSingleNft = ({ onClick }) => {
                     <div hidden={hideIcon} className="info-text">
                         <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead</p>
                     </div>    
-                        <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={(e) => setEditions(e.target.value.replace(/\D/,''))} value={editions} />
+                        <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
                 </div>
                 <div className="single-nft-buttons">
                     <Button className="light-button">MINT NOW</Button>
-                    <Button className="light-border-button" onClick={() => handleSaveForLater()}>SAVE FOR LATER</Button>
+                    <Button className="light-border-button" onClick={handleSaveForLater}>SAVE FOR LATER</Button>
                 </div>
             </div>
             <div className="single-nft-preview">

@@ -11,14 +11,15 @@ import LoadingPopup from '../Popups/loadingPopup';
 import '../MintModal/modals.scss';
 
 const MyNFTs = ({onClose}) => {
-    const { savedNfts, selectedTabIndex, setSelectedTabIndex, showModal, setShowModal } = useContext(AppContext);
+    const { savedNfts, selectedTabIndex, setSelectedTabIndex, showModal, setShowModal, setActiveView } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const handleClose = () => {
         document.body.classList.remove('no__scroll');
-        setTimeout(() => { setShowModal(false) }, 500);
+        setShowModal(false);
     }
 
     const handleOpen = () => {
+        setActiveView(null)
         setShowModal(true);
         document.body.classList.add('no__scroll')
     }
@@ -44,7 +45,7 @@ const MyNFTs = ({onClose}) => {
                             {selectedTabIndex === 1 &&
                                 <button className='mint__btn' disabled={checkSelectedSavedNfts()}>Mint selected</button>
                             }
-                            <button className='mint__btn' onClick={handleOpen}>Mint NFT</button>
+                            <button className='mint__btn' onClick={handleOpen}>Create NFT</button>
                         </div>
                         {showModal &&
                             <MintModal open={showModal} onClose={handleClose}></MintModal>

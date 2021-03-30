@@ -375,12 +375,19 @@
                                 margin-left: 6px;
                             }
                         }
-                        .collection__count {
+                        div.collection__count {
                             font-family: $spaceGroteskFont;
                             font-style: normal;
                             font-weight: bold;
                             font-size: 14px;
                             color: $black;
+                        }
+                        p.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
                         }
                     }
 
@@ -573,12 +580,19 @@
                                 margin-left: 6px;
                             }
                         }
-                        .collection__count {
+                        div.collection__count {
                             font-family: $spaceGroteskFont;
                             font-style: normal;
                             font-weight: bold;
                             font-size: 14px;
                             color: $black;
+                        }
+                        p.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
                         }
                     }
 

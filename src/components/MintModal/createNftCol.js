@@ -13,7 +13,7 @@ const CreateNftCol = ({ onClick }) =>{
 
     return(
         <div className="mintNftCollection-div">
-            <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>MINT NFT COLLECTION</span></div>
+            <div className="back-nft" onClick={() => onClick('collection')}><img src={arrow} alt="back"/><span>Create NFT COLLECTION</span></div>
             <div className="nft-collectible">
                 <h2 className="nft-coll-title">Create NFT Collectible</h2>
                 <div className="nft-coll-content">

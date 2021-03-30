@@ -1,14 +1,15 @@
 import './modals.scss';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import MintNft from './mintNft';
 import MintNftCollection from './mintNftCollection';
 import MintSingleNft from './mintSingleNft';
 import CreateNftCol from './createNftCol';
 import PopupComponent from '../Popups/popup';
+import AppContext from '../../ContextAPI';
 
 
 const MintModal = ({ open, onClose, ...restProps }) => {
-    const [activeView, setActiveView] = useState(null);
+    const { activeView, setActiveView } = useContext(AppContext);
     const [collections, setCollections] = useState([]);
 
     const handleNtfClick = (type) => {

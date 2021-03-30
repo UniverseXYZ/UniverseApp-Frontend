@@ -15,6 +15,8 @@ const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(true);
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [activeView, setActiveView] = useState(null);
+    const [savedNFTsID, setSavedNFTsID] = useState(null);
     const [savedNfts, setSavedNfts] = useState([
         // {
         //     id: 1,
@@ -100,6 +102,10 @@ const App = () => {
                 setShowModal,
                 savedCollections,
                 setSavedCollections,
+                activeView,
+                setActiveView,
+                savedNFTsID,
+                setSavedNFTsID,
             }}
         >
             <Routes>
