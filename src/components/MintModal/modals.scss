@@ -200,6 +200,7 @@
 }
 .name-image{
   display: flex;
+  align-items: flex-start;
   min-height: 73px;
   margin-top: 40px;
   margin-left: 100px;
@@ -233,9 +234,33 @@
   background: $white;
   border: 1px solid #D4D4D4;
   box-sizing: border-box;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   overflow: hidden;
+
+  .cover-preview {
+    position: relative;
+
+    &:hover {
+      > div {
+        display: flex;
+      }
+    }
+
+    > div {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
 }
 .inp-picture>div{
   text-align: center;

@@ -3,9 +3,11 @@ import checkIcon from '../../assets/images/check.svg';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import AppContext from '../../ContextAPI';
+import Popup from "reactjs-popup";
+import RemovePopup from '../Popups/removeNftPopup';
 
 const SavedNFTs = () => {
-    const { handleClickOutside, savedNfts, setSavedNfts } = useContext(AppContext);
+    const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } = useContext(AppContext);
     const [showDropdown, setShowDropdown] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [dropdownID, setDropdownID] = useState(0);
@@ -23,19 +25,32 @@ const SavedNFTs = () => {
         newSavedNfts.map(nft => isChecked ? nft.selected = false : nft.selected = true);
     }
 
+    const handleClickOutside = (event) => {
+        if (!event.target.classList.contains('three__dots')) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                if (document.getElementById('popup-root')) {
+                    if (!document.getElementById('popup-root').hasChildNodes()) {    
+                        setShowDropdown(false);
+                    }
+                } else {
+                    setShowDropdown(false);
+                }
+            }
+        }
+    };
+
     useEffect(() => {
-        document.addEventListener('click', (e) => handleClickOutside(e, 'three__dots', ref, setShowDropdown), true);
+        document.addEventListener('click', handleClickOutside, true);
         return () => {
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'three__dots', ref, setShowDropdown), true);
+            document.removeEventListener('click', handleClickOutside, true);
         };
     })
 
     const handleEdit = (id) => {
-        console.log(id)
-    }
-
-    const handleRemove = (id) => {
-        setSavedNfts(savedNfts.filter(item => item.id !== id));
+        document.body.classList.add('no__scroll');
+        setSavedNFTsID(id);
+        setActiveView('single');
+        setShowModal(true);
     }
 
     return (
@@ -72,23 +87,40 @@ const SavedNFTs = () => {
                                                         <p>Edit</p>
                                                         <img src={editIcon} alt='Edit Icon' />
                                                     </li>
-                                                    <li className='remove' onClick={() => handleRemove(nft.id)}>
-                                                        <p>Remove</p>
-                                                        <img src={removeIcon} alt='Remove Icon' />
-                                                    </li>
+                                                    <Popup
+                                                        trigger={
+                                                            <li className='remove'>
+                                                                <p>Remove</p>
+                                                                <img src={removeIcon} alt='Remove Icon' />
+                                                            </li>
+                                                        }
+                                                    >
+                                                        {
+                                                            (close) => (
+                                                                <RemovePopup close={close} nftID={nft.id} />
+                                                            )
+                                                        }
+                                                    </Popup>
                                                 </ul>
                                             }
                                         </button>
                                     </div>
-                                    {nft.type === 'collection' &&
-                                        <>
-                                            <div className='saved__nft__box__footer'>
-                                                <div className='collection__details'>
+                                    <div className='saved__nft__box__footer'>
+                                        <div className='collection__details'>
+                                            {nft.type === 'collection' &&
+                                                <>
                                                     <img src={nft.collectionAvatar} alt={nft.collectionName} />
                                                     <span>{nft.collectionName}</span>
-                                                </div>
-                                                <div className='collection__count'>{`x${nft.collectionCount}`}</div>
-                                            </div>
+                                                </>
+                                            }
+                                        </div>
+                                        {nft.generatedEditions.length > 1 ?
+                                            <div className='collection__count'>{`x${nft.generatedEditions.length}`}</div> :
+                                            <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p>
+                                        }
+                                    </div>
+                                    {nft.generatedEditions.length > 1 &&
+                                        <>
                                             <div className='saved__nft__box__highlight__one'></div>
                                             <div className='saved__nft__box__highlight__two'></div>
                                         </>
