@@ -5,7 +5,7 @@ import AppContext from '../../ContextAPI';
 const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
     const { handleClickOutside } = useContext(AppContext);
     const [showDropdown, setShowDropdown] = useState(false);
-    const itemsPerPage = [8, 12, 24, 48, 96];
+    const itemsPerPage = [12, 24, 48];
     const ref = useRef(null);
 
     useEffect(() => {
