@@ -4,7 +4,7 @@ import AppContext from '../../ContextAPI';
 
 
 const MintNft = ({ onClick }) => {
-    const { setSavedNFTsID } = useContext(AppContext);
+    const { setSavedNFTsID, setSavedCollectionID } = useContext(AppContext);
 
     return(
         <div className="mintNft-div">
@@ -18,7 +18,7 @@ const MintNft = ({ onClick }) => {
                     <h2 className='nft-title'>Single NFT</h2>
                     <p className='nft-desc'>ERC-721 non-fungible token</p>
                 </div>
-                <div className='nft-box' onClick={() => onClick('collection')}>
+                <div className='nft-box' onClick={() => { onClick('collection'); setSavedCollectionID(null) }}>
                     <div className='image-container'>
                         <img src={defaultImage} alt='Default' />
                     </div>

@@ -2,26 +2,41 @@ import {useState, useEffect, useContext, useRef} from 'react'
 import AppContext from '../../ContextAPI';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
+import Popup from "reactjs-popup";
+import RemovePopup from '../Popups/removeNftPopup';
 
 const SavedCollections = () => {
-    const { handleClickOutside, savedCollections } = useContext(AppContext);
+    const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } = useContext(AppContext);
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownID, setDropdownID] = useState(0);
     const ref = useRef(null);
 
+    const handleClickOutside = (event) => {
+        if (!event.target.classList.contains('three__dots')) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                if (document.getElementById('popup-root')) {
+                    if (!document.getElementById('popup-root').hasChildNodes()) {    
+                        setShowDropdown(false);
+                    }
+                } else {
+                    setShowDropdown(false);
+                }
+            }
+        }
+    };
+
     useEffect(() => {
-        document.addEventListener('click', (e) => handleClickOutside(e, 'three__dots', ref, setShowDropdown), true);
+        document.addEventListener('click', handleClickOutside, true);
         return () => {
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'three__dots', ref, setShowDropdown), true);
+            document.removeEventListener('click', handleClickOutside, true);
         };
     })
 
     const handleEdit = (id) => {
-        console.log(id)
-    }
-
-    const handleRemove = (id) => {
-        console.log(id)
+        document.body.classList.add('no__scroll');
+        setSavedCollectionID(id);
+        setActiveView('collection');
+        setShowModal(true);
     }
 
     return (
@@ -32,15 +47,15 @@ const SavedCollections = () => {
                         return (
                             <div className='saved__collection__box' key={collection.id}>
                                 <div className='saved__collection__box__header'>
-                                    {!collection.bgImage.startsWith('#') ? 
-                                        <img src={collection.bgImage} alt={collection.name} /> :
-                                        <div className='random__bg__color' style={{ backgroundColor: collection.bgImage }}></div>
+                                    {typeof collection.previewImage === 'string' && collection.previewImage.startsWith('#') ? 
+                                        <div className='random__bg__color' style={{ backgroundColor: collection.previewImage }}></div> :
+                                        <img src={URL.createObjectURL(collection.previewImage)} alt={collection.name} />
                                     }
                                 </div>
                                 <div className='saved__collection__box__body'>
-                                    {!collection.avatar.startsWith('#') ? 
-                                        <img className='collection__avatar' src={collection.avatar} alt={collection.name} /> :
-                                        <div className='random__avatar__color' style={{ backgroundColor: collection.bgImage }}>{collection.name.charAt(0)}</div>
+                                    {typeof collection.previewImage === 'string' && collection.previewImage.startsWith('#') ? 
+                                        <div className='random__avatar__color' style={{ backgroundColor: collection.previewImage }}>{collection.name.charAt(0)}</div> :
+                                        <img className='collection__avatar' src={URL.createObjectURL(collection.previewImage)} alt={collection.name} />
                                     }
                                     <h3 className='collection__name'>{collection.name}</h3>
                                     <button className='three__dots' onClick={() => { setShowDropdown(!showDropdown); setDropdownID(collection.id); }}>
@@ -53,10 +68,25 @@ const SavedCollections = () => {
                                                     <p>Edit</p>
                                                     <img src={editIcon} alt='Edit Icon' />
                                                 </li>
-                                                <li className='remove' onClick={() => handleRemove(collection.id)}>
-                                                    <p>Remove</p>
-                                                    <img src={removeIcon} alt='Remove Icon' />
-                                                </li>
+                                                <Popup
+                                                    trigger={
+                                                        <li className='remove'>
+                                                            <p>Remove</p>
+                                                            <img src={removeIcon} alt='Remove Icon' />
+                                                        </li>
+                                                    }
+                                                >
+                                                    {
+                                                        (close) => (
+                                                            <RemovePopup
+                                                                close={close}
+                                                                nftID={collection.id}
+                                                                removedItemName={collection.name}
+                                                                removeFrom={'savedCollection'}
+                                                            />
+                                                        )
+                                                    }
+                                                </Popup>
                                             </ul>
                                         }
                                     </button>
