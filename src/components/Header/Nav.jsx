@@ -30,25 +30,28 @@ const Nav = () => {
     return (
         <ul>
             <li>
-            <button className={`menu-li ${isMintingDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}>minting & Auctions <img src={arrowUP} alt="Minting & Auctions"/></button>
-            {isMintingDropdownOpened &&
+                <button className={`menu-li ${isMintingDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}>
+                    <span className='nav__link__title'>minting & Auctions</span>
+                    <img src={arrowUP} alt="Minting & Auctions" />
+                </button>
+                {isMintingDropdownOpened &&
                     <div ref={ref} className='dropdown minting-drop'>
-                
                         <div className='dropdown__body'>
                             <button onClick={() => { history.push(''); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
                             <button className="active-auctions" onClick={() => { setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
                             <button onClick={() => { history.push(''); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Upcoming releases</button>
-
                         </div>
                     </div>
                 }
-
             </li>
             <li>Whitepaper</li>
             <li className="team">Team</li>
             <li>
-                    <button className={`menu-li myAccount ${isAccountDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}>
-                                <img className="icon-img" src={Icon} alt='Diamond icon' />My Account <img src={arrowUP} alt="My Account"/></button>
+                <button className={`menu-li myAccount ${isAccountDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}>
+                    <img className="icon-img" src={Icon} alt='Diamond icon' />
+                    <span className='nav__link__title'>My Account</span>
+                    <img src={arrowUP} alt="My Account" />
+                </button>
 
                 {isAccountDropdownOpened &&
                     <div ref={ref} className='dropdown drop-account'>
