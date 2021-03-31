@@ -97,7 +97,12 @@ const SavedNFTs = () => {
                                                     >
                                                         {
                                                             (close) => (
-                                                                <RemovePopup close={close} nftID={nft.id} />
+                                                                <RemovePopup
+                                                                    close={close}
+                                                                    nftID={nft.id}
+                                                                    removedItemName={nft.name}
+                                                                    removeFrom={'saved'}
+                                                                />
                                                             )
                                                         }
                                                     </Popup>
@@ -109,7 +114,10 @@ const SavedNFTs = () => {
                                         <div className='collection__details'>
                                             {nft.type === 'collection' &&
                                                 <>
-                                                    <img src={nft.collectionAvatar} alt={nft.collectionName} />
+                                                    {typeof nft.collectionAvatar === 'string' && nft.collectionAvatar.startsWith('#') ? 
+                                                        <div className='random__bg__color' style={{ backgroundColor: nft.collectionAvatar }}>{nft.collectionName.charAt(0)}</div> :
+                                                        <img src={URL.createObjectURL(nft.collectionAvatar)} alt={nft.collectionName} />
+                                                    }
                                                     <span>{nft.collectionName}</span>
                                                 </>
                                             }

@@ -17,6 +17,7 @@ const App = () => {
     const [showModal, setShowModal] = useState(false);
     const [activeView, setActiveView] = useState(null);
     const [savedNFTsID, setSavedNFTsID] = useState(null);
+    const [savedCollectionID, setSavedCollectionID] = useState(null);
     const [savedNfts, setSavedNfts] = useState([
         // {
         //     id: 1,
@@ -54,30 +55,30 @@ const App = () => {
         // },
     ]);
     const [savedCollections, setSavedCollections] = useState([
-        {
-            id: 1,
-            bgImage: nft1Image,
-            name: 'Collection name',
-            avatar: nft1Image,
-        },
-        {
-            id: 2,
-            bgImage: nft2Image,
-            name: 'Mooncat Rescue',
-            avatar: nft2Image,
-        },
-        {
-            id: 3,
-            bgImage: '#BBDEFB',
-            name: 'Crazy Collection',
-            avatar: '#BBDEFB',
-        },
-        {
-            id: 4,
-            bgImage: '#FFF9C4',
-            name: 'HashMasks',
-            avatar: '#FFF9C4',
-        },
+        // {
+        //     id: 1,
+        //     bgImage: nft1Image,
+        //     name: 'Collection name',
+        //     avatar: nft1Image,
+        // },
+        // {
+        //     id: 2,
+        //     bgImage: nft2Image,
+        //     name: 'Mooncat Rescue',
+        //     avatar: nft2Image,
+        // },
+        // {
+        //     id: 3,
+        //     bgImage: '#BBDEFB',
+        //     name: 'Crazy Collection',
+        //     avatar: '#BBDEFB',
+        // },
+        // {
+        //     id: 4,
+        //     bgImage: '#FFF9C4',
+        //     name: 'HashMasks',
+        //     avatar: '#FFF9C4',
+        // },
     ]);
 
     const handleClickOutside = (event, className, ref, cb) => {
@@ -106,6 +107,8 @@ const App = () => {
                 setActiveView,
                 savedNFTsID,
                 setSavedNFTsID,
+                savedCollectionID,
+                setSavedCollectionID,
             }}
         >
             <Routes>

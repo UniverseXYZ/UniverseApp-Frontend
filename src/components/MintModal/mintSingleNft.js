@@ -38,18 +38,23 @@ const MintSingleNft = ({ onClick }) => {
     }
 
     const validateFile = (file) => {
-        if ((
-            file.type === "audio/mpeg" ||
-            file.type === "video/mp4" ||
-            file.type === "image/webp" ||
-            file.type === "image/gif" ||
-            file.type === "image/png") &&
-            file.size / 1048576 < 30) {
-            setPreviewImage(file);
-            setErrors({...errors, previewImage: ''});
-        } else {
+        if (!file) {
             setPreviewImage(null);
             setErrors({...errors, previewImage: 'File format must be PNG, GIF, WEBP, MP4 or MP3 (Max Size: 30mb)'});
+        } else {
+            if ((
+                file.type === "audio/mpeg" ||
+                file.type === "video/mp4" ||
+                file.type === "image/webp" ||
+                file.type === "image/gif" ||
+                file.type === "image/png") &&
+                file.size / 1048576 < 30) {
+                setPreviewImage(file);
+                setErrors({...errors, previewImage: ''});
+            } else {
+                setPreviewImage(null);
+                setErrors({...errors, previewImage: 'File format must be PNG, GIF, WEBP, MP4 or MP3 (Max Size: 30mb)'});
+            }
         }
     }
 
@@ -111,26 +116,26 @@ const MintSingleNft = ({ onClick }) => {
                 <h5>Upload file</h5>
                 <div className="single-nft-upload-file">
                     <p>PNG, GIF, WEBP, MP4 or MP3. Max 30mb</p>
-                    <Button className="light-border-button" onClick={()=>inputFile.current.click()}>CHOOSE FILE</Button>
-                    <input type="file" className="inp-disable" ref={inputFile}
-                        onChange={(e) => validateFile(e.target.files[0])}/>
-                    </div>
-                    {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
+                    <Button className="light-border-button" onClick={() => inputFile.current.click()}>CHOOSE FILE</Button>
+                    <input type="file" className="inp-disable" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
+                </div>
+                {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
                 <div className="single-nft-name">
                     <h5>Name</h5>
-                        <Input className='inp' error={errors.name} placeholder="Enter NFT name" onChange={(e) => setName(e.target.value)} value={name} />
+                    <Input className='inp' error={errors.name} placeholder="Enter NFT name" onChange={(e) => setName(e.target.value)} value={name} />
                 </div>
                 <div className="single-nft-description">
                     <h5>Description (optional)</h5>
                     <textarea rows="5" placeholder="Example copy" className="inp" onChange={(e) => setDescription(e.target.value)} value={description}></textarea>
                 </div>
                 <div className="single-nft-editions">
-                    <h5>Number of editions <img src={infoIcon} alt='Info Icon' onMouseOver={()=>setHideIcon(false)}
-                    onMouseLeave={()=>setHideIcon(true)}/></h5>
+                    <h5>Number of editions
+                        <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon(false)} onMouseLeave={() => setHideIcon(true)} />
+                    </h5>
                     <div hidden={hideIcon} className="info-text">
                         <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead</p>
                     </div>    
-                        <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
+                    <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
                 </div>
                 <div className="single-nft-buttons">
                     <Button className="light-button">MINT NOW</Button>
