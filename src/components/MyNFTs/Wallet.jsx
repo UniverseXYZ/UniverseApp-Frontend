@@ -10,7 +10,7 @@ const Wallet = ({ data }) => {
     const { handleClickOutside } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [offset, setOffset] = useState(0);
-    const [perPage, setPerPage] = useState(8);
+    const [perPage, setPerPage] = useState(12);
     const ref = useRef(null);
     const [collections, setCollections] = useState([
         {

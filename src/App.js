@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './assets/scss/normalize.scss';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import MyNFTs from './components/MyNFTs';
 import MyAccount from './components/MyAccount';
 import AppContext from './ContextAPI';
@@ -118,6 +119,7 @@ const App = () => {
                     <Route exact path="/my-account" component={() => <MyAccount />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
+                <Footer />
             </Routes>
         </AppContext.Provider>
     );
