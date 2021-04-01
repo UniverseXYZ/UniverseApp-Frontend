@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import Button from '../Button';
 import Input from '../Input';
 import defaultImage from '../../assets/images/default-image.png';
@@ -7,9 +7,11 @@ import arrow from '../../assets/images/Arrow.png';
 import testNFTImage from '../../assets/images/saved-nft1.png';
 import uuid from 'react-uuid';
 import randomColor from 'randomcolor';
+import AppContext from '../../ContextAPI';
 
 const CreateNftCol = (props) => {
 
+    const { savedNfts, setSavedNfts } = useContext(AppContext);
     const { setShowCollectible, collectionName, coverImage, collectionNFTs, setCollectionNFTs, collectionNFTsID, setCollectionNFTsID } = props;
 
     const [errors, setErrors] = useState({
@@ -93,11 +95,20 @@ const CreateNftCol = (props) => {
 
     useEffect(() => {
         if (collectionNFTsID) {
-            const res = collectionNFTs.filter(item => item.id === collectionNFTsID);
-            setName(res[0].name);
-            setDescription(res[0].description);
-            setEditions(res[0].numberOfEditions);
-            setPreviewImage(res[0].previewImage);
+            const getCollectionNFT = collectionNFTs.filter(item => item.id === collectionNFTsID);
+            if (getCollectionNFT.length) {
+                setName(getCollectionNFT[0].name);
+                setDescription(getCollectionNFT[0].description);
+                setEditions(getCollectionNFT[0].numberOfEditions);
+                setPreviewImage(getCollectionNFT[0].previewImage);
+            }
+            const getSavedNFT = savedNfts.filter(item => item.id === collectionNFTsID);
+            if (getSavedNFT.length) {
+                setName(getSavedNFT[0].name);
+                setDescription(getSavedNFT[0].description);
+                setEditions(getSavedNFT[0].numberOfEditions);
+                setPreviewImage(getSavedNFT[0].previewImage);
+            }
         }
     }, [])
 
@@ -111,7 +122,7 @@ const CreateNftCol = (props) => {
                 }
                 if (!collectionNFTsID) {
                     setCollectionNFTs([...collectionNFTs, {
-                        id: collectionNFTs.length ? collectionNFTs[collectionNFTs.length - 1].id+1 : 1,
+                        id: uuid(),
                         type: 'collection',
                         collectionId: collectionName,
                         collectionName: collectionName,
@@ -125,19 +136,38 @@ const CreateNftCol = (props) => {
                         selected: false,
                     }])
                 } else {
-                    setCollectionNFTs(collectionNFTs.map(item => 
-                        item.id === collectionNFTsID ?
-                            {
-                                ...item,
-                                bgImage: testNFTImage, // This is just for testing
-                                previewImage: previewImage,
-                                name: name,
-                                description: description,
-                                numberOfEditions: Number(editions),
-                                generatedEditions: generatedEditions,
-                            }
-                            : item
-                    ))
+                    const getSavedNFT = savedNfts.filter(item => item.id === collectionNFTsID);
+                    if (getSavedNFT.length) {
+                        setSavedNfts(savedNfts.map(item => 
+                            item.id === collectionNFTsID ?
+                                {
+                                    ...item,
+                                    bgImage: testNFTImage, // This is just for testing
+                                    previewImage: previewImage,
+                                    name: name,
+                                    description: description,
+                                    numberOfEditions: Number(editions),
+                                    generatedEditions: generatedEditions,
+                                }
+                                : item
+                        ))
+                    }
+                    collectionNFTs.map(nft => {
+                        setSavedNfts([...savedNfts, {
+                            id: nft.id,
+                            type: 'collection',
+                            collectionId: nft.collectionId,
+                            collectionName: nft.collectionName,
+                            collectionAvatar: nft.collectionAvatar,
+                            bgImage: testNFTImage, // This is just for testing
+                            previewImage: previewImage,
+                            name: name,
+                            description: description,
+                            numberOfEditions: Number(editions),
+                            generatedEditions: generatedEditions,
+                            selected: false,
+                        }])
+                    })
                     setCollectionNFTsID(null);
                 }
                 if (addToCollectionClick) {

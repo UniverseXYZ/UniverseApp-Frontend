@@ -4,6 +4,7 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import Popup from "reactjs-popup";
 import RemovePopup from '../Popups/removeNftPopup';
+import uuid from 'react-uuid';
 
 const SavedCollections = () => {
     const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } = useContext(AppContext);
@@ -45,7 +46,7 @@ const SavedCollections = () => {
                 <div className='saved__collections__lists'>
                     {savedCollections.map(collection => {
                         return (
-                            <div className='saved__collection__box' key={collection.id}>
+                            <div className='saved__collection__box' key={uuid()}>
                                 <div className='saved__collection__box__header'>
                                     {typeof collection.previewImage === 'string' && collection.previewImage.startsWith('#') ? 
                                         <div className='random__bg__color' style={{ backgroundColor: collection.previewImage }}></div> :

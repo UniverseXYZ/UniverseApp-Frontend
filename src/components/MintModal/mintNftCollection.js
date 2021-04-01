@@ -12,6 +12,7 @@ import AppContext from '../../ContextAPI';
 import CreateNftCol from './createNftCol';
 import randomColor from 'randomcolor';
 import testNFTImage from '../../assets/images/saved-nft1.png';
+import uuid from 'react-uuid';
 
 const MintNftCollection = ({ onClick }) => {
     
@@ -33,6 +34,10 @@ const MintNftCollection = ({ onClick }) => {
     });
 
     const [saveForLateClick, setSaveForLateClick] = useState(false);
+
+    const handleCollectionName = (value) => {
+        setCollectionName(value);
+    }
 
     const handleSaveForLater = () => {
         setSaveForLateClick(true);
@@ -107,29 +112,32 @@ const MintNftCollection = ({ onClick }) => {
             setCollectionName(res[0].name);
             setCoverImage(res[0].previewImage);
         }
-    }, [])
+    }, [collectionNFTs])
 
     useEffect(() => {
         if (saveForLateClick) {
             if (!errors.collectionName) {
                 if (!savedCollectionID) {
                     setSavedCollections([...savedCollections, {
-                        id: savedCollections.length ? savedCollections[savedCollections.length - 1].id+1 : 1,
+                        id: collectionName,
                         bgImage: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                         previewImage: coverImage || randomColor(),
                         name: collectionName,
                         avatar: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                     }])
                     if (collectionNFTs.length) {
+                        var newArr = [...savedNfts];
                         collectionNFTs.map(nft => {
-                            setSavedNfts([...savedNfts, nft])
+                            newArr.push(nft);
                         })
+                        setSavedNfts(newArr);
                     }
                 } else {
                     setSavedCollections(savedCollections.map(item => 
                         item.id === savedCollectionID ?
                             {
                                 ...item,
+                                id: collectionName,
                                 bgImage: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                                 previewImage: coverImage || randomColor(),
                                 name: collectionName,
@@ -137,6 +145,23 @@ const MintNftCollection = ({ onClick }) => {
                             }
                             : item
                     ))
+                    setSavedNfts(savedNfts.map(item => 
+                        item.collectionId === savedCollectionID ?
+                        {
+                            ...item,
+                            collectionId: collectionName,
+                            collectionName: collectionName,
+                            collectionAvatar: coverImage,
+                        }
+                        : item
+                    ))
+                    if (collectionNFTs.length) {
+                        var newArr = [...savedNfts];
+                        collectionNFTs.map(nft => {
+                            newArr.push(nft);
+                        })
+                        setSavedNfts(newArr);
+                    }
                     setSavedCollectionID(null);
                 }
                 setShowModal(false);
@@ -151,7 +176,7 @@ const MintNftCollection = ({ onClick }) => {
             <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>Create NFT</span></div>
             <h2>{!savedCollectionID ? 'Create NFT Collection' : 'Edit NFT Collection'}</h2>
             <div className="name-image">
-            <Input label="Collection Name" className="inp" error={errors.collectionName} placeholder="Enter the Collection Name" onChange={(e) => setCollectionName(e.target.value)} value={collectionName} />
+            <Input label="Collection Name" className="inp" error={errors.collectionName} placeholder="Enter the Collection Name" onChange={(e) => handleCollectionName(e.target.value)} value={collectionName} />
 
             <div className="input-cover">
             <p>Cover Image</p>
@@ -172,10 +197,79 @@ const MintNftCollection = ({ onClick }) => {
             </div>
             </div>
             <div className='collection__nfts'>
-                {collectionNFTs.length ?
-                    collectionNFTs.map((nft, index) => {
-                        return (
-                            <div className={`saved__nft__box`} key={nft.id}>
+                {collectionNFTs.map((nft, index) => {
+                    return (
+                        <div className={`saved__nft__box`} key={uuid()}>
+                            <div className='saved__nft__box__image'>
+                                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                            </div>
+                            <div className='saved__nft__box__name'>
+                                <h3>{nft.name}</h3>
+                                <button className='three__dots' onClick={() => { setShowDropdown(!showDropdown); setDropdownID(nft.id); }}>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    {(dropdownID === nft.id && showDropdown) &&
+                                        <ul ref={ref} className='edit__remove'>
+                                            <li className='edit' onClick={() => handleEdit(nft.id)}>
+                                                <p>Edit</p>
+                                                <img src={editIcon} alt='Edit Icon' />
+                                            </li>
+                                            <Popup
+                                                trigger={
+                                                    <li className='remove'>
+                                                        <p>Remove</p>
+                                                        <img src={removeIcon} alt='Remove Icon' />
+                                                    </li>
+                                                }
+                                            >
+                                                {
+                                                    (close) => (
+                                                        <RemovePopup
+                                                            close={close}
+                                                            nftID={nft.id}
+                                                            removedItemName={nft.name}
+                                                            removeFrom={'collection'}
+                                                            collectionNFTs={collectionNFTs}
+                                                            setCollectionNFTs={setCollectionNFTs}
+                                                        />
+                                                    )
+                                                }
+                                            </Popup>
+                                        </ul>
+                                    }
+                                </button>
+                            </div>
+                            <div className='saved__nft__box__footer'>
+                                <div className='collection__details'>
+                                    {nft.type === 'collection' &&
+                                        <>
+                                            {typeof nft.collectionAvatar === 'string' && nft.collectionAvatar.startsWith('#') ?
+                                                <div className='random__bg__color' style={{ backgroundColor: nft.collectionAvatar }}>{nft.collectionName.charAt(0)}</div> :
+                                                <img src={URL.createObjectURL(nft.collectionAvatar)} alt={nft.collectionName} />
+                                            }
+                                            <span title={nft.collectionName}>{nft.collectionName.length > 13 ? nft.collectionName.substring(0,13)+'...' : nft.collectionName}</span>
+                                        </>
+                                    }
+                                </div>
+                                {nft.generatedEditions.length > 1 ?
+                                    <div className='collection__count'>{`x${nft.generatedEditions.length}`}</div> :
+                                    <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p>
+                                }
+                            </div>
+                            {nft.generatedEditions.length > 1 &&
+                                <>
+                                    <div className='saved__nft__box__highlight__one'></div>
+                                    <div className='saved__nft__box__highlight__two'></div>
+                                </>
+                            }
+                        </div>
+                    )
+                })}
+                {savedCollectionID ? 
+                    savedNfts.map(nft => {
+                        return nft.collectionId === savedCollectionID ? (
+                            <div className={`saved__nft__box`} key={uuid()}>
                                 <div className='saved__nft__box__image'>
                                     <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
                                 </div>
@@ -224,7 +318,7 @@ const MintNftCollection = ({ onClick }) => {
                                                     <div className='random__bg__color' style={{ backgroundColor: nft.collectionAvatar }}>{nft.collectionName.charAt(0)}</div> :
                                                     <img src={URL.createObjectURL(nft.collectionAvatar)} alt={nft.collectionName} />
                                                 }
-                                                <span>{nft.collectionName}</span>
+                                                <span title={nft.collectionName}>{nft.collectionName.length > 13 ? nft.collectionName.substring(0,13)+'...' : nft.collectionName}</span>
                                             </>
                                         }
                                     </div>
@@ -240,7 +334,7 @@ const MintNftCollection = ({ onClick }) => {
                                     </>
                                 }
                             </div>
-                        )
+                        ) : <></>
                     }) : <></>
                 }
                 <div className="create-col" onClick={handleShowCollectible}>
