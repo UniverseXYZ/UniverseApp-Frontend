@@ -5,6 +5,7 @@ import removeIcon from '../../assets/images/remove.svg';
 import AppContext from '../../ContextAPI';
 import Popup from "reactjs-popup";
 import RemovePopup from '../Popups/removeNftPopup';
+import uuid from 'react-uuid';
 
 const SavedNFTs = () => {
     const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } = useContext(AppContext);
@@ -68,7 +69,7 @@ const SavedNFTs = () => {
                     <div className='saved__nfts__lists'>
                         {savedNfts.map((nft, index) => {
                             return (
-                                <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={nft.id}>
+                                <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
                                     <div className='saved__nft__box__image' onClick={() => handleSavedNfts(index)}>
                                         <img src={nft.bgImage} alt={nft.name} />
                                         {nft.selected &&
