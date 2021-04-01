@@ -1,13 +1,24 @@
 @import '../../assets/scss/variables';
 
+
 .my-account {
+
     .my-account-title {
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 16px;
-        font-family: $sharpGroteskSemiBoldFont;
-        font-weight: 600;
-        font-size: 32px;
-        line-height: 140%;
-        color: black;
+
+        h1{
+            font-family: $sharpGroteskSemiBoldFont;
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 140%;
+            color: $black;
+        }
+        button{
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+        }
+        
     }
     .my-account-description {
         max-width: 511px;
@@ -15,206 +26,472 @@
         font-size: 18px;
         line-height: 150%;
         color: rgba(0, 0, 0, 0.6);
-        margin-bottom: 40px;
+        margin-left: 8px;
     }
 
     .account-grid-container {
 
-        .account-name{
+        .account-grid-name {
             display: flex;
             width: 100%;
-            height: 80px;
+            padding: 40px 0;
+
+            .account-picture {
+                min-width: 285px;
+                
+                .account-image {
+                    width: 190px;
+                    height: 190px;
+                    border-radius: 50%;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+
+                    .default-img {
+                        width: 60px;
+                        height: 60px;
+                        margin: 64px;
+                    }
+                    .account-img{
+                        width: 190px;
+                        height: 190px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+                }
+
+                .account-picture-editing{
+                    margin-top: 12px;
+                    width: 190px;
+                    text-align: center;
+                    
+                    p{
+                        font-family: $spaceGroteskFont;
+                        font-size: 14px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.6);
+                        padding-bottom: 12px;
+                    }
+                    button{
+                        margin: auto;
+                    }
+                }
+            }
+
+            .account-grid-name-edit{
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 50px;
+
+                .account-name {
+                    margin-top: 3px;
+    
+                    h2{
+                        font-family: $sharpGroteskMediumFont;
+                        font-weight: 600;
+                        font-size: 26px;
+                        line-height: 140%;
+                        letter-spacing: 0.2px;
+                        color: $black;
+                        padding-bottom: 10px;
+                    }
+                    .account-link{
+                        display: flex;
+                        font-family: $spaceGroteskFont;
+                            font-size: 18px;
+                            line-height: 23px;
+                        .link{
+                            color: $black;
+                        }
+                        .default-address{
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                    }
+                }
+            }
+
+            .account-grid-name-editing{
+                position: relative;
+                margin-top: 30px;
+                h5{
+                    font-family: $spaceGroteskFont;
+                    font-size: 14px;
+                    line-height: 22px;
+                }
+                input{
+                    width: 540px;
+                    height: 50px;
+                    font-family: $spaceGroteskFont;
+                    font-size: 16px;
+                    line-height: 20px;
+                    margin-bottom: 20px;
+
+                    &::placeholder{
+                        color: rgba(0, 0, 0, 0.2);
+                    }
+                    &:focus {
+                        background: 
+                            linear-gradient($white, $white) padding-box,
+                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        border: 1px solid transparent;
+                    }
+                    &:focus::placeholder {
+                        color: transparent;
+                    }
+                }
+                .info-text{
+                    position: absolute;
+                    width: 229px;
+                    height: 106px;
+                    padding: 16px;
+                    left: 65px;
+                    top: -13px;
+                    background: $white;
+                    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                    border-radius: 12px;
+
+                    p{
+                        font-family: $spaceGroteskFont;
+                        font-size: 12px;
+                        line-height: 150%;
+                    }
+                }
+                .display-warning{
+                    display: flex;
+                    width: 100%;
+                    padding: 20px;
+                    background: #FDFCF9;
+                    border: 1px solid #E4B613;
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    margin-bottom: 20px;
+                    
+
+                    p{
+                        padding-left: 10px;
+                        font-family: $spaceGroteskFont;
+                        font-weight: 500;
+                        font-size: 16px;
+                        line-height: 160%;
+                        color: #E4B613;
+                    }
+                    img{
+                        margin-top: -20px;
+                    }
+                }
+                
+            }
+        }
+
+        .account-grid-about{
+            display: flex;
+            width: 100%;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 30px 0;
+
+            h5{
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+                min-width: 285px;
+            }
+
+            .account-grid-about-edit{
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+
+                .about-default-text{
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 160%;
+                    color: rgba(0, 0, 0, 0.4);
+                }
+                .about-text{
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 160%;
+                    color: $black;
+                    width: 635px;
+                }
+            }
+            .account-grid-about-editing {
+                textarea{
+                    width: 540px;
+                    height: 127px;
+                    font-family: $spaceGroteskFont;
+                    font-size: 16px;
+                    line-height: 20px;    
+                    padding: 15px 16px;
+                    margin-bottom: 20px;
+                }
+                ::placeholder{
+                    color: rgba(0, 0, 0, 0.2);
+                }
+            }
+        }
+
+        .account-grid-logo{
+            display: flex;
+            width: 100%;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 30px 0;
+
+            h5{
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+                min-width: 285px;
+            }
+
+            .account-grid-logo-edit{
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+
+                .image-logo{
+                    width: 95px;
+                }
+                .default-logo{
+                    width: 42px;
+                    height: 42px;
+                }
+            }
+
+            .account-grid-logo-editing{
+                .import-logo{
+                    text-align: center;
+                    width: 540px;
+                    height: 513px;
+                    background: rgba(0, 0, 0, 0.02);
+                    border: 1px dashed rgba(0, 0, 0, 0.1);
+                    box-sizing: border-box;
+                    border-radius: 10px;
+                    margin-bottom: 20px;
+
+                    .cloud{
+                        margin-top: 31px;
+                        margin-bottom: 16px;
+                    }
+                    h5{
+                        font-family: $spaceGroteskFont;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 160%;
+                        color: black;
+                    }
+                    p{
+                        font-family: $spaceGroteskFont;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.4);
+                        margin-bottom: 16px;
+                    }
+                    button{
+                        margin: auto;
+                    }
+
+                    .import-logo-preview{
+                        margin: 20px;
+                        h6{
+                            text-align: start;
+                            font-family: $spaceGroteskFont;
+                            font-weight: 600;
+                            font-size: 12px;
+                            line-height: 150%;
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                        .logo-picture{
+                            background-color: $white;
+                            border: 1px dashed rgba(0, 0, 0, 0.1);
+                            box-sizing: border-box;
+                            border-radius: 10px;
+
+                            .logo-img{
+                                width: 100%;
+                                max-height: 252px;
+                                object-fit: cover;
+                            }
+
+                            .default-image{
+                                width: 90px;
+                                height: 90px;
+                                margin: 91px;
+                            }
+                        }
+                    }
+                }   
+            }
+        }
+
+        .account-grid-social{
+            display: flex;
+            width: 100%;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 30px 0;
+            
+            h5{
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+                min-width: 285px;
+            }
+
+            .account-grid-social-edit{
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+
+                .site{
+                    display: flex;
+                    margin-bottom: 24px;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 20px;
+
+                    .site-link{
+                        color: $black;
+                    }
+                    .site-default-address{
+                        color: rgba(0, 0, 0, 0.4);
+                    }
+
+                    img{
+                        padding-right: 12px;
+                    }
+                }
+            }
+
+            .account-grid-social-editing{
+                h5{
+                    font-family: $spaceGroteskFont;
+                    font-weight: bold;
+                    font-size: 14px;
+                    line-height: 22px;
+                    color: $black;
+                }
+                // input{
+                //     width: 540px; 
+                //     // background-image: url("https://image.flaticon.com/icons/png/512/23/23931.png");
+                //     // background-repeat: no-repeat;
+                //     // background-size: 24px;
+                //     // background-position: 13px;
+                //     padding-left: 50px;
+                //     font-family: $spaceGroteskFont;
+                //     font-size: 16px;
+                //     line-height: 20px;
+                //     margin-bottom: 20px;
+
+                //     &::placeholder{
+                //         color: rgba(0, 0, 0, 0.2);
+                //     }
+                    
+                // }
+                
+                .twitter{
+                    position: relative;
+
+                    img{
+                        position: absolute;
+                        width: 24px;
+                        height: 24px;
+                        left: 13px;
+                        top: 36px;
+                    }
+
+                    input{
+                        width: 540px;
+                        padding-left: 50px;
+                        font-family: $spaceGroteskFont;
+                        font-size: 16px;
+                        line-height: 20px;
+                        margin-bottom: 20px;
+
+                        &::placeholder{
+                            color: rgba(0, 0, 0, 0.2);
+                        }  
+                        &:focus {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            border: 1px solid transparent;
+                        }
+                        &:focus::placeholder {
+                            color: transparent;
+                        }
+                    }
+                }
+                .instagram{
+                    position: relative;
+
+                    img{
+                        position: absolute;
+                        width: 24px;
+                        height: 24px;
+                        left: 13px;
+                        top: 36px;
+                    }
+                    input{
+                        width: 540px;
+                        padding-left: 50px;
+                        font-family: $spaceGroteskFont;
+                        font-size: 16px;
+                        line-height: 20px;
+                        margin-bottom: 20px;
+
+                        &::placeholder{
+                            color: rgba(0, 0, 0, 0.2);
+                        }
+
+                        &:focus {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            border: 1px solid transparent;
+                            
+                        }
+
+                        &:focus::placeholder {
+                            color: transparent;
+                        }
+                    }
+                }
+            }
+        }
+        .account-display-buttons{
+            display: flex;
 
             button{
-                width: 120px;
-                &.light-border-button {
-                    background: 
-                    linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                    border: 1px solid transparent;
-                }
-            }
-            .account-name-default-text{
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-                line-height: 20px;
-                color: rgba(0, 0, 0, 0.4);
-            }
-            .account-profile-name{
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-                line-height: 20px;
-                color: $black;
-            }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-            }
-            .account-name-default-text{
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-                line-height: 20px;
-                color: rgba(0, 0, 0, 0.4);
-            }
-            .account-profile-name{
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-                line-height: 20px;
-                color: $black;
-            }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-            }
-            
-        }
-
-        .account-cover-image {
-            display: flex;
-            width: 100%;
-            height: 120px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            
-            .account-picture{
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-
-                .default-img{
-                    padding-left: 23px;
-                    padding-top: 23px;
-                    
-                }
-                .cover-img{
-                    width: 80px;
-                    height: 80px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                }
-            }
-
-            p{
-                display: flex;
-                text-align: right;
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-                line-height: 22px;
-                font-weight: 500;
-                color: rgba(0, 0, 0, 0.6);
-            }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-            }
-
-            p{
-                display: flex;
-                text-align: right;
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-                line-height: 22px;
-                font-weight: 500;
-                color: rgba(0, 0, 0, 0.6);
-            }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
+                margin-right: 10px;
             }
         }
-
-        .account-website-link {
-            display: flex;
-            width: 100%;
-            height: 80px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            font-family: $spaceGroteskFont;
-            font-size: 16px;
-            line-height: 20px;
-
-            button {
-                width: 120px;
-                &.light-border-button {
-                    background: 
-                    linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                    border: 1px solid transparent;
-                }
-            }
-            .link-default-text{
-                color: rgba(0, 0, 0, 0.4);
-            }
-            .link-account-text{
-                color: $black;
-            }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-            }
-            .link-default-text{
-                color: rgba(0, 0, 0, 0.4);
-            }
-            link-account-text{
-                color: $black;
-            }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-            }
-        }
-
-        .account-grid-name{
-            display: flex;
-            width: 285px;
-            align-items: center;
-            font-family: $spaceGroteskFont;
-            font-size: 14px;
-            line-height: 22px;
-        }
-
-        .account-grid-input {
-            display: flex;
-            align-items: center;
-            width: 660px;
-
-            input{
-                width: 540px;
-                height: 50px;
-                border-radius: 12px;
-                padding: 15px;
+        
+        button{
+            // width: 120px;
+            height: max-content;
+            &.light-border-button {
                 background: 
-                        linear-gradient($white, $white) padding-box,
-                        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                border: 2px solid transparent;
+                linear-gradient($white, $white) padding-box,
+                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 1px solid transparent;
             }
-            h5{
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-            }
-            
-        }
-        .cover{
-            justify-content: space-between;
-        }
-
-        .account-grid-button {
-            display: grid;
-            align-items: center;
-            justify-content: end;
-            width: 186px;
-
-            button {
-                &.light-border-button {
-                    background: 
-                    linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                    border: 1px solid transparent;
-                }
-                img{
-                    padding-left: 5px;
-                }
+            img{
+                padding-left: 5px;
             }
         }
     }

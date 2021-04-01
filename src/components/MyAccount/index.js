@@ -1,108 +1,291 @@
 import './my-account.scss';
 import Button from '../Button'
 import Input from '../Input'
-import pencilIcon from '../../assets/images/pencil.png';
+import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-image.png'
 import { useRef, useState } from 'react';
+import instagramLogo from '../../assets/images/instagram-outlined.svg'
+import twitterLogo from '../../assets/images/icons_twitter.svg'
+import infoIcon from '../../assets/images/icon.png'
+import warningIcon from '../../assets/images/Exclamation.svg'
+import cloudIcon from '../../assets/images/ion_cloud.svg'
 
 const MyAccount = () => {
 
-    const [displayName, setDisplayName] = useState({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", textHide:false, nameHide:true, imgHide:false})
-    const [websiteLink, setWebsiteLink] = useState({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", hide:false, textHide:false})
+    const [hideIcon, setHideIcon] = useState(true)
+    const [nameEditing, setNameEditing] = useState(true)
+    const [aboutEditing, setAboutEditing] = useState(true)
+    const [logoEditing, setLogoEditing] = useState(true)
+    const [socialEditing, setSocialEditing] = useState(true)
 
+    const accountInput = useRef(null)
+    const logoInput = useRef(null)
+
+    const [accountDisplay, setAccountDisplay] = useState({name:"", pageAddress:"", accountImage: null})
     const [accountName, setAccountName] = useState("")
-    const [linkName, setLinkName] = useState("")
-    const [coverImage, setCoverImage] = useState(null)
+    const [accountPage, setAccountPage] = useState("")
+    const [accountImage, setAccountImage] = useState(null)
 
-    const inputFile = useRef(null)
+    const [about, setAbout] = useState("")
+    const [aboutNew, setAboutNew] =useState("")
 
-    const changeDisplay = () =>{
-        if (displayName.buttonName === "EDIT") {
-            setDisplayName({buttonName:"SAVE", buttonStyle:"light-button", inputStyle:"inp-light-border", textHide:true, nameHide:true, imgHide:true})
-        }
-        else if (accountName.length > 0) {
-            setDisplayName({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", textHide:true, nameHide:false, imgHide:false})
-        }
-        else {
-            setDisplayName({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", textHide:false, nameHide:true, imgHide:false})
-        }
+    const [logoImage, setLogoImage] = useState(null)
+    const [logo, setLogo] = useState(null)
+
+    const [socialDisplay, setSocialDisplay] = useState({twitter:"", instagram:""})
+    const [twitterLink, setTwitterLink] = useState("")
+    const [instagramLink, setInstagramLink] = useState("")
+
+    const saveDisplayChanges = () => {
+        setAccountDisplay({name:accountName, pageAddress:accountPage, accountImage: accountImage})
+        setNameEditing(true)
+        // setAccountImage(null);
+    }  
+    const cancelDisplayChanges = () => {
+        setAccountName(accountDisplay.name)
+        setAccountPage(accountDisplay.pageAddress)
+        setNameEditing(true)
+        setAccountImage(null);
+    }  
+
+    const saveAboutChanges = () => {
+        setAbout(aboutNew)
+        setAboutEditing(true)
+    }
+    const cancelAboutChanges = () => {
+        setAboutNew(about)
+        setAboutEditing(true)
     }
 
-    const changeWebsiteLink = () =>{
-        if (websiteLink.buttonName === "EDIT") {
-            setWebsiteLink({buttonName:"SAVE", buttonStyle:"light-button", inputStyle:"inp-light-border", hide:true, textHide:true})
-            if (linkName.length === 0) {
-                setLinkName("universe.xyz/")
-            }
-            else{
-                setLinkName("universe.xyz/"+linkName)
-            }
+    const saveLogoChanges = () => {
+        if (logoImage) {
+            setLogo(logoImage)
         }
-        else if(linkName.length >= 14) {
-            setWebsiteLink({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", hide:false, textHide:true})
-            setLinkName(linkName.substring(13))
-        }
-        else {
-            setWebsiteLink({buttonName:"EDIT", buttonStyle:"light-border-button", inputStyle:"inp-disable", hide:false, textHide:false})
-            setLinkName("")
-        }
+        setLogoEditing(true)
+    }
+    const cancelLogoChanges = () => {
+        setLogoImage(null)
+        setLogoEditing(true)
+    }
+    
+    const saveSocialChanges = () => {
+        setSocialDisplay({twitter:twitterLink, instagram:instagramLink})
+        setSocialEditing(true)
+    }
+
+    const cancelSocialChanges = () => {
+        setTwitterLink(socialDisplay.twitter)
+        setInstagramLink(socialDisplay.instagram)
+        setSocialEditing(true)
     }
 
     return (
-        <div className="container my-account">
-            <h1 className="my-account-title">My account</h1>
+        <div className="my-account container">
+            <div className="my-account-title">
+                <h1>My Profile</h1>
+                <Button className="light-button">PREVIEW MY UNIVERSE PAGE</Button>
+            </div>
             <p className="my-account-description">You can set preffered display name, create your branded profile URL and manage other personal settings</p>
 
             <div className="account-grid-container">
-                <div className="account-name">
-                    <div className="account-grid-name">
-                        <h5>Display name</h5>
-                    </div>
-                    <div className="account-grid-input">
-                        <Input className={displayName.inputStyle} type="text" value={accountName} onChange={(e)=>setAccountName(e.target.value)}></Input>
-                        <p hidden={displayName.textHide} className="account-name-default-text">Enter your display name</p>
-                        <p hidden={displayName.nameHide} className="account-profile-name">{accountName}</p>
-                    </div>
-                    <div className="account-grid-button">
-                        <Button className={displayName.buttonStyle} onClick={()=>changeDisplay()} >{displayName.buttonName}
-                        <img hidden={displayName.imgHide} src={pencilIcon} alt='Edit Icon' /></Button>
-                    </div>
-                </div>
-
-                <div className="account-cover-image">
-                    <div className="account-grid-name">
-                        <h5>Cover image</h5>
-                    </div>
-                    <div className="account-grid-input cover">
-                        <div className="account-picture">
-                            {coverImage ? 
-                                <img className="cover-img" src={URL.createObjectURL(coverImage)} alt='Cover' />
-                            :
-                                <img className="default-img" src={defaultImage} alt='Cover' />}
+                
+                <div className="account-grid-name">
+                    <div className="account-picture">
+                        <div className="account-image">
+                            {accountImage &&
+                                <img className="account-img" src={URL.createObjectURL(accountImage)} alt='Cover' />
+                            }
+                            {!accountImage && accountDisplay.accountImage &&
+                                <img className="account-img" src={URL.createObjectURL(accountDisplay.accountImage)} alt='Cover' />
+                            }
+                            {!accountImage && !accountDisplay.accountImage &&
+                                <img className="default-img" src={defaultImage} alt='Cover' />
+                            }
+                            
                         </div>
-                        <p>We recommend an image of a least 400x400px. Gifs works too</p>
-                        <input type="file" className="inp-disable" ref={inputFile} onChange={(e)=>setCoverImage(e.target.files[0])}></input>
+                        {!nameEditing ?
+                            <div className="account-picture-editing">
+                                <p>We recomend an image of at least 400x400.</p>
+                                <Button className="light-border-button" onClick={() => accountInput.current.click()}>CHOOSE FILE</Button>
+                                <input type="file" className="inp-disable" ref={accountInput} onChange={(e)=>e.target.files[0] && setAccountImage(e.target.files[0])}></input>
+                            </div>:null
+                        }
+                        
                     </div>
-                    <div className="account-grid-button">
-                        <Button className="light-border-button" onClick={()=>inputFile.current.click()}>CHOOSE FILE</Button>
-                    </div>
+                    {nameEditing ? 
+                        <div className="account-grid-name-edit">
+                            <div className="account-name">
+                                {accountDisplay.name!=""?
+                                    <h2>{accountDisplay.name}</h2>
+                                :
+                                    <h2>Your Name</h2>
+                                }
+                                {accountDisplay.pageAddress != ""?
+                                    <div className="account-link">
+                                        <p className="link">{`universe.xyz/${accountDisplay.pageAddress}`}</p>
+                                    </div>
+                                :
+                                    <div className="account-link">
+                                        <p className="link">universe.xyz/</p>
+                                        <p className="default-address">youraddress</p>
+                                    </div>
+                                }
+                                
+                            </div>
+                            <Button className="light-border-button" onClick={() => setNameEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                        </div> 
+                    : 
+                        <div className="account-grid-name-editing">    
+                            <h5>Display name</h5>
+                            <Input placeholder="Enter your display name" className="inp" value={accountName} onChange={(e)=>setAccountName(e.target.value)}/>
+                            
+                            <h5>Universe page address <img src={infoIcon} alt='Info Icon' onMouseOver={()=>setHideIcon(false)} onMouseLeave={()=>setHideIcon(true)}/></h5>
+                            <div hidden={hideIcon} className="info-text">
+                                <p>Universe page is your own brand landing page within the Universe ecosystem. It can contain your logo, description, and social links</p>
+                            </div>
+                            <Input placeholder="Enter your display name" className="inp" value={accountPage} onChange={(e) => setAccountPage(e.target.value)}/>
+                            {(accountName!=accountDisplay.name || accountPage!=accountDisplay.pageAddress || accountImage)?
+                                <div className="display-warning">
+                                    <img src={warningIcon}/>
+                                    <p>Your edits will be visible on the My Universe landing page but will not be displayed on the current running auctions landing pages.</p>
+                                </div>
+                                :null
+                            }
+                            
+                            
+                            <div className="account-display-buttons">
+                                <Button className="light-button" onClick={() => saveDisplayChanges()}>SAVE CHANGES</Button>
+                                <Button className="light-border-button" onClick={() => cancelDisplayChanges()}>CANCEL</Button>
+                            </div>
+                        </div>
+                    }
                 </div>
 
-                <div className="account-website-link">
-                    <div className="account-grid-name">
-                        <h5>Universe website link</h5>
-                    </div>
-                    <div className="account-grid-input">
-                        <Input type="text" className={websiteLink.inputStyle} value={linkName} onChange={(e)=>setLinkName(e.target.value)}></Input>
-                        <h5 hidden={websiteLink.hide}>universe.xyz/</h5>
-                        <p className="link-default-text" hidden={websiteLink.textHide}>your_brand</p>
-                        <p className="link-account-text" hidden={websiteLink.hide}>{linkName}</p>
-                    </div>
-                    <div className="account-grid-button">
-                        <Button className={websiteLink.buttonStyle} onClick={()=>changeWebsiteLink()}>{websiteLink.buttonName}
-                        <img hidden={websiteLink.hide} src={pencilIcon} alt='Edit Icon' /></Button>
-                    </div>
+                <div className="account-grid-about">
+                    <h5>About</h5>
+                    {aboutEditing?
+                        <div className="account-grid-about-edit">
+                            {about==""?
+                            <p className="about-default-text">Write few sentences about yourself</p>
+                            :
+                            <p className="about-text">{about}</p>
+                            }
+                            
+                            <Button className="light-border-button" onClick={() => setAboutEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                        </div>
+                    :
+
+                        <div className="account-grid-about-editing">
+                            <textarea placeholder="Enter few words about yourself" className="inp" value={aboutNew} onChange = {(e) => setAboutNew(e.target.value)}/>
+                            <div className="account-display-buttons">
+                                <Button className="light-button" onClick={() => saveAboutChanges()}>SAVE CHANGES</Button>
+                                <Button className="light-border-button" onClick={() => cancelAboutChanges()}>CANCEL</Button>
+                            </div>
+                        </div>
+                    }
                 </div>
+
+                <div className="account-grid-logo">
+                    <h5>Personal logo</h5>
+                    {logoEditing?
+                        <div className="account-grid-logo-edit">
+                            {logo?
+                                <img className="image-logo" src={URL.createObjectURL(logo)}/>
+                                :
+                                <img className="default-logo" src={defaultImage} alt="Cover"/>    
+                            }     
+                            <Button className="light-border-button" onClick={()=> setLogoEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                        </div>
+                    :
+                        <div className="account-grid-logo-editing">
+                            <div className="import-logo">
+                                <img className="cloud" src={cloudIcon}/>
+                                <h5>Drop your file here</h5>
+                                <p>(min 300x300px, SVG/PNG/JPEG, max 1mb)</p>
+                                <input type="file" className="inp-disable" ref={logoInput} onChange={(e)=> e.target.files[0] && setLogoImage(e.target.files[0])}></input>
+                                <Button className="light-border-button" onClick={() => logoInput.current.click()}>CHOOSE FILE</Button>
+                                <div className="import-logo-preview">
+                                    <h6>Preview</h6>
+                                    <div className="logo-picture">
+                                    {
+                                        logoImage &&
+                                        <img className="logo-img" src={URL.createObjectURL(logoImage)} alt='Cover' />
+                                    }
+                                    {
+                                        !logoImage && logo &&
+                                        <img className="logo-img" src={URL.createObjectURL(logo)} alt='Cover' />
+                                    }
+                                    {
+                                        !logoImage && !logo &&
+                                        <img className="default-image" src={defaultImage} alt='Cover'/>
+                                    }  
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="account-display-buttons">
+                                <Button className="light-button" onClick={() => saveLogoChanges()}>SAVE CHANGES</Button>
+                                <Button className="light-border-button" onClick={() => cancelLogoChanges()}>CANCEL</Button>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>
+
+                <div className="account-grid-social">
+                    <h5>Social</h5>
+                    {socialEditing?
+                        <div className="account-grid-social-edit">
+                            <div className="social-sites">
+                            {socialDisplay.instagram == ""?
+                                <div className="site">
+                                    <img src={instagramLogo}/>
+                                    <p className="site-link">instagram.com/</p>
+                                    <p className="site-default-address">youraddress</p>
+                                </div>
+                            :
+                                <div className="site">
+                                    <img src={instagramLogo}/>
+                                    <p className="site-link">{`instagram.com/${socialDisplay.instagram}`}</p>
+                                </div>
+                            }
+                            {socialDisplay.twitter == ""?
+                                <div className="site">
+                                    <img src={twitterLogo}/>
+                                    <p className="site-link">twitter.com/</p>
+                                    <p className="site-default-address">youraddress</p>
+                                </div>
+                            :
+                                <div className="site">
+                                    <img src={twitterLogo}/>
+                                    <p className="site-link">{`twitter.com/${socialDisplay.twitter}`}</p>
+                                </div>
+                            }   
+                                
+                            </div>
+                            <Button className="light-border-button" onClick={() => setSocialEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                        </div>
+                    :
+                        <div className="account-grid-social-editing">
+                            <div className="twitter">
+                                <h5>Twitter profile</h5>
+                                <img src={twitterLogo}/>
+                                <Input  placeholder="twitter.com/username" className="inp" value={twitterLink} onChange={(e) => setTwitterLink(e.target.value)}/>
+                            </div>
+                            <div className="instagram">
+                                <h5>Instagram profile</h5>
+                                <img src={instagramLogo}/>
+                                <Input placeholder="instagram.com/username" className="inp" value={instagramLink} onChange={(e) => setInstagramLink(e.target.value)}/>
+                            </div>
+                            <div className="account-display-buttons">
+                                <Button className="light-button" onClick={() => saveSocialChanges()}>SAVE CHANGES</Button>
+                                <Button className="light-border-button" onClick={() => cancelSocialChanges()}>CANCEL</Button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
             </div>
         </div>
     )
