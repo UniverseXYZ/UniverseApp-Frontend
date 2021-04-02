@@ -37,9 +37,16 @@ const MyAccount = () => {
     const [instagramLink, setInstagramLink] = useState("")
 
     const saveDisplayChanges = () => {
-        setAccountDisplay({name:accountName, pageAddress:accountPage, accountImage: accountImage})
+        if (accountImage) {
+            setAccountDisplay({name:accountName, pageAddress:accountPage, accountImage: accountImage})
+            setAccountImage(null);
+        }
+        else{
+            setAccountDisplay(previousAccountDisplay => ({...previousAccountDisplay, name:accountName, pageAddress:accountPage}))
+        }
+        
         setNameEditing(true)
-        // setAccountImage(null);
+        
     }  
     const cancelDisplayChanges = () => {
         setAccountName(accountDisplay.name)
