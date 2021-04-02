@@ -1,9 +1,9 @@
-import './footer.scss';
+import './Footer.scss';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg'
 import twitter from '../../assets/images/Twitter.svg'
 import discord from '../../assets/images/Discord.svg'
-import Btn from '../Button';
+import Btn from '../button/Button';
 
 const Footer = () => {
     return (

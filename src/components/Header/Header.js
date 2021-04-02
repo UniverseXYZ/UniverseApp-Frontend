@@ -1,5 +1,5 @@
-import './header.scss';
-import appLogo from '../../assets/images/dark.png';
+import './Header.scss';
+import appLogo from '../../assets/images/dark.svg';
 import Nav from './Nav';
 import { Link } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import './light-button.scss';
+import './Button.scss';
 
 const Button = ({ children, ...restProps }) => {
     return (

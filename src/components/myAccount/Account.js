@@ -1,12 +1,12 @@
-import './my-account.scss';
-import Button from '../Button'
-import Input from '../Input'
+import './Account.scss';
+import Button from '../button/Button';
+import Input from '../input/Input';
 import pencilIcon from '../../assets/images/edit.svg';
-import defaultImage from '../../assets/images/default-image.png'
+import defaultImage from '../../assets/images/default-img.svg';
 import { useRef, useState } from 'react';
 import instagramLogo from '../../assets/images/instagram-outlined.svg'
 import twitterLogo from '../../assets/images/icons_twitter.svg'
-import infoIcon from '../../assets/images/icon.png'
+import infoIcon from '../../assets/images/icon.svg'
 import warningIcon from '../../assets/images/Exclamation.svg'
 import cloudIcon from '../../assets/images/ion_cloud.svg'
 

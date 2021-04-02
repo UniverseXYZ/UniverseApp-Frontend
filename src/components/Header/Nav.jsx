@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import Icon from '../../assets/images/icon1.png';
+import Icon from '../../assets/images/icon1.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import AppContext from '../../ContextAPI';
@@ -38,7 +38,7 @@ const Nav = () => {
                     <div ref={ref} className='dropdown minting-drop'>
                         <div className='dropdown__body'>
                             <button onClick={() => { history.push(''); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
-                            <button className="active-auctions" onClick={() => { setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
+                            <button className="active-auctions" onClick={() => { history.push('my-auctions'); setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
                             <button onClick={() => { history.push(''); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Upcoming releases</button>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ const Nav = () => {
                         <div className='dropdown__body'>
                             <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
                             <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
-                            <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
+                            <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
                             {/* <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isDropdownOpened) }}>My Account</button> */}
                             <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened)}}>Sign Out</button>
                         </div>
