@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Icon from '../../assets/images/icon1.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import {CopyToClipboard} from 'react-copy-to-clipboard';

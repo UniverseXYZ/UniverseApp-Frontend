@@ -1,7 +1,7 @@
 import Input from '../input/Input';
 import Button from '../button/Button';
 import arrow from '../../assets/images/arrow.svg';
-import union from '../../assets/images/union.svg';
+import union from '../../assets/images/Union.svg';
 import upload from '../../assets/images/upload.svg';
 import RemovePopup from '../popups/RemoveNftPopup';
 import Popup from "reactjs-popup";
@@ -11,12 +11,21 @@ import { useContext, useRef, useState, useEffect } from 'react';
 import AppContext from '../../ContextAPI';
 import CreateNftCol from './CreateNftCol';
 import randomColor from 'randomcolor';
-import testNFTImage from '../../assets/images/saved-nft1.svg';
 import uuid from 'react-uuid';
 
 const MintNftCollection = ({ onClick }) => {
     
-    const { setShowModal, savedCollections, setSavedCollections, savedNfts, setSavedNfts, savedCollectionID, setSavedCollectionID } = useContext(AppContext);
+    const {
+        setShowModal,
+        savedCollections,
+        setSavedCollections,
+        savedNfts,
+        setSavedNfts,
+        savedCollectionID,
+        setSavedCollectionID,
+        myNFTs,
+        setMyNFTs,
+    } = useContext(AppContext);
     
     const [collectionNFTs, setCollectionNFTs] = useState([]);
     const [collectionNFTsID, setCollectionNFTsID] = useState(null);
@@ -31,48 +40,83 @@ const MintNftCollection = ({ onClick }) => {
 
     const [errors, setErrors] = useState({
         collectionName: '',
+        collectible: '',
     });
 
     const [saveForLateClick, setSaveForLateClick] = useState(false);
+    const [mintNowClick, setMintNowClick] = useState(false);
 
     const handleCollectionName = (value) => {
         setCollectionName(value);
     }
 
     const handleSaveForLater = () => {
+        setMintNowClick(false);
         setSaveForLateClick(true);
         if (!collectionName) {
             setErrors({
                 collectionName: '“Collection name” is not allowed to be empty',
+                collectible: '',
             });
         } else {
-            const collectionNameExists = savedCollections.filter(collection => collection.name.toLowerCase() === collectionName.toLowerCase());
-            if (collectionNameExists.length && !savedCollectionID) {
+            const collectionNameExists = savedCollections.length ? savedCollections.filter(collection => collection.name.toLowerCase() === collectionName.toLowerCase()) : [];
+            const existsInMyNfts = myNFTs.length ? myNFTs.filter(nft => nft.collectionName?.toLowerCase() === collectionName.toLowerCase()) : [];
+            if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
                 setErrors({
                     collectionName: '“Collection name” already exists',
+                    collectible: '',
                 });
             } else {
                 setErrors({
                     collectionName: '',
+                    collectible: '',
+                });
+            }
+        }
+    }
+
+    const handleMinting = () => {
+        setSaveForLateClick(false);
+        setMintNowClick(true);
+        setErrors({
+            collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
+            collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
+        });
+        if (collectionName) {
+            const collectionNameExists = savedCollections.length ? savedCollections.filter(collection => collection.name.toLowerCase() === collectionName.toLowerCase()) : [];
+            const existsInMyNfts = myNFTs.length ? myNFTs.filter(nft => nft.collectionName?.toLowerCase() === collectionName.toLowerCase()) : [];
+            if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
+                setErrors({
+                    collectionName: '“Collection name” already exists',
+                    collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
+                });
+            } else {
+                setErrors({
+                    collectionName: '',
+                    collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
                 });
             }
         }
     }
 
     const handleShowCollectible = () => {
+        setMintNowClick(false);
         if (!collectionName) {
             setErrors({
                 collectionName: '“Collection name” is not allowed to be empty',
+                collectible: '',
             });
         } else {
             const collectionNameExists = savedCollections.filter(collection => collection.name.toLowerCase() === collectionName.toLowerCase());
             if (collectionNameExists.length && !savedCollectionID) {
                 setErrors({
                     collectionName: '“Collection name” already exists',
+                    collectible: '',
                 });
             } else {
                 setErrors({
                     collectionName: '',
+                    collectible: '',
                 });
                 setShowCollectible(true);
             }
@@ -120,10 +164,8 @@ const MintNftCollection = ({ onClick }) => {
                 if (!savedCollectionID) {
                     setSavedCollections([...savedCollections, {
                         id: collectionName,
-                        bgImage: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                         previewImage: coverImage || randomColor(),
                         name: collectionName,
-                        avatar: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                     }])
                     if (collectionNFTs.length) {
                         var newArr = [...savedNfts];
@@ -138,10 +180,8 @@ const MintNftCollection = ({ onClick }) => {
                             {
                                 ...item,
                                 id: collectionName,
-                                bgImage: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                                 previewImage: coverImage || randomColor(),
                                 name: collectionName,
-                                avatar: coverImage ? testNFTImage : randomColor(), // This is just for testing, instead of testNFTImage, we should use coverImage, so it should be coverImage || randomColor()
                             }
                             : item
                     ))
@@ -156,14 +196,36 @@ const MintNftCollection = ({ onClick }) => {
                         : item
                     ))
                     if (collectionNFTs.length) {
-                        var newArr = [...savedNfts];
+                        var newArray = [...savedNfts];
                         collectionNFTs.map(nft => {
-                            newArr.push(nft);
+                            newArray.push(nft);
                         })
-                        setSavedNfts(newArr);
+                        setSavedNfts(newArray);
                     }
                     setSavedCollectionID(null);
                 }
+                setShowModal(false);
+                document.body.classList.remove('no__scroll');
+            }
+        }
+        if (mintNowClick) {
+            if (!errors.collectionName && !errors.collectible) {
+                var newMyNFTs = [...myNFTs];
+                collectionNFTs.map(nft => {
+                    newMyNFTs.push({
+                        id: uuid(),
+                        type: 'collection',
+                        collectionId: collectionName,
+                        collectionName: collectionName,
+                        collectionAvatar: coverImage || randomColor(),
+                        previewImage: nft.previewImage,
+                        name: nft.name,
+                        description: nft.description,
+                        numberOfEditions: Number(nft.editions),
+                        generatedEditions: nft.generatedEditions,
+                    });
+                })
+                setMyNFTs(newMyNFTs);
                 setShowModal(false);
                 document.body.classList.remove('no__scroll');
             }
@@ -346,10 +408,15 @@ const MintNftCollection = ({ onClick }) => {
                     </div>
                 </div>
             </div>
-            <p className="error-message"></p>
+            {errors.collectible && <p className="error-message">{errors.collectible}</p>}
             <div className="collection-buttons">
-                <Button className="light-button">mint now</Button>
-                <Button className="light-border-button" onClick={handleSaveForLater}>save for later</Button>
+                {!savedCollectionID ?
+                    <>
+                        <Button className="light-button" onClick={handleMinting}>mint now</Button>
+                        <Button className="light-border-button" onClick={handleSaveForLater}>save for later</Button>
+                    </> :
+                    <Button className="light-button" onClick={handleSaveForLater}>Save Changes</Button>
+                }
             </div>
         </div>     
     ) : (

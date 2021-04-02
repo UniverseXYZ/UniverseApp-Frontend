@@ -122,12 +122,12 @@ const MyAccount = () => {
                     {nameEditing ? 
                         <div className="account-grid-name-edit">
                             <div className="account-name">
-                                {accountDisplay.name!=""?
+                                {accountDisplay.name!==""?
                                     <h2>{accountDisplay.name}</h2>
                                 :
                                     <h2>Your Name</h2>
                                 }
-                                {accountDisplay.pageAddress != ""?
+                                {accountDisplay.pageAddress !== ""?
                                     <div className="account-link">
                                         <p className="link">{`universe.xyz/${accountDisplay.pageAddress}`}</p>
                                     </div>
@@ -151,9 +151,9 @@ const MyAccount = () => {
                                 <p>Universe page is your own brand landing page within the Universe ecosystem. It can contain your logo, description, and social links</p>
                             </div>
                             <Input placeholder="Enter your display name" className="inp" value={accountPage} onChange={(e) => setAccountPage(e.target.value)}/>
-                            {(accountName!=accountDisplay.name || accountPage!=accountDisplay.pageAddress || accountImage)?
+                            {(accountName!==accountDisplay.name || accountPage!==accountDisplay.pageAddress || accountImage)?
                                 <div className="display-warning">
-                                    <img src={warningIcon}/>
+                                    <img alt='' src={warningIcon}/>
                                     <p>Your edits will be visible on the My Universe landing page but will not be displayed on the current running auctions landing pages.</p>
                                 </div>
                                 :null
@@ -172,7 +172,7 @@ const MyAccount = () => {
                     <h5>About</h5>
                     {aboutEditing?
                         <div className="account-grid-about-edit">
-                            {about==""?
+                            {about===""?
                             <p className="about-default-text">Write few sentences about yourself</p>
                             :
                             <p className="about-text">{about}</p>
@@ -197,7 +197,7 @@ const MyAccount = () => {
                     {logoEditing?
                         <div className="account-grid-logo-edit">
                             {logo?
-                                <img className="image-logo" src={URL.createObjectURL(logo)}/>
+                                <img alt='' className="image-logo" src={URL.createObjectURL(logo)}/>
                                 :
                                 <img className="default-logo" src={defaultImage} alt="Cover"/>    
                             }     
@@ -206,7 +206,7 @@ const MyAccount = () => {
                     :
                         <div className="account-grid-logo-editing">
                             <div className="import-logo">
-                                <img className="cloud" src={cloudIcon}/>
+                                <img alt='' className="cloud" src={cloudIcon}/>
                                 <h5>Drop your file here</h5>
                                 <p>(min 300x300px, SVG/PNG/JPEG, max 1mb)</p>
                                 <input type="file" className="inp-disable" ref={logoInput} onChange={(e)=> e.target.files[0] && setLogoImage(e.target.files[0])}></input>
@@ -245,27 +245,27 @@ const MyAccount = () => {
                     {socialEditing?
                         <div className="account-grid-social-edit">
                             <div className="social-sites">
-                            {socialDisplay.instagram == ""?
+                            {socialDisplay.instagram === ""?
                                 <div className="site">
-                                    <img src={instagramLogo}/>
+                                    <img alt='' src={instagramLogo}/>
                                     <p className="site-link">instagram.com/</p>
                                     <p className="site-default-address">youraddress</p>
                                 </div>
                             :
                                 <div className="site">
-                                    <img src={instagramLogo}/>
+                                    <img alt='' src={instagramLogo}/>
                                     <p className="site-link">{`instagram.com/${socialDisplay.instagram}`}</p>
                                 </div>
                             }
-                            {socialDisplay.twitter == ""?
+                            {socialDisplay.twitter === ""?
                                 <div className="site">
-                                    <img src={twitterLogo}/>
+                                    <img alt='' src={twitterLogo}/>
                                     <p className="site-link">twitter.com/</p>
                                     <p className="site-default-address">youraddress</p>
                                 </div>
                             :
                                 <div className="site">
-                                    <img src={twitterLogo}/>
+                                    <img alt='' src={twitterLogo}/>
                                     <p className="site-link">{`twitter.com/${socialDisplay.twitter}`}</p>
                                 </div>
                             }   
@@ -277,12 +277,12 @@ const MyAccount = () => {
                         <div className="account-grid-social-editing">
                             <div className="twitter">
                                 <h5>Twitter profile</h5>
-                                <img src={twitterLogo}/>
+                                <img alt='' src={twitterLogo}/>
                                 <Input  placeholder="twitter.com/username" className="inp" value={twitterLink} onChange={(e) => setTwitterLink(e.target.value)}/>
                             </div>
                             <div className="instagram">
                                 <h5>Instagram profile</h5>
-                                <img src={instagramLogo}/>
+                                <img alt='' src={instagramLogo}/>
                                 <Input placeholder="instagram.com/username" className="inp" value={instagramLink} onChange={(e) => setInstagramLink(e.target.value)}/>
                             </div>
                             <div className="account-display-buttons">
