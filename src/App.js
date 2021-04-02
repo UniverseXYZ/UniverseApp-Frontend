@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import MyNFTs from './components/MyNFTs';
 import MyAccount from './components/MyAccount';
+import MyAuction from './components/Auctions';
 import AppContext from './ContextAPI';
 import nft1Image from './assets/images/saved-nft1.png';
 import nft2Image from './assets/images/saved-nft2.png';
@@ -117,6 +118,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={() => <MyNFTs />} />
                     <Route exact path="/my-account" component={() => <MyAccount />} />
+                    <Route exact path="/myAuctions" component={() => <MyAuction />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <Footer />
