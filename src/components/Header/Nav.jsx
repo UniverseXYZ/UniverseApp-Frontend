@@ -80,7 +80,7 @@ const Nav = () => {
                         <div className='dropdown__body'>
                             <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
                             <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
-                            <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
+                            <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
                             {/* <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isDropdownOpened) }}>My Account</button> */}
                             <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened)}}>Sign Out</button>
                         </div>

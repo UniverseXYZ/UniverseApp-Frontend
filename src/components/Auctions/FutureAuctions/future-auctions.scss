@@ -1,0 +1,330 @@
+@import '../../../assets/scss/variables';
+
+.future-auctions {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 34px 30px;
+
+    .auction-header{
+        display: flex;
+        justify-content: space-between;
+        height: 42px;
+        align-items: center;
+        margin-bottom: 6px;
+
+        h3{
+            font-family: $sharpGroteskMediumFont;
+            font-weight: 600;
+            font-size: 16px;
+            font-style: normal;
+            line-height: 130%;
+            letter-spacing: 0.2px;
+            color: $black;
+        }
+
+        .launch-auction{
+            display: flex;
+
+            .line{
+                width: 0;
+                height: 42px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                margin-left: 20px;
+                margin-right: 12px;
+            }
+        }
+
+    }
+    
+    .auctions-launch-dates{
+        display: flex;
+
+        .total{
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 6px 16px;
+            margin-right: 12px;
+
+            p{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+                line-height: 150%;
+                color: $black;
+            }
+        }
+        .error{
+            border: 1px solid #FF4949;
+            p{
+                color: #FF4949;
+            }
+            img{
+                visibility: visible;
+                margin-left: 13px;
+                margin-top: -2px;
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        .launch-date{
+            position: relative;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            box-sizing: border-box;
+            padding: 6px 16px;
+            margin-right: 12px;
+            align-items: center;
+
+            p{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+                line-height: 150%;  
+            }
+            .launch-info{
+                position: absolute;
+                z-index: 2;
+                padding: 16px;
+                width: 224px;
+                background: $white;
+                border-radius: 12px;
+                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                top: -100px;
+                left: 136px;
+
+                p{
+                    font-family: $spaceGroteskFont;
+                    font-weight: 300;
+                    font-size: 12px;
+                    line-height: 150%;
+                    color: $black;
+                }
+            }
+        }
+
+        .end-date{
+            position: relative;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            box-sizing: border-box;
+            padding: 6px 16px;
+            margin-right: 12px;
+            align-items: center;
+
+            p{
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+                line-height: 150%; 
+            }
+            img{
+                // display: none;
+                // margin-left: 13px;
+                // margin-top: -2px;
+                // width: 14px;
+                // height: 14px;
+            }
+            .end-info{
+                position: absolute;
+                z-index: 2;
+                padding: 16px;
+                width: 251px;
+                background: $white;
+                border-radius: 12px;
+                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                top: -100px;
+                left: 99px;
+
+                p{
+                    font-family: $spaceGroteskFont;
+                    font-weight: 300;
+                    font-size: 12px;
+                    line-height: 150%;
+                    color: $black;
+                }
+            }
+        }
+    }
+    .auctions-steps{
+        display: flex;
+        text-align: center;
+        justify-content: space-between;
+        margin: 30px 34px 64px 64px; 
+
+        h6{
+            font-family: $spaceGroteskFont;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 150%;
+            color: rgba(0, 0, 0, 0.4);
+        }
+        h4{
+            font-family: $spaceGroteskFont;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 150%;
+            color: $black;
+            margin-bottom: 2px;
+        }
+        .circle{
+            position: relative;
+            // z-index: 3;
+            margin: auto;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-bottom: 7px;
+
+            .hz-line{
+                position: absolute;
+                left: 20px;
+                top: 10px;
+                width: 340px;
+                height: 0px;
+                border: 1px solid red;
+            }
+
+            img{
+                width: 20px;
+                height: 20px;
+                object-fit: contain;
+            }
+        }
+        .step-1{
+            .circle{
+                .hz-line{
+                    // z-index: 1;
+                    background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #bceb01, #9ceb28) border-box;
+                    border: 1px solid transparent;
+                    width: 340px;
+                }
+            }
+            button{
+                &.light-border-button {
+                    background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                    border: 1px solid transparent;
+                }
+            }
+        }
+
+        .step-2{
+            .circle{
+                z-index: 9999;
+                background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 1px solid transparent;
+
+                .hz-line{
+                    z-index: 2;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    width: 360px;
+                }
+            }
+        }
+        .step-3{
+            .circle{
+                z-index: 9999;
+                background: $white;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
+    .auctions-future-tier{
+        width: 100%;
+        
+
+        .future-tier{
+            margin-bottom: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 24px 30px;
+            background: $white;
+            box-sizing: border-box;
+            border-radius: 10px;
+
+            .future-tier-header{
+                display: flex;
+                margin-bottom: 15px;
+
+                h3{
+                    font-family: $sharpGroteskMediumFont;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 150%;
+                    color: $black;
+                    margin-right: 22px;
+                }
+                p{
+                    font-family: $spaceGroteskFont;
+                    font-size: 14px;
+                    line-height: 150%;
+                    color: $black;
+                    margin-right: 22px;
+                }
+            }
+            .future-tier-body{
+                display: flex;
+                background: $white;
+
+                .future-tier-image{
+                    position: relative;
+                    height: 95px;
+                    width: 87px;
+                    margin-right: 13px;
+                    
+                    .future-tier-image-main{
+                        position: absolute;
+                        background: $white;
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        z-index: 1;
+                        box-sizing: border-box;
+                        border-radius: 10px;
+                        width: 87px;
+                        height: 87px;
+                        padding: 6px;
+
+                        img{
+                            z-index: 9999;
+                        }
+                    }
+                    .future-tier-image-first{
+                        position: absolute;
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        border-radius: 12px;
+                        width: 75px;
+                        height: 87px;
+                        top: 4px;
+                        left: 6px;
+                    }
+                    .future-tier-image-second{
+                        position: absolute;
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        border-radius: 12px;
+                        width: 63px;
+                        height: 77px;
+                        top: 18px;
+                        left: 12px;
+                    }
+                }
+            }
+        }
+        button{
+            margin-top: 20px;
+            &.light-border-button {
+                background: 
+                linear-gradient($white, $white) padding-box,
+                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 1px solid transparent;
+            }
+        }
+        
+    }
+    
+}

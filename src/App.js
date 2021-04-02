@@ -118,7 +118,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={() => <MyNFTs />} />
                     <Route exact path="/my-account" component={() => <MyAccount />} />
-                    <Route exact path="/myAuctions" component={() => <MyAuction />} />
+                    <Route exact path="/my-auctions" component={() => <MyAuction />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <Footer />
