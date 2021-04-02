@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import AppContext from "../../ContextAPI";
-import Button from "../Button";
-import "./popupStyle.scss";
+import Button from "../button/Button";
+import "./PopupStyle.scss";
 
 const RemovePopup = ({ close, nftID, removedItemName, removeFrom, collectionNFTs, setCollectionNFTs }) => {
     const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useContext(AppContext);

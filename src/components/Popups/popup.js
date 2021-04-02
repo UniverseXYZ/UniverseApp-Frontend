@@ -1,8 +1,8 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import Button from "../Button";
-import closeIcon from '../../assets/images/cross.png';
-import "./popupStyle.scss";
+import Button from "../button/Button";
+import closeIcon from '../../assets/images/cross.svg';
+import "./PopupStyle.scss";
 
 export default ({ onClose }) => {
 

@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
 import Lists from './Lists';
-import '../Pagination/pagination.scss';
-import ItemsPerPageDropdown from '../Pagination/ItemsPerPageDropdown';
-import Pagination from '../Pagination';
+import '../pagination/Pagination.scss';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
+import Pagination from '../pagination/Pagionation';
 import AppContext from '../../ContextAPI';
 
 const Wallet = () => {

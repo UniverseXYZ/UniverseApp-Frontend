@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import './assets/scss/normalize.scss';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import MyNFTs from './components/MyNFTs';
-import MyAccount from './components/MyAccount';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import MyNFTs from './components/myNFTs/Ntfs';
+import MyAccount from './components/myAccount/Account';
+import Auctions from './components/auctions/Auction';
 import AppContext from './ContextAPI';
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={() => <MyNFTs />} />
                     <Route exact path="/my-account" component={() => <MyAccount />} />
+                    <Route exact path="/my-auctions" component={() => <Auctions />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <Footer />

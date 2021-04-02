@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect, useContext } from 'react';
-import Button from '../Button';
-import Input from '../Input';
-import defaultImage from '../../assets/images/default-image.png';
-import infoIcon from '../../assets/images/icon.png';
-import arrow from '../../assets/images/Arrow.png';
+import { useRef, useState, useEffect,useContext } from 'react';
+import Button from '../button/Button';
+import Input from '../input/Input';
+import defaultImage from '../../assets/images/default-img.svg';
+import infoIcon from '../../assets/images/icon.svg';
+import arrow from '../../assets/images/arrow.svg';
 import uuid from 'react-uuid';
 import randomColor from 'randomcolor';
 import AppContext from '../../ContextAPI';

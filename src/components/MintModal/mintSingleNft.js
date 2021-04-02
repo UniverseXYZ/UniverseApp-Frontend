@@ -1,9 +1,8 @@
-import arrow from '../../assets/images/Arrow.png'
-import infoIcon from '../../assets/images/icon.png'
-import defaultImage from '../../assets/images/default-image.png'
-import testNFTImage from '../../assets/images/saved-nft1.png';
-import Button from '../Button'
-import Input from '../Input'
+import arrow from '../../assets/images/arrow.svg'
+import infoIcon from '../../assets/images/icon.svg'
+import defaultImage from '../../assets/images/default-img.svg'
+import Button from '../button/Button'
+import Input from '../input/Input'
 import { useRef, useState, useEffect, useContext } from 'react'
 import AppContext from '../../ContextAPI'
 import uuid from 'react-uuid'
@@ -121,10 +120,10 @@ const MintSingleNft = ({ onClick }) => {
         }
         if (mintNowClick) {
             if (!errors.name && !errors.edition && !errors.previewImage) {
-                var generatedEditions = [];
+                var mintingGeneratedEditions = [];
                 
                 for(let i = 0; i < editions; i++) {
-                    generatedEditions.push(uuid().split('-')[0]);
+                    mintingGeneratedEditions.push(uuid().split('-')[0]);
                 }
                 setMyNFTs([...myNFTs, {
                     id: uuid(),
@@ -133,7 +132,7 @@ const MintSingleNft = ({ onClick }) => {
                     name: name,
                     description: description,
                     numberOfEditions: Number(editions),
-                    generatedEditions: generatedEditions,
+                    generatedEditions: mintingGeneratedEditions,
                 }])
                 setShowModal(false);
                 document.body.classList.remove('no__scroll');

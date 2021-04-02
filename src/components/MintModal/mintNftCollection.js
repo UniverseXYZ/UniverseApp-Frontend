@@ -1,15 +1,15 @@
-import Input from '../Input';
-import Button from '../Button';
-import arrow from '../../assets/images/Arrow.png';
+import Input from '../input/Input';
+import Button from '../button/Button';
+import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
-import upload from '../../assets/images/Upload.png';
-import RemovePopup from '../Popups/removeNftPopup';
+import upload from '../../assets/images/upload.svg';
+import RemovePopup from '../popups/RemoveNftPopup';
 import Popup from "reactjs-popup";
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import { useContext, useRef, useState, useEffect } from 'react';
 import AppContext from '../../ContextAPI';
-import CreateNftCol from './createNftCol';
+import CreateNftCol from './CreateNftCol';
 import randomColor from 'randomcolor';
 import uuid from 'react-uuid';
 
@@ -196,11 +196,11 @@ const MintNftCollection = ({ onClick }) => {
                         : item
                     ))
                     if (collectionNFTs.length) {
-                        var newArr = [...savedNfts];
+                        var newArray = [...savedNfts];
                         collectionNFTs.map(nft => {
-                            newArr.push(nft);
+                            newArray.push(nft);
                         })
-                        setSavedNfts(newArr);
+                        setSavedNfts(newArray);
                     }
                     setSavedCollectionID(null);
                 }
@@ -210,9 +210,9 @@ const MintNftCollection = ({ onClick }) => {
         }
         if (mintNowClick) {
             if (!errors.collectionName && !errors.collectible) {
-                var newArr = [...myNFTs];
+                var newMyNFTs = [...myNFTs];
                 collectionNFTs.map(nft => {
-                    newArr.push({
+                    newMyNFTs.push({
                         id: uuid(),
                         type: 'collection',
                         collectionId: collectionName,
@@ -225,7 +225,7 @@ const MintNftCollection = ({ onClick }) => {
                         generatedEditions: nft.generatedEditions,
                     });
                 })
-                setMyNFTs(newArr);
+                setMyNFTs(newMyNFTs);
                 setShowModal(false);
                 document.body.classList.remove('no__scroll');
             }
