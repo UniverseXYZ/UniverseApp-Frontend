@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import defaultImage from '../../assets/images/big-default-image.png';
+import defaultImage from '../../assets/images/big-def-img.svg';
 import AppContext from '../../ContextAPI';
 
 

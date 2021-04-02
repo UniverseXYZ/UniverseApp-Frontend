@@ -1,17 +1,17 @@
-import Input from '../Input';
-import Button from '../Button';
-import arrow from '../../assets/images/Arrow.png';
-import union from '../../assets/images/Union.svg';
-import upload from '../../assets/images/Upload.png';
-import RemovePopup from '../Popups/removeNftPopup';
+import Input from '../input/Input';
+import Button from '../button/Button';
+import arrow from '../../assets/images/arrow.svg';
+import union from '../../assets/images/union.svg';
+import upload from '../../assets/images/upload.svg';
+import RemovePopup from '../popups/RemoveNftPopup';
 import Popup from "reactjs-popup";
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import { useContext, useRef, useState, useEffect } from 'react';
 import AppContext from '../../ContextAPI';
-import CreateNftCol from './createNftCol';
+import CreateNftCol from './CreateNftCol';
 import randomColor from 'randomcolor';
-import testNFTImage from '../../assets/images/saved-nft1.png';
+import testNFTImage from '../../assets/images/saved-nft1.svg';
 import uuid from 'react-uuid';
 
 const MintNftCollection = ({ onClick }) => {

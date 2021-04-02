@@ -1,5 +1,5 @@
 import React from 'react';
-import './inputs.scss';
+import './Inputs.scss';
 
 const Input = ({ label, error, className, ...restProps }) => {
 

@@ -1,7 +1,7 @@
-import './auctions.scss';
+import './Auctions.scss';
 import { useContext, useEffect } from 'react';
-import { PLACEHOLDER_NFTS } from '../../dummydata/NFTsDummyData';
-import { AUCTIONS_DATA } from '../../auctionsData/data';
+import { PLACEHOLDER_NFTS } from '../../dummyData/NFTsDummyData';
+import { AUCTIONS_DATA } from '../../auctionsData/Data';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 

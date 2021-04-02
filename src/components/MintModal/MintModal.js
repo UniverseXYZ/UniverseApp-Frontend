@@ -1,9 +1,9 @@
-import './modals.scss';
+import './Modals.scss';
 import { useContext } from 'react';
-import MintNft from './mintNft';
-import MintNftCollection from './mintNftCollection';
-import MintSingleNft from './mintSingleNft';
-import PopupComponent from '../Popups/popup';
+import MintNft from './MintNft';
+import MintNftCollection from './MintNftCollection';
+import MintSingleNft from './MintSingleNft';
+import PopupComponent from '../popups/Popup';
 import AppContext from '../../ContextAPI';
 
 

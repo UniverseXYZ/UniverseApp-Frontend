@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import './assets/scss/normalize.scss';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import MyNFTs from './components/MyNFTs';
-import MyAccount from './components/MyAccount';
-import MyAuction from './components/Auctions';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import MyNFTs from './components/myNFTs/Ntfs';
+import MyAccount from './components/myAccount/Account';
+import Auctions from './components/auctions/Auction';
 import AppContext from './ContextAPI';
-import nft1Image from './assets/images/saved-nft1.png';
-import nft2Image from './assets/images/saved-nft2.png';
-// import nft3Image from './assets/images/saved-nft3.png';
-// import nft4Image from './assets/images/saved-nft4.png';
+import nft1Image from './assets/images/saved-nft1.svg';
+import nft2Image from './assets/images/saved-nft2.svg';
+// import nft3Image from './assets/images/saved-nft3.svg';
+// import nft4Image from './assets/images/saved-nft4.svg';
 // import testCollectionAvatar from './assets/images/test-collection-avatar.svg';
 
 const App = () => {
@@ -118,7 +118,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={() => <MyNFTs />} />
                     <Route exact path="/my-account" component={() => <MyAccount />} />
-                    <Route exact path="/myAuctions" component={() => <MyAuction />} />
+                    <Route exact path="/my-auctions" component={() => <Auctions />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <Footer />

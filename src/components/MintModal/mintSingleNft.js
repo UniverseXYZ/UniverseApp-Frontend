@@ -1,9 +1,9 @@
-import arrow from '../../assets/images/Arrow.png'
-import infoIcon from '../../assets/images/icon.png'
-import defaultImage from '../../assets/images/default-image.png'
-import testNFTImage from '../../assets/images/saved-nft1.png';
-import Button from '../Button'
-import Input from '../Input'
+import arrow from '../../assets/images/arrow.svg'
+import infoIcon from '../../assets/images/icon.svg'
+import defaultImage from '../../assets/images/default-img.svg'
+import testNFTImage from '../../assets/images/saved-nft1.svg';
+import Button from '../button/Button'
+import Input from '../input/Input'
 import { useRef, useState, useEffect, useContext } from 'react'
 import AppContext from '../../ContextAPI'
 import uuid from 'react-uuid'

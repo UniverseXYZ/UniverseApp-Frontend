@@ -1,14 +1,14 @@
 import { useContext, useEffect } from 'react';
-import './my-nfts.scss';
+import './Nfts.scss';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
-import MintModal from '../MintModal';
-import { PLACEHOLDER_NFTS } from '../../dummydata/NFTsDummyData';
+import MintModal from '../mintModal/MintModal';
+import { PLACEHOLDER_NFTS } from '../../dummyData/NFTsDummyData';
 import AppContext from '../../ContextAPI';
-import CongratsPopup from '../Popups/congratsPopup';
-import LoadingPopup from '../Popups/loadingPopup';
-import '../MintModal/modals.scss';
+import CongratsPopup from '../popups/CongratsPopup';
+import LoadingPopup from '../popups/LoadingPopup';
+import '../mintModal/Modals.scss';
 
 const MyNFTs = ({onClose}) => {
     const { savedNfts, selectedTabIndex, setSelectedTabIndex, showModal, setShowModal, setActiveView } = useContext(AppContext);

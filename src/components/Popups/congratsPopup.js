@@ -1,6 +1,6 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import Button from "../Button";
+import Button from "../button/Button";
 
 const CongratsPopup = ({ onClose }) => {
     return (

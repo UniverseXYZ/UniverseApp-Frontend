@@ -4,7 +4,7 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import AppContext from '../../ContextAPI';
 import Popup from "reactjs-popup";
-import RemovePopup from '../Popups/removeNftPopup';
+import RemovePopup from '../popups/RemoveNftPopup';
 import uuid from 'react-uuid';
 
 const SavedNFTs = () => {

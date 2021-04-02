@@ -1,7 +1,7 @@
 import React from 'react'
 import Popup from 'reactjs-popup'
-import Button from '../Button'
-import './popupStyle.scss';
+import Button from '../button/Button'
+import './PopupStyle.scss';
 
 const LoadingPopup = ({ onClose }) => {
     return (
