@@ -6,6 +6,9 @@ import Input from '../input/Input'
 import { useRef, useState, useEffect, useContext } from 'react'
 import AppContext from '../../ContextAPI'
 import uuid from 'react-uuid'
+import Popup from "reactjs-popup"
+import LoadingPopup from '../popups/LoadingPopup'
+import CongratsPopup from '../popups/CongratsPopup'
 
 const MintSingleNft = ({ onClick }) => {
     
@@ -120,28 +123,53 @@ const MintSingleNft = ({ onClick }) => {
         }
         if (mintNowClick) {
             if (!errors.name && !errors.edition && !errors.previewImage) {
-                var mintingGeneratedEditions = [];
-                
-                for(let i = 0; i < editions; i++) {
-                    mintingGeneratedEditions.push(uuid().split('-')[0]);
-                }
-                setMyNFTs([...myNFTs, {
-                    id: uuid(),
-                    type: 'single',
-                    previewImage: previewImage,
-                    name: name,
-                    description: description,
-                    numberOfEditions: Number(editions),
-                    generatedEditions: mintingGeneratedEditions,
-                }])
-                setShowModal(false);
-                document.body.classList.remove('no__scroll');
+                document.getElementById('loading-hidden-btn').click();
+                setTimeout(() => {
+                    document.getElementById('popup-root').remove();
+                    document.getElementById('congrats-hidden-btn').click();
+                    setTimeout(() => {
+                        var mintingGeneratedEditions = [];
+                        
+                        for(let i = 0; i < editions; i++) {
+                            mintingGeneratedEditions.push(uuid().split('-')[0]);
+                        }
+                        setMyNFTs([...myNFTs, {
+                            id: uuid(),
+                            type: 'single',
+                            previewImage: previewImage,
+                            name: name,
+                            description: description,
+                            numberOfEditions: Number(editions),
+                            generatedEditions: mintingGeneratedEditions,
+                        }])
+                        setShowModal(false);
+                        document.body.classList.remove('no__scroll');
+                    }, 2000)
+                }, 3000)
             }
         }
     }, [errors, saveForLateClick, savedNfts])
 
     return (
     <div className="mintNftCollection-div">
+        <Popup
+            trigger={<button id='loading-hidden-btn' style={{ display: 'none' }}></button>}
+        >
+            {
+                (close) => (
+                    <LoadingPopup onClose={close} />
+                )
+            }
+        </Popup>
+        <Popup
+            trigger={<button id='congrats-hidden-btn' style={{ display: 'none' }}></button>}
+        >
+            {
+                (close) => (
+                    <CongratsPopup onClose={close} />
+                )
+            }
+        </Popup>
         <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>Create NFT</span></div>
         <h2 className="single-nft-title">{!savedNFTsID ? 'Create Single NFT' : 'Edit NFT'}</h2>
         <div className="single-nft-content">

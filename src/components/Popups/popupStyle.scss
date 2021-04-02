@@ -49,10 +49,7 @@
 .popup-arrow {
   display: none;
 }
-  .congrats-popup{
-    height: 330px;
-  }
-  .congrats{
+.congrats{
   font-style: normal;
   font-weight: 600;
   font-size: 32px;
@@ -65,24 +62,22 @@
   font-size: 32px;
   line-height: 45px;
   text-align: center;
-  padding-top: 60px;
   padding-bottom: 20px;
-  }
-  .congrats-text{
+}
+.congrats-text{
   padding: 0 80px;
   margin: 0;
-  }
-  .loading-div {
+}
+.loading-div {
   width: 600px;
-  height: 422px;
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
 }
 .loading-ring {
-  margin-left: 43%;
-  margin-top: 60px;
-  height: 61.39px;
+  display: flex;
+  justify-content: center;
+  height: 80px;
 }
 .loading-ring div{
   box-sizing: border-box;
@@ -114,7 +109,7 @@
   }
 }
 .loading-text{
-  margin-top: 78.61px;
+  margin-top: 30px;
   text-align: center;
   padding: 0;
   height: 82px;

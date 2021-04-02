@@ -1,22 +1,18 @@
-import React from "react";
-import Popup from "reactjs-popup";
+import React, { useContext } from "react";
+import AppContext from "../../ContextAPI";
 import Button from "../button/Button";
 
 const CongratsPopup = ({ onClose }) => {
+    console.log('onClose', onClose)
+    const { setShowModal } = useContext(AppContext);
     return (
-        <Popup trigger="">
-            {
-                (close) => (
-                    <div className="popup-div congrats-popup">
-                        <div className="congrats">Congratulations</div>
-                        <div className="popup-text congrats-text"><p>NFT was successfully minted and should be displayed in your wallet shortly</p></div>
-                        <div className="popup-btns">
-                            <Button className="light-border-button" onClick={close}>Close</Button>
-                        </div>
-                    </div>
-                )
-            }
-        </Popup>
+        <div className="popup-div congrats-popup">
+            <div className="congrats">Congratulations</div>
+            <div className="popup-text congrats-text"><p>NFT was successfully minted and should be displayed in your wallet shortly</p></div>
+            <div className="popup-btns">
+                <Button className="light-border-button" onClick={onClose}>Close</Button>
+            </div>
+        </div>
     );
 };
 
