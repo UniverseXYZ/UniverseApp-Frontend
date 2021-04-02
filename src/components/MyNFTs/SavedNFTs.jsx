@@ -8,9 +8,8 @@ import RemovePopup from '../Popups/removeNftPopup';
 import uuid from 'react-uuid';
 
 const SavedNFTs = () => {
-    const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } = useContext(AppContext);
+    const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID, selectAllIsChecked, setSelectAllIsChecked } = useContext(AppContext);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
     const [dropdownID, setDropdownID] = useState(0);
     const ref = useRef(null);
 
@@ -22,8 +21,11 @@ const SavedNFTs = () => {
     }
 
     const toggleSelection = () => {
+        setSelectAllIsChecked(!selectAllIsChecked);
+        
         let newSavedNfts = [...savedNfts];
-        newSavedNfts.map(nft => isChecked ? nft.selected = false : nft.selected = true);
+        newSavedNfts.map(nft => nft.selected = !nft.selected);
+        setSavedNfts(newSavedNfts);
     }
 
     const handleClickOutside = (event) => {
@@ -59,10 +61,10 @@ const SavedNFTs = () => {
             {savedNfts.length ?
                 <>
                     <div className='custom__checkbox'>
-                        <label onClick={toggleSelection}>
-                            <input type='checkbox' onChange={() => setIsChecked(!isChecked)} checked={isChecked} />
+                        <label>
+                            <input type='checkbox' onChange={toggleSelection} checked={selectAllIsChecked} />
                             <i></i>
-                            {isChecked ? 'Clear all' : 'Select all'}
+                            {selectAllIsChecked ? 'Clear all' : 'Select all'}
                         </label>
                     </div>
 
@@ -71,7 +73,7 @@ const SavedNFTs = () => {
                             return (
                                 <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
                                     <div className='saved__nft__box__image' onClick={() => handleSavedNfts(index)}>
-                                        <img src={nft.bgImage} alt={nft.name} />
+                                        <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
                                         {nft.selected &&
                                             <img className='check__icon' src={checkIcon} alt='Check Icon' />
                                         }

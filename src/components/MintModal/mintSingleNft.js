@@ -10,7 +10,7 @@ import uuid from 'react-uuid'
 
 const MintSingleNft = ({ onClick }) => {
     
-    const { savedNfts, setSavedNfts, setShowModal, savedNFTsID } = useContext(AppContext);
+    const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(AppContext);
 
     const [errors, setErrors] = useState({
         name: '',
@@ -19,6 +19,7 @@ const MintSingleNft = ({ onClick }) => {
     });
 
     const [saveForLateClick, setSaveForLateClick] = useState(false);
+    const [mintNowClick, setMintNowClick] = useState(false);
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -29,6 +30,7 @@ const MintSingleNft = ({ onClick }) => {
 
 
     const handleSaveForLater = () => {
+        setMintNowClick(false);
         setSaveForLateClick(true);
         setErrors({
             name: !name ? '“Name” is not allowed to be empty' : '',
@@ -37,7 +39,19 @@ const MintSingleNft = ({ onClick }) => {
         });
     }
 
+    const handleMinting = () => {
+        setSaveForLateClick(false);
+        setMintNowClick(true);
+        setErrors({
+            name: !name ? '“Name” is not allowed to be empty' : '',
+            edition: !editions ? '“Number of editions” is required' : '',
+            previewImage: !previewImage ? '“File” is required' : null,
+        });
+    }
+
     const validateFile = (file) => {
+        setSaveForLateClick(false);
+        setMintNowClick(false);
         if (!file) {
             setPreviewImage(null);
             setErrors({...errors, previewImage: 'File format must be PNG, GIF, WEBP, MP4 or MP3 (Max Size: 30mb)'});
@@ -78,16 +92,14 @@ const MintSingleNft = ({ onClick }) => {
     useEffect(() => {
         if (saveForLateClick) {
             if (!errors.name && !errors.edition && !errors.previewImage) {
-                setShowModal(false);
                 var generatedEditions = [];
-
+                
                 for(let i = 0; i < editions; i++) {
                     generatedEditions.push(uuid().split('-')[0]);
                 }
                 if (!savedNFTsID) {
                     setSavedNfts([...savedNfts, {
                         id: uuid(),
-                        bgImage: testNFTImage, // This is just for testing
                         previewImage: previewImage,
                         name: name,
                         description: description,
@@ -99,10 +111,32 @@ const MintSingleNft = ({ onClick }) => {
                 } else {
                     setSavedNfts(savedNfts.map(item => 
                         item.id === savedNFTsID ?
-                            { ...item, bgImage: testNFTImage, name: name, description: description, numberOfEditions: editions, generatedEditions: generatedEditions, }
-                            : item
-                    ))
+                        { ...item, previewImage: previewImage, name: name, description: description, numberOfEditions: editions, generatedEditions: generatedEditions, }
+                        : item
+                        ))
                 }
+                setShowModal(false);
+                document.body.classList.remove('no__scroll');
+            }
+        }
+        if (mintNowClick) {
+            if (!errors.name && !errors.edition && !errors.previewImage) {
+                var generatedEditions = [];
+                
+                for(let i = 0; i < editions; i++) {
+                    generatedEditions.push(uuid().split('-')[0]);
+                }
+                setMyNFTs([...myNFTs, {
+                    id: uuid(),
+                    type: 'single',
+                    previewImage: previewImage,
+                    name: name,
+                    description: description,
+                    numberOfEditions: Number(editions),
+                    generatedEditions: generatedEditions,
+                }])
+                setShowModal(false);
+                document.body.classList.remove('no__scroll');
             }
         }
     }, [errors, saveForLateClick, savedNfts])
@@ -110,7 +144,7 @@ const MintSingleNft = ({ onClick }) => {
     return (
     <div className="mintNftCollection-div">
         <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>Create NFT</span></div>
-        <h2 className="single-nft-title">Create Single NFT</h2>
+        <h2 className="single-nft-title">{!savedNFTsID ? 'Create Single NFT' : 'Edit NFT'}</h2>
         <div className="single-nft-content">
             <div className="single-nft-upload">
                 <h5>Upload file</h5>
@@ -138,8 +172,13 @@ const MintSingleNft = ({ onClick }) => {
                     <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
                 </div>
                 <div className="single-nft-buttons">
-                    <Button className="light-button">MINT NOW</Button>
-                    <Button className="light-border-button" onClick={handleSaveForLater}>SAVE FOR LATER</Button>
+                    {!savedNFTsID ?
+                        <>
+                            <Button className="light-button" onClick={handleMinting}>MINT NOW</Button>
+                            <Button className="light-border-button" onClick={handleSaveForLater}>SAVE FOR LATER</Button>
+                        </> :
+                        <Button className="light-button" onClick={handleSaveForLater}>Save Changes</Button>
+                    }
                 </div>
             </div>
             <div className="single-nft-preview">

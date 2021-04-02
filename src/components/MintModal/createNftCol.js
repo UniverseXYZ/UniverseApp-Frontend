@@ -4,7 +4,6 @@ import Input from '../Input';
 import defaultImage from '../../assets/images/default-image.png';
 import infoIcon from '../../assets/images/icon.png';
 import arrow from '../../assets/images/Arrow.png';
-import testNFTImage from '../../assets/images/saved-nft1.png';
 import uuid from 'react-uuid';
 import randomColor from 'randomcolor';
 import AppContext from '../../ContextAPI';
@@ -46,17 +45,6 @@ const CreateNftCol = (props) => {
         setClicked(true);
         setAddToCollectionClick(false);
         setAddAndCreateNewClick(true);
-        setErrors({
-            name: !name ? '“Name” is not allowed to be empty' : '',
-            edition: !editions ? '“Number of editions” is required' : '',
-            previewImage: !previewImage ? '“File” is required' : null,
-        });
-    }
-
-    const handleSaveChanges = () => {
-        setClicked(true);
-        setAddAndCreateNewClick(false);
-        setAddToCollectionClick(true);
         setErrors({
             name: !name ? '“Name” is not allowed to be empty' : '',
             edition: !editions ? '“Number of editions” is required' : '',
@@ -127,7 +115,6 @@ const CreateNftCol = (props) => {
                         collectionId: collectionName,
                         collectionName: collectionName,
                         collectionAvatar: coverImage || randomColor(),
-                        bgImage: testNFTImage, // This is just for testing
                         previewImage: previewImage,
                         name: name,
                         description: description,
@@ -142,7 +129,6 @@ const CreateNftCol = (props) => {
                             item.id === collectionNFTsID ?
                                 {
                                     ...item,
-                                    bgImage: testNFTImage, // This is just for testing
                                     previewImage: previewImage,
                                     name: name,
                                     description: description,
@@ -159,7 +145,6 @@ const CreateNftCol = (props) => {
                             collectionId: nft.collectionId,
                             collectionName: nft.collectionName,
                             collectionAvatar: nft.collectionAvatar,
-                            bgImage: testNFTImage, // This is just for testing
                             previewImage: previewImage,
                             name: name,
                             description: description,
@@ -224,7 +209,7 @@ const CreateNftCol = (props) => {
                                     <Button className="light-button" onClick={handleAddToCollection}>ADD TO COLLECTION</Button>
                                     <Button className="light-border-button" onClick={handleAddAndCreateNew}>ADD AND CREATE NEW</Button>
                                 </> :
-                                <Button className="light-button" onClick={handleSaveChanges}>Save Changes</Button>
+                                <Button className="light-button" onClick={handleAddToCollection}>Save Changes</Button>
                             }
                         </div>
                     </div>

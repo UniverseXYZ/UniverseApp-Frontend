@@ -30,6 +30,14 @@ const MyNFTs = ({onClose}) => {
         return res.length ? false : true;
     }
 
+    const handleMintSelected = () => {
+        savedNfts.map(nft => {
+            if (nft.selected) {
+                console.log(nft)
+            }
+        })
+    }
+
     useEffect(() => {
         document.title = 'Universe Minting - My NFTs'
         return () => { document.title = 'Universe Minting' };
@@ -43,7 +51,7 @@ const MyNFTs = ({onClose}) => {
                         <h1 className='title'>My NFTs</h1>
                         <div>
                             {selectedTabIndex === 1 &&
-                                <button className='mint__btn' disabled={checkSelectedSavedNfts()}>Mint selected</button>
+                                <button className='mint__btn' onClick={handleMintSelected} disabled={checkSelectedSavedNfts()}>Mint selected</button>
                             }
                             <button className='mint__btn' onClick={handleOpen}>Create NFT</button>
                         </div>

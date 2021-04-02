@@ -346,7 +346,14 @@
                             font-size: 14px;
                             color: $black;
                         }
-                        span {
+                        div.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                        }
+                        p.collection__count {
                             font-family: $spaceGroteskFont;
                             font-style: normal;
                             font-weight: normal;
@@ -361,6 +368,22 @@
                         justify-content: space-between;
 
                         .collection__details {
+                            display: flex;
+                            align-items: center;
+                            .random__bg__color {
+                                height: 20px;
+                                width: 20px;
+                                border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: $sharpGroteskMediumFont;
+                                font-style: normal;
+                                font-weight: 500;
+                                font-size: 12px;
+                                text-transform: uppercase;
+                                color: $black;
+                            }
                             img {
                                 height: 20px;
                                 width: 20px;
