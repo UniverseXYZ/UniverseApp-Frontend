@@ -13,139 +13,166 @@ const FutureAuctions = () => {
     const [hideLaunchIcon, setHideLaunchIcon] = useState(true)
     const [hideEndIcon, setHideEndIcon] = useState(true)
     const [auctionHide, setAuctionHide] = useState(true)
+    const PLACEHOLDER_FUTURE_AUCTIONS = [
+        {
+            id: 1,
+            name: 'Auction 1',
+            totalNFTs: 45,
+            launchDate: 'Apr 4, 00:00 EST',
+            endDate: 'Apr 10, 00:00 EST',
+            platinumTier: {
+                name: 'Platinum Tier',
+                nftsPerWinner: 3,
+                winners: 5,
+                totalNFTs: 15,
+                nfts: [nft3, nft6, nft5],
+            },
+            goldTier: {
+                name: 'Gold Tier',
+                nftsPerWinner: 2,
+                winners: 10,
+                totalNFTs: 20,
+                nfts: [nft3, nft6],
+            },
+            silverTier: {
+                name: 'Silver Tier',
+                nftsPerWinner: 1,
+                winners: 20,
+                totalNFTs: 20,
+                nfts: [nft3],
+            },
+        },
+    ]
 
     return (
         <div className='future-auctions'>
-            <div className="auction-header">
-                <h3>Auction 1</h3>
-                <div className="launch-auction">
-                    <Button className="light-button" disabled>LAUNCH AUCTION</Button>
-                    <div className="line"></div>
-                    {/* <img src={arrowUp}/> */}
-                    {auctionHide?
-                        <img src={arrowDown} onClick={() => setAuctionHide(false)}/>
-                    :
-                        <img src={arrowUp} onClick={() => setAuctionHide(true)}/>
-                    }  
-                </div>
-            </div>
-            <div className="auctions-launch-dates">
-                <div className="total-dates">
-                    <p>Total NFTs: <b>45</b></p>
-                </div>
-                <div className="launch-date-error">
-                    <p>Launch date: <b>Mar 15, 00:00 EST</b> <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(false)} onMouseLeave={() => setHideLaunchIcon(true)}/></p>
-                    <div hidden={hideLaunchIcon} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
-                </div>
-                <div className="end-date-error">
-                    <p>End date: <b>Mar 15, 00:00 EST</b> <img src={infoIconRed} onMouseOver={() => setHideEndIcon(false)} onMouseLeave={() => setHideEndIcon(true)}/></p>
-                    <div hidden={hideEndIcon} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
-                </div>
-            </div>
-            <div className="auctions-steps">
-                <div className="step-1">
-                    <h6>Step 1</h6>
-                    <h4>Auction Set Up</h4>
-                    <div className="circle">
-                        <img src={doneIcon}/>
-                        <div className="hz-line"></div>
-                    </div>
-                    <Button className="light-border-button">EDIT AUCTION</Button>
-                </div>
-                <div className="step-2">
-                    <h6>Step2</h6>
-                    <h4>NFT Minting</h4>
-                    <div className="circle">
-                        <img hidden={true} src={doneIcon}/>
-                        <div className="hz-line"></div>
-                    </div>
-                    <Button className="light-button">MINT NFTS</Button>
-                </div>
-                <div className="step-3">
-                    <h6>Step 3</h6>
-                    <h4>Landing Page Customization</h4>
-                    <div className="circle">
-                        <img hidden={true} src={doneIcon}/>
-                    </div>
-                    <Button className="light-button" disabled>SET UP LANDING PAGE</Button>
-                </div>
-            </div>
-            <div hidden={auctionHide} className="auctions-future-tier">
-                <div className="future-tier">
-                    <div className="future-tier-header">
-                        <h3>Platinum Tier</h3>
-                        <p>NFTs per winner: <b>3</b></p>
-                        <p>Winners: <b>5</b></p>
-                        <p>Total NFTs: <b>15</b></p>
-                    </div>
-                    <div className="future-tier-body">
-                        <div className="future-tier-image">
-                            <div className="future-tier-image-second"></div>
-                            <div className="future-tier-image-first"></div>
-                            <div className="future-tier-image-main">
-                                <img src={nft3}/>
-                            </div>    
+            {PLACEHOLDER_FUTURE_AUCTIONS.map(future_auction => {
+                return (
+                    <div className="auction" key={future_auction.id}>
+                        <div className="auction-header">
+                            <h3>{future_auction.name}</h3>
+                            <div className="launch-auction">
+                                <Button className="light-button" disabled>LAUNCH AUCTION</Button>
+                                <div className="line"></div>
+                                {auctionHide?
+                                    <img src={arrowDown} onClick={() => setAuctionHide(false)}/>
+                                :
+                                    <img src={arrowUp} onClick={() => setAuctionHide(true)}/>
+                                }  
+                            </div>
                         </div>
-                        <div className="future-tier-image">
-                            <div className="future-tier-image-second"></div>
-                            <div className="future-tier-image-first"></div>
-                            <div className="future-tier-image-main">
-                                <img src={nft6}/>
-                            </div>    
+                        <div className="auctions-launch-dates">
+                            <div className="total-dates">
+                                <p>Total NFTs: <b>{future_auction.totalNFTs}</b></p>
+                            </div>
+                            <div className="launch-date-error">
+                                <p>Launch date: <b>{future_auction.launchDate}</b> <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(false)} onMouseLeave={() => setHideLaunchIcon(true)}/></p>
+                                <div hidden={hideLaunchIcon} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
+                            </div>
+                            <div className="end-date-error">
+                                <p>End date: <b>{future_auction.endDate}</b> <img src={infoIconRed} onMouseOver={() => setHideEndIcon(false)} onMouseLeave={() => setHideEndIcon(true)}/></p>
+                                <div hidden={hideEndIcon} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
+                            </div>
                         </div>
-                        <div className="future-tier-image">
-                            <div className="future-tier-image-second"></div>
-                            <div className="future-tier-image-first"></div>
-                            <div className="future-tier-image-main">
-                                <img src={nft5}/>
-                            </div>    
+                        <div className="auctions-steps">
+                            <div className="step-1">
+                                <h6>Step 1</h6>
+                                <h4>Auction Set Up</h4>
+                                <div className="circle">
+                                    <img src={doneIcon}/>
+                                    <div className="hz-line"></div>
+                                </div>
+                                <Button className="light-border-button">EDIT AUCTION</Button>
+                            </div>
+                            <div className="step-2">
+                                <h6>Step2</h6>
+                                <h4>NFT Minting</h4>
+                                <div className="circle">
+                                    <img hidden={true} src={doneIcon}/>
+                                    <div className="hz-line"></div>
+                                </div>
+                                <Button className="light-button">MINT NFTS</Button>
+                            </div>
+                            <div className="step-3">
+                                <h6>Step 3</h6>
+                                <h4>Landing Page Customization</h4>
+                                <div className="circle">
+                                    <img hidden={true} src={doneIcon}/>
+                                </div>
+                                <Button className="light-button" disabled>SET UP LANDING PAGE</Button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className="future-tier">
-                    <div className="future-tier-header">
-                        <h3>Gold Tier</h3>
-                        <p>NFTs per winner: <b>2</b></p>
-                        <p>Winners: <b>10</b></p>
-                        <p>Total NFTs: <b>20</b></p>
-                    </div>
-                    <div className="future-tier-body">
-                        <div className="future-tier-image">
-                            <div className="future-tier-image-second"></div>
-                            <div className="future-tier-image-first"></div>
-                            <div className="future-tier-image-main">
-                                <img src={nft3}/>
-                            </div>    
-                        </div>
-                        <div className="future-tier-image">
-                            <div className="future-tier-image-second"></div>
-                            <div className="future-tier-image-first"></div>
-                            <div className="future-tier-image-main">
-                                <img src={nft6}/>
-                            </div>    
-                        </div>
-                    </div>
-                </div>
-                <div className="future-tier">
-                    <div className="future-tier-header">
-                        <h3>Silver Tier</h3>
-                        <p>NFTs per winner: <b>1</b></p>
-                        <p>Winners: <b>20</b></p>
-                        <p>Total NFTs: <b>20</b></p>
-                    </div>
-                    <div className="future-tier-body">
-                        <div className="future-tier-image">
-                            <div className="future-tier-image-second"></div>
-                            <div className="future-tier-image-first"></div>
-                            <div className="future-tier-image-main">
-                                <img src={nft3}/>
-                            </div>    
+                        <div hidden={auctionHide} className="auctions-future-tier">
+                            <div className="future-tier">
+                                <div className="future-tier-header">
+                                    <h3>{future_auction.platinumTier.name}</h3>
+                                    <p>NFTs per winner: <b>{future_auction.platinumTier.nftsPerWinner}</b></p>
+                                    <p>Winners: <b>{future_auction.platinumTier.winners}</b></p>
+                                    <p>Total NFTs: <b>{future_auction.platinumTier.totalNFTs}</b></p>
+                                </div>
+                                <div className="future-tier-body">
+                                    {future_auction.platinumTier.nfts.map((nft, index) => {
+                                        return (
+                                            <div className="future-tier-image" key={index}>
+                                                <div className="future-tier-image-second"></div>
+                                                <div className="future-tier-image-first"></div>
+                                                <div className="future-tier-image-main">
+                                                    <img src={nft}/>
+                                                </div>    
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className="future-tier">
+                                <div className="future-tier-header">
+                                    <h3>{future_auction.goldTier.name}</h3>
+                                    <p>NFTs per winner: <b>{future_auction.goldTier.nftsPerWinner}</b></p>
+                                    <p>Winners: <b>{future_auction.goldTier.winners}</b></p>
+                                    <p>Total NFTs: <b>{future_auction.goldTier.totalNFTs}</b></p>
+                                </div>
+                                <div className="future-tier-body">
+                                    {future_auction.goldTier.nfts.map((nft, index) => {
+                                        return (
+                                            <div className="future-tier-image" key={index}>
+                                                <div className="future-tier-image-second"></div>
+                                                <div className="future-tier-image-first"></div>
+                                                <div className="future-tier-image-main">
+                                                    <img src={nft}/>
+                                                </div>    
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className="future-tier">
+                                <div className="future-tier-header">
+                                    <h3>{future_auction.silverTier.name}</h3>
+                                    <p>NFTs per winner: <b>{future_auction.silverTier.nftsPerWinner}</b></p>
+                                    <p>Winners: <b>{future_auction.silverTier.winners}</b></p>
+                                    <p>Total NFTs: <b>{future_auction.silverTier.totalNFTs}</b></p>
+                                </div>
+                                <div className="future-tier-body">
+                                    {future_auction.silverTier.nfts.map((nft, index) => {
+                                        return (
+                                            <div className="future-tier-image" key={index}>
+                                                <div className="future-tier-image-second"></div>
+                                                <div className="future-tier-image-first"></div>
+                                                <div className="future-tier-image-main">
+                                                    <img src={nft}/>
+                                                </div>    
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <Button className="light-border-button">REMOVE</Button>
                         </div>
                     </div>
-                </div>
-                <Button className="light-border-button">REMOVE</Button>
-            </div>
+                )
+            })}
         </div>
+        
     )
 }
 
