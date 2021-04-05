@@ -13,6 +13,8 @@ const FutureAuctions = () => {
     const [hideLaunchIcon, setHideLaunchIcon] = useState(true)
     const [hideEndIcon, setHideEndIcon] = useState(true)
     const [auctionHide, setAuctionHide] = useState(true)
+    var today=new Date();
+    console.log(today.getUTCMonth())
     const PLACEHOLDER_FUTURE_AUCTIONS = [
         {
             id: 1,
@@ -20,6 +22,62 @@ const FutureAuctions = () => {
             totalNFTs: 45,
             launchDate: 'Apr 4, 00:00 EST',
             endDate: 'Apr 10, 00:00 EST',
+            platinumTier: {
+                name: 'Platinum Tier',
+                nftsPerWinner: 3,
+                winners: 5,
+                totalNFTs: 15,
+                nfts: [nft3, nft6, nft5],
+            },
+            goldTier: {
+                name: 'Gold Tier',
+                nftsPerWinner: 2,
+                winners: 10,
+                totalNFTs: 20,
+                nfts: [nft3, nft6],
+            },
+            silverTier: {
+                name: 'Silver Tier',
+                nftsPerWinner: 1,
+                winners: 20,
+                totalNFTs: 20,
+                nfts: [nft3],
+            },
+        },
+        {
+            id: 2,
+            name: 'Auction 2',
+            totalNFTs: 45,
+            launchDate: 'Apr 4, 00:00 EST',
+            endDate: 'Apr 10, 00:00 EST',
+            platinumTier: {
+                name: 'Platinum Tier',
+                nftsPerWinner: 3,
+                winners: 5,
+                totalNFTs: 15,
+                nfts: [nft3, nft6, nft5],
+            },
+            goldTier: {
+                name: 'Gold Tier',
+                nftsPerWinner: 2,
+                winners: 10,
+                totalNFTs: 20,
+                nfts: [nft3, nft6],
+            },
+            silverTier: {
+                name: 'Silver Tier',
+                nftsPerWinner: 1,
+                winners: 20,
+                totalNFTs: 20,
+                nfts: [nft3],
+            },
+        },
+        {
+            id: 3,
+            name: 'Auction 3',
+            totalNFTs: 45,
+            launchDate: 'May 15, 00:00 EST',
+            endDate: 'May 18, 00:00 EST',
             platinumTier: {
                 name: 'Platinum Tier',
                 nftsPerWinner: 3,
@@ -55,9 +113,9 @@ const FutureAuctions = () => {
                                 <Button className="light-button" disabled>LAUNCH AUCTION</Button>
                                 <div className="line"></div>
                                 {auctionHide?
-                                    <img src={arrowDown} onClick={() => setAuctionHide(false)}/>
+                                    <img src={arrowDown} onClick={() =>setAuctionHide(false)}/>
                                 :
-                                    <img src={arrowUp} onClick={() => setAuctionHide(true)}/>
+                                    <img src={arrowUp} onClick={() =>setAuctionHide(true)}/>
                                 }  
                             </div>
                         </div>
@@ -65,11 +123,11 @@ const FutureAuctions = () => {
                             <div className="total-dates">
                                 <p>Total NFTs: <b>{future_auction.totalNFTs}</b></p>
                             </div>
-                            <div className="launch-date-error">
+                            <div className="total-dates">
                                 <p>Launch date: <b>{future_auction.launchDate}</b> <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(false)} onMouseLeave={() => setHideLaunchIcon(true)}/></p>
                                 <div hidden={hideLaunchIcon} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
                             </div>
-                            <div className="end-date-error">
+                            <div className="total-dates">
                                 <p>End date: <b>{future_auction.endDate}</b> <img src={infoIconRed} onMouseOver={() => setHideEndIcon(false)} onMouseLeave={() => setHideEndIcon(true)}/></p>
                                 <div hidden={hideEndIcon} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
                             </div>
