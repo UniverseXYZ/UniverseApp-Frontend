@@ -9,7 +9,7 @@ import Auctions from './components/auctions/Auction';
 import AppContext from './ContextAPI';
 
 const App = () => {
-    const [isWalletConnected, setIsWalletConnected] = useState(true);
+    const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
     const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
     const [showModal, setShowModal] = useState(false);
