@@ -1,4 +1,6 @@
 import uuid from "react-uuid";
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import videoIcon from '../../assets/images/video-icon.svg';
 
 const Lists = ({ data, perPage, offset }) => {
     const sliceData = data.slice(offset, offset + perPage);
@@ -9,7 +11,21 @@ const Lists = ({ data, perPage, offset }) => {
                 return (
                     <div className='nft__box' key={uuid()}>
                         <div className='nft__box__image'>
-                            <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                            {nft.previewImage.type === 'video/mp4' &&
+                                <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
+                                    <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                            {nft.previewImage.type === 'audio/mpeg' &&
+                                <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                            }
+                            {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' &&
+                                <img className="preview-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                            }
+                            {nft.previewImage.type === 'video/mp4' &&
+                                <img className='video__icon' src={videoIcon} alt='Video Icon' />
+                            }
                         </div>
                         <div className='nft__box__name'>
                             <h3>{nft.name}</h3>

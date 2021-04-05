@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-import AppContext from "../../ContextAPI";
+import React from "react";
 import Button from "../button/Button";
 
 const CongratsPopup = ({ onClose }) => {
-    console.log('onClose', onClose)
-    const { setShowModal } = useContext(AppContext);
     return (
         <div className="popup-div congrats-popup">
             <div className="congrats">Congratulations</div>
