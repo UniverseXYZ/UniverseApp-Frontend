@@ -4,7 +4,7 @@ import { PLACEHOLDER_NFTS } from '../../dummyData/DummyData';
 import { AUCTIONS_DATA } from '../../auctionsData/Data';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
-import FutureAuctions from './FutureAuctions/FutureAuctions';
+import FutureAuctions from './futureAuctions/FutureAuctions';
 
 
 const MyAuction = () => {
