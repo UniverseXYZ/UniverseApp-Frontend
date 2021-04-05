@@ -23,15 +23,15 @@ const FutureAuctions = () => {
                 </div>
             </div>
             <div className="auctions-launch-dates">
-                <div className="total">
+                <div className="total-dates">
                     <p>Total NFTs: <b>45</b></p>
                 </div>
-                <div className="launch-date error">
+                <div className="launch-date-error">
                     <p>Launch date: <b>Mar 15, 00:00 EST</b> <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(false)} onMouseLeave={() => setHideLaunchIcon(true)}/></p>
                     <div hidden={hideLaunchIcon} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
                 </div>
-                <div className="end-date error">
-                    <p>Launch date: <b>Mar 15, 00:00 EST</b> <img src={infoIconRed} onMouseOver={() => setHideEndIcon(false)} onMouseLeave={() => setHideEndIcon(true)}/></p>
+                <div className="end-date-error">
+                    <p>End date: <b>Mar 15, 00:00 EST</b> <img src={infoIconRed} onMouseOver={() => setHideEndIcon(false)} onMouseLeave={() => setHideEndIcon(true)}/></p>
                     <div hidden={hideEndIcon} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
                 </div>
             </div>

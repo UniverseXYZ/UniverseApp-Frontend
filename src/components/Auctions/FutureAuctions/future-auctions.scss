@@ -41,7 +41,7 @@
     .auctions-launch-dates{
         display: flex;
 
-        .total{
+        .total-dates{
             background: rgba(0, 0, 0, 0.05);
             border-radius: 12px;
             padding: 6px 16px;
@@ -53,22 +53,13 @@
                 line-height: 150%;
                 color: $black;
             }
-        }
-        .error{
-            border: 1px solid #FF4949;
-            p{
-                color: #FF4949;
-            }
             img{
-                visibility: visible;
-                margin-left: 13px;
-                margin-top: -2px;
-                width: 14px;
-                height: 14px;
+                display: none;
             }
         }
+        
 
-        .launch-date{
+        .launch-date-error{
             position: relative;
             background: rgba(0, 0, 0, 0.05);
             border-radius: 12px;
@@ -76,12 +67,22 @@
             padding: 6px 16px;
             margin-right: 12px;
             align-items: center;
+            border: 1px solid #FF4949;
 
             p{
                 font-family: $spaceGroteskFont;
                 font-size: 14px;
                 line-height: 150%;  
+                color: #FF4949;
             }
+
+            img{
+                margin-left: 13px;
+                margin-top: -2px;
+                width: 14px;
+                height: 14px;
+            }
+
             .launch-info{
                 position: absolute;
                 z-index: 2;
@@ -103,7 +104,7 @@
             }
         }
 
-        .end-date{
+        .end-date-error{
             position: relative;
             background: rgba(0, 0, 0, 0.05);
             border-radius: 12px;
@@ -111,18 +112,19 @@
             padding: 6px 16px;
             margin-right: 12px;
             align-items: center;
+            border: 1px solid #FF4949;
 
             p{
                 font-family: $spaceGroteskFont;
                 font-size: 14px;
                 line-height: 150%; 
+                color: #FF4949;
             }
             img{
-                // display: none;
-                // margin-left: 13px;
-                // margin-top: -2px;
-                // width: 14px;
-                // height: 14px;
+                margin-left: 13px;
+                margin-top: -2px;
+                width: 14px;
+                height: 14px;
             }
             .end-info{
                 position: absolute;
