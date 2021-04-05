@@ -1,10 +1,11 @@
-import Button from "../../Button"
+import Button from "../../button/Button"
 import arrowUp from '../../../assets/images/Arrow_Up.svg'
+import arrowDown from '../../../assets/images/ArrowDown.svg'
 import infoIconRed from '../../../assets/images/Vector.svg'
 import doneIcon from '../../../assets/images/Completed.svg'
-import nft3 from '../../../assets/images/nft3.png'
-import nft6 from '../../../assets/images/nft6.png'
-import nft5 from '../../../assets/images/nft5.png'
+import nft3 from '../../../assets/images/ntf3.svg'
+import nft6 from '../../../assets/images/ntf6.svg'
+import nft5 from '../../../assets/images/ntf5.svg'
 import { useState } from "react"
 
 const FutureAuctions = () => {
@@ -20,7 +21,12 @@ const FutureAuctions = () => {
                 <div className="launch-auction">
                     <Button className="light-button" disabled>LAUNCH AUCTION</Button>
                     <div className="line"></div>
-                    <img src={arrowUp}/>
+                    {/* <img src={arrowUp}/> */}
+                    {auctionHide?
+                        <img src={arrowDown} onClick={() => setAuctionHide(false)}/>
+                    :
+                        <img src={arrowUp} onClick={() => setAuctionHide(true)}/>
+                    }  
                 </div>
             </div>
             <div className="auctions-launch-dates">
@@ -64,7 +70,7 @@ const FutureAuctions = () => {
                     <Button className="light-button" disabled>SET UP LANDING PAGE</Button>
                 </div>
             </div>
-            <div className="auctions-future-tier">
+            <div hidden={auctionHide} className="auctions-future-tier">
                 <div className="future-tier">
                     <div className="future-tier-header">
                         <h3>Platinum Tier</h3>
