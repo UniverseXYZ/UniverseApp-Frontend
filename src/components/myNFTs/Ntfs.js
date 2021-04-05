@@ -4,7 +4,7 @@ import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
 import MintModal from '../mintModal/MintModal';
-import { PLACEHOLDER_NFTS } from '../../dummyData/NFTsDummyData';
+import { PLACEHOLDER_NFTS } from '../../dummyData/DummyData';
 import AppContext from '../../ContextAPI';
 import '../mintModal/Modals.scss';
 
