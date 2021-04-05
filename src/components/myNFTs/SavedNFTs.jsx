@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import checkIcon from '../../assets/images/check.svg';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import videoIcon from '../../assets/images/video-icon.svg';
 import AppContext from '../../ContextAPI';
 import Popup from "reactjs-popup";
 import RemovePopup from '../popups/RemoveNftPopup';
@@ -21,10 +23,17 @@ const SavedNFTs = () => {
     }
 
     const toggleSelection = () => {
+        if(localStorage.localChecked) {
+            localStorage.localChecked = localStorage.localChecked === 'true' ? 'false' : 'true';
+        } else {
+            localStorage.localChecked = 'true';
+        }
         setSelectAllIsChecked(!selectAllIsChecked);
-
+        
         let newSavedNfts = [...savedNfts];
-        newSavedNfts.map(nft => nft.selected = !nft.selected);
+        localStorage.localChecked === 'true' ? 
+            newSavedNfts.map(nft => nft.selected = true) : 
+            newSavedNfts.map(nft => nft.selected = false) 
         setSavedNfts(newSavedNfts);
     }
 
@@ -41,6 +50,17 @@ const SavedNFTs = () => {
             }
         }
     };
+
+    useEffect(() => {
+        const res = savedNfts.filter(nft => !nft.selected)
+        if(res.length) {
+            setSelectAllIsChecked(false);
+            localStorage.localChecked = 'false';
+        } else {
+            setSelectAllIsChecked(true);
+            localStorage.localChecked = 'true';
+        }
+    }, [savedNfts])
 
     useEffect(() => {
         document.addEventListener('click', handleClickOutside, true);
@@ -73,7 +93,21 @@ const SavedNFTs = () => {
                             return (
                                 <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
                                     <div className='saved__nft__box__image' onClick={() => handleSavedNfts(index)}>
-                                        <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                        {nft.previewImage.type === 'video/mp4' &&
+                                            <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
+                                                <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        }
+                                        {nft.previewImage.type === 'audio/mpeg' &&
+                                            <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                                        }
+                                        {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' &&
+                                            <img className="preview-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                        }
+                                        {nft.previewImage.type === 'video/mp4' &&
+                                            <img className='video__icon' src={videoIcon} alt='Video Icon' />
+                                        }
                                         {nft.selected &&
                                             <img className='check__icon' src={checkIcon} alt='Check Icon' />
                                         }

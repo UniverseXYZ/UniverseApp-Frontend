@@ -1,86 +1,19 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
 import Lists from './Lists';
 import '../pagination/Pagination.scss';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import Pagination from '../pagination/Pagionation';
 import AppContext from '../../ContextAPI';
+import uuid from 'react-uuid';
 
-const Wallet = () => {
+const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
     const { handleClickOutside, myNFTs } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
+    const [searchByName, setSearchByName] = useState('');
     const [offset, setOffset] = useState(0);
     const [perPage, setPerPage] = useState(12);
     const ref = useRef(null);
-    const [collections, setCollections] = useState([
-        {
-            id: 1,
-            name: 'Crazy Collection',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 2,
-            name: 'HashMasks',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 3,
-            name: 'PixaLyfe',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 4,
-            name: 'Mooncat Rescue',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 5,
-            name: 'CryptoKitties',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 6,
-            name: 'Mooncat Rescue',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 7,
-            name: 'Mooncat Rescue',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 8,
-            name: 'HashMasks',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 9,
-            name: 'PixaLyfe',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-        {
-            id: 10,
-            name: 'Mooncat Rescue',
-            avatar: testCollectionAvatar,
-            selected: false,
-        },
-    ]);
-
-    useEffect(() => {
-        document.addEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
-        return () => {
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
-        };
-    })
+    const [collections, setCollections] = useState([]);
 
     const handleCollections = (index) => {
         let newCollections = [...collections];
@@ -88,13 +21,71 @@ const Wallet = () => {
 
         setCollections(newCollections);
     }
-
+    
     const clearFilters = () => {
         let newCollections = [...collections];
         newCollections.map(collection => collection.selected = false)
-
+        
         setCollections(newCollections);
+        setSearchByName('');
     }
+
+    const handleSearchByName = (value) => {
+        setSearchByName(value);
+    }
+
+    useEffect(() => {
+        const getCollections = myNFTs.filter(nft => nft.collectionName)
+        const uniqueCollections = getCollections.filter((v,i,a) => a.findIndex( t => (t.collectionName === v.collectionName)) === i);
+        var newCollections = [];
+        uniqueCollections.forEach(collection => {
+            newCollections.push({
+                id: uuid(),
+                name: collection.collectionName,
+                avatar: collection.collectionAvatar,
+                selected: false,
+            })
+        })
+        setCollections(newCollections);
+    }, [])
+
+    useEffect(() => {
+        const res = collections.filter(col => col.selected)
+        if(res.length || searchByName) {
+            var newFilteredNFTs = [];
+            myNFTs.forEach(nft => {
+                if(!searchByName && res.length) {
+                    if(nft.type === 'collection') {
+                        res.forEach(item => {
+                            if(nft.collectionName === item.name) {
+                                newFilteredNFTs.push(nft);
+                            }
+                        })
+                    }
+                } else if(!res.length && searchByName) {
+                    if(nft.name.toLowerCase().includes(searchByName.toLowerCase())) {
+                        newFilteredNFTs.push(nft);
+                    }
+                } else if(res.length && searchByName) {
+                    res.forEach(item => {
+                        if(nft.collectionName === item.name && nft.name.toLowerCase().includes(searchByName.toLowerCase())) {
+                            newFilteredNFTs.push(nft);
+                        }
+                    })
+                }
+            });
+            setFilteredNFTs(newFilteredNFTs);
+        } else {
+            setFilteredNFTs(myNFTs);
+        }
+    }, [collections, searchByName])
+    
+    useEffect(() => {
+        document.addEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
+        return () => {
+            document.removeEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
+        };
+    })
 
     return (
         <div className='tab__wallet'>
@@ -123,19 +114,23 @@ const Wallet = () => {
                                 <input
                                     type='text'
                                     placeholder='Start typing'
+                                    value={searchByName}
+                                    onChange={(e) => handleSearchByName(e.target.value)}
                                 />
                             </div>
                         </div>
                         {isCollectionDropdownOpened &&
                             <div ref={ref} className='collections__dropdown'>
-                                {collections.map((collection, index) => {
-                                    return (
-                                        <button key={collection.id} className={collection.selected ? 'selected' : ''} onClick={() => handleCollections(index)}>
-                                            <img src={collection.avatar} alt={collection.name} />
-                                            <span>{collection.name}</span>
-                                        </button>
-                                    )
-                                })}
+                                {collections.length ? 
+                                    collections.map((collection, index) => {
+                                        return (
+                                            <button key={collection.id} className={collection.selected ? 'selected' : ''} onClick={() => handleCollections(index)}>
+                                                <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                                                <span>{collection.name}</span>
+                                            </button>
+                                        )
+                                    }) : <div className='empty__nfts'><h3>No Collections found</h3></div>
+                                }
                             </div>
                         }
                     </div>
@@ -144,20 +139,24 @@ const Wallet = () => {
                         {collections.map((collection, index) => {
                             return collection.selected && (
                                 <div key={collection.id}>
-                                    <img src={collection.avatar} alt={collection.name} />
+                                    <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
                                     <span>{collection.name}</span>
                                     <button title='Remove' onClick={() => handleCollections(index)}>&#10006;</button>
                                 </div>
                             )
                         })}
                     </div>
-
-                    <Lists data={myNFTs} perPage={perPage} offset={offset} />
-
-                    <div className='pagination__container'>
-                        <Pagination data={myNFTs} perPage={perPage} setOffset={setOffset} />
-                        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-                    </div>
+                    {filteredNFTs.length ?
+                        <>
+                            <Lists data={filteredNFTs} perPage={perPage} offset={offset} />
+                            
+                            <div className='pagination__container'>
+                                <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
+                                <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+                            </div>
+                        </> : 
+                        <div className='empty__nfts'><h3>No NFTs found</h3></div>
+                    }
                 </> : <div className='empty__nfts'><h3>No NFTs found</h3></div>
             }
 

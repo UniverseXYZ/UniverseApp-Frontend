@@ -30,10 +30,11 @@
   background: #fff;
   padding: 7px;
 }       
+.mintNft-div {
+  padding: 80px 100px;
+}
 .mintNft-div>h2{
   position: relative;
-  margin-left: 100px;
-  margin-top: 80px;
   font-family: $sharpGroteskSemiBoldFont;
   font-style: normal;
   font-weight: 600;
@@ -44,27 +45,23 @@
 
 }
 .mintNft-div>p{
-  padding: 0;
-  text-indent: 0;
   position: relative;
   font-size: 18px;
-  left: 100px;
-  margin-right: 45%;
-  top: 16px;
+  margin-top: 16px;
+  margin-bottom: 40px;
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
   line-height: 27px;
   color: rgba(0, 0, 0, 0.6);
+  max-width: 522px;
 }
 .ntfs{
-  margin-left: 100px;
-  width: 50%;
-  margin-top: 8%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
+  max-width: 522px;
+  width: 100%;
 
   .nft-box {
     background: $white;
@@ -197,7 +194,7 @@
 .collection__nfts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 265px;
+  // grid-auto-rows: 265px;
   padding: 40px 0px 10px;
   grid-gap: 30px;
 
@@ -235,6 +232,23 @@
     &__image {
         position: relative;
         margin-bottom: 12px;
+        height: 200px;
+        width: 200px;
+        video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 12px;
+        }
+        img.preview-image {
+            width: 100%;
+            border-radius: 12px;
+        }
+        .video__icon {
+          position: absolute;
+          top: 9px;
+          right: 7px;
+        }
     }   
     &__name {
         display: flex;
@@ -401,6 +415,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-width: 228px;
+  min-height: 283px;
+  padding: 20px;
 }
 .input-cover>input{
   display: none;

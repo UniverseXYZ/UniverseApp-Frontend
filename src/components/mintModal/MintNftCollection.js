@@ -4,14 +4,18 @@ import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 import upload from '../../assets/images/upload.svg';
 import RemovePopup from '../popups/RemoveNftPopup';
-import Popup from "reactjs-popup";
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import videoIcon from '../../assets/images/video-icon.svg';
 import { useContext, useRef, useState, useEffect } from 'react';
 import AppContext from '../../ContextAPI';
 import CreateNftCol from './CreateNftCol';
 import randomColor from 'randomcolor';
 import uuid from 'react-uuid';
+import Popup from "reactjs-popup"
+import LoadingPopup from '../popups/LoadingPopup'
+import CongratsPopup from '../popups/CongratsPopup'
 
 const MintNftCollection = ({ onClick }) => {
     
@@ -169,7 +173,7 @@ const MintNftCollection = ({ onClick }) => {
                     }])
                     if (collectionNFTs.length) {
                         var newArr = [...savedNfts];
-                        collectionNFTs.map(nft => {
+                        collectionNFTs.forEach(nft => {
                             newArr.push(nft);
                         })
                         setSavedNfts(newArr);
@@ -197,7 +201,7 @@ const MintNftCollection = ({ onClick }) => {
                     ))
                     if (collectionNFTs.length) {
                         var newArray = [...savedNfts];
-                        collectionNFTs.map(nft => {
+                        collectionNFTs.forEach(nft => {
                             newArray.push(nft);
                         })
                         setSavedNfts(newArray);
@@ -210,24 +214,31 @@ const MintNftCollection = ({ onClick }) => {
         }
         if (mintNowClick) {
             if (!errors.collectionName && !errors.collectible) {
-                var newMyNFTs = [...myNFTs];
-                collectionNFTs.map(nft => {
-                    newMyNFTs.push({
-                        id: uuid(),
-                        type: 'collection',
-                        collectionId: collectionName,
-                        collectionName: collectionName,
-                        collectionAvatar: coverImage || randomColor(),
-                        previewImage: nft.previewImage,
-                        name: nft.name,
-                        description: nft.description,
-                        numberOfEditions: Number(nft.editions),
-                        generatedEditions: nft.generatedEditions,
-                    });
-                })
-                setMyNFTs(newMyNFTs);
-                setShowModal(false);
-                document.body.classList.remove('no__scroll');
+                document.getElementById('loading-hidden-btn').click();
+                setTimeout(() => {
+                    document.getElementById('popup-root').remove();
+                    document.getElementById('congrats-hidden-btn').click();
+                    setTimeout(() => {
+                        var newMyNFTs = [...myNFTs];
+                        collectionNFTs.forEach(nft => {
+                            newMyNFTs.push({
+                                id: uuid(),
+                                type: 'collection',
+                                collectionId: collectionName,
+                                collectionName: collectionName,
+                                collectionAvatar: coverImage || randomColor(),
+                                previewImage: nft.previewImage,
+                                name: nft.name,
+                                description: nft.description,
+                                numberOfEditions: Number(nft.editions),
+                                generatedEditions: nft.generatedEditions,
+                            });
+                        })
+                        setMyNFTs(newMyNFTs);
+                        setShowModal(false);
+                        document.body.classList.remove('no__scroll');
+                    }, 2000)
+                }, 3000)
             }
         }
     }, [errors])
@@ -235,6 +246,24 @@ const MintNftCollection = ({ onClick }) => {
 
     return !showCollectible ? (
         <div className="mintNftCollection-div">
+            <Popup
+                trigger={<button id='loading-hidden-btn' style={{ display: 'none' }}></button>}
+            >
+                {
+                    (close) => (
+                        <LoadingPopup onClose={close} />
+                    )
+                }
+            </Popup>
+            <Popup
+                trigger={<button id='congrats-hidden-btn' style={{ display: 'none' }}></button>}
+            >
+                {
+                    (close) => (
+                        <CongratsPopup onClose={close} />
+                    )
+                }
+            </Popup>
             <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>Create NFT</span></div>
             <h2>{!savedCollectionID ? 'Create NFT Collection' : 'Edit NFT Collection'}</h2>
             <div className="name-image">
@@ -263,7 +292,21 @@ const MintNftCollection = ({ onClick }) => {
                     return (
                         <div className={`saved__nft__box`} key={uuid()}>
                             <div className='saved__nft__box__image'>
-                                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                {nft.previewImage.type === 'video/mp4' &&
+                                    <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
+                                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                }
+                                {nft.previewImage.type === 'audio/mpeg' &&
+                                    <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                                }
+                                {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' &&
+                                    <img className="preview-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                }
+                                {nft.previewImage.type === 'video/mp4' &&
+                                    <img className='video__icon' src={videoIcon} alt='Video Icon' />
+                                }
                             </div>
                             <div className='saved__nft__box__name'>
                                 <h3>{nft.name}</h3>
@@ -333,7 +376,21 @@ const MintNftCollection = ({ onClick }) => {
                         return nft.collectionId === savedCollectionID ? (
                             <div className={`saved__nft__box`} key={uuid()}>
                                 <div className='saved__nft__box__image'>
-                                    <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                    {nft.previewImage.type === 'video/mp4' &&
+                                        <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
+                                            <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    }
+                                    {nft.previewImage.type === 'audio/mpeg' &&
+                                        <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                                    }
+                                    {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' &&
+                                        <img className="preview-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                    }
+                                    {nft.previewImage.type === 'video/mp4' &&
+                                        <img className='video__icon' src={videoIcon} alt='Video Icon' />
+                                    }
                                 </div>
                                 <div className='saved__nft__box__name'>
                                     <h3>{nft.name}</h3>
