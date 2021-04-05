@@ -4,6 +4,7 @@ import { PLACEHOLDER_NFTS } from '../../dummyData/DummyData';
 import { AUCTIONS_DATA } from '../../auctionsData/Data';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
+import FutureAuctions from './FutureAuctions/FutureAuctions';
 
 
 const MyAuction = () => {
@@ -41,14 +42,14 @@ const MyAuction = () => {
                         </div> 
                          </> }
 
-                         {selectedTabIndex === 1 && AUCTIONS_DATA.length > 0 && <><div>tab 2</div></>}
-                         {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && <>
+                         {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && <FutureAuctions />}
+                         {/* {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && <>
                         <div className='empty__auction'>
                             <h3>No scheduled auctions found</h3>
                             <p className='desc'>Create your first auction by clicking the button below</p>
                             <button className='set_up'>Set Up Auction</button>
                         </div> 
-                     </>}
+                     </>} */}
                         
                          {selectedTabIndex === 2 && AUCTIONS_DATA.length > 0 && <><div>tab 3</div></> }
                          {selectedTabIndex === 2 && AUCTIONS_DATA.length === 0 && <>
