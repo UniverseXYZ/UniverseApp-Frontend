@@ -161,6 +161,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #FCFEFD;
+    overflow-x: hidden;
 
     &.no__scroll {
         overflow: hidden;

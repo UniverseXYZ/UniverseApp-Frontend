@@ -125,7 +125,10 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                                     collections.map((collection, index) => {
                                         return (
                                             <button key={collection.id} className={collection.selected ? 'selected' : ''} onClick={() => handleCollections(index)}>
-                                                <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                                                {typeof collection.avatar === 'string' && collection.avatar.startsWith('#') ? 
+                                                    <div className='random__bg__color' style={{ backgroundColor: collection.avatar }}>{collection.name.charAt(0)}</div> :
+                                                    <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                                                }
                                                 <span>{collection.name}</span>
                                             </button>
                                         )
@@ -139,7 +142,10 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                         {collections.map((collection, index) => {
                             return collection.selected && (
                                 <div key={collection.id}>
-                                    <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                                    {typeof collection.avatar === 'string' && collection.avatar.startsWith('#') ? 
+                                        <div className='random__bg__color' style={{ backgroundColor: collection.avatar }}>{collection.name.charAt(0)}</div> :
+                                        <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                                    }
                                     <span>{collection.name}</span>
                                     <button title='Remove' onClick={() => handleCollections(index)}>&#10006;</button>
                                 </div>

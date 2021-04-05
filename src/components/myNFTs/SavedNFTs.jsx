@@ -160,7 +160,16 @@ const SavedNFTs = () => {
                                             }
                                         </div>
                                         {nft.generatedEditions.length > 1 ?
-                                            <div className='collection__count'>{`x${nft.generatedEditions.length}`}</div> :
+                                            <div className='collection__count'>
+                                                {`x${nft.generatedEditions.length}`}
+                                                <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
+                                                    {nft.generatedEditions.map(edition => {
+                                                        return (
+                                                            <div key={edition}>{`#${edition}`}</div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div> :
                                             <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p>
                                         }
                                     </div>
