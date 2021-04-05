@@ -5,6 +5,7 @@ import { AUCTIONS_DATA } from '../../auctionsData/Data';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import FutureAuctions from './futureAuctions/FutureAuctions';
+import ActiveAictions from './ActiveAuction';
 
 
 const MyAuction = () => {
@@ -33,7 +34,9 @@ const MyAuction = () => {
                             <img src={Exclamation} alt="message"/>
                             <p>Please, fill out the profile details before you set up an auction.<span> Go to my profile.</span></p>
                         </div>
-                        {selectedTabIndex === 0 && AUCTIONS_DATA.length > 0 && <><div>tab 1</div></> }
+                        {selectedTabIndex === 0 && AUCTIONS_DATA.length > 0 && 
+                            <ActiveAictions />
+                         }
                         {selectedTabIndex === 0 && AUCTIONS_DATA.length === 0 && <>
                         <div className='empty__auction'>
                             <h3>No active auctions found</h3>
