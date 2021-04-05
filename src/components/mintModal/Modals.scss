@@ -352,11 +352,42 @@
             }
         }
         div.collection__count {
+          position: relative;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
             font-size: 14px;
             color: $black;
+            cursor: default;
+
+            &:hover {
+                .generatedEditions {
+                    display: grid;
+                    grid-column-gap: 10px;
+                    grid-row-gap: 5px;
+                    z-index: 1;
+                }
+            }
+
+            .generatedEditions {
+                display: none;
+                position: absolute;
+                bottom: 25px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: $white;
+                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                border-radius: 12px;
+                padding: 16px;
+                > div {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px;
+                    line-height: 150%;
+                    color: $black;
+                }
+            }
         }
         p.collection__count {
             font-family: $spaceGroteskFont;
