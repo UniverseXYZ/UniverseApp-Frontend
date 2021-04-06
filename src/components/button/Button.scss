@@ -21,8 +21,9 @@
    border: 1px solid;
    border-image-source: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
    border-radius: 12px;
-   background: linear-gradient(#fff,#fff) padding-box,
-   linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+   background: 
+      linear-gradient($white, $white) padding-box,
+      linear-gradient(to right, #BCEB00, #00EAEA) border-box;
    font-family: $sharpGroteskMediumFont;
    font-style: normal;
    font-weight: 500;

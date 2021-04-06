@@ -17,16 +17,26 @@ import trezorLogo from '../../../assets/images/trezor.svg';
 import coinbaseLogo from '../../../assets/images/coinbase.svg';
 import walletConnectLogo from '../../../assets/images/wallet-connect.svg';
 import leftArrow from '../../../assets/images/arrow.svg'
+import Button from '../../button/Button';
 
-const MobileView = ({ethereumAddress}) => {
+const MobileView = (props) => {
+    const {
+        ethereumAddress,
+        handleConnectWallet,
+        setShowMenu,
+        setShowSelectWallet,
+        showMenu,
+        showSelectWallet,
+        showInstallWalletPopup,
+        setSelectedWallet,
+        setShowInstallWalletPopup,
+        selectedWallet
+    } = props;
     const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
-    const [showMenu, setShowMenu] = useState(false);
     const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
     const [collapseAboutMenu, setCollapseAboutMenu] = useState(false);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [showSelectWallet, setShowSelectWallet] = useState(false);
-
     const ref = useRef(null);
     const history = useHistory();
 
@@ -79,7 +89,7 @@ const MobileView = ({ethereumAddress}) => {
                             </div>
                             <div className='dropdown__body'>
                                 <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
-                                <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
+                                <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
                                 <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
                                 <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign Out</button>
                             </div>
@@ -122,7 +132,7 @@ const MobileView = ({ethereumAddress}) => {
                                             <Link className='sub__nav' to='/whitepaper'>
                                                 <span>Whitepaper</span>
                                             </Link>
-                                            <Link className='sub__nav' to='/team'>
+                                            <Link className='sub__nav team' to='/team'>
                                                 <span>Team</span>
                                             </Link>
                                         </>
@@ -135,30 +145,42 @@ const MobileView = ({ethereumAddress}) => {
                                 }
                             </> :
                             <div className='select_wallet__section'>
-                                <div className="backToMenu" onClick={() => setShowSelectWallet(false)}><img src={leftArrow} alt="back"/><span>Back to menu</span></div>
-                                <h1 className='title'>Select Wallet</h1>
-                                <p className='desc'>Please pick a wallet to connect to Universe</p>
-                                <div className='wallets'>
-                                    <button onClick={() => {setIsWalletConnected(!isWalletConnected); setShowMenu(false); setShowSelectWallet(false)}}>
-                                        <img src={metamaskLogo} alt='Metamask' />
-                                    </button>
-                                    <button onClick={() => {setIsWalletConnected(!isWalletConnected); setShowMenu(false); setShowSelectWallet(false)}}>
-                                        <img src={ledgerLogo} alt='Ledger' />
-                                    </button>
-                                    <button onClick={() => {setIsWalletConnected(!isWalletConnected); setShowMenu(false); setShowSelectWallet(false)}}>
-                                        <img src={keystoreLogo} alt='Keystore' />
-                                    </button>
-                                    <button onClick={() => {setIsWalletConnected(!isWalletConnected); setShowMenu(false); setShowSelectWallet(false)}}>
-                                        <img src={trezorLogo} alt='Trezor' />
-                                    </button>
-                                    <button onClick={() => {setIsWalletConnected(!isWalletConnected); setShowMenu(false); setShowSelectWallet(false)}}>
-                                        <img src={coinbaseLogo} alt='Coinbase' />
-                                    </button>
-                                    <button onClick={() => {setIsWalletConnected(!isWalletConnected); setShowMenu(false); setShowSelectWallet(false)}}>
-                                        <img src={walletConnectLogo} alt='WalletConnect' />
-                                    </button>
-                                </div>
-                                <p className='info'>We do not own your private keys and cannot access your funds without your confirmation.</p>
+                            <div className="backToMenu" onClick={() => setShowSelectWallet(false)}><img src={leftArrow} alt="back" /><span>Back to menu</span></div>
+                            {!showInstallWalletPopup ?
+                                <>
+                                    <h1 className='title'>Select Wallet</h1>
+                                    <p className='desc'>Please pick a wallet to connect to Universe</p>
+                                    <div className='wallets'>
+                                        <button onClick={() => handleConnectWallet('Metamask')}>
+                                            <img src={metamaskLogo} alt='Metamask' />
+                                        </button>
+                                        <button onClick={() => handleConnectWallet('Ledger')}>
+                                            <img src={ledgerLogo} alt='Ledger' />
+                                        </button>
+                                        <button onClick={() => handleConnectWallet('Keystore')}>
+                                            <img src={keystoreLogo} alt='Keystore' />
+                                        </button>
+                                        <button onClick={() => handleConnectWallet('Trezor')}>
+                                            <img src={trezorLogo} alt='Trezor' />
+                                        </button>
+                                        <button onClick={() => handleConnectWallet('Coinbase')}>
+                                            <img src={coinbaseLogo} alt='Coinbase' />
+                                        </button>
+                                        <button onClick={() => handleConnectWallet('WalletConnect')}>
+                                            <img src={walletConnectLogo} alt='WalletConnect' />
+                                        </button>
+                                    </div>
+                                    <p className='info'>We do not own your private keys and cannot access your funds without your confirmation.</p>
+                                </> :
+                                <>
+                                    <h1 className='title'>Install {selectedWallet}</h1>
+                                    <p className='desc'>You need to have Metamask installed to continue. Once you have installed it, please refresh the page</p>
+                                    <div className='links'>
+                                        <Button className='light-button'>Install {selectedWallet}</Button>
+                                        <Button className='light-border-button' onClick={() => { setShowInstallWalletPopup(false); setSelectedWallet(''); }}>Go back</Button>
+                                    </div>
+                                </>
+                            }
                             </div>
                         }
                     </ul>
