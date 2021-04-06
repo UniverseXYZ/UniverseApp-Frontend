@@ -1,4 +1,5 @@
 @import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
 
 
 .my-account {
@@ -6,28 +7,46 @@
     .my-account-title {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 16px;
+        
+        .my-account-description{
+            h1{
+                font-family: $sharpGroteskSemiBoldFont;
+                font-weight: 600;
+                font-size: 32px;
+                line-height: 140%;
+                color: $black;
+                margin-bottom: 16px;
 
-        h1{
-            font-family: $sharpGroteskSemiBoldFont;
-            font-weight: 600;
-            font-size: 32px;
-            line-height: 140%;
-            color: $black;
+                @include sm {
+                    font-size: 26px;
+                    margin-bottom: 25px;
+                }
+            }
+            p{
+                max-width: 511px;
+                font-family: $spaceGroteskFont;
+                font-size: 18px;
+                line-height: 150%;
+                color: rgba(0, 0, 0, 0.6);
+            }
         }
+        
         button{
             box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            height: fit-content;
+
+            @include sm{
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        @include sm{
+            display: block;
         }
         
     }
-    .my-account-description {
-        max-width: 511px;
-        font-family: $spaceGroteskFont;
-        font-size: 18px;
-        line-height: 150%;
-        color: rgba(0, 0, 0, 0.6);
-        margin-left: 8px;
-    }
+    
 
     .account-grid-container {
 
@@ -45,16 +64,36 @@
                     border-radius: 50%;
                     border: 1px solid rgba(0, 0, 0, 0.1);
 
+
                     .default-img {
                         width: 60px;
                         height: 60px;
                         margin: 64px;
+
+                        @include lg {
+                            width: 41px;
+                            height: 41px;
+                            margin: 46px;
+                        }
+                        @include sm {
+                            width: 31px;
+                            height: 31px;
+                            margin: 32px;
+                        }
                     }
                     .account-img{
                         width: 190px;
                         height: 190px;
                         border-radius: 50%;
                         object-fit: cover;
+                    }
+                    @include lg {
+                        width: 132px;
+                        height: 132px;
+                    }
+                    @include sm {
+                        width: 96px;
+                        height: 96px;
                     }
                 }
 
@@ -73,6 +112,20 @@
                     button{
                         margin: auto;
                     }
+
+                    @include lg{
+                        width: 160px;
+                        margin-top: 19px;
+                        text-align: left;
+                    }
+                }
+
+                @include lg{
+                    min-width: 185px;
+                }
+                @include sm{
+                    margin-top: 5px;
+                    min-width: 119px;
                 }
             }
 
@@ -83,7 +136,6 @@
                 margin-top: 50px;
 
                 .account-name {
-                    margin-top: 3px;
     
                     h2{
                         font-family: $sharpGroteskMediumFont;
@@ -93,9 +145,17 @@
                         letter-spacing: 0.2px;
                         color: $black;
                         padding-bottom: 10px;
+
+                        @include sm{
+                            font-size: 20px;
+                            line-height: 130%;
+                            letter-spacing: 0px;
+                            padding-bottom: 3px;
+                        }
                     }
                     .account-link{
                         display: flex;
+                        flex-wrap: wrap;
                         font-family: $spaceGroteskFont;
                             font-size: 18px;
                             line-height: 23px;
@@ -106,6 +166,116 @@
                             color: rgba(0, 0, 0, 0.4);
                         }
                     }
+                    
+                }
+                @include lg{
+                    margin-top: 30px;
+                }
+                @include md{
+                    display: grid;
+                    margin-top: 0px;
+                }
+
+                button{
+                    @include md{
+                        width: fit-content;
+                        margin-top: 10px;
+                    }
+                }
+            }
+
+            @include lg {
+                padding: 50px 0;
+            }
+            @include sm{
+                padding: 40px 0;
+            }
+        }
+
+        .account-grid-name1 {
+            display: flex;
+            width: 100%;
+            padding: 40px 0;
+
+            .account-picture {
+                min-width: 285px;
+                
+                .account-image {
+                    width: 190px;
+                    height: 190px;
+                    border-radius: 50%;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+
+
+                    .default-img {
+                        width: 60px;
+                        height: 60px;
+                        margin: 64px;
+
+                        @include lg {
+                            width: 41px;
+                            height: 41px;
+                            margin: 46px;
+                        }
+                        @include sm {
+                            width: 31px;
+                            height: 31px;
+                            margin: 32px;
+                        }
+                    }
+                    .account-img{
+                        width: 190px;
+                        height: 190px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+                    @include lg {
+                        width: 132px;
+                        height: 132px;
+                    }
+                    @include md{
+                        margin-right: 24px;
+                    }
+                    @include sm {
+                        width: 96px;
+                        height: 96px;
+                    }
+                }
+
+                .account-picture-editing{
+                    margin-top: 12px;
+                    width: 190px;
+                    text-align: center;
+                    
+                    p{
+                        font-family: $spaceGroteskFont;
+                        font-size: 14px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.6);
+                        padding-bottom: 12px;
+                    }
+                    button{
+                        margin: auto;
+                    }
+
+                    @include lg{
+                        width: 160px;
+                        margin-top: 19px;
+                        text-align: left;
+                    }
+                    @include sm{
+                        margin-top: 0px;
+                    }
+                }
+
+                @include lg{
+                    min-width: 185px;
+                }
+                @include md{
+                    display: flex;
+                }
+                @include sm{
+                    min-width: 119px;
                 }
             }
 
@@ -117,6 +287,14 @@
                     font-size: 14px;
                     line-height: 22px;
                 }
+
+                .intup-l{
+                    @include lg{
+                        width: 100%;
+                        max-width: 540px;
+                    }
+                }
+
                 input{
                     width: 540px;
                     height: 50px;
@@ -137,14 +315,18 @@
                     &:focus::placeholder {
                         color: transparent;
                     }
+
+                    @include lg{
+                        width: 100%;
+                    }
                 }
                 .info-text{
                     position: absolute;
                     width: 229px;
-                    height: 106px;
+                    min-height: 106px;
                     padding: 16px;
                     left: 65px;
-                    top: -13px;
+                    top: -26px;
                     background: $white;
                     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
                     border-radius: 12px;
@@ -156,9 +338,10 @@
                     }
                 }
                 .display-warning{
+                    position: relative;
                     display: flex;
                     width: 100%;
-                    padding: 20px;
+                    padding: 24px;
                     background: #FDFCF9;
                     border: 1px solid #E4B613;
                     box-sizing: border-box;
@@ -167,7 +350,7 @@
                     
 
                     p{
-                        padding-left: 10px;
+                        padding-left: 31px;
                         font-family: $spaceGroteskFont;
                         font-weight: 500;
                         font-size: 16px;
@@ -175,10 +358,26 @@
                         color: #E4B613;
                     }
                     img{
-                        margin-top: -20px;
+                        position: absolute;
+                        top: 24px;
+                        left: 24px;
                     }
                 }
+                @include lg {
+                    width: 100%;
+                    margin-top: 17px;
+                }
                 
+            }
+
+            @include lg {
+                padding: 50px 0;
+            }
+            @include md {
+                display: block;
+            }
+            @include sm{
+                padding: 40px 0;
             }
         }
 
@@ -196,6 +395,11 @@
                 line-height: 22px;
                 color: rgba(0, 0, 0, 0.4);
                 min-width: 285px;
+
+                @include lg{
+                    min-width: 185px;
+                    margin-bottom: 16px;
+                }
             }
 
             .account-grid-about-edit{
@@ -210,6 +414,11 @@
                     font-size: 16px;
                     line-height: 160%;
                     color: rgba(0, 0, 0, 0.4);
+
+                    @include sm{
+                        margin-top: 23px;
+                        min-width: 178px;
+                    }
                 }
                 .about-text{
                     font-family: $spaceGroteskFont;
@@ -218,12 +427,26 @@
                     font-size: 16px;
                     line-height: 160%;
                     color: $black;
-                    width: 635px;
+                    max-width: 635px;
+                    width: 75%;
+                }
+                button{
+                    @include md{
+                        position: absolute;
+                        top: 20px;
+                        right: 0px;    
+                    }
+                    @include sm{
+                        font-size: 0px;
+                        padding: 8px;
+                    }
                 }
             }
             .account-grid-about-editing {
+                width: 100%;
                 textarea{
-                    width: 540px;
+                    max-width: 540px;
+                    width: 100%;
                     height: 127px;
                     font-family: $spaceGroteskFont;
                     font-size: 16px;
@@ -234,6 +457,15 @@
                 ::placeholder{
                     color: rgba(0, 0, 0, 0.2);
                 }
+            }
+            @include lg{
+                padding: 50px 0;
+            }
+
+            @include md{
+                position: relative;
+                display: grid;
+                padding: 20px 0;
             }
         }
 
@@ -251,6 +483,11 @@
                 line-height: 22px;
                 color: rgba(0, 0, 0, 0.4);
                 min-width: 285px;
+
+                @include lg {
+                    min-width: 185px;
+                    padding-bottom: 29px;
+                }
             }
 
             .account-grid-logo-edit{
@@ -265,13 +502,24 @@
                     width: 42px;
                     height: 42px;
                 }
+                button{
+                    @include sm{
+                        position: absolute;
+                        top: 20px;
+                        right: 0px;
+                        font-size: 0px;
+                        padding: 8px;
+                    }
+                }
             }
 
             .account-grid-logo-editing{
+                width: 100%;
                 .import-logo{
                     text-align: center;
-                    width: 540px;
-                    height: 513px;
+                    max-width: 540px;
+                    width: 100;
+                    height: fit-content;
                     background: rgba(0, 0, 0, 0.02);
                     border: 1px dashed rgba(0, 0, 0, 0.1);
                     box-sizing: border-box;
@@ -280,14 +528,25 @@
 
                     .cloud{
                         margin-top: 31px;
-                        margin-bottom: 16px;
+
+                        @include sm{
+                            display: none;
+                        }
                     }
                     h5{
+                        margin-top: 16px;
                         font-family: $spaceGroteskFont;
                         font-weight: 600;
                         font-size: 14px;
                         line-height: 160%;
                         color: black;
+                        @include lg{
+                            padding-bottom: 5px;
+                        }
+
+                        @include sm{
+                            padding-bottom: 5px;
+                        }
                     }
                     p{
                         font-family: $spaceGroteskFont;
@@ -332,6 +591,18 @@
                     }
                 }   
             }
+
+            @include lg{
+                padding: 50px 0;
+            }
+            @include md{
+                display: grid;
+            }
+
+            @include sm{
+                position: relative;
+                padding: 20px 0;
+            }
         }
 
         .account-grid-social{
@@ -348,6 +619,11 @@
                 line-height: 22px;
                 color: rgba(0, 0, 0, 0.4);
                 min-width: 285px;
+
+                @include lg{
+                    min-width: 185px;
+                    margin-bottom: 20px;
+                }
             }
 
             .account-grid-social-edit{
@@ -374,37 +650,40 @@
                     img{
                         padding-right: 12px;
                     }
+                    @include sm{
+                        flex-wrap: wrap;
+                    }
+                }
+                button{
+                    @include sm{
+                        position: absolute;
+                        top: 20px;
+                        right: 0px;
+                        font-size: 0px;
+                        padding: 8px;
+                    }
                 }
             }
 
             .account-grid-social-editing{
+                width: 100%;
+                max-width: 540px;
                 h5{
                     font-family: $spaceGroteskFont;
                     font-weight: bold;
                     font-size: 14px;
                     line-height: 22px;
                     color: $black;
+                    margin-bottom: 0px;
                 }
-                // input{
-                //     width: 540px; 
-                //     // background-image: url("https://image.flaticon.com/icons/png/512/23/23931.png");
-                //     // background-repeat: no-repeat;
-                //     // background-size: 24px;
-                //     // background-position: 13px;
-                //     padding-left: 50px;
-                //     font-family: $spaceGroteskFont;
-                //     font-size: 16px;
-                //     line-height: 20px;
-                //     margin-bottom: 20px;
-
-                //     &::placeholder{
-                //         color: rgba(0, 0, 0, 0.2);
-                //     }
-                    
-                // }
+                .intup-l{
+                    width: 100%;
+                }
                 
                 .twitter{
                     position: relative;
+                    width: 100%;
+                    max-width: 540px;
 
                     img{
                         position: absolute;
@@ -413,9 +692,10 @@
                         left: 13px;
                         top: 36px;
                     }
+                    
 
-                    input{
-                        width: 540px;
+                    input{                           
+                        width: 100%;
                         padding-left: 50px;
                         font-family: $spaceGroteskFont;
                         font-size: 16px;
@@ -425,7 +705,7 @@
                         &::placeholder{
                             color: rgba(0, 0, 0, 0.2);
                         }  
-                        &:focus {
+                        &:focus {                                
                             background: 
                                 linear-gradient($white, $white) padding-box,
                                 linear-gradient(to right, #BCEB00, #00EAEA) border-box;
@@ -434,10 +714,19 @@
                         &:focus::placeholder {
                             color: transparent;
                         }
+                        @include lg{
+                            width: 100%;
+                            max-width: 540px;
+                        }
                     }
+                    
+
+                    
                 }
                 .instagram{
                     position: relative;
+                    max-width: 540px;
+                    width: 100%;
 
                     img{
                         position: absolute;
@@ -446,8 +735,9 @@
                         left: 13px;
                         top: 36px;
                     }
+                    
                     input{
-                        width: 540px;
+                        width: 100%;
                         padding-left: 50px;
                         font-family: $spaceGroteskFont;
                         font-size: 16px;
@@ -469,8 +759,15 @@
                         &:focus::placeholder {
                             color: transparent;
                         }
+
+                        
                     }
                 }
+            }
+            @include md{
+                position: relative;
+                display: block;
+                padding: 20px 0;
             }
         }
         .account-display-buttons{
@@ -478,11 +775,17 @@
 
             button{
                 margin-right: 10px;
+
+                @include sm{
+                    margin-bottom: 15px;
+                }
+            }
+            @include sm{
+                display: grid;
             }
         }
         
         button{
-            // width: 120px;
             height: max-content;
             &.light-border-button {
                 background: 
@@ -492,7 +795,20 @@
             }
             img{
                 padding-left: 5px;
+                @include sm{
+                    padding-left: 0px;
+                }
             }
         }
+    }
+
+    @include lg {
+        width: 100%;
+        padding: 0px 60px;
+    }
+    @include sm {
+        width: 100%;
+        padding: 0px 20px;
+        margin-top: 20px;
     }
 }

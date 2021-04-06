@@ -89,37 +89,29 @@ const MyAccount = () => {
     return (
         <div className="my-account container">
             <div className="my-account-title">
-                <h1>My Profile</h1>
+                <div className="my-account-description">
+                    <h1>My Profile</h1>
+                    <p>You can set preffered display name, create your branded profile URL and manage other personal settings</p>
+                </div>
                 <Button className="light-button">PREVIEW MY UNIVERSE PAGE</Button>
             </div>
-            <p className="my-account-description">You can set preffered display name, create your branded profile URL and manage other personal settings</p>
-
+            
             <div className="account-grid-container">
-                
-                <div className="account-grid-name">
-                    <div className="account-picture">
-                        <div className="account-image">
-                            {accountImage &&
-                                <img className="account-img" src={URL.createObjectURL(accountImage)} alt='Cover' />
-                            }
-                            {!accountImage && accountDisplay.accountImage &&
-                                <img className="account-img" src={URL.createObjectURL(accountDisplay.accountImage)} alt='Cover' />
-                            }
-                            {!accountImage && !accountDisplay.accountImage &&
-                                <img className="default-img" src={defaultImage} alt='Cover' />
-                            }
-                            
+                {nameEditing?
+                    <div className="account-grid-name">
+                        <div className="account-picture">
+                            <div className="account-image">
+                                {accountImage &&
+                                    <img className="account-img" src={URL.createObjectURL(accountImage)} alt='Cover' />
+                                }
+                                {!accountImage && accountDisplay.accountImage &&
+                                    <img className="account-img" src={URL.createObjectURL(accountDisplay.accountImage)} alt='Cover' />
+                                }
+                                {!accountImage && !accountDisplay.accountImage &&
+                                    <img className="default-img" src={defaultImage} alt='Cover' />
+                                }                            
+                            </div>
                         </div>
-                        {!nameEditing ?
-                            <div className="account-picture-editing">
-                                <p>We recomend an image of at least 400x400.</p>
-                                <Button className="light-border-button" onClick={() => accountInput.current.click()}>CHOOSE FILE</Button>
-                                <input type="file" className="inp-disable" ref={accountInput} onChange={(e)=>e.target.files[0] && setAccountImage(e.target.files[0])}></input>
-                            </div>:null
-                        }
-                        
-                    </div>
-                    {nameEditing ? 
                         <div className="account-grid-name-edit">
                             <div className="account-name">
                                 {accountDisplay.name!==""?
@@ -129,44 +121,66 @@ const MyAccount = () => {
                                 }
                                 {accountDisplay.pageAddress !== ""?
                                     <div className="account-link">
-                                        <p className="link">{`universe.xyz/${accountDisplay.pageAddress}`}</p>
+                                        <p className="link">universe.xyz/</p>
+                                        <p className="link">{accountDisplay.pageAddress}</p>
                                     </div>
                                 :
                                     <div className="account-link">
-                                        <p className="link">universe.xyz/</p>
+                                        <p className="link">universe.xyz/</p>                                        
                                         <p className="default-address">youraddress</p>
                                     </div>
                                 }
                                 
                             </div>
                             <Button className="light-border-button" onClick={() => setNameEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
-                        </div> 
-                    : 
+                        </div>
+                    </div>
+                    :
+                    <div className="account-grid-name1">
+                        <div className="account-picture">
+                            <div className="account-image">
+                                {accountImage &&
+                                    <img className="account-img" src={URL.createObjectURL(accountImage)} alt='Cover' />
+                                }
+                                {!accountImage && accountDisplay.accountImage &&
+                                    <img className="account-img" src={URL.createObjectURL(accountDisplay.accountImage)} alt='Cover' />
+                                }
+                                {!accountImage && !accountDisplay.accountImage &&
+                                    <img className="default-img" src={defaultImage} alt='Cover' />
+                                }
+                                
+                            </div>
+                            <div className="account-picture-editing">
+                                <p>We recomend an image of at least 400x400.</p>
+                                <Button className="light-border-button" onClick={() => accountInput.current.click()}>CHOOSE FILE</Button>
+                                <input type="file" className="inp-disable" ref={accountInput} onChange={(e)=>e.target.files[0] && setAccountImage(e.target.files[0])}></input>
+                            </div>  
+                                        
+                        </div>
                         <div className="account-grid-name-editing">    
                             <h5>Display name</h5>
                             <Input placeholder="Enter your display name" className="inp" value={accountName} onChange={(e)=>setAccountName(e.target.value)}/>
-                            
+                                
                             <h5>Universe page address <img src={infoIcon} alt='Info Icon' onMouseOver={()=>setHideIcon(false)} onMouseLeave={()=>setHideIcon(true)}/></h5>
                             <div hidden={hideIcon} className="info-text">
-                                <p>Universe page is your own brand landing page within the Universe ecosystem. It can contain your logo, description, and social links</p>
+                                <p>Universe page is your own brand landing page within the Universe ecosystem. It can contain your logo, description, and social links.</p>
                             </div>
                             <Input placeholder="Enter your display name" className="inp" value={accountPage} onChange={(e) => setAccountPage(e.target.value)}/>
-                            {(accountName!==accountDisplay.name || accountPage!==accountDisplay.pageAddress || accountImage)?
+                            {
+                                (accountName!==accountDisplay.name || accountPage!==accountDisplay.pageAddress || accountImage)?
                                 <div className="display-warning">
                                     <img alt='' src={warningIcon}/>
                                     <p>Your edits will be visible on the My Universe landing page but will not be displayed on the current running auctions landing pages.</p>
                                 </div>
                                 :null
-                            }
-                            
-                            
+                            }                            
                             <div className="account-display-buttons">
                                 <Button className="light-button" onClick={() => saveDisplayChanges()}>SAVE CHANGES</Button>
                                 <Button className="light-border-button" onClick={() => cancelDisplayChanges()}>CANCEL</Button>
                             </div>
-                        </div>
-                    }
-                </div>
+                        </div> 
+                    </div>
+                }
 
                 <div className="account-grid-about">
                     <h5>About</h5>
@@ -254,7 +268,8 @@ const MyAccount = () => {
                             :
                                 <div className="site">
                                     <img alt='' src={instagramLogo}/>
-                                    <p className="site-link">{`instagram.com/${socialDisplay.instagram}`}</p>
+                                    <p className="site-link">instagram.com/</p>
+                                    <p className="site-link">{socialDisplay.instagram}</p>
                                 </div>
                             }
                             {socialDisplay.twitter === ""?
@@ -266,7 +281,8 @@ const MyAccount = () => {
                             :
                                 <div className="site">
                                     <img alt='' src={twitterLogo}/>
-                                    <p className="site-link">{`twitter.com/${socialDisplay.twitter}`}</p>
+                                    <p className="site-link">twitter.com/</p>
+                                    <p className="site-link">{socialDisplay.twitter}</p>
                                 </div>
                             }   
                                 
@@ -275,16 +291,17 @@ const MyAccount = () => {
                         </div>
                     :
                         <div className="account-grid-social-editing">
-                            <div className="twitter">
-                                <h5>Twitter profile</h5>
-                                <img alt='' src={twitterLogo}/>
-                                <Input  placeholder="twitter.com/username" className="inp" value={twitterLink} onChange={(e) => setTwitterLink(e.target.value)}/>
-                            </div>
                             <div className="instagram">
                                 <h5>Instagram profile</h5>
                                 <img alt='' src={instagramLogo}/>
                                 <Input placeholder="instagram.com/username" className="inp" value={instagramLink} onChange={(e) => setInstagramLink(e.target.value)}/>
                             </div>
+                            <div className="twitter">
+                                <h5>Twitter profile</h5>
+                                <img alt='' src={twitterLogo}/>
+                                <Input  placeholder="twitter.com/username" className="inp" value={twitterLink} onChange={(e) => setTwitterLink(e.target.value)}/>
+                            </div>
+                            
                             <div className="account-display-buttons">
                                 <Button className="light-button" onClick={() => saveSocialChanges()}>SAVE CHANGES</Button>
                                 <Button className="light-border-button" onClick={() => cancelSocialChanges()}>CANCEL</Button>
