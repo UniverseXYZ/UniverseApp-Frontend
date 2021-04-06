@@ -35,11 +35,6 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        if (props.location.pathname === '/') {
-            document.querySelector('header').classList.add('dark')
-        } else {
-            document.querySelector('header').classList.remove('dark')
-        }
         function handleResize() {
             setWindowSize({
                 width: window.innerWidth,
@@ -51,6 +46,14 @@ const Header = (props) => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    useEffect(() => {
+        if (props.location.pathname === '/') {
+            document.querySelector('header').classList.add('dark')
+        } else {
+            document.querySelector('header').classList.remove('dark')
+        }
+    })
 
     return (
         <header>
