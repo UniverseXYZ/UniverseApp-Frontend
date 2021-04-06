@@ -5,38 +5,50 @@ import trezorLogo from '../../assets/images/trezor.svg';
 import coinbaseLogo from '../../assets/images/coinbase.svg';
 import walletConnectLogo from '../../assets/images/wallet-connect.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
-import { useContext } from 'react';
-import AppContext from '../../ContextAPI';
+import Button from '../button/Button';
 
-const SelectWalletPopup = ({ close }) => {
-    const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
+const SelectWalletPopup = (props) => {
+    const { close, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet } = props;
 
     return (
         <div className='select_wallet__popup'>
             <img className='close__popup' onClick={close} src={closeIcon} alt='Close' />
-            <h1 className='title'>Select Wallet</h1>
-            <p className='desc'>Please pick a wallet to connect to Universe</p>
-            <div className='wallets'>
-                <button onClick={() => {setIsWalletConnected(!isWalletConnected)}}>
-                    <img src={metamaskLogo} alt='Metamask' />
-                </button>
-                <button onClick={() => {setIsWalletConnected(!isWalletConnected)}}>
-                    <img src={ledgerLogo} alt='Ledger' />
-                </button>
-                <button onClick={() => {setIsWalletConnected(!isWalletConnected)}}>
-                    <img src={keystoreLogo} alt='Keystore' />
-                </button>
-                <button onClick={() => {setIsWalletConnected(!isWalletConnected)}}>
-                    <img src={trezorLogo} alt='Trezor' />
-                </button>
-                <button onClick={() => {setIsWalletConnected(!isWalletConnected)}}>
-                    <img src={coinbaseLogo} alt='Coinbase' />
-                </button>
-                <button onClick={() => {setIsWalletConnected(!isWalletConnected)}}>
-                    <img src={walletConnectLogo} alt='WalletConnect' />
-                </button>
-            </div>
-            <p className='info'>We do not own your private keys and cannot access your funds without your confirmation.</p>
+            {!showInstallWalletPopup ? 
+                <>
+                    <h1 className='title'>Select Wallet</h1>
+                    <p className='desc'>Please pick a wallet to connect to Universe</p>
+                    <div className='wallets'>
+                        <button onClick={() => handleConnectWallet('Metamask')}>
+                            <img src={metamaskLogo} alt='Metamask' />
+                        </button>
+                        <button onClick={() => handleConnectWallet('Ledger')}>
+                            <img src={ledgerLogo} alt='Ledger' />
+                        </button>
+                        <button onClick={() => handleConnectWallet('Keystore')}>
+                            <img src={keystoreLogo} alt='Keystore' />
+                        </button>
+                        <button onClick={() => handleConnectWallet('Trezor')}>
+                            <img src={trezorLogo} alt='Trezor' />
+                        </button>
+                        <button onClick={() => handleConnectWallet('Coinbase')}>
+                            <img src={coinbaseLogo} alt='Coinbase' />
+                        </button>
+                        <button onClick={() => handleConnectWallet('WalletConnect')}>
+                            <img src={walletConnectLogo} alt='WalletConnect' />
+                        </button>
+                    </div>
+                    <p className='info'>We do not own your private keys and cannot access your funds without your confirmation.</p>
+                </> :
+                <>
+                    <h1 className='title'>Install {selectedWallet}</h1>
+                    <p className='desc'>You need to have Metamask installed to continue. Once you have installed it, please refresh the page</p>
+                    <div className='links'>
+                        <Button className='light-button'>Install {selectedWallet}</Button>
+                        <Button className='light-border-button' onClick={() => { setShowInstallWalletPopup(false); setSelectedWallet(''); }}>Go back</Button>
+                    </div>
+                </>
+            }
+            
         </div>
     )
 }

@@ -1,0 +1,177 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.homepage {
+    .welcome__section {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: $black;
+        min-height: 720px;
+        padding: 0 20px;
+
+        .ellipse-l {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            @include sm {
+                height: 200px;
+            }
+        }
+
+        .ellipse-r {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(180deg);
+            @include sm {
+                height: 200px;
+            }
+        }
+        
+        &__container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 1110px;
+            margin: 0 auto;
+
+            .left {
+                max-width: 627px;
+                h1.title {
+                    font-family: $sharpGroteskSemiBoldFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 48px;
+                    line-height: 120%;
+                    color: $white;
+                    @include lg {
+                        text-align: center;
+                    }
+                    @include sm {
+                        font-size: 26px;
+                        line-height: 140%;
+                    }
+                }
+                p.desc {
+                    margin: 30px 0 50px;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 18px;
+                    line-height: 150%;
+                    color: rgba(255, 255, 255, 0.6);
+                    max-width: 475px;
+                    @include lg {
+                        text-align: center;
+                        margin: 30px auto 50px;
+                    }
+                    @include sm {
+                        font-size: 16px;
+                        margin: 16px auto;
+                    }
+                }
+                .links {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    .light-border-button {
+                        background: 
+                            linear-gradient($black, $black) padding-box,
+                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        color: $white;
+                        margin-left: 15px;
+                    }
+                    button {
+                        @include sm {
+                            width: 100%;
+                            margin-left: 0!important;
+                            margin-bottom: 20px;
+                        }
+                    }
+                    @include lg {
+                        justify-content: center;
+                        margin-bottom: 140px;
+                    }
+                    @include sm {
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+            .right {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            @include lg {
+                flex-wrap: wrap;
+                justify-content: center;
+                flex-direction: column-reverse;
+            }
+        }
+    }
+
+    .about__section {
+        position: relative;
+        padding: 90px 0;
+        overflow: hidden;
+
+        .circle-r {
+            position: absolute;
+            top: -40%;
+            right: -5%;
+        }
+
+        .circle-l {
+            position: absolute;
+            top: 40%;
+            left: -5%;
+            transform: rotate(180deg);
+        }
+
+        &__container {
+            width: 1110px;
+            margin: 0 auto;
+
+            .universe__protocol {
+                background: 
+                    linear-gradient($white,$white) padding-box,
+                    linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+                border: 1px solid transparent;
+                backdrop-filter: blur(20px);
+                border-radius: 20px;
+                padding: 72px 95px;
+                opacity: 0.9;
+                margin-bottom: 150px;
+
+                h1.title {
+                    font-family: $sharpGroteskSemiBoldFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 36px;
+                    line-height: 140%;
+                    color: $black;
+                }
+                p.info {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 18px;
+                    line-height: 150%;
+                    color: $black;
+                    margin: 22px 0;
+                }
+                p.desc {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 160%;
+                    color: rgba(0, 0, 0, 0.6);
+                }
+            }
+        }
+    }
+}

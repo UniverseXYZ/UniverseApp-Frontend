@@ -7,6 +7,7 @@ import MyNFTs from './components/myNFTs/Ntfs';
 import MyAccount from './components/myAccount/Account'
 import Auctions from './components/auctions/Auction';
 import AppContext from './ContextAPI';
+import Homepage from './containers/homepage/Homepage';
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -57,7 +58,8 @@ const App = () => {
             <Routes>
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={() => <MyNFTs />} />
+                    <Route exact path="/" component={() => <Homepage />} />
+                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
                     <Route exact path="/my-account" component={() => <MyAccount />} />
                     <Route exact path="/my-auctions" component={() => <Auctions />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
