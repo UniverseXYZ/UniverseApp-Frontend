@@ -33,3 +33,21 @@
         width: 0;
     }
 }
+
+@keyframes tabletMenuSlideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 375px;
+    }
+}
+
+@keyframes mobileMenuSlideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
