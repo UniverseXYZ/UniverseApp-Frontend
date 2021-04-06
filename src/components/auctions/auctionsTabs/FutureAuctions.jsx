@@ -3,108 +3,27 @@ import arrowUp from '../../../assets/images/Arrow_Up.svg'
 import arrowDown from '../../../assets/images/ArrowDown.svg'
 import infoIconRed from '../../../assets/images/Vector.svg'
 import doneIcon from '../../../assets/images/Completed.svg'
-import nft3 from '../../../assets/images/ntf3.svg'
-import nft6 from '../../../assets/images/ntf6.svg'
-import nft5 from '../../../assets/images/ntf5.svg'
+import {AUCTIONS_DATA} from '../../../auctionsData/Data'
 import { useState } from "react"
+import Moment from 'react-moment'
+import moment from 'moment'
+import '../../pagination/Pagination.scss'
+import Pagination from '../../pagination/Pagionation'
+
 
 const FutureAuctions = () => {
 
     const [hideLaunchIcon, setHideLaunchIcon] = useState(true)
     const [hideEndIcon, setHideEndIcon] = useState(true)
-    const [auctionHide, setAuctionHide] = useState(true)
+    const [shownActionId, setshownActionId] = useState(null)
+    const [offset, setOffset] = useState(0);
+    const [perPage, setPerPage] = useState(10);
     var today=new Date();
     console.log(today.getUTCMonth())
-    const PLACEHOLDER_FUTURE_AUCTIONS = [
-        {
-            id: 1,
-            name: 'Auction 1',
-            totalNFTs: 45,
-            launchDate: 'Apr 4, 00:00 EST',
-            endDate: 'Apr 10, 00:00 EST',
-            platinumTier: {
-                name: 'Platinum Tier',
-                nftsPerWinner: 3,
-                winners: 5,
-                totalNFTs: 15,
-                nfts: [nft3, nft6, nft5],
-            },
-            goldTier: {
-                name: 'Gold Tier',
-                nftsPerWinner: 2,
-                winners: 10,
-                totalNFTs: 20,
-                nfts: [nft3, nft6],
-            },
-            silverTier: {
-                name: 'Silver Tier',
-                nftsPerWinner: 1,
-                winners: 20,
-                totalNFTs: 20,
-                nfts: [nft3],
-            },
-        },
-        {
-            id: 2,
-            name: 'Auction 2',
-            totalNFTs: 45,
-            launchDate: 'Apr 4, 00:00 EST',
-            endDate: 'Apr 10, 00:00 EST',
-            platinumTier: {
-                name: 'Platinum Tier',
-                nftsPerWinner: 3,
-                winners: 5,
-                totalNFTs: 15,
-                nfts: [nft3, nft6, nft5],
-            },
-            goldTier: {
-                name: 'Gold Tier',
-                nftsPerWinner: 2,
-                winners: 10,
-                totalNFTs: 20,
-                nfts: [nft3, nft6],
-            },
-            silverTier: {
-                name: 'Silver Tier',
-                nftsPerWinner: 1,
-                winners: 20,
-                totalNFTs: 20,
-                nfts: [nft3],
-            },
-        },
-        {
-            id: 3,
-            name: 'Auction 3',
-            totalNFTs: 45,
-            launchDate: 'May 15, 00:00 EST',
-            endDate: 'May 18, 00:00 EST',
-            platinumTier: {
-                name: 'Platinum Tier',
-                nftsPerWinner: 3,
-                winners: 5,
-                totalNFTs: 15,
-                nfts: [nft3, nft6, nft5],
-            },
-            goldTier: {
-                name: 'Gold Tier',
-                nftsPerWinner: 2,
-                winners: 10,
-                totalNFTs: 20,
-                nfts: [nft3, nft6],
-            },
-            silverTier: {
-                name: 'Silver Tier',
-                nftsPerWinner: 1,
-                winners: 20,
-                totalNFTs: 20,
-                nfts: [nft3],
-            },
-        },
-    ]
 
     return (
         <div className='future-auctions'>
-            {PLACEHOLDER_FUTURE_AUCTIONS.map(future_auction => {
+            {AUCTIONS_DATA.slice(offset,offset+perPage).map(future_auction => {
                 return (
                     <div className="auction" key={future_auction.id}>
                         <div className="auction-header">
@@ -112,10 +31,10 @@ const FutureAuctions = () => {
                             <div className="launch-auction">
                                 <Button className="light-button" disabled>LAUNCH AUCTION</Button>
                                 <div className="line"></div>
-                                {auctionHide?
-                                    <img src={arrowDown} onClick={() =>setAuctionHide(false)}/>
-                                :
-                                    <img src={arrowUp} onClick={() =>setAuctionHide(true)}/>
+                                {shownActionId === future_auction.id ?
+                                    <img src={arrowUp} onClick={() =>setshownActionId(null)}/>
+                                    :
+                                <img src={arrowDown} onClick={() =>setshownActionId(future_auction.id)}/>
                                 }  
                             </div>
                         </div>
@@ -160,21 +79,21 @@ const FutureAuctions = () => {
                                 <Button className="light-button" disabled>SET UP LANDING PAGE</Button>
                             </div>
                         </div>
-                        <div hidden={auctionHide} className="auctions-future-tier">
-                            <div className="future-tier">
-                                <div className="future-tier-header">
+                        <div hidden={shownActionId !== future_auction.id} className="auctions-tier">
+                            <div className="tier">
+                                <div className="tier-header">
                                     <h3>{future_auction.platinumTier.name}</h3>
                                     <p>NFTs per winner: <b>{future_auction.platinumTier.nftsPerWinner}</b></p>
                                     <p>Winners: <b>{future_auction.platinumTier.winners}</b></p>
                                     <p>Total NFTs: <b>{future_auction.platinumTier.totalNFTs}</b></p>
                                 </div>
-                                <div className="future-tier-body">
+                                <div className="tier-body">
                                     {future_auction.platinumTier.nfts.map((nft, index) => {
                                         return (
-                                            <div className="future-tier-image" key={index}>
-                                                <div className="future-tier-image-second"></div>
-                                                <div className="future-tier-image-first"></div>
-                                                <div className="future-tier-image-main">
+                                            <div className="tier-image" key={index}>
+                                                <div className="tier-image-second"></div>
+                                                <div className="tier-image-first"></div>
+                                                <div className="tier-image-main">
                                                     <img src={nft}/>
                                                 </div>    
                                             </div>
@@ -182,20 +101,20 @@ const FutureAuctions = () => {
                                     })}
                                 </div>
                             </div>
-                            <div className="future-tier">
-                                <div className="future-tier-header">
+                            <div className="tier">
+                                <div className="tier-header">
                                     <h3>{future_auction.goldTier.name}</h3>
                                     <p>NFTs per winner: <b>{future_auction.goldTier.nftsPerWinner}</b></p>
                                     <p>Winners: <b>{future_auction.goldTier.winners}</b></p>
                                     <p>Total NFTs: <b>{future_auction.goldTier.totalNFTs}</b></p>
                                 </div>
-                                <div className="future-tier-body">
+                                <div className="tier-body">
                                     {future_auction.goldTier.nfts.map((nft, index) => {
                                         return (
-                                            <div className="future-tier-image" key={index}>
-                                                <div className="future-tier-image-second"></div>
-                                                <div className="future-tier-image-first"></div>
-                                                <div className="future-tier-image-main">
+                                            <div className="tier-image" key={index}>
+                                                <div className="tier-image-second"></div>
+                                                <div className="tier-image-first"></div>
+                                                <div className="tier-image-main">
                                                     <img src={nft}/>
                                                 </div>    
                                             </div>
@@ -203,20 +122,20 @@ const FutureAuctions = () => {
                                     })}
                                 </div>
                             </div>
-                            <div className="future-tier">
-                                <div className="future-tier-header">
+                            <div className="tier">
+                                <div className="tier-header">
                                     <h3>{future_auction.silverTier.name}</h3>
                                     <p>NFTs per winner: <b>{future_auction.silverTier.nftsPerWinner}</b></p>
                                     <p>Winners: <b>{future_auction.silverTier.winners}</b></p>
                                     <p>Total NFTs: <b>{future_auction.silverTier.totalNFTs}</b></p>
                                 </div>
-                                <div className="future-tier-body">
+                                <div className="tier-body">
                                     {future_auction.silverTier.nfts.map((nft, index) => {
                                         return (
-                                            <div className="future-tier-image" key={index}>
-                                                <div className="future-tier-image-second"></div>
-                                                <div className="future-tier-image-first"></div>
-                                                <div className="future-tier-image-main">
+                                            <div className="tier-image" key={index}>
+                                                <div className="tier-image-second"></div>
+                                                <div className="tier-image-first"></div>
+                                                <div className="tier-image-main">
                                                     <img src={nft}/>
                                                 </div>    
                                             </div>
@@ -229,6 +148,9 @@ const FutureAuctions = () => {
                     </div>
                 )
             })}
+            <div className='pagination__container'>
+                                <Pagination data={AUCTIONS_DATA} perPage={perPage} setOffset={setOffset} />
+            </div>
         </div>
         
     )
