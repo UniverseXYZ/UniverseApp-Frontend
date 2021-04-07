@@ -13,6 +13,7 @@ footer{
         display: flex;
         flex-wrap: wrap;
         width: 100%;
+        padding-bottom: 59px;
 
         li:first-child{
             font-family: $spaceGroteskFont;
@@ -23,6 +24,9 @@ footer{
             color: rgba(255, 255, 255, 0.4);
             padding-bottom: 9%;
             cursor: unset;
+        }
+        .grey{
+            color: rgba(255, 255, 255, 0.4);
         }
 
         li{
@@ -43,13 +47,24 @@ footer{
             // display: flex;
             // flex-direction: column;
 
-            .universe-list{
-                display: flex;
-                width: 60%;
-            }
 
             .logo-div{
-                margin: -5px 0 25px 0;
+                margin: -5px 15px 25px 0;
+
+                img{
+                    height: 56px;
+                    width: 151px;
+                    margin-right: 15px;
+                }
+            }
+
+            .subscribe{
+                max-width: 350px;
+                width: 100%;
+
+                @include sm {
+                    max-width: 100%;
+                }
             }
 
             p{
@@ -73,13 +88,28 @@ footer{
                 box-sizing: border-box;
                 border-radius: 14px;
                 height: 52px;
-                width: 68%;
+                // width: 68%;
+                width: 90%;
                 padding-left: 3%;
                 padding-bottom: 2px;
+
+                @include lg{
+                    width: 100%;
+                    max-width: 350px;
+                }
+                @include sm {
+                    max-width: 100%;
+                }
             }
 
             button{
                 margin-left: -147px;
+
+                @include sm{
+                    margin-left: 0%;
+                    margin-top: 16px;
+                    width: 100%;
+                }
             }
             @include lg{
                 display: flex;
@@ -88,7 +118,20 @@ footer{
                 margin-bottom: 60px;
             }
 
+            @include sm{
+                display: block;
+            }
+
         } 
+
+        .universe-list{
+            display: flex;
+            width: 60%;
+
+            @include lg{
+                width: 100%;
+            }
+        }
 
         .universe-global{
             flex: 19%;
@@ -100,6 +143,10 @@ footer{
         
         .coming-soon{
             flex: 18%;
+            
+            @include sm{
+                display: none;
+            }
         }
 
         @include lg{
@@ -107,37 +154,75 @@ footer{
             padding: 60px;
         }
 
+        @include sm{
+            padding: 60px 20px;
+        }
+
     }
     .footer-bottom{
         display: flex;
+        justify-content: space-between;
         width: 100%;
-         padding: 25px 0;
+        padding: 25px 0;
             
-        div{
+        .footer-links{
+            display: flex;
+            justify-content: space-between;
+            margin-left: 10%;
+            width: 47%;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 500;
             font-size: 12px;
             line-height: 22px;
             color: rgba(255, 255, 255, 0.4);
+
+            @include lg{
+                margin-left: 0%;
+                width: 70%;
+            }
+            @include sm{
+                display: block;
+            }
         }
 
         .op-sourced{
             width: 30%; 
-            margin-left: 10%;
+            // margin-left: 10%;
+
+            @include lg{
+                width: fit-content;
+                margin-left: 0%;
+            }
         }
 
         .powered-by{
             width: 35%;
+
+            @include lg{
+                width: fit-content;
+            }
         }
 
         .icons{
-            width: 18%;
-            text-align: end;
+            margin-right: 10%;
+            // width: 18%;
+            // text-align: end;
+
+            @include lg{
+                margin-right: 0%;
+            }
         }
 
         .icons :last-child{
-            padding-left: 7%;
+            padding-left: 15px;
+        }
+
+        @include lg{
+            padding: 40px 58px;
+        }
+        @include sm{
+            padding: 60px 22px;
         }
 
     }    
