@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import nfuSocialNetworkIcon from '../../assets/images/nfu-social-network.svg';
 import nfuAuctionsIcon from '../../assets/images/nfu-auctions.svg';
@@ -54,15 +54,11 @@ const NonFungibleUniverse = () => {
         },
     ]);
 
-    useEffect(() => {
-        window.addEventListener("load", event => {
-            var newNfus = [...nfus];
-            newNfus.map(nfu => {
-                nfu.loaded = true;
-            })
-            setNfus(newNfus);
-        });
-    }, [])
+    const handleLoaded = idx => {
+        var newNfus = [...nfus];
+        newNfus[idx].loaded = true;
+        setNfus(newNfus);
+    }
 
     return (
         <div className='non__fungible__universe__section'>
@@ -71,20 +67,21 @@ const NonFungibleUniverse = () => {
             <div className='non__fungible__universe__section__container'>
                 <h1 className='title'>Non-Fungible Universe</h1>
                 <div className='nfu__grid'>
-                    {nfus.map(nfu => {
-                        return nfu.loaded ? (
+                    {nfus.map((nfu, index) => {
+                        return (
                             <div className='nfu__grid__item' key={nfu.id}>
-                                <img src={nfu.icon} alt={nfu.title} />
-                                <h2 className='title'>{nfu.title}</h2>
-                                <p className='desc'>{nfu.description}</p>
-                            </div>
-                        ) : (
-                            <div className='nfu__grid__item' key={nfu.id}>
-                                <SkeletonTheme color="#202020" highlightColor="#444">
-                                    <Skeleton circle={true} height={50} width={50} />
-                                    <Skeleton />
-                                    <Skeleton height={150} />
-                                </SkeletonTheme>
+                                {!nfu.loaded &&
+                                    <SkeletonTheme color="#202020" highlightColor="#444">
+                                        <Skeleton circle={true} height={50} width={50} />
+                                        <Skeleton />
+                                        <Skeleton height={150} />
+                                    </SkeletonTheme>
+                                }
+                                <div style={{ display: nfu.loaded ? 'block' : 'none' }}>
+                                    <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
+                                    <h2 className='title'>{nfu.title}</h2>
+                                    <p className='desc'>{nfu.description}</p>
+                                </div>
                             </div>
                         )
                     })}
