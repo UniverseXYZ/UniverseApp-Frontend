@@ -1,6 +1,7 @@
 @import '_fonts.scss';
 @import '_variables.scss';
 @import '_animations.scss';
+@import '_mixins.scss';
 
 html,
 body,
@@ -171,6 +172,13 @@ body {
         }
         .mod-div {
             animation: slideIn .3s ease-in-out forwards;
+
+            @include lg{
+                animation: tabletModalSlideIn .3s ease-in-out forwards;
+            }
+            @include sm{
+                animation: mobileModalSlideIn .3s ease-in-out forwards;
+            }
         }
     }
 }

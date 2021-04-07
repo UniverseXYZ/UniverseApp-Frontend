@@ -15,15 +15,20 @@ const MintNft = ({ onClick }) => {
                     <div className='image-container'>
                         <img src={defaultImage} alt='Default' />
                     </div>
-                    <h2 className='nft-title'>Single NFT</h2>
-                    <p className='nft-desc'>ERC-721 non-fungible token</p>
+                    <div className="nft-titled">
+                        <h2 className='nft-title'>Single NFT</h2>
+                        <p className='nft-desc'>ERC-721 non-fungible token</p>
+                    </div>
                 </div>
                 <div className='nft-box' onClick={() => { onClick('collection'); setSavedCollectionID(null) }}>
                     <div className='image-container'>
                         <img src={defaultImage} alt='Default' />
                     </div>
-                    <h2 className='nft-title'>NFT Collection</h2>
-                    <p className='nft-desc'>ERC-721 non-fungible token with built-in ERC-721 tokens</p>
+                    <div className="nft-titled">
+                        <h2 className='nft-title'>NFT Collection</h2>
+                        <p className='nft-desc'>ERC-721 non-fungible token with built-in ERC-721 tokens</p>
+                    </div>
+                    
                     <div className='nft-box-highlight-one'></div>
                     <div className='nft-box-highlight-two'></div>
                 </div>

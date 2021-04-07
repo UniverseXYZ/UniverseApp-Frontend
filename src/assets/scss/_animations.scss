@@ -21,16 +21,25 @@
         width: 0;
     }
     to {
-        width: 65%;
+        width: 930px;
     }
 }
 
 @keyframes slideOut {
     from {
-        width: 65%;
+        width: 930px;
     }
     to {
         width: 0;
+    }
+}
+
+@keyframes tabletModalSlideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 90%;
     }
 }
 
@@ -44,6 +53,14 @@
 }
 
 @keyframes mobileMenuSlideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+@keyframes mobileModalSlideIn {
     from {
         width: 0;
     }

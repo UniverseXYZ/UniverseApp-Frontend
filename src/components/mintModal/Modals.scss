@@ -1,4 +1,5 @@
 @import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
 
 .mod-div {
   position: absolute;
@@ -9,6 +10,11 @@
   background: $white;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
   animation: slideOut .3s ease-in-out forwards;
+
+  @include sm{
+    height: 90%;
+    top: 87px;
+  }
 }
 .whole-modal {
   z-index: 999;
@@ -18,7 +24,7 @@
   position: fixed;
   height: 100%;
   opacity: 0;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.6);
   animation: fadeOut .3s ease-in-out forwards;
 }
 .modal-close{
@@ -29,9 +35,21 @@
   border-radius: 50%;
   background: #fff;
   padding: 7px;
+
+  @include sm{
+    top: -60px;
+    left: 88%;
+  }
 }       
 .mintNft-div {
   padding: 80px 100px;
+
+  @include lg{
+    padding: 74px 60px;
+  }
+  @include sm{
+    padding: 38px 20px;
+  }
 }
 .mintNft-div>h2{
   position: relative;
@@ -60,7 +78,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
-  max-width: 522px;
+  // max-width: 522px;
   width: 100%;
 
   .nft-box {
@@ -103,8 +121,10 @@
       border: 1px solid rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
       border-radius: 5px;
-      width: 230px;
-      height: 230px;
+      // width: 230px;
+      // max-width: 326px;
+      height: 326px;
+      min-height: 230px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -113,6 +133,22 @@
       img {
         width: 85px;
         height: 85px;
+      }
+      @include lg{
+        height: 283px;
+      }
+      @include sm{
+        margin-bottom: 0%;
+        height: 230px;
+      }
+    }
+    .nft-titled{
+      width: 100%;
+
+      @include sm{
+        position: absolute;
+        left: 0%;
+        top: 110%;
       }
     }
     .nft-title {
@@ -158,6 +194,14 @@
       height: 8px;
       left: 16px;
     }
+
+    @include sm{
+      padding: 12px;
+    }
+  }
+
+  @include sm{
+    grid-gap: 20px;
   }
 }
 .ntfs > img{
