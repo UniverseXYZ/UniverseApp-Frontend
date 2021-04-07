@@ -1,16 +1,12 @@
-import { useRef, useState, useEffect,useContext } from 'react';
+    import { useRef, useState, useEffect,useContext } from 'react';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import defaultImage from '../../assets/images/default-img.svg';
-import sizeDownIcon from '../../assets/images/size-down.svg'
-import sizeUpIcon from '../../assets/images/size-up.svg'
 import infoIcon from '../../assets/images/icon.svg';
-import mp3Icon from '../../assets/images/mp3-icon.png'
 import arrow from '../../assets/images/arrow.svg';
 import uuid from 'react-uuid';
 import randomColor from 'randomcolor';
 import AppContext from '../../ContextAPI';
-import Popup from "reactjs-popup"
 
 const CreateNftCol = (props) => {
 
@@ -141,41 +137,22 @@ const CreateNftCol = (props) => {
                                 }
                                 : item
                         ))
-                    } else {
-                        var newSavedNFTs = [...savedNfts];
-                        collectionNFTs.forEach(nft => {
-                            if(nft.id === collectionNFTsID) {
-                                newSavedNFTs.push({
-                                    id: nft.id,
-                                    type: 'collection',
-                                    collectionId: nft.collectionId,
-                                    collectionName: nft.collectionName,
-                                    collectionAvatar: nft.collectionAvatar,
-                                    previewImage: previewImage,
-                                    name: name,
-                                    description: description,
-                                    numberOfEditions: Number(editions),
-                                    generatedEditions: generatedEditions,
-                                    selected: false,
-                                })
-                            } else {
-                                newSavedNFTs.push({
-                                    id: nft.id,
-                                    type: 'collection',
-                                    collectionId: nft.collectionId,
-                                    collectionName: nft.collectionName,
-                                    collectionAvatar: nft.collectionAvatar,
-                                    previewImage: nft.previewImage,
-                                    name: nft.name,
-                                    description: nft.description,
-                                    numberOfEditions: Number(nft.editions),
-                                    generatedEditions: nft.generatedEditions,
-                                    selected: false,
-                                })
-                            }
-                        })
-                        setSavedNfts(newSavedNFTs);
                     }
+                    collectionNFTs.map(nft => {
+                        setSavedNfts([...savedNfts, {
+                            id: nft.id,
+                            type: 'collection',
+                            collectionId: nft.collectionId,
+                            collectionName: nft.collectionName,
+                            collectionAvatar: nft.collectionAvatar,
+                            previewImage: previewImage,
+                            name: name,
+                            description: description,
+                            numberOfEditions: Number(editions),
+                            generatedEditions: generatedEditions,
+                            selected: false,
+                        }])
+                    })
                     setCollectionNFTsID(null);
                 }
                 if (addToCollectionClick) {
@@ -240,48 +217,7 @@ const CreateNftCol = (props) => {
                         <h5>Preview</h5>
                         <div className="nft-coll-picture">
                         {previewImage ? 
-                            <Popup
-                                trigger={
-                                    <div className='preview__image'>
-                                        <img className='size__up' src={sizeUpIcon} alt='Size Up'/>
-                                        {previewImage.type === 'video/mp4' &&
-                                            <video>
-                                                <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        }
-                                        {previewImage.type === 'audio/mpeg' &&
-                                            <img className="preview-image" src={mp3Icon} alt='Preview' />
-                                        }
-                                        {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' &&
-                                            <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Preview' />
-                                        }
-                                    </div>
-                                }
-                            >
-                                {
-                                    (close) => (
-                                        <div className='preview__image__popup'>
-                                            <img className='size__down' src={sizeDownIcon} onClick={close} alt='Size Down'/>
-                                            {previewImage.type === 'video/mp4' &&
-                                                <video controls autoPlay>
-                                                    <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            }
-                                            {previewImage.type === 'audio/mpeg' &&
-                                                <audio controls autoPlay>
-                                                    <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
-                                                    Your browser does not support the audio element.
-                                                </audio>
-                                            }
-                                            {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' &&
-                                                <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Preview' />
-                                            }
-                                        </div>
-                                    )
-                                }
-                            </Popup> :
+                            <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Cover' /> :
                             <img className="default-image" src={defaultImage} alt='Cover' />}
                         </div>
                     </div>  

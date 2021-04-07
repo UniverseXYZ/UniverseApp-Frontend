@@ -4,7 +4,9 @@ import { PLACEHOLDER_NFTS } from '../../dummyData/DummyData';
 import { AUCTIONS_DATA } from '../../auctionsData/Data';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
-import FutureAuctions from './futureAuctions/FutureAuctions';
+import FutureAuctions from './auctionsTabs/FutureAuctions';
+import ActiveAictions from './auctionsTabs/ActiveAuctions';
+import PastAuctions from './auctionsTabs/PastAuctions';
 
 
 const MyAuction = () => {
@@ -33,7 +35,9 @@ const MyAuction = () => {
                             <img src={Exclamation} alt="message"/>
                             <p>Please, fill out the profile details before you set up an auction.<span> Go to my profile.</span></p>
                         </div>
-                        {selectedTabIndex === 0 && AUCTIONS_DATA.length > 0 && <><div>tab 1</div></> }
+                        {selectedTabIndex === 0 && AUCTIONS_DATA.length > 0 && 
+                            <ActiveAictions />
+                         }
                         {selectedTabIndex === 0 && AUCTIONS_DATA.length === 0 && <>
                         <div className='empty__auction'>
                             <h3>No active auctions found</h3>
@@ -41,17 +45,18 @@ const MyAuction = () => {
                             <button className='set_up'>Set Up Auction</button>
                         </div> 
                          </> }
-
-                         {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && <FutureAuctions />}
-                         {/* {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && <>
+                         {selectedTabIndex === 1 && AUCTIONS_DATA.length > 0 && 
+                            <FutureAuctions /> }
+                         {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && <>
                         <div className='empty__auction'>
                             <h3>No scheduled auctions found</h3>
                             <p className='desc'>Create your first auction by clicking the button below</p>
                             <button className='set_up'>Set Up Auction</button>
                         </div> 
-                     </>} */}
+                     </>}
                         
-                         {selectedTabIndex === 2 && AUCTIONS_DATA.length > 0 && <><div>tab 3</div></> }
+                         {selectedTabIndex === 2 && AUCTIONS_DATA.length > 0 && 
+                         <PastAuctions /> }
                          {selectedTabIndex === 2 && AUCTIONS_DATA.length === 0 && <>
                         <div className='empty__auction'>
                             <h3>No past auctions found</h3>
