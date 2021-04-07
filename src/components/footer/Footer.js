@@ -12,7 +12,7 @@ const Footer = () => {
                     <div className="logo-div">
                         <img src={Logo} alt="logo"/>
                     </div>
-                    <div>
+                    <div className="subscribe">
                         <p>Stay up to date with our newsletter</p>
                         <input placeholder="Enter your email" />
                         <Btn className="light-button">Subscribe</Btn>
@@ -24,7 +24,7 @@ const Footer = () => {
                             <li>Universe Global</li>
                             <li>Home</li>
                             <li>Whitepaper</li>
-                            <li>Team</li>
+                            <li className="grey">Team</li>
                         </ul>
                     </div>
                     <div className="minting-auctions">
@@ -38,17 +38,19 @@ const Footer = () => {
                     <div className="coming-soon">
                         <ul>
                             <li>Coming Soons</li>
-                            <li>Kekit</li>
-                            <li>KekDAO</li>
-                            <li>gaming</li>
+                            <li className="grey">Kekit</li>
+                            <li className="grey">KekDAO</li>
+                            <li className="grey">gaming</li>
                         </ul>
                     </div>
                 </div>
                 
             </div>
             <div className="footer-bottom">
-                <div className="op-sourced"><span>Universe.xyz © 2021. Open-sourced.</span></div>
-                <div className="powered-by"><span>Powered by kekDAO.</span></div>
+                <div className="footer-links">
+                    <div className="op-sourced"><span>Universe.xyz © 2021. Open-sourced.</span></div>
+                    <div className="powered-by"><span>Powered by kekDAO.</span></div>
+                </div>
                 <div className="icons">
                     <img src={twitter} alt="twiter"/>
                     <img src={discord} alt="discord"/>
