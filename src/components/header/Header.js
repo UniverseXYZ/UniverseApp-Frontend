@@ -48,7 +48,7 @@ const Header = (props) => {
     }, []);
 
     useEffect(() => {
-        if (props.location.pathname === '/') {
+        if (props.location.pathname === '/' || props.location.pathname === '/minting-and-auctions/about') {
             document.querySelector('header').classList.add('dark')
         } else {
             document.querySelector('header').classList.remove('dark')
