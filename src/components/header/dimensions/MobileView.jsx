@@ -110,7 +110,7 @@ const MobileView = (props) => {
                                     </Link>
                                     {collapseMintingMenu &&
                                         <>
-                                            <Link className='sub__nav' to='/about'>
+                                            <Link className='sub__nav' to='/minting-and-auctions/about'>
                                                 <span>About</span>
                                             </Link>
                                             <Link className='sub__nav' to='/active-auctions'>
