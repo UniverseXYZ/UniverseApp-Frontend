@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import nfuSocialNetworkIcon from '../../assets/images/nfu-social-network.svg';
 import nfuAuctionsIcon from '../../assets/images/nfu-auctions.svg';
 import nfuMarketIcon from '../../assets/images/nfu-market.svg';
@@ -7,6 +9,61 @@ import nfuGovernanceIcon from '../../assets/images/nfu-governance.svg';
 import ellipses from '../../assets/images/ellipses.svg';
 
 const NonFungibleUniverse = () => {
+    const [nfus, setNfus] = useState([
+        {
+            id: 1,
+            icon: nfuSocialNetworkIcon,
+            title: 'NFT Social Network',
+            description: 'With the rise of decentralisation and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being cencored.',
+            loaded: false,
+        },
+        {
+            id: 2,
+            icon: nfuAuctionsIcon,
+            title: 'Auctions',
+            description: 'Creating a decentralized NFT launch system that is made by artists for artists.',
+            loaded: false,
+        },
+        {
+            id: 3,
+            icon: nfuMarketIcon,
+            title: 'NFT Market',
+            description: 'A universe of three initial planets with 23 OG characters each to memeify (69 total OG characters).',
+            loaded: false,
+        },
+        {
+            id: 4,
+            icon: nfuGamingIcon,
+            title: 'Gaming',
+            description: 'Games built with web 3.0 at their forefront, not added in as an afterthought.',
+            loaded: false,
+        },
+        {
+            id: 5,
+            icon: nfuMediaProtocolsIcon,
+            title: 'Media Protocols',
+            description: 'A meeting place where fans and artists can meet and discover new ways a decentralized community can support and interact with their favorite WEB3 media protocols.',
+            loaded: false,
+        },
+        {
+            id: 6,
+            icon: nfuGovernanceIcon,
+            title: 'DAO and Governance',
+            description: 'kekDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
+            loaded: false,
+        },
+    ]);
+
+    useEffect(() => {
+        window.addEventListener("load", event => {
+            var newNfus = [...nfus];
+            newNfus.map(nfu => {
+                nfu.loaded = true;
+            })
+            setNfus(newNfus);
+        });
+    }, [])
+
     return (
         <div className='non__fungible__universe__section'>
             <img className='ellipse-l' src={ellipses} alt='Ellipses' />
@@ -14,36 +71,23 @@ const NonFungibleUniverse = () => {
             <div className='non__fungible__universe__section__container'>
                 <h1 className='title'>Non-Fungible Universe</h1>
                 <div className='nfu__grid'>
-                    <div className='nfu__grid__item'>
-                        <img src={nfuSocialNetworkIcon} alt='NFT Social Network' />
-                        <h2 className='title'>NFT Social Network</h2>
-                        <p className='desc'>With the rise of decentralisation and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being cencored.</p>
-                    </div>
-                    <div className='nfu__grid__item'>
-                        <img src={nfuAuctionsIcon} alt='Auctions' />
-                        <h2 className='title'>Auctions</h2>
-                        <p className='desc'>Creating a decentralized NFT launch system that is made by artists for artists.</p>
-                    </div>
-                    <div className='nfu__grid__item'>
-                        <img src={nfuMarketIcon} alt='NFT Market' />
-                        <h2 className='title'>NFT Market</h2>
-                        <p className='desc'>A universe of three initial planets with 23 OG characters each to memeify (69 total OG characters).</p>
-                    </div>
-                    <div className='nfu__grid__item'>
-                        <img src={nfuGamingIcon} alt='Gaming' />
-                        <h2 className='title'>Gaming</h2>
-                        <p className='desc'>Games built with web 3.0 at their forefront, not added in as an afterthought.</p>
-                    </div>
-                    <div className='nfu__grid__item'>
-                        <img src={nfuMediaProtocolsIcon} alt='Media Protocols' />
-                        <h2 className='title'>Media Protocols</h2>
-                        <p className='desc'>A meeting place where fans and artists can meet and discover new ways a decentralized community can support and interact with their favorite WEB3 media protocols.</p>
-                    </div>
-                    <div className='nfu__grid__item'>
-                        <img src={nfuGovernanceIcon} alt='DAO and Governance' />
-                        <h2 className='title'>DAO and Governance</h2>
-                        <p className='desc'>kekDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.</p>
-                    </div>
+                    {nfus.map(nfu => {
+                        return nfu.loaded ? (
+                            <div className='nfu__grid__item' key={nfu.id}>
+                                <img src={nfu.icon} alt={nfu.title} />
+                                <h2 className='title'>{nfu.title}</h2>
+                                <p className='desc'>{nfu.description}</p>
+                            </div>
+                        ) : (
+                            <div className='nfu__grid__item' key={nfu.id}>
+                                <SkeletonTheme color="#202020" highlightColor="#444">
+                                    <Skeleton circle={true} height={50} width={50} />
+                                    <Skeleton />
+                                    <Skeleton height={150} />
+                                </SkeletonTheme>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
         </div>
