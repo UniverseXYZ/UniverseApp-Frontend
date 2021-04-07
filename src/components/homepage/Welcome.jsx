@@ -1,5 +1,5 @@
 import Popup from "reactjs-popup";
-import welcomeImg from '../../assets/images/homepage-welcome.svg';
+import welcomeImg from '../../assets/images/homepage-welcome.png';
 import ellipses from '../../assets/images/ellipses.svg';
 import Button from '../button/Button';
 import SubscribePopup from "../popups/SubscribePopup";

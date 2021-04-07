@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import closeIcon from '../../assets/images/close-menu.svg';
-import subscribeIcon from '../../assets/images/subscribe.svg';
+import subscribeIcon from '../../assets/images/subscribe.png';
 import Button from '../button/Button';
 
 const SubscribePopup = ({ close }) => {
