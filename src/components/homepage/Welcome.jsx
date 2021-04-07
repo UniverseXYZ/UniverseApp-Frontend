@@ -16,7 +16,7 @@ const Welcome = () => {
                     <div className='links'>
                         <Button className='light-button'>Whitepaper</Button>
                         <Popup
-                            trigger={<Button className='light-border-button'>join newsletter</Button>}
+                            trigger={<button className='light-border-button'>join newsletter</button>}
                         >
                             {
                                 (close) => (

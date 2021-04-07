@@ -1,7 +1,3 @@
-import tier_img1 from '../assets/images/tier_img1.svg';
-import tier_img2 from '../assets/images/tier_img2.svg';
-import tier_img3 from '../assets/images/tier_img3.svg';
-
 import nft3 from '../assets/images/ntf3.svg';
 import nft6 from '../assets/images/ntf6.svg';
 import nft5 from '../assets/images/ntf5.svg';

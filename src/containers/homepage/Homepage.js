@@ -1,5 +1,7 @@
 import About from '../../components/homepage/About';
+import BuyUniverseNFTs from '../../components/homepage/BuyUniverseNFTs';
 import '../../components/homepage/Homepage.scss';
+import NonFungibleUniverse from '../../components/homepage/NonFungibleUniverse';
 import Welcome from "../../components/homepage/Welcome"
 
 const Homepage = () => {
@@ -7,6 +9,8 @@ const Homepage = () => {
         <div className='homepage'>
             <Welcome />
             <About />
+            <NonFungibleUniverse />
+            <BuyUniverseNFTs />
         </div>
     )
 }
