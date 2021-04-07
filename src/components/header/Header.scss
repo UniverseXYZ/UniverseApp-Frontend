@@ -2,11 +2,77 @@
 @import '../../assets/scss/_mixins';
 
 header {
+    position: relative;
+    top: 0;
+    width: 100%;
+    z-index: 999;
     padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: $white;
+
+    
+    &.dark {
+        background-color: $black;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        .app__logo {
+            .dark {
+                display: none;
+            }
+            .light {
+                display: block;
+            }
+        }
+
+        .desktop__nav ul li .menu-li {
+            color: $white;
+
+            img.arrow {
+                filter: invert(1);
+            }
+        }
+
+        .desktop__nav ul li .myAccount {
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .desktop__nav ul li .sign__in {
+            background: 
+                linear-gradient($black, $black) padding-box,
+                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            color: $white;
+        }
+
+        .tablet__nav button.hamburger {
+            background-color: $black;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            img {
+                filter: invert(1);
+            }
+        }
+
+        .mobile__nav button.hamburger {
+            background-color: $black;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            img {
+                filter: invert(1);
+            }
+        }
+    }
+    
+    .app__logo {
+        .dark {
+            display: block;
+        }
+        .light {
+            display: none;
+        }
+    }
 
     .desktop__nav {
             margin-right: 2%;
@@ -24,10 +90,6 @@ header {
                 font-size: 12px;
                 line-height: 12px;
                 cursor: pointer;
-
-                &:last-child {
-                    margin-left: 16px;
-                }
                 
                 a {
                     padding: 14px 16px;
@@ -40,9 +102,8 @@ header {
                 }
                 
                 .sign__in {
-                    padding: 15px;
+                    padding: 10px 25px;
                     text-align: center;
-                    width: 200px;
                     background: 
                         linear-gradient($white, $white) padding-box,
                         linear-gradient(to right, #BCEB00, #00EAEA) border-box;
@@ -76,7 +137,9 @@ header {
                     opacity: 0.4;
                 }
                 
-                .menu-li{
+                .menu-li {
+                    display: flex;
+                    align-items: center;
                     text-transform: uppercase;
                     font-family: $sharpGroteskMediumFont;
                     font-style: normal;
@@ -85,11 +148,20 @@ header {
                     line-height: 12px;
                     cursor: pointer;
                     background: transparent;
+
+                    img:not(.icon-img) {
+                        transition: .5s ease;
+                    }
+
+                    &.dropdown__opened {
+                        img:not(.icon-img) {
+                            transform: rotate(180deg);
+                        }
+                    }
                 }
 
                 .myAccount{
-                    padding-left: 15px;
-                    margin-left: 15px;
+                    padding-left: 30px;
                     border-left: 1px solid rgba(0, 0, 0, 0.1);
                 }
 
@@ -101,9 +173,9 @@ header {
                     position: absolute;
                     right: 0;
                     top: 50px;
+                    width: 280px;
                     background: $white;
                     border-radius: 10px;
-                    width: 280px;
                     z-index: 2;
                     filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
 
@@ -209,7 +281,6 @@ header {
             border-radius: 12px;
             padding: 10px;
             background-color: $white;
-
         }
         .overlay {
             position: fixed;
@@ -218,17 +289,17 @@ header {
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 10;
+            z-index: 999;
         }
         ul.nav__menu {
             position: absolute;
             right: 0;
             top: 97px;
             width: 0;
+            height: calc(100vh - 97px);
             padding: 40px 30px;
             background-color: $white;
-            height: calc(100% - 97px);
-            z-index: 11;
+            z-index: 999;
             animation: tabletMenuSlideIn .3s ease-in-out forwards;
 
             li {
@@ -250,6 +321,9 @@ header {
                     }
                     &.sub__nav {
                         padding-left: 20px;
+                    }
+                    &.team {
+                        opacity: 0.4;
                     }
                     &.collapsed {
                         img {
@@ -440,6 +514,9 @@ header {
                     &.sub__nav {
                         padding-left: 20px;
                     }
+                    &.team {
+                        opacity: 0.4;
+                    }
                     &.collapsed {
                         img {
                             transform: rotate(180deg);
@@ -520,22 +597,34 @@ header {
                     margin: 32px 0;
 
                     button {
-                    padding: 32px;
-                    background-color: $white;
-                    border: 1px solid rgba(0, 0, 0, 0.1);
-                    box-sizing: border-box;
-                    border-radius: 12px;
-                    transition: .5s ease;
+                        padding: 32px;
+                        background-color: $white;
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        border-radius: 12px;
+                        transition: .5s ease;
 
-                    &:hover {
-                        background: 
-                            linear-gradient($white, $white) padding-box,
-                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                        border: 1px solid transparent;
-                    }
+                        &:hover {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            border: 1px solid transparent;
+                        }
                     }
                 }
+                .links {
+                    margin-top: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    gap: 12px;
+
+                    button {
+                        width: 100%;
+                    }
                 }
+            }
         }
         .wallet__connected__tablet {
             position: relative;

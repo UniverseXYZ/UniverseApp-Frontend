@@ -12,7 +12,7 @@ import Group2 from '../../../assets/images/Group2.svg';
 import copyIcon from '../../../assets/images/copy.svg';
 import SelectWalletPopup from '../../popups/SelectWalletPopup';
 
-const TabletView = ({ethereumAddress}) => {
+const TabletView = ({ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet}) => {
     const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
     const [showMenu, setShowMenu] = useState(false);
     const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
@@ -71,7 +71,7 @@ const TabletView = ({ethereumAddress}) => {
                             </div>
                             <div className='dropdown__body'>
                                 <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
-                                <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
+                                <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
                                 <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
                                 <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign Out</button>
                             </div>
@@ -112,7 +112,7 @@ const TabletView = ({ethereumAddress}) => {
                                     <Link className='sub__nav' to='/whitepaper'>
                                         <span>Whitepaper</span>
                                     </Link>
-                                    <Link className='sub__nav' to='/team'>
+                                    <Link className='sub__nav team' to='/team'>
                                         <span>Team</span>
                                     </Link>
                                 </>
@@ -125,7 +125,14 @@ const TabletView = ({ethereumAddress}) => {
                                 >
                                     {
                                         (close) => (
-                                            <SelectWalletPopup close={close} />
+                                            <SelectWalletPopup
+                                                close={close}
+                                                handleConnectWallet={handleConnectWallet}
+                                                showInstallWalletPopup={showInstallWalletPopup}
+                                                setShowInstallWalletPopup={setShowInstallWalletPopup}
+                                                selectedWallet={selectedWallet}
+                                                setSelectedWallet={setSelectedWallet}
+                                            />
                                         )
                                     }
                                 </Popup>

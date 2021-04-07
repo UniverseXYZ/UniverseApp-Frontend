@@ -10,10 +10,11 @@ import Group1 from '../../../assets/images/Group1.svg';
 import Group2 from '../../../assets/images/Group2.svg';
 import SelectWalletPopup from '../../popups/SelectWalletPopup';
 
-const DesktopView = ({ethereumAddress}) => {
+const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet}) => {
     const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
+    const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
     const [copied, setCopied] = useState(false);
     const history = useHistory();
     const ref = useRef(null);
@@ -21,9 +22,11 @@ const DesktopView = ({ethereumAddress}) => {
     useEffect(() => {
         document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAccountDropdownOpened), true);
         document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsMintingDropdownOpened), true);
+        document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAboutDropdownOpened), true);
         return () => {
             document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAccountDropdownOpened), true);
             document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsMintingDropdownOpened), true);
+            document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAboutDropdownOpened), true);
         };
     })
     return (
@@ -32,7 +35,7 @@ const DesktopView = ({ethereumAddress}) => {
                 <li>
                     <button className={`menu-li ${isMintingDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}>
                         <span className='nav__link__title'>minting & Auctions</span>
-                        <img src={arrowUP} alt="Minting & Auctions" />
+                        <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
                     {isMintingDropdownOpened &&
                         <div ref={ref} className='dropdown minting-drop'>
@@ -44,14 +47,26 @@ const DesktopView = ({ethereumAddress}) => {
                         </div>
                     }
                 </li>
-                <li>Whitepaper</li>
-                <li className="team">Team</li>
+                <li>
+                    <button className={`menu-li ${isAboutDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsAboutDropdownOpened(!isAboutDropdownOpened)}>
+                        <span className='nav__link__title'>About</span>
+                        <img className='arrow' src={arrowUP} alt="arrow" />
+                    </button>
+                    {isAboutDropdownOpened &&
+                        <div ref={ref} className='dropdown minting-drop'>
+                            <div className='dropdown__body'>
+                                <button onClick={() => { history.push('/whitepaper'); setIsAboutDropdownOpened(!isAboutDropdownOpened) }}>Whitepaper</button>
+                                <button className="team" onClick={() => { history.push('/team'); setIsAboutDropdownOpened(!isAboutDropdownOpened)}}>Team</button>
+                            </div>
+                        </div>
+                    }
+                </li>
                 {isWalletConnected ?
                     <li>
                         <button className={`menu-li myAccount ${isAccountDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}>
                             <img className="icon-img" src={Icon} alt='Diamond icon' />
                             <span className='nav__link__title'>My Account</span>
-                            <img src={arrowUP} alt="My Account" />
+                            <img className='arrow' src={arrowUP} alt="arrow" />
                         </button>
 
                         {isAccountDropdownOpened &&
@@ -80,7 +95,7 @@ const DesktopView = ({ethereumAddress}) => {
                                 </div>
                                 <div className='dropdown__body'>
                                     <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
-                                    <button onClick={() => { history.push('/'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
+                                    <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
                                     <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
                                 <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign Out</button>
                                 </div>
@@ -93,7 +108,14 @@ const DesktopView = ({ethereumAddress}) => {
                         >
                             {
                                 (close) => (
-                                    <SelectWalletPopup close={close} />
+                                    <SelectWalletPopup
+                                        close={close}
+                                        handleConnectWallet={handleConnectWallet}
+                                        showInstallWalletPopup={showInstallWalletPopup}
+                                        setShowInstallWalletPopup={setShowInstallWalletPopup}
+                                        selectedWallet={selectedWallet}
+                                        setSelectedWallet={setSelectedWallet}
+                                    />
                                 )
                             }
                         </Popup>

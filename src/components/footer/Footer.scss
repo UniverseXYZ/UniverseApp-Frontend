@@ -1,108 +1,125 @@
 @import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
 
 
 footer{
     padding: 0;
     margin: 0;
-    background: #000000;
-    margin-top: 3.5%;
+    background: $black;
 
    .footer{
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 3.5%;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 3.5%;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
 
-    li:first-child{
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 22px;
-        color: rgba(255, 255, 255, 0.4);
-        padding-bottom: 9%;
-        cursor: unset;
-    }
+        li:first-child{
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 22px;
+            color: rgba(255, 255, 255, 0.4);
+            padding-bottom: 9%;
+            cursor: unset;
+        }
 
-    li{
-        font-family: $sharpGroteskMediumFont;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 12px;
-        text-transform: uppercase;
-        padding-bottom: 9%;
-        color: #FFFFFF;
-        cursor: pointer ;
-    }
+        li{
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 12px;
+            text-transform: uppercase;
+            padding-bottom: 9%;
+            color: #FFFFFF;
+            cursor: pointer ;
+        }
 
-   .universe{
-    flex: 30%;
-    margin-left: 10%;
-    display: flex;
-    flex-direction: column;
+        .universe{
+            flex: 30%;
+            margin-left: 10%;
+            // display: flex;
+            // flex-direction: column;
 
-    .logo-div{
-        margin: -5px 0 25px 0;
-    }
+            .universe-list{
+                display: flex;
+                width: 60%;
+            }
 
-    p{
-        color: #fff;
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 14px;
-        margin-bottom: 5px;
-        line-height: 22px;
-    }
+            .logo-div{
+                margin: -5px 0 25px 0;
+            }
 
-    input{
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 14px;
-        line-height: 22px;
-        background: #FFFFFF;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-sizing: border-box;
-        border-radius: 14px;
-        height: 52px;
-        width: 68%;
-        padding-left: 3%;
-        padding-bottom: 2px;
-    }
+            p{
+                color: #fff;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                margin-bottom: 5px;
+                line-height: 22px;
+            }
 
-    button{
-        margin-left: -147px;
-    }
+            input{
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                background: #FFFFFF;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 14px;
+                height: 52px;
+                width: 68%;
+                padding-left: 3%;
+                padding-bottom: 2px;
+            }
 
-    } 
+            button{
+                margin-left: -147px;
+            }
+            @include lg{
+                display: flex;
+                justify-content: space-between;
+                margin-left: 0%;
+                margin-bottom: 60px;
+            }
 
-   .universe-global{
-        flex: 19%;
+        } 
+
+        .universe-global{
+            flex: 19%;
+        }
+        
+        .minting-auctions{
+            flex: 23%;
+        }
+        
+        .coming-soon{
+            flex: 18%;
+        }
+
+        @include lg{
+            display: block;
+            padding: 60px;
+        }
+
     }
-    
-    .minting-auctions{
-        flex: 23%;
-    }
-    
-    .coming-soon{
-        flex: 18%;
-    }
-}
     .footer-bottom{
         display: flex;
         width: 100%;
-        padding: 25px 0;
-        
+         padding: 25px 0;
+            
         div{
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 22px;
-        color: rgba(255, 255, 255, 0.4);
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 22px;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .op-sourced{
@@ -120,7 +137,7 @@ footer{
         }
 
         .icons :last-child{
-         padding-left: 7%;
+            padding-left: 7%;
         }
 
     }    
