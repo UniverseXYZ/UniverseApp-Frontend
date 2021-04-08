@@ -48,12 +48,14 @@ const Header = (props) => {
     }, []);
 
     useEffect(() => {
+        console.log(123)
+        setShowMenu(false);
         if (props.location.pathname === '/' || props.location.pathname === '/minting-and-auctions/about') {
             document.querySelector('header').classList.add('dark')
         } else {
             document.querySelector('header').classList.remove('dark')
         }
-    })
+    }, [props.location.pathname])
 
     return (
         <header>
@@ -79,6 +81,8 @@ const Header = (props) => {
                     setShowInstallWalletPopup={setShowInstallWalletPopup}
                     selectedWallet={selectedWallet}
                     setSelectedWallet={setSelectedWallet}
+                    showMenu={showMenu}
+                    setShowMenu={setShowMenu}
                 />
             }
             {windowSize.width <= 576 &&

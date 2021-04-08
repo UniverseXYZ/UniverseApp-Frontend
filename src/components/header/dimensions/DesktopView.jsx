@@ -41,8 +41,8 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                         <div ref={ref} className='dropdown minting-drop'>
                             <div className='dropdown__body'>
                                 <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
-                                <button className="active-auctions" onClick={() => { history.push('my-auctions'); setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
-                                <button onClick={() => { history.push(''); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Upcoming releases</button>
+                                <button className="active-auctions" onClick={() => { history.push('/'); setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
+                                <button onClick={() => { history.push('/'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Upcoming releases</button>
                             </div>
                         </div>
                     }
@@ -55,8 +55,8 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                     {isAboutDropdownOpened &&
                         <div ref={ref} className='dropdown minting-drop'>
                             <div className='dropdown__body'>
-                                <button onClick={() => { history.push('/whitepaper'); setIsAboutDropdownOpened(!isAboutDropdownOpened) }}>Whitepaper</button>
-                                <button className="team" onClick={() => { history.push('/team'); setIsAboutDropdownOpened(!isAboutDropdownOpened)}}>Team</button>
+                                <button onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened) }}>Whitepaper</button>
+                                <button className="team" onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened)}}>Team</button>
                             </div>
                         </div>
                     }
