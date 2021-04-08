@@ -102,11 +102,11 @@ const TabletView = (props) => {
                                     <Link className='sub__nav' to='/minting-and-auctions/about'>
                                         <span>About</span>
                                     </Link>
-                                    <Link className='sub__nav' to='/'>
+                                    <Link className='sub__nav' to='/minting-and-auctions/marketplace'>
                                         <span>Active auctions</span>
                                     </Link>
-                                    <Link className='sub__nav' to='/'>
-                                        <span>upcoming releases</span>
+                                    <Link className='sub__nav' to='/minting-and-auctions/marketplace'>
+                                        <span>Future Auctions</span>
                                     </Link>
                                 </>
                             }

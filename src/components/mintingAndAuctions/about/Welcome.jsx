@@ -3,9 +3,11 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import ellipses from '../../../assets/images/ellipses.svg';
 import Button from '../../button/Button';
 import welcomeImg from '../../../assets/images/about-page-welcome.png';
+import { useHistory } from 'react-router';
 
 const Welcome = () => {
     const [loaded, setLoaded] = useState(false);
+    const history = useHistory();
 
     return (
         <div className='welcome__section'>
@@ -17,7 +19,7 @@ const Welcome = () => {
                     <p className='desc'>Mint single or multiple NFTs, create and edit NFT Collections, and run auctions with multiple NFTs per winner. In this Universe anything is possible.</p>
                     <div className='links'>
                         <Button className='light-button'>Set up auction</Button>
-                        <Button className='light-border-button'>Open marketplace</Button>
+                        <Button className='light-border-button' onClick={() => history.push('/minting-and-auctions/marketplace')}>Open marketplace</Button>
                     </div>
                 </div>
                 <div className='right'>

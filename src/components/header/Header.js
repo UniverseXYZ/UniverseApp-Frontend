@@ -48,9 +48,12 @@ const Header = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log(123)
         setShowMenu(false);
-        if (props.location.pathname === '/' || props.location.pathname === '/minting-and-auctions/about') {
+        if (
+            props.location.pathname === '/' ||
+            props.location.pathname === '/minting-and-auctions/about' ||
+            props.location.pathname === '/minting-and-auctions/marketplace'
+        ) {
             document.querySelector('header').classList.add('dark')
         } else {
             document.querySelector('header').classList.remove('dark')
