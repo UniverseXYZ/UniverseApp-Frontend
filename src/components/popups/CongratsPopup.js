@@ -1,11 +1,13 @@
 import React from "react";
 import Button from "../button/Button";
+import closeIcon from '../../assets/images/cross.svg';
 
 const CongratsPopup = ({ onClose }) => {
     return (
         <div className="popup-div congrats-popup">
-            <div className="congrats">Congratulations</div>
-            <div className="popup-text congrats-text"><p>NFT was successfully minted and should be displayed in your wallet shortly</p></div>
+            <button className="popup-close" onClick={onClose}><img src={closeIcon} alt=""/></button>
+            <div className="popup-title"><h4>Congratulations</h4></div>
+            <div className="popup-text"><p>NFT was successfully minted and should be displayed in your wallet shortly</p></div>
             <div className="popup-btns">
                 <Button className="light-border-button" onClick={onClose}>Close</Button>
             </div>

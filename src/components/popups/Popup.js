@@ -12,7 +12,7 @@ export default ({ onClose }) => {
                 (close) => (
                     <div className="popup-div modal-close-popup">
                         <button className="popup-close" onClick={close}><img src={closeIcon} alt=""/></button>
-                        <div className="popap-title"><h4>Are you sure?</h4></div>
+                        <div className="popup-title"><h4>Are you sure?</h4></div>
                         <div className="popup-text"><p>Are you sure you want to close this?<br/>All the progress will be lost.</p></div>
                         <div className="popup-btns">
                             <Button onClick={onClose} className="light-button">Discard and Close</Button>

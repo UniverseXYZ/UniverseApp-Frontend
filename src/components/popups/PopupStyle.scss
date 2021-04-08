@@ -260,6 +260,8 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
+  max-width: 520px;
+  width: 100%;
 
   @include lg{
     max-width: 520px;
@@ -267,7 +269,7 @@
   }
   @include sm{
     padding: 40px 26px;
-    width: 90%;
+    width: 85%;
   }
 }
 .popup-close{
@@ -282,7 +284,7 @@
   top: 0;
   right: 0;
 }
-.popap-title{
+.popup-title{
   text-align: center;
   padding-bottom: 24px;
 
@@ -292,6 +294,11 @@
     font-size: 26px;
     line-height: 140%;
     letter-spacing: 0.2px;
+
+    @include sm{
+      font-size: 20px;
+      line-height: 130%;
+    }
   }
 }
 .popup-text {
@@ -310,14 +317,24 @@
   color: rgba(0, 0, 0, 0.6);
 }
 .popup-btns{
+  display: flex;
+  justify-content: center;
   width: 100%;
   text-align: center;
-  padding: 0;
   margin-top: 20px;
+
+  @include sm{
+    display: grid;
+    justify-content: normal;
+  }
 }
 .popup-btns > .light-button{
   margin-right: 12px;
-  margin-bottom: 20px;
+  
+  @include sm{
+    margin-right: 0%;
+    margin-bottom: 20px;
+  }
 }
 .popup-arrow {
   display: none;
@@ -342,10 +359,18 @@
   margin: 0;
 }
 .loading-div {
-  width: 600px;
+  max-width: 520px;
+  width: 100%;
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
+
+  @include lg{
+    width: 70%;
+  }
+  @include sm{
+    width: 85%;
+  }
 }
 .loading-ring {
   display: flex;
@@ -385,27 +410,24 @@
   margin-top: 30px;
   text-align: center;
   padding: 0;
-  height: 82px;
 }
 .loading-text>p{
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
-  line-height: 27px;
+  font-size: 16px;
+  line-height: 26px;
   text-align: center;
   color: rgba(0, 0, 0, 0.6);
 }
 .loading-btns{
   text-align: center;
   padding: 0;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 .loading-btns > .light-border-button{
   background: linear-gradient($white, $white) padding-box,                    
               linear-gradient(to right, #BCEB00, #00EAEA) border-box;
   border: 1px solid transparent;
-  width: 104px;
-  height: 42px;
 }
 
