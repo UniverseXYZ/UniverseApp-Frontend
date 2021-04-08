@@ -221,9 +221,16 @@
   margin-left: 10px;
 }
 .mintNftCollection-div {
-  padding: 80px 100px;
+  padding: 84px 100px;
   max-height: 100%;
   overflow-y: auto;
+
+  @include lg{
+    padding: 84px 60px;
+  }
+  @include sm{
+    padding: 34px 20px;
+  }
 }
 .mintNftCollection-div > h2{
   margin-top: 20px; 
@@ -748,148 +755,371 @@ line-height: 22px;
   font-style: normal;
   font-weight: 600;
   font-size: 26px;
-  line-height: 36px;
+  line-height: 140%;
   letter-spacing: 0.2px;
   color: $black;
 }
 .single-nft-content{
-  display: flex;
   margin-top: 40px;
 
   h5{
     font-family: $spaceGroteskFont;
-    font-weight: 700;
+    font-weight: bold;
     font-size: 14px;
     line-height: 22px;
   }
 
   .single-nft-upload {
-    width: 445px;
-    margin-right: 30px;
+    width: 100%;
 
     .single-nft-upload-file {
-      text-align: center;
-      width: 445px;
-      height: 169px;
-      border: 1px dashed #D4D4D4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px dashed rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.02);
       border-radius: 12px;
+      padding: 11px 16px 16px 16px;
+      
+      .single-nft-drop-file{
+        width: 100%;
+        text-align: center;
+        // padding: 0px 60px;
+        
+        img{
+          padding-bottom: 16px;
+        }
 
-      p{
-        margin-top: 48px;
-        margin-bottom: 11px;
+        p{
+          padding-bottom: 16px;
+          font-family: $spaceGroteskFont;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 22px;
+          color: rgba(0, 0, 0, 0.4);
+
+          @include sm{
+            font-size: 10px;
+            line-height: 160%;
+          }
+        }
+        
+        button{
+          &.light-border-button {
+            background: 
+            linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            border: 1px solid transparent;
+            
+            @include sm{
+              font-size: 10px;
+              line-height: 10px;
+            }
+          }
+        }
+
+        @include md{
+          padding-right: 20px;
+        }
+      }      
+    }
+    .single-nft-preview {
+      margin: 11px 16px 16px;
+
+      h5{
         font-family: $spaceGroteskFont;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 22px;
-        color: rgba(0, 0, 0, 0.6);
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.4);
+      }
+  
+      .single-nft-picture {
+        width: 215px;
+        height: 215px;              
+        background: $white;
+        border: 1px solid #D4D4D4;
+        box-sizing: border-box;
+        border-radius: 12px;
+  
+        .default-image {
+          width: 85px;              
+          height: 85px;
+          margin-left: 30%;
+          margin-top: 30%;
+
+          @include md{
+            width: 47px;
+            height: 47px;
+            margin-left: 32%;
+          }
+          @include sm{
+            margin-left: 29%;
+          }
+        }
+  
+        .preview-image {
+          width: 215px;
+          height: 215px;              
+          border-radius: 12px;
+          object-fit: cover;
+
+          @include md{
+            width: 137px;
+            height: 137px;
+          }
+          @include sm{
+            width: 110px;
+            height: 110px;
+          }
+        }
+
+        @include md{
+          width: 137px;
+          height: 137px;
+        }
+        @include sm{
+          width: 110px;
+          height: 110px;
+        }
+        
+      }
+      @include sm{
+        margin: 0px;
+      }
+    }
+    
+  }
+    
+  .single-nft-name{
+    margin-top: 40px;
+    width: 100%;
+
+    .intup-l{
+      width: 100%;
+    }
+
+    input{
+      font-family: $spaceGroteskFont;
+      font-size: 16px;
+      line-height: 20px;
+      &.inp {
+        width: 100%;
+      }
+      
+    }
+    ::placeholder{
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .single-nft-description{
+    margin-top: 20px;
+    width: 100%;
+
+    textarea {
+      font-family: $spaceGroteskFont;
+      font-size: 16px;
+      line-height: 20px;
+      &.inp {
+        width: 100%;
+        height: 96px;
+      }
+    }
+    ::placeholder{
+      font-family: $spaceGroteskFont;
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .single-nft-editions{
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+
+    .intup-l{
+      width: 100%;
+    }
+
+    input{
+      font-family: $spaceGroteskFont;
+      font-size: 16px;
+      line-height: 20px;
+      &.inp {
+        width: 100%;
       }
     }
 
+    .info-text {
+      position: absolute;
+      background: $white;                
+      color: $black;
+      box-shadow: 0px 10px 20px 
+        rgba(136, 120, 172, 0.2);
+      border-radius: 12px;
+      width: 224px;
+      height: 106px;
+      padding: 16px;        
+      font-size: 12px;
+      font-family: $spaceGroteskFont;
+      top: -106px;
+      left: 17px;
+    }
+  }
+
+  .single-nft-properties{
+    position: relative;
+    margin-top: 42px;
+
+    .properties-info-text{
+      position: absolute;
+      background: $white;
+      padding: 16px 16px 18px 16px;
+      box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+      border-radius: 12px;
+      width: 226px;
+      top: -130px;
+      left: 120px;
+
+      p{
+        font-family: $spaceGroteskFont;
+        font-size: 12px;
+        line-height: 150%;
+        color: $black;
+      }
+    }
+
+    h4{
+      font-family: $sharpGroteskMediumFont;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      letter-spacing: 0.2px;
+      color: $black;
+      margin-bottom: 10px;
+    }
+
+    .properties{
+      display: flex;
+      width: 100%;
+      padding: 18px 18px 18px 24px;
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+
+      h5{
+        font-family: $spaceGroteskFont;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 22px;
+      }
+      .intup-l{
+        width: 100%;
+      }
+      input{
+        font-family: $spaceGroteskFont;
+        font-size: 16px;
+        line-height: 20px;
+        &.inp {
+          width: 100%;
+        }
+      }
+      ::placeholder{
+        font-family: $spaceGroteskFont;
+        color: rgba(0, 0, 0, 0.2);
+      }
+
+      .property-name{
+        width: 44.5%;
+        padding-right: 12px;
+
+        @include sm{
+          width: 100%;
+          padding-right: 0;
+          padding-bottom: 12px;
+        }
+      }
+
+      .property-value{
+        width: 44.5%;
+        padding-right: 12px;
+
+        @include sm{
+          width: 100%;
+          padding-right: 0;
+          padding-bottom: 12px;
+        }
+      }
+
+      img{
+        margin-top: 23px;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        cursor: pointer;
+
+        @include sm{
+          display: none;
+        }
+      }
+      img:hover{
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      button{
+        display: none;
+
+        @include sm{
+          display: grid;
+        }
+      }
+
+      @include sm{
+        display: grid;
+      }
+    }
+
+    .property-add{
+      img{
+        padding-right: 10px;
+      }
+      h5{
+        font-family: $sharpGroteskMediumFont;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 12px;
+        color: $black;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .single-nft-buttons {
+    margin-top: 40px;
+    margin-bottom: 40px;
     button{
+      &.light-button {
+        margin-right: 12px;
+        @include sm{
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+
       &.light-border-button {
-          background: 
+        background: 
           linear-gradient($white, $white) padding-box,
           linear-gradient(to right, #BCEB00, #00EAEA) border-box;
           border: 1px solid transparent;
       }
     }
-
-    .single-nft-name{
-      margin-top: 20px;
-      width: 445px;
-      height: 73px;
-
-      input{
-        &.inp {
-          width: 445px;
-        }
-      }
-    }
-
-    .single-nft-description{
-      margin-top: 20px;
-      width: 445px;
-      height: 119px;
-
-      input {
-        &.inp {
-          width: 445px;
-          height: 95px;
-        }
-      }
-    }
-
-    .single-nft-editions{
-      position: relative;
-      margin-top: 20px;
-      width: 445px;
-      height: 73px;
-
-      input{
-        &.inp {
-          width: 445px;
-        }
-      }
-
-      .info-text {
-        position: absolute;
-        background: $white;                
-        color: $black;
-        box-shadow: 0px 10px 20px 
-          rgba(136, 120, 172, 0.2);
-          border-radius: 12px;
-          width: 224px;
-          height: 106px;
-          padding: 16px;
-          font-size: 12px;
-          font-family: $spaceGroteskFont;
-          top: -106px;
-          left: 17px;
-      }
-    }
-
-    .single-nft-buttons {
-      margin-top: 40px;
-
-      button{
-        &.light-button {
-          margin-right: 12px;
-        }
-
-        &.light-border-button {
-          background: 
-            linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-            border: 1px solid transparent;
-        }
-      }
+    @include sm{
+      display: grid;
     }
   }
+  
 
-  .single-nft-preview {
-    width: 255px;
-
-    .single-nft-picture {
-      width: 255px;
-      height: 263px;              
-      background: $white;
-      border: 1px solid #D4D4D4;
-      box-sizing: border-box;
-      border-radius: 12px;
-
-      .default-image {
-        width: 85px;              
-        height: 85px;
-        margin-left: 85px;
-        margin-top: 89px;
-      }
-
-      .preview-image {
-        width: 255px;
-        height: 263px;              
-        border-radius: 12px;
-        object-fit: cover;
-      }
-    }
-  }
+  
 }
