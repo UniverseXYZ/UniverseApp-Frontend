@@ -104,7 +104,7 @@ const MobileView = (props) => {
                         {!showSelectWallet ?
                             <>
                                 <li>
-                                    <Link to='' className={collapseMintingMenu ? 'collapsed' : ''} onClick={() => setCollapseMintingMenu(!collapseMintingMenu)}>
+                                <Link to='' className={collapseMintingMenu ? 'collapsed' : ''} onClick={(e) => { e.preventDefault(); setCollapseMintingMenu(!collapseMintingMenu) }}>
                                         <span>Minting & Auctions</span>
                                         <img src={arrowDown} alt='arrow-down' />
                                     </Link>
@@ -113,26 +113,26 @@ const MobileView = (props) => {
                                             <Link className='sub__nav' to='/minting-and-auctions/about'>
                                                 <span>About</span>
                                             </Link>
-                                            <Link className='sub__nav' to='/active-auctions'>
+                                            <Link className='sub__nav' to='/'>
                                                 <span>Active auctions</span>
                                             </Link>
-                                            <Link className='sub__nav' to='/upcoming-releases'>
+                                            <Link className='sub__nav' to='/'>
                                                 <span>upcoming releases</span>
                                             </Link>
                                         </>
                                     }
                                 </li>
                                 <li>
-                                    <Link to='' className={collapseAboutMenu ? 'collapsed' : ''} onClick={() => setCollapseAboutMenu(!collapseAboutMenu)}>
+                                <Link to='' className={collapseAboutMenu ? 'collapsed' : ''} onClick={(e) => { e.preventDefault(); setCollapseAboutMenu(!collapseAboutMenu) }}>
                                         <span>About</span>
                                         <img src={arrowDown} alt='arrow-down' />
                                     </Link>
                                     {collapseAboutMenu &&
                                         <>
-                                            <Link className='sub__nav' to='/whitepaper'>
+                                            <Link className='sub__nav' to='/'>
                                                 <span>Whitepaper</span>
                                             </Link>
-                                            <Link className='sub__nav team' to='/team'>
+                                            <Link className='sub__nav team' to='/'>
                                                 <span>Team</span>
                                             </Link>
                                         </>
