@@ -1,9 +1,9 @@
+import { useRef, useState, useEffect } from 'react';
 import './Account.scss';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import { useRef, useState } from 'react';
 import instagramLogo from '../../assets/images/instagram-outlined.svg'
 import twitterLogo from '../../assets/images/icons_twitter.svg'
 import infoIcon from '../../assets/images/icon.svg'
@@ -85,6 +85,12 @@ const MyAccount = () => {
         setInstagramLink(socialDisplay.instagram)
         setSocialEditing(true)
     }
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        document.title = 'Universe Minting - My Profile'
+        return () => { document.title = 'Universe Minting' };
+    }, [])
 
     return (
         <div className="my-account container">

@@ -3,6 +3,7 @@ import auctionsAccordionOne from '../../../../assets/images/auctions-accordion1.
 import auctionsAccordionTwo from '../../../../assets/images/auctions-accordion2.png';
 import auctionsAccordionThree from '../../../../assets/images/auctions-accordion3.png';
 import auctionsAccordionFour from '../../../../assets/images/auctions-accordion4.png';
+import Button from '../../../button/Button';
 
 const AuctionsTab = () => {
     const [isFirstAccordionOpened, setIsFirstAccordionOpened] = useState(false);
@@ -73,7 +74,7 @@ const AuctionsTab = () => {
                 }
             </div>
 
-            <div className='accordion__item' onClick={() => setIsFourthAccordionOpened(!isFourthAccordionOpened)}>
+            <div className='accordion__item last' onClick={() => setIsFourthAccordionOpened(!isFourthAccordionOpened)}>
                 <div className='accordion__item__header'>
                     <h2 className='title'>4. Customize Auction Landing Page</h2>
                     <div className='toggle'>
@@ -91,6 +92,10 @@ const AuctionsTab = () => {
                         <img src={auctionsAccordionFour} alt='Customize Auction Landing Page' />
                     </div>
                 }
+            </div>
+
+            <div className='launch__app__btn'>
+                <Button className='light-button'>Set up auction</Button>
             </div>
         </div>
     )

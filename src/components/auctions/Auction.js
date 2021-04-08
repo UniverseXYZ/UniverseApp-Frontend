@@ -12,6 +12,12 @@ import PastAuctions from './auctionsTabs/PastAuctions';
 const MyAuction = () => {
     const {  selectedTabIndex, setSelectedTabIndex } = useContext(AppContext);
     const tabs = ['Active auctions', 'Future auctions', 'past auctions'];
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        document.title = 'Universe Minting - My Auctions'
+        return () => { document.title = 'Universe Minting' };
+    }, [])
     
     return(
   <div className="container auction__page">

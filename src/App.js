@@ -61,9 +61,9 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={() => <Homepage />} />
                     <Route exact path="/minting-and-auctions/about" component={() => <About />} />
-                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-                    <Route exact path="/my-account" component={() => <MyAccount />} />
-                    <Route exact path="/my-auctions" component={() => <Auctions />} />
+                    <Route exact path="/my-nfts" component={() => isWalletConnected ? <MyNFTs /> : <Redirect to='/' />} />
+                    <Route exact path="/my-account" component={() => isWalletConnected ? <MyAccount /> : <Redirect to='/' />} />
+                    <Route exact path="/my-auctions" component={() => isWalletConnected ? <Auctions /> : <Redirect to='/' />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <Footer />

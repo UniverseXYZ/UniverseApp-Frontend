@@ -1,5 +1,4 @@
 import {useState} from 'react'
-import Button from '../../../button/Button';
 import AuctionsTab from './AuctionsTab';
 import MintingTab from './MintingTab';
 
@@ -19,9 +18,6 @@ const HowItWorks = () => {
                         <MintingTab /> :
                         <AuctionsTab />
                     }
-                </div>
-                <div className='launch__app__btn'>
-                    <Button className='light-button'>Launch app</Button>
                 </div>
             </div>
         </div>

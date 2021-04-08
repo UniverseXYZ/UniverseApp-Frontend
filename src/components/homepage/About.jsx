@@ -6,8 +6,11 @@ import blockThree from '../../assets/images/homepage-block3.png';
 import appLogo from '../../assets/images/dark.svg';
 import Button from '../button/Button';
 import SubscribePopup from "../popups/SubscribePopup";
+import { useHistory } from "react-router";
 
 const About = () => {
+    const history = useHistory();
+
     return (
         <div className='about__section'>
             <img className='circle-r' src={circleImg} alt='Circle' />
@@ -28,14 +31,14 @@ const About = () => {
                     <div>
                         <img src={appLogo} alt='App Logo' />
                         <p className='desc'>Galaxies are minted into NFT’s and the kekDAO takes a small fee for every new galaxy minted. These galaxies represent the IP of that item in the universe that community creates art from: shows, merch, music festivals, ect. These Galaxies can also hold other planets in them essentially, other NFTs creating collections of art, shows, merch, music festivals. Future build outs we hope to turn these into mini DAOs along with an integrated social network.</p>
-                        <Button className='light-button'>Learn more</Button>
+                        <Button className='light-button' onClick={() => history.push('/minting-and-auctions/about')}>Learn more</Button>
                     </div>
 
                     {/* Block 2 */}
                     <div>
                         <img src={appLogo} alt='App Logo' />
                         <p className='desc'>We are developing a trustless and decentralized auction house for NFT’s where anyone holding a NFT can put up the Galaxy and/or the collection of Planets for auction. These auctions can also facilitate swaps of other tokens. You will be able to pay with specific ERC-20 and ETH. The kekDAO will take a small fee of every auction.</p>
-                        <Button className='light-button'>Learn more</Button>
+                        <Button className='light-button' onClick={() => history.push('/minting-and-auctions/about')}>Learn more</Button>
                     </div>
                     <div>
                         <img src={blockTwo} alt='Block' />

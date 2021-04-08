@@ -2,6 +2,7 @@ import { useState } from 'react';
 import mintingAccordionOne from '../../../../assets/images/minting-accordion1.png';
 import mintingAccordionTwo from '../../../../assets/images/minting-accordion2.png';
 import mintingAccordionThree from '../../../../assets/images/minting-accordion3.png';
+import Button from '../../../button/Button';
 
 const MintingTab = () => {
     const [isFirstAccordionOpened, setIsFirstAccordionOpened] = useState(false);
@@ -51,7 +52,7 @@ const MintingTab = () => {
                 }
             </div>
 
-            <div className='accordion__item' onClick={() => setIsThirdAccordionOpened(!isThirdAccordionOpened)}>
+            <div className='accordion__item last' onClick={() => setIsThirdAccordionOpened(!isThirdAccordionOpened)}>
                 <div className='accordion__item__header'>
                     <h2 className='title'>3. Mint NFTs or Save for Later</h2>
                     <div className='toggle'>
@@ -69,6 +70,10 @@ const MintingTab = () => {
                         <img src={mintingAccordionThree} alt='Mint NFTs or Save for Later' />
                     </div>
                 }
+            </div>
+
+            <div className='launch__app__btn'>
+                <Button className='light-button'>Launch app</Button>
             </div>
         </div>
     )
