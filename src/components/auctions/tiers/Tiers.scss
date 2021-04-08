@@ -1,0 +1,80 @@
+@import '../../../assets/scss/variables';
+
+.reward-tiers{
+
+.back-rew>span{
+    text-align: center;
+    text-transform: uppercase;
+    color: #000000;
+    font-family: $sharpGroteskMediumFont;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 12px;
+    margin-left: 10px;
+  }
+  .back-rew{
+    cursor: pointer;
+  }
+
+  .hear-part{
+    margin-top: 24px;
+  .tier-title{
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 26px;
+        line-height: 36px;
+        letter-spacing: 0.2px;      
+        color: $black;
+  }
+  p{
+    position: absolute;
+    width: 32%;   
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 27px;    
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+    }
+
+    .create-rew-tier{
+        border: 1px solid;
+        border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
+        background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 228px;
+        min-height: 160px;
+        padding: 20px;
+        margin-top: 10%;
+    }
+    .plus-icon{
+        text-align: center;
+        align-items: center;
+    }
+    .create-rew-text{
+        font-family: "Sharp Grotesk Medium", sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        text-align: center;
+        margin-top: 30px;
+      }
+    .create-rew-text>p{
+        font-family: $sharpGroteskMediumFont;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+}

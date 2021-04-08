@@ -2,12 +2,15 @@ import Button from "../../button/Button"
 import arrowUp from '../../../assets/images/Arrow_Up.svg'
 import arrowDown from '../../../assets/images/ArrowDown.svg'
 import infoIconRed from '../../../assets/images/Vector.svg'
+import searchIcon from '../../../assets/images/search-icon.svg'
 import doneIcon from '../../../assets/images/Completed.svg'
 import {AUCTIONS_DATA} from '../../../auctionsData/Data'
+import {PAST_ACTIONS_DATA} from '../../../auctionsData/Data'
 import icon from '../../../assets/images/auction_icon.svg'
 import bid_icon from '../../../assets/images/bid_icon.svg'
+import Input from '../../input/Input'
 import copyIcon from '../../../assets/images/copy.svg'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useState } from "react"
 import Moment from 'react-moment';
 import moment from 'moment';
@@ -20,10 +23,21 @@ const PastAuctions = () => {
     const [copied, setCopied] = useState(false);
     const [offset, setOffset] = useState(0);
     const [perPage, setPerPage] = useState(10);
+    const [searchByName,setSearchByName] =useState('');
 
+    const handleSearch= (value) =>{
+        setSearchByName(value)
+    }
     return (
         <div className='past-auctions'>
-            {AUCTIONS_DATA.slice(offset,offset+perPage).map(past_auction => {
+            <div className='input-search'>
+            <img src={searchIcon} alt='search'/>
+            <Input className='searchInp'
+            onChange={(e) => handleSearch(e.target.value)}
+            value={searchByName}
+            placeholder='Search by name'/>
+            </div>
+            {PAST_ACTIONS_DATA.slice(offset,offset+perPage).filter(item=>item.name.toLowerCase().includes(searchByName.toLowerCase())).map(past_auction => {
                 return (
                     <div className="auction past-auction" key={past_auction.id}>
                         <div className="auction-header">
@@ -84,7 +98,7 @@ const PastAuctions = () => {
                         </div>
                         <div hidden={shownActionId !== past_auction.id}className="auctions-tier">
                             <div className="tier">
-                                <div className="tier-header">
+                                <div className="header">
                                     <h3>{past_auction.platinumTier.name}</h3>
                                     <p>NFTs per winner: <b>{past_auction.platinumTier.nftsPerWinner}</b></p>
                                     <p>Winners: <b>{past_auction.platinumTier.winners}</b></p>
@@ -151,7 +165,7 @@ const PastAuctions = () => {
                 )
             })}
             <div className='pagination__container'>
-                                <Pagination data={AUCTIONS_DATA} perPage={perPage} setOffset={setOffset} />
+                                <Pagination data={PAST_ACTIONS_DATA} perPage={perPage} setOffset={setOffset} />
             </div>
         </div>
         
