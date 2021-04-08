@@ -4,12 +4,14 @@ import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-d
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import MyNFTs from './components/myNFTs/Ntfs';
-import MyAccount from './components/myAccount/Account'
+import MyAccount from './components/myAccount/Account';
 import Auctions from './components/auctions/Auction';
 import AppContext from './ContextAPI';
 import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/About';
 import Marketplace from './containers/mintingAndAuctions/Marketplace';
+import RewardTiers from './components/auctions/tiers/RewardTiers';
+
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -61,11 +63,18 @@ const App = () => {
                 <Header />
                 <Switch>
                     <Route exact path="/" component={() => <Homepage />} />
+
                     <Route exact path="/minting-and-auctions/about" component={() => <About />} />
                     <Route exact path="/minting-and-auctions/marketplace" component={() => <Marketplace />} />
                     <Route exact path="/my-nfts" component={() => isWalletConnected ? <MyNFTs /> : <Redirect to='/' />} />
                     <Route exact path="/my-account" component={() => isWalletConnected ? <MyAccount /> : <Redirect to='/' />} />
                     <Route exact path="/my-auctions" component={() => isWalletConnected ? <Auctions /> : <Redirect to='/' />} />
+
+                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
+                    <Route exact path="/my-account" component={() => <MyAccount />} />
+                    <Route exact path="/my-auctions" component={() => <Auctions />} />
+                    <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
+
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <Footer />
