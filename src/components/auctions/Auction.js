@@ -11,7 +11,7 @@ import PastAuctions from './auctionsTabs/PastAuctions';
 
 const MyAuction = () => {
     const {  selectedTabIndex, setSelectedTabIndex } = useContext(AppContext);
-    const tabs = ['Active auctions', 'Future auctions', 'past auctions'];
+    const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -25,7 +25,7 @@ const MyAuction = () => {
        <div className='auction__page__header'>
                         <h1 className='title'>My Auctions</h1>
                         <div>
-                            <button className='set_up' >Set Up Auction</button>
+                            <button className='set_up' >Set up auction</button>
                         </div>  
       </div>
       
@@ -48,7 +48,7 @@ const MyAuction = () => {
                         <div className='empty__auction'>
                             <h3>No active auctions found</h3>
                             <p className='desc'>Create your first auction by clicking the button below</p>
-                            <button className='set_up'>Set Up Auction</button>
+                            <button className='set_up'>Set up auction</button>
                         </div> 
                          </> }
                          {selectedTabIndex === 1 && AUCTIONS_DATA.length > 0 && 
@@ -57,7 +57,7 @@ const MyAuction = () => {
                         <div className='empty__auction'>
                             <h3>No scheduled auctions found</h3>
                             <p className='desc'>Create your first auction by clicking the button below</p>
-                            <button className='set_up'>Set Up Auction</button>
+                            <button className='set_up'>Set up auction</button>
                         </div> 
                      </>}
                         
@@ -67,7 +67,7 @@ const MyAuction = () => {
                         <div className='empty__auction'>
                             <h3>No past auctions found</h3>
                             <p className='desc'>Create your first auction by clicking the button below</p>
-                            <button className='set_up'>Set Up Auction</button>
+                            <button className='set_up'>Set up auction</button>
                         </div> 
                          </> }
 

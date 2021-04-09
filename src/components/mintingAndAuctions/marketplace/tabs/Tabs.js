@@ -9,8 +9,8 @@ const Tabs = () => {
         <div className='tabs__section'>
             <div className='tabs__section__container'>
                 <div className='tabs'>
-                    <button onClick={() => setSelectedTabIndex(0)} className={selectedTabIndex === 0 ? 'active' : ''}>Active Auctions</button>
-                    <button onClick={() => setSelectedTabIndex(1)} className={selectedTabIndex === 1 ? 'active' : ''}>Future Auctions</button>
+                    <button onClick={() => setSelectedTabIndex(0)} className={selectedTabIndex === 0 ? 'active' : ''}>Active auctions</button>
+                    <button onClick={() => setSelectedTabIndex(1)} className={selectedTabIndex === 1 ? 'active' : ''}>Future auctions</button>
                 </div>
                 <div className='tab__content'>
                     {selectedTabIndex === 0 ? 

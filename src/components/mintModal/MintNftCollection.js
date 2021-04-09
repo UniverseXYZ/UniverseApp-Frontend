@@ -487,10 +487,10 @@ const MintNftCollection = ({ onClick }) => {
             <div className="collection-buttons">
                 {!savedCollectionID ?
                     <>
-                        <Button className="light-button" onClick={handleMinting}>mint now</Button>
-                        <Button className="light-border-button" onClick={handleSaveForLater}>save for later</Button>
+                        <Button className="light-button" onClick={handleMinting}>Mint now</Button>
+                        <Button className="light-border-button" onClick={handleSaveForLater}>Save for later</Button>
                     </> :
-                    <Button className="light-button" onClick={handleSaveForLater}>Save Changes</Button>
+                    <Button className="light-button" onClick={handleSaveForLater}>Save changes</Button>
                 }
             </div>
         </div>     

@@ -25,7 +25,7 @@ const RemovePopup = ({ close, nftID, removedItemName, removeFrom, collectionNFTs
             <div className="popup-title"><h4>Are you sure?</h4></div>
             <div className="popup-text"><p>Are you sure you want to remove the <b>{removedItemName}</b>?</p></div>
             <div className="popup-btns">
-                <Button className="light-button" onClick={() => handleRemove(nftID)}>Yes, Remove</Button>
+                <Button className="light-button" onClick={() => handleRemove(nftID)}>Yes, remove</Button>
                 <Button className="light-border-button" onClick={close}>Cancel</Button>
             </div>
         </div>

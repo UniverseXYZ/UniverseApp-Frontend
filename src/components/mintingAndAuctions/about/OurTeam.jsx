@@ -32,7 +32,7 @@ const OurTeam = () => {
                     </div>
                 </div>
                 <div className='see__full__team'>
-                    <button>see the full team</button>
+                    <button>See the full team</button>
                 </div>
             </div>
         </div>
