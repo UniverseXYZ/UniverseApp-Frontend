@@ -2,7 +2,7 @@ import {useState} from 'react'
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown'
 import Pagination from '../../../../pagination/Pagionation'
 import FutureAuctionsFilters from './Filters'
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from './Data'
+import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../../dummyData/FutureAuctionsDummyData'
 import FutureAuctionsList from './FutureAuctionsList'
 
 const FutureAuctionsTab = () => {
@@ -12,9 +12,9 @@ const FutureAuctionsTab = () => {
     return (
         <div className='future__auctions__tab'>
             <FutureAuctionsFilters />
-            <FutureAuctionsList data={PLACEHOLDER_ACTIVE_AUCTIONS} perPage={perPage} offset={offset} />
+            <FutureAuctionsList data={PLACEHOLDER_FUTURE_AUCTIONS} perPage={perPage} offset={offset} />
             <div className='pagination__container'>
-                <Pagination data={PLACEHOLDER_ACTIVE_AUCTIONS} perPage={perPage} setOffset={setOffset} />
+                <Pagination data={PLACEHOLDER_FUTURE_AUCTIONS} perPage={perPage} setOffset={setOffset} />
                 <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
             </div>
         </div>

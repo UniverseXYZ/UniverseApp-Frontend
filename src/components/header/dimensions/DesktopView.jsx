@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {NotificationManager} from 'react-notifications';
 import Popup from "reactjs-popup"
 import Icon from '../../../assets/images/icon1.svg';
 import copyIcon from '../../../assets/images/copy.svg';
@@ -15,7 +16,6 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
     const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
-    const [copied, setCopied] = useState(false);
     const history = useHistory();
     const ref = useRef(null);
 
@@ -41,7 +41,7 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                         <div ref={ref} className='dropdown minting-drop'>
                             <div className='dropdown__body'>
                                 <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
-                                <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
+                                <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
                                 <button onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future Auctions</button>
                             </div>
                         </div>
@@ -74,9 +74,9 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                                 <div className='dropdown__header'>
                                     <div className="copy-div">
                                         <img className="icon-img" src={Icon} alt='icon' />
-                                        <div className='ethereum__address'>{copied ? 'Copied!' : ethereumAddress}</div>
+                                        <div className='ethereum__address'>{ethereumAddress}</div>
                                         <div className='copy' title='Copy to clipboard'>
-                                            <CopyToClipboard text={ethereumAddress} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                            <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
                                                 <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
                                             </CopyToClipboard>
                                         </div>
@@ -97,7 +97,7 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                                     <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
                                     <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
                                     <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
-                                <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign Out</button>
+                                    <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign Out</button>
                                 </div>
                             </div>
                         }

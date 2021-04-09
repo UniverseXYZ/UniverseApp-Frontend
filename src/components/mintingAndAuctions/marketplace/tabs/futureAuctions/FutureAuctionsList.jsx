@@ -1,7 +1,9 @@
 import React from 'react'
+import { useHistory } from 'react-router';
 
 const FutureAuctionsList = ({ data, perPage, offset }) => {
     const sliceData = data.slice(offset, offset + perPage);
+    const history = useHistory();
 
     return (
         <div className='future__auctions__list'>
@@ -16,7 +18,7 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                             <div className='artist__details'>
                                 <img src={auction.artist.avatar} alt={auction.artist.name} />
                                 <span>by</span>
-                                <button>{auction.artist.name}</button>
+                                <button onClick={() => history.push(`/artist/${auction.artist.name.split(' ')[1]}`, {id: auction.artist.id})}>{auction.artist.name}</button>
                             </div>
                         </div>
                         <div className='auction__details'>
