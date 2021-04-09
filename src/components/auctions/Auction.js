@@ -1,5 +1,5 @@
 import './Auctions.scss';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, } from 'react';
 import { PLACEHOLDER_NFTS } from '../../dummyData/DummyData';
 import { AUCTIONS_DATA } from '../../auctionsData/Data';
 import AppContext from '../../ContextAPI';
@@ -7,6 +7,7 @@ import Exclamation from '../../assets/images/Exclamation.svg';
 import FutureAuctions from './auctionsTabs/FutureAuctions';
 import ActiveAictions from './auctionsTabs/ActiveAuctions';
 import PastAuctions from './auctionsTabs/PastAuctions';
+import { useHistory } from 'react-router-dom';
 
 
 const MyAuction = () => {
@@ -18,6 +19,8 @@ const MyAuction = () => {
         document.title = 'Universe Minting - My Auctions'
         return () => { document.title = 'Universe Minting' };
     }, [])
+
+    const history = useHistory();
     
     return(
   <div className="container auction__page">
@@ -25,7 +28,7 @@ const MyAuction = () => {
        <div className='auction__page__header'>
                         <h1 className='title'>My Auctions</h1>
                         <div>
-                            <button className='set_up' >Set up auction</button>
+                        <button className='set_up' onClick={() => { history.push('/reward-tiers') }}>Set up auction</button>
                         </div>  
       </div>
       
@@ -40,7 +43,7 @@ const MyAuction = () => {
                         <div style={{display: "none"}} className="err-msg">
                             <img src={Exclamation} alt="message"/>
                             <p>Please, fill out the profile details before you set up an auction.<span> Go to my profile.</span></p>
-                        </div>
+                        </div>      
                         {selectedTabIndex === 0 && AUCTIONS_DATA.length > 0 && 
                             <ActiveAictions />
                          }
@@ -67,7 +70,7 @@ const MyAuction = () => {
                         <div className='empty__auction'>
                             <h3>No past auctions found</h3>
                             <p className='desc'>Create your first auction by clicking the button below</p>
-                            <button className='set_up'>Set up auction</button>
+                            <button className='set-up' onClick={() => { history.push('/reward-tiers') }}>Set up auction</button>
                         </div> 
                          </> }
 

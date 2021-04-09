@@ -2,11 +2,13 @@ import Button from "../../button/Button"
 import arrowUp from '../../../assets/images/Arrow_Up.svg'
 import arrowDown from '../../../assets/images/ArrowDown.svg'
 import infoIconRed from '../../../assets/images/Vector.svg'
-import doneIcon from '../../../assets/images/Completed.svg'
+import searchIcon from '../../../assets/images/search-icon.svg'
 import {AUCTIONS_DATA} from '../../../auctionsData/Data'
+import {ACTIVE_ACTIONS_DATA} from '../../../auctionsData/Data'
 import icon from '../../../assets/images/auction_icon.svg'
 import bid_icon from '../../../assets/images/bid_icon.svg'
 import copyIcon from '../../../assets/images/copy.svg'
+import Input from '../../input/Input';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useState } from "react"
 import Moment from 'react-moment';
@@ -20,10 +22,22 @@ const ActiveAuctions = () => {
     const [copied, setCopied] = useState(false);
     const [offset, setOffset] = useState(0);
     const [perPage, setPerPage] = useState(10);
+    const [searchByName, setSearchByName] = useState('');
+
+    const handleSearch= (value) =>{
+        setSearchByName(value)
+    } 
 
     return (
         <div className='active-auctions'>
-            {AUCTIONS_DATA.slice(offset, offset +perPage).map(active_auction => {
+            <div className='input-search'>
+            <img src={searchIcon} alt='search'/>
+            <Input className='searchInp'
+            onChange={(e) => handleSearch(e.target.value)}
+            value={searchByName}
+            placeholder='Search by name'/>
+            </div>
+            {ACTIVE_ACTIONS_DATA.slice(offset, offset +perPage).filter(item => item.name.toLowerCase().includes(searchByName.toLowerCase())).slice(offset, offset +perPage).map(active_auction => {
                 return (
                     <div className="auction active-auction" key={active_auction.id}>
                         <div className="auction-header">
@@ -54,7 +68,6 @@ const ActiveAuctions = () => {
                                 <p>Auction ends in <b>
                                
                                 { moment.utc(moment(active_auction.endDate).diff(moment(active_auction.launchDate))).format('H : mm : ss')}
-                                {/* <Moment from={active_auction.launchDate}>{active_auction.endDate}</Moment> */}
                                     </b></p>
                             </div>
                             <div className="total-dates">
@@ -158,7 +171,7 @@ const ActiveAuctions = () => {
                 )
             })}
             <div className='pagination__container'>
-                                <Pagination data={AUCTIONS_DATA} perPage={perPage} setOffset={setOffset} />
+                                <Pagination data={ACTIVE_ACTIONS_DATA} perPage={perPage} setOffset={setOffset} />
             </div>
         </div>
         

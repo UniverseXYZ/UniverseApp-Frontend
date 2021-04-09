@@ -57,7 +57,7 @@
                 color: $black;
             }
             img{
-                display: none;
+                margin: 0px 0px 3px 6px;
             }
         }
         
@@ -327,11 +327,59 @@
                 linear-gradient(to right, #BCEB00, #00EAEA) border-box;
                 border: 1px solid transparent;
             }
-        }
-        
+        }    
     }
-    
-}
+    .end-info, .launch-info{
+        position: absolute;
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 0px 10px 20px   
+              rgba(136, 120, 172, 0.2);
+        border-radius: 12px;
+        width: 251px;
+        height: 87px;
+        padding: 16px;
+        font-size: 12px;
+        font-family: $spaceGroteskFont;
+        margin-top: -5%;
+        margin-left: 2%;
+       } 
+       .input-search{
+        position: relative;
+        float: right;
+        margin-top: -85px;
+        img{
+        position: absolute;
+        right: 4%;
+        top: 28%;
+        height: 20px;
+        }
+    }   
+    .searchInp{
+        height: 50px;
+        background: #FFFFFF;
+        border: 1px solid #D4D4D4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        font-size: 16px;
+        line-height: 20px;
+        font-family: $spaceGroteskFont;
+        padding: 15px 16px;
+
+        &:focus {
+            background: 
+                linear-gradient($white, $white) padding-box,
+                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            border: 1px solid transparent;
+        }
+       }  
+    .dateError{
+        p{
+            color: #FF4949!important; 
+        }
+        border: 1px solid #FF4949;
+      }   
+    }
 
 .active-auctions, .past-auctions{
     .active-auction{
