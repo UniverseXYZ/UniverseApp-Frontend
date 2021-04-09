@@ -10,7 +10,7 @@ import AppContext from '../../ContextAPI';
 
 const CreateNftCol = (props) => {
 
-    const { savedNfts, setSavedNfts } = useContext(AppContext);
+    const { savedNfts, setSavedNfts } = useContext(AppContext); 
     const { setShowCollectible, collectionName, coverImage, collectionNFTs, setCollectionNFTs, collectionNFTsID, setCollectionNFTsID } = props;
 
     const [errors, setErrors] = useState({
@@ -201,7 +201,7 @@ const CreateNftCol = (props) => {
                             <div hidden={hideIcon} className="info-text">
                                 <p>Total amount of NFTs that will be distributed to the current revard tier winners</p>
                             </div>
-                            <Input className="inp" error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
+                            <Input className="inp" error={errors.edition} placeholder="Enter number of editions" onChange={validateEdition} value={editions} />
                         </div>
                         <div className="nft-coll-buttons">
                             {!collectionNFTsID ?

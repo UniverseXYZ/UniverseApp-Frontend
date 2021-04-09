@@ -1,6 +1,5 @@
 @import '../../../assets/scss/variables';
 
-.reward-tiers{
 
 .back-rew>span{
     text-align: center;
@@ -17,7 +16,7 @@
     cursor: pointer;
   }
 
-  .hear-part{
+  .head-part{
     margin-top: 24px;
   .tier-title{
         font-family: $sharpGroteskSemiBoldFont;
@@ -31,12 +30,16 @@
   p{
     position: absolute;
     width: 32%;   
+    margin-top: 10px;
     font-family: $spaceGroteskFont;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 27px;    
     color: rgba(0, 0, 0, 0.6);
+  }
+  .create-p{
+    width: 28%;
   }
 
     }
@@ -55,26 +58,69 @@
         min-height: 160px;
         padding: 20px;
         margin-top: 10%;
+        margin-bottom: 30%;
     }
     .plus-icon{
         text-align: center;
         align-items: center;
     }
     .create-rew-text{
-        font-family: "Sharp Grotesk Medium", sans-serif;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        text-align: center;
         margin-top: 30px;
       }
     .create-rew-text>p{
-        font-family: $sharpGroteskMediumFont;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+      
+  }
+  .tier-info{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+
+    .intup-l{
+      margin-top: 20px;
+    }
+  }
+  .button-div{
+    position: relative;
+    display: flex;
+    margin-top:4%;
+      .light-border-button{
+        margin-right: 2%;
+      }  
+      .total-num{
+        position: absolute;
+        right: 0;
+        top: 35%;
+        font-family: $spaceGroteskFont;
         font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 20px;
-        text-align: center;
-        text-transform: uppercase;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 22px;
+        letter-spacing: 0.3px;
+        color: #000000;
+
+        img{
+          padding-left: 5px;
+        }
       }
-}
+    }
+      .info-text {
+        position: absolute;
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 0px 10px 20px 
+          rgba(136, 120, 172, 0.2);
+        border-radius: 12px;
+        width: 230px;
+        min-height: 70px;
+        padding: 16px;
+        font-size: 12px;
+        font-family: "Space Grotesk", sans-serif;
+        left: 26%;
+        bottom: 35px;
+      }
