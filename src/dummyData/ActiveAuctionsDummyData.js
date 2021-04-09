@@ -1,5 +1,5 @@
-import artistAvatar from '../../../../../assets/images/artist-avatar.svg';
-import auctionImg from '../../../../../assets/images/ntf5.svg';
+import artistAvatar from '../assets/images/artist-avatar.svg';
+import auctionImg from '../assets/images/ntf5.svg';
 
 export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     {
@@ -7,6 +7,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -21,6 +22,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -35,6 +37,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -49,6 +52,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -63,6 +67,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -77,6 +82,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -91,6 +97,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -105,6 +112,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -119,6 +127,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -133,6 +142,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -147,6 +157,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -161,6 +172,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -175,6 +187,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -189,6 +202,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -203,6 +217,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -217,6 +232,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -231,6 +247,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -245,6 +262,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -259,6 +277,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
@@ -273,6 +292,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         title: 'Auction Title',
         image: auctionImg,
         artist: {
+            id: 1,
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },

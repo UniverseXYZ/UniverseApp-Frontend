@@ -71,11 +71,13 @@ const NonFungibleUniverse = () => {
                         return (
                             <div className='nfu__grid__item' key={nfu.id}>
                                 {!nfu.loaded &&
-                                    <SkeletonTheme color="#202020" highlightColor="#444">
-                                        <Skeleton circle={true} height={50} width={50} />
-                                        <Skeleton />
-                                        <Skeleton height={150} />
-                                    </SkeletonTheme>
+                                    <div>
+                                        <SkeletonTheme color="#202020" highlightColor="#444">
+                                            <Skeleton circle={true} height={50} width={50} />
+                                            <h2 className='title'><Skeleton /></h2>
+                                            <p className='desc'><Skeleton height={150} /></p>
+                                        </SkeletonTheme>
+                                    </div>
                                 }
                                 <div style={{ display: nfu.loaded ? 'block' : 'none' }}>
                                     <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />

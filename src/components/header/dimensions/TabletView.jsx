@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useRef } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {NotificationManager} from 'react-notifications';
 import { Link, useHistory } from 'react-router-dom';
 import Popup from "reactjs-popup"
 import hamburgerIcon from '../../../assets/images/hamburger.svg';
@@ -27,7 +28,6 @@ const TabletView = (props) => {
     const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
     const [collapseAboutMenu, setCollapseAboutMenu] = useState(false);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
-    const [copied, setCopied] = useState(false);
 
     const ref = useRef(null);
     const history = useHistory();
@@ -59,9 +59,9 @@ const TabletView = (props) => {
                             <div className='dropdown__header'>
                                 <div className="copy-div">
                                     <img className="icon-img" src={accountIcon} alt='icon' />
-                                    <div className='ethereum__address'>{copied ? 'Copied!' : ethereumAddress}</div>
+                                    <div className='ethereum__address'>{ethereumAddress}</div>
                                     <div className='copy' title='Copy to clipboard'>
-                                        <CopyToClipboard text={ethereumAddress} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                        <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
                                             <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
                                         </CopyToClipboard>
                                     </div>

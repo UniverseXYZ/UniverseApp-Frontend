@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './assets/scss/normalize.scss';
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer} from 'react-notifications';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
@@ -11,6 +13,7 @@ import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/About';
 import Marketplace from './containers/mintingAndAuctions/Marketplace';
 import RewardTiers from './components/auctions/tiers/RewardTiers';
+import Artist from './containers/artist/Artist';
 
 
 const App = () => {
@@ -69,14 +72,12 @@ const App = () => {
                     <Route exact path="/my-nfts" component={() => isWalletConnected ? <MyNFTs /> : <Redirect to='/' />} />
                     <Route exact path="/my-account" component={() => isWalletConnected ? <MyAccount /> : <Redirect to='/' />} />
                     <Route exact path="/my-auctions" component={() => isWalletConnected ? <Auctions /> : <Redirect to='/' />} />
-
-                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-                    <Route exact path="/my-account" component={() => <MyAccount />} />
-                    <Route exact path="/my-auctions" component={() => <Auctions />} />
                     <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
+                    <Route exact path="/artist/:name" children={<Artist />} />
 
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
+                <NotificationContainer/>
                 <Footer />
             </Routes>
         </AppContext.Provider>

@@ -88,6 +88,7 @@ const MyNFTs = () => {
     }, [])
 
     useEffect(() => {
+        console.log(myNFTs)
         setFilteredNFTs(myNFTs);
     }, [])
         
