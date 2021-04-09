@@ -11,7 +11,7 @@ const CreateYourAuction = () => {
                 </div>
                 <div className='setup__auction__btn'>
                     <button>
-                        <span>set up auction</span>
+                        <span>Set up auction</span>
                         <img src={gradientArrow} alt='Arrow' />
                     </button>
                 </div>

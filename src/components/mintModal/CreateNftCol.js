@@ -179,7 +179,7 @@ const CreateNftCol = (props) => {
                         <h5>Upload file</h5>
                         <div className="nft-coll-upload-file">
                             <p>PNG, GIF, WEBP, MP4 or MP3. Max 30mb</p>
-                            <Button className="light-border-button" onClick={() => inputFile.current.click()}>CHOOSE FILE</Button>
+                            <Button className="light-border-button" onClick={() => inputFile.current.click()}>Choose file</Button>
                             <input type="file" className="inp-disable" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
                         </div>
                         {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
@@ -206,10 +206,10 @@ const CreateNftCol = (props) => {
                         <div className="nft-coll-buttons">
                             {!collectionNFTsID ?
                                 <>
-                                    <Button className="light-button" onClick={handleAddToCollection}>ADD TO COLLECTION</Button>
-                                    <Button className="light-border-button" onClick={handleAddAndCreateNew}>ADD AND CREATE NEW</Button>
+                                    <Button className="light-button" onClick={handleAddToCollection}>Add to collection</Button>
+                                    <Button className="light-border-button" onClick={handleAddAndCreateNew}>Add and create new</Button>
                                 </> :
-                                <Button className="light-button" onClick={handleAddToCollection}>Save Changes</Button>
+                                <Button className="light-button" onClick={handleAddToCollection}>Save changes</Button>
                             }
                         </div>
                     </div>

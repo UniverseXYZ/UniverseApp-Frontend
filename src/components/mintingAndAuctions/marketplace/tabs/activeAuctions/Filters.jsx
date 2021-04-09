@@ -30,7 +30,7 @@ const ActiveAuctionsFilters = () => {
                     {isDropdownOpened &&
                         <ul ref={ref}>
                             <li onClick={() => { setSelectedItem('Newest'); setIsDropdownOpened(false) }}>Newest</li>
-                            <li onClick={() => { setSelectedItem('highest bid'); setIsDropdownOpened(false) }}>highest bid</li>
+                            <li onClick={() => { setSelectedItem('Highest bid'); setIsDropdownOpened(false) }}>Highest bid</li>
                         </ul>
                     }
                 </div>

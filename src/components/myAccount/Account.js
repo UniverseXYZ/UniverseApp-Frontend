@@ -99,7 +99,7 @@ const MyAccount = () => {
                     <h1>My Profile</h1>
                     <p>You can set preffered display name, create your branded profile URL and manage other personal settings</p>
                 </div>
-                <Button className="light-button">PREVIEW MY UNIVERSE PAGE</Button>
+                <Button className="light-button">Preview my Universe Page</Button>
             </div>
             
             <div className="account-grid-container">
@@ -138,7 +138,7 @@ const MyAccount = () => {
                                 }
                                 
                             </div>
-                            <Button className="light-border-button" onClick={() => setNameEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                            <Button className="light-border-button" onClick={() => setNameEditing(false)}>Edit <img src={pencilIcon} alt="Edit Icon" /></Button>
                         </div>
                     </div>
                     :
@@ -158,7 +158,7 @@ const MyAccount = () => {
                             </div>
                             <div className="account-picture-editing">
                                 <p>We recomend an image of at least 400x400.</p>
-                                <Button className="light-border-button" onClick={() => accountInput.current.click()}>CHOOSE FILE</Button>
+                                <Button className="light-border-button" onClick={() => accountInput.current.click()}>Choose file</Button>
                                 <input type="file" className="inp-disable" ref={accountInput} onChange={(e)=>e.target.files[0] && setAccountImage(e.target.files[0])}></input>
                             </div>  
                                         
@@ -181,8 +181,8 @@ const MyAccount = () => {
                                 :null
                             }                            
                             <div className="account-display-buttons">
-                                <Button className="light-button" onClick={() => saveDisplayChanges()}>SAVE CHANGES</Button>
-                                <Button className="light-border-button" onClick={() => cancelDisplayChanges()}>CANCEL</Button>
+                                <Button className="light-button" onClick={() => saveDisplayChanges()}>Save changes</Button>
+                                <Button className="light-border-button" onClick={() => cancelDisplayChanges()}>Cancel</Button>
                             </div>
                         </div> 
                     </div>
@@ -198,15 +198,15 @@ const MyAccount = () => {
                             <p className="about-text">{about}</p>
                             }
                             
-                            <Button className="light-border-button" onClick={() => setAboutEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                            <Button className="light-border-button" onClick={() => setAboutEditing(false)}>Edit <img src={pencilIcon} alt="Edit Icon" /></Button>
                         </div>
                     :
 
                         <div className="account-grid-about-editing">
                             <textarea placeholder="Enter few words about yourself" className="inp" value={aboutNew} onChange = {(e) => setAboutNew(e.target.value)}/>
                             <div className="account-display-buttons">
-                                <Button className="light-button" onClick={() => saveAboutChanges()}>SAVE CHANGES</Button>
-                                <Button className="light-border-button" onClick={() => cancelAboutChanges()}>CANCEL</Button>
+                                <Button className="light-button" onClick={() => saveAboutChanges()}>Save changes</Button>
+                                <Button className="light-border-button" onClick={() => cancelAboutChanges()}>Cancel</Button>
                             </div>
                         </div>
                     }
@@ -221,7 +221,7 @@ const MyAccount = () => {
                                 :
                                 <img className="default-logo" src={defaultImage} alt="Cover"/>    
                             }     
-                            <Button className="light-border-button" onClick={()=> setLogoEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                            <Button className="light-border-button" onClick={()=> setLogoEditing(false)}>Edit <img src={pencilIcon} alt="Edit Icon" /></Button>
                         </div>
                     :
                         <div className="account-grid-logo-editing">
@@ -230,7 +230,7 @@ const MyAccount = () => {
                                 <h5>Drop your file here</h5>
                                 <p>(min 300x300px, SVG/PNG/JPEG, max 1mb)</p>
                                 <input type="file" className="inp-disable" ref={logoInput} onChange={(e)=> e.target.files[0] && setLogoImage(e.target.files[0])}></input>
-                                <Button className="light-border-button" onClick={() => logoInput.current.click()}>CHOOSE FILE</Button>
+                                <Button className="light-border-button" onClick={() => logoInput.current.click()}>Choose file</Button>
                                 <div className="import-logo-preview">
                                     <h6>Preview</h6>
                                     <div className="logo-picture">
@@ -252,8 +252,8 @@ const MyAccount = () => {
                                 </div>
                             </div>
                             <div className="account-display-buttons">
-                                <Button className="light-button" onClick={() => saveLogoChanges()}>SAVE CHANGES</Button>
-                                <Button className="light-border-button" onClick={() => cancelLogoChanges()}>CANCEL</Button>
+                                <Button className="light-button" onClick={() => saveLogoChanges()}>Save changes</Button>
+                                <Button className="light-border-button" onClick={() => cancelLogoChanges()}>Cancel</Button>
                             </div>
                         </div>
                     }
@@ -293,7 +293,7 @@ const MyAccount = () => {
                             }   
                                 
                             </div>
-                            <Button className="light-border-button" onClick={() => setSocialEditing(false)}>EDIT <img src={pencilIcon} alt="Edit Icon" /></Button>
+                            <Button className="light-border-button" onClick={() => setSocialEditing(false)}>Edit <img src={pencilIcon} alt="Edit Icon" /></Button>
                         </div>
                     :
                         <div className="account-grid-social-editing">
@@ -309,8 +309,8 @@ const MyAccount = () => {
                             </div>
                             
                             <div className="account-display-buttons">
-                                <Button className="light-button" onClick={() => saveSocialChanges()}>SAVE CHANGES</Button>
-                                <Button className="light-border-button" onClick={() => cancelSocialChanges()}>CANCEL</Button>
+                                <Button className="light-button" onClick={() => saveSocialChanges()}>Save changes</Button>
+                                <Button className="light-border-button" onClick={() => cancelSocialChanges()}>Cancel</Button>
                             </div>
                         </div>
                     }

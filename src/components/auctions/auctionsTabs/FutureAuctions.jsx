@@ -49,7 +49,7 @@ const FutureAuctions = () => {
                         <div className="auction-header">
                             <h3>{future_auction.name}</h3>
                             <div className="launch-auction">
-                                <Button className="light-button" disabled>Set up Auction</Button>
+                                <Button className="light-button" disabled>Set up auction</Button>
                                 <div className="line"></div>
                                 {shownActionId === future_auction.id ?
                                     <img src={arrowUp} onClick={() =>setshownActionId(null)}/>
@@ -79,7 +79,7 @@ const FutureAuctions = () => {
                                     <img src={doneIcon}/>
                                     <div className="hz-line"></div>
                                 </div>
-                                <Button className="light-border-button">EDIT AUCTION</Button>
+                                <Button className="light-border-button">Edit auction</Button>
                             </div>
                             <div className="step-2">
                                 <h6>Step2</h6>
@@ -88,7 +88,7 @@ const FutureAuctions = () => {
                                     <img hidden={true} src={doneIcon}/>
                                     <div className="hz-line"></div>
                                 </div>
-                                <Button className="light-button">MINT NFTS</Button>
+                                <Button className="light-button">Mint NFTs</Button>
                             </div>
                             <div className="step-3">
                                 <h6>Step 3</h6>
@@ -96,7 +96,7 @@ const FutureAuctions = () => {
                                 <div className="circle">
                                     <img hidden={true} src={doneIcon}/>
                                 </div>
-                                <Button className="light-button" disabled>SET UP LANDING PAGE</Button>
+                                <Button className="light-button" disabled>Set up landing page</Button>
                             </div>
                         </div>
                         <div hidden={shownActionId !== future_auction.id} className="auctions-tier">
@@ -163,7 +163,7 @@ const FutureAuctions = () => {
                                     })}
                                 </div>
                             </div>
-                            <Button className="light-border-button" onClick={() => handleRemove(future_auction.id)}>REMOVE</Button>
+                            <Button className="light-border-button" onClick={() => handleRemove(future_auction.id)}>Remove</Button>
                         </div>
                     </div>
                 )

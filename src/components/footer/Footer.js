@@ -37,10 +37,10 @@ const Footer = () => {
                     </div>
                     <div className="coming-soon">
                         <ul>
-                            <li>Coming Soons</li>
+                            <li>Coming Soon</li>
                             <li className="grey">Kekit</li>
                             <li className="grey">KekDAO</li>
-                            <li className="grey">gaming</li>
+                            <li className="grey">Gaming</li>
                         </ul>
                     </div>
                 </div>
