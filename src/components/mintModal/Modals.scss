@@ -211,7 +211,6 @@
 }
 .back-nft>span{
   text-align: center;
-  text-transform: uppercase;
   color: #000000;
   font-family: $sharpGroteskMediumFont;
   font-style: normal;
@@ -350,11 +349,11 @@
                         border-bottom-right-radius: 12px;
                     }   
                     p {
-                        font-family: $sharpGroteskMediumFont;
+                        font-family: $spaceGroteskFont;
                         font-style: normal;
-                        font-weight: 500;
-                        font-size: 12px;
-                        text-transform: uppercase;
+                        font-weight: 600;
+                        font-size: 16px;
+                        line-height: 20px;
                     }   
                     &.edit p {
                         color: $black;
@@ -584,13 +583,13 @@ line-height: 22px;
   margin-top: 30px;
 }
 .collection-t>p{
-  font-family: $sharpGroteskMediumFont;
+  font-family: $spaceGroteskFont;
   font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 16px;
   line-height: 20px;
   text-align: center;
-  text-transform: uppercase;
+  // text-transform: uppercase;
 }
 .nft-collectible {
   margin-top: 20px;

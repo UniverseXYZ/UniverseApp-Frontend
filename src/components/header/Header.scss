@@ -81,7 +81,7 @@ header {
             align-items: center;
 
             li {
-                text-transform: uppercase; 
+                // text-transform: uppercase; 
                 margin-left: 30px;
                 position: relative;
                 font-family: $sharpGroteskMediumFont;
@@ -93,7 +93,7 @@ header {
                 
                 a {
                     padding: 14px 16px;
-                    text-transform: uppercase;
+                    // text-transform: uppercase;
                     font-family: $sharpGroteskMediumFont;
                     font-style: normal;
                     font-weight: 500;
@@ -102,7 +102,7 @@ header {
                 }
                 
                 .sign__in {
-                    padding: 10px 25px;
+                    padding: 11px 26px;
                     text-align: center;
                     background: 
                         linear-gradient($white, $white) padding-box,
@@ -110,11 +110,12 @@ header {
                     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
                     border-radius: 12px;
                     border: 2px solid transparent;
-                    font-family: $sharpGroteskMediumFont;
+                    font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: 500;
-                    font-size: 12px;
-                    text-transform: uppercase;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
+                    // text-transform: uppercase;
                     color: $black;
                 }
 
@@ -140,12 +141,12 @@ header {
                 .menu-li {
                     display: flex;
                     align-items: center;
-                    text-transform: uppercase;
-                    font-family: $sharpGroteskMediumFont;
+                    // text-transform: uppercase;
+                    font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: 500;
-                    font-size: 12px;
-                    line-height: 12px;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
                     cursor: pointer;
                     background: transparent;
 
@@ -249,11 +250,12 @@ header {
                             padding-right: 20px;
                             background-color: $white;
                             text-align: left;
-                            font-family: $sharpGroteskMediumFont;
+                            font-family: $spaceGroteskFont;
                             font-style: normal;
-                            font-weight: 500;
-                            font-size: 11px;
-                            text-transform: uppercase;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 140%;
+                            // text-transform: uppercase;
                             padding-bottom: 26px;
                             border-radius: 10px;
 
@@ -308,12 +310,12 @@ header {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    font-family: $sharpGroteskMediumFont;
+                    font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: 500;
-                    font-size: 12px;
-                    line-height: 12px;
-                    text-transform: uppercase;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
+                    // text-transform: uppercase;
                     color: $black;
                     padding: 18px 0;
                     width: 100%;
@@ -322,6 +324,9 @@ header {
                     }
                     &.sub__nav {
                         padding-left: 20px;
+                        font-weight: bold;
+                        font-size: 14px;
+                        line-height: 140%;
                     }
                     &.team {
                         opacity: 0.4;
@@ -441,11 +446,12 @@ header {
                         padding-right: 20px;
                         background-color: $white;
                         text-align: left;
-                        font-family: $sharpGroteskMediumFont;
+                        font-family: $spaceGroteskFont;
                         font-style: normal;
-                        font-weight: 500;
-                        font-size: 11px;
-                        text-transform: uppercase;
+                        font-weight: 600;
+                        font-size: 16px;
+                        line-height: 20px;
+                        // text-transform: uppercase;
                         padding-bottom: 26px;
                         border-radius: 10px;
     
@@ -502,12 +508,12 @@ header {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    font-family: $sharpGroteskMediumFont;
+                    font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: 500;
-                    font-size: 12px;
-                    line-height: 12px;
-                    text-transform: uppercase;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
+                    // text-transform: uppercase;
                     color: $black;
                     padding: 18px 0;
                     width: 100%;
@@ -516,6 +522,9 @@ header {
                     }
                     &.sub__nav {
                         padding-left: 20px;
+                        font-weight: bold;
+                        font-size: 14px;
+                        line-height: 140%;
                     }
                     &.team {
                         opacity: 0.4;
@@ -529,17 +538,17 @@ header {
                 button.sign__in {
                     margin-top: 20px;
                     width: 100%;
-                    font-family: $sharpGroteskMediumFont;
+                    font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: normal;
-                    font-size: 12px;
-                    line-height: 12px;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    text-transform: uppercase;
+                    // text-transform: uppercase;
                     color: $black;
-                    padding: 15px;
+                    padding: 11px 26px;
                     background: 
                         linear-gradient($white, $white) padding-box,
                         linear-gradient(to right, #BCEB00, #00EAEA) border-box;

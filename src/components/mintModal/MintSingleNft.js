@@ -187,7 +187,7 @@ const MintSingleNft = ({ onClick }) => {
                         <img src={cloudIcon}/>
                         <h5>Drop your file here</h5>
                         <p>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4, max 30mb)</p>
-                        <Button className="light-border-button" onClick={() => inputFile.current.click()}>CHOOSE FILE</Button>
+                        <Button className="light-border-button" onClick={() => inputFile.current.click()}>Choose file</Button>
                         <input type="file" className="inp-disable" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
                     </div>
                     <div className="single-nft-preview">
@@ -275,7 +275,7 @@ const MintSingleNft = ({ onClick }) => {
                         <Input className="inp" placeholder="Enter value" />
                     </div>
                     <img src={delateIcon}/>
-                    <Button className="light-border-button">REMOVE</Button>
+                    <Button className="light-border-button">Remove</Button>
                 </div>
                 <div className="property-add">
                     <h5><img src={addIcon} />Add property</h5>
@@ -284,10 +284,10 @@ const MintSingleNft = ({ onClick }) => {
             <div className="single-nft-buttons">
                 {!savedNFTsID ?
                     <>
-                        <Button className="light-button" onClick={handleMinting}>MINT NOW</Button>
-                        <Button className="light-border-button" onClick={handleSaveForLater}>SAVE FOR LATER</Button>
+                        <Button className="light-button" onClick={handleMinting}>Mint now</Button>
+                        <Button className="light-border-button" onClick={handleSaveForLater}>Save for later</Button>
                     </> :
-                    <Button className="light-button" onClick={handleSaveForLater}>Save Changes</Button>
+                    <Button className="light-button" onClick={handleSaveForLater}>Save changes</Button>
                 }
             </div>
             

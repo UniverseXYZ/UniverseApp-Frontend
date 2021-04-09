@@ -14,7 +14,7 @@ import RewardTiers from './components/auctions/tiers/RewardTiers';
 
 
 const App = () => {
-    const [isWalletConnected, setIsWalletConnected] = useState(false);
+    const [isWalletConnected, setIsWalletConnected] = useState(true);
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
     const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
     const [showModal, setShowModal] = useState(false);

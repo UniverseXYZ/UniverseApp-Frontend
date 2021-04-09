@@ -18,7 +18,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                             </div>
                         </div>
                         <div className='view__auction'>
-                            <Button className='light-button'>View Auction</Button>
+                            <Button className='light-button'>View auction</Button>
                         </div>
                         <div className='auction__img'>
                             <img src={auction.image} alt={auction.title} />

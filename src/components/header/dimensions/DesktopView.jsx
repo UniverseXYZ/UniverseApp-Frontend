@@ -34,15 +34,15 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
             <ul>
                 <li>
                     <button className={`menu-li ${isMintingDropdownOpened ? 'dropdown__opened' : ''}`} onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}>
-                        <span className='nav__link__title'>minting & Auctions</span>
+                        <span className='nav__link__title'>Minting & Auctions</span>
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
                     {isMintingDropdownOpened &&
                         <div ref={ref} className='dropdown minting-drop'>
                             <div className='dropdown__body'>
                                 <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
-                                <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active Auction</button>
-                                <button onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future Auctions</button>
+                                <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsWalletConnected(!isWalletConnected); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active auctions</button>
+                                <button onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future auctions</button>
                             </div>
                         </div>
                     }
@@ -94,10 +94,10 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                                     
                                 </div>
                                 <div className='dropdown__body'>
-                                    <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My Profile</button>
-                                    <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My ntfs</button>
+                                    <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My profile</button>
+                                    <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My NFTs</button>
                                     <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
-                                <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign Out</button>
+                                <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign out</button>
                                 </div>
                             </div>
                         }

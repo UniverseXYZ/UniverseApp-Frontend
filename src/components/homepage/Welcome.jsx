@@ -20,7 +20,7 @@ const Welcome = () => {
                     <div className='links'>
                         <Button className='light-button'>Whitepaper</Button>
                         <Popup
-                            trigger={<button className='light-border-button'>join newsletter</button>}
+                            trigger={<button className='light-border-button'>Join newsletter</button>}
                         >
                             {
                                 (close) => (

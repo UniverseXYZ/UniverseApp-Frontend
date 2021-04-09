@@ -18,7 +18,7 @@ footer{
         li:first-child{
             font-family: $spaceGroteskFont;
             font-style: normal;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 12px;
             line-height: 22px;
             color: rgba(255, 255, 255, 0.4);
@@ -30,12 +30,12 @@ footer{
         }
 
         li{
-            font-family: $sharpGroteskMediumFont;
+            font-family: $spaceGroteskFont;
             font-style: normal;
-            font-weight: 500;
-            font-size: 12px;
-            line-height: 12px;
-            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 140%;
+            // text-transform: uppercase;
             padding-bottom: 9%;
             color: #FFFFFF;
             cursor: pointer ;
@@ -59,6 +59,7 @@ footer{
             }
 
             .subscribe{
+                position: relative;
                 max-width: 350px;
                 width: 100%;
 
@@ -87,9 +88,9 @@ footer{
                 border: 1px solid rgba(0, 0, 0, 0.1);
                 box-sizing: border-box;
                 border-radius: 14px;
-                height: 52px;
+                height: 50px;
                 // width: 68%;
-                width: 90%;
+                width: 100%;
                 padding-left: 3%;
                 padding-bottom: 2px;
 
@@ -103,9 +104,13 @@ footer{
             }
 
             button{
-                margin-left: -147px;
+                // margin-left: -147px;
+                position: absolute;
+                right: 4px;
+                bottom: 4px;
 
                 @include sm{
+                    position: relative;
                     margin-left: 0%;
                     margin-top: 16px;
                     width: 100%;

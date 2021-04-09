@@ -29,7 +29,7 @@ const SubscribePopup = ({ close }) => {
                         <p className='desc'>Don’t miss the updates from us!</p>
                         <div className='subscribe__form'>
                             <input type='email' placeholder='Enter your email' value={email} onChange={(e) => setEmail(e.target.value)} />
-                            <Button className='light-button w-100' onClick={handleSubscribe}>subscribe</Button>
+                            <Button className='light-button w-100' onClick={handleSubscribe}>Subscribe</Button>
                         </div>
                     </> :
                     <>

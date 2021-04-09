@@ -15,7 +15,7 @@ export default ({ onClose }) => {
                         <div className="popup-title"><h4>Are you sure?</h4></div>
                         <div className="popup-text"><p>Are you sure you want to close this?<br/>All the progress will be lost.</p></div>
                         <div className="popup-btns">
-                            <Button onClick={onClose} className="light-button">Discard and Close</Button>
+                            <Button onClick={onClose} className="light-button">Discard and close</Button>
                             <Button className="light-border-button" onClick={close}>Continue editing</Button>
                         </div>
                     </div>
