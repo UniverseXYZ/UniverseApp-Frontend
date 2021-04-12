@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {NotificationManager} from 'react-notifications';
+import {Animated} from "react-animated-css";
 import Popup from "reactjs-popup"
 import Icon from '../../../assets/images/icon1.svg';
 import copyIcon from '../../../assets/images/copy.svg';
@@ -38,13 +39,15 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
                     {isMintingDropdownOpened &&
-                        <div ref={ref} className='dropdown minting-drop'>
-                            <div className='dropdown__body'>
-                                <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
-                                <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active auction</button>
-                                <button onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future auctions</button>
+                        <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                            <div ref={ref} className='dropdown minting-drop'>
+                                <div className='dropdown__body'>
+                                    <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
+                                    <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active auction</button>
+                                    <button onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future auctions</button>
+                                </div>
                             </div>
-                        </div>
+                        </Animated>
                     }
                 </li>
                 <li>
@@ -53,12 +56,14 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
                     {isAboutDropdownOpened &&
-                        <div ref={ref} className='dropdown minting-drop'>
-                            <div className='dropdown__body'>
-                                <button onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened) }}>Whitepaper</button>
-                                <button className="team" onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened)}}>Team</button>
+                        <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                            <div ref={ref} className='dropdown minting-drop'>
+                                <div className='dropdown__body'>
+                                    <button onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened) }}>Whitepaper</button>
+                                    <button className="team" onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened)}}>Team</button>
+                                </div>
                             </div>
-                        </div>
+                        </Animated>
                     }
                 </li>
                 {isWalletConnected ?
@@ -70,36 +75,38 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                         </button>
 
                         {isAccountDropdownOpened &&
-                            <div ref={ref} className='dropdown drop-account'>
-                                <div className='dropdown__header'>
-                                    <div className="copy-div">
-                                        <img className="icon-img" src={Icon} alt='icon' />
-                                        <div className='ethereum__address'>{ethereumAddress}</div>
-                                        <div className='copy' title='Copy to clipboard'>
-                                            <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
-                                                <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
-                                            </CopyToClipboard>
+                            <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                                <div ref={ref} className='dropdown drop-account'>
+                                    <div className='dropdown__header'>
+                                        <div className="copy-div">
+                                            <img className="icon-img" src={Icon} alt='icon' />
+                                            <div className='ethereum__address'>{ethereumAddress}</div>
+                                            <div className='copy' title='Copy to clipboard'>
+                                                <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
+                                                    <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
+                                                </CopyToClipboard>
+                                            </div>
                                         </div>
+                                        <div className="group1">
+                                            <img src={Group1} alt="ETH" />
+                                            <span className="first-span">6,24 ETH</span>
+                                            <span className="second-span">$10,554</span>
+                                        </div>
+                                        <div className="group2">
+                                            <img src={Group2} alt="WETH" />
+                                            <span className="first-span">6,24 WETH</span>
+                                            <span className="second-span">$10,554</span>
+                                        </div>
+                                        
                                     </div>
-                                    <div className="group1">
-                                        <img src={Group1} alt="ETH" />
-                                        <span className="first-span">6,24 ETH</span>
-                                        <span className="second-span">$10,554</span>
+                                    <div className='dropdown__body'>
+                                        <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My profile</button>
+                                        <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My NFTs</button>
+                                        <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
+                                        <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign out</button>
                                     </div>
-                                    <div className="group2">
-                                        <img src={Group2} alt="WETH" />
-                                        <span className="first-span">6,24 WETH</span>
-                                        <span className="second-span">$10,554</span>
-                                    </div>
-                                    
                                 </div>
-                                <div className='dropdown__body'>
-                                    <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My profile</button>
-                                    <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My NFTs</button>
-                                    <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
-                                    <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign out</button>
-                                </div>
-                            </div>
+                            </Animated>
                         }
                     </li> :
                     <li>

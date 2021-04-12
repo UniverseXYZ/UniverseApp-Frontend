@@ -2,7 +2,8 @@ import { useState, useEffect, useContext, useRef } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {NotificationManager} from 'react-notifications';
 import { Link, useHistory } from 'react-router-dom';
-import Popup from "reactjs-popup"
+import Popup from "reactjs-popup";
+import {Animated} from "react-animated-css";
 import hamburgerIcon from '../../../assets/images/hamburger.svg';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import arrowDown from '../../../assets/images/arrow-down.svg';
@@ -55,6 +56,7 @@ const TabletView = (props) => {
                 <div className='wallet__connected__tablet'>
                 <img className="account__icon" src={accountIcon} onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setShowMenu(false) }} alt='Account icon' />
                     {isAccountDropdownOpened &&
+                    <Animated animationIn="bounceIn" animationOut="zoomOutDown">
                         <div ref={ref} className='dropdown drop-account'>
                             <div className='dropdown__header'>
                                 <div className="copy-div">
@@ -85,6 +87,7 @@ const TabletView = (props) => {
                                 <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign out</button>
                             </div>
                         </div>
+                    </Animated>
                     }
                 </div>
             }

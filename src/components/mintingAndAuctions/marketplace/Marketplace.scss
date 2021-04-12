@@ -160,34 +160,34 @@
                                     font-weight: 600;
                                     font-size: 16px;
                                     line-height: 20px;
-                                    // text-transform: uppercase;
                                     color: $black;
                                 }
                                 .chevron__down {
                                     width: 14px;
                                     transition: .5s ease;
                                 }
-                                ul {
+                                .sorting__dropdown {
                                     position: absolute;
                                     top: 55px;
-                                    background: $white;
-                                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                                    border-radius: 12px;
                                     left: 0;
                                     width: 100%;
                                     z-index: 1;
-
-                                    li {
-                                        padding: 20px;
-                                        font-family: $spaceGroteskFont;
-                                        font-style: normal;
-                                        font-weight: 600;
-                                        font-size: 16px;
-                                        line-height: 20px;
-                                        // text-transform: uppercase;
-                                        color: $black;
-                                        &:first-child {
-                                            border-bottom: 2px solid #E5E5E5;
+                                    ul {
+                                        background: $white;
+                                        box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                                        border-radius: 12px;
+    
+                                        li {
+                                            padding: 20px;
+                                            font-family: $spaceGroteskFont;
+                                            font-style: normal;
+                                            font-weight: 600;
+                                            font-size: 16px;
+                                            line-height: 20px;
+                                            color: $black;
+                                            &:first-child {
+                                                border-bottom: 2px solid #E5E5E5;
+                                            }
                                         }
                                     }
                                 }
@@ -303,6 +303,7 @@
                                 }
                             }
                             .auction__img {
+                                grid-column: 1/2;
                                 min-width: 200px;
                                 min-height: 200px;
                                 img {
@@ -319,6 +320,7 @@
                             .auction__details {
                                 display: flex;
                                 flex-wrap: wrap;
+                                grid-column: 2/3;
                                 > div {
                                     width: 100%;
                                 }
@@ -415,39 +417,39 @@
                                     }
                                 }
                                 .selected__item {
-                                    font-family: $sharpGroteskMediumFont;
+                                    font-family: $spaceGroteskFont;
                                     font-style: normal;
                                     font-weight: 600;
                                     font-size: 16px;
                                     line-height: 20px;
-                                    // text-transform: uppercase;
                                     color: $black;
                                 }
                                 .chevron__down {
                                     width: 14px;
                                     transition: .5s ease;
                                 }
-                                ul {
+                                .sorting__dropdown {
                                     position: absolute;
                                     top: 55px;
-                                    background: $white;
-                                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                                    border-radius: 12px;
                                     left: 0;
                                     width: 100%;
                                     z-index: 1;
-
-                                    li {
-                                        padding: 20px;
-                                        font-family: $sharpGroteskMediumFont;
-                                        font-style: normal;
-                                        font-weight: 600;
-                                        font-size: 16px;
-                                        line-height: 20px;
-                                        // text-transform: uppercase;
-                                        color: $black;
-                                        &:first-child {
-                                            border-bottom: 2px solid #E5E5E5;
+                                    ul {
+                                        background: $white;
+                                        box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                                        border-radius: 12px;
+    
+                                        li {
+                                            padding: 20px;
+                                            font-family: $spaceGroteskFont;
+                                            font-style: normal;
+                                            font-weight: 600;
+                                            font-size: 16px;
+                                            line-height: 20px;
+                                            color: $black;
+                                            &:first-child {
+                                                border-bottom: 2px solid #E5E5E5;
+                                            }
                                         }
                                     }
                                 }

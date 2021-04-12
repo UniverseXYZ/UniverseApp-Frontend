@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import {AnimatedOnScroll} from "react-animated-css-onscroll";
 import nfuSocialNetworkIcon from '../../assets/images/nfu-social-network.svg';
 import nfuAuctionsIcon from '../../assets/images/nfu-auctions.svg';
 import nfuMarketIcon from '../../assets/images/nfu-market.svg';
@@ -80,9 +81,11 @@ const NonFungibleUniverse = () => {
                                     </div>
                                 }
                                 <div style={{ display: nfu.loaded ? 'block' : 'none' }}>
-                                    <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
-                                    <h2 className='title'>{nfu.title}</h2>
-                                    <p className='desc'>{nfu.description}</p>
+                                    <AnimatedOnScroll animationIn="fadeInUp">
+                                        <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
+                                        <h2 className='title'>{nfu.title}</h2>
+                                        <p className='desc'>{nfu.description}</p>
+                                    </AnimatedOnScroll>
                                 </div>
                             </div>
                         )

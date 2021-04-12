@@ -81,7 +81,6 @@ header {
             align-items: center;
 
             li {
-                // text-transform: uppercase; 
                 margin-left: 30px;
                 position: relative;
                 font-family: $sharpGroteskMediumFont;
@@ -89,11 +88,9 @@ header {
                 font-weight: 500;
                 font-size: 12px;
                 line-height: 12px;
-                cursor: pointer;
                 
                 a {
                     padding: 14px 16px;
-                    // text-transform: uppercase;
                     font-family: $sharpGroteskMediumFont;
                     font-style: normal;
                     font-weight: 500;
@@ -136,12 +133,14 @@ header {
 
                 .team{
                     opacity: 0.4;
+                    border-top: 2px solid rgba(0, 0, 0, 0.1);
+                    border-top-left-radius: unset!important;
+                    border-top-right-radius: unset!important;
                 }
                 
                 .menu-li {
                     display: flex;
                     align-items: center;
-                    // text-transform: uppercase;
                     font-family: $spaceGroteskFont;
                     font-style: normal;
                     font-weight: 600;
@@ -173,7 +172,7 @@ header {
                 .dropdown {
                     position: absolute;
                     right: 0;
-                    top: 50px;
+                    top: 30px;
                     width: 280px;
                     background: $white;
                     border-radius: 10px;
@@ -315,7 +314,6 @@ header {
                     font-weight: 600;
                     font-size: 16px;
                     line-height: 20px;
-                    // text-transform: uppercase;
                     color: $black;
                     padding: 18px 0;
                     width: 100%;
@@ -369,7 +367,7 @@ header {
             .dropdown {
                 position: absolute;
                 right: 0;
-                top: 50px;
+                top: 30px;
                 background: $white;
                 border-radius: 10px;
                 width: 280px;
@@ -648,7 +646,7 @@ header {
             .dropdown {
                 position: absolute;
                 right: 0;
-                top: 50px;
+                top: 30px;
                 background: $white;
                 border-radius: 10px;
                 width: 280px;
