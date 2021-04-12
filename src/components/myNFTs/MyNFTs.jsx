@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import './Nfts.scss';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';

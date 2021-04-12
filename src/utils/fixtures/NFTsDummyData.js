@@ -1,6 +1,6 @@
-import testVideo from '../assets/videos/file_example_MP4_480_1_5MG.mp4';
-import testImage from '../assets/images/ntf3.svg';
-import testCollectionAvatar from '../assets/images/test-collection-avatar.svg';
+import testVideo from '../../assets/images/file_example_MP4_480_1_5MG.mp4';
+import testImage from '../../assets/images/ntf3.svg';
+import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
 import uuid from 'react-uuid';
 
 export const PLACEHOLDER_NFTS = [

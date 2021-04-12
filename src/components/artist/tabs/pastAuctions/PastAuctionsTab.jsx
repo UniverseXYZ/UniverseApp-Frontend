@@ -2,7 +2,7 @@ import {useState} from 'react'
 import Pagination from '../../../pagination/Pagionation';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 import PastAuctionsList from './PastAuctionsList';
-import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../dummyData/PastAuctionsDummyData';
+import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../utils/fixtures/PastAuctionsDummyData';
 
 const PastAuctionsTab = () => {
     const [offset, setOffset] = useState(0);

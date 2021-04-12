@@ -1,6 +1,6 @@
 import './Auctions.scss';
 import { useContext, useEffect, } from 'react';
-import { AUCTIONS_DATA } from '../../auctionsData/Data';
+import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import FutureAuctions from './auctionsTabs/FutureAuctions';

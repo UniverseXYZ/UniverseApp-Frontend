@@ -2,7 +2,7 @@ import {useState} from 'react'
 import Pagination from '../../../pagination/Pagionation';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 import ActiveAuctionsList from './ActiveAuctionsList';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../dummyData/ActiveAuctionsDummyData';
+import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../utils/fixtures/ActiveAuctionsDummyData';
 
 const ActiveAuctionsTab = () => {
     const [offset, setOffset] = useState(0);

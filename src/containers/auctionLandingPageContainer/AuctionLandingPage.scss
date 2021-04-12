@@ -1,0 +1,100 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.auction__landing__page {
+    .auction__details__section {
+        padding: 30px 60px 100px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        &__container {
+            max-width: 1110px;
+            margin: 0 auto;
+
+            button.slick-arrow {
+                background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 1px solid transparent;
+                height: 42px;
+                width: 42px;
+                border-radius: 12px;
+
+                &::before {
+                    display: none;
+                }
+
+                &.slick-prev {
+                    position: absolute;
+                    left: -50px;
+                }
+                &.slick-next {
+                    position: absolute;
+                    right: -50px;
+                }
+
+                &.slick-disabled {
+                    background: transparent;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                }
+            }
+            .carousel__auction__container {
+                &.selected {
+                    .carousel__auction {
+                        background: 
+                            linear-gradient($white, $white) padding-box,
+                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        border: 2px solid transparent;
+
+                        &__info {
+                            h4 {
+                                color: $black!important;
+                            }
+                            p {
+                                color: rgba(0, 0, 0, 0.6)!important;
+                            }
+                        }
+                    }
+                }
+                .carousel__auction {
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    margin: 0 10px;
+                    cursor: pointer;
+    
+                    &__image {
+                        height: 40px;
+                        width: 40px;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 4px;
+                        }
+                    }
+                    &__info {
+                        h4 {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 160%;
+                        }
+                        p {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            line-height: 150%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

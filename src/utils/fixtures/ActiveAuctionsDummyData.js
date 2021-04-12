@@ -1,11 +1,13 @@
-import artistAvatar from '../assets/images/artist-avatar.svg';
-import auctionImg from '../assets/images/ntf5.svg';
+import artistAvatar from '../../assets/images/artist-avatar.svg';
+import auctionImg from '../../assets/images/ntf5.svg';
+import auctionBackgroundImage from '../../assets/images/auction-bg-image.png';
 
 export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     {
         id: 1,
-        title: 'Auction Title',
+        title: 'Auction1',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -19,8 +21,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 2,
-        title: 'Auction Title',
+        title: 'Auction2',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -34,8 +37,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 3,
-        title: 'Auction Title',
+        title: 'Auction3',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -49,8 +53,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 4,
-        title: 'Auction Title',
+        title: 'Auction4',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -64,8 +69,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 5,
-        title: 'Auction Title',
+        title: 'Auction5',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -79,8 +85,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 6,
-        title: 'Auction Title',
+        title: 'Auction6',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -94,8 +101,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 7,
-        title: 'Auction Title',
+        title: 'Auction7',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -109,8 +117,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 8,
-        title: 'Auction Title',
+        title: 'Auction8',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -124,8 +133,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 9,
-        title: 'Auction Title',
+        title: 'Auction9',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -139,8 +149,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 10,
-        title: 'Auction Title',
+        title: 'Auction10',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -154,8 +165,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 11,
-        title: 'Auction Title',
+        title: 'Auction11',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -169,8 +181,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 12,
-        title: 'Auction Title',
+        title: 'Auction12',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -184,8 +197,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 13,
-        title: 'Auction Title',
+        title: 'Auction13',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -199,8 +213,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 14,
-        title: 'Auction Title',
+        title: 'Auction14',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -214,8 +229,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 15,
-        title: 'Auction Title',
+        title: 'Auction15',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -229,8 +245,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 16,
-        title: 'Auction Title',
+        title: 'Auction16',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -244,8 +261,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 17,
-        title: 'Auction Title',
+        title: 'Auction17',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -259,8 +277,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 18,
-        title: 'Auction Title',
+        title: 'Auction18',
         image: auctionImg,
+        background: auctionBackgroundImage,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -274,8 +293,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 19,
-        title: 'Auction Title',
+        title: 'Auction19',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',
@@ -289,8 +309,9 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     {
         id: 20,
-        title: 'Auction Title',
+        title: 'Auction20',
         image: auctionImg,
+        background: null,
         artist: {
             id: 1,
             name: 'Justin 3LAU',

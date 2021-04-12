@@ -1,6 +1,4 @@
 import {useEffect, useState} from 'react'
-import { useLocation } from 'react-router'
-import { PLACEHOLDER_ARTISTS } from '../../dummyData/ArtistDummyData';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {Animated} from "react-animated-css";
 import {NotificationManager} from 'react-notifications';
@@ -9,9 +7,7 @@ import instagramIcon from '../../assets/images/instagram-outlined.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import Skeleton from 'react-loading-skeleton';
 
-const ArtistDetails = () => {
-    const location = useLocation();
-    const artist = PLACEHOLDER_ARTISTS.filter(artist => artist.id === location.state.id)[0];
+const ArtistDetails = ({artist}) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

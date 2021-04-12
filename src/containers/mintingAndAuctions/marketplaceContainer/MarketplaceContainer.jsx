@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import '../../components/mintingAndAuctions/marketplace/Marketplace.scss';
-import CreateYourAuction from '../../components/mintingAndAuctions/marketplace/tabs/CreateYourAuction';
-import Tabs from '../../components/mintingAndAuctions/marketplace/tabs/Tabs';
-import Welcome from '../../components/mintingAndAuctions/marketplace/Welcome';
+import './Marketplace.scss';
+import CreateYourAuction from '../../../components/mintingAndAuctions/marketplace/tabs/CreateYourAuction';
+import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs';
+import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome';
 
-const Marketplace = () => {
+const MarketplaceContainer = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -21,4 +21,4 @@ const Marketplace = () => {
     )
 }
 
-export default Marketplace;
+export default MarketplaceContainer;
