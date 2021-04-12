@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {Animated} from "react-animated-css";
 import {NotificationManager} from 'react-notifications';
 import AppContext from '../../../ContextAPI';
 import hamburgerIcon from '../../../assets/images/hamburger.svg';
@@ -62,38 +63,40 @@ const MobileView = (props) => {
             </button>
             {isWalletConnected &&
                 <div className='wallet__connected__tablet'>
-                <img className="account__icon" src={accountIcon} onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setShowMenu(false) }} alt='Account icon' />
+                    <img className="account__icon" src={accountIcon} onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setShowMenu(false) }} alt='Account icon' />
                     {isAccountDropdownOpened &&
-                        <div ref={ref} className='dropdown drop-account'>
-                            <div className='dropdown__header'>
-                                <div className="copy-div">
-                                    <img className="icon-img" src={accountIcon} alt='icon' />
-                                    <div className='ethereum__address'>{ethereumAddress}</div>
-                                    <div className='copy' title='Copy to clipboard'>
-                                        <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
-                                            <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
-                                        </CopyToClipboard>
+                        <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                            <div ref={ref} className='dropdown drop-account'>
+                                <div className='dropdown__header'>
+                                    <div className="copy-div">
+                                        <img className="icon-img" src={accountIcon} alt='icon' />
+                                        <div className='ethereum__address'>{ethereumAddress}</div>
+                                        <div className='copy' title='Copy to clipboard'>
+                                            <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
+                                                <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
+                                            </CopyToClipboard>
+                                        </div>
                                     </div>
+                                    <div className="group1">
+                                        <img src={Group1} alt="ETH" />
+                                        <span className="first-span">6,24 ETH</span>
+                                        <span className="second-span">$10,554</span>
+                                    </div>
+                                    <div className="group2">
+                                        <img src={Group2} alt="WETH" />
+                                        <span className="first-span">6,24 WETH</span>
+                                        <span className="second-span">$10,554</span>
+                                    </div>
+                                    
                                 </div>
-                                <div className="group1">
-                                    <img src={Group1} alt="ETH" />
-                                    <span className="first-span">6,24 ETH</span>
-                                    <span className="second-span">$10,554</span>
+                                <div className='dropdown__body'>
+                                    <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My profile</button>
+                                    <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My NFTs</button>
+                                    <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
+                                    <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign out</button>
                                 </div>
-                                <div className="group2">
-                                    <img src={Group2} alt="WETH" />
-                                    <span className="first-span">6,24 WETH</span>
-                                    <span className="second-span">$10,554</span>
-                                </div>
-                                
                             </div>
-                            <div className='dropdown__body'>
-                                <button onClick={() => { history.push('/my-account'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My profile</button>
-                                <button onClick={() => { history.push('/my-nfts'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My NFTs</button>
-                                <button onClick={() => { history.push('/my-auctions'); setIsAccountDropdownOpened(!isAccountDropdownOpened) }}>My auctions</button>
-                                <button className="signOut" onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setIsWalletConnected(!isWalletConnected) }}>Sign out</button>
-                            </div>
-                        </div>
+                        </Animated>
                     }
                 </div>
             }

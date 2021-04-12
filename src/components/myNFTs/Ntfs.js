@@ -83,12 +83,12 @@ const MyNFTs = () => {
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         document.title = 'Universe Minting - My NFTs'
         return () => { document.title = 'Universe Minting' };
     }, [])
 
     useEffect(() => {
-        console.log(myNFTs)
         setFilteredNFTs(myNFTs);
     }, [])
         
@@ -116,7 +116,7 @@ const MyNFTs = () => {
                 <>
                     <div className='mynfts__page__header'>
                         <h1 className='title'>My NFTs</h1>
-                        <div>
+                        <div className='create__mint__btns'>
                             {selectedTabIndex === 1 &&
                                 <button className='mint__btn' onClick={handleMintSelected} disabled={checkSelectedSavedNfts()}>Mint selected</button>
                             }

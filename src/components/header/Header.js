@@ -41,10 +41,23 @@ const Header = (props) => {
                 height: window.innerHeight,
             });
         }
-        window.addEventListener("resize", handleResize);
-        handleResize();
+        function handleScroll() {
+            if(window.scrollY > 100) {
+                document.querySelector('header').style.position = 'fixed';
+            } else {
+                document.querySelector('header').style.position = 'relative';
+            }
+        }
 
-        return () => window.removeEventListener("resize", handleResize);
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("scroll", handleScroll);
+        handleResize();
+        handleScroll();
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("scroll", handleScroll);
+        }
     }, []);
 
     useEffect(() => {

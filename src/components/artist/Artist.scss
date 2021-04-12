@@ -123,32 +123,64 @@
             margin: 0 auto;
 
             .tabs__wrapper {
-                overflow-x: auto;
+                position: relative;
                 margin-bottom: 30px;
                 .tabs {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    gap: 40px;
-                    min-width: 600px;
-    
-                    button {
-                        font-family: $sharpGroteskMediumFont;
-                        font-style: normal;
-                        font-weight: 500;
-                        font-size: 12px;
-                        line-height: 16px;
-                        text-transform: uppercase;
-                        color: rgba(0, 0, 0, 0.4);
-                        padding-bottom: 10px;
-                        background-color: transparent;
-                        &.active {
-                            color: $black;
-                            border-bottom: 1px solid $black;
+                    overflow-x: auto;
+                    .tab_items {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        gap: 40px;
+                        min-width: 460px;
+        
+                        button {
+                            font-family: $sharpGroteskMediumFont;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 12px;
+                            line-height: 16px;
+                            text-transform: uppercase;
+                            color: rgba(0, 0, 0, 0.4);
+                            padding-bottom: 10px;
+                            padding-top: 7px;
+                            background-color: transparent;
+                            &.active {
+                                color: $black;
+                                border-bottom: 1px solid $black;
+                            }
+                            @include sm {
+                                font-size: 11px;
+                            }
                         }
-                        @include sm {
-                            font-size: 11px;
+                        @include md {
+                            gap: 15px;
                         }
+                    }
+                }
+                .tab__right__arrow {
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    justify-content: flex-end;
+                    pointer-events: none;
+                    img {
+                        pointer-events: all;
+                    }
+                }
+                .tab__left__arrow {
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    justify-content: flex-end;
+                    transform: rotate(180deg);
+                    pointer-events: none;
+                    img {
+                        pointer-events: all;
                     }
                 }
             }

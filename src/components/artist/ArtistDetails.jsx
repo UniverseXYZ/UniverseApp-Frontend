@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import { useLocation } from 'react-router'
 import { PLACEHOLDER_ARTISTS } from '../../containers/artist/ArtistDummyData';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {Animated} from "react-animated-css";
 import {NotificationManager} from 'react-notifications';
 import twitterIcon from '../../assets/images/icons_twitter.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
@@ -23,30 +24,32 @@ const ArtistDetails = () => {
     return (
         <div className='artist__details__section'>
             {!loading ? 
-                <div className='artist__details__section__container'>
-                    <div className='avatar'>
-                        <img src={artist.avatar} alt={artist.name} />
-                        <h2 className='show__on__mobile'>{artist.name}</h2>
-                    </div>
-                    <div className='info'>
-                        <h1 className='title'>{artist.name}</h1>
-                        <p className='desc'>{artist.about}</p>
-                        <div className='social__links'>
-                            <a href={artist.instagramUrl} target='_blank'>
-                                <img src={instagramIcon} alt='Instagram' />
-                            </a>
-                            <a href={artist.twitterUrl} target='_blank'>
-                                <img src={twitterIcon} alt='Twitter' />
-                            </a>
-                            <CopyToClipboard text={artist.address} onCopy={() => NotificationManager.success('Copied!')}>
-                                <div className='copy__to__clipboard'>
-                                    <img src={copyIcon} alt='Copy to clipboard' />
-                                    <span>Copy URL</span>
-                                </div>
-                            </CopyToClipboard>
+                <Animated animationIn="fadeInUp" animationOut="fadeOutUp" isVisible={true}>
+                    <div className='artist__details__section__container'>
+                            <div className='avatar'>
+                                <img src={artist.avatar} alt={artist.name} />
+                                <h2 className='show__on__mobile'>{artist.name}</h2>
+                            </div>
+                        <div className='info'>
+                            <h1 className='title'>{artist.name}</h1>
+                            <p className='desc'>{artist.about}</p>
+                            <div className='social__links'>
+                                <a href={artist.instagramUrl} target='_blank'>
+                                    <img src={instagramIcon} alt='Instagram' />
+                                </a>
+                                <a href={artist.twitterUrl} target='_blank'>
+                                    <img src={twitterIcon} alt='Twitter' />
+                                </a>
+                                <CopyToClipboard text={artist.address} onCopy={() => NotificationManager.success('Copied!')}>
+                                    <div className='copy__to__clipboard'>
+                                        <img src={copyIcon} alt='Copy to clipboard' />
+                                        <span>Copy URL</span>
+                                    </div>
+                                </CopyToClipboard>
+                            </div>
                         </div>
-                    </div>
-                </div> :
+                    </div> 
+                </Animated> :
                 <div className='artist__details__section__container'>
                     <div className='avatar'>
                         <Skeleton height={window.screen.width > 576 ? 280 : 90} width={window.screen.width > 576 ? 280 : 90} circle={true} />

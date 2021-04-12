@@ -1,82 +1,117 @@
+import {useEffect, useState} from 'react';
 import uuid from "react-uuid";
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import Skeleton from 'react-loading-skeleton';
+import {Animated} from "react-animated-css";
 
 const Lists = ({ data, perPage, offset }) => {
     const sliceData = data.slice(offset, offset + perPage);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Here need to get all nfts for logged in user
+        let timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [])
 
     return (
         <div className='nfts__lists'>
             {sliceData.map(nft => {
-                return (
-                    <div className='nft__box' key={uuid()}>
-                        <div className='nft__box__image'>
-                            {nft.previewImage.type === 'video/mp4' &&
-                                <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
-                                    <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            }
-                            {nft.previewImage.type === 'audio/mpeg' &&
-                                <img className="preview-image" src={mp3Icon} alt={nft.name} />
-                            }
-                            {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' &&
-                                <img className="preview-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
-                            }
-                            {nft.previewImage.type === 'video/mp4' &&
-                                <img className='video__icon' src={videoIcon} alt='Video Icon' />
+                return !loading ? (
+                    <Animated animationIn="fadeInUp" key={uuid()}>
+                        <div className='nft__box'>
+                            <div className='nft__box__image'>
+                                {nft.previewImage.type === 'video/mp4' &&
+                                    <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
+                                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                }
+                                {nft.previewImage.type === 'audio/mpeg' &&
+                                    <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                                }
+                                {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' &&
+                                    <img className="preview-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                }
+                                {nft.previewImage.type === 'video/mp4' &&
+                                    <img className='video__icon' src={videoIcon} alt='Video Icon' />
+                                }
+                            </div>
+                            <div className='nft__box__name'>
+                                <h3>{nft.name}</h3>
+                                {nft.type === 'single' ?
+                                    nft.generatedEditions.length > 1 ?
+                                        <div className='collection__count'>
+                                            {`x${nft.generatedEditions.length}`}
+                                            <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
+                                                {nft.generatedEditions.map(edition => {
+                                                    return (
+                                                        <div key={edition}>{`#${edition}`}</div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div> :
+                                    <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p> : <></>
+                                }
+                            </div>
+                            <div className='nft__box__footer'>
+                                <div className='collection__details'>
+                                    {nft.type === 'collection' &&
+                                        <>
+                                            {typeof nft.collectionAvatar === 'string' && nft.collectionAvatar.startsWith('#') ? 
+                                                <div className='random__bg__color' style={{ backgroundColor: nft.collectionAvatar }}>{nft.collectionName.charAt(0)}</div> :
+                                                <img src={URL.createObjectURL(nft.collectionAvatar)} alt={nft.collectionName} />
+                                            }
+                                            <span>{nft.collectionName}</span>
+                                        </>
+                                    }
+                                </div>
+                                {nft.type === 'collection' ?
+                                    nft.generatedEditions.length > 1 ?
+                                        <div className='collection__count'>
+                                            {`x${nft.generatedEditions.length}`}
+                                            <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
+                                                {nft.generatedEditions.map(edition => {
+                                                    return (
+                                                        <div key={edition}>{`#${edition}`}</div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div> :
+                                    <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p> : <></>
+                                }
+                            </div>
+                            {nft.generatedEditions.length > 1 &&
+                                <>
+                                    <div className='nft__box__highlight__one'></div>
+                                    <div className='nft__box__highlight__two'></div>
+                                </>
                             }
                         </div>
+
+                    </Animated>
+                ) : (
+                    <div className='nft__box' key={uuid()}>
+                        <div className='nft__box__image'>
+                            <Skeleton height={200} />
+                        </div>
                         <div className='nft__box__name'>
-                            <h3>{nft.name}</h3>
-                            {nft.type === 'single' ?
-                                nft.generatedEditions.length > 1 ?
-                                    <div className='collection__count'>
-                                        {`x${nft.generatedEditions.length}`}
-                                        <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
-                                            {nft.generatedEditions.map(edition => {
-                                                return (
-                                                    <div key={edition}>{`#${edition}`}</div>
-                                                )
-                                            })}
-                                        </div>
-                                    </div> :
-                                <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p> : <></>
-                            }
+                            <h3><Skeleton height={20} width={100} /></h3>
                         </div>
                         <div className='nft__box__footer'>
                             <div className='collection__details'>
                                 {nft.type === 'collection' &&
                                     <>
-                                        {typeof nft.collectionAvatar === 'string' && nft.collectionAvatar.startsWith('#') ? 
-                                            <div className='random__bg__color' style={{ backgroundColor: nft.collectionAvatar }}>{nft.collectionName.charAt(0)}</div> :
-                                            <img src={URL.createObjectURL(nft.collectionAvatar)} alt={nft.collectionName} />
-                                        }
-                                        <span>{nft.collectionName}</span>
+                                        <Skeleton circle={true} width={20} height={20} />
+                                        <Skeleton width={100} />
                                     </>
                                 }
                             </div>
-                            {nft.type === 'collection' ?
-                                nft.generatedEditions.length > 1 ?
-                                    <div className='collection__count'>
-                                        {`x${nft.generatedEditions.length}`}
-                                        <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
-                                            {nft.generatedEditions.map(edition => {
-                                                return (
-                                                    <div key={edition}>{`#${edition}`}</div>
-                                                )
-                                            })}
-                                        </div>
-                                    </div> :
-                                <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p> : <></>
-                            }
                         </div>
-                        {nft.generatedEditions.length > 1 &&
-                            <>
-                                <div className='nft__box__highlight__one'></div>
-                                <div className='nft__box__highlight__two'></div>
-                            </>
-                        }
                     </div>
                 )
             })}
