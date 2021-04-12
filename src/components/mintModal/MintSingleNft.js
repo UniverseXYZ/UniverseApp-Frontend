@@ -256,7 +256,7 @@ const MintSingleNft = ({ onClick }) => {
                     <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon(false)} onMouseLeave={() => setHideIcon(true)} />
                 </h5>
                 <div hidden={hideIcon} className="info-text">
-                    <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead</p>                    
+                    <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead.</p>                    
                 </div>    
                 <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
             </div>
@@ -278,7 +278,7 @@ const MintSingleNft = ({ onClick }) => {
                     <Button className="light-border-button">Remove</Button>
                 </div>
                 <div className="property-add">
-                    <h5><img src={addIcon} />Add property</h5>
+                    <h5><img src={addIcon} />Add Property</h5>
                 </div>
             </div>
             <div className="single-nft-buttons">
