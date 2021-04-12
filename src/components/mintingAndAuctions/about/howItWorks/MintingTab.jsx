@@ -24,7 +24,7 @@ const MintingTab = () => {
                             </div>
                         </div>
                         {isFirstAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         Create a single NFT or mint a large collection that you have been creating for months. Our tools give you the easy formating and editing options to easily curate a perfect collection before you launch. Eliminate mistakes with our review process.
@@ -47,7 +47,7 @@ const MintingTab = () => {
                             </div>
                         </div>
                         {isSecondAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         NFTs are empowering because they do not limit any type of artists, files are not limited and you can turn a painting, a video, a song, a beat, a sound, a picture, a drawing,  a gif or anything that your creative mind can think of into an NFT. The possibilities are endless with art and the Universe. 
@@ -70,7 +70,7 @@ const MintingTab = () => {
                             </div>
                         </div>
                         {isThirdAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         This is where the magic happens. Mint NFTs instantly or save them for later for a collection or maybe it’s just not ready yet.
