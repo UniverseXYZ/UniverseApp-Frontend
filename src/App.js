@@ -13,7 +13,12 @@ import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/About';
 import Marketplace from './containers/mintingAndAuctions/Marketplace';
 import RewardTiers from './components/auctions/tiers/RewardTiers';
+<<<<<<< Updated upstream
 import Artist from './containers/artist/Artist';
+=======
+import CreateTiers from './components/auctions/tiers/CreateTiers';
+
+>>>>>>> Stashed changes
 
 
 const App = () => {
@@ -75,6 +80,11 @@ const App = () => {
                     <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
                     <Route exact path="/artist/:name" children={<Artist />} />
 
+                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
+                    <Route exact path="/my-account" component={() => <MyAccount />} />
+                    <Route exact path="/my-auctions" component={() => <Auctions />} />
+                    <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
+                    <Route exact path="/create-tiers" component={() => <CreateTiers />} />                    
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
                 <NotificationContainer/>

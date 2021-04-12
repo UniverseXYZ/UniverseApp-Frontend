@@ -217,24 +217,12 @@
 
         .step-2{
             .circle{
-                // z-index: 9999;
-                background: 
-                    linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                border: 1px solid transparent;
-
+                
                 .hz-line{
                     z-index: 2;
                     border: 1px solid rgba(0, 0, 0, 0.1);
-                    width: 360px;
+                    width: 365px;
                 }
-            }
-        }
-        .step-3{
-            .circle{
-                // z-index: 9999;
-                background: $white;
-                border: 1px solid rgba(0, 0, 0, 0.1);
             }
         }
     }

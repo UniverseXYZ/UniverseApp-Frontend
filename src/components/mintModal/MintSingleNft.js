@@ -239,7 +239,6 @@ const MintSingleNft = ({ onClick }) => {
                             <img className="default-image" src={defaultImage} alt='Preview' />}
                         </div>
                     </div> 
-
                 </div>
             </div>
             {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
@@ -265,20 +264,23 @@ const MintSingleNft = ({ onClick }) => {
                 <div hidden={hideIcon1} className="properties-info-text">
                     <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
                 </div>
-                <div className="properties">
-                    <div className="property-name">
-                        <h5>Property name</h5>
-                        <Input className="inp" placeholder="Enter NFT property" />
-                    </div>
-                    <div className="property-value">
-                        <h5>Value</h5>
-                        <Input className="inp" placeholder="Enter value" />
-                    </div>
-                    <img src={delateIcon}/>
-                    <Button className="light-border-button">Remove</Button>
+                <div className="single-nft-editions">
+                    <h5>Number of editions
+                        <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon(false)} onMouseLeave={() => setHideIcon(true)} />
+                    </h5>
+                    <div hidden={hideIcon} className="info-text">
+                        <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead</p>
+                    </div>    
+                    <Input className='inp' error={errors.edition} placeholder="Enter number of editions" onChange={validateEdition} value={editions} />
                 </div>
-                <div className="property-add">
-                    <h5><img src={addIcon} />Add property</h5>
+                <div className="single-nft-buttons">
+                    {!savedNFTsID ?
+                        <>
+                            <Button className="light-button" onClick={handleMinting}>Mint now</Button>
+                            <Button className="light-border-button" onClick={handleSaveForLater}>Save for later</Button>
+                        </> :
+                        <Button className="light-button" onClick={handleSaveForLater}>Save changes</Button>
+                    }
                 </div>
             </div>
             <div className="single-nft-buttons">
