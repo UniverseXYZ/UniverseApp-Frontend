@@ -3,7 +3,7 @@ import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown'
 import Pagination from '../../../../pagination/Pagionation'
 import ActiveAuctionsList from './ActiveAuctionsList'
 import ActiveAuctionsFilters from './Filters'
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../../dummyData/ActiveAuctionsDummyData'
+import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../../utils/fixtures/ActiveAuctionsDummyData'
 
 const ActiveAuctionsTab = () => {
     const [offset, setOffset] = useState(0);

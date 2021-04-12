@@ -1,5 +1,5 @@
-import artistAvatar from '../assets/images/artist-avatar.svg';
-import auctionImg from '../assets/images/ntf4.svg';
+import artistAvatar from '../../assets/images/artist-avatar.svg';
+import auctionImg from '../../assets/images/ntf4.svg';
 
 export const PLACEHOLDER_FUTURE_AUCTIONS = [
     {

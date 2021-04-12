@@ -2,7 +2,7 @@ import {useState} from 'react'
 import Pagination from '../../../pagination/Pagionation';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 import FutureAuctionsList from './FutureAuctionsList';
-import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../dummyData/FutureAuctionsDummyData';
+import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../utils/fixtures/FutureAuctionsDummyData';
 
 const FutureAuctionsTab = () => {
     const [offset, setOffset] = useState(0);

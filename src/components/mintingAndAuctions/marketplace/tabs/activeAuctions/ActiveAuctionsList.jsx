@@ -29,11 +29,11 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                                 <div className='artist__details'>
                                     <img src={auction.artist.avatar} alt={auction.artist.name} />
                                     <span>by</span>
-                                    <button onClick={() => history.push(`/artist/${auction.artist.name.split(' ')[1]}`, {id: auction.artist.id})}>{auction.artist.name}</button>
+                                    <button onClick={() => history.push(`/${auction.artist.name.split(' ')[1]}`, {id: auction.artist.id})}>{auction.artist.name}</button>
                                 </div>
                             </div>
                             <div className='view__auction'>
-                                <Button className='light-button'>View auction</Button>
+                                <Button className='light-button' onClick={() => history.push(`/${auction.artist.name.split(' ')[1]}/${auction.title}`, {id: auction.id})}>View auction</Button>
                             </div>
                             <div className='auction__img'>
                                 <img src={auction.image} alt={auction.title} />

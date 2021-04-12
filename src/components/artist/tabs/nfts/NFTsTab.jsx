@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import NFTsList from './NFTsList'
-import { PLACEHOLDER_NFTS } from '../../../../dummyData/NFTsDummyData';
+import { PLACEHOLDER_NFTS } from '../../../../utils/fixtures/NFTsDummyData';
 import NFTsFilters from './Filters';
 import Pagination from '../../../pagination/Pagionation';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';

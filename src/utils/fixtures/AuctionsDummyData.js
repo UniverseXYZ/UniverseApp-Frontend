@@ -1,9 +1,8 @@
 
-import Moment from 'react-moment'
 import moment from 'moment'
-import nft3 from '../assets/images/ntf3.svg';
-import nft6 from '../assets/images/ntf6.svg';
-import nft5 from '../assets/images/ntf5.svg';
+import nft3 from '../../assets/images/ntf3.svg';
+import nft6 from '../../assets/images/ntf6.svg';
+import nft5 from '../../assets/images/ntf5.svg';
 
 
 export const AUCTIONS_DATA = [
@@ -1097,10 +1096,10 @@ export const PAST_ACTIONS_DATA = [];
 AUCTIONS_DATA.forEach((auction) => {
     if (auction ) {
         
-        if(moment(auction.endDate).isBefore(moment.now()) && auction.launch == true ){
+        if(moment(auction.endDate).isBefore(moment.now()) && auction.launch ){
             PAST_ACTIONS_DATA.push(auction);
         }
-        if(moment(auction.endDate).isAfter(moment.now()) && (moment(auction.endDate).diff(moment(auction.launchDate))>0 && moment(auction.launchDate).isBefore(moment.now())) >0 && auction.launch == true ){
+        if(moment(auction.endDate).isAfter(moment.now()) && (moment(auction.endDate).diff(moment(auction.launchDate))>0 && moment(auction.launchDate).isBefore(moment.now())) >0 && auction.launch ){
             ACTIVE_ACTIONS_DATA.push(auction);  
         }
         else{

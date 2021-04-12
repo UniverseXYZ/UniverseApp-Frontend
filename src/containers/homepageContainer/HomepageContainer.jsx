@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import About from '../../components/homepage/About';
 import BuyUniverseNFTs from '../../components/homepage/BuyUniverseNFTs';
-import '../../components/homepage/Homepage.scss';
+import './Homepage.scss';
 import NonFungibleUniverse from '../../components/homepage/NonFungibleUniverse';
 import Welcome from "../../components/homepage/Welcome"
 
-const Homepage = () => {
+const HomepageContainer = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -23,4 +23,4 @@ const Homepage = () => {
     )
 }
 
-export default Homepage;
+export default HomepageContainer;

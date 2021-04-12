@@ -2,7 +2,7 @@ import {useState} from 'react'
 import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown'
 import Pagination from '../../../../pagination/Pagionation'
 import FutureAuctionsFilters from './Filters'
-import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../../dummyData/FutureAuctionsDummyData'
+import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../../utils/fixtures/FutureAuctionsDummyData'
 import FutureAuctionsList from './FutureAuctionsList'
 
 const FutureAuctionsTab = () => {

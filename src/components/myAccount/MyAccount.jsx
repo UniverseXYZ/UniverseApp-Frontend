@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from 'react';
-import './Account.scss';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import pencilIcon from '../../assets/images/edit.svg';
