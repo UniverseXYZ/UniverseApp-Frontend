@@ -26,7 +26,7 @@ const AuctionsTab = () => {
                             </div>
                         </div>
                         {isFirstAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         Reward tiers are what makes this auction type unique, it allows you to place multiple NFTs into a reward. For instance, Justin’s Tier One aka Platinum gave you all 11 song NFTs and Gold Tier gave you 7 song NFTs. <br/><br/> You can do it like Justin or put different NFTs in every slot. It is completely customizable and up to you.
@@ -49,7 +49,7 @@ const AuctionsTab = () => {
                             </div>
                         </div>
                         {isSecondAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         Create a single NFT or an entire collections on our minting platform. You can also use a collection you already minted or own.  We did not want to limit creators to platforms so we allow you to use any NFTs for your collection.  One place view all is important to us and our collectibles so we wanted to share this tool with you.
@@ -72,7 +72,7 @@ const AuctionsTab = () => {
                             </div>
                         </div>
                         {isThirdAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         This is a new style of auction that is in very popular demand sense Justin Blau had a blow out auction featuring this style.  We wanted  to create a user-friendly interface to allow anyone to easily launch a tiered out auction.
@@ -95,7 +95,7 @@ const AuctionsTab = () => {
                             </div>
                         </div>
                         {isFourthAccordionOpened &&
-                            <Animated animationIn="fadeInUp">
+                            <Animated animationIn="zoomIn">
                                 <div className='accordion__item__body'>
                                     <p className='desc'>
                                         We know creating websites can get tricky so we have created an easy way to set up an auction landing page with a  subdomain of your choosing. <br/><br/> You are able to put your own logo, images, copy and we will handle all the hard coding work for you.

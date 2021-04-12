@@ -6,6 +6,7 @@
         position: relative;
         display: flex;
         align-items: center;
+        justify-content: center;
         background-color: $black;
         min-height: 720px;
         padding: 0 60px;
@@ -237,7 +238,6 @@
                     font-weight: 500;
                     font-size: 12px;
                     line-height: 12px;
-                    // text-transform: uppercase;
                     color: rgba(0, 0, 0, 0.4);
                     padding-bottom: 10px;
                     background-color: transparent;
@@ -417,7 +417,6 @@
                     font-weight: 500;
                     font-size: 12px;
                     line-height: 12px;
-                    // text-transform: uppercase;
                     color: rgba(0, 0, 0, 0.2);
                     background-color: $white;
                 }
