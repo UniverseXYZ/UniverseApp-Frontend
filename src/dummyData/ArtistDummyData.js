@@ -1,5 +1,5 @@
-import artistAvatar from '../../assets/images/artist-avatar.svg';
-import artistLogo from '../../assets/images/artist-logo.svg';
+import artistAvatar from '../assets/images/artist-avatar.svg';
+import artistLogo from '../assets/images/artist-logo.svg';
 
 export const PLACEHOLDER_ARTISTS = [
     {

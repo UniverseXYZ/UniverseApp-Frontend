@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import { useLocation } from 'react-router'
-import { PLACEHOLDER_ARTISTS } from '../../containers/artist/ArtistDummyData';
+import { PLACEHOLDER_ARTISTS } from '../../dummyData/ArtistDummyData';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {Animated} from "react-animated-css";
 import {NotificationManager} from 'react-notifications';
@@ -24,7 +24,7 @@ const ArtistDetails = () => {
     return (
         <div className='artist__details__section'>
             {!loading ? 
-                <Animated animationIn="fadeInUp" animationOut="fadeOutUp" isVisible={true}>
+                <Animated animationIn="zoomIn" animationOut="fadeOutUp" isVisible={true}>
                     <div className='artist__details__section__container'>
                             <div className='avatar'>
                                 <img src={artist.avatar} alt={artist.name} />
