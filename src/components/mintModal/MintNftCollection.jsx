@@ -6,6 +6,7 @@ import upload from '../../assets/images/upload.svg';
 import RemovePopup from '../popups/RemoveNftPopup';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
+import cloudIcon from '../../assets/images/ion_cloud.svg'
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import { useContext, useRef, useState, useEffect } from 'react';
@@ -267,20 +268,25 @@ const MintNftCollection = ({ onClick }) => {
             <div className="back-nft" onClick={() => onClick(null)}><img src={arrow} alt="back"/><span>Create NFT</span></div>
             <h2>{!savedCollectionID ? 'Create NFT Collection' : 'Edit NFT Collection'}</h2>
             <div className="name-image">
-            <Input label="Collection Name" className="inp" error={errors.collectionName} placeholder="Enter the Collection Name" onChange={(e) => handleCollectionName(e.target.value)} value={collectionName} />
-
+                <div className="name-input">
+                    <Input label="Collection name" className="inp" error={errors.collectionName} placeholder="Enter the Collection Name" onChange={(e) => handleCollectionName(e.target.value)} value={collectionName} />
+                    <Input label="Token Name" className="inp" error={errors.collectionName} placeholder="$ART" />
+                </div>
             <div className="input-cover">
-            <p>Cover Image</p>
+            <p>Cover image (opt)</p>
                 <div className="inp-picture">
                     {coverImage && typeof coverImage === 'object' ?
                         <div className='cover-preview'>
                             <img className="cover-img" src={URL.createObjectURL(coverImage)} alt='Cover' />
-                            <div onClick={() => inputFile.current.click()}>
-                                <img className="upload-img" src={upload} alt='Upload Icon' />
+                            <div>
+                                <img className="upload-img" src={cloudIcon} alt='Cloud Icon' onClick={() => inputFile.current.click()}/>
+                                <p>(min 200x200px, PNG/JPEG/GIF, max 1mb)</p>
+                                <Button className="light-border-button" onClick={()=>setCoverImage(null)} >Remove</Button>
                             </div>
                         </div> :
                         <div className="icon-div" onClick={() => inputFile.current.click()}>
-                            <img className="upload-img" src={upload} alt='Upload Icon' />
+                            <img className="upload-img" src={cloudIcon} alt='Cloud Icon' />
+                            <p>(min 200x200px, PNG/JPEG/GIF, max 1mb)</p>
                         </div>
                     }
                 </div>

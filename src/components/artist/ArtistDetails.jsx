@@ -22,10 +22,10 @@ const ArtistDetails = ({artist}) => {
             {!loading ? 
                 <Animated animationIn="zoomIn" animationOut="fadeOutUp" isVisible={true}>
                     <div className='artist__details__section__container'>
-                            <div className='avatar'>
-                                <img src={artist.avatar} alt={artist.name} />
-                                <h2 className='show__on__mobile'>{artist.name}</h2>
-                            </div>
+                        <div className='avatar'>
+                            <img src={artist.avatar} alt={artist.name} />
+                            <h2 className='show__on__mobile'>{artist.name}</h2>
+                        </div>
                         <div className='info'>
                             <h1 className='title'>{artist.name}</h1>
                             <p className='desc'>{artist.about}</p>
