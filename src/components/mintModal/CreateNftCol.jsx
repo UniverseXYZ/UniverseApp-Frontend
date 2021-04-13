@@ -5,6 +5,9 @@ import defaultImage from '../../assets/images/default-img.svg';
 import sizeDownIcon from '../../assets/images/size-down.svg'
 import sizeUpIcon from '../../assets/images/size-up.svg'
 import infoIcon from '../../assets/images/icon.svg';
+import cloudIcon from '../../assets/images/ion_cloud.svg'
+import delateIcon from '../../assets/images/inactive.svg'
+import addIcon from '../../assets/images/Add.svg'
 import mp3Icon from '../../assets/images/mp3-icon.png'
 import arrow from '../../assets/images/arrow.svg';
 import uuid from 'react-uuid';
@@ -32,7 +35,37 @@ const CreateNftCol = (props) => {
     const [editions, setEditions] = useState(1);
     const [previewImage, setPreviewImage] = useState(null);
     const [hideIcon, setHideIcon] = useState(true);
+    const [hideIcon1,setHideIcon1] = useState(true)
     const inputFile = useRef(null);
+
+    const [properties, setProperties] = useState([{name:"", value:""}])
+    const [propertyName,setPropertyName] = useState("")
+    const [propertyValue, setPropertyValue] = useState("")
+
+    const removeProperty = (index) => {
+        let temp=[...properties]
+        temp.splice(index,1)
+        setProperties(temp)
+    }
+
+    const addProperty = () => {
+        let prevProperties=[...properties]
+        let temp={name:"", value:""}
+        prevProperties.push(temp)
+        setProperties(prevProperties)
+    }
+
+    const propertyChangesName = (index, name) => {
+        let prevProperties=[...properties]
+        prevProperties[index].name=name
+        setProperties(prevProperties)
+    }
+
+    const propertyChangesValue = (index, value) => {
+        let prevProperties=[...properties]
+        prevProperties[index].value=value
+        setProperties(prevProperties)
+    }
 
     const handleAddToCollection = () => {
         setClicked(true);
@@ -191,6 +224,7 @@ const CreateNftCol = (props) => {
             }
         }
     }, [errors])
+    console.log(properties)
 
     return(
         <div className="mintNftCollection-div">
@@ -201,9 +235,21 @@ const CreateNftCol = (props) => {
                     <div className="nft-coll-upload">
                         <h5>Upload file</h5>
                         <div className="nft-coll-upload-file">
-                            <p>PNG, GIF, WEBP, MP4 or MP3. Max 30mb</p>
-                            <Button className="light-border-button" onClick={() => inputFile.current.click()}>CHOOSE FILE</Button>
-                            <input type="file" className="inp-disable" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
+                            <div className="nft-coll-drop-file">
+                                <img src={cloudIcon}/>
+                                <h5>Drop your file here</h5>
+                                <p>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4, max 30mb)</p>
+                                <Button className="light-border-button" onClick={() => inputFile.current.click()}>Choose file</Button>
+                                <input type="file" className="inp-disable" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
+                            </div>
+                            <div className="nft-coll-preview">
+                                <h5>Preview</h5>
+                                <div className="nft-coll-picture">
+                                {previewImage ? 
+                                    <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Cover' /> :
+                                    <img className="default-image" src={defaultImage} alt='Cover' />}
+                                </div>
+                            </div>
                         </div>
                         {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
                         <div className="nft-coll-name">
@@ -225,6 +271,32 @@ const CreateNftCol = (props) => {
                                 <p>Total amount of NFTs that will be distributed to the current revard tier winners</p>
                             </div>
                             <Input className="inp" error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
+                        </div>
+                        <div className="nft-coll-properties">
+                            <h4>Properties (optional) <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon1(false)} onMouseLeave={() => setHideIcon1(true)}/></h4>
+                            <div hidden={hideIcon1} className="properties-info-text">
+                                <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
+                            </div>
+                            
+                            {
+                                properties.map((elm,i)=>{
+                                    return <div className="properties" key={i}>
+                                        <div className="property-name">
+                                            <h5>Property name</h5>
+                                            <Input className="inp" placeholder="Enter NFT property" value={properties[i].name} onChange={(e) => propertyChangesName(i, e.target.value)}/>
+                                        </div>
+                                        <div className="property-value">
+                                            <h5>Value</h5>
+                                            <Input className="inp" placeholder="Enter value" value={properties[i].value} onChange={(e) => propertyChangesValue(i, e.target.value)}/>
+                                        </div>
+                                        <img src={delateIcon} onClick={()=>removeProperty(i)}/>
+                                        <Button className="light-border-button" onClick={()=>removeProperty(i)}>Remove</Button>
+                                    </div>
+                                })
+                            }
+                            <div className="property-add">
+                                <h5><img src={addIcon} onClick={()=>addProperty()}/>Add Property</h5>
+                            </div>
                         </div>
                         <div className="nft-coll-buttons">
                             {!collectionNFTsID ?
@@ -284,7 +356,7 @@ const CreateNftCol = (props) => {
                             </Popup> :
                             <img className="default-image" src={defaultImage} alt='Cover' />}
                         </div>
-                    </div>  
+                    </div>
                 </div>
             </div>
         </div>
