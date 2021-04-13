@@ -1,0 +1,306 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.auction__landing__page {
+    .auction__details__section {
+        padding: 30px 60px 110px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        &__container {
+            max-width: 1110px;
+            margin: 0 auto;
+
+            button.slick-arrow {
+                background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                border: 1px solid transparent;
+                height: 42px;
+                width: 42px;
+                border-radius: 12px;
+
+                &::before {
+                    display: none;
+                }
+
+                &.slick-prev {
+                    position: absolute;
+                    left: -50px;
+                }
+                &.slick-next {
+                    position: absolute;
+                    right: -50px;
+                    img {
+                        transform: rotate(180deg);
+                    }
+                }
+
+                &.slick-disabled {
+                    background: transparent;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                }
+            }
+            .carousel__auction__container {
+                &.selected {
+                    .carousel__auction {
+                        background: 
+                            linear-gradient($white, $white) padding-box,
+                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        border: 2px solid transparent!important;
+
+                        &__info {
+                            h4 {
+                                color: $black!important;
+                            }
+                            p {
+                                color: rgba(0, 0, 0, 0.6)!important;
+                            }
+                        }
+                    }
+                }
+                .carousel__auction {
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    margin: 0 10px;
+                    cursor: pointer;
+    
+                    &__image {
+                        height: 40px;
+                        width: 40px;
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 4px;
+                        }
+                    }
+                    &__info {
+                        h4 {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 160%;
+                        }
+                        p {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            line-height: 150%;
+                        }
+                    }
+                }
+            }
+            .auction__details__box {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 75px;
+                padding-top: 80px;
+
+                &__image {
+                    max-width: 445px;
+                    max-height: 445px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        filter: drop-shadow(0px 10px 40px rgba(136, 120, 172, 0.2));
+                        border-radius: 10px;
+                    }
+                }
+                &__info {
+                    h1.title {
+                        font-family: $sharpGroteskSemiBoldFont;
+                        font-style: normal;
+                        font-weight: 600;
+                        font-size: 26px;
+                        line-height: 140%;
+                        letter-spacing: 0.2px;
+                        color: $black;
+                        margin-bottom: 10px;
+                    }
+                    .artist__details {
+                        display: flex;
+                        align-items: center;
+
+                        img {
+                            width: 30px;
+                            height: 30px;
+                            margin-right: 10px;
+                            border-radius: 50%;
+                        }
+                        span {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 14px;
+                            line-height: 150%;
+                            color: rgba(0, 0, 0, 0.6);
+                            margin-right: 5px;
+                        }
+                        button {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 150%;
+                            background-color: $white;
+                            text-decoration: underline;
+                            color: $black;
+                        }
+                    }
+                    .auction__ends__in {
+                        margin-top: 20px;
+                        display: flex;
+                        align-items: center;
+                        label {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 22px;
+                            color: $black;
+                            margin-right: 12px;
+                        }
+                        .time {
+                            display: flex;
+                            align-items: center;
+
+                            > div {
+                                background: rgba(0, 0, 0, 0.02);
+                                border: 1px solid rgba(0, 0, 0, 0.1);
+                                box-sizing: border-box;
+                                border-radius: 10px;
+                                padding: 6px 12px;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: bold;
+                                font-size: 16px;
+                                line-height: 22px;
+                                letter-spacing: 0.3px;
+                                color: $black;
+                            }
+                            > span {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: bold;
+                                font-size: 16px;
+                                line-height: 22px;
+                                letter-spacing: 0.3px;
+                                color: $black;
+                                margin: 0 5px;
+                            }
+                        }
+                        .copy__to__clipboard {
+                            cursor: pointer;
+                            margin-left: 12px;
+                            span {
+                                margin-left: 7px;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 150%;
+                                color: $black;
+                                opacity: 0.4;
+                            }
+                        }
+                    }
+                    .top__bidders {
+                        background: $white;
+                        box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                        border-radius: 12px;
+                        padding: 25px 0px;
+                        margin-top: 16px;
+
+                        &__header {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            padding: 0 40px;
+
+                            h2.title {
+                                font-family: $sharpGroteskSemiBoldFont;
+                                font-style: normal;
+                                font-weight: 600;
+                                font-size: 16px;
+                                line-height: 130%;
+                                letter-spacing: 0.2px;
+                                color: $black;
+                            }
+                            button.view__all__bids {
+                                font-family: $spaceGroteskFont;
+                                font-weight: bold;
+                                font-size: 14px;
+                                line-height: 22px;
+                                letter-spacing: 0.3px;
+                                text-decoration-line: underline;
+                                color: $black;
+                            }
+                        }
+                        &__content {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            align-items: center;
+                            padding: 25px 40px;
+                            .ten__bidders__left {
+                                padding-right: 40px;
+                                border-right: 1px solid rgba(0, 0, 0, 0.1);
+                            }
+                            .ten__bidders__right {
+                                padding-left: 40px;
+                                border-left: 1px solid rgba(0, 0, 0, 0.1);
+                            }
+                            .bidder {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin-bottom: 6px;
+                                .name {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 14px;
+                                    line-height: 22px;
+                                    color: $black;
+                                }
+                                .bid {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 14px;
+                                    line-height: 22px;
+                                    color: rgba(0, 0, 0, 0.6);
+                                }
+                            }
+                        }
+                        &__footer {
+                            padding: 25px 40px 0;
+                            border-top: 1px solid rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+
+                            .your__bid {
+
+                                .no__bids {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 16px;
+                                    line-height: 160%;
+                                    color: rgba(0, 0, 0, 0.6);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

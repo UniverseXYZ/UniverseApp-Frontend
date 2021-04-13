@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import {AnimatedOnScroll} from "react-animated-css-onscroll";
 import nfuSocialNetworkIcon from '../../assets/images/nfu-social-network.svg';
 import nfuAuctionsIcon from '../../assets/images/nfu-auctions.svg';
 import nfuMarketIcon from '../../assets/images/nfu-market.svg';
@@ -71,16 +72,20 @@ const NonFungibleUniverse = () => {
                         return (
                             <div className='nfu__grid__item' key={nfu.id}>
                                 {!nfu.loaded &&
-                                    <SkeletonTheme color="#202020" highlightColor="#444">
-                                        <Skeleton circle={true} height={50} width={50} />
-                                        <Skeleton />
-                                        <Skeleton height={150} />
-                                    </SkeletonTheme>
+                                    <div>
+                                        <SkeletonTheme color="#202020" highlightColor="#444">
+                                            <Skeleton circle={true} height={50} width={50} />
+                                            <h2 className='title'><Skeleton /></h2>
+                                            <p className='desc'><Skeleton height={150} /></p>
+                                        </SkeletonTheme>
+                                    </div>
                                 }
                                 <div style={{ display: nfu.loaded ? 'block' : 'none' }}>
-                                    <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
-                                    <h2 className='title'>{nfu.title}</h2>
-                                    <p className='desc'>{nfu.description}</p>
+                                    <AnimatedOnScroll animationIn="fadeInUp">
+                                        <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
+                                        <h2 className='title'>{nfu.title}</h2>
+                                        <p className='desc'>{nfu.description}</p>
+                                    </AnimatedOnScroll>
                                 </div>
                             </div>
                         )

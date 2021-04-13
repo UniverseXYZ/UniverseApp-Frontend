@@ -26,6 +26,7 @@
             font-weight: 600;
             font-size: 16px;
             // text-transform: uppercase;
+            line-height: 20px;
             color: $black;
             padding: 11px 26px;
             margin-left: 12px;
@@ -108,13 +109,13 @@
             background: $primary-bg-color;
             box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
             border-radius: 12px;
-            font-family: $sharpGroteskMediumFont;
+            font-family: $spaceGroteskFont;
             font-style: normal;
-            font-weight: 500;
-            font-size: 12px;
-            text-transform: uppercase;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
             color: $black;
-            padding: 15px 25px;
+            padding: 11px 26px;
         }
     }
 

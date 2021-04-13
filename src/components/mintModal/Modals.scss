@@ -43,6 +43,8 @@
 }       
 .mintNft-div {
   padding: 80px 100px;
+  max-height: 100%;
+  overflow-y: auto;
 
   @include lg{
     padding: 74px 60px;

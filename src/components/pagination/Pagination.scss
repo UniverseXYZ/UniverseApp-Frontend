@@ -1,4 +1,5 @@
 @import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
 
 .pagination__container {
     display: flex;
@@ -92,25 +93,38 @@
         &__dropdown {
             position: absolute;
             bottom: 36px;
-            background: $white;
-            box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-            border-radius: 12px;
             left: 0;
             width: 100%;
 
-            li {
-                padding: 10px;
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 14px;
-                color: rgba(0, 0, 0, 0.4);
-                border-bottom: 2px solid #E5E5E5;
+            ul {
+                background: $white;
+                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                border-radius: 12px;
+                li {
+                    padding: 10px;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: rgba(0, 0, 0, 0.4);
+                    border-bottom: 2px solid #E5E5E5;
+    
+                    &.active {
+                        color: $black;
+                    }
 
-                &.active {
-                    color: $black;
+                    &:last-child {
+                        border-bottom: none;
+                    }
                 }
             }
+
         }
+        @include md {
+            display: none;
+        }
+    }
+    @include md {
+        justify-content: center;
     }
 }

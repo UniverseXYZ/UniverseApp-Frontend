@@ -1,0 +1,1015 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
+
+.mynfts__page {
+
+    .empty__nfts {
+        width: 100%;
+        h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            text-align: center;
+            color: $black;
+            margin-bottom: 130px;
+        }
+        h3 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 22px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.6);
+        }
+        p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.6);
+            max-width: 440px;
+            margin: 16px auto 40px;
+        }
+        button.mint__btn {
+            display: block;
+            margin: 0 auto;
+            background: $primary-bg-color;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            // text-transform: uppercase;
+            color: $black;
+            padding: 11px 26px;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        gap: 22px;
+
+        h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            color: $black;
+        }
+
+        .create__mint__btns {
+            display: flex;
+            gap: 12px;
+            button {
+                background: $primary-bg-color;
+                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                border-radius: 12px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+                padding: 11px 26px;
+    
+                &:disabled {
+                    cursor: not-allowed;
+                    background: #E6E6E6;
+                    box-shadow: none;
+                }
+                @include sm {
+                    width: 100%;
+                }
+            }
+            @include sm {
+                width: 100%;
+            }
+        }
+
+        @include sm {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__body {
+        ul.tabs {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+
+            li {
+                margin-right: 40px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 20px;
+                color: rgba(0, 0, 0, 0.4);
+                padding-bottom: 9px;
+                cursor: pointer;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+
+                &.active {
+                    color: $black;
+                    border-bottom: 1px solid $black;
+                }
+                @include sm {
+                    margin-right: 20px;
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .tab__wallet {
+            .filtration {
+                position: relative;
+                display: grid;
+                grid-template-columns: auto 255px;
+                grid-gap: 30px;
+
+                .filter__by__collection {
+                    &__label {
+                        margin-bottom: 15px;
+
+                        label {
+                            font-family: $sharpGroteskSemiBoldFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            letter-spacing: 0.2px;
+                            color: $black;
+                            margin-right: 15px;
+                        }
+                        button {
+                            background: none;
+                            border: none;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 14px;
+                            text-decoration: underline;
+                            color: $black;
+                        }
+                    }
+                    &__input {
+                        input {
+                            background: $white;
+                            border: 1px solid #D4D4D4;
+                            box-sizing: border-box;
+                            border-radius: 12px;
+                            width: 100%;
+                            padding: 15px;
+
+                            &::placeholder {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 16px;
+                                color: #CACACA;
+                            }
+
+                            &.focused {
+                                background: 
+                                    linear-gradient($white, $white) padding-box,
+                                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                                border: 1px solid transparent;
+                            }
+                            &.focused::placeholder {
+                                color: transparent;
+                            }
+                        }
+                    }
+                }
+
+                .search__by__name {
+                    &__label {
+                        margin-bottom: 15px;
+
+                        label {
+                            font-family: $sharpGroteskSemiBoldFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            letter-spacing: 0.2px;
+                            color: $black;
+                            margin-right: 15px;
+                        }
+                    }
+                    &__input {
+                        input {
+                            background: $white;
+                            border: 1px solid #D4D4D4;
+                            box-sizing: border-box;
+                            border-radius: 12px;
+                            width: 100%;
+                            padding: 15px;
+
+                            &::placeholder {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 16px;
+                                color: #CACACA;
+                            }
+
+                            &:focus {
+                                background: 
+                                    linear-gradient($white, $white) padding-box,
+                                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                                border: 1px solid transparent;
+                            }
+                            &:focus::placeholder {
+                                color: transparent;
+                            }
+                        }
+                    }
+                }
+
+                .collections__dropdown {
+                    background: $white;
+                    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
+                    border-radius: 12px;
+                    padding: 30px;
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 12px;
+                    position: absolute;
+                    left: 0;
+                    top: 90px;
+                    width: 100%;
+                    z-index: 1;
+
+                    button {
+                        background: rgba(0, 0, 0, 0.02);
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        box-sizing: border-box;
+                        border-radius: 10px;
+                        padding: 6px 14px;
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+
+                        .random__bg__color {
+                            height: 30px;
+                            width: 30px;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-family: $sharpGroteskMediumFont;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 12px;
+                            text-transform: uppercase;
+                            color: $black;
+                        }
+
+                        img {
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                        }
+
+                        &.selected {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                            border: 1px solid transparent;
+
+                            &::after {
+                                content: '\2716';
+                                background-color: $black;
+                                color: $white;
+                                position: absolute;
+                                top: -7px;
+                                right: -7px;
+                                border-radius: 50%;
+                                padding: 0px 3px;
+                            }
+                        }
+
+                        span {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 20px;
+                            color: $black;
+                            margin-left: 15px;
+                        }
+                    }
+                }
+                @include md {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            .selected__filters {
+                margin-top: 40px;
+                margin-bottom: 40px;
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+
+                > div {
+                    background: 
+                        linear-gradient($white, $white) padding-box,
+                        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                    border: 1px solid transparent;
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 6px 14px;
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                    }
+
+                    span {
+                        font-family: $sharpGroteskMediumFont;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        color: $black;
+                        margin-left: 15px;
+                    }
+
+                    button {
+                        background-color: $black;
+                        color: $white;
+                        position: absolute;
+                        top: -7px;
+                        right: -7px;
+                        border-radius: 50%;
+                        padding: 0px 3px;
+                    }
+                }
+            }
+
+            .nfts__lists {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-gap: 30px;
+
+                .nft__box {
+                    background: $white;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 12px;
+                    position: relative;
+
+                    &__image {
+                        position: relative;
+                        margin-bottom: 12px;
+                        height: 230px;
+                        width: 100%;
+                        video {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 12px;
+                        }
+                        img.preview-image {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 12px;
+                        }
+                        .video__icon {
+                            position: absolute;
+                            top: 9px;
+                            right: 7px;
+                        }
+                    }
+
+                    &__name {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+
+                        h3 {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                        }
+                        div.collection__count {
+                            position: relative;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                            cursor: default;
+
+                            &:hover {
+                                .generatedEditions {
+                                    display: grid;
+                                    grid-column-gap: 10px;
+                                    grid-row-gap: 5px;
+                                    z-index: 1;
+                                }
+                            }
+
+                            .generatedEditions {
+                                display: none;
+                                position: absolute;
+                                bottom: 25px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: $white;
+                                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                                border-radius: 12px;
+                                padding: 16px;
+
+                                > div {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 150%;
+                                    color: $black;
+                                }
+                            }
+                        }
+                        p.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                    }
+
+                    &__footer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        .collection__details {
+                            display: flex;
+                            align-items: center;
+                            .random__bg__color {
+                                height: 20px;
+                                width: 20px;
+                                border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: $sharpGroteskMediumFont;
+                                font-style: normal;
+                                font-weight: 500;
+                                font-size: 12px;
+                                text-transform: uppercase;
+                                color: $black;
+                            }
+                            img {
+                                height: 20px;
+                                width: 20px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                            }
+                            span {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: 300;
+                                font-size: 12px;
+                                color: $black;
+                                margin-left: 6px;
+                            }
+                        }
+                        div.collection__count {
+                            position: relative;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                            cursor: default;
+
+                            &:hover {
+                                .generatedEditions {
+                                    display: grid;
+                                    grid-column-gap: 10px;
+                                    grid-row-gap: 5px;
+                                    z-index: 1;
+                                }
+                            }
+
+                            .generatedEditions {
+                                display: none;
+                                position: absolute;
+                                bottom: 25px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: $white;
+                                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                                border-radius: 12px;
+                                padding: 16px;
+                                > div {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 150%;
+                                    color: $black;
+                                }
+                            }
+                        }
+                        p.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                    }
+
+                    &__highlight__one {
+                        position: absolute;
+                        bottom: -8px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-left: 1px solid rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom-left-radius: 150px;
+                        border-bottom-right-radius: 150px;
+                        width: 95%;
+                        height: 8px;
+                        left: 8px;
+                    }
+                    &__highlight__two {
+                        position: absolute;
+                        bottom: -16px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-left: 1px solid rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom-left-radius: 150px;
+                        border-bottom-right-radius: 150px;
+                        width: 90%;
+                        height: 8px;
+                        left: 16px;
+                    }
+                }
+                @include xl {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @include lg {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                @include sm {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+
+        .tab__saved__nfts {
+            .custom__checkbox {
+                margin-bottom: 20px;
+
+                label {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 300;
+                    font-size: 14px;
+                    text-decoration-line: underline;
+                    color: $black;
+                    cursor: pointer;
+                    
+                    input {
+                        @include css-checkbox(16px, $black, $white);
+                    }
+                }
+            }
+
+            .saved__nfts__lists {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-gap: 30px;
+                
+                .saved__nft__box {
+                    background: $white;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    box-sizing: border-box;
+                    border-radius: 12px;
+                    padding: 12px;
+                    position: relative;
+
+                    &.selected {
+                        background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        border: 2px solid transparent;
+
+                        .saved__nft__box__highlight__one {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            border-bottom: 2px solid transparent;
+                            border-left: 2px solid transparent;
+                            border-right: 2px solid transparent;
+                            bottom: -10px;
+                        }
+                        .saved__nft__box__highlight__two {
+                            background: 
+                                linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                            border-bottom: 2px solid transparent;
+                            border-left: 2px solid transparent;
+                            border-right: 2px solid transparent;
+                            bottom: -18px;
+                        }
+                    }
+
+                    &__image {
+                        position: relative;
+                        margin-bottom: 12px;
+                        cursor: pointer;
+                        height: 230px;
+                        width: 100%;
+
+                        video {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 12px;
+                        }
+                        img.preview-image {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 12px;
+                        }
+
+                        .check__icon {
+                            position: absolute;
+                            top: 8px;
+                            left: 8px;
+                        }
+                        .video__icon {
+                            position: absolute;
+                            top: 9px;
+                            right: 7px;
+                        }
+                    }
+
+                    &__name {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+
+                        h3 {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                        }
+                        .three__dots {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            gap: 3px;
+                            span {
+                                height: 4px;
+                                width: 4px;
+                                background-color: $black;
+                                border-radius: 50%;
+                            }
+
+                            .edit__remove {
+                                position: absolute;
+                                right: 0;
+                                top: 15px;
+                                background: #E6E6E6;
+                                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                                width: 160px;
+                                border-radius: 12px;
+                                z-index: 10;
+
+                                li {
+                                    padding: 20px;
+                                    background-color: $white;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    
+                                    &:first-child {
+                                        margin-bottom: 2px;
+                                        border-top-left-radius: 12px;
+                                        border-top-right-radius: 12px;
+                                    }
+                                    &:last-child {
+                                        border-bottom-left-radius: 12px;
+                                        border-bottom-right-radius: 12px;
+                                    }
+
+                                    p {
+                                        font-family: $spaceGroteskFont;
+                                        font-style: normal;
+                                        font-weight: 600;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                    }
+
+                                    &.edit p {
+                                        color: $black;
+                                    }
+                                    &.remove p {
+                                        color: #FF4949;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &__footer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        .collection__details {
+                            display: flex;
+                            align-items: center;
+                            .random__bg__color {
+                                height: 20px;
+                                width: 20px;
+                                border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: $sharpGroteskMediumFont;
+                                font-style: normal;
+                                font-weight: 500;
+                                font-size: 12px;
+                                text-transform: uppercase;
+                                color: $black;
+                            }
+                            img {
+                                height: 20px;
+                                width: 20px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                            }
+                            span {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: 300;
+                                font-size: 12px;
+                                color: $black;
+                                margin-left: 6px;
+                            }
+                        }
+                        div.collection__count {
+                            position: relative;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                            cursor: default;
+
+                            &:hover {
+                                .generatedEditions {
+                                    display: grid;
+                                    grid-column-gap: 10px;
+                                    grid-row-gap: 5px;
+                                    z-index: 1;
+                                }
+                            }
+
+                            .generatedEditions {
+                                display: none;
+                                position: absolute;
+                                bottom: 25px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: $white;
+                                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                                border-radius: 12px;
+                                padding: 16px;
+
+                                > div {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 150%;
+                                    color: $black;
+                                }
+                            }
+                        }
+                        p.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                    }
+
+                    &__highlight__one {
+                        position: absolute;
+                        bottom: -8px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-left: 1px solid rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom-left-radius: 150px;
+                        border-bottom-right-radius: 150px;
+                        width: 95%;
+                        height: 8px;
+                        left: 8px;
+                    }
+                    &__highlight__two {
+                        position: absolute;
+                        bottom: -16px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-left: 1px solid rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom-left-radius: 150px;
+                        border-bottom-right-radius: 150px;
+                        width: 90%;
+                        height: 8px;
+                        left: 16px;
+                    }
+                }
+                @include xl {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @include lg {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                @include md {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+
+        .tab__saved__collections {
+            .saved__collections__lists {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                grid-gap: 30px;
+
+                .saved__collection__box {
+                    background: $white;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    box-sizing: border-box;
+                    border-radius: 12px;
+
+                    &__header {
+                        height: 80px;
+                        border-top-left-radius: 12px;
+                        border-top-right-radius: 12px;
+                        overflow: hidden;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            filter: blur(8px);
+                        }
+                        .random__bg__color {
+                            height: 100%;
+                            width: 100%;
+                        }
+                    }
+
+                    &__body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                        background-color: $white;
+                        position: relative;
+                        z-index: 2;
+                        padding: 0 15px 15px;
+
+                        .collection__avatar {
+                            height: 75px;
+                            width: 75px;
+                            object-fit: cover;
+                            border-radius: 50%;
+                            border: 2px solid $white;
+                            margin-top: -40px;
+                        }
+                        .random__avatar__color {
+                            height: 75px;
+                            width: 75px;
+                            border-radius: 50%;
+                            border: 2px solid $white;
+                            margin-top: -40px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-family: $sharpGroteskMediumFont;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 32px;
+                            text-transform: uppercase;
+                            color: $black;
+                        }
+                        .collection__name {
+                            font-family: $sharpGroteskMediumFont;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 12px;
+                            text-align: center;
+                            color: $black;
+                            margin-top: 20px;
+                            margin-bottom: 20px;
+                        }
+                        .three__dots {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            gap: 3px;
+                            span {
+                                height: 4px;
+                                width: 4px;
+                                background-color: $black;
+                                border-radius: 50%;
+                            }
+
+                            .edit__remove {
+                                position: absolute;
+                                left: 50%;
+                                top: 15px;
+                                transform: translateX(-50%);
+                                background: #E6E6E6;
+                                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                                width: 160px;
+                                border-radius: 12px;
+                                z-index: 10;
+
+                                li {
+                                    padding: 20px;
+                                    background-color: $white;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    
+                                    &:first-child {
+                                        margin-bottom: 2px;
+                                        border-top-left-radius: 12px;
+                                        border-top-right-radius: 12px;
+                                    }
+                                    &:last-child {
+                                        border-bottom-left-radius: 12px;
+                                        border-bottom-right-radius: 12px;
+                                    }
+
+                                    p {
+                                        font-family: $spaceGroteskFont;
+                                        font-style: normal;
+                                        font-weight: 600;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                    }
+
+                                    &.edit p {
+                                        color: $black;
+                                    }
+                                    &.remove p {
+                                        color: #FF4949;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                @include lg {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @include md {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                @include sm {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+    }
+}

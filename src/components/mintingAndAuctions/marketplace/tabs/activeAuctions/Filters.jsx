@@ -1,4 +1,5 @@
-import {useContext, useState, useEffect, useRef} from 'react'
+import {useContext, useState, useEffect, useRef} from 'react';
+import {Animated} from "react-animated-css";
 import arrowDown from '../../../../../assets/images/arrow-down.svg';
 import searchIcon from '../../../../../assets/images/search.svg';
 import AppContext from '../../../../../ContextAPI';
@@ -28,10 +29,14 @@ const ActiveAuctionsFilters = () => {
                     <span className='selected__item'>{selectedItem}</span>
                     <img className='chevron__down' src={arrowDown} alt='Arrow' />
                     {isDropdownOpened &&
-                        <ul ref={ref}>
-                            <li onClick={() => { setSelectedItem('Newest'); setIsDropdownOpened(false) }}>Newest</li>
-                            <li onClick={() => { setSelectedItem('Highest bid'); setIsDropdownOpened(false) }}>Highest bid</li>
-                        </ul>
+                        <div className='sorting__dropdown'>
+                            <Animated animationIn="bounceIn">
+                                <ul ref={ref}>
+                                    <li onClick={() => { setSelectedItem('Newest'); setIsDropdownOpened(false) }}>Newest</li>
+                                    <li onClick={() => { setSelectedItem('Highest bid'); setIsDropdownOpened(false) }}>Highest bid</li>
+                                </ul>
+                            </Animated>
+                        </div>
                     }
                 </div>
                 <div className='search'>

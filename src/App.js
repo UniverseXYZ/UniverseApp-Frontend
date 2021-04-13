@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import './assets/scss/normalize.scss';
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer} from 'react-notifications';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
+import AppContext from './ContextAPI';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
-import MyNFTs from './components/myNFTs/Ntfs';
-import MyAccount from './components/myAccount/Account';
+
 import Auctions from './components/auctions/Auction';
-import AppContext from './ContextAPI';
-import Homepage from './containers/homepage/Homepage';
-import About from './containers/mintingAndAuctions/About';
-import Marketplace from './containers/mintingAndAuctions/Marketplace';
 import RewardTiers from './components/auctions/tiers/RewardTiers';
+import CreateTiers from './components/auctions/tiers/CreateTiers';
+
+import MyNFTsContainer from './containers/myNFTsContainer/MyNFTsContainer';
+import ArtistContainer from './containers/artistContainer/ArtistContainer';
+import AuctionLandingPageContainer from './containers/auctionLandingPageContainer/AuctionLandingPageContainer';
+import HomepageContainer from './containers/homepageContainer/HomepageContainer';
+import AboutContainer from './containers/mintingAndAuctions/aboutContainer/AboutContainer';
+import MarketplaceContainer from './containers/mintingAndAuctions/marketplaceContainer/MarketplaceContainer';
+import MyAccountContainer from './containers/myAccountContainer/MyAccountContainer';
 
 
 const App = () => {
@@ -62,21 +69,23 @@ const App = () => {
             <Routes>
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={() => <Homepage />} />
+                    <Route exact path="/" component={() => <HomepageContainer />} />
+                    <Route exact path="/minting-and-auctions/about" component={() => <AboutContainer />} />
+                    <Route exact path="/minting-and-auctions/marketplace" component={() => <MarketplaceContainer />} />
+                    <Route exact path="/my-nfts" component={() => <MyNFTsContainer />} />
+                    <Route exact path="/my-account" component={() => <MyAccountContainer />} />
 
-                    <Route exact path="/minting-and-auctions/about" component={() => <About />} />
-                    <Route exact path="/minting-and-auctions/marketplace" component={() => <Marketplace />} />
-                    <Route exact path="/my-nfts" component={() => isWalletConnected ? <MyNFTs /> : <Redirect to='/' />} />
-                    <Route exact path="/my-account" component={() => isWalletConnected ? <MyAccount /> : <Redirect to='/' />} />
-                    <Route exact path="/my-auctions" component={() => isWalletConnected ? <Auctions /> : <Redirect to='/' />} />
 
-                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-                    <Route exact path="/my-account" component={() => <MyAccount />} />
                     <Route exact path="/my-auctions" component={() => <Auctions />} />
                     <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
+                    <Route exact path="/create-tiers" component={() => <CreateTiers />} />
 
+                    
+                    <Route exact path="/:artist" children={<ArtistContainer />} />
+                    <Route exact path="/:artist/:auction" children={<AuctionLandingPageContainer />} />
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
+                <NotificationContainer/>
                 <Footer />
             </Routes>
         </AppContext.Provider>

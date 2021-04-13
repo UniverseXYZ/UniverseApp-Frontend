@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext, useRef} from 'react'
+import {useState, useEffect, useContext, useRef} from 'react';
 import AppContext from '../../ContextAPI';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';

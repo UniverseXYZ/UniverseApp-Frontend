@@ -4,9 +4,11 @@ import arrowDown from '../../../assets/images/ArrowDown.svg'
 import infoIconRed from '../../../assets/images/Vector.svg'
 import doneIcon from '../../../assets/images/Completed.svg'
 import searchIcon from '../../../assets/images/search-icon.svg'
-import {AUCTIONS_DATA} from '../../../auctionsData/Data'
+import emptyMark from '../../../assets/images/emptyMark.svg'
+import emptyWhite from '../../../assets/images/emptyWhite.svg'
+import {AUCTIONS_DATA} from '../../../utils/fixtures/AuctionsDummyData'
 import Input from '../../input/Input'
-import {FUTURE_ACTIONS_DATA} from '../../../auctionsData/Data'
+import {FUTURE_ACTIONS_DATA} from '../../../utils/fixtures/AuctionsDummyData'
 import { useState } from "react"
 import Moment from 'react-moment'
 import moment from 'moment'
@@ -85,18 +87,33 @@ const FutureAuctions = () => {
                                 <h6>Step2</h6>
                                 <h4>NFT Minting</h4>
                                 <div className="circle">
-                                    <img hidden={true} src={doneIcon}/>
+                                    <img hidden={!future_auction.mint} src={doneIcon}/>
+                                    <img hidden={future_auction.mint} src={emptyMark}/>
                                     <div className="hz-line"></div>
                                 </div>
-                                <Button className="light-button">Mint NFTs</Button>
+                                {future_auction.mint === true ?
+                                   <Button disabled className="light-button">Mint NFTs</Button> :
+                                   <Button className="light-button">Mint NFTs</Button> 
+                                }
                             </div>
                             <div className="step-3">
                                 <h6>Step 3</h6>
                                 <h4>Landing Page Customization</h4>
                                 <div className="circle">
-                                    <img hidden={true} src={doneIcon}/>
+                                    {(!future_auction.landingCustom && !future_auction.mint) &&
+                                        <img alt='landing_page' src={emptyWhite}/>
+                                    }
+                                    {(future_auction.mint && !future_auction.landingCustom) &&
+                                        <img alt='landing_page' src={emptyMark}/>
+                                    }
+                                    {(future_auction.mint && future_auction.landingCustom) &&
+                                        <img alt='landing_page' src={doneIcon}/>
+                                    }
                                 </div>
-                                <Button className="light-button" disabled>Set up landing page</Button>
+                                {(future_auction.mint === true && future_auction.landingCustom === false) ?
+                                <Button className="light-border-button" >Set up landing page</Button> :
+                                <Button className="light-border-button" disabled>Set up landing page</Button>
+                                }
                             </div>
                         </div>
                         <div hidden={shownActionId !== future_auction.id} className="auctions-tier">

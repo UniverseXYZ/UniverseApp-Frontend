@@ -1,6 +1,7 @@
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import { useState, useEffect, useRef, useContext } from 'react';
 import AppContext from '../../ContextAPI';
+import {Animated} from "react-animated-css";
 
 const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
     const { handleClickOutside } = useContext(AppContext);
@@ -22,13 +23,17 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
                 <span>{perPage}</span>
                 <img src={arrowDownIcon} alt='Chevron' className={showDropdown ? 'rotate' : ''} />
                 {showDropdown &&
-                    <ul className='items__per__page__dropdown'>
-                        {itemsPerPage.map((n, index) => {
-                            return (
-                                <li key={index} className={perPage === n ? 'active' : ''} onClick={() => setPerPage(n)}>{n}</li>
-                            )
-                        })}
-                    </ul>
+                    <div className='items__per__page__dropdown'>
+                        <Animated animationIn="bounceIn">
+                            <ul>
+                                {itemsPerPage.map((n, index) => {
+                                    return (
+                                        <li key={index} className={perPage === n ? 'active' : ''} onClick={() => setPerPage(n)}>{n}</li>
+                                        )
+                                    })}
+                            </ul>
+                        </Animated>
+                    </div>
                 }
             </button>
         </div>

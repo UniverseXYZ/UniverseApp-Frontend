@@ -2,13 +2,12 @@
 
 .light-button {
    padding: 11px 26px;
-   // padding: 15px 26px 15px 26px;
    background: $primary-bg-color;
    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
    border-radius: 12px;
    // display: flex;
    align-items: center;
-   // font-family: $sharpGroteskMediumFont;
+   justify-content: center;
    font-family: $spaceGroteskFont;
    font-style: normal;
    font-weight: 600;
@@ -19,15 +18,15 @@
 .light-border-button{
    // display: flex;
    align-items: center;
-   // padding: 15px 26px 15px 26px;
    padding: 11px 26px;
+   justify-content: center;
+   padding: 11px 26px 11px 26px;
    border: 1px solid;
    border-image-source: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
    border-radius: 12px;
    background: 
       linear-gradient($white, $white) padding-box,
       linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-   // font-family: $sharpGroteskMediumFont;
    font-family: $spaceGroteskFont;
    font-style: normal;
    font-weight: 600;
