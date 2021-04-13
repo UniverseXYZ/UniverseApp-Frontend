@@ -1,9 +1,8 @@
-@import '../../../assets/scss/variables';
+@import '../../assets/scss/variables';
 
 
 .back-rew>span{
     text-align: center;
-    text-transform: uppercase;
     color: #000000;
     font-family: $sharpGroteskMediumFont;
     font-style: normal;
@@ -60,6 +59,10 @@
         margin-top: 10%;
         margin-bottom: 30%;
     }
+    .select-ntfs{
+      height: 255px;
+      width: 255px;
+    }
     .plus-icon{
         text-align: center;
         align-items: center;
@@ -78,6 +81,7 @@
   }
   .tier-info{
     display: flex;
+    position: relative;
     flex-direction: column;
     margin-top: 10%;
 
@@ -121,6 +125,14 @@
         padding: 16px;
         font-size: 12px;
         font-family: "Space Grotesk", sans-serif;
-        left: 26%;
-        bottom: 35px;
+        bottom: 20px;
+        left: 25px;
+      }
+      .info-text.t2{
+        bottom: 75px;
+        position: absolute;
+      }
+      .info-text.t1{
+        bottom: 170px;
+        position: absolute;
       }

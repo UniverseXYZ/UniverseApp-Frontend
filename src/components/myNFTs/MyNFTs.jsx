@@ -8,6 +8,7 @@ import '../mintModal/Modals.scss';
 import Popup from "reactjs-popup"
 import LoadingPopup from '../popups/LoadingPopup'
 import CongratsPopup from '../popups/CongratsPopup'
+import { useLocation } from 'react-router';
 
 const MyNFTs = () => {
     const { 
@@ -24,6 +25,8 @@ const MyNFTs = () => {
     } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const [filteredNFTs, setFilteredNFTs] = useState([]);
+    const location = useLocation();
+    const isCreatingAction = location.pathname === '/select-action-nfts';
     const handleClose = () => {
         document.body.classList.remove('no__scroll');
         setShowModal(false);
