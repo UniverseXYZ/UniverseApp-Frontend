@@ -450,6 +450,16 @@
       }
     }
   }
+  .errors {
+    margin-top: 24px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 150%;
+    text-align: center;
+    color: #FF4949;
+  }
   @include sm {
     width: 90%;
   }

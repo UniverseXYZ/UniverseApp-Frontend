@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import { Animated } from 'react-animated-css';
+import uuid from 'react-uuid';
 import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
@@ -13,21 +14,27 @@ const PlaceBidPopup = ({ onClose, onAuctionTitle, onArtistName }) => {
     const [showServiceFeeInfo, setShowServiceFeeInfo] = useState(false);
     const [showTotalBidAmountInfo, setShowTotalBidAmountInfo] = useState(false);
     const [error, setError] = useState('');
+    const [clicked, setClicked] = useState(false);
 
     const handleInputChange = (val) => {
+        setClicked(false);
         if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
             setYourBid(val);
             if (!val) {
                 PLACEHOLDER_SERVICE__FEE ? setTotalBidAmount(PLACEHOLDER_SERVICE__FEE) : setTotalBidAmount(0);
             } else if (!val.endsWith('.')) {
                 PLACEHOLDER_SERVICE__FEE ? setTotalBidAmount(PLACEHOLDER_SERVICE__FEE + parseFloat(val)) : setTotalBidAmount(0 + parseFloat(val))
-            } 
+            }
+            if (val && !val.endsWith('.') && val < PLACEHOLDER_YOUR_BALANCE) {
+                setError('');
+            }
         }
     }
 
     const handlePlaceBidClick = () => {
+        setClicked(true);
         if (!yourBid) {
-            setError('Your bid field is required.');
+            setError('"Your bid" field is required.');
         } else if (yourBid.endsWith('.')) {
             setError('Incorrect bid amount.');
         } else if (parseFloat(yourBid) > PLACEHOLDER_YOUR_BALANCE) {
@@ -38,7 +45,11 @@ const PlaceBidPopup = ({ onClose, onAuctionTitle, onArtistName }) => {
     }
 
     useEffect(() => {
-        console.log(error)
+        if (clicked) {
+            if (!error) {
+                
+            }
+        }
     }, [error])
 
     useEffect(() => {
@@ -93,8 +104,11 @@ const PlaceBidPopup = ({ onClose, onAuctionTitle, onArtistName }) => {
                 </div>
             </div>
             <div className='place__bid__btn'>
-                <Button className='light-button w-100' onClick={handlePlaceBidClick}>Place a bid</Button>
+                <Button className='light-button w-100' onClick={handlePlaceBidClick} disabled={error ? true : false}>Place a bid</Button>
             </div>
+            <Animated animationIn="fadeInUp" isVisible={error ? true : false}>
+                <p className='errors'>{error}</p>
+            </Animated>
         </div>
     )
 }
