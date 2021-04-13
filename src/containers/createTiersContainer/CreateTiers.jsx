@@ -14,6 +14,8 @@ const CreateTiers = () => {
     const [hideIcon2, setHideIcon2] = useState(true);
     const { setAuction } = useContext(AppContext);
 
+    const { myNFTs,setMyNFTs } = useContext(AppContext);
+
     const [values, setValues] = useState({
         name: '',
         winners: '',
@@ -30,7 +32,7 @@ const CreateTiers = () => {
         if (values.name) {
             if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
                 setAuction(data => ({ ...data, tier: { ...data.tier, ...values, totalNFTs: values.winners * values.nftsPerWinner } }));
-                history.push('/select-action-nfts');
+                    history.push('/select-nfts');
             }
         }
     }, [isValidFields])
@@ -57,11 +59,11 @@ const CreateTiers = () => {
             <div hidden={hideIcon1} className="info-text t1">
                   <p>Amount of people who will get NFTs from the current reward tier.</p>
              </div> 
-            <Input id="winners" error={isValidFields.winners ? undefined : 'Number of winners is required!'} label={<span>Number of winners <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon1(false)} onMouseLeave={() => setHideIcon1(true)} /></span>} class="inp" value={values.winners} onChange={handleChange}/>
-            <div hidden={hideIcon2} className="info-text t2">
+            <Input id="winners" type="number" error={isValidFields.winners ? undefined : 'Number of winners is required!'} label={<span>Number of winners <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon1(false)} onMouseLeave={() => setHideIcon1(true)} /></span>} class="inp" value={values.winners} onChange={handleChange}/>
+            <div hidden={hideIcon2} className="info-text t2">   
                   <p>Amount of NFTs each winner of this reward tier is going to get.</p>
              </div>
-            <Input id="nftsPerWinner" error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'} label={<span>NFTs per winner <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon2(false)}  onMouseLeave={() => setHideIcon2(true)} /></span>} class="inp" value={values.nftsPerWinner} onChange={handleChange} />
+            <Input id="nftsPerWinner" type="number" error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'} label={<span>NFTs per winner <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon2(false)}  onMouseLeave={() => setHideIcon2(true)} /></span>} class="inp" value={values.nftsPerWinner} onChange={handleChange} />
             </div>
             <div className="button-div">
                 <Button className='light-border-button' onClick={() => { history.push('/reward-tiers') }}>Cancel</Button>
@@ -74,10 +76,7 @@ const CreateTiers = () => {
                 <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon(false)}  onMouseLeave={() => setHideIcon(true)} />
                 </div>
             </div>
-            </div>
-        
-        
-        
+            </div>    
         </div>
     )
 }

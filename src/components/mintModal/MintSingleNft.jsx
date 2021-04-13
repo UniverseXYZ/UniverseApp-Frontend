@@ -15,10 +15,14 @@ import uuid from 'react-uuid'
 import Popup from "reactjs-popup"
 import LoadingPopup from '../popups/LoadingPopup'
 import CongratsPopup from '../popups/CongratsPopup'
+import { useLocation } from 'react-router'
+import { useHistory } from 'react-router-dom'
+
 
 const MintSingleNft = ({ onClick }) => {
     
     const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(AppContext);
+    const history = useHistory();
 
     const [errors, setErrors] = useState({
         name: '',
@@ -87,6 +91,9 @@ const MintSingleNft = ({ onClick }) => {
             setEditions(value)
         }
     }
+
+    const location = useLocation();
+    const isCreatingAction = location.pathname === '/select-nfts';
 
     useEffect(() => {
         if (savedNFTsID) {

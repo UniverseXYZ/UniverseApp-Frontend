@@ -329,7 +329,7 @@
         padding: 16px;
         font-size: 12px;
         font-family: $spaceGroteskFont;
-        margin-top: -5%;
+        margin-top: -4%;
         margin-left: 2%;
        } 
        .input-search{
@@ -361,6 +361,18 @@
             border: 1px solid transparent;
         }
        }  
+       .clear-input{
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 150%;
+        text-align: right;
+        text-decoration-line: underline;
+        color: #000000;
+        background: #fff;
+        margin-right: 16px;
+       }
     .dateError{
         p{
             color: #FF4949!important; 

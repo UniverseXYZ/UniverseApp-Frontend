@@ -8,7 +8,9 @@ import '../mintModal/Modals.scss';
 import Popup from "reactjs-popup"
 import LoadingPopup from '../popups/LoadingPopup'
 import CongratsPopup from '../popups/CongratsPopup'
-import { useLocation } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
+import arrow from '../../assets/images/arrow.svg';
+import union from '../../assets/images/Union.svg';
 
 const MyNFTs = () => {
     const { 
@@ -21,12 +23,14 @@ const MyNFTs = () => {
         setShowModal, 
         setActiveView, 
         myNFTs, 
-        setMyNFTs 
+        setMyNFTs,
+        selectedNft,
     } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const [filteredNFTs, setFilteredNFTs] = useState([]);
     const location = useLocation();
-    const isCreatingAction = location.pathname === '/select-action-nfts';
+    const isCreatingAction = location.pathname === '/select-nfts';
+    const history = useHistory();
     const handleClose = () => {
         document.body.classList.remove('no__scroll');
         setShowModal(false);
@@ -148,15 +152,43 @@ const MyNFTs = () => {
                         }
                     </div>
                 </> :
-                <div className='empty__nfts'>
-                    <h1 className='title'>My NFTs</h1>
-                    <h3>No NFTs found</h3>
-                    <p className='desc'>Create NFTs or NFT collections with our platform by clicking the button below</p>
-                    <button className='mint__btn' onClick={handleOpen}>Create NFT</button>
-                    {showModal &&
-                        <MintModal open={showModal} onClose={handleClose}></MintModal>
-                    }
-                </div>
+                    isCreatingAction ? 
+                        (
+                        <div className='container select-nfts'>
+                        <div className="back-rew" onClick={() => { history.push('/reward-tiers') }}><img src={arrow} alt="back"/><span>Create reward tier</span></div>
+                        {showModal &&
+                           <MintModal open={showModal} onClose={handleClose}></MintModal>
+                         }
+                        <div>
+                        <div className='head-part'>
+                          <h2 className="tier-title">Select NTFs</h2>
+                        </div>
+                        <div className="space-tier-div">
+                             {selectedNft.length >0 ? "" : 
+                             <p>No NFTs found in your wallet</p>
+                             }
+                        </div>
+                        <div className="create-rew-tier select-ntfs" onClick={handleOpen} >
+                            <div className="plus-icon">
+                                <img src={union} alt="create"/>
+                            </div> 
+                            <div className="create-rew-text">
+                              <p>Create NFT</p>
+                            </div>
+                        </div>
+                        </div>
+                        </div>  ) :
+                        (
+                        <div className='empty__nfts'>
+                            <h1 className='title'>My NFTs</h1>
+                            <h3>No NFTs found</h3>
+                            <p className='desc'>Create NFTs or NFT collections with our platform by clicking the button below</p>
+                            <button className='mint__btn' onClick={handleOpen}>Create NFT</button>
+                            {showModal &&
+                                <MintModal open={showModal} onClose={handleClose}></MintModal>
+                            }
+                        </div>
+                        )
             }
         </div>
     )
