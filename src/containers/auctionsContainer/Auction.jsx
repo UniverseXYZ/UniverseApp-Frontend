@@ -3,9 +3,9 @@ import { useContext, useEffect, } from 'react';
 import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
-import FutureAuctions from './auctionsTabs/FutureAuctions';
-import ActiveAictions from './auctionsTabs/ActiveAuctions';
-import PastAuctions from './auctionsTabs/PastAuctions';
+import FutureAuctions from '../../components/auctions/FutureAuctions';
+import ActiveAictions from '../../components/auctions/ActiveAuctions';
+import PastAuctions from '../../components/auctions/PastAuctions';
 import { useHistory } from 'react-router-dom';
 
 

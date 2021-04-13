@@ -1,6 +1,6 @@
-import './Tiers.scss';
-import arrow from '../../../assets/images/arrow.svg';
-import union from '../../../assets/images/Union.svg';
+import '../../components/auctions/Tiers.scss';
+import arrow from '../../assets/images/arrow.svg';
+import union from '../../assets/images/Union.svg';
 import { useHistory } from 'react-router-dom';
 
 

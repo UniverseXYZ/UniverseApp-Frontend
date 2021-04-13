@@ -301,8 +301,8 @@ const CreateNftCol = (props) => {
                         <div className="nft-coll-buttons">
                             {!collectionNFTsID ?
                                 <>
-                                    <Button className="light-button" onClick={handleAddToCollection}>ADD TO COLLECTION</Button>
-                                    <Button className="light-border-button" onClick={handleAddAndCreateNew}>ADD AND CREATE NEW</Button>
+                                    <Button className="light-button" onClick={handleAddToCollection}>Add to collection</Button>
+                                    <Button className="light-border-button" onClick={handleAddAndCreateNew}>Add and create new</Button>
                                 </> :
                                 <Button className="light-button" onClick={handleAddToCollection}>Save Changes</Button>
                             }
