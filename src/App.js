@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './assets/scss/normalize.scss';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer} from 'react-notifications';
@@ -27,6 +27,10 @@ const App = () => {
     const [activeView, setActiveView] = useState(null);
     const [savedNFTsID, setSavedNFTsID] = useState(null);
     const [savedCollectionID, setSavedCollectionID] = useState(null);
+    const [windowSize, setWindowSize] = useState({
+        width: undefined,
+        height: undefined,
+    });
     const [savedNfts, setSavedNfts] = useState([]);
     const [savedCollections, setSavedCollections] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
@@ -40,6 +44,32 @@ const App = () => {
             }
         }
     };
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        }
+        function handleScroll() {
+            if(window.scrollY > 100) {
+                document.querySelector('header').style.position = 'fixed';
+            } else {
+                document.querySelector('header').style.position = 'relative';
+            }
+        }
+
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("scroll", handleScroll);
+        handleResize();
+        handleScroll();
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("scroll", handleScroll);
+        }
+    }, []);
 
     return (
         <AppContext.Provider
@@ -67,6 +97,8 @@ const App = () => {
                 setSelectAllIsChecked,
                 auction,
                 setAuction,
+                windowSize,
+                setWindowSize,
                 selectedNft,
                 setSelectedNft
             }}
