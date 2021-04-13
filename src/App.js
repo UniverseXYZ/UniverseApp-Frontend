@@ -10,7 +10,6 @@ import Footer from './components/footer/Footer';
 import AuctionsContainer from './containers/auctionsContainer/Auction';
 import RewardTiersContainer from './containers/rewardTiersContainer/RewardTiers';
 import CreateTiersContainer from './containers/createTiersContainer/CreateTiers';
-import TierSelectNFTsContainer from './containers/tierSelectNFTsContainer/SelectNFTs';
 import MyNFTsContainer from './containers/myNFTsContainer/MyNFTsContainer';
 import ArtistContainer from './containers/artistContainer/ArtistContainer';
 import AuctionLandingPageContainer from './containers/auctionLandingPageContainer/AuctionLandingPageContainer';
@@ -36,6 +35,7 @@ const App = () => {
     const [savedCollections, setSavedCollections] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
     const [auction, setAuction] = useState({ tier: {} });
+    const [selectedNft,setSelectedNft] =useState([]);
 
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -99,6 +99,8 @@ const App = () => {
                 setAuction,
                 windowSize,
                 setWindowSize,
+                selectedNft,
+                setSelectedNft
             }}
         >
             <Routes>
@@ -110,14 +112,12 @@ const App = () => {
                     <Route exact path="/my-nfts" component={() => <MyNFTsContainer />} />
                     <Route exact path="/my-account" component={() => <MyAccountContainer />} />
 
-
                     <Route exact path="/my-auctions" component={() => <AuctionsContainer />}     />
                     <Route exact path="/reward-tiers" component={() => <RewardTiersContainer />} />
                     <Route exact path="/create-tiers" component={() => <CreateTiersContainer />} />
-                    <Route exact path="/select-nfts" component={() => <TierSelectNFTsContainer />} />
-                    <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} />
+                    <Route exact path="/select-nfts" component={() => <MyNFTsContainer />} />
+                    {/* <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} /> */}
 
-                    
                     <Route exact path="/:artist" children={<ArtistContainer />} />
                     <Route exact path="/:artist/:auction" children={<AuctionLandingPageContainer />} />
                     
