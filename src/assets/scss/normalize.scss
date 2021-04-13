@@ -124,6 +124,26 @@ table {
     box-sizing: border-box;
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: $white; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #E1E1E1; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #E1E1E1; 
+}
+
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
     -webkit-appearance: none;

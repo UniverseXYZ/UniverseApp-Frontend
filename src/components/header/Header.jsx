@@ -9,12 +9,8 @@ import MobileView from './dimensions/MobileView';
 import AppContext from '../../ContextAPI';
 
 const Header = (props) => {
-    const { setIsWalletConnected } = useContext(AppContext);
+    const { setIsWalletConnected, windowSize } = useContext(AppContext);
     const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
-    const [windowSize, setWindowSize] = useState({
-        width: undefined,
-        height: undefined,
-    });
 
     const [selectedWallet, setSelectedWallet] = useState('');
     const [installed, setInstalled] = useState(true);
@@ -33,32 +29,6 @@ const Header = (props) => {
             setShowInstallWalletPopup(true);
         }
     }
-
-    useEffect(() => {
-        function handleResize() {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
-        }
-        function handleScroll() {
-            if(window.scrollY > 100) {
-                document.querySelector('header').style.position = 'fixed';
-            } else {
-                document.querySelector('header').style.position = 'relative';
-            }
-        }
-
-        window.addEventListener("resize", handleResize);
-        window.addEventListener("scroll", handleScroll);
-        handleResize();
-        handleScroll();
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-            window.removeEventListener("scroll", handleScroll);
-        }
-    }, []);
 
     useEffect(() => {
         setShowMenu(false);
