@@ -24,13 +24,18 @@ const ActiveAuctions = () => {
     const [perPage, setPerPage] = useState(10);
     const [searchByName, setSearchByName] = useState('');
 
-    const handleSearch= (value) =>{
+    const handleSearch = (value) =>{
         setSearchByName(value)
     } 
+
+    const clearInput = () =>{
+        setSearchByName('')
+    }
 
     return (
         <div className='active-auctions'>
             <div className='input-search'>
+            <button onClick={clearInput} className="clear-input">Clear</button>
             <img src={searchIcon} alt='search'/>
             <Input className='searchInp'
             onChange={(e) => handleSearch(e.target.value)}

@@ -19,7 +19,7 @@ import Pagination from '../pagination/Pagionation'
 
 const FutureAuctions = () => {
 
-    const [hideLaunchIcon, setHideLaunchIcon] = useState(true)
+    const [hideLaunchIcon, setHideLaunchIcon] = useState(0)
     const [hideEndIcon, setHideEndIcon] = useState(true)
     const [shownActionId, setshownActionId] = useState(null)
     const [offset, setOffset] = useState(0);
@@ -36,9 +36,15 @@ const FutureAuctions = () => {
         setSearchByName(value);
         }
 
+    const clearInput = () =>{
+            setSearchByName('')
+        }
+        
+
     return (
         <div className='future-auctions'>
             <div className='input-search'>
+            <button onClick={clearInput} className="clear-input">Clear</button>
             <img src={searchIcon} alt='search'/>
             <Input className='searchInp'
             onChange={(e) => handleSearch(e.target.value)}
@@ -65,12 +71,16 @@ const FutureAuctions = () => {
                                 <p>Total NFTs: <b>{future_auction.totalNFTs}</b></p>
                             </div>
                             <div className={"total-dates " + (moment(future_auction.launchDate).isBefore(moment.now()) ? 'dateError' : '')}>
-                                <div hidden={hideLaunchIcon} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
-                                <p>Launch date: <b><Moment format="MMMM DD, hh:mm">{future_auction.launchDate}</Moment></b> {(moment(future_auction.launchDate).isBefore(moment.now()) ? <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(false)} onMouseLeave={() => setHideLaunchIcon(true)}/> : '')} </p>
+                                <div hidden={hideLaunchIcon === future_auction.id? false :true} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
+                                <p>Launch date: <b><Moment format="MMMM DD, hh:mm">{future_auction.launchDate}</Moment></b> {(moment(future_auction.launchDate).isBefore(moment.now()) ?
+                                  <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(future_auction.id)} onMouseLeave={() => setHideLaunchIcon(0)}/> : '')} 
+                                </p>
                             </div>
                             <div className={"total-dates " + (moment(future_auction.endDate).isBefore(moment.now()) ? 'dateError' : '')}>
-                                <div hidden={hideEndIcon} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
-                                <p>End date: <b><Moment format="MMMM DD, hh:mm">{future_auction.endDate}</Moment></b> {(moment(future_auction.endDate).isBefore(moment.now()) ?  <img src={infoIconRed} onMouseOver={() => setHideEndIcon(false)} onMouseLeave={() => setHideEndIcon(true)}/> : '')}</p>
+                                <div hidden={hideEndIcon === future_auction.id? false :true} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
+                                <p>End date: <b><Moment format="MMMM DD, hh:mm">{future_auction.endDate}</Moment></b> {(moment(future_auction.endDate).isBefore(moment.now()) ?
+                                  <img src={infoIconRed} onMouseOver={() => setHideEndIcon(future_auction.id)} onMouseLeave={() => setHideEndIcon(0)}/>: '')}
+                                </p>
                             </div>
                         </div>
                         <div className="auctions-steps">

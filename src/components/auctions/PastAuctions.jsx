@@ -28,9 +28,15 @@ const PastAuctions = () => {
     const handleSearch= (value) =>{
         setSearchByName(value)
     }
+    
+    const clearInput = () =>{
+        setSearchByName('')
+    }
+
     return (
         <div className='past-auctions'>
             <div className='input-search'>
+            <button onClick={clearInput} className="clear-input">Clear</button>
             <img src={searchIcon} alt='search'/>
             <Input className='searchInp'
             onChange={(e) => handleSearch(e.target.value)}

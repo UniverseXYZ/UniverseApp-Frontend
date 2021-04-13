@@ -43,6 +43,18 @@
 
     }
 
+    .space-tier-div{
+      margin-top: 8%;
+      p{
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 22px;
+        color: #000000;
+        margin-bottom: 20px;
+      }
+    }
     .create-rew-tier{
         border: 1px solid;
         border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
@@ -62,6 +74,7 @@
     .select-ntfs{
       height: 255px;
       width: 255px;
+      margin-top: unset;
     }
     .plus-icon{
         text-align: center;
