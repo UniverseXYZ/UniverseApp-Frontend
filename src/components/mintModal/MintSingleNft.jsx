@@ -41,6 +41,33 @@ const MintSingleNft = ({ onClick }) => {
     const [hideIcon1,setHideIcon1] = useState(true)
     const inputFile = useRef(null);
 
+    const [properties, setProperties] = useState([{name:"", value:""}])
+
+    const removeProperty = (index) => {
+        let temp = [...properties]
+        temp.splice(index,1)
+        setProperties(temp)
+    }
+
+    const addProperty = () => {
+        let newProperties = [...properties]
+        let temp = {name:"", value:""}
+        newProperties.push(temp)
+        setProperties(newProperties)
+    }
+
+    const propertyChangesName = (index, name) => {
+        let newProperties = [...properties]
+        newProperties[index].name = name
+        setProperties(newProperties)
+    }
+
+    const propertyChangesValue = (index, value) => {
+        let newProperties = [...properties]
+        newProperties[index].value = value
+        setProperties(newProperties)
+    }
+
 
     const handleSaveForLater = () => {
         setMintNowClick(false);
@@ -272,20 +299,24 @@ const MintSingleNft = ({ onClick }) => {
                 <div hidden={hideIcon1} className="properties-info-text">
                     <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
                 </div>
-                <div className="properties">
-                    <div className="property-name">
-                        <h5>Property name</h5>
-                        <Input className="inp" placeholder="Enter NFT property" />
-                    </div>
-                    <div className="property-value">
-                        <h5>Value</h5>
-                        <Input className="inp" placeholder="Enter value" />
-                    </div>
-                    <img src={delateIcon}/>
-                    <Button className="light-border-button">Remove</Button>
-                </div>
+                {
+                    properties.map((elm,i) => {
+                        return <div className="properties" key={i}>
+                            <div className="property-name">
+                                <h5>Property name</h5>
+                                <Input className="inp" placeholder="Enter NFT property" value={properties[i].name} onChange = {(e) => propertyChangesName(i, e.target.value)}/>
+                            </div>
+                            <div className="property-value">
+                                <h5>Value</h5>
+                                <Input className="inp" placeholder="Enter value" value={properties[i].value} onChange = {(e) => propertyChangesValue(i, e.target.value)}/>
+                            </div>
+                            <img src={delateIcon} onClick = {() => removeProperty(i)}/>
+                            <Button className="light-border-button" onClick = {()=>removeProperty(i)}>Remove</Button>
+                        </div>
+                    })
+                }
                 <div className="property-add">
-                    <h5><img src={addIcon} />Add Property</h5>
+                    <h5><img src={addIcon} onClick={() => addProperty()}/>Add Property</h5>
                 </div>
             </div>
             <div className="single-nft-buttons">

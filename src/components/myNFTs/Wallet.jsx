@@ -1,24 +1,74 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import {Animated} from 'react-animated-css';
 import Lists from './Lists';
 import '../pagination/Pagination.scss';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import Pagination from '../pagination/Pagionation';
 import AppContext from '../../ContextAPI';
 import uuid from 'react-uuid';
+import Button from '../button/Button';
+import closeIcon from '../../assets/images/cross.svg';
+import filterIcon from '../../assets/images/filters-icon.svg'
 
 const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
-    const { handleClickOutside, myNFTs } = useContext(AppContext);
+    const { myNFTs } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [searchByName, setSearchByName] = useState('');
     const [offset, setOffset] = useState(0);
     const [perPage, setPerPage] = useState(12);
     const ref = useRef(null);
+    const refMobile = useRef(null);
     const [collections, setCollections] = useState([]);
+    const [mobileVersion, setMobileVersion] = useState(true)
+    const [draftCollections, setDraftCollections] = useState([])
+    const [indexes,setIndexes] = useState([])
+
+    const saveIndexes = (index) => {
+        let temp=[...indexes]
+        temp.push(index)
+        setIndexes(temp)
+        let newCollections = [...collections];
+        newCollections[index].selected = !newCollections[index].selected;
+        setDraftCollections(newCollections)
+    }
+
+    const handleCollectionsMobile = () => {
+        setCollections(draftCollections)
+        setMobileVersion(true)
+        document.querySelector('.animate__filters__popup').style.display = 'none';
+        setIndexes([])
+    }
+    const closeCollectionMobile = () => {
+        let newCollections = [...draftCollections];
+        indexes.map((index)=>{
+            newCollections[index].selected = !newCollections[index].selected    
+        })
+        setCollections(newCollections)
+        setIndexes([])
+        setMobileVersion(true)
+        document.querySelector('.animate__filters__popup').style.display = 'none';
+    }
+
+    const clearFiltersMobile = () => {
+        setIndexes([])
+        let temp=[]
+        let newCollections = [...draftCollections];
+        newCollections.map((collection,index) => {
+            if (collection.selected) {
+                temp.push(index)
+                collection.selected = false
+            }
+        })
+        setIndexes(temp)
+        setDraftCollections(newCollections)
+        
+        // setCollections(newCollections);
+        setSearchByName('');
+    }
 
     const handleCollections = (index) => {
         let newCollections = [...collections];
         newCollections[index].selected = !newCollections[index].selected;
-
         setCollections(newCollections);
     }
     
@@ -81,21 +131,41 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
     }, [collections, searchByName])
     
     useEffect(() => {
-        document.addEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
+        document.addEventListener('click', handleClickOutside, true);
         return () => {
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened), true);
+            document.removeEventListener('click', handleClickOutside, true);
         };
     })
 
+    const handleClickOutside = (event) => {
+        if (!event.target.classList.contains('target')) {
+            if (ref.current && !ref.current.contains(event.target) && refMobile.current && !refMobile.current.contains(event.target)) {   
+                setIsCollectionDropdownOpened(false);
+            }
+        }
+    };
+
+    const handleFiltersClick = () => {
+        setMobileVersion(false); 
+        document.body.classList.add('no__scroll')
+        document.querySelector('.filter__by__collection_mobile').style.top = window.scrollY + 'px';
+        document.querySelector('.animate__filters__popup').style.display = 'block';
+    }
+
     return (
         <div className='tab__wallet'>
-            {myNFTs.length ?
-                <>
-                    <div className='filtration'>
+            <Animated animationIn='fadeInUp' className='animate__filters__popup'>
+                <div hidden={mobileVersion} className='filter__by__collection_mobile'>
+                    <div className='filter__by__collection_mobile__overlay'></div>
+                    <div className='filter__by__collection_mobile__popup'>
+                        <img className='close' src={closeIcon} alt="" onClick={()=> {closeCollectionMobile(); document.body.classList.remove('no__scroll')}}/>
+                        <div className="filter_by_collection_buttons">
+                            <button className="clear_all" onClick={clearFiltersMobile}>Clear all</button>
+                            <button className="light-button" onClick={() => {handleCollectionsMobile(); document.body.classList.remove('no__scroll')}}>Apply Filter</button>
+                        </div>
                         <div className='filter__by__collection'>
                             <div className='filter__by__collection__label'>
                                 <label>Filter by collection</label>
-                                <button onClick={clearFilters}>Clear all</button>
                             </div>
                             <div className='filter__by__collection__input'>
                                 <input
@@ -106,6 +176,47 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                                 />
                             </div>
                         </div>
+                        {isCollectionDropdownOpened &&
+                            <div ref={refMobile} className='collections__dropdown'>
+                                {collections.length ? 
+                                    collections.map((collection, index) => {
+                                        return (
+                                            <button key={collection.id} className={collection.selected ? 'selected' : ''} onClick={() => saveIndexes(index)}>
+                                                {typeof collection.avatar === 'string' && collection.avatar.startsWith('#') ? 
+                                                    <div className='random__bg__color' style={{ backgroundColor: collection.avatar }}>{collection.name.charAt(0)}</div> :
+                                                    <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                                                }
+                                                <span>{collection.name}</span>
+                                            </button>
+                                        )
+                                    }) : <div className='empty__nfts'><h3>No Collections found</h3></div>
+                                }
+                            </div>
+                        }
+                        
+                    </div>
+                </div>
+            </Animated>
+            
+            {myNFTs.length ?
+                <>
+                    <div className='filtration'>
+
+                        <div className='filter__by__collection'>
+                            <div className='filter__by__collection__label'>
+                                <label>Filter by collection</label>
+                                <button className="clear_all" onClick={clearFilters}>Clear all</button>
+                            </div>
+                            <div className='filter__by__collection__input'>
+                                <input
+                                    className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
+                                    type='text'
+                                    placeholder='Browse collections...'
+                                    onFocus={() => setIsCollectionDropdownOpened(true)}
+                                />
+                            </div>
+                        </div>
+
                         <div className='search__by__name'>
                             <div className='search__by__name__label'>
                                 <label>Seach by name</label>
@@ -119,6 +230,9 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                                 />
                             </div>
                         </div>
+
+                        {/* <Button className="filter" onClick={handleFiltersClick}>{`Filters ${collections.filter(col => col.selected).length !== 0 ? '('+collections.filter(col => col.selected).length+')' : ''}`}</Button> */}
+                        <Button className="filter" onClick={handleFiltersClick}>Filter by collection <img src={filterIcon}/></Button>
                         {isCollectionDropdownOpened &&
                             <div ref={ref} className='collections__dropdown'>
                                 {collections.length ? 

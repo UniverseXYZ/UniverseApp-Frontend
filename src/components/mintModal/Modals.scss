@@ -285,7 +285,7 @@
         position: relative;
         margin-bottom: 12px;
         height: 200px;
-        width: 200px;
+        width: 100%;
         video {
           width: 100%;
           height: 100%;
@@ -294,6 +294,8 @@
         }
         img.preview-image {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
             border-radius: 12px;
         }
         .video__icon {
@@ -474,6 +476,12 @@
         left: 16px;
     }
   }
+  @include lg {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include md {
+    grid-template-columns: 1fr;
+  }
 }
 .back-nft{
   cursor: pointer;
@@ -588,7 +596,6 @@
   text-align: center;
   align-items: center;
   flex-wrap: wrap;
-  padding: 29px 21px 23px 21px;
 
 }
 .input-cover{
@@ -1000,6 +1007,7 @@ line-height: 22px;
           .property-add{
             img{
               padding-right: 10px;
+              cursor: pointer;
             }
             h5{
               font-family: $spaceGroteskFont;
@@ -1380,6 +1388,7 @@ line-height: 22px;
     .property-add{
       img{
         padding-right: 10px;
+        cursor: pointer;
       }
       h5{
         font-family: $spaceGroteskFont;

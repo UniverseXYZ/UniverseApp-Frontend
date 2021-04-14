@@ -131,6 +131,199 @@
         }
 
         .tab__wallet {
+
+            .animate__filters__popup {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                z-index: 99999;
+                left: 0;
+                display: none;
+            }
+
+            .filter__by__collection_mobile {
+                position: absolute;
+                top: 0;
+                height: 100%;
+                width: 100%;
+                left: 0;
+
+                .filter__by__collection_mobile__overlay {
+                    background: rgba(0, 0, 0, 0.6);
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                    top: 0;
+                    z-index: 999;
+                }
+                .filter__by__collection_mobile__popup {
+                    position: absolute;
+                    top: 70px;
+                    left: 0px;
+                    width: 100%;
+                    height: 100%;
+                    background: $white;
+                    z-index: 9999;
+                    border-radius: 0 0 12px 12px;
+    
+                    img.close {
+                        position: absolute;
+                        width: 26px;
+                        height: 26px;
+                        top: -48px;
+                        right: 20px;
+                        background: white;
+                        border-radius: 50%;
+                        padding: 5px;
+                    }
+    
+                    .filter_by_collection_buttons{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 0 20px;
+                        height: 74px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    
+                        .clear_all {
+                            background: none;
+                            border: none;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 14px;
+                            text-decoration: underline;
+                            color: $black;
+                        }
+                    }
+    
+                    .filter__by__collection{
+                        padding: 24px 20px;
+    
+                        .filter__by__collection__label {
+                            label {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: bold;
+                                font-size: 14px;
+                                line-height: 22px;
+                                color: $black;
+                            }
+                        }
+    
+                        .filter__by__collection__input {
+                            input {
+                                background: $white;
+                                border: 1px solid #D4D4D4;
+                                box-sizing: border-box;
+                                border-radius: 12px;
+                                width: 100%;
+                                padding: 15px;
+    
+                                &::placeholder {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 16px;
+                                    color: #CACACA;
+                                }
+    
+                                &.focused {
+                                    background: 
+                                        linear-gradient($white, $white) padding-box,
+                                        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                                    border: 1px solid transparent;
+                                }
+                                &.focused::placeholder {
+                                    color: transparent;
+                                }
+                            }
+                        }
+    
+                        
+                    }
+                    .collections__dropdown {
+                        // background: $white;
+                        // box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
+                        border-radius: 12px;
+                        padding: 20px;
+                        // display: flex;
+                        // align-items: center;
+                        // flex-wrap: wrap;
+                        gap: 12px;
+                        // position: absolute;
+                        // left: 0;
+                        // top: 90px;
+                        width: 100%;
+                        z-index: 1;
+    
+                        button {
+                            background: rgba(0, 0, 0, 0.02);
+                            border: 1px solid rgba(0, 0, 0, 0.1);
+                            box-sizing: border-box;
+                            border-radius: 10px;
+                            padding: 6px 14px;
+                            display: flex;
+                            align-items: center;
+                            position: relative;
+                            width: 100%;
+                            margin-bottom: 16px;
+    
+                            .random__bg__color {
+                                height: 30px;
+                                width: 30px;
+                                border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: $sharpGroteskMediumFont;
+                                font-style: normal;
+                                font-weight: 500;
+                                font-size: 12px;
+                                color: $black;
+                            }
+    
+                            img {
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                            }
+    
+                            &.selected {
+                                background: 
+                                    linear-gradient($white, $white) padding-box,
+                                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                                border: 1px solid transparent;
+    
+                                &::after {
+                                    content: '\2716';
+                                    background-color: $black;
+                                    color: $white;
+                                    position: absolute;
+                                    top: -7px;
+                                    right: -7px;
+                                    border-radius: 50%;
+                                    padding: 0px 3px;
+                                }
+                            }
+    
+                            span {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: 600;
+                                font-size: 16px;
+                                line-height: 20px;
+                                color: $black;
+                                margin-left: 15px;
+                            }
+                        }
+                    }
+                }
+
+            }
+
             .filtration {
                 position: relative;
                 display: grid;
@@ -150,7 +343,7 @@
                             color: $black;
                             margin-right: 15px;
                         }
-                        button {
+                        .clear_all {
                             background: none;
                             border: none;
                             font-family: $spaceGroteskFont;
@@ -188,6 +381,9 @@
                                 color: transparent;
                             }
                         }
+                    }
+                    @include sm{
+                        display: none;
                     }
                 }
 
@@ -234,6 +430,40 @@
                         }
                     }
                 }
+
+                .filter{
+                    display: none;
+                    background: rgba(0, 0, 0, 0.6);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 12px;
+                    box-sizing: border-box;
+                    backdrop-filter: blur(10px);
+                    
+                    padding: 11px 26px;
+                    font-family: $spaceGroteskFont;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
+                    color: white;
+
+                    img{
+                        padding-left: 10px;
+                    }
+
+                    @include sm{
+                        position: fixed;
+                        display: flex;
+                        justify-content: center;
+                        text-align: center;
+                        left: 0;
+                        right: 0;
+                        margin: auto;
+                        bottom: 40px;
+                        z-index: 10;
+                    }
+                }
+
+                
 
                 .collections__dropdown {
                     background: $white;
@@ -324,6 +554,21 @@
                 flex-wrap: wrap;
                 gap: 12px;
 
+                .random__bg__color {
+                    height: 30px;
+                    width: 30px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-family: $sharpGroteskMediumFont;
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    color: $black;
+                }
+
                 > div {
                     background: 
                         linear-gradient($white, $white) padding-box,
@@ -362,6 +607,9 @@
                         border-radius: 50%;
                         padding: 0px 3px;
                     }
+                }
+                @include md {
+                    visibility: hidden;
                 }
             }
 
@@ -582,6 +830,7 @@
                     grid-template-columns: 1fr;
                 }
             }
+
         }
 
         .tab__saved__nfts {
