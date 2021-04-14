@@ -3,6 +3,7 @@ import { useLocation } from 'react-router';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import './AuctionLandingPage.scss';
 import AuctionDetails from '../../components/auctionLandngPage/AuctionDetails';
+import UniverseAuctionDetails from '../../components/auctionLandngPage/UniverseAuctionDetails';
 
 const AuctionLandingPageContainer = () => {
     const location = useLocation();
@@ -17,6 +18,7 @@ const AuctionLandingPageContainer = () => {
     return (
         <div className='auction__landing__page'>
             <AuctionDetails auction={auction} />
+            <UniverseAuctionDetails />
         </div>
     )
 }

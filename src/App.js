@@ -17,10 +17,22 @@ import HomepageContainer from './containers/homepageContainer/HomepageContainer'
 import AboutContainer from './containers/mintingAndAuctions/aboutContainer/AboutContainer';
 import MarketplaceContainer from './containers/mintingAndAuctions/marketplaceContainer/MarketplaceContainer';
 import MyAccountContainer from './containers/myAccountContainer/MyAccountContainer';
+import uuid from 'react-uuid';
 
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(true);
+    const [loggedInArtist, setLoggedInArtist] = useState({
+        id: uuid(),
+        name: '',
+        universePageAddress: '',
+        avatar: null,
+        about: '',
+        personalLogo: null,
+        instagramLink: '',
+        twitterLink: '',
+    });
+    const [yourBalance, setYourBalance] = useState(48.24);
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
     const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -76,6 +88,10 @@ const App = () => {
             value={{
                 isWalletConnected,
                 setIsWalletConnected,
+                loggedInArtist,
+                setLoggedInArtist,
+                yourBalance,
+                setYourBalance,
                 handleClickOutside,
                 savedNfts,
                 setSavedNfts,

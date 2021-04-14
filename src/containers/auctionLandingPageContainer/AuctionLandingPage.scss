@@ -325,10 +325,37 @@
                             .name {
                                 font-family: $spaceGroteskFont;
                                 font-style: normal;
-                                font-weight: normal;
+                                font-weight: bold;
                                 font-size: 14px;
                                 line-height: 22px;
                                 color: $black;
+                                b {
+                                    font-size: 11px;
+                                    margin-right: 3px;
+                                }
+                                span {
+                                    margin-left: 5px;
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: 600;
+                                    font-size: 10px;
+                                    line-height: 120%;
+                                    padding: 2px 5px;
+                                    border-radius: 20px;
+
+                                    &.platinum {
+                                        color: #80CCDF;
+                                        border: 1px solid #80CCDF;
+                                    }
+                                    &.gold {
+                                        color: #DDBC45;
+                                        border: 1px solid #DDBC45;
+                                    }
+                                    &.silver {
+                                        color: #BCBCBC;
+                                        border: 1px solid #BCBCBC;
+                                    }
+                                }
                             }
                             .bid {
                                 font-family: $spaceGroteskFont;
@@ -365,6 +392,18 @@
                                 line-height: 160%;
                                 color: rgba(0, 0, 0, 0.6);
                             }
+                            .your__current__bid {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 16px;
+                                line-height: 160%;
+                                color: rgba(0, 0, 0, 0.6);
+                                b {
+                                    font-weight: bold;
+                                    color: $black;
+                                }
+                            }
                         }
                         .place__bid {
                             @include sm {
@@ -397,6 +436,94 @@
         }
         @include md {
             padding: 30px 20px 60px;
+        }
+    }
+    .universe__auction__details__section {
+        padding: 120px 60px;
+
+        &__container {
+            max-width: 1110px;
+            margin: 0 auto;
+
+            h1.title {
+                font-family: $sharpGroteskSemiBoldFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 36px;
+                line-height: 140%;
+                color: $black;
+                margin-bottom: 5px;
+                @include lg {
+                    font-size: 32px;
+                }
+                @include sm {
+                    font-size: 26px;
+                }
+            }
+            p.desc {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 18px;
+                line-height: 150%;
+                color: rgba(0, 0, 0, 0.6);
+                margin-bottom: 70px;
+            }
+            .boxes {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 30px;
+
+                .box {
+                    .nowrap__mobile {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        flex-wrap: wrap;
+                        img {
+                            width: 60px;
+                            height: 60px;
+                            @include sm {
+                                width: 40px;
+                                height: 40px;
+                            }
+                        }
+                        h2.sub__title {
+                            width: 100%;
+                            font-family: $sharpGroteskSemiBoldFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 130%;
+                            letter-spacing: 0.2px;
+                            color: $black;
+                            @include sm {
+                                width: auto;
+                                font-size: 15px;
+                            }
+                        }
+                    }
+                    .sub__desc {
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 14px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.6);
+                        margin-top: 6px;
+                    }
+                }
+                @include lg {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                @include sm {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+
+        @include md {
+            padding: 60px 20px;
         }
     }
 }
