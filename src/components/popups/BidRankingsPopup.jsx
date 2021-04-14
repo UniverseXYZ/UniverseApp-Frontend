@@ -20,10 +20,10 @@ const BidRankingsPopup = ({ onClose, onBidders }) => {
                     <table>
                         <tbody>
                             {onBidders.map((bidder, index) => {
-                                return (
+                                return bidder.rewardTier === 'Platinum' && (
                                     <tr key={bidder.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{bidder.name}</td>
+                                        <td>{index + 1 + '. '}</td>
+                                        <td>{bidder.name}<span className={bidder.rewardTier.toLocaleLowerCase()+'__small'}>{bidder.rewardTier}</span></td>
                                         <td>{'Ξ' + bidder.bid}</td>
                                         <td>~$48,580</td>
                                     </tr>
@@ -36,10 +36,10 @@ const BidRankingsPopup = ({ onClose, onBidders }) => {
                     <table>
                         <tbody>
                             {onBidders.map((bidder, index) => {
-                                return (
+                                return bidder.rewardTier === 'Gold' && (
                                     <tr key={bidder.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{bidder.name}</td>
+                                        <td>{index + 1 + '. '}</td>
+                                        <td>{bidder.name} <span className={bidder.rewardTier.toLocaleLowerCase()+'__small'}>{bidder.rewardTier}</span></td>
                                         <td>{'Ξ' + bidder.bid}</td>
                                         <td>~$48,580</td>
                                     </tr>
@@ -52,10 +52,10 @@ const BidRankingsPopup = ({ onClose, onBidders }) => {
                     <table>
                         <tbody>
                             {onBidders.map((bidder, index) => {
-                                return (
+                                return bidder.rewardTier === 'Silver' && (
                                     <tr key={bidder.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{bidder.name}</td>
+                                        <td>{index + 1 + '. '}</td>
+                                        <td>{bidder.name} <span className={bidder.rewardTier.toLocaleLowerCase()+'__small'}>{bidder.rewardTier}</span></td>
                                         <td>{'Ξ' + bidder.bid}</td>
                                         <td>~$48,580</td>
                                     </tr>

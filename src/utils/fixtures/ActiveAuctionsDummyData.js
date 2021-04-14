@@ -4,7 +4,6 @@ import auctionImg2 from '../../assets/images/ntf2.svg';
 import auctionImg3 from '../../assets/images/ntf3.svg';
 import auctionImg4 from '../../assets/images/ntf4.svg';
 import auctionBackgroundImage from '../../assets/images/auction-bg-image.png';
-import uuid from 'react-uuid';
 
 export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     {
@@ -17,63 +16,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 2,
@@ -85,63 +34,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 3,
@@ -153,63 +52,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 4,
@@ -221,63 +70,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 5,
@@ -289,63 +88,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 6,
@@ -357,63 +106,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 7,
@@ -425,63 +124,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 8,
@@ -493,63 +142,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 9,
@@ -561,63 +160,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 10,
@@ -629,63 +178,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 11,
@@ -697,63 +196,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 12,
@@ -765,63 +214,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 13,
@@ -833,63 +232,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 14,
@@ -901,63 +250,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 15,
@@ -969,63 +268,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 16,
@@ -1037,63 +286,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 17,
@@ -1105,63 +304,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 18,
@@ -1173,63 +322,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 19,
@@ -1241,63 +340,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
     {
         id: 20,
@@ -1309,62 +358,12 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             name: 'Justin 3LAU',
             avatar: artistAvatar,
         },
+        launchDate: '2021-03-01 19:00:00',
+        endDate: '2021-04-18 19:00:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
-        bidders: [
-            {
-                id: uuid(),
-                name: 'Whaleshark',
-                bid: 25,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 24,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 23.5,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 23,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 20,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 18,
-            },
-            {
-                id: uuid(),
-                name: 'WeirdWoman',
-                bid: 15,
-            },
-            {
-                id: uuid(),
-                name: 'TopBidder',
-                bid: 10,
-            },
-            {
-                id: uuid(),
-                name: 'Warden',
-                bid: 6.9,
-            },
-            {
-                id: uuid(),
-                name: 'Weird Man',
-                bid: 6.8,
-            },
-        ]
     },
 ];

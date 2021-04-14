@@ -263,7 +263,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 12px;
-    max-height: 400px;
+    max-height: 310px;
     overflow-y: auto;
     padding-right: 30px;
 
@@ -292,8 +292,49 @@
           font-size: 14px;
           line-height: 22px;
           color: $black;
+          padding: 5px 0;
+
+          span.platinum__small {
+            border: 1px solid #80CCDF;
+            color: #80CCDF;
+            padding: 2px 5px;
+            border-radius: 12px;
+            margin-left: 5px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 120%;
+          }
+          span.gold__small {
+            border: 1px solid #DDBC45;
+            color: #DDBC45;
+            padding: 2px 5px;
+            border-radius: 12px;
+            margin-left: 5px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 120%;
+          }
+          span.silver__small {
+            border: 1px solid #BCBCBC;
+            color: #BCBCBC;
+            padding: 2px 5px;
+            border-radius: 12px;
+            margin-left: 5px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 120%;
+          }
 
           &:nth-child(1) {
+            font-size: 12px;
+          }
+          &:nth-child(2) {
             font-weight: bold;
           }
           &:nth-child(4) {
@@ -343,6 +384,9 @@
     line-height: 140%;
     letter-spacing: 0.2px;
     color: $black;
+    @include sm {
+      font-size: 20px;
+    }
   }
   p.desc {
     margin: 24px 0;
@@ -355,9 +399,12 @@
     b {
       color: $black;
     }
+    @include sm {
+      margin: 8px 0 24px;
+      font-size: 14px;
+    }
   }
   .bid__form {
-    margin-bottom: 24px;
     position: relative;
     label {
       width: 100%;
@@ -401,7 +448,41 @@
       }
     }
   }
+  .info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 160%;
+    color: rgba(0, 0, 0, 0.6);
+    .bid__eligible {
+      position: relative;
+
+      &__info {
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: $white;
+        box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+        border-radius: 12px;
+        padding: 16px;
+        min-width: 240px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        color: $black;
+      }
+    }
+  }
   .total {
+    margin-top: 24px;
     margin-bottom: 24px;
     .total_row {
       display: flex;
@@ -460,8 +541,48 @@
     text-align: center;
     color: #FF4949;
   }
+  .congrats__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+  .congrats__title {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 140%;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: $black;
+  }
+  .congrats__desc {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 24px 0 40px;
+    b {
+      color: $black;
+    }
+  }
+  .congrats__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      @include sm {
+        width: 100%;
+      }
+    }
+  }
   @include sm {
     width: 90%;
+    padding: 30px;
   }
 }
 .subscribe__popup {
