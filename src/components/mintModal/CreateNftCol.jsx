@@ -39,9 +39,6 @@ const CreateNftCol = (props) => {
     const inputFile = useRef(null);
 
     const [properties, setProperties] = useState([{name:"", value:""}])
-    const [propertyName,setPropertyName] = useState("")
-    const [propertyValue, setPropertyValue] = useState("")
-
     const removeProperty = (index) => {
         let temp=[...properties]
         temp.splice(index,1)
@@ -224,7 +221,6 @@ const CreateNftCol = (props) => {
             }
         }
     }, [errors])
-    console.log(properties)
 
     return(
         <div className="mintNftCollection-div">
@@ -243,13 +239,54 @@ const CreateNftCol = (props) => {
                                 <input type="file" className="inp-disable" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
                             </div>
                             <div className="nft-coll-preview">
-                                <h5>Preview</h5>
-                                <div className="nft-coll-picture">
-                                {previewImage ? 
-                                    <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Cover' /> :
-                                    <img className="default-image" src={defaultImage} alt='Cover' />}
-                                </div>
+                            <h5>Preview</h5>
+                            <div className="nft-coll-picture">
+                            {previewImage ? 
+                                <Popup
+                                    trigger={
+                                        <div className='preview__image'>
+                                            <img className='size__up' src={sizeUpIcon} alt='Size Up'/>
+                                            {previewImage.type === 'video/mp4' &&
+                                                <video>
+                                                    <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            }
+                                            {previewImage.type === 'audio/mpeg' &&
+                                                <img className="preview-image" src={mp3Icon} alt='Preview' />
+                                            }
+                                            {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' &&
+                                                <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Preview' />
+                                            }
+                                        </div>
+                                    }
+                                >
+                                    {
+                                        (close) => (
+                                            <div className='preview__image__popup'>
+                                                <img className='size__down' src={sizeDownIcon} onClick={close} alt='Size Down'/>
+                                                {previewImage.type === 'video/mp4' &&
+                                                    <video controls autoPlay>
+                                                        <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                }
+                                                {previewImage.type === 'audio/mpeg' &&
+                                                    <audio controls autoPlay>
+                                                        <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                }
+                                                {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' &&
+                                                    <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Preview' />
+                                                }
+                                            </div>
+                                        )
+                                    }
+                                </Popup> :
+                                <img className="default-image" src={defaultImage} alt='Cover' />}
                             </div>
+                        </div>
                         </div>
                         {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
                         <div className="nft-coll-name">
@@ -301,60 +338,11 @@ const CreateNftCol = (props) => {
                         <div className="nft-coll-buttons">
                             {!collectionNFTsID ?
                                 <>
-                                    <Button className="light-button" onClick={handleAddToCollection}>ADD TO COLLECTION</Button>
-                                    <Button className="light-border-button" onClick={handleAddAndCreateNew}>ADD AND CREATE NEW</Button>
+                                    <Button className="light-button" onClick={handleAddToCollection}>Add to collection</Button>
+                                    <Button className="light-border-button" onClick={handleAddAndCreateNew}>Add and create new</Button>
                                 </> :
                                 <Button className="light-button" onClick={handleAddToCollection}>Save Changes</Button>
                             }
-                        </div>
-                    </div>
-                    <div className="nft-coll-preview">
-                        <h5>Preview</h5>
-                        <div className="nft-coll-picture">
-                        {previewImage ? 
-                            <Popup
-                                trigger={
-                                    <div className='preview__image'>
-                                        <img className='size__up' src={sizeUpIcon} alt='Size Up'/>
-                                        {previewImage.type === 'video/mp4' &&
-                                            <video>
-                                                <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        }
-                                        {previewImage.type === 'audio/mpeg' &&
-                                            <img className="preview-image" src={mp3Icon} alt='Preview' />
-                                        }
-                                        {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' &&
-                                            <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Preview' />
-                                        }
-                                    </div>
-                                }
-                            >
-                                {
-                                    (close) => (
-                                        <div className='preview__image__popup'>
-                                            <img className='size__down' src={sizeDownIcon} onClick={close} alt='Size Down'/>
-                                            {previewImage.type === 'video/mp4' &&
-                                                <video controls autoPlay>
-                                                    <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            }
-                                            {previewImage.type === 'audio/mpeg' &&
-                                                <audio controls autoPlay>
-                                                    <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
-                                                    Your browser does not support the audio element.
-                                                </audio>
-                                            }
-                                            {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' &&
-                                                <img className="preview-image" src={URL.createObjectURL(previewImage)} alt='Preview' />
-                                            }
-                                        </div>
-                                    )
-                                }
-                            </Popup> :
-                            <img className="default-image" src={defaultImage} alt='Cover' />}
                         </div>
                     </div>
                 </div>
