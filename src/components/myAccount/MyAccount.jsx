@@ -8,10 +8,11 @@ import twitterLogo from '../../assets/images/icons_twitter.svg'
 import infoIcon from '../../assets/images/icon.svg'
 import warningIcon from '../../assets/images/Exclamation.svg'
 import cloudIcon from '../../assets/images/ion_cloud.svg'
+import { Animated } from 'react-animated-css';
 
 const MyAccount = () => {
 
-    const [hideIcon, setHideIcon] = useState(true)
+    const [hideIcon, setHideIcon] = useState(false)
     const [nameEditing, setNameEditing] = useState(true)
     const [aboutEditing, setAboutEditing] = useState(true)
     const [logoEditing, setLogoEditing] = useState(true)
@@ -166,10 +167,20 @@ const MyAccount = () => {
                             <h5>Display name</h5>
                             <Input placeholder="Enter your display name" className="inp" value={accountName} onChange={(e)=>setAccountName(e.target.value)}/>
                                 
-                            <h5>Universe page address <img src={infoIcon} alt='Info Icon' onMouseOver={()=>setHideIcon(false)} onMouseLeave={()=>setHideIcon(true)}/></h5>
-                            <div hidden={hideIcon} className="info-text">
-                                <p>Universe page is your own brand landing page within the Universe ecosystem. It can contain your logo, description, and social links.</p>
-                            </div>
+                            <h5 onMouseEnter={()=>setHideIcon(true)} onMouseLeave={()=>setHideIcon(false)}>
+                                Universe page address 
+                                <div className='universe__page__address'>
+                                    <img src={infoIcon} alt='Info Icon'/>
+                                    {hideIcon &&
+                                        <Animated animationIn="zoomIn">
+                                            <div className="info-text1">
+                                                <p>Universe page is your own brand landing page within the Universe ecosystem. It can contain your logo, description, and social links.</p>
+                                            </div>
+                                        </Animated>
+                                    }
+                                </div>
+                            </h5>
+                            
                             <Input placeholder="Enter your display name" className="inp" value={accountPage} onChange={(e) => setAccountPage(e.target.value)}/>
                             {
                                 (accountName!==accountDisplay.name || accountPage!==accountDisplay.pageAddress || accountImage)?
