@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import {AnimatedOnScroll} from "react-animated-css-onscroll";
 import Popup from "reactjs-popup";
-import welcomeImg from '../../assets/images/homepage-welcome.png';
 import ellipses from '../../assets/images/ellipses.svg';
+import heroVideo from '../../assets/images/hero_video.mp4';
 import Button from '../button/Button';
 import SubscribePopup from "../popups/SubscribePopup";
 
 const Welcome = () => {
     const [loaded, setLoaded] = useState(false);
+    const ref = useRef();
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (ref.current && ref.current.readyState === 4) {
+                setLoaded(true);
+                ref.current.play().catch(error => { });
+                clearInterval(interval);
+            }
+        }, 1000)
+
+        return () => clearInterval(interval);
+    }, [])
     
     return (
         <div className='welcome__section'>
@@ -38,7 +51,11 @@ const Welcome = () => {
                                 <Skeleton circle={true} height={300} width={300} />
                             </SkeletonTheme>
                         }
-                        <img src={welcomeImg} alt='Welcome' onLoad={() => setLoaded(true)} style={{ display: loaded ? 'block' : 'none' }} />
+                        <video ref={ref} loop playsInline muted style={{ display: loaded ? 'block' : 'none' }}>
+                            <source src={heroVideo} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                        {/* <img src={welcomeImg} alt='Welcome' onLoad={() => setLoaded(true)} style={{ display: loaded ? 'block' : 'none' }} /> */}
                     </div>
                 </div>
             </AnimatedOnScroll>

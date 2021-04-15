@@ -4,6 +4,16 @@ import auctionImg2 from '../../assets/images/ntf2.svg';
 import auctionImg3 from '../../assets/images/ntf3.svg';
 import auctionImg4 from '../../assets/images/ntf4.svg';
 import auctionBackgroundImage from '../../assets/images/auction-bg-image.png';
+import uuid from 'react-uuid';
+import nft1 from '../../assets/images/ntf1.svg';
+import nft2 from '../../assets/images/ntf2.svg';
+import nft3 from '../../assets/images/ntf3.svg';
+import nft4 from '../../assets/images/ntf4.svg';
+import nft5 from '../../assets/images/ntf5.svg';
+import nft6 from '../../assets/images/ntf6.svg';
+import nft7 from '../../assets/images/ntf7.svg';
+import nft8 from '../../assets/images/ntf8.svg';
+import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
 
 export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     {
@@ -23,6 +33,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 2,
@@ -35,12 +150,117 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
             avatar: artistAvatar,
         },
         launchDate: '2021-03-01 19:00:00',
-        endDate: '2021-04-18 19:00:00',
+        endDate: '2021-04-18 11:26:00',
         timeLeft: '2d : 5h : 20m : 30s',
         winners: 35,
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 3,
@@ -59,6 +279,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 4,
@@ -77,6 +402,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 5,
@@ -95,6 +525,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 6,
@@ -113,6 +648,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 7,
@@ -131,6 +771,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 8,
@@ -149,6 +894,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 9,
@@ -167,6 +1017,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 10,
@@ -185,6 +1140,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 11,
@@ -203,6 +1263,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 12,
@@ -221,6 +1386,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 13,
@@ -239,6 +1509,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 14,
@@ -257,6 +1632,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 15,
@@ -275,6 +1755,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 16,
@@ -293,6 +1878,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 17,
@@ -311,6 +2001,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 18,
@@ -329,6 +2124,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 19,
@@ -347,6 +2247,111 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
     {
         id: 20,
@@ -365,5 +2370,110 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
         nftsPerWinner: '10-7',
         highestWinningBid: 40,
         lowestWinningBid: 14,
+        totalNFTs: 9,
+        rewardTiers: [
+            {
+                id: uuid(),
+                type: 'platinum',
+                bidders: '1-5',
+                nftsPerWinner: 3,
+                minimumBid: 40,
+                description: 'Amet nibh risus turpis mattis adipiscing.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft1,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft2,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft3,
+                        title: 'NFT 3',
+                        releasedDate: 'Jan 10, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 4',
+                        releasedDate: 'Feb 2, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft5,
+                        title: 'NFT 5',
+                        releasedDate: 'March 9, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft6,
+                        title: 'NFT 6',
+                        releasedDate: 'Feb 22, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'gold',
+                bidders: '6-15',
+                nftsPerWinner: 3,
+                minimumBid: 20,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft7,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                    {
+                        id: uuid(),
+                        image: nft8,
+                        title: 'NFT 2',
+                        releasedDate: 'Feb 15, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+            {
+                id: uuid(),
+                type: 'silver',
+                bidders: '16-35',
+                nftsPerWinner: 3,
+                minimumBid: 2,
+                description: 'Amet nibh risus turpis mattis adipiscing. Vitae sit consectetur odio massa fusce scelerisque.',
+                nfts: [
+                    {
+                        id: uuid(),
+                        image: nft4,
+                        title: 'NFT 1',
+                        releasedDate: 'Jan 30, 2021',
+                        collectionName: 'CryptoPunks',
+                        collectionAvatar: testCollectionAvatar,
+                    },
+                ]
+            },
+        ]
     },
 ];

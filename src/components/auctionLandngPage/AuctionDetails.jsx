@@ -13,8 +13,9 @@ import AppContext from '../../ContextAPI';
 import BidRankingsPopup from '../popups/BidRankingsPopup';
 import PlaceBidPopup from '../popups/PlaceBidPopup';
 import uuid from 'react-uuid';
+import Button from '../button/Button';
 
-const AuctionDetails = ({ auction }) => {
+const AuctionDetails = ({ auction, bidders, setBidders }) => {
     const { windowSize, loggedInArtist } = useContext(AppContext);
     const getAllAuctionsForCurrentArtist = PLACEHOLDER_ACTIVE_AUCTIONS.filter(act => act.artist.id === auction.artist.id);
     const [selectedAuction, setSelectedAuction] = useState(auction);
@@ -26,116 +27,37 @@ const AuctionDetails = ({ auction }) => {
         slidesToScroll: 1
     });
     const [loading, setLoading] = useState(true);
-    const [bidders, setBidders] = useState([
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'Whaleshark',
-            bid: 10,
-            rewardTier: 'Gold',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'WeirdWoman',
-            bid: 24,
-            rewardTier: 'Gold',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'TopBidder',
-            bid: 13.5,
-            rewardTier: 'Gold',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'Weird Man',
-            bid: 23,
-            rewardTier: 'Gold',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'Weird Man',
-            bid: 20,
-            rewardTier: 'Gold',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'Weird Man',
-            bid: 40,
-            rewardTier: 'Platinum',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'WeirdWoman',
-            bid: 5,
-            rewardTier: 'Silver',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'TopBidder',
-            bid: 2,
-            rewardTier: 'Silver',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'Warden',
-            bid: 17,
-            rewardTier: 'Gold',
-        },
-        {
-            id: uuid(),
-            aucionId: selectedAuction.id,
-            artistId: uuid(),
-            name: 'Weird Man',
-            bid: 6.8,
-            rewardTier: 'Silver',
-        },
-    ]);
     const [currentBid, setCurrentBid] = useState(null);
     const [countdown, setCountdown] = useState({
-            days: null,
-            hours: null,
-            minutes: null,
-            seconds: null,
-        });
+        days: null,
+        hours: null,
+        minutes: null,
+        seconds: null,
+    });
+    const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
     const history = useHistory();
 
     const convertDate = (date) => {
-        let dLeft = Math.abs(new Date(date) - Date.now()) / 1000;
+        let dLeft = (new Date(date) - Date.now()) / 1000;
         let daysLeft = Math.floor(dLeft / 86400);
         let hoursLeft = Math.floor(dLeft / 3600) % 24;
         let minutesLeft = Math.floor(dLeft / 60) % 60;
         let secondsLeft = dLeft % 60;
-        return `Ends in ${parseInt(daysLeft)}d : ${parseInt(hoursLeft)}h : ${parseInt(minutesLeft)}m : ${parseInt(secondsLeft)}s`;
+        return daysLeft >= 0 ? `Ends in ${parseInt(daysLeft)}d : ${parseInt(hoursLeft)}h : ${parseInt(minutesLeft)}m : ${parseInt(secondsLeft)}s` : false;
     } 
 
     useEffect(() => {
         const interval = setInterval(() => {
-            let d = Math.abs(new Date(selectedAuction.endDate) - Date.now()) / 1000;
+            let d = (new Date(selectedAuction.endDate) - Date.now()) / 1000;
             let days = Math.floor(d / 86400);
             let hours = Math.floor(d / 3600) % 24;
             let minutes = Math.floor(d / 60) % 60;
             let seconds = d % 60;
-            if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+            if (days < 0) {
                 clearInterval(interval);
+                setSelectedAuctionEnded(true);
             } else {
+                setSelectedAuctionEnded(false);
                 setCountdown({
                     days: Number(days),
                     hours: Number(hours),
@@ -144,9 +66,7 @@ const AuctionDetails = ({ auction }) => {
                 });
             }
         }, 1000);
-        return () => {
-            clearInterval(interval);
-        };
+        return () => clearInterval(interval);
     }, [selectedAuction])
 
     useEffect(() => {
@@ -212,7 +132,9 @@ const AuctionDetails = ({ auction }) => {
                                         <div className='carousel__auction__info'>
                                             <h4 style={{ color: selectedAuction.background ? '#fff' : '#000' }}>{act.title}</h4>
                                             <p style={{ color: selectedAuction.background ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}>
-                                                {convertDate(act.endDate)}
+                                                {!convertDate(act.endDate) ? 
+                                                    <span>Auction has ended</span> : convertDate(act.endDate)
+                                                }
                                             </p>
                                         </div>
                                     </div>
@@ -236,15 +158,20 @@ const AuctionDetails = ({ auction }) => {
                                     <button onClick={() => history.push(`/${selectedAuction.artist.name.split(' ')[1]}`, { id: selectedAuction.artist.id })}>{selectedAuction.artist.name}</button>
                                 </div>
                                 <div className='auction__ends__in'>
-                                    <div className='auction__ends__in__label'>
-                                        <label>Auction ends in: </label>
-                                        <div className='time'>
-                                            <div className='days'>{countdown.days + 'd'}</div><span>:</span>
-                                            <div className='hours'>{countdown.hours + 'h'}</div><span>:</span>
-                                            <div className='minutes'>{countdown.minutes + 'm'}</div><span>:</span>
-                                            <div className='seconds'>{countdown.seconds + 's'}</div>
-                                        </div>
-                                    </div>
+                                    {!selectedAuctionEnded ? 
+                                        <div className='auction__ends__in__label'>
+                                            <label>Auction ends in: </label>
+                                            <div className='time'>
+                                                <div className='days'>{countdown.days + 'd'}</div><span>:</span>
+                                                <div className='hours'>{countdown.hours + 'h'}</div><span>:</span>
+                                                <div className='minutes'>{countdown.minutes + 'm'}</div><span>:</span>
+                                                <div className='seconds'>{countdown.seconds + 's'}</div>
+                                            </div>
+                                        </div> :
+                                        <Animated animationIn='zoomIn'>
+                                            <div className='auction__ended'>Auction has ended</div>
+                                        </Animated>
+                                    }
                                     <CopyToClipboard text={window.location.href} onCopy={() => NotificationManager.success('Copied!')}>
                                         <div className='copy__to__clipboard'>
                                             <img src={copyIcon} alt='Copy to clipboard' />
@@ -253,79 +180,129 @@ const AuctionDetails = ({ auction }) => {
                                     </CopyToClipboard>
                                 </div>
                             </div>
-                            <div className='auction__details__box__top__bidders'>
-                                <div className='auction__details__box__top__bidders__header'>
-                                    <h2 className='title'>Top 10 bidders</h2>
-                                    <Popup
-                                        trigger={<button className='view__all__bids'>View all bids</button>}
-                                    >
-                                        {
-                                            (close) => (
-                                                <BidRankingsPopup onClose={close} onBidders={bidders}  />
-                                            )
-                                        }
-                                    </Popup>
-                                </div>
-                                <div className='auction__details__box__top__bidders__content'>
-                                    <div className='ten__bidders__left'>
-                                        {bidders.map((bidder, index) => {
-                                            return index < 5 && (
-                                                <div className='bidder' key={bidder.id}>
-                                                    <div className='name'>
-                                                        <b>{index + 1 +'.'}</b>
-                                                        {bidder.name}
-                                                        <span className={bidder.rewardTier.toLocaleLowerCase()}>{bidder.rewardTier}</span>
-                                                    </div>
-                                                    <div className='bid'>{'Ξ' + bidder.bid}</div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                    <div className='ten__bidders__right'>
-                                        {bidders.map((bidder, index) => {
-                                            return index >= 5 && index < 10 && (
-                                                <div className='bidder' key={bidder.id}>
-                                                    <div className='name'>
-                                                        <b>{index + 1+'.'}</b>
-                                                        {bidder.name}
-                                                        <span className={bidder.rewardTier.toLocaleLowerCase()}>{bidder.rewardTier}</span>
-                                                    </div>
-                                                    <div className='bid'>{'Ξ' + bidder.bid}</div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                                <div className='auction__details__box__top__bidders__footer'>
-                                    <div className='your__bid'>
-                                        {!currentBid ? 
-                                            <span className='no__bids'>You haven’t any bids yet</span> :
-                                            <span className='your__current__bid'>
-                                                <b>{`Your bid: Ξ${currentBid.bid} `}</b>
-                                                {`(#${bidders.findIndex(x => (x.artistId == currentBid.artistId) && (x.bid == currentBid.bid)) + 1} in the list)`}
-                                            </span>
-                                        }
-                                    </div>
-                                    <div className='place__bid'>
+                            {!selectedAuctionEnded && 
+                                <div className='auction__details__box__top__bidders'>
+                                    <div className='auction__details__box__top__bidders__header'>
+                                        <h2 className='title'>Top 10 bidders</h2>
                                         <Popup
-                                            trigger={<button className='light-button'>Place a bid</button>}
+                                            trigger={<button className='view__all__bids'>View all bids</button>}
                                         >
                                             {
                                                 (close) => (
-                                                    <PlaceBidPopup
-                                                        onClose={close}
-                                                        onAuctionId={selectedAuction.id}
-                                                        onAuctionTitle={selectedAuction.title}
-                                                        onArtistName={selectedAuction.artist.name}
-                                                        onBidders={bidders}
-                                                        onSetBidders={setBidders}
-                                                    />
+                                                    <BidRankingsPopup onClose={close} onBidders={bidders}  />
                                                 )
                                             }
                                         </Popup>
                                     </div>
-                                </div>
-                            </div>
+                                    <div className='auction__details__box__top__bidders__content'>
+                                        <div className='ten__bidders__left'>
+                                            {bidders.map((bidder, index) => {
+                                                return index < 5 && (
+                                                    <div className='bidder' key={bidder.id}>
+                                                        <div className='name'>
+                                                            <b>{index + 1 +'.'}</b>
+                                                            {bidder.name}
+                                                            <span className={bidder.rewardTier.toLocaleLowerCase()}>{bidder.rewardTier}</span>
+                                                        </div>
+                                                        <div className='bid'>{'Ξ' + bidder.bid}</div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                        <div className='ten__bidders__right'>
+                                            {bidders.map((bidder, index) => {
+                                                return index >= 5 && index < 10 && (
+                                                    <div className='bidder' key={bidder.id}>
+                                                        <div className='name'>
+                                                            <b>{index + 1+'.'}</b>
+                                                            {bidder.name}
+                                                            <span className={bidder.rewardTier.toLocaleLowerCase()}>{bidder.rewardTier}</span>
+                                                        </div>
+                                                        <div className='bid'>{'Ξ' + bidder.bid}</div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                    <div className='auction__details__box__top__bidders__footer'>
+                                        <div className='your__bid'>
+                                            {currentBid && currentBid.aucionId === selectedAuction.id ? 
+                                                <span className='your__current__bid'>
+                                                    <b>{`Your bid: Ξ${currentBid.bid} `}</b>
+                                                    {`(#${bidders.findIndex(x => (x.artistId == currentBid.artistId) && (x.bid == currentBid.bid)) + 1} in the list)`}
+                                                </span> :
+                                                <span className='no__bids'>You haven’t any bids yet</span>
+                                            }
+                                        </div>
+                                        <div className='place__bid'>
+                                            <Popup
+                                                trigger={<button className='light-button'>Place a bid</button>}
+                                            >
+                                                {
+                                                    (close) => (
+                                                        <PlaceBidPopup
+                                                            onClose={close}
+                                                            onAuctionId={selectedAuction.id}
+                                                            onAuctionTitle={selectedAuction.title}
+                                                            onArtistName={selectedAuction.artist.name}
+                                                            onBidders={bidders}
+                                                            onSetBidders={setBidders}
+                                                        />
+                                                    )
+                                                }
+                                            </Popup>
+                                        </div>
+                                    </div>
+                                </div> 
+                            }
+                            {selectedAuctionEnded && currentBid && (currentBid.rewardTier === 'Silver' && currentBid.bid <= 5) &&
+                                <Animated animationIn='zoomIn'>
+                                    <div className='ended__result'>
+                                        <div className='content'>
+                                            <h2 className='title'>Unfortunately, your bid didn’t win</h2>
+                                            <p className='desc'>You are able to withdraw your funds by clicking the Withdraw button below. You can still buy individual NFTs from other sellers on NFT marketplaces.</p>
+                                            <div className='view__rankings'>
+                                                <Popup
+                                                    trigger={<button>View rankings</button>}
+                                                >
+                                                    {
+                                                        (close) => (
+                                                            <BidRankingsPopup onClose={close} onBidders={bidders}  />
+                                                        )
+                                                    }
+                                                </Popup>
+                                            </div>
+                                        </div>
+                                        <div className='footer'>
+                                            <Button className='light-button'>Withdraw</Button>
+                                        </div>
+                                    </div>
+                                </Animated>
+                            }
+                            {selectedAuctionEnded && currentBid && currentBid.bid > 5 &&
+                                <Animated animationIn='zoomIn'>
+                                    <div className='ended__result'>
+                                        <div className='content'>
+                                            <h2 className='title'>Congratulations!</h2>
+                                            <p className='desc'>Your bid won the <b>{currentBid.rewardTier}</b> tier. You can claim your NFTs by clicking the button below</p>
+                                            <div className='view__rankings'>
+                                                <Popup
+                                                    trigger={<button>View rankings</button>}
+                                                >
+                                                    {
+                                                        (close) => (
+                                                            <BidRankingsPopup onClose={close} onBidders={bidders}  />
+                                                        )
+                                                    }
+                                                </Popup>
+                                            </div>
+                                        </div>
+                                        <div className='footer'>
+                                            <Button className='light-button'>Claim</Button>
+                                        </div>
+                                    </div>
+                                </Animated>
+                            }
                         </div>
                     </Animated> :
                     <div className='auction__details__box'>

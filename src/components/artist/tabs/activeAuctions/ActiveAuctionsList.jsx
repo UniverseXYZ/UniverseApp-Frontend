@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import {Animated} from "react-animated-css";
 import Button from '../../../button/Button';
 import Skeleton from 'react-loading-skeleton';
@@ -9,6 +9,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
     const artistActiveAuctions = data.filter(auction => auction.artist.id === location.state.id);
     const sliceData = artistActiveAuctions.slice(offset, offset + perPage);
     const [loading, setLoading] = useState(true);
+    const history = useHistory();
 
     useEffect(() => {
         // Here need to get all active auctions for artist
@@ -34,7 +35,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                                 </div>
                             </div>
                             <div className='view__auction'>
-                                <Button className='light-button'>View Auction</Button>
+                                <Button className='light-button' onClick={() => history.push(`/${auction.artist.name.split(' ')[1]}/${auction.title}`, {id: auction.id})}>View Auction</Button>
                             </div>
                             <div className='auction__img'>
                                 <img src={auction.image} alt={auction.title} />
@@ -46,8 +47,8 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                                         <h3>{auction.timeLeft}</h3>
                                     </div>
                                     <div className='auction__details__box'>
-                                            <p>Winners</p>
-                                            <h3>{auction.winners}</h3>
+                                        <p>Winners</p>
+                                        <h3>{auction.winners}</h3>
                                     </div>
                                     <div className='auction__details__box'>
                                         <p>NFTs Per Winner:</p>
@@ -56,8 +57,8 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                                 </div>
                                 <div>
                                     <div className='auction__details__box'>
-                                            <p>Highest Winning Bid:</p>
-                                            <h3>{`${auction.highestWinningBid} ETH `}<span>{`~$${auction.highestWinningBid * 2031}`}</span></h3>
+                                        <p>Highest Winning Bid:</p>
+                                        <h3>{`${auction.highestWinningBid} ETH `}<span>{`~$${auction.highestWinningBid * 2031}`}</span></h3>
                                     </div>
                                     <div className='auction__details__box'>
                                         <p>Lowest Winning Bid:</p>
