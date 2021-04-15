@@ -14,7 +14,7 @@ const UniverseAuctionDetails = () => {
                     <p className='desc'>Here are some tips about the Universe</p>
                 </AnimatedOnScroll>
                 <div className='boxes'>
-                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={500}>
+                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={200}>
                         <div className='box'>
                             <div className='nowrap__mobile'>
                                 <img src={auctionLengthIcon} alt='Auction Length' />
@@ -23,7 +23,7 @@ const UniverseAuctionDetails = () => {
                             <p className='sub__desc'>This Auction will last 24 hours and will be extended 3 minutes after every bid with 3 minutes left on the auction. This gives everyone ample time to place a bid and have a fair chance at the auction.</p>
                         </div>
                     </AnimatedOnScroll>
-                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={1000}>
+                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={400}>
                         <div className='box'>
                             <div className='nowrap__mobile'>
                                 <img src={biddingCurrencyIcon} alt='Bidding Currency' />
@@ -32,7 +32,7 @@ const UniverseAuctionDetails = () => {
                             <p className='sub__desc'>We have allowed you to pay with almost any ERC-20 by the contract address. This means you will be able to Bid with any currency in your wallet which means no more wasting gas on failed swaps to get a bid placed in time.</p>
                         </div>
                     </AnimatedOnScroll>
-                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={1500}>
+                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={600}>
                         <div className='box'>
                             <div className='nowrap__mobile'>
                                 <img src={placingBidsIcon} alt='Placing Bids' />
@@ -41,7 +41,7 @@ const UniverseAuctionDetails = () => {
                             <p className='sub__desc'>Placing a bid is easy and seamless. Just connect your wallet and and follow the on screen instructions to place a bid. You may have to place a few bids to win and this may require a multiple gas fees.</p>
                         </div>
                     </AnimatedOnScroll>
-                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={2000}>
+                    <AnimatedOnScroll animationIn='fadeInUp' animationInDelay={800}>
                         <div className='box'>
                             <div className='nowrap__mobile'>
                                 <img src={multipleNFTsIcon} alt='Multiple NFTs & Winners' />
