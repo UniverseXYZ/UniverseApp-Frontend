@@ -448,6 +448,9 @@
         .img_head{
             display: flex;
         }
+        .copy-div{
+            padding-top: 2px;
+            padding-right: 8px;
         .copy>span{
             font-family: $spaceGroteskFont;
             font-style: normal;
@@ -459,8 +462,50 @@
         }
         .copyImg{
             margin-right: 5px; 
-            margin-left: 14px; 
+            margin-left: 11px; 
         }
+         &:hover{
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            .copy>span{
+                opacity: 0.6;
+            }
+         }
+         &:active{
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+
+         }
+         .copy>span{
+            opacity: 0.6;
+        }
+        .copied-div{
+            position: absolute;
+            width: 94px;
+            height: 27px;
+            background: #000;
+            border-radius: 100px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 150%;
+            text-align: center;
+            color: #FFFFFF;
+            margin-top: -2%;
+            padding-top: 4px;
+        
+            span{
+                position: absolute;
+                width: 7.6px;
+                height: 7.6px;
+                left: 45px;
+                top: 23px;
+                background: #000;
+                transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+            }
+        }
+    }
     }
     .bid_info{
         display: flex;

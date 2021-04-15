@@ -48,6 +48,7 @@ const App = () => {
     const [myNFTs, setMyNFTs] = useState([]);
     const [auction, setAuction] = useState({ tier: {} });
     const [selectedNft,setSelectedNft] =useState([]);
+    const [selectedNFTIds,setSelectedNFTIds] =useState([]);
 
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -116,7 +117,9 @@ const App = () => {
                 windowSize,
                 setWindowSize,
                 selectedNft,
-                setSelectedNft
+                setSelectedNft,
+                selectedNFTIds,
+                setSelectedNFTIds,
             }}
         >
             <Routes>

@@ -9,9 +9,11 @@ import uuid from 'react-uuid';
 import Button from '../button/Button';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg'
+import { useLocation } from 'react-router'
+
 
 const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
-    const { myNFTs } = useContext(AppContext);
+    const { myNFTs, auction,setAuction, selectedNFTIds } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [searchByName, setSearchByName] = useState('');
     const [offset, setOffset] = useState(0);
@@ -22,6 +24,7 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
     const [mobileVersion, setMobileVersion] = useState(true)
     const [draftCollections, setDraftCollections] = useState([])
     const [indexes,setIndexes] = useState([])
+    const [previewNFTs, setPreviewNFTs] = useState([])
 
     const saveIndexes = (index) => {
         let temp=[...indexes]
@@ -31,6 +34,9 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
         newCollections[index].selected = !newCollections[index].selected;
         setDraftCollections(newCollections)
     }
+    
+    const location = useLocation()
+    const isCreatingAction = location.pathname === '/select-nfts'; 
 
     const handleCollectionsMobile = () => {
         setCollections(draftCollections)
@@ -137,6 +143,17 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
         };
     })
 
+    useEffect(() => {
+        const previewNFTs = [];
+        filteredNFTs.forEach(nft => {
+            if (selectedNFTIds.includes(nft.id)) {
+                previewNFTs.push(nft);
+            }
+        });
+        setPreviewNFTs(previewNFTs);
+    }, [filteredNFTs, selectedNFTIds]);
+    console.log(previewNFTs)
+    console.log(auction)
     const handleClickOutside = (event) => {
         if (!event.target.classList.contains('target')) {
             if (ref.current && !ref.current.contains(event.target) && refMobile.current && !refMobile.current.contains(event.target)) {   
@@ -279,7 +296,25 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                     }
                 </> : <div className='empty__nfts'><h3>No NFTs found</h3></div>
             }
-
+            {isCreatingAction && 
+                <div className="container selected-ntf">
+                    <div className="infoSelect-div">
+                        <span>Number of winners : {auction.tier.winners}</span>
+                        <span>NFTs per winner : {auction.tier.nftsPerWinner}</span>
+                        <span className="err-select">You have not selected enough NFTs for this reward tier</span>
+                    </div>
+                    {previewNFTs.map((nft, index) => {
+                            return  (
+                                <div>
+                                    {/* <img src={nft.previewImage}> */}
+                                </div>
+                            )
+                        })}
+                    <div className="continue-ntf">
+                        <Button className="light-button" disabled>Continue</Button>
+                    </div>
+                </div>
+            }
         </div>
     )
 }
