@@ -75,7 +75,7 @@ header {
     }
 
     .desktop__nav {
-            margin-right: 2%;
+        margin-right: 2%;
         ul {
             display: flex;
             align-items: center;
@@ -271,10 +271,13 @@ header {
                 }
             }
         }
+        @include lg {
+            display: none;
+        }
     }
 
     .tablet__nav {
-        display: flex;
+        display: none;
         align-items: center;
         button.hamburger {
             border: 1px solid rgba(0, 0, 0, 0.1);
@@ -468,9 +471,15 @@ header {
                 }
             }
         }
+        @include lg {
+            display: flex;
+        }
+        @include sm {
+            display: none;
+        }
     }
     .mobile__nav {
-        display: flex;
+        display: none;
         align-items: center;
         button.hamburger {
             border: 1px solid rgba(0, 0, 0, 0.1);
@@ -745,6 +754,9 @@ header {
                     
                 }
             }
+        }
+        @include sm {
+            display: flex;
         }
     }
 

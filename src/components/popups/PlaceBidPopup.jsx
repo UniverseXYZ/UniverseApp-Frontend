@@ -17,6 +17,7 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
     const [showTotalBidAmountInfo, setShowTotalBidAmountInfo] = useState(false);
     const [showBidEligibleInfo, setShowBidEligibleInfo] = useState(false);
     const [showBidSubmitted, setShowBidSubmitted] = useState(false);
+    const [rewardTier, setRewardTier] = useState('');
     const [error, setError] = useState('');
     const [clicked, setClicked] = useState(false);
 
@@ -31,6 +32,14 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
             }
             if (val && !val.endsWith('.') && val < yourBalance) {
                 setError('');
+            }
+            // just for testing
+            if (val <= 20) {
+                setRewardTier('Silver');
+            } else if (val > 20 && val <= 40) {
+                setRewardTier('Gold');
+            } else if (val > 40) {
+                setRewardTier('Platinum');
             }
         }
     }
@@ -56,13 +65,14 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
                 setShowBidSubmitted(true);
                 setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
                 let newBidders = [...onBidders];
+
                 newBidders.push({
                     id: uuid(),
                     aucionId: onAuctionId,
                     artistId: loggedInArtist.id,
                     name: loggedInArtist.name,
                     bid: parseFloat(yourBid),
-                    rewardTier: yourBid < 10 ? 'Silver' : (yourBid >= 10 && yourBid <= 30 ? 'Gold' : 'Platinum'), // just for testing
+                    rewardTier: rewardTier,
                 })
                 onSetBidders(newBidders);
             }
@@ -90,7 +100,7 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
                     </div>
                     {yourBid && !yourBid.endsWith('.') &&
                         <div className='info' onMouseEnter={() => setShowBidEligibleInfo(true)} onMouseLeave={() => setShowBidEligibleInfo(false)}>
-                            Your bid is eligible to win a <span style={{ color: yourBid < 10 ? '#BCBCBC' : yourBid >= 10 && yourBid <= 30 ? '#DDBC45' : '#80CCDF' }}>{yourBid < 10 ? 'Silver' : yourBid >= 10 && yourBid <= 30 ? 'Gold' : 'Platinum'} tier</span>
+                            Your bid is eligible to win a <span style={{ color: rewardTier === 'Silver' ? '#BCBCBC' : rewardTier === 'Gold' ? '#DDBC45' : '#80CCDF' }}>{rewardTier} tier</span>
                             <div className='bid__eligible'>
                                 <img src={infoIcon} alt='Info' />
                                 {showBidEligibleInfo &&

@@ -20,7 +20,7 @@ const ArtistDetails = ({onArtist}) => {
     return (
         <div className='artist__details__section'>
             {!loading ? 
-                <Animated animationIn="zoomIn" animationOut="fadeOutUp" isVisible={true}>
+                <Animated animationIn="zoomIn">
                     <div className='artist__details__section__container'>
                         <div className='avatar'>
                             <img src={onArtist.avatar} alt={onArtist.name} />

@@ -1,0 +1,54 @@
+import React from 'react'
+import { AnimatedOnScroll } from 'react-animated-css-onscroll'
+import Button from '../button/Button'
+
+const RewardTiers = ({ auction }) => {
+    
+    return (
+        <div className='reward__tiers__section'>
+            <div className='reward__tiers__section__container'>
+                <h1 className='title'>Reward Tiers</h1>
+                <p className='desc'>Each Tier has different rewards and different winners! Look through the Tiers and the NFTs for each.</p>
+
+                <div className='tiers__section'>
+                    {auction.rewardTiers.map(tier => {
+                        return (
+                            <AnimatedOnScroll animationIn='fadeIn' animationInDelay={500} key={tier.id}>
+                                <div className='tier__box'>
+                                    <div className='tier__nfts__container'>
+                                        <div className='tier__nfts'>
+                                            {tier.nfts.map((nft, index) => {
+                                                return index < 3 && (
+                                                    <div className='nft__image' key={nft.id}>
+                                                        <img src={nft.image} alt={nft.name} />
+                                                        {index === 2 && <span className='show__more'>{`+${tier.nfts.length-3} more`}</span>}
+                                                    </div>)
+                                            })}
+                                        </div>
+                                    </div>
+                                    <div className='tier__details'>
+                                        <div className='tier__title'>
+                                            <h2>{tier.type === 'platinum' ? 'Platinum Tier' : tier.type === 'gold' ? 'Gold Tier' : 'Silver Tier'}</h2>
+                                            <span style={{ backgroundColor: tier.type === 'platinum' ? '#80CCDF' : tier.type === 'gold' ? '#DDBC45' : '#BCBCBC' }}></span>
+                                        </div>
+                                        <div className='tier__info'>
+                                            <span>{`Bidders #${tier.bidders}`}</span>
+                                            <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
+                                            <span>{`Minimum bid: ${tier.minimumBid} ETH`}</span>
+                                        </div>
+                                        <div className='tier__description'>{tier.description}</div>
+                                        <div className='preview__nfts'>
+                                            <Button className='light-button'>Preview NFTs</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </AnimatedOnScroll>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default RewardTiers;

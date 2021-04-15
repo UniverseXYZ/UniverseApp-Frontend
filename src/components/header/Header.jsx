@@ -49,42 +49,36 @@ const Header = (props) => {
                 <Link className='dark' to={'/'}><img src={appDarkLogo} alt='App Logo' /></Link>
                 <Link className='light' to={'/'}><img src={appLightLogo} alt='App Logo' /></Link>
             </div>
-            {windowSize.width > 992 &&
-                <DesktopView
-                    ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
-                    handleConnectWallet={handleConnectWallet}
-                    showInstallWalletPopup={showInstallWalletPopup}
-                    setShowInstallWalletPopup={setShowInstallWalletPopup}
-                    selectedWallet={selectedWallet}
-                    setSelectedWallet={setSelectedWallet}
-                />
-            }
-            {windowSize.width <= 992 && windowSize.width > 576 &&
-                <TabletView
-                    ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
-                    handleConnectWallet={handleConnectWallet}
-                    showInstallWalletPopup={showInstallWalletPopup}
-                    setShowInstallWalletPopup={setShowInstallWalletPopup}
-                    selectedWallet={selectedWallet}
-                    setSelectedWallet={setSelectedWallet}
-                    showMenu={showMenu}
-                    setShowMenu={setShowMenu}
-                />
-            }
-            {windowSize.width <= 576 &&
-                <MobileView
-                    ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
-                    handleConnectWallet={handleConnectWallet}
-                    setShowMenu={setShowMenu}
-                    setShowSelectWallet={setShowSelectWallet}
-                    showMenu={showMenu}
-                    showSelectWallet={showSelectWallet}
-                    showInstallWalletPopup={showInstallWalletPopup}
-                    setSelectedWallet={setSelectedWallet}
-                    setShowInstallWalletPopup={setShowInstallWalletPopup}
-                    selectedWallet={selectedWallet}
-                />
-            }
+            <DesktopView
+                ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+                handleConnectWallet={handleConnectWallet}
+                showInstallWalletPopup={showInstallWalletPopup}
+                setShowInstallWalletPopup={setShowInstallWalletPopup}
+                selectedWallet={selectedWallet}
+                setSelectedWallet={setSelectedWallet}
+            />
+            <TabletView
+                ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+                handleConnectWallet={handleConnectWallet}
+                showInstallWalletPopup={showInstallWalletPopup}
+                setShowInstallWalletPopup={setShowInstallWalletPopup}
+                selectedWallet={selectedWallet}
+                setSelectedWallet={setSelectedWallet}
+                showMenu={showMenu}
+                setShowMenu={setShowMenu}
+            />
+            <MobileView
+                ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+                handleConnectWallet={handleConnectWallet}
+                setShowMenu={setShowMenu}
+                setShowSelectWallet={setShowSelectWallet}
+                showMenu={showMenu}
+                showSelectWallet={showSelectWallet}
+                showInstallWalletPopup={showInstallWalletPopup}
+                setSelectedWallet={setSelectedWallet}
+                setShowInstallWalletPopup={setShowInstallWalletPopup}
+                selectedWallet={selectedWallet}
+            />
         </header>
     )
 }

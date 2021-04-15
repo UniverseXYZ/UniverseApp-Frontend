@@ -480,6 +480,9 @@
         color: $black;
       }
     }
+    @include sm {
+      font-size: 12px;
+    }
   }
   .total {
     margin-top: 24px;
