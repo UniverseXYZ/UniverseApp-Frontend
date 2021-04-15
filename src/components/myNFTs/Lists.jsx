@@ -1,16 +1,67 @@
 import uuid from "react-uuid";
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import { useEffect, useState, useContext} from 'react';
+import { useLocation } from 'react-router';
+import checkIcon from '../../assets/images/check.svg';
+import nonSelecting from '../../assets/images/nonSelecting.svg';
+import AppContext from '../../ContextAPI';
+
+
 
 const Lists = ({ data, perPage, offset }) => {
     const sliceData = data.slice(offset, offset + perPage);
 
+    const location = useLocation()
+    const isCreatingAction = location.pathname === '/select-nfts'; 
+
+    const { auction,setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
+
+    const [openEditions, setOpenEditions] = useState(true)
+    const [selected,Setselected] = useState([])
+    const [data1,setData ] = useState([])
+
+    const handleSavedNfts = (clickedNFT) => {
+        if (isCreatingAction && auction.tier.winners < clickedNFT.generatedEditions.length) {
+            setSelectedNFTIds((prevValue) => {
+                const nftIndex = prevValue.findIndex((nft) => nft === clickedNFT.id);
+                if (nftIndex !== -1) {
+                    return [...prevValue.slice(0, nftIndex), ...prevValue.slice(nftIndex +1)]
+                } else {
+                    return [...prevValue, clickedNFT.id]
+                }
+            })
+            // console.log(index)
+            // let setData = [...sliceData];
+            // setData[index].selected = !setData[index].selected;
+    
+            // setSavedNfts(setData);
+        }
+    }
+    const handleShow = () =>{
+        setOpenEditions(!openEditions)
+    }
+
+    useEffect(() => {
+      console.log(auction.tier)
+    }, [])
+
     return (
         <div className='nfts__lists'>
-            {sliceData.map(nft => {
+            {sliceData.map((nft, index) => {
                 return (
-                    <div className='nft__box' key={uuid()}>
-                        <div className='nft__box__image'>
+                    <div  className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${auction.tier.winners > nft.generatedEditions.length ? 'disabled' : ''}`} key={nft.id} >                      
+                        <div className='nft__box__image' onClick={() => handleSavedNfts(nft)}>
+                        {isCreatingAction &&
+                        <>
+                        {selectedNFTIds.includes(nft.id) && auction.tier.winners <= nft.generatedEditions.length &&
+                            <img className='check__icon' src={checkIcon} alt='Check Icon' />
+                        }
+                        {auction.tier.winners > nft.generatedEditions.length &&
+                            <img className='nonicon__icon' src={nonSelecting} alt='Check Icon' />
+                        }
+                        </>
+                         }
                             {nft.previewImage.type === 'video/mp4' &&
                                 <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
                                     <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
@@ -26,13 +77,34 @@ const Lists = ({ data, perPage, offset }) => {
                             {nft.previewImage.type === 'video/mp4' &&
                                 <img className='video__icon' src={videoIcon} alt='Video Icon' />
                             }
-                        </div>
+                        </div>                         
                         <div className='nft__box__name'>
+                        
                             <h3>{nft.name}</h3>
                             {nft.type === 'single' ?
                                 nft.generatedEditions.length > 1 ?
                                     <div className='collection__count'>
+                                        
+                                        {isCreatingAction &&
+                                        <>
+                                        <button type="button" className="editions-btn button" onClick={handleShow} >Edition #</button>  
+                                             <ul className="editions-list" hidden={openEditions}>
+                                                <li disabled >Choose edition number</li>
+                                                  {nft.generatedEditions.map(edition => {
+                                                   return (
+                                                <li  key={edition}>
+                                                 <label className="edition-container">{`#${edition}`}
+                                                    <input type="checkbox" id={edition} />
+                                                    <span className="checkmark"></span>
+                                                 </label>
+                                                </li>
+                                                 )
+                                                })}
+                                            </ul>
+                                                </>}
+                                        <div className="ed-num">
                                         {`x${nft.generatedEditions.length}`}
+                                        </div>
                                         <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
                                             {nft.generatedEditions.map(edition => {
                                                 return (
@@ -40,6 +112,7 @@ const Lists = ({ data, perPage, offset }) => {
                                                 )
                                             })}
                                         </div>
+
                                     </div> :
                                 <p className='collection__count'>{`#${nft.generatedEditions[0]}`}</p> : <></>
                             }

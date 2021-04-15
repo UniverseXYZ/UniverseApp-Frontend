@@ -12,7 +12,7 @@ const CreateTiers = () => {
     const [hideIcon, setHideIcon] = useState(true);
     const [hideIcon1, setHideIcon1] = useState(true);
     const [hideIcon2, setHideIcon2] = useState(true);
-    const { setAuction } = useContext(AppContext);
+    const { auction, setAuction } = useContext(AppContext);
 
     const { myNFTs,setMyNFTs } = useContext(AppContext);
 

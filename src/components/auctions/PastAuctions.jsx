@@ -9,7 +9,7 @@ import {PAST_ACTIONS_DATA} from '../../utils/fixtures/AuctionsDummyData'
 import icon from '../../assets/images/auction_icon.svg'
 import bid_icon from '../../assets/images/bid_icon.svg'
 import Input from '../input/Input'
-import copyIcon from '../../assets/images/copy.svg'
+import copyIcon from '../../assets/images/copy1.svg'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useState } from "react"
 import Moment from 'react-moment';
@@ -52,8 +52,10 @@ const PastAuctions = () => {
                             <h3>{past_auction.name}</h3>
                             <div className="copy-div">
                                         <div className='copy' title='Copy to clipboard'>
+                                                <div className="copied-div" hidden={!copied}>URL copied!<span></span></div>
                                             <CopyToClipboard text={past_auction.auctionLink} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
-                                                <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/>{copied ? 'Copied!' : 'Copy URL'}</span>
+                                                <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/>Copy URL</span>
+                                             
                                             </CopyToClipboard>
                                         </div>
                                     </div>
