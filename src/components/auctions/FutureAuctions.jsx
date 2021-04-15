@@ -1,3 +1,4 @@
+import {Animated} from 'react-animated-css';
 import Button from "../button/Button"
 import arrowUp from '../../assets/images/Arrow_Up.svg'
 import arrowDown from '../../assets/images/ArrowDown.svg'
@@ -71,9 +72,17 @@ const FutureAuctions = () => {
                                 <p>Total NFTs: <b>{future_auction.totalNFTs}</b></p>
                             </div>
                             <div className={"total-dates " + (moment(future_auction.launchDate).isBefore(moment.now()) ? 'dateError' : '')}>
-                                <div hidden={hideLaunchIcon === future_auction.id? false :true} className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
-                                <p>Launch date: <b><Moment format="MMMM DD, hh:mm">{future_auction.launchDate}</Moment></b> {(moment(future_auction.launchDate).isBefore(moment.now()) ?
-                                  <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(future_auction.id)} onMouseLeave={() => setHideLaunchIcon(0)}/> : '')} 
+                                <p>Launch date: <b><Moment format="MMMM DD, hh:mm">{future_auction.launchDate}</Moment></b> 
+                                {(moment(future_auction.launchDate).isBefore(moment.now()) &&
+                                    <div className='launch__date__info'>
+                                        {hideLaunchIcon === future_auction.id &&
+                                        <Animated animationIn='zoomIn'>
+                                            <div className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
+                                        </Animated>
+                                        }
+                                      <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(future_auction.id)} onMouseLeave={() => setHideLaunchIcon(0)}/>
+                                    </div>
+                                  )}
                                 </p>
                             </div>
                             <div className={"total-dates " + (moment(future_auction.endDate).isBefore(moment.now()) ? 'dateError' : '')}>

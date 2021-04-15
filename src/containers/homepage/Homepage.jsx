@@ -5,7 +5,7 @@ import './Homepage.scss';
 import NonFungibleUniverse from '../../components/homepage/NonFungibleUniverse';
 import Welcome from "../../components/homepage/Welcome"
 
-const HomepageContainer = () => {
+const Homepage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -23,4 +23,4 @@ const HomepageContainer = () => {
     )
 }
 
-export default HomepageContainer;
+export default Homepage;

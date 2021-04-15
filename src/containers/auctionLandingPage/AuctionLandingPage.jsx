@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import './AuctionLandingPage.scss';
-import AuctionDetails from '../../components/auctionLandngPage/AuctionDetails';
-import UniverseAuctionDetails from '../../components/auctionLandngPage/UniverseAuctionDetails';
-import RewardTiers from '../../components/auctionLandngPage/RewardTiers';
-import AuctionOwnerDetails from '../../components/auctionLandngPage/AuctionOwnerDetails';
-import PlaceBid from '../../components/auctionLandngPage/PlaceBid';
+import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails';
+import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails';
+import RewardTiers from '../../components/auctionLandingPage/RewardTiers';
+import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails';
+import PlaceBid from '../../components/auctionLandingPage/PlaceBid';
 import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 import uuid from 'react-uuid';
 
-const AuctionLandingPageContainer = () => {
+const AuctionLandingPage = () => {
     const location = useLocation();
     const auction = PLACEHOLDER_ACTIVE_AUCTIONS.filter(auction => auction.id === location.state.id)[0];
     const artist = PLACEHOLDER_ARTISTS.filter(artist => artist.id === auction.artist.id)[0];
@@ -105,7 +105,7 @@ const AuctionLandingPageContainer = () => {
 
     return (
         <div className='auction__landing__page'>
-            <AuctionDetails auction={auction} bidders={bidders} setBidders={setBidders} />
+            <AuctionDetails onAuction={auction} bidders={bidders} setBidders={setBidders} />
             <UniverseAuctionDetails />
             <RewardTiers auction={auction} />
             <AuctionOwnerDetails artist={artist} />
@@ -114,4 +114,4 @@ const AuctionLandingPageContainer = () => {
     )
 }
 
-export default AuctionLandingPageContainer;
+export default AuctionLandingPage;

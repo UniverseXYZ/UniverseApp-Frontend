@@ -5,7 +5,7 @@ import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTo
 import HowItWorks from '../../../components/mintingAndAuctions/about/howItWorks/HowItWorks';
 import OurTeam from '../../../components/mintingAndAuctions/about/OurTeam';
 
-const AboutContainer = () => {
+const About = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -23,4 +23,4 @@ const AboutContainer = () => {
     )
 }
 
-export default AboutContainer;
+export default About;

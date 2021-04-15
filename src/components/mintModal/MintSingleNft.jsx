@@ -17,6 +17,7 @@ import LoadingPopup from '../popups/LoadingPopup'
 import CongratsPopup from '../popups/CongratsPopup'
 import { useLocation } from 'react-router'
 import { useHistory } from 'react-router-dom'
+import { Animated } from 'react-animated-css';
 
 
 const MintSingleNft = ({ onClick }) => {
@@ -37,8 +38,8 @@ const MintSingleNft = ({ onClick }) => {
     const [description, setDescription] = useState('');
     const [editions, setEditions] = useState(1);
     const [previewImage, setPreviewImage] = useState(null);
-    const [hideIcon, setHideIcon] = useState(true);
-    const [hideIcon1,setHideIcon1] = useState(true)
+    const [hideIcon, setHideIcon] = useState(false);
+    const [hideIcon1,setHideIcon1] = useState(false)
     const inputFile = useRef(null);
 
     const [properties, setProperties] = useState([{name:"", value:""}])
@@ -286,18 +287,33 @@ const MintSingleNft = ({ onClick }) => {
                 <textarea rows="5" placeholder="Example copy" className="inp" onChange={(e) => setDescription(e.target.value)} value={description}></textarea>
             </div>
             <div className="single-nft-editions">
-                <h5>Number of editions
-                    <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon(false)} onMouseLeave={() => setHideIcon(true)} />
-                </h5>
-                <div hidden={hideIcon} className="info-text">
-                    <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead.</p>                    
-                </div>    
+                <div className="single-nft-edition-header" >
+                    <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>Number of editions
+                        <img src={infoIcon} alt='Info Icon' />
+                    </h5>
+                    {
+                        hideIcon &&
+                        <Animated animationIn="zoomIn">
+                            <div className="info-text">
+                                <p>NFTs are minted to our auction contract by default. Turn the toggle on if you want them to be minted to your wallet instead.</p>                    
+                            </div>
+                        </Animated>
+                    }                      
+                </div>  
                 <Input className='inp' error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
             </div>
             <div className="single-nft-properties">
-                <h4>Properties (optional) <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon1(false)} onMouseLeave={() => setHideIcon1(true)}/></h4>
-                <div hidden={hideIcon1} className="properties-info-text">
-                    <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
+                <div className="single-nft-properties-header">
+                    <h4 onMouseOver={() => setHideIcon1(true)} onMouseLeave={() => setHideIcon1(false)}>Properties (optional) <img src={infoIcon} alt='Info Icon'/></h4>
+                    {
+                        hideIcon1 &&
+                        <Animated animationIn="zoomIn">
+                            <div className="properties-info-text">
+                                <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
+                            </div>
+                        </Animated>
+                    }
+                    
                 </div>
                 {
                     properties.map((elm,i) => {

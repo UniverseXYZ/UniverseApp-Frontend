@@ -5,7 +5,7 @@ import ArtistDetails from '../../components/artist/ArtistDetails';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs';
 import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 
-const ArtistContainer = () => {
+const Artist = () => {
     const location = useLocation();
     const artist = PLACEHOLDER_ARTISTS.filter(artist => artist.id === location.state.id)[0];
     
@@ -17,10 +17,10 @@ const ArtistContainer = () => {
 
     return (
         <div className='artist__page'>
-            <ArtistDetails artist={artist} />
+            <ArtistDetails onArtist={artist} />
             <ArtistPageTabs />
         </div>
     )
 }
 
-export default ArtistContainer;
+export default Artist;
