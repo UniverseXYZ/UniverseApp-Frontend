@@ -7,16 +7,16 @@ import AppContext from './ContextAPI';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 
-import AuctionsContainer from './containers/auctionsContainer/Auction';
-import RewardTiersContainer from './containers/rewardTiersContainer/RewardTiers';
-import CreateTiersContainer from './containers/createTiersContainer/CreateTiers';
-import MyNFTsContainer from './containers/myNFTsContainer/MyNFTsContainer';
-import ArtistContainer from './containers/artistContainer/ArtistContainer';
-import AuctionLandingPageContainer from './containers/auctionLandingPageContainer/AuctionLandingPageContainer';
-import HomepageContainer from './containers/homepageContainer/HomepageContainer';
-import AboutContainer from './containers/mintingAndAuctions/aboutContainer/AboutContainer';
-import MarketplaceContainer from './containers/mintingAndAuctions/marketplaceContainer/MarketplaceContainer';
-import MyAccountContainer from './containers/myAccountContainer/MyAccountContainer';
+import Auctions from './containers/auctions/Auction';
+import RewardTiers from './containers/rewardTiers/RewardTiers';
+import CreateTiers from './containers/createTiers/CreateTiers';
+import MyNFTs from './containers/myNFTs/MyNFTs';
+import Artist from './containers/artist/Artist';
+import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage';
+import Homepage from './containers/homepage/Homepage';
+import About from './containers/mintingAndAuctions/about/About';
+import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace';
+import MyAccount from './containers/myAccount/MyAccount';
 import uuid from 'react-uuid';
 
 
@@ -122,20 +122,20 @@ const App = () => {
             <Routes>
                 <Header />
                 <Switch>
-                    <Route exact path="/" component={() => <HomepageContainer />} />
-                    <Route exact path="/minting-and-auctions/about" component={() => <AboutContainer />} />
-                    <Route exact path="/minting-and-auctions/marketplace" component={() => <MarketplaceContainer />} />
-                    <Route exact path="/my-nfts" component={() => <MyNFTsContainer />} />
-                    <Route exact path="/my-account" component={() => <MyAccountContainer />} />
+                    <Route exact path="/" component={() => <Homepage />} />
+                    <Route exact path="/minting-and-auctions/about" component={() => <About />} />
+                    <Route exact path="/minting-and-auctions/marketplace" component={() => <Marketplace />} />
+                    <Route exact path="/my-nfts" component={() => <MyNFTs />} />
+                    <Route exact path="/my-account" component={() => <MyAccount />} />
 
-                    <Route exact path="/my-auctions" component={() => <AuctionsContainer />}     />
-                    <Route exact path="/reward-tiers" component={() => <RewardTiersContainer />} />
-                    <Route exact path="/create-tiers" component={() => <CreateTiersContainer />} />
-                    <Route exact path="/select-nfts" component={() => <MyNFTsContainer />} />
+                    <Route exact path="/my-auctions" component={() => <Auctions />}     />
+                    <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
+                    <Route exact path="/create-tiers" component={() => <CreateTiers />} />
+                    <Route exact path="/select-nfts" component={() => <MyNFTs />} />
                     {/* <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} /> */}
 
-                    <Route exact path="/:artist" children={<ArtistContainer />} />
-                    <Route exact path="/:artist/:auction" children={<AuctionLandingPageContainer />} />
+                    <Route exact path="/:artist" children={<Artist />} />
+                    <Route exact path="/:artist/:auction" children={<AuctionLandingPage />} />
                     
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>

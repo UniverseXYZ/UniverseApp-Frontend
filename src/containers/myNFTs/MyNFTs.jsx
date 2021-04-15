@@ -2,12 +2,12 @@ import React from 'react';
 import MyNFTs from '../../components/myNFTs/MyNFTs';
 import './MyNFTs.scss';
 
-const MyNFTsContainer = () => {
+const myNFTs = () => {
     return (
         <div>
-            <MyNFTs />
+            < MyNFTs/>
         </div>
     )
 }
 
-export default MyNFTsContainer;
+export default myNFTs;

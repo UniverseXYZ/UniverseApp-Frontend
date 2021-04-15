@@ -14,10 +14,10 @@ import BidRankingsPopup from '../popups/BidRankingsPopup';
 import PlaceBidPopup from '../popups/PlaceBidPopup';
 import uuid from 'react-uuid';
 
-const AuctionDetails = ({ auction }) => {
+const AuctionDetails = ({ onAuction }) => {
     const { windowSize, loggedInArtist } = useContext(AppContext);
-    const getAllAuctionsForCurrentArtist = PLACEHOLDER_ACTIVE_AUCTIONS.filter(act => act.artist.id === auction.artist.id);
-    const [selectedAuction, setSelectedAuction] = useState(auction);
+    const getAllAuctionsForCurrentArtist = PLACEHOLDER_ACTIVE_AUCTIONS.filter(act => act.artist.id === onAuction.artist.id);
+    const [selectedAuction, setSelectedAuction] = useState(onAuction);
     const [sliderSettings, setSliderSettings] = useState({
         dots: false,
         infinite: false,

@@ -4,7 +4,7 @@ import CreateYourAuction from '../../../components/mintingAndAuctions/marketplac
 import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs';
 import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome';
 
-const MarketplaceContainer = () => {
+const Marketplace = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -21,4 +21,4 @@ const MarketplaceContainer = () => {
     )
 }
 
-export default MarketplaceContainer;
+export default Marketplace;

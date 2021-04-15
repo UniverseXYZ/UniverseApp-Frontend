@@ -14,6 +14,7 @@ import uuid from 'react-uuid';
 import randomColor from 'randomcolor';
 import AppContext from '../../ContextAPI';
 import Popup from "reactjs-popup"
+import { Animated } from 'react-animated-css';
 
 const CreateNftCol = (props) => {
 
@@ -34,8 +35,8 @@ const CreateNftCol = (props) => {
     const [description, setDescription] = useState('');
     const [editions, setEditions] = useState(1);
     const [previewImage, setPreviewImage] = useState(null);
-    const [hideIcon, setHideIcon] = useState(true);
-    const [hideIcon1,setHideIcon1] = useState(true)
+    const [hideIcon, setHideIcon] = useState(false);
+    const [hideIcon1,setHideIcon1] = useState(false)
     const inputFile = useRef(null);
 
     const [properties, setProperties] = useState([{name:"", value:""}])
@@ -298,21 +299,34 @@ const CreateNftCol = (props) => {
                             <textarea rows="5" placeholder="Example copy" className="inp" onChange={(e) => setDescription(e.target.value)} value={description}></textarea>
                         </div>
                         <div className="nft-coll-editions">
-                            <h5>Number of editions
-                                <img onMouseOver={() => setHideIcon(false)}
-                                    onMouseLeave={() => setHideIcon(true)} 
-                                    src={infoIcon} alt='Info Icon'
-                                />
-                            </h5>
-                            <div hidden={hideIcon} className="info-text">
-                                <p>Total amount of NFTs that will be distributed to the current revard tier winners</p>
+                            <div className="nft-coll-editions-header">
+                                <h5 onMouseOver={() => setHideIcon(true)}
+                                    onMouseLeave={() => setHideIcon(false)} >Number of editions
+                                    <img src={infoIcon} alt='Info Icon'/>
+                                </h5>
+                                {
+                                    hideIcon &&
+                                    <Animated animationIn="zoomIn">
+                                        <div className="info-text">
+                                            <p>Total amount of NFTs that will be distributed to the current revard tier winners</p>
+                                        </div>
+                                    </Animated>
+                                }    
                             </div>
                             <Input className="inp" error={errors.edition} placeholder="Enter Number of Editions" onChange={validateEdition} value={editions} />
                         </div>
                         <div className="nft-coll-properties">
-                            <h4>Properties (optional) <img src={infoIcon} alt='Info Icon' onMouseOver={() => setHideIcon1(false)} onMouseLeave={() => setHideIcon1(true)}/></h4>
-                            <div hidden={hideIcon1} className="properties-info-text">
-                                <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
+                            <div className="nft-coll-properties-header">
+                                <h4 onMouseOver={() => setHideIcon1(true)} onMouseLeave={() => setHideIcon1(false)}>Properties (optional) <img src={infoIcon} alt='Info Icon' /></h4>
+                                {
+                                    hideIcon1 &&
+                                    <Animated animationIn="zoomIn">
+                                        <div className="properties-info-text">
+                                            <p>Adding properties allows you to specify the character NFT traits, the goods NFT sizes, or any other details you would like to specify.</p>
+                                        </div>
+                                    </Animated>
+                                }
+                                
                             </div>
                             
                             {

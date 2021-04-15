@@ -7,7 +7,7 @@ import instagramIcon from '../../assets/images/instagram-outlined.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import Skeleton from 'react-loading-skeleton';
 
-const ArtistDetails = ({artist}) => {
+const ArtistDetails = ({onArtist}) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,20 +23,20 @@ const ArtistDetails = ({artist}) => {
                 <Animated animationIn="zoomIn" animationOut="fadeOutUp" isVisible={true}>
                     <div className='artist__details__section__container'>
                         <div className='avatar'>
-                            <img src={artist.avatar} alt={artist.name} />
-                            <h2 className='show__on__mobile'>{artist.name}</h2>
+                            <img src={onArtist.avatar} alt={onArtist.name} />
+                            <h2 className='show__on__mobile'>{onArtist.name}</h2>
                         </div>
                         <div className='info'>
-                            <h1 className='title'>{artist.name}</h1>
-                            <p className='desc'>{artist.about}</p>
+                            <h1 className='title'>{onArtist.name}</h1>
+                            <p className='desc'>{onArtist.about}</p>
                             <div className='social__links'>
-                                <a href={artist.instagramUrl} target='_blank'>
+                                <a href={onArtist.instagramUrl} target='_blank'>
                                     <img src={instagramIcon} alt='Instagram' />
                                 </a>
-                                <a href={artist.twitterUrl} target='_blank'>
+                                <a href={onArtist.twitterUrl} target='_blank'>
                                     <img src={twitterIcon} alt='Twitter' />
                                 </a>
-                                <CopyToClipboard text={artist.address} onCopy={() => NotificationManager.success('Copied!')}>
+                                <CopyToClipboard text={onArtist.address} onCopy={() => NotificationManager.success('Copied!')}>
                                     <div className='copy__to__clipboard'>
                                         <img src={copyIcon} alt='Copy to clipboard' />
                                         <span>Copy URL</span>
