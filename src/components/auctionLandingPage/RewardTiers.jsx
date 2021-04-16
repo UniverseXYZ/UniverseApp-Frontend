@@ -1,6 +1,7 @@
 import React from 'react'
 import { AnimatedOnScroll } from 'react-animated-css-onscroll'
-import Button from '../button/Button'
+import Popup from "reactjs-popup"
+import PreviewNFTsPopup from '../popups/PreviewNFTsPopup'
 
 const RewardTiers = ({ auction }) => {
     
@@ -38,7 +39,15 @@ const RewardTiers = ({ auction }) => {
                                         </div>
                                         <div className='tier__description'>{tier.description}</div>
                                         <div className='preview__nfts'>
-                                            <Button className='light-button'>Preview NFTs</Button>
+                                            <Popup
+                                                trigger={<button className='light-button'>Preview NFTs</button>}
+                                            >
+                                                {
+                                                    (close) => (
+                                                        <PreviewNFTsPopup onClose={close} onTier={tier} />
+                                                    )
+                                                }
+                                            </Popup>
                                         </div>
                                     </div>
                                 </div>
