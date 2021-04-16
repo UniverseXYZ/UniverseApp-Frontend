@@ -43,8 +43,8 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                             <div ref={ref} className='dropdown minting-drop'>
                                 <div className='dropdown__body'>
                                     <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
-                                    <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active auction</button>
-                                    <button onClick={() => { history.push('/minting-and-auctions/marketplace'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future auctions</button>
+                                    <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace/active-auctions'); setIsMintingDropdownOpened(!isMintingDropdownOpened)}}>Active auction</button>
+                                    <button onClick={() => { history.push('/minting-and-auctions/marketplace/future-auctions'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>Future auctions</button>
                                 </div>
                             </div>
                         </Animated>

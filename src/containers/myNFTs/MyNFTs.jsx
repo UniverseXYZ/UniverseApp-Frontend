@@ -3,11 +3,7 @@ import MyNFTs from '../../components/myNFTs/MyNFTs';
 import './MyNFTs.scss';
 
 const myNFTs = () => {
-    return (
-        <div>
-            < MyNFTs/>
-        </div>
-    )
+    return <MyNFTs />
 }
 
 export default myNFTs;

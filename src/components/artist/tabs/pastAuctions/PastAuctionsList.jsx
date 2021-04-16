@@ -32,8 +32,9 @@ const PastAuctionsList = ({data, perPage, offset}) => {
                                     <button>{auction.artist.name}</button>
                                 </div>
                             </div>
-                            <div className='auction__img'>
-                                <img src={auction.image} alt={auction.title} />
+                            <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
+                                <img className='original' src={auction.image} alt={auction.title} />
+                                <img className='artist__image' src={auction.artist.avatar} alt={auction.title} />
                             </div>
                             <div className='auction__details'>
                                 <div>

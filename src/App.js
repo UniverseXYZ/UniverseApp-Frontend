@@ -127,7 +127,8 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={() => <Homepage />} />
                     <Route exact path="/minting-and-auctions/about" component={() => <About />} />
-                    <Route exact path="/minting-and-auctions/marketplace" component={() => <Marketplace />} />
+                    <Route exact path="/minting-and-auctions/marketplace/active-auctions" component={() => <Marketplace />} />
+                    <Route exact path="/minting-and-auctions/marketplace/future-auctions" component={() => <Marketplace />} />
                     <Route exact path="/my-nfts" component={() => <MyNFTs />} />
                     <Route exact path="/my-account" component={() => <MyAccount />} />
 

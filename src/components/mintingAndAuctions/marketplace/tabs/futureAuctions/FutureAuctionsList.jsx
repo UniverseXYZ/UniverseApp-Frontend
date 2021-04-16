@@ -23,8 +23,9 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                 return !loading ? (
                     <Animated animationIn="fadeInUp" key={auction.id}>
                         <div className='future__auction__item'>
-                            <div className='auction__img'>
-                                <img src={auction.image} alt={auction.title} />
+                            <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
+                                <img className='original' src={auction.image} alt={auction.title} />
+                                <img className='artist__image' src={auction.artist.avatar} alt={auction.title} />
                             </div>
                             <div className='title'>
                                 <h1>{auction.title}</h1>
@@ -40,8 +41,8 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                                     <h3>{auction.startsIn}</h3>
                                 </div>
                                 <div className='auction__details__box'>
-                                        <p>Winners</p>
-                                        <h3>{auction.winners}</h3>
+                                    <p>Winners</p>
+                                    <h3>{auction.winners}</h3>
                                 </div>
                                 <div className='auction__details__box'>
                                     <p>NFTs Per Winner:</p>
@@ -68,7 +69,7 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                                 <h3><Skeleton height={20} width={80} /></h3>
                             </div>
                             <div className='auction__details__box'>
-                                    <h3><Skeleton height={20} width={80} /></h3>
+                                <h3><Skeleton height={20} width={80} /></h3>
                             </div>
                             <div className='auction__details__box'>
                                 <h3><Skeleton height={20} width={80} /></h3>

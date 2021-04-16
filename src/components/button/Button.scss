@@ -14,6 +14,15 @@
    font-size: 16px;
    line-height: 20px;
    color: $black;
+   transition: .5s;
+   &:hover {
+      background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+   }
+   &:disabled{
+      background: #E6E6E6;
+      color: rgba(0, 0, 0, 0.2);
+      box-shadow: none;
+   }
 }
 .light-border-button{
    // display: flex;
@@ -33,9 +42,10 @@
    font-size: 16px;
    line-height: 20px;
    color: $black;
-}
-button:disabled{
-   background: #E6E6E6;
-   color: rgba(0, 0, 0, 0.2);
-   box-shadow: none;
+   transition: .5s;
+   &:disabled{
+      border: 1px solid #E6E6E6;
+      color: #E6E6E6;
+      box-shadow: none;
+   }
 }
