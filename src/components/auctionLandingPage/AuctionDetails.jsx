@@ -126,8 +126,9 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                             return (
                                 <div key={act.id} className={`carousel__auction__container ${selectedAuction.id === act.id ? 'selected' : ''}`} onClick={() => { setSelectedAuction(act); setLoading(true); { history.push(`/${act.artist.name.split(' ')[1]}/${act.title}`, {id: act.id}) } }}>
                                     <div className='carousel__auction' style={{ border: selectedAuction.background ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.2)' }}>
-                                        <div className='carousel__auction__image'>
-                                            <img src={act.image} alt={act.title} />
+                                        <div className={`carousel__auction__image ${act.image ? '' : 'show__avatar'}`}>
+                                            <img className='original' src={act.image} alt={act.title} />
+                                            <img className='artist__image' src={act.artist.avatar} alt={act.title} />
                                         </div>
                                         <div className='carousel__auction__info'>
                                             <h4 style={{ color: selectedAuction.background ? '#fff' : '#000' }}>{act.title}</h4>
@@ -147,8 +148,9 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 {!loading ?
                     <Animated animationIn="zoomIn" key={selectedAuction.id}>
                         <div className='auction__details__box'>
-                            <div className='auction__details__box__image'>
-                                <img src={selectedAuction.image} />
+                            <div className={`auction__details__box__image ${selectedAuction.image ? '' : 'show__avatar'}`}>
+                                <img className='original' src={selectedAuction.image} alt={selectedAuction.title} />
+                                <img className='artist__image' src={selectedAuction.artist.avatar} alt={selectedAuction.title} />
                             </div>
                             <div className='auction__details__box__info'>
                                 <h1 className='title'>{selectedAuction.title}</h1>

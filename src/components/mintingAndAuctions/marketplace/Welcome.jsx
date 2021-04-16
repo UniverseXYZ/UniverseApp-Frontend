@@ -9,7 +9,7 @@ const Welcome = () => {
             <img className='ellipse-r' src={ellipses} alt='Ellipses' />
             <AnimatedOnScroll animationIn="fadeInUp">
                 <div className='welcome__section__container'>
-                    <h1 className='title'>Welcome to the Auction Marketplace</h1>
+                    <h1 className='title'>Welcome to the Auction House</h1>
                     <p className='desc'>Check out on creative releases from artists that partnered with us</p>
                 </div>
             </AnimatedOnScroll>

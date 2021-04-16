@@ -35,7 +35,8 @@ const Header = (props) => {
         if (
             props.location.pathname === '/' ||
             props.location.pathname === '/minting-and-auctions/about' ||
-            props.location.pathname === '/minting-and-auctions/marketplace'
+            props.location.pathname === '/minting-and-auctions/marketplace/active-auctions' ||
+            props.location.pathname === '/minting-and-auctions/marketplace/future-auctions'
         ) {
             document.querySelector('header').classList.add('dark')
         } else {

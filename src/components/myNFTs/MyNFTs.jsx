@@ -157,23 +157,23 @@ const MyNFTs = () => {
                         <div className='container select-nfts'>
                         <div className="back-rew" onClick={() => { history.push('/reward-tiers') }}><img src={arrow} alt="back"/><span>Create reward tier</span></div>
                         {showModal &&
-                           <MintModal open={showModal} onClose={handleClose}></MintModal>
-                         }
+                            <MintModal open={showModal} onClose={handleClose}></MintModal>
+                        }
                         <div>
                         <div className='head-part'>
-                          <h2 className="tier-title">Select NTFs</h2>
+                            <h2 className="tier-title">Select NTFs</h2>
                         </div>
                         <div className="space-tier-div">
-                             {selectedNft.length >0 ? "" : 
-                             <p>No NFTs found in your wallet</p>
-                             }
+                            {selectedNft.length >0 ? "" : 
+                                <p>No NFTs found in your wallet</p>
+                            }
                         </div>
                         <div className="create-rew-tier select-ntfs" onClick={handleOpen} >
                             <div className="plus-icon">
                                 <img src={union} alt="create"/>
                             </div> 
                             <div className="create-rew-text">
-                              <p>Create NFT</p>
+                                <p>Create NFT</p>
                             </div>
                         </div>
                         </div>

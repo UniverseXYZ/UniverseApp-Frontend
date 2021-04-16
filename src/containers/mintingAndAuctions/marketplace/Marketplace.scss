@@ -44,6 +44,7 @@
                 text-align: center;
                 color: $white;
                 margin-bottom: 20px;
+                max-width: 580px;
                 @include md {
                     font-size: 26px;
                 }
@@ -306,11 +307,37 @@
                                 grid-column: 1/2;
                                 min-width: 200px;
                                 min-height: 200px;
-                                img {
+                                max-height: 300px;
+                                border-radius: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                &.show__avatar {
+                                    background: conic-gradient(from 176.21deg at 50% 50%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(95.11% 95.11% at 36.64% 4.89%, #F0E939 0%, #FEB0FE 49.86%, #42A4FF 100%);
+                                    background-blend-mode: screen, normal;
+                                    img.original {
+                                        display: none;
+                                    }
+                                    img.artist__image {
+                                        display: block;
+                                    }
+                                }
+
+                                img.original {
+                                    display: block;
                                     width: 100%;
                                     height: 100%;
                                     object-fit: cover;
                                     border-radius: 10px;
+                                }
+                                img.artist__image {
+                                    display: none;
+                                    width: 180px;
+                                    height: 180px;
+                                    object-fit: cover;
+                                    border-radius: 50%;
+                                    border: 4px solid $white;
                                 }
                                 @include lg {
                                     grid-row: 1/2;
@@ -545,13 +572,37 @@
                             }
                             .auction__img {
                                 min-width: 200px;
-                                min-height: 200px;
+                                height: 300px;
                                 margin-bottom: 16px;
-                                img {
+                                border-radius: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                &.show__avatar {
+                                    background: conic-gradient(from 176.21deg at 50% 50%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(95.11% 95.11% at 36.64% 4.89%, #F0E939 0%, #FEB0FE 49.86%, #42A4FF 100%);
+                                    background-blend-mode: screen, normal;
+                                    img.original {
+                                        display: none;
+                                    }
+                                    img.artist__image {
+                                        display: block;
+                                    }
+                                }
+
+                                img.original {
+                                    display: block;
                                     width: 100%;
                                     height: 100%;
                                     object-fit: cover;
                                     border-radius: 10px;
+                                }
+                                img.artist__image {
+                                    display: none;
+                                    width: 180px;
+                                    height: 180px;
+                                    object-fit: cover;
+                                    border-radius: 50%;
+                                    border: 4px solid $white;
                                 }
                             }
                             .auction__details {
@@ -618,6 +669,7 @@
                 line-height: 140%;
                 color: $black;
                 margin-bottom: 15px;
+                
                 @include lg {
                     font-size: 26px;
                 }
