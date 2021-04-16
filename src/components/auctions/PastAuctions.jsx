@@ -36,29 +36,29 @@ const PastAuctions = () => {
     return (
         <div className='past-auctions'>
             <div className='input-search'>
-            <button onClick={clearInput} className="clear-input">Clear</button>
-            <img src={searchIcon} alt='search'/>
-            <Input className='searchInp'
-            onChange={(e) => handleSearch(e.target.value)}
-            value={searchByName}
-            placeholder='Search by name'/>
+                <button onClick={clearInput} className="clear-input">Clear</button>
+                <img src={searchIcon} alt='search'/>
+                <Input className='searchInp'
+                    onChange={(e) => handleSearch(e.target.value)}
+                    value={searchByName}
+                    placeholder='Search by name'
+                />
             </div>
             {PAST_ACTIONS_DATA.slice(offset,offset+perPage).filter(item=>item.name.toLowerCase().includes(searchByName.toLowerCase())).map(past_auction => {
                 return (
                     <div className="auction past-auction" key={past_auction.id}>
                         <div className="auction-header">
                             <div className="img_head">
-                            <img className='auctionIcon' src={icon} alt='auction'/>
-                            <h3>{past_auction.name}</h3>
-                            <div className="copy-div">
-                                        <div className='copy' title='Copy to clipboard'>
-                                                <div className="copied-div" hidden={!copied}>URL copied!<span></span></div>
-                                            <CopyToClipboard text={past_auction.auctionLink} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
-                                                <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/>Copy URL</span>
-                                             
-                                            </CopyToClipboard>
-                                        </div>
+                                <img className='auctionIcon' src={icon} alt='auction'/>
+                                <h3>{past_auction.name}</h3>
+                                <div className="copy-div">
+                                    <div className='copy' title='Copy to clipboard'>
+                                        <div className="copied-div" hidden={!copied}>URL copied!<span></span></div>
+                                        <CopyToClipboard text={past_auction.auctionLink} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                            <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/>Copy URL</span>                                         
+                                        </CopyToClipboard>
                                     </div>
+                                </div>
                             </div>
                             <div className="launch-auction">
                                 {shownActionId === past_auction.id ?

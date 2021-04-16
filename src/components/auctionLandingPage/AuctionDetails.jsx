@@ -27,6 +27,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
         slidesToScroll: 1
     });
     const [loading, setLoading] = useState(true);
+    const [copied, setCopied] = useState(false);
     const [currentBid, setCurrentBid] = useState(null);
     const [countdown, setCountdown] = useState({
         days: null,
@@ -172,12 +173,14 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                                             <div className='auction__ended'>Auction has ended</div>
                                         </Animated>
                                     }
-                                    <CopyToClipboard text={window.location.href} onCopy={() => NotificationManager.success('Copied!')}>
-                                        <div className='copy__to__clipboard'>
-                                            <img src={copyIcon} alt='Copy to clipboard' />
-                                            <span>Copy URL</span>
+                                    <div className="copy-div">
+                                        <div className='copy' title='Copy to clipboard'>
+                                            <div className="copied-div" hidden={!copied}>URL copied!<span></span></div>
+                                            <CopyToClipboard text={window.location.href} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                                <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/>Copy URL</span>
+                                            </CopyToClipboard>
                                         </div>
-                                    </CopyToClipboard>
+                                    </div>
                                 </div>
                             </div>
                             {!selectedAuctionEnded && 
