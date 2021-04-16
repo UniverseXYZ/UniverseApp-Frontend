@@ -9,6 +9,7 @@ import Skeleton from 'react-loading-skeleton';
 
 const ArtistDetails = ({onArtist}) => {
     const [loading, setLoading] = useState(true);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         // Here need to get artist details
@@ -36,12 +37,14 @@ const ArtistDetails = ({onArtist}) => {
                                 <a href={onArtist.twitterUrl} target='_blank'>
                                     <img src={twitterIcon} alt='Twitter' />
                                 </a>
-                                <CopyToClipboard text={onArtist.address} onCopy={() => NotificationManager.success('Copied!')}>
-                                    <div className='copy__to__clipboard'>
-                                        <img src={copyIcon} alt='Copy to clipboard' />
-                                        <span>Copy URL</span>
+                                <div className="copy-div">
+                                    <div className='copy' title='Copy to clipboard'>
+                                        <div className="copied-div" hidden={!copied}>URL copied!<span></span></div>
+                                        <CopyToClipboard text={onArtist.address} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                            <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/>Copy URL</span>
+                                        </CopyToClipboard>
                                     </div>
-                                </CopyToClipboard>
+                                </div>
                             </div>
                         </div>
                     </div> 

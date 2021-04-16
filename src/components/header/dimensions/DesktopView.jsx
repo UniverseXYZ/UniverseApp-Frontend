@@ -17,6 +17,7 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
     const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
+    const [copied, setCopied] = useState(false)
     const history = useHistory();
     const ref = useRef(null);
 
@@ -81,12 +82,16 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
                                         <div className="copy-div">
                                             <img className="icon-img" src={Icon} alt='icon' />
                                             <div className='ethereum__address'>{ethereumAddress}</div>
-                                            <div className='copy' title='Copy to clipboard'>
-                                                <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
-                                                    <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
-                                                </CopyToClipboard>
+                                            <div className="copy__div">
+                                                <div className='copy' title='Copy to clipboard'>
+                                                    <div className="copied-div" hidden={!copied}>Address copied!<span></span></div>
+                                                    <CopyToClipboard text={ethereumAddress} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                                        <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/></span>
+                                                    </CopyToClipboard>
+                                                </div>
                                             </div>
                                         </div>
+
                                         <div className="group1">
                                             <img src={Group1} alt="ETH" />
                                             <span className="first-span">6,24 ETH</span>

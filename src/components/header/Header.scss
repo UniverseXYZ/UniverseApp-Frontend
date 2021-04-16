@@ -176,6 +176,55 @@ header {
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
+
+                            .copy__div{
+                                padding-top: 2px;
+                                padding-right: 8px;
+    
+                                .copy>span{
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 18px;
+                                    color: #000000;
+                                    opacity: 0.4;
+                                }
+                                .copyImg{
+                                    margin-right: 5px; 
+                                    margin-left: 11px; 
+                                }
+                                .copy>span{
+                                    opacity: 0.6;
+                                }
+                                .copied-div{
+                                    position: absolute;
+                                    width: fit-content;
+                                    height: 27px;
+                                    background: #000;
+                                    border-radius: 100px;
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 150%;
+                                    text-align: center;
+                                    color: #FFFFFF;
+                                    margin-top: -12%;
+                                    left: 68%;
+                                    padding: 4px 12px;
+                                
+                                    span{
+                                        position: absolute;
+                                        width: 7.6px;
+                                        height: 7.6px;
+                                        left: 48%;
+                                        top: 23px;
+                                        background: #000;
+                                        transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+                                    }
+                                }
+                            }
                         }   
                         
                         .first-span{
@@ -367,6 +416,55 @@ header {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
+
+                        .copy__div{
+                                padding-top: 2px;
+                                padding-right: 8px;
+    
+                                .copy>span{
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 18px;
+                                    color: #000000;
+                                    opacity: 0.4;
+                                }
+                                .copyImg{
+                                    margin-right: 5px; 
+                                    margin-left: 11px; 
+                                }
+                                .copy>span{
+                                    opacity: 0.6;
+                                }
+                                .copied-div{
+                                    position: absolute;
+                                    width: fit-content;
+                                    height: 27px;
+                                    background: #000;
+                                    border-radius: 100px;
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 150%;
+                                    text-align: center;
+                                    color: #FFFFFF;
+                                    margin-top: -12%;
+                                    left: 68%;
+                                    padding: 4px 12px;
+                                
+                                    span{
+                                        position: absolute;
+                                        width: 7.6px;
+                                        height: 7.6px;
+                                        left: 48%;
+                                        top: 23px;
+                                        background: #000;
+                                        transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+                                    }
+                                }
+                            }
                     }   
                     
                     .first-span{
@@ -648,6 +746,55 @@ header {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
+
+                        .copy__div{
+                            padding-top: 2px;
+                            padding-right: 8px;
+
+                            .copy>span{
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 18px;
+                                color: #000000;
+                                opacity: 0.4;
+                            }
+                            .copyImg{
+                                margin-right: 5px; 
+                                margin-left: 11px; 
+                            }
+                            .copy>span{
+                                opacity: 0.6;
+                            }
+                            .copied-div{
+                                position: absolute;
+                                width: fit-content;
+                                height: 27px;
+                                background: #000;
+                                border-radius: 100px;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 150%;
+                                text-align: center;
+                                color: #FFFFFF;
+                                margin-top: -12%;
+                                left: 68%;
+                                padding: 4px 12px;
+                            
+                                span{
+                                    position: absolute;
+                                    width: 7.6px;
+                                    height: 7.6px;
+                                    left: 48%;
+                                    top: 23px;
+                                    background: #000;
+                                    transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+                                }
+                            }
+                        }
                     }   
                     
                     .first-span{

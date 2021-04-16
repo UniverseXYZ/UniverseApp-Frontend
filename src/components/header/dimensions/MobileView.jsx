@@ -38,6 +38,7 @@ const MobileView = (props) => {
     const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
     const [collapseAboutMenu, setCollapseAboutMenu] = useState(false);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
+    const [copied, setCopied] = useState(false)
     const ref = useRef(null);
     const history = useHistory();
 
@@ -71,10 +72,13 @@ const MobileView = (props) => {
                                     <div className="copy-div">
                                         <img className="icon-img" src={accountIcon} alt='icon' />
                                         <div className='ethereum__address'>{ethereumAddress}</div>
-                                        <div className='copy' title='Copy to clipboard'>
-                                            <CopyToClipboard text={ethereumAddress} onCopy={() => NotificationManager.success('Copied!')}>
-                                                <span><img src={copyIcon} alt='Copy to clipboard icon' /></span>
-                                            </CopyToClipboard>
+                                        <div className="copy__div">
+                                            <div className='copy' title='Copy to clipboard'>
+                                                <div className="copied-div" hidden={!copied}>Address copied!<span></span></div>
+                                                <CopyToClipboard text={ethereumAddress} onCopy={() => { setCopied(true); setTimeout(() => { setCopied(false) }, 1000) }}>
+                                                    <span><img src={copyIcon} alt='Copy to clipboard icon' className='copyImg'/></span>
+                                                </CopyToClipboard>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="group1">
