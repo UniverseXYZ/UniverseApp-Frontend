@@ -45,8 +45,6 @@
         display: flex;
 
         .total-dates{
-            // position: relative;
-            display: flex;
             background: rgba(0, 0, 0, 0.05);
             border-radius: 12px;
             padding: 6px 16px;
@@ -54,57 +52,63 @@
 
             p{
                 display: flex;
-                align-items: center;
+                position: relative;
                 font-family: $spaceGroteskFont;
                 font-size: 14px;
                 line-height: 150%;
                 color: $black;
-            }
-            img{
-                margin: 0px 0px 3px 6px;
-            }
-            .launch__date__info {
-                position: relative;
-            }
-            .launch-info{
-                position: absolute;
-                z-index: 2;
-                padding: 16px;
-                width: 224px;
-                background: $white;
-                border-radius: 12px;
-                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                bottom: 25px;
-                left: 50%;
-                transform: translateX(-50%);
 
-                p{
-                    font-family: $spaceGroteskFont;
-                    font-weight: 300;
-                    font-size: 12px;
-                    line-height: 150%;
-                    color: $black;
+                img{
+                    margin: 0px 0px 3px 6px;
+                }
+            
+                
+                .launch__date__info {
+
+                    .launch-info{
+                        position: absolute;
+                        z-index: 2;
+                        padding: 16px;
+                        width: 224px;
+                        background: $white;
+                        border-radius: 12px;
+                        box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                        bottom: 5px;
+                        left: 50%;
+                        transform: translateX(-50%);
+        
+                        p{
+                            font-family: $spaceGroteskFont;
+                            font-weight: 300;
+                            font-size: 12px;
+                            line-height: 150%;
+                            color: $black;
+                        }
+                    }
                 }
             }
 
-            .end-info{
-                position: absolute;
-                z-index: 2;
-                padding: 16px;
-                width: 251px;
-                background: $white;
-                border-radius: 12px;
-                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                bottom: 25px;
-                left: 100%;
-                transform: translateX(-50%);
+            .end__date__info{
 
-                p{
-                    font-family: $spaceGroteskFont;
-                    font-weight: 300;
-                    font-size: 12px;
-                    line-height: 150%;
-                    color: $black;
+                .end-info{
+                    position: absolute;
+                    z-index: 2;
+                    padding: 16px;
+                    width: 251px;
+                    background: $white;
+                    border-radius: 12px;
+                    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                    bottom: 5px;
+                    left: 100%;
+                    transform: translateX(-50%);
+
+                    p{
+                        font-family: $spaceGroteskFont;
+                        font-weight: 300;
+                        font-size: 12px;
+                        line-height: 150%;
+                        color: $black;
+                    }
                 }
             }
         }
@@ -227,15 +231,16 @@
             height: 20px;
             border-radius: 50%;
             margin-bottom: 7px;
+            z-index: 10;
 
-            .hz-line{
-                position: absolute;
-                left: 20px;
-                top: 10px;
-                width: 340px;
-                height: 0px;
-                border: 1px solid red;
-            }
+            // .hz-line{
+            //     position: absolute;
+            //     left: 20px;
+            //     top: 10px;
+            //     width: 340px;
+            //     height: 0px;
+            //     border: 1px solid red;
+            // }
 
             img{
                 width: 20px;
@@ -245,8 +250,12 @@
         }
         .step-1{
             .circle{
-                .hz-line{
-                    // z-index: 1;
+                .hz-line1{
+                    position: absolute;
+                    left: 20px;
+                    top: 10px;
+                    height: 0px;
+                    z-index: 1;
                     background: 
                     linear-gradient($white, $white) padding-box,
                     linear-gradient(to right, #bceb01, #9ceb28) border-box;
@@ -267,8 +276,12 @@
         .step-2{
             .circle{
                 
-                .hz-line{
-                    z-index: 2;
+                .hz-line2{
+                    position: absolute;
+                    left: 20px;
+                    top: 10px;
+                    height: 0px;
+                    z-index: 5;
                     border: 1px solid rgba(0, 0, 0, 0.1);
                     width: 365px;
                 }

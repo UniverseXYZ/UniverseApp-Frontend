@@ -72,23 +72,31 @@ const FutureAuctions = () => {
                                 <p>Total NFTs: <b>{future_auction.totalNFTs}</b></p>
                             </div>
                             <div className={"total-dates " + (moment(future_auction.launchDate).isBefore(moment.now()) ? 'dateError' : '')}>
-                                <p>Launch date: <b><Moment format="MMMM DD, hh:mm">{future_auction.launchDate}</Moment></b> 
+                                <p onMouseOver={()=>setHideLaunchIcon(future_auction.id)} onMouseLeave={() => setHideLaunchIcon(0)}>Launch date: <b><Moment format="MMMM DD, hh:mm">{future_auction.launchDate}</Moment></b> 
                                 {(moment(future_auction.launchDate).isBefore(moment.now()) &&
                                     <div className='launch__date__info'>
                                         {hideLaunchIcon === future_auction.id &&
-                                        <Animated animationIn='zoomIn'>
+                                        <Animated animationIn='zoomIn' style={{position: 'relative'}}>
                                             <div className="launch-info">Your launch date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
                                         </Animated>
                                         }
-                                      <img src={infoIconRed} onMouseOver={()=>setHideLaunchIcon(future_auction.id)} onMouseLeave={() => setHideLaunchIcon(0)}/>
+                                      <img src={infoIconRed} />
                                     </div>
                                   )}
                                 </p>
                             </div>
                             <div className={"total-dates " + (moment(future_auction.endDate).isBefore(moment.now()) ? 'dateError' : '')}>
-                                <div hidden={hideEndIcon === future_auction.id? false :true} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
-                                <p>End date: <b><Moment format="MMMM DD, hh:mm">{future_auction.endDate}</Moment></b> {(moment(future_auction.endDate).isBefore(moment.now()) ?
-                                  <img src={infoIconRed} onMouseOver={() => setHideEndIcon(future_auction.id)} onMouseLeave={() => setHideEndIcon(0)}/>: '')}
+                                <p onMouseOver={() => setHideEndIcon(future_auction.id)} onMouseLeave={() => setHideEndIcon(0)}>End date: <b><Moment format="MMMM DD, hh:mm">{future_auction.endDate}</Moment></b> 
+                                    {(moment(future_auction.endDate).isBefore(moment.now()) &&
+                                        <div className="end__date__info">
+                                            {hideEndIcon === future_auction.id &&
+                                                <Animated animationIn='zoomIn' style={{position: 'relative'}}>
+                                                    <div hidden={hideEndIcon === future_auction.id? false :true} className="end-info">Your launch and end date has already passed. Go to Edit Auction and adjust the launch and end dates.</div>
+                                                </Animated>
+                                            }
+                                            <img src={infoIconRed} />
+                                        </div>
+                                    )}
                                 </p>
                             </div>
                         </div>
@@ -98,7 +106,7 @@ const FutureAuctions = () => {
                                 <h4>Auction Set Up</h4>
                                 <div className="circle">
                                     <img src={doneIcon}/>
-                                    <div className="hz-line"></div>
+                                    <div className="hz-line1"></div>
                                 </div>
                                 <Button className="light-border-button">Edit auction</Button>
                             </div>
@@ -108,7 +116,7 @@ const FutureAuctions = () => {
                                 <div className="circle">
                                     <img hidden={!future_auction.mint} src={doneIcon}/>
                                     <img hidden={future_auction.mint} src={emptyMark}/>
-                                    <div className="hz-line"></div>
+                                    <div className="hz-line2"></div>
                                 </div>
                                 {future_auction.mint === true ?
                                    <Button disabled className="light-button">Mint NFTs</Button> :
