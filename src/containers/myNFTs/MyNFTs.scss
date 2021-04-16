@@ -997,6 +997,7 @@
             }
             .infoSelect-div{
                 display: flex;
+                padding: 16px 0px;
                 span{
                     width: 15%;
                     font-family: $spaceGroteskFont;
@@ -1006,14 +1007,41 @@
                     line-height: 18px;
                 }
             }
-            .continue-ntf{
-                margin: 20px 0;
-                text-align: end;
+            .sel-info{
+                display: flex;
+                padding-bottom: 25px;
+            }
+            .continue-nft{
+                min-height: 50px;
+                position: relative;
+                
+                button{
+                    position:absolute;
+                    bottom: 0;
+                }
             }
             .err-select{
                 text-align: right;
                 color: #FF4949;
                 width: 70%!important;
+            }
+            .img-div{
+                display: flex;
+                width: 85%;
+                .imgs{
+                    position: relative;
+                    .del-img{
+                        position: absolute;
+                        bottom: 20px;
+                        left: 30px;
+                    }
+                }
+            }
+            .smallView-image{
+            margin-right: 16px;
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
             }
         }
 
