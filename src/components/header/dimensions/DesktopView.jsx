@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {NotificationManager} from 'react-notifications';
 import {Animated} from "react-animated-css";
 import Popup from "reactjs-popup"
 import Icon from '../../../assets/images/icon1.svg';
@@ -12,7 +12,7 @@ import Group1 from '../../../assets/images/Group1.svg';
 import Group2 from '../../../assets/images/Group2.svg';
 import SelectWalletPopup from '../../popups/SelectWalletPopup';
 
-const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet}) => {
+const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet }) => {
     const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
@@ -136,6 +136,15 @@ const DesktopView = ({ethereumAddress, handleConnectWallet, showInstallWalletPop
             </ul>
         </div>
     )
+}
+
+DesktopView.propTypes = {
+    ethereumAddress: PropTypes.string,
+    handleConnectWallet: PropTypes.func,
+    showInstallWalletPopup: PropTypes.bool,
+    setShowInstallWalletPopup: PropTypes.func,
+    selectedWallet: PropTypes.string,
+    setSelectedWallet: PropTypes.func,
 }
 
 export default DesktopView;

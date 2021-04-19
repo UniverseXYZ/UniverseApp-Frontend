@@ -1,30 +1,27 @@
-import arrow from '../../assets/images/arrow.svg'
-import infoIcon from '../../assets/images/icon.svg'
-import defaultImage from '../../assets/images/default-img.svg'
-import sizeDownIcon from '../../assets/images/size-down.svg'
-import sizeUpIcon from '../../assets/images/size-up.svg'
-import delateIcon from '../../assets/images/inactive.svg'
-import mp3Icon from '../../assets/images/mp3-icon.png'
-import addIcon from '../../assets/images/Add.svg'
-import cloudIcon from '../../assets/images/ion_cloud.svg'
-import Button from '../button/Button'
-import Input from '../input/Input'
-import { useRef, useState, useEffect, useContext } from 'react'
-import AppContext from '../../ContextAPI'
-import uuid from 'react-uuid'
-import Popup from "reactjs-popup"
-import LoadingPopup from '../popups/LoadingPopup'
-import CongratsPopup from '../popups/CongratsPopup'
-import { useLocation } from 'react-router'
-import { useHistory } from 'react-router-dom'
+import { useRef, useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { useLocation } from 'react-router';
 import { Animated } from 'react-animated-css';
+import uuid from 'react-uuid';
+import Popup from "reactjs-popup";
+import Button from '../button/Button';
+import Input from '../input/Input';
+import AppContext from '../../ContextAPI';
+import LoadingPopup from '../popups/LoadingPopup';
+import CongratsPopup from '../popups/CongratsPopup';
+import arrow from '../../assets/images/arrow.svg';
+import infoIcon from '../../assets/images/icon.svg';
+import defaultImage from '../../assets/images/default-img.svg';
+import sizeDownIcon from '../../assets/images/size-down.svg';
+import sizeUpIcon from '../../assets/images/size-up.svg';
+import delateIcon from '../../assets/images/inactive.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import addIcon from '../../assets/images/Add.svg';
+import cloudIcon from '../../assets/images/ion_cloud.svg';
 
 
 const MintSingleNft = ({ onClick }) => {
-    
     const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(AppContext);
-    const history = useHistory();
-
     const [errors, setErrors] = useState({
         name: '',
         edition: '',
@@ -348,6 +345,10 @@ const MintSingleNft = ({ onClick }) => {
         </div>
     </div>
     )
+}
+
+MintSingleNft.propTypes = {
+    onClick: PropTypes.func,
 }
 
 export default MintSingleNft;

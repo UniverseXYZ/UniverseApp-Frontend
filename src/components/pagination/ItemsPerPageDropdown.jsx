@@ -1,7 +1,8 @@
-import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import { useState, useEffect, useRef, useContext } from 'react';
-import AppContext from '../../ContextAPI';
+import PropTypes from 'prop-types';
 import {Animated} from "react-animated-css";
+import AppContext from '../../ContextAPI';
+import arrowDownIcon from '../../assets/images/arrow-down.svg';
 
 const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
     const { handleClickOutside } = useContext(AppContext);
@@ -38,6 +39,11 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
             </button>
         </div>
     )
+}
+
+ItemsPerPageDropdown.propTypes = {
+    perPage: PropTypes.number,
+    setPerPage: PropTypes.func,
 }
 
 export default ItemsPerPageDropdown;

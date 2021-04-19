@@ -1,5 +1,6 @@
-import './Modals.scss';
 import { useContext } from 'react';
+import PropTypes from 'prop-types';
+import './Modals.scss';
 import MintNft from './MintNft';
 import MintNftCollection from './MintNftCollection';
 import MintSingleNft from './MintSingleNft';
@@ -24,6 +25,11 @@ const MintModal = ({ open, onClose, ...restProps }) => {
             </div>
         </div>
     )
+}
+
+MintModal.propTypes = {
+    open: PropTypes.bool,
+    onClose: PropTypes.func,
 }
 
 export default MintModal;

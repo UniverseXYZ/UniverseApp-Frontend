@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
 import Button from '../button/Button';
@@ -41,6 +42,10 @@ const SubscribePopup = ({ close }) => {
             </div>
         </div>
     )
+}
+
+SubscribePopup.propTypes = {
+    close: PropTypes.func,
 }
 
 export default SubscribePopup;

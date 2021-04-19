@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import PropTypes from 'prop-types';
 import AppContext from "../../ContextAPI";
 import Button from "../button/Button";
 import "./PopupStyle.scss";
@@ -31,5 +32,14 @@ const RemovePopup = ({ close, nftID, removedItemName, removeFrom, collectionNFTs
         </div>
     );
 };
+
+RemovePopup.propTypes = {
+    close: PropTypes.func,
+    nftID: PropTypes.number,
+    removedItemName: PropTypes.string,
+    removeFrom: PropTypes.string,
+    collectionNFTs: PropTypes.array,
+    setCollectionNFTs: PropTypes.func,
+}
 
 export default RemovePopup;

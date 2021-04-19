@@ -232,6 +232,17 @@
             }
 
             .tab__content {
+                .empty__nfts {
+                    width: 100%;
+                    h3 {
+                        font-family: "Space Grotesk", sans-serif;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 22px;
+                        text-align: center;
+                        color: rgba(0, 0, 0, 0.6);
+                    }
+                }
                 .active__auctions__list {
                     display: grid;
                     grid-template-columns: 1fr 1fr;

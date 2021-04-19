@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
+import Button from '../button/Button';
 import closeIcon from '../../assets/images/close-menu.svg';
 import wrongNetworkIcon from '../../assets/images/wrong-network.svg';
-import Button from '../button/Button';
 
 const WrongNetworkPopup = ({close}) => {
     return (
@@ -12,6 +13,10 @@ const WrongNetworkPopup = ({close}) => {
             <Button className='light-border-button'>Switch wallet</Button>
         </div>
     )
+}
+
+WrongNetworkPopup.propTypes = {
+    close: PropTypes.func,
 }
 
 export default WrongNetworkPopup;

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+import Button from '../button/Button';
 import metamaskLogo from '../../assets/images/metamask.svg';
 import ledgerLogo from '../../assets/images/ledger.svg';
 import keystoreLogo from '../../assets/images/keystore.svg';
@@ -5,7 +7,6 @@ import trezorLogo from '../../assets/images/trezor.svg';
 import coinbaseLogo from '../../assets/images/coinbase.svg';
 import walletConnectLogo from '../../assets/images/wallet-connect.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
-import Button from '../button/Button';
 
 const SelectWalletPopup = (props) => {
     const { close, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet } = props;
@@ -53,4 +54,13 @@ const SelectWalletPopup = (props) => {
     )
 }
 
-export default SelectWalletPopup
+SelectWalletPopup.propTypes = {
+    close: PropTypes.func,
+    handleConnectWallet: PropTypes.func,
+    showInstallWalletPopup: PropTypes.bool,
+    setShowInstallWalletPopup: PropTypes.func,
+    selectedWallet: PropTypes.bool,
+    setSelectedWallet: PropTypes.func,
+}
+
+export default SelectWalletPopup;

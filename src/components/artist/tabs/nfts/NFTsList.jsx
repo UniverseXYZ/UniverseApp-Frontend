@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react';
+import PropTypes from 'prop-types';
 import uuid from "react-uuid";
 import videoIcon from '../../../../assets/images/video-icon.svg';
 import Skeleton from 'react-loading-skeleton';
-import {Animated} from "react-animated-css";
+import { Animated } from "react-animated-css";
 
 const NFTsList = ({ data, perPage, offset }) => {
     const sliceData = data.slice(offset, offset + perPage);
@@ -112,6 +113,12 @@ const NFTsList = ({ data, perPage, offset }) => {
             })}
         </div>
     )
+}
+
+NFTsList.propTypes = {
+    data: PropTypes.array,
+    perPage: PropTypes.number,
+    offset: PropTypes.number,
 }
 
 export default NFTsList;

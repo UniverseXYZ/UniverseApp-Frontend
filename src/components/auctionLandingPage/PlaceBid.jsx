@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import gradientArrow from '../../assets/images/gradient-arrow.svg';
 import Popup from "reactjs-popup"
 import PlaceBidPopup from '../popups/PlaceBidPopup';
@@ -37,6 +38,12 @@ const PlaceBid = ({auction, bidders, setBidders}) => {
             </div>
         </div>
     )
+}
+
+PlaceBid.propTypes = {
+    auction: PropTypes.object,
+    bidders: PropTypes.array,
+    setBidders: PropTypes.func,
 }
 
 export default PlaceBid;

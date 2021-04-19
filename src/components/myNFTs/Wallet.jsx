@@ -1,20 +1,21 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import PropTypes from 'prop-types';
 import {Animated} from 'react-animated-css';
+import { useLocation } from 'react-router';
+import uuid from 'react-uuid';
 import Lists from './Lists';
-import '../pagination/Pagination.scss';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import Pagination from '../pagination/Pagionation';
 import AppContext from '../../ContextAPI';
-import uuid from 'react-uuid';
 import Button from '../button/Button';
+import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
-import crossSmall from '../../assets/images/crossSmall.svg'
-import { useLocation } from 'react-router'
+import crossSmall from '../../assets/images/crossSmall.svg';
 
 
-const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
-    const { myNFTs, auction,setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
+const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
+    const { myNFTs, auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [searchByName, setSearchByName] = useState('');
     const [offset, setOffset] = useState(0);
@@ -332,6 +333,11 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
             }
         </div>
     )
+}
+
+Wallet.propTypes = {
+    filteredNFTs: PropTypes.array,
+    setFilteredNFTs: PropTypes.func,
 }
 
 export default Wallet;
