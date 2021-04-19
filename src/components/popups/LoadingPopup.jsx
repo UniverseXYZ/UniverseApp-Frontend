@@ -1,5 +1,6 @@
-import React from 'react'
-import Button from '../button/Button'
+import React from 'react';
+import PropTypes from 'prop-types';
+import Button from '../button/Button';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 
@@ -20,4 +21,9 @@ const LoadingPopup = ({ onClose }) => {
         </div>
     );
 };
-export default LoadingPopup
+
+LoadingPopup.propTypes = {
+    onClose: PropTypes.func,
+}
+
+export default LoadingPopup;

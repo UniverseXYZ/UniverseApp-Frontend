@@ -1,12 +1,10 @@
-import {useState, useEffect} from 'react'
-import { useLocation } from 'react-router';
+import { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import {Animated} from "react-animated-css";
+import { Animated } from "react-animated-css";
+import PropTypes from 'prop-types';
 
 const PastAuctionsList = ({data, perPage, offset}) => {
-    const location = useLocation();
-    const artistPastAuctions = data.filter(auction => auction.artist.id === location.state.id);
-    const sliceData = artistPastAuctions.slice(offset, offset + perPage);
+    const sliceData = data.slice(offset, offset + perPage);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -74,7 +72,7 @@ const PastAuctionsList = ({data, perPage, offset}) => {
                             </div>
                         </div>
                         <div className='auction__img'>
-                            <Skeleton height={200} />
+                            <Skeleton height={200} width={200} />
                         </div>
                         <div className='auction__details'>
                             <div>
@@ -102,6 +100,12 @@ const PastAuctionsList = ({data, perPage, offset}) => {
             })}
         </div>
     )
+}
+
+PastAuctionsList.propTypes = {
+    data: PropTypes.array,
+    perPage: PropTypes.number,
+    offset: PropTypes.number,
 }
 
 export default PastAuctionsList;

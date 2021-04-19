@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import PropTypes from 'prop-types';
 import defaultImage from '../../assets/images/big-def-img.svg';
 import AppContext from '../../ContextAPI';
 
@@ -36,4 +37,9 @@ const MintNft = ({ onClick }) => {
         </div>
     )
 }
-export default MintNft
+
+MintNft.propTypes = {
+    onClick: PropTypes.func,
+}
+
+export default MintNft;

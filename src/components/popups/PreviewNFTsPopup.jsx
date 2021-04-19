@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import sizeUpIcon from '../../assets/images/size-up.svg';
 import sizeDownIcon from '../../assets/images/size-down.svg';
@@ -93,6 +94,11 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             </div>
         </div>
     )
+}
+
+PreviewNFTsPopup.propTypes = {
+    onClose: PropTypes.func,
+    onTier: PropTypes.object,
 }
 
 export default PreviewNFTsPopup;

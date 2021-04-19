@@ -1,18 +1,17 @@
 import { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { NotificationManager } from 'react-notifications';
 import { Animated } from "react-animated-css";
 import Skeleton from 'react-loading-skeleton';
 import { useHistory } from 'react-router';
-import Popup from "reactjs-popup"
+import Popup from "reactjs-popup";
 import Slider from "react-slick";
 import leftArrow from '../../assets/images/arrow.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
 import BidRankingsPopup from '../popups/BidRankingsPopup';
 import PlaceBidPopup from '../popups/PlaceBidPopup';
-import uuid from 'react-uuid';
 import Button from '../button/Button';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
@@ -368,6 +367,12 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
             </div>
         </div>
     )
+}
+
+AuctionDetails.propTypes = {
+    onAuction: PropTypes.object,
+    bidders: PropTypes.array,
+    setBidders: PropTypes.func,
 }
 
 export default AuctionDetails;

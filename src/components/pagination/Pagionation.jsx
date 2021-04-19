@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import leftArrow from '../../assets/images/left-arrow.svg';
 import rightArrow from '../../assets/images/right-arrow.svg';
@@ -17,15 +18,21 @@ const Pagination = ({data, perPage, setOffset}) => {
     useEffect(() => {
         // Prev Icon
         const prev = document.querySelector('.previous a');
-        const prevIcon = document.createElement('img');
-        prevIcon.src = leftArrow;
-        prev.appendChild(prevIcon)
+        if (prev) {
+            const prevIcon = document.createElement('img');
+            prevIcon.src = leftArrow;
+            prev.innerHTML = '';
+            prev.appendChild(prevIcon)
+        }
 
         // Next Icon
         const next = document.querySelector('.next a');
-        const nextIcon = document.createElement('img');
-        nextIcon.src = rightArrow;
-        next.appendChild(nextIcon)
+        if (next) {
+            const nextIcon = document.createElement('img');
+            nextIcon.src = rightArrow;
+            next.innerHTML = '';
+            next.appendChild(nextIcon)
+        }
     }, [])
 
     return (
@@ -45,4 +52,10 @@ const Pagination = ({data, perPage, setOffset}) => {
     )
 }
 
-export default Pagination
+Pagination.propTypes = {
+    data: PropTypes.array,
+    perPage: PropTypes.number,
+    setOffset: PropTypes.func,
+}
+
+export default Pagination;

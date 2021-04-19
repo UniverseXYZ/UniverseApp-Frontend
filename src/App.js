@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import './assets/scss/normalize.scss';
-import 'react-notifications/lib/notifications.css';
-import {NotificationContainer} from 'react-notifications';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
+import './assets/scss/normalize.scss';
 import AppContext from './ContextAPI';
+import uuid from 'react-uuid';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
-
 import Auctions from './containers/auctions/Auction';
 import RewardTiers from './containers/rewardTiers/RewardTiers';
 import CreateTiers from './containers/createTiers/CreateTiers';
@@ -17,8 +15,6 @@ import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/about/About';
 import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace';
 import MyAccount from './containers/myAccount/MyAccount';
-import uuid from 'react-uuid';
-
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(true);
@@ -47,8 +43,8 @@ const App = () => {
     const [savedCollections, setSavedCollections] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
     const [auction, setAuction] = useState({ tier: {} });
-    const [selectedNft,setSelectedNft] =useState([]);
-    const [selectedNFTIds,setSelectedNFTIds] =useState([]);
+    const [selectedNft,setSelectedNft] = useState([]);
+    const [selectedNFTIds,setSelectedNFTIds] = useState([]);
 
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -66,7 +62,7 @@ const App = () => {
             });
         }
         function handleScroll() {
-            if(window.scrollY > 100) {
+            if(window.scrollY > 400) {
                 document.querySelector('header').style.position = 'fixed';
             } else {
                 document.querySelector('header').style.position = 'relative';
@@ -143,7 +139,6 @@ const App = () => {
                     
                     <Route path="*" component={() => <Redirect to='/' />} />
                 </Switch>
-                <NotificationContainer/>
                 <Footer />
             </Routes>
         </AppContext.Provider>

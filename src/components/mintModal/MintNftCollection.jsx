@@ -1,22 +1,22 @@
+import { useContext, useRef, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import uuid from 'react-uuid';
+import Popup from "reactjs-popup"
+import randomColor from 'randomcolor';
 import Input from '../input/Input';
 import Button from '../button/Button';
+import AppContext from '../../ContextAPI';
+import CreateNftCol from './CreateNftCol';
+import LoadingPopup from '../popups/LoadingPopup'
+import CongratsPopup from '../popups/CongratsPopup'
+import RemovePopup from '../popups/RemoveNftPopup';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
-import upload from '../../assets/images/upload.svg';
-import RemovePopup from '../popups/RemoveNftPopup';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg'
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import { useContext, useRef, useState, useEffect } from 'react';
-import AppContext from '../../ContextAPI';
-import CreateNftCol from './CreateNftCol';
-import randomColor from 'randomcolor';
-import uuid from 'react-uuid';
-import Popup from "reactjs-popup"
-import LoadingPopup from '../popups/LoadingPopup'
-import CongratsPopup from '../popups/CongratsPopup'
 
 const MintNftCollection = ({ onClick }) => {
     
@@ -511,6 +511,10 @@ const MintNftCollection = ({ onClick }) => {
             setCollectionNFTsID={setCollectionNFTsID}
         />
     )
+}
+
+MintNftCollection.propTypes = {
+    onClick: PropTypes.func,
 }
 
 export default MintNftCollection;

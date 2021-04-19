@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll'
 import Popup from "reactjs-popup"
 import PreviewNFTsPopup from '../popups/PreviewNFTsPopup'
@@ -58,6 +59,10 @@ const RewardTiers = ({ auction }) => {
             </div>
         </div>
     )
+}
+
+RewardTiers.propTypes = {
+    auction: PropTypes.object,
 }
 
 export default RewardTiers;

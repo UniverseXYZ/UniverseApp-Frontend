@@ -1,20 +1,21 @@
-import { useRef, useState, useEffect,useContext } from 'react';
-import Button from '../button/Button';
-import Input from '../input/Input';
-import defaultImage from '../../assets/images/default-img.svg';
-import sizeDownIcon from '../../assets/images/size-down.svg'
-import sizeUpIcon from '../../assets/images/size-up.svg'
-import infoIcon from '../../assets/images/icon.svg';
-import cloudIcon from '../../assets/images/ion_cloud.svg'
-import delateIcon from '../../assets/images/inactive.svg'
-import addIcon from '../../assets/images/Add.svg'
-import mp3Icon from '../../assets/images/mp3-icon.png'
-import arrow from '../../assets/images/arrow.svg';
+import { useRef, useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { Animated } from 'react-animated-css';
+import Popup from "reactjs-popup";
 import uuid from 'react-uuid';
 import randomColor from 'randomcolor';
 import AppContext from '../../ContextAPI';
-import Popup from "reactjs-popup"
-import { Animated } from 'react-animated-css';
+import Button from '../button/Button';
+import Input from '../input/Input';
+import defaultImage from '../../assets/images/default-img.svg';
+import sizeDownIcon from '../../assets/images/size-down.svg';
+import sizeUpIcon from '../../assets/images/size-up.svg';
+import infoIcon from '../../assets/images/icon.svg';
+import cloudIcon from '../../assets/images/ion_cloud.svg';
+import delateIcon from '../../assets/images/inactive.svg';
+import addIcon from '../../assets/images/Add.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import arrow from '../../assets/images/arrow.svg';
 
 const CreateNftCol = (props) => {
 
@@ -362,6 +363,17 @@ const CreateNftCol = (props) => {
                 </div>
             </div>
         </div>
-        )
-    }
-export default CreateNftCol
+    )
+}
+
+CreateNftCol.propTypes = {
+    setShowCollectible: PropTypes.func,
+    collectionName: PropTypes.string,
+    coverImage: PropTypes.object,
+    collectionNFTs: PropTypes.array,
+    setCollectionNFTs: PropTypes.func,
+    collectionNFTsID: PropTypes.object,
+    setCollectionNFTsID: PropTypes.func,
+}
+
+export default CreateNftCol;

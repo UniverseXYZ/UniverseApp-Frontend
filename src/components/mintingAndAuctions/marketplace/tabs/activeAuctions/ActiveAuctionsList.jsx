@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import Button from '../../../../button/Button';
 import {Animated} from "react-animated-css";
@@ -105,6 +106,12 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
             })}
         </div>
     )
+}
+
+ActiveAuctionsList.propTypes = {
+    data: PropTypes.array,
+    perPage: PropTypes.number,
+    offset: PropTypes.number,
 }
 
 export default ActiveAuctionsList;

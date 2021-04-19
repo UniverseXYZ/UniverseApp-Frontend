@@ -1,25 +1,24 @@
-import uuid from "react-uuid";
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import videoIcon from '../../assets/images/video-icon.svg';
 import { useEffect, useState, useContext} from 'react';
 import { useLocation } from 'react-router';
+import PropTypes from 'prop-types';
+import AppContext from '../../ContextAPI';
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
-import AppContext from '../../ContextAPI';
-
 
 
 const Lists = ({ data, perPage, offset }) => {
     const sliceData = data.slice(offset, offset + perPage);
 
-    const location = useLocation()
+    const location = useLocation();
     const isCreatingAction = location.pathname === '/select-nfts'; 
 
-    const { auction,setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
+    const { auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
 
-    const [openEditions, setOpenEditions] = useState(null)
-    const [selected,Setselected] = useState([])
-    const [data1,setData ] = useState([])
+    const [openEditions, setOpenEditions] = useState(null);
+    const [selected, Setselected] = useState([]);
+    const [data1, setData] = useState([]);
 
     const handleSavedNfts = (clickedNFT) => {
         if (isCreatingAction && auction.tier.winners < clickedNFT.generatedEditions.length) {
@@ -36,7 +35,6 @@ const Lists = ({ data, perPage, offset }) => {
         }
     }
     const handleShow = (nft) =>{
-        
         if(selectedNFTIds.includes(nft.id) && auction.tier.winners <= nft.generatedEditions.length){
             setOpenEditions(openEditions ? null : nft.id)
         }
@@ -62,7 +60,7 @@ const Lists = ({ data, perPage, offset }) => {
                             <img className='nonicon__icon' src={nonSelecting} alt='Check Icon' />
                         }
                         </>
-                         }
+                        }
                             {nft.previewImage.type === 'video/mp4' &&
                                 <video onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()}>
                                     <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
@@ -157,6 +155,12 @@ const Lists = ({ data, perPage, offset }) => {
             })}
         </div>
     )
+}
+
+Lists.propTypes = {
+    data: PropTypes.array,
+    perPage: PropTypes.number,
+    offset: PropTypes.number,
 }
 
 export default Lists;
