@@ -12,6 +12,8 @@ import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
+import crossSmall from '../../assets/images/crossSmall.svg'
+import { useHistory, useLocation } from 'react-router'
 
 
 const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
@@ -27,7 +29,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
     const [draftCollections, setDraftCollections] = useState([])
     const [indexes,setIndexes] = useState([])
     const [previewNFTs, setPreviewNFTs] = useState([])
-
+    const history = useHistory();
+    
     const saveIndexes = (index) => {
         let temp=[...indexes]
         temp.push(index)
@@ -158,8 +161,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
             }
         });
         setPreviewNFTs(previewNFTs);
+        // setAuction(data => ({ ...data, tier: { ...data.tier,nfts{...data.tier.nfts, previewNFTs}} }));
     }, [filteredNFTs, selectedNFTIds]);
-    
+    console.log(previewNFTs)
     const handleClickOutside = (event) => {
         if (!event.target.classList.contains('target')) {
             if (ref.current && !ref.current.contains(event.target) && refMobile.current && !refMobile.current.contains(event.target)) {   
@@ -324,7 +328,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                     </div>
                     <div className="continue-nft">
                     {auction.tier.nftsPerWinner == previewNFTs.length ?
-                        <Button className="light-button">Continue</Button>:
+                        <Button onClick={() => { history.push('/review-reward',previewNFTs) }} className="light-button">Continue</Button>:
                         <Button className="light-button" disabled>Continue</Button>
                     }
                     </div>

@@ -7,15 +7,15 @@ import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
 import infoIcon from '../../assets/images/icon.svg'
 import { Animated } from 'react-animated-css';
+import uuid from 'react-uuid';
+import './CreateTiers.scss'
 
 const CreateTiers = () => {
     const history = useHistory();
     const [hideIcon, setHideIcon] = useState(false);
     const [hideIcon1, setHideIcon1] = useState(false);
     const [hideIcon2, setHideIcon2] = useState(false);
-    const { auction, setAuction } = useContext(AppContext);
-
-    const { myNFTs,setMyNFTs } = useContext(AppContext);
+    const { auction, setAuction,myNFTs,setMyNFTs } = useContext(AppContext);
 
     const [values, setValues] = useState({
         name: '',
@@ -32,12 +32,12 @@ const CreateTiers = () => {
     useEffect(() => {
         if (values.name) {
             if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
-                setAuction(data => ({ ...data, tier: { ...data.tier, ...values, totalNFTs: values.winners * values.nftsPerWinner } }));
+                setAuction(data => ({ ...data, tier: { ...data.tier, ...values, totalNFTs: values.winners * values.nftsPerWinner, tierId: uuid()} }));
                     history.push('/select-nfts');
             }
         }
     }, [isValidFields])
-
+    console.log(auction)
     const handleChange = event => {
         setValues(prevValues => ({ ...prevValues, [event.target.id]: event.target.value }));
     };
