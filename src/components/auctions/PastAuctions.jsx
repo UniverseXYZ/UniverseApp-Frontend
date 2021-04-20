@@ -49,7 +49,7 @@ const PastAuctions = () => {
                     <div className="auction past-auction" key={past_auction.id}>
                         <div className="auction-header">
                             <div className="img_head">
-                                <img className='auctionIcon' src={icon} alt='auction'/>
+                                {/* <img className='auctionIcon' src={icon} alt='auction'/> */}
                                 <h3>{past_auction.name}</h3>
                                 <div className="copy-div">
                                     <div className='copy' title='Copy to clipboard'>
@@ -106,11 +106,13 @@ const PastAuctions = () => {
                         </div>
                         <div hidden={shownActionId !== past_auction.id}className="auctions-tier">
                             <div className="tier">
-                                <div className="header">
+                                <div className="tier-header">
                                     <h3>{past_auction.platinumTier.name}</h3>
-                                    <p>NFTs per winner: <b>{past_auction.platinumTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{past_auction.platinumTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{past_auction.platinumTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{past_auction.platinumTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{past_auction.platinumTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{past_auction.platinumTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {past_auction.platinumTier.nfts.map((nft, index) => {
@@ -129,9 +131,11 @@ const PastAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{past_auction.goldTier.name}</h3>
-                                    <p>NFTs per winner: <b>{past_auction.goldTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{past_auction.goldTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{past_auction.goldTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{past_auction.goldTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{past_auction.goldTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{past_auction.goldTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {past_auction.goldTier.nfts.map((nft, index) => {
@@ -150,9 +154,11 @@ const PastAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{past_auction.silverTier.name}</h3>
-                                    <p>NFTs per winner: <b>{past_auction.silverTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{past_auction.silverTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{past_auction.silverTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{past_auction.silverTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{past_auction.silverTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{past_auction.silverTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {past_auction.silverTier.nfts.map((nft, index) => {
