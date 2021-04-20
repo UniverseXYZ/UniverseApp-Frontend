@@ -7,10 +7,10 @@ import DesktopView from './dimensions/DesktopView';
 import TabletView from './dimensions/TabletView';
 import MobileView from './dimensions/MobileView';
 import AppContext from '../../ContextAPI';
+import { providers, utils } from "ethers";
 
 const Header = (props) => {
-    const { setIsWalletConnected, windowSize } = useContext(AppContext);
-    const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
+    const { setIsWalletConnected, windowSize, address, connectWeb3 } = useContext(AppContext);
 
     const [selectedWallet, setSelectedWallet] = useState('');
     const [installed, setInstalled] = useState(true);
@@ -18,13 +18,17 @@ const Header = (props) => {
     const [showSelectWallet, setShowSelectWallet] = useState(false);
     const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
     
-    const handleConnectWallet = (wallet) => {
+    const handleConnectWallet = async (wallet) => {
         // Here need to check if selected wallet is installed in browser
         setSelectedWallet(wallet);
         if (installed) {
-            setIsWalletConnected(true);
-            setShowMenu(false);
-            setShowSelectWallet(false);
+            if (wallet == "Metamask" && typeof window.ethereum !== "undefined") {
+                const provider = new providers.Web3Provider(window.ethereum);
+                await connectWeb3(provider);
+                setIsWalletConnected(true);
+                setShowMenu(false);
+                setShowSelectWallet(false);
+            }
         } else {
             setShowInstallWalletPopup(true);
         }
@@ -51,7 +55,7 @@ const Header = (props) => {
                 <Link className='light' to={'/'}><img src={appLightLogo} alt='App Logo' /></Link>
             </div>
             <DesktopView
-                ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+                ethereumAddress={address}
                 handleConnectWallet={handleConnectWallet}
                 showInstallWalletPopup={showInstallWalletPopup}
                 setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -59,7 +63,7 @@ const Header = (props) => {
                 setSelectedWallet={setSelectedWallet}
             />
             <TabletView
-                ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+                ethereumAddress={address}
                 handleConnectWallet={handleConnectWallet}
                 showInstallWalletPopup={showInstallWalletPopup}
                 setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -69,7 +73,7 @@ const Header = (props) => {
                 setShowMenu={setShowMenu}
             />
             <MobileView
-                ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+                ethereumAddress={address}
                 handleConnectWallet={handleConnectWallet}
                 setShowMenu={setShowMenu}
                 setShowSelectWallet={setShowSelectWallet}

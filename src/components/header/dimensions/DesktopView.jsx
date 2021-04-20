@@ -10,9 +10,10 @@ import arrowUP from '../../../assets/images/arrow-down.svg';
 import Group1 from '../../../assets/images/Group1.svg';
 import Group2 from '../../../assets/images/Group2.svg';
 import SelectWalletPopup from '../../popups/SelectWalletPopup';
+import {shortenEthereumAddress, toFixed} from "../../../utils/helpers/format";
 
 const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet }) => {
-    const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
+    const { isWalletConnected, setIsWalletConnected, handleClickOutside, ethBalance, usdEthBalance, wethBalance, usdWethBalance } = useContext(AppContext);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
     const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
@@ -71,13 +72,13 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
 
                                 <div className="group1">
                                     <img src={Group1} alt="ETH" />
-                                    <span className="first-span">6,24 ETH</span>
-                                    <span className="second-span">$10,554</span>
+                                    <span className="first-span">{toFixed(ethBalance, 2)} ETH</span>
+                                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                                 </div>
                                 <div className="group2">
                                     <img src={Group2} alt="WETH" />
-                                    <span className="first-span">6,24 WETH</span>
-                                    <span className="second-span">$10,554</span>
+                                    <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                                    <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                                 </div>
                                 
                             </div>
