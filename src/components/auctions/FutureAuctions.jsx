@@ -45,20 +45,23 @@ const FutureAuctions = () => {
     return (
         <div className='future-auctions'>
             <div className='input-search'>
-            <button onClick={clearInput} className="clear-input">Clear</button>
-            <img src={searchIcon} alt='search'/>
-            <Input className='searchInp'
-            onChange={(e) => handleSearch(e.target.value)}
-            value={searchByName}
-            placeholder='Search by name'/>
+                <button onClick={clearInput} className="clear-input">Clear</button>
+                <img src={searchIcon} alt='search'/>
+                <Input className='searchInp'
+                onChange={(e) => handleSearch(e.target.value)}
+                value={searchByName}
+                placeholder='Search by name'/>
             </div>
             {data.slice(offset,offset+perPage).filter(item => item.name.toLowerCase().includes(searchByName.toLowerCase())).map(future_auction => {
                 return (
                     <div className="auction" key={future_auction.id}>
                         <div className="auction-header">
-                            <h3>{future_auction.name}</h3>
-                            <div className="launch-auction">
+                            <div className="auction-header-button">
+                                <h3>{future_auction.name}</h3>
                                 <Button className="light-button" disabled>Set up auction</Button>
+                            </div>
+                            <div className="launch-auction">
+                                {/* <Button className="light-button" disabled>Set up auction</Button> */}
                                 <div className="line"></div>
                                 {shownActionId === future_auction.id ?
                                     <img src={arrowUp} onClick={() =>setshownActionId(null)}/>
@@ -143,13 +146,64 @@ const FutureAuctions = () => {
                                 }
                             </div>
                         </div>
+
+                        <div className="auction-steps-mobile">
+                            <div className="auction-steps-moves">
+                                <div className="circle">
+                                    <img src={doneIcon}/>
+                                </div>
+                                <div className="hz-line1"></div>
+                                <div className="circle">
+                                    <img hidden={!future_auction.mint} src={doneIcon}/>
+                                    <img hidden={future_auction.mint} src={emptyMark}/>
+                                </div>
+                                <div className="hz-line2"></div>
+                                <div className="circle">
+                                    {(!future_auction.landingCustom && !future_auction.mint) &&
+                                        <img alt='landing_page' src={emptyWhite}/>
+                                    }
+                                    {(future_auction.mint && !future_auction.landingCustom) &&
+                                        <img alt='landing_page' src={emptyMark}/>
+                                    }
+                                    {(future_auction.mint && future_auction.landingCustom) &&
+                                        <img alt='landing_page' src={doneIcon}/>
+                                    }
+                                </div>
+                            </div>
+                            <div className="steps">
+                                <div className="step-1">
+                                    <h6>Step 1</h6>
+                                    <h4>Auction Set Up</h4>
+                                    <Button className="light-border-button">Edit auction</Button>
+                                </div>
+                                <div className="step-2">
+                                    <h6>Step2</h6>
+                                    <h4>NFT Minting</h4>
+                                    {future_auction.mint === true ?
+                                    <Button disabled className="light-button">Mint NFTs</Button> :
+                                    <Button className="light-button">Mint NFTs</Button> 
+                                    }
+                                </div>
+                                <div className="step-3">
+                                    <h6>Step 3</h6>
+                                    <h4>Landing Page Customization</h4>
+                                    {(future_auction.mint === true && future_auction.landingCustom === false) ?
+                                        <Button className="light-border-button" >Set up landing page</Button> :
+                                        <Button className="light-border-button" disabled>Set up landing page</Button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
                         <div hidden={shownActionId !== future_auction.id} className="auctions-tier">
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{future_auction.platinumTier.name}</h3>
-                                    <p>NFTs per winner: <b>{future_auction.platinumTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{future_auction.platinumTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{future_auction.platinumTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{future_auction.platinumTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{future_auction.platinumTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{future_auction.platinumTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {future_auction.platinumTier.nfts.map((nft, index) => {
@@ -168,9 +222,11 @@ const FutureAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{future_auction.goldTier.name}</h3>
-                                    <p>NFTs per winner: <b>{future_auction.goldTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{future_auction.goldTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{future_auction.goldTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{future_auction.goldTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{future_auction.goldTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{future_auction.goldTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {future_auction.goldTier.nfts.map((nft, index) => {
@@ -189,9 +245,11 @@ const FutureAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{future_auction.silverTier.name}</h3>
-                                    <p>NFTs per winner: <b>{future_auction.silverTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{future_auction.silverTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{future_auction.silverTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{future_auction.silverTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{future_auction.silverTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{future_auction.silverTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {future_auction.silverTier.nfts.map((nft, index) => {

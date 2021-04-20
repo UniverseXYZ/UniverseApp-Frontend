@@ -50,7 +50,7 @@ const CreateTiers = () => {
 
     return(
         <div className='container create-tiers'>
-            <div className="back-rew" onClick={() => { history.push('/reward-tiers') }}><img src={arrow} alt="back"/><span>My Auctions</span></div>          
+            <div className="back-rew" onClick={() => { history.push('/reward-tiers') }}><img src={arrow} alt="back"/><span>Reward tiers</span></div>          
             <div>
                 <div className='head-part'>
                     <h2 className="tier-title">Create Reward Tier</h2>
