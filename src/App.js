@@ -43,13 +43,9 @@ const App = () => {
     const [savedNfts, setSavedNfts] = useState([]);
     const [savedCollections, setSavedCollections] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
-    const [auction, setAuction] = useState({ tier: {} });
+    const [auction, setAuction] = useState({ tier: {nfts:{}} });
     const [selectedNft,setSelectedNft] = useState([]);
     const [selectedNFTIds,setSelectedNFTIds] = useState([]);
-
-    const [auction, setAuction] = useState({ tier: {nfts:{}} });
-    const [selectedNft,setSelectedNft] =useState([]);
-    const [selectedNFTIds,setSelectedNFTIds] =useState([]);
     
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
