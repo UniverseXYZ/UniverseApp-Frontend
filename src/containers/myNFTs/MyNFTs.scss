@@ -682,6 +682,18 @@
                         top: 8px;
                         left: 8px;
                     }
+                    .selected-number{
+                        position: absolute;
+                        left: 14%;
+                        font-size: 14px;
+                        line-height: 21px;
+                        font-weight: bold;
+                        top: 2%;
+                        font-family: $spaceGroteskFont;
+                        background: -webkit-linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
                     .nonicon__icon{
                         position: absolute;
                         top: 8px;
@@ -993,6 +1005,8 @@
             
             .selected-ntf{
                 background: #FFFFFF;
+                // padding-bottom: 16px;
+                // padding-top: 16px;
                 box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
             }
             .infoSelect-div{

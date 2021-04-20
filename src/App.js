@@ -8,6 +8,7 @@ import Footer from './components/footer/Footer';
 import Auctions from './containers/auctions/Auction';
 import RewardTiers from './containers/rewardTiers/RewardTiers';
 import CreateTiers from './containers/createTiers/CreateTiers';
+import ReviewReward from './containers/reviewReward/ReviewReward';
 import MyNFTs from './containers/myNFTs/MyNFTs';
 import Artist from './containers/artist/Artist';
 import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage';
@@ -46,6 +47,10 @@ const App = () => {
     const [selectedNft,setSelectedNft] = useState([]);
     const [selectedNFTIds,setSelectedNFTIds] = useState([]);
 
+    const [auction, setAuction] = useState({ tier: {nfts:{}} });
+    const [selectedNft,setSelectedNft] =useState([]);
+    const [selectedNFTIds,setSelectedNFTIds] =useState([]);
+    
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
             if (ref.current && !ref.current.contains(event.target)) {
@@ -131,6 +136,7 @@ const App = () => {
                     <Route exact path="/my-auctions" component={() => <Auctions />}     />
                     <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
                     <Route exact path="/create-tiers" component={() => <CreateTiers />} />
+                    <Route exact path="/review-reward" component={() => <ReviewReward />} />
                     <Route exact path="/select-nfts" component={() => <MyNFTs />} />
                     {/* <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} /> */}
 

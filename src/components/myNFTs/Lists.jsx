@@ -42,7 +42,7 @@ const Lists = ({ data, perPage, offset }) => {
 
     useEffect(() => {
       console.log(auction)
-      console.log(selectedNFTIds.length)
+      console.log(selectedNFTIds)
     }, [])
 
     return (
@@ -54,7 +54,7 @@ const Lists = ({ data, perPage, offset }) => {
                         {isCreatingAction &&
                         <>
                         {selectedNFTIds.includes(nft.id) && auction.tier.winners <= nft.generatedEditions.length &&
-                            <img className='check__icon' src={checkIcon} alt='Check Icon' />
+                            <><img className='check__icon' src={checkIcon} alt='Check Icon'/> <span className="selected-number">0/{auction.tier.winners}</span> </>
                         }
                         {auction.tier.winners > nft.generatedEditions.length &&
                             <img className='nonicon__icon' src={nonSelecting} alt='Check Icon' />
