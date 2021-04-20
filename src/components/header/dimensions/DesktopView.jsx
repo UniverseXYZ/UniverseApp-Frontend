@@ -40,7 +40,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
                     {isMintingDropdownOpened &&
-                        <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                        <Animated animationIn="fadeIn">
                             <div ref={ref} className='dropdown minting-drop'>
                                 <div className='dropdown__body'>
                                     <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(!isMintingDropdownOpened) }}>About</button>
@@ -57,7 +57,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
                     {isAboutDropdownOpened &&
-                        <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                        <Animated animationIn="fadeIn">
                             <div ref={ref} className='dropdown minting-drop'>
                                 <div className='dropdown__body'>
                                     <button onClick={() => { history.push('/'); setIsAboutDropdownOpened(!isAboutDropdownOpened) }}>Whitepaper</button>
@@ -76,7 +76,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                         </button>
 
                         {isAccountDropdownOpened &&
-                            <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                            <Animated animationIn="fadeIn">
                                 <div ref={ref} className='dropdown drop-account'>
                                     <div className='dropdown__header'>
                                         <div className="copy-div">

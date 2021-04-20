@@ -66,7 +66,7 @@ const MobileView = (props) => {
                 <div className='wallet__connected__tablet'>
                     <img className="account__icon" src={accountIcon} onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setShowMenu(false) }} alt='Account icon' />
                     {isAccountDropdownOpened &&
-                        <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                        <Animated animationIn="fadeIn">
                             <div ref={ref} className='dropdown drop-account'>
                                 <div className='dropdown__header'>
                                     <div className="copy-div">

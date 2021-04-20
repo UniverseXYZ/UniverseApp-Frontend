@@ -25,13 +25,13 @@ const ActiveAuctionsFilters = () => {
                 <button>Clear all</button>
             </div>
             <div className='active__auctions__filters__fields'>
-                <div className={`dropdown ${isDropdownOpened ? 'opened' : ''}`} onClick={() => setIsDropdownOpened(!isDropdownOpened)}>
+                <div ref={ref} className={`dropdown ${isDropdownOpened ? 'opened' : ''}`} onClick={() => setIsDropdownOpened(!isDropdownOpened)}>
                     <span className='selected__item'>{selectedItem}</span>
                     <img className='chevron__down' src={arrowDown} alt='Arrow' />
                     {isDropdownOpened &&
                         <div className='sorting__dropdown'>
-                            <Animated animationIn="bounceIn">
-                                <ul ref={ref}>
+                            <Animated animationIn="fadeIn">
+                                <ul>
                                     <li onClick={() => { setSelectedItem('Newest'); setIsDropdownOpened(false) }}>Newest</li>
                                     <li onClick={() => { setSelectedItem('Highest bid'); setIsDropdownOpened(false) }}>Highest bid</li>
                                 </ul>

@@ -25,7 +25,7 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
                 <img src={arrowDownIcon} alt='Chevron' className={showDropdown ? 'rotate' : ''} />
                 {showDropdown &&
                     <div className='items__per__page__dropdown'>
-                        <Animated animationIn="bounceIn">
+                        <Animated animationIn="fadeIn">
                             <ul>
                                 {itemsPerPage.map((n, index) => {
                                     return (
