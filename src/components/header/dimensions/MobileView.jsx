@@ -20,6 +20,7 @@ import coinbaseLogo from '../../../assets/images/coinbase.svg';
 import walletConnectLogo from '../../../assets/images/wallet-connect.svg';
 import leftArrow from '../../../assets/images/arrow.svg'
 import Button from '../../button/Button';
+import {shortenEthereumAddress, toFixed} from "../../../utils/helpers/format";
 
 const MobileView = (props) => {
     const {
@@ -34,7 +35,7 @@ const MobileView = (props) => {
         setShowInstallWalletPopup,
         selectedWallet
     } = props;
-    const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+    const { isWalletConnected, setIsWalletConnected, handleClickOutside, ethBalance, usdEthBalance, wethBalance, usdWethBalance } = useContext(AppContext);
     const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
     const [collapseAboutMenu, setCollapseAboutMenu] = useState(false);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -71,7 +72,7 @@ const MobileView = (props) => {
                                 <div className='dropdown__header'>
                                     <div className="copy-div">
                                         <img className="icon-img" src={accountIcon} alt='icon' />
-                                        <div className='ethereum__address'>{ethereumAddress}</div>
+                                        <div className='ethereum__address'>{shortenEthereumAddress(ethereumAddress)}</div>
                                         <div className="copy__div">
                                             <div className='copy' title='Copy to clipboard'>
                                                 <div className="copied-div" hidden={!copied}>Address copied!<span></span></div>
@@ -83,13 +84,13 @@ const MobileView = (props) => {
                                     </div>
                                     <div className="group1">
                                         <img src={Group1} alt="ETH" />
-                                        <span className="first-span">6,24 ETH</span>
-                                        <span className="second-span">$10,554</span>
+                                        <span className="first-span">{toFixed(ethBalance, 2)} ETH</span>
+                                        <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                                     </div>
                                     <div className="group2">
                                         <img src={Group2} alt="WETH" />
-                                        <span className="first-span">6,24 WETH</span>
-                                        <span className="second-span">$10,554</span>
+                                        <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                                        <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                                     </div>
                                     
                                 </div>

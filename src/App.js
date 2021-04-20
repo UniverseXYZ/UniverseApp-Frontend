@@ -16,9 +16,11 @@ import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/about/About';
 import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace';
 import MyAccount from './containers/myAccount/MyAccount';
+import { providers, utils } from 'ethers';
+import { getEthPriceEtherscan, getWethBalanceEtherscan } from './utils/api/etherscan'
 
 const App = () => {
-    const [isWalletConnected, setIsWalletConnected] = useState(true);
+    const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [loggedInArtist, setLoggedInArtist] = useState({
         id: uuid(),
         name: '',
@@ -49,6 +51,13 @@ const App = () => {
     const [auction, setAuction] = useState({ tiers: [] });
     const [selectedNft,setSelectedNft] =useState([]);
     const [selectedNFTIds,setSelectedNFTIds] =useState([]);
+    const [web3Provider, setWeb3Provider] = useState(null);
+    const [address, setAddress] = useState("");
+    const [signer, setSigner] = useState("");
+    const [ethBalance, setEthBalance] = useState(0);
+    const [wethBalance, setWethBalance] = useState(0);
+    const [usdEthBalance, setUsdEthBalance] = useState(0);
+    const [usdWethBalance, setUsdWethBalance] = useState(0);
     
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -57,8 +66,60 @@ const App = () => {
             }
         }
     };
+  
+    const connectWeb3 = async (provider) => {
+      const { ethereum } = window;
+  
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+      const balance = await provider.getBalance(accounts[0]);
+      const network = await provider.getNetwork();
+      const ethPrice = await getEthPriceEtherscan();
+      const wethBalance = await getWethBalanceEtherscan(accounts[0], network.chainId);
+  
+      setWeb3Provider(provider);
+      setIsWalletConnected(true);
+      setSigner(provider.getSigner(0));
+      setAddress(accounts[0]);
+      setEthBalance(utils.formatEther(balance));
+      setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
+      setWethBalance(utils.formatEther(wethBalance.result));
+      setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
+    };
+  
+    const isMetaMaskConnected = async (provider) => {
+      const accounts = await provider.listAccounts();
+      return accounts.length > 0;
+    };
 
-    useEffect(() => {
+    useEffect(async() => {
+        
+        if (typeof window.ethereum !== "undefined") {
+          const { ethereum } = window;
+    
+          const provider = new providers.Web3Provider(window.ethereum);
+          const isConnected = await isMetaMaskConnected(provider);
+            
+          if (provider && isConnected) {
+            await connectWeb3(provider);
+          } else {
+            console.log("Please install/connect MetaMask!");
+          }
+    
+          ethereum.on("accountsChanged", async ([account]) => {
+            if (account) {
+              await connectWeb3(provider);
+            } else {
+              setIsWalletConnected(false);
+            }
+          });
+    
+          ethereum.on("chainChanged", async (networkId) => {
+            window.location.reload();
+          });
+        } else {
+          console.log("Please install/connect MetaMask!");
+        }
+        
         function handleResize() {
             setWindowSize({
                 width: window.innerWidth,
@@ -72,7 +133,6 @@ const App = () => {
                 document.querySelector('header').style.position = 'relative';
             }
         }
-
         // window.addEventListener("resize", handleResize);
         window.addEventListener("scroll", handleScroll);
         handleResize();
@@ -120,6 +180,17 @@ const App = () => {
                 setSelectedNft,
                 selectedNFTIds,
                 setSelectedNFTIds,
+                address,
+                setAddress,
+                ethBalance,
+                setEthBalance,
+                usdEthBalance,
+                setUsdEthBalance,
+                wethBalance,
+                setWethBalance,
+                usdWethBalance,
+                setUsdWethBalance,
+                connectWeb3 
             }}
         >
             <Routes>

@@ -6,6 +6,24 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### Load required api keys
+
+Edit .envrc.example then copy it to .envrc
+
+```
+$ cp .envrc.example .envrc
+$ source .envrc
+```
+
+Make sure to update the enviroment variables with suitable values.
+
+Now enable the env vars using [direnv](https://direnv.net/docs/installation.html)
+
+```
+$ eval "$(direnv hook bash)"
+$ direnv allow
+```
+
 ### `yarn start`
 
 Runs the app in the development mode.\
