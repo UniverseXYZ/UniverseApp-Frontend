@@ -720,10 +720,6 @@ line-height: 22px;
             }
             button{
               &.light-border-button {
-                background: 
-                linear-gradient($white, $white) padding-box,                    
-                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                border: 1px solid transparent;
 
                 @include sm{
                   font-size: 10px;
@@ -1048,13 +1044,6 @@ line-height: 22px;
                 margin-bottom: 20px;
               }
             }
-
-            &.light-border-button {
-              background: 
-                linear-gradient($white, $white) padding-box,
-                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-              border: 1px solid transparent;
-            }
           }
 
           @include sm{
@@ -1123,10 +1112,6 @@ line-height: 22px;
         
         button{
           &.light-border-button {
-            background: 
-            linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-            border: 1px solid transparent;
             
             @include sm{
               font-size: 10px;
@@ -1442,13 +1427,6 @@ line-height: 22px;
           margin-right: 0;
           margin-bottom: 20px;
         }
-      }
-
-      &.light-border-button {
-        background: 
-          linear-gradient($white, $white) padding-box,
-          linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-          border: 1px solid transparent;
       }
     }
     @include sm{

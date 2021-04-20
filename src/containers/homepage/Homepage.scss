@@ -78,11 +78,14 @@
                     align-items: center;
                     flex-wrap: wrap;
                     .light-border-button {
-                        background: 
-                            linear-gradient($black, $black) padding-box,
-                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        background-image: linear-gradient(101deg, #BCEB00, #00EAEA);
+                        background-origin: border-box;
+                        box-shadow: 2px 1000px 1px #000 inset;
                         color: $white;
                         margin-left: 15px;
+                        &:hover{
+                            box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
+                        }
                     }
                     button {
                         @include sm {
@@ -263,6 +266,7 @@
                     @include md {
                         display: block;
                         margin-top: 40px;
+                        margin-bottom: 40px;
                     }
                 }
                 .hide__on__mobile {
@@ -318,7 +322,7 @@
                     line-height: 150%;
                     color: rgba(0, 0, 0, 0.4);
                     @include md {
-                        display: inline-block;
+                        display: inline-show__on__mobileblock;
                         margin-bottom: 20px;
                     }
                 }
@@ -436,6 +440,8 @@
                     border: 1px solid transparent;
                     border-radius: 10px;
                     padding: 45px 30px;
+                    cursor: pointer;
+                    transition: all .3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
 
                     h2.title {
                         margin: 30px 0 15px;
@@ -454,6 +460,11 @@
                         font-size: 14px;
                         line-height: 160%;
                         color: rgba(255, 255, 255, 0.7);
+                    }
+
+                    &:hover {
+                        transform: scale(1.02);
+                        box-shadow: 0 2px 10px 1px rgba(136, 120, 172, 0.2);
                     }
                 }
 

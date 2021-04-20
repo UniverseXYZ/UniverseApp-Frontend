@@ -15,7 +15,7 @@ const NonFungibleUniverse = () => {
             id: 1,
             icon: nfuSocialNetworkIcon,
             title: 'NFT Social Network',
-            description: 'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being Censored.',
+            description: 'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being censored.',
             loaded: false,
         },
         {
