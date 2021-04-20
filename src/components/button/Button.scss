@@ -10,11 +10,11 @@
    justify-content: center;
    font-family: $spaceGroteskFont;
    font-style: normal;
-   font-weight: 600;
+   font-weight: 500;
    font-size: 16px;
    line-height: 20px;
    color: $black;
-   transition: .5s;
+   transition: 50ms ease-in;
    &:hover {
       background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
    }
@@ -30,19 +30,18 @@
    padding: 11px 26px;
    justify-content: center;
    padding: 11px 26px 11px 26px;
-   border: 1px solid;
-   border-image-source: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+   border: 1px solid transparent;
    border-radius: 12px;
    background: 
       linear-gradient($white, $white) padding-box,
       linear-gradient(to right, #BCEB00, #00EAEA) border-box;
    font-family: $spaceGroteskFont;
    font-style: normal;
-   font-weight: 600;
+   font-weight: 500;
    font-size: 16px;
    line-height: 20px;
    color: $black;
-   transition: .5s;
+   transition: 50ms ease-in;
    &:disabled{
       border: 1px solid #E6E6E6;
       color: #E6E6E6;

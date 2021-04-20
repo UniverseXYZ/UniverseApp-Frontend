@@ -7,9 +7,11 @@ import infoIcon from '../../assets/images/icon.svg'
 import warningIcon from '../../assets/images/Exclamation.svg'
 import { Animated } from 'react-animated-css';
 import AppContext from '../../ContextAPI';
+import { useHistory } from 'react-router';
 
 const Main = () => {
     const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+    const history = useHistory();
 
     const [hideIcon, setHideIcon] = useState(false)
     const [nameEditing, setNameEditing] = useState(true)
@@ -39,6 +41,20 @@ const Main = () => {
         setNameEditing(true)
     }
 
+    const handlePreviewClick = () => {
+        if (loggedInArtist.name &&
+            loggedInArtist.universePageAddress &&
+            loggedInArtist.avatar &&
+            loggedInArtist.about &&
+            loggedInArtist.personalLogo &&
+            loggedInArtist.instagramLink &&
+            loggedInArtist.twitterLink) {
+            history.push(`/${loggedInArtist.name.split(' ')[0]}`, { id: loggedInArtist.id });
+        } else {
+            alert('Please first fill in all fields.');
+        }
+    }
+
     return (
         <div className="my-account container">
             <div className="my-account-title">
@@ -46,7 +62,7 @@ const Main = () => {
                     <h1>My Profile</h1>
                     <p>You can set preffered display name, create your branded profile URL and manage other personal settings</p>
                 </div>
-                <Button className="light-button">Preview my Universe Page</Button>
+                <Button className="light-button" onClick={handlePreviewClick}>Preview my Universe Page</Button>
             </div>
             
             <div className="account-grid-container">

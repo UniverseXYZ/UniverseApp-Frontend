@@ -1,19 +1,21 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { useHistory, useLocation } from 'react-router'
 import {Animated} from 'react-animated-css';
+import uuid from 'react-uuid';
 import Lists from './Lists';
-import '../pagination/Pagination.scss';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import Pagination from '../pagination/Pagionation';
 import AppContext from '../../ContextAPI';
-import uuid from 'react-uuid';
 import Button from '../button/Button';
+import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
-import filterIcon from '../../assets/images/filters-icon.svg'
-import { useLocation } from 'react-router'
+import filterIcon from '../../assets/images/filters-icon.svg';
+import crossSmall from '../../assets/images/crossSmall.svg';
 
 
-const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
-    const { myNFTs, auction,setAuction, selectedNFTIds } = useContext(AppContext);
+const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
+    const { myNFTs, auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [searchByName, setSearchByName] = useState('');
     const [offset, setOffset] = useState(0);
@@ -25,7 +27,8 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
     const [draftCollections, setDraftCollections] = useState([])
     const [indexes,setIndexes] = useState([])
     const [previewNFTs, setPreviewNFTs] = useState([])
-
+    const history = useHistory();
+    
     const saveIndexes = (index) => {
         let temp=[...indexes]
         temp.push(index)
@@ -90,6 +93,11 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
         setSearchByName(value);
     }
 
+    const handledeleteNft = (nftSelected) => {
+        const nftIndex = selectedNFTIds.findIndex((nft) => nft === nftSelected.id);
+        setSelectedNFTIds(selectedNFTIds => selectedNFTIds.filter(item => item !== nftSelected.id))        
+    }
+
     useEffect(() => {
         const getCollections = myNFTs.filter(nft => nft.collectionName)
         const uniqueCollections = getCollections.filter((v,i,a) => a.findIndex( t => (t.collectionName === v.collectionName)) === i);
@@ -151,9 +159,9 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
             }
         });
         setPreviewNFTs(previewNFTs);
+        // setAuction(data => ({ ...data, tier: { ...data.tier,nfts{...data.tier.nfts, previewNFTs}} }));
     }, [filteredNFTs, selectedNFTIds]);
     console.log(previewNFTs)
-    console.log(auction)
     const handleClickOutside = (event) => {
         if (!event.target.classList.contains('target')) {
             if (ref.current && !ref.current.contains(event.target) && refMobile.current && !refMobile.current.contains(event.target)) {   
@@ -277,7 +285,7 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                                         <div className='random__bg__color' style={{ backgroundColor: collection.avatar }}>{collection.name.charAt(0)}</div> :
                                         <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
                                     }
-                                    <span>{collection.name}</span>
+                                    <span>{collection.name}</span>  
                                     <button title='Remove' onClick={() => handleCollections(index)}>&#10006;</button>
                                 </div>
                             )
@@ -301,22 +309,37 @@ const Wallet = ({filteredNFTs, setFilteredNFTs}) => {
                     <div className="infoSelect-div">
                         <span>Number of winners : {auction.tier.winners}</span>
                         <span>NFTs per winner : {auction.tier.nftsPerWinner}</span>
+                        { auction.tier.nftsPerWinner > previewNFTs.length &&
                         <span className="err-select">You have not selected enough NFTs for this reward tier</span>
+                        }
                     </div>
+                    <div className='sel-info'>
+                    <div className="img-div">
                     {previewNFTs.map((nft, index) => {
                             return  (
-                                <div>
-                                    {/* <img src={nft.previewImage}> */}
-                                </div>
-                            )
-                        })}
-                    <div className="continue-ntf">
+                                    <div className='imgs'>
+                                    <img key={nft} className="smallView-image" src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                    <img className="del-img" src={crossSmall} onClick={() => handledeleteNft(nft)} alt="delete"/>
+                                    </div>
+                                     )
+                                })}
+                    </div>
+                    <div className="continue-nft">
+                    {auction.tier.nftsPerWinner == previewNFTs.length ?
+                        <Button onClick={() => { history.push('/review-reward',previewNFTs) }} className="light-button">Continue</Button>:
                         <Button className="light-button" disabled>Continue</Button>
+                    }
+                    </div>
                     </div>
                 </div>
             }
         </div>
     )
+}
+
+Wallet.propTypes = {
+    filteredNFTs: PropTypes.array,
+    setFilteredNFTs: PropTypes.func,
 }
 
 export default Wallet;

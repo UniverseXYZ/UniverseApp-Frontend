@@ -1,4 +1,5 @@
-import {useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import closeIcon from '../../assets/images/close-menu.svg';
@@ -170,6 +171,15 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
             
         </div>
     )
+}
+
+PlaceBidPopup.propTypes = {
+    onClose: PropTypes.func,
+    onAuctionId: PropTypes.number,
+    onAuctionTitle: PropTypes.string,
+    onArtistName: PropTypes.string,
+    onBidders: PropTypes.array,
+    onSetBidders: PropTypes.func,
 }
 
 export default PlaceBidPopup;

@@ -682,6 +682,18 @@
                         top: 8px;
                         left: 8px;
                     }
+                    .selected-number{
+                        position: absolute;
+                        left: 14%;
+                        font-size: 14px;
+                        line-height: 21px;
+                        font-weight: bold;
+                        top: 2%;
+                        font-family: $spaceGroteskFont;
+                        background: -webkit-linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
                     .nonicon__icon{
                         position: absolute;
                         top: 8px;
@@ -993,10 +1005,13 @@
             
             .selected-ntf{
                 background: #FFFFFF;
+                // padding-bottom: 16px;
+                // padding-top: 16px;
                 box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
             }
             .infoSelect-div{
                 display: flex;
+                padding: 16px 0px;
                 span{
                     width: 15%;
                     font-family: $spaceGroteskFont;
@@ -1006,14 +1021,41 @@
                     line-height: 18px;
                 }
             }
-            .continue-ntf{
-                margin: 20px 0;
-                text-align: end;
+            .sel-info{
+                display: flex;
+                padding-bottom: 25px;
+            }
+            .continue-nft{
+                min-height: 50px;
+                position: relative;
+                
+                button{
+                    position:absolute;
+                    bottom: 0;
+                }
             }
             .err-select{
                 text-align: right;
                 color: #FF4949;
                 width: 70%!important;
+            }
+            .img-div{
+                display: flex;
+                width: 85%;
+                .imgs{
+                    position: relative;
+                    .del-img{
+                        position: absolute;
+                        bottom: 20px;
+                        left: 30px;
+                    }
+                }
+            }
+            .smallView-image{
+            margin-right: 16px;
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
             }
         }
 

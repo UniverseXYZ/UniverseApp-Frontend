@@ -12,15 +12,17 @@ const Welcome = () => {
     const ref = useRef();
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (ref.current && ref.current.readyState === 4) {
-                setLoaded(true);
-                ref.current.play().catch(error => { });
-                clearInterval(interval);
-            }
-        }, 1000)
+        const timeout = setTimeout(() => {
+            setLoaded(true);
+        }, 2000)
+        // const interval = setInterval(() => {
+        //     if (ref.current && ref.current.readyState === 4) {
+        //         setLoaded(true);
+        //         clearInterval(interval);
+        //     }
+        // }, 1000)
 
-        return () => clearInterval(interval);
+        return () => clearTimeout(timeout);
     }, [])
     
     return (
@@ -46,16 +48,15 @@ const Welcome = () => {
                         </div>
                     </div>
                     <div className='right'>
-                        {!loaded &&
+                        {!loaded ?
                             <SkeletonTheme color="#202020" highlightColor="#444">
                                 <Skeleton circle={true} height={300} width={300} />
-                            </SkeletonTheme>
+                            </SkeletonTheme> :
+                            <video ref={ref} autoPlay loop muted playsInline>
+                                <source src={heroVideo} type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
                         }
-                        <video ref={ref} loop playsInline muted style={{ display: loaded ? 'block' : 'none' }}>
-                            <source src={heroVideo} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                        {/* <img src={welcomeImg} alt='Welcome' onLoad={() => setLoaded(true)} style={{ display: loaded ? 'block' : 'none' }} /> */}
                     </div>
                 </div>
             </AnimatedOnScroll>

@@ -15,7 +15,7 @@ const NonFungibleUniverse = () => {
             id: 1,
             icon: nfuSocialNetworkIcon,
             title: 'NFT Social Network',
-            description: 'With the rise of decentralisation and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being cencored.',
+            description: 'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being Censored.',
             loaded: false,
         },
         {
@@ -36,7 +36,7 @@ const NonFungibleUniverse = () => {
             id: 4,
             icon: nfuGamingIcon,
             title: 'Gaming',
-            description: 'Games built with web 3.0 at their forefront, not added in as an afterthought.',
+            description: 'Games built with WEB3 at their forefront, not added in as an afterthought.',
             loaded: false,
         },
         {

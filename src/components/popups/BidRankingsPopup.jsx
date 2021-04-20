@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/close-menu.svg';
 
 const BidRankingsPopup = ({ onClose, onBidders }) => {
@@ -67,6 +68,11 @@ const BidRankingsPopup = ({ onClose, onBidders }) => {
             </div>
         </div>
     )
+}
+
+BidRankingsPopup.propTypes = {
+    onClose: PropTypes.func,
+    onBidders: PropTypes.array,
 }
 
 export default BidRankingsPopup;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import Button from "../button/Button";
 import closeIcon from '../../assets/images/cross.svg';
 
@@ -14,5 +15,9 @@ const CongratsPopup = ({ onClose }) => {
         </div>
     );
 };
+
+CongratsPopup.propTypes = {
+    onClose: PropTypes.func,
+}
 
 export default CongratsPopup;

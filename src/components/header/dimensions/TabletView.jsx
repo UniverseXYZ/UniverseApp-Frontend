@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useState, useEffect, useContext, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {NotificationManager} from 'react-notifications';
 import { Link, useHistory } from 'react-router-dom';
 import Popup from "reactjs-popup";
 import {Animated} from "react-animated-css";
@@ -57,7 +57,7 @@ const TabletView = (props) => {
                 <div className='wallet__connected__tablet'>
                 <img className="account__icon" src={accountIcon} onClick={() => { setIsAccountDropdownOpened(!isAccountDropdownOpened); setShowMenu(false) }} alt='Account icon' />
                     {isAccountDropdownOpened &&
-                    <Animated animationIn="bounceIn" animationOut="zoomOutDown">
+                    <Animated animationIn="fadeIn">
                         <div ref={ref} className='dropdown drop-account'>
                             <div className='dropdown__header'>
                                 <div className="copy-div">
@@ -159,6 +159,17 @@ const TabletView = (props) => {
             }
         </div>
     )
+}
+
+TabletView.propTypes = {
+    ethereumAddress: PropTypes.string,
+    handleConnectWallet: PropTypes.func,
+    showInstallWalletPopup: PropTypes.bool,
+    setShowInstallWalletPopup: PropTypes.func,
+    selectedWallet: PropTypes.string,
+    setSelectedWallet: PropTypes.func,
+    showMenu: PropTypes.bool,
+    setShowMenu: PropTypes.func,
 }
 
 export default TabletView;

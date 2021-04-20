@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Skeleton from 'react-loading-skeleton';
 import twitterIcon from '../../assets/images/icons_twitter.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
 
-const AuctionOwnerDetails = ({artist}) => {
+const AuctionOwnerDetails = ({ artist }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -52,6 +53,10 @@ const AuctionOwnerDetails = ({artist}) => {
             }
         </div>
     )
+}
+
+AuctionOwnerDetails.propTypes = {
+    artist: PropTypes.object,
 }
 
 export default AuctionOwnerDetails;

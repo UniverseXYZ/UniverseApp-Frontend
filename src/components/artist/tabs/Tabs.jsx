@@ -1,11 +1,12 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import NFTsTab from './nfts/NFTsTab';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab';
 
-const Tabs = () => {
+const Tabs = ({onArtist}) => {
     const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
     const handleTabRightScrolling = () => {
@@ -74,7 +75,7 @@ const Tabs = () => {
                 </div>
                 <div className='tab__content'>
                     {selectedTabIndex === 0 && 
-                        <NFTsTab />
+                        <NFTsTab onArtist={onArtist} />
                     }
                     {selectedTabIndex === 1 && 
                         <ActiveAuctionsTab /> 
@@ -89,6 +90,10 @@ const Tabs = () => {
             </div>
         </div>
     )
+}
+
+Tabs.propTypes = {
+    onArtist: PropTypes.object,
 }
 
 export default Tabs;
