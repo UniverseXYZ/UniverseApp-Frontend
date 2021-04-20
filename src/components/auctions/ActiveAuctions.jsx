@@ -40,15 +40,18 @@ const ActiveAuctions = () => {
                 <Input className='searchInp'
                     onChange={(e) => handleSearch(e.target.value)}
                     value={searchByName}
-                    placeholder='Search by name'/>
+                    placeholder='Search by name'
+                />
             </div>
             {ACTIVE_ACTIONS_DATA.slice(offset, offset +perPage).filter(item => item.name.toLowerCase().includes(searchByName.toLowerCase())).slice(offset, offset +perPage).map(active_auction => {
                 return (
                     <div className="auction active-auction" key={active_auction.id}>
                         <div className="auction-header">
                             <div className="img_head">
-                                <img className='auctionIcon' src={icon} alt='auction'/>
-                                <h3>{active_auction.name}</h3>
+                                <div className="img_head_title">
+                                    <img className='auctionIcon' src={icon} alt='auction'/>
+                                    <h3>{active_auction.name}</h3>
+                                </div>
                                 <div className="copy-div">
                                     <div className='copy' title='Copy to clipboard'>
                                         <div className="copied-div" hidden={!copied}>URL copied!<span></span></div>
@@ -112,9 +115,11 @@ const ActiveAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{active_auction.platinumTier.name}</h3>
-                                    <p>NFTs per winner: <b>{active_auction.platinumTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{active_auction.platinumTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{active_auction.platinumTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{active_auction.platinumTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{active_auction.platinumTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{active_auction.platinumTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {active_auction.platinumTier.nfts.map((nft, index) => {
@@ -133,9 +138,11 @@ const ActiveAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{active_auction.goldTier.name}</h3>
-                                    <p>NFTs per winner: <b>{active_auction.goldTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{active_auction.goldTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{active_auction.goldTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{active_auction.goldTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{active_auction.goldTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{active_auction.goldTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {active_auction.goldTier.nfts.map((nft, index) => {
@@ -154,9 +161,11 @@ const ActiveAuctions = () => {
                             <div className="tier">
                                 <div className="tier-header">
                                     <h3>{active_auction.silverTier.name}</h3>
-                                    <p>NFTs per winner: <b>{active_auction.silverTier.nftsPerWinner}</b></p>
-                                    <p>Winners: <b>{active_auction.silverTier.winners}</b></p>
-                                    <p>Total NFTs: <b>{active_auction.silverTier.totalNFTs}</b></p>
+                                    <div className="tier-header-description">
+                                        <p>NFTs per winner: <b>{active_auction.silverTier.nftsPerWinner}</b></p>
+                                        <p>Winners: <b>{active_auction.silverTier.winners}</b></p>
+                                        <p>Total NFTs: <b>{active_auction.silverTier.totalNFTs}</b></p>
+                                    </div>
                                 </div>
                                 <div className="tier-body">
                                     {active_auction.silverTier.nfts.map((nft, index) => {
@@ -177,7 +186,7 @@ const ActiveAuctions = () => {
                 )
             })}
             <div className='pagination__container'>
-                                <Pagination data={ACTIVE_ACTIONS_DATA} perPage={perPage} setOffset={setOffset} />
+                <Pagination data={ACTIVE_ACTIONS_DATA} perPage={perPage} setOffset={setOffset} />
             </div>
         </div>
         
