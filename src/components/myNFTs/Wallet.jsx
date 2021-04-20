@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory, useLocation } from 'react-router'
 import {Animated} from 'react-animated-css';
-import { useLocation } from 'react-router';
 import uuid from 'react-uuid';
 import Lists from './Lists';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
@@ -12,8 +12,6 @@ import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
-import crossSmall from '../../assets/images/crossSmall.svg'
-import { useHistory, useLocation } from 'react-router'
 
 
 const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {

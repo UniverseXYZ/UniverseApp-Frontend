@@ -12,7 +12,7 @@ const BuyUniverseNFTs = () => {
                         <span className='coming__soon'>Coming soon</span>
                     </div>
                     <div>
-                        <img src={buyUniverseNFTsImg} alt='Buy Universe NFTs' />
+                        <img src={buyUniverseNFTsImg} alt='Buy Universe NFTs' style={{ minWidth: '280px' }} />
                     </div>
                 </div>
             </AnimatedOnScroll>
