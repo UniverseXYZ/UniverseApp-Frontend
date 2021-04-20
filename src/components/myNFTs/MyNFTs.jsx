@@ -25,12 +25,18 @@ const MyNFTs = () => {
         myNFTs, 
         setMyNFTs,
         selectedNft,
+        auction,
+        setAuction
     } = useContext(AppContext);
     const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
     const [filteredNFTs, setFilteredNFTs] = useState([]);
     const location = useLocation();
     const isCreatingAction = location.pathname === '/select-nfts';
     const history = useHistory();
+
+    console.log(location.state)
+    // console.log(auction)
+
     const handleClose = () => {
         document.body.classList.remove('no__scroll');
         setShowModal(false);
@@ -161,7 +167,7 @@ const MyNFTs = () => {
                         }
                         <div>
                         <div className='head-part'>
-                            <h2 className="tier-title">Select NTFs</h2>
+                            <h2 className="tier-title">Select NFTs</h2>
                         </div>
                         <div className="space-tier-div">
                             {selectedNft.length >0 ? "" : 

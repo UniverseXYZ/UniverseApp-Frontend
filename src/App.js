@@ -43,9 +43,12 @@ const App = () => {
     const [savedNfts, setSavedNfts] = useState([]);
     const [savedCollections, setSavedCollections] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
-    const [auction, setAuction] = useState({ tier: {nfts:{}} });
-    const [selectedNft,setSelectedNft] = useState([]);
-    const [selectedNFTIds,setSelectedNFTIds] = useState([]);
+    // const tiers  = useState({ tiers: [ { nfts: [], name: '', winner: '', nftsPerWinner:'' } ] });
+    // const [auction, setAuction] = useState({ tier: {nfts:{}} });
+
+    const [auction, setAuction] = useState({ tiers: [] });
+    const [selectedNft,setSelectedNft] =useState([]);
+    const [selectedNFTIds,setSelectedNFTIds] =useState([]);
     
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -134,6 +137,7 @@ const App = () => {
                     <Route exact path="/create-tiers" component={() => <CreateTiers />} />
                     <Route exact path="/review-reward" component={() => <ReviewReward />} />
                     <Route exact path="/select-nfts" component={() => <MyNFTs />} />
+
                     {/* <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} /> */}
 
                     <Route exact path="/:artist" children={<Artist />} />

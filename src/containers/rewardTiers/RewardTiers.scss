@@ -1,0 +1,14 @@
+
+@import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
+
+.reward-tiers{
+    .view-tier{
+        height: 349px;
+        margin-top: 10%;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+    }
+}

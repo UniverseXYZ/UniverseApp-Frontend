@@ -20,30 +20,36 @@ const ReviewReward = () => {
     const history = useHistory();
     const { auction,setAuction } = useContext(AppContext);
     const [hideIcon, setHideIcon] = useState(false);
+    const ref = useRef(null);
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownID, setDropdownID] = useState(0);
-    const ref = useRef(null);
-    const [review, setReview] = useState(location.state);
+    const tierId = location.state;
+    const tierById = auction.tiers.find((element) => element.id === tierId)
+
     const handleEdit = (id) => {
         document.body.classList.add('no__scroll');
         
     }
 
     const handleRemove = (id) => {
-        // document.body.classList.add('no__scroll');
-        console.log(id)
-        setReview(review => review.filter(item => item.id !== id))     
+        document.body.classList.add('no__scroll');
+        console.log(id)   
+    setAuction(auction => ({ ...auction, tiers: [...auction.tiers.filter(tier => tier.id !== tierById.id), { ...tierById, nfts: tierById.nfts.filter(item => item.id !== id) }] }));
+
     }
+   
+    const handleCreate = () =>{
+        history.push('/reward-tiers',tierId)
+    } 
 
     useEffect(() => {
         console.log(auction)
-        console.log(review)
 
     })
     return (
         <div className='container reviw-reward'>
-            <div className="back-rew" onClick={() => { history.push('/select-nfts') }}><img src={arrow} alt="back"/><span>Select NFTs</span></div>
+            <div className="back-rew" onClick={() => { history.push('/select-nfts',tierId) }}><img src={arrow} alt="back"/><span>Select NFTs</span></div>
             <div>
             <div className='head-part'>
             <h2 className="tier-title">Review Reward Tier</h2>
@@ -52,15 +58,15 @@ const ReviewReward = () => {
             <div className='tier-inf'>
                 <div className="tName">
                     <p>Tier name</p>
-                    <span>{auction.tier.name}</span>
+                    <span>{tierById.name}</span>
                 </div>
                 <div className="numberWinn">
                     <p>Number of winners</p>
-                    <span>{auction.tier.winners}</span>
+                    <span>{tierById.winners}</span>
                 </div>
                 <div className="perWin">
                 <p>NFTs per winner</p>
-                <span>{auction.tier.nftsPerWinner}</span>
+                <span>{tierById.nftsPerWinner}</span>
                 </div>
             </div>
                 <div className="totalNft">
@@ -71,14 +77,16 @@ const ReviewReward = () => {
                                     </div>
                                 </Animated>
                             }
-                <p>Total NFTs:&nbsp;<b>{auction.tier.totalNFTs}</b>
+                <p>Total NFTs:&nbsp;<b>
+                        {tierById.winners * tierById.nftsPerWinner}
+                    </b>
                 <img onMouseOver={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)} src={infoIcon} alt="total"/>
                 </p>
                 </div>
             </div>
 
             <div className='rev-reward'>
-                        {review.map((nft, index) => {
+                        {tierById.nfts.map((nft, index) => {
                             return (
                                 <div className="rev-reward__box">
                                     <div className='rev-reward__box__image'>
@@ -144,10 +152,11 @@ const ReviewReward = () => {
                                 </div>
                             )
                         })}
-                    </div>
-                    <div className="create-btn">
-                    {review.length>0 ?
-                        <Button className="light-button">Create tier</Button> :
+                    </div> 
+                     <div className="create-btn">
+                    {tierById.nfts.length>0 ?
+                    
+                        <Button className="light-button" onClick={ () => handleCreate() }>Create tier</Button> :
                         <Button className="light-button" disabled>Create tier</Button>
                     }
                     </div>
