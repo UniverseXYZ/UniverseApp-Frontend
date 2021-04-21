@@ -325,6 +325,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                                 })}
                     </div>
                     <div className="continue-nft">
+                        {console.log('aaaa', auction.tier.nftsPerWinner, previewNFTs.length)}
                     {auction.tier.nftsPerWinner == previewNFTs.length ?
                         <Button onClick={() => { history.push('/review-reward',previewNFTs) }} className="light-button">Continue</Button>:
                         <Button className="light-button" disabled>Continue</Button>
