@@ -233,6 +233,7 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-gap: 50px;
+                align-items: center;
 
                 > div:nth-child(4) {
                     @include md {
@@ -240,15 +241,12 @@
                     }
                 }
 
-                .universe__auctions__img {
-                    width: 610px;
-                    height: 610px;
-                    object-fit: cover;
-                    @include lg {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
+                // .universe__auctions__img {
+                //     @include lg {
+                //         width: 100%;
+                //         height: 100%;
+                //     }
+                // }
 
                 .universe__original__characters__img {
                     width: 410px;
@@ -364,9 +362,13 @@
                         }
                     }
                 }
+                @include lg {
+                    align-items: flex-start;
+                }
                 @include md {
                     grid-gap: 20px;
                     grid-template-columns: 1fr;
+                    align-items: center;
                 }
             }
         }
