@@ -30,14 +30,17 @@ const CreateTiers = () => {
     });
 
     useEffect(() => {
-        if (values.name) {
+        if (values.name) {  
             if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
-                setAuction(data => ({ ...data, tier: { ...data.tier, ...values, totalNFTs: values.winners * values.nftsPerWinner, tierId: uuid()} }));
-                    history.push('/select-nfts');
+                const createdTierId = uuid();
+                console.log(createdTierId)
+                // setAuction(data => ({ ...data, tier: { ...data.tier, ...values, totalNFTs: values.winners * values.nftsPerWinner, tierId: uuid()} }));
+                setAuction(auction => ({ ...auction, tiers: [ ...auction.tiers, { ...values, id: createdTierId, nfts: [] } ] }));
+                history.push('/select-nfts', createdTierId);
             }
         }
     }, [isValidFields])
-    console.log(auction)
+    
     const handleChange = event => {
         setValues(prevValues => ({ ...prevValues, [event.target.id]: event.target.value }));
     };
