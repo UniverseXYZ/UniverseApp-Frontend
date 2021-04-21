@@ -14,7 +14,7 @@ import SelectWalletPopup from '../../popups/SelectWalletPopup';
 import {shortenEthereumAddress, toFixed} from "../../../utils/helpers/format";
 
 const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet }) => {
-    const { isWalletConnected, setIsWalletConnected, handleClickOutside, ethBalance, usdEthBalance, wethBalance, usdWethBalance } = useContext(AppContext);
+    const { isWalletConnected, setIsWalletConnected, handleClickOutside, yourBalance, usdEthBalance, wethBalance, usdWethBalance } = useContext(AppContext);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
     const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
@@ -72,7 +72,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                             <div className='dropdown__header'>
                                 <div className="copy-div">
                                     <img className="icon-img" src={Icon} alt='icon' />
-                                    <div className='ethereum__address'>{ethereumAddress}</div>
+                                    <div className='ethereum__address'>{shortenEthereumAddress(ethereumAddress)}</div>
                                     <div className="copy__div">
                                         <div className='copy' title='Copy to clipboard'>
                                             <div className="copied-div" hidden={!copied}>Address copied!<span></span></div>
@@ -85,7 +85,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
 
                                 <div className="group1">
                                     <img src={Group1} alt="ETH" />
-                                    <span className="first-span">{toFixed(ethBalance, 2)} ETH</span>
+                                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
                                     <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                                 </div>
                                 <div className="group2">

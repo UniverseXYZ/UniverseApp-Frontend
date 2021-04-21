@@ -24,7 +24,7 @@ const Header = (props) => {
         if (installed) {
             if (wallet == "Metamask" && typeof window.ethereum !== "undefined") {
                 const provider = new providers.Web3Provider(window.ethereum);
-                await connectWeb3(provider);
+                await connectWeb3( window.ethereum, provider);
                 setIsWalletConnected(true);
                 setShowMenu(false);
                 setShowSelectWallet(false);
