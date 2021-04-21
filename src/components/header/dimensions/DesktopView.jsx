@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {Animated} from "react-animated-css";
 import Popup from "reactjs-popup"
 import Icon from '../../../assets/images/icon1.svg';
 import copyIcon from '../../../assets/images/copy.svg';
@@ -13,24 +12,12 @@ import Group2 from '../../../assets/images/Group2.svg';
 import SelectWalletPopup from '../../popups/SelectWalletPopup';
 
 const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPopup, setShowInstallWalletPopup, selectedWallet, setSelectedWallet }) => {
-    const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+    const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
     const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
     const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
     const [copied, setCopied] = useState(false)
     const history = useHistory();
-    const ref = useRef(null);
-
-    useEffect(() => {
-        document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAccountDropdownOpened), true);
-        document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsMintingDropdownOpened), true);
-        document.addEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAboutDropdownOpened), true);
-        return () => {
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAccountDropdownOpened), true);
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsMintingDropdownOpened), true);
-            document.removeEventListener('click', (e) => handleClickOutside(e, 'dropdown__opened', ref, setIsAboutDropdownOpened), true);
-        };
-    })
 
     return (
         <div className='desktop__nav'>
@@ -40,10 +27,10 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                         <span className='nav__link__title'>Minting & Auctions</span>
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
-                    <div ref={ref} className='dropdown minting-drop'>
+                    <div className='dropdown minting-drop'>
                         <div className='dropdown__body'>
                             <button onClick={() => { history.push('/minting-and-auctions/about'); setIsMintingDropdownOpened(false) }}>About</button>
-                            <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace/active-auctions'); setIsMintingDropdownOpened(false)}}>Active auction</button>
+                            <button className="active-auctions" onClick={() => { history.push('/minting-and-auctions/marketplace/active-auctions'); setIsMintingDropdownOpened(false)}}>Active auctions</button>
                             <button onClick={() => { history.push('/minting-and-auctions/marketplace/future-auctions'); setIsMintingDropdownOpened(false) }}>Future auctions</button>
                         </div>
                     </div>
@@ -53,7 +40,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                         <span className='nav__link__title'>About</span>
                         <img className='arrow' src={arrowUP} alt="arrow" />
                     </button>
-                    <div ref={ref} className='dropdown minting-drop'>
+                    <div className='dropdown minting-drop'>
                         <div className='dropdown__body'>
                             <button onClick={() => { history.push('/'); setIsAboutDropdownOpened(false) }}>Whitepaper</button>
                             <button className="team" onClick={() => { history.push('/'); setIsAboutDropdownOpened(false)}}>Team</button>
@@ -67,7 +54,7 @@ const DesktopView = ({ ethereumAddress, handleConnectWallet, showInstallWalletPo
                             <span className='nav__link__title'>My Account</span>
                             <img className='arrow' src={arrowUP} alt="arrow" />
                         </button>
-                        <div ref={ref} className='dropdown drop-account'>
+                        <div className='dropdown drop-account'>
                             <div className='dropdown__header'>
                                 <div className="copy-div">
                                     <img className="icon-img" src={Icon} alt='icon' />
