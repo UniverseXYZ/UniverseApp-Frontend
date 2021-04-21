@@ -14,13 +14,7 @@ const Welcome = () => {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setLoaded(true);
-        }, 2000)
-        // const interval = setInterval(() => {
-        //     if (ref.current && ref.current.readyState === 4) {
-        //         setLoaded(true);
-        //         clearInterval(interval);
-        //     }
-        // }, 1000)
+        }, 1000)
 
         return () => clearTimeout(timeout);
     }, [])
