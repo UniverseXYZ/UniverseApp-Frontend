@@ -78,11 +78,14 @@
                     align-items: center;
                     flex-wrap: wrap;
                     .light-border-button {
-                        background: 
-                            linear-gradient($black, $black) padding-box,
-                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                        background-image: linear-gradient(101deg, #BCEB00, #00EAEA);
+                        background-origin: border-box;
+                        box-shadow: 2px 1000px 1px #000 inset;
                         color: $white;
                         margin-left: 15px;
+                        &:hover{
+                            box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
+                        }
                     }
                     button {
                         @include sm {
@@ -305,7 +308,12 @@
                             display: grid;
                             grid-template-columns: 1fr 1fr;
                             grid-gap: 50px;
-                            margin-top: 30px;
+                            overflow: hidden;
+                            animation: fadeOutDown .5s ease-in-out forwards;
+
+                            &.open {
+                                animation: fadeInDown .5s ease-in-out forwards;
+                            }
 
                             .desc {
                                 font-family:$spaceGroteskFont;

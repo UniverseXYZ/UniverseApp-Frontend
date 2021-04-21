@@ -40,6 +40,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
     
     const location = useLocation()
     const isCreatingAction = location.pathname === '/select-nfts'; 
+    const tierId = location.state;
+    const tierById = auction.tiers.find((element) => element.id === tierId)
+    console.log(tierById)
 
     const handleCollectionsMobile = () => {
         setCollections(draftCollections)
@@ -161,7 +164,6 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
         setPreviewNFTs(previewNFTs);
         // setAuction(data => ({ ...data, tier: { ...data.tier,nfts{...data.tier.nfts, previewNFTs}} }));
     }, [filteredNFTs, selectedNFTIds]);
-    console.log(previewNFTs)
     const handleClickOutside = (event) => {
         if (!event.target.classList.contains('target')) {
             if (ref.current && !ref.current.contains(event.target) && refMobile.current && !refMobile.current.contains(event.target)) {   
@@ -175,6 +177,11 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
         document.body.classList.add('no__scroll')
         document.querySelector('.filter__by__collection_mobile').style.top = window.scrollY + 'px';
         document.querySelector('.animate__filters__popup').style.display = 'block';
+    }
+
+    const handleContinue = (previewNFTs) => {
+        setAuction(auction => ({ ...auction, tiers: [...auction.tiers.filter(tier => tier.id !== tierById.id), { ...tierById, nfts: previewNFTs }] }));
+        history.push('/review-reward',tierId)
     }
 
     return (
@@ -304,12 +311,12 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                     }
                 </> : <div className='empty__nfts'><h3>No NFTs found</h3></div>
             }
-            {isCreatingAction && 
+            {isCreatingAction && tierById && 
                 <div className="container selected-ntf">
                     <div className="infoSelect-div">
-                        <span>Number of winners : {auction.tier.winners}</span>
-                        <span>NFTs per winner : {auction.tier.nftsPerWinner}</span>
-                        { auction.tier.nftsPerWinner > previewNFTs.length &&
+                        <span>Number of winners : {tierById.winners}</span>
+                        <span>NFTs per winner : {tierById.nftsPerWinner}</span>
+                        { tierById.nftsPerWinner > previewNFTs.length &&
                         <span className="err-select">You have not selected enough NFTs for this reward tier</span>
                         }
                     </div>
@@ -322,12 +329,11 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                                     <img className="del-img" src={crossSmall} onClick={() => handledeleteNft(nft)} alt="delete"/>
                                     </div>
                                      )
-                                })}
+                                })} 
                     </div>
                     <div className="continue-nft">
-                        {console.log('aaaa', auction.tier.nftsPerWinner, previewNFTs.length)}
-                    {auction.tier.nftsPerWinner == previewNFTs.length ?
-                        <Button onClick={() => { history.push('/review-reward',previewNFTs) }} className="light-button">Continue</Button>:
+                    {tierById && tierById.nftsPerWinner == previewNFTs.length ?
+                        <Button onClick={() => handleContinue(previewNFTs)} className="light-button">Continue</Button>:
                         <Button className="light-button" disabled>Continue</Button>
                     }
                     </div>

@@ -15,14 +15,18 @@ const Lists = ({ data, perPage, offset }) => {
     const isCreatingAction = location.pathname === '/select-nfts'; 
 
     const { auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
-
+    
     const [openEditions, setOpenEditions] = useState(null);
     const [selected, Setselected] = useState([]);
     const [data1, setData] = useState([]);
 
-    const handleSavedNfts = (clickedNFT) => {
-        if (isCreatingAction && auction.tier.winners < clickedNFT.generatedEditions.length) {
-            if (auction.tier.nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
+    const tierId = location.state;
+    const tierById = auction.tiers.find((element) => element.id === tierId)
+
+
+    const handleSavedNfts = (clickedNFT) => {          
+        if (isCreatingAction && tierById.winners < clickedNFT.generatedEditions.length) {
+            if (tierById.nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
             setSelectedNFTIds((prevValue) => {
                 const nftIndex = prevValue.findIndex((nft) => nft === clickedNFT.id);
                 if (nftIndex !== -1) {
@@ -31,32 +35,31 @@ const Lists = ({ data, perPage, offset }) => {
                     return [...prevValue, clickedNFT.id]
                 }
             })
-            
         }
     }
     const handleShow = (nft) =>{
-        if(selectedNFTIds.includes(nft.id) && auction.tier.winners <= nft.generatedEditions.length){
+        if(selectedNFTIds.includes(nft.id) && tierById.winners <= nft.generatedEditions.length){
             setOpenEditions(openEditions ? null : nft.id)
         }
     }
 
     useEffect(() => {
-      console.log(auction)
-      console.log(selectedNFTIds)
+    //   console.log(auction)
+    //   console.log(selectedNFTIds)
     }, [])
 
     return (
         <div className='nfts__lists'>
             {sliceData.map((nft, index) => {
                 return (
-                    <div  className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${(auction.tier.winners > nft.generatedEditions.length) || (auction.tier.nftsPerWinner == selectedNFTIds.length && !selectedNFTIds.includes(nft.id)) ? 'disabled' : ''}`} key={nft.id} >                      
+                    <div  className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${(tierById.winners > nft.generatedEditions.length) || (tierById.nftsPerWinner == selectedNFTIds.length && !selectedNFTIds.includes(nft.id)) ? 'disabled' : ''}`} key={nft.id} >                      
                         <div className='nft__box__image' onClick={() => handleSavedNfts(nft)}>
                         {isCreatingAction &&
                         <>
-                        {selectedNFTIds.includes(nft.id) && auction.tier.winners <= nft.generatedEditions.length &&
-                            <><img className='check__icon' src={checkIcon} alt='Check Icon'/> <span className="selected-number">0/{auction.tier.winners}</span> </>
+                        {selectedNFTIds.includes(nft.id) && tierById.winners <= nft.generatedEditions.length &&
+                            <><img className='check__icon' src={checkIcon} alt='Check Icon'/> <span className="selected-number">0/{tierById.winners}</span> </>
                         }
-                        {auction.tier.winners > nft.generatedEditions.length &&
+                        {tierById.winners > nft.generatedEditions.length &&
                             <img className='nonicon__icon' src={nonSelecting} alt='Check Icon' />
                         }
                         </>
@@ -104,7 +107,7 @@ const Lists = ({ data, perPage, offset }) => {
                                         {`x${nft.generatedEditions.length}`}
                                         </div>
                                         }   
-                                        {!( selectedNFTIds.includes(nft.id) && auction.tier.winners <= nft.generatedEditions.length) &&
+                                        {!( selectedNFTIds.includes(nft.id) && tierById.winners <= nft.generatedEditions.length) &&
                                         <div className='generatedEditions' style={{ gridTemplateColumns: `repeat(${Math.ceil(nft.generatedEditions.length/10)}, auto)` }}>
                                             {nft.generatedEditions.map(edition => {
                                                 return (

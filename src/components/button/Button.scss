@@ -24,7 +24,7 @@
       box-shadow: none;
    }
 }
-.light-border-button{
+.light-border-button {
    // display: flex;
    align-items: center;
    padding: 11px 26px;
@@ -32,9 +32,9 @@
    padding: 11px 26px 11px 26px;
    border: 1px solid transparent;
    border-radius: 12px;
-   background: 
-      linear-gradient($white, $white) padding-box,
-      linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+   background-image: linear-gradient(101deg, #BCEB00, #00EAEA);
+   background-origin: border-box;
+   box-shadow: 2px 1000px 1px #fff inset;
    font-family: $spaceGroteskFont;
    font-style: normal;
    font-weight: 500;
@@ -46,5 +46,8 @@
       border: 1px solid #E6E6E6;
       color: #E6E6E6;
       box-shadow: none;
+   }
+   &:hover{
+      box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
    }
 }
