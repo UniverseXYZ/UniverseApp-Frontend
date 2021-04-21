@@ -16,14 +16,15 @@ import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/about/About';
 import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace';
 import MyAccount from './containers/myAccount/MyAccount';
-import { providers, utils } from 'ethers';
+import { Contract, providers, utils } from 'ethers';
 import { getEthPriceEtherscan, getWethBalanceEtherscan } from './utils/api/etherscan'
+import Contracts from './contracts/contracts.json';
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [loggedInArtist, setLoggedInArtist] = useState({
         id: uuid(),
-        name: '',
+        name: 'Donald Duck',
         universePageAddress: '',
         avatar: null,
         about: '',
@@ -54,10 +55,10 @@ const App = () => {
     const [web3Provider, setWeb3Provider] = useState(null);
     const [address, setAddress] = useState("");
     const [signer, setSigner] = useState("");
-    const [ethBalance, setEthBalance] = useState(0);
     const [wethBalance, setWethBalance] = useState(0);
     const [usdEthBalance, setUsdEthBalance] = useState(0);
     const [usdWethBalance, setUsdWethBalance] = useState(0);
+    const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
     
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -67,23 +68,31 @@ const App = () => {
         }
     };
   
-    const connectWeb3 = async (provider) => {
-      const { ethereum } = window;
-  
+    const connectWeb3 = async (ethereum, provider) => {
+
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });
       const balance = await provider.getBalance(accounts[0]);
       const network = await provider.getNetwork();
       const ethPrice = await getEthPriceEtherscan();
       const wethBalance = await getWethBalanceEtherscan(accounts[0], network.chainId);
+      const signer = provider.getSigner(accounts[0]).connectUnchecked();
   
-      setWeb3Provider(provider);
       setIsWalletConnected(true);
-      setSigner(provider.getSigner(0));
       setAddress(accounts[0]);
-      setEthBalance(utils.formatEther(balance));
+      setSigner(provider.getSigner(accounts[0]).connectUnchecked());
+      setYourBalance(utils.formatEther(balance))
       setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
       setWethBalance(utils.formatEther(wethBalance.result));
       setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
+
+      let ctr = Contracts[network.chainId].contracts.AuctionFactory;
+      setAuctionFactoryContract(
+          new Contract(
+            ctr.address,
+            ctr.abi,
+            signer
+          )
+        );
     };
   
     const isMetaMaskConnected = async (provider) => {
@@ -91,35 +100,7 @@ const App = () => {
       return accounts.length > 0;
     };
 
-    useEffect(async() => {
-        
-        if (typeof window.ethereum !== "undefined") {
-          const { ethereum } = window;
-    
-          const provider = new providers.Web3Provider(window.ethereum);
-          const isConnected = await isMetaMaskConnected(provider);
-            
-          if (provider && isConnected) {
-            await connectWeb3(provider);
-          } else {
-            console.log("Please install/connect MetaMask!");
-          }
-    
-          ethereum.on("accountsChanged", async ([account]) => {
-            if (account) {
-              await connectWeb3(provider);
-            } else {
-              setIsWalletConnected(false);
-            }
-          });
-    
-          ethereum.on("chainChanged", async (networkId) => {
-            window.location.reload();
-          });
-        } else {
-          console.log("Please install/connect MetaMask!");
-        }
-        
+    useEffect(() => {
         function handleResize() {
             setWindowSize({
                 width: window.innerWidth,
@@ -142,6 +123,36 @@ const App = () => {
             // window.removeEventListener("resize", handleResize);
             window.removeEventListener("scroll", handleScroll);
         }
+    }, []);
+
+    useEffect(async()=> {
+        if (typeof window.ethereum !== "undefined") {
+          const { ethereum } = window;
+    
+          const provider = new providers.Web3Provider(window.ethereum);
+          const isConnected = await isMetaMaskConnected(provider);
+          setWeb3Provider(provider)
+          if (provider && isConnected) {
+            await connectWeb3(ethereum, provider);
+          } else {
+            console.log("Please install/connect MetaMask!");
+          }
+    
+          ethereum.on("accountsChanged", async ([account]) => {
+            if (account) {
+              await connectWeb3(ethereum, provider);
+            } else {
+              setIsWalletConnected(false);
+            }
+          });
+    
+          ethereum.on("chainChanged", async (networkId) => {
+            window.location.reload();
+          });
+        } else {
+          console.log("Please install/connect MetaMask!");
+        }
+
     }, []);
 
     return (
@@ -182,14 +193,18 @@ const App = () => {
                 setSelectedNFTIds,
                 address,
                 setAddress,
-                ethBalance,
-                setEthBalance,
                 usdEthBalance,
                 setUsdEthBalance,
                 wethBalance,
                 setWethBalance,
                 usdWethBalance,
                 setUsdWethBalance,
+                web3Provider,
+                setWeb3Provider,
+                auctionFactoryContract,
+                setAuctionFactoryContract,
+                signer,
+                setSigner,
                 connectWeb3 
             }}
         >

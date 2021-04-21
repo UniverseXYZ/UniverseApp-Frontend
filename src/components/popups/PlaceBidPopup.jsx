@@ -8,9 +8,10 @@ import infoIcon from '../../assets/images/icon.svg';
 import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
+import { utils } from 'ethers';
 
 const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onBidders, onSetBidders }) => {
-    const { loggedInArtist, yourBalance, setYourBalance } = useContext(AppContext);
+    const { loggedInArtist, yourBalance, setYourBalance, auctionFactoryContract } = useContext(AppContext);
     const PLACEHOLDER_SERVICE__FEE = 0.105;
     const [yourBid, setYourBid] = useState('');
     const [totalBidAmount, setTotalBidAmount] = useState(0);
@@ -60,9 +61,12 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
         }
     }
 
-    useEffect(() => {
+    useEffect(async () => {
         if (clicked) {
             if (!error) {
+                const bidTx = 
+                    await auctionFactoryContract.ethBid(onAuctionId, {value: utils.parseEther(yourBid)});
+                await bidTx.wait();
                 setShowBidSubmitted(true);
                 setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
                 let newBidders = [...onBidders];

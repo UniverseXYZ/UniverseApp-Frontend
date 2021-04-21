@@ -35,7 +35,7 @@ const MobileView = (props) => {
         setShowInstallWalletPopup,
         selectedWallet
     } = props;
-    const { isWalletConnected, setIsWalletConnected, handleClickOutside, ethBalance, usdEthBalance, wethBalance, usdWethBalance } = useContext(AppContext);
+    const { isWalletConnected, setIsWalletConnected, handleClickOutside, yourBalance, usdEthBalance, wethBalance, usdWethBalance } = useContext(AppContext);
     const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
     const [collapseAboutMenu, setCollapseAboutMenu] = useState(false);
     const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -84,7 +84,7 @@ const MobileView = (props) => {
                                     </div>
                                     <div className="group1">
                                         <img src={Group1} alt="ETH" />
-                                        <span className="first-span">{toFixed(ethBalance, 2)} ETH</span>
+                                        <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
                                         <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                                     </div>
                                     <div className="group2">
