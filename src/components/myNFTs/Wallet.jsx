@@ -179,11 +179,10 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
         document.querySelector('.animate__filters__popup').style.display = 'block';
     }
 
-    const handleContinue = (previewNFTs) =>{
-    setAuction(auction => ({ ...auction, tiers: [...auction.tiers.filter(tier => tier.id !== tierById.id), { ...tierById, nfts: previewNFTs }] }));
-    history.push('/review-reward',tierId)
+    const handleContinue = (previewNFTs) => {
+        setAuction(auction => ({ ...auction, tiers: [...auction.tiers.filter(tier => tier.id !== tierById.id), { ...tierById, nfts: previewNFTs }] }));
+        history.push('/review-reward',tierId)
     }
-    console.log(auction)
 
     return (
         <div className='tab__wallet'>

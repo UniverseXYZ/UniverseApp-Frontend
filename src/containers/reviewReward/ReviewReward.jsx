@@ -70,18 +70,18 @@ const ReviewReward = () => {
                 </div>
             </div>
                 <div className="totalNft">
-                { hideIcon &&
-                                <Animated animationIn="zoomIn" style={{position: 'relative'}}>
-                                    <div className="info-text">
-                                        <p>Total amount of NFTs that will be distributed to the current reward tier winners.</p>
-                                    </div>
-                                </Animated>
-                            }
-                <p>Total NFTs:&nbsp;<b>
-                        {tierById.winners * tierById.nftsPerWinner}
-                    </b>
-                <img onMouseOver={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)} src={infoIcon} alt="total"/>
-                </p>
+                <p>Total NFTs:&nbsp;<b>{tierById.winners * tierById.nftsPerWinner}</b>
+                            <div className='total__nfts__info'>
+                                { hideIcon &&
+                                    <Animated animationIn="zoomIn" style={{position: 'relative'}}>
+                                        <div className="info-text">
+                                            <p>Total amount of NFTs that will be distributed to the current reward tier winners.</p>
+                                        </div>
+                                    </Animated>
+                                }
+                                <img onMouseOver={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)} src={infoIcon} alt="total"/>
+                            </div>
+                    </p>
                 </div>
             </div>
 
