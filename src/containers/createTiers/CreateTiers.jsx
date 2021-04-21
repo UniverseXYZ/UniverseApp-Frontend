@@ -1,7 +1,7 @@
 import '../../components/auctions/Tiers.scss';
-import {useState, useContext, useEffect } from 'react';
+import {useState, useContext, useEffect, useLayoutEffect } from 'react';
 import arrow from '../../assets/images/arrow.svg';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import AppContext from '../../ContextAPI';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
@@ -29,17 +29,30 @@ const CreateTiers = () => {
         nftsPerWinner: true,
     });
 
+    const location = useLocation();
+    const tierId = location.state;
+    const tierById = auction.tiers.find((element) => element.id === tierId)
+
     useEffect(() => {
         if (values.name) {  
             if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
-                const createdTierId = uuid();
-                console.log(createdTierId)
-                // setAuction(data => ({ ...data, tier: { ...data.tier, ...values, totalNFTs: values.winners * values.nftsPerWinner, tierId: uuid()} }));
-                setAuction(auction => ({ ...auction, tiers: [ ...auction.tiers, { ...values, id: createdTierId, nfts: [] } ] }));
-                history.push('/select-nfts', createdTierId);
+                if (tierId) {
+                    setAuction(auction => ({ ...auction, tiers: [ ...auction.tiers.filter(tier => tier.id !== tierId), { ...tierById, ...values } ] }));
+                    history.push('/select-nfts', tierId);
+                } else {
+                    const createdTierId = uuid();
+                    setAuction(auction => ({ ...auction, tiers: [ ...auction.tiers, { ...values, id: createdTierId, nfts: [] } ] }));   
+                    history.push('/select-nfts', createdTierId);
+                }
             }
         }
     }, [isValidFields])
+
+    useEffect(() => {
+        if (tierById) {
+            setValues({ name: tierById.name, winners: tierById.winners, nftsPerWinner: tierById.nftsPerWinner });
+        }
+    }, [tierById]);
     
     const handleChange = event => {
         setValues(prevValues => ({ ...prevValues, [event.target.id]: event.target.value }));

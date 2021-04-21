@@ -34,8 +34,7 @@ const ReviewReward = () => {
 
     const handleRemove = (id) => {
         document.body.classList.add('no__scroll');
-        console.log(id)   
-    setAuction(auction => ({ ...auction, tiers: [...auction.tiers.filter(tier => tier.id !== tierById.id), { ...tierById, nfts: tierById.nfts.filter(item => item.id !== id) }] }));
+        setAuction(auction => ({ ...auction, tiers: [...auction.tiers.filter(tier => tier.id !== tierById.id), { ...tierById, nfts: tierById.nfts.filter(item => item.id !== id) }] }));
 
     }
    
@@ -53,7 +52,7 @@ const ReviewReward = () => {
             <div>
             <div className='head-part'>
             <h2 className="tier-title">Review Reward Tier</h2>
-            <Button className="light-border-button" onClick={() => { history.push('/create-tiers') }}>Edit <img src={pencil} alt="edit"/></Button>
+            <Button className="light-border-button" onClick={() => { history.push('/create-tiers',tierId) }}>Edit <img src={pencil} alt="edit"/></Button>
             </div>
             <div className='tier-inf'>
                 <div className="tName">
