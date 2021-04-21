@@ -12,6 +12,9 @@ const Welcome = () => {
     const ref = useRef();
 
     useEffect(() => {
+        // setInterval(() => {
+        //     ref.current && console.log(ref.current.readystate)
+        // }, 1000)
         const timeout = setTimeout(() => {
             setLoaded(true);
         }, 1000)

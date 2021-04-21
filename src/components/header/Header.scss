@@ -95,6 +95,7 @@ header {
                     .dropdown {
                         transform: rotateX(0deg);
                         opacity: 1;
+                        pointer-events: auto;
                     }
                     .nav__link__title {
                         opacity: 0.6;
@@ -178,9 +179,10 @@ header {
                     transform-style: preserve-3d;
                     transform-origin: top center;
                     backface-visibility: hidden;
-                    transform: rotateX(-90deg);
+                    transform: rotateX(-3deg);
                     transition: transform 0.4s cubic-bezier(0.17, 0.67, 0.59, 1.21), opacity 0.1s 0.1s;
                     opacity: 0;
+                    pointer-events: none;
 
                     &.drop-account {
                         top: 50px;
