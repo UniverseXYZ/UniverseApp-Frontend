@@ -23,7 +23,6 @@ const Lists = ({ data, perPage, offset }) => {
     const tierId = location.state;
     const tierById = auction.tiers.find((element) => element.id === tierId)
 
-
     const handleSavedNfts = (clickedNFT) => {          
         if (isCreatingAction && tierById.winners < clickedNFT.generatedEditions.length) {
             if (tierById.nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
@@ -42,11 +41,6 @@ const Lists = ({ data, perPage, offset }) => {
             setOpenEditions(openEditions ? null : nft.id)
         }
     }
-
-    useEffect(() => {
-    //   console.log(auction)
-    //   console.log(selectedNFTIds)
-    }, [])
 
     return (
         <div className='nfts__lists'>
