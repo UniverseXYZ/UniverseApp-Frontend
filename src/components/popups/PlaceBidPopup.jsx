@@ -64,20 +64,25 @@ const PlaceBidPopup = ({ onClose, onAuctionId, onAuctionTitle, onArtistName, onB
     useEffect(async () => {
         if (clicked) {
             if (!error) {
-                await placeETHBid(auctionFactoryContract, onAuctionId, yourBid)
-                setShowBidSubmitted(true);
-                setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
-                let newBidders = [...onBidders];
+                try {
+                    await placeETHBid(auctionFactoryContract, onAuctionId, yourBid);
 
-                newBidders.push({
-                    id: uuid(),
-                    aucionId: onAuctionId,
-                    artistId: loggedInArtist.id,
-                    name: loggedInArtist.name,
-                    bid: parseFloat(yourBid),
-                    rewardTier: rewardTier,
-                })
-                onSetBidders(newBidders);
+                    setShowBidSubmitted(true);
+                    setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
+                    let newBidders = [...onBidders];
+    
+                    newBidders.push({
+                        id: uuid(),
+                        aucionId: onAuctionId,
+                        artistId: loggedInArtist.id,
+                        name: loggedInArtist.name,
+                        bid: parseFloat(yourBid),
+                        rewardTier: rewardTier,
+                    })
+                    onSetBidders(newBidders);
+                } catch (e) {
+                    console.log(e?.error?.message);
+                }
             }
         }
     }, [error, clicked])

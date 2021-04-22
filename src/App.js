@@ -59,6 +59,7 @@ const App = () => {
     const [usdEthBalance, setUsdEthBalance] = useState(0);
     const [usdWethBalance, setUsdWethBalance] = useState(0);
     const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
+    const [universeERC721Contract, setUniverseERC721Contract] = useState(null);
     
     const handleClickOutside = (event, className, ref, cb) => {
         if (!event.target.classList.contains(className)) {
@@ -85,14 +86,9 @@ const App = () => {
       setWethBalance(utils.formatEther(wethBalance.result));
       setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
 
-      let ctr = Contracts[network.chainId].contracts.AuctionFactory;
-      setAuctionFactoryContract(
-          new Contract(
-            ctr.address,
-            ctr.abi,
-            signer
-          )
-        );
+      let contracts = Contracts[network.chainId].contracts;
+      setAuctionFactoryContract(new Contract(contracts.AuctionFactory.address, contracts.AuctionFactory.abi, signer));
+      setUniverseERC721Contract(new Contract(contracts.MockNFT.address, contracts.MockNFT.abi, signer));
     };
   
     const isMetaMaskConnected = async (provider) => {
@@ -203,6 +199,8 @@ const App = () => {
                 setWeb3Provider,
                 auctionFactoryContract,
                 setAuctionFactoryContract,
+                universeERC721Contract,
+                setUniverseERC721Contract,
                 signer,
                 setSigner,
                 connectWeb3 
