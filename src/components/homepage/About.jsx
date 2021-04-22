@@ -2,31 +2,54 @@ import { useEffect } from 'react';
 import Popup from "reactjs-popup";
 import {AnimatedOnScroll} from "react-animated-css-onscroll";
 import { useHistory } from "react-router";
+import Lottie from 'react-lottie'
+import animationData from '../../utils/animations/cards_animation.json';
 import circleImg from '../../assets/images/circle.svg';
 import blockOne from '../../assets/images/homepage-block1.png';
-import blockTwo from '../../assets/images/homepage-block2.png';
-import blockThree from '../../assets/images/homepage-block3.png';
 import universeMintingLogo from '../../assets/images/universe-minting.svg';
 import universeAuctionsLogo from '../../assets/images/universe-auctions.svg';
+import bgImage from '../../assets/images/bg-min.png';
+import planetFrontImage from '../../assets/images/planet-front-min.png';
+import planetBackImage from '../../assets/images/planet-back-min.png';
+import planetMiddleImage from '../../assets/images/planet-middle-min.png';
 import Button from '../button/Button';
 import SubscribePopup from "../popups/SubscribePopup";
 
 const About = () => {
     const history = useHistory();
 
-    useEffect(() => {
-        var circleR = document.querySelector("#circle-r");
-        var circleL = document.querySelector("#circle-l");
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
 
+    useEffect(() => {
+        var circleR = document.querySelector("#circle-r"),
+        circleL = document.querySelector("#circle-l"),
+        planetFront = document.querySelector("#planet__front"),
+        planetBack = document.querySelector("#planet__back"),
+        planetMiddle = document.querySelector("#planet__middle");
+        
         window.addEventListener("DOMContentLoaded", scrollLoop, false);
         
+        console.log(document.querySelector('.about__section'))
         function scrollLoop() {
-            const yScrollPosition = window.scrollY;
+            if (document.querySelector('.about__section')) {
+                const yScrollPosition = window.scrollY;
+                const aboutOffsetTop = document.querySelector('.about__section').offsetTop;
+                circleR.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0)";
+                circleL.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0) rotate(180deg)";
+                planetFront.style.transform = "translate3d(" + (yScrollPosition - aboutOffsetTop) * 0.01 + "px, " + (yScrollPosition - aboutOffsetTop) * 0.01 + "px, 0)";
+                planetBack.style.transform = "translate3d(" + (yScrollPosition - aboutOffsetTop) * 0.02 + "px, " + (yScrollPosition - aboutOffsetTop) * 0.02 + "px, 0)";
+                planetMiddle.style.transform = "translate3d(" + (yScrollPosition - aboutOffsetTop) * -0.01 + "px, " + (yScrollPosition - aboutOffsetTop) * -0.01 + "px, 0)";
+            
+                requestAnimationFrame(scrollLoop);
+            }
 
-            circleR.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0)";
-            circleL.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0) rotate(180deg)";
-        
-            requestAnimationFrame(scrollLoop);
         }
     }, [])
 
@@ -69,12 +92,17 @@ const About = () => {
                         </AnimatedOnScroll>
                         <AnimatedOnScroll animationIn="fadeInUp">
                             <img className='show__on__mobile' src={universeAuctionsLogo} alt='Universe Auctions' />
-                            <img className='universe__auctions__img' src={blockTwo} alt='Block' />
+                            <div className='planets__group'>
+                                <img src={bgImage} alt='Block' />
+                                <img id='planet__front' src={planetFrontImage} alt='Planet Front' />
+                                <img id='planet__back' src={planetBackImage} alt='Planet Back' />
+                                <img id='planet__middle' src={planetMiddleImage} alt='Planet Middle' />
+                            </div>
                         </AnimatedOnScroll>
 
                         {/* Block 3 */}
                         <AnimatedOnScroll animationIn="fadeInUp" style={{ display: 'flex', justifyContent: 'center' }}>
-                            <img className='universe__original__characters__img' src={blockThree} alt='Block' />
+                            <Lottie options={defaultOptions} />
                         </AnimatedOnScroll>
                         <AnimatedOnScroll animationIn="fadeInUp">
                             <h1 className='title'>Universe Original Characters and Lore</h1>

@@ -12,25 +12,29 @@ const Welcome = () => {
     const ref = useRef();
 
     useEffect(() => {
-        // setInterval(() => {
-        //     ref.current && console.log(ref.current.readystate)
-        // }, 1000)
-        const timeout = setTimeout(() => {
-            setLoaded(true);
+        const interval = setInterval(() => {
+            if (ref.current && ref.current.readyState === 4) {
+                setLoaded(true);
+                clearInterval(interval);
+            }
         }, 1000)
 
-        return () => clearTimeout(timeout);
-    }, [])
+        return () => clearInterval(interval);
+    }, [loaded])
     
     return (
         <div className='welcome__section'>
             <img className='ellipse-l' src={ellipses} alt='Ellipses' />
             <img className='ellipse-r' src={ellipses} alt='Ellipses' />
-            <AnimatedOnScroll animationIn="fadeInUp">
-                <div className='welcome__section__container'>
-                    <div className='left'>
+            <div className='welcome__section__container'>
+                <div className='left'>
+                    <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={200}>
                         <h1 className='title'>Welcome to the NFT Universe built on Ethereum</h1>
+                    </AnimatedOnScroll>
+                    <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={400}>
                         <p className='desc'>Launch your own community-driven NFT universe baked with social tools, media services, and distribution - underpinned by the native $KEK token.</p>
+                    </AnimatedOnScroll>
+                    <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={600}>
                         <div className='links'>
                             <Button className='light-button'>Whitepaper</Button>
                             <Popup
@@ -43,20 +47,22 @@ const Welcome = () => {
                                 }
                             </Popup>
                         </div>
-                    </div>
+                    </AnimatedOnScroll>
+                </div>
+                <AnimatedOnScroll animationIn="fadeInUp">
                     <div className='right'>
-                        {!loaded ?
+                        {!loaded &&
                             <SkeletonTheme color="#202020" highlightColor="#444">
                                 <Skeleton circle={true} height={300} width={300} />
-                            </SkeletonTheme> :
-                            <video ref={ref} autoPlay loop muted playsInline>
-                                <source src={heroVideo} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
+                            </SkeletonTheme>
                         }
+                        <video ref={ref} autoPlay loop muted playsInline style={{ display: loaded ? 'block' : 'none' }}>
+                            <source src={heroVideo} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
-                </div>
-            </AnimatedOnScroll>
+                </AnimatedOnScroll>
+            </div>
         </div>
     )
 }
