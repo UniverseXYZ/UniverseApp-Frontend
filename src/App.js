@@ -19,6 +19,7 @@ import MyAccount from './containers/myAccount/MyAccount';
 import { Contract, providers, utils } from 'ethers';
 import { getEthPriceEtherscan, getWethBalanceEtherscan } from './utils/api/etherscan'
 import Contracts from './contracts/contracts.json';
+import { fetchUserNfts } from './utils/api/services'
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -77,6 +78,11 @@ const App = () => {
       const ethPrice = await getEthPriceEtherscan();
       const wethBalance = await getWethBalanceEtherscan(accounts[0], network.chainId);
       const signer = provider.getSigner(accounts[0]).connectUnchecked();
+
+      const contracts = Contracts[network.chainId].contracts;
+      const auctionFactoryContract = new Contract(contracts.AuctionFactory.address, contracts.AuctionFactory.abi, signer);
+      const universeERC721Contract = new Contract(contracts.MockNFT.address, contracts.MockNFT.abi, signer);
+      const userNftIds = await fetchUserNfts(universeERC721Contract, accounts[0]);
   
       setIsWalletConnected(true);
       setAddress(accounts[0]);
@@ -85,10 +91,9 @@ const App = () => {
       setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
       setWethBalance(utils.formatEther(wethBalance.result));
       setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
+      setAuctionFactoryContract(auctionFactoryContract);
+      setUniverseERC721Contract(universeERC721Contract);
 
-      let contracts = Contracts[network.chainId].contracts;
-      setAuctionFactoryContract(new Contract(contracts.AuctionFactory.address, contracts.AuctionFactory.abi, signer));
-      setUniverseERC721Contract(new Contract(contracts.MockNFT.address, contracts.MockNFT.abi, signer));
     };
   
     const isMetaMaskConnected = async (provider) => {

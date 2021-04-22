@@ -51,8 +51,7 @@ export const fetchUserNfts = async (erc721Contract, ownerAddress) => {
   const userNftIds = [];
   for (let i = 0; i < parseInt(nftBalance.toNumber()); i++) {
     let tokenId = await erc721Contract.tokenOfOwnerByIndex(ownerAddress, i);
-    userNftIds.push(tokenId);
+    userNftIds.push(parseInt(tokenId.toNumber()));
   }
-  console.log(userNftIds);
   return userNftIds;
 }
