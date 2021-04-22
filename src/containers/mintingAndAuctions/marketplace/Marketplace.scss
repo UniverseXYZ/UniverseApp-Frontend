@@ -711,6 +711,7 @@
                         font-size: 16px;
                         line-height: 20px;
                         background: -webkit-linear-gradient(right, #00EAEA, #BCEB00);
+                        background-clip: text;
                         -webkit-background-clip: text;
                         -webkit-text-fill-color: transparent;
                         margin-right: 10px;
