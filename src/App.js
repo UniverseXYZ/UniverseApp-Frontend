@@ -16,6 +16,7 @@ import Homepage from './containers/homepage/Homepage';
 import About from './containers/mintingAndAuctions/about/About';
 import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace';
 import MyAccount from './containers/myAccount/MyAccount';
+import CustomizeAuction from './containers/customizeAuction/CustomizeAuction';
 
 const App = () => {
     const [isWalletConnected, setIsWalletConnected] = useState(true);
@@ -137,6 +138,8 @@ const App = () => {
                     <Route exact path="/create-tiers" component={() => <CreateTiers />} />
                     <Route exact path="/review-reward" component={() => <ReviewReward />} />
                     <Route exact path="/select-nfts" component={() => <MyNFTs />} />
+
+                    <Route exact path="/customize-auction-landing-page" component={() => <CustomizeAuction />} />
 
                     {/* <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} /> */}
 

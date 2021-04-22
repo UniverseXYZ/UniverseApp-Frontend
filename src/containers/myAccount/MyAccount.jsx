@@ -4,6 +4,7 @@ import './MyAccount.scss';
 import About from '../../components/myAccount/About'
 import PersonalLogo from '../../components/myAccount/PersonalLogo';
 import Social from '../../components/myAccount/Social';
+import Head from '../../components/myAccount/Head';
 
 const MyAccount = () => {
 
@@ -15,6 +16,7 @@ const MyAccount = () => {
 
     return (
         <div>
+            <Head />
             <Main />
             <About />
             <PersonalLogo />
