@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import Popup from "reactjs-popup";
 import {AnimatedOnScroll} from "react-animated-css-onscroll";
+import { useHistory } from "react-router";
 import circleImg from '../../assets/images/circle.svg';
 import blockOne from '../../assets/images/homepage-block1.png';
 import blockTwo from '../../assets/images/homepage-block2.png';
@@ -8,16 +10,31 @@ import universeMintingLogo from '../../assets/images/universe-minting.svg';
 import universeAuctionsLogo from '../../assets/images/universe-auctions.svg';
 import Button from '../button/Button';
 import SubscribePopup from "../popups/SubscribePopup";
-import { useHistory } from "react-router";
 
 const About = () => {
     const history = useHistory();
 
+    useEffect(() => {
+        var circleR = document.querySelector("#circle-r");
+        var circleL = document.querySelector("#circle-l");
+
+        window.addEventListener("DOMContentLoaded", scrollLoop, false);
+        
+        function scrollLoop() {
+            const yScrollPosition = window.scrollY;
+
+            circleR.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0)";
+            circleL.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0) rotate(180deg)";
+        
+            requestAnimationFrame(scrollLoop);
+        }
+    }, [])
+
     return (
         <div className='describe__section'>
             <div className='universe__protocol__section'>
-                <img className='circle-r' src={circleImg} alt='Circle' />
-                <img className='circle-l' src={circleImg} alt='Circle' />
+                <img id='circle-r' className='circle-r' src={circleImg} alt='Circle' />
+                <img id='circle-l' className='circle-l' src={circleImg} alt='Circle' />
                 <div className='universe__protocol__section__container'>
                     <AnimatedOnScroll animationIn="fadeInUp">
                         <div className='universe__protocol'>
