@@ -57,13 +57,13 @@ const Main = () => {
 
     return (
         <div className="my-account container">
-            <div className="my-account-title">
+            {/* <div className="my-account-title">
                 <div className="my-account-description">
                     <h1>My Profile</h1>
                     <p>You can set preffered display name, create your branded profile URL and manage other personal settings</p>
                 </div>
                 <Button className="light-button" onClick={handlePreviewClick}>Preview my Universe Page</Button>
-            </div>
+            </div> */}
             
             <div className="account-grid-container">
                 {nameEditing?
