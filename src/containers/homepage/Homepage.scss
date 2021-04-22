@@ -15,6 +15,7 @@
             position: absolute;
             top: 70px;
             left: 20px;
+            z-index: 1;
             @include sm {
                 height: 200px;
             }
@@ -24,6 +25,7 @@
             position: absolute;
             bottom: 70px;
             right: 20px;
+            z-index: 1;
             transform: rotate(180deg);
             @include sm {
                 height: 200px;
@@ -36,6 +38,7 @@
             justify-content: space-between;
             max-width: 1110px;
             margin: 0 auto;
+            overflow: hidden;
 
             .left {
                 max-width: 627px;
@@ -126,255 +129,368 @@
         }
     }
 
-    .about__section {
+    .describe__section {
         position: relative;
-        padding: 90px 60px;
         overflow: hidden;
 
-        .circle-r {
-            position: absolute;
-            top: -10%;
-            right: -10%;
-            @include lg {
-                width: 384px;
-                height: 384px;
-            }
-            @include sm {
-                width: 278px;
-                height: 278px;
-                top: 15%;
-                right: -20%;
-            }
-        }
+        .universe__protocol__section {
+            position: relative;
+            padding: 90px 60px;
+            overflow: hidden;
 
-        .circle-l {
-            position: absolute;
-            top: 10%;
-            left: -10%;
-            transform: rotate(180deg);
-            @include lg {
-                width: 384px;
-                height: 384px;
-            }
-            @include sm {
-                width: 278px;
-                height: 278px;
-                top: -3%;
-                left: -35%;
-            }
-        }
-
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-
-            .universe__protocol {
-                background: 
-                    linear-gradient($white,$white) padding-box,
-                    linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
-                border: 1px solid transparent;
-                backdrop-filter: blur(20px);
-                border-radius: 20px;
-                padding: 72px 95px;
-                opacity: 0.9;
-                margin-bottom: 150px;
+            .circle-r {
+                position: absolute;
+                z-index: -1;
+                top: -5%;
+                right: -5%;
                 @include lg {
-                    padding: 50px 50px;
+                    width: 384px;
+                    height: 384px;
+                    top: 0;
+                    right: -15%;
                 }
                 @include sm {
-                    padding: 40px 25px;
-                }
-
-                h1.title {
-                    font-family: $sharpGroteskSemiBoldFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 36px;
-                    line-height: 140%;
-                    color: $black;
-                    @include lg {
-                        font-size: 26px;
-                    }
-                    @include sm {
-                        font-size: 20px;
-                    }
-                }
-                p.info {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 18px;
-                    line-height: 150%;
-                    color: $black;
-                    margin: 22px 0;
-                    @include sm {
-                        font-size: 16px;
-                        margin: 18px 0;
-                    }
-                }
-                p.desc {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: normal;
-                    font-size: 16px;
-                    line-height: 160%;
-                    color: rgba(0, 0, 0, 0.6);
-                    @include lg {
-                        font-size: 14px;
-                    }
-                }
-                @include md {
-                    margin-bottom: 100px;
+                    width: 278px;
+                    height: 278px;
+                    bottom: -15%;
+                    top: unset;
+                    right: -20%;
                 }
             }
 
-            .blocks {
-                position: relative;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                grid-gap: 50px;
-                align-items: center;
-
-                > div:nth-child(4) {
-                    @include md {
-                        grid-row-start: 3;
-                    }
+            .circle-l {
+                position: absolute;
+                z-index: -1;
+                bottom: -50%;
+                left: -5%;
+                @include lg {
+                    width: 384px;
+                    height: 384px;
+                    bottom: -30%;
+                    left: 0;
                 }
+                @include sm {
+                    width: 278px;
+                    height: 278px;
+                    top: 5%;
+                    left: -10%;
+                }
+            }
 
-                .universe__auctions__img {
-                    width: 610px;
-                    height: 610px;
-                    object-fit: cover;
+            &__container {
+                max-width: 1110px;
+                margin: 0 auto;
+                .universe__protocol {
+                    background: 
+                        linear-gradient($white,$white) padding-box,
+                        linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+                    border: 1px solid transparent;
+                    backdrop-filter: blur(20px);
+                    border-radius: 20px;
+                    padding: 72px 95px;
+                    opacity: 0.9;
                     @include lg {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-
-                .universe__original__characters__img {
-                    width: 410px;
-                    height: 380px;
-                    object-fit: cover;
-                    @include lg {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-
-                .show__on__mobile {
-                    display: none;
-                    @include md {
-                        display: block;
-                        margin-top: 40px;
-                        margin-bottom: 40px;
-                    }
-                }
-                .hide__on__mobile {
-                    @include md {
-                        display: none;
-                    }
-                }
-
-                h1.title {
-                    font-family: $sharpGroteskSemiBoldFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 36px;
-                    line-height: 140%;
-                    color: $black;
-                    margin-bottom: 20px;
-                    @include lg {
-                        font-size: 26px;
-                    }
-                }
-
-                p.desc {
-                    margin: 40px 0;
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: normal;
-                    font-size: 16px;
-                    line-height: 160%;
-                    color: rgba(0, 0, 0, 0.6);
-                    @include lg {
-                        font-size: 14px;
-                    }
-                    @include md {
-                        margin-top: 0;
+                        padding: 50px 50px;
                     }
                     @include sm {
-                        font-size: 16px;
+                        padding: 40px 25px;
                     }
-                }
-                button {
-                    @include sm {
-                        width: 100%;
+    
+                    h1.title {
+                        font-family: $sharpGroteskSemiBoldFont;
+                        font-style: normal;
+                        font-weight: 600;
+                        font-size: 36px;
+                        line-height: 140%;
+                        color: $black;
+                        @include lg {
+                            font-size: 26px;
+                        }
+                        @include sm {
+                            font-size: 20px;
+                        }
                     }
-                }
-                .coming__soon {
-                    background: rgba(0, 0, 0, 0.05);
-                    border-radius: 12px;
-                    padding: 6px 12px;
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 14px;
-                    line-height: 150%;
-                    color: rgba(0, 0, 0, 0.4);
-                    @include md {
-                        display: inline-show__on__mobileblock;
-                        margin-bottom: 20px;
-                    }
-                }
-                .subscribe__form {
-                    label {
-                        display: block;
+                    p.info {
                         font-family: $spaceGroteskFont;
                         font-style: normal;
-                        font-weight: bold;
-                        font-size: 14px;
-                        line-height: 22px;
+                        font-weight: 600;
+                        font-size: 18px;
+                        line-height: 150%;
                         color: $black;
+                        margin: 22px 0;
+                        @include sm {
+                            font-size: 16px;
+                            margin: 18px 0;
+                        }
                     }
-                    .form__group {
-                        position: relative;
-                        input {
+                    p.desc {
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 16px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.6);
+                        @include lg {
+                            font-size: 14px;
+                        }
+                    }
+                    @include md {
+                        margin-bottom: 100px;
+                    }
+                }
+            }
+            @include sm {
+                padding: 90px 20px;
+            }
+        }
+        .about__section {
+            padding: 90px 60px;
+            background-color: $white;
+            &__container {
+                max-width: 1110px;
+                margin: 0 auto;
+    
+                .blocks {
+                    position: relative;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    grid-gap: 50px;
+                    align-items: center;
+    
+                    > div:nth-child(4) {
+                        @include md {
+                            grid-row-start: 3;
+                        }
+                    }
+    
+                    .universe__original__characters__img {
+                        width: 410px;
+                        height: 380px;
+                        object-fit: cover;
+                        @include lg {
                             width: 100%;
-                            border: 1px solid rgba(0, 0, 0, 0.1);
-                            box-sizing: border-box;
-                            border-radius: 12px;
-                            padding: 15px;
+                            height: 100%;
+                        }
+                    }
+    
+                    .show__on__mobile {
+                        display: none;
+                        @include md {
+                            display: block;
+                            margin-top: 40px;
+                            margin-bottom: 40px;
+                        }
+                    }
+                    .hide__on__mobile {
+                        @include md {
+                            display: none;
+                        }
+                    }
+
+                    .planets__group {
+                        position: relative;
+                        #planet__front {
+                            position: absolute;
+                            top: 20%;
+                            left: 15%;
+                            width: 350px;
+                            z-index: 2;
+                            @include xl {
+                                top: 15%;
+                                left: 10%;
+                            }
+                            @include lg {
+                                top: 25%;
+                                left: 20%;
+                                width: 200px;
+                            }
+                            @include md {
+                                top: 20%;
+                                left: 15%;
+                                width: 350px;
+                            }
+                            @include sm {
+                                top: 25%;
+                                left: 20%;
+                                width: 200px;
+                            }
+                            @media (max-width: 400px) {
+                                top: 20%;
+                                left: 15%;
+                                width: 180px;
+                            }
+                        }
+                        #planet__back {
+                            position: absolute;
+                            top: 15%;
+                            left: 50%;
+                            width: 200px;
+                            z-index: 2;
+                            @include xl {
+                                top: 10%;
+                                left: 45%;
+                            }
+                            @include lg {
+                                top: 15%;
+                                left: 50%;
+                                width: 130px;
+                            }
+                            @include md {
+                                top: 15%;
+                                left: 50%;
+                                width: 200px;
+                            }
+                            @include sm {
+                                top: 15%;
+                                left: 45%;
+                                width: 130px;
+                            }
+                            @media (max-width: 400px) {
+                                width: 100px;
+                            }
+                        }
+                        #planet__middle {
+                            position: absolute;
+                            top: 14%;
+                            left: 7%;
+                            width: 250px;
+                            z-index: 1;
+                            @include xl {
+                                top: 9%;
+                                left: 2%;
+                            }
+                            @include lg {
+                                top: 21%;
+                                left: 19%;
+                                width: 150px;
+                            }
+                            @include md {
+                                top: 16%;
+                                left: 13%;
+                                width: 250px;
+                            }
+                            @include sm {
+                                top: 21%;
+                                left: 19%;
+                                width: 150px;
+                            }
+                            @media (max-width: 400px) {
+                                width: 120px;
+                            }
+                        }
+                        @include lg {
+                            min-width: 380px;
+                        }
+                        @include sm {
+                            min-width: auto;
+                        }
+                    }
+    
+                    h1.title {
+                        font-family: $sharpGroteskSemiBoldFont;
+                        font-style: normal;
+                        font-weight: 600;
+                        font-size: 36px;
+                        line-height: 140%;
+                        color: $black;
+                        margin-bottom: 20px;
+                        @include lg {
+                            font-size: 20px;
+                        }
+                    }
+    
+                    p.desc {
+                        margin: 40px 0;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 16px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.6);
+                        @include lg {
+                            font-size: 14px;
+                        }
+                        @include md {
+                            margin-top: 0;
+                        }
+                        @include sm {
+                            font-size: 16px;
+                        }
+                    }
+                    button {
+                        @include sm {
+                            width: 100%;
+                        }
+                    }
+                    .coming__soon {
+                        background: rgba(0, 0, 0, 0.05);
+                        border-radius: 12px;
+                        padding: 6px 12px;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 150%;
+                        color: rgba(0, 0, 0, 0.4);
+                        @include md {
+                            display: inline-block;
+                            margin-bottom: 20px;
+                        }
+                    }
+                    .subscribe__form {
+                        label {
+                            display: block;
                             font-family: $spaceGroteskFont;
                             font-style: normal;
-                            font-weight: normal;
-                            font-size: 16px;
-                            line-height: 20px;
-                            margin-bottom: 14px;
-
-                            &::placeholder {
-                                color: rgba(0, 0, 0, 0.2);
-                            }
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 22px;
+                            color: $black;
                         }
-                        button {
-                            position: absolute;
-                            right: 4px;
-                            top: 4px;
-                            @include sm {
-                                position: relative;
+                        .form__group {
+                            position: relative;
+                            input {
+                                width: 100%;
+                                border: 1px solid rgba(0, 0, 0, 0.1);
+                                box-sizing: border-box;
+                                border-radius: 12px;
+                                padding: 15px;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 16px;
+                                line-height: 20px;
+                                margin-bottom: 14px;
+    
+                                &::placeholder {
+                                    color: rgba(0, 0, 0, 0.2);
+                                }
+                            }
+                            button {
+                                position: absolute;
+                                right: 4px;
+                                top: 4px;
+                                @include sm {
+                                    position: relative;
+                                }
                             }
                         }
                     }
+                    @include lg {
+                        align-items: flex-start;
+                    }
+                    @include md {
+                        grid-gap: 20px;
+                        grid-template-columns: 1fr;
+                        align-items: center;
+                    }
                 }
-                @include md {
-                    grid-gap: 20px;
-                    grid-template-columns: 1fr;
-                }
+            }
+            @include sm {
+                padding: 90px 20px;
             }
         }
 
-        @include sm {
-            padding: 90px 20px;
-        }
     }
 
     .non__fungible__universe__section {
@@ -504,8 +620,12 @@
                 font-size: 36px;
                 line-height: 140%;
                 color: $black;
+                white-space: nowrap;
                 @include lg {
                     font-size: 26px;
+                }
+                @include md {
+                    white-space: pre-wrap;
                 }
                 @include sm {
                     text-align: center;

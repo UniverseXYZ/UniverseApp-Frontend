@@ -17,14 +17,14 @@ const DigitalTools = () => {
                     </AnimatedOnScroll>
                     <AnimatedOnScroll animationIn="fadeInUp">
                         <h2 className='title'>Efficient collection curating and launching</h2>
-                        <p className='desc'>Curate large collection of 100s or even 1000s of NFTs. Our tools allow you to easily customize and curate collections so that they are perfect before you launch. Launching 100s of NFTs at one time can be extremely difficult but our step by step set up and review process easily allows you to prevent mistakes and launch a beautiful and consistent collection.</p>
-                        <Button className='light-border-button'>Create nft collection</Button>
+                        <p className='desc'>Curate large collections of 100s or even 1000s of NFTs: Our tools allow you to easily customize and perfect your collection before you launch. Launching 100s of NFTs at a time can be extremely difficult, however our step by step set up and review process allows you to prevent mistakes and launch a beautiful and consistent collection.</p>
+                        <Button className='light-border-button'>Create NFT collection</Button>
                     </AnimatedOnScroll>
 
                     {/* Block 2 */}
                     <AnimatedOnScroll animationIn="fadeInUp">
                         <h2 className='title'>Easy to use UI for minting and selling NFTs</h2>
-                        <p className='desc'>We have combined UI and flows from industry leaders and tweaked it slightly to make an easy to use system for minting and selling NFTs. <br/><br/> We offer step by step instructions for steps so you dont get stuck or confused.</p>
+                        <p className='desc'>We have combined UI and flows from industry leaders and tweaked it slightly to make an easy to use system for minting and selling NFTs. <br/><br/> We offer step by step instructions for the entire process, so you wont get stuck or confused.</p>
                         <Button className='light-border-button'>Set up auction</Button>
                     </AnimatedOnScroll>
                     <AnimatedOnScroll animationIn="fadeInUp">

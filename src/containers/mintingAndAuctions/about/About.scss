@@ -36,6 +36,7 @@
             justify-content: space-between;
             max-width: 1110px;
             margin: 0 auto;
+            overflow: hidden;
 
             .left {
                 max-width: 627px;
@@ -52,24 +53,25 @@
                     @include sm {
                         font-size: 26px;
                         line-height: 140%;
+                        margin-top: 23px;
                     }
                 }
                 p.desc {
                     margin: 30px 0 50px;
                     font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: normal;
+                    font-weight: 300;
                     font-size: 18px;
                     line-height: 150%;
                     color: rgba(255, 255, 255, 0.6);
-                    max-width: 475px;
+                    max-width: 445px;
                     @include lg {
                         text-align: center;
                         margin: 30px auto 50px;
                     }
                     @include sm {
                         font-size: 16px;
-                        margin: 16px auto;
+                        margin: 16px auto 30px;
                     }
                 }
                 .links {
@@ -114,6 +116,9 @@
                     @include lg {
                         max-width: 530px;
                     }
+                    @include sm {
+                        max-width: 216px;
+                    }
                 }
             }
 
@@ -144,8 +149,15 @@
                 line-height: 140%;
                 text-align: center;
                 color: $black;
-                @include sm {
+                @include lg {
                     font-size: 26px;
+                }
+                @include md {
+                    max-width: 413px;
+                    margin: 0 auto;
+                }
+                @include sm {
+                    text-align: left;
                 }
             }
 
@@ -192,9 +204,13 @@
                         width: 100%;
                     }
                 }
+                @include lg {
+                    align-items: flex-start;
+                }
                 @include md {
-                    grid-gap: 20px;
+                    grid-gap: 60px;
                     grid-template-columns: 1fr;
+                    align-items: center;
                 }
                 @include sm {
                     margin: 50px 0 0;
@@ -210,6 +226,7 @@
     .how__it__works__section {
         position: relative;
         padding: 100px 60px;
+        background: #FAFCFF;
 
         &__container {
             max-width: 1110px;
@@ -232,7 +249,6 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                gap: 40px;
                 margin-bottom: 30px;
 
                 button {
@@ -247,6 +263,9 @@
                     &.active {
                         color: $black;
                         border-bottom: 1px solid $black;
+                    }
+                    &:nth-child(2) {
+                        margin-left: 40px;
                     }
                 }
             }
@@ -371,11 +390,11 @@
                 }
             }
             .team__members {
-                display: flex;
-                align-items: center;
-                justify-content: space-around;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
                 grid-column-gap: 10px;
                 grid-row-gap: 30px;
+                justify-items: center;
 
                 .member {
                     width: 180px;
@@ -400,15 +419,21 @@
                     @include lg {
                         width: 130px;
                     }
-                    @include md {
-                        width: 200px;
-                    }
                     @include sm {
                         width: 130px;
                     }
                 }
+                @include xl {
+                    grid-template-columns: repeat(4, 1fr);
+                }
+                @include lg {
+                    grid-template-columns: repeat(5, 1fr);
+                }
                 @include md {
-                    flex-wrap: wrap;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @include sm {
+                    grid-template-columns: repeat(2, 1fr);
                 }
             }
             .see__full__team {
