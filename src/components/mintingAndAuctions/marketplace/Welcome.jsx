@@ -15,7 +15,7 @@ const Welcome = () => {
                         <h1 className='title'>Auction House</h1>
                     </AnimatedOnScroll>
                     <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={1000}>
-                        <p className='desc'>Check out on creative releases from artists that partnered with us</p>
+                        <p className='desc'>Check out creative releases from artists that have partnered with us</p>
                     </AnimatedOnScroll>
                 </div>
         </div>

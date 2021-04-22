@@ -17,7 +17,7 @@ const DigitalTools = () => {
                     </AnimatedOnScroll>
                     <AnimatedOnScroll animationIn="fadeInUp">
                         <h2 className='title'>Efficient collection curating and launching</h2>
-                        <p className='desc'>Curate large collection of 100s or even 1000s of NFTs. Our tools allow you to easily customize and curate collections so that they are perfect before you launch. Launching 100s of NFTs at one time can be extremely difficult but our step by step set up and review process easily allows you to prevent mistakes and launch a beautiful and consistent collection.</p>
+                        <p className='desc'>Curate large collections of 100s or even 1000s of NFTs: Our tools allow you to easily customize and perfect your collection before you launch. Launching 100s of NFTs at a time can be extremely difficult, however our step by step set up and review process allows you to prevent mistakes and launch a beautiful and consistent collection.</p>
                         <Button className='light-border-button'>Create NFT collection</Button>
                     </AnimatedOnScroll>
 

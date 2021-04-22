@@ -40,14 +40,14 @@ const About = () => {
                         </AnimatedOnScroll>
                         <AnimatedOnScroll animationIn="fadeInUp">
                             <img className='hide__on__mobile' src={universeMintingLogo} alt='Universe Minting' />
-                            <p className='desc'>Galaxies are minted into NFT’s and the kekDAO takes a small fee for every new galaxy minted. These galaxies represent the IP of that item in the universe that community creates art from: shows, merch, music festivals, ect. These Galaxies can also hold other planets in them essentially, other NFTs creating collections of art, shows, merch, music festivals. For future build outs, we hope to one day turn these into mini DAOs along with an integrated social network.</p>
+                            <p className='desc'>Galaxies are a collection of minted NFT's these galaxies represent the IP of that particular item in the universe and its community can create art for: shows, merch, music festivals, etc. These Galaxies can also contain other planets within them, other NFT collections of art, shows, merch and music festivals. For future build outs, we hope to one day turn these into mini DAOs along with an integrated social network.</p>
                             <Button className='light-button' onClick={() => history.push('/minting-and-auctions/about')}>Learn more</Button>
                         </AnimatedOnScroll>
 
                         {/* Block 2 */}
                         <AnimatedOnScroll animationIn="fadeInUp">
                             <img className='hide__on__mobile' src={universeAuctionsLogo} alt='Universe Auctions' />
-                            <p className='desc'>We are developing a trustless and decentralized auction house for NFT’s where anyone holding a NFT can put up the Galaxy and/or the collection of Planets for auction. These auctions can also facilitate swaps of other tokens. You will be able to pay with specific ERC-20 and ETH. The kekDAO will take a small fee of every auction.</p>
+                            <p className='desc'>We are developing a trustless and decentralized auction house for NFTs where anyone holding an NFT can put the Galaxy and/or the collection of Planets up for auction. These auctions can also facilitate swaps of other tokens. You will be able to pay with specific ERC-20 and ETH. The kekDAO will take a small fee of every auction.</p>
                             <Button className='light-button' onClick={() => history.push('/minting-and-auctions/about')}>Learn more</Button>
                         </AnimatedOnScroll>
                         <AnimatedOnScroll animationIn="fadeInUp">
@@ -62,7 +62,7 @@ const About = () => {
                         <AnimatedOnScroll animationIn="fadeInUp">
                             <h1 className='title'>Universe Original Characters and Lore</h1>
                             <span className='coming__soon'>Coming soon</span>
-                            <p className='desc'>We are creating a whole universe of 69 original characters with stories and lore to lay the framework to showcase the potential for KekDAO. We will show you how to create a universe of your own, build with us and help the Universe of NFTs never stops expanding.</p>
+                            <p className='desc'>We are creating a whole universe of 69 original characters with stories and lore to lay the framework and showcase the potential for KekDAO. We will show you how to create a universe of your own, build with us and help the Universe of NFTs expand infinitely.</p>
                             <div className='subscribe__form'>
                                 <label htmlFor='subscribeInp'>Subscribe to stay updated on the latest news</label>
                                 <div className='form__group'>
