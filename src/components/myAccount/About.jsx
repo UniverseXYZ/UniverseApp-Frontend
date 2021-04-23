@@ -29,13 +29,14 @@ const About = () => {
           {aboutEditing ? (
             <div className="account-grid-about-edit">
               {about === '' ? (
-                <p className="about-default-text">Write few sentences about yourself</p>
+                <p className="about-default-text">Please write a few lines about yourself</p>
               ) : (
                 <p className="about-text">{loggedInArtist.about}</p>
               )}
 
               <Button className="light-border-button" onClick={() => setAboutEditing(false)}>
-                Edit <img src={pencilIcon} alt="Edit Icon" />
+                <span className="hide__on__mobile">Edit</span>
+                <img src={pencilIcon} alt="Edit Icon" />
               </Button>
             </div>
           ) : (

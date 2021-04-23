@@ -63,7 +63,8 @@ const Social = () => {
                 )}
               </div>
               <Button className="light-border-button" onClick={() => setSocialEditing(false)}>
-                Edit <img src={pencilIcon} alt="Edit Icon" />
+                <span className="hide__on__mobile">Edit</span>
+                <img src={pencilIcon} alt="Edit Icon" />
               </Button>
             </div>
           ) : (

@@ -4,7 +4,7 @@ import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
 
 const Head = () => {
-  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useContext(AppContext);
   const history = useHistory();
 
   const handlePreviewClick = () => {
@@ -26,16 +26,14 @@ const Head = () => {
   return (
     <div className="my-account container">
       <div className="my-account-title">
-        <div className="my-account-description">
-          <h1>My Profile</h1>
-          <p>
-            You can set preffered display name, create your branded profile URL and manage other
-            personal settings
-          </p>
-        </div>
+        <h1>My Profile</h1>
         <Button className="light-button" onClick={handlePreviewClick}>
           Preview my Universe Page
         </Button>
+        <p>
+          You can set your preffered display name, create a branded URL and manage other personal
+          settings.
+        </p>
       </div>
     </div>
   );

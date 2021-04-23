@@ -41,7 +41,8 @@ const PersonalLogo = () => {
                 <img className="default-logo" src={defaultImage} alt="Cover" />
               )}
               <Button className="light-border-button" onClick={() => setLogoEditing(false)}>
-                Edit <img src={pencilIcon} alt="Edit Icon" />
+                <span className="hide__on__mobile">Edit</span>
+                <img src={pencilIcon} alt="Edit Icon" />
               </Button>
             </div>
           ) : (
