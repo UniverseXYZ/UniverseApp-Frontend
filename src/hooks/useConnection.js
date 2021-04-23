@@ -29,6 +29,6 @@ export const useConnection = () => {
 
   return {
     address,
-    signer
+    signer,
   };
 };

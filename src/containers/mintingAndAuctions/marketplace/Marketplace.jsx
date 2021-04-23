@@ -5,20 +5,21 @@ import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs';
 import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome';
 
 const Marketplace = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = 'Universe Minting - Minting & Auctions - Marketplace';
+    return () => {
+      document.title = 'Universe Minting';
+    };
+  }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        document.title = 'Universe Minting - Minting & Auctions - Marketplace'
-        return () => { document.title = 'Universe Minting' };
-    }, [])
-
-    return (
-        <div className='marketplace__page'>
-            <Welcome />
-            <Tabs />
-            <CreateYourAuction />
-        </div>
-    )
-}
+  return (
+    <div className="marketplace__page">
+      <Welcome />
+      <Tabs />
+      <CreateYourAuction />
+    </div>
+  );
+};
 
 export default Marketplace;

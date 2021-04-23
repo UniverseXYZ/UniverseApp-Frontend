@@ -1,9 +1,5 @@
 import './Button.scss';
 
-const Button = ({ children, ...restProps }) => {
-    return (
-        <button {...restProps} >{children}</button>
-    )
-}
+const Button = ({ children, ...restProps }) => <button {...restProps}>{children}</button>;
 
 export default Button;
