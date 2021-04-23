@@ -7,29 +7,28 @@ import MintSingleNft from './MintSingleNft';
 import PopupComponent from '../popups/Popup';
 import AppContext from '../../ContextAPI';
 
-
 const MintModal = ({ open, onClose, ...restProps }) => {
-    const { activeView, setActiveView } = useContext(AppContext);
+  const { activeView, setActiveView } = useContext(AppContext);
 
-    const handleNtfClick = (type) => {
-        setActiveView(type);
-    };
+  const handleNtfClick = (type) => {
+    setActiveView(type);
+  };
 
-    return (
-        <div className="whole-modal">
-            <div {...restProps} className='mod-div'>
-                <PopupComponent onClose={onClose} />
-                {activeView === null && <MintNft onClick={handleNtfClick} />}
-                {activeView === 'single' && <MintSingleNft onClick={handleNtfClick} />}
-                {activeView === 'collection' && <MintNftCollection onClick={handleNtfClick} />}
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="whole-modal">
+      <div {...restProps} className="mod-div">
+        <PopupComponent onClose={onClose} />
+        {activeView === null && <MintNft onClick={handleNtfClick} />}
+        {activeView === 'single' && <MintSingleNft onClick={handleNtfClick} />}
+        {activeView === 'collection' && <MintNftCollection onClick={handleNtfClick} />}
+      </div>
+    </div>
+  );
+};
 
 MintModal.propTypes = {
-    open: PropTypes.bool,
-    onClose: PropTypes.func,
-}
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+};
 
 export default MintModal;
