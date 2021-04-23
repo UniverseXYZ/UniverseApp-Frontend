@@ -26,31 +26,34 @@ const About = () => {
             preserveAspectRatio: 'xMidYMid slice'
         }
     };
-
+        
     useEffect(() => {
-        var circleR = document.querySelector("#circle-r"),
-        circleL = document.querySelector("#circle-l"),
-        planetFront = document.querySelector("#planet__front"),
-        planetBack = document.querySelector("#planet__back"),
-        planetMiddle = document.querySelector("#planet__middle");
+        const circleR = document.querySelector("#circle-r"),
+            circleL = document.querySelector("#circle-l"),
+            planetFront = document.querySelector("#planet__front"),
+            planetBack = document.querySelector("#planet__back"),
+            planetMiddle = document.querySelector("#planet__middle");
         
-        window.addEventListener("DOMContentLoaded", scrollLoop, false);
-        
-        console.log(document.querySelector('.about__section'))
-        function scrollLoop() {
+        const scrollLoop = () => {
             if (document.querySelector('.about__section')) {
                 const yScrollPosition = window.scrollY;
                 const aboutOffsetTop = document.querySelector('.about__section').offsetTop;
+    
                 circleR.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0)";
                 circleL.style.transform = "translate3d(" + yScrollPosition * -0.05 + "px, " + yScrollPosition * -0.2 + "px, 0) rotate(180deg)";
                 planetFront.style.transform = "translate3d(" + (yScrollPosition - aboutOffsetTop) * 0.01 + "px, " + (yScrollPosition - aboutOffsetTop) * 0.01 + "px, 0)";
                 planetBack.style.transform = "translate3d(" + (yScrollPosition - aboutOffsetTop) * 0.02 + "px, " + (yScrollPosition - aboutOffsetTop) * 0.02 + "px, 0)";
                 planetMiddle.style.transform = "translate3d(" + (yScrollPosition - aboutOffsetTop) * -0.01 + "px, " + (yScrollPosition - aboutOffsetTop) * -0.01 + "px, 0)";
-            
+                
                 requestAnimationFrame(scrollLoop);
             }
-
         }
+
+        if (document.querySelector('.about__section')) {
+            requestAnimationFrame(scrollLoop);
+        }
+        
+        return () => cancelAnimationFrame(scrollLoop);
     }, [])
 
     return (
