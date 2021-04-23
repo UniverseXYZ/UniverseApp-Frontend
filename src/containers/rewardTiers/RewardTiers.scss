@@ -17,7 +17,7 @@
         .auctions-tier{
             margin-top: 36px;
         }
-      .auctionIcon{
+        .auctionIcon{
             margin-right: 20px;
         }
 
@@ -44,32 +44,70 @@
                     margin-right: 12px;
                 }
             }
-            .tier-winners, .tier-perwinners{
-                
-                background: rgba(0, 0, 0, 0.05);
-                border-radius: 12px;
-                margin-right: 12px;
-             h4{
-                position: static;
-                height: 21px;
-                left: 15.69%;
-                right: 15.69%;
-                top: 6px;
-                font-family: Space Grotesk;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 14px;
-                line-height: 21px;
-                display: flex;
-                align-items: center;
-                color: #000000;
-                flex: none;
-                order: 0;
-                flex-grow: 0;
-                margin: 6px 16px ;
+            .winners__edit__btn{
+                .winners{
+                    display: flex;
+                    .tier-winners, .tier-perwinners{
+                        
+                        background: rgba(0, 0, 0, 0.05);
+                        border-radius: 12px;
+                        margin-right: 12px;
+                        h4{
+                            position: static;
+                            height: 21px;
+                            left: 15.69%;
+                            right: 15.69%;
+                            top: 6px;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 14px;
+                            line-height: 21px;
+                            display: flex;
+                            align-items: center;
+                            color: #000000;
+                            flex: none;
+                            order: 0;
+                            flex-grow: 0;
+                            margin: 6px 16px ;
+                        }
+                        @include sm{
+                            margin-bottom: 10px;
+                            width: fit-content;
+                        }
+                    }
+                    @include lg{
+                        margin-top: 12px;
+                        margin-left: 35px;
+                    }
+                    @include sm{
+                        margin-left: 0%;
+                        display: grid;
+                    }
+                }
+                button{
+                    display: none;
+                    img{
+                        padding-left: 12px;
+                        padding-right: 5px;
+                    }
+
+                    @include sm{
+                        display: flex;
+                        width: 100%;
+                        margin-top: 10px;
+                    }
+                }
+                @include sm{
+                    width: 100%;
                 }
             }
-            
+            @include lg{
+                display: grid;
+            }
+            @include sm{
+                width: 100%;
+            }
         }
         .launch-auction{        
             height: 42px;
@@ -77,18 +115,33 @@
             margin-left: 20px;
             margin-right: 12px;
             img{
-                padding-top: 10px;
-                padding-left: 10px;
+                margin-top: 10px;
+                margin-left: 10px;
+                height: 20px;
+
+                @include sm{
+                    margin-top: 0;
+                    margin-left: 0;
+                }
+            }
+
+            @include sm{
+                margin-left: 0;
+                margin-right: 0;
+                border-left: none;
             }
         }  
         .edit-show{
             display: flex;
-            width: 18%;
+            // width: 18%;
             button{
                 display: flex;
                 img{
                     padding-left: 12px;
                     padding-right: 5px;
+                }
+                @include sm{
+                    display: none;
                 }
             }
         }
@@ -138,10 +191,12 @@
                     right: 7px;
                 }
                 @include lg{
-                    width: 196px;
-                    height: 196px;
+                    width: 100%;
+                    height: 129px;
+                    text-align: center;
+                    margin: auto;
                 }
-                @include md {
+                @include sm {
                     width: 100%;
                     height: 312px;
                 }
