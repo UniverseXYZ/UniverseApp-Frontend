@@ -1020,7 +1020,8 @@
                 display: flex;
                 padding: 16px 0px;
                 span{
-                    width: 15%;
+                    // width: 15%;
+                    margin-right: 20px;
                     font-family: $spaceGroteskFont;
                     font-style: normal;
                     font-weight: normal;
@@ -1031,14 +1032,23 @@
             .sel-info{
                 display: flex;
                 padding-bottom: 25px;
+
+                @include sm{
+                    display: grid;
+                }
             }
             .continue-nft{
                 min-height: 50px;
                 position: relative;
                 
                 button{
-                    position:absolute;
-                    bottom: 0;
+                    // position:absolute;
+                    // bottom: 0;
+
+                    @include sm{
+                        margin-top: 37px;
+                        width: 100%;
+                    }
                 }
             }
             .err-select{

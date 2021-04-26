@@ -1,12 +1,12 @@
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Animated } from 'react-animated-css';
 import arrow from '../../assets/images/arrow.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import backgroundImage from '../../assets/images/background.svg';
+import backgroundDef from '../../assets/images/background.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import Button from '../../components/button/Button';
 import Input from '../../components/input/Input';
@@ -19,6 +19,18 @@ const CustomizeAuction = () => {
   const history = useHistory();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
+
+  const inputPromo = useRef(null);
+  const inputBackground = useRef(null);
+  const inputPlatinum = useRef(null);
+  const inputGold = useRef(null);
+  const inputSilver = useRef(null);
+
+  const [promoImage, setPromoImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [platinumImage, setPlatinumImage] = useState(null);
+  const [goldImage, setGoldImage] = useState(null);
+  const [silverImage, setSilverImage] = useState(null);
 
   return (
     <div className="container customize__auction">
@@ -70,11 +82,27 @@ const CustomizeAuction = () => {
               <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
               <h5>Drop your file here</h5>
               <p>(min 1080x1080px, 1:1 square ratio, PNG/JPEG, max 3mb)</p>
-              <Button className="light-border-button">Choose file</Button>
+              <Button className="light-border-button" onClick={() => inputPromo.current.click()}>
+                Choose file
+              </Button>
+              <input
+                type="file"
+                className="inp-disable"
+                ref={inputPromo}
+                onChange={(e) => setPromoImage(e.target.files[0])}
+              />
               <div className="promo__preview">
                 <h6>Preview</h6>
                 <div className="preview-div">
-                  <img className="default__promo__image" src={defaultImage} alt="Default" />
+                  {promoImage ? (
+                    <img
+                      className="preview__image"
+                      src={URL.createObjectURL(promoImage)}
+                      alt="Promo"
+                    />
+                  ) : (
+                    <img className="default__promo__image" src={defaultImage} alt="Default" />
+                  )}
                 </div>
               </div>
             </div>
@@ -111,8 +139,17 @@ const CustomizeAuction = () => {
                     </div>
                   </Animated>
                 )}
-                <div className="slide-btn">
-                  <div className="circle" />
+                <div className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    className="toggle-switch-checkbox"
+                    name="toggleSwitch"
+                    id="toggleSwitch"
+                  />
+                  <label className="toggle-switch-label" htmlFor="toggleSwitch">
+                    <span className="toggle-switch-inner" />
+                    <span className="toggle-switch-switch" />
+                  </label>
                 </div>
               </div>
             </div>
@@ -120,14 +157,42 @@ const CustomizeAuction = () => {
               <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
               <h5>Drop your file here</h5>
               <p>(min 1280x720px, 16:9 square ratio, PNG/JPEG, max 1mb)</p>
-              <Button className="light-border-button">Choose file</Button>
+              <div className="upload__background__buttons">
+                <Button
+                  className="light-border-button"
+                  onClick={() => inputBackground.current.click()}
+                >
+                  Choose file
+                </Button>
+                {backgroundImage && (
+                  <Button
+                    className="light-border-button remove"
+                    onClick={() => setBackgroundImage(null)}
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
+              <input
+                type="file"
+                className="inp-disable"
+                ref={inputBackground}
+                onChange={(e) => setBackgroundImage(e.target.files[0])}
+              />
               <div className="background__preview">
                 <h6>Preview</h6>
                 <div className="preview-div">
+                  {backgroundImage && (
+                    <img
+                      className="background__image"
+                      src={URL.createObjectURL(backgroundImage)}
+                      alt="background"
+                    />
+                  )}
                   <img
                     className="background__default__image"
-                    src={backgroundImage}
-                    alt="Backgound"
+                    src={backgroundDef}
+                    alt="background"
                   />
                 </div>
               </div>
@@ -180,12 +245,31 @@ const CustomizeAuction = () => {
                   <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                   <h5>Drop your file here</h5>
                   <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
-                  <Button className="light-border-button">Choose file</Button>
+                  <Button
+                    className="light-border-button"
+                    onClick={() => inputPlatinum.current.click()}
+                  >
+                    Choose file
+                  </Button>
+                  <input
+                    type="file"
+                    className="inp-disable"
+                    ref={inputPlatinum}
+                    onChange={(e) => setPlatinumImage(e.target.files[0])}
+                  />
                 </div>
                 <div className="upload__image__preview">
                   <h6>Preview</h6>
                   <div className="preview-div">
-                    <img className="default__upload__image" src={defaultImage} alt="Default" />
+                    {platinumImage ? (
+                      <img
+                        src={URL.createObjectURL(platinumImage)}
+                        className="preview__image"
+                        alt="Platinum"
+                      />
+                    ) : (
+                      <img className="default__upload__image" src={defaultImage} alt="default" />
+                    )}
                   </div>
                 </div>
               </div>
@@ -232,12 +316,28 @@ const CustomizeAuction = () => {
                   <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                   <h5>Drop your file here</h5>
                   <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
-                  <Button className="light-border-button">Choose file</Button>
+                  <Button className="light-border-button" onClick={() => inputGold.current.click()}>
+                    Choose file
+                  </Button>
+                  <input
+                    type="file"
+                    className="inp-disable"
+                    ref={inputGold}
+                    onChange={(e) => setGoldImage(e.target.files[0])}
+                  />
                 </div>
                 <div className="upload__image__preview">
                   <h6>Preview</h6>
                   <div className="preview-div">
-                    <img className="default__upload__image" src={defaultImage} alt="Default" />
+                    {goldImage ? (
+                      <img
+                        className="preview__image"
+                        src={URL.createObjectURL(goldImage)}
+                        alt="Gold"
+                      />
+                    ) : (
+                      <img className="default__upload__image" src={defaultImage} alt="Default" />
+                    )}
                   </div>
                 </div>
               </div>
@@ -284,12 +384,31 @@ const CustomizeAuction = () => {
                   <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                   <h5>Drop your file here</h5>
                   <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
-                  <Button className="light-border-button">Choose file</Button>
+                  <Button
+                    className="light-border-button"
+                    onClick={() => inputSilver.current.click()}
+                  >
+                    Choose file
+                  </Button>
+                  <input
+                    type="file"
+                    className="inp-disable"
+                    ref={inputSilver}
+                    onChange={(e) => setSilverImage(e.target.files[0])}
+                  />
                 </div>
                 <div className="upload__image__preview">
                   <h6>Preview</h6>
                   <div className="preview-div">
-                    <img className="default__upload__image" src={defaultImage} alt="Default" />
+                    {silverImage ? (
+                      <img
+                        className="preview__image"
+                        src={URL.createObjectURL(silverImage)}
+                        alt="Silver"
+                      />
+                    ) : (
+                      <img className="default__upload__image" src={defaultImage} alt="Default" />
+                    )}
                   </div>
                 </div>
               </div>

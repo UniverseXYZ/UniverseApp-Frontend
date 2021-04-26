@@ -1,667 +1,781 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/_mixins';
 
-.customize__auction{
-    .customize__auction_title{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
+.customize__auction {
+  .customize__auction_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
 
-        h2{
-            font-family: $sharpGroteskMediumFont;
-            font-weight: 600;
-            font-style: normal;
-            font-size: 32px;
-            line-height: 140%;
+    h2 {
+      font-family: $sharpGroteskMediumFont;
+      font-weight: 600;
+      font-style: normal;
+      font-size: 32px;
+      line-height: 140%;
 
-            @include sm{
-                font-size: 26px;
-                margin-bottom: 20px;
-            }
-        }
-        button{
-            height: fit-content;
-        }
-
-        @include sm{
-            display: grid;
-        }
+      @include sm {
+        font-size: 26px;
+        margin-bottom: 20px;
+      }
+    }
+    button {
+      height: fit-content;
     }
 
-    .domain__branding{
-        margin-top: 60px;
-        margin-bottom: 40px;
-        h3{
-            font-family: $sharpGroteskMediumFont;
+    @include sm {
+      display: grid;
+    }
+  }
+
+  .domain__branding {
+    margin-top: 60px;
+    margin-bottom: 40px;
+    h3 {
+      font-family: $sharpGroteskMediumFont;
+      font-weight: 600;
+      font-style: normal;
+      font-size: 26px;
+      line-height: 140%;
+      letter-spacing: 0.2px;
+
+      @include lg {
+        font-size: 20px;
+        line-height: 130%;
+        letter-spacing: normal;
+      }
+    }
+    @include lg {
+      margin-top: 40px;
+      margin-bottom: 30px;
+    }
+    @include sm {
+      margin-top: 20px;
+      margin-bottom: 18px;
+    }
+  }
+
+  .headline__link {
+    display: flex;
+
+    h5 {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    .intup-l {
+      width: 100%;
+
+      input {
+        width: 100%;
+        font-family: $spaceGroteskFont;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: normal;
+        color: $black;
+      }
+      ::placeholder {
+        font-family: $spaceGroteskFont;
+        font-size: 16px;
+        line-height: 20px;
+        color: #cacaca;
+      }
+    }
+
+    .error__text {
+      padding-top: 4px;
+      font-family: $spaceGroteskFont;
+      font-size: 12px;
+      line-height: 150%;
+      color: #ff4949;
+    }
+
+    .auction__headline {
+      margin-right: 30px;
+      width: 100%;
+
+      .auction__headline__input {
+        margin-bottom: 42px;
+      }
+
+      .upload__promo {
+        .upload__promo__title {
+          position: relative;
+          display: flex;
+          width: fit-content;
+
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
             font-weight: 600;
-            font-style: normal;
-            font-size: 26px;
-            line-height: 140%;
+            font-size: 16px;
+            line-height: 130%;
             letter-spacing: 0.2px;
+          }
+          .promo-info {
+            position: absolute;
+            width: 186px;
+            height: fit-content;
+            background: $white;
+            box-shadow: 0 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            bottom: 25px;
+            left: 100%;
+            transform: translateX(-50%);
 
-            @include lg{
-                font-size: 20px;
-                line-height: 130%;
-                letter-spacing: normal;
+            @include sm {
+              left: 50%;
+              transform: translateX(-50%);
+              top: 0;
+              // bottom: unset;
             }
-        }
-        @include lg{
-            margin-top: 40px;
-            margin-bottom: 30px;
-        }
-        @include sm{
-            margin-top: 20px;
-            margin-bottom: 18px;
-        }
-    }
 
-    .headline__link{
-        display: flex;
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 150%;
+              color: $black;
+            }
+          }
+        }
+        .upload__promo__body {
+          text-align: center;
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px dashed rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          margin-top: 10px;
 
-        h5{
+          .cloud__icon {
+            margin-top: 30px;
+            margin-bottom: 16px;
+          }
+          h5 {
             font-family: $spaceGroteskFont;
-            font-style: normal;
             font-weight: bold;
             font-size: 14px;
-            line-height: 22px;
-        }
-        .intup-l{
-            width: 100%;
-
-            input{
-                width: 100%;
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-                line-height: 20px;
-                font-weight: normal;
-                color: $black;
-            }
-            ::placeholder{
-                font-family: $spaceGroteskFont;
-                font-size: 16px;
-                line-height: 20px;
-                color: #CACACA;
-            }
-        }
-
-        .error__text{
-            padding-top: 4px;
+            line-height: 160%;
+          }
+          p {
             font-family: $spaceGroteskFont;
-            font-size: 12px;
-            line-height: 150%;
-            color: #FF4949;
-        }
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+          }
+          button {
+            margin-top: 16px;
+            margin-bottom: 21px;
+          }
 
-        .auction__headline{
-            margin-right: 30px;
-            width: 100%;
-
-            .auction__headline__input{
-                margin-bottom: 42px;
-            }
-
-            .upload__promo{
-                .upload__promo__title{
-                    position: relative;
-                    display: flex;
-                    width: fit-content;
-
-                    h4{
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 130%;
-                        letter-spacing: 0.2px;
-                    }
-                    .promo-info{
-                        position: absolute;
-                        width: 186px;
-                        height: fit-content;
-                        background: $white;
-                        box-shadow: 0 10px 20px rgba(136, 120, 172, 0.2);
-                        border-radius: 12px;
-                        padding: 16px;
-                        bottom: 25px;
-                        left: 100%;
-                        transform: translateX(-50%);
-
-                        p{
-                            font-family: $spaceGroteskFont;
-                            font-size: 12px;
-                            line-height: 150%;
-                            color: $black;
-                        }
-                    }
-                }
-                .upload__promo__body{
-                    text-align: center;
-                    background: rgba(0, 0, 0, 0.02);
-                    border: 1px dashed rgba(0, 0, 0, 0.1);
-                    border-radius: 10px;
-                    margin-top: 10px;
-
-                    .cloud__icon{
-                        margin-top: 30px;
-                        margin-bottom: 16px;
-                    }
-                    h5{
-                        font-family: $spaceGroteskFont;
-                        font-weight: bold;
-                        font-size: 14px;
-                        line-height: 160%;
-                    }
-                    p{
-                        font-family: $spaceGroteskFont;
-                        font-weight: normal;
-                        font-size: 14px;
-                        line-height: 160%;
-                        color: rgba(0, 0, 0, 0.6);
-                    }
-                    button{
-                        margin-top: 16px;
-                        margin-bottom: 21px;
-                    }
-
-                    .promo__preview{
-                        width: fit-content;
-                        margin: auto;
-                        margin-bottom: 40px;
-
-                        h6{
-                            font-family: $spaceGroteskFont;
-                            font-size: 12px;
-                            line-height: 150%;
-                            color: rgba(0, 0, 0, 0.4);
-                            text-align: left;
-                        }
-                        .preview-div{
-                            background: $white;
-                            border: 1px solid rgba(0, 0, 0, 0.1);
-                            box-sizing: border-box;
-                            border-radius: 10px;
-                         
-                            .default__promo__image{
-                                width: 86px;
-                                height: 86px;
-                                margin: 84px;
-
-                                @include lg{
-                                    margin: 40px;
-                                }
-                            }
-                        }
-                        @include lg{
-                            margin-bottom: 20px;
-                        }
-                    }
-                }
-            }
-        }
-
-        .auction__link{
-            width: 100%;
-
-            .auction__link__input{
-                margin-bottom: 42px;
-            }
-
-            .upload__background{
-                .upload__background__title{
-                    display: flex;
-                    justify-content: space-between;
-
-                    h4{
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 130%;
-                        letter-spacing: 0.2px;
-                    }
-
-                    .background__blur{
-                        display: flex;
-                        position: relative;
-                        align-items: center;
-                        font-family: $spaceGroteskFont;
-                        font-size: 14px;
-                        line-height: 150%;
-                        color: rgba(0, 0, 0, 0.4);
-
-                        img{
-                            margin-left: 4px;
-                            margin-right: 7px;
-                        }
-
-                        .blur-info{
-                            position: absolute;
-                            width: 274px;
-                            height: fit-content;
-                            padding: 16px;
-                            background: $white;
-                            box-shadow: 0 10px 20px rgba(136, 120, 172, 0.2);
-                            border-radius: 12px;
-                            bottom: 25px;
-                            left: 100%;
-                            // right: 0;
-                            transform: translateX(-50%);
-
-                            p{
-                                font-family: $spaceGroteskFont;
-                                font-size: 12px;
-                                line-height: 150%;
-                                color: $black;
-                            }
-                        }
-
-                        .slide-btn{
-                            width: 40px;
-                            height: 24px;
-                            border-radius: 50px;
-                            background: rgba(0, 0, 0, 0.1);
-
-                            .circle{
-                                width: 18px;
-                                height: 18px;
-                                border-radius: 50%;
-                                background-color: white;
-                                margin: 3px;
-                            }
-                        }
-                    }
-                }
-
-                .upload__background__body{
-                    text-align: center;
-                    background: rgba(0, 0, 0, 0.02);
-                    border: 1px dashed rgba(0, 0, 0, 0.1);
-                    border-radius: 10px;
-                    margin-top: 10px;
-
-                    .cloud__icon{
-                        margin-top: 30px;
-                        margin-bottom: 16px;
-                    }
-                    h5{
-                        font-family: $spaceGroteskFont;
-                        font-weight: bold;
-                        font-size: 14px;
-                        line-height: 160%;
-                    }
-                    p{
-                        font-family: $spaceGroteskFont;
-                        font-weight: normal;
-                        font-size: 14px;
-                        line-height: 160%;
-                        color: rgba(0, 0, 0, 0.6);
-                    }
-                    button{
-                        margin-top: 16px;
-                        margin-bottom: 21px;
-                    }
-
-                    .background__preview{
-                        margin-left: 40px;
-                        margin-right: 40px;
-                        margin-bottom: 40px;
-
-                        h6{
-                            font-family: $spaceGroteskFont;
-                            font-size: 12px;
-                            line-height: 150%;
-                            color: rgba(0, 0, 0, 0.4);
-                            text-align: left;
-                        }
-                        .preview-div{
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            background: $white;
-                            border: 1px solid rgba(0, 0, 0, 0.1);
-                            box-sizing: border-box;
-                            border-radius: 10px;
-                            height: 254px;
-                         
-                            .background__default__image{
-                                width: 80%;
-                                max-height: 70%;
-                            }
-                            @include lg{
-                                height: 167px;
-                            }
-                        }
-                        @include lg{
-                            margin-right: 20px;
-                            margin-left: 20px;
-                            margin-bottom: 20px;
-                        }
-                    }
-                }
-            }
-            @include sm{
-                margin-top: 30px;
-            }
-        }
-
-        @include sm{
-            display: grid;
-        }
-    }
-
-    .reward__tiers{
-        h3{
-            font-family: $sharpGroteskMediumFont;
-            font-weight: 600;
-            font-size: 26px;
-            line-height: 140%;
-            letter-spacing: 0.2px;
-            margin-top: 60px;
+          .promo__preview {
+            width: fit-content;
+            margin: auto;
             margin-bottom: 40px;
 
-            @include lg{
-                font-size: 20px;
-                line-height: 130%;
-                letter-spacing: normal;
-                margin-bottom: 20px;
+            h6 {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 150%;
+              color: rgba(0, 0, 0, 0.4);
+              text-align: left;
             }
-        }
-        .customize__auction__tier{
-            padding: 34px 30px 30px 30px;
-            background: rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            .preview-div {
+              background: $white;
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              box-sizing: border-box;
+              border-radius: 10px;
+              width: 256px;
+              height: 256px;
 
-            .tier__header{
-                display: flex;
-                justify-content: space-between;
+              .default__promo__image {
+                width: 86px;
+                height: 86px;
+                margin: 84px;
 
-                .tier__title{
-                    display: flex;
-                    align-items: center;
-
-                    h4{
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 130%;
-                        margin-right: 12px;
-
-                        @include lg{
-                            margin-bottom: 12px;
-                        }
-                    }
-
-                    .tier__description{
-                        display: flex;
-
-                        .winners{
-                            padding: 6px 16px;
-                            background: rgba(0, 0, 0, 0.05);
-                            border-radius: 12px;
-                            margin-right: 12px;
-
-                            p{
-                                font-family: $spaceGroteskFont;
-                                font-size: 14px;
-                                line-height: 150%;
-                            }
-                            @include sm{
-                                margin-right: 4px;
-                            }
-                        }
-                        @include md{
-                            // flex-wrap: wrap;
-                        }
-                    }
-                    .pick__color{
-                        display: none;
-
-                        @include sm{
-                            display: flex;
-                            margin-bottom: 20px;
-                        }
-                    }
-
-                    @include lg{
-                        display: grid;
-                    }
+                @include lg {
+                  margin: 40px;
                 }
-
-                .pick__color{
-                    display: flex;
-
-                    p{
-                        font-family: $spaceGroteskFont;
-                        font-size: 14px;
-                        line-height: 150%;
-                    }
-
-                    @include sm{
-                        display: none;
-                    }
+                @include sm {
+                  margin: 98px;
                 }
-
-            }  
-            
-            .tier__body{
-                display: flex;
-                justify-content: space-between;
-                margin-top: 30px;
-
-                .custom__description{
-                    margin-right: 30px;
-                    width: 100%;
-
-                    .custom__description__title{
-                        display: flex;
-                        justify-content: space-between;
-
-                        h4{
-                            font-family: $spaceGroteskFont;
-                            font-weight: bold;
-                            font-size: 14px;
-                            line-height: 22px;
-                        }
-                        p{
-                            font-family: $spaceGroteskFont;
-                            font-size: 12px;
-                            line-height: 160%;
-                            color: rgba(0, 0, 0, 0.4);
-                        }
-                    }
-                    textarea{
-                        height: 281px;
-                        font-family: $spaceGroteskFont;
-                        font-size: 16px;
-                        line-height: 20px;
-                        color: $black;
-
-                        @include lg{
-                            height: 135px;
-                        }
-                        @include sm{
-                            height: 161px;
-                        }
-                    }
-                    ::placeholder{
-                        color: rgba(0, 0, 0, 0.2);
-                    }
-                    .error__text{
-                        font-family: $spaceGroteskFont;
-                        font-size: 12px;
-                        line-height: 150%;
-                        color: #FF4949;
-                    }
-
-                    @include lg{
-                        margin-bottom: 30px;
-                    }
-                    @include sm{
-                        margin-bottom: 20px;
-                    }
-                }
-
-                .upload__image{
-                    width: 100%;
-
-                    h4{
-                        font-family: $spaceGroteskFont;
-                        font-weight: bold;
-                        font-size: 14px;
-                        line-height: 22px;
-                    }
-
-                    .upload__image__div{
-                        display: flex;
-                        align-items: center;
-                        height: 280px;
-                        padding: 21px 24px 24px 24px;
-                        background: rgba(0, 0, 0, 0.02);
-                        border: 1px dashed rgba(0, 0, 0, 0.1);
-                        box-sizing: border-box;
-                        border-radius: 10px;
-
-                        .upload__image__description{
-                            text-align: center;
-                            width: 100%;
-                            margin-right: 15px;
-
-                            .cloud__icon{
-                                margin-bottom: 16px;
-                            }
-                            h5{
-                                font-family: $spaceGroteskFont;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 160%;
-                            }
-                            p{
-                                font-family: $spaceGroteskFont;
-                                font-weight: normal;
-                                font-size: 14px;
-                                line-height: 160%;
-                                color: rgba(0, 0, 0, 0.6);
-                            }
-                            button{
-                                margin-top: 16px;
-                            }
-                        }
-
-                        .upload__image__preview{
-                            h6{
-                                font-family: $spaceGroteskFont;
-                                font-size: 12px;
-                                line-height: 150%;
-                                color: rgba(0, 0, 0, 0.4);
-                            }
-
-                            .preview-div{
-                                background: $white;
-                                border: 1px solid rgba(0, 0, 0, 0.1);
-                                box-sizing: border-box;
-                                border-radius: 10px;
-                                width: 217px;
-                                height: 217px;
-
-                                .default__upload__image{
-                                    display: flex;
-                                    height: 86px;
-                                    margin: auto;
-                                    margin-top: 65px;
-
-                                    @include sm{
-                                        margin-top: 82px;
-                                        height: 90px;
-                                    }
-                                }
-
-                                @include sm{
-                                    width: 100%;
-                                    height: 255px;
-                                }
-                            }
-                            @include sm{
-                                margin: auto;
-                                width: 100%;
-                                margin-top: 20px;
-                            }
-                        }
-                        @include sm{
-                            display: block;
-                            height: fit-content;
-                        }
-                    }
-                }
-                @include lg{
-                    display: block;
-                }
+              }
+              @include lg {
+                height: 167px;
+                width: 167px;
+              }
+              @include sm {
+                width: 295px;
+                height: 295px;
+              }
             }
+            @include lg {
+              margin-bottom: 20px;
+            }
+          }
         }
+      }
     }
-    .about__artist{
-        margin-top: 64px;
 
-        .about__artist__header{
+    .auction__link {
+      width: 100%;
+
+      .auction__link__input {
+        margin-bottom: 42px;
+      }
+
+      .upload__background {
+        .upload__background__title {
+          display: flex;
+          justify-content: space-between;
+
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 130%;
+            letter-spacing: 0.2px;
+          }
+
+          .background__blur {
+            display: flex;
+            position: relative;
+            align-items: center;
+            font-family: $spaceGroteskFont;
+            font-size: 14px;
+            line-height: 150%;
+            color: rgba(0, 0, 0, 0.4);
+
+            img {
+              margin-left: 4px;
+              margin-right: 7px;
+            }
+
+            .blur-info {
+              position: absolute;
+              width: 274px;
+              height: fit-content;
+              padding: 16px;
+              background: $white;
+              box-shadow: 0 10px 20px rgba(136, 120, 172, 0.2);
+              border-radius: 12px;
+              bottom: 25px;
+              left: 100%;
+              // right: 0;
+              transform: translateX(-50%);
+
+              p {
+                font-family: $spaceGroteskFont;
+                font-size: 12px;
+                line-height: 150%;
+                color: $black;
+              }
+            }
+
+            .slide-btn {
+              width: 40px;
+              height: 24px;
+              border-radius: 50px;
+              background: rgba(0, 0, 0, 0.1);
+
+              .circle {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background-color: white;
+                margin: 3px;
+              }
+            }
+          }
+        }
+
+        .upload__background__body {
+          text-align: center;
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px dashed rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          margin-top: 10px;
+
+          .cloud__icon {
+            margin-top: 30px;
+            margin-bottom: 16px;
+          }
+          h5 {
+            font-family: $spaceGroteskFont;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 160%;
+          }
+          p {
+            font-family: $spaceGroteskFont;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+          }
+          .upload__background__buttons {
+            button {
+              margin-top: 16px;
+              margin-bottom: 21px;
+            }
+            .remove {
+              margin-left: 12px;
+            }
+          }
+
+          .background__preview {
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-bottom: 40px;
+
+            h6 {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 150%;
+              color: rgba(0, 0, 0, 0.4);
+              text-align: left;
+            }
+            .preview-div {
+              position: relative;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background: $white;
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              box-sizing: border-box;
+              border-radius: 10px;
+              height: 254px;
+
+              .background__image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+
+              .background__default__image {
+                position: absolute;
+                width: 80%;
+                max-height: 70%;
+                background: rgba(255, 255, 255, 0.2);
+              }
+              @include lg {
+                height: 167px;
+              }
+            }
+            @include lg {
+              margin-right: 20px;
+              margin-left: 20px;
+              margin-bottom: 20px;
+            }
+          }
+        }
+      }
+      @include sm {
+        margin-top: 30px;
+      }
+    }
+
+    @include sm {
+      display: grid;
+    }
+  }
+
+  .reward__tiers {
+    h3 {
+      font-family: $sharpGroteskMediumFont;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      letter-spacing: 0.2px;
+      margin-top: 60px;
+      margin-bottom: 40px;
+
+      @include lg {
+        font-size: 20px;
+        line-height: 130%;
+        letter-spacing: normal;
+        margin-bottom: 20px;
+      }
+    }
+    .customize__auction__tier {
+      padding: 34px 30px 30px 30px;
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 10px;
+      margin-bottom: 20px;
+
+      .tier__header {
+        display: flex;
+        justify-content: space-between;
+
+        .tier__title {
+          display: flex;
+          align-items: center;
+
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 130%;
+            margin-right: 12px;
+
+            @include lg {
+              margin-bottom: 12px;
+            }
+          }
+
+          .tier__description {
+            display: flex;
+
+            .winners {
+              padding: 6px 16px;
+              background: rgba(0, 0, 0, 0.05);
+              border-radius: 12px;
+              margin-right: 12px;
+
+              p {
+                font-family: $spaceGroteskFont;
+                font-size: 14px;
+                line-height: 150%;
+              }
+              @include sm {
+                margin-right: 4px;
+              }
+            }
+            @include md {
+              // flex-wrap: wrap;
+            }
+          }
+          .pick__color {
+            display: none;
+
+            @include sm {
+              display: flex;
+              margin-bottom: 20px;
+            }
+          }
+
+          @include lg {
+            display: grid;
+          }
+        }
+
+        .pick__color {
+          display: flex;
+
+          p {
+            font-family: $spaceGroteskFont;
+            font-size: 14px;
+            line-height: 150%;
+          }
+
+          @include sm {
+            display: none;
+          }
+        }
+      }
+
+      .tier__body {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+
+        .custom__description {
+          margin-right: 30px;
+          width: 100%;
+
+          .custom__description__title {
             display: flex;
             justify-content: space-between;
 
-            h3{
-                margin-top: 0px;
+            h4 {
+              font-family: $spaceGroteskFont;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 22px;
             }
-            .about__artist__warning{
-                display: flex;
-                border: 1px solid #E4B613;
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 160%;
+              color: rgba(0, 0, 0, 0.4);
+            }
+          }
+          textarea {
+            height: 281px;
+            font-family: $spaceGroteskFont;
+            font-size: 16px;
+            line-height: 20px;
+            color: $black;
+
+            @include lg {
+              height: 135px;
+            }
+            @include sm {
+              height: 161px;
+            }
+          }
+          ::placeholder {
+            color: rgba(0, 0, 0, 0.2);
+          }
+          .error__text {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            line-height: 150%;
+            color: #ff4949;
+          }
+
+          @include lg {
+            margin-bottom: 30px;
+          }
+          @include sm {
+            margin-bottom: 20px;
+          }
+        }
+
+        .upload__image {
+          width: 100%;
+
+          h4 {
+            font-family: $spaceGroteskFont;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 22px;
+          }
+
+          .upload__image__div {
+            display: flex;
+            align-items: center;
+            height: 280px;
+            padding: 21px 24px 24px 24px;
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px dashed rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 10px;
+
+            .upload__image__description {
+              text-align: center;
+              width: 100%;
+              margin-right: 15px;
+
+              .cloud__icon {
+                margin-bottom: 16px;
+              }
+              h5 {
+                font-family: $spaceGroteskFont;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 160%;
+              }
+              p {
+                font-family: $spaceGroteskFont;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 160%;
+                color: rgba(0, 0, 0, 0.6);
+              }
+              button {
+                margin-top: 16px;
+              }
+            }
+
+            .upload__image__preview {
+              h6 {
+                font-family: $spaceGroteskFont;
+                font-size: 12px;
+                line-height: 150%;
+                color: rgba(0, 0, 0, 0.4);
+              }
+
+              .preview-div {
+                background: $white;
+                border: 1px solid rgba(0, 0, 0, 0.1);
                 box-sizing: border-box;
-                border-radius: 12px;
-                width: 75%;
-                padding: 20px 20px 22px 24px;
+                border-radius: 10px;
+                width: 217px;
+                height: 217px;
 
-                img{
-                    width: 18px;
-                    height: 18px;
-                    margin-right: 13px;
-                    margin-top: 4px;
+                .preview__image {
+                  width: 100%;
+                  height: 100%;
+                }
 
-                    @include sm{
-                        margin: auto;
-                    }
+                .default__upload__image {
+                  display: flex;
+                  height: 86px;
+                  margin: auto;
+                  margin-top: 65px;
+
+                  @include sm {
+                    margin-top: 82px;
+                    height: 90px;
+                  }
                 }
-                p{
-                    font-family: $spaceGroteskFont;
-                    font-weight: 600;
-                    font-size: 16px;
-                    line-height: 160%;
-                    color: #E4B613;
+
+                @include sm {
+                  width: 100%;
+                  height: 255px;
                 }
-                @include lg{
-                    width: 100%;
-                }
-                @include sm{
-                    display: grid;
-                    text-align: center;
-                }
+              }
+              @include sm {
+                margin: auto;
+                width: 100%;
+                margin-top: 20px;
+              }
             }
-            @include lg{
-                display: grid;
+            @include sm {
+              display: block;
+              height: fit-content;
             }
+          }
         }
-        .my-account{
-            padding: 0;
+        @include lg {
+          display: block;
         }
+      }
     }
-    .customize-buttons{
-        .light-button{
-            margin-right: 20px;
-            @include sm{
-                margin-right: 0px;
-                margin-bottom: 20px;
-            }
-        }
+  }
+  .about__artist {
+    margin-top: 64px;
 
-        @include sm{
-            display: grid;
+    .about__artist__header {
+      display: flex;
+      justify-content: space-between;
+
+      h3 {
+        margin-top: 0px;
+      }
+      .about__artist__warning {
+        display: flex;
+        border: 1px solid #e4b613;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: 75%;
+        padding: 20px 20px 22px 24px;
+
+        img {
+          width: 18px;
+          height: 18px;
+          margin-right: 13px;
+          margin-top: 4px;
+
+          @include sm {
+            margin: auto;
+          }
         }
+        p {
+          font-family: $spaceGroteskFont;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 160%;
+          color: #e4b613;
+        }
+        @include lg {
+          width: 100%;
+        }
+        @include sm {
+          display: grid;
+          text-align: center;
+        }
+      }
+      @include lg {
+        display: grid;
+      }
     }
+    .my-account {
+      padding: 0;
+    }
+  }
+  .customize-buttons {
+    .light-button {
+      margin-right: 20px;
+      @include sm {
+        margin-right: 0px;
+        margin-bottom: 20px;
+      }
+    }
+
+    @include sm {
+      display: grid;
+    }
+  }
+}
+
+.toggle-switch {
+  position: relative;
+  min-width: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  text-align: left;
+  &-checkbox {
+    display: none;
+  }
+  &-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0 solid #bbb;
+    border-radius: 50px;
+    margin: 0;
+  }
+  &-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+    &:before,
+    &:after {
+      display: block;
+      float: left;
+      width: 50%;
+      height: 24px;
+      box-sizing: border-box;
+    }
+    &:before {
+      content: '';
+      padding-left: 10px;
+      background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      color: #fff;
+    }
+  }
+  &-disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+    &:before {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+  }
+  &-inner:after {
+    content: '';
+    padding-right: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  &-switch {
+    display: block;
+    width: 18px;
+    margin: 3px;
+    background: $white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 16px;
+    border: 0 solid #bbb;
+    border-radius: 50%;
+    transition: all 0.3s ease-in 0s;
+  }
+  &-checkbox:checked + &-label {
+    .toggle-switch-inner {
+      margin-left: 0;
+    }
+    .toggle-switch-switch {
+      right: 0px;
+    }
+  }
 }
