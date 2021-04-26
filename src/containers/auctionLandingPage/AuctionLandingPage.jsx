@@ -13,9 +13,9 @@ import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 const AuctionLandingPage = () => {
   const location = useLocation();
   const auction = location.state
-    ? PLACEHOLDER_ACTIVE_AUCTIONS.filter((auction) => auction.id === location.state.id)[0]
+    ? PLACEHOLDER_ACTIVE_AUCTIONS.filter((act) => act.id === location.state.id)[0]
     : null;
-  const artist = PLACEHOLDER_ARTISTS.filter((artist) => artist.id === auction?.artist.id)[0];
+  const artist = PLACEHOLDER_ARTISTS.filter((a) => a.id === auction?.artist.id)[0];
 
   const [bidders, setBidders] = useState([]);
 

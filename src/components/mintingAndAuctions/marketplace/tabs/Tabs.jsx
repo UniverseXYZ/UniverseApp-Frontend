@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory, withRouter } from 'react-router-dom';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab';
 
-const Tabs = (props) => {
+const Tabs = ({ location }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
 
   useEffect(() => {
-    if (props.location.pathname === '/minting-and-auctions/marketplace/active-auctions') {
+    if (location.pathname === '/minting-and-auctions/marketplace/active-auctions') {
       setSelectedTabIndex(0);
-    } else if (props.location.pathname === '/minting-and-auctions/marketplace/future-auctions') {
+    } else if (location.pathname === '/minting-and-auctions/marketplace/future-auctions') {
       setSelectedTabIndex(1);
     }
   }, []);
@@ -46,6 +47,10 @@ const Tabs = (props) => {
       </div>
     </div>
   );
+};
+
+Tabs.propTypes = {
+  location: PropTypes.oneOfType([PropTypes.any]).isRequired,
 };
 
 export default withRouter(Tabs);

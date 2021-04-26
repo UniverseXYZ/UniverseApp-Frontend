@@ -12,7 +12,7 @@ const Artist = () => {
   const artist = location.state
     ? location.state.id === loggedInArtist.id
       ? loggedInArtist
-      : PLACEHOLDER_ARTISTS.filter((artist) => artist.id === location.state.id)[0]
+      : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
     : null;
 
   useEffect(() => {

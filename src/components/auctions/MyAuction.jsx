@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import uuid from 'react-uuid';
 import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
@@ -97,7 +98,7 @@ const MyAuction = () => {
           <ul className="tabs">
             {tabs.map((tab, index) => (
               <li
-                key={index}
+                key={uuid()}
                 className={selectedTabIndex === index ? 'active' : ''}
                 onClick={() => setSelectedTabIndex(index)}
                 aria-hidden="true"

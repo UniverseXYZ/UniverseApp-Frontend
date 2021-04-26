@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
+import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 
@@ -35,9 +36,9 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
           <div className="items__per__page__dropdown">
             <Animated animationIn="fadeIn">
               <ul>
-                {itemsPerPage.map((n, index) => (
+                {itemsPerPage.map((n) => (
                   <li
-                    key={index}
+                    key={uuid()}
                     className={perPage === n ? 'active' : ''}
                     onClick={() => setPerPage(n)}
                     aria-hidden="true"

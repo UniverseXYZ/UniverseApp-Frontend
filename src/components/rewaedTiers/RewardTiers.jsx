@@ -42,7 +42,7 @@ const RewardTiers = () => {
           </p>
         </div>
         {auction.tiers.length > 0 &&
-          auction.tiers.map((tier, index) => (
+          auction.tiers.map((tier) => (
             <div className="view-tier">
               <div className="auction-header">
                 <div className="img_head">
@@ -105,7 +105,7 @@ const RewardTiers = () => {
               </div>
               <div hidden={shownActionId !== tier.id} className="auctions-tier">
                 <div className="rev-reward">
-                  {tier.nfts.map((nft, index) => (
+                  {tier.nfts.map((nft) => (
                     <div className="rev-reward__box">
                       <div className="rev-reward__box__image">
                         {nft.previewImage.type === 'video/mp4' && (

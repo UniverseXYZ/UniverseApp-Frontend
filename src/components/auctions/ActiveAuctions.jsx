@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Moment from 'react-moment';
 import moment from 'moment';
-import Button from '../button/Button';
+import uuid from 'react-uuid';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
-import infoIconRed from '../../assets/images/Vector.svg';
 import searchIcon from '../../assets/images/search-icon.svg';
-import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import { ACTIVE_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
@@ -183,8 +181,8 @@ const ActiveAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {activeAuction.platinumTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {activeAuction.platinumTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">
@@ -210,8 +208,8 @@ const ActiveAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {activeAuction.goldTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {activeAuction.goldTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">
@@ -237,8 +235,8 @@ const ActiveAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {activeAuction.silverTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {activeAuction.silverTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">

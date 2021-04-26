@@ -35,20 +35,20 @@ const Create = () => {
     if (values.name) {
       if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
         if (tierId) {
-          setAuction((auction) => ({
+          setAuction({
             ...auction,
             tiers: [
               ...auction.tiers.filter((tier) => tier.id !== tierId),
               { ...tierById, ...values },
             ],
-          }));
+          });
           history.push('/select-nfts', tierId);
         } else {
           const createdTierId = uuid();
-          setAuction((auction) => ({
+          setAuction({
             ...auction,
             tiers: [...auction.tiers, { ...values, id: createdTierId, nfts: [] }],
-          }));
+          });
           history.push('/select-nfts', createdTierId);
         }
       }

@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import AppContext from '../../../ContextAPI';
@@ -43,9 +42,11 @@ const MobileView = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    showMenu
-      ? document.body.classList.add('no__scroll')
-      : document.body.classList.remove('no__scroll');
+    if (showMenu) {
+      document.body.classList.add('no__scroll');
+    } else {
+      document.body.classList.remove('no__scroll');
+    }
   }, [showMenu]);
 
   useEffect(() => {

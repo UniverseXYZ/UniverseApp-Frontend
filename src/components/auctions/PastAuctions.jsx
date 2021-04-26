@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Moment from 'react-moment';
 import moment from 'moment';
+import uuid from 'react-uuid';
 import Button from '../button/Button';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -170,8 +171,8 @@ const PastAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {pastAuction.platinumTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {pastAuction.platinumTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">
@@ -197,8 +198,8 @@ const PastAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {pastAuction.goldTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {pastAuction.goldTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">
@@ -224,8 +225,8 @@ const PastAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {pastAuction.silverTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {pastAuction.silverTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">

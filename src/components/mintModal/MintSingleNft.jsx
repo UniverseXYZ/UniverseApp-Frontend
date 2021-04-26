@@ -55,9 +55,9 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(newProperties);
   };
 
-  const propertyChangesName = (index, name) => {
+  const propertyChangesName = (index, val) => {
     const newProperties = [...properties];
-    newProperties[index].name = name;
+    newProperties[index].name = val;
     setProperties(newProperties);
   };
 
@@ -395,14 +395,14 @@ const MintSingleNft = ({ onClick }) => {
               </Animated>
             )}
           </div>
-          {properties.map((elm, i) => (
-            <div className="properties" key={i}>
+          {properties.map((elm) => (
+            <div className="properties" key={uuid()}>
               <div className="property-name">
                 <h5>Property name</h5>
                 <Input
                   className="inp"
                   placeholder="Enter NFT property"
-                  value={properties[i].name}
+                  value={elm.name}
                   onChange={(e) => propertyChangesName(i, e.target.value)}
                 />
               </div>
@@ -411,7 +411,7 @@ const MintSingleNft = ({ onClick }) => {
                 <Input
                   className="inp"
                   placeholder="Enter value"
-                  value={properties[i].value}
+                  value={elm.value}
                   onChange={(e) => propertyChangesValue(i, e.target.value)}
                 />
               </div>
