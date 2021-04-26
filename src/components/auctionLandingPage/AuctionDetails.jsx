@@ -77,7 +77,9 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
 
   useEffect(() => {
     const res = bidders.filter((bidder) => bidder.artistId === loggedInArtist.id);
-    res.length && setCurrentBid(res[res.length - 1]);
+    if (res.length) {
+      setCurrentBid(res[res.length - 1]);
+    }
     bidders.sort((a, b) => b.bid - a.bid);
   }, [bidders]);
 

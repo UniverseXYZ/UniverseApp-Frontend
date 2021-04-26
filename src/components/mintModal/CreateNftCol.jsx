@@ -61,9 +61,9 @@ const CreateNftCol = (props) => {
     setProperties(prevProperties);
   };
 
-  const propertyChangesName = (index, name) => {
+  const propertyChangesName = (index, val) => {
     const prevProperties = [...properties];
-    prevProperties[index].name = name;
+    prevProperties[index].name = val;
     setProperties(prevProperties);
   };
 
@@ -418,14 +418,14 @@ const CreateNftCol = (props) => {
                 )}
               </div>
 
-              {properties.map((elm, i) => (
-                <div className="properties" key={i}>
+              {properties.map((elm) => (
+                <div className="properties" key={uuid()}>
                   <div className="property-name">
                     <h5>Property name</h5>
                     <Input
                       className="inp"
                       placeholder="Enter NFT property"
-                      value={properties[i].name}
+                      value={elm.name}
                       onChange={(e) => propertyChangesName(i, e.target.value)}
                     />
                   </div>
@@ -434,7 +434,7 @@ const CreateNftCol = (props) => {
                     <Input
                       className="inp"
                       placeholder="Enter value"
-                      value={properties[i].value}
+                      value={elm.value}
                       onChange={(e) => propertyChangesValue(i, e.target.value)}
                     />
                   </div>

@@ -98,7 +98,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 
   const handledeleteNft = (nftSelected) => {
     const nftIndex = selectedNFTIds.findIndex((nft) => nft === nftSelected.id);
-    setSelectedNFTIds((selectedNFTIds) => selectedNFTIds.filter((item) => item !== nftSelected.id));
+    setSelectedNFTIds(selectedNFTIds.filter((item) => item !== nftSelected.id));
   };
 
   const handleClickOutside = (event) => {
@@ -121,14 +121,14 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
     document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
-  const handleContinue = (previewNFTs) => {
-    setAuction((auction) => ({
+  const handleContinue = (prevNFTs) => {
+    setAuction({
       ...auction,
       tiers: [
         ...auction.tiers.filter((tier) => tier.id !== tierById.id),
-        { ...tierById, nfts: previewNFTs },
+        { ...tierById, nfts: prevNFTs },
       ],
-    }));
+    });
     history.push('/review-reward', tierId);
   };
 
@@ -191,13 +191,13 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   });
 
   useEffect(() => {
-    const previewNFTs = [];
+    const prevNFTs = [];
     filteredNFTs.forEach((nft) => {
       if (selectedNFTIds.includes(nft.id)) {
-        previewNFTs.push(nft);
+        prevNFTs.push(nft);
       }
     });
-    setPreviewNFTs(previewNFTs);
+    setPreviewNFTs(prevNFTs);
     // setAuction(data => ({ ...data, tier: { ...data.tier,nfts{...data.tier.nfts, previewNFTs}} }));
   }, [filteredNFTs, selectedNFTIds]);
 

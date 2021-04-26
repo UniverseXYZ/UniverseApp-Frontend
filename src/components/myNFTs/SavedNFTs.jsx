@@ -39,13 +39,15 @@ const SavedNFTs = () => {
     setSelectAllIsChecked(!selectAllIsChecked);
 
     const newSavedNfts = [...savedNfts];
-    localStorage.localChecked === 'true'
-      ? newSavedNfts.map((nft) => {
-          nft.selected = true;
-        })
-      : newSavedNfts.map((nft) => {
-          nft.selected = false;
-        });
+    if (localStorage.localChecked === 'true') {
+      newSavedNfts.map((nft) => {
+        nft.selected = true;
+      });
+    } else {
+      newSavedNfts.map((nft) => {
+        nft.selected = false;
+      });
+    }
     setSavedNfts(newSavedNfts);
   };
 

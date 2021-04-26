@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useLocation, useHistory } from 'react-router-dom';
+import uuid from 'react-uuid';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
@@ -60,28 +61,30 @@ const MyNFTs = () => {
         const newMyNFTs = [...myNFTs];
         savedNfts.forEach((nft) => {
           if (nft.selected) {
-            nft.type === 'single'
-              ? newMyNFTs.push({
-                  id: nft.id,
-                  type: nft.type,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.numberOfEditions),
-                  generatedEditions: nft.generatedEditions,
-                })
-              : newMyNFTs.push({
-                  id: nft.id,
-                  type: nft.type,
-                  collectionId: nft.collectionName,
-                  collectionName: nft.collectionName,
-                  collectionAvatar: nft.collectionAvatar,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.numberOfEditions),
-                  generatedEditions: nft.generatedEditions,
-                });
+            if (nft.type === 'single') {
+              newMyNFTs.push({
+                id: nft.id,
+                type: nft.type,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.numberOfEditions),
+                generatedEditions: nft.generatedEditions,
+              });
+            } else {
+              newMyNFTs.push({
+                id: nft.id,
+                type: nft.type,
+                collectionId: nft.collectionName,
+                collectionName: nft.collectionName,
+                collectionAvatar: nft.collectionAvatar,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.numberOfEditions),
+                generatedEditions: nft.generatedEditions,
+              });
+            }
           }
         });
         setMyNFTs(newMyNFTs);
@@ -155,7 +158,7 @@ const MyNFTs = () => {
             <ul className="tabs">
               {tabs.map((tab, index) => (
                 <li
-                  key={index}
+                  key={uuid()}
                   className={selectedTabIndex === index ? 'active' : ''}
                   onClick={() => setSelectedTabIndex(index)}
                   aria-hidden="true"

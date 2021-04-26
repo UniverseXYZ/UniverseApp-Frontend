@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Animated } from 'react-animated-css';
 import Moment from 'react-moment';
 import moment from 'moment';
+import uuid from 'react-uuid';
 import Button from '../button/Button';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -270,8 +271,8 @@ const FutureAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {futureAuction.platinumTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {futureAuction.platinumTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">
@@ -297,8 +298,8 @@ const FutureAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {futureAuction.goldTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {futureAuction.goldTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">
@@ -324,8 +325,8 @@ const FutureAuctions = () => {
                   </div>
                 </div>
                 <div className="tier-body">
-                  {futureAuction.silverTier.nfts.map((nft, index) => (
-                    <div className="tier-image" key={index}>
+                  {futureAuction.silverTier.nfts.map((nft) => (
+                    <div className="tier-image" key={uuid()}>
                       <div className="tier-image-second" />
                       <div className="tier-image-first" />
                       <div className="tier-image-main">

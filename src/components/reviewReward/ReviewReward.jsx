@@ -30,13 +30,13 @@ const Reward = () => {
 
   const handleRemove = (id) => {
     document.body.classList.add('no__scroll');
-    setAuction((auction) => ({
+    setAuction({
       ...auction,
       tiers: [
         ...auction.tiers.filter((tier) => tier.id !== tierById.id),
         { ...tierById, nfts: tierById.nfts.filter((item) => item.id !== id) },
       ],
-    }));
+    });
   };
 
   const handleCreate = () => {

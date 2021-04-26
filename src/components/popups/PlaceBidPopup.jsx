@@ -34,13 +34,17 @@ const PlaceBidPopup = ({
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
       setYourBid(val);
       if (!val) {
-        PLACEHOLDER_SERVICE__FEE
-          ? setTotalBidAmount(PLACEHOLDER_SERVICE__FEE)
-          : setTotalBidAmount(0);
+        if (PLACEHOLDER_SERVICE__FEE) {
+          setTotalBidAmount(PLACEHOLDER_SERVICE__FEE);
+        } else {
+          setTotalBidAmount(0);
+        }
       } else if (!val.endsWith('.')) {
-        PLACEHOLDER_SERVICE__FEE
-          ? setTotalBidAmount(PLACEHOLDER_SERVICE__FEE + parseFloat(val))
-          : setTotalBidAmount(0 + parseFloat(val));
+        if (PLACEHOLDER_SERVICE__FEE) {
+          setTotalBidAmount(PLACEHOLDER_SERVICE__FEE + parseFloat(val));
+        } else {
+          setTotalBidAmount(0 + parseFloat(val));
+        }
       }
       if (val && !val.endsWith('.') && val < yourBalance) {
         setError('');
@@ -92,7 +96,11 @@ const PlaceBidPopup = ({
   }, [error, clicked]);
 
   useEffect(() => {
-    PLACEHOLDER_SERVICE__FEE ? setTotalBidAmount(PLACEHOLDER_SERVICE__FEE) : setTotalBidAmount(0);
+    if (PLACEHOLDER_SERVICE__FEE) {
+      setTotalBidAmount(PLACEHOLDER_SERVICE__FEE);
+    } else {
+      setTotalBidAmount(0);
+    }
   }, []);
 
   return (

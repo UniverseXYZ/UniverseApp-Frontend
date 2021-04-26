@@ -35,9 +35,11 @@ const TabletView = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    showMenu
-      ? document.body.classList.add('no__scroll')
-      : document.body.classList.remove('no__scroll');
+    if (showMenu) {
+      document.body.classList.add('no__scroll');
+    } else {
+      document.body.classList.remove('no__scroll');
+    }
   }, [showMenu]);
 
   useEffect(() => {
