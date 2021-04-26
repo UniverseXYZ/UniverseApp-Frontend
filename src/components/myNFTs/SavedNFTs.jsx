@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import checkIcon from '../../assets/images/check.svg';
@@ -40,8 +40,12 @@ const SavedNFTs = () => {
 
     const newSavedNfts = [...savedNfts];
     localStorage.localChecked === 'true'
-      ? newSavedNfts.map((nft) => (nft.selected = true))
-      : newSavedNfts.map((nft) => (nft.selected = false));
+      ? newSavedNfts.map((nft) => {
+          nft.selected = true;
+        })
+      : newSavedNfts.map((nft) => {
+          nft.selected = false;
+        });
     setSavedNfts(newSavedNfts);
   };
 
@@ -89,8 +93,13 @@ const SavedNFTs = () => {
       {savedNfts.length ? (
         <>
           <div className="custom__checkbox">
-            <label>
-              <input type="checkbox" onChange={toggleSelection} checked={selectAllIsChecked} />
+            <label htmlFor="toggleSelection">
+              <input
+                id="toggleSelection"
+                type="checkbox"
+                onChange={toggleSelection}
+                checked={selectAllIsChecked}
+              />
               <i />
               {selectAllIsChecked ? 'Clear all' : 'Select all'}
             </label>
@@ -99,13 +108,20 @@ const SavedNFTs = () => {
           <div className="saved__nfts__lists">
             {savedNfts.map((nft, index) => (
               <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
-                <div className="saved__nft__box__image" onClick={() => handleSavedNfts(index)}>
+                <div
+                  className="saved__nft__box__image"
+                  onClick={() => handleSavedNfts(index)}
+                  aria-hidden="true"
+                >
                   {nft.previewImage.type === 'video/mp4' && (
                     <video
                       onMouseOver={(event) => event.target.play()}
+                      onFocus={(event) => event.target.play()}
                       onMouseOut={(event) => event.target.pause()}
+                      onBlur={(event) => event.target.pause()}
                     >
                       <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                      <track kind="captions" {...props} />
                       Your browser does not support the video tag.
                     </video>
                   )}
@@ -128,6 +144,7 @@ const SavedNFTs = () => {
                 <div className="saved__nft__box__name">
                   <h3>{nft.name}</h3>
                   <button
+                    type="button"
                     className="three__dots"
                     onClick={() => {
                       setShowDropdown(!showDropdown);
@@ -139,7 +156,7 @@ const SavedNFTs = () => {
                     <span />
                     {dropdownID === nft.id && showDropdown && (
                       <ul ref={ref} className="edit__remove">
-                        <li className="edit" onClick={() => handleEdit(nft.id)}>
+                        <li className="edit" onClick={() => handleEdit(nft.id)} aria-hidden="true">
                           <p>Edit</p>
                           <img src={editIcon} alt="Edit Icon" />
                         </li>

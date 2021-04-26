@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
 import { Animated } from 'react-animated-css';
 import arrow from '../../assets/images/arrow.svg';
 import infoIcon from '../../assets/images/icon.svg';
@@ -27,6 +27,7 @@ const CustomizeAuction = () => {
         onClick={() => {
           history.push('/reward-tiers');
         }}
+        aria-hidden="true"
       >
         <img src={arrow} alt="back" />
         <span>Reward tiers</span>
@@ -53,7 +54,9 @@ const CustomizeAuction = () => {
                 Upload promo image (optional){' '}
                 <img
                   onMouseOver={() => setPromoInfo(true)}
+                  onFocus={() => setPromoInfo(true)}
                   onMouseLeave={() => setPromoInfo(false)}
+                  onBlur={() => setPromoInfo(false)}
                   src={infoIcon}
                   alt="Info"
                 />
@@ -96,7 +99,9 @@ const CustomizeAuction = () => {
                 Blur
                 <img
                   onMouseOver={() => setBlurInfo(true)}
+                  onFocus={() => setBlurInfo(true)}
                   onMouseLeave={() => setBlurInfo(false)}
+                  onBlur={() => setBlurInfo(false)}
                   src={infoIcon}
                   alt="Info"
                 />

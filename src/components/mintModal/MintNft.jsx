@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import defaultImage from '../../assets/images/big-def-img.svg';
 import AppContext from '../../ContextAPI';
@@ -20,6 +20,7 @@ const MintNft = ({ onClick }) => {
             onClick('single');
             setSavedNFTsID(null);
           }}
+          aria-hidden="true"
         >
           <div className="image-container">
             <img src={defaultImage} alt="Default" />
@@ -35,6 +36,7 @@ const MintNft = ({ onClick }) => {
             onClick('collection');
             setSavedCollectionID(null);
           }}
+          aria-hidden="true"
         >
           <div className="image-container">
             <img src={defaultImage} alt="Default" />
@@ -53,7 +55,7 @@ const MintNft = ({ onClick }) => {
 };
 
 MintNft.propTypes = {
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default MintNft;

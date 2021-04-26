@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
@@ -19,7 +19,13 @@ const SubscribePopup = ({ close }) => {
 
   return (
     <div className="subscribe__popup">
-      <img className="close__popup" onClick={close} src={closeIcon} alt="Close" />
+      <img
+        className="close__popup"
+        onClick={close}
+        src={closeIcon}
+        alt="Close"
+        aria-hidden="true"
+      />
       <div className="w-50">
         <img src={subscribeIcon} alt="Subscribe" />
       </div>
@@ -55,7 +61,7 @@ const SubscribePopup = ({ close }) => {
 };
 
 SubscribePopup.propTypes = {
-  close: PropTypes.func,
+  close: PropTypes.func.isRequired,
 };
 
 export default SubscribePopup;

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import testCollectionAvatar from '../../../../assets/images/test-collection-avatar.svg';
 import AppContext from '../../../../ContextAPI';
 
@@ -24,7 +24,9 @@ const NFTsFilters = () => {
 
   const clearFilters = () => {
     const newCollections = [...collections];
-    newCollections.map((collection) => (collection.selected = false));
+    newCollections.map((collection) => {
+      collection.selected = false;
+    });
 
     setCollections(newCollections);
     setSearchByName('');
@@ -57,8 +59,10 @@ const NFTsFilters = () => {
       <div className="filtration">
         <div className="filter__by__collection">
           <div className="filter__by__collection__label">
-            <label>Filter by collection</label>
-            <button onClick={clearFilters}>Clear all</button>
+            <span>Filter by collection</span>
+            <button type="button" onClick={clearFilters}>
+              Clear all
+            </button>
           </div>
           <div className="filter__by__collection__input">
             <input
@@ -71,7 +75,7 @@ const NFTsFilters = () => {
         </div>
         <div className="search__by__name">
           <div className="search__by__name__label">
-            <label>Seach by name</label>
+            <span>Seach by name</span>
           </div>
           <div className="search__by__name__input">
             <input
@@ -87,6 +91,7 @@ const NFTsFilters = () => {
             {collections.length ? (
               collections.map((collection, index) => (
                 <button
+                  type="button"
                   key={collection.id}
                   className={collection.selected ? 'selected' : ''}
                   onClick={() => handleCollections(index)}
@@ -125,7 +130,7 @@ const NFTsFilters = () => {
                   <img src={collection.avatar} alt={collection.name} />
                 )}
                 <span>{collection.name}</span>
-                <button title="Remove" onClick={() => handleCollections(index)}>
+                <button type="button" title="Remove" onClick={() => handleCollections(index)}>
                   &#10006;
                 </button>
               </div>

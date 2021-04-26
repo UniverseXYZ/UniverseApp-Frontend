@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react';
-import { Redirect, useLocation } from 'react-router';
+import React, { useContext, useEffect } from 'react';
+import { Redirect, useLocation } from 'react-router-dom';
 import './Artist.scss';
 import ArtistDetails from '../../components/artist/ArtistDetails';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs';

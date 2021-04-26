@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import AppContext from '../../ContextAPI';
 import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';

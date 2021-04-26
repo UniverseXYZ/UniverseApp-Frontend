@@ -5,6 +5,7 @@
 
     .empty__nfts {
         width: 100%;
+        margin-bottom: 200px;
         h1.title {
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
@@ -13,6 +14,12 @@
             text-align: center;
             color: $black;
             margin-bottom: 130px;
+            @include lg {
+                margin-bottom: 100px;
+            }
+            @include sm {
+                margin-bottom: 75px;
+            }
         }
         h3 {
             font-family: $spaceGroteskFont;
@@ -20,7 +27,7 @@
             font-weight: bold;
             font-size: 22px;
             text-align: center;
-            color: rgba(0, 0, 0, 0.6);
+            color: $black;
         }
         p.desc {
             font-family: $spaceGroteskFont;
@@ -48,6 +55,9 @@
             transition: 50ms ease-in;
             &:hover {
                 background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+            }
+            @include sm {
+                width: 100%;
             }
         }
     }
@@ -209,7 +219,7 @@
                         padding: 24px 20px;
     
                         .filter__by__collection__label {
-                            label {
+                            span {
                                 font-family: $spaceGroteskFont;
                                 font-style: normal;
                                 font-weight: bold;
@@ -341,7 +351,7 @@
                     &__label {
                         margin-bottom: 15px;
 
-                        label {
+                        span {
                             font-family: $sharpGroteskSemiBoldFont;
                             font-style: normal;
                             font-weight: 600;
@@ -398,7 +408,7 @@
                     &__label {
                         margin-bottom: 15px;
 
-                        label {
+                        span {
                             font-family: $sharpGroteskSemiBoldFont;
                             font-style: normal;
                             font-weight: 600;

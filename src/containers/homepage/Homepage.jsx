@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import About from '../../components/homepage/About';
 import BuyUniverseNFTs from '../../components/homepage/BuyUniverseNFTs';
 import './Homepage.scss';

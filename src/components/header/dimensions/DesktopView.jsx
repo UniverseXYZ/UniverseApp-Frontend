@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -31,6 +31,7 @@ const DesktopView = ({
       <ul>
         <li>
           <button
+            type="button"
             className="menu-li"
             onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}
           >
@@ -40,6 +41,7 @@ const DesktopView = ({
           <div className="dropdown minting-drop">
             <div className="dropdown__body">
               <button
+                type="button"
                 onClick={() => {
                   history.push('/minting-and-auctions/about');
                   setIsMintingDropdownOpened(false);
@@ -48,6 +50,7 @@ const DesktopView = ({
                 About
               </button>
               <button
+                type="button"
                 className="active-auctions"
                 onClick={() => {
                   history.push('/minting-and-auctions/marketplace/active-auctions');
@@ -57,6 +60,7 @@ const DesktopView = ({
                 Active auctions
               </button>
               <button
+                type="button"
                 onClick={() => {
                   history.push('/minting-and-auctions/marketplace/future-auctions');
                   setIsMintingDropdownOpened(false);
@@ -69,6 +73,7 @@ const DesktopView = ({
         </li>
         <li>
           <button
+            type="button"
             className="menu-li"
             onClick={() => setIsAboutDropdownOpened(!isAboutDropdownOpened)}
           >
@@ -78,6 +83,7 @@ const DesktopView = ({
           <div className="dropdown minting-drop">
             <div className="dropdown__body">
               <button
+                type="button"
                 onClick={() => {
                   history.push('/');
                   setIsAboutDropdownOpened(false);
@@ -86,6 +92,7 @@ const DesktopView = ({
                 Whitepaper
               </button>
               <button
+                type="button"
                 className="team"
                 onClick={() => {
                   history.push('/');
@@ -100,6 +107,7 @@ const DesktopView = ({
         {isWalletConnected ? (
           <li>
             <button
+              type="button"
               className="menu-li myAccount"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
@@ -148,6 +156,7 @@ const DesktopView = ({
               </div>
               <div className="dropdown__body">
                 <button
+                  type="button"
                   onClick={() => {
                     history.push('/my-account');
                     setIsAccountDropdownOpened(false);
@@ -156,6 +165,7 @@ const DesktopView = ({
                   My profile
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     history.push('/my-nfts');
                     setIsAccountDropdownOpened(false);
@@ -164,6 +174,7 @@ const DesktopView = ({
                   My NFTs
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     history.push('/my-auctions');
                     setIsAccountDropdownOpened(false);
@@ -172,6 +183,7 @@ const DesktopView = ({
                   My auctions
                 </button>
                 <button
+                  type="button"
                   className="signOut"
                   onClick={() => {
                     setIsAccountDropdownOpened(false);
@@ -185,7 +197,13 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup trigger={<button className="sign__in">Sign In</button>}>
+            <Popup
+              trigger={
+                <button type="button" className="sign__in">
+                  Sign In
+                </button>
+              }
+            >
               {(close) => (
                 <SelectWalletPopup
                   close={close}
@@ -205,12 +223,12 @@ const DesktopView = ({
 };
 
 DesktopView.propTypes = {
-  ethereumAddress: PropTypes.string,
-  handleConnectWallet: PropTypes.func,
-  showInstallWalletPopup: PropTypes.bool,
-  setShowInstallWalletPopup: PropTypes.func,
-  selectedWallet: PropTypes.string,
-  setSelectedWallet: PropTypes.func,
+  ethereumAddress: PropTypes.string.isRequired,
+  handleConnectWallet: PropTypes.func.isRequired,
+  showInstallWalletPopup: PropTypes.bool.isRequired,
+  setShowInstallWalletPopup: PropTypes.func.isRequired,
+  selectedWallet: PropTypes.string.isRequired,
+  setSelectedWallet: PropTypes.func.isRequired,
 };
 
 export default DesktopView;

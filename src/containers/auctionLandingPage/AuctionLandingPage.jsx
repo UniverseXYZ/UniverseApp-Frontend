@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Redirect, useLocation } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { Redirect, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import './AuctionLandingPage.scss';

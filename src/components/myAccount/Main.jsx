@@ -1,4 +1,4 @@
-import { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { Animated } from 'react-animated-css';
 import Button from '../button/Button';
 import Input from '../input/Input';

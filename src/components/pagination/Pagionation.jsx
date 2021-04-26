@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import leftArrow from '../../assets/images/left-arrow.svg';
@@ -53,9 +53,9 @@ const Pagination = ({ data, perPage, setOffset }) => {
 };
 
 Pagination.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  setOffset: PropTypes.func,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  setOffset: PropTypes.func.isRequired,
 };
 
 export default Pagination;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
@@ -97,7 +97,13 @@ const PlaceBidPopup = ({
 
   return (
     <div className="place__bid__popup">
-      <img className="close__popup" onClick={onClose} src={closeIcon} alt="Close" />
+      <img
+        className="close__popup"
+        onClick={onClose}
+        src={closeIcon}
+        alt="Close"
+        aria-hidden="true"
+      />
       {!showBidSubmitted ? (
         <>
           <h1 className="title">Place a bid</h1>
@@ -105,7 +111,7 @@ const PlaceBidPopup = ({
             You are about to place a bid for <b>{onAuctionTitle}</b> by <b>{onArtistName}</b>
           </p>
           <div className="bid__form">
-            <label htmlFor="your-bid">Your bid</label>
+            <span>Your bid</span>
             <input
               id="your-bid"
               type="text"
@@ -236,12 +242,12 @@ const PlaceBidPopup = ({
 };
 
 PlaceBidPopup.propTypes = {
-  onClose: PropTypes.func,
-  onAuctionId: PropTypes.number,
-  onAuctionTitle: PropTypes.string,
-  onArtistName: PropTypes.string,
-  onBidders: PropTypes.array,
-  onSetBidders: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  onAuctionId: PropTypes.number.isRequired,
+  onAuctionTitle: PropTypes.string.isRequired,
+  onArtistName: PropTypes.string.isRequired,
+  onBidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  onSetBidders: PropTypes.func.isRequired,
 };
 
 export default PlaceBidPopup;

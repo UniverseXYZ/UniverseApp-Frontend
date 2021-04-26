@@ -1,3 +1,4 @@
+import React from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import blockOne from '../../../assets/images/about-page-block1.png';
 import blockTwo from '../../../assets/images/about-page-block2.png';

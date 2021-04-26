@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
@@ -249,6 +249,7 @@ const CreateNftCol = (props) => {
           setShowCollectible(false);
           setCollectionNFTsID(null);
         }}
+        aria-hidden="true"
       >
         <img src={arrow} alt="back" />
         <span>Create NFT COLLECTION</span>
@@ -286,6 +287,7 @@ const CreateNftCol = (props) => {
                           {previewImage.type === 'video/mp4' && (
                             <video>
                               <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                              <track kind="captions" {...props} />
                               Your browser does not support the video tag.
                             </video>
                           )}
@@ -310,16 +312,19 @@ const CreateNftCol = (props) => {
                             src={sizeDownIcon}
                             onClick={close}
                             alt="Size Down"
+                            aria-hidden="true"
                           />
                           {previewImage.type === 'video/mp4' && (
                             <video controls autoPlay>
                               <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                              <track kind="captions" {...props} />
                               Your browser does not support the video tag.
                             </video>
                           )}
                           {previewImage.type === 'audio/mpeg' && (
                             <audio controls autoPlay>
                               <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
+                              <track kind="captions" {...props} />
                               Your browser does not support the audio element.
                             </audio>
                           )}
@@ -363,7 +368,12 @@ const CreateNftCol = (props) => {
             </div>
             <div className="nft-coll-editions">
               <div className="nft-coll-editions-header">
-                <h5 onMouseOver={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
+                <h5
+                  onMouseOver={() => setHideIcon(true)}
+                  onFocus={() => setHideIcon(true)}
+                  onMouseLeave={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon(false)}
+                >
                   Number of editions
                   <img src={infoIcon} alt="Info Icon" />
                 </h5>
@@ -388,7 +398,12 @@ const CreateNftCol = (props) => {
             </div>
             <div className="nft-coll-properties">
               <div className="nft-coll-properties-header">
-                <h4 onMouseOver={() => setHideIcon1(true)} onMouseLeave={() => setHideIcon1(false)}>
+                <h4
+                  onMouseOver={() => setHideIcon1(true)}
+                  onFocus={() => setHideIcon1(true)}
+                  onMouseLeave={() => setHideIcon1(false)}
+                  onBlur={() => setHideIcon1(false)}
+                >
                   Properties (optional) <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideIcon1 && (
@@ -423,7 +438,12 @@ const CreateNftCol = (props) => {
                       onChange={(e) => propertyChangesValue(i, e.target.value)}
                     />
                   </div>
-                  <img src={delateIcon} alt="Delete" onClick={() => removeProperty(i)} />
+                  <img
+                    src={delateIcon}
+                    alt="Delete"
+                    onClick={() => removeProperty(i)}
+                    aria-hidden="true"
+                  />
                   <Button className="light-border-button" onClick={() => removeProperty(i)}>
                     Remove
                   </Button>
@@ -431,7 +451,7 @@ const CreateNftCol = (props) => {
               ))}
               <div className="property-add">
                 <h5>
-                  <img src={addIcon} alt="Add" onClick={() => addProperty()} />
+                  <img src={addIcon} alt="Add" onClick={() => addProperty()} aria-hidden="true" />
                   Add Property
                 </h5>
               </div>
@@ -460,13 +480,13 @@ const CreateNftCol = (props) => {
 };
 
 CreateNftCol.propTypes = {
-  setShowCollectible: PropTypes.func,
-  collectionName: PropTypes.string,
-  coverImage: PropTypes.object,
-  collectionNFTs: PropTypes.array,
-  setCollectionNFTs: PropTypes.func,
-  collectionNFTsID: PropTypes.object,
-  setCollectionNFTsID: PropTypes.func,
+  setShowCollectible: PropTypes.func.isRequired,
+  collectionName: PropTypes.string.isRequired,
+  coverImage: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  collectionNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setCollectionNFTs: PropTypes.func.isRequired,
+  collectionNFTsID: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setCollectionNFTsID: PropTypes.func.isRequired,
 };
 
 export default CreateNftCol;

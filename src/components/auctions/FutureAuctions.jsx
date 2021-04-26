@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { Animated } from 'react-animated-css';
-import { useState } from 'react';
 import Moment from 'react-moment';
 import moment from 'moment';
 import Button from '../button/Button';
@@ -39,7 +39,7 @@ const FutureAuctions = () => {
   return (
     <div className="future-auctions">
       <div className="input-search">
-        <button onClick={clearInput} className="clear-input">
+        <button type="button" onClick={clearInput} className="clear-input">
           Clear
         </button>
         <img src={searchIcon} alt="search" />
@@ -66,12 +66,18 @@ const FutureAuctions = () => {
                 {/* <Button className="light-button" disabled>Set up auction</Button> */}
                 <div className="line" />
                 {shownActionId === futureAuction.id ? (
-                  <img src={arrowUp} onClick={() => setshownActionId(null)} alt="Arrow up" />
+                  <img
+                    src={arrowUp}
+                    onClick={() => setshownActionId(null)}
+                    alt="Arrow up"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <img
                     src={arrowDown}
                     onClick={() => setshownActionId(futureAuction.id)}
                     alt="Arrow down"
+                    aria-hidden="true"
                   />
                 )}
               </div>
@@ -89,7 +95,9 @@ const FutureAuctions = () => {
               >
                 <p
                   onMouseOver={() => setHideLaunchIcon(futureAuction.id)}
+                  onFocus={() => setHideLaunchIcon(futureAuction.id)}
                   onMouseLeave={() => setHideLaunchIcon(0)}
+                  onBlur={() => setHideLaunchIcon(0)}
                 >
                   Launch date:{' '}
                   <b>
@@ -117,7 +125,9 @@ const FutureAuctions = () => {
               >
                 <p
                   onMouseOver={() => setHideEndIcon(futureAuction.id)}
+                  onFocus={() => setHideEndIcon(futureAuction.id)}
                   onMouseLeave={() => setHideEndIcon(0)}
+                  onBlur={() => setHideEndIcon(0)}
                 >
                   End date:{' '}
                   <b>

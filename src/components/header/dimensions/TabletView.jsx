@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link, useHistory } from 'react-router-dom';
@@ -57,7 +57,7 @@ const TabletView = (props) => {
 
   return (
     <div className="tablet__nav">
-      <button className="hamburger" onClick={() => setShowMenu(!showMenu)}>
+      <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
         ) : (
@@ -74,6 +74,7 @@ const TabletView = (props) => {
               setShowMenu(false);
             }}
             alt="Account icon"
+            aria-hidden="true"
           />
           {isAccountDropdownOpened && (
             <Animated animationIn="fadeIn">
@@ -117,6 +118,7 @@ const TabletView = (props) => {
                 </div>
                 <div className="dropdown__body">
                   <button
+                    type="button"
                     onClick={() => {
                       history.push('/my-account');
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -125,6 +127,7 @@ const TabletView = (props) => {
                     My profile
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       history.push('/my-nfts');
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -133,6 +136,7 @@ const TabletView = (props) => {
                     My NTFs
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       history.push('/my-auctions');
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -141,6 +145,7 @@ const TabletView = (props) => {
                     My auctions
                   </button>
                   <button
+                    type="button"
                     className="signOut"
                     onClick={() => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -210,7 +215,13 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li>
-                <Popup trigger={<button className="sign__in">Sign In</button>}>
+                <Popup
+                  trigger={
+                    <button type="button" className="sign__in">
+                      Sign In
+                    </button>
+                  }
+                >
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
@@ -232,14 +243,14 @@ const TabletView = (props) => {
 };
 
 TabletView.propTypes = {
-  ethereumAddress: PropTypes.string,
-  handleConnectWallet: PropTypes.func,
-  showInstallWalletPopup: PropTypes.bool,
-  setShowInstallWalletPopup: PropTypes.func,
-  selectedWallet: PropTypes.string,
-  setSelectedWallet: PropTypes.func,
-  showMenu: PropTypes.bool,
-  setShowMenu: PropTypes.func,
+  ethereumAddress: PropTypes.string.isRequired,
+  handleConnectWallet: PropTypes.func.isRequired,
+  showInstallWalletPopup: PropTypes.bool.isRequired,
+  setShowInstallWalletPopup: PropTypes.func.isRequired,
+  selectedWallet: PropTypes.string.isRequired,
+  setSelectedWallet: PropTypes.func.isRequired,
+  showMenu: PropTypes.bool.isRequired,
+  setShowMenu: PropTypes.func.isRequired,
 };
 
 export default TabletView;

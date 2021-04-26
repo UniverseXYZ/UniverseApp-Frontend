@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
 import PropTypes from 'prop-types';
@@ -27,7 +27,7 @@ const PastAuctionsList = ({ data, perPage, offset }) => {
                 <div className="artist__details">
                   <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
-                  <button>{auction.artist.name}</button>
+                  <button type="button">{auction.artist.name}</button>
                 </div>
               </div>
               <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
@@ -121,9 +121,9 @@ const PastAuctionsList = ({ data, perPage, offset }) => {
 };
 
 PastAuctionsList.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  offset: PropTypes.number,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
 export default PastAuctionsList;

@@ -1,4 +1,4 @@
-import { React, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
@@ -148,7 +148,7 @@ const ArtistDetails = ({ onArtist }) => {
 };
 
 ArtistDetails.propTypes = {
-  onArtist: PropTypes.object,
+  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default ArtistDetails;

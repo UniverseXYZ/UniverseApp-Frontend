@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
-import { useLocation } from 'react-router';
+import React, { useEffect, useState, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AppContext from '../../ContextAPI';
 import mp3Icon from '../../assets/images/mp3-icon.png';
@@ -52,7 +52,7 @@ const Lists = ({ data, perPage, offset }) => {
           }`}
           key={nft.id}
         >
-          <div className="nft__box__image" onClick={() => handleSavedNfts(nft)}>
+          <div className="nft__box__image" onClick={() => handleSavedNfts(nft)} aria-hidden="true">
             {isCreatingAction && (
               <>
                 {selectedNFTIds.includes(nft.id) &&
@@ -70,9 +70,12 @@ const Lists = ({ data, perPage, offset }) => {
             {nft.previewImage.type === 'video/mp4' && (
               <video
                 onMouseOver={(event) => event.target.play()}
+                onFocus={(event) => event.target.play()}
                 onMouseOut={(event) => event.target.pause()}
+                onBlur={(event) => event.target.pause()}
               >
                 <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                <track kind="captions" {...props} />
                 Your browser does not support the video tag.
               </video>
             )}
@@ -108,7 +111,7 @@ const Lists = ({ data, perPage, offset }) => {
                         <li disabled>Choose edition number</li>
                         {nft.generatedEditions.map((edition) => (
                           <li key={edition}>
-                            <label className="edition-container">
+                            <label htmlFor={edition} className="edition-container">
                               {`#${edition}`}
                               <input type="checkbox" id={edition} />
                               <span className="checkmark" />
@@ -202,9 +205,9 @@ const Lists = ({ data, perPage, offset }) => {
 };
 
 Lists.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  offset: PropTypes.number,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
 export default Lists;

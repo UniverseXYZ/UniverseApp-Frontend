@@ -1,3 +1,4 @@
+import React from 'react';
 import TimKangImg from '../../../assets/images/Tim-Kang.png';
 import TylerWardImg from '../../../assets/images/Tyler-Ward.png';
 import TroyMurrayImg from '../../../assets/images/Troy-Murray.png';
@@ -31,7 +32,7 @@ const OurTeam = () => (
         </div>
       </div>
       <div className="see__full__team">
-        <button>See the full team</button>
+        <button type="button">See the full team</button>
       </div>
     </div>
   </div>

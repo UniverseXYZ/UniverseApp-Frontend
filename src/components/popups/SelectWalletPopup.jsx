@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import metamaskLogo from '../../assets/images/metamask.svg';
@@ -20,28 +21,34 @@ const SelectWalletPopup = (props) => {
 
   return (
     <div className="select_wallet__popup">
-      <img className="close__popup" onClick={close} src={closeIcon} alt="Close" />
+      <img
+        className="close__popup"
+        onClick={close}
+        src={closeIcon}
+        alt="Close"
+        aria-hidden="true"
+      />
       {!showInstallWalletPopup ? (
         <>
           <h1 className="title">Select Wallet</h1>
           <p className="desc">Please pick a wallet to connect to Universe</p>
           <div className="wallets">
-            <button onClick={() => handleConnectWallet('Metamask')}>
+            <button type="button" onClick={() => handleConnectWallet('Metamask')}>
               <img src={metamaskLogo} alt="Metamask" />
             </button>
-            <button onClick={() => handleConnectWallet('Ledger')}>
+            <button type="button" onClick={() => handleConnectWallet('Ledger')}>
               <img src={ledgerLogo} alt="Ledger" />
             </button>
-            <button onClick={() => handleConnectWallet('Keystore')}>
+            <button type="button" onClick={() => handleConnectWallet('Keystore')}>
               <img src={keystoreLogo} alt="Keystore" />
             </button>
-            <button onClick={() => handleConnectWallet('Trezor')}>
+            <button type="button" onClick={() => handleConnectWallet('Trezor')}>
               <img src={trezorLogo} alt="Trezor" />
             </button>
-            <button onClick={() => handleConnectWallet('Coinbase')}>
+            <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
               <img src={coinbaseLogo} alt="Coinbase" />
             </button>
-            <button onClick={() => handleConnectWallet('WalletConnect')}>
+            <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>
               <img src={walletConnectLogo} alt="WalletConnect" />
             </button>
           </div>
@@ -75,12 +82,12 @@ const SelectWalletPopup = (props) => {
 };
 
 SelectWalletPopup.propTypes = {
-  close: PropTypes.func,
-  handleConnectWallet: PropTypes.func,
-  showInstallWalletPopup: PropTypes.bool,
-  setShowInstallWalletPopup: PropTypes.func,
-  selectedWallet: PropTypes.bool,
-  setSelectedWallet: PropTypes.func,
+  close: PropTypes.func.isRequired,
+  handleConnectWallet: PropTypes.func.isRequired,
+  showInstallWalletPopup: PropTypes.bool.isRequired,
+  setShowInstallWalletPopup: PropTypes.func.isRequired,
+  selectedWallet: PropTypes.bool.isRequired,
+  setSelectedWallet: PropTypes.func.isRequired,
 };
 
 export default SelectWalletPopup;

@@ -2,19 +2,6 @@
     "extends": ["airbnb", "prettier"],
     "parser": "babel-eslint",
     "rules": {
-        "react/require-default-props": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
-        "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "react/button-has-type": "off",
-        "react/forbid-prop-types": "off",
-        "import/no-extraneous-dependencies": "off",
-        "react/react-in-jsx-scope": "off",
-        "no-return-assign": "off",
-        "no-param-reassign": "off",
-        "jsx-a11y/label-has-associated-control": "off",
-        "jsx-a11y/control-has-associated-label": "off",
-        "jsx-a11y/media-has-caption": "off",
-        "jsx-a11y/mouse-events-have-key-events": "off",
         "no-nested-ternary": "off",
         "no-unused-expressions": "off",
         "react/jsx-props-no-spreading": "off",
@@ -32,6 +19,12 @@
         "no-alert": "off",
         "no-console": "off",
         "no-undef": "off",
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ],
         "react/jsx-filename-extension": [
         1,
         {

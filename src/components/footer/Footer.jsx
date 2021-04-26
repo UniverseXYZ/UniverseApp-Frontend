@@ -1,3 +1,4 @@
+import React from 'react';
 import './Footer.scss';
 import Logo from '../../assets/images/light.svg';
 import twitter from '../../assets/images/Twitter.svg';

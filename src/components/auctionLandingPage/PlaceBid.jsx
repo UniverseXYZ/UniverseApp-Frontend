@@ -14,7 +14,7 @@ const PlaceBid = ({ auction, bidders, setBidders }) => (
       <div className="place__bid__btn">
         <Popup
           trigger={
-            <button>
+            <button type="button">
               <span>Place a bid</span>
               <img src={gradientArrow} alt="Arrow" />
             </button>
@@ -37,9 +37,9 @@ const PlaceBid = ({ auction, bidders, setBidders }) => (
 );
 
 PlaceBid.propTypes = {
-  auction: PropTypes.object,
-  bidders: PropTypes.array,
-  setBidders: PropTypes.func,
+  auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setBidders: PropTypes.func.isRequired,
 };
 
 export default PlaceBid;

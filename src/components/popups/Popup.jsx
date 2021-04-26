@@ -7,14 +7,14 @@ import './PopupStyle.scss';
 export default ({ onClose }) => (
   <Popup
     trigger={
-      <button className="modal-close">
+      <button type="button" className="modal-close">
         <img src={closeIcon} alt="" />{' '}
       </button>
     }
   >
     {(close) => (
       <div className="popup-div modal-close-popup">
-        <button className="popup-close" onClick={close}>
+        <button type="button" className="popup-close" onClick={close}>
           <img src={closeIcon} alt="" />
         </button>
         <div className="popup-title">

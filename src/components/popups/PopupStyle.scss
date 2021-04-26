@@ -406,7 +406,7 @@
   }
   .bid__form {
     position: relative;
-    label {
+    span {
       width: 100%;
       font-family: $spaceGroteskFont;
       font-style: normal;
@@ -824,7 +824,7 @@
         gap: 40px;
         margin-bottom: 25px;
         .item {
-          label {
+          span {
             display: block;
             font-family: $spaceGroteskFont;
             font-style: normal;

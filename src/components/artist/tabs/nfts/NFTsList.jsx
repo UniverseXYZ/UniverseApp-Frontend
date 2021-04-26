@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Skeleton from 'react-loading-skeleton';
@@ -28,9 +28,12 @@ const NFTsList = ({ data, perPage, offset }) => {
                 {nft.previewImage.type === 'video/mp4' && (
                   <video
                     onMouseOver={(event) => event.target.play()}
+                    onFocus={(event) => event.target.play()}
                     onMouseOut={(event) => event.target.pause()}
+                    onBlur={(event) => event.target.pause()}
                   >
                     <source src={nft.previewImage.url} type="video/mp4" />
+                    <track kind="captions" />
                     Your browser does not support the video tag.
                   </video>
                 )}
@@ -147,9 +150,9 @@ const NFTsList = ({ data, perPage, offset }) => {
 };
 
 NFTsList.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  offset: PropTypes.number,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
 export default NFTsList;

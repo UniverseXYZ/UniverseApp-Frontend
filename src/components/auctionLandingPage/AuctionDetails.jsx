@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import Skeleton from 'react-loading-skeleton';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import Slider from 'react-slick';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
@@ -144,6 +144,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   setLoading(true);
                   history.push(`/${act.artist.name.split(' ')[1]}/${act.title}`, { id: act.id });
                 }}
+                aria-hidden="true"
               >
                 <div
                   className="carousel__auction"
@@ -203,6 +204,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   <img src={selectedAuction.artist.avatar} alt={selectedAuction.artist.name} />
                   <span>by</span>
                   <button
+                    type="button"
                     onClick={() =>
                       history.push(`/${selectedAuction.artist.name.split(' ')[1]}`, {
                         id: selectedAuction.artist.id,
@@ -215,7 +217,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 <div className="auction__ends__in">
                   {!selectedAuctionEnded ? (
                     <div className="auction__ends__in__label">
-                      <label>Auction ends in: </label>
+                      <span>Auction ends in: </span>
                       <div className="time">
                         <div className="days">{`${countdown.days}d`}</div>
                         <span>:</span>
@@ -259,7 +261,13 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 <div className="auction__details__box__top__bidders">
                   <div className="auction__details__box__top__bidders__header">
                     <h2 className="title">Top 10 bidders</h2>
-                    <Popup trigger={<button className="view__all__bids">View all bids</button>}>
+                    <Popup
+                      trigger={
+                        <button type="button" className="view__all__bids">
+                          View all bids
+                        </button>
+                      }
+                    >
                       {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
                     </Popup>
                   </div>
@@ -316,7 +324,13 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                       )}
                     </div>
                     <div className="place__bid">
-                      <Popup trigger={<button className="light-button">Place a bid</button>}>
+                      <Popup
+                        trigger={
+                          <button type="button" className="light-button">
+                            Place a bid
+                          </button>
+                        }
+                      >
                         {(close) => (
                           <PlaceBidPopup
                             onClose={close}
@@ -345,7 +359,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                           You can still buy individual NFTs from other sellers on NFT marketplaces.
                         </p>
                         <div className="view__rankings">
-                          <Popup trigger={<button>View rankings</button>}>
+                          <Popup trigger={<button type="button">View rankings</button>}>
                             {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
                           </Popup>
                         </div>
@@ -366,7 +380,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         NFTs by clicking the button below
                       </p>
                       <div className="view__rankings">
-                        <Popup trigger={<button>View rankings</button>}>
+                        <Popup trigger={<button type="button">View rankings</button>}>
                           {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
                         </Popup>
                       </div>
@@ -404,7 +418,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 <h2 className="title">
                   <Skeleton width={100} />
                 </h2>
-                <button className="view__all__bids">
+                <button type="button" className="view__all__bids">
                   <Skeleton width={100} />
                 </button>
               </div>
@@ -458,9 +472,9 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
 };
 
 AuctionDetails.propTypes = {
-  onAuction: PropTypes.object,
-  bidders: PropTypes.array,
-  setBidders: PropTypes.func,
+  onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setBidders: PropTypes.func.isRequired,
 };
 
 export default AuctionDetails;

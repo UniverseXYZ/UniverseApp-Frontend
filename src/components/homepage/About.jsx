@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import Lottie from 'react-lottie';
 import animationData from '../../utils/animations/cards_animation.json';
 import circleImg from '../../assets/images/circle.svg';
@@ -175,10 +175,16 @@ const About = () => {
                 infinitely.
               </p>
               <div className="subscribe__form">
-                <label htmlFor="subscribeInp">Subscribe to stay updated on the latest news</label>
+                <span htmlFor="subscribeInp">Subscribe to stay updated on the latest news</span>
                 <div className="form__group">
                   <input id="subscribeInp" type="email" placeholder="Enter your email" />
-                  <Popup trigger={<button className="light-button">Subscribe</button>}>
+                  <Popup
+                    trigger={
+                      <button type="button" className="light-button">
+                        Subscribe
+                      </button>
+                    }
+                  >
                     {(close) => <SubscribePopup close={close} />}
                   </Popup>
                 </div>

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
@@ -88,6 +88,7 @@ const Create = () => {
         onClick={() => {
           history.push('/reward-tiers');
         }}
+        aria-hidden="true"
       >
         <img src={arrow} alt="back" />
         <span>Reward tiers</span>
@@ -111,10 +112,12 @@ const Create = () => {
           />
 
           <div className="tier-info_icon">
-            <label
+            <span
               className="inp-label"
               onMouseOver={() => setHideIcon1(true)}
+              onFocus={() => setHideIcon1(true)}
               onMouseLeave={() => setHideIcon1(false)}
+              onBlur={() => setHideIcon1(false)}
             >
               <span>
                 Number of winners
@@ -127,7 +130,7 @@ const Create = () => {
                   </div>
                 </Animated>
               )}
-            </label>
+            </span>
           </div>
           <Input
             id="winners"
@@ -139,10 +142,12 @@ const Create = () => {
           />
 
           <div className="tier-info_icon">
-            <label
+            <span
               className="inp-label"
               onMouseOver={() => setHideIcon2(true)}
+              onFocus={() => setHideIcon2(true)}
               onMouseLeave={() => setHideIcon2(false)}
+              onBlur={() => setHideIcon2(false)}
             >
               <span>
                 NFTs per winner <img src={infoIcon} alt="Info Icon" />
@@ -154,7 +159,7 @@ const Create = () => {
                   </div>
                 </Animated>
               )}
-            </label>
+            </span>
           </div>
           <Input
             id="nftsPerWinner"
@@ -195,7 +200,9 @@ const Create = () => {
               src={infoIcon}
               alt="Info Icon"
               onMouseOver={() => setHideIcon(true)}
+              onFocus={() => setHideIcon(true)}
               onMouseLeave={() => setHideIcon(false)}
+              onBlur={() => setHideIcon(false)}
             />
           </div>
         </div>
