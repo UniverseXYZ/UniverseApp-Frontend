@@ -207,8 +207,8 @@
                 width: 167px;
               }
               @include sm {
-                width: 295px;
-                height: 295px;
+                width: 255px;
+                height: 255px;
               }
             }
             @include lg {
@@ -443,10 +443,11 @@
               }
               @include sm {
                 margin-right: 4px;
+                margin-bottom: 10px;
               }
             }
-            @include md {
-              // flex-wrap: wrap;
+            @include sm {
+              flex-wrap: wrap;
             }
           }
           .pick__color {
@@ -646,7 +647,18 @@
       justify-content: space-between;
 
       h3 {
-        margin-top: 0px;
+        font-family: $sharpGroteskMediumFont;
+        font-weight: 600;
+        font-size: 26px;
+        line-height: 140%;
+        letter-spacing: 0.2px;
+
+        @include lg {
+          font-size: 20px;
+          line-height: 130%;
+          letter-spacing: normal;
+          margin-bottom: 20px;
+        }
       }
       .about__artist__warning {
         display: flex;
