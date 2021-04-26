@@ -38,7 +38,7 @@ const AuctionSettings = () => {
 
   return (
     <div className="auction-settings container">
-      <div className="back-rew" onClick={() => history.push('/reward-tiers')}>
+      <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
         <img src={arrow} alt="back" />
         <span>My Auctions</span>
       </div>
