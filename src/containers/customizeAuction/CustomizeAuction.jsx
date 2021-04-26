@@ -24,7 +24,6 @@ const CustomizeAuction = () => {
         <h2>Customize Auction Landing Page</h2>
         <Button className="light-border-button">Preview</Button>
       </div>
-
       <DomainAndBranding />
       <RewardTiersAuction />
       <AboutArtistAuction />

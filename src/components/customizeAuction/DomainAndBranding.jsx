@@ -10,6 +10,9 @@ import backgroundDef from '../../assets/images/background.svg';
 const DomainAndBranding = () => {
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
+  const [blur, setBlur] = useState(false);
+  const [auctionHeadline, setAuctionHeadline] = useState('');
+  const [auctionLink, setAuctionLink] = useState('universe.xyz/3LAU/auction1');
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
@@ -26,7 +29,12 @@ const DomainAndBranding = () => {
         <div className="auction__headline">
           <div className="auction__headline__input">
             <h5>Auction headline</h5>
-            <Input type="text" placeholder="Enter the auction name" />
+            <Input
+              type="text"
+              placeholder="Enter the auction name"
+              value={auctionHeadline}
+              onChange={(e) => setAuctionHeadline(e.target.value)}
+            />
             <p className="error__text">"Auction headline" is not allowed to be empty</p>
           </div>
           <div className="upload__promo">
@@ -84,7 +92,11 @@ const DomainAndBranding = () => {
             <h5>
               Auction link <img src={infoIcon} alt="Info" />
             </h5>
-            <Input type="text" value="universe.xyz/3LAU/auction1" />
+            <Input
+              type="text"
+              value={auctionLink}
+              onChange={(e) => setAuctionLink(e.target.value)}
+            />
             <p className="error__text">"Auction link" is not allowed to be empty</p>
           </div>
           <div className="upload__background">
@@ -115,6 +127,7 @@ const DomainAndBranding = () => {
                     className="toggle-switch-checkbox"
                     name="toggleSwitch"
                     id="toggleSwitch"
+                    onChange={() => setBlur(!blur)}
                   />
                   <label className="toggle-switch-label" htmlFor="toggleSwitch">
                     <span className="toggle-switch-inner" />
