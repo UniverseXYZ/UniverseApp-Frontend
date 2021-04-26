@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
@@ -50,15 +50,27 @@ const RewardTiers = () => {
                     <img className="auctionIcon" src={icon} alt="auction" />
                     <h3>{tier.name}</h3>
                   </div>
-                  <div className="tier-winners">
-                    <h4>
-                      Winners:&nbsp;<b>{tier.winners}</b>
-                    </h4>
-                  </div>
-                  <div className="tier-perwinners">
-                    <h4>
-                      NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
-                    </h4>
+                  <div className="winners__edit__btn">
+                    <div className="winners">
+                      <div className="tier-winners">
+                        <h4>
+                          Winners:&nbsp;<b>{tier.winners}</b>
+                        </h4>
+                      </div>
+                      <div className="tier-perwinners">
+                        <h4>
+                          NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
+                        </h4>
+                      </div>
+                    </div>
+                    <Button
+                      className="light-border-button"
+                      onClick={() => {
+                        history.push('/create-tiers', tier.id);
+                      }}
+                    >
+                      Edit <img src={pencil} alt="edit-icon" />
+                    </Button>
                   </div>
                 </div>
                 <div className="edit-show">
@@ -83,7 +95,7 @@ const RewardTiers = () => {
                     ) : (
                       <img
                         src={arrowDown}
-                        alt="Arrow down"
+                        alt="Arrow Down"
                         onClick={() => setShownActionId(tier.id)}
                         aria-hidden="true"
                       />
@@ -178,6 +190,21 @@ const RewardTiers = () => {
           <div className="create-rew-text">
             <p>Create reward tier</p>
           </div>
+        </div>
+      </div>
+      ))
+      <div
+        className="create-rew-tier"
+        onClick={() => {
+          history.push('/create-tiers');
+        }}
+        aria-hidden="true"
+      >
+        <div className="plus-icon">
+          <img src={union} alt="create" />
+        </div>
+        <div className="create-rew-text">
+          <p>Create reward tier</p>
         </div>
       </div>
     </div>
