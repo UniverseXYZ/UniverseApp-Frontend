@@ -1,5 +1,7 @@
 import { utils } from 'ethers';
 
+const ETH_DEFAULT_ADDRESS = '0x0000000000000000000000000000000000000000';
+
 export const placeETHBid = async (auctionFactoryContract, onAuctionId, yourBid) => {
   const bidTx = await auctionFactoryContract.ethBid(onAuctionId, { value: utils.parseEther(yourBid) });
   return await bidTx.wait();
@@ -12,7 +14,7 @@ export const createAuction = async (
   resetTimer,
   numberOfSlots,
   supportWhiteList,
-  assetAddress = '0x0000000000000000000000000000000000000000'
+  assetAddress = ETH_DEFAULT_ADDRESS
 ) => {
   const createAuctionTx = await auctionFactoryContract(
     startBlockNumber,
@@ -31,11 +33,11 @@ export const mintSingleERC721 = async (universeERC721Contract, address, tokenURI
   const receipt = await mintTx.wait();
   for (const event of receipt.events) {
     if (event.event !== 'Transfer') {
-      continue
+      continue;
     }
     return event.args.tokenId.toString();
   }
-}
+};
 
 export const mintMultipleERC721 = async (universeERC721Contract, address, tokenURIs) => {
   const tokenIds = [];
@@ -44,7 +46,7 @@ export const mintMultipleERC721 = async (universeERC721Contract, address, tokenU
     tokenIds.push(tokenId);
   }
   return tokenIds;
-}
+};
 
 export const fetchUserNfts = async (erc721Contract, ownerAddress) => {
   const nftBalance = await erc721Contract.balanceOf(ownerAddress);
@@ -54,4 +56,24 @@ export const fetchUserNfts = async (erc721Contract, ownerAddress) => {
     userNftIds.push(parseInt(tokenId.toNumber()));
   }
   return userNftIds;
-}
+};
+
+export const whitelistAddresses = async (auctionFactoryContract, addresses) => {
+  const whitelistAddressesTx = await auctionFactoryContract.whitelistMultipleAddresses(addresses);
+  return await whitelistAddressesTx.wait();
+};
+
+export const setRoyaltyFeeMantissa = async (auctionFactoryContract, fee) => {
+  const setRoyaltyFeeMantissaTx = await auctionFactoryContract.setRoyaltyFeeMantissa(utils.parseEther(fee));
+  return await setRoyaltyFeeMantissaTx.wait();
+};
+
+export const withdrawETH = async (auctionFactoryContract, onAuctionId) => {
+  const withdrawETHTx = await auctionFactoryContract.withdrawEthBid(onAuctionId);
+  return await withdrawETHTx.wait();
+};
+
+export const withdrawRoyalties = async (auctionFactoryContract, assetAddress = ETH_DEFAULT_ADDRESS, to) => {
+  const withdrawETHTx = await auctionFactoryContract.withdrawRoyalties(assetAddress, to);
+  return await withdrawETHTx.wait();
+};
