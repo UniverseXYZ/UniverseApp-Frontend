@@ -5,7 +5,7 @@ import Button from '../button/Button';
 import closeIcon from '../../assets/images/cross.svg';
 import './PopupStyle.scss';
 
-const MainPopup = ({ onClose }) => {
+const PopupComponent = ({ onClose }) => (
   <Popup
     trigger={
       <button type="button" className="modal-close">
@@ -38,11 +38,11 @@ const MainPopup = ({ onClose }) => {
         </div>
       </div>
     )}
-  </Popup>;
-};
+  </Popup>
+);
 
-MainPopup.propTypes = {
+PopupComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default MainPopup;
+export default PopupComponent;

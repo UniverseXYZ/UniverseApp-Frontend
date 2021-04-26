@@ -106,7 +106,7 @@ const Create = () => {
             id="name"
             error={isValidFields.name ? undefined : 'Tier name is required!'}
             label="Tier name"
-            class="inp"
+            className="inp"
             value={values.name}
             onChange={handleChange}
           />
@@ -136,7 +136,7 @@ const Create = () => {
             id="winners"
             type="number"
             error={isValidFields.winners ? undefined : 'Number of winners is required!'}
-            class="inp"
+            className="inp"
             value={values.winners}
             onChange={handleChange}
           />
@@ -165,7 +165,7 @@ const Create = () => {
             id="nftsPerWinner"
             type="number"
             error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'}
-            class="inp"
+            className="inp"
             value={values.nftsPerWinner}
             onChange={handleChange}
           />
