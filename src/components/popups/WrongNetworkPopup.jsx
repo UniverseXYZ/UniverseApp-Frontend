@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import closeIcon from '../../assets/images/close-menu.svg';
@@ -5,7 +6,7 @@ import wrongNetworkIcon from '../../assets/images/wrong-network.svg';
 
 const WrongNetworkPopup = ({ close }) => (
   <div className="wrong__network__popup">
-    <img className="close__popup" onClick={close} src={closeIcon} alt="Close" />
+    <img className="close__popup" onClick={close} src={closeIcon} alt="Close" aria-hidden="true" />
     <img src={wrongNetworkIcon} alt="Wrong Network" />
     <h1 className="title">Wrong network</h1>
     <p className="desc">
@@ -20,7 +21,7 @@ const WrongNetworkPopup = ({ close }) => (
 );
 
 WrongNetworkPopup.propTypes = {
-  close: PropTypes.func,
+  close: PropTypes.func.isRequired,
 };
 
 export default WrongNetworkPopup;

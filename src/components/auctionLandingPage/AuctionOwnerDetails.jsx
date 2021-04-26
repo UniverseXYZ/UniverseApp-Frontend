@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Skeleton from 'react-loading-skeleton';
@@ -67,7 +67,7 @@ const AuctionOwnerDetails = ({ artist }) => {
 };
 
 AuctionOwnerDetails.propTypes = {
-  artist: PropTypes.object,
+  artist: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default AuctionOwnerDetails;

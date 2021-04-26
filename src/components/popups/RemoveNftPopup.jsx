@@ -29,7 +29,7 @@ const RemovePopup = ({
 
   return (
     <div className="popup-div remove-popup">
-      <button className="popup-close" onClick={close}>
+      <button type="button" className="popup-close" onClick={close}>
         <img src={closeIcon} alt="" />
       </button>
       <div className="popup-title">
@@ -53,12 +53,12 @@ const RemovePopup = ({
 };
 
 RemovePopup.propTypes = {
-  close: PropTypes.func,
-  nftID: PropTypes.number,
-  removedItemName: PropTypes.string,
-  removeFrom: PropTypes.string,
-  collectionNFTs: PropTypes.array,
-  setCollectionNFTs: PropTypes.func,
+  close: PropTypes.func.isRequired,
+  nftID: PropTypes.number.isRequired,
+  removedItemName: PropTypes.string.isRequired,
+  removeFrom: PropTypes.string.isRequired,
+  collectionNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setCollectionNFTs: PropTypes.func.isRequired,
 };
 
 export default RemovePopup;

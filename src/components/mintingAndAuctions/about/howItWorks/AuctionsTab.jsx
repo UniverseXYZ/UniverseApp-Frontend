@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import auctionsAccordionOne from '../../../../assets/images/auctions-accordion1.png';
 import auctionsAccordionTwo from '../../../../assets/images/auctions-accordion2.png';
 import auctionsAccordionThree from '../../../../assets/images/auctions-accordion3.png';
@@ -16,6 +16,7 @@ const AuctionsTab = () => {
       <div
         className="accordion__item"
         onClick={() => setIsFirstAccordionOpened(!isFirstAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">1. Set Up Reward Tiers</h2>
@@ -38,6 +39,7 @@ const AuctionsTab = () => {
       <div
         className="accordion__item"
         onClick={() => setIsSecondAccordionOpened(!isSecondAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">2. Mint NFT Collectibles and Collections</h2>
@@ -59,6 +61,7 @@ const AuctionsTab = () => {
       <div
         className="accordion__item"
         onClick={() => setIsThirdAccordionOpened(!isThirdAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">3. Create Universe Auction</h2>
@@ -79,6 +82,7 @@ const AuctionsTab = () => {
       <div
         className="accordion__item last"
         onClick={() => setIsFourthAccordionOpened(!isFourthAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">4. Customize Auction Landing Page</h2>

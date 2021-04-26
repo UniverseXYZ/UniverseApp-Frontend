@@ -1,7 +1,6 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import AppContext from '../../../ContextAPI';
@@ -43,9 +42,11 @@ const MobileView = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    showMenu
-      ? document.body.classList.add('no__scroll')
-      : document.body.classList.remove('no__scroll');
+    if (showMenu) {
+      document.body.classList.add('no__scroll');
+    } else {
+      document.body.classList.remove('no__scroll');
+    }
   }, [showMenu]);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const MobileView = (props) => {
 
   return (
     <div className="mobile__nav">
-      <button className="hamburger" onClick={() => setShowMenu(!showMenu)}>
+      <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
         ) : (
@@ -82,6 +83,7 @@ const MobileView = (props) => {
               setShowMenu(false);
             }}
             alt="Account icon"
+            aria-hidden="true"
           />
           {isAccountDropdownOpened && (
             <Animated animationIn="fadeIn">
@@ -125,6 +127,7 @@ const MobileView = (props) => {
                 </div>
                 <div className="dropdown__body">
                   <button
+                    type="button"
                     onClick={() => {
                       history.push('/my-account');
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -133,6 +136,7 @@ const MobileView = (props) => {
                     My profile
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       history.push('/my-nfts');
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -141,6 +145,7 @@ const MobileView = (props) => {
                     My NFTs
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       history.push('/my-auctions');
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -149,6 +154,7 @@ const MobileView = (props) => {
                     My auctions
                   </button>
                   <button
+                    type="button"
                     className="signOut"
                     onClick={() => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
@@ -226,7 +232,11 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li>
-                    <button className="sign__in" onClick={() => setShowSelectWallet(true)}>
+                    <button
+                      type="button"
+                      className="sign__in"
+                      onClick={() => setShowSelectWallet(true)}
+                    >
                       Sign In
                     </button>
                   </li>
@@ -234,7 +244,11 @@ const MobileView = (props) => {
               </>
             ) : (
               <div className="select_wallet__section">
-                <div className="backToMenu" onClick={() => setShowSelectWallet(false)}>
+                <div
+                  className="backToMenu"
+                  onClick={() => setShowSelectWallet(false)}
+                  aria-hidden="true"
+                >
                   <img src={leftArrow} alt="back" />
                   <span>Back to menu</span>
                 </div>
@@ -243,22 +257,22 @@ const MobileView = (props) => {
                     <h1 className="title">Select Wallet</h1>
                     <p className="desc">Please pick a wallet to connect to Universe</p>
                     <div className="wallets">
-                      <button onClick={() => handleConnectWallet('Metamask')}>
+                      <button type="button" onClick={() => handleConnectWallet('Metamask')}>
                         <img src={metamaskLogo} alt="Metamask" />
                       </button>
-                      <button onClick={() => handleConnectWallet('Ledger')}>
+                      <button type="button" onClick={() => handleConnectWallet('Ledger')}>
                         <img src={ledgerLogo} alt="Ledger" />
                       </button>
-                      <button onClick={() => handleConnectWallet('Keystore')}>
+                      <button type="button" onClick={() => handleConnectWallet('Keystore')}>
                         <img src={keystoreLogo} alt="Keystore" />
                       </button>
-                      <button onClick={() => handleConnectWallet('Trezor')}>
+                      <button type="button" onClick={() => handleConnectWallet('Trezor')}>
                         <img src={trezorLogo} alt="Trezor" />
                       </button>
-                      <button onClick={() => handleConnectWallet('Coinbase')}>
+                      <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
                         <img src={coinbaseLogo} alt="Coinbase" />
                       </button>
-                      <button onClick={() => handleConnectWallet('WalletConnect')}>
+                      <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>
                         <img src={walletConnectLogo} alt="WalletConnect" />
                       </button>
                     </div>
@@ -298,16 +312,16 @@ const MobileView = (props) => {
 };
 
 MobileView.propTypes = {
-  ethereumAddress: PropTypes.string,
-  handleConnectWallet: PropTypes.func,
-  showInstallWalletPopup: PropTypes.bool,
-  setShowInstallWalletPopup: PropTypes.func,
-  selectedWallet: PropTypes.string,
-  setSelectedWallet: PropTypes.func,
-  showMenu: PropTypes.bool,
-  setShowMenu: PropTypes.func,
-  showSelectWallet: PropTypes.bool,
-  setShowSelectWallet: PropTypes.func,
+  ethereumAddress: PropTypes.string.isRequired,
+  handleConnectWallet: PropTypes.func.isRequired,
+  showInstallWalletPopup: PropTypes.bool.isRequired,
+  setShowInstallWalletPopup: PropTypes.func.isRequired,
+  selectedWallet: PropTypes.string.isRequired,
+  setSelectedWallet: PropTypes.func.isRequired,
+  showMenu: PropTypes.bool.isRequired,
+  setShowMenu: PropTypes.func.isRequired,
+  showSelectWallet: PropTypes.bool.isRequired,
+  setShowSelectWallet: PropTypes.func.isRequired,
 };
 
 export default MobileView;

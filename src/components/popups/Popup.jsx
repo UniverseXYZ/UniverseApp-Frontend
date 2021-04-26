@@ -1,20 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import Button from '../button/Button';
 import closeIcon from '../../assets/images/cross.svg';
 import './PopupStyle.scss';
 
-export default ({ onClose }) => (
+const MainPopup = ({ onClose }) => {
   <Popup
     trigger={
-      <button className="modal-close">
+      <button type="button" className="modal-close">
         <img src={closeIcon} alt="" />{' '}
       </button>
     }
   >
     {(close) => (
       <div className="popup-div modal-close-popup">
-        <button className="popup-close" onClick={close}>
+        <button type="button" className="popup-close" onClick={close}>
           <img src={closeIcon} alt="" />
         </button>
         <div className="popup-title">
@@ -37,5 +38,11 @@ export default ({ onClose }) => (
         </div>
       </div>
     )}
-  </Popup>
-);
+  </Popup>;
+};
+
+MainPopup.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
+
+export default MainPopup;

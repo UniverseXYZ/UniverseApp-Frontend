@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Welcome from '../../../components/mintingAndAuctions/about/Welcome';
 import './About.scss';
 import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTools';

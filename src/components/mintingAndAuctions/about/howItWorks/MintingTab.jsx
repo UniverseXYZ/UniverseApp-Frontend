@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Animated } from 'react-animated-css';
 import mintingAccordionOne from '../../../../assets/images/minting-accordion1.png';
 import mintingAccordionTwo from '../../../../assets/images/minting-accordion2.png';
@@ -15,6 +15,7 @@ const MintingTab = () => {
       <div
         className="accordion__item"
         onClick={() => setIsFirstAccordionOpened(!isFirstAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">1. Create Single NFTs or Organise NFT Collections</h2>
@@ -35,6 +36,7 @@ const MintingTab = () => {
       <div
         className="accordion__item"
         onClick={() => setIsSecondAccordionOpened(!isSecondAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">2. Upload Images, Audio or Video, and Fill the Meta Data</h2>
@@ -59,6 +61,7 @@ const MintingTab = () => {
       <div
         className="accordion__item last"
         onClick={() => setIsThirdAccordionOpened(!isThirdAccordionOpened)}
+        aria-hidden="true"
       >
         <div className="accordion__item__header">
           <h2 className="title">3. Mint NFTs or Save for Later</h2>

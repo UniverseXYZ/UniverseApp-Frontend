@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useLocation, useHistory } from 'react-router';
+import { useLocation, useHistory } from 'react-router-dom';
+import uuid from 'react-uuid';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
@@ -34,9 +35,6 @@ const MyNFTs = () => {
   const isCreatingAction = location.pathname === '/select-nfts';
   const history = useHistory();
 
-  console.log(location.state);
-  // console.log(auction)
-
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
     setShowModal(false);
@@ -63,28 +61,30 @@ const MyNFTs = () => {
         const newMyNFTs = [...myNFTs];
         savedNfts.forEach((nft) => {
           if (nft.selected) {
-            nft.type === 'single'
-              ? newMyNFTs.push({
-                  id: nft.id,
-                  type: nft.type,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.numberOfEditions),
-                  generatedEditions: nft.generatedEditions,
-                })
-              : newMyNFTs.push({
-                  id: nft.id,
-                  type: nft.type,
-                  collectionId: nft.collectionName,
-                  collectionName: nft.collectionName,
-                  collectionAvatar: nft.collectionAvatar,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.numberOfEditions),
-                  generatedEditions: nft.generatedEditions,
-                });
+            if (nft.type === 'single') {
+              newMyNFTs.push({
+                id: nft.id,
+                type: nft.type,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.numberOfEditions),
+                generatedEditions: nft.generatedEditions,
+              });
+            } else {
+              newMyNFTs.push({
+                id: nft.id,
+                type: nft.type,
+                collectionId: nft.collectionName,
+                collectionName: nft.collectionName,
+                collectionAvatar: nft.collectionAvatar,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.numberOfEditions),
+                generatedEditions: nft.generatedEditions,
+              });
+            }
           }
         });
         setMyNFTs(newMyNFTs);
@@ -108,10 +108,28 @@ const MyNFTs = () => {
 
   return (
     <div className="container mynfts__page">
-      <Popup trigger={<button id="loading-hidden-btn" style={{ display: 'none' }} />}>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="loading-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
         {(close) => <LoadingPopup onClose={close} />}
       </Popup>
-      <Popup trigger={<button id="congrats-hidden-btn" style={{ display: 'none' }} />}>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
         {(close) => <CongratsPopup onClose={close} />}
       </Popup>
       {myNFTs.length || savedNfts.length || savedCollections.length ? (
@@ -121,6 +139,7 @@ const MyNFTs = () => {
             <div className="create__mint__btns">
               {selectedTabIndex === 1 && (
                 <button
+                  type="button"
                   className="mint__btn"
                   onClick={handleMintSelected}
                   disabled={checkSelectedSavedNfts()}
@@ -128,7 +147,7 @@ const MyNFTs = () => {
                   Mint selected
                 </button>
               )}
-              <button className="mint__btn" onClick={handleOpen}>
+              <button type="button" className="mint__btn" onClick={handleOpen}>
                 Create NFT
               </button>
             </div>
@@ -139,9 +158,10 @@ const MyNFTs = () => {
             <ul className="tabs">
               {tabs.map((tab, index) => (
                 <li
-                  key={index}
+                  key={uuid()}
                   className={selectedTabIndex === index ? 'active' : ''}
                   onClick={() => setSelectedTabIndex(index)}
+                  aria-hidden="true"
                 >
                   {tab}
                 </li>
@@ -161,6 +181,7 @@ const MyNFTs = () => {
             onClick={() => {
               history.push('/reward-tiers');
             }}
+            aria-hidden="true"
           >
             <img src={arrow} alt="back" />
             <span>Create reward tier</span>
@@ -173,7 +194,7 @@ const MyNFTs = () => {
             <div className="space-tier-div">
               {selectedNft.length > 0 ? '' : <p>No NFTs found in your wallet</p>}
             </div>
-            <div className="create-rew-tier select-ntfs" onClick={handleOpen}>
+            <div className="create-rew-tier select-ntfs" onClick={handleOpen} aria-hidden="true">
               <div className="plus-icon">
                 <img src={union} alt="create" />
               </div>
@@ -190,7 +211,7 @@ const MyNFTs = () => {
           <p className="desc">
             Create NFTs or NFT collections with our platform by clicking the button below
           </p>
-          <button className="mint__btn" onClick={handleOpen}>
+          <button type="button" className="mint__btn" onClick={handleOpen}>
             Create NFT
           </button>
           {showModal && <MintModal open={showModal} onClose={handleClose} />}

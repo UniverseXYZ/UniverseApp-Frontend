@@ -83,8 +83,6 @@
   }
 }
 .create-rew-tier{
-  // border: 1px solid;
-  // border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
   background: 
     linear-gradient($white, $white) padding-box,
     linear-gradient(to right, #BCEB00, #00EAEA) border-box;
@@ -99,7 +97,7 @@
   min-height: 160px;
   padding: 20px;
   margin-top: 40px;
-  margin-bottom: 30%;
+  margin-bottom: 5%;
 
   @include sm{
     width: 100%;
@@ -168,7 +166,7 @@
       min-height: 70px;
       padding: 16px;
       font-size: 12px;
-      font-family: "Space Grotesk", sans-serif;
+      font-family: $spaceGroteskFont;
       bottom: 25px;
       left: 100%;        
       transform: translateX(-50%);
@@ -224,7 +222,7 @@
       min-height: 70px;        
       padding: 16px;
       font-size: 12px;
-      font-family: "Space Grotesk", sans-serif;
+      font-family: $spaceGroteskFont;
       bottom: 10px;
       right: 0;
       font-weight: normal;

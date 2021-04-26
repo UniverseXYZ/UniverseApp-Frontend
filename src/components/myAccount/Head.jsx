@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { useHistory } from 'react-router';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
 

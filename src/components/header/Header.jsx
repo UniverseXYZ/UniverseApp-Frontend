@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './Header.scss';
 import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
@@ -86,6 +87,10 @@ const Header = ({ location }) => {
       />
     </header>
   );
+};
+
+Header.propTypes = {
+  location: PropTypes.oneOfType([PropTypes.any]).isRequired,
 };
 
 export default withRouter(Header);

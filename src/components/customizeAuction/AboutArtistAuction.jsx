@@ -1,3 +1,4 @@
+import React from 'react';
 import Button from '../button/Button';
 import About from '../myAccount/About';
 import Main from '../myAccount/Main';

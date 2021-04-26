@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import Skeleton from 'react-loading-skeleton';
 import Button from '../../../../button/Button';
@@ -31,6 +31,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                   <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
                   <button
+                    type="button"
                     onClick={() =>
                       history.push(`/${auction.artist.name.split(' ')[1]}`, {
                         id: auction.artist.id,
@@ -144,9 +145,9 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
 };
 
 ActiveAuctionsList.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  offset: PropTypes.number,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
 export default ActiveAuctionsList;

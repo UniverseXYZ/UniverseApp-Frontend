@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Popup from 'reactjs-popup';
@@ -40,7 +40,13 @@ const Welcome = () => {
           <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={600}>
             <div className="links">
               <Button className="light-button">Whitepaper</Button>
-              <Popup trigger={<button className="light-border-button">Join newsletter</button>}>
+              <Popup
+                trigger={
+                  <button type="button" className="light-border-button">
+                    Join newsletter
+                  </button>
+                }
+              >
                 {(close) => <SubscribePopup close={close} />}
               </Popup>
             </div>

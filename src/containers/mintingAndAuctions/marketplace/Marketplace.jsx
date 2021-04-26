@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Marketplace.scss';
 import CreateYourAuction from '../../../components/mintingAndAuctions/marketplace/tabs/CreateYourAuction';
 import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs';

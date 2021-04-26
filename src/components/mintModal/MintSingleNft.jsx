@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
@@ -55,9 +55,9 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(newProperties);
   };
 
-  const propertyChangesName = (index, name) => {
+  const propertyChangesName = (index, val) => {
     const newProperties = [...properties];
-    newProperties[index].name = name;
+    newProperties[index].name = val;
     setProperties(newProperties);
   };
 
@@ -211,13 +211,31 @@ const MintSingleNft = ({ onClick }) => {
 
   return (
     <div className="mintNftCollection-div">
-      <Popup trigger={<button id="loading-hidden-btn" style={{ display: 'none' }} />}>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="loading-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
         {(close) => <LoadingPopup onClose={close} />}
       </Popup>
-      <Popup trigger={<button id="congrats-hidden-btn" style={{ display: 'none' }} />}>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
         {(close) => <CongratsPopup onClose={close} />}
       </Popup>
-      <div className="back-nft" onClick={() => onClick(null)}>
+      <div className="back-nft" onClick={() => onClick(null)} aria-hidden="true">
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div>
@@ -251,6 +269,7 @@ const MintSingleNft = ({ onClick }) => {
                         {previewImage.type === 'video/mp4' && (
                           <video>
                             <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                            <track kind="captions" {...props} />
                             Your browser does not support the video tag.
                           </video>
                         )}
@@ -275,16 +294,19 @@ const MintSingleNft = ({ onClick }) => {
                           src={sizeDownIcon}
                           onClick={close}
                           alt="Size Down"
+                          aria-hidden="true"
                         />
                         {previewImage.type === 'video/mp4' && (
                           <video controls autoPlay>
                             <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                            <track kind="captions" {...props} />
                             Your browser does not support the video tag.
                           </video>
                         )}
                         {previewImage.type === 'audio/mpeg' && (
                           <audio controls autoPlay>
                             <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
+                            <track kind="captions" {...props} />
                             Your browser does not support the audio element.
                           </audio>
                         )}
@@ -354,7 +376,12 @@ const MintSingleNft = ({ onClick }) => {
         </div>
         <div className="single-nft-properties">
           <div className="single-nft-properties-header">
-            <h4 onMouseOver={() => setHideIcon1(true)} onMouseLeave={() => setHideIcon1(false)}>
+            <h4
+              onMouseOver={() => setHideIcon1(true)}
+              onFocus={() => setHideIcon1(true)}
+              onMouseLeave={() => setHideIcon1(false)}
+              onBlur={() => setHideIcon1(false)}
+            >
               Properties (optional) <img src={infoIcon} alt="Info Icon" />
             </h4>
             {hideIcon1 && (
@@ -368,14 +395,14 @@ const MintSingleNft = ({ onClick }) => {
               </Animated>
             )}
           </div>
-          {properties.map((elm, i) => (
-            <div className="properties" key={i}>
+          {properties.map((elm) => (
+            <div className="properties" key={uuid()}>
               <div className="property-name">
                 <h5>Property name</h5>
                 <Input
                   className="inp"
                   placeholder="Enter NFT property"
-                  value={properties[i].name}
+                  value={elm.name}
                   onChange={(e) => propertyChangesName(i, e.target.value)}
                 />
               </div>
@@ -384,11 +411,16 @@ const MintSingleNft = ({ onClick }) => {
                 <Input
                   className="inp"
                   placeholder="Enter value"
-                  value={properties[i].value}
+                  value={elm.value}
                   onChange={(e) => propertyChangesValue(i, e.target.value)}
                 />
               </div>
-              <img src={delateIcon} alt="Delete" onClick={() => removeProperty(i)} />
+              <img
+                src={delateIcon}
+                alt="Delete"
+                onClick={() => removeProperty(i)}
+                aria-hidden="true"
+              />
               <Button className="light-border-button" onClick={() => removeProperty(i)}>
                 Remove
               </Button>
@@ -396,7 +428,7 @@ const MintSingleNft = ({ onClick }) => {
           ))}
           <div className="property-add">
             <h5>
-              <img src={addIcon} alt="Add" onClick={() => addProperty()} />
+              <img src={addIcon} alt="Add" onClick={() => addProperty()} aria-hidden="true" />
               Add Property
             </h5>
           </div>
@@ -423,7 +455,7 @@ const MintSingleNft = ({ onClick }) => {
 };
 
 MintSingleNft.propTypes = {
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default MintSingleNft;

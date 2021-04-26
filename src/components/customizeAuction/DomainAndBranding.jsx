@@ -1,5 +1,5 @@
 import { Animated } from 'react-animated-css';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import infoIcon from '../../assets/images/icon.svg';
@@ -43,7 +43,9 @@ const DomainAndBranding = () => {
                 Upload promo image (optional){' '}
                 <img
                   onMouseOver={() => setPromoInfo(true)}
+                  onFocus={() => setPromoInfo(true)}
                   onMouseLeave={() => setPromoInfo(false)}
+                  onBlur={() => setPromoInfo(false)}
                   src={infoIcon}
                   alt="Info"
                 />
@@ -106,7 +108,9 @@ const DomainAndBranding = () => {
                 Blur
                 <img
                   onMouseOver={() => setBlurInfo(true)}
+                  onFocus={() => setBlurInfo(true)}
                   onMouseLeave={() => setBlurInfo(false)}
+                  onBlur={() => setBlurInfo(false)}
                   src={infoIcon}
                   alt="Info"
                 />
@@ -123,13 +127,13 @@ const DomainAndBranding = () => {
                 )}
                 <div className="toggle-switch">
                   <input
+                    id="toggleSwitch"
                     type="checkbox"
                     className="toggle-switch-checkbox"
                     name="toggleSwitch"
-                    id="toggleSwitch"
                     onChange={() => setBlur(!blur)}
                   />
-                  <label className="toggle-switch-label" htmlFor="toggleSwitch">
+                  <label htmlFor="toggleSwitch" className="toggle-switch-label">
                     <span className="toggle-switch-inner" />
                     <span className="toggle-switch-switch" />
                   </label>

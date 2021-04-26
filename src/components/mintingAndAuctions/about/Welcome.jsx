@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import ellipses from '../../../assets/images/ellipses.svg';
 import Button from '../../button/Button';

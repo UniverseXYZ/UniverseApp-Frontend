@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import NFTsTab from './nfts/NFTsTab';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
@@ -59,29 +59,38 @@ const Tabs = ({ onArtist }) => {
       <div className="tabs__section__container">
         <div className="tabs__wrapper">
           <div className="tab__left__arrow">
-            <img onClick={handleTabLeftScrolling} src={tabArrow} alt="Tab left arrow" />
+            <img
+              onClick={handleTabLeftScrolling}
+              aria-hidden="true"
+              src={tabArrow}
+              alt="Tab left arrow"
+            />
           </div>
           <div className="tabs">
             <div className="tab_items">
               <button
+                type="button"
                 onClick={() => setSelectedTabIndex(0)}
                 className={selectedTabIndex === 0 ? 'active' : ''}
               >
                 NFTs
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedTabIndex(1)}
                 className={selectedTabIndex === 1 ? 'active' : ''}
               >
                 Active auctions
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedTabIndex(2)}
                 className={selectedTabIndex === 2 ? 'active' : ''}
               >
                 Future auctions
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedTabIndex(3)}
                 className={selectedTabIndex === 3 ? 'active' : ''}
               >
@@ -90,7 +99,12 @@ const Tabs = ({ onArtist }) => {
             </div>
           </div>
           <div className="tab__right__arrow">
-            <img onClick={handleTabRightScrolling} src={tabArrow} alt="Tab right arrow" />
+            <img
+              onClick={handleTabRightScrolling}
+              aria-hidden="true"
+              src={tabArrow}
+              alt="Tab right arrow"
+            />
           </div>
         </div>
         <div className="tab__content">
@@ -105,7 +119,7 @@ const Tabs = ({ onArtist }) => {
 };
 
 Tabs.propTypes = {
-  onArtist: PropTypes.object,
+  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default Tabs;

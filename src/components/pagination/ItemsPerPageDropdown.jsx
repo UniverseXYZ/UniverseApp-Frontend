@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
+import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 
@@ -27,19 +28,20 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
 
   return (
     <div className="items__per__page">
-      <label>Items per page</label>
-      <button ref={ref} onClick={() => setShowDropdown(!showDropdown)}>
+      <span>Items per page</span>
+      <button type="button" ref={ref} onClick={() => setShowDropdown(!showDropdown)}>
         <span>{perPage}</span>
         <img src={arrowDownIcon} alt="Chevron" className={showDropdown ? 'rotate' : ''} />
         {showDropdown && (
           <div className="items__per__page__dropdown">
             <Animated animationIn="fadeIn">
               <ul>
-                {itemsPerPage.map((n, index) => (
+                {itemsPerPage.map((n) => (
                   <li
-                    key={index}
+                    key={uuid()}
                     className={perPage === n ? 'active' : ''}
                     onClick={() => setPerPage(n)}
+                    aria-hidden="true"
                   >
                     {n}
                   </li>
@@ -54,8 +56,8 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
 };
 
 ItemsPerPageDropdown.propTypes = {
-  perPage: PropTypes.number,
-  setPerPage: PropTypes.func,
+  perPage: PropTypes.number.isRequired,
+  setPerPage: PropTypes.func.isRequired,
 };
 
 export default ItemsPerPageDropdown;

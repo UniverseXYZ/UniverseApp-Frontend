@@ -1,3 +1,4 @@
+import React from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
 import arrow from '../../assets/images/arrow.svg';
@@ -16,6 +17,7 @@ const CustomizeAuction = () => {
         onClick={() => {
           history.push('/reward-tiers');
         }}
+        aria-hidden="true"
       >
         <img src={arrow} alt="back" />
         <span>Reward tiers</span>

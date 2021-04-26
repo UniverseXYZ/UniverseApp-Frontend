@@ -9,7 +9,7 @@ const CreateYourAuction = () => (
         <p className="desc">Mint NFTs, set up rewards tiers and launch Universe auctions</p>
       </div>
       <div className="setup__auction__btn">
-        <button>
+        <button type="button">
           <span>Set up auction</span>
           <img src={gradientArrow} alt="Arrow" />
         </button>

@@ -59,7 +59,13 @@ const RewardTiers = ({ auction }) => (
                 </div>
                 <div className="tier__description">{tier.description}</div>
                 <div className="preview__nfts">
-                  <Popup trigger={<button className="light-button">Preview NFTs</button>}>
+                  <Popup
+                    trigger={
+                      <button type="button" className="light-button">
+                        Preview NFTs
+                      </button>
+                    }
+                  >
                     {(close) => <PreviewNFTsPopup onClose={close} onTier={tier} />}
                   </Popup>
                 </div>
@@ -73,7 +79,7 @@ const RewardTiers = ({ auction }) => (
 );
 
 RewardTiers.propTypes = {
-  auction: PropTypes.object,
+  auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default RewardTiers;

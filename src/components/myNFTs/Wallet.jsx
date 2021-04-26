@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Lists from './Lists';
@@ -41,7 +41,6 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   const isCreatingAction = location.pathname === '/select-nfts';
   const tierId = location.state;
   const tierById = auction.tiers.find((element) => element.id === tierId);
-
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
@@ -84,7 +83,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 
   const clearFilters = () => {
     const newCollections = [...collections];
-    newCollections.map((collection) => (collection.selected = false));
+    newCollections.map((collection) => {
+      collection.selected = false;
+    });
 
     setCollections(newCollections);
     setSearchByName('');
@@ -96,7 +97,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 
   const handledeleteNft = (nftSelected) => {
     const nftIndex = selectedNFTIds.findIndex((nft) => nft === nftSelected.id);
-    setSelectedNFTIds((selectedNFTIds) => selectedNFTIds.filter((item) => item !== nftSelected.id));
+    setSelectedNFTIds(selectedNFTIds.filter((item) => item !== nftSelected.id));
   };
 
   const handleClickOutside = (event) => {
@@ -119,14 +120,14 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
     document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
-  const handleContinue = (previewNFTs) => {
-    setAuction((auction) => ({
+  const handleContinue = (prevNFTs) => {
+    setAuction({
       ...auction,
       tiers: [
         ...auction.tiers.filter((tier) => tier.id !== tierById.id),
-        { ...tierById, nfts: previewNFTs },
+        { ...tierById, nfts: prevNFTs },
       ],
-    }));
+    });
     history.push('/review-reward', tierId);
   };
 
@@ -189,13 +190,13 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   });
 
   useEffect(() => {
-    const previewNFTs = [];
+    const prevNFTs = [];
     filteredNFTs.forEach((nft) => {
       if (selectedNFTIds.includes(nft.id)) {
-        previewNFTs.push(nft);
+        prevNFTs.push(nft);
       }
     });
-    setPreviewNFTs(previewNFTs);
+    setPreviewNFTs(prevNFTs);
     // setAuction(data => ({ ...data, tier: { ...data.tier,nfts{...data.tier.nfts, previewNFTs}} }));
   }, [filteredNFTs, selectedNFTIds]);
 
@@ -213,12 +214,14 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                 closeCollectionMobile();
                 document.body.classList.remove('no__scroll');
               }}
+              aria-hidden="true"
             />
             <div className="filter_by_collection_buttons">
-              <button className="clear_all" onClick={clearFiltersMobile}>
+              <button type="button" className="clear_all" onClick={clearFiltersMobile}>
                 Clear all
               </button>
               <button
+                type="button"
                 className="light-button"
                 onClick={() => {
                   handleCollectionsMobile();
@@ -230,7 +233,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
             </div>
             <div className="filter__by__collection">
               <div className="filter__by__collection__label">
-                <label>Filter by collection</label>
+                <span>Filter by collection</span>
               </div>
               <div className="filter__by__collection__input">
                 <input
@@ -246,6 +249,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                 {collections.length ? (
                   collections.map((collection, index) => (
                     <button
+                      type="button"
                       key={collection.id}
                       className={collection.selected ? 'selected' : ''}
                       onClick={() => saveIndexes(index)}
@@ -280,8 +284,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
           <div className="filtration">
             <div className="filter__by__collection">
               <div className="filter__by__collection__label">
-                <label>Filter by collection</label>
-                <button className="clear_all" onClick={clearFilters}>
+                <span>Filter by collection</span>
+                <button type="button" className="clear_all" onClick={clearFilters}>
                   Clear all
                 </button>
               </div>
@@ -297,7 +301,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 
             <div className="search__by__name">
               <div className="search__by__name__label">
-                <label>Seach by name</label>
+                <span>Seach by name</span>
               </div>
               <div className="search__by__name__input">
                 <input
@@ -318,6 +322,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                 {collections.length ? (
                   collections.map((collection, index) => (
                     <button
+                      type="button"
                       key={collection.id}
                       className={collection.selected ? 'selected' : ''}
                       onClick={() => handleCollections(index)}
@@ -361,7 +366,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                       <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
                     )}
                     <span>{collection.name}</span>
-                    <button title="Remove" onClick={() => handleCollections(index)}>
+                    <button type="button" title="Remove" onClick={() => handleCollections(index)}>
                       &#10006;
                     </button>
                   </div>
@@ -414,12 +419,13 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                     src={crossSmall}
                     onClick={() => handledeleteNft(nft)}
                     alt="delete"
+                    aria-hidden="true"
                   />
                 </div>
               ))}
             </div>
             <div className="continue-nft">
-              {tierById && tierById.nftsPerWinner === previewNFTs.length ? (
+              {tierById && Number(tierById.nftsPerWinner) === Number(previewNFTs.length) ? (
                 <Button onClick={() => handleContinue(previewNFTs)} className="light-button">
                   Continue
                 </Button>
@@ -437,8 +443,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 };
 
 Wallet.propTypes = {
-  filteredNFTs: PropTypes.array,
-  setFilteredNFTs: PropTypes.func,
+  filteredNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setFilteredNFTs: PropTypes.func.isRequired,
 };
 
 export default Wallet;

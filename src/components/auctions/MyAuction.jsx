@@ -1,5 +1,6 @@
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import uuid from 'react-uuid';
 import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
@@ -73,6 +74,7 @@ const MyAuction = () => {
         <h1 className="title">My Auctions</h1>
         <div>
           <button
+            type="button"
             className="set_up"
             onClick={() => {
               history.push('/reward-tiers');
@@ -86,21 +88,32 @@ const MyAuction = () => {
       <div className="auction__page__body">
         <div className="tabs__wrapper">
           <div className="tab__left__arrow">
-            <img onClick={handleTabLeftScrolling} src={tabArrow} alt="Tab left arrow" />
+            <img
+              onClick={handleTabLeftScrolling}
+              src={tabArrow}
+              alt="Tab left arrow"
+              aria-hidden="true"
+            />
           </div>
           <ul className="tabs">
             {tabs.map((tab, index) => (
               <li
-                key={index}
+                key={uuid()}
                 className={selectedTabIndex === index ? 'active' : ''}
                 onClick={() => setSelectedTabIndex(index)}
+                aria-hidden="true"
               >
                 {tab}
               </li>
             ))}
           </ul>
           <div className="tab__right__arrow">
-            <img onClick={handleTabRightScrolling} src={tabArrow} alt="Tab right arrow" />
+            <img
+              onClick={handleTabRightScrolling}
+              src={tabArrow}
+              alt="Tab right arrow"
+              aria-hidden="true"
+            />
           </div>
         </div>
         <div style={{ display: 'none' }} className="err-msg">
@@ -116,7 +129,9 @@ const MyAuction = () => {
             <div className="empty__auction">
               <h3>No active auctions found</h3>
               <p className="desc">Create your first auction by clicking the button below</p>
-              <button className="set_up">Set up auction</button>
+              <button type="button" className="set_up">
+                Set up auction
+              </button>
             </div>
           </>
         )}
@@ -126,7 +141,9 @@ const MyAuction = () => {
             <div className="empty__auction">
               <h3>No scheduled auctions found</h3>
               <p className="desc">Create your first auction by clicking the button below</p>
-              <button className="set_up">Set up auction</button>
+              <button type="button" className="set_up">
+                Set up auction
+              </button>
             </div>
           </>
         )}
@@ -138,6 +155,7 @@ const MyAuction = () => {
               <h3>No past auctions found</h3>
               <p className="desc">Create your first auction by clicking the button below</p>
               <button
+                type="button"
                 className="set-up"
                 onClick={() => {
                   history.push('/reward-tiers');

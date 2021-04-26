@@ -1,5 +1,5 @@
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useEffect, useState, useContext, useRef } from 'react';
 import { Animated } from 'react-animated-css';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
@@ -30,13 +30,13 @@ const Reward = () => {
 
   const handleRemove = (id) => {
     document.body.classList.add('no__scroll');
-    setAuction((auction) => ({
+    setAuction({
       ...auction,
       tiers: [
         ...auction.tiers.filter((tier) => tier.id !== tierById.id),
         { ...tierById, nfts: tierById.nfts.filter((item) => item.id !== id) },
       ],
-    }));
+    });
   };
 
   const handleCreate = () => {
@@ -53,6 +53,7 @@ const Reward = () => {
         onClick={() => {
           history.push('/select-nfts', tierId);
         }}
+        aria-hidden="true"
       >
         <img src={arrow} alt="back" />
         <span>Select NFTs</span>
@@ -99,7 +100,9 @@ const Reward = () => {
               )}
               <img
                 onMouseOver={() => setHideIcon(true)}
+                onFocus={() => setHideIcon(true)}
                 onMouseLeave={() => setHideIcon(false)}
+                onBlur={() => setHideIcon(false)}
                 src={infoIcon}
                 alt="total"
               />
@@ -115,9 +118,12 @@ const Reward = () => {
               {nft.previewImage.type === 'video/mp4' && (
                 <video
                   onMouseOver={(event) => event.target.play()}
+                  onFocus={(event) => event.target.play()}
                   onMouseOut={(event) => event.target.pause()}
+                  onBlur={(event) => event.target.pause()}
                 >
                   <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                  <track kind="captions" {...props} />
                   Your browser does not support the video tag.
                 </video>
               )}
@@ -139,6 +145,7 @@ const Reward = () => {
             <div className="rev-reward__box__name">
               <h3>{nft.name}</h3>
               <button
+                type="button"
                 className="three__dots"
                 onClick={() => {
                   setShowDropdown(!showDropdown);
@@ -150,11 +157,11 @@ const Reward = () => {
                 <span />
                 {dropdownID === nft.id && showDropdown && (
                   <ul ref={ref} className="edit__remove">
-                    <li className="edit" onClick={() => handleEdit(nft.id)}>
+                    <li className="edit" onClick={() => handleEdit(nft.id)} aria-hidden="true">
                       <p>Edit</p>
                       <img src={editIcon} alt="Edit" />
                     </li>
-                    <li className="remove" onClick={() => handleRemove(nft.id)}>
+                    <li className="remove" onClick={() => handleRemove(nft.id)} aria-hidden="true">
                       <p>Remove</p>
                       <img src={removeIcon} alt="Remove" />
                     </li>
