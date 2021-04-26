@@ -191,21 +191,18 @@ const RewardTiers = () => {
             <p>Create reward tier</p>
           </div>
         </div>
-      </div>
-      ))
-      <div
-        className="create-rew-tier"
-        onClick={() => {
-          history.push('/create-tiers');
-        }}
-        aria-hidden="true"
-      >
-        <div className="plus-icon">
-          <img src={union} alt="create" />
-        </div>
-        <div className="create-rew-text">
-          <p>Create reward tier</p>
-        </div>
+        {auction.tiers.length > 0 && (
+          <div className="set-up">
+            <Button
+              className="light-button"
+              onClick={() => {
+                history.push('/auction-settings');
+              }}
+            >
+              Set up auction
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
