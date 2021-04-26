@@ -4,39 +4,37 @@ import TroyMurrayImg from '../../../assets/images/Troy-Murray.png';
 import JustinBlauImg from '../../../assets/images/Justin-Blau.png';
 import RyanShtirmerImg from '../../../assets/images/Ryan-Shtirmer.png';
 
-const OurTeam = () => {
-    return (
-        <div className='our__team__section'>
-            <div className='our__team__section__container'>
-                <h1 className='title'>Our Team</h1>
-                <div className='team__members'>
-                    <div className='member'>
-                        <img src={TimKangImg} alt='Tim Kang' />
-                        <h3>Tim Kang</h3>
-                    </div>
-                    <div className='member'>
-                        <img src={TylerWardImg} alt='Tyler Ward' />
-                        <h3>Tyler Ward</h3>
-                    </div>
-                    <div className='member'>
-                        <img src={TroyMurrayImg} alt='Troy Murray' />
-                        <h3>Troy Murray</h3>
-                    </div>
-                    <div className='member'>
-                        <img src={JustinBlauImg} alt='Justin 3LAU' />
-                        <h3>Justin 3LAU</h3>
-                    </div>
-                    <div className='member'>
-                        <img src={RyanShtirmerImg} alt='Ryan Shtirmer' />
-                        <h3>Ryan Shtirmer</h3>
-                    </div>
-                </div>
-                <div className='see__full__team'>
-                    <button>See the full team</button>
-                </div>
-            </div>
+const OurTeam = () => (
+  <div className="our__team__section">
+    <div className="our__team__section__container">
+      <h1 className="title">Our Team</h1>
+      <div className="team__members">
+        <div className="member">
+          <img src={TimKangImg} alt="Tim Kang" />
+          <h3>Tim Kang</h3>
         </div>
-    )
-}
+        <div className="member">
+          <img src={TylerWardImg} alt="Tyler Ward" />
+          <h3>Tyler Ward</h3>
+        </div>
+        <div className="member">
+          <img src={TroyMurrayImg} alt="Troy Murray" />
+          <h3>Troy Murray</h3>
+        </div>
+        <div className="member">
+          <img src={JustinBlauImg} alt="Justin 3LAU" />
+          <h3>Justin 3LAU</h3>
+        </div>
+        <div className="member">
+          <img src={RyanShtirmerImg} alt="Ryan Shtirmer" />
+          <h3>Ryan Shtirmer</h3>
+        </div>
+      </div>
+      <div className="see__full__team">
+        <button>See the full team</button>
+      </div>
+    </div>
+  </div>
+);
 
 export default OurTeam;

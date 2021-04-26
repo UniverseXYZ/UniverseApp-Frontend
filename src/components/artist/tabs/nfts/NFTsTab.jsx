@@ -8,25 +8,29 @@ import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 import AppContext from '../../../../ContextAPI';
 
 const NFTsTab = ({ onArtist }) => {
-    const { loggedInArtist, myNFTs } = useContext(AppContext);
-    const [offset, setOffset] = useState(0);
-    const [perPage, setPerPage] = useState(12);
-    const data = loggedInArtist.id === onArtist.id ? myNFTs : PLACEHOLDER_NFTS;
+  const { loggedInArtist, myNFTs } = useContext(AppContext);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(12);
+  const data = loggedInArtist.id === onArtist.id ? myNFTs : PLACEHOLDER_NFTS;
 
-    return data.length ? (
-        <>
-            <NFTsFilters />
-            <NFTsList data={data} perPage={perPage} offset={offset} />
-            <div className='pagination__container'>
-                <Pagination data={data} perPage={perPage} setOffset={setOffset} />
-                <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-            </div>
-        </>
-    ) : <div className='empty__nfts'><h3>No NFTs found</h3></div>
-}
+  return data.length ? (
+    <>
+      <NFTsFilters />
+      <NFTsList data={data} perPage={perPage} offset={offset} />
+      <div className="pagination__container">
+        <Pagination data={data} perPage={perPage} setOffset={setOffset} />
+        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+      </div>
+    </>
+  ) : (
+    <div className="empty__nfts">
+      <h3>No NFTs found</h3>
+    </div>
+  );
+};
 
 NFTsTab.propTypes = {
-    onArtist: PropTypes.object,
-}
+  onArtist: PropTypes.object,
+};
 
 export default NFTsTab;

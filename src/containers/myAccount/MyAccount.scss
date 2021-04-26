@@ -5,44 +5,62 @@
 .my-account {
 
     .my-account-title {
-        display: flex;
-        justify-content: space-between;
-        
-        .my-account-description{
-            h1{
-                font-family: $sharpGroteskSemiBoldFont;
-                font-weight: 600;
-                font-size: 32px;
-                line-height: 140%;
-                color: $black;
-                margin-bottom: 16px;
+        display: grid;
+        grid-template-columns: 1fr 253px;
 
-                @include sm {
-                    font-size: 26px;
-                    margin-bottom: 25px;
-                }
+        h1 {
+            grid-column: 1/2;
+            grid-row: 1/2;
+            font-family: $sharpGroteskSemiBoldFont;
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 140%;
+            color: $black;
+            margin-bottom: 16px;
+
+            @include sm {
+                grid-column: 1/2;
+                grid-row: 1/2;
+                font-size: 26px;
+                margin-bottom: 16px;
             }
-            p{
-                max-width: 511px;
-                font-family: $spaceGroteskFont;
-                font-size: 18px;
-                line-height: 150%;
-                color: rgba(0, 0, 0, 0.6);
+        }
+        p {
+            grid-column: 1/3;
+            grid-row: 2/3;
+            max-width: 511px;
+            font-family: $spaceGroteskFont;
+            font-size: 18px;
+            line-height: 150%;
+            color: rgba(0, 0, 0, 0.6);
+            @include sm {
+                grid-column: 1/2;
+                grid-row: 2/3;
             }
         }
         
-        button{
+        button {
+            grid-column: 2/3;
+            grid-row: 1/2;
+            white-space: nowrap;
             box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
             height: fit-content;
 
-            @include sm{
+            @include sm {
+                grid-column: 1/2;
+                grid-row: 3/4;
                 width: 100%;
                 margin-top: 20px;
             }
         }
 
-        @include sm{
-            display: block;
+        @include lg {
+            padding-top: 40px;
+        }
+
+        @include sm {
+            grid-template-columns: 1fr;
+            padding-top: 40px;
         }
         
     }
@@ -188,7 +206,7 @@
                 padding: 50px 0;
             }
             @include sm{
-                padding: 40px 0;
+                padding: 40px 0 20px;
             }
         }
 
@@ -425,7 +443,7 @@
 
                     @include sm{
                         margin-top: 23px;
-                        min-width: 178px;
+                        max-width: 178px;
                     }
                 }
                 .about-text{
@@ -445,8 +463,7 @@
                         right: 0px;    
                     }
                     @include sm{
-                        font-size: 0px;
-                        padding: 8px;
+                        padding: 10px;
                     }
                 }
             }
@@ -515,8 +532,7 @@
                         position: absolute;
                         top: 20px;
                         right: 0px;
-                        font-size: 0px;
-                        padding: 8px;
+                        padding: 10px;
                     }
                 }
             }
@@ -667,8 +683,7 @@
                         position: absolute;
                         top: 20px;
                         right: 0px;
-                        font-size: 0px;
-                        padding: 8px;
+                        padding: 10px;
                     }
                 }
             }
@@ -801,10 +816,12 @@
                 linear-gradient(to right, #BCEB00, #00EAEA) border-box;
                 border: 1px solid transparent;
             }
-            img{
-                padding-left: 5px;
-                @include sm{
-                    padding-left: 0px;
+            span {
+                margin-right: 12px;
+                &.hide__on__mobile {
+                    @include sm {
+                        display: none;
+                    }
                 }
             }
         }
@@ -813,10 +830,11 @@
     @include lg {
         width: 100%;
         padding: 0px 60px;
+        margin: 0 auto;
     }
     @include sm {
         width: 100%;
         padding: 0px 20px;
-        margin-top: 20px;
+        margin: 0 auto;
     }
 }
