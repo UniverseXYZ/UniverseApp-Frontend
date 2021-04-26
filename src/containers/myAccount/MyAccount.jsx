@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Main from '../../components/myAccount/Main';
 import './MyAccount.scss';
 import About from '../../components/myAccount/About';

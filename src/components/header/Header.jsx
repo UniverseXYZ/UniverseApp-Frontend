@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import './Header.scss';
 import appDarkLogo from '../../assets/images/dark.svg';

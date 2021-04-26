@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Skeleton from 'react-loading-skeleton';
@@ -30,7 +30,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                 <div className="artist__details">
                   <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
-                  <button>{auction.artist.name}</button>
+                  <button type="button">{auction.artist.name}</button>
                 </div>
               </div>
               <div className="view__auction">
@@ -136,9 +136,9 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
 };
 
 ActiveAuctionsList.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  offset: PropTypes.number,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
 export default ActiveAuctionsList;

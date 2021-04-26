@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
@@ -77,6 +77,7 @@ const SavedCollections = () => {
                 )}
                 <h3 className="collection__name">{collection.name}</h3>
                 <button
+                  type="button"
                   className="three__dots"
                   onClick={() => {
                     setShowDropdown(!showDropdown);
@@ -88,7 +89,11 @@ const SavedCollections = () => {
                   <span />
                   {dropdownID === collection.id && showDropdown && (
                     <ul ref={ref} className="edit__remove">
-                      <li className="edit" onClick={() => handleEdit(collection.id)}>
+                      <li
+                        className="edit"
+                        onClick={() => handleEdit(collection.id)}
+                        aria-hidden="true"
+                      >
                         <p>Edit</p>
                         <img src={editIcon} alt="Edit Icon" />
                       </li>

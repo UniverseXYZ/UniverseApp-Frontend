@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, useEffect } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
@@ -266,13 +266,31 @@ const MintNftCollection = ({ onClick }) => {
 
   return !showCollectible ? (
     <div className="mintNftCollection-div">
-      <Popup trigger={<button id="loading-hidden-btn" style={{ display: 'none' }} />}>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="loading-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
         {(close) => <LoadingPopup onClose={close} />}
       </Popup>
-      <Popup trigger={<button id="congrats-hidden-btn" style={{ display: 'none' }} />}>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
         {(close) => <CongratsPopup onClose={close} />}
       </Popup>
-      <div className="back-nft" onClick={() => onClick(null)}>
+      <div className="back-nft" onClick={() => onClick(null)} aria-hidden="true">
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div>
@@ -306,6 +324,7 @@ const MintNftCollection = ({ onClick }) => {
                     src={cloudIcon}
                     alt="Cloud Icon"
                     onClick={() => inputFile.current.click()}
+                    aria-hidden="true"
                   />
                   <p>(min 200x200px, PNG/JPEG/GIF, max 1mb)</p>
                   <Button className="light-border-button" onClick={() => setCoverImage(null)}>
@@ -314,7 +333,11 @@ const MintNftCollection = ({ onClick }) => {
                 </div>
               </div>
             ) : (
-              <div className="icon-div" onClick={() => inputFile.current.click()}>
+              <div
+                className="icon-div"
+                onClick={() => inputFile.current.click()}
+                aria-hidden="true"
+              >
                 <img className="upload-img" src={cloudIcon} alt="Cloud Icon" />
                 <p>(min 200x200px, PNG/JPEG/GIF, max 1mb)</p>
               </div>
@@ -336,9 +359,12 @@ const MintNftCollection = ({ onClick }) => {
               {nft.previewImage.type === 'video/mp4' && (
                 <video
                   onMouseOver={(event) => event.target.play()}
+                  onFocus={(event) => event.target.play()}
                   onMouseOut={(event) => event.target.pause()}
+                  onBlur={(event) => event.target.pause()}
                 >
                   <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                  <track kind="captions" {...props} />
                   Your browser does not support the video tag.
                 </video>
               )}
@@ -359,6 +385,7 @@ const MintNftCollection = ({ onClick }) => {
             <div className="saved__nft__box__name">
               <h3>{nft.name}</h3>
               <button
+                type="button"
                 className="three__dots"
                 onClick={() => {
                   setShowDropdown(!showDropdown);
@@ -370,7 +397,7 @@ const MintNftCollection = ({ onClick }) => {
                 <span />
                 {dropdownID === nft.id && showDropdown && (
                   <ul ref={ref} className="edit__remove">
-                    <li className="edit" onClick={() => handleEdit(nft.id)}>
+                    <li className="edit" onClick={() => handleEdit(nft.id)} aria-hidden="true">
                       <p>Edit</p>
                       <img src={editIcon} alt="Edit Icon" />
                     </li>
@@ -459,9 +486,12 @@ const MintNftCollection = ({ onClick }) => {
                   {nft.previewImage.type === 'video/mp4' && (
                     <video
                       onMouseOver={(event) => event.target.play()}
+                      onFocus={(event) => event.target.play()}
                       onMouseOut={(event) => event.target.pause()}
+                      onBlur={(event) => event.target.pause()}
                     >
                       <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                      <track kind="captions" {...props} />
                       Your browser does not support the video tag.
                     </video>
                   )}
@@ -483,6 +513,7 @@ const MintNftCollection = ({ onClick }) => {
                 <div className="saved__nft__box__name">
                   <h3>{nft.name}</h3>
                   <button
+                    type="button"
                     className="three__dots"
                     onClick={() => {
                       setShowDropdown(!showDropdown);
@@ -494,7 +525,7 @@ const MintNftCollection = ({ onClick }) => {
                     <span />
                     {dropdownID === nft.id && showDropdown && (
                       <ul ref={ref} className="edit__remove">
-                        <li className="edit" onClick={() => handleEdit(nft.id)}>
+                        <li className="edit" onClick={() => handleEdit(nft.id)} aria-hidden="true">
                           <p>Edit</p>
                           <img src={editIcon} alt="Edit Icon" />
                         </li>
@@ -581,7 +612,7 @@ const MintNftCollection = ({ onClick }) => {
         ) : (
           <></>
         )}
-        <div className="create-col" onClick={handleShowCollectible}>
+        <div className="create-col" onClick={handleShowCollectible} aria-hidden="true">
           <div className="plus-icon">
             <img src={union} alt="create" />
           </div>
@@ -622,7 +653,7 @@ const MintNftCollection = ({ onClick }) => {
 };
 
 MintNftCollection.propTypes = {
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default MintNftCollection;

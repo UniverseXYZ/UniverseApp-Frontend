@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Button from '../button/Button';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';

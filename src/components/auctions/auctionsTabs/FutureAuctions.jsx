@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Moment from 'react-moment';
 import moment from 'moment';
 import Button from '../../button/Button';
@@ -57,12 +57,18 @@ const FutureAuctions = () => {
                 </Button>
                 <div className="line" />
                 {shownActionId === futureAuction.id ? (
-                  <img src={arrowUp} alt="Arrow up" onClick={() => setshownActionId(null)} />
+                  <img
+                    src={arrowUp}
+                    alt="Arrow up"
+                    onClick={() => setshownActionId(null)}
+                    aria-hidden="true"
+                  />
                 ) : (
                   <img
                     src={arrowDown}
                     alt="Arrow down"
                     onClick={() => setshownActionId(futureAuction.id)}
+                    aria-hidden="true"
                   />
                 )}
               </div>
@@ -91,7 +97,9 @@ const FutureAuctions = () => {
                     <img
                       src={infoIconRed}
                       onMouseOver={() => setHideLaunchIcon(false)}
+                      onFocus={() => setHideLaunchIcon(false)}
                       onMouseLeave={() => setHideLaunchIcon(true)}
+                      onBlur={() => setHideLaunchIcon(true)}
                       alt="Info"
                     />
                   ) : (
@@ -117,7 +125,9 @@ const FutureAuctions = () => {
                     <img
                       src={infoIconRed}
                       onMouseOver={() => setHideEndIcon(false)}
+                      onFocus={() => setHideEndIcon(false)}
                       onMouseLeave={() => setHideEndIcon(true)}
+                      onBlur={() => setHideEndIcon(true)}
                       alt="Info"
                     />
                   ) : (

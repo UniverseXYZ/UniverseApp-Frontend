@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppContext from '../../ContextAPI';
 import instagramLogo from '../../assets/images/instagram-outlined.svg';
 import twitterLogo from '../../assets/images/icons_twitter.svg';

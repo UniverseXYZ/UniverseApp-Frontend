@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import AuctionsTab from './AuctionsTab';
 import MintingTab from './MintingTab';
 
@@ -11,12 +11,14 @@ const HowItWorks = () => {
         <h1 className="title">How It Works</h1>
         <div className="tabs">
           <button
+            type="button"
             onClick={() => setSelectedTabIndex(0)}
             className={selectedTabIndex === 0 ? 'active' : ''}
           >
             Minting
           </button>
           <button
+            type="button"
             onClick={() => setSelectedTabIndex(1)}
             className={selectedTabIndex === 1 ? 'active' : ''}
           >

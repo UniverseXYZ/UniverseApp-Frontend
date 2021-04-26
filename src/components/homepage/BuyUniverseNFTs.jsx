@@ -1,3 +1,4 @@
+import React from 'react';
 import buyUniverseNFTsImg from '../../assets/images/buy-universe-nft.png';
 
 const BuyUniverseNFTs = () => (

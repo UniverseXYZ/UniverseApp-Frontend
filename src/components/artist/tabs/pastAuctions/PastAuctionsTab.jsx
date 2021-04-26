@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Pagination from '../../../pagination/Pagionation';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 import PastAuctionsList from './PastAuctionsList';

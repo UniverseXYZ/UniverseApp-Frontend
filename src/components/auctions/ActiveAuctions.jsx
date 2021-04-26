@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useState } from 'react';
 import Moment from 'react-moment';
 import moment from 'moment';
 import Button from '../button/Button';
@@ -34,7 +34,7 @@ const ActiveAuctions = () => {
   return (
     <div className="active-auctions">
       <div className="input-search">
-        <button onClick={clearInput} className="clear-input">
+        <button type="button" onClick={clearInput} className="clear-input">
           Clear
         </button>
         <img src={searchIcon} alt="search" />
@@ -81,12 +81,18 @@ const ActiveAuctions = () => {
               </div>
               <div className="launch-auction">
                 {shownActionId === activeAuction.id ? (
-                  <img src={arrowUp} onClick={() => setShownActionId(null)} alt="Arrow up" />
+                  <img
+                    src={arrowUp}
+                    onClick={() => setShownActionId(null)}
+                    alt="Arrow up"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <img
                     src={arrowDown}
                     onClick={() => setShownActionId(activeAuction.id)}
                     alt="Arrow down"
+                    aria-hidden="true"
                   />
                 )}
               </div>

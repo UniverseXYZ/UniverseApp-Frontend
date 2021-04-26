@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
 import PropTypes from 'prop-types';
@@ -31,7 +31,7 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                 <div className="artist__details">
                   <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
-                  <button>{auction.artist.name}</button>
+                  <button type="button">{auction.artist.name}</button>
                 </div>
               </div>
               <div className="auction__details">
@@ -89,9 +89,9 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
 };
 
 FutureAuctionsList.propTypes = {
-  data: PropTypes.array,
-  perPage: PropTypes.number,
-  offset: PropTypes.number,
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  perPage: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
 export default FutureAuctionsList;

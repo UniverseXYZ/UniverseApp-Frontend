@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import sizeUpIcon from '../../assets/images/size-up.svg';
@@ -39,6 +39,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             src={sizeDownIcon}
             alt="Exit Full Screen"
             onClick={() => setFullScreen(false)}
+            aria-hidden="true"
           />
         ) : (
           <img
@@ -46,14 +47,23 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             src={sizeUpIcon}
             alt="Show Full Screen"
             onClick={() => setFullScreen(true)}
+            aria-hidden="true"
           />
         )}
-        <img className="close" src={closeIcon} alt="Close" onClick={onClose} />
+        <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
 
-        <div className="slider__left__arrow" onClick={() => handleArrowClick('left')}>
+        <div
+          className="slider__left__arrow"
+          onClick={() => handleArrowClick('left')}
+          aria-hidden="true"
+        >
           <img src={arrowIcon} alt="Slide left" />
         </div>
-        <div className="slider__right__arrow" onClick={() => handleArrowClick('right')}>
+        <div
+          className="slider__right__arrow"
+          onClick={() => handleArrowClick('right')}
+          aria-hidden="true"
+        >
           <img src={arrowIcon} alt="Slide right" />
         </div>
 
@@ -102,6 +112,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                 className={`nft__image ${selectedNFTIndex === index ? 'selected' : ''}`}
                 key={nft.id}
                 onClick={() => setSelectedNFTIndex(index)}
+                aria-hidden="true"
               >
                 <img src={nft.image} alt={nft.name} />
               </div>
@@ -112,11 +123,11 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <h2 className="nft__title">{onTier.nfts[selectedNFTIndex].title}</h2>
           <div className="nft__released">
             <div className="item">
-              <label>Released</label>
+              <span>Released</span>
               <p>{onTier.nfts[selectedNFTIndex].releasedDate}</p>
             </div>
             <div className="item">
-              <label>Collection</label>
+              <span>Collection</span>
               <p>
                 <img
                   src={onTier.nfts[selectedNFTIndex].collectionAvatar}
@@ -134,8 +145,8 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
 };
 
 PreviewNFTsPopup.propTypes = {
-  onClose: PropTypes.func,
-  onTier: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
+  onTier: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default PreviewNFTsPopup;

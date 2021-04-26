@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useHistory, withRouter } from 'react-router';
+import React, { useState, useEffect } from 'react';
+import { useHistory, withRouter } from 'react-router-dom';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab';
 
@@ -20,6 +20,7 @@ const Tabs = (props) => {
       <div className="tabs__section__container">
         <div className="tabs">
           <button
+            type="button"
             onClick={() => {
               setSelectedTabIndex(0);
               history.push('/minting-and-auctions/marketplace/active-auctions');
@@ -29,6 +30,7 @@ const Tabs = (props) => {
             Active auctions
           </button>
           <button
+            type="button"
             onClick={() => {
               setSelectedTabIndex(1);
               history.push('/minting-and-auctions/marketplace/future-auctions');

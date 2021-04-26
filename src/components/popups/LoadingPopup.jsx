@@ -12,7 +12,7 @@ const LoadingPopup = ({ onClose }) => (
       <div />
       <div />
     </div>
-    <button className="popup-close" onClick={onClose}>
+    <button type="button" className="popup-close" onClick={onClose}>
       <img src={closeIcon} alt="" />
     </button>
     <div className="loading-text">
@@ -33,7 +33,7 @@ const LoadingPopup = ({ onClose }) => (
 );
 
 LoadingPopup.propTypes = {
-  onClose: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default LoadingPopup;

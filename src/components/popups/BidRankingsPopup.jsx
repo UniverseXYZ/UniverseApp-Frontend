@@ -4,7 +4,13 @@ import closeIcon from '../../assets/images/close-menu.svg';
 
 const BidRankingsPopup = ({ onClose, onBidders }) => (
   <div className="bid__rankings__popup">
-    <img className="close__popup" onClick={onClose} src={closeIcon} alt="Close" />
+    <img
+      className="close__popup"
+      onClick={onClose}
+      src={closeIcon}
+      alt="Close"
+      aria-hidden="true"
+    />
     <h1 className="title">Bid Rankings</h1>
     <div className="reward__tiers">
       <div className="label">Reward Tiers:</div>
@@ -86,8 +92,8 @@ const BidRankingsPopup = ({ onClose, onBidders }) => (
 );
 
 BidRankingsPopup.propTypes = {
-  onClose: PropTypes.func,
-  onBidders: PropTypes.array,
+  onClose: PropTypes.func.isRequired,
+  onBidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default BidRankingsPopup;

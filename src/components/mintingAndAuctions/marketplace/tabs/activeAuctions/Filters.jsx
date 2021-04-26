@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Animated } from 'react-animated-css';
 import arrowDown from '../../../../../assets/images/arrow-down.svg';
 import searchIcon from '../../../../../assets/images/search.svg';
@@ -30,13 +30,14 @@ const ActiveAuctionsFilters = () => {
     <div className="active__auctions__filters">
       <div className="active__auctions__filters__head">
         <h1 className="title">Filters</h1>
-        <button>Clear all</button>
+        <button type="button">Clear all</button>
       </div>
       <div className="active__auctions__filters__fields">
         <div
           ref={ref}
           className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
           onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+          aria-hidden="true"
         >
           <span className="selected__item">{selectedItem}</span>
           <img className="chevron__down" src={arrowDown} alt="Arrow" />
@@ -49,6 +50,7 @@ const ActiveAuctionsFilters = () => {
                       setSelectedItem('Newest');
                       setIsDropdownOpened(false);
                     }}
+                    aria-hidden="true"
                   >
                     Newest
                   </li>
@@ -57,6 +59,7 @@ const ActiveAuctionsFilters = () => {
                       setSelectedItem('Highest bid');
                       setIsDropdownOpened(false);
                     }}
+                    aria-hidden="true"
                   >
                     Highest bid
                   </li>

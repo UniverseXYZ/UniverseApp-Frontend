@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import NFTsList from './NFTsList';
 import { PLACEHOLDER_NFTS } from '../../../../utils/fixtures/NFTsDummyData';
@@ -30,7 +30,7 @@ const NFTsTab = ({ onArtist }) => {
 };
 
 NFTsTab.propTypes = {
-  onArtist: PropTypes.object,
+  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default NFTsTab;

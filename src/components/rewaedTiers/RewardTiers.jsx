@@ -1,5 +1,5 @@
+import React, { useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 import icon from '../../assets/images/auction_icon.svg';
@@ -28,6 +28,7 @@ const RewardTiers = () => {
         onClick={() => {
           history.push('/my-auctions');
         }}
+        aria-hidden="true"
       >
         <img src={arrow} alt="back" />
         <span>My Auctions</span>
@@ -85,12 +86,18 @@ const RewardTiers = () => {
                   </div>
                   <div className="launch-auction">
                     {shownActionId === tier.id ? (
-                      <img src={arrowUp} onClick={() => setShownActionId(null)} alt="Arrow up" />
+                      <img
+                        src={arrowUp}
+                        alt="Arrow up"
+                        onClick={() => setShownActionId(null)}
+                        aria-hidden="true"
+                      />
                     ) : (
                       <img
                         src={arrowDown}
-                        onClick={() => setShownActionId(tier.id)}
                         alt="Arrow Down"
+                        onClick={() => setShownActionId(tier.id)}
+                        aria-hidden="true"
                       />
                     )}
                   </div>
@@ -104,9 +111,12 @@ const RewardTiers = () => {
                         {nft.previewImage.type === 'video/mp4' && (
                           <video
                             onMouseOver={(event) => event.target.play()}
+                            onFocus={(event) => event.target.play()}
                             onMouseOut={(event) => event.target.pause()}
+                            onBlur={(event) => event.target.pause()}
                           >
                             <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                            <track kind="captions" {...props} />
                             Your browser does not support the video tag.
                           </video>
                         )}
@@ -172,6 +182,7 @@ const RewardTiers = () => {
           onClick={() => {
             history.push('/create-tiers');
           }}
+          aria-hidden="true"
         >
           <div className="plus-icon">
             <img src={union} alt="create" />
@@ -187,6 +198,7 @@ const RewardTiers = () => {
         onClick={() => {
           history.push('/create-tiers');
         }}
+        aria-hidden="true"
       >
         <div className="plus-icon">
           <img src={union} alt="create" />

@@ -5,7 +5,7 @@ import closeIcon from '../../assets/images/cross.svg';
 
 const CongratsPopup = ({ onClose }) => (
   <div className="popup-div congrats-popup">
-    <button className="popup-close" onClick={onClose}>
+    <button type="button" className="popup-close" onClick={onClose}>
       <img src={closeIcon} alt="" />
     </button>
     <div className="popup-title">
@@ -23,7 +23,7 @@ const CongratsPopup = ({ onClose }) => (
 );
 
 CongratsPopup.propTypes = {
-  onClose: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default CongratsPopup;
