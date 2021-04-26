@@ -48,7 +48,7 @@ export const mintMultipleERC721 = async (universeERC721Contract, address, tokenU
   return tokenIds;
 };
 
-export const fetchUserNfts = async (erc721Contract, ownerAddress) => {
+export const fetchUserNftIds = async (erc721Contract, ownerAddress) => {
   const nftBalance = await erc721Contract.balanceOf(ownerAddress);
   const userNftIds = [];
   for (let i = 0; i < parseInt(nftBalance.toNumber()); i++) {
@@ -57,6 +57,14 @@ export const fetchUserNfts = async (erc721Contract, ownerAddress) => {
   }
   return userNftIds;
 };
+
+export const getUserNftsMetadata = async (erc721Contract, ownerAddress) => {
+  const nftIds = await fetchUserNftIds(erc721Contract, ownerAddress);
+  for (const nftId of nftIds) {
+    const tokenURI = await erc721Contract.tokenURI(nftId);
+    const tokenMetadata = await fetch(tokenURI, {mode: 'no-cors', method: 'GET', headers: { "Content-Type": "application/json" }});
+  }
+}
 
 export const whitelistAddresses = async (auctionFactoryContract, addresses) => {
   const whitelistAddressesTx = await auctionFactoryContract.whitelistMultipleAddresses(addresses);
