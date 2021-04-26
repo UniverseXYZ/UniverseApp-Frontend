@@ -41,7 +41,6 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   const isCreatingAction = location.pathname === '/select-nfts';
   const tierId = location.state;
   const tierById = auction.tiers.find((element) => element.id === tierId);
-
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
@@ -426,7 +425,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
               ))}
             </div>
             <div className="continue-nft">
-              {tierById && tierById.nftsPerWinner === previewNFTs.length ? (
+              {tierById && Number(tierById.nftsPerWinner) === Number(previewNFTs.length) ? (
                 <Button onClick={() => handleContinue(previewNFTs)} className="light-button">
                   Continue
                 </Button>
