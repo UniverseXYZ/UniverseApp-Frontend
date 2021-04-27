@@ -466,11 +466,21 @@
 
         .pick__color {
           display: flex;
+          align-items: center;
 
           p {
             font-family: $spaceGroteskFont;
             font-size: 14px;
             line-height: 150%;
+            margin-right: 8px;
+
+            @include sm {
+              font-family: $spaceGroteskFont;
+              font-size: 14px;
+              line-height: 150%;
+              margin-right: 0%;
+              margin-left: 8px;
+            }
           }
 
           @include sm {
@@ -789,5 +799,101 @@
     .toggle-switch-switch {
       right: 0px;
     }
+  }
+}
+
+.pick__color__div {
+  position: relative;
+
+  .pick {
+    display: flex;
+    background: $white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 10px;
+    min-width: 52px;
+    min-height: 32px;
+    padding: 5px;
+    cursor: pointer;
+
+    .color {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      margin-right: 9px;
+    }
+  }
+}
+
+.custom__color__picker {
+  position: absolute;
+  right: 0px;
+  top: 34px;
+  background: $white;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  padding: 16px 16px 28px;
+  max-width: 320px;
+  .rcp-saturation {
+    border-radius: 8px;
+    &-cursor {
+      width: 32px;
+      height: 32px;
+      border: 8px solid #ffffff;
+    }
+  }
+  .rcp-body {
+    width: 100%;
+    padding: 20px 0;
+    .rcp-fields {
+      display: none;
+    }
+    .rcp-hue-cursor {
+      width: 32px;
+      height: 32px;
+      border: 8px solid #ffffff;
+      top: -6px;
+    }
+  }
+  .color__picker__hex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h5 {
+      font-family: $spaceGroteskFont;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .color__picker__name {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 8px;
+      width: 120px;
+      height: 40px;
+      padding: 4px;
+
+      .colored {
+        border-radius: 4px;
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+      }
+
+      p {
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+  }
+
+  @include sm {
+    right: unset;
+    left: 0%;
   }
 }
