@@ -182,18 +182,129 @@
         }
         .drop-down{
           position: absolute;
-          width: 98px;
+          width: 100px;
           height: 34px;
           right: 8%;
-          background: rgba(0, 0, 0, 0.02);
-          top: 26%;
+          top: 26.5%;
           border-radius: 6px;
-          .select{
-            .css-1okebmr-indicatorSeparator{
-              display: none;
+          button{
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 6px;
+            background: 
+            linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            border: 1px solid transparent;
+          }
+          }
+
+          .option-list{
+            z-index: 100;
+            overflow-x: auto;
+            position: absolute;
+            width: 445px;
+            height: 280px;
+            right: -14px;
+            top: 40px;
+            background: #FFFFFF;
+            box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            h1{
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 22px;
+              color: #000000;
+            }
+            .searchInp{
+              height: 50px;
+              border: 1px solid #D4D4D4;
+              box-sizing: border-box;
+              border-radius: 12px;
+              font-size: 16px;
+              line-height: 20px;
+              font-family: $spaceGroteskFont;
+              padding: 15px 16px;
+              color: #CACACA;
+              margin-left: unset !important;
+              margin-top: 8px;
+              width: 400px;
+      
+              &:focus {
+                  background: 
+                      linear-gradient($white, $white) padding-box,
+                      linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                  border: 1px solid transparent;
+                  color: #000;
+              }
+          }  
+            .searchDiv{ 
+                padding: 20px;
+                height: 112px;
+                &:hover{
+                  background: 
+                  linear-gradient($white, $white) padding-box,
+                  linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+              }                
+            }
+            li{
+                border-top: 1px solid rgba(0, 0, 0, 0.1);;
+                padding-left: 20px;
+                height: 50px;
+                &:hover{
+                    background: #F6FAF3;
+                }
+                .img-name{
+                  width: 100%;
+                  height: 100%;
+                }
+              img{
+                padding: 17px 12px 0 0;
+                margin: 0;
+              }
+              .dai-name{
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 20px;
+                // display: flex;
+                align-items: center;
+                color: #000000;
+                
+              }
+              .subtitle{
+                position: absolute;
+                left: 12%;
+                margin-top: -15px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 10px;
+                line-height: 0;
+                display: flex;
+                align-items: center;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            
+          }
+          .button-name{
+            padding: 0 10px;
+            font-family: $spaceGroteskFont;
+            font-size: 16px;
+            line-height: 20px;
+          }
+          .token-div{
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            .add-token{
+              margin: 20px;
+              width: 89%;
+              border-radius: 12px;
             }
           }
-        }
         .light-button{
             margin-top: 51px;
         }
