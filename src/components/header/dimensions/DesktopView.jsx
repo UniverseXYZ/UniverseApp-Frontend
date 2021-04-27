@@ -95,7 +95,7 @@ const DesktopView = ({
                 type="button"
                 className="team"
                 onClick={() => {
-                  history.push('/');
+                  history.push('/team');
                   setIsAboutDropdownOpened(false);
                 }}
               >
