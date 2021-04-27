@@ -37,7 +37,8 @@ const Header = ({ location }) => {
       location.pathname === '/' ||
       location.pathname === '/minting-and-auctions/about' ||
       location.pathname === '/minting-and-auctions/marketplace/active-auctions' ||
-      location.pathname === '/minting-and-auctions/marketplace/future-auctions'
+      location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
+      location.pathname === '/team'
     ) {
       document.querySelector('header').classList.add('dark');
     } else {

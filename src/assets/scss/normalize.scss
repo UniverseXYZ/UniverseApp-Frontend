@@ -145,6 +145,11 @@ table {
     background: #E1E1E1; 
 }
 
+::selection {
+    background-color: $black;
+    color: $white;
+}
+
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
     -webkit-appearance: none;

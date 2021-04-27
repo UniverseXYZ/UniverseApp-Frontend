@@ -19,6 +19,7 @@ import MyAccount from './containers/myAccount/MyAccount';
 import CustomizeAuction from './containers/customizeAuction/CustomizeAuction';
 import AuctionDetails from './components/auctionLandingPage/AuctionDetails';
 import AuctionSettings from './containers/auctionSettings/AuctionSettings';
+import Team from './containers/team/Team';
 
 const App = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(true);
@@ -152,6 +153,8 @@ const App = () => {
             path="/customize-auction-landing-page"
             component={() => <CustomizeAuction />}
           />
+          <Route exact path="/team" component={() => <Team />} />
+
           <Route exact path="/auction-settings" component={() => <AuctionSettings />} />
           <Route exact path="/:artist">
             <Artist />
