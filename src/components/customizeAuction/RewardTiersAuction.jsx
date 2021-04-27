@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import Button from '../button/Button';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
+import CustomColorPicker from './CustomColorPicker';
 
 const RewardTiersAuction = () => {
   const inputPlatinum = useRef(null);
@@ -20,8 +21,8 @@ const RewardTiersAuction = () => {
           <div className="tier__title">
             <h4>Platinum Tier</h4>
             <div className="pick__color">
+              <CustomColorPicker />
               <p>Pick tier color</p>
-              <input type="color" />
             </div>
             <div className="tier__description">
               <div className="winners">
@@ -37,7 +38,7 @@ const RewardTiersAuction = () => {
           </div>
           <div className="pick__color">
             <p>Pick tier color</p>
-            <input type="color" />
+            <CustomColorPicker />
           </div>
         </div>
 
@@ -94,8 +95,8 @@ const RewardTiersAuction = () => {
           <div className="tier__title">
             <h4>Gold Tier</h4>
             <div className="pick__color">
+              <CustomColorPicker />
               <p>Pick tier color</p>
-              <input type="color" />
             </div>
             <div className="tier__description">
               <div className="winners">
@@ -108,7 +109,7 @@ const RewardTiersAuction = () => {
           </div>
           <div className="pick__color">
             <p>Pick tier color</p>
-            <input type="color" />
+            <CustomColorPicker />
           </div>
         </div>
 
@@ -162,8 +163,8 @@ const RewardTiersAuction = () => {
           <div className="tier__title">
             <h4>Silver Tier</h4>
             <div className="pick__color">
+              <CustomColorPicker />
               <p>Pick tier color</p>
-              <input type="color" />
             </div>
             <div className="tier__description">
               <div className="winners">
@@ -176,7 +177,7 @@ const RewardTiersAuction = () => {
           </div>
           <div className="pick__color">
             <p>Pick tier color</p>
-            <input type="color" />
+            <CustomColorPicker />
           </div>
         </div>
 
