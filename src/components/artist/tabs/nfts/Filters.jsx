@@ -24,7 +24,7 @@ const NFTsFilters = () => {
 
   const clearFilters = () => {
     const newCollections = [...collections];
-    newCollections.map((collection) => {
+    newCollections.forEach((collection) => {
       collection.selected = false;
     });
 

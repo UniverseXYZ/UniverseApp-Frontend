@@ -40,11 +40,11 @@ const SavedNFTs = () => {
 
     const newSavedNfts = [...savedNfts];
     if (localStorage.localChecked === 'true') {
-      newSavedNfts.map((nft) => {
+      newSavedNfts.forEach((nft) => {
         nft.selected = true;
       });
     } else {
-      newSavedNfts.map((nft) => {
+      newSavedNfts.forEach((nft) => {
         nft.selected = false;
       });
     }

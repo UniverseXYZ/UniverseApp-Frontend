@@ -389,6 +389,28 @@ header {
                         }
                     }
                 }
+                button.link {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
+                    color: $black;
+                    padding: 18px 0;
+                    width: 100%;
+                    background-color: $white;
+                    img {
+                        transition: .3s ease;
+                    }
+                    &.collapsed {
+                        img {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
                 button.sign__in {
                     margin-top: 20px;
                     width: 100%;
@@ -616,7 +638,6 @@ header {
                     font-weight: 600;
                     font-size: 16px;
                     line-height: 20px;
-                    // text-transform: uppercase;
                     color: $black;
                     padding: 18px 0;
                     width: 100%;
@@ -638,6 +659,28 @@ header {
                         }
                     }
                 }
+                button.link {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 20px;
+                    color: $black;
+                    padding: 18px 0;
+                    width: 100%;
+                    background-color: $white;
+                    img {
+                        transition: .3s ease;
+                    }
+                    &.collapsed {
+                        img {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
                 button.sign__in {
                     margin-top: 20px;
                     width: 100%;
@@ -649,7 +692,6 @@ header {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    // text-transform: uppercase;
                     color: $black;
                     padding: 11px 26px;
                     background: 

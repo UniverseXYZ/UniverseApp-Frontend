@@ -109,12 +109,12 @@ const About = () => {
             <AnimatedOnScroll animationIn="fadeInUp">
               <img className="hide__on__mobile" src={universeMintingLogo} alt="Universe Minting" />
               <p className="desc">
-                Galaxies are a collection of minted NFT's these galaxies represent the IP of that
-                particular item in the universe and its community can create art for: shows, merch,
-                music festivals, etc. These Galaxies can also contain other planets within them,
-                other NFT collections of art, shows, merch and music festivals. For future build
-                outs, we hope to one day turn these into mini DAOs along with an integrated social
-                network.
+                Galaxies are a collection of minted NFT&apos;s these galaxies represent the IP of
+                that particular item in the universe and its community can create art for: shows,
+                merch, music festivals, etc. These Galaxies can also contain other planets within
+                them, other NFT collections of art, shows, merch and music festivals. For future
+                build outs, we hope to one day turn these into mini DAOs along with an integrated
+                social network.
               </p>
               <Button
                 className="light-button"

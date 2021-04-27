@@ -205,8 +205,8 @@ const PlaceBidPopup = ({
                     <Animated animationIn="zoomIn">
                       <div className="total__bid__amount__info">
                         Keep in mind that your funds will be used only if your bid wins a certain
-                        tier. If you don't win, you will be able to withdraw your funds by clicking
-                        the Withdraw button that will become active after the auction ends.
+                        tier. If you don&apos;t win, you will be able to withdraw your funds by
+                        clicking the Withdraw button that will become active after the auction ends.
                       </div>
                     </Animated>
                   )}

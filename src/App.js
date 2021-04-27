@@ -142,34 +142,23 @@ const App = () => {
           />
           <Route exact path="/my-nfts" component={() => <MyNFTs />} />
           <Route exact path="/my-account" component={() => <MyAccount />} />
-
           <Route exact path="/my-auctions" component={() => <Auctions />} />
           <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
           <Route exact path="/create-tiers" component={() => <CreateTiers />} />
           <Route exact path="/review-reward" component={() => <ReviewReward />} />
           <Route exact path="/select-nfts" component={() => <MyNFTs />} />
-
           <Route
             exact
             path="/customize-auction-landing-page"
             component={() => <CustomizeAuction />}
           />
-
-          {/* <Route exact path="/select-action-nfts" component={() => <MyNFTsContainer />} /> */}
-          <Route exact path="/my-auctions" component={() => <Auctions />} />
-          <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
-          <Route exact path="/create-tiers" component={() => <CreateTiers />} />
-          <Route exact path="/review-reward" component={() => <ReviewReward />} />
-          <Route exact path="/select-nfts" component={() => <MyNFTs />} />
           <Route exact path="/auction-settings" component={() => <AuctionSettings />} />
-
           <Route exact path="/:artist">
             <Artist />
           </Route>
           <Route exact path="/:artist/:auction">
             <AuctionLandingPage />
           </Route>
-
           <Route path="*" component={() => <Redirect to="/" />} />
         </Switch>
         <Footer />

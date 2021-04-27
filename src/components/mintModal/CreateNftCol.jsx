@@ -124,7 +124,7 @@ const CreateNftCol = (props) => {
 
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
-    if (parseInt(value) !== 0) {
+    if (parseInt(value, 10) !== 0) {
       setEditions(value);
     }
   };
@@ -481,12 +481,18 @@ const CreateNftCol = (props) => {
 
 CreateNftCol.propTypes = {
   setShowCollectible: PropTypes.func.isRequired,
-  collectionName: PropTypes.string.isRequired,
-  coverImage: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  collectionName: PropTypes.string,
+  coverImage: PropTypes.oneOfType([PropTypes.object]),
   collectionNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCollectionNFTs: PropTypes.func.isRequired,
-  collectionNFTsID: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  collectionNFTsID: PropTypes.oneOfType([PropTypes.object]),
   setCollectionNFTsID: PropTypes.func.isRequired,
+};
+
+CreateNftCol.defaultProps = {
+  collectionName: '',
+  coverImage: '',
+  collectionNFTsID: '',
 };
 
 export default CreateNftCol;
