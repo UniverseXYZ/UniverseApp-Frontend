@@ -407,9 +407,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
           <div className="sel-info">
             <div className="img-div">
               {previewNFTs.map((nft, index) => (
-                <div className="imgs">
+                <div key={nft.id} className="imgs">
                   <img
-                    key={nft}
                     className="smallView-image"
                     src={URL.createObjectURL(nft.previewImage)}
                     alt={nft.name}

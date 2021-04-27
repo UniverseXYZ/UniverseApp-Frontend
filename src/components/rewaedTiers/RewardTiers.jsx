@@ -43,7 +43,7 @@ const RewardTiers = () => {
         </div>
         {auction.tiers.length > 0 &&
           auction.tiers.map((tier) => (
-            <div className="view-tier">
+            <div key={tier.id} className="view-tier">
               <div className="auction-header">
                 <div className="img_head">
                   <div className="img_head_title">
