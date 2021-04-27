@@ -49,7 +49,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   };
   const closeCollectionMobile = () => {
     const newCollections = [...draftCollections];
-    indexes.map((index) => {
+    indexes.forEach((index) => {
       newCollections[index].selected = !newCollections[index].selected;
     });
     setCollections(newCollections);
@@ -62,7 +62,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
     setIndexes([]);
     const temp = [];
     const newCollections = [...draftCollections];
-    newCollections.map((collection, index) => {
+    newCollections.forEach((collection, index) => {
       if (collection.selected) {
         temp.push(index);
         collection.selected = false;
@@ -83,7 +83,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 
   const clearFilters = () => {
     const newCollections = [...collections];
-    newCollections.map((collection) => {
+    newCollections.forEach((collection) => {
       collection.selected = false;
     });
 

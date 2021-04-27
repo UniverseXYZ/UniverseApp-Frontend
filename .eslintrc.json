@@ -4,15 +4,10 @@
     "rules": {
         "no-nested-ternary": "off",
         "no-unused-vars": "off",
-        "jsx-a11y/anchor-is-valid": "off",
-        "react/no-unescaped-entities": "off",
-        "radix": "off",
-        "array-callback-return": "off",
-        "import/prefer-default-export": "off",
         "no-alert": "off",
         "no-console": "off",
         "no-undef": "off",
-        
+        "import/prefer-default-export": "off",
         "jsx-a11y/label-has-associated-control": "off",
         "react/jsx-props-no-spreading": "off",
         "no-param-reassign": [
@@ -28,13 +23,13 @@
         }
         ],
         "prettier/prettier": [
-        "error",
-        {
-            "trailingComma": "es5",
-            "singleQuote": true,
-            "printWidth": 100,
-            "endOfLine": "auto"
-        }
+            "error",
+            {
+                "trailingComma": "es5",
+                "singleQuote": true,
+                "printWidth": 100,
+                "endOfLine": "auto"
+            }
         ]
     },
     "plugins": ["prettier"]

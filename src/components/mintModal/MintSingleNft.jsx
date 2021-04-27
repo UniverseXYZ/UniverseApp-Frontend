@@ -117,7 +117,7 @@ const MintSingleNft = ({ onClick }) => {
 
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
-    if (parseInt(value) !== 0) {
+    if (parseInt(value, 10) !== 0) {
       setEditions(value);
     }
   };

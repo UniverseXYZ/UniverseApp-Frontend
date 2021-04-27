@@ -46,9 +46,10 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
     const minutesLeft = Math.floor(dLeft / 60) % 60;
     const secondsLeft = dLeft % 60;
     return daysLeft >= 0
-      ? `Ends in ${parseInt(daysLeft)}d : ${parseInt(hoursLeft)}h : ${parseInt(
-          minutesLeft
-        )}m : ${parseInt(secondsLeft)}s`
+      ? `Ends in ${parseInt(daysLeft, 10)}d : ${parseInt(hoursLeft, 10)}h : ${parseInt(
+          minutesLeft,
+          10
+        )}m : ${parseInt(secondsLeft, 10)}s`
       : false;
   };
 
@@ -65,10 +66,10 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
       } else {
         setSelectedAuctionEnded(false);
         setCountdown({
-          days: parseInt(days),
-          hours: parseInt(hours),
-          minutes: parseInt(minutes),
-          seconds: parseInt(seconds),
+          days: parseInt(days, 10),
+          hours: parseInt(hours, 10),
+          minutes: parseInt(minutes, 10),
+          seconds: parseInt(seconds, 10),
         });
       }
     }, 1000);

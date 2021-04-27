@@ -167,9 +167,9 @@ const TabletView = (props) => {
           <div className="overlay" />
           <ul className="nav__menu">
             <li>
-              <Link
-                to=""
-                className={collapseMintingMenu ? 'collapsed' : ''}
+              <button
+                type="button"
+                className={`link ${collapseMintingMenu ? 'collapsed' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   setCollapseMintingMenu(!collapseMintingMenu);
@@ -177,7 +177,7 @@ const TabletView = (props) => {
               >
                 <span>Minting & Auctions</span>
                 <img src={arrowDown} alt="arrow-down" />
-              </Link>
+              </button>
               {collapseMintingMenu && (
                 <>
                   <Link className="sub__nav" to="/minting-and-auctions/about">
@@ -193,9 +193,9 @@ const TabletView = (props) => {
               )}
             </li>
             <li>
-              <Link
-                to=""
-                className={collapseAboutMenu ? 'collapsed' : ''}
+              <button
+                type="button"
+                className={`link ${collapseAboutMenu ? 'collapsed' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   setCollapseAboutMenu(!collapseAboutMenu);
@@ -203,7 +203,7 @@ const TabletView = (props) => {
               >
                 <span>About</span>
                 <img src={arrowDown} alt="arrow-down" />
-              </Link>
+              </button>
               {collapseAboutMenu && (
                 <>
                   <Link className="sub__nav" to="/">

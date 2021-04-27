@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Animated } from 'react-animated-css';
 import arrowDown from '../../../../../assets/images/arrow-down.svg';
 import searchIcon from '../../../../../assets/images/search.svg';
 import AppContext from '../../../../../ContextAPI';
@@ -43,28 +42,26 @@ const FutureAuctionsFilters = () => {
           <img className="chevron__down" src={arrowDown} alt="Arrow" />
           {isDropdownOpened && (
             <div className="sorting__dropdown">
-              <Animated animationIn="fadeIn">
-                <ul>
-                  <li
-                    onClick={() => {
-                      setSelectedItem('Newest');
-                      setIsDropdownOpened(false);
-                    }}
-                    aria-hidden="true"
-                  >
-                    Newest
-                  </li>
-                  <li
-                    onClick={() => {
-                      setSelectedItem('Highest bid');
-                      setIsDropdownOpened(false);
-                    }}
-                    aria-hidden="true"
-                  >
-                    Highest bid
-                  </li>
-                </ul>
-              </Animated>
+              <ul>
+                <li
+                  onClick={() => {
+                    setSelectedItem('Newest');
+                    setIsDropdownOpened(false);
+                  }}
+                  aria-hidden="true"
+                >
+                  Newest
+                </li>
+                <li
+                  onClick={() => {
+                    setSelectedItem('Highest bid');
+                    setIsDropdownOpened(false);
+                  }}
+                  aria-hidden="true"
+                >
+                  Highest bid
+                </li>
+              </ul>
             </div>
           )}
         </div>

@@ -35,7 +35,7 @@ const DomainAndBranding = () => {
               value={auctionHeadline}
               onChange={(e) => setAuctionHeadline(e.target.value)}
             />
-            <p className="error__text">"Auction headline" is not allowed to be empty</p>
+            <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
           </div>
           <div className="upload__promo">
             <div className="upload__promo__title">
@@ -99,7 +99,7 @@ const DomainAndBranding = () => {
               value={auctionLink}
               onChange={(e) => setAuctionLink(e.target.value)}
             />
-            <p className="error__text">"Auction link" is not allowed to be empty</p>
+            <p className="error__text">&quot;Auction link&quot; is not allowed to be empty</p>
           </div>
           <div className="upload__background">
             <div className="upload__background__title">
@@ -118,9 +118,9 @@ const DomainAndBranding = () => {
                   <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                     <div className="blur-info">
                       <p>
-                        Background blur can help to focus user's attention on the most important
-                        elements of the page. We recommend using it when your background image has
-                        lots of small details.
+                        Background blur can help to focus user&apos;s attention on the most
+                        important elements of the page. We recommend using it when your background
+                        image has lots of small details.
                       </p>
                     </div>
                   </Animated>
