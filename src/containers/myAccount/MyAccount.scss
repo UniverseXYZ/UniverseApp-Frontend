@@ -463,7 +463,10 @@
                         right: 0px;    
                     }
                     @include sm{
-                        padding: 10px;
+                        display: flex;
+                        padding: 0px;
+                        height: 42px;
+                        width: 42px;
                     }
                 }
             }
@@ -532,7 +535,10 @@
                         position: absolute;
                         top: 20px;
                         right: 0px;
-                        padding: 10px;
+                        display: flex;
+                        padding: 0px;
+                        height: 42px;
+                        width: 42px;
                     }
                 }
             }
@@ -683,7 +689,10 @@
                         position: absolute;
                         top: 20px;
                         right: 0px;
-                        padding: 10px;
+                        display: flex;
+                        padding: 0px;
+                        height: 42px;
+                        width: 42px;
                     }
                 }
             }

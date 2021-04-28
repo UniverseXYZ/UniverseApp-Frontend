@@ -91,7 +91,7 @@
                     color: $black;
                     margin-bottom: 40px;
                     @include sm {
-                        font-size: 26px;
+                        font-size: 20px;
                     }
                 }
                 .creators {
@@ -118,6 +118,9 @@
                         grid-template-columns: repeat(2, 1fr);
                     }
                 }
+                @include sm {
+                    margin-bottom: 80px;
+                }
             }
 
             .contributors__section {
@@ -130,7 +133,7 @@
                     color: $black;
                     margin-bottom: 40px;
                     @include sm {
-                        font-size: 26px;
+                        font-size: 20px;
                     }
                 }
                 .contributors {

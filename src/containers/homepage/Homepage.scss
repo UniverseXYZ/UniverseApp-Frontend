@@ -29,6 +29,7 @@
             transform: rotate(180deg);
             @include sm {
                 height: 200px;
+                bottom: 10px;
             }
         }
         
@@ -136,7 +137,6 @@
         .universe__protocol__section {
             position: relative;
             padding: 90px 60px;
-            overflow: hidden;
 
             .circle-r {
                 position: absolute;
@@ -152,7 +152,7 @@
                 @include sm {
                     width: 278px;
                     height: 278px;
-                    bottom: -15%;
+                    bottom: -22%;
                     top: unset;
                     right: -20%;
                 }
@@ -208,6 +208,7 @@
                         }
                         @include sm {
                             font-size: 20px;
+                            max-width: 285px;
                         }
                     }
                     p.info {
@@ -237,15 +238,17 @@
                     @include md {
                         margin-bottom: 100px;
                     }
+                    @include sm {
+                        margin-bottom: 60px;
+                    }
                 }
             }
             @include sm {
-                padding: 90px 20px;
+                padding: 60px 20px 20px;
             }
         }
         .about__section {
             padding: 90px 60px;
-            background-color: $white;
             &__container {
                 max-width: 1110px;
                 margin: 0 auto;
@@ -277,7 +280,7 @@
                         display: none;
                         @include md {
                             display: block;
-                            margin-top: 40px;
+                            margin-top: 60px;
                             margin-bottom: 40px;
                         }
                     }
@@ -487,7 +490,7 @@
                 }
             }
             @include sm {
-                padding: 90px 20px;
+                padding: 20px 20px;
             }
         }
 
@@ -639,6 +642,10 @@
                 font-size: 16px;
                 line-height: 160%;
                 color: $black;
+                min-width: 583px;
+                @include lg {
+                    min-width: auto;
+                }
                 @include sm {
                     text-align: center;
                 }

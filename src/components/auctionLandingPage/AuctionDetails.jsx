@@ -129,10 +129,11 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   return (
     <div
       className="auction__details__section"
-      style={{
-        background: selectedAuction.background ? `url(${selectedAuction.background})` : '#F8FBFF',
-      }}
+      // style={{
+      //   background: selectedAuction.background ? `url(${selectedAuction.background})` : '#F8FBFF',
+      // }}
     >
+      <div className="bg" />
       <div className="auction__details__section__container">
         {getAllAuctionsForCurrentArtist.length && getAllAuctionsForCurrentArtist.length > 1 ? (
           <Slider {...sliderSettings}>

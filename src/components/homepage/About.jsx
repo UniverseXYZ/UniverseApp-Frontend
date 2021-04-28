@@ -96,7 +96,12 @@ const About = () => {
           <div className="blocks">
             {/* Block 1 */}
             <AnimatedOnScroll animationIn="fadeInUp">
-              <img className="show__on__mobile" src={universeMintingLogo} alt="Universe Minting" />
+              <img
+                className="show__on__mobile"
+                src={universeMintingLogo}
+                alt="Universe Minting"
+                style={{ marginTop: 0 }}
+              />
               <img
                 src={blockOne}
                 alt="Block"
@@ -140,6 +145,7 @@ const About = () => {
               <Button
                 className="light-button"
                 onClick={() => history.push('/minting-and-auctions/about')}
+                style={{ marginBottom: '60px' }}
               >
                 Learn more
               </Button>

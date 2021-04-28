@@ -1,262 +1,312 @@
 import React from 'react';
-import KateHerbert from '../../assets/images/team/Kate-Herbert.png';
+import Justin3LAU from '../../assets/images/team/Justin-3LAU.png';
+import DillonFrancis from '../../assets/images/team/Dillon-Francis.png';
+import AndréAnjos from '../../assets/images/team/André-Anjos.png';
+import WesleyPentz from '../../assets/images/team/Wesley-Pentz.png';
+import GuyLawrence from '../../assets/images/team/Guy-Lawrence.png';
+import HowardLawrence from '../../assets/images/team/Howard-Lawrence.png';
+import AaronMcDonald from '../../assets/images/team/Aaron-McDonald.png';
+import KainWarwick from '../../assets/images/team/Kain-Warwick.png';
+import StaniKulechov from '../../assets/images/team/Stani-Kulechov.png';
+import SantiagoSantos from '../../assets/images/team/Santiago-Santos.png';
+import MattHunter from '../../assets/images/team/Matt-Hunter.png';
+import AkinSawyer from '../../assets/images/team/Akin-Sawyer.png';
+import QuinnAbraham from '../../assets/images/team/Quinn-Abraham.png';
+import BillyLuedtke from '../../assets/images/team/Billy-Luedtke.png';
+import TomShaughnessy from '../../assets/images/team/Tom-Shaughnessy.png';
+import VitalikCherniak from '../../assets/images/team/Vitalik-Cherniak.png';
+import AdamDaugelli from '../../assets/images/team/Adam-Daugelli.png';
+import ChainLinkGod from '../../assets/images/team/ChainLinkGod.png';
+import NoahJessop from '../../assets/images/team/Noah-Jessop.png';
+import JamesTodaro from '../../assets/images/team/James-Todaro.png';
+import RobLeshner from '../../assets/images/team/Rob-Leshner.png';
+import BenLakoff from '../../assets/images/team/Ben-Lakoff.png';
+import BogdanGheorghe from '../../assets/images/team/Bogdan-Gheorghe.png';
+import JordanMomtazi from '../../assets/images/team/Jordan-Momtazi.png';
+import IgorLilic from '../../assets/images/team/Igor-Lilic.png';
+import RyanZurrer from '../../assets/images/team/Ryan-Zurrer.png';
+import EJRodgers from '../../assets/images/team/EJ-Rodgers.png';
+import KeeganSelby from '../../assets/images/team/Keegan-Selby.png';
+import AlokVasudev from '../../assets/images/team/Alok-Vasudev.png';
+import KeiranWarwick from '../../assets/images/team/Keiran-Warwick.png';
+import KevinXu from '../../assets/images/team/Kevin-Xu.png';
+import KevinRose from '../../assets/images/team/Kevin-Rose.png';
+import AaronWright from '../../assets/images/team/Aaron-Wright.png';
+import ChandlerSong from '../../assets/images/team/Chandler-Song.png';
+import VanceSpencer from '../../assets/images/team/Vance-Spencer.png';
+import DeFiDad from '../../assets/images/team/DeFi-Dad.png';
+import InternetPaul from '../../assets/images/team/Internet-Paul.png';
+import MiguelNabais from '../../assets/images/team/Miguel-Nabais.png';
+import MarcWeinstein from '../../assets/images/team/Marc-Weinstein.png';
+import LesBorsai from '../../assets/images/team/Les-Borsai.png';
+import SpencerNoon from '../../assets/images/team/Spencer-Noon.png';
+import HomerShillson from '../../assets/images/team/Homer-Shillson.png';
+import AntonBukov from '../../assets/images/team/Anton-Bukov.png';
+import RahillaZafar from '../../assets/images/team/Rahilla-Zafar.png';
+import TekinSalimi from '../../assets/images/team/Tekin-Salimi.png';
+import JakeBrukhman from '../../assets/images/team/Jake-Brukhman.png';
+import WhaleShark from '../../assets/images/team/WhaleShark.png';
+import Gmoney from '../../assets/images/team/Gmoney.png';
+import RobbieFerguson from '../../assets/images/team/Robbie-Ferguson.png';
+import AndréNabais from '../../assets/images/team/André-Nabais.png';
+import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
 
 const UniverseContributors = () => {
   const contributors = [
     {
       id: 1,
       name: 'Justin 3LAU',
-      avatar: KateHerbert,
+      avatar: Justin3LAU,
     },
     {
       id: 2,
       name: 'Dillon Francis',
-      avatar: KateHerbert,
+      avatar: DillonFrancis,
     },
     {
       id: 3,
       name: 'André Anjos - RAC',
-      avatar: KateHerbert,
+      avatar: AndréAnjos,
     },
     {
       id: 4,
       name: 'Wesley Pentz - Diplo',
-      avatar: KateHerbert,
+      avatar: WesleyPentz,
     },
     {
       id: 5,
       name: 'Guy Lawrence - Disclosure',
-      avatar: KateHerbert,
+      avatar: GuyLawrence,
     },
     {
       id: 6,
       name: 'Howard Lawrence - Disclosure',
-      avatar: KateHerbert,
+      avatar: HowardLawrence,
     },
     {
       id: 7,
       name: 'Aaron McDonald',
-      avatar: KateHerbert,
+      avatar: AaronMcDonald,
     },
     {
       id: 8,
       name: 'Kain Warwick',
-      avatar: KateHerbert,
+      avatar: KainWarwick,
     },
     {
       id: 9,
       name: 'Stani Kulechov',
-      avatar: KateHerbert,
+      avatar: StaniKulechov,
     },
     {
       id: 10,
       name: 'Santiago Santos',
-      avatar: KateHerbert,
+      avatar: SantiagoSantos,
     },
     {
       id: 11,
       name: 'Matt Hunter',
-      avatar: KateHerbert,
+      avatar: MattHunter,
     },
     {
       id: 12,
       name: 'Akin Sawyer',
-      avatar: KateHerbert,
+      avatar: AkinSawyer,
     },
     {
       id: 13,
       name: 'Quinn Abraham',
-      avatar: KateHerbert,
+      avatar: QuinnAbraham,
     },
     {
       id: 14,
       name: 'Billy Luedtke',
-      avatar: KateHerbert,
+      avatar: BillyLuedtke,
     },
     {
       id: 15,
       name: 'Tom Shaughnessy',
-      avatar: KateHerbert,
+      avatar: TomShaughnessy,
     },
     {
       id: 16,
       name: 'Vitalik Cherniak',
-      avatar: KateHerbert,
+      avatar: VitalikCherniak,
     },
     {
       id: 17,
       name: 'Adam D’augelli',
-      avatar: KateHerbert,
+      avatar: AdamDaugelli,
     },
     {
       id: 18,
       name: 'ChainLinkGod',
-      avatar: KateHerbert,
+      avatar: ChainLinkGod,
     },
     {
       id: 19,
       name: 'Noah Jessop',
-      avatar: KateHerbert,
+      avatar: NoahJessop,
     },
     {
       id: 20,
       name: 'Dr. James Todaro',
-      avatar: KateHerbert,
+      avatar: JamesTodaro,
     },
     {
       id: 21,
       name: 'Rob Leshner',
-      avatar: KateHerbert,
+      avatar: RobLeshner,
     },
     {
       id: 22,
       name: 'Ben Lakoff',
-      avatar: KateHerbert,
+      avatar: BenLakoff,
     },
     {
       id: 23,
       name: 'Bogdan Gheorghe',
-      avatar: KateHerbert,
+      avatar: BogdanGheorghe,
     },
     {
       id: 24,
       name: 'Jordan Momtazi',
-      avatar: KateHerbert,
+      avatar: JordanMomtazi,
     },
     {
       id: 25,
       name: 'Igor Lilic',
-      avatar: KateHerbert,
+      avatar: IgorLilic,
     },
     {
       id: 26,
       name: 'Ryan Zurrer',
-      avatar: KateHerbert,
+      avatar: RyanZurrer,
     },
     {
       id: 27,
       name: 'EJ Rodgers',
-      avatar: KateHerbert,
+      avatar: EJRodgers,
     },
     {
       id: 28,
       name: 'Keegan Selby',
-      avatar: KateHerbert,
+      avatar: KeeganSelby,
     },
     {
       id: 29,
       name: 'Alok Vasudev',
-      avatar: KateHerbert,
+      avatar: AlokVasudev,
     },
     {
       id: 30,
       name: 'Keiran Warwick',
-      avatar: KateHerbert,
+      avatar: KeiranWarwick,
     },
     {
       id: 31,
       name: 'Kevin Xu',
-      avatar: KateHerbert,
+      avatar: KevinXu,
     },
     {
       id: 32,
       name: 'Kevin Rose',
-      avatar: KateHerbert,
+      avatar: KevinRose,
     },
     {
       id: 33,
       name: 'Aaron Wright',
-      avatar: KateHerbert,
+      avatar: AaronWright,
     },
     {
       id: 34,
       name: 'Chandler Song',
-      avatar: KateHerbert,
+      avatar: ChandlerSong,
     },
     {
       id: 35,
       name: 'Vance Spencer',
-      avatar: KateHerbert,
+      avatar: VanceSpencer,
     },
     {
       id: 36,
       name: 'DeFi Dad',
-      avatar: KateHerbert,
+      avatar: DeFiDad,
     },
     {
       id: 37,
       name: 'Internet Paul',
-      avatar: KateHerbert,
+      avatar: InternetPaul,
     },
     {
       id: 38,
       name: 'Miguel Nabais',
-      avatar: KateHerbert,
+      avatar: MiguelNabais,
     },
     {
       id: 39,
       name: 'Marc Weinstein',
-      avatar: KateHerbert,
+      avatar: MarcWeinstein,
     },
     {
       id: 40,
       name: 'Les Borsai',
-      avatar: KateHerbert,
+      avatar: LesBorsai,
     },
     {
       id: 41,
       name: 'Spencer Noon',
-      avatar: KateHerbert,
+      avatar: SpencerNoon,
     },
     {
       id: 42,
       name: 'Homer Shillson',
-      avatar: KateHerbert,
+      avatar: HomerShillson,
     },
     {
       id: 43,
       name: 'Anton Bukov',
-      avatar: KateHerbert,
+      avatar: AntonBukov,
     },
     {
       id: 44,
       name: 'Rahilla Zafar',
-      avatar: KateHerbert,
+      avatar: RahillaZafar,
     },
     {
       id: 45,
       name: 'Tekin Salimi',
-      avatar: KateHerbert,
+      avatar: TekinSalimi,
     },
     {
       id: 46,
       name: 'Jake Brukhman',
-      avatar: KateHerbert,
+      avatar: JakeBrukhman,
     },
     {
       id: 47,
       name: 'WhaleShark',
-      avatar: KateHerbert,
+      avatar: WhaleShark,
     },
     {
       id: 48,
       name: 'Gmoney',
-      avatar: KateHerbert,
+      avatar: Gmoney,
     },
     {
       id: 49,
       name: 'Robbie Ferguson',
-      avatar: KateHerbert,
+      avatar: RobbieFerguson,
     },
     {
       id: 50,
       name: 'André Nabais',
-      avatar: KateHerbert,
+      avatar: AndréNabais,
     },
     {
       id: 51,
       name: 'Luke Lombe',
-      avatar: KateHerbert,
+      avatar: LukeLombe,
     },
   ];
   return (
@@ -265,7 +315,7 @@ const UniverseContributors = () => {
       <div className="contributors">
         {contributors.map((contributor) => (
           <div className="contributor" key={contributor.id}>
-            <img src={contributor.avatar} alt={contributor.name} />
+            <img src={contributor.avatar} alt={contributor.name} title={contributor.name} />
             <h2>{contributor.name}</h2>
           </div>
         ))}

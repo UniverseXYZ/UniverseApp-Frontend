@@ -119,6 +119,9 @@ const AuctionLandingPage = () => {
       <RewardTiers auction={auction} />
       <AuctionOwnerDetails artist={artist} />
       <PlaceBid auction={auction} bidders={bidders} setBidders={setBidders} />
+      <div className="artist__personal__logo">
+        <img src={artist.personalLogo} alt="Artist personal logo" />
+      </div>
     </div>
   ) : (
     <Redirect to="/" />
