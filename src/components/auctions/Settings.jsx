@@ -1,5 +1,6 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useContext } from 'react';
+import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
@@ -15,6 +16,7 @@ import usdcIcon from '../../assets/images/usdc_icon.svg';
 import bondIcon from '../../assets/images/bond_icon.svg';
 import snxIcon from '../../assets/images/snx.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
+import AddToken from '../popups/AddTokenPopup';
 
 const AuctionSettings = () => {
   const location = useLocation();
@@ -26,6 +28,7 @@ const AuctionSettings = () => {
   const [minBid, setMinBId] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [bidtype, setBidtype] = useState('eth');
+  const [showAddToken, setShowAddToken] = useState(false);
 
   const options = [
     {
@@ -69,6 +72,9 @@ const AuctionSettings = () => {
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
+  const handleClose = () => {
+    setShowAddToken(false);
+  };
   console.log(minBid);
   const bid = options.find((element) => element.value === bidtype);
   console.log(bid);
@@ -79,6 +85,8 @@ const AuctionSettings = () => {
         <img src={arrow} alt="back" />
         <span>My Auctions</span>
       </div>
+      {/* {showAddToken && <AddToken onClose={handleClose} />} */}
+
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction Settings</h2>
@@ -91,7 +99,7 @@ const AuctionSettings = () => {
               <div className="drop-down">
                 <button type="button" onClick={() => handleShow()}>
                   <img src={bid.img} alt="icon" />
-                  <spam className="button-name">{bid.name}</spam>
+                  <span className="button-name">{bid.name}</span>
                   <img src={arrowDown} alt="arrow" />
                 </button>
                 <ul className="option-list" hidden={openList}>
@@ -114,20 +122,28 @@ const AuctionSettings = () => {
                     >
                       <div className="img-name">
                         <img src={item.img} alt="icon" />
-                        <spam className="dai-name">{item.name}</spam>
+                        <span className="dai-name">{item.name}</span>
                       </div>
-                      {item.subtitle && <spam className="subtitle">{item.subtitle}</spam>}
+                      {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
                     </li>
                   ))}
                   <div className="token-div">
-                    <Button className="light-border-button add-token">Add token</Button>
+                    <Popup
+                      trigger={
+                        <button type="button" className="light-border-button add-token">
+                          Add token
+                        </button>
+                      }
+                    >
+                      {(close) => <AddToken onClose={close} />}
+                    </Popup>
                   </div>
                 </ul>
               </div>
             </div>
             <div className="infoDiv">
               <Input label="Start date" />
-              {/* <DatePicker selected={startDate} onChange={date => setStartDate(date)} /> */}
+              <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
               <Input label="End date" />
               <span className="auction-ext">
                 Ending auction extension timer: 3 minutes

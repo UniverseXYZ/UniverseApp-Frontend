@@ -26,6 +26,74 @@
     }
   }
 }
+.add__token {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 440px;
+  height: 471px;
+  background: $white;
+  box-shadow: 0 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  padding: 40px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+
+  h3 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-weight: 600px;
+    font-size: 26px;
+    line-height: 140%;
+    letter-spacing: 0.2px;
+    margin-bottom: 24px;
+  }
+
+  label {
+    font-family: $spaceGroteskFont;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 1px;
+  }
+
+  input {
+    font-family: $spaceGroteskFont;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 20px;
+  }
+  ::placeholder {
+    font-family: $spaceGroteskFont;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.2);
+  }
+
+  button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  @include sm {
+    width: 90%;
+    padding: 40px 20px;
+  }
+}
 .preview__image__popup {
   position: fixed;
   left: 50%;
@@ -116,12 +184,10 @@
       border: 1px solid rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
       border-radius: 12px;
-      transition: .5s ease;
+      transition: 0.5s ease;
 
       &:hover {
-        background: 
-            linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
         border: 1px solid transparent;
       }
     }
@@ -245,16 +311,16 @@
         border-radius: 6px;
 
         &:nth-child(1) {
-          color: #80CCDF;
-          border: 1px solid #80CCDF;
+          color: #80ccdf;
+          border: 1px solid #80ccdf;
         }
         &:nth-child(2) {
-          color: #DDBC45;
-          border: 1px solid #DDBC45;
+          color: #ddbc45;
+          border: 1px solid #ddbc45;
         }
         &:nth-child(3) {
-          color: #BCBCBC;
-          border: 1px solid #BCBCBC;
+          color: #bcbcbc;
+          border: 1px solid #bcbcbc;
         }
       }
     }
@@ -268,17 +334,17 @@
     padding-right: 30px;
 
     .platinum {
-      border: 1px solid #80CCDF;
+      border: 1px solid #80ccdf;
       padding: 10px 20px;
       border-radius: 12px;
     }
     .gold {
-      border: 1px solid #DDBC45;
+      border: 1px solid #ddbc45;
       padding: 10px 20px;
       border-radius: 12px;
     }
     .silver {
-      border: 1px solid #BCBCBC;
+      border: 1px solid #bcbcbc;
       padding: 10px 20px;
       border-radius: 12px;
     }
@@ -295,8 +361,8 @@
           padding: 5px 0;
 
           span.platinum__small {
-            border: 1px solid #80CCDF;
-            color: #80CCDF;
+            border: 1px solid #80ccdf;
+            color: #80ccdf;
             padding: 2px 5px;
             border-radius: 12px;
             margin-left: 5px;
@@ -307,8 +373,8 @@
             line-height: 120%;
           }
           span.gold__small {
-            border: 1px solid #DDBC45;
-            color: #DDBC45;
+            border: 1px solid #ddbc45;
+            color: #ddbc45;
             padding: 2px 5px;
             border-radius: 12px;
             margin-left: 5px;
@@ -319,8 +385,8 @@
             line-height: 120%;
           }
           span.silver__small {
-            border: 1px solid #BCBCBC;
-            color: #BCBCBC;
+            border: 1px solid #bcbcbc;
+            color: #bcbcbc;
             padding: 2px 5px;
             border-radius: 12px;
             margin-left: 5px;
@@ -427,7 +493,7 @@
       font-weight: normal;
       font-size: 16px;
       line-height: 20px;
-      color: #1A1A1A;
+      color: #1a1a1a;
     }
     .currency {
       position: absolute;
@@ -542,7 +608,7 @@
     font-size: 12px;
     line-height: 150%;
     text-align: center;
-    color: #FF4949;
+    color: #ff4949;
   }
   .congrats__icon {
     display: flex;
@@ -649,7 +715,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: .5s;
+      transition: 0.5s;
       z-index: 1;
       &:hover {
         background: rgba(0, 0, 0, 0.3);
@@ -681,7 +747,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: .5s;
+      transition: 0.5s;
       z-index: 1;
       &:hover {
         background: rgba(0, 0, 0, 0.3);
@@ -789,9 +855,8 @@
           cursor: pointer;
           border-radius: 10px;
           &.selected {
-            background: 
-              linear-gradient($white, $white) padding-box,
-              linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            background: linear-gradient($white, $white) padding-box,
+              linear-gradient(to right, #bceb00, #00eaea) border-box;
             border: 2px solid transparent;
           }
           img {
@@ -920,7 +985,7 @@
     }
   }
   button {
-     @include md {
+    @include md {
       width: 100%;
     }
   }
@@ -959,7 +1024,7 @@
     width: 90%;
   }
 }
-.popup-div{
+.popup-div {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -971,16 +1036,16 @@
   max-width: 520px;
   width: 100%;
 
-  @include lg{
+  @include lg {
     max-width: 520px;
     width: 70%;
   }
-  @include sm{
+  @include sm {
     padding: 40px 26px;
     width: 85%;
   }
 }
-.popup-close{
+.popup-close {
   cursor: pointer;
   padding: 2px 8px;
   margin-top: -12px;
@@ -992,18 +1057,18 @@
   top: 0;
   right: 0;
 }
-.popup-title{
+.popup-title {
   text-align: center;
   padding-bottom: 24px;
 
-  h4{
+  h4 {
     font-family: $sharpGroteskSemiBoldFont;
     font-weight: 600;
     font-size: 26px;
     line-height: 140%;
     letter-spacing: 0.2px;
 
-    @include sm{
+    @include sm {
       font-size: 20px;
       line-height: 130%;
     }
@@ -1015,7 +1080,7 @@
   justify-content: center;
   align-items: center;
 }
-.popup-text>p{
+.popup-text > p {
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: normal;
@@ -1024,22 +1089,22 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.6);
 }
-.popup-btns{
+.popup-btns {
   display: flex;
   justify-content: center;
   width: 100%;
   text-align: center;
   margin-top: 20px;
 
-  @include sm{
+  @include sm {
     display: grid;
     justify-content: normal;
   }
 }
-.popup-btns > .light-button{
+.popup-btns > .light-button {
   margin-right: 12px;
-  
-  @include sm{
+
+  @include sm {
     margin-right: 0%;
     margin-bottom: 20px;
   }
@@ -1047,7 +1112,7 @@
 .popup-arrow {
   display: none;
 }
-.congrats{
+.congrats {
   font-style: normal;
   font-weight: 600;
   font-size: 32px;
@@ -1062,7 +1127,7 @@
   text-align: center;
   padding-bottom: 20px;
 }
-.congrats-text{
+.congrats-text {
   padding: 0 80px;
   margin: 0;
 }
@@ -1073,10 +1138,10 @@
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
 
-  @include lg{
+  @include lg {
     width: 70%;
   }
-  @include sm{
+  @include sm {
     width: 85%;
   }
 }
@@ -1085,7 +1150,7 @@
   justify-content: center;
   height: 80px;
 }
-.loading-ring div{
+.loading-ring div {
   box-sizing: border-box;
   display: block;
   position: absolute;
@@ -1095,7 +1160,7 @@
   border: 3px solid $white;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #fff #ADEB13  #65F2EC  #6BEA65;
+  border-color: #fff #adeb13 #65f2ec #6bea65;
 }
 .loading-ring div:nth-child(1) {
   animation-delay: -0.45s;
@@ -1114,12 +1179,12 @@
     transform: rotate(360deg);
   }
 }
-.loading-text{
+.loading-text {
   margin-top: 30px;
   text-align: center;
   padding: 0;
 }
-.loading-text>p{
+.loading-text > p {
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: normal;
@@ -1128,9 +1193,8 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.6);
 }
-.loading-btns{
+.loading-btns {
   text-align: center;
   padding: 0;
   margin-top: 30px;
 }
-
