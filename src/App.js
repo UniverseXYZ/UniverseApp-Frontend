@@ -72,10 +72,14 @@ const App = () => {
     function handleScroll() {
       if (window.scrollY > 400) {
         document.querySelector('header').style.position = 'fixed';
-        document.querySelector('.artist__personal__logo').style.position = 'fixed';
+        if (document.querySelector('.artist__personal__logo')) {
+          document.querySelector('.artist__personal__logo').style.position = 'fixed';
+        }
       } else {
         document.querySelector('header').style.position = 'relative';
-        document.querySelector('.artist__personal__logo').style.position = 'absolute';
+        if (document.querySelector('.artist__personal__logo')) {
+          document.querySelector('.artist__personal__logo').style.position = 'absolute';
+        }
       }
     }
 
