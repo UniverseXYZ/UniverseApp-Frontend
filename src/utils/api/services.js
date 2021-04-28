@@ -77,3 +77,27 @@ export const withdrawRoyalties = async (auctionFactoryContract, assetAddress = E
   const withdrawETHTx = await auctionFactoryContract.withdrawRoyalties(assetAddress, to);
   return await withdrawETHTx.wait();
 };
+
+export const getAuction = async (auctionFactoryContract, auctionId) => {
+  return await auctionFactoryContract.auctions(auctionId);
+};
+
+export const getMinimumReservePriceForSlot = async (auctionFactoryContract, auctionId, slotIdx) => {
+  return await auctionFactoryContract.getMinimumReservePriceForSlot(auctionId, slotIdx);
+};
+
+export const isAddressWhitelisted = async (auctionFactoryContract, auctionId, address) => {
+  return await auctionFactoryContract.isAddressWhitelisted(auctionId, address);
+};
+
+export const getBidderBalance = async (auctionFactoryContract, auctionId, address) => {
+  return await auctionFactoryContract.getBidderBalance(auctionId, address);
+};
+
+export const getSlotWinner = async (auctionFactoryContract, auctionId, slotIdx) => {
+  return await auctionFactoryContract.getSlotWinner(auctionId, slotIdx);
+};
+
+export const getDepositedNftsInSlot = async (auctionFactoryContract, auctionId, slotIdx) => {
+  return await auctionFactoryContract.getDepositedNftsInSlot(auctionId, slotIdx);
+};
