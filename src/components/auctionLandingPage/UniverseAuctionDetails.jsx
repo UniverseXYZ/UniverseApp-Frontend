@@ -9,7 +9,9 @@ const UniverseAuctionDetails = () => (
   <div className="universe__auction__details__section">
     <div className="universe__auction__details__section__container">
       <AnimatedOnScroll animationIn="zoomIn">
-        <h1 className="title">Universe Auction Details</h1>
+        <h1 className="title">
+          Universe <span>Auction Details</span>
+        </h1>
         <p className="desc">Here are some tips about the Universe</p>
       </AnimatedOnScroll>
       <div className="boxes">

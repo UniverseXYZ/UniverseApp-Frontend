@@ -6,6 +6,7 @@ import PreviewNFTsPopup from '../popups/PreviewNFTsPopup';
 
 const RewardTiers = ({ auction }) => (
   <div className="reward__tiers__section">
+    <div className="bg" />
     <div className="reward__tiers__section__container">
       <h1 className="title">Reward Tiers</h1>
       <p className="desc">

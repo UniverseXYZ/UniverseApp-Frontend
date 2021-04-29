@@ -96,9 +96,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
       setSliderSettings({ ...sliderSettings, slidesToShow: 4 });
     }
     if (windowSize.width < 993) {
-      setSliderSettings({ ...sliderSettings, slidesToShow: 3 });
-    }
-    if (windowSize.width < 768) {
       setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
     }
     if (windowSize.width < 576) {

@@ -410,8 +410,8 @@ const CreateNftCol = (props) => {
                   <Animated animationIn="zoomIn">
                     <div className="properties-info-text">
                       <p>
-                        Adding properties allows you to specify the character NFT traits, the goods
-                        NFT sizes, or any other details you would like to specify.
+                        Adding properties allows you to specify the character NFT traits and any
+                        other details you would like to specify.
                       </p>
                     </div>
                   </Animated>

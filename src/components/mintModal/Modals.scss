@@ -9,9 +9,9 @@
   top: 0px;
   background: $white;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
-  animation: slideOut .3s ease-in-out forwards;
+  animation: slideOut 0.3s ease-in-out forwards;
 
-  @include sm{
+  @include sm {
     height: 90%;
     top: 87px;
   }
@@ -25,9 +25,9 @@
   height: 100%;
   opacity: 0;
   background: rgba(0, 0, 0, 0.6);
-  animation: fadeOut .3s ease-in-out forwards;
+  animation: fadeOut 0.3s ease-in-out forwards;
 }
-.modal-close{
+.modal-close {
   box-shadow: 0px 10px 20px 0px rgba(136, 120, 172, 0.2);
   position: absolute;
   top: 28px;
@@ -36,24 +36,24 @@
   background: #fff;
   padding: 7px;
 
-  @include sm{
+  @include sm {
     top: -60px;
     left: 88%;
   }
-}       
+}
 .mintNft-div {
   padding: 80px 100px;
   max-height: 100%;
   overflow-y: auto;
 
-  @include lg{
+  @include lg {
     padding: 74px 60px;
   }
-  @include sm{
+  @include sm {
     padding: 38px 20px;
   }
 }
-.mintNft-div>h2{
+.mintNft-div > h2 {
   position: relative;
   font-family: $sharpGroteskSemiBoldFont;
   font-style: normal;
@@ -62,21 +62,22 @@
   line-height: 36px;
   color: #000;
   letter-spacing: 0.2px;
-
 }
-.mintNft-div>p{
-  position: relative;
-  font-size: 18px;
-  margin-top: 16px;
-  margin-bottom: 40px;
-  font-family: $spaceGroteskFont;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 27px;
-  color: rgba(0, 0, 0, 0.6);
-  max-width: 522px;
+.mintNft-div {
+  p {
+    position: relative;
+    font-size: 18px;
+    margin-top: 16px;
+    margin-bottom: 40px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 150%;
+    color: rgba(0, 0, 0, 0.6);
+    max-width: 522px;
+  }
 }
-.ntfs{
+.ntfs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
@@ -93,24 +94,18 @@
     position: relative;
 
     &:hover {
-      background: 
-        linear-gradient($white, $white) padding-box,
-        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
       border: 1px solid transparent;
 
       .nft-box-highlight-one {
-        background: 
-          linear-gradient($white, $white) padding-box,
-          linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
         border-bottom: 1px solid transparent;
         border-left: 1px solid transparent;
         border-right: 1px solid transparent;
         bottom: -9px;
       }
       .nft-box-highlight-two {
-        background: 
-          linear-gradient($white, $white) padding-box,
-          linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
         border-bottom: 1px solid transparent;
         border-left: 1px solid transparent;
         border-right: 1px solid transparent;
@@ -136,18 +131,18 @@
         width: 85px;
         height: 85px;
       }
-      @include lg{
+      @include lg {
         height: 283px;
       }
-      @include sm{
+      @include sm {
         margin-bottom: 0%;
         height: 230px;
       }
     }
-    .nft-titled{
+    .nft-titled {
       width: 100%;
 
-      @include sm{
+      @include sm {
         position: absolute;
         left: 0%;
         top: 110%;
@@ -166,10 +161,12 @@
     .nft-desc {
       font-family: $spaceGroteskFont;
       font-style: normal;
-      font-weight: 300;
+      font-weight: normal;
       font-size: 14px;
+      line-height: 160%;
       text-align: center;
       color: rgba(0, 0, 0, 0.6);
+      padding: 0 12px;
     }
 
     &-highlight-one {
@@ -197,21 +194,21 @@
       left: 16px;
     }
 
-    @include sm{
+    @include sm {
       padding: 12px;
     }
   }
 
-  @include sm{
+  @include sm {
     grid-gap: 20px;
   }
 }
-.ntfs > img{
+.ntfs > img {
   cursor: pointer;
   margin-left: 1%;
   width: 48%;
 }
-.back-nft>span{
+.back-nft > span {
   text-align: center;
   color: #000000;
   font-family: $spaceGroteskFont;
@@ -226,15 +223,15 @@
   max-height: 100%;
   overflow-y: auto;
 
-  @include lg{
+  @include lg {
     padding: 84px 60px;
   }
-  @include sm{
+  @include sm {
     padding: 34px 20px;
   }
 }
-.mintNftCollection-div > h2{
-  margin-top: 20px; 
+.mintNftCollection-div > h2 {
+  margin-top: 20px;
   font-family: $sharpGroteskSemiBoldFont;
   font-style: normal;
   font-weight: 600;
@@ -256,14 +253,14 @@
     box-sizing: border-box;
     border-radius: 12px;
     padding: 12px;
-    position: relative; 
+    position: relative;
     // &:hover {
-    //     background: 
+    //     background:
     //             linear-gradient($white, $white) padding-box,
     //             linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-    //     border: 2px solid transparent;    
+    //     border: 2px solid transparent;
     //     .saved__nft__box__highlight__one {
-    //         background: 
+    //         background:
     //             linear-gradient($white, $white) padding-box,
     //             linear-gradient(to right, #BCEB00, #00EAEA) border-box;
     //         border-bottom: 2px solid transparent;
@@ -272,7 +269,7 @@
     //         bottom: -10px;
     //     }
     //     .saved__nft__box__highlight__two {
-    //         background: 
+    //         background:
     //             linear-gradient($white, $white) padding-box,
     //             linear-gradient(to right, #BCEB00, #00EAEA) border-box;
     //         border-bottom: 2px solid transparent;
@@ -280,200 +277,200 @@
     //         border-right: 2px solid transparent;
     //         bottom: -18px;
     //     }
-    // }   
+    // }
     &__image {
-        position: relative;
-        margin-bottom: 12px;
-        height: 200px;
+      position: relative;
+      margin-bottom: 12px;
+      height: 200px;
+      width: 100%;
+      video {
         width: 100%;
-        video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 12px;
-        }
-        img.preview-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 12px;
-        }
-        .video__icon {
-          position: absolute;
-          top: 9px;
-          right: 7px;
-        }
-    }   
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+      img.preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+      .video__icon {
+        position: absolute;
+        top: 9px;
+        right: 7px;
+      }
+    }
     &__name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      h3 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        color: $black;
+      }
+      .three__dots {
+        position: relative;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;    
-        h3 {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
-            color: $black;
+        gap: 3px;
+        span {
+          height: 4px;
+          width: 4px;
+          background-color: $black;
+          border-radius: 50%;
         }
-        .three__dots {
-            position: relative;
+        .edit__remove {
+          position: absolute;
+          right: 0;
+          top: 15px;
+          background: #e6e6e6;
+          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+          width: 160px;
+          border-radius: 12px;
+          z-index: 10;
+          li {
+            padding: 20px;
+            background-color: $white;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 3px;
-            span {
-                height: 4px;
-                width: 4px;
-                background-color: $black;
-                border-radius: 50%;
-            }   
-            .edit__remove {
-                position: absolute;
-                right: 0;
-                top: 15px;
-                background: #E6E6E6;
-                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                width: 160px;
-                border-radius: 12px;
-                z-index: 10;    
-                li {
-                    padding: 20px;
-                    background-color: $white;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
 
-                    &:first-child {
-                        margin-bottom: 2px;
-                        border-top-left-radius: 12px;
-                        border-top-right-radius: 12px;
-                    }
-                    &:last-child {
-                        border-bottom-left-radius: 12px;
-                        border-bottom-right-radius: 12px;
-                    }   
-                    p {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 20px;
-                    }   
-                    &.edit p {
-                        color: $black;
-                    }
-                    &.remove p {
-                        color: #FF4949;
-                    }
-                }
+            &:first-child {
+              margin-bottom: 2px;
+              border-top-left-radius: 12px;
+              border-top-right-radius: 12px;
             }
-        }
-    }   
-    &__footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;   
-        .collection__details {
-            display: flex;
-            align-items: center;
-            .random__bg__color {
-              height: 20px;
-              width: 20px;
-              border-radius: 50%;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              font-family: $sharpGroteskMediumFont;
+            &:last-child {
+              border-bottom-left-radius: 12px;
+              border-bottom-right-radius: 12px;
+            }
+            p {
+              font-family: $spaceGroteskFont;
               font-style: normal;
-              font-weight: 500;
-              font-size: 12px;
-              text-transform: uppercase;
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 20px;
+            }
+            &.edit p {
               color: $black;
             }
-            img {
-                height: 20px;
-                width: 20px;
-                object-fit: cover;
-                border-radius: 50%;
+            &.remove p {
+              color: #ff4949;
             }
-            span {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 300;
-                font-size: 12px;
-                color: $black;
-                margin-left: 6px;
-            }
+          }
         }
-        div.collection__count {
-          position: relative;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
-            color: $black;
-            cursor: default;
-
-            &:hover {
-                .generatedEditions {
-                    display: grid;
-                    grid-column-gap: 10px;
-                    grid-row-gap: 5px;
-                    z-index: 1;
-                }
-            }
-
-            .generatedEditions {
-                display: none;
-                position: absolute;
-                bottom: 25px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: $white;
-                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                border-radius: 12px;
-                padding: 16px;
-                > div {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: normal;
-                    font-size: 12px;
-                    line-height: 150%;
-                    color: $black;
-                }
-            }
+      }
+    }
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .collection__details {
+        display: flex;
+        align-items: center;
+        .random__bg__color {
+          height: 20px;
+          width: 20px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-family: $sharpGroteskMediumFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          text-transform: uppercase;
+          color: $black;
         }
-        p.collection__count {
+        img {
+          height: 20px;
+          width: 20px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        span {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 300;
+          font-size: 12px;
+          color: $black;
+          margin-left: 6px;
+        }
+      }
+      div.collection__count {
+        position: relative;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        color: $black;
+        cursor: default;
+
+        &:hover {
+          .generatedEditions {
+            display: grid;
+            grid-column-gap: 10px;
+            grid-row-gap: 5px;
+            z-index: 1;
+          }
+        }
+
+        .generatedEditions {
+          display: none;
+          position: absolute;
+          bottom: 25px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: $white;
+          box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          padding: 16px;
+          > div {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: normal;
             font-size: 12px;
-            color: rgba(0, 0, 0, 0.4);
+            line-height: 150%;
+            color: $black;
+          }
         }
-    }   
+      }
+      p.collection__count {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
     &__highlight__one {
-        position: absolute;
-        bottom: -8px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 150px;
-        border-bottom-right-radius: 150px;
-        width: 95%;
-        height: 8px;
-        left: 8px;
+      position: absolute;
+      bottom: -8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom-left-radius: 150px;
+      border-bottom-right-radius: 150px;
+      width: 95%;
+      height: 8px;
+      left: 8px;
     }
     &__highlight__two {
-        position: absolute;
-        bottom: -16px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 150px;
-        border-bottom-right-radius: 150px;
-        width: 90%;
-        height: 8px;
-        left: 16px;
+      position: absolute;
+      bottom: -16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom-left-radius: 150px;
+      border-bottom-right-radius: 150px;
+      width: 90%;
+      height: 8px;
+      left: 16px;
     }
   }
   @include lg {
@@ -483,39 +480,40 @@
     grid-template-columns: 1fr;
   }
 }
-.back-nft{
+.back-nft {
   cursor: pointer;
 }
-.name-image{
+.name-image {
   display: flex;
   align-items: flex-start;
   min-height: 73px;
   margin-top: 40px;
   position: relative;
 
-  .name-input{
+  .name-input {
     width: 100%;
 
-    .inp-label{
+    .inp-label {
       margin-bottom: 1px;
       line-height: 22px;
     }
-    .intup-l{
+    .intup-l {
       margin-bottom: 20px;
       width: 100%;
-      input{
+      input {
         width: 100%;
       }
     }
   }
 }
-.name-image > .input-l{
+.name-image > .input-l {
   width: 40%;
 }
-.create-col{
+.create-col {
   border: 1px solid;
   border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
-  background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
   border-radius: 12px;
   cursor: pointer;
   display: flex;
@@ -526,16 +524,16 @@
   min-height: 283px;
   padding: 20px;
 }
-.input-cover>input{
+.input-cover > input {
   display: none;
 }
-.inp-picture{
+.inp-picture {
   margin-top: 1px;
   width: 147px;
   height: 147px;
   border-radius: 12px;
   background: $white;
-  border: 1px solid #D4D4D4;
+  border: 1px solid #d4d4d4;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -543,13 +541,13 @@
   position: relative;
   overflow: hidden;
 
-  :hover{
+  :hover {
     background: rgba(0, 0, 0, 0.02);
   }
 
   .cover-preview {
     position: relative;
-    .cover-img{
+    .cover-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -567,24 +565,24 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255,255,255,0.6);
+      background: rgba(255, 255, 255, 0.6);
       display: none;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      padding: 18px 9px 9px ;
+      padding: 18px 9px 9px;
 
-      p{
+      p {
         font-size: $spaceGroteskFont;
         font-weight: normal;
         font-size: 10px;
         line-height: 160%;
         color: rgba(0, 0, 0, 0.6);
       }
-      button{
+      button {
         width: 100%;
-        &.light-border-button{
+        &.light-border-button {
           font-size: 10px;
           line-height: 10px;
         }
@@ -592,34 +590,33 @@
     }
   }
 }
-.inp-picture>div{
+.inp-picture > div {
   text-align: center;
   align-items: center;
   flex-wrap: wrap;
-
 }
-.input-cover{
+.input-cover {
   margin-left: 3%;
 }
-.input-cover>p{
-font-family: $spaceGroteskFont;
-font-style: normal;
-font-weight: bold;
-font-size: 14px;
-line-height: 22px;
+.input-cover > p {
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 22px;
 }
-.inp-picture>img{
+.inp-picture > img {
   width: 100%;
   height: 100%;
 }
-.icon-div{
+.icon-div {
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 
-  p{
+  p {
     font-size: $spaceGroteskFont;
     font-weight: normal;
     font-size: 10px;
@@ -630,30 +627,30 @@ line-height: 22px;
 .collection-buttons {
   margin-top: 30px;
 
-  @include sm{
+  @include sm {
     display: grid;
   }
 }
-.collection-buttons>:first-child{
+.collection-buttons > :first-child {
   margin-right: 16px;
-  @include sm{
+  @include sm {
     margin-right: 0;
     margin-bottom: 20px;
   }
 }
-.plus-icon{
+.plus-icon {
   text-align: center;
   align-items: center;
 }
-.collection-t{
-  font-family: "Sharp Grotesk Medium", sans-serif;
+.collection-t {
+  font-family: 'Sharp Grotesk Medium', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
   text-align: center;
   margin-top: 30px;
 }
-.collection-t>p{
+.collection-t > p {
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: 600;
@@ -665,398 +662,391 @@ line-height: 22px;
 .nft-collectible {
   margin-top: 20px;
 
-  .nft-coll-title{
+  .nft-coll-title {
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
     font-size: 26px;
     line-height: 36px;
-    letter-spacing: 0.2px;      
+    letter-spacing: 0.2px;
     color: $black;
   }
 
   .nft-coll-content {
     margin-top: 40px;
 
-    h5{
+    h5 {
       font-family: $spaceGroteskFont;
       font-weight: bold;
       font-size: 14px;
       line-height: 22px;
     }
 
-      .nft-coll-upload{
-        width: 100%; 
+    .nft-coll-upload {
+      width: 100%;
 
-        .nft-coll-upload-file{
-          display: flex;
-          justify-content: space-between;
-          align-items: center;           
-          border: 1px dashed rgba(0, 0, 0, 0.1);
-          background-color: rgba(0, 0, 0, 0.02);
-          border-radius: 12px;
-          padding: 11px 16px 16px 16px;
+      .nft-coll-upload-file {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px dashed rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.02);
+        border-radius: 12px;
+        padding: 11px 16px 16px 16px;
 
-          .nft-coll-drop-file{
-            width: 100%;
-            text-align: center;
+        .nft-coll-drop-file {
+          width: 100%;
+          text-align: center;
 
-            img{
-              padding-bottom: 16px;
-            }
-
-            p{
-              margin-bottom: 16px;
-              font-family: $spaceGroteskFont;
-              font-weight: 500;
-              font-size: 14px;
-              line-height: 160%;
-              color: rgba(0, 0, 0, 0.4);
-
-              @include sm{
-                font-size: 10px;
-                line-height: 160%;
-              }
-            }
-            button{
-              &.light-border-button {
-
-                @include sm{
-                  font-size: 10px;
-                  line-height: 10px;
-                }
-              }
-            }
-            @include md{
-              padding-right: 20px;
-            }
+          img {
+            padding-bottom: 16px;
           }
 
-          .nft-coll-preview {
-            margin: 11px 16px 16px;
+          p {
+            margin-bottom: 16px;
+            font-family: $spaceGroteskFont;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.4);
 
-            h5{
-              font-family: $spaceGroteskFont;
-              font-weight: normal;
-              font-size: 12px;
-              line-height: 150%;
-              color: rgba(0, 0, 0, 0.4);
+            @include sm {
+              font-size: 10px;
+              line-height: 160%;
             }
-      
-            .nft-coll-picture {
+          }
+          button {
+            &.light-border-button {
+              @include sm {
+                font-size: 10px;
+                line-height: 10px;
+              }
+            }
+          }
+          @include md {
+            padding-right: 20px;
+          }
+        }
+
+        .nft-coll-preview {
+          margin: 11px 16px 16px;
+
+          h5 {
+            font-family: $spaceGroteskFont;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 150%;
+            color: rgba(0, 0, 0, 0.4);
+          }
+
+          .nft-coll-picture {
+            width: 215px;
+            height: 215px;
+            background: $white;
+            border: 1px solid #d4d4d4;
+            box-sizing: border-box;
+            border-radius: 12px;
+
+            .default-image {
+              width: 85px;
+              height: 85px;
+              margin-left: 30%;
+              margin-top: 30%;
+
+              @include md {
+                width: 47px;
+                height: 47px;
+                margin-left: 32%;
+              }
+
+              @include sm {
+                margin-left: 29%;
+              }
+            }
+
+            .preview-image {
               width: 215px;
-              height: 215px;              
-              background: $white;
-              border: 1px solid #D4D4D4;
-              box-sizing: border-box;
+              height: 215px;
               border-radius: 12px;
-      
-              .default-image {
-                width: 85px;              
-                height: 85px;
-                margin-left: 30%;
-                margin-top: 30%;
+              object-fit: cover;
 
-                @include md{
-                  width: 47px;
-                  height: 47px;
-                  margin-left: 32%;
-                }
-
-                @include sm{
-                  margin-left: 29%;
-                }
-              }
-      
-              .preview-image {
-                width: 215px;
-                height: 215px;              
-                border-radius: 12px;
-                object-fit: cover;
-
-                @include md{
-                  width: 137px;
-                  height: 137px;
-                }
-
-                @include sm{
-                  width: 110px;
-                  height: 110px;
-                }
-
-              }
-
-              @include md{
+              @include md {
                 width: 137px;
                 height: 137px;
               }
 
-              @include sm{
+              @include sm {
                 width: 110px;
                 height: 110px;
               }
             }
 
-            @include sm{
-              margin: 0px;
+            @include md {
+              width: 137px;
+              height: 137px;
             }
-          }  
-        }
 
-        .nft-coll-name {
-          margin-top: 20px;
-          width: 100%;
-
-          .intup-l{
-            width: 100%;
-          }
-          input{
-            font-family: $spaceGroteskFont;
-            font-size: 16px;
-            line-height: 20px;
-            &.inp {
-              width: 100%;
-            }  
-          }
-
-          ::placeholder{
-            color: rgba(0, 0, 0, 0.2);
-          }
-        }
-
-        .nft-coll-description {
-          margin-top: 20px;
-          width: 100%;
-
-          textarea {
-            font-family: $spaceGroteskFont;
-            font-size: 16px;
-            line-height: 20px;
-            &.inp {
-              width: 100%;
-              height: 96px;
-            }
-          }
-          ::placeholder{
-            font-family: $spaceGroteskFont;
-            color: rgba(0, 0, 0, 0.2);
-          }
-        }
-
-        .nft-coll-editions {
-          margin-top: 20px;
-          width: 100%; 
-
-          .nft-coll-editions-header{
-            position: relative;
-            display: flex;
-            width: fit-content;
-
-            .info-text {
-              position: absolute;
-              background: $white;                             
-              box-shadow: 0px 10px 20px 
-                rgba(136, 120, 172, 0.2);
-              border-radius: 12px;
-              width: 194px;
-              height: 88px;
-              padding: 16px;
-              bottom: 25px;
-              left: 100%;
-              transform: translateX(-50%);
-
-              p{
-                font-family: $spaceGroteskFont;
-                font-size: 12px;
-                line-height: 150%;
-                color: $black;
-              }
+            @include sm {
+              width: 110px;
+              height: 110px;
             }
           }
 
-          .intup-l{
-            width: 100%;
-          }
-      
-          input{
-            font-family: $spaceGroteskFont;
-            font-size: 16px;
-            line-height: 20px;
-            &.inp {
-              width: 100%;
-            }
-          }
-          ::placeholder{
-            color: rgba(0, 0, 0, 0.2);
-          }
-
-          
-        }
-
-        .nft-coll-properties{
-          margin-top: 40px;
-
-          .nft-coll-properties-header{
-            position: relative;
-            display: flex;
-            width: fit-content;
-
-            .properties-info-text{
-              position: absolute;
-              background: $white;
-              padding: 16px 16px 18px 16px;
-              box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-              border-radius: 12px;
-              width: 226px;
-              bottom: 35px;
-              left: 100%;
-              transform: translateX(-50%);
-  
-              p{
-                font-family: $spaceGroteskFont;
-                font-size: 12px;
-                line-height: 150%;
-                color: $black;
-              }
-            }
-  
-            h4{
-              font-family: $sharpGroteskMediumFont;
-              font-weight: 600;
-              font-size: 16px;
-              line-height: 130%;
-              letter-spacing: 0.2px;
-              color: $black;
-              margin-bottom: 10px;
-            }            
-          }
-
-          .properties{
-            display: flex;
-            width: 100%;
-            padding: 18px 18px 18px 24px;
-            background: rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-
-            h5{
-              font-family: $spaceGroteskFont;
-              font-weight: bold;
-              font-size: 14px;
-              line-height: 22px;
-            }
-            .intup-l{
-              width: 100%;
-            }
-            input{
-              font-family: $spaceGroteskFont;
-              font-size: 16px;
-              line-height: 20px;
-
-              &.inp {
-                width: 100%;
-              }
-            }
-
-            ::placeholder{
-              font-family: $spaceGroteskFont;
-              color: rgba(0, 0, 0, 0.2);
-            }
-
-            .property-name{
-              width: 44.5%;
-              padding-right: 12px;
-
-              @include sm{
-                width: 100%;
-                padding-right: 0;
-                padding-bottom: 12px;
-              }
-            }
-
-            .property-value{
-              width: 44.5%;
-              padding-right: 12px;
-
-              @include sm{
-                width: 100%;
-                padding-right: 0;
-                padding-bottom: 12px;
-              }
-            }
-
-            img{
-              margin-top: 23px;
-              width: 50px;
-              height: 50px;
-              border-radius: 12px;
-              cursor: pointer;
-
-              @include sm{
-                display: none;
-              }
-            }
-
-            img:hover{
-              background-color: rgba(0, 0, 0, 0.05);
-            }
-
-            button{
-              display: none;
-
-              @include sm{
-                display: grid;
-              }
-            }
-
-            @include sm{
-              display: grid;
-            }
-          }
-
-          .property-add{
-            img{
-              padding-right: 10px;
-              cursor: pointer;
-            }
-            h5{
-              font-family: $spaceGroteskFont;
-              font-weight: 600;
-              font-size: 16px;
-              line-height: 20px;
-              color: $black;
-            }
-          }
-        }
-
-        .nft-coll-buttons {
-          margin-top: 40px;
-          margin-bottom: 40px;
-
-          button{
-            &.light-button {
-              margin-right: 12px;
-
-              @include sm{
-                margin-right: 0;
-                margin-bottom: 20px;
-              }
-            }
-          }
-
-          @include sm{
-            display: grid;
+          @include sm {
+            margin: 0px;
           }
         }
       }
 
-    
+      .nft-coll-name {
+        margin-top: 20px;
+        width: 100%;
+
+        .intup-l {
+          width: 100%;
+        }
+        input {
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          line-height: 20px;
+          &.inp {
+            width: 100%;
+          }
+        }
+
+        ::placeholder {
+          color: rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .nft-coll-description {
+        margin-top: 20px;
+        width: 100%;
+
+        textarea {
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          line-height: 20px;
+          &.inp {
+            width: 100%;
+            height: 96px;
+          }
+        }
+        ::placeholder {
+          font-family: $spaceGroteskFont;
+          color: rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .nft-coll-editions {
+        margin-top: 20px;
+        width: 100%;
+
+        .nft-coll-editions-header {
+          position: relative;
+          display: flex;
+          width: fit-content;
+
+          .info-text {
+            position: absolute;
+            background: $white;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            width: 194px;
+            height: 88px;
+            padding: 16px;
+            bottom: 25px;
+            left: 100%;
+            transform: translateX(-50%);
+
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 150%;
+              color: $black;
+            }
+          }
+        }
+
+        .intup-l {
+          width: 100%;
+        }
+
+        input {
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          line-height: 20px;
+          &.inp {
+            width: 100%;
+          }
+        }
+        ::placeholder {
+          color: rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .nft-coll-properties {
+        margin-top: 40px;
+
+        .nft-coll-properties-header {
+          position: relative;
+          display: flex;
+          width: fit-content;
+
+          .properties-info-text {
+            position: absolute;
+            background: $white;
+            padding: 16px 16px 18px 16px;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            width: 226px;
+            bottom: 35px;
+            left: 100%;
+            transform: translateX(-50%);
+
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 150%;
+              color: $black;
+            }
+          }
+
+          h4 {
+            font-family: $sharpGroteskMediumFont;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 130%;
+            letter-spacing: 0.2px;
+            color: $black;
+            margin-bottom: 10px;
+          }
+        }
+
+        .properties {
+          display: flex;
+          width: 100%;
+          padding: 18px 18px 18px 24px;
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          box-sizing: border-box;
+          margin-bottom: 20px;
+
+          h5 {
+            font-family: $spaceGroteskFont;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 22px;
+          }
+          .intup-l {
+            width: 100%;
+          }
+          input {
+            font-family: $spaceGroteskFont;
+            font-size: 16px;
+            line-height: 20px;
+
+            &.inp {
+              width: 100%;
+            }
+          }
+
+          ::placeholder {
+            font-family: $spaceGroteskFont;
+            color: rgba(0, 0, 0, 0.2);
+          }
+
+          .property-name {
+            width: 44.5%;
+            padding-right: 12px;
+
+            @include sm {
+              width: 100%;
+              padding-right: 0;
+              padding-bottom: 12px;
+            }
+          }
+
+          .property-value {
+            width: 44.5%;
+            padding-right: 12px;
+
+            @include sm {
+              width: 100%;
+              padding-right: 0;
+              padding-bottom: 12px;
+            }
+          }
+
+          img {
+            margin-top: 23px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+
+            @include sm {
+              display: none;
+            }
+          }
+
+          img:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+          }
+
+          button {
+            display: none;
+
+            @include sm {
+              display: grid;
+            }
+          }
+
+          @include sm {
+            display: grid;
+          }
+        }
+
+        .property-add {
+          img {
+            padding-right: 10px;
+            cursor: pointer;
+          }
+          h5 {
+            font-family: $spaceGroteskFont;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            color: $black;
+          }
+        }
+      }
+
+      .nft-coll-buttons {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        button {
+          &.light-button {
+            margin-right: 12px;
+
+            @include sm {
+              margin-right: 0;
+              margin-bottom: 20px;
+            }
+          }
+        }
+
+        @include sm {
+          display: grid;
+        }
+      }
+    }
   }
 }
 
-.single-nft-title{
+.single-nft-title {
   font-family: $sharpGroteskSemiBoldFont;
   font-style: normal;
   font-weight: 600;
@@ -1065,10 +1055,10 @@ line-height: 22px;
   letter-spacing: 0.2px;
   color: $black;
 }
-.single-nft-content{
+.single-nft-content {
   margin-top: 40px;
 
-  h5{
+  h5 {
     font-family: $spaceGroteskFont;
     font-weight: bold;
     font-size: 14px;
@@ -1086,136 +1076,132 @@ line-height: 22px;
       background-color: rgba(0, 0, 0, 0.02);
       border-radius: 12px;
       padding: 11px 16px 16px 16px;
-      
-      .single-nft-drop-file{
+
+      .single-nft-drop-file {
         width: 100%;
         text-align: center;
         // padding: 0px 60px;
-        
-        img{
+
+        img {
           padding-bottom: 16px;
         }
 
-        p{
+        p {
           padding-bottom: 16px;
           font-family: $spaceGroteskFont;
-          font-weight: 500;
+          font-weight: 400;
           font-size: 14px;
           line-height: 22px;
           color: rgba(0, 0, 0, 0.4);
 
-          @include sm{
+          @include sm {
             font-size: 10px;
             line-height: 160%;
           }
         }
-        
-        button{
+
+        button {
           &.light-border-button {
-            
-            @include sm{
+            @include sm {
               font-size: 10px;
               line-height: 10px;
             }
           }
         }
 
-        @include md{
+        @include md {
           padding-right: 20px;
         }
-      }      
+      }
     }
     .single-nft-preview {
       margin: 11px 16px 16px;
 
-      h5{
+      h5 {
         font-family: $spaceGroteskFont;
         font-weight: normal;
         font-size: 12px;
         line-height: 150%;
         color: rgba(0, 0, 0, 0.4);
       }
-  
+
       .single-nft-picture {
         width: 215px;
-        height: 215px;              
+        height: 215px;
         background: $white;
-        border: 1px solid #D4D4D4;
+        border: 1px solid #d4d4d4;
         box-sizing: border-box;
         border-radius: 12px;
-  
+
         .default-image {
-          width: 85px;              
+          width: 85px;
           height: 85px;
           margin-left: 30%;
           margin-top: 30%;
 
-          @include md{
+          @include md {
             width: 47px;
             height: 47px;
             margin-left: 32%;
           }
-          @include sm{
+          @include sm {
             margin-left: 29%;
           }
         }
-  
+
         .preview-image {
           width: 215px;
-          height: 215px;              
+          height: 215px;
           border-radius: 12px;
           object-fit: cover;
 
-          @include md{
+          @include md {
             width: 137px;
             height: 137px;
           }
-          @include sm{
+          @include sm {
             width: 110px;
             height: 110px;
           }
         }
 
-        @include md{
+        @include md {
           width: 137px;
           height: 137px;
         }
-        @include sm{
+        @include sm {
           width: 110px;
           height: 110px;
         }
-        
       }
-      @include sm{
+      @include sm {
         margin: 0px;
       }
     }
-    
   }
-    
-  .single-nft-name{
+
+  .single-nft-name {
     margin-top: 20px;
     width: 100%;
 
-    .intup-l{
+    .intup-l {
       width: 100%;
     }
 
-    input{
+    input {
       font-family: $spaceGroteskFont;
       font-size: 16px;
       line-height: 20px;
       &.inp {
         width: 100%;
       }
-      
     }
-    ::placeholder{
+    ::placeholder {
       color: rgba(0, 0, 0, 0.2);
     }
   }
 
-  .single-nft-description{
+  .single-nft-description {
     margin-top: 20px;
     width: 100%;
 
@@ -1228,35 +1214,34 @@ line-height: 22px;
         height: 96px;
       }
     }
-    ::placeholder{
+    ::placeholder {
       font-family: $spaceGroteskFont;
       color: rgba(0, 0, 0, 0.2);
     }
   }
 
-  .single-nft-editions{
+  .single-nft-editions {
     margin-top: 20px;
     width: 100%;
 
-    .single-nft-edition-header{
+    .single-nft-edition-header {
       position: relative;
       display: flex;
       width: fit-content;
 
       .info-text {
         position: absolute;
-        background: $white;                
-        box-shadow: 0px 10px 20px 
-          rgba(136, 120, 172, 0.2);
+        background: $white;
+        box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
         border-radius: 12px;
         width: 224px;
         height: 106px;
-        padding: 16px; 
+        padding: 16px;
         bottom: 25px;
         left: 100%;
         transform: translateX(-50%);
 
-        p{
+        p {
           font-family: $spaceGroteskFont;
           font-size: 12px;
           line-height: 150%;
@@ -1265,11 +1250,11 @@ line-height: 22px;
       }
     }
 
-    .intup-l{
+    .intup-l {
       width: 100%;
     }
 
-    input{
+    input {
       font-family: $spaceGroteskFont;
       font-size: 16px;
       line-height: 20px;
@@ -1277,20 +1262,20 @@ line-height: 22px;
         width: 100%;
       }
     }
-    ::placeholder{
+    ::placeholder {
       color: rgba(0, 0, 0, 0.2);
     }
   }
 
-  .single-nft-properties{
+  .single-nft-properties {
     margin-top: 40px;
 
-    .single-nft-properties-header{
+    .single-nft-properties-header {
       position: relative;
       display: flex;
       width: fit-content;
-      
-      h4{
+
+      h4 {
         font-family: $sharpGroteskMediumFont;
         font-weight: 600;
         font-size: 16px;
@@ -1300,7 +1285,7 @@ line-height: 22px;
         margin-bottom: 10px;
       }
 
-      .properties-info-text{
+      .properties-info-text {
         position: absolute;
         background: $white;
         padding: 16px 16px 18px 16px;
@@ -1310,8 +1295,8 @@ line-height: 22px;
         bottom: 35px;
         left: 100%;
         transform: translateX(-50%);
-  
-        p{
+
+        p {
           font-family: $spaceGroteskFont;
           font-size: 12px;
           line-height: 150%;
@@ -1320,7 +1305,7 @@ line-height: 22px;
       }
     }
 
-    .properties{
+    .properties {
       display: flex;
       width: 100%;
       padding: 18px 18px 18px 24px;
@@ -1330,16 +1315,16 @@ line-height: 22px;
       box-sizing: border-box;
       margin-bottom: 20px;
 
-      h5{
+      h5 {
         font-family: $spaceGroteskFont;
         font-weight: bold;
         font-size: 14px;
         line-height: 22px;
       }
-      .intup-l{
+      .intup-l {
         width: 100%;
       }
-      input{
+      input {
         font-family: $spaceGroteskFont;
         font-size: 16px;
         line-height: 20px;
@@ -1347,67 +1332,67 @@ line-height: 22px;
           width: 100%;
         }
       }
-      ::placeholder{
+      ::placeholder {
         font-family: $spaceGroteskFont;
         color: rgba(0, 0, 0, 0.2);
       }
 
-      .property-name{
+      .property-name {
         width: 44.5%;
         padding-right: 12px;
 
-        @include sm{
+        @include sm {
           width: 100%;
           padding-right: 0;
           padding-bottom: 12px;
         }
       }
 
-      .property-value{
+      .property-value {
         width: 44.5%;
         padding-right: 12px;
 
-        @include sm{
+        @include sm {
           width: 100%;
           padding-right: 0;
           padding-bottom: 12px;
         }
       }
 
-      img{
+      img {
         margin-top: 23px;
         width: 50px;
         height: 50px;
         border-radius: 12px;
         cursor: pointer;
 
-        @include sm{
+        @include sm {
           display: none;
         }
       }
-      img:hover{
+      img:hover {
         background-color: rgba(0, 0, 0, 0.05);
       }
 
-      button{
+      button {
         display: none;
 
-        @include sm{
+        @include sm {
           display: grid;
         }
       }
 
-      @include sm{
+      @include sm {
         display: grid;
       }
     }
 
-    .property-add{
-      img{
+    .property-add {
+      img {
         padding-right: 10px;
         cursor: pointer;
       }
-      h5{
+      h5 {
         font-family: $spaceGroteskFont;
         font-weight: 600;
         font-size: 16px;
@@ -1420,20 +1405,17 @@ line-height: 22px;
   .single-nft-buttons {
     margin-top: 40px;
     margin-bottom: 40px;
-    button{
+    button {
       &.light-button {
         margin-right: 12px;
-        @include sm{
+        @include sm {
           margin-right: 0;
           margin-bottom: 20px;
         }
       }
     }
-    @include sm{
+    @include sm {
       display: grid;
     }
   }
-  
-
-  
 }

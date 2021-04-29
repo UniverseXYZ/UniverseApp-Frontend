@@ -1,6 +1,6 @@
 import uuid from 'react-uuid';
 import artistAvatar from '../../assets/images/artist-avatar.svg';
-import auctionImg from '../../assets/images/auctions-accordion1.png';
+import auctionImg from '../../assets/images/auction-test.png';
 import auctionImg2 from '../../assets/images/auctions-accordion2.png';
 import auctionImg3 from '../../assets/images/auctions-accordion3.png';
 import auctionImg4 from '../../assets/images/auctions-accordion4.png';

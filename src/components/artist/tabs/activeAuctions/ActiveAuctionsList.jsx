@@ -42,7 +42,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                     })
                   }
                 >
-                  View Auction
+                  View auction
                 </Button>
               </div>
               <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
