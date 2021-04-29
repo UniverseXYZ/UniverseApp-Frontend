@@ -147,12 +147,12 @@
         }
          
     }
-    .auction-reward {
+    .rev-reward {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-gap: 30px;
         
-        .auction-reward__box {
+        .rev-reward__box {
             background: $white;
             border: 1px solid rgba(0, 0, 0, 0.1);
             box-sizing: border-box;

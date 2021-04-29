@@ -90,41 +90,26 @@ const AuctionSettings = () => {
   };
   const bid = options.find((element) => element.value === bidtype);
 
-  useEffect(() => {
-    if (values.name) {
-      if (
-        isValidFields.startingBid &&
-        isValidFields.startDate &&
-        isValidFields.endDate &&
-        isValidFields.bidErr
-      ) {
-        if (auction.tiers.length > 0) {
-          setAuction({
-            ...auction,
-            name: values.name,
-            startingBid: values.startingBid,
-            startDate: values.startDate,
-            endDate: values.endDate,
-          });
-        }
-      }
-    }
-  }, [isValidFields]);
-
   const handleAddAuction = () => {
-    setIsValidFields((prevValues) => ({ ...prevValues, name: values.name.trim().length !== 0 }));
     setIsValidFields((prevValues) => ({
       ...prevValues,
       startingBid: values.startingBid.trim().length !== 0,
-    }));
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
       startDate: values.startDate.trim().length !== 0,
-    }));
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
       endDate: values.endDate.trim().length !== 0,
+      name: values.name.trim().length !== 0,
     }));
+
+    let auctionFieldsValid = false;
+    let bidFieldsValid = false;
+
+    if (values.name && values.startingBid && values.startDate && values.endDate) {
+      if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
+        if (auction.tiers.length > 0) {
+          auctionFieldsValid = true;
+        }
+      }
+    }
+
     if (minBid === true) {
       let currentMinBid = 0;
       // eslint-disable-next-line no-restricted-syntax, guard-for-in
@@ -137,11 +122,25 @@ const AuctionSettings = () => {
           return;
         }
       }
-      // eslint-disable-next-line no-return-assign
-      auction.tiers.map((tier) => (tier.minBid = bidValues[tier.id]));
       setErrorArray([]);
+      bidFieldsValid = true;
+    } else {
+      bidFieldsValid = true;
     }
-    history.push('/auction-review', location.pathname);
+
+    if (auctionFieldsValid && bidFieldsValid) {
+      setAuction((prevValue) => ({
+        ...prevValue,
+        name: values.name,
+        startingBid: values.startingBid,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        tiers: minBid
+          ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
+          : prevValues.tiers,
+      }));
+      history.push('/auction-review', location.pathname);
+    }
   };
 
   const handleOnChange = (event) => {
@@ -257,7 +256,7 @@ const AuctionSettings = () => {
                   onMouseOver={() => setHideIcon1(true)}
                   onFocus={() => setHideIcon1(true)}
                   onMouseLeave={() => setHideIcon1(false)}
-                  onBlur={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon1(false)}
                 />
               </span>
               {hideIcon1 && (

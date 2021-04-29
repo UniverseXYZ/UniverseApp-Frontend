@@ -1,9 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { Animated } from 'react-animated-css';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 import icon from '../../assets/images/auction_icon.svg';
+import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import ethIcon from '../../assets/images/bid_icon.svg';
+import daiIcon from '../../assets/images/dai_icon.svg';
+import usdcIcon from '../../assets/images/usdc_icon.svg';
+import bondIcon from '../../assets/images/bond_icon.svg';
+import snxIcon from '../../assets/images/snx.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check.svg';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
@@ -16,6 +23,7 @@ const AuctionReview = () => {
   const location = useLocation();
   const history = useHistory();
   const [shownActionId, setShownActionId] = useState(null);
+  const [hideIcon, setHideIcon] = useState(false);
 
   const { auction, setAuction } = useContext(AppContext);
   const tierId = location.state;
@@ -38,13 +46,51 @@ const AuctionReview = () => {
           <h2 className="tier-title">Auction Review</h2>
         </div>
         {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
-          <div>
-            <div style={{ display: 'grid' }}>
-              <span>Auction name- {auction.name}</span>
-              <span>Bid token (ERC-20) </span>
-              <span>Starting bid- {auction.startingBid}</span>
-              <span>Start date- {auction.startDate}</span>
-              <span>End date- {auction.endDate}</span>
+          <div className="auction-inf">
+            <div className="name-bid">
+              <div className="tName">
+                <p>Auction name</p>
+                <span>{auction.name}</span>
+              </div>
+              <div className="bidToken">
+                <p>Bid token (ERC-20)</p>
+                <span>token</span>
+              </div>
+              <div className="startingBid">
+                <p>Starting bid</p>
+                <span>{auction.startingBid}</span>
+              </div>
+            </div>
+            <div className="date-part">
+              <div className="startDate">
+                <p>Start date</p>
+                <span>{auction.startDate}</span>
+              </div>
+              <div className="endDate">
+                <p>End date</p>
+                <span>{auction.endDate}</span>
+                <span className="auction-ext">
+                  Ending auction extension timer: 3 minutes
+                  <img
+                    src={infoIcon}
+                    alt="Info Icon"
+                    onMouseOver={() => setHideIcon(true)}
+                    onFocus={() => setHideIcon(true)}
+                    onMouseLeave={() => setHideIcon(false)}
+                    onBlur={() => setHideIcon(false)}
+                  />
+                </span>
+                {hideIcon && (
+                  <Animated animationIn="zoomIn">
+                    <div className="info-text">
+                      <p>
+                        Any bid in the last 3 minutes of an auction will extend the auction for an
+                        additional 3 minutes.
+                      </p>
+                    </div>
+                  </Animated>
+                )}
+              </div>
             </div>
           </div>
         )}
