@@ -1,0 +1,202 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.calendar {
+    position: absolute;
+    right: 0;
+    background: $white;
+    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+    border-radius: 12px;
+    width: 386px;
+    
+    &__header {
+        padding: 24px 30px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h2 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 22px;
+            color: $black;
+        }
+        .month__changers {
+            display: flex;
+            align-items: center;
+            button {
+                background-color: $white;
+                img {
+                    cursor: pointer;
+                    
+                    &.right {
+                        transform: rotate(180deg);
+                        margin-left: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    &__body {
+        overflow: hidden;
+        padding: 24px 30px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+        .rdrDateDisplayWrapper, 
+        .rdrMonthAndYearWrapper {
+            display: none;
+        }
+        .rdrWeekDay {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.4);
+        }
+        .rdrDayNumber {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.4);
+        }
+        .rdrStartEdge,
+        .rdrEndEdge {
+            color: #5FEA73!important;
+        }
+        .rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
+            color: $black;
+            font-weight: bold;
+        }
+        .rdrInRange {
+            color: rgba(95, 234, 115, 0.4)!important;
+        }
+        .rdrDayStartPreview,
+        .rdrDayInPreview,
+        .rdrDayEndPreview {
+            color: #5FEA73!important;
+        }
+        .rdrDayToday .rdrDayNumber span:after {
+            background-color: #5FEA73!important;
+        }
+        .rdrDay {
+            height: 4em;
+        }
+
+
+        .week__days {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            div {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 125%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                color: rgba(0, 0, 0, 0.4);
+                width: 40px;
+                height: 40px;
+                @include sm {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+        .week__days__numbers {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            div {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 125%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                color: $black;
+                width: 40px;
+                height: 40px;
+
+                &.selected {
+                    background: #5FEA73;
+                    border-radius: 12px;
+                    font-weight: bold;
+                }
+                @include sm {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+    }
+    &__footer {
+        padding: 24px 30px;
+        .timezone {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            .label {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                color: $black;
+            }
+            .selected__timezone {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 12px;
+                line-height: 22px;
+                color: $black;
+            }
+        }
+        .time {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            input {
+                background: rgba(0, 0, 0, 0.02);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 10px;
+                padding: 16px;
+                width: 127px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 28px;
+                line-height: 22px;
+                text-align: center;
+                color: $black;
+                @include sm {
+                    width: 111px;
+                }
+            }
+            span {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+            }
+        }
+    }
+    @include sm {
+        width: 295px;
+    }
+}

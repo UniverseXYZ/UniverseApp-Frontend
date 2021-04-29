@@ -2,7 +2,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useContext } from 'react';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
-import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
@@ -17,6 +16,7 @@ import bondIcon from '../../assets/images/bond_icon.svg';
 import snxIcon from '../../assets/images/snx.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AddToken from '../popups/AddTokenPopup';
+import Calendar from '../calendar/Calendar';
 
 const AuctionSettings = () => {
   const location = useLocation();
@@ -26,9 +26,15 @@ const AuctionSettings = () => {
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
   const [minBid, setMinBId] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState({
+    month: '',
+    day: '',
+    year: '',
+    hours: '',
+    minutes: '',
+    timezone: '',
+  });
   const [bidtype, setBidtype] = useState('eth');
-  const [showAddToken, setShowAddToken] = useState(false);
 
   const options = [
     {
@@ -72,20 +78,13 @@ const AuctionSettings = () => {
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
-  const handleClose = () => {
-    setShowAddToken(false);
-  };
-  console.log(minBid);
   const bid = options.find((element) => element.value === bidtype);
-  console.log(bid);
-  console.log(bidtype);
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
         <img src={arrow} alt="back" />
         <span>My Auctions</span>
       </div>
-      {/* {showAddToken && <AddToken onClose={handleClose} />} */}
 
       <div>
         <div className="head-part">
@@ -142,8 +141,12 @@ const AuctionSettings = () => {
               </div>
             </div>
             <div className="infoDiv">
-              <Input label="Start date" />
-              <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+              <Input
+                label="Start date"
+                value={`${startDate.month} ${startDate.day}, ${startDate.year}, ${startDate.hours}:${startDate.minutes} ${startDate.timezone}`}
+                onChange={(e) => console.log(e.target.value)}
+              />
+              {/* <Calendar startDate={startDate} setStartDate={setStartDate} /> */}
               <Input label="End date" />
               <span className="auction-ext">
                 Ending auction extension timer: 3 minutes
