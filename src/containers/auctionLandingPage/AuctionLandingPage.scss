@@ -2,1123 +2,1180 @@
 @import '../../assets/scss/mixins';
 
 .auction__landing__page {
-    .artist__personal__logo {
-        position: absolute;
-        top: 20px;
-        z-index: 9999;
-        left: 220px;
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        padding: 10px 0 10px 24px;
-        background: $white;
-        @include lg {
-            left: 100px;
-        }
-        @include sm {
-            left: 80px;
-            padding: 10px 0 10px 14px;
-        }
+  .artist__personal__logo {
+    position: absolute;
+    top: 20px;
+    z-index: 9999;
+    left: 220px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 0 10px 24px;
+    background: $white;
+    @include lg {
+      left: 100px;
     }
-    .auction__details__section {
-        padding: 30px 60px 110px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        .bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: conic-gradient(from 
-            176.21deg
-            at 50% 50%, #000000 
-            -24.66deg
-            , #FFFFFF 
-            0.25deg
-            , #000000 
-            50.63deg
-            , #000000 
-            51.97deg
-            , #FFFFFF 
-            88.12deg
-            , #000000 
-            142.5deg
-            , #FFFFFF 
-            196.87deg
-            , #000000 
-            256.87deg
-            , #FFFFFF 
-            300deg
-            , #000000 
-            335.2deg
-            , #000000 
-            335.34deg
-            , #FFFFFF 
-            360.25deg
-            ), radial-gradient(95.11% 95.11% at 36.64% 4.89%, #F0E939 0%, #FEB0FE 49.86%, #42A4FF 100%);
+    @include sm {
+      left: 80px;
+      padding: 10px 0 10px 14px;
+    }
+  }
+  .auction__details__section {
+    position: relative;
+    padding: 30px 60px 110px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: conic-gradient(
+          from 176.21deg at 50% 50%,
+          #000000 -24.66deg,
+          #ffffff 0.25deg,
+          #000000 50.63deg,
+          #000000 51.97deg,
+          #ffffff 88.12deg,
+          #000000 142.5deg,
+          #ffffff 196.87deg,
+          #000000 256.87deg,
+          #ffffff 300deg,
+          #000000 335.2deg,
+          #000000 335.34deg,
+          #ffffff 360.25deg
+        ),
+        radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
+      background-blend-mode: screen, normal;
+      opacity: 0.1;
+    }
+    &__container {
+      max-width: 1110px;
+      margin: 0 auto;
+
+      .slick-slider {
+        @include md {
+          display: none;
+        }
+      }
+
+      button.slick-arrow {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent;
+        height: 42px;
+        width: 42px;
+        border-radius: 12px;
+
+        &::before {
+          display: none;
+        }
+
+        &.slick-prev {
+          position: absolute;
+          left: -50px;
+        }
+        &.slick-next {
+          position: absolute;
+          right: -50px;
+          img {
+            transform: rotate(180deg);
+          }
+        }
+
+        &.slick-disabled {
+          background: transparent;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+      .carousel__auction__container {
+        &.selected {
+          .carousel__auction {
+            background: linear-gradient($white, $white) padding-box,
+              linear-gradient(to right, #bceb00, #00eaea) border-box;
+            border: 2px solid transparent !important;
+
+            &__info {
+              h4 {
+                color: $black !important;
+              }
+              p {
+                color: rgba(0, 0, 0, 0.6) !important;
+                // white-space: nowrap;
+              }
+            }
+          }
+        }
+        .carousel__auction {
+          box-sizing: border-box;
+          border-radius: 12px;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin: 0 10px;
+          cursor: pointer;
+
+          &__image {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &.show__avatar {
+              background: conic-gradient(
+                  from 176.21deg at 50% 50%,
+                  #000000 -24.66deg,
+                  #ffffff 0.25deg,
+                  #000000 50.63deg,
+                  #000000 51.97deg,
+                  #ffffff 88.12deg,
+                  #000000 142.5deg,
+                  #ffffff 196.87deg,
+                  #000000 256.87deg,
+                  #ffffff 300deg,
+                  #000000 335.2deg,
+                  #000000 335.34deg,
+                  #ffffff 360.25deg
+                ),
+                radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
+              background-blend-mode: screen, normal;
+              img.original {
+                display: none;
+              }
+              img.artist__image {
+                display: block;
+              }
+            }
+
+            img.original {
+              display: block;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 4px;
+            }
+            img.artist__image {
+              display: none;
+              width: 30px;
+              height: 30px;
+              object-fit: cover;
+              border-radius: 50%;
+              border: 4px solid $white;
+            }
+          }
+          &__info {
+            h4 {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 160%;
+            }
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 150%;
+              span {
+                color: #e4b613;
+              }
+            }
+          }
+        }
+      }
+      .auction__details__box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 75px;
+        grid-row-gap: 40px;
+        padding-top: 80px;
+
+        &__image {
+          grid-column: 1/2;
+          grid-row: 1/3;
+          max-width: 445px;
+          // max-height: 445px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          &.show__avatar {
+            background: conic-gradient(
+                from 176.21deg at 50% 50%,
+                #000000 -24.66deg,
+                #ffffff 0.25deg,
+                #000000 50.63deg,
+                #000000 51.97deg,
+                #ffffff 88.12deg,
+                #000000 142.5deg,
+                #ffffff 196.87deg,
+                #000000 256.87deg,
+                #ffffff 300deg,
+                #000000 335.2deg,
+                #000000 335.34deg,
+                #ffffff 360.25deg
+              ),
+              radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
             background-blend-mode: screen, normal;
-            opacity: 0.1;
-        }
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-
-            .slick-slider {
-                @include md {
-                    display: none;
-                }
+            img.original {
+              display: none;
             }
+            img.artist__image {
+              display: block;
+            }
+          }
 
-            button.slick-arrow {
-                background: 
-                    linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                border: 1px solid transparent;
-                height: 42px;
-                width: 42px;
+          img.original {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            filter: drop-shadow(0px 10px 40px rgba(136, 120, 172, 0.2));
+          }
+          img.artist__image {
+            display: none;
+            width: 270px;
+            height: 270px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid $white;
+            filter: drop-shadow(0px 10px 40px rgba(136, 120, 172, 0.2));
+            @include lg {
+              width: 180px;
+              height: 180px;
+              margin: 30px 0;
+            }
+          }
+          @include md {
+            grid-row: 1/2;
+            // max-width: 100%;
+            max-height: 335px;
+          }
+          @include sm {
+            max-height: 100%;
+            max-width: 100%;
+          }
+        }
+        &__info {
+          grid-column: 2/3;
+          grid-row: 1/2;
+          h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 26px;
+            line-height: 140%;
+            letter-spacing: 0.2px;
+            color: $black;
+            margin-bottom: 10px;
+          }
+          .artist__details {
+            display: flex;
+            align-items: center;
+
+            img {
+              width: 30px;
+              height: 30px;
+              margin-right: 10px;
+              border-radius: 50%;
+            }
+            span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 150%;
+              color: rgba(0, 0, 0, 0.6);
+              margin-right: 5px;
+            }
+            button {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 150%;
+              background-color: $white;
+              text-decoration: underline;
+              color: $black;
+            }
+          }
+          .auction__ends__in {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            // flex-wrap: wrap;
+
+            &__label {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              span {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                color: $black;
+                margin-right: 12px;
+              }
+              .time {
+                display: flex;
+                align-items: center;
+
+                > div {
+                  background: rgba(0, 0, 0, 0.02);
+                  border: 1px solid rgba(0, 0, 0, 0.1);
+                  box-sizing: border-box;
+                  border-radius: 10px;
+                  padding: 6px 12px;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 16px;
+                  line-height: 22px;
+                  letter-spacing: 0.3px;
+                  color: $black;
+                }
+                > span {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 16px;
+                  line-height: 22px;
+                  letter-spacing: 0.3px;
+                  color: $black;
+                  margin: 0 5px;
+                }
+              }
+              @include sm {
+                max-width: 270px;
+              }
+            }
+            // .copy__to__clipboard {
+            //     cursor: pointer;
+            //     margin-left: 12px;
+            //     span {
+            //         margin-left: 7px;
+            //         font-family: $spaceGroteskFont;
+            //         font-style: normal;
+            //         font-weight: normal;
+            //         font-size: 12px;
+            //         line-height: 150%;
+            //         color: $black;
+            //         opacity: 0.4;
+            //     }
+            //     @include lg {
+            //         margin-left: 0;
+            //         margin-top: 20px;
+            //     }
+            //     @include md {
+            //         margin-left: 12px;
+            //         margin-top: 0px;
+            //     }
+            //     @include sm {
+            //         width: 100%;
+            //         margin-left: 0;
+            //         margin-top: 10px;
+            //     }
+            // }
+
+            .copy-div {
+              position: relative;
+              margin-left: 10px;
+              padding: 7px 8px;
+
+              .copy > span {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 18px;
+                color: #000000;
+                opacity: 0.4;
+              }
+              .copyImg {
+                margin-right: 5px;
+              }
+              &:hover {
+                background: rgba(0, 0, 0, 0.05);
                 border-radius: 12px;
-
-                &::before {
-                    display: none;
+                .copy > span {
+                  opacity: 0.6;
                 }
-
-                &.slick-prev {
-                    position: absolute;
-                    left: -50px;
-                }
-                &.slick-next {
-                    position: absolute;
-                    right: -50px;
-                    img {
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.slick-disabled {
-                    background: transparent;
-                    border: 1px solid rgba(0, 0, 0, 0.1);
-                }
-            }
-            .carousel__auction__container {
-                &.selected {
-                    .carousel__auction {
-                        background: 
-                            linear-gradient($white, $white) padding-box,
-                            linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                        border: 2px solid transparent!important;
-
-                        &__info {
-                            h4 {
-                                color: $black!important;
-                            }
-                            p {
-                                color: rgba(0, 0, 0, 0.6)!important;
-                            }
-                        }
-                    }
-                }
-                .carousel__auction {
-                    box-sizing: border-box;
-                    border-radius: 12px;
-                    padding: 10px;
-                    display: flex;
-                    align-items: center;
-                    gap: 16px;
-                    margin: 0 10px;
-                    cursor: pointer;
-    
-                    &__image {
-                        height: 40px;
-                        width: 40px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        &.show__avatar {
-                            background: conic-gradient(from 176.21deg at 50% 50%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(95.11% 95.11% at 36.64% 4.89%, #F0E939 0%, #FEB0FE 49.86%, #42A4FF 100%);
-                            background-blend-mode: screen, normal;
-                            img.original {
-                                display: none;
-                            }
-                            img.artist__image {
-                                display: block;
-                            }
-                        }
-
-                        img.original {
-                            display: block;
-                            width: 100%;
-                            height: 100%;
-                            object-fit: cover;
-                            border-radius: 4px;
-                        }
-                        img.artist__image {
-                            display: none;
-                            width: 30px;
-                            height: 30px;
-                            object-fit: cover;
-                            border-radius: 50%;
-                            border: 4px solid $white;
-                        }
-                    }
-                    &__info {
-                        h4 {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: bold;
-                            font-size: 14px;
-                            line-height: 160%;
-                        }
-                        p {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 12px;
-                            line-height: 150%;
-                            span {
-                                color: #E4B613;
-                            }
-                        }
-                    }
-                }
-            }
-            .auction__details__box {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                grid-column-gap: 75px;
-                grid-row-gap: 40px;
-                padding-top: 80px;
-
-                &__image {
-                    grid-column: 1/2;
-                    grid-row: 1/3;
-                    max-width: 445px;
-                    // max-height: 445px;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    &.show__avatar {
-                        background: conic-gradient(from 176.21deg at 50% 50%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(95.11% 95.11% at 36.64% 4.89%, #F0E939 0%, #FEB0FE 49.86%, #42A4FF 100%);
-                        background-blend-mode: screen, normal;
-                        img.original {
-                            display: none;
-                        }
-                        img.artist__image {
-                            display: block;
-                        }
-                    }
-
-                    img.original {
-                        display: block;
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                        border-radius: 10px;
-                        filter: drop-shadow(0px 10px 40px rgba(136, 120, 172, 0.2));
-                    }
-                    img.artist__image {
-                        display: none;
-                        width: 270px;
-                        height: 270px;
-                        object-fit: cover;
-                        border-radius: 50%;
-                        border: 4px solid $white;
-                        filter: drop-shadow(0px 10px 40px rgba(136, 120, 172, 0.2));
-                        @include lg {
-                            width: 180px;
-                            height: 180px;
-                            margin: 30px 0;
-                        }
-                    }
-                    @include md {
-                        grid-row: 1/2;
-                        max-width: 100%;
-                        max-height: 335px;
-                    }
-                    @include sm {
-                        max-height: 100%;
-                    }
-                }
-                &__info {
-                    grid-column: 2/3;
-                    grid-row: 1/2;
-                    h1.title {
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 26px;
-                        line-height: 140%;
-                        letter-spacing: 0.2px;
-                        color: $black;
-                        margin-bottom: 10px;
-                    }
-                    .artist__details {
-                        display: flex;
-                        align-items: center;
-
-                        img {
-                            width: 30px;
-                            height: 30px;
-                            margin-right: 10px;
-                            border-radius: 50%;
-                        }
-                        span {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 150%;
-                            color: rgba(0, 0, 0, 0.6);
-                            margin-right: 5px;
-                        }
-                        button {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: bold;
-                            font-size: 14px;
-                            line-height: 150%;
-                            background-color: $white;
-                            text-decoration: underline;
-                            color: $black;
-                        }
-                    }
-                    .auction__ends__in {
-                        margin-top: 20px;
-                        display: flex;
-                        align-items: center;
-                        flex-wrap: wrap;
-
-                        &__label {
-                            display: flex;
-                            align-items: center;
-                            flex-wrap: wrap;
-                            span {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 22px;
-                                color: $black;
-                                margin-right: 12px;
-                            }
-                            .time {
-                                display: flex;
-                                align-items: center;
-    
-                                > div {
-                                    background: rgba(0, 0, 0, 0.02);
-                                    border: 1px solid rgba(0, 0, 0, 0.1);
-                                    box-sizing: border-box;
-                                    border-radius: 10px;
-                                    padding: 6px 12px;
-                                    font-family: $spaceGroteskFont;
-                                    font-style: normal;
-                                    font-weight: bold;
-                                    font-size: 16px;
-                                    line-height: 22px;
-                                    letter-spacing: 0.3px;
-                                    color: $black;
-                                }
-                                > span {
-                                    font-family: $spaceGroteskFont;
-                                    font-style: normal;
-                                    font-weight: bold;
-                                    font-size: 16px;
-                                    line-height: 22px;
-                                    letter-spacing: 0.3px;
-                                    color: $black;
-                                    margin: 0 5px;
-                                }
-                            }
-                        }
-                        // .copy__to__clipboard {
-                        //     cursor: pointer;
-                        //     margin-left: 12px;
-                        //     span {
-                        //         margin-left: 7px;
-                        //         font-family: $spaceGroteskFont;
-                        //         font-style: normal;
-                        //         font-weight: normal;
-                        //         font-size: 12px;
-                        //         line-height: 150%;
-                        //         color: $black;
-                        //         opacity: 0.4;
-                        //     }
-                        //     @include lg {
-                        //         margin-left: 0;
-                        //         margin-top: 20px;
-                        //     }
-                        //     @include md {
-                        //         margin-left: 12px;
-                        //         margin-top: 0px;
-                        //     }
-                        //     @include sm {
-                        //         width: 100%;
-                        //         margin-left: 0;
-                        //         margin-top: 10px;
-                        //     }
-                        // }
-
-
-                        .copy-div{
-                            position: relative;
-                            margin-left: 10px;
-                            padding: 7px 8px;
-    
-                            .copy>span{
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 12px;
-                                line-height: 18px;
-                                color: #000000;
-                                opacity: 0.4;
-                            }
-                            .copyImg{
-                                margin-right: 5px;
-                            }
-                            &:hover{
-                                background: rgba(0, 0, 0, 0.05);
-                                border-radius: 12px;
-                                .copy>span{
-                                    opacity: 0.6;
-                                }
-                            }
-                            &:active{
-                                background: rgba(0, 0, 0, 0.1);
-                                border-radius: 12px;
-                    
-                            }
-                            .copy>span{
-                                opacity: 0.6;
-                            }
-                            .copied-div{
-                                position: absolute;
-                                min-width: 95px;
-                                height: 27px;
-                                background: #000;
-                                border-radius: 100px;
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 12px;
-                                line-height: 150%;
-                                text-align: center;
-                                color: #FFFFFF;
-                                top: -100%;
-                                left: 0%;
-                                padding: 5px 13px;
-                            
-                                span{
-                                    position: absolute;
-                                    width: 7.6px;
-                                    height: 7.6px;
-                                    left: 45px;
-                                    top: 23px;
-                                    background: #000;
-                                    transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
-                                }
-                            }
-                        }
-                    }
-                    .auction__ended {
-                        background: rgba(228, 182, 19, 0.05);
-                        border: 1px solid #E4B613;
-                        box-sizing: border-box;
-                        border-radius: 12px;
-                        padding: 6px 16px;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 14px;
-                        line-height: 150%;
-                        color: #E4B613;
-                    }
-                    @include md {
-                        grid-column: 1/2;
-                        grid-row: 2/3;
-                    }
-                }
-                &__top__bidders {
-                    grid-column: 2/3;
-                    grid-row: 2/3;
-                    background: $white;
-                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                    border-radius: 12px;
-                    padding: 25px 0px;
-
-                    &__header {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 0 40px;
-
-                        h2.title {
-                            font-family: $sharpGroteskSemiBoldFont;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 16px;
-                            line-height: 130%;
-                            letter-spacing: 0.2px;
-                            color: $black;
-                            @include sm {
-                                font-size: 14px;
-                            }
-                        }
-                        button.view__all__bids {
-                            font-family: $spaceGroteskFont;
-                            font-weight: bold;
-                            font-size: 14px;
-                            line-height: 22px;
-                            letter-spacing: 0.3px;
-                            text-decoration-line: underline;
-                            color: $black;
-                            background-color: $white;
-                        }
-                        @include sm {
-                            padding: 0 24px;
-                        }
-                    }
-                    &__content {
-                        display: grid;
-                        grid-template-columns: 1fr 1fr;
-                        align-items: center;
-                        padding: 25px 40px;
-
-                        .ten__bidders__left {
-                            padding-right: 40px;
-                            border-right: 1px solid rgba(0, 0, 0, 0.1);
-                            @include sm {
-                                padding-right: 0px;
-                                border-right: none;
-                            }
-                        }
-                        .ten__bidders__right {
-                            padding-left: 40px;
-                            border-left: 1px solid rgba(0, 0, 0, 0.1);
-                            @include sm {
-                                padding-left: 0px;
-                                border-left: none;
-                            }
-                        }
-                        .bidder {
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                            margin-bottom: 6px;
-                            .name {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 22px;
-                                color: $black;
-                                b {
-                                    font-size: 11px;
-                                    margin-right: 3px;
-                                }
-                                span {
-                                    margin-left: 5px;
-                                    font-family: $spaceGroteskFont;
-                                    font-style: normal;
-                                    font-weight: 600;
-                                    font-size: 10px;
-                                    line-height: 120%;
-                                    padding: 2px 5px;
-                                    border-radius: 20px;
-
-                                    &.platinum {
-                                        color: #80CCDF;
-                                        border: 1px solid #80CCDF;
-                                    }
-                                    &.gold {
-                                        color: #DDBC45;
-                                        border: 1px solid #DDBC45;
-                                    }
-                                    &.silver {
-                                        color: #BCBCBC;
-                                        border: 1px solid #BCBCBC;
-                                    }
-                                }
-                            }
-                            .bid {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 14px;
-                                line-height: 22px;
-                                color: rgba(0, 0, 0, 0.6);
-                            }
-                        }
-                        @include sm {
-                            grid-template-columns: 1fr;
-                            padding: 24px;
-                        }
-                    }
-                    &__footer {
-                        padding: 25px 40px 0;
-                        border-top: 1px solid rgba(0, 0, 0, 0.1);
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        flex-wrap: wrap;
-                        gap: 20px;
-
-                        .your__bid {
-                            @include sm {
-                                width: 100%;
-                            }
-                            .no__bids {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 16px;
-                                line-height: 160%;
-                                color: rgba(0, 0, 0, 0.6);
-                            }
-                            .your__current__bid {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 16px;
-                                line-height: 160%;
-                                color: rgba(0, 0, 0, 0.6);
-                                b {
-                                    font-weight: bold;
-                                    color: $black;
-                                }
-                            }
-                        }
-                        .place__bid {
-                            @include sm {
-                                width: 100%;
-                            }
-                            button {
-                                @include sm {
-                                    width: 100%;
-                                }
-                            }
-                        }
-                        @include sm {
-                            padding: 24px;
-                        }
-                    }
-                    @include lg {
-                        grid-column: 1/3;
-                        grid-row: 3/4;
-                    }
-                }
-                .ended__result {
-                    grid-column: 2/3;
-                    grid-row: 2/3;
-                    background: $white;
-                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                    border-radius: 12px;
-                    .content {
-                        padding: 40px 15px;
-                        h2.title {
-                            font-family: $sharpGroteskSemiBoldFont;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 16px;
-                            line-height: 130%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            text-align: center;
-                            letter-spacing: 0.2px;
-                            color: $black;
-                        }
-                        p.desc {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 160%;
-                            text-align: center;
-                            color: rgba(0, 0, 0, 0.6);
-                            max-width: 380px;
-                            margin: 10px auto 16px;
-                        }
-                        .view__rankings {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            button {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 22px;
-                                display: flex;
-                                align-items: center;
-                                text-align: center;
-                                text-decoration-line: underline;
-                                color: $black;
-                                background-color: $white;
-                            }
-                        }
-                        @include sm {
-                            padding: 40px 30px;
-                        }
-                    }
-                    .footer {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 15px;
-                        border-top: 1px solid rgba(0, 0, 0, 0.1);
-                        button {
-                            @include sm {
-                                width: 100%;
-                            }
-                        }
-                    }
-                    @include lg {
-                        grid-column: 1/3;
-                        grid-row: 3/4;
-                    }
-                }
-                @include lg {
-                    grid-column-gap: 50px;
-                }
-                @include md {
-                    grid-column-gap: 0px;
-                    grid-template-columns: 1fr;
-                    padding-top: 0;
-                }
-            }
-        }
-        @include md {
-            padding: 30px 20px 60px;
-        }
-    }
-    .universe__auction__details__section {
-        padding: 120px 60px;
-
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-
-            h1.title {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 36px;
-                line-height: 140%;
-                color: $black;
-                margin-bottom: 5px;
-                @include lg {
-                    font-size: 32px;
-                }
-                @include sm {
-                    font-size: 26px;
-                }
-            }
-            p.desc {
+              }
+              &:active {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 12px;
+              }
+              .copy > span {
+                opacity: 0.6;
+              }
+              .copied-div {
+                position: absolute;
+                min-width: 95px;
+                height: 27px;
+                background: #000;
+                border-radius: 100px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 18px;
-                line-height: 150%;
-                color: rgba(0, 0, 0, 0.6);
-                margin-bottom: 70px;
-            }
-            .boxes {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 30px;
-
-                .box {
-                    .nowrap__mobile {
-                        display: flex;
-                        align-items: center;
-                        gap: 16px;
-                        flex-wrap: wrap;
-                        img {
-                            width: 60px;
-                            height: 60px;
-                            @include sm {
-                                width: 40px;
-                                height: 40px;
-                            }
-                        }
-                        h2.sub__title {
-                            width: 100%;
-                            font-family: $sharpGroteskSemiBoldFont;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 16px;
-                            line-height: 130%;
-                            letter-spacing: 0.2px;
-                            color: $black;
-                            @include sm {
-                                width: auto;
-                                font-size: 15px;
-                            }
-                        }
-                    }
-                    .sub__desc {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 14px;
-                        line-height: 160%;
-                        color: rgba(0, 0, 0, 0.6);
-                        margin-top: 6px;
-                    }
-                }
-                @include lg {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                @include sm {
-                    grid-template-columns: 1fr;
-                }
-            }
-        }
-
-        @include md {
-            padding: 60px 20px;
-        }
-    }
-    .reward__tiers__section {
-        padding: 120px 60px;
-        background-color: #FBF9FF;
-
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-
-            h1.title {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 36px;
-                line-height: 140%;
-                text-align: center;
-                color: $black;
-            }
-            p.desc {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 18px;
+                font-size: 12px;
                 line-height: 150%;
                 text-align: center;
-                color: rgba(0, 0, 0, 0.6);
-                max-width: 470px;
-                margin: 5px auto 70px;
-            }
-            .tiers__section {
-                display: grid;
-                grid-template-columns: 1fr;
-                grid-gap: 24px;
-                .tier__box {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    grid-gap: 80px;
-                    background: $white;
-                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                    border-radius: 12px;
-                    padding: 60px 30px;
+                color: #ffffff;
+                top: -100%;
+                left: 0%;
+                padding: 5px 13px;
 
-                    .tier__nfts__container {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        .tier__nfts {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            height: 200px;
-                            width: 100%;
-                            .nft__image {
-                                position: relative;
-                                max-height: 200px;
-                                max-width: 200px;
-                                border-radius: 12px;
-                                border: 6px solid $white;
-                                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                                &:nth-child(2) {
-                                    margin-left: -20%;
-                                }
-                                &:nth-child(3) {
-                                    margin-left: -20%;
-                                }
-                                img {
-                                    width: 100%;
-                                    height: 100%;
-                                    object-fit: cover;
-                                    border-radius: 12px;
-                                }
-
-                            }
-                            .show__more {
-                                position: absolute;
-                                top: 50%;
-                                left: 100%;
-                                transform: translate(-50%, -50%);
-                                background: $white;
-                                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                                border-radius: 50%;
-                                height: 45px;
-                                width: 45px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 100%;
-                                text-align: center;
-                                color: $black;
-                            }
-                        }
-                    }
-                    .tier__details {
-                        .tier__title {
-                            position: relative;
-                            margin-bottom: 12px;
-                            h2 {
-                                font-family: $sharpGroteskSemiBoldFont;
-                                font-style: normal;
-                                font-weight: 600;
-                                font-size: 20px;
-                                line-height: 130%;
-                                color: $black;
-                                @include md {
-                                    margin-left: 40px;
-                                }
-                            }
-                            span {
-                                position: absolute;
-                                left: -40px;
-                                top: 0;
-                                border-radius: 50%;
-                                height: 28px;
-                                width: 28px;
-                                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                                @include md {
-                                    left: 0;
-                                }
-                            }
-                        }
-                        .tier__info {
-                            display: flex;
-                            align-items: center;
-                            flex-wrap: wrap;
-                            gap: 12px;
-                            span {
-                                background: rgba(0, 0, 0, 0.05);
-                                border-radius: 12px;
-                                padding: 6px 16px;
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 150%;
-                                color: $black;
-                            }
-                        }
-                        .tier__description {
-                            margin: 24px 0;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 160%;
-                            color: rgba(0, 0, 0, 0.6);
-                        }
-                        .preview__nfts {
-                            button {
-                                @include sm {
-                                    width: 100%;
-                                }
-                            }
-                        }
-                    }
-                    @include md {
-                        grid-template-columns: 1fr;
-                        gap: 10px;
-                        padding: 20px;
-                    }
+                span {
+                  position: absolute;
+                  width: 7.6px;
+                  height: 7.6px;
+                  left: 45px;
+                  top: 23px;
+                  background: #000;
+                  transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
                 }
+              }
             }
+            @include sm {
+              align-items: flex-end;
+            }
+          }
+          .auction__ended {
+            background: rgba(228, 182, 19, 0.05);
+            border: 1px solid #e4b613;
+            box-sizing: border-box;
+            border-radius: 12px;
+            padding: 6px 16px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 150%;
+            color: #e4b613;
+          }
+          @include md {
+            grid-column: 1/2;
+            grid-row: 2/3;
+          }
         }
-        @include sm {
-            padding: 60px 20px;
-        }
-    }
-    .artist__details__section {
-        position: relative;
-        padding: 120px 60px;
+        &__top__bidders {
+          grid-column: 2/3;
+          grid-row: 2/3;
+          background: $white;
+          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          padding: 25px 0px;
 
-        &__container {
+          &__header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 100px;
-            max-width: 1110px;
-            margin: 0 auto;
+            padding: 0 40px;
 
-            .show__on__mobile {
-                display: none;
-                margin-left: 22px;
+            h2.title {
+              font-family: $sharpGroteskSemiBoldFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 130%;
+              letter-spacing: 0.2px;
+              color: $black;
+              @include sm {
+                font-size: 14px;
+              }
+            }
+            button.view__all__bids {
+              font-family: $spaceGroteskFont;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 22px;
+              letter-spacing: 0.3px;
+              text-decoration-line: underline;
+              color: $black;
+              background-color: $white;
+            }
+            @include sm {
+              padding: 0 24px;
+            }
+          }
+          &__content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 25px 40px;
+
+            .ten__bidders__left {
+              padding-right: 40px;
+              border-right: 1px solid rgba(0, 0, 0, 0.1);
+              @include sm {
+                padding-right: 0px;
+                border-right: none;
+              }
+            }
+            .ten__bidders__right {
+              padding-left: 40px;
+              border-left: 1px solid rgba(0, 0, 0, 0.1);
+              @include sm {
+                padding-left: 0px;
+                border-left: none;
+              }
+            }
+            .bidder {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 6px;
+              .name {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                color: $black;
+                b {
+                  font-size: 11px;
+                  margin-right: 3px;
+                }
+                span {
+                  margin-left: 5px;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 10px;
+                  line-height: 120%;
+                  padding: 2px 5px;
+                  border-radius: 20px;
+
+                  &.platinum {
+                    color: #80ccdf;
+                    border: 1px solid #80ccdf;
+                  }
+                  &.gold {
+                    color: #ddbc45;
+                    border: 1px solid #ddbc45;
+                  }
+                  &.silver {
+                    color: #bcbcbc;
+                    border: 1px solid #bcbcbc;
+                  }
+                }
+              }
+              .bid {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.6);
+              }
+            }
+            @include sm {
+              grid-template-columns: 1fr;
+              padding: 24px;
+            }
+          }
+          &__footer {
+            padding: 25px 40px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            .your__bid {
+              @include sm {
+                width: 100%;
+              }
+              .no__bids {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 160%;
+                color: rgba(0, 0, 0, 0.6);
+              }
+              .your__current__bid {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 160%;
+                color: rgba(0, 0, 0, 0.6);
+                b {
+                  font-weight: bold;
+                  color: $black;
+                }
+              }
+            }
+            .place__bid {
+              @include sm {
+                width: 100%;
+              }
+              button {
+                @include sm {
+                  width: 100%;
+                }
+              }
+            }
+            @include sm {
+              padding: 24px;
+            }
+          }
+          @include lg {
+            grid-column: 1/3;
+            grid-row: 3/4;
+          }
+        }
+        .ended__result {
+          grid-column: 2/3;
+          grid-row: 2/3;
+          background: $white;
+          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          .content {
+            padding: 40px 15px;
+            h2.title {
+              font-family: $sharpGroteskSemiBoldFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 130%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              text-align: center;
+              letter-spacing: 0.2px;
+              color: $black;
+            }
+            p.desc {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 160%;
+              text-align: center;
+              color: rgba(0, 0, 0, 0.6);
+              max-width: 380px;
+              margin: 10px auto 16px;
+            }
+            .view__rankings {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              button {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                text-decoration-line: underline;
+                color: $black;
+                background-color: $white;
+              }
+            }
+            @include sm {
+              padding: 40px 30px;
+            }
+          }
+          .footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            button {
+              @include sm {
+                width: 100%;
+              }
+            }
+          }
+          @include lg {
+            grid-column: 1/3;
+            grid-row: 3/4;
+          }
+        }
+        @include lg {
+          grid-column-gap: 50px;
+        }
+        @include md {
+          grid-column-gap: 0px;
+          grid-template-columns: 1fr;
+          padding-top: 0;
+        }
+      }
+    }
+    @include md {
+      padding: 30px 20px 60px;
+    }
+  }
+  .universe__auction__details__section {
+    padding: 120px 60px;
+
+    &__container {
+      max-width: 1110px;
+      margin: 120px auto;
+
+      h1.title {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 140%;
+        color: $black;
+        margin-bottom: 5px;
+        @include lg {
+          font-size: 32px;
+        }
+        @include sm {
+          display: grid;
+          font-size: 26px;
+        }
+      }
+      p.desc {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 70px;
+      }
+      .boxes {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+
+        .box {
+          .nowrap__mobile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            img {
+              width: 60px;
+              height: 60px;
+              @include sm {
+                width: 40px;
+                height: 40px;
+              }
+            }
+            h2.sub__title {
+              width: 100%;
+              font-family: $sharpGroteskSemiBoldFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 130%;
+              letter-spacing: 0.2px;
+              color: $black;
+              @include sm {
+                width: auto;
+                font-size: 15px;
+              }
+            }
+          }
+          .sub__desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+            margin-top: 6px;
+          }
+        }
+        @include lg {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        @include sm {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+
+    @include md {
+      padding: 60px 20px;
+    }
+  }
+  .reward__tiers__section {
+    position: relative;
+    padding: 120px 60px;
+    // background-color: #fbf9ff;
+
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: conic-gradient(
+          from 176.21deg at 50% 50%,
+          #000000 -24.66deg,
+          #ffffff 0.25deg,
+          #000000 50.63deg,
+          #000000 51.97deg,
+          #ffffff 88.12deg,
+          #000000 142.5deg,
+          #ffffff 196.87deg,
+          #000000 256.87deg,
+          #ffffff 300deg,
+          #000000 335.2deg,
+          #000000 335.34deg,
+          #ffffff 360.25deg
+        ),
+        radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
+      background-blend-mode: screen, normal;
+      opacity: 0.1;
+    }
+
+    &__container {
+      max-width: 1110px;
+      margin: 0 auto;
+
+      h1.title {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 140%;
+        text-align: center;
+        color: $black;
+      }
+      p.desc {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 150%;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.6);
+        max-width: 470px;
+        margin: 5px auto 70px;
+      }
+      .tiers__section {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 24px;
+        .tier__box {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 80px;
+          background: $white;
+          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          padding: 60px 30px;
+
+          .tier__nfts__container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .tier__nfts {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 200px;
+              width: 100%;
+              .nft__image {
+                position: relative;
+                max-height: 200px;
+                max-width: 200px;
+                border-radius: 12px;
+                border: 6px solid $white;
+                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                &:nth-child(2) {
+                  margin-left: -20%;
+                }
+                &:nth-child(3) {
+                  margin-left: -20%;
+                }
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;
+                  border-radius: 12px;
+                }
+              }
+              .show__more {
+                position: absolute;
+                top: 50%;
+                left: 100%;
+                transform: translate(-50%, -50%);
+                background: $white;
+                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                border-radius: 50%;
+                height: 45px;
+                width: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 100%;
+                text-align: center;
+                color: $black;
+              }
+            }
+          }
+          .tier__details {
+            .tier__title {
+              position: relative;
+              margin-bottom: 12px;
+              h2 {
                 font-family: $sharpGroteskSemiBoldFont;
                 font-style: normal;
                 font-weight: 600;
                 font-size: 20px;
                 line-height: 130%;
                 color: $black;
-                @include sm {
-                    display: block;
+                @include md {
+                  margin-left: 40px;
                 }
+              }
+              span {
+                position: absolute;
+                left: -40px;
+                top: 0;
+                border-radius: 50%;
+                height: 28px;
+                width: 28px;
+                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                @include md {
+                  left: 0;
+                }
+              }
             }
-            .avatar {
-                display: flex;
-                align-items: center;
-                img {
-                    min-width: 280px;
-                    min-height: 280px;
-                    object-fit: cover;
-                    border-radius: 50%;
-                    @include lg {
-                        min-width: 220px;
-                        min-height: 220px;
-                    }
-                    @include sm {
-                        min-width: auto;
-                        min-height: auto;
-                        width: 90px;
-                        height: 90px;
-                    }
-                }
-            }
-            .info {
-                width: 100%;
-                h1.title {
-                    font-family: $sharpGroteskSemiBoldFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 32px;
-                    line-height: 140%;
-                    color: $black;
-                    @include lg {
-                        font-size: 26px;
-                    }
-                    @include sm {
-                        display: none;
-                    }
-                }
-                p.desc {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: normal;
-                    font-size: 16px;
-                    line-height: 160%;
-                    color: rgba(0, 0, 0, 0.6);
-                    margin: 10px 0 24px;
-                    @include lg {
-                        font-size: 14px;
-                    }
-                }
-                .social__links {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-    
-                    a {
-                        border: 1px solid rgba(0, 0, 0, 0.1);
-                        box-sizing: border-box;
-                        border-radius: 12px;
-                        padding: 13px;
-                    }
-                }
-            }
-            @include lg {
-                gap: 50px;
-            }
-            @include sm {
-                gap: 10px;
-                flex-wrap: wrap;
-            }
-        }
-        @include md {
-            padding: 60px 20px;
-        }
-    }
-    .place__bid__section {
-        position: relative;
-        padding: 65px 60px;
-        background-image: url('../../assets/images/place-bid-bg.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 24px;
-
-            h1.title {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 36px;
-                line-height: 140%;
-                color: $black;
-                margin-bottom: 15px;
-                @include lg {
-                    font-size: 26px;
-                }
-                @include sm {
-                    text-align: center;
-                }
-            }
-            p.desc {
+            .tier__info {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              gap: 12px;
+              span {
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 12px;
+                padding: 6px 16px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
-                font-weight: normal;
-                font-size: 18px;
+                font-weight: bold;
+                font-size: 14px;
                 line-height: 150%;
                 color: $black;
-                @include lg {
-                    font-size: 16px;
-                }
+              }
+            }
+            .tier__description {
+              margin: 24px 0;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 160%;
+              color: rgba(0, 0, 0, 0.6);
+            }
+            .preview__nfts {
+              button {
                 @include sm {
-                    text-align: center;
+                  width: 100%;
                 }
+              }
             }
-            .place__bid__btn {
-                button {
-                    display: flex;
-                    align-items: center;
-                    background: $black;
-                    box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                    border-radius: 12px;
-                    padding: 15px 26px;
-                    span {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 20px;
-                        background: -webkit-linear-gradient(right, #00EAEA, #BCEB00);
-                        -webkit-background-clip: text;
-                        -webkit-text-fill-color: transparent;
-                        margin-right: 10px;
-                    }
-                }
-            }
-            @include sm {
-                justify-content: center;
-            }
+          }
+          @include md {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 20px;
+          }
+        }
+      }
+    }
+    @include sm {
+      padding: 60px 20px;
+    }
+  }
+  .artist__details__section {
+    position: relative;
+    padding: 120px 60px;
+
+    &__container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 100px;
+      max-width: 1110px;
+      margin: 0 auto;
+
+      .show__on__mobile {
+        display: none;
+        margin-left: 22px;
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 130%;
+        color: $black;
+        @include sm {
+          display: block;
+        }
+      }
+      .avatar {
+        display: flex;
+        align-items: center;
+        img {
+          min-width: 280px;
+          min-height: 280px;
+          object-fit: cover;
+          border-radius: 50%;
+          @include lg {
+            min-width: 220px;
+            min-height: 220px;
+          }
+          @include sm {
+            min-width: auto;
+            min-height: auto;
+            width: 90px;
+            height: 90px;
+          }
+        }
+      }
+      .info {
+        width: 100%;
+        h1.title {
+          font-family: $sharpGroteskSemiBoldFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 32px;
+          line-height: 140%;
+          color: $black;
+          @include lg {
+            font-size: 26px;
+          }
+          @include sm {
+            display: none;
+          }
+        }
+        p.desc {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.6);
+          margin: 10px 0 24px;
+          @include lg {
+            font-size: 14px;
+          }
+        }
+        .social__links {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+
+          a {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 12px;
+            padding: 13px;
+          }
+        }
+      }
+      @include lg {
+        gap: 50px;
+      }
+      @include sm {
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+    }
+    @include md {
+      padding: 60px 20px;
+    }
+  }
+  .place__bid__section {
+    position: relative;
+    padding: 65px 60px;
+    background-image: url('../../assets/images/place-bid-bg.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    &__container {
+      max-width: 1110px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+
+      h1.title {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 140%;
+        color: $black;
+        margin-bottom: 15px;
+        @include lg {
+          font-size: 26px;
         }
         @include sm {
-            padding: 65px 20px;
+          text-align: center;
         }
+      }
+      p.desc {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 150%;
+        color: $black;
+        @include lg {
+          font-size: 16px;
+        }
+        @include sm {
+          text-align: center;
+        }
+      }
+      .place__bid__btn {
+        button {
+          display: flex;
+          align-items: center;
+          background: $black;
+          box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          padding: 15px 26px;
+          span {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            background: -webkit-linear-gradient(right, #00eaea, #bceb00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 10px;
+          }
+          @include sm {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+        @include sm {
+          width: 100%;
+        }
+      }
+      @include sm {
+        justify-content: center;
+      }
     }
+    @include sm {
+      padding: 65px 20px;
+    }
+  }
 }

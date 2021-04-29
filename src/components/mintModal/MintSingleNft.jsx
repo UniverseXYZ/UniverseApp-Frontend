@@ -388,15 +388,16 @@ const MintSingleNft = ({ onClick }) => {
               <Animated animationIn="zoomIn">
                 <div className="properties-info-text">
                   <p>
-                    Adding properties allows you to specify the character NFT traits, the goods NFT
-                    sizes, or any other details you would like to specify.
+                    Adding properties allows you to specify the character traits. This will allow
+                    users to easily search for your NFT.
                   </p>
                 </div>
               </Animated>
             )}
           </div>
-          {properties.map((elm) => (
-            <div className="properties" key={uuid()}>
+          {properties.map((elm, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div className="properties" key={i}>
               <div className="property-name">
                 <h5>Property name</h5>
                 <Input
@@ -429,7 +430,7 @@ const MintSingleNft = ({ onClick }) => {
           <div className="property-add">
             <h5>
               <img src={addIcon} alt="Add" onClick={() => addProperty()} aria-hidden="true" />
-              Add Property
+              Add property
             </h5>
           </div>
         </div>
