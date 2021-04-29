@@ -70,7 +70,7 @@ const App = () => {
         }
     };
   
-    const connectWeb3 = async (ethereum, provider) => {
+    const connectMetamask = async (ethereum, provider) => {
 
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });
       const balance = await provider.getBalance(accounts[0]);
@@ -95,6 +95,35 @@ const App = () => {
       setAuctionFactoryContract(auctionFactoryContract);
       setUniverseERC721Contract(universeERC721Contract);
 
+    };
+
+    const connectWalletConnect = async (provider) => {
+      const {
+        accounts: [account]
+      } = provider;
+  
+      const web3Provider = new providers.Web3Provider(provider);
+      const network = await web3Provider.getNetwork();
+      const balance = await web3Provider.getBalance(account);
+      const ethPrice = await getEthPriceEtherscan();
+      const wethBalance = await getWethBalanceEtherscan(account, provider.chainId);
+      const signer = web3Provider.getSigner(account).connectUnchecked();
+  
+      // TODO:  Uncomment for mainnet, ConnectWallet do not support rinkeby
+  
+      // const contracts = Contracts[network.chainId].contracts;
+      // const auctionFactoryContract = new Contract(contracts.AuctionFactory.address, contracts.AuctionFactory.abi, signer);
+      // const universeERC721Contract = new Contract(contracts.MockNFT.address, contracts.MockNFT.abi, signer);
+      // const userNftIds = await fetchUserNfts(universeERC721Contract, account);
+  
+      setIsWalletConnected(true);
+      setAddress(account);
+      setYourBalance(utils.formatEther(balance));
+      setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
+      setWethBalance(utils.formatEther(wethBalance.result));
+      setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
+      // setAuctionFactoryContract(auctionFactoryContract);
+      // setUniverseERC721Contract(universeERC721Contract);
     };
   
     const isMetaMaskConnected = async (provider) => {
@@ -135,14 +164,14 @@ const App = () => {
           const isConnected = await isMetaMaskConnected(provider);
           setWeb3Provider(provider)
           if (provider && isConnected) {
-            await connectWeb3(ethereum, provider);
+            await connectMetamask(ethereum, provider);
           } else {
             console.log("Please install/connect MetaMask!");
           }
     
           ethereum.on("accountsChanged", async ([account]) => {
             if (account) {
-              await connectWeb3(ethereum, provider);
+              await connectMetamask(ethereum, provider);
             } else {
               setIsWalletConnected(false);
             }
@@ -209,7 +238,8 @@ const App = () => {
                 setUniverseERC721Contract,
                 signer,
                 setSigner,
-                connectWeb3 
+                connectMetamask,
+                connectWalletConnect
             }}
         >
             <Routes>
