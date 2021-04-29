@@ -18,9 +18,8 @@
       // display: flex;
       width: 100%;
       padding: 50px 45px 0 45px;
-      .intup-l {
-        .inp,
-        .inp-label {
+      .intup-l{
+        input, .inp-label, p{
           margin-left: 30px;
         }
       }
@@ -116,10 +115,15 @@
       }
     }
     .tiers-part {
+      position: relative;
       padding-left: 45px;
-      width: 50%;
       .intup-l {
         margin-bottom: 20px;
+      }
+      .bid-type{
+        position: absolute;
+        top: 43%;
+        right: 1%;
       }
     }
     .switch {
@@ -184,7 +188,7 @@
     width: 100px;
     height: 34px;
     right: 8%;
-    top: 26.5%;
+    top: 86px;
     border-radius: 6px;
     button {
       width: 100%;
@@ -287,6 +291,16 @@
     font-family: $spaceGroteskFont;
     font-size: 16px;
     line-height: 20px;
+  }
+  .last-error{
+    padding-top: 40px;
+    margin-bottom: -20px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 18px;
+    color: #FF4949;
   }
   .token-div {
     border-top: 1px solid rgba(0, 0, 0, 0.1);

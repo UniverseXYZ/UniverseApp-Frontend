@@ -20,6 +20,7 @@ import CustomizeAuction from './containers/customizeAuction/CustomizeAuction';
 import AuctionDetails from './components/auctionLandingPage/AuctionDetails';
 import AuctionSettings from './containers/auctionSettings/AuctionSettings';
 import Team from './containers/team/Team';
+import AuctionReview from './containers/auctionReview/AuctionReview';
 
 const App = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(true);
@@ -47,12 +48,11 @@ const App = () => {
   const [savedNfts, setSavedNfts] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
-  // const tiers  = useState({ tiers: [ { nfts: [], name: '', winner: '', nftsPerWinner:'' } ] });
-  // const [auction, setAuction] = useState({ tier: {nfts:{}} });
 
   const [auction, setAuction] = useState({ tiers: [] });
   const [selectedNft, setSelectedNft] = useState([]);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
+  const [bidtype, setBidtype] = useState('eth');
 
   const handleClickOutside = (event, className, ref, cb) => {
     if (!event.target.classList.contains(className)) {
@@ -130,6 +130,8 @@ const App = () => {
         setSelectedNft,
         selectedNFTIds,
         setSelectedNFTIds,
+        bidtype,
+        setBidtype,
       }}
     >
       <Routes>
@@ -162,6 +164,7 @@ const App = () => {
           <Route exact path="/team" component={() => <Team />} />
 
           <Route exact path="/auction-settings" component={() => <AuctionSettings />} />
+          <Route exact path="/auction-review" component={() => <AuctionReview />} />
           <Route exact path="/:artist">
             <Artist />
           </Route>

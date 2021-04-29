@@ -47,7 +47,7 @@ const Create = () => {
           const createdTierId = uuid();
           setAuction({
             ...auction,
-            tiers: [...auction.tiers, { ...values, id: createdTierId, nfts: [] }],
+            tiers: [...auction.tiers, { ...values, id: createdTierId, nfts: [], minBid: '' }],
           });
           history.push('/select-nfts', createdTierId);
         }
