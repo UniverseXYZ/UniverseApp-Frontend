@@ -12,7 +12,7 @@ import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 
-const RewardTiers = () => {
+const AuctionReview = () => {
   const location = useLocation();
   const history = useHistory();
   const [shownActionId, setShownActionId] = useState(null);
@@ -22,32 +22,38 @@ const RewardTiers = () => {
   const tierById = auction.tiers.find((element) => element.id === tierId);
   console.log(auction);
   return (
-    <div className="container reward-tiers">
+    <div className="container auction-reward">
       <div
         className="back-rew"
         onClick={() => {
-          history.push('/my-auctions');
+          history.push('/auction-settings');
         }}
         aria-hidden="true"
       >
         <img src={arrow} alt="back" />
-        <span>My Auctions</span>
+        <span>Auctions settings</span>
       </div>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Reward Tiers</h2>
-          <p>
-            Reward Tiers are the NFT bundles that users are bidding for to win. There can be up to
-            10 tiers in one auction.
-          </p>
+          <h2 className="tier-title">Auction Review</h2>
         </div>
+        {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
+          <div>
+            <div style={{ display: 'grid' }}>
+              <span>Auction name- {auction.name}</span>
+              <span>Bid token (ERC-20) </span>
+              <span>Starting bid- {auction.startingBid}</span>
+              <span>Start date- {auction.startDate}</span>
+              <span>End date- {auction.endDate}</span>
+            </div>
+          </div>
+        )}
         {auction.tiers.length > 0 &&
           auction.tiers.map((tier) => (
             <div key={tier.id} className="view-tier">
               <div className="auction-header">
                 <div className="img_head">
                   <div className="img_head_title">
-                    <img className="auctionIcon" src={icon} alt="auction" />
                     <h3>{tier.name}</h3>
                   </div>
                   <div className="winners__edit__btn">
@@ -104,10 +110,10 @@ const RewardTiers = () => {
                 </div>
               </div>
               <div hidden={shownActionId !== tier.id} className="auctions-tier">
-                <div className="rev-reward">
+                <div className="auction-reward">
                   {tier.nfts.map((nft) => (
-                    <div className="rev-reward__box">
-                      <div className="rev-reward__box__image">
+                    <div className="auction-reward__box">
+                      <div className="auction-reward__box__image">
                         {nft.previewImage.type === 'video/mp4' && (
                           <video
                             onMouseOver={(event) => event.target.play()}
@@ -138,10 +144,10 @@ const RewardTiers = () => {
                           <img className="check__icon" src={checkIcon} alt="Check Icon" />
                         )}
                       </div>
-                      <div className="rev-reward__box__name">
+                      <div className="auction-reward__box__name">
                         <h3>{nft.name}</h3>
                       </div>
-                      <div className="rev-reward__box__footer">
+                      <div className="auction-reward__box__footer">
                         <div className="collection__details">
                           {nft.type === 'collection' && (
                             <>
@@ -167,8 +173,8 @@ const RewardTiers = () => {
                       </div>
                       {nft.generatedEditions.length > 1 && (
                         <>
-                          <div className="rev-reward__box__highlight__one" />
-                          <div className="rev-reward__box__highlight__two" />
+                          <div className="auction-reward__box__highlight__one" />
+                          <div className="auction-reward__box__highlight__two" />
                         </>
                       )}
                     </div>
@@ -177,34 +183,8 @@ const RewardTiers = () => {
               </div>
             </div>
           ))}
-        <div
-          className="create-rew-tier"
-          onClick={() => {
-            history.push('/create-tiers');
-          }}
-          aria-hidden="true"
-        >
-          <div className="plus-icon">
-            <img src={union} alt="create" />
-          </div>
-          <div className="create-rew-text">
-            <p>Create reward tier</p>
-          </div>
-        </div>
-        {auction.tiers.length > 0 && (
-          <div className="set-up">
-            <Button
-              className="light-button"
-              onClick={() => {
-                history.push('/auction-settings');
-              }}
-            >
-              Set up auction
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
 };
-export default RewardTiers;
+export default AuctionReview;
