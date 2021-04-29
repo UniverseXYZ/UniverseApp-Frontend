@@ -21,20 +21,27 @@ import Calendar from '../calendar/Calendar';
 const AuctionSettings = () => {
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction } = useContext(AppContext);
+  const { auction, setAuction, bidtype, setBidtype } = useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
   const [minBid, setMinBId] = useState(false);
-  const [startDate, setStartDate] = useState({
-    month: '',
-    day: '',
-    year: '',
-    hours: '',
-    minutes: '',
-    timezone: '',
+  const [errorArray, setErrorArray] = useState([]);
+
+  const [isValidFields, setIsValidFields] = useState({
+    name: true,
+    startingBid: true,
+    startDate: true,
+    endDate: true,
   });
-  const [bidtype, setBidtype] = useState('eth');
+
+  const [bidValues, setBidValues] = useState({});
+  const [values, setValues] = useState({
+    name: '',
+    startingBid: '',
+    startDate: '',
+    endDate: '',
+  });
 
   const options = [
     {
@@ -78,7 +85,76 @@ const AuctionSettings = () => {
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
+  const handleClose = () => {
+    setShowAddToken(false);
+  };
   const bid = options.find((element) => element.value === bidtype);
+
+  useEffect(() => {
+    if (values.name) {
+      if (
+        isValidFields.startingBid &&
+        isValidFields.startDate &&
+        isValidFields.endDate &&
+        isValidFields.bidErr
+      ) {
+        if (auction.tiers.length > 0) {
+          setAuction({
+            ...auction,
+            name: values.name,
+            startingBid: values.startingBid,
+            startDate: values.startDate,
+            endDate: values.endDate,
+          });
+        }
+      }
+    }
+  }, [isValidFields]);
+
+  const handleAddAuction = () => {
+    setIsValidFields((prevValues) => ({ ...prevValues, name: values.name.trim().length !== 0 }));
+    setIsValidFields((prevValues) => ({
+      ...prevValues,
+      startingBid: values.startingBid.trim().length !== 0,
+    }));
+    setIsValidFields((prevValues) => ({
+      ...prevValues,
+      startDate: values.startDate.trim().length !== 0,
+    }));
+    setIsValidFields((prevValues) => ({
+      ...prevValues,
+      endDate: values.endDate.trim().length !== 0,
+    }));
+    if (minBid === true) {
+      let currentMinBid = 0;
+      // eslint-disable-next-line no-restricted-syntax, guard-for-in
+      for (const key in bidValues) {
+        if (currentMinBid < bidValues[key]) {
+          currentMinBid = bidValues[key];
+          setErrorArray((prevValue) => prevValue.filter((tierId) => tierId !== key));
+        } else {
+          setErrorArray((prevValue) => [...prevValue, key]);
+          return;
+        }
+      }
+      // eslint-disable-next-line no-return-assign
+      auction.tiers.map((tier) => (tier.minBid = bidValues[tier.id]));
+      setErrorArray([]);
+    }
+    history.push('/auction-review', location.pathname);
+  };
+
+  const handleOnChange = (event) => {
+    setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
+  };
+
+  const handleBidChange = (event) => {
+    setBidValues((prevValue) => ({
+      ...prevValue,
+      [event.target.id]: event.target.value,
+    }));
+  };
+
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
@@ -93,8 +169,23 @@ const AuctionSettings = () => {
         <div className="setting-form">
           <div className="up-side">
             <div className="infoDiv">
-              <Input label="Auction name" />
-              <Input label="Starting bid" />
+              <Input
+                id="name"
+                onChange={handleOnChange}
+                label="Auction name"
+                value={values.name}
+                error={
+                  isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
+                }
+              />
+              <Input
+                id="startingBid"
+                type="number"
+                onChange={handleOnChange}
+                label="Starting bid"
+                value={values.startingBid}
+                error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
+              />
               <div className="drop-down">
                 <button type="button" onClick={() => handleShow()}>
                   <img src={bid.img} alt="icon" />
@@ -106,6 +197,7 @@ const AuctionSettings = () => {
                     <div>
                       <h1>Select bid token (ERC-20)</h1>
                       <Input
+                        type="number"
                         placeholder="Search name or paste ERC-20 contract address"
                         className="searchInp"
                       />
@@ -142,12 +234,21 @@ const AuctionSettings = () => {
             </div>
             <div className="infoDiv">
               <Input
-                label="Start date"
-                value={`${startDate.month} ${startDate.day}, ${startDate.year}, ${startDate.hours}:${startDate.minutes} ${startDate.timezone}`}
-                onChange={(e) => console.log(e.target.value)}
+                type="date"
+                onChange={handleOnChange}
+                id="startDate"
+                label="Auction name"
+                value={values.startDate}
+                error={isValidFields.startDate ? undefined : 'Start date is required!'}
               />
-              {/* <Calendar startDate={startDate} setStartDate={setStartDate} /> */}
-              <Input label="End date" />
+              <Input
+                type="date"
+                onChange={handleOnChange}
+                id="endDate"
+                label="End date"
+                value={values.endDate}
+                error={isValidFields.endDate ? undefined : 'End date is required!'}
+              />
               <span className="auction-ext">
                 Ending auction extension timer: 3 minutes
                 <img
@@ -210,18 +311,46 @@ const AuctionSettings = () => {
                 </div>
               )}
             </div>
-
-            {auction.tiers.length > 0 &&
-              minBid === true &&
-              auction.tiers.map((tier, index) => (
-                <div className="tiers-part">
-                  <Input label={tier.name} placeholder="0.1" />
-                </div>
-              ))}
+            <div className="tiers-inp">
+              {auction.tiers.length > 0 &&
+                minBid === true &&
+                auction.tiers.map((tier, _index) => (
+                  <div className="tiers-part">
+                    <span className="bid-type">
+                      <img src={bid.img} alt="icon" />
+                      <spam className="button-name">{bid.name}</spam>
+                    </span>
+                    <Input
+                      type="number"
+                      name="tierBid"
+                      label={tier.name}
+                      error={
+                        errorArray.includes(tier.id)
+                          ? 'The minimum bid for this tier cannot be lower than for the tier below'
+                          : undefined
+                      }
+                      onChange={handleBidChange}
+                      id={tier.id}
+                      placeholder="0.1"
+                      value={bidValues[tier.id]}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
-      <Button className="light-button">Review auction</Button>
+      {(!isValidFields.startingBid ||
+        !isValidFields.startDate ||
+        !isValidFields.endDate ||
+        errorArray.length > 0) && (
+        <div className="last-error">
+          Something went wrong. Please, fix the errors in the fields above and try again
+        </div>
+      )}
+      <Button className="light-button" onClick={handleAddAuction}>
+        Review auction
+      </Button>
     </div>
   );
 };
