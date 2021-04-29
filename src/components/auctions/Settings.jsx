@@ -2,7 +2,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useContext } from 'react';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
-import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
@@ -17,6 +16,7 @@ import bondIcon from '../../assets/images/bond_icon.svg';
 import snxIcon from '../../assets/images/snx.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AddToken from '../popups/AddTokenPopup';
+import Calendar from '../calendar/Calendar';
 
 const AuctionSettings = () => {
   const location = useLocation();
@@ -161,7 +161,6 @@ const AuctionSettings = () => {
         <img src={arrow} alt="back" />
         <span>My Auctions</span>
       </div>
-      {/* {showAddToken && <AddToken onClose={handleClose} />} */}
 
       <div>
         <div className="head-part">
@@ -242,7 +241,6 @@ const AuctionSettings = () => {
                 value={values.startDate}
                 error={isValidFields.startDate ? undefined : 'Start date is required!'}
               />
-              {/* <DatePicker selected={startDate} onChange={date => setStartDate(date)} /> */}
               <Input
                 type="date"
                 onChange={handleOnChange}
