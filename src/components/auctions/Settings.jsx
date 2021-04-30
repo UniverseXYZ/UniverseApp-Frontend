@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import Select from 'react-select';
+import moment from 'moment';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input';
@@ -93,13 +94,14 @@ const AuctionSettings = () => {
     setShowAddToken(false);
   };
   const bid = options.find((element) => element.value === bidtype);
+  const isEditingAuction = location.state === '/auction-review';
 
   const handleAddAuction = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
       startingBid: values.startingBid.trim().length !== 0,
-      startDate: values.startDate.trim().length !== 0,
-      endDate: values.endDate.trim().length !== 0,
+      startDate: moment(values.startDate).format().trim().length !== 0,
+      endDate: moment(values.endDate).format().trim().length !== 0,
       name: values.name.trim().length !== 0,
     }));
 
@@ -137,8 +139,8 @@ const AuctionSettings = () => {
         ...prevValue,
         name: values.name,
         startingBid: values.startingBid,
-        startDate: values.startDate,
-        endDate: values.endDate,
+        startDate: moment(values.startDate).format(),
+        endDate: moment(values.endDate).format(),
         tiers: minBid
           ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
           : prevValues.tiers,
@@ -150,6 +152,8 @@ const AuctionSettings = () => {
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
+  console.log(location.pathname);
+  console.log(isEditingAuction);
 
   const handleBidChange = (event) => {
     setBidValues((prevValue) => ({
@@ -174,6 +178,25 @@ const AuctionSettings = () => {
     };
   });
 
+  useEffect(() => {
+    if (isEditingAuction) {
+      setValues({
+        name: auction.name,
+        startingBid: auction.startingBid,
+        startDate: new Date(auction.startDate),
+        endDate: new Date(auction.endDate),
+      });
+      // setBidValues(
+      //   auction.tiers.reduce((acc, currentTier) => {
+      //     console.log(currentTier);
+      //     acc[currentTier.id] = currentTier.minBid;
+      //     return acc;
+      //   }),
+      //   {}
+      // );
+    }
+  }, [isEditingAuction]);
+  console.log(bidValues);
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
