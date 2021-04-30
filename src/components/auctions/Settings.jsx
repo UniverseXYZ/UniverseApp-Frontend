@@ -16,9 +16,25 @@ import bondIcon from '../../assets/images/bond_icon.svg';
 import snxIcon from '../../assets/images/snx.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AddToken from '../popups/AddTokenPopup';
-import Calendar from '../calendar/Calendar';
+import StartDateCalendar from '../calendar/StartDateCalendar';
+import EndDateCalendar from '../calendar/EndDateCalendar';
 
 const AuctionSettings = () => {
+  const d = new Date();
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   const location = useLocation();
   const history = useHistory();
   const { auction, setAuction, bidtype, setBidtype } = useContext(AppContext);
@@ -29,7 +45,7 @@ const AuctionSettings = () => {
   const [showStartDate, setShowStartDate] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
   const [errorArray, setErrorArray] = useState([]);
-  const ref = useRef(null);
+  const startDateRef = useRef(null);
   const endDateRef = useRef(null);
 
   const [isValidFields, setIsValidFields] = useState({
@@ -45,6 +61,26 @@ const AuctionSettings = () => {
     startingBid: '',
     startDate: '',
     endDate: '',
+  });
+
+  const [startDateTemp, setStartDateTemp] = useState({
+    month: monthNames[d.getMonth()],
+    day: d.getDate(),
+    year: d.getFullYear(),
+    hours: '12',
+    minutes: '00',
+    timezone: 'GMT +04:00',
+    format: 'AM',
+  });
+
+  const [endDateTemp, setEndDateTemp] = useState({
+    month: monthNames[d.getMonth()],
+    day: d.getDate(),
+    year: d.getFullYear(),
+    hours: '12',
+    minutes: '00',
+    timezone: 'GMT +04:00',
+    format: 'AM',
   });
 
   const options = [
@@ -159,7 +195,7 @@ const AuctionSettings = () => {
   };
 
   const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
+    if (startDateRef.current && !startDateRef.current.contains(event.target)) {
       setShowStartDate(false);
     }
     if (endDateRef.current && !endDateRef.current.contains(event.target)) {
@@ -259,15 +295,29 @@ const AuctionSettings = () => {
                   onClick={() => setShowStartDate(true)}
                   id="startDate"
                   label="Start Date"
-                  value={values.startDate}
+                  autoComplete="off"
+                  value={
+                    values.startDate
+                      ? `${values.startDate.toString().split(' ')[1]} ${
+                          values.startDate.toString().split(' ')[2]
+                        }, ${
+                          values.startDate.toString().split(' ')[3]
+                        }, ${values.startDate.toString().split(' ')[4].substring(0, 5)} ${
+                          startDateTemp.timezone
+                        }`
+                      : ''
+                  }
                   error={isValidFields.startDate ? undefined : 'Start date is required!'}
                 />
                 {showStartDate && (
-                  <Calendar
-                    ref={ref}
+                  <StartDateCalendar
+                    ref={startDateRef}
+                    monthNames={monthNames}
+                    values={values}
                     setValues={setValues}
-                    sDate={values.startDate}
-                    eDate={values.endDate}
+                    startDateTemp={startDateTemp}
+                    setStartDateTemp={setStartDateTemp}
+                    setShowStartDate={setShowStartDate}
                   />
                 )}
               </div>
@@ -278,7 +328,18 @@ const AuctionSettings = () => {
                   onClick={() => setShowEndDate(true)}
                   id="endDate"
                   label="End date"
-                  value={values.endDate}
+                  autoComplete="off"
+                  value={
+                    values.endDate
+                      ? `${values.endDate.toString().split(' ')[1]} ${
+                          values.endDate.toString().split(' ')[2]
+                        }, ${
+                          values.endDate.toString().split(' ')[3]
+                        }, ${values.endDate.toString().split(' ')[4].substring(0, 5)} ${
+                          endDateTemp.timezone
+                        }`
+                      : ''
+                  }
                   error={isValidFields.endDate ? undefined : 'End date is required!'}
                 />
                 <span className="auction-ext">
@@ -303,11 +364,14 @@ const AuctionSettings = () => {
                   </Animated>
                 )}
                 {showEndDate && (
-                  <Calendar
+                  <EndDateCalendar
                     ref={endDateRef}
+                    monthNames={monthNames}
+                    values={values}
                     setValues={setValues}
-                    sDate={values.startDate}
-                    eDate={values.endDate}
+                    endDateTemp={endDateTemp}
+                    setEndDateTemp={setEndDateTemp}
+                    setShowEndDate={setShowEndDate}
                   />
                 )}
               </div>
