@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import Select from 'react-select';
+import moment from 'moment';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input';
@@ -35,6 +36,8 @@ const AuctionSettings = () => {
     'Nov',
     'Dec',
   ];
+  const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
+
   const location = useLocation();
   const history = useHistory();
   const { auction, setAuction, bidtype, setBidtype } = useContext(AppContext);
@@ -47,6 +50,10 @@ const AuctionSettings = () => {
   const [errorArray, setErrorArray] = useState([]);
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
+
+  const handleSearch = (value) => {
+    setsearchByNameAndAddress(value);
+  };
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
@@ -89,30 +96,35 @@ const AuctionSettings = () => {
       name: 'ETH',
       img: ethIcon,
       subtitle: 'Ether',
+      address: 'address',
     },
     {
       value: 'dai',
       name: 'DAI',
       img: daiIcon,
       subtitle: 'DAI Stablecoin',
+      address: '',
     },
     {
       value: 'usdc',
       name: 'USDC',
       img: usdcIcon,
       subtitle: 'USD Coin',
+      address: 'address',
     },
     {
       value: 'bond',
       name: 'BOND',
       img: bondIcon,
       subtitle: 'BarnBridge Governance Token',
+      address: '',
     },
     {
       value: 'snx',
       name: 'SNX',
       img: snxIcon,
       subtitle: 'Synthetix Network Token',
+      address: '',
     },
   ];
   const handleShow = () => {
@@ -129,13 +141,14 @@ const AuctionSettings = () => {
     setShowAddToken(false);
   };
   const bid = options.find((element) => element.value === bidtype);
+  const isEditingAuction = location.state === '/auction-review';
 
   const handleAddAuction = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
       startingBid: values.startingBid.trim().length !== 0,
-      startDate: values.startDate.trim().length !== 0,
-      endDate: values.endDate.trim().length !== 0,
+      startDate: moment(values.startDate).format().trim().length !== 0,
+      endDate: moment(values.endDate).format().trim().length !== 0,
       name: values.name.trim().length !== 0,
     }));
 
@@ -173,8 +186,8 @@ const AuctionSettings = () => {
         ...prevValue,
         name: values.name,
         startingBid: values.startingBid,
-        startDate: values.startDate,
-        endDate: values.endDate,
+        startDate: moment(values.startDate).format(),
+        endDate: moment(values.endDate).format(),
         tiers: minBid
           ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
           : prevValues.tiers,
@@ -186,6 +199,8 @@ const AuctionSettings = () => {
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
+  console.log(location.pathname);
+  console.log(isEditingAuction);
 
   const handleBidChange = (event) => {
     setBidValues((prevValue) => ({
@@ -210,6 +225,25 @@ const AuctionSettings = () => {
     };
   });
 
+  useEffect(() => {
+    if (isEditingAuction) {
+      setValues({
+        name: auction.name,
+        startingBid: auction.startingBid,
+        startDate: new Date(auction.startDate),
+        endDate: new Date(auction.endDate),
+      });
+      // setBidValues(
+      //   auction.tiers.reduce((acc, currentTier) => {
+      //     console.log(currentTier);
+      //     acc[currentTier.id] = currentTier.minBid;
+      //     return acc;
+      //   }),
+      //   {}
+      // );
+    }
+  }, [isEditingAuction]);
+  console.log(bidValues);
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
@@ -252,27 +286,34 @@ const AuctionSettings = () => {
                     <div>
                       <h1>Select bid token (ERC-20)</h1>
                       <Input
-                        type="number"
+                        onChange={(e) => handleSearch(e.target.value)}
+                        value={searchByNameAndAddress}
                         placeholder="Search name or paste ERC-20 contract address"
                         className="searchInp"
                       />
                     </div>
                   </li>
-                  {options.map((item) => (
-                    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-                    <li
-                      key={item.value}
-                      onClick={() => handleChange(item.value)}
-                      onKeyPress={() => handleChange(item.value)}
-                      onKeyDown={() => handleChange(item.value)}
-                    >
-                      <div className="img-name">
-                        <img src={item.img} alt="icon" />
-                        <span className="dai-name">{item.name}</span>
-                      </div>
-                      {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
-                    </li>
-                  ))}
+                  {options
+                    .filter(
+                      (item) =>
+                        item.name.toLowerCase().includes(searchByNameAndAddress.toLowerCase()) ||
+                        item.address.toLowerCase().includes(searchByNameAndAddress.toLowerCase())
+                    )
+                    .map((item) => (
+                      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+                      <li
+                        key={item.value}
+                        onClick={() => handleChange(item.value)}
+                        onKeyPress={() => handleChange(item.value)}
+                        onKeyDown={() => handleChange(item.value)}
+                      >
+                        <div className="img-name">
+                          <img src={item.img} alt="icon" />
+                          <span className="dai-name">{item.name}</span>
+                        </div>
+                        {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
+                      </li>
+                    ))}
                   <div className="token-div">
                     <Popup
                       trigger={

@@ -3,6 +3,12 @@
 @import '../../assets/scss/_mixins';
 
 .auction-reward{
+    .head-part{
+    display: flex;    
+    .tier-title{
+        width: 87%;
+    }
+    }
     .view-tier{
         margin-top: 10%;
         border-radius: 10px;
@@ -44,7 +50,7 @@
             .winners__edit__btn{
                 .winners{
                     display: flex;
-                    .tier-winners, .tier-perwinners{
+                    .tier-winners, .tier-perwinners, .tier-minbid{
                         
                         background: rgba(0, 0, 0, 0.05);
                         border-radius: 12px;
@@ -405,4 +411,34 @@
         font-weight: normal!important;
         }
       } 
+      .bidtype{
+        text-transform: uppercase;
+        img{
+            padding-right: 5px;
+        }
+    }
+    .message{
+    display: flex;
+    background: #FDFCF9;
+    border: 1px solid #E4B613;
+    margin-top: 40px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    span{
+        padding: 24px 13px 50px 24px;
+    }
+    h1{
+        font-family: Space Grotesk;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 26px;
+        color: #E4B613;
+        padding-top: 24px;
+        padding-right: 20px;
+    }
+}
+.light-button{
+    margin-top: 40px;
+}
 }
