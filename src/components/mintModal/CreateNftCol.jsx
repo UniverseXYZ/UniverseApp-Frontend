@@ -265,7 +265,9 @@ const CreateNftCol = (props) => {
               <div className="nft-coll-drop-file">
                 <img src={cloudIcon} alt="Cloud" />
                 <h5>Drop your file here</h5>
-                <p>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4, max 30mb)</p>
+                <p>
+                  <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
+                </p>
                 <Button className="light-border-button" onClick={() => inputFile.current.click()}>
                   Choose file
                 </Button>
@@ -452,7 +454,7 @@ const CreateNftCol = (props) => {
               <div className="property-add">
                 <h5>
                   <img src={addIcon} alt="Add" onClick={() => addProperty()} aria-hidden="true" />
-                  Add Property
+                  Add property
                 </h5>
               </div>
             </div>

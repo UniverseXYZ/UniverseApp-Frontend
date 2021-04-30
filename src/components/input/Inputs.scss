@@ -1,22 +1,21 @@
 @import '../../assets/scss/variables';
 
-.inp{
-  background: #FFFFFF;
-  border: 1px solid #D4D4D4;
+.inp {
+  background: #ffffff;
+  border: 1px solid #d4d4d4;
   box-sizing: border-box;
   border-radius: 12px;
   // height: 50px;
   padding: 15px;
   width: 100%;
 }
-.inp-light-border{
+.inp-light-border {
   border: 2px solid;
   border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
   background: linear-gradient($white, $white) padding-box,
-  linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
-
+    linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
 }
-.intup-l{
+.intup-l {
   display: inline-grid;
 
   input {
@@ -24,7 +23,7 @@
   }
 }
 span.inp-label,
-.inp-label{
+.inp-label {
   position: relative;
   font-family: $spaceGroteskFont;
   font-style: normal;
@@ -33,20 +32,19 @@ span.inp-label,
   color: $black;
   margin-bottom: 10px;
 }
-.error-inp{
-  border: 1px solid red!important;
+.error-inp {
+  border: 1px solid red !important;
   border-radius: 12px;
   padding: 15px;
 }
-.error-message{
+.error-message {
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: normal;
   font-size: 12px;
   line-height: 18px;
-  color: #FF4949;
-    
+  color: #ff4949;
 }
-.inp-disable{
+.inp-disable {
   display: none;
 }

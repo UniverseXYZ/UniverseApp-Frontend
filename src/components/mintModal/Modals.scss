@@ -503,6 +503,21 @@
       input {
         width: 100%;
       }
+      .inp::placeholder {
+        font-family: $spaceGroteskFont;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(0, 0, 0, 0.2);
+      }
+
+      .error-inp::placeholder {
+        font-family: $spaceGroteskFont;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 20px;
+        color: #ff4949;
+      }
     }
   }
 }
@@ -541,15 +556,15 @@
   position: relative;
   overflow: hidden;
 
-  :hover {
-    background: rgba(0, 0, 0, 0.02);
-  }
+  // :hover {
+  //   background: rgba(0, 0, 0, 0.02);
+  // }
 
   .cover-preview {
     position: relative;
     .cover-img {
-      width: 100%;
-      height: 100%;
+      width: 145px;
+      height: 145px;
       object-fit: cover;
     }
 
@@ -571,7 +586,7 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      padding: 18px 9px 9px;
+      padding: 17px 8px 8px;
 
       p {
         font-size: $spaceGroteskFont;
@@ -586,6 +601,9 @@
           font-size: 10px;
           line-height: 10px;
         }
+        // &:hover {
+        //   box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
+        // }
       }
     }
   }
@@ -593,10 +611,16 @@
 .inp-picture > div {
   text-align: center;
   align-items: center;
-  flex-wrap: wrap;
+  font-family: $spaceGroteskFont;
+  // flex-wrap: wrap;
+  display: block;
+  // padding: 29px 27px 23px;
 }
 .input-cover {
   margin-left: 3%;
+  // :hover {
+  //   background: rgba(0, 0, 0, 0.02);
+  // }
 }
 .input-cover > p {
   font-family: $spaceGroteskFont;
@@ -614,7 +638,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 29px 27px 23px;
   height: 100%;
+  &:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
 
   p {
     font-size: $spaceGroteskFont;
@@ -622,6 +650,15 @@
     font-size: 10px;
     line-height: 160%;
     color: rgba(0, 0, 0, 0.6);
+    margin-top: 11px;
+  }
+}
+.collection__final__error {
+  margin-top: 40px;
+  width: 450px;
+
+  @include sm {
+    width: 100%;
   }
 }
 .collection-buttons {
@@ -680,6 +717,10 @@
       font-weight: bold;
       font-size: 14px;
       line-height: 22px;
+
+      @include sm {
+        font-size: 10px;
+      }
     }
 
     .nft-coll-upload {
@@ -700,19 +741,27 @@
 
           img {
             padding-bottom: 16px;
+            @include sm {
+              padding-bottom: 10px;
+            }
           }
 
           p {
             margin-bottom: 16px;
             font-family: $spaceGroteskFont;
-            font-weight: 500;
+            font-weight: normal;
             font-size: 14px;
             line-height: 160%;
-            color: rgba(0, 0, 0, 0.4);
+            color: rgba(0, 0, 0, 0.6);
+
+            @include lg {
+              display: grid;
+            }
 
             @include sm {
               font-size: 10px;
               line-height: 160%;
+              margin-bottom: 10px;
             }
           }
           button {
@@ -814,8 +863,11 @@
           }
         }
 
-        ::placeholder {
+        .inp::placeholder {
           color: rgba(0, 0, 0, 0.2);
+        }
+        .error-inp::placeholder {
+          color: #ff4949;
         }
       }
 
@@ -880,8 +932,11 @@
             width: 100%;
           }
         }
-        ::placeholder {
+        .inp::placeholder {
           color: rgba(0, 0, 0, 0.2);
+        }
+        .error-inp::placeholder {
+          color: #ff4949;
         }
       }
 
@@ -1063,6 +1118,10 @@
     font-weight: bold;
     font-size: 14px;
     line-height: 22px;
+
+    @include sm {
+      font-size: 10px;
+    }
   }
 
   .single-nft-upload {
@@ -1084,19 +1143,28 @@
 
         img {
           padding-bottom: 16px;
+
+          @include sm {
+            padding-bottom: 10px;
+          }
         }
 
         p {
           padding-bottom: 16px;
           font-family: $spaceGroteskFont;
-          font-weight: 400;
+          font-weight: normal;
           font-size: 14px;
           line-height: 22px;
-          color: rgba(0, 0, 0, 0.4);
+          color: rgba(0, 0, 0, 0.6);
+
+          @include lg {
+            display: grid;
+          }
 
           @include sm {
             font-size: 10px;
             line-height: 160%;
+            padding-bottom: 10px;
           }
         }
 
@@ -1196,8 +1264,11 @@
         width: 100%;
       }
     }
-    ::placeholder {
+    .inp::placeholder {
       color: rgba(0, 0, 0, 0.2);
+    }
+    .error-inp::placeholder {
+      color: #ff4949;
     }
   }
 
@@ -1399,6 +1470,14 @@
         line-height: 20px;
         color: $black;
       }
+    }
+  }
+  .single__final__error {
+    margin-top: 40px;
+    width: 470px;
+
+    @include sm {
+      width: 100%;
     }
   }
 
