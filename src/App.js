@@ -71,15 +71,13 @@ const App = () => {
     }
     function handleScroll() {
       if (window.scrollY > 400) {
+        document.querySelector('header').style.position = 'relative';
         document.querySelector('header').style.position = 'fixed';
         if (document.querySelector('.artist__personal__logo')) {
           document.querySelector('.artist__personal__logo').style.position = 'fixed';
         }
-      } else {
-        document.querySelector('header').style.position = 'relative';
-        if (document.querySelector('.artist__personal__logo')) {
-          document.querySelector('.artist__personal__logo').style.position = 'absolute';
-        }
+      } else if (document.querySelector('.artist__personal__logo')) {
+        document.querySelector('.artist__personal__logo').style.position = 'absolute';
       }
     }
 

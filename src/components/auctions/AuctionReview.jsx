@@ -1,6 +1,9 @@
-import React, { useState, useContext } from 'react';
+/* eslint-disable no-cond-assign */
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
+import Popup from 'reactjs-popup';
+import moment from 'moment';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 import icon from '../../assets/images/auction_icon.svg';
@@ -11,6 +14,7 @@ import daiIcon from '../../assets/images/dai_icon.svg';
 import usdcIcon from '../../assets/images/usdc_icon.svg';
 import bondIcon from '../../assets/images/bond_icon.svg';
 import snxIcon from '../../assets/images/snx.svg';
+import yellowIcon from '../../assets/images/yellowIcon.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check.svg';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
@@ -18,6 +22,8 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
+import CongratsAuctionPopup from '../popups/CongratsAuctionPopup';
+import LoadingPopup from '../popups/LoadingPopup';
 
 const AuctionReview = () => {
   const location = useLocation();
@@ -26,11 +32,67 @@ const AuctionReview = () => {
   const [hideIcon, setHideIcon] = useState(false);
 
   const { auction, setAuction } = useContext(AppContext);
-  const tierId = location.state;
-  const tierById = auction.tiers.find((element) => element.id === tierId);
-  console.log(auction);
+  const { bidtype, setBidype } = useContext(AppContext);
+  const [bidicon, setBidicon] = useState(null);
+
+  useEffect(() => {
+    if (bidtype === 'eth') {
+      setBidicon(ethIcon);
+    }
+    if (bidtype === 'dai') {
+      setBidicon(daiIcon);
+    }
+    if (bidtype === 'usdc') {
+      setBidicon(usdcIcon);
+    }
+    if (bidtype === 'bond') {
+      setBidicon(bondIcon);
+    }
+    if (bidtype === 'snx') {
+      setBidicon(snxIcon);
+    }
+  }, []);
+
+  const handleSetAuction = () => {
+    if (auction && auction.tiers.length) {
+      console.log(auction);
+      document.getElementById('loading-hidden-btn').click();
+      setTimeout(() => {
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
+      }, 2000);
+      setTimeout(() => {
+        history.push('/customize-auction-landing-page');
+      }, 6000);
+    }
+  };
+
   return (
     <div className="container auction-reward">
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="loading-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <LoadingPopup onClose={close} />}
+      </Popup>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <CongratsAuctionPopup onClose={close} />}
+      </Popup>
       <div
         className="back-rew"
         onClick={() => {
@@ -44,6 +106,16 @@ const AuctionReview = () => {
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction Review</h2>
+          {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
+            <Button
+              className="light-border-button"
+              onClick={() => {
+                history.push('/auction-settings', location.pathname);
+              }}
+            >
+              Edit <img src={pencil} alt="edit-icon" />
+            </Button>
+          )}
         </div>
         {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
           <div className="auction-inf">
@@ -54,7 +126,10 @@ const AuctionReview = () => {
               </div>
               <div className="bidToken">
                 <p>Bid token (ERC-20)</p>
-                <span>token</span>
+                <span className="bidtype">
+                  {bidicon && <img src={bidicon} alt="icon" />}
+                  {bidtype}
+                </span>
               </div>
               <div className="startingBid">
                 <p>Starting bid</p>
@@ -64,11 +139,11 @@ const AuctionReview = () => {
             <div className="date-part">
               <div className="startDate">
                 <p>Start date</p>
-                <span>{auction.startDate}</span>
+                <span>{moment(auction.startDate).format('MMMM DD, YYYY')}</span>
               </div>
               <div className="endDate">
                 <p>End date</p>
-                <span>{auction.endDate}</span>
+                <span>{moment(auction.endDate).format('MMMM DD, YYYY')}</span>
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
                   <img
@@ -112,6 +187,14 @@ const AuctionReview = () => {
                       <div className="tier-perwinners">
                         <h4>
                           NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
+                        </h4>
+                      </div>
+                      <div className="tier-minbid">
+                        <h4>
+                          Minimum bid per tier:&nbsp;
+                          <b>
+                            {tier.minBid} <span className="bidtype">{bidtype}</span>
+                          </b>
                         </h4>
                       </div>
                     </div>
@@ -230,6 +313,18 @@ const AuctionReview = () => {
             </div>
           ))}
       </div>
+      <div className="message">
+        <span>
+          <img src={yellowIcon} alt="icon" />
+        </span>
+        <h1>
+          Creating an auction doesn’t launch it. You will be able to mint all the NFTs and set up a
+          landing page to host your launch. Once you launch anyone can start biddsing.
+        </h1>
+      </div>
+      <Button className="light-button" onClick={handleSetAuction}>
+        Set up auction
+      </Button>
     </div>
   );
 };
