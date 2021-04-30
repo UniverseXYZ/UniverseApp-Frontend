@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRange } from 'react-date-range';
 import PropTypes from 'prop-types';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import { DateRange } from 'react-date-range';
 import './Calendar.scss';
-import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 
-const Calendar = () => {
+const Calendar = React.forwardRef(({ setValues, sDate, eDate }, ref) => {
   const [state, setState] = useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: typeof sDate === 'object' ? sDate : new Date(),
+      endDate: typeof eDate === 'object' ? eDate : new Date(),
       key: 'selection',
     },
   ]);
@@ -38,39 +37,10 @@ const Calendar = () => {
   );
   const [hours, setHours] = useState('12');
   const [minutes, setMinutes] = useState('00');
-  const [selectedDay, setSelectedDay] = useState(d.getDate());
   const [selectedDate, setSelectedDate] = useState({
     year: d.getFullYear(),
     month: d.getMonth(),
   });
-  const [currentMonth, setCurrentMonth] = useState([]);
-
-  const createDaysArray = () => {
-    const dateArr = [];
-    const lastDay = new Date(selectedDate.year, selectedDate.month + 1, 0);
-    let weeks = Array(7).join('1').split('1');
-    let date;
-
-    for (let i = 1; i < lastDay.getDate() + 1; i += 1) {
-      date = new Date(selectedDate.year, selectedDate.month, i);
-
-      if (date.getDay() === 0) {
-        if (weeks.join('') !== '') {
-          dateArr.push(weeks);
-        }
-        weeks = Array(7).join('1').split('1');
-      }
-
-      weeks[date.getDay()] = date.getDate();
-    }
-
-    weeks.length = weeks.length ? 7 : 0;
-    if (weeks.length) {
-      dateArr.push(weeks);
-    }
-
-    setCurrentMonth(dateArr);
-  };
 
   const changeMonth = (direction) => {
     if (direction === 'next') {
@@ -83,20 +53,6 @@ const Calendar = () => {
       const year = Number(document.querySelector('.rdrYearPicker select').value);
       setSelectedDate({ month, year });
     }, 100);
-
-    // let { year } = selectedDate;
-    // let { month } = selectedDate;
-
-    // month = direction === 'next' ? month + 1 : month - 1;
-
-    // if (month === 12) {
-    //   month = 0;
-    //   year += 1;
-    // } else if (month === -1) {
-    //   month = 11;
-    //   year -= 1;
-    // }
-    // setSelectedDate({ ...selectedDate, month, year });
   };
 
   const handleHoursChange = (val) => {
@@ -113,23 +69,27 @@ const Calendar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setStartDate({
-  //     month: monthNames[selectedDate.month],
-  //     day: selectedDay,
-  //     year: selectedDate.year,
-  //     hours,
-  //     minutes,
-  //     timezone: selectedTimezone,
-  //   });
-  // }, [selectedDay]);
+  useEffect(() => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      startDate: state[0].startDate,
+      endDate: state[0].endDate,
+    }));
+  }, [state]);
 
   useEffect(() => {
-    createDaysArray();
-  }, [selectedDate]);
+    if (document.querySelector('.rdrWeekDay')) {
+      const month = Number(document.querySelector('.rdrMonthPicker select').value);
+      const year = Number(document.querySelector('.rdrYearPicker select').value);
+      setSelectedDate({ month, year });
+      weekNames.forEach((weekName, index) => {
+        document.querySelectorAll('.rdrWeekDay')[index].innerHTML = weekName;
+      });
+    }
+  }, []);
 
   return (
-    <div className="calendar">
+    <div className="calendar" ref={ref}>
       <div className="calendar__header">
         <h2>{`${monthNames[selectedDate.month]} ${selectedDate.year}`}</h2>
         <div className="month__changers">
@@ -144,37 +104,10 @@ const Calendar = () => {
 
       <div className="calendar__body">
         <DateRange
-          editableDateInputs
           onChange={(item) => setState([item.selection])}
           moveRangeOnFirstSelection={false}
           ranges={state}
         />
-        {/* <div className="week__days">
-          {weekNames.map((week) => (
-            <div key={uuid()}>{week}</div>
-          ))}
-        </div>
-        {currentMonth.map((weekDays) => (
-          <div key={uuid()} className="week__days__numbers">
-            {weekDays.map((day) => (
-              <div
-                key={uuid()}
-                className={`${
-                  startDate.day === day &&
-                  startDate.month === monthNames[selectedDate.month] &&
-                  startDate.year === selectedDate.year
-                    ? 'selected'
-                    : ''
-                }`}
-                aria-hidden="true"
-                onClick={() => day && setSelectedDay(day)}
-                style={{ cursor: day ? 'pointer' : 'default' }}
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-        ))} */}
       </div>
 
       <div className="calendar__footer">
@@ -194,11 +127,12 @@ const Calendar = () => {
       </div>
     </div>
   );
-};
+});
 
-// Calendar.propTypes = {
-//   setStartDate: PropTypes.func.isRequired,
-//   startDate: PropTypes.oneOfType([PropTypes.object]).isRequired,
-// };
+Calendar.propTypes = {
+  setValues: PropTypes.func.isRequired,
+  sDate: PropTypes.oneOfType([PropTypes.any]).isRequired,
+  eDate: PropTypes.oneOfType([PropTypes.any]).isRequired,
+};
 
 export default Calendar;

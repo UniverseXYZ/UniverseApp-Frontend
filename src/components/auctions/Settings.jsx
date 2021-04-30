@@ -1,5 +1,5 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import Select from 'react-select';
@@ -26,7 +26,11 @@ const AuctionSettings = () => {
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
   const [minBid, setMinBId] = useState(false);
+  const [showStartDate, setShowStartDate] = useState(false);
+  const [showEndDate, setShowEndDate] = useState(false);
   const [errorArray, setErrorArray] = useState([]);
+  const ref = useRef(null);
+  const endDateRef = useRef(null);
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
@@ -154,6 +158,22 @@ const AuctionSettings = () => {
     }));
   };
 
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowStartDate(false);
+    }
+    if (endDateRef.current && !endDateRef.current.contains(event.target)) {
+      setShowEndDate(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
+
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
@@ -232,43 +252,65 @@ const AuctionSettings = () => {
               </div>
             </div>
             <div className="infoDiv">
-              <Input
-                type="date"
-                onChange={handleOnChange}
-                id="startDate"
-                label="Auction name"
-                value={values.startDate}
-                error={isValidFields.startDate ? undefined : 'Start date is required!'}
-              />
-              <Input
-                type="date"
-                onChange={handleOnChange}
-                id="endDate"
-                label="End date"
-                value={values.endDate}
-                error={isValidFields.endDate ? undefined : 'End date is required!'}
-              />
-              <span className="auction-ext">
-                Ending auction extension timer: 3 minutes
-                <img
-                  src={infoIcon}
-                  alt="Info Icon"
-                  onMouseOver={() => setHideIcon1(true)}
-                  onFocus={() => setHideIcon1(true)}
-                  onMouseLeave={() => setHideIcon1(false)}
-                  onBlur={() => setHideIcon1(false)}
+              <div className="date__input">
+                <Input
+                  type="text"
+                  onChange={handleOnChange}
+                  onClick={() => setShowStartDate(true)}
+                  id="startDate"
+                  label="Start Date"
+                  value={values.startDate}
+                  error={isValidFields.startDate ? undefined : 'Start date is required!'}
                 />
-              </span>
-              {hideIcon1 && (
-                <Animated animationIn="zoomIn">
-                  <div className="info-text">
-                    <p>
-                      Any bid in the last 3 minutes of an auction will extend the auction for an
-                      additional 3 minutes.
-                    </p>
-                  </div>
-                </Animated>
-              )}
+                {showStartDate && (
+                  <Calendar
+                    ref={ref}
+                    setValues={setValues}
+                    sDate={values.startDate}
+                    eDate={values.endDate}
+                  />
+                )}
+              </div>
+              <div className="date__input">
+                <Input
+                  type="text"
+                  onChange={handleOnChange}
+                  onClick={() => setShowEndDate(true)}
+                  id="endDate"
+                  label="End date"
+                  value={values.endDate}
+                  error={isValidFields.endDate ? undefined : 'End date is required!'}
+                />
+                <span className="auction-ext">
+                  Ending auction extension timer: 3 minutes
+                  <img
+                    src={infoIcon}
+                    alt="Info Icon"
+                    onMouseOver={() => setHideIcon1(true)}
+                    onFocus={() => setHideIcon1(true)}
+                    onMouseLeave={() => setHideIcon1(false)}
+                    onBlur={() => setHideIcon1(false)}
+                  />
+                </span>
+                {hideIcon1 && (
+                  <Animated animationIn="zoomIn">
+                    <div className="info-text">
+                      <p>
+                        Any bid in the last 3 minutes of an auction will extend the auction for an
+                        additional 3 minutes.
+                      </p>
+                    </div>
+                  </Animated>
+                )}
+                {showEndDate && (
+                  <Calendar
+                    ref={endDateRef}
+                    setValues={setValues}
+                    sDate={values.startDate}
+                    eDate={values.endDate}
+                  />
+                )}
+              </div>
             </div>
           </div>
           <div className="down-side">
