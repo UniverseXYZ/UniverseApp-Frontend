@@ -20,6 +20,8 @@ import AddToken from '../popups/AddTokenPopup';
 import Calendar from '../calendar/Calendar';
 
 const AuctionSettings = () => {
+  const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
+
   const location = useLocation();
   const history = useHistory();
   const { auction, setAuction, bidtype, setBidtype } = useContext(AppContext);
@@ -32,6 +34,10 @@ const AuctionSettings = () => {
   const [errorArray, setErrorArray] = useState([]);
   const ref = useRef(null);
   const endDateRef = useRef(null);
+
+  const handleSearch = (value) => {
+    setsearchByNameAndAddress(value);
+  };
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
@@ -54,30 +60,35 @@ const AuctionSettings = () => {
       name: 'ETH',
       img: ethIcon,
       subtitle: 'Ether',
+      address: 'address',
     },
     {
       value: 'dai',
       name: 'DAI',
       img: daiIcon,
       subtitle: 'DAI Stablecoin',
+      address: '',
     },
     {
       value: 'usdc',
       name: 'USDC',
       img: usdcIcon,
       subtitle: 'USD Coin',
+      address: 'address',
     },
     {
       value: 'bond',
       name: 'BOND',
       img: bondIcon,
       subtitle: 'BarnBridge Governance Token',
+      address: '',
     },
     {
       value: 'snx',
       name: 'SNX',
       img: snxIcon,
       subtitle: 'Synthetix Network Token',
+      address: '',
     },
   ];
   const handleShow = () => {
@@ -239,27 +250,34 @@ const AuctionSettings = () => {
                     <div>
                       <h1>Select bid token (ERC-20)</h1>
                       <Input
-                        type="number"
+                        onChange={(e) => handleSearch(e.target.value)}
+                        value={searchByNameAndAddress}
                         placeholder="Search name or paste ERC-20 contract address"
                         className="searchInp"
                       />
                     </div>
                   </li>
-                  {options.map((item) => (
-                    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-                    <li
-                      key={item.value}
-                      onClick={() => handleChange(item.value)}
-                      onKeyPress={() => handleChange(item.value)}
-                      onKeyDown={() => handleChange(item.value)}
-                    >
-                      <div className="img-name">
-                        <img src={item.img} alt="icon" />
-                        <span className="dai-name">{item.name}</span>
-                      </div>
-                      {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
-                    </li>
-                  ))}
+                  {options
+                    .filter(
+                      (item) =>
+                        item.name.toLowerCase().includes(searchByNameAndAddress.toLowerCase()) ||
+                        item.address.toLowerCase().includes(searchByNameAndAddress.toLowerCase())
+                    )
+                    .map((item) => (
+                      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+                      <li
+                        key={item.value}
+                        onClick={() => handleChange(item.value)}
+                        onKeyPress={() => handleChange(item.value)}
+                        onKeyDown={() => handleChange(item.value)}
+                      >
+                        <div className="img-name">
+                          <img src={item.img} alt="icon" />
+                          <span className="dai-name">{item.name}</span>
+                        </div>
+                        {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
+                      </li>
+                    ))}
                   <div className="token-div">
                     <Popup
                       trigger={
