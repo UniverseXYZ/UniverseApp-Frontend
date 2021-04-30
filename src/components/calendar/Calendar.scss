@@ -9,7 +9,7 @@
     background: $white;
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
     border-radius: 12px;
-    width: 386px;
+    width: 336px;
     
     &__header {
         padding: 24px 30px;
@@ -149,7 +149,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
             .label {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
@@ -159,32 +158,99 @@
                 color: $black;
             }
             .selected__timezone {
+                position: relative;
+                background: rgba(0, 0, 0, 0.02);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 10px;
+                padding: 3px 15px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: bold;
                 font-size: 12px;
                 line-height: 22px;
                 color: $black;
+                cursor: pointer;
+                img {
+                    margin-left: 12px;
+                    transition: 0.5s ease-in-out;
+                    &.rotate {
+                        transform: rotate(180deg);
+                    }
+                }
+                ul {
+                    position: absolute;
+                    bottom: 30px;
+                    left: 0;
+                    width: 100%;
+                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                    background: $white;
+                    border-radius: 12px;
+                    padding: 6px;
+                    max-height: 300px;
+                    overflow-y: auto;
+
+                    li {
+                        text-align: center;
+                        padding: 6px 15px;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 12px;
+                        line-height: 22px;
+                        color: $black;
+
+                        &:hover {
+                            background: rgba(0, 0, 0, 0.05);
+                            border-radius: 6px;
+                        }
+                    }
+                }
+            }
+        }
+        .time__format {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            > div {
+                width: 50%;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 140%;
+                text-align: center;
+                color: $black;
+                padding: 4px;
+                cursor: pointer;
+                &.selected {
+                    background-color: $white;
+                    border-radius: 6px;
+                }
             }
         }
         .time {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 10px;
             input {
-                background: rgba(0, 0, 0, 0.02);
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                box-sizing: border-box;
                 border-radius: 10px;
-                padding: 16px;
-                width: 127px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
-                font-weight: normal;
+                font-weight: 600;
                 font-size: 28px;
                 line-height: 22px;
                 text-align: center;
                 color: $black;
+                padding: 16px;
+                width: 127px;
                 @include sm {
                     width: 111px;
                 }
@@ -196,6 +262,15 @@
                 font-size: 16px;
                 line-height: 20px;
                 color: $black;
+            }
+        }
+        .actions {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 16px;
+            button {
+                margin-top: 0;
             }
         }
     }
