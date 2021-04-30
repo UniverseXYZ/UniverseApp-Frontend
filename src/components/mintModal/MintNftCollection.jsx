@@ -38,12 +38,14 @@ const MintNftCollection = ({ onClick }) => {
   const [dropdownID, setDropdownID] = useState(0);
   const [showCollectible, setShowCollectible] = useState(false);
   const [collectionName, setCollectionName] = useState('');
+  const [tokenName, setTokenName] = useState('');
   const [coverImage, setCoverImage] = useState(null);
   const inputFile = useRef(null);
   const ref = useRef(null);
 
   const [errors, setErrors] = useState({
     collectionName: '',
+    tokenName: '',
     collectible: '',
   });
 
@@ -54,12 +56,17 @@ const MintNftCollection = ({ onClick }) => {
     setCollectionName(value);
   };
 
+  const handleTokenName = (value) => {
+    setTokenName(value);
+  };
+
   const handleSaveForLater = () => {
     setMintNowClick(false);
     setSaveForLateClick(true);
     if (!collectionName) {
       setErrors({
         collectionName: '“Collection name” is not allowed to be empty',
+        tokenName: !tokenName ? 'Token name is not allowed to be empty' : '',
         collectible: '',
       });
     } else {
@@ -74,11 +81,13 @@ const MintNftCollection = ({ onClick }) => {
       if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
         setErrors({
           collectionName: '“Collection name” already exists',
+          tokenName: '"Token name" already exists',
           collectible: '',
         });
       } else {
         setErrors({
           collectionName: '',
+          tokenName: '',
           collectible: '',
         });
       }
@@ -90,6 +99,7 @@ const MintNftCollection = ({ onClick }) => {
     setMintNowClick(true);
     setErrors({
       collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
+      tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
       collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
     });
     if (collectionName) {
@@ -104,6 +114,7 @@ const MintNftCollection = ({ onClick }) => {
       if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
         setErrors({
           collectionName: '“Collection name” already exists',
+          tokenName: '“Token name” already exists',
           collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
         });
       } else {
@@ -120,6 +131,7 @@ const MintNftCollection = ({ onClick }) => {
     if (!collectionName) {
       setErrors({
         collectionName: '“Collection name” is not allowed to be empty',
+        tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: '',
       });
     } else {
@@ -129,11 +141,13 @@ const MintNftCollection = ({ onClick }) => {
       if (collectionNameExists.length && !savedCollectionID) {
         setErrors({
           collectionName: '“Collection name” already exists',
+          tokenName: '“Token name” already exists',
           collectible: '',
         });
       } else {
         setErrors({
           collectionName: '',
+          tokenName: '',
           collectible: '',
         });
         setShowCollectible(true);
@@ -308,8 +322,10 @@ const MintNftCollection = ({ onClick }) => {
           <Input
             label="Token Name"
             className="inp"
-            error={errors.collectionName}
+            error={errors.tokenName}
             placeholder="$ART"
+            onChange={(e) => handleTokenName(e.target.value)}
+            value={tokenName}
           />
         </div>
         <div className="input-cover">
@@ -622,6 +638,15 @@ const MintNftCollection = ({ onClick }) => {
         </div>
       </div>
       {errors.collectible && <p className="error-message">{errors.collectible}</p>}
+      {(errors.collectionName !== '' || errors.tokenName !== '' || errors.collectible !== '') && (
+        <div className="collection__final__error">
+          <p className="error-message">
+            Something went wrong. Please fix the errors in the fields above and try again. The
+            buttons will be enabled after the information has been entered.
+          </p>
+        </div>
+      )}
+
       <div className="collection-buttons">
         {!savedCollectionID ? (
           <>

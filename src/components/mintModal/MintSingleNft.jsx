@@ -247,7 +247,9 @@ const MintSingleNft = ({ onClick }) => {
             <div className="single-nft-drop-file">
               <img src={cloudIcon} alt="Cloud" />
               <h5>Drop your file here</h5>
-              <p>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4, max 30mb)</p>
+              <p>
+                <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
+              </p>
               <Button className="light-border-button" onClick={() => inputFile.current.click()}>
                 Choose file
               </Button>
@@ -434,6 +436,14 @@ const MintSingleNft = ({ onClick }) => {
             </h5>
           </div>
         </div>
+        {(errors.name !== '' || errors.edition !== '' || errors.previewImage !== '') && (
+          <div className="single__final__error">
+            <p className="error-message">
+              Something went wrong. Please fix the errors in the fields above and try again. The
+              buttons will be enabled after the information has been entered.
+            </p>
+          </div>
+        )}
         <div className="single-nft-buttons">
           {!savedNFTsID ? (
             <>

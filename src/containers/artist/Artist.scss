@@ -11,7 +11,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 100px;
+      // gap: 100px;
       max-width: 1110px;
       margin: 0 auto;
 
@@ -50,6 +50,7 @@
       }
       .info {
         width: 100%;
+        margin-left: 100px;
         h1.title {
           font-family: $sharpGroteskSemiBoldFont;
           font-style: normal;
@@ -79,13 +80,14 @@
         .social__links {
           display: flex;
           align-items: center;
-          gap: 15px;
+          // gap: 15px;
 
           a {
             border: 1px solid rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             border-radius: 12px;
             padding: 13px;
+            margin-right: 15px;
           }
           .copy-div {
             position: relative;
@@ -146,12 +148,19 @@
             }
           }
         }
+        @include lg {
+          margin-left: 50px;
+        }
+        @include sm {
+          margin-left: 0%;
+          margin-top: 15px;
+        }
       }
-      @include lg {
-        gap: 50px;
-      }
+      // @include lg {
+      //   gap: 50px;
+      // }
       @include sm {
-        gap: 10px;
+        // gap: 15px;
         flex-wrap: wrap;
       }
     }
@@ -176,8 +185,9 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            gap: 40px;
+            // gap: 40px;
             min-width: 460px;
+            white-space: nowrap;
 
             button {
               font-family: $spaceGroteskFont;
@@ -189,17 +199,18 @@
               padding-bottom: 10px;
               padding-top: 7px;
               background-color: transparent;
+              margin-right: 40px;
               &.active {
                 color: $black;
                 border-bottom: 1px solid $black;
               }
-              @include sm {
-                font-size: 11px;
-              }
+              // @include sm {
+              //   font-size: 11px;
+              // }
             }
-            @include md {
-              gap: 15px;
-            }
+            // @include md {
+            //   gap: 15px;
+            // }
           }
         }
         .tab__right__arrow {
@@ -411,6 +422,10 @@
                   line-height: 22px;
                   color: rgba(0, 0, 0, 0.4);
                   margin-bottom: -7px;
+
+                  @include lg {
+                    font-size: 10px;
+                  }
                 }
                 h3 {
                   font-family: $spaceGroteskFont;
@@ -557,6 +572,11 @@
                   font-size: 12px;
                   line-height: 22px;
                   color: rgba(0, 0, 0, 0.4);
+
+                  @include lg {
+                    font-size: 10px;
+                    line-height: 150%;
+                  }
                 }
                 h3 {
                   font-family: $spaceGroteskFont;
@@ -1025,6 +1045,9 @@
     }
     @include md {
       padding: 80px 20px;
+    }
+    @include sm {
+      padding: 40px 20px;
     }
   }
 }
