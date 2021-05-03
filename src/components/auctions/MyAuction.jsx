@@ -71,7 +71,7 @@ const MyAuction = () => {
   return (
     <div className="container auction__page">
       <div className="auction__page__header">
-        <h1 className="title">My Auctions</h1>
+        <h1 className="title">My auctions</h1>
         <div>
           <button
             type="button"

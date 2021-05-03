@@ -109,7 +109,7 @@ const FutureAuctions = () => {
                       {hideLaunchIcon === futureAuction.id && (
                         <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                           <div className="launch-info">
-                            Your launch date has already passed. Go to Edit Auction and adjust the
+                            Your launch date has already passed. Go to “Edit Auction” and adjust the
                             launch and end dates.
                           </div>
                         </Animated>
@@ -139,7 +139,7 @@ const FutureAuctions = () => {
                       {hideEndIcon === futureAuction.id && (
                         <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                           <div hidden={hideEndIcon !== futureAuction.id} className="end-info">
-                            Your launch and end date has already passed. Go to Edit Auction and
+                            Your launch and end date has already passed. Go to “Edit Auction” and
                             adjust the launch and end dates.
                           </div>
                         </Animated>
@@ -153,7 +153,7 @@ const FutureAuctions = () => {
             <div className="auctions-steps">
               <div className="step-1">
                 <h6>Step 1</h6>
-                <h4>Auction Set Up</h4>
+                <h4>Auction set up</h4>
                 <div className="circle">
                   <img src={doneIcon} alt="Done" />
                   <div className="hz-line1" />
@@ -162,7 +162,7 @@ const FutureAuctions = () => {
               </div>
               <div className="step-2">
                 <h6>Step2</h6>
-                <h4>NFT Minting</h4>
+                <h4>NFT minting</h4>
                 <div className="circle">
                   <img hidden={!futureAuction.mint} src={doneIcon} alt="Done" />
                   <img hidden={futureAuction.mint} src={emptyMark} alt="Empty mark" />
@@ -178,7 +178,7 @@ const FutureAuctions = () => {
               </div>
               <div className="step-3">
                 <h6>Step 3</h6>
-                <h4>Landing Page Customization</h4>
+                <h4>Landing page customization</h4>
                 <div className="circle">
                   {!futureAuction.landingCustom && !futureAuction.mint && (
                     <img alt="landing_page" src={emptyWhite} />
@@ -226,12 +226,12 @@ const FutureAuctions = () => {
               <div className="steps">
                 <div className="step-1">
                   <h6>Step 1</h6>
-                  <h4>Auction Set Up</h4>
+                  <h4>Auction set up</h4>
                   <Button className="light-border-button">Edit auction</Button>
                 </div>
                 <div className="step-2">
                   <h6>Step2</h6>
-                  <h4>NFT Minting</h4>
+                  <h4>NFT minting</h4>
                   {futureAuction.mint === true ? (
                     <Button disabled className="light-button">
                       Mint NFTs
@@ -242,7 +242,7 @@ const FutureAuctions = () => {
                 </div>
                 <div className="step-3">
                   <h6>Step 3</h6>
-                  <h4>Landing Page Customization</h4>
+                  <h4>Landing page customization</h4>
                   {futureAuction.mint === true && futureAuction.landingCustom === false ? (
                     <Button className="light-border-button">Set up landing page</Button>
                   ) : (

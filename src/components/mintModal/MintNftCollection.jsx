@@ -308,7 +308,7 @@ const MintNftCollection = ({ onClick }) => {
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div>
-      <h2>{!savedCollectionID ? 'Create NFT Collection' : 'Edit NFT Collection'}</h2>
+      <h2>{!savedCollectionID ? 'Create NFT collection' : 'Edit NFT collection'}</h2>
       <div className="name-image">
         <div className="name-input">
           <Input

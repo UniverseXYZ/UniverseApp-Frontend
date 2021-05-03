@@ -35,7 +35,7 @@ const RewardTiers = () => {
       </div>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Reward Tiers</h2>
+          <h2 className="tier-title">Reward tiers</h2>
           <p>
             Reward Tiers are the NFT bundles that users are bidding for to win. There can be up to
             10 tiers in one auction.

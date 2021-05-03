@@ -734,6 +734,7 @@
         background-color: rgba(0, 0, 0, 0.02);
         border-radius: 12px;
         padding: 11px 16px 16px 16px;
+        min-width: 300px;
 
         .nft-coll-drop-file {
           width: 100%;
@@ -761,19 +762,23 @@
             @include sm {
               font-size: 10px;
               line-height: 160%;
-              margin-bottom: 10px;
+              padding-bottom: 10px;
+              width: 136px;
+              margin: auto;
             }
           }
           button {
             &.light-border-button {
               @include sm {
+                font-family: $sharpGroteskMediumFont;
                 font-size: 10px;
                 line-height: 10px;
+                width: 136px;
               }
             }
           }
           @include md {
-            padding-right: 20px;
+            margin-right: 20px;
           }
         }
 
@@ -808,9 +813,9 @@
                 margin-left: 32%;
               }
 
-              @include sm {
-                margin-left: 29%;
-              }
+              // @include sm {
+              //   margin-left: 29%;
+              // }
             }
 
             .preview-image {
@@ -835,10 +840,10 @@
               height: 137px;
             }
 
-            @include sm {
-              width: 110px;
-              height: 110px;
-            }
+            // @include sm {
+            //   width: 110px;
+            //   height: 110px;
+            // }
           }
 
           @include sm {

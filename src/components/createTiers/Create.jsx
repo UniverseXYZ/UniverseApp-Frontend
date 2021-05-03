@@ -95,7 +95,7 @@ const Create = () => {
       </div>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Create Reward Tier</h2>
+          <h2 className="tier-title">Create reward tier</h2>
           <p className="create-p">
             Each reward tier can contain up to 20 winners and up to 5 NFTs for each winner (total:
             100 NFTs).
@@ -120,8 +120,7 @@ const Create = () => {
               onBlur={() => setHideIcon1(false)}
             >
               <span>
-                Number of winners
-                <img src={infoIcon} alt="Info Icon" />
+                Number of winners <img src={infoIcon} alt="Info Icon" />
               </span>
               {hideIcon1 && (
                 <Animated animationIn="zoomIn">

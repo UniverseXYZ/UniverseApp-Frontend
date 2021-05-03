@@ -1,27 +1,26 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/mixins';
 
-.create-tiers{
-.tier-info{
+.create-tiers {
+  .tier-info {
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-top: 10%;
-    .intup-l{
+    // margin-top: 10%;
+    .intup-l {
       margin-bottom: 20px;
     }
 
-    .tier-info_icon{
+    .tier-info_icon {
       position: relative;
       display: flex;
       height: fit-content;
 
-      .info-text{
+      .info-text {
         position: absolute;
         background: #ffffff;
         color: #000000;
-        box-shadow: 0px 10px 20px 
-        rgba(136, 120, 172, 0.2);
+        box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
         border-radius: 12px;
         width: 230px;
         min-height: 70px;
@@ -35,52 +34,52 @@
       }
     }
   }
-  .button-div{
+  .button-div {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top:4%;
-      .light-border-button{
-        margin-right: 2%;
-      }  
-      .btns {
-        display: flex;
-        align-items: center;
-        @include sm{
-          display: grid;
-        }
-      }
-      .total-num{
-        position: relative;
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 22px;
-        letter-spacing: 0.3px;
-        color: #000000;
-
-        .info-text {
-          position: absolute;
-          background: #ffffff;
-          color: #000000;
-          box-shadow: 0px 10px 20px 
-            rgba(136, 120, 172, 0.2);
-          border-radius: 12px;
-          width: 230px;
-          min-height: 70px;
-          padding: 16px;
-          font-size: 12px;
-          font-family: $spaceGroteskFont;
-          bottom: 10px;
-          // right: 0;
-          font-weight: normal;
-        }
-
-        img{
-          padding-left: 5px;
-        }
+    margin-top: 20px;
+    // margin-top: 4%;
+    .light-border-button {
+      margin-right: 12px;
+    }
+    .btns {
+      display: flex;
+      align-items: center;
+      @include sm {
+        display: grid;
       }
     }
+    .total-num {
+      position: relative;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: 0.3px;
+      color: #000000;
+
+      .info-text {
+        position: absolute;
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+        border-radius: 12px;
+        width: 230px;
+        min-height: 70px;
+        padding: 16px;
+        font-size: 12px;
+        font-family: $spaceGroteskFont;
+        bottom: 10px;
+        // right: 0;
+        font-weight: normal;
+      }
+
+      img {
+        padding-left: 5px;
+      }
+    }
+  }
 }
