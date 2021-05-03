@@ -3,13 +3,25 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
+import SelectWalletPopup from '../../popups/SelectWalletPopup';
 import Icon from '../../../assets/images/icon1.svg';
 import copyIcon from '../../../assets/images/copy.svg';
 import AppContext from '../../../ContextAPI';
 import arrowUP from '../../../assets/images/arrow-down.svg';
 import Group1 from '../../../assets/images/Group1.svg';
 import Group2 from '../../../assets/images/Group2.svg';
-import SelectWalletPopup from '../../popups/SelectWalletPopup';
+import auctionHouseIcon from '../../../assets/images/auction-house.svg';
+import marketplaceIcon from '../../../assets/images/nft-marketplace.svg';
+import socialMediaIcon from '../../../assets/images/social-media.svg';
+import aboutIcon from '../../../assets/images/about.svg';
+import whitepaperIcon from '../../../assets/images/whitepaper.svg';
+import teamIcon from '../../../assets/images/team.svg';
+import governanceIcon from '../../../assets/images/governance.svg';
+import yieldFarmingIcon from '../../../assets/images/yield-farming.svg';
+import docsIcon from '../../../assets/images/docs.svg';
+import myProfileIcon from '../../../assets/images/my-profile.svg';
+import myNFTsIcon from '../../../assets/images/my-nfts.svg';
+import signOutIcon from '../../../assets/images/sign-out.svg';
 
 const DesktopView = ({
   ethereumAddress,
@@ -23,6 +35,7 @@ const DesktopView = ({
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
+  const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
 
@@ -35,7 +48,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}
           >
-            <span className="nav__link__title">Minting & Auctions</span>
+            <span className="nav__link__title">Products</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -43,30 +56,34 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  history.push('/minting-and-auctions/about');
-                  setIsMintingDropdownOpened(false);
-                }}
-              >
-                About
-              </button>
-              <button
-                type="button"
-                className="active-auctions"
-                onClick={() => {
                   history.push('/minting-and-auctions/marketplace/active-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >
-                Active auctions
+                <img src={auctionHouseIcon} alt="Auction House" />
+                Auction house
               </button>
               <button
                 type="button"
+                className="disable"
                 onClick={() => {
-                  history.push('/minting-and-auctions/marketplace/future-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >
-                Future auctions
+                <img src={marketplaceIcon} alt="NFT Marketplace" />
+                <span>NFT marketplace</span>
+                <span className="tooltiptext">Coming soon</span>
+              </button>
+              <button
+                type="button"
+                className="disable"
+                onClick={() => {
+                  setIsMintingDropdownOpened(false);
+                }}
+              >
+                <img src={socialMediaIcon} alt="Social Media" />
+                <span>Social media</span>
+                <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
           </div>
@@ -77,7 +94,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsAboutDropdownOpened(!isAboutDropdownOpened)}
           >
-            <span className="nav__link__title">About</span>
+            <span className="nav__link__title">Info</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -85,10 +102,21 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
+                  history.push('/minting-and-auctions/about');
+                  setIsAboutDropdownOpened(false);
+                }}
+              >
+                <img src={aboutIcon} alt="About" />
+                About
+              </button>
+              <button
+                type="button"
+                onClick={() => {
                   history.push('/');
                   setIsAboutDropdownOpened(false);
                 }}
               >
+                <img src={whitepaperIcon} alt="Whitepaper" />
                 Whitepaper
               </button>
               <button
@@ -99,7 +127,49 @@ const DesktopView = ({
                   setIsAboutDropdownOpened(false);
                 }}
               >
+                <img src={teamIcon} alt="Team" />
                 Team
+              </button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="menu-li"
+            onClick={() => setIsDAODropdownOpened(!isDAODropdownOpened)}
+          >
+            <span className="nav__link__title">DAO</span>
+            <img className="arrow" src={arrowUP} alt="arrow" />
+          </button>
+          <div className="dropdown minting-drop">
+            <div className="dropdown__body">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                }}
+              >
+                <img src={governanceIcon} alt="Governance" />
+                Governance
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                }}
+              >
+                <img src={yieldFarmingIcon} alt="Yield Farming" />
+                Yield farming
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                }}
+              >
+                <img src={docsIcon} alt="Docs" />
+                Docs
               </button>
             </div>
           </div>
@@ -162,6 +232,7 @@ const DesktopView = ({
                     setIsAccountDropdownOpened(false);
                   }}
                 >
+                  <img src={myProfileIcon} alt="My Profile" />
                   My profile
                 </button>
                 <button
@@ -171,6 +242,7 @@ const DesktopView = ({
                     setIsAccountDropdownOpened(false);
                   }}
                 >
+                  <img src={myNFTsIcon} alt="My NFTs" />
                   My NFTs
                 </button>
                 <button
@@ -180,6 +252,7 @@ const DesktopView = ({
                     setIsAccountDropdownOpened(false);
                   }}
                 >
+                  <img src={auctionHouseIcon} alt="My Auctions" />
                   My auctions
                 </button>
                 <button
@@ -190,6 +263,7 @@ const DesktopView = ({
                     setIsWalletConnected(!isWalletConnected);
                   }}
                 >
+                  <img src={signOutIcon} alt="Sign out" />
                   Sign out
                 </button>
               </div>

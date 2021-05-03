@@ -22,6 +22,10 @@ import ZhivkoTodorov from '../../assets/images/team/Zhivko-Todorov.png';
 import KateHerbert from '../../assets/images/team/Kate-Herbert.png';
 import CezarParaschiv from '../../assets/images/team/Cezar-Paraschiv.png';
 import AlexMissivrenko from '../../assets/images/team/Alex-Missivrenko.png';
+import MariaMosiy from '../../assets/images/team/Maria-Mosiy.png';
+import IvanMykolaiv from '../../assets/images/team/Ivan-Mykolaiv.png';
+import PavloBabenko from '../../assets/images/team/Pavlo-Babenko.png';
+import SergePiven from '../../assets/images/team/Serge-Piven.png';
 
 const UniverseCreators = () => {
   const creators = [
@@ -139,6 +143,26 @@ const UniverseCreators = () => {
       id: 23,
       name: 'Alex Missivrenko',
       avatar: AlexMissivrenko,
+    },
+    {
+      id: 24,
+      name: 'Maria Mosiy',
+      avatar: MariaMosiy,
+    },
+    {
+      id: 25,
+      name: 'Ivan Mykolaiv',
+      avatar: IvanMykolaiv,
+    },
+    {
+      id: 26,
+      name: 'Pavlo Babenko',
+      avatar: PavloBabenko,
+    },
+    {
+      id: 27,
+      name: 'Serge Piven',
+      avatar: SergePiven,
     },
   ];
   return (

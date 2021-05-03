@@ -199,8 +199,6 @@ const AuctionSettings = () => {
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
-  console.log(location.pathname);
-  console.log(isEditingAuction);
 
   const handleBidChange = (event) => {
     setBidValues((prevValue) => ({
@@ -243,7 +241,6 @@ const AuctionSettings = () => {
       // );
     }
   }, [isEditingAuction]);
-  console.log(bidValues);
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
@@ -333,7 +330,6 @@ const AuctionSettings = () => {
                 <Input
                   type="text"
                   readOnly
-                  onChange={handleOnChange}
                   onClick={() => setShowStartDate(true)}
                   id="startDate"
                   label="Start Date"
@@ -367,7 +363,6 @@ const AuctionSettings = () => {
                 <Input
                   type="text"
                   readOnly
-                  onChange={handleOnChange}
                   onClick={() => setShowEndDate(true)}
                   id="endDate"
                   label="End date"
