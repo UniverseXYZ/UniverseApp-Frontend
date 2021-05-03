@@ -248,12 +248,12 @@ const AuctionSettings = () => {
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
         <img src={arrow} alt="back" />
-        <span>My Auctions</span>
+        <span>My auctions</span>
       </div>
 
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Auction Settings</h2>
+          <h2 className="tier-title">Auction settings</h2>
         </div>
         <div className="setting-form">
           <div className="up-side">

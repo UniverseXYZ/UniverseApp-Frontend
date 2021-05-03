@@ -42,7 +42,7 @@ const MintNft = ({ onClick }) => {
             <img src={defaultImage} alt="Default" />
           </div>
           <div className="nft-titled">
-            <h2 className="nft-title">NFT Collection</h2>
+            <h2 className="nft-title">NFT collection</h2>
             <p className="nft-desc">ERC-721 non-fungible token with built-in ERC-721 tokens</p>
           </div>
 

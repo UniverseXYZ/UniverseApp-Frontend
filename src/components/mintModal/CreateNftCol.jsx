@@ -256,7 +256,7 @@ const CreateNftCol = (props) => {
       </div>
       <div className="nft-collectible">
         <h2 className="nft-coll-title">
-          {!collectionNFTsID ? 'Create NFT Collectible' : 'Edit NFT Collectible'}
+          {!collectionNFTsID ? 'Create NFT collectible' : 'Edit NFT collectible'}
         </h2>
         <div className="nft-coll-content">
           <div className="nft-coll-upload">

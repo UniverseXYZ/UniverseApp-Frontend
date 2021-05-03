@@ -177,6 +177,7 @@
 
             h6 {
               font-family: $spaceGroteskFont;
+              font-weight: normal;
               font-size: 12px;
               line-height: 150%;
               color: rgba(0, 0, 0, 0.4);
@@ -332,6 +333,7 @@
 
             h6 {
               font-family: $spaceGroteskFont;
+              font-weight: normal;
               font-size: 12px;
               line-height: 150%;
               color: rgba(0, 0, 0, 0.4);
@@ -421,6 +423,7 @@
             font-size: 16px;
             line-height: 130%;
             margin-right: 12px;
+            letter-spacing: 0.2px;
 
             @include lg {
               margin-bottom: 12px;
@@ -435,12 +438,11 @@
               background: rgba(0, 0, 0, 0.05);
               border-radius: 12px;
               margin-right: 12px;
+              font-family: $spaceGroteskFont;
+              font-size: 14px;
+              line-height: 150%;
+              font-weight: normal;
 
-              p {
-                font-family: $spaceGroteskFont;
-                font-size: 14px;
-                line-height: 150%;
-              }
               @include sm {
                 margin-right: 4px;
                 margin-bottom: 10px;
@@ -596,6 +598,7 @@
             .upload__image__preview {
               h6 {
                 font-family: $spaceGroteskFont;
+                font-weight: normal;
                 font-size: 12px;
                 line-height: 150%;
                 color: rgba(0, 0, 0, 0.4);
@@ -834,6 +837,7 @@
   border-radius: 12px;
   padding: 16px 16px 28px;
   max-width: 320px;
+  z-index: 9;
   .rcp-saturation {
     border-radius: 8px;
     &-cursor {

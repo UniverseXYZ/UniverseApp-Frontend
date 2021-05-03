@@ -23,7 +23,7 @@ const CustomizeAuction = () => {
         <span>Reward tiers</span>
       </div>
       <div className="customize__auction_title">
-        <h2>Customize Auction Landing Page</h2>
+        <h2>Customize auction landing page</h2>
         <Button className="light-border-button">Preview</Button>
       </div>
       <DomainAndBranding />

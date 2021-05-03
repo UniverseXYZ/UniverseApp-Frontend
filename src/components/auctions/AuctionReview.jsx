@@ -105,7 +105,7 @@ const AuctionReview = () => {
       </div>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Auction Review</h2>
+          <h2 className="tier-title">Auction review</h2>
           {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
             <Button
               className="light-border-button"

@@ -14,12 +14,12 @@ const RewardTiersAuction = () => {
   const [silverImage, setSilverImage] = useState(null);
   return (
     <div className="reward__tiers">
-      <h3>Reward Tiers</h3>
+      <h3>Reward tiers</h3>
 
       <div className="customize__auction__tier">
         <div className="tier__header">
           <div className="tier__title">
-            <h4>Platinum Tier</h4>
+            <h4>Platinum tier</h4>
             <div className="pick__color">
               <CustomColorPicker />
               <p>Pick tier color</p>
@@ -93,7 +93,7 @@ const RewardTiersAuction = () => {
       <div className="customize__auction__tier">
         <div className="tier__header">
           <div className="tier__title">
-            <h4>Gold Tier</h4>
+            <h4>Gold tier</h4>
             <div className="pick__color">
               <CustomColorPicker />
               <p>Pick tier color</p>
@@ -161,7 +161,7 @@ const RewardTiersAuction = () => {
       <div className="customize__auction__tier">
         <div className="tier__header">
           <div className="tier__title">
-            <h4>Silver Tier</h4>
+            <h4>Silver tier</h4>
             <div className="pick__color">
               <CustomColorPicker />
               <p>Pick tier color</p>
