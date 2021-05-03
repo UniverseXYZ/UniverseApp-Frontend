@@ -332,6 +332,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <Input
                   type="text"
+                  readOnly
                   onChange={handleOnChange}
                   onClick={() => setShowStartDate(true)}
                   id="startDate"
@@ -365,6 +366,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <Input
                   type="text"
+                  readOnly
                   onChange={handleOnChange}
                   onClick={() => setShowEndDate(true)}
                   id="endDate"
