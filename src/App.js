@@ -21,6 +21,7 @@ import AuctionDetails from './components/auctionLandingPage/AuctionDetails';
 import AuctionSettings from './containers/auctionSettings/AuctionSettings';
 import Team from './containers/team/Team';
 import AuctionReview from './containers/auctionReview/AuctionReview';
+import BidOptions from './utils/fixtures/BidOptions';
 
 const App = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(true);
@@ -53,6 +54,7 @@ const App = () => {
   const [selectedNft, setSelectedNft] = useState([]);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [bidtype, setBidtype] = useState('eth');
+  const [options, setOptions] = useState(BidOptions);
 
   const handleClickOutside = (event, className, ref, cb) => {
     if (!event.target.classList.contains(className)) {
@@ -136,6 +138,8 @@ const App = () => {
         setSelectedNFTIds,
         bidtype,
         setBidtype,
+        options,
+        setOptions,
       }}
     >
       <Routes>

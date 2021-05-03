@@ -10,11 +10,6 @@ import Input from '../input/Input';
 import infoIcon from '../../assets/images/icon.svg';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from '../button/Button';
-import ethIcon from '../../assets/images/bid_icon.svg';
-import daiIcon from '../../assets/images/dai_icon.svg';
-import usdcIcon from '../../assets/images/usdc_icon.svg';
-import bondIcon from '../../assets/images/bond_icon.svg';
-import snxIcon from '../../assets/images/snx.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AddToken from '../popups/AddTokenPopup';
 import StartDateCalendar from '../calendar/StartDateCalendar';
@@ -40,7 +35,7 @@ const AuctionSettings = () => {
 
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction, bidtype, setBidtype } = useContext(AppContext);
+  const { auction, setAuction, bidtype, setBidtype, options } = useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -89,44 +84,6 @@ const AuctionSettings = () => {
     timezone: 'GMT +04:00',
     format: 'AM',
   });
-
-  const options = [
-    {
-      value: 'eth',
-      name: 'ETH',
-      img: ethIcon,
-      subtitle: 'Ether',
-      address: 'address',
-    },
-    {
-      value: 'dai',
-      name: 'DAI',
-      img: daiIcon,
-      subtitle: 'DAI Stablecoin',
-      address: '',
-    },
-    {
-      value: 'usdc',
-      name: 'USDC',
-      img: usdcIcon,
-      subtitle: 'USD Coin',
-      address: 'address',
-    },
-    {
-      value: 'bond',
-      name: 'BOND',
-      img: bondIcon,
-      subtitle: 'BarnBridge Governance Token',
-      address: '',
-    },
-    {
-      value: 'snx',
-      name: 'SNX',
-      img: snxIcon,
-      subtitle: 'Synthetix Network Token',
-      address: '',
-    },
-  ];
   const handleShow = () => {
     setOpenList(!openList);
   };
@@ -142,7 +99,7 @@ const AuctionSettings = () => {
   };
   const bid = options.find((element) => element.value === bidtype);
   const isEditingAuction = location.state === '/auction-review';
-
+  console.log(bid);
   const handleAddAuction = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
@@ -199,8 +156,6 @@ const AuctionSettings = () => {
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
-  console.log(location.pathname);
-  console.log(isEditingAuction);
 
   const handleBidChange = (event) => {
     setBidValues((prevValue) => ({
@@ -243,7 +198,6 @@ const AuctionSettings = () => {
       // );
     }
   }, [isEditingAuction]);
-  console.log(bidValues);
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
@@ -277,7 +231,7 @@ const AuctionSettings = () => {
               />
               <div className="drop-down">
                 <button type="button" onClick={() => handleShow()}>
-                  <img src={bid.img} alt="icon" />
+                  {bid.img && <img src={bid.img} alt="icon" />}
                   <span className="button-name">{bid.name}</span>
                   <img src={arrowDown} alt="arrow" />
                 </button>
@@ -302,13 +256,17 @@ const AuctionSettings = () => {
                     .map((item) => (
                       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
                       <li
-                        key={item.value}
+                        key={item.value ? item.value : item.name}
                         onClick={() => handleChange(item.value)}
                         onKeyPress={() => handleChange(item.value)}
                         onKeyDown={() => handleChange(item.value)}
                       >
                         <div className="img-name">
-                          <img src={item.img} alt="icon" />
+                          {item.img ? (
+                            <img src={item.img} alt="icon" />
+                          ) : (
+                            <span className="imgDefSpan" />
+                          )}
                           <span className="dai-name">{item.name}</span>
                         </div>
                         {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
