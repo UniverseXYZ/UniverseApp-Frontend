@@ -1,18 +1,30 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
+import SelectWalletPopup from '../../popups/SelectWalletPopup';
 import hamburgerIcon from '../../../assets/images/hamburger.svg';
 import closeIcon from '../../../assets/images/close-menu.svg';
-import arrowDown from '../../../assets/images/arrow-down.svg';
 import accountIcon from '../../../assets/images/icon1.svg';
+import accountDarkIcon from '../../../assets/images/account-dark-icon.svg';
 import AppContext from '../../../ContextAPI';
-import Group1 from '../../../assets/images/Group1.svg';
 import Group2 from '../../../assets/images/Group2.svg';
+import Group1 from '../../../assets/images/Group1.svg';
 import copyIcon from '../../../assets/images/copy.svg';
-import SelectWalletPopup from '../../popups/SelectWalletPopup';
+import auctionHouseIcon from '../../../assets/images/auction-house.svg';
+import myProfileIcon from '../../../assets/images/my-profile.svg';
+import myNFTsIcon from '../../../assets/images/my-nfts.svg';
+import signOutIcon from '../../../assets/images/sign-out.svg';
+import marketplaceIcon from '../../../assets/images/nft-marketplace.svg';
+import socialMediaIcon from '../../../assets/images/social-media.svg';
+import aboutIcon from '../../../assets/images/about.svg';
+import whitepaperIcon from '../../../assets/images/whitepaper.svg';
+import teamIcon from '../../../assets/images/team.svg';
+import governanceIcon from '../../../assets/images/governance.svg';
+import yieldFarmingIcon from '../../../assets/images/yield-farming.svg';
+import docsIcon from '../../../assets/images/docs.svg';
 
 const TabletView = (props) => {
   const {
@@ -26,8 +38,6 @@ const TabletView = (props) => {
     setShowMenu,
   } = props;
   const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
-  const [collapseMintingMenu, setCollapseMintingMenu] = useState(false);
-  const [collapseAboutMenu, setCollapseAboutMenu] = useState(false);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -59,18 +69,21 @@ const TabletView = (props) => {
 
   return (
     <div className="tablet__nav">
-      <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
-        {!showMenu ? (
-          <img src={hamburgerIcon} alt="Hamburger" />
-        ) : (
-          <img src={closeIcon} alt="Close" />
-        )}
-      </button>
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
           <img
-            className="account__icon"
+            className="account__icon hide__on__tablet"
             src={accountIcon}
+            onClick={() => {
+              setIsAccountDropdownOpened(!isAccountDropdownOpened);
+              setShowMenu(false);
+            }}
+            alt="Account icon"
+            aria-hidden="true"
+          />
+          <img
+            className="account__icon show__on__tablet"
+            src={accountDarkIcon}
             onClick={() => {
               setIsAccountDropdownOpened(!isAccountDropdownOpened);
               setShowMenu(false);
@@ -126,6 +139,7 @@ const TabletView = (props) => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
+                    <img src={myProfileIcon} alt="My Profile" />
                     My profile
                   </button>
                   <button
@@ -135,6 +149,7 @@ const TabletView = (props) => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
+                    <img src={myNFTsIcon} alt="My NFTs" />
                     My NTFs
                   </button>
                   <button
@@ -144,6 +159,7 @@ const TabletView = (props) => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
+                    <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
                   </button>
                   <button
@@ -154,6 +170,7 @@ const TabletView = (props) => {
                       setIsWalletConnected(!isWalletConnected);
                     }}
                   >
+                    <img src={signOutIcon} alt="Sign out" />
                     Sign out
                   </button>
                 </div>
@@ -162,68 +179,108 @@ const TabletView = (props) => {
           )}
         </div>
       )}
+      <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
+        {!showMenu ? (
+          <img src={hamburgerIcon} alt="Hamburger" />
+        ) : (
+          <img src={closeIcon} alt="Close" />
+        )}
+      </button>
       {showMenu && (
         <>
           <div className="overlay" />
           <ul className="nav__menu">
             <li>
-              <button
-                type="button"
-                className={`link ${collapseMintingMenu ? 'collapsed' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setCollapseMintingMenu(!collapseMintingMenu);
-                }}
-              >
-                <span>Minting & Auctions</span>
-                <img src={arrowDown} alt="arrow-down" />
-              </button>
-              {collapseMintingMenu && (
-                <>
-                  <Link className="sub__nav" to="/minting-and-auctions/about">
-                    <span>About</span>
-                  </Link>
-                  <Link className="sub__nav" to="/minting-and-auctions/marketplace/active-auctions">
-                    <span>Active auctions</span>
-                  </Link>
-                  <Link className="sub__nav" to="/minting-and-auctions/marketplace/future-auctions">
-                    <span>Future Auctions</span>
-                  </Link>
-                </>
-              )}
-            </li>
-            <li>
-              <button
-                type="button"
-                className={`link ${collapseAboutMenu ? 'collapsed' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setCollapseAboutMenu(!collapseAboutMenu);
-                }}
-              >
-                <span>About</span>
-                <img src={arrowDown} alt="arrow-down" />
-              </button>
-              {collapseAboutMenu && (
-                <>
-                  <Link className="sub__nav" to="/">
-                    <span>Whitepaper</span>
-                  </Link>
-                  <Link className="sub__nav team" to="/">
-                    <span>Team</span>
-                  </Link>
-                </>
-              )}
+              <div className="grid__menu">
+                <div>
+                  <p className="title">Products</p>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                      }}
+                    >
+                      <img src={auctionHouseIcon} alt="Auction House" />
+                      Auction house
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button" className="disable">
+                      <img src={marketplaceIcon} alt="NFT Marketplace" />
+                      <span>NFT marketplace</span>
+                      <span className="tooltiptext">Coming soon</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button" className="disable">
+                      <img src={socialMediaIcon} alt="Social Media" />
+                      <span>Social media</span>
+                      <span className="tooltiptext">Coming soon</span>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <p className="title">Info</p>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/minting-and-auctions/about');
+                      }}
+                    >
+                      <img src={aboutIcon} alt="About" />
+                      About
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button">
+                      <img src={whitepaperIcon} alt="Whitepaper" />
+                      Whitepaper
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      className="team"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/team');
+                      }}
+                    >
+                      <img src={teamIcon} alt="Team" />
+                      Team
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <p className="title">DAO</p>
+                  <div>
+                    <button type="button">
+                      <img src={governanceIcon} alt="Governance" />
+                      Governance
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button">
+                      <img src={yieldFarmingIcon} alt="Yield Farming" />
+                      Yield farming
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button">
+                      <img src={docsIcon} alt="Docs" />
+                      Docs
+                    </button>
+                  </div>
+                </div>
+              </div>
             </li>
             {!isWalletConnected && (
-              <li>
-                <Popup
-                  trigger={
-                    <button type="button" className="sign__in">
-                      Sign In
-                    </button>
-                  }
-                >
+              <li className="sign__in">
+                <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
                       close={close}

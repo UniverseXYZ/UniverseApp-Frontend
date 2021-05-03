@@ -49,6 +49,10 @@
                     margin: 0 auto;
                     font-size: 36px;
                 }
+                @include sm {
+                    max-width: 310px;   
+                    font-size: 26px;
+                }
             } 
             p.desc {
                 font-family: $spaceGroteskFont;
@@ -63,6 +67,10 @@
                 margin: 14px auto 0;
                 @include lg {
                     max-width: 451px;
+                }
+                @include sm {
+                    font-size: 16px;
+                    max-width: 307px;
                 }
             }
 
@@ -110,12 +118,20 @@
                             color: $black;
                             margin-top: 16px;
                         }
+                        img {
+                            width: 344px;
+                        }
                     }
                     @include lg {
                         grid-template-columns: repeat(3, 1fr);
                     }
                     @include md {
-                        grid-template-columns: repeat(2, 1fr);
+                        grid-template-columns: 1fr 1fr;
+                    }
+                    @include sm {
+                        grid-template-columns: 1fr;
+                        justify-items: center;
+                        grid-row-gap: 30px;
                     }
                 }
                 @include sm {
@@ -164,6 +180,8 @@
                     }
                     @include sm {
                         grid-template-columns: repeat(2, 1fr);
+                        grid-column-gap: 20px;
+                        grid-row-gap: 30px;
                     }
                 }
             }
