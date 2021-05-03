@@ -66,7 +66,9 @@
     line-height: 22px;
     margin-bottom: 1px;
   }
-
+  .intup-l{
+    width: 100%;
+    }
   input {
     font-family: $spaceGroteskFont;
     font-weight: normal;
@@ -74,6 +76,7 @@
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 20px;
+    width: unset;
   }
   ::placeholder {
     font-family: $spaceGroteskFont;
