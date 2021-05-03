@@ -165,20 +165,44 @@ const EndDateCalendar = React.forwardRef(
     };
 
     const handleSaveClick = () => {
-      setValues((prevValues) => ({
-        ...prevValues,
-        endDate: new Date(
-          endDateTemp.year,
-          monthNames.indexOf(endDateTemp.month),
-          endDateTemp.day,
-          endDateTemp.hours,
-          endDateTemp.minutes
-        ),
+      if (endDateTemp.hours && endDateTemp.minutes) {
+        setValues((prevValues) => ({
+          ...prevValues,
+          endDate: new Date(
+            endDateTemp.year,
+            monthNames.indexOf(endDateTemp.month),
+            endDateTemp.day,
+            endDateTemp.hours,
+            endDateTemp.minutes
+          ),
+        }));
+        setShowEndDate(false);
+      } else {
+        setEndDateTemp((prevState) => ({
+          ...prevState,
+          hours: '12',
+          minutes: '00',
+        }));
+        setShowEndDate(false);
+      }
+    };
+
+    const handleFormatClick = (val) => {
+      setEndDateTemp((prevState) => ({
+        ...prevState,
+        format: val,
       }));
-      setShowEndDate(false);
     };
 
     useEffect(() => {
+      if (!values.endDate && values.startDate) {
+        setEndDateTemp((prevState) => ({
+          ...prevState,
+          month: values.startDate.toString().split(' ')[1],
+          day: Number(values.startDate.toString().split(' ')[2]),
+          year: Number(values.startDate.toString().split(' ')[3]),
+        }));
+      }
       createDaysArray();
     }, [selectedDate]);
 
@@ -204,16 +228,48 @@ const EndDateCalendar = React.forwardRef(
           </div>
           {currentMonth.map((week) => (
             <div key={uuid()} className="week__days__numbers">
-              {week.map((day) => (
+              {week.map((day, index) => (
                 <div
                   key={uuid()}
-                  className={
-                    day === endDateTemp.day &&
-                    monthNames[selectedDate.month] === endDateTemp.month &&
-                    selectedDate.year === endDateTemp.year
-                      ? 'selected'
-                      : ''
-                  }
+                  className={`
+                    ${
+                      day === endDateTemp.day &&
+                      monthNames[selectedDate.month] === endDateTemp.month &&
+                      selectedDate.year === endDateTemp.year
+                        ? 'selectedEndDay'
+                        : ''
+                    }
+                    ${
+                      day &&
+                      values.startDate &&
+                      new Date(selectedDate.year, selectedDate.month, day) <
+                        new Date(
+                          endDateTemp.year,
+                          monthNames.indexOf(endDateTemp.month),
+                          endDateTemp.day
+                        ) &&
+                      new Date(selectedDate.year, selectedDate.month, day) >
+                        new Date(
+                          Number(values.startDate.toString().split(' ')[3]),
+                          monthNames.indexOf(values.startDate.toString().split(' ')[1]),
+                          Number(values.startDate.toString().split(' ')[2])
+                        )
+                        ? 'inRange'
+                        : ''
+                    }
+                    ${
+                      new Date(selectedDate.year, selectedDate.month, Number(day)).getTime() ===
+                      new Date(
+                        Number(values.startDate.toString().split(' ')[3]),
+                        monthNames.indexOf(values.startDate.toString().split(' ')[1]),
+                        Number(values.startDate.toString().split(' ')[2])
+                      ).getTime()
+                        ? 'selectedStartDay'
+                        : ''
+                    }
+                    ${index === 0 ? 'startEdge' : ''}
+                    ${index === 6 ? 'endEdge' : ''}
+                  `}
                   aria-hidden="true"
                   onClick={() => handleDayClick(day)}
                   style={{ cursor: day ? 'pointer' : 'default' }}
@@ -260,24 +316,14 @@ const EndDateCalendar = React.forwardRef(
             <div
               className={endDateTemp.format === 'AM' ? 'selected' : ''}
               aria-hidden="true"
-              onClick={() =>
-                setEndDateTemp((prevState) => ({
-                  ...prevState,
-                  format: 'AM',
-                }))
-              }
+              onClick={() => handleFormatClick('AM')}
             >
               AM
             </div>
             <div
               className={endDateTemp.format === 'PM' ? 'selected' : ''}
               aria-hidden="true"
-              onClick={() =>
-                setEndDateTemp((prevState) => ({
-                  ...prevState,
-                  format: 'PM',
-                }))
-              }
+              onClick={() => handleFormatClick('PM')}
             >
               PM
             </div>

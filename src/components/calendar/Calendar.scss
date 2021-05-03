@@ -47,49 +47,6 @@
         padding: 24px 30px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
-        .rdrDateDisplayWrapper, 
-        .rdrMonthAndYearWrapper {
-            display: none;
-        }
-        .rdrWeekDay {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            color: rgba(0, 0, 0, 0.4);
-        }
-        .rdrDayNumber {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            color: rgba(0, 0, 0, 0.4);
-        }
-        .rdrStartEdge,
-        .rdrEndEdge {
-            color: #5FEA73!important;
-        }
-        .rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
-            color: $black;
-            font-weight: bold;
-        }
-        .rdrInRange {
-            color: rgba(95, 234, 115, 0.4)!important;
-        }
-        .rdrDayStartPreview,
-        .rdrDayInPreview,
-        .rdrDayEndPreview {
-            color: #5FEA73!important;
-        }
-        .rdrDayToday .rdrDayNumber span:after {
-            content: none;
-            background-color: #5FEA73!important;
-        }
-        .rdrDay {
-            height: 4em;
-        }
-
-
         .week__days {
             display: flex;
             justify-content: space-between;
@@ -130,11 +87,31 @@
                 color: $black;
                 width: 40px;
                 height: 40px;
+                margin: 3px 0;
 
-                &.selected {
+                &.selectedStartDay {
                     background: #5FEA73;
-                    border-radius: 12px;
+                    border-top-left-radius: 12px;
+                    border-bottom-left-radius: 12px;
                     font-weight: bold;
+                }
+                &.selectedEndDay {
+                    background: #5FEA73;
+                    border-top-right-radius: 12px;
+                    border-bottom-right-radius: 12px;
+                    font-weight: bold;
+                }
+                &.inRange {
+                    background: rgba(95, 234, 115, 0.4);
+                    font-weight: bold;
+                }
+                &.startEdge {
+                    border-top-left-radius: 12px;
+                    border-bottom-left-radius: 12px;
+                }
+                &.endEdge {
+                    border-top-right-radius: 12px;
+                    border-bottom-right-radius: 12px;
                 }
                 @include sm {
                     width: 30px;

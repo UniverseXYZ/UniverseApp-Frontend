@@ -116,6 +116,20 @@ const StartDateCalendar = React.forwardRef(
           new Date(new Date().toDateString())
         ) {
           alert('Start date can not be before today!');
+        } else if (
+          values.endDate &&
+          new Date(new Date(selectedDate.year, selectedDate.month, day).toDateString()) >
+            new Date(
+              Number(values.endDate.toString().split(' ')[3]),
+              monthNames.indexOf(values.endDate.toString().split(' ')[1]),
+              Number(values.endDate.toString().split(' ')[2])
+            )
+        ) {
+          alert(
+            `Start date must be before ${values.endDate.toString().split(' ')[1]} ${Number(
+              values.endDate.toString().split(' ')[2]
+            )}, ${Number(values.endDate.toString().split(' ')[3])}`
+          );
         } else {
           setStartDateTemp((prevState) => ({
             ...prevState,
@@ -153,17 +167,33 @@ const StartDateCalendar = React.forwardRef(
     };
 
     const handleSaveClick = () => {
-      setValues((prevValues) => ({
-        ...prevValues,
-        startDate: new Date(
-          startDateTemp.year,
-          monthNames.indexOf(startDateTemp.month),
-          startDateTemp.day,
-          startDateTemp.hours,
-          startDateTemp.minutes
-        ),
+      if (startDateTemp.hours && startDateTemp.minutes) {
+        setValues((prevValues) => ({
+          ...prevValues,
+          startDate: new Date(
+            startDateTemp.year,
+            monthNames.indexOf(startDateTemp.month),
+            startDateTemp.day,
+            startDateTemp.hours,
+            startDateTemp.minutes
+          ),
+        }));
+        setShowStartDate(false);
+      } else {
+        setStartDateTemp((prevState) => ({
+          ...prevState,
+          hours: '12',
+          minutes: '00',
+        }));
+        setShowStartDate(false);
+      }
+    };
+
+    const handleFormatClick = (val) => {
+      setStartDateTemp((prevState) => ({
+        ...prevState,
+        format: val,
       }));
-      setShowStartDate(false);
     };
 
     useEffect(() => {
@@ -192,16 +222,48 @@ const StartDateCalendar = React.forwardRef(
           </div>
           {currentMonth.map((week) => (
             <div key={uuid()} className="week__days__numbers">
-              {week.map((day) => (
+              {week.map((day, index) => (
                 <div
                   key={uuid()}
-                  className={
-                    day === startDateTemp.day &&
-                    monthNames[selectedDate.month] === startDateTemp.month &&
-                    selectedDate.year === startDateTemp.year
-                      ? 'selected'
-                      : ''
-                  }
+                  className={`
+                    ${
+                      day === startDateTemp.day &&
+                      monthNames[selectedDate.month] === startDateTemp.month &&
+                      selectedDate.year === startDateTemp.year
+                        ? 'selectedStartDay'
+                        : ''
+                    }
+                    ${
+                      day &&
+                      values.endDate &&
+                      new Date(selectedDate.year, selectedDate.month, day) >
+                        new Date(
+                          startDateTemp.year,
+                          monthNames.indexOf(startDateTemp.month),
+                          startDateTemp.day
+                        ) &&
+                      new Date(selectedDate.year, selectedDate.month, day) <
+                        new Date(
+                          Number(values.endDate.toString().split(' ')[3]),
+                          monthNames.indexOf(values.endDate.toString().split(' ')[1]),
+                          Number(values.endDate.toString().split(' ')[2])
+                        )
+                        ? 'inRange'
+                        : ''
+                    }
+                    ${
+                      new Date(selectedDate.year, selectedDate.month, Number(day)).getTime() ===
+                      new Date(
+                        Number(values.endDate.toString().split(' ')[3]),
+                        monthNames.indexOf(values.endDate.toString().split(' ')[1]),
+                        Number(values.endDate.toString().split(' ')[2])
+                      ).getTime()
+                        ? 'selectedEndDay'
+                        : ''
+                    }
+                    ${index === 0 ? 'startEdge' : ''}
+                    ${index === 6 ? 'endEdge' : ''}
+                  `}
                   aria-hidden="true"
                   onClick={() => handleDayClick(day)}
                   style={{ cursor: day ? 'pointer' : 'default' }}
@@ -248,24 +310,14 @@ const StartDateCalendar = React.forwardRef(
             <div
               className={startDateTemp.format === 'AM' ? 'selected' : ''}
               aria-hidden="true"
-              onClick={() =>
-                setStartDateTemp((prevState) => ({
-                  ...prevState,
-                  format: 'AM',
-                }))
-              }
+              onClick={() => handleFormatClick('AM')}
             >
               AM
             </div>
             <div
               className={startDateTemp.format === 'PM' ? 'selected' : ''}
               aria-hidden="true"
-              onClick={() =>
-                setStartDateTemp((prevState) => ({
-                  ...prevState,
-                  format: 'PM',
-                }))
-              }
+              onClick={() => handleFormatClick('PM')}
             >
               PM
             </div>
