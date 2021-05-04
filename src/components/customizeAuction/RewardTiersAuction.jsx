@@ -12,6 +12,11 @@ const RewardTiersAuction = () => {
   const [platinumImage, setPlatinumImage] = useState(null);
   const [goldImage, setGoldImage] = useState(null);
   const [silverImage, setSilverImage] = useState(null);
+
+  const [platinumDescription, setPlatinumDescription] = useState('');
+  const [goldDescription, setGoldDescription] = useState('');
+  const [silverDescription, setSilverDescription] = useState('');
+
   return (
     <div className="reward__tiers">
       <h3>Reward tiers</h3>
@@ -48,8 +53,14 @@ const RewardTiersAuction = () => {
               <h4>Custom description</h4>
               <p>0/600</p>
             </div>
-            <textarea className="inp" placeholder="Enter the description" />
-            <p className="error__text">Fill out the description</p>
+            <textarea
+              className="inp"
+              placeholder="Enter the description"
+              onChange={(e) => setPlatinumDescription(e.target.value)}
+            />
+            {platinumDescription.length === 0 && (
+              <p className="error__text">Fill out the description</p>
+            )}
           </div>
           <div className="upload__image">
             <h4>Upload tier image (optional)</h4>
@@ -119,8 +130,14 @@ const RewardTiersAuction = () => {
               <h4>Custom description</h4>
               <p>0/600</p>
             </div>
-            <textarea className="inp" placeholder="Enter the description" />
-            <p className="error__text">Fill out the description</p>
+            <textarea
+              className="inp"
+              placeholder="Enter the description"
+              onChange={(e) => setGoldDescription(e.target.value)}
+            />
+            {goldDescription.length === 0 && (
+              <p className="error__text">Fill out the description</p>
+            )}
           </div>
           <div className="upload__image">
             <h4>Upload tier image (optional)</h4>
@@ -187,8 +204,14 @@ const RewardTiersAuction = () => {
               <h4>Custom description</h4>
               <p>0/600</p>
             </div>
-            <textarea className="inp" placeholder="Enter the description" />
-            <p className="error__text">Fill out the description</p>
+            <textarea
+              className="inp"
+              placeholder="Enter the description"
+              onChange={(e) => setSilverDescription(e.target.value)}
+            />
+            {silverDescription.length === 0 && (
+              <p className="error__text">Fill out the description</p>
+            )}
           </div>
           <div className="upload__image">
             <h4>Upload tier image (optional)</h4>
