@@ -1,0 +1,283 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/_mixins';
+
+.desktop__nav {
+    margin-right: 2%;
+    ul {
+        display: flex;
+        align-items: center;
+        li {
+            margin-left: 30px;
+            position: relative;
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 12px;
+            padding: 10px 0;
+            -webkit-perspective: 200;
+            &:hover {
+                .dropdown {
+                    transform: rotateX(0deg);
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+                .nav__link__title {
+                    opacity: 0.6;
+                }
+                img.arrow {
+                    transform: rotate(180deg);
+                }
+            }
+            
+            a {
+                padding: 14px 16px;
+                font-family: $sharpGroteskMediumFont;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+                color: $black;
+            }
+            
+            .sign__in {
+                padding: 11px 26px;
+                text-align: center;
+                background: 
+                    linear-gradient($white, $white) padding-box,
+                    linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                border-radius: 12px;
+                border: 2px solid transparent;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+            }
+            .signOut{
+                color: #FF4949;
+                &:hover {
+                    background: rgba(255, 73, 73, 0.05)!important;
+                }
+            }
+            
+            .menu-li {
+                display: flex;
+                align-items: center;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 20px;
+                cursor: pointer;
+                background: transparent;
+                img:not(.icon-img) {
+                    transition: .5s ease;
+                }
+            }
+            .myAccount{
+                padding-left: 30px;
+                border-left: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            .nav__link__title {
+                margin: 0 12px;
+            }
+            .dropdown {
+                position: absolute;
+                right: 0;
+                top: 40px;
+                width: 194px;
+                background: $white;
+                border-radius: 10px;
+                z-index: 2;
+                filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
+                transform-style: preserve-3d;
+                transform-origin: top center;
+                backface-visibility: hidden;
+                transform: rotateX(-3deg);
+                transition: transform 0.4s cubic-bezier(0.17, 0.67, 0.59, 1.21), opacity 0.1s 0.1s;
+                opacity: 0;
+                pointer-events: none;
+                &.drop-account {
+                    top: 50px;
+                    width: 280px;
+                }
+                &__header {
+                    .copy-div{
+                        position: relative;
+                        padding: 15px 20px;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        .copy__div{
+                            padding-top: 2px;
+                            padding-right: 8px;
+
+                            .copy>span{
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 18px;
+                                color: #000000;
+                                opacity: 0.4;
+                            }
+                            .copyImg{
+                                margin-right: 5px; 
+                                margin-left: 11px; 
+                            }
+                            .copy>span{
+                                opacity: 0.6;
+                            }
+                            .copied-div{
+                                position: absolute;
+                                width: fit-content;
+                                height: 27px;
+                                background: #000;
+                                border-radius: 100px;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 150%;
+                                text-align: center;
+                                color: #FFFFFF;
+                                margin-top: -12%;
+                                left: 68%;
+                                padding: 4px 12px;
+                            
+                                span{
+                                    position: absolute;
+                                    width: 7.6px;
+                                    height: 7.6px;
+                                    left: 48%;
+                                    top: 23px;
+                                    background: #000;
+                                    transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+                                }
+                            }
+                        }
+                    }   
+                    
+                    .first-span{
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 14px;
+                    line-height: 22px;
+                    align-items: center;
+                    color: #000000;
+                    }
+                    .second-span{
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 160%;
+                    align-items: center;
+                    color: rgba(0, 0, 0, 0.4);
+                    margin: 0px 12px;
+                    }
+                    .group1 > img, .group2 > img{
+                        margin: 0px 12px 0 0;
+                    }
+                    .group1 ,.group2{
+                        margin-top: 15px;
+                        padding: 0 20px;
+                    }
+                    
+                    .group2 {
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        padding-bottom: 20px;   
+                    }
+                    .diamond {
+                        border: 1px solid #E6E6E6;
+                        border-radius: 50%;
+                        padding: 5px 6px;
+                    }
+                    .ethereum__address {
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 16px;
+                        color: $black;
+                        margin: 0 12px;
+                    }
+                    .copy {
+                        cursor: pointer;
+                    }
+                }
+                &__body {
+                    padding: 6px;
+                    button {
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        padding: 20px;
+                        background-color: $white;
+                        text-align: left;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 14px;
+                        line-height: 140%;
+                        border-radius: 10px;
+                        &:hover {
+                            background: rgba(0, 0, 0, 0.05);
+                        }
+                        &.disable {
+                            position: relative;
+                            cursor: default;
+                            img,
+                            span:not(.tooltiptext) {
+                                opacity: 0.2;
+                            }
+                            .tooltiptext {
+                                visibility: hidden;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                width: 120px;
+                                background-color: $black;
+                                color: $white;
+                                text-align: center;
+                                border-radius: 100px;
+                                padding: 5px 0;
+                                position: absolute;
+                                z-index: 1;
+                                top: -18px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                &::after {
+                                    content: "";
+                                    position: absolute;
+                                    top: 100%;
+                                    left: 50%;
+                                    margin-left: -5px;
+                                    border-width: 5px;
+                                    border-style: solid;
+                                    border-color: black transparent transparent transparent;
+                                }
+                            }
+                            &:hover {
+                                .tooltiptext {
+                                    visibility: visible;
+                                }
+                            }
+                        }
+                        img {
+                            margin-right: 8px;
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+    @include lg {
+        display: none;
+    }
+}

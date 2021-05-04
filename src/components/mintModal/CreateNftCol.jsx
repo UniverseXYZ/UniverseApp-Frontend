@@ -451,9 +451,9 @@ const CreateNftCol = (props) => {
                   </Button>
                 </div>
               ))}
-              <div className="property-add">
+              <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
                 <h5>
-                  <img src={addIcon} alt="Add" onClick={() => addProperty()} aria-hidden="true" />
+                  <img src={addIcon} alt="Add" />
                   Add property
                 </h5>
               </div>
