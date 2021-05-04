@@ -6,6 +6,7 @@ import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
+import backgroundTransparent from '../../assets/images/background1.svg';
 
 const DomainAndBranding = () => {
   const [promoInfo, setPromoInfo] = useState(false);
@@ -35,7 +36,9 @@ const DomainAndBranding = () => {
               value={auctionHeadline}
               onChange={(e) => setAuctionHeadline(e.target.value)}
             />
-            <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
+            {auctionHeadline.length === 0 && (
+              <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
+            )}
           </div>
           <div className="upload__promo">
             <div className="upload__promo__title">
@@ -99,7 +102,9 @@ const DomainAndBranding = () => {
               value={auctionLink}
               onChange={(e) => setAuctionLink(e.target.value)}
             />
-            <p className="error__text">&quot;Auction link&quot; is not allowed to be empty</p>
+            {!auctionLink.startsWith('universe.xyz/3LAU/') && (
+              <p className="error__text">&quot;Auction link&quot; is not allowed to be empty</p>
+            )}
           </div>
           <div className="upload__background">
             <div className="upload__background__title">
@@ -170,11 +175,18 @@ const DomainAndBranding = () => {
                 <h6>Preview</h6>
                 <div className="preview-div">
                   {backgroundImage && (
-                    <img
-                      className="background__image"
-                      src={URL.createObjectURL(backgroundImage)}
-                      alt="background"
-                    />
+                    <>
+                      <img
+                        className="background__image"
+                        src={URL.createObjectURL(backgroundImage)}
+                        alt="background"
+                      />
+                      <img
+                        className="background__default__image"
+                        src={backgroundTransparent}
+                        alt="Background Trans"
+                      />
+                    </>
                   )}
                   <img
                     className="background__default__image"
