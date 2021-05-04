@@ -111,7 +111,6 @@
           padding: 10px;
           display: flex;
           align-items: center;
-          gap: 16px;
           margin: 0 10px;
           cursor: pointer;
 
@@ -121,6 +120,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-right: 16px;
             &.show__avatar {
               background: conic-gradient(
                   from 176.21deg at 50% 50%,
@@ -188,14 +188,13 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-column-gap: 75px;
-        grid-row-gap: 40px;
+        grid-row-gap: 16px;
         padding-top: 80px;
 
         &__image {
           grid-column: 1/2;
           grid-row: 1/3;
           max-width: 445px;
-          // max-height: 445px;
           border-radius: 10px;
           display: flex;
           align-items: center;
@@ -712,7 +711,7 @@
         }
       }
     }
-    @include md {
+    @include lg {
       padding: 30px 20px 60px;
     }
   }
@@ -721,7 +720,7 @@
 
     &__container {
       max-width: 1110px;
-      margin: 120px auto;
+      margin: 0px auto;
 
       h1.title {
         font-family: $sharpGroteskSemiBoldFont;
@@ -757,9 +756,9 @@
           .nowrap__mobile {
             display: flex;
             align-items: center;
-            gap: 16px;
             flex-wrap: wrap;
             img {
+              margin-bottom: 16px;
               width: 60px;
               height: 60px;
               @include sm {
@@ -801,14 +800,13 @@
       }
     }
 
-    @include md {
+    @include lg {
       padding: 60px 20px;
     }
   }
   .reward__tiers__section {
     position: relative;
     padding: 120px 60px;
-    // background-color: #fbf9ff;
 
     .bg {
       position: absolute;
@@ -1001,7 +999,7 @@
         }
       }
     }
-    @include sm {
+    @include lg {
       padding: 60px 20px;
     }
   }
@@ -1013,7 +1011,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 100px;
       max-width: 1110px;
       margin: 0 auto;
 
@@ -1033,6 +1030,7 @@
       .avatar {
         display: flex;
         align-items: center;
+        margin-right: 100px;
         img {
           min-width: 280px;
           min-height: 280px;
@@ -1048,6 +1046,13 @@
             width: 90px;
             height: 90px;
           }
+        }
+        @include lg {
+          margin-right: 50px;
+        }
+        @include sm {
+          margin-right: 0px;
+          margin-bottom: 10px;
         }
       }
       .info {
@@ -1081,21 +1086,19 @@
         .social__links {
           display: flex;
           align-items: center;
-          gap: 15px;
 
           a {
             border: 1px solid rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             border-radius: 12px;
             padding: 13px;
+            &:first-child {
+              margin-right: 15px;
+            }
           }
         }
       }
-      @include lg {
-        gap: 50px;
-      }
       @include sm {
-        gap: 10px;
         flex-wrap: wrap;
       }
     }
@@ -1116,7 +1119,6 @@
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 24px;
 
       h1.title {
         font-family: $sharpGroteskSemiBoldFont;
@@ -1173,6 +1175,7 @@
         }
         @include sm {
           width: 100%;
+          margin-top: 24px;
         }
       }
       @include sm {

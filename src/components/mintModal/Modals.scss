@@ -1069,9 +1069,9 @@
         }
 
         .property-add {
+          cursor: pointer;
           img {
             padding-right: 10px;
-            cursor: pointer;
           }
           h5 {
             font-family: $spaceGroteskFont;
@@ -1144,7 +1144,6 @@
       .single-nft-drop-file {
         width: 100%;
         text-align: center;
-        // padding: 0px 60px;
 
         img {
           padding-bottom: 16px;
@@ -1170,6 +1169,8 @@
             font-size: 10px;
             line-height: 160%;
             padding-bottom: 10px;
+            max-width: 136px;
+            margin: 0 auto;
           }
         }
 
@@ -1464,9 +1465,9 @@
     }
 
     .property-add {
+      cursor: pointer;
       img {
         padding-right: 10px;
-        cursor: pointer;
       }
       h5 {
         font-family: $spaceGroteskFont;
@@ -1474,6 +1475,137 @@
         font-size: 16px;
         line-height: 20px;
         color: $black;
+      }
+    }
+    .royalities {
+      margin-top: 40px;
+      .title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        h4 {
+          font-family: $sharpGroteskMediumFont;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 130%;
+          letter-spacing: 0.2px;
+          color: $black;
+        }
+        img {
+          margin-left: 6px;
+          margin-right: 15px;
+        }
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 40px;
+          height: 24px;
+        }
+
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: '';
+          height: 16px;
+          width: 16px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          -webkit-transition: 0.4s;
+          transition: 0.4s;
+        }
+
+        input:checked + .slider {
+          background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+        }
+
+        input:checked + .slider:before {
+          -webkit-transform: translateX(16px);
+          -ms-transform: translateX(16px);
+          transform: translateX(16px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 50px;
+        }
+
+        .slider.round:before {
+          border-radius: 50%;
+        }
+      }
+      .percent__amount {
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 10px;
+        padding: 18px 24px;
+        .inp__container {
+          position: relative;
+          margin-bottom: 6px;
+          .intup-l {
+            width: 100%;
+            input {
+              width: 100%;
+              font-family: Space Grotesk;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 16px;
+              line-height: 20px;
+              color: $black;
+              &::placeholder {
+                font-family: $spaceGroteskFont;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 20px;
+                color: rgba(0, 0, 0, 0.2);
+              }
+            }
+          }
+          span {
+            position: absolute;
+            top: 29px;
+            right: 1px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 20px;
+            color: $black;
+            display: flex;
+            height: 50px;
+            width: 50px;
+            align-items: center;
+            justify-content: center;
+            background-color: $white;
+            border-radius: 12px;
+          }
+        }
+        .suggested {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 150%;
+          color: rgba(0, 0, 0, 0.6);
+        }
       }
     }
   }

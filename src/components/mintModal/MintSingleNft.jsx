@@ -38,9 +38,16 @@ const MintSingleNft = ({ onClick }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
+  const [percentAmount, setPercentAmount] = useState('');
+  const [royalities, setRoyalities] = useState(true);
   const inputFile = useRef(null);
-
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
+
+  const handleInputChange = (val) => {
+    if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
+      setPercentAmount(val);
+    }
+  };
 
   const removeProperty = (index) => {
     const temp = [...properties];
@@ -239,7 +246,7 @@ const MintSingleNft = ({ onClick }) => {
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div>
-      <h2 className="single-nft-title">{!savedNFTsID ? 'Create Single NFT' : 'Edit NFT'}</h2>
+      <h2 className="single-nft-title">{!savedNFTsID ? 'Create single NFT' : 'Edit NFT'}</h2>
       <div className="single-nft-content">
         <div className="single-nft-upload">
           <h5>Upload file</h5>
@@ -429,11 +436,44 @@ const MintSingleNft = ({ onClick }) => {
               </Button>
             </div>
           ))}
-          <div className="property-add">
+          <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
             <h5>
-              <img src={addIcon} alt="Add" onClick={() => addProperty()} aria-hidden="true" />
+              <img src={addIcon} alt="Add" />
               Add property
             </h5>
+          </div>
+          <div className="royalities">
+            <div className="title">
+              <h4>Royalities</h4>
+              <img src={infoIcon} alt="Info Icon" />
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={royalities}
+                  onChange={(e) => setRoyalities(e.target.checked)}
+                />
+                <span className="slider round" />
+              </label>
+            </div>
+            {royalities && (
+              <Animated animationIn="fadeIn">
+                <div className="percent__amount">
+                  <div className="inp__container">
+                    <Input
+                      type="text"
+                      label="Percent amount"
+                      inputMode="numeric"
+                      pattern="[0-9]"
+                      placeholder="Enter percent amount"
+                      value={percentAmount}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                    />
+                    <span>%</span>
+                  </div>
+                  <span className="suggested">Suggested: 10%, 20%, 30%</span>
+                </div>
+              </Animated>
+            )}
           </div>
         </div>
         {(errors.name !== '' || errors.edition !== '' || errors.previewImage !== '') && (

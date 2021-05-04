@@ -16,7 +16,7 @@ const BuyUniverseNFTs = () => (
         <img
           src={buyUniverseNFTsImg}
           alt="Buy Universe NFTs"
-          style={{ minWidth: '280px', maxWdth: '310px' }}
+          style={{ minWidth: '280px', maxWidth: '310px' }}
         />
       </div>
     </div>

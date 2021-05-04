@@ -7,13 +7,19 @@ footer{
     margin: 0;
     background: $black;
 
-   .footer{
+    .footer {
         border: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 3.5%;
-        display: flex;
-        flex-wrap: wrap;
-        width: 100%;
-        padding-bottom: 59px;
+        padding: 60px;
+
+        &__container {
+            max-width: 1110px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            @include lg {
+                grid-template-columns: 1fr;
+            }
+        }
 
         li:first-child{
             font-family: $spaceGroteskFont;
@@ -25,30 +31,70 @@ footer{
             padding-bottom: 9%;
             cursor: unset;
         }
-        .grey{
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        li{
+        
+        li {
+            position: relative;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
             font-size: 14px;
             line-height: 140%;
-            // text-transform: uppercase;
-            padding-bottom: 9%;
-            color: #FFFFFF;
-            cursor: pointer ;
+            padding-bottom: 24px;
+            color: $white;
+            cursor: pointer;
+            &.disable {
+                color: rgba(255, 255, 255, 0.4);
+                cursor: default;
+                .tooltiptext {
+                    visibility: hidden;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px;
+                    width: 120px;
+                    background-color: $black;
+                    color: $white;
+                    text-align: center;
+                    border-radius: 100px;
+                    padding: 5px 0;
+                    position: absolute;
+                    z-index: 1;
+                    top: -30px;
+                    left: 30%;
+                    transform: translateX(-50%);
+                    box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.4);
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        top: 100%;
+                        left: 50%;
+                        margin-top: 0.6px;
+                        margin-left: -5px;
+                        border-width: 5px;
+                        border-style: solid;
+                        border-color: rgba(255, 255, 255, 0.4) transparent transparent transparent;
+                    }
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        top: 100%;
+                        left: 50%;
+                        margin-left: -5px;
+                        border-width: 5px;
+                        border-style: solid;
+                        border-color: black transparent transparent transparent;
+                    }
+                }
+                &:hover {
+                    .tooltiptext {
+                        visibility: visible;
+                    }
+                }
+            }
         }
 
-        .universe{
-            flex: 30%;
-            margin-left: 10%;
-            // display: flex;
-            // flex-direction: column;
-
-
-            .logo-div{
+        .universe {
+            .logo-div {
                 margin: -5px 15px 25px 0;
 
                 img{
@@ -69,7 +115,7 @@ footer{
             }
 
             p{
-                color: #fff;
+                color: $white;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: bold;
@@ -84,12 +130,11 @@ footer{
                 font-weight: bold;
                 font-size: 14px;
                 line-height: 22px;
-                background: #FFFFFF;
+                background: $white;
                 border: 1px solid rgba(0, 0, 0, 0.1);
                 box-sizing: border-box;
                 border-radius: 14px;
                 height: 50px;
-                // width: 68%;
                 width: 100%;
                 padding-left: 3%;
                 padding-bottom: 2px;
@@ -104,7 +149,6 @@ footer{
             }
 
             button{
-                // margin-left: -147px;
                 position: absolute;
                 right: 4px;
                 bottom: 4px;
@@ -116,7 +160,7 @@ footer{
                     width: 100%;
                 }
             }
-            @include lg{
+            @include lg {
                 display: flex;
                 justify-content: space-between;
                 margin-left: 0%;
@@ -129,106 +173,84 @@ footer{
 
         } 
 
-        .universe-list{
-            display: flex;
-            width: 60%;
-
-            @include lg{
+        .universe-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            
+            @include lg {
                 width: 100%;
             }
-        }
-
-        .universe-global{
-            flex: 19%;
-        }
-        
-        .minting-auctions{
-            flex: 23%;
-        }
-        
-        .coming-soon{
-            flex: 18%;
-            
-            @include sm{
-                display: none;
+            @include sm {
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 60px;
             }
         }
 
-        @include lg{
+        @include lg {
             display: block;
             padding: 60px;
         }
 
-        @include sm{
+        @include sm {
             padding: 60px 20px;
         }
 
     }
-    .footer-bottom{
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        padding: 25px 0;
+    .footer-bottom {
+        padding: 25px 60px;
+
+        &-container {
+            max-width: 1110px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            @include sm {
+                grid-template-columns: 1fr auto;
+            }
+        }
             
-        .footer-links{
-            display: flex;
-            justify-content: space-between;
-            margin-left: 10%;
-            width: 47%;
+        .footer-links {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 500;
             font-size: 12px;
             line-height: 22px;
             color: rgba(255, 255, 255, 0.4);
-
-            @include lg{
-                margin-left: 0%;
-                width: 70%;
-            }
-            @include sm{
-                display: block;
-            }
         }
 
-        .op-sourced{
-            width: 30%; 
-            // margin-left: 10%;
-
-            @include lg{
-                width: fit-content;
-                margin-left: 0%;
+        .powered-by {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 22px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            @include sm {
+                grid-column: 1/2;
+                grid-row: 2/3;
+                text-align: left;
             }
         }
 
-        .powered-by{
-            width: 35%;
-
-            @include lg{
-                width: fit-content;
+        .icons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            img:last-child {
+                padding-left: 15px;
+            }
+            @include sm {
+                grid-column: 2/3;
+                grid-row: 1/2;
             }
         }
 
-        .icons{
-            margin-right: 10%;
-            // width: 18%;
-            // text-align: end;
-
-            @include lg{
-                margin-right: 0%;
-            }
+        @include lg {
+            padding: 40px 60px;
         }
-
-        .icons :last-child{
-            padding-left: 15px;
+        @include sm {
+            padding: 40px 20px;
         }
-
-        @include lg{
-            padding: 40px 58px;
-        }
-        @include sm{
-            padding: 60px 22px;
-        }
-
     }    
 }

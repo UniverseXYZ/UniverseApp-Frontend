@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import Justin3LAU from '../../assets/images/team/Justin-3LAU.png';
 import DillonFrancis from '../../assets/images/team/Dillon-Francis.png';
 import AndréAnjos from '../../assets/images/team/André-Anjos.png';
@@ -52,270 +53,340 @@ import AndréNabais from '../../assets/images/team/André-Nabais.png';
 import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
 
 const UniverseContributors = () => {
-  const contributors = [
+  const [contributors, setContributors] = useState([
     {
       id: 1,
       name: 'Justin 3LAU',
       avatar: Justin3LAU,
+      loaded: false,
     },
     {
       id: 2,
       name: 'Dillon Francis',
       avatar: DillonFrancis,
+      loaded: false,
     },
     {
       id: 3,
       name: 'André Anjos - RAC',
       avatar: AndréAnjos,
+      loaded: false,
     },
     {
       id: 4,
       name: 'Wesley Pentz - Diplo',
       avatar: WesleyPentz,
+      loaded: false,
     },
     {
       id: 5,
       name: 'Guy Lawrence - Disclosure',
       avatar: GuyLawrence,
+      loaded: false,
     },
     {
       id: 6,
       name: 'Howard Lawrence - Disclosure',
       avatar: HowardLawrence,
+      loaded: false,
     },
     {
       id: 7,
       name: 'Aaron McDonald',
       avatar: AaronMcDonald,
+      loaded: false,
     },
     {
       id: 8,
       name: 'Kain Warwick',
       avatar: KainWarwick,
+      loaded: false,
     },
     {
       id: 9,
       name: 'Stani Kulechov',
       avatar: StaniKulechov,
+      loaded: false,
     },
     {
       id: 10,
       name: 'Santiago Santos',
       avatar: SantiagoSantos,
+      loaded: false,
     },
     {
       id: 11,
       name: 'Matt Hunter',
       avatar: MattHunter,
+      loaded: false,
     },
     {
       id: 12,
       name: 'Akin Sawyer',
       avatar: AkinSawyer,
+      loaded: false,
     },
     {
       id: 13,
       name: 'Quinn Abraham',
       avatar: QuinnAbraham,
+      loaded: false,
     },
     {
       id: 14,
       name: 'Billy Luedtke',
       avatar: BillyLuedtke,
+      loaded: false,
     },
     {
       id: 15,
       name: 'Tom Shaughnessy',
       avatar: TomShaughnessy,
+      loaded: false,
     },
     {
       id: 16,
       name: 'Vitalik Cherniak',
       avatar: VitalikCherniak,
+      loaded: false,
     },
     {
       id: 17,
       name: 'Adam D’augelli',
       avatar: AdamDaugelli,
+      loaded: false,
     },
     {
       id: 18,
       name: 'ChainLinkGod',
       avatar: ChainLinkGod,
+      loaded: false,
     },
     {
       id: 19,
       name: 'Noah Jessop',
       avatar: NoahJessop,
+      loaded: false,
     },
     {
       id: 20,
       name: 'Dr. James Todaro',
       avatar: JamesTodaro,
+      loaded: false,
     },
     {
       id: 21,
       name: 'Rob Leshner',
       avatar: RobLeshner,
+      loaded: false,
     },
     {
       id: 22,
       name: 'Ben Lakoff',
       avatar: BenLakoff,
+      loaded: false,
     },
     {
       id: 23,
       name: 'Bogdan Gheorghe',
       avatar: BogdanGheorghe,
+      loaded: false,
     },
     {
       id: 24,
       name: 'Jordan Momtazi',
       avatar: JordanMomtazi,
+      loaded: false,
     },
     {
       id: 25,
       name: 'Igor Lilic',
       avatar: IgorLilic,
+      loaded: false,
     },
     {
       id: 26,
       name: 'Ryan Zurrer',
       avatar: RyanZurrer,
+      loaded: false,
     },
     {
       id: 27,
       name: 'EJ Rodgers',
       avatar: EJRodgers,
+      loaded: false,
     },
     {
       id: 28,
       name: 'Keegan Selby',
       avatar: KeeganSelby,
+      loaded: false,
     },
     {
       id: 29,
       name: 'Alok Vasudev',
       avatar: AlokVasudev,
+      loaded: false,
     },
     {
       id: 30,
       name: 'Keiran Warwick',
       avatar: KeiranWarwick,
+      loaded: false,
     },
     {
       id: 31,
       name: 'Kevin Xu',
       avatar: KevinXu,
+      loaded: false,
     },
     {
       id: 32,
       name: 'Kevin Rose',
       avatar: KevinRose,
+      loaded: false,
     },
     {
       id: 33,
       name: 'Aaron Wright',
       avatar: AaronWright,
+      loaded: false,
     },
     {
       id: 34,
       name: 'Chandler Song',
       avatar: ChandlerSong,
+      loaded: false,
     },
     {
       id: 35,
       name: 'Vance Spencer',
       avatar: VanceSpencer,
+      loaded: false,
     },
     {
       id: 36,
       name: 'DeFi Dad',
       avatar: DeFiDad,
+      loaded: false,
     },
     {
       id: 37,
       name: 'Internet Paul',
       avatar: InternetPaul,
+      loaded: false,
     },
     {
       id: 38,
       name: 'Miguel Nabais',
       avatar: MiguelNabais,
+      loaded: false,
     },
     {
       id: 39,
       name: 'Marc Weinstein',
       avatar: MarcWeinstein,
+      loaded: false,
     },
     {
       id: 40,
       name: 'Les Borsai',
       avatar: LesBorsai,
+      loaded: false,
     },
     {
       id: 41,
       name: 'Spencer Noon',
       avatar: SpencerNoon,
+      loaded: false,
     },
     {
       id: 42,
       name: 'Homer Shillson',
       avatar: HomerShillson,
+      loaded: false,
     },
     {
       id: 43,
       name: 'Anton Bukov',
       avatar: AntonBukov,
+      loaded: false,
     },
     {
       id: 44,
       name: 'Rahilla Zafar',
       avatar: RahillaZafar,
+      loaded: false,
     },
     {
       id: 45,
       name: 'Tekin Salimi',
       avatar: TekinSalimi,
+      loaded: false,
     },
     {
       id: 46,
       name: 'Jake Brukhman',
       avatar: JakeBrukhman,
+      loaded: false,
     },
     {
       id: 47,
       name: 'WhaleShark',
       avatar: WhaleShark,
+      loaded: false,
     },
     {
       id: 48,
       name: 'Gmoney',
       avatar: Gmoney,
+      loaded: false,
     },
     {
       id: 49,
       name: 'Robbie Ferguson',
       avatar: RobbieFerguson,
+      loaded: false,
     },
     {
       id: 50,
       name: 'André Nabais',
       avatar: AndréNabais,
+      loaded: false,
     },
     {
       id: 51,
       name: 'Luke Lombe',
       avatar: LukeLombe,
+      loaded: false,
     },
-  ];
+  ]);
+
+  const handleLoaded = (idx) => {
+    const newContributors = [...contributors];
+    newContributors[idx].loaded = true;
+    setContributors(newContributors);
+  };
+
   return (
     <div className="contributors__section">
       <h1 className="title">Universe Contributors</h1>
       <div className="contributors">
-        {contributors.map((contributor) => (
+        {contributors.map((contributor, index) => (
           <div className="contributor" key={contributor.id}>
-            <img src={contributor.avatar} alt={contributor.name} title={contributor.name} />
+            {!contributor.loaded && (
+              <Skeleton
+                height={160}
+                style={{ width: window.screen.width < 576 ? '160px' : '100%' }}
+              />
+            )}
+            <img
+              src={contributor.avatar}
+              alt={contributor.name}
+              title={contributor.name}
+              onLoad={() => handleLoaded(index)}
+              style={{ display: contributor.loaded ? 'block' : 'none' }}
+            />
             <h2>{contributor.name}</h2>
           </div>
         ))}

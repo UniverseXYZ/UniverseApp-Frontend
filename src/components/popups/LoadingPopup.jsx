@@ -17,8 +17,8 @@ const LoadingPopup = ({ onClose }) => (
     </button>
     <div className="loading-text">
       <p>
-        <span>Loading... do not click refresh or leave this page.</span>
-        <span>Just kidding, you can do whatever you want.</span>
+        <span>Loading... do not click refresh or leave this page. </span>
+        <span>Just kidding, you can do whatever you want. </span>
         <span>This is Ethereum!</span>
       </p>
     </div>
