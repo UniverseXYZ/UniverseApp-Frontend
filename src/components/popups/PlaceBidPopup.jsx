@@ -116,7 +116,7 @@ const PlaceBidPopup = ({
         <>
           <h1 className="title">Place a bid</h1>
           <p className="desc">
-            You are about to place a bid for <b>{onAuctionTitle}</b> by <b>{onArtistName}</b>
+            You are about to place a bid <br /> for <b>{onAuctionTitle}</b> by <b>{onArtistName}</b>
           </p>
           <div className="bid__form">
             <span>Your bid</span>
@@ -206,7 +206,7 @@ const PlaceBidPopup = ({
                       <div className="total__bid__amount__info">
                         Keep in mind that your funds will be used only if your bid wins a certain
                         tier. If you don&apos;t win, you will be able to withdraw your funds by
-                        clicking the Withdraw button that will become active after the auction ends.
+                        clicking the withdraw button that will become active after the auction ends.
                       </div>
                     </Animated>
                   )}

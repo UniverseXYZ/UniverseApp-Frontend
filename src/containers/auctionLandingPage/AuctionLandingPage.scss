@@ -922,6 +922,9 @@
                 text-align: center;
                 color: $black;
               }
+              @include md {
+                margin-bottom: 40px;
+              }
             }
           }
           .tier__details {
@@ -956,7 +959,7 @@
               display: flex;
               align-items: center;
               flex-wrap: wrap;
-              gap: 12px;
+              // gap: 12px;
               span {
                 background: rgba(0, 0, 0, 0.05);
                 border-radius: 12px;
@@ -967,10 +970,12 @@
                 font-size: 14px;
                 line-height: 150%;
                 color: $black;
+                margin-right: 12px;
+                margin-bottom: 12px;
               }
             }
             .tier__description {
-              margin: 24px 0;
+              margin: 12px 0 24px;
               font-family: $spaceGroteskFont;
               font-style: normal;
               font-weight: normal;

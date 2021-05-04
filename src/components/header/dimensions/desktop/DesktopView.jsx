@@ -183,7 +183,7 @@ const DesktopView = ({
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
               <img className="icon-img" src={Icon} alt="Diamond icon" />
-              <span className="nav__link__title">My Account</span>
+              <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
             <div className="dropdown drop-account">
