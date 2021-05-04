@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import './Header.scss';
 import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
-import DesktopView from './dimensions/DesktopView';
-import TabletView from './dimensions/TabletView';
-import MobileView from './dimensions/MobileView';
+import DesktopView from './dimensions/desktop/DesktopView';
+import TabletView from './dimensions/tablet/TabletView';
+import MobileView from './dimensions/mobile/MobileView';
 import AppContext from '../../ContextAPI';
 
 const Header = ({ location }) => {
