@@ -130,6 +130,11 @@ table {
     height: 5px;
 }
 
+::-webkit-scrollbar:horizontal {
+    width: 0px;
+    height: 0px;
+}
+
 /* Track */
 ::-webkit-scrollbar-track {
     background: $white; 

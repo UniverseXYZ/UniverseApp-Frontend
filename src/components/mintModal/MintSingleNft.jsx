@@ -246,7 +246,7 @@ const MintSingleNft = ({ onClick }) => {
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div>
-      <h2 className="single-nft-title">{!savedNFTsID ? 'Create Single NFT' : 'Edit NFT'}</h2>
+      <h2 className="single-nft-title">{!savedNFTsID ? 'Create single NFT' : 'Edit NFT'}</h2>
       <div className="single-nft-content">
         <div className="single-nft-upload">
           <h5>Upload file</h5>

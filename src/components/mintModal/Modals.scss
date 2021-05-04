@@ -1144,7 +1144,6 @@
       .single-nft-drop-file {
         width: 100%;
         text-align: center;
-        // padding: 0px 60px;
 
         img {
           padding-bottom: 16px;
@@ -1170,6 +1169,8 @@
             font-size: 10px;
             line-height: 160%;
             padding-bottom: 10px;
+            max-width: 136px;
+            margin: 0 auto;
           }
         }
 

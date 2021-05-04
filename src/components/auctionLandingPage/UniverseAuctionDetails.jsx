@@ -10,7 +10,7 @@ const UniverseAuctionDetails = () => (
     <div className="universe__auction__details__section__container">
       <AnimatedOnScroll animationIn="zoomIn">
         <h1 className="title">
-          Universe <span>Auction Details</span>
+          Universe <span>auction details</span>
         </h1>
         <p className="desc">Here are some tips about the Universe</p>
       </AnimatedOnScroll>
@@ -19,7 +19,7 @@ const UniverseAuctionDetails = () => (
           <div className="box">
             <div className="nowrap__mobile">
               <img src={auctionLengthIcon} alt="Auction Length" />
-              <h2 className="sub__title">Auction Length</h2>
+              <h2 className="sub__title">Auction length</h2>
             </div>
             <p className="sub__desc">
               This Auction will last 24 hours and will be extended 3 minutes after every bid with 3
@@ -32,7 +32,7 @@ const UniverseAuctionDetails = () => (
           <div className="box">
             <div className="nowrap__mobile">
               <img src={biddingCurrencyIcon} alt="Bidding Currency" />
-              <h2 className="sub__title">Bidding Currency</h2>
+              <h2 className="sub__title">Bidding currency</h2>
             </div>
             <p className="sub__desc">
               We have allowed you to pay with almost any ERC-20 by the contract address. This means
@@ -45,7 +45,7 @@ const UniverseAuctionDetails = () => (
           <div className="box">
             <div className="nowrap__mobile">
               <img src={placingBidsIcon} alt="Placing Bids" />
-              <h2 className="sub__title">Placing Bids</h2>
+              <h2 className="sub__title">Placing bids</h2>
             </div>
             <p className="sub__desc">
               Placing a bid is easy and seamless. Just connect your wallet and and follow the on
@@ -58,7 +58,7 @@ const UniverseAuctionDetails = () => (
           <div className="box">
             <div className="nowrap__mobile">
               <img src={multipleNFTsIcon} alt="Multiple NFTs & Winners" />
-              <h2 className="sub__title">Multiple NFTs & Winners</h2>
+              <h2 className="sub__title">Multiple NFTs & winners</h2>
             </div>
             <p className="sub__desc">
               This auction styler allows multiple winners to win multiple NFTs. Each Tier is
