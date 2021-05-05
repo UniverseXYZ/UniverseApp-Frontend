@@ -422,7 +422,7 @@ const AuctionSettings = () => {
                 auction.tiers.map((tier, _index) => (
                   <div className="tiers-part">
                     <span className="bid-type">
-                      <img src={bid.img} alt="icon" />
+                      {bid.img && <img src={bid.img} alt="icon" />}
                       <spam className="button-name">{bid.name}</spam>
                     </span>
                     <Input
