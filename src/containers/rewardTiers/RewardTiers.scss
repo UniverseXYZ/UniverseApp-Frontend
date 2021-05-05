@@ -4,12 +4,14 @@
 
 .reward-tiers{
     .view-tier{
-        margin-top: 10%;
+        margin-bottom: 24px;
         border-radius: 10px;
         background: rgba(0, 0, 0, 0.02);
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         padding: 34px 30px;
+        cursor: default;
+
         .auction-header{
             display: flex;
             width: 100%;
@@ -19,6 +21,7 @@
         }
         .auctionIcon{
             margin-right: 20px;
+            cursor: grab;
         }
 
         .img_head{

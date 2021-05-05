@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
+import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
 import arrow from '../../assets/images/arrow.svg';
@@ -43,9 +44,6 @@ const Reward = () => {
     history.push('/reward-tiers', tierId);
   };
 
-  useEffect(() => {
-    console.log(auction);
-  });
   return (
     <div className="container reviw-reward">
       <div
@@ -113,7 +111,7 @@ const Reward = () => {
 
       <div className="rev-reward">
         {tierById.nfts.map((nft, index) => (
-          <div className="rev-reward__box">
+          <div className="rev-reward__box" key={uuid()}>
             <div className="rev-reward__box__image">
               {nft.previewImage.type === 'video/mp4' && (
                 <video
@@ -123,7 +121,7 @@ const Reward = () => {
                   onBlur={(event) => event.target.pause()}
                 >
                   <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                  <track kind="captions" {...props} />
+                  <track kind="captions" />
                   Your browser does not support the video tag.
                 </video>
               )}

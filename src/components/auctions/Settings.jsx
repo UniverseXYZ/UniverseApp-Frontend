@@ -174,6 +174,7 @@ const AuctionSettings = () => {
   };
 
   useEffect(() => {
+    console.log('auction', auction);
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
@@ -424,7 +425,7 @@ const AuctionSettings = () => {
                 auction.tiers.map((tier, _index) => (
                   <div className="tiers-part">
                     <span className="bid-type">
-                      <img src={bid.img} alt="icon" />
+                      {bid.img && <img src={bid.img} alt="icon" />}
                       <span className="button-name">{bid.name}</span>
                     </span>
                     <Input

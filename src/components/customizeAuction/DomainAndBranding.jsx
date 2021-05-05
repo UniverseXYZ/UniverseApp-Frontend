@@ -1,5 +1,6 @@
 import { Animated } from 'react-animated-css';
 import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import infoIcon from '../../assets/images/icon.svg';
@@ -8,7 +9,7 @@ import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
 
-const DomainAndBranding = () => {
+const DomainAndBranding = ({ values, onChange }) => {
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
   const [blur, setBlur] = useState(false);
@@ -20,7 +21,6 @@ const DomainAndBranding = () => {
 
   const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
-
   return (
     <div>
       <div className="domain__branding">
@@ -33,12 +33,14 @@ const DomainAndBranding = () => {
             <Input
               type="text"
               placeholder="Enter the auction name"
-              value={auctionHeadline}
-              onChange={(e) => setAuctionHeadline(e.target.value)}
+              value={values.headline}
+              onChange={(e) =>
+                onChange((prevValues) => ({ ...prevValues, headline: e.target.value }))
+              }
             />
-            {auctionHeadline.length === 0 && (
-              <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
-            )}
+            <p className="error__text">
+              &quot;Auction website link&quot; is not allowed to be empty
+            </p>
           </div>
           <div className="upload__promo">
             <div className="upload__promo__title">
@@ -72,15 +74,17 @@ const DomainAndBranding = () => {
                 type="file"
                 className="inp-disable"
                 ref={inputPromo}
-                onChange={(e) => setPromoImage(e.target.files[0])}
+                onChange={(e) =>
+                  onChange((prevValues) => ({ ...prevValues, promoImage: e.target.files[0] }))
+                }
               />
               <div className="promo__preview">
                 <h6>Preview</h6>
                 <div className="preview-div">
-                  {promoImage ? (
+                  {values.promoImage ? (
                     <img
                       className="preview__image"
-                      src={URL.createObjectURL(promoImage)}
+                      src={URL.createObjectURL(values.promoImage)}
                       alt="Promo"
                     />
                   ) : (
@@ -99,12 +103,10 @@ const DomainAndBranding = () => {
             </h5>
             <Input
               type="text"
-              value={auctionLink}
-              onChange={(e) => setAuctionLink(e.target.value)}
+              value={values.link}
+              onChange={(e) => onChange((prevValues) => ({ ...prevValues, link: e.target.value }))}
             />
-            {!auctionLink.startsWith('universe.xyz/3LAU/') && (
-              <p className="error__text">&quot;Auction link&quot; is not allowed to be empty</p>
-            )}
+            <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
           </div>
           <div className="upload__background">
             <div className="upload__background__title">
@@ -169,24 +171,19 @@ const DomainAndBranding = () => {
                 type="file"
                 className="inp-disable"
                 ref={inputBackground}
-                onChange={(e) => setBackgroundImage(e.target.files[0])}
+                onChange={(e) =>
+                  onChange((prevValues) => ({ ...prevValues, backgroundImage: e.target.files[0] }))
+                }
               />
               <div className="background__preview">
                 <h6>Preview</h6>
                 <div className="preview-div">
-                  {backgroundImage && (
-                    <>
-                      <img
-                        className="background__image"
-                        src={URL.createObjectURL(backgroundImage)}
-                        alt="background"
-                      />
-                      <img
-                        className="background__default__image"
-                        src={backgroundTransparent}
-                        alt="Background Trans"
-                      />
-                    </>
+                  {values.backgroundImage && (
+                    <img
+                      className="background__image"
+                      src={URL.createObjectURL(values.backgroundImage)}
+                      alt="background"
+                    />
                   )}
                   <img
                     className="background__default__image"
@@ -203,4 +200,20 @@ const DomainAndBranding = () => {
   );
 };
 
+DomainAndBranding.propTypes = {
+  values: PropTypes.exact({
+    headline: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    promoImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
+    backgroundImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+DomainAndBranding.defaultProps = {
+  values: {
+    promoImage: '',
+    backgroundImage: '',
+  },
+};
 export default DomainAndBranding;

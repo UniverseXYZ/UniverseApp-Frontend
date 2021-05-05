@@ -146,7 +146,7 @@ const App = () => {
         <Header />
         <Switch>
           <Route exact path="/" component={() => <Homepage />} />
-          <Route exact path="/minting-and-auctions/about" component={() => <About />} />
+          <Route exact path="/about" component={() => <About />} />
           <Route
             exact
             path="/minting-and-auctions/marketplace/active-auctions"

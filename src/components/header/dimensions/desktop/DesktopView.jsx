@@ -103,7 +103,7 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  history.push('/minting-and-auctions/about');
+                  history.push('/about');
                   setIsAboutDropdownOpened(false);
                 }}
               >

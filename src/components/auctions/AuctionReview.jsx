@@ -253,7 +253,7 @@ const AuctionReview = () => {
                             onBlur={(event) => event.target.pause()}
                           >
                             <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                            <track kind="captions" {...props} />
+                            <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
@@ -321,7 +321,7 @@ const AuctionReview = () => {
         </span>
         <h1>
           Creating an auction doesn’t launch it. You will be able to mint all the NFTs and set up a
-          landing page to host your launch. Once you launch anyone can start biddsing.
+          landing page to host your launch. Once you launch anyone can start bidding.
         </h1>
       </div>
       <Button className="light-button" onClick={handleSetAuction}>

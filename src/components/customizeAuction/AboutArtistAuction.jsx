@@ -22,10 +22,6 @@ const AboutArtistAuction = () => (
     <About />
     <PersonalLogo />
     <Social />
-    <div className="customize-buttons">
-      <Button className="light-button">Save and close</Button>
-      <Button className="light-border-button">Save and preview</Button>
-    </div>
   </div>
 );
 export default AboutArtistAuction;

@@ -12,6 +12,7 @@ import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
 
 const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   const { myNFTs, auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
@@ -408,11 +409,30 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
             <div className="img-div">
               {previewNFTs.map((nft, index) => (
                 <div key={nft.id} className="imgs">
-                  <img
-                    className="smallView-image"
-                    src={URL.createObjectURL(nft.previewImage)}
-                    alt={nft.name}
-                  />
+                  {nft.previewImage.type === 'video/mp4' && (
+                    <video
+                      className="smallView-image"
+                      onMouseOver={(event) => event.target.play()}
+                      onFocus={(event) => event.target.play()}
+                      onMouseOut={(event) => event.target.pause()}
+                      onBlur={(event) => event.target.pause()}
+                    >
+                      <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                      <track kind="captions" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                  {nft.previewImage.type === 'audio/mpeg' && (
+                    <img className="smallView-image" src={mp3Icon} alt={nft.name} />
+                  )}
+                  {nft.previewImage.type !== 'audio/mpeg' &&
+                    nft.previewImage.type !== 'video/mp4' && (
+                      <img
+                        className="smallView-image"
+                        src={URL.createObjectURL(nft.previewImage)}
+                        alt={nft.name}
+                      />
+                    )}
                   <img
                     className="del-img"
                     src={crossSmall}
