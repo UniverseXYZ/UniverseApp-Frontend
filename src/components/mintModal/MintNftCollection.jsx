@@ -54,10 +54,18 @@ const MintNftCollection = ({ onClick }) => {
 
   const handleCollectionName = (value) => {
     setCollectionName(value);
+    setErrors({
+      ...errors,
+      collectionName: !value ? '“Collection name” is not allowed to be empty' : '',
+    });
   };
 
   const handleTokenName = (value) => {
     setTokenName(value);
+    setErrors({
+      ...errors,
+      tokenName: !value ? 'Token name is not allowed to be empty' : '',
+    });
   };
 
   const handleSaveForLater = () => {
@@ -187,6 +195,7 @@ const MintNftCollection = ({ onClick }) => {
       const res = savedCollections.filter((item) => item.id === savedCollectionID);
       setCollectionName(res[0].name);
       setCoverImage(res[0].previewImage);
+      setTokenName(res[0].tokenName);
     }
   }, [collectionNFTs]);
 
@@ -200,6 +209,7 @@ const MintNftCollection = ({ onClick }) => {
               id: collectionName,
               previewImage: coverImage || randomColor(),
               name: collectionName,
+              tokenName,
             },
           ]);
           if (collectionNFTs.length) {
@@ -218,6 +228,7 @@ const MintNftCollection = ({ onClick }) => {
                     id: collectionName,
                     previewImage: coverImage || randomColor(),
                     name: collectionName,
+                    tokenName,
                   }
                 : item
             )
@@ -230,6 +241,7 @@ const MintNftCollection = ({ onClick }) => {
                     collectionId: collectionName,
                     collectionName,
                     collectionAvatar: coverImage,
+                    tokenName,
                   }
                 : item
             )
@@ -262,6 +274,7 @@ const MintNftCollection = ({ onClick }) => {
                 collectionId: collectionName,
                 collectionName,
                 collectionAvatar: coverImage || randomColor(),
+                tokenName,
                 previewImage: nft.previewImage,
                 name: nft.name,
                 description: nft.description,
@@ -380,7 +393,7 @@ const MintNftCollection = ({ onClick }) => {
                   onBlur={(event) => event.target.pause()}
                 >
                   <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                  <track kind="captions" {...props} />
+                  <track kind="captions" />
                   Your browser does not support the video tag.
                 </video>
               )}
@@ -428,7 +441,7 @@ const MintNftCollection = ({ onClick }) => {
                       {(close) => (
                         <RemovePopup
                           close={close}
-                          nftID={nft.id}
+                          nftID={Number(nft.id)}
                           removedItemName={nft.name}
                           removeFrom="collection"
                           collectionNFTs={collectionNFTs}
@@ -507,7 +520,7 @@ const MintNftCollection = ({ onClick }) => {
                       onBlur={(event) => event.target.pause()}
                     >
                       <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                      <track kind="captions" {...props} />
+                      <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
                   )}
@@ -556,7 +569,7 @@ const MintNftCollection = ({ onClick }) => {
                           {(close) => (
                             <RemovePopup
                               close={close}
-                              nftID={nft.id}
+                              nftID={Number(nft.id)}
                               removedItemName={nft.name}
                               removeFrom="collection"
                               collectionNFTs={collectionNFTs}
@@ -638,7 +651,7 @@ const MintNftCollection = ({ onClick }) => {
         </div>
       </div>
       {errors.collectible && <p className="error-message">{errors.collectible}</p>}
-      {(errors.collectionName !== '' || errors.tokenName !== '' || errors.collectible !== '') && (
+      {(errors.collectionName || errors.tokenName || errors.collectible) && (
         <div className="collection__final__error">
           <p className="error-message">
             Something went wrong. Please fix the errors in the fields above and try again. The
@@ -650,15 +663,27 @@ const MintNftCollection = ({ onClick }) => {
       <div className="collection-buttons">
         {!savedCollectionID ? (
           <>
-            <Button className="light-button" onClick={handleMinting}>
+            <Button
+              className="light-button"
+              onClick={handleMinting}
+              disabled={errors.collectionName || errors.tokenName || errors.collectible}
+            >
               Mint now
             </Button>
-            <Button className="light-border-button" onClick={handleSaveForLater}>
+            <Button
+              className="light-border-button"
+              onClick={handleSaveForLater}
+              disabled={errors.collectionName || errors.tokenName || errors.collectible}
+            >
               Save for later
             </Button>
           </>
         ) : (
-          <Button className="light-button" onClick={handleSaveForLater}>
+          <Button
+            className="light-button"
+            onClick={handleSaveForLater}
+            disabled={errors.collectionName || errors.tokenName || errors.collectible}
+          >
             Save changes
           </Button>
         )}

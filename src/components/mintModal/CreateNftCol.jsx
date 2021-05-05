@@ -137,6 +137,7 @@ const CreateNftCol = (props) => {
         setDescription(getCollectionNFT[0].description);
         setEditions(getCollectionNFT[0].numberOfEditions);
         setPreviewImage(getCollectionNFT[0].previewImage);
+        setProperties(getCollectionNFT[0].properties);
       }
       const getSavedNFT = savedNfts.filter((item) => item.id === collectionNFTsID);
       if (getSavedNFT.length) {
@@ -144,6 +145,7 @@ const CreateNftCol = (props) => {
         setDescription(getSavedNFT[0].description);
         setEditions(getSavedNFT[0].numberOfEditions);
         setPreviewImage(getSavedNFT[0].previewImage);
+        setProperties(getSavedNFT[0].properties);
       }
     }
   }, []);
@@ -170,6 +172,7 @@ const CreateNftCol = (props) => {
               description,
               numberOfEditions: Number(editions),
               generatedEditions,
+              properties,
               selected: false,
             },
           ]);
@@ -186,6 +189,7 @@ const CreateNftCol = (props) => {
                       description,
                       numberOfEditions: Number(editions),
                       generatedEditions,
+                      properties,
                     }
                   : item
               )
@@ -205,6 +209,7 @@ const CreateNftCol = (props) => {
                   description,
                   numberOfEditions: Number(editions),
                   generatedEditions,
+                  properties,
                   selected: false,
                 });
               } else {
@@ -219,6 +224,7 @@ const CreateNftCol = (props) => {
                   description: nft.description,
                   numberOfEditions: Number(nft.editions),
                   generatedEditions: nft.generatedEditions,
+                  properties,
                   selected: false,
                 });
               }
@@ -252,7 +258,7 @@ const CreateNftCol = (props) => {
         aria-hidden="true"
       >
         <img src={arrow} alt="back" />
-        <span>Create NFT collection</span>
+        <span>Create NFT Collection</span>
       </div>
       <div className="nft-collectible">
         <h2 className="nft-coll-title">
@@ -289,7 +295,7 @@ const CreateNftCol = (props) => {
                           {previewImage.type === 'video/mp4' && (
                             <video>
                               <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                              <track kind="captions" {...props} />
+                              <track kind="captions" />
                               Your browser does not support the video tag.
                             </video>
                           )}
@@ -319,14 +325,14 @@ const CreateNftCol = (props) => {
                           {previewImage.type === 'video/mp4' && (
                             <video controls autoPlay>
                               <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                              <track kind="captions" {...props} />
+                              <track kind="captions" />
                               Your browser does not support the video tag.
                             </video>
                           )}
                           {previewImage.type === 'audio/mpeg' && (
                             <audio controls autoPlay>
                               <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
-                              <track kind="captions" {...props} />
+                              <track kind="captions" />
                               Your browser does not support the audio element.
                             </audio>
                           )}
@@ -420,8 +426,9 @@ const CreateNftCol = (props) => {
                 )}
               </div>
 
-              {properties.map((elm) => (
-                <div className="properties" key={uuid()}>
+              {properties.map((elm, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div className="properties" key={i}>
                   <div className="property-name">
                     <h5>Property name</h5>
                     <Input
