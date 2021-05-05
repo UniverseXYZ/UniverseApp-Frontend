@@ -23,7 +23,6 @@
     font-weight: 600;
     font-size: 32px;
     line-height: 140%;
-    // letter-spacing: 0.2px;
     color: $black;
 
     @include sm {
@@ -33,6 +32,7 @@
   p {
     width: 58%;
     margin-top: 5px;
+    margin-bottom: 40px;
     font-family: $spaceGroteskFont;
     font-style: normal;
     font-weight: normal;
