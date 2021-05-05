@@ -123,7 +123,7 @@ const SavedNFTs = () => {
                       onBlur={(event) => event.target.pause()}
                     >
                       <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                      <track kind="captions" {...props} />
+                      <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
                   )}
@@ -173,7 +173,7 @@ const SavedNFTs = () => {
                           {(close) => (
                             <RemovePopup
                               close={close}
-                              nftID={nft.id}
+                              nftID={Number(nft.id)}
                               removedItemName={nft.name}
                               removeFrom="saved"
                             />

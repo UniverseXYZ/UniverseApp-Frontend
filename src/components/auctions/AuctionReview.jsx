@@ -251,7 +251,7 @@ const AuctionReview = () => {
                             onBlur={(event) => event.target.pause()}
                           >
                             <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                            <track kind="captions" {...props} />
+                            <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}

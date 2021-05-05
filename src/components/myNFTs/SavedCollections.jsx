@@ -108,7 +108,7 @@ const SavedCollections = () => {
                         {(close) => (
                           <RemovePopup
                             close={close}
-                            nftID={collection.id}
+                            nftID={Number(collection.id)}
                             removedItemName={collection.name}
                             removeFrom="savedCollection"
                           />

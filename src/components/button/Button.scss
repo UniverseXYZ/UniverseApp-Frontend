@@ -19,7 +19,7 @@
       background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
    }
    &:disabled{
-      background: #E6E6E6;
+      background: rgba(0, 0, 0, 0.05);
       color: rgba(0, 0, 0, 0.2);
       box-shadow: none;
    }
@@ -43,9 +43,10 @@
    color: $black;
    transition: 50ms ease-in;
    &:disabled{
-      border: 1px solid #E6E6E6;
-      color: #E6E6E6;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: rgba(0, 0, 0, 0.2);
       box-shadow: none;
+      background: $white;
    }
    &:hover{
       box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;

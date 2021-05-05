@@ -42,6 +42,7 @@ const MintSingleNft = ({ onClick }) => {
   const [royalities, setRoyalities] = useState(true);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
+  const [editableNFTType, setEditableNFTType] = useState('');
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -139,6 +140,9 @@ const MintSingleNft = ({ onClick }) => {
       setDescription(res[0].description);
       setEditions(res[0].numberOfEditions);
       setPreviewImage(res[0].previewImage);
+      setPercentAmount(res[0].percentAmount);
+      setProperties(res[0].properties);
+      setEditableNFTType(res[0].type);
     }
   }, []);
 
@@ -160,6 +164,8 @@ const MintSingleNft = ({ onClick }) => {
               description,
               numberOfEditions: editions,
               generatedEditions,
+              properties,
+              percentAmount,
               type: 'single',
               selected: false,
             },
@@ -175,6 +181,8 @@ const MintSingleNft = ({ onClick }) => {
                     description,
                     numberOfEditions: editions,
                     generatedEditions,
+                    properties,
+                    percentAmount,
                   }
                 : item
             )
@@ -206,6 +214,8 @@ const MintSingleNft = ({ onClick }) => {
                 description,
                 numberOfEditions: Number(editions),
                 generatedEditions: mintingGeneratedEditions,
+                properties,
+                percentAmount,
               },
             ]);
             setShowModal(false);
@@ -278,7 +288,7 @@ const MintSingleNft = ({ onClick }) => {
                         {previewImage.type === 'video/mp4' && (
                           <video>
                             <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                            <track kind="captions" {...props} />
+                            <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
@@ -308,14 +318,14 @@ const MintSingleNft = ({ onClick }) => {
                         {previewImage.type === 'video/mp4' && (
                           <video controls autoPlay>
                             <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                            <track kind="captions" {...props} />
+                            <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
                         {previewImage.type === 'audio/mpeg' && (
                           <audio controls autoPlay>
                             <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
-                            <track kind="captions" {...props} />
+                            <track kind="captions" />
                             Your browser does not support the audio element.
                           </audio>
                         )}
@@ -344,7 +354,15 @@ const MintSingleNft = ({ onClick }) => {
             className="inp"
             error={errors.name}
             placeholder="Enter NFT name"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              setErrors({
+                ...errors,
+                name: !e.target.value ? '“Name” is not allowed to be empty' : '',
+              });
+              setMintNowClick(false);
+              setSaveForLateClick(false);
+            }}
             value={name}
           />
         </div>
@@ -442,41 +460,43 @@ const MintSingleNft = ({ onClick }) => {
               Add property
             </h5>
           </div>
-          <div className="royalities">
-            <div className="title">
-              <h4>Royalities</h4>
-              <img src={infoIcon} alt="Info Icon" />
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={royalities}
-                  onChange={(e) => setRoyalities(e.target.checked)}
-                />
-                <span className="slider round" />
-              </label>
-            </div>
-            {royalities && (
-              <Animated animationIn="fadeIn">
-                <div className="percent__amount">
-                  <div className="inp__container">
-                    <Input
-                      type="text"
-                      label="Percent amount"
-                      inputMode="numeric"
-                      pattern="[0-9]"
-                      placeholder="Enter percent amount"
-                      value={percentAmount}
-                      onChange={(e) => handleInputChange(e.target.value)}
-                    />
-                    <span>%</span>
+          {editableNFTType !== 'collection' && (
+            <div className="royalities">
+              <div className="title">
+                <h4>Royalities</h4>
+                <img src={infoIcon} alt="Info Icon" />
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={royalities}
+                    onChange={(e) => setRoyalities(e.target.checked)}
+                  />
+                  <span className="slider round" />
+                </label>
+              </div>
+              {royalities && (
+                <Animated animationIn="fadeIn">
+                  <div className="percent__amount">
+                    <div className="inp__container">
+                      <Input
+                        type="text"
+                        label="Percent amount"
+                        inputMode="numeric"
+                        pattern="[0-9]"
+                        placeholder="Enter percent amount"
+                        value={percentAmount}
+                        onChange={(e) => handleInputChange(e.target.value)}
+                      />
+                      <span>%</span>
+                    </div>
+                    <span className="suggested">Suggested: 10%, 20%, 30%</span>
                   </div>
-                  <span className="suggested">Suggested: 10%, 20%, 30%</span>
-                </div>
-              </Animated>
-            )}
-          </div>
+                </Animated>
+              )}
+            </div>
+          )}
         </div>
-        {(errors.name !== '' || errors.edition !== '' || errors.previewImage !== '') && (
+        {(errors.name || errors.edition || errors.previewImage) && (
           <div className="single__final__error">
             <p className="error-message">
               Something went wrong. Please fix the errors in the fields above and try again. The
@@ -487,15 +507,27 @@ const MintSingleNft = ({ onClick }) => {
         <div className="single-nft-buttons">
           {!savedNFTsID ? (
             <>
-              <Button className="light-button" onClick={handleMinting}>
+              <Button
+                className="light-button"
+                onClick={handleMinting}
+                disabled={errors.name || errors.edition || errors.previewImage}
+              >
                 Mint now
               </Button>
-              <Button className="light-border-button" onClick={handleSaveForLater}>
+              <Button
+                className="light-border-button"
+                onClick={handleSaveForLater}
+                disabled={errors.name || errors.edition || errors.previewImage}
+              >
                 Save for later
               </Button>
             </>
           ) : (
-            <Button className="light-button" onClick={handleSaveForLater}>
+            <Button
+              className="light-button"
+              onClick={handleSaveForLater}
+              disabled={errors.name || errors.edition || errors.previewImage}
+            >
               Save changes
             </Button>
           )}
