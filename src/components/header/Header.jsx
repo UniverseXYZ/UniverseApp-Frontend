@@ -35,7 +35,7 @@ const Header = ({ location }) => {
     setShowMenu(false);
     if (
       location.pathname === '/' ||
-      location.pathname === '/minting-and-auctions/about' ||
+      location.pathname === '/about' ||
       location.pathname === '/minting-and-auctions/marketplace/active-auctions' ||
       location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
       location.pathname === '/team'

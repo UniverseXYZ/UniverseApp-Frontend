@@ -174,6 +174,7 @@ const AuctionSettings = () => {
   };
 
   useEffect(() => {
+    console.log('auction', auction);
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);

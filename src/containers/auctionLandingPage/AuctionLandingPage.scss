@@ -801,6 +801,10 @@
     }
 
     @include lg {
+      padding: 100px 20px;
+    }
+
+    @include md {
       padding: 60px 20px;
     }
   }
