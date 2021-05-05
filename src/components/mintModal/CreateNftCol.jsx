@@ -252,7 +252,7 @@ const CreateNftCol = (props) => {
         aria-hidden="true"
       >
         <img src={arrow} alt="back" />
-        <span>Create NFT COLLECTION</span>
+        <span>Create NFT collection</span>
       </div>
       <div className="nft-collectible">
         <h2 className="nft-coll-title">

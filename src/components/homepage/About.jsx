@@ -121,10 +121,7 @@ const About = () => {
                 build outs, we hope to one day turn these into mini DAOs along with an integrated
                 social network.
               </p>
-              <Button
-                className="light-button"
-                onClick={() => history.push('/minting-and-auctions/about')}
-              >
+              <Button className="light-button" onClick={() => history.push('/about')}>
                 Learn more
               </Button>
             </AnimatedOnScroll>
@@ -144,7 +141,7 @@ const About = () => {
               </p>
               <Button
                 className="light-button"
-                onClick={() => history.push('/minting-and-auctions/about')}
+                onClick={() => history.push('/about')}
                 style={{ marginBottom: '60px' }}
               >
                 Learn more

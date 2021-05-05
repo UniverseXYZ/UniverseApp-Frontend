@@ -238,7 +238,7 @@ const MobileView = (props) => {
                           type="button"
                           onClick={() => {
                             setShowMenu(false);
-                            history.push('/minting-and-auctions/about');
+                            history.push('/about');
                           }}
                         >
                           <img src={aboutIcon} alt="About" />

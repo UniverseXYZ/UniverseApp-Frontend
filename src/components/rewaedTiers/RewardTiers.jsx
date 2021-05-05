@@ -31,7 +31,7 @@ const RewardTiers = () => {
         aria-hidden="true"
       >
         <img src={arrow} alt="back" />
-        <span>My Auctions</span>
+        <span>My auctions</span>
       </div>
       <div>
         <div className="head-part">

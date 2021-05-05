@@ -45,7 +45,7 @@ const Footer = () => {
             <div className="minting-auctions">
               <ul>
                 <li>INFO</li>
-                <li onClick={() => history.push('/minting-and-auctions/about')} aria-hidden="true">
+                <li onClick={() => history.push('/about')} aria-hidden="true">
                   About
                 </li>
                 <li>Whitepaper</li>
