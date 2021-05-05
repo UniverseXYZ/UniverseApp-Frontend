@@ -221,69 +221,72 @@ const AuctionSettings = () => {
                   isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
                 }
               />
-              <Input
-                id="startingBid"
-                type="number"
-                onChange={handleOnChange}
-                label="Starting bid"
-                value={values.startingBid}
-                error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
-              />
-              <div className="drop-down">
-                <button type="button" onClick={() => handleShow()}>
-                  {bid.img && <img src={bid.img} alt="icon" />}
-                  <span className="button-name">{bid.name}</span>
-                  <img src={arrowDown} alt="arrow" />
-                </button>
-                <ul className="option-list" hidden={openList}>
-                  <li className="searchDiv">
-                    <div>
-                      <h1>Select bid token (ERC-20)</h1>
-                      <Input
-                        onChange={(e) => handleSearch(e.target.value)}
-                        value={searchByNameAndAddress}
-                        placeholder="Search name or paste ERC-20 contract address"
-                        className="searchInp"
-                      />
-                    </div>
-                  </li>
-                  {options
-                    .filter(
-                      (item) =>
-                        item.name.toLowerCase().includes(searchByNameAndAddress.toLowerCase()) ||
-                        item.address.toLowerCase().includes(searchByNameAndAddress.toLowerCase())
-                    )
-                    .map((item) => (
-                      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-                      <li
-                        key={item.value ? item.value : item.name}
-                        onClick={() => handleChange(item.value)}
-                        onKeyPress={() => handleChange(item.value)}
-                        onKeyDown={() => handleChange(item.value)}
+              <div className="starting-bid">
+                <Input
+                  id="startingBid"
+                  type="number"
+                  onChange={handleOnChange}
+                  label="Starting bid"
+                  value={values.startingBid}
+                  error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
+                />
+
+                <div className="drop-down">
+                  <button type="button" onClick={() => handleShow()}>
+                    {bid.img && <img src={bid.img} alt="icon" />}
+                    <span className="button-name">{bid.name}</span>
+                    <img src={arrowDown} alt="arrow" />
+                  </button>
+                  <ul className="option-list" hidden={openList}>
+                    <li className="searchDiv">
+                      <div>
+                        <h1>Select bid token (ERC-20)</h1>
+                        <Input
+                          onChange={(e) => handleSearch(e.target.value)}
+                          value={searchByNameAndAddress}
+                          placeholder="Search name or paste ERC-20 contract address"
+                          className="searchInp"
+                        />
+                      </div>
+                    </li>
+                    {options
+                      .filter(
+                        (item) =>
+                          item.name.toLowerCase().includes(searchByNameAndAddress.toLowerCase()) ||
+                          item.address.toLowerCase().includes(searchByNameAndAddress.toLowerCase())
+                      )
+                      .map((item) => (
+                        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+                        <li
+                          key={item.value ? item.value : item.name}
+                          onClick={() => handleChange(item.value)}
+                          onKeyPress={() => handleChange(item.value)}
+                          onKeyDown={() => handleChange(item.value)}
+                        >
+                          <div className="img-name">
+                            {item.img ? (
+                              <img src={item.img} alt="icon" />
+                            ) : (
+                              <span className="imgDefSpan" />
+                            )}
+                            <span className="dai-name">{item.name}</span>
+                          </div>
+                          {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
+                        </li>
+                      ))}
+                    <div className="token-div">
+                      <Popup
+                        trigger={
+                          <button type="button" className="light-border-button add-token">
+                            Add token
+                          </button>
+                        }
                       >
-                        <div className="img-name">
-                          {item.img ? (
-                            <img src={item.img} alt="icon" />
-                          ) : (
-                            <span className="imgDefSpan" />
-                          )}
-                          <span className="dai-name">{item.name}</span>
-                        </div>
-                        {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
-                      </li>
-                    ))}
-                  <div className="token-div">
-                    <Popup
-                      trigger={
-                        <button type="button" className="light-border-button add-token">
-                          Add token
-                        </button>
-                      }
-                    >
-                      {(close) => <AddToken onClose={close} />}
-                    </Popup>
-                  </div>
-                </ul>
+                        {(close) => <AddToken onClose={close} />}
+                      </Popup>
+                    </div>
+                  </ul>
+                </div>
               </div>
             </div>
             <div className="infoDiv">
@@ -422,7 +425,7 @@ const AuctionSettings = () => {
                   <div className="tiers-part">
                     <span className="bid-type">
                       <img src={bid.img} alt="icon" />
-                      <spam className="button-name">{bid.name}</spam>
+                      <span className="button-name">{bid.name}</span>
                     </span>
                     <Input
                       type="number"

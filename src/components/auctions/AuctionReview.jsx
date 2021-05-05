@@ -124,22 +124,24 @@ const AuctionReview = () => {
                 <p>Auction name</p>
                 <span>{auction.name}</span>
               </div>
-              <div className="bidToken">
-                <p>Bid token (ERC-20)</p>
-                <span className="bidtype">
-                  {bidicon && <img src={bidicon} alt="icon" />}
-                  {bidtype}
-                </span>
-              </div>
-              <div className="startingBid">
-                <p>Starting bid</p>
-                <span>{auction.startingBid}</span>
-              </div>
-            </div>
-            <div className="date-part">
               <div className="startDate">
                 <p>Start date</p>
                 <span>{moment(auction.startDate).format('MMMM DD, YYYY')}</span>
+              </div>
+            </div>
+            <div className="date-part">
+              <div className="bid-part">
+                <div className="bidToken">
+                  <p>Bid token (ERC-20)</p>
+                  <span className="bidtype">
+                    {bidicon && <img src={bidicon} alt="icon" />}
+                    {bidtype}
+                  </span>
+                </div>
+                <div className="startingBid">
+                  <p>Starting bid</p>
+                  <span>{auction.startingBid}</span>
+                </div>
               </div>
               <div className="endDate">
                 <p>End date</p>
