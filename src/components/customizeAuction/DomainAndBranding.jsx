@@ -204,8 +204,8 @@ DomainAndBranding.propTypes = {
   values: PropTypes.exact({
     headline: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
-    promoImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
-    backgroundImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
+    promoImage: PropTypes.oneOfType([PropTypes.any]),
+    backgroundImage: PropTypes.oneOfType([PropTypes.any]),
   }),
   onChange: PropTypes.func.isRequired,
 };
