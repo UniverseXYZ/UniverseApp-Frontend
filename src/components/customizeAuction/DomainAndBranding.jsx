@@ -29,12 +29,17 @@ const DomainAndBranding = ({ values, onChange }) => {
       <div className="headline__link">
         <div className="auction__headline">
           <div className="auction__headline__input">
-            <h5>Auction headline</h5>
+            <div className="auction__headline__title">
+              <h5>Auction headline</h5>
+              <p>{values.headline.length}/150</p>
+            </div>
+
             <Input
               type="text"
               placeholder="Enter the auction name"
               value={values.headline}
               onChange={(e) =>
+                e.target.value.length <= 150 &&
                 onChange((prevValues) => ({ ...prevValues, headline: e.target.value }))
               }
             />

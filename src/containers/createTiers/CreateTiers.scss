@@ -37,12 +37,16 @@
   .button-div {
     position: relative;
     display: flex;
-    align-items: center;
+    // align-items: center;
     justify-content: space-between;
     margin-top: 20px;
     // margin-top: 4%;
     .light-border-button {
       margin-right: 12px;
+      @include sm {
+        margin-right: 0%;
+        margin-bottom: 15px;
+      }
     }
     .btns {
       display: flex;
@@ -53,6 +57,8 @@
     }
     .total-num {
       position: relative;
+      display: flex;
+      white-space: break-spaces;
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: normal;
