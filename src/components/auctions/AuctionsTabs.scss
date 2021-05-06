@@ -11,6 +11,7 @@
     border-radius: 10px;
     padding: 34px 30px;
     margin-bottom: 24px;
+    cursor: default;
 
     @include sm {
       padding: 20px 16px;
@@ -614,6 +615,7 @@
   .auction-header {
     .auctionIcon {
       margin-right: 20px;
+      cursor: grab;
     }
 
     .img_head {

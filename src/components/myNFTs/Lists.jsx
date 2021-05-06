@@ -47,6 +47,10 @@ const Lists = ({ data, perPage, offset }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(selectedNFTIds);
+  }, [selectedNFTIds]);
+
   return (
     <div className="nfts__lists">
       {sliceData.map((nft, index) => (
@@ -69,7 +73,9 @@ const Lists = ({ data, perPage, offset }) => {
                   tierById.winners <= nft.generatedEditions.length && (
                     <>
                       <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
-                      <span className="selected-number">0/{tierById.winners}</span>{' '}
+                      <span className="selected-number">
+                        {selectedNFTIds.length}/{tierById.winners}
+                      </span>{' '}
                     </>
                   )}
                 {tierById && tierById.winners > nft.generatedEditions.length && (

@@ -6,12 +6,20 @@ import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import FutureAuctions from './FutureAuctions';
-import ActiveAictions from './ActiveAuctions';
+import ActiveAuctions from './ActiveAuctions';
 import PastAuctions from './PastAuctions';
 
 const MyAuction = () => {
-  const { selectedTabIndex, setSelectedTabIndex } = useContext(AppContext);
+  const {
+    selectedTabIndex,
+    setSelectedTabIndex,
+    myAuctions,
+    setMyAuctions,
+    auction,
+    setAuction,
+  } = useContext(AppContext);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
+  const history = useHistory();
 
   const handleTabRightScrolling = () => {
     let scrollAmount = 0;
@@ -66,7 +74,12 @@ const MyAuction = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const history = useHistory();
+  useEffect(() => {
+    if (auction.tiers.length) {
+      setMyAuctions([...myAuctions, auction]);
+      setAuction({ tiers: [] });
+    }
+  }, []);
 
   return (
     <div className="container auction__page">
@@ -123,48 +136,64 @@ const MyAuction = () => {
             <span> Go to my profile.</span>
           </p>
         </div>
-        {selectedTabIndex === 0 && AUCTIONS_DATA.length > 0 && <ActiveAictions />}
-        {selectedTabIndex === 0 && AUCTIONS_DATA.length === 0 && (
-          <>
-            <div className="empty__auction">
-              <h3>No active auctions found</h3>
-              <p className="desc">Create your first auction by clicking the button below</p>
-              <button type="button" className="set_up">
-                Set up auction
-              </button>
-            </div>
-          </>
+        {selectedTabIndex === 0 && myAuctions.length ? (
+          <ActiveAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
+        ) : (
+          <></>
         )}
-        {selectedTabIndex === 1 && AUCTIONS_DATA.length > 0 && <FutureAuctions />}
-        {selectedTabIndex === 1 && AUCTIONS_DATA.length === 0 && (
-          <>
-            <div className="empty__auction">
-              <h3>No scheduled auctions found</h3>
-              <p className="desc">Create your first auction by clicking the button below</p>
-              <button type="button" className="set_up">
-                Set up auction
-              </button>
-            </div>
-          </>
+        {selectedTabIndex === 0 && !myAuctions.length ? (
+          <div className="empty__auction">
+            <h3>No active auctions found</h3>
+            <p className="desc">Create your first auction by clicking the button below</p>
+            <button
+              type="button"
+              className="set_up"
+              onClick={() => {
+                history.push('/reward-tiers');
+              }}
+            >
+              Set up auction
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
+        {selectedTabIndex === 1 && AUCTIONS_DATA.length ? <FutureAuctions /> : <></>}
+        {selectedTabIndex === 1 && !AUCTIONS_DATA.length ? (
+          <div className="empty__auction">
+            <h3>No scheduled auctions found</h3>
+            <p className="desc">Create your first auction by clicking the button below</p>
+            <button
+              type="button"
+              className="set_up"
+              onClick={() => {
+                history.push('/reward-tiers');
+              }}
+            >
+              Set up auction
+            </button>
+          </div>
+        ) : (
+          <></>
         )}
 
-        {selectedTabIndex === 2 && AUCTIONS_DATA.length > 0 && <PastAuctions />}
-        {selectedTabIndex === 2 && AUCTIONS_DATA.length === 0 && (
-          <>
-            <div className="empty__auction">
-              <h3>No past auctions found</h3>
-              <p className="desc">Create your first auction by clicking the button below</p>
-              <button
-                type="button"
-                className="set-up"
-                onClick={() => {
-                  history.push('/reward-tiers');
-                }}
-              >
-                Set up auction
-              </button>
-            </div>
-          </>
+        {selectedTabIndex === 2 && AUCTIONS_DATA.length ? <PastAuctions /> : <></>}
+        {selectedTabIndex === 2 && !AUCTIONS_DATA.length ? (
+          <div className="empty__auction">
+            <h3>No past auctions found</h3>
+            <p className="desc">Create your first auction by clicking the button below</p>
+            <button
+              type="button"
+              className="set_up"
+              onClick={() => {
+                history.push('/reward-tiers');
+              }}
+            >
+              Set up auction
+            </button>
+          </div>
+        ) : (
+          <></>
         )}
       </div>
     </div>
