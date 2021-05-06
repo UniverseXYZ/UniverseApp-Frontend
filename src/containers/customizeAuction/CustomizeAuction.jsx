@@ -11,7 +11,6 @@ import AppContext from '../../ContextAPI';
 const CustomizeAuction = () => {
   const history = useHistory();
   const { auction, setAuction } = useContext(AppContext);
-  console.log(auction);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
     link: '',
@@ -21,7 +20,7 @@ const CustomizeAuction = () => {
   const [rewardTiersAuction, setRewardTiersAuction] = useState(
     auction.tiers.map((tier) => ({ id: tier.id }))
   );
-  console.log(rewardTiersAuction);
+
   const handleSaveClose = () => {
     if (domainAndBranding.headline && domainAndBranding.link) {
       let descriptionCount = 0;
@@ -34,8 +33,9 @@ const CustomizeAuction = () => {
         }
         if (descriptionCount === rewardTiersAuction.length) desc = true;
       }
-      if (desc === true) {
-        // auction.tiers.map((tier,index) => )
+      if (desc) {
+        console.log('desc = true');
+        history.push('/my-auctions');
         setAuction((prevValues) => ({
           ...prevValues,
           headline: domainAndBranding.headline,
@@ -49,7 +49,6 @@ const CustomizeAuction = () => {
         }));
       }
     }
-    console.log(auction);
   };
 
   const handleSavePreview = () => {

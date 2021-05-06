@@ -129,6 +129,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
         { ...tierById, nfts: prevNFTs },
       ],
     });
+    setSelectedNFTIds([]);
     history.push('/review-reward', tierId);
   };
 
