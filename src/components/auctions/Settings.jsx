@@ -147,7 +147,7 @@ const AuctionSettings = () => {
         endDate: moment(values.endDate).format(),
         tiers: minBid
           ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
-          : prevValues.tiers,
+          : prevValue.tiers,
       }));
       history.push('/auction-review', location.pathname);
     }

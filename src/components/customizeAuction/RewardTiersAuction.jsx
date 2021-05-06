@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
@@ -7,10 +7,9 @@ import CustomColorPicker from './CustomColorPicker';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {
-  const inputImg = useRef(null);
-
-  const [tierImg, setTierImg] = useState(null);
   const { auction, setAuction, bidtype } = useContext(AppContext);
+  const arrLength = auction.tiers.length;
+  const [elRefs, setElRefs] = useState([]);
 
   const handleDescriptionChange = (event, tierId) => {
     onChange((prevValues) =>
@@ -23,6 +22,14 @@ const RewardTiersAuction = ({ values, onChange }) => {
       })
     );
   };
+
+  useEffect(() => {
+    setElRefs((elr) =>
+      Array(arrLength)
+        .fill()
+        .map((_, i) => elr[i] || React.createRef())
+    );
+  }, [arrLength]);
 
   const handleUploadImage = (event, tierId) => {
     onChange((prevValues) =>
@@ -40,7 +47,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
     <div className="reward__tiers">
       <h3>Reward Tiers</h3>
       {auction &&
-        auction.tiers.map((tier) => {
+        auction.tiers.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
           const image = values.find((valuesTier) => valuesTier.id === tier.id).tierImg;
 
@@ -98,14 +105,14 @@ const RewardTiersAuction = ({ values, onChange }) => {
                       <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
                       <Button
                         className="light-border-button"
-                        onClick={() => inputImg.current.click()}
+                        onClick={() => elRefs[i].current.click()}
                       >
                         Choose file
                       </Button>
                       <input
                         type="file"
                         className="inp-disable"
-                        ref={inputImg}
+                        ref={elRefs[i]}
                         onChange={(e) => handleUploadImage(e, tier.id)}
                       />
                     </div>
@@ -140,7 +147,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
 RewardTiersAuction.propTypes = {
   values: PropTypes.exact({
     description: PropTypes.string.isRequired,
-    tierImg: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
+    tierImg: PropTypes.oneOfType([PropTypes.any]),
   }),
   onChange: PropTypes.func.isRequired,
 };

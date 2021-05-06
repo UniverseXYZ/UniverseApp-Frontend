@@ -85,7 +85,7 @@ const Reward = () => {
         <div className="totalNft">
           <p>
             Total NFTs:&nbsp;<b>{tierById.winners * tierById.nftsPerWinner}</b>
-            <div className="total__nfts__info">
+            <span className="total__nfts__info">
               {hideIcon && (
                 <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                   <div className="info-text">
@@ -104,7 +104,7 @@ const Reward = () => {
                 src={infoIcon}
                 alt="total"
               />
-            </div>
+            </span>
           </p>
         </div>
       </div>
