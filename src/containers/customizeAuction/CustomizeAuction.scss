@@ -99,6 +99,20 @@
 
       .auction__headline__input {
         margin-bottom: 42px;
+
+        .auction__headline__title {
+          display: flex;
+          justify-content: space-between;
+
+          p {
+            font-family: $spaceGroteskFont;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 12px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.4);
+          }
+        }
       }
 
       .upload__promo {

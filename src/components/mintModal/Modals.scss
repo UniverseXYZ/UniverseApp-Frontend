@@ -14,6 +14,7 @@
   @include sm {
     height: 90%;
     top: 87px;
+    border-radius: 12px 12px 0 0;
   }
 }
 .whole-modal {
@@ -1533,7 +1534,7 @@
         }
 
         input:checked + .slider {
-          background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+          background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
         }
 
         input:checked + .slider:before {

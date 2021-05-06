@@ -40,8 +40,12 @@
       width: 100%;
 
       button {
+        white-space: nowrap;
         @include md {
           margin-top: 20px;
+        }
+        @include sm {
+          width: 100%;
         }
       }
 
@@ -175,26 +179,6 @@
         width: 14px;
         height: 14px;
       }
-
-      // .launch-info{
-      //     position: absolute;
-      //     z-index: 2;
-      //     padding: 16px;
-      //     width: 224px;
-      //     background: $white;
-      //     border-radius: 12px;
-      //     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-      //     top: -100px;
-      //     left: 136px;
-
-      //     p{
-      //         font-family: $spaceGroteskFont;
-      //         font-weight: 300;
-      //         font-size: 12px;
-      //         line-height: 150%;
-      //         color: $black;
-      //     }
-      // }
     }
 
     .end-date-error {
@@ -232,7 +216,7 @@
     display: flex;
     text-align: center;
     justify-content: space-between;
-    margin: 30px 34px 64px 64px;
+    margin: 30px 43px 64px 73px;
 
     h6 {
       font-family: $spaceGroteskFont;
@@ -291,7 +275,7 @@
           }
 
           @include lg {
-            width: 160px;
+            width: 180px;
           }
         }
       }
@@ -320,10 +304,13 @@
           }
 
           @include lg {
-            width: 190px;
+            width: 220px;
           }
         }
       }
+    }
+    @include lg {
+      margin: 30px 18px 60px 33px;
     }
     @include md {
       display: none;
@@ -375,6 +362,9 @@
         margin-bottom: 10px;
       }
       button {
+        @include md {
+          width: 255px;
+        }
         @include sm {
           width: 100%;
         }
@@ -423,6 +413,10 @@
           line-height: 150%;
           color: $black;
           margin-right: 22px;
+
+          @include md {
+            margin-bottom: 10px;
+          }
         }
         .tier-header-description {
           display: flex;
@@ -514,7 +508,7 @@
     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
     border-radius: 12px;
     width: 251px;
-    height: 87px;
+    height: fit-content;
     padding: 16px;
     font-size: 12px;
     font-family: $spaceGroteskFont;

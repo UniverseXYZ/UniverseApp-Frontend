@@ -15,7 +15,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
   const handleDescriptionChange = (event, tierId) => {
     onChange((prevValues) =>
       prevValues.map((tier) => {
-        if (tier.id === tierId) {
+        if (tier.id === tierId && event.target.value.length <= 600) {
           return { ...tier, description: event.target.value };
         }
 
@@ -40,9 +40,10 @@ const RewardTiersAuction = ({ values, onChange }) => {
     <div className="reward__tiers">
       <h3>Reward Tiers</h3>
       {auction &&
-        auction.tiers.map((tier) => {
+        auction.tiers.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
           const image = values.find((valuesTier) => valuesTier.id === tier.id).tierImg;
+          // console.log(values[0].description.length);
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -78,7 +79,10 @@ const RewardTiersAuction = ({ values, onChange }) => {
                 <div className="custom__description">
                   <div className="custom__description__title">
                     <h4>Custom description</h4>
-                    <p>0/600</p>
+                    <p>
+                      {values[i].description ? values[i].description.length : 0}
+                      /600
+                    </p>
                   </div>
                   <textarea
                     className="inp"
