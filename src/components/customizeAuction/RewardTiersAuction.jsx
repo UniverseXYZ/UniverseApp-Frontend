@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-shadow */
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
@@ -17,7 +19,6 @@ const RewardTiersAuction = ({ values, onChange }) => {
         if (tier.id === tierId && event.target.value.length <= 600) {
           return { ...tier, description: event.target.value };
         }
-
         return tier;
       })
     );
@@ -98,7 +99,9 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     value={values.find((valuesTier) => valuesTier.id === tier.id).description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
-                  <p className="error__text">Fill out the description</p>
+                  {!values.find((valuesTier) => valuesTier.id === tier.id).description?.trim() && (
+                    <p className="error__text">Fill out the description</p>
+                  )}
                 </div>
                 <div className="upload__image">
                   <h4>Upload tier image (optional)</h4>

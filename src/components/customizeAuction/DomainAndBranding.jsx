@@ -18,9 +18,22 @@ const DomainAndBranding = ({ values, onChange }) => {
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
-
+  const [validLink, setValidLink] = useState(false);
+  const [validHeadline, setValidHeadline] = useState(false);
   const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
+
+  const handleLink = (e) => {
+    onChange((prevValues) => ({ ...prevValues, link: e.target.value }));
+    setValidLink(e.target.value.trim().length !== 0);
+  };
+
+  const handleHeadline = (e) => {
+    if (e.target.value.length <= 150) {
+      onChange((prevValues) => ({ ...prevValues, headline: e.target.value }));
+      setValidHeadline(e.target.value.trim().length !== 0);
+    }
+  };
   return (
     <div>
       <div className="domain__branding">
@@ -38,14 +51,13 @@ const DomainAndBranding = ({ values, onChange }) => {
               type="text"
               placeholder="Enter the auction name"
               value={values.headline}
-              onChange={(e) =>
-                e.target.value.length <= 150 &&
-                onChange((prevValues) => ({ ...prevValues, headline: e.target.value }))
-              }
+              onChange={handleHeadline}
             />
-            <p className="error__text">
-              &quot;Auction website link&quot; is not allowed to be empty
-            </p>
+            {!validHeadline && (
+              <p className="error__text">
+                &quot;Auction website link&quot; is not allowed to be empty
+              </p>
+            )}
           </div>
           <div className="upload__promo">
             <div className="upload__promo__title">
@@ -106,12 +118,10 @@ const DomainAndBranding = ({ values, onChange }) => {
             <h5>
               Auction link <img src={infoIcon} alt="Info" />
             </h5>
-            <Input
-              type="text"
-              value={values.link}
-              onChange={(e) => onChange((prevValues) => ({ ...prevValues, link: e.target.value }))}
-            />
-            <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
+            <Input type="text" value={values.link} onChange={handleLink} />
+            {!validLink && (
+              <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
+            )}
           </div>
           <div className="upload__background">
             <div className="upload__background__title">
@@ -209,8 +219,8 @@ DomainAndBranding.propTypes = {
   values: PropTypes.exact({
     headline: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
-    promoImage: PropTypes.oneOfType([PropTypes.any]),
-    backgroundImage: PropTypes.oneOfType([PropTypes.any]),
+    promoImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
+    backgroundImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
   }),
   onChange: PropTypes.func.isRequired,
 };
