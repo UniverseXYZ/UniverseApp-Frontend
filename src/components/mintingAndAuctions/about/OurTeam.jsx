@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import TimKangImg from '../../../assets/images/Tim-Kang.png';
 import TylerWardImg from '../../../assets/images/Tyler-Ward.png';
 import TroyMurrayImg from '../../../assets/images/Troy-Murray.png';
-import JustinBlauImg from '../../../assets/images/Justin-Blau.png';
+import JustinBlauImg from '../../../assets/images/Justin-3LAU.png';
 import RyanShtirmerImg from '../../../assets/images/Ryan-Shtirmer.png';
 import Button from '../../button/Button';
 

@@ -122,23 +122,10 @@
             justify-content: center;
             margin-right: 16px;
             &.show__avatar {
-              background: conic-gradient(
-                  from 176.21deg at 50% 50%,
-                  #000000 -24.66deg,
-                  #ffffff 0.25deg,
-                  #000000 50.63deg,
-                  #000000 51.97deg,
-                  #ffffff 88.12deg,
-                  #000000 142.5deg,
-                  #ffffff 196.87deg,
-                  #000000 256.87deg,
-                  #ffffff 300deg,
-                  #000000 335.2deg,
-                  #000000 335.34deg,
-                  #ffffff 360.25deg
-                ),
-                radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
-              background-blend-mode: screen, normal;
+              background-image: url('../../assets/images/artist_card_bg.png');
+              background-position: center;
+              background-size: cover;
+              background-repeat: no-repeat;
               img.original {
                 display: none;
               }
@@ -200,23 +187,10 @@
           align-items: center;
           justify-content: center;
           &.show__avatar {
-            background: conic-gradient(
-                from 176.21deg at 50% 50%,
-                #000000 -24.66deg,
-                #ffffff 0.25deg,
-                #000000 50.63deg,
-                #000000 51.97deg,
-                #ffffff 88.12deg,
-                #000000 142.5deg,
-                #ffffff 196.87deg,
-                #000000 256.87deg,
-                #ffffff 300deg,
-                #000000 335.2deg,
-                #000000 335.34deg,
-                #ffffff 360.25deg
-              ),
-              radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
-            background-blend-mode: screen, normal;
+            background-image: url('../../assets/images/artist_card_bg.png');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
             img.original {
               display: none;
             }
@@ -1114,7 +1088,7 @@
   .place__bid__section {
     position: relative;
     padding: 65px 60px;
-    background-image: url('../../assets/images/place-bid-bg.png');
+    background-image: url('../../assets/images/place-bid-bg-desktop.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -1169,6 +1143,7 @@
             font-size: 16px;
             line-height: 20px;
             background: -webkit-linear-gradient(right, #00eaea, #bceb00);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-right: 10px;
@@ -1187,8 +1162,13 @@
         justify-content: center;
       }
     }
+    @include lg {
+      padding: 65px 20px;
+      background-image: url('../../assets/images/place-bid-bg-tablet.png');
+    }
     @include sm {
       padding: 65px 20px;
+      background-image: url('../../assets/images/place-bid-bg-mobile.png');
     }
   }
 }

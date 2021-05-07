@@ -147,7 +147,7 @@ const AuctionSettings = () => {
         endDate: moment(values.endDate).format(),
         tiers: minBid
           ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
-          : prevValues.tiers,
+          : prevValue.tiers,
       }));
       history.push('/auction-review', location.pathname);
     }
@@ -174,7 +174,6 @@ const AuctionSettings = () => {
   };
 
   useEffect(() => {
-    console.log('auction', auction);
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);

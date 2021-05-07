@@ -1,4 +1,6 @@
-import React, { useRef, useState, useContext } from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-shadow */
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
@@ -7,10 +9,9 @@ import CustomColorPicker from './CustomColorPicker';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {
-  const inputImg = useRef(null);
-
-  const [tierImg, setTierImg] = useState(null);
   const { auction, setAuction, bidtype } = useContext(AppContext);
+  const arrLength = auction.tiers.length;
+  const [elRefs, setElRefs] = useState([]);
 
   const handleDescriptionChange = (event, tierId) => {
     onChange((prevValues) =>
@@ -18,11 +19,18 @@ const RewardTiersAuction = ({ values, onChange }) => {
         if (tier.id === tierId && event.target.value.length <= 600) {
           return { ...tier, description: event.target.value };
         }
-
         return tier;
       })
     );
   };
+
+  useEffect(() => {
+    setElRefs((elr) =>
+      Array(arrLength)
+        .fill()
+        .map((_, i) => elr[i] || React.createRef())
+    );
+  }, [arrLength]);
 
   const handleUploadImage = (event, tierId) => {
     onChange((prevValues) =>
@@ -91,7 +99,9 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     value={values.find((valuesTier) => valuesTier.id === tier.id).description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
-                  <p className="error__text">Fill out the description</p>
+                  {!values.find((valuesTier) => valuesTier.id === tier.id).description?.trim() && (
+                    <p className="error__text">Fill out the description</p>
+                  )}
                 </div>
                 <div className="upload__image">
                   <h4>Upload tier image (optional)</h4>
@@ -102,14 +112,14 @@ const RewardTiersAuction = ({ values, onChange }) => {
                       <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
                       <Button
                         className="light-border-button"
-                        onClick={() => inputImg.current.click()}
+                        onClick={() => elRefs[i].current.click()}
                       >
                         Choose file
                       </Button>
                       <input
                         type="file"
                         className="inp-disable"
-                        ref={inputImg}
+                        ref={elRefs[i]}
                         onChange={(e) => handleUploadImage(e, tier.id)}
                       />
                     </div>
@@ -144,7 +154,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
 RewardTiersAuction.propTypes = {
   values: PropTypes.exact({
     description: PropTypes.string.isRequired,
-    tierImg: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
+    tierImg: PropTypes.oneOfType([PropTypes.any]),
   }),
   onChange: PropTypes.func.isRequired,
 };

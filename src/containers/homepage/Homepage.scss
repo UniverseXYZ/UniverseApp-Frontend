@@ -603,7 +603,7 @@
     .buy__universe__nfts__section {
         position: relative;
         padding: 80px 60px;
-        background-image: url('../../assets/images/buy-universe-nft-bg.png');
+        background-image: url('../../assets/images/buy-universe-nft-bg-desktop.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -676,8 +676,14 @@
                 justify-items: center;
             }
         }
+        @include lg {
+            background-image: url('../../assets/images/buy-universe-nft-bg-tablet.png');
+        }
         @include md {
             padding: 60px 20px;
+        }
+        @include sm {
+            background-image: url('../../assets/images/buy-universe-nft-bg-mobile.png');
         }
     }
 }
