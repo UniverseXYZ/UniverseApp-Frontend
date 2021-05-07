@@ -18,7 +18,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 1,
     title: 'Auction1',
-    image: auctionImg,
+    image: null,
     background: null,
     artist: {
       id: 1,
