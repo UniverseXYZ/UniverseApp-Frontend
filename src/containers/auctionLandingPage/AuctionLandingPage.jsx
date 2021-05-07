@@ -12,22 +12,21 @@ import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 
 const AuctionLandingPage = () => {
   const location = useLocation();
-  const auction = location.state
-    ? PLACEHOLDER_ACTIVE_AUCTIONS.filter((act) => act.id === location.state.id)[0]
-    : null;
-  const artist = PLACEHOLDER_ARTISTS.filter((a) => a.id === auction?.artist.id)[0];
+  const selectedAuction = location.state ? location.state.auction : null;
+  const artist = selectedAuction?.artist;
 
   const [bidders, setBidders] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = `Universe Minting - Auction - ${auction?.title}`;
-    if (auction) {
+    document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
+    console.log('selectedAuction', selectedAuction);
+    if (selectedAuction) {
       // Fake data for testing
       setBidders([
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'Whaleshark',
           bid: 10,
@@ -35,7 +34,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'WeirdWoman',
           bid: 24,
@@ -43,7 +42,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'TopBidder',
           bid: 13.5,
@@ -51,7 +50,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'Weird Man',
           bid: 23,
@@ -59,7 +58,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'Weird Man',
           bid: 20,
@@ -67,7 +66,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'Weird Man',
           bid: 40,
@@ -75,7 +74,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'WeirdWoman',
           bid: 5,
@@ -83,7 +82,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'TopBidder',
           bid: 9,
@@ -91,7 +90,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'Warden',
           bid: 17,
@@ -99,7 +98,7 @@ const AuctionLandingPage = () => {
         },
         {
           id: uuid(),
-          aucionId: auction.id,
+          aucionId: selectedAuction.id,
           artistId: uuid(),
           name: 'Weird Man',
           bid: 6.8,
@@ -110,17 +109,17 @@ const AuctionLandingPage = () => {
     return () => {
       document.title = 'Universe Minting';
     };
-  }, [auction]);
+  }, [selectedAuction]);
 
-  return auction ? (
+  return selectedAuction ? (
     <div className="auction__landing__page">
-      <AuctionDetails onAuction={auction} bidders={bidders} setBidders={setBidders} />
+      <AuctionDetails onAuction={selectedAuction} bidders={bidders} setBidders={setBidders} />
       <UniverseAuctionDetails />
-      <RewardTiers auction={auction} />
+      {/* <RewardTiers auction={selectedAuction} /> */}
       <AuctionOwnerDetails artist={artist} />
-      <PlaceBid auction={auction} bidders={bidders} setBidders={setBidders} />
+      {/* <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} /> */}
       <div className="artist__personal__logo">
-        <img src={artist.personalLogo} alt="Artist personal logo" />
+        <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
       </div>
     </div>
   ) : (

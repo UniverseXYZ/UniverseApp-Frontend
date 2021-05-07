@@ -20,7 +20,7 @@ const AuctionOwnerDetails = ({ artist }) => {
         <AnimatedOnScroll animationIn="zoomIn">
           <div className="artist__details__section__container">
             <div className="avatar">
-              <img src={artist.avatar} alt={artist.name} />
+              <img src={URL.createObjectURL(artist.avatar)} alt={artist.name} />
               <h2 className="show__on__mobile">{artist.name}</h2>
             </div>
             <div className="info">

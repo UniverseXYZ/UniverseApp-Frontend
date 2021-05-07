@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
+import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 import Button from '../../components/button/Button';
 import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding';
@@ -10,7 +11,7 @@ import AppContext from '../../ContextAPI';
 
 const CustomizeAuction = () => {
   const history = useHistory();
-  const { auction, setAuction } = useContext(AppContext);
+  const { auction, setAuction, loggedInArtist, myAuctions, setMyAuctions } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
     link: '',
@@ -53,8 +54,41 @@ const CustomizeAuction = () => {
   };
 
   const handleSavePreview = () => {
-    console.log(rewardTiersAuction);
-    console.log(domainAndBranding);
+    if (domainAndBranding.headline && domainAndBranding.link) {
+      let descriptionCount = 0;
+      let desc = false;
+      if (rewardTiersAuction) {
+        for (let i = 0; i < rewardTiersAuction.length; i += 1) {
+          if (rewardTiersAuction[i].description !== '') {
+            descriptionCount += 1;
+          }
+        }
+        if (descriptionCount === rewardTiersAuction.length) desc = true;
+      }
+      if (desc) {
+        const newAuction = { ...auction };
+        newAuction.id = uuid();
+        newAuction.headline = domainAndBranding.headline;
+        newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+        newAuction.promoImage = domainAndBranding.promoImage;
+        newAuction.backgroundImage = domainAndBranding.backgroundImage;
+        newAuction.tiers = auction.tiers.map((tier) => {
+          const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
+          return { ...tier, ...rewardTier };
+        });
+        if (loggedInArtist.name && loggedInArtist.avatar) {
+          newAuction.artist = loggedInArtist;
+          console.log(newAuction);
+          history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
+            auction: newAuction,
+          });
+          setTimeout(() => {
+            setMyAuctions([...myAuctions, newAuction]);
+            setAuction({ tiers: [] });
+          }, 1000);
+        }
+      }
+    }
   };
 
   return (

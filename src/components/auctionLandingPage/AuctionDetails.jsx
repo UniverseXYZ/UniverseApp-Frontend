@@ -15,8 +15,8 @@ import PlaceBidPopup from '../popups/PlaceBidPopup';
 import Button from '../button/Button';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
-  const { windowSize, loggedInArtist } = useContext(AppContext);
-  const getAllAuctionsForCurrentArtist = PLACEHOLDER_ACTIVE_AUCTIONS.filter(
+  const { windowSize, loggedInArtist, myAuctions } = useContext(AppContext);
+  const getAllAuctionsForCurrentArtist = myAuctions.filter(
     (act) => act.artist.id === onAuction.artist.id
   );
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
@@ -124,13 +124,11 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, []);
 
   return (
-    <div
-      className="auction__details__section"
-      // style={{
-      //   background: selectedAuction.background ? `url(${selectedAuction.background})` : '#F8FBFF',
-      // }}
-    >
-      <div className="bg" />
+    <div className="auction__details__section">
+      <div
+        className={`bg ${!selectedAuction.backgroundImage ? 'empty' : ''}`}
+        style={{ backgroundImage: `url(${selectedAuction.backgroundImage})` }}
+      />
       <div className="auction__details__section__container">
         {getAllAuctionsForCurrentArtist.length && getAllAuctionsForCurrentArtist.length > 1 ? (
           <Slider {...sliderSettings}>
@@ -189,20 +187,27 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
             <div className="auction__details__box">
               <div
                 className={`auction__details__box__image ${
-                  selectedAuction.image ? '' : 'show__avatar'
+                  selectedAuction.promoImage ? '' : 'show__avatar'
                 }`}
               >
-                <img className="original" src={selectedAuction.image} alt={selectedAuction.title} />
+                <img
+                  className="original"
+                  src={URL.createObjectURL(selectedAuction.promoImage)}
+                  alt={selectedAuction.name}
+                />
                 <img
                   className="artist__image"
-                  src={selectedAuction.artist.avatar}
-                  alt={selectedAuction.title}
+                  src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                  alt={selectedAuction.name}
                 />
               </div>
               <div className="auction__details__box__info">
-                <h1 className="title">{selectedAuction.title}</h1>
+                <h1 className="title">{selectedAuction.name}</h1>
                 <div className="artist__details">
-                  <img src={selectedAuction.artist.avatar} alt={selectedAuction.artist.name} />
+                  <img
+                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                    alt={selectedAuction.artist.name}
+                  />
                   <span>by</span>
                   <button
                     type="button"
@@ -335,8 +340,8 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         {(close) => (
                           <PlaceBidPopup
                             onClose={close}
-                            onAuctionId={selectedAuction.id}
-                            onAuctionTitle={selectedAuction.title}
+                            onAuctionId={Number(selectedAuction.id)}
+                            onAuctionTitle={selectedAuction.name}
                             onArtistName={selectedAuction.artist.name}
                             onBidders={bidders}
                             onSetBidders={setBidders}
