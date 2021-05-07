@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
@@ -19,6 +19,7 @@ const MyAuction = () => {
     setAuction,
   } = useContext(AppContext);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
+  const [hideButton, setHideButton] = useState(false);
   const history = useHistory();
 
   const handleTabRightScrolling = () => {
@@ -79,23 +80,40 @@ const MyAuction = () => {
       setMyAuctions([...myAuctions, auction]);
       setAuction({ tiers: [] });
     }
+    function handleHideButton() {
+      if (window.innerWidth < 576) {
+        if (AUCTIONS_DATA.length > 0) {
+          setHideButton(true);
+        } else {
+          setHideButton(false);
+        }
+      } else {
+        setHideButton(true);
+      }
+    }
+    window.addEventListener('resize', handleHideButton);
+    handleHideButton();
+
+    return () => window.removeEventListener('resize', handleHideButton);
   }, []);
 
   return (
     <div className="container auction__page">
       <div className="auction__page__header">
         <h1 className="title">My auctions</h1>
-        <div>
-          <button
-            type="button"
-            className="set_up"
-            onClick={() => {
-              history.push('/reward-tiers');
-            }}
-          >
-            Set up auction
-          </button>
-        </div>
+        {hideButton && (
+          <div>
+            <button
+              type="button"
+              className="set_up"
+              onClick={() => {
+                history.push('/reward-tiers');
+              }}
+            >
+              Set up auction
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="auction__page__body">

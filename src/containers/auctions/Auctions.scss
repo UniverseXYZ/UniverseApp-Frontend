@@ -96,7 +96,7 @@
       font-weight: bold;
       font-size: 22px;
       text-align: center;
-      color: rgba(0, 0, 0, 0.6);
+      color: $black;
       margin-bottom: 16px;
     }
     p.desc {
@@ -127,6 +127,10 @@
       line-height: 20px;
       color: $black;
       padding: 11px 26px;
+
+      @include sm {
+        width: 100%;
+      }
     }
   }
 

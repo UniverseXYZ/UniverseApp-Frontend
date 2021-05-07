@@ -12,8 +12,8 @@
   animation: slideOut 0.3s ease-in-out forwards;
 
   @include sm {
-    height: 90%;
-    top: 87px;
+    height: 100%;
+    top: 69px;
     border-radius: 12px 12px 0 0;
   }
 }
@@ -38,7 +38,7 @@
   padding: 7px;
 
   @include sm {
-    top: -60px;
+    top: -48px;
     left: 88%;
   }
 }
@@ -214,7 +214,7 @@
   color: #000000;
   font-family: $spaceGroteskFont;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 16px;
   line-height: 20px;
   margin-left: 10px;
@@ -718,10 +718,6 @@
       font-weight: bold;
       font-size: 14px;
       line-height: 22px;
-
-      @include sm {
-        font-size: 10px;
-      }
     }
 
     .nft-coll-upload {
@@ -740,6 +736,11 @@
         .nft-coll-drop-file {
           width: 100%;
           text-align: center;
+          h5 {
+            @include sm {
+              font-size: 10px;
+            }
+          }
 
           img {
             padding-bottom: 16px;
@@ -1123,11 +1124,7 @@
     font-family: $spaceGroteskFont;
     font-weight: bold;
     font-size: 14px;
-    line-height: 22px;
-
-    @include sm {
-      font-size: 10px;
-    }
+    line-height: 160%;
   }
 
   .single-nft-upload {
@@ -1145,6 +1142,12 @@
       .single-nft-drop-file {
         width: 100%;
         text-align: center;
+
+        h5 {
+          @include sm {
+            font-size: 10px;
+          }
+        }
 
         img {
           padding-bottom: 16px;
@@ -1306,6 +1309,7 @@
       position: relative;
       display: flex;
       width: fit-content;
+      white-space: break-spaces;
 
       .info-text {
         position: absolute;
@@ -1582,7 +1586,7 @@
           }
           span {
             position: absolute;
-            top: 29px;
+            top: 35px;
             right: 1px;
             font-family: $spaceGroteskFont;
             font-style: normal;
@@ -1591,7 +1595,7 @@
             line-height: 20px;
             color: $black;
             display: flex;
-            height: 50px;
+            height: 40px;
             width: 50px;
             align-items: center;
             justify-content: center;
