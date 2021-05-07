@@ -272,7 +272,7 @@ const CreateNftCol = (props) => {
                 <img src={cloudIcon} alt="Cloud" />
                 <h5>Drop your file here</h5>
                 <p>
-                  <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
+                  <span>(min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
                 </p>
                 <Button className="light-border-button" onClick={() => inputFile.current.click()}>
                   Choose file
@@ -382,14 +382,13 @@ const CreateNftCol = (props) => {
                   onMouseLeave={() => setHideIcon(false)}
                   onBlur={() => setHideIcon(false)}
                 >
-                  Number of editions
-                  <img src={infoIcon} alt="Info Icon" />
+                  Number of editions <img src={infoIcon} alt="Info Icon" />
                 </h5>
                 {hideIcon && (
                   <Animated animationIn="zoomIn">
                     <div className="info-text">
                       <p>
-                        Total amount of NFTs that will be distributed to the current revard tier
+                        Total amount of NFTs that will be distributed to the current reward tier
                         winners
                       </p>
                     </div>

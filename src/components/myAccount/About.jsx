@@ -42,7 +42,7 @@ const About = () => {
           ) : (
             <div className="account-grid-about-editing">
               <textarea
-                placeholder="Enter few words about yourself"
+                placeholder="Please write a few lines about yourself"
                 className="inp"
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}

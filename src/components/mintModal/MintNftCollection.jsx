@@ -64,7 +64,7 @@ const MintNftCollection = ({ onClick }) => {
     setTokenName(value);
     setErrors({
       ...errors,
-      tokenName: !value ? 'Token name is not allowed to be empty' : '',
+      tokenName: !value ? '“Token name” is not allowed to be empty' : '',
     });
   };
 
@@ -74,7 +74,7 @@ const MintNftCollection = ({ onClick }) => {
     if (!collectionName) {
       setErrors({
         collectionName: '“Collection name” is not allowed to be empty',
-        tokenName: !tokenName ? 'Token name is not allowed to be empty' : '',
+        tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: '',
       });
     } else {
@@ -89,7 +89,7 @@ const MintNftCollection = ({ onClick }) => {
       if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
         setErrors({
           collectionName: '“Collection name” already exists',
-          tokenName: '"Token name" already exists',
+          tokenName: '“Token name” already exists',
           collectible: '',
         });
       } else {

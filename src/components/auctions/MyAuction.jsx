@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
@@ -12,6 +12,7 @@ import PastAuctions from './PastAuctions';
 const MyAuction = () => {
   const { selectedTabIndex, setSelectedTabIndex } = useContext(AppContext);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
+  const [hideButton, setHideButton] = useState(false);
 
   const handleTabRightScrolling = () => {
     let scrollAmount = 0;
@@ -66,23 +67,43 @@ const MyAuction = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    function handleHideButton() {
+      if (window.innerWidth < 576) {
+        if (AUCTIONS_DATA.length > 0) {
+          setHideButton(true);
+        } else {
+          setHideButton(false);
+        }
+      } else {
+        setHideButton(true);
+      }
+    }
+    window.addEventListener('resize', handleHideButton);
+    handleHideButton();
+
+    return () => window.removeEventListener('resize', handleHideButton);
+  }, []);
+
   const history = useHistory();
 
   return (
     <div className="container auction__page">
       <div className="auction__page__header">
         <h1 className="title">My auctions</h1>
-        <div>
-          <button
-            type="button"
-            className="set_up"
-            onClick={() => {
-              history.push('/reward-tiers');
-            }}
-          >
-            Set up auction
-          </button>
-        </div>
+        {hideButton && (
+          <div>
+            <button
+              type="button"
+              className="set_up"
+              onClick={() => {
+                history.push('/reward-tiers');
+              }}
+            >
+              Set up auction
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="auction__page__body">
@@ -129,7 +150,13 @@ const MyAuction = () => {
             <div className="empty__auction">
               <h3>No active auctions found</h3>
               <p className="desc">Create your first auction by clicking the button below</p>
-              <button type="button" className="set_up">
+              <button
+                type="button"
+                className="set_up"
+                onClick={() => {
+                  history.push('/reward-tiers');
+                }}
+              >
                 Set up auction
               </button>
             </div>
@@ -141,7 +168,13 @@ const MyAuction = () => {
             <div className="empty__auction">
               <h3>No scheduled auctions found</h3>
               <p className="desc">Create your first auction by clicking the button below</p>
-              <button type="button" className="set_up">
+              <button
+                type="button"
+                className="set_up"
+                onClick={() => {
+                  history.push('/reward-tiers');
+                }}
+              >
                 Set up auction
               </button>
             </div>
@@ -156,7 +189,7 @@ const MyAuction = () => {
               <p className="desc">Create your first auction by clicking the button below</p>
               <button
                 type="button"
-                className="set-up"
+                className="set_up"
                 onClick={() => {
                   history.push('/reward-tiers');
                 }}

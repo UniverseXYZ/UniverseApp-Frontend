@@ -46,7 +46,9 @@ const MintSingleNft = ({ onClick }) => {
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
-      setPercentAmount(val);
+      if (val <= 100) {
+        setPercentAmount(val);
+      }
     }
   };
 
@@ -379,8 +381,7 @@ const MintSingleNft = ({ onClick }) => {
         <div className="single-nft-editions">
           <div className="single-nft-edition-header">
             <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
-              Number of editions
-              <img src={infoIcon} alt="Info Icon" />
+              Number of editions <img src={infoIcon} alt="Info Icon" />
             </h5>
             {hideIcon && (
               <Animated animationIn="zoomIn">
@@ -463,7 +464,7 @@ const MintSingleNft = ({ onClick }) => {
           {editableNFTType !== 'collection' && (
             <div className="royalities">
               <div className="title">
-                <h4>Royalities</h4>
+                <h4>Royalties</h4>
                 <img src={infoIcon} alt="Info Icon" />
                 <label className="switch">
                   <input

@@ -9,6 +9,13 @@
     // margin-top: 10%;
     .intup-l {
       margin-bottom: 20px;
+      input {
+        width: 540px;
+
+        @include lg {
+          width: 100%;
+        }
+      }
     }
 
     .tier-info_icon {
@@ -40,6 +47,7 @@
     // align-items: center;
     justify-content: space-between;
     margin-top: 20px;
+    width: 540px;
     // margin-top: 4%;
     .light-border-button {
       margin-right: 12px;
@@ -78,14 +86,18 @@
         padding: 16px;
         font-size: 12px;
         font-family: $spaceGroteskFont;
-        bottom: 10px;
-        // right: 0;
+        bottom: 25px;
+        left: -100px;
         font-weight: normal;
+        height: fit-content;
       }
 
       img {
         padding-left: 5px;
       }
+    }
+    @include lg {
+      width: 100%;
     }
   }
 }
