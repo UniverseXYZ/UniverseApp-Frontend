@@ -34,19 +34,20 @@ const CustomizeAuction = () => {
         if (descriptionCount === rewardTiersAuction.length) desc = true;
       }
       if (desc) {
-        console.log('desc = true');
         history.push('/my-auctions');
-        setAuction((prevValues) => ({
-          ...prevValues,
-          headline: domainAndBranding.headline,
-          link: domainAndBranding.link,
-          promoImage: domainAndBranding.promoImage,
-          backgroundImage: domainAndBranding.backgroundImage,
-          tiers: prevValues.tiers.map((tier) => {
-            const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-            return { ...tier, ...rewardTier };
-          }),
-        }));
+        setTimeout(() => {
+          setAuction((prevValues) => ({
+            ...prevValues,
+            headline: domainAndBranding.headline,
+            link: domainAndBranding.link,
+            promoImage: domainAndBranding.promoImage,
+            backgroundImage: domainAndBranding.backgroundImage,
+            tiers: prevValues.tiers.map((tier) => {
+              const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
+              return { ...tier, ...rewardTier };
+            }),
+          }));
+        }, 1000);
       }
     }
   };
