@@ -79,7 +79,7 @@
 
     .create__mint__btns {
       display: flex;
-      
+
       button {
         background: $primary-bg-color;
         box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
@@ -1009,13 +1009,30 @@
       }
 
       .selected-ntf {
+        position: fixed;
+        width: 100%;
+        left: 0;
+        bottom: 0;
         background: #ffffff;
         // padding-bottom: 16px;
         // padding-top: 16px;
         box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+        z-index: 9;
+
+        .selected-body {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 0;
+          margin-bottom: 0;
+
+          @include md {
+            display: block;
+            width: 100%;
+          }
+        }
       }
       .infoSelect-div {
-        display: flex;
+        // display: flex;
         padding: 16px 0px;
         span {
           // width: 15%;
@@ -1028,37 +1045,48 @@
         }
       }
       .sel-info {
-        display: flex;
-        padding-bottom: 25px;
+        // display: flex;
+        padding: 16px 0;
 
         @include sm {
           display: grid;
         }
       }
       .continue-nft {
-        min-height: 50px;
+        display: flex;
+        justify-content: flex-end;
         position: relative;
+        margin-top: 25px;
 
         button {
           // position:absolute;
           // bottom: 0;
 
-          @include sm {
-            margin-top: 37px;
+          @include md {
+            // margin-top: 37px;
             width: 100%;
           }
         }
       }
       .err-select {
+        font-family: $spaceGroteskFont;
+        font-size: 12px;
+        line-height: 150%;
         text-align: right;
         color: #ff4949;
-        width: 70% !important;
+        // width: 70% !important;
+
+        @include md {
+          text-align: left;
+        }
       }
       .img-div {
         display: flex;
-        width: 85%;
+        margin-top: 16px;
+
         .imgs {
           position: relative;
+          margin-right: 16px;
           .del-img {
             position: absolute;
             bottom: 20px;

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
 import Button from '../button/Button';
 import Input from '../input/Input';
@@ -13,14 +13,27 @@ const Main = () => {
 
   const [hideIcon, setHideIcon] = useState(false);
   const [nameEditing, setNameEditing] = useState(true);
+  const [placeholderText, setPlaceholderText] = useState('your-address');
 
   const accountInput = useRef(null);
 
   const [accountName, setAccountName] = useState(loggedInArtist.name);
   const [accountPage, setAccountPage] = useState(
-    `universe.xyz/${loggedInArtist.universePageAddress}`
+    `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
+
+  const handleOnFocus = () => {
+    if (!loggedInArtist.universePageAddress) {
+      setAccountPage('universe.xyz/');
+    }
+  };
+
+  const handleOnBlur = () => {
+    if (!loggedInArtist.universePageAddress) {
+      setAccountPage('universe.xyz/your-address');
+    }
+  };
 
   const saveDisplayChanges = () => {
     const page = accountPage.substring(13);
@@ -152,11 +165,14 @@ const Main = () => {
 
               <Input
                 placeholder="Enter your universe page address"
+                // className={`inp ${!loggedInArtist.universePageAddress && }`}
                 className="inp"
                 value={accountPage}
                 onChange={(e) =>
                   e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
                 }
+                onFocus={handleOnFocus}
+                onBlur={handleOnBlur}
               />
               {accountName !== loggedInArtist.name ||
               accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||

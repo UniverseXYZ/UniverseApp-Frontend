@@ -8,6 +8,7 @@ import nfuGamingIcon from '../../assets/images/nfu-gaming.svg';
 import nfuMediaProtocolsIcon from '../../assets/images/nfu-media-protocols.svg';
 import nfuGovernanceIcon from '../../assets/images/nfu-governance.svg';
 import ellipses from '../../assets/images/ellipses.svg';
+import rightArrow from '../../assets/images/arrow-right.svg';
 
 const NonFungibleUniverse = () => {
   const [nfus, setNfus] = useState([
@@ -18,6 +19,7 @@ const NonFungibleUniverse = () => {
       description:
         'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being censored.',
       loaded: false,
+      action: 'Coming soon',
     },
     {
       id: 2,
@@ -26,14 +28,16 @@ const NonFungibleUniverse = () => {
       description:
         'Creating a decentralized NFT launch system that is made by artists for artists.',
       loaded: false,
+      action: 'Explore',
     },
     {
       id: 3,
       icon: nfuMarketIcon,
-      title: 'NFT Market',
+      title: 'NFT Marketplace',
       description:
         'A universe of three initial planets with 23 OG characters each to memeify (69 total OG characters).',
       loaded: false,
+      action: 'Coming soon',
     },
     {
       id: 4,
@@ -41,6 +45,7 @@ const NonFungibleUniverse = () => {
       title: 'Gaming',
       description: 'Games built with WEB3 at their forefront, not added in as an afterthought.',
       loaded: false,
+      action: 'Coming soon',
     },
     {
       id: 5,
@@ -49,6 +54,7 @@ const NonFungibleUniverse = () => {
       description:
         'A meeting place where fans and artists can meet and discover new ways a decentralized community can support and interact with their favorite WEB3 media protocols.',
       loaded: false,
+      action: 'Coming soon',
     },
     {
       id: 6,
@@ -57,6 +63,7 @@ const NonFungibleUniverse = () => {
       description:
         'kekDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
       loaded: false,
+      action: 'Explore',
     },
   ]);
 
@@ -88,11 +95,21 @@ const NonFungibleUniverse = () => {
                   </SkeletonTheme>
                 </div>
               )}
-              <div style={{ display: nfu.loaded ? 'block' : 'none' }}>
+              <div style={{ display: nfu.loaded ? 'block' : 'none', height: '100%' }}>
                 <AnimatedOnScroll animationIn="fadeInUp">
                   <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
                   <h2 className="title">{nfu.title}</h2>
                   <p className="desc">{nfu.description}</p>
+                  {nfu.action === 'Explore' ? (
+                    <button type="button">
+                      {nfu.action}
+                      <img src={rightArrow} alt="Arrow" />
+                    </button>
+                  ) : (
+                    <button type="button" disabled>
+                      {nfu.action}
+                    </button>
+                  )}
                 </AnimatedOnScroll>
               </div>
             </div>

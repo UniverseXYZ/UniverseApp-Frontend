@@ -2,688 +2,711 @@
 @import '../../assets/scss/mixins';
 
 .homepage {
-    .welcome__section {
-        position: relative;
+  .welcome__section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $black;
+    min-height: 720px;
+    padding: 0 60px;
+
+    .ellipse-l {
+      position: absolute;
+      top: 70px;
+      left: 20px;
+      z-index: 1;
+      @include sm {
+        height: 200px;
+      }
+    }
+
+    .ellipse-r {
+      position: absolute;
+      bottom: 70px;
+      right: 20px;
+      z-index: 1;
+      transform: rotate(180deg);
+      @include sm {
+        height: 200px;
+        bottom: 10px;
+      }
+    }
+
+    &__container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1110px;
+      margin: 0 auto;
+      overflow: hidden;
+
+      .left {
+        max-width: 627px;
+        h1.title {
+          font-family: $sharpGroteskSemiBoldFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 48px;
+          line-height: 120%;
+          color: $white;
+          @include lg {
+            text-align: center;
+          }
+          @include sm {
+            font-size: 26px;
+            line-height: 140%;
+          }
+        }
+        p.desc {
+          margin: 30px 0 50px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 300;
+          font-size: 18px;
+          line-height: 150%;
+          color: rgba(255, 255, 255, 0.6);
+          max-width: 475px;
+          @include lg {
+            text-align: center;
+            margin: 30px auto 50px;
+          }
+          @include sm {
+            font-size: 16px;
+            margin: 16px auto;
+          }
+        }
+        .links {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-wrap: wrap;
+          .light-border-button {
+            background-image: linear-gradient(101deg, #bceb00, #00eaea);
+            background-origin: border-box;
+            box-shadow: 2px 1000px 1px #000 inset;
+            color: $white;
+            margin-left: 15px;
+            &:hover {
+              box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
+            }
+          }
+          button {
+            @include sm {
+              width: 100%;
+              margin-left: 0 !important;
+              margin-bottom: 20px;
+            }
+          }
+          @include lg {
+            justify-content: center;
+            margin-bottom: 140px;
+          }
+          @include sm {
+            margin-bottom: 30px;
+          }
+        }
+      }
+      .right {
         display: flex;
-        align-items: center;
         justify-content: center;
-        background-color: $black;
-        min-height: 720px;
-        padding: 0 60px;
-
-        .ellipse-l {
-            position: absolute;
-            top: 70px;
-            left: 20px;
-            z-index: 1;
-            @include sm {
-                height: 200px;
-            }
+        align-items: center;
+        video {
+          width: 100%;
+          @include lg {
+            max-width: 500px;
+          }
         }
+      }
 
-        .ellipse-r {
-            position: absolute;
-            bottom: 70px;
-            right: 20px;
-            z-index: 1;
-            transform: rotate(180deg);
-            @include sm {
-                height: 200px;
-                bottom: 10px;
-            }
-        }
-        
-        &__container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1110px;
-            margin: 0 auto;
-            overflow: hidden;
+      @include lg {
+        flex-wrap: wrap;
+        justify-content: center;
+        flex-direction: column-reverse;
+      }
+    }
+    @include sm {
+      padding: 0px 20px;
+    }
+  }
 
-            .left {
-                max-width: 627px;
-                h1.title {
-                    font-family: $sharpGroteskSemiBoldFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 48px;
-                    line-height: 120%;
-                    color: $white;
-                    @include lg {
-                        text-align: center;
-                    }
-                    @include sm {
-                        font-size: 26px;
-                        line-height: 140%;
-                    }
-                }
-                p.desc {
-                    margin: 30px 0 50px;
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 300;
-                    font-size: 18px;
-                    line-height: 150%;
-                    color: rgba(255, 255, 255, 0.6);
-                    max-width: 475px;
-                    @include lg {
-                        text-align: center;
-                        margin: 30px auto 50px;
-                    }
-                    @include sm {
-                        font-size: 16px;
-                        margin: 16px auto;
-                    }
-                }
-                .links {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    .light-border-button {
-                        background-image: linear-gradient(101deg, #BCEB00, #00EAEA);
-                        background-origin: border-box;
-                        box-shadow: 2px 1000px 1px #000 inset;
-                        color: $white;
-                        margin-left: 15px;
-                        &:hover{
-                            box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
-                        }
-                    }
-                    button {
-                        @include sm {
-                            width: 100%;
-                            margin-left: 0!important;
-                            margin-bottom: 20px;
-                        }
-                    }
-                    @include lg {
-                        justify-content: center;
-                        margin-bottom: 140px;
-                    }
-                    @include sm {
-                        margin-bottom: 30px;
-                    }
-                }
-            }
-            .right {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                video {
-                    width: 100%;
-                    @include lg {
-                        max-width: 500px;
-                    }
-                }
-            }
+  .describe__section {
+    position: relative;
+    overflow: hidden;
 
-            @include lg {
-                flex-wrap: wrap;
-                justify-content: center;
-                flex-direction: column-reverse;
-            }
+    .universe__protocol__section {
+      position: relative;
+      padding: 90px 60px;
+
+      .circle-r {
+        position: absolute;
+        z-index: -1;
+        top: -5%;
+        right: -5%;
+        @include lg {
+          width: 384px;
+          height: 384px;
+          top: 0;
+          right: -15%;
         }
         @include sm {
-            padding: 0px 20px;
+          width: 278px;
+          height: 278px;
+          bottom: -22%;
+          top: unset;
+          right: -20%;
         }
+      }
+
+      .circle-l {
+        position: absolute;
+        z-index: -1;
+        bottom: -50%;
+        left: -5%;
+        @include lg {
+          width: 384px;
+          height: 384px;
+          bottom: -30%;
+          left: 0;
+        }
+        @include sm {
+          width: 278px;
+          height: 278px;
+          top: 5%;
+          left: -10%;
+        }
+      }
+
+      &__container {
+        max-width: 1110px;
+        margin: 0 auto;
+        .universe__protocol {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
+          border: 1px solid transparent;
+          backdrop-filter: blur(20px);
+          border-radius: 20px;
+          padding: 72px 95px;
+          opacity: 0.9;
+          @include lg {
+            padding: 50px 50px;
+          }
+          @include sm {
+            padding: 40px 25px;
+          }
+
+          h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 36px;
+            line-height: 140%;
+            color: $black;
+            @include lg {
+              font-size: 26px;
+            }
+            @include sm {
+              font-size: 20px;
+              max-width: 285px;
+            }
+          }
+          p.info {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 150%;
+            color: $black;
+            margin: 22px 0;
+            @include sm {
+              font-size: 16px;
+              margin: 18px 0;
+            }
+          }
+          p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+            @include lg {
+              font-size: 14px;
+            }
+          }
+          @include md {
+            margin-bottom: 100px;
+          }
+          @include sm {
+            margin-bottom: 60px;
+          }
+        }
+      }
+      @include sm {
+        padding: 60px 20px 20px;
+      }
     }
+    .about__section {
+      padding: 90px 60px;
+      &__container {
+        max-width: 1110px;
+        margin: 0 auto;
 
-    .describe__section {
-        position: relative;
-        overflow: hidden;
+        .blocks {
+          position: relative;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 50px;
+          align-items: center;
 
-        .universe__protocol__section {
+          > div:nth-child(4) {
+            @include md {
+              grid-row-start: 3;
+            }
+          }
+
+          .universe__original__characters__img {
+            width: 410px;
+            height: 380px;
+            object-fit: cover;
+            @include lg {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .show__on__mobile {
+            display: none;
+            @include md {
+              display: block;
+              margin-top: 60px;
+              margin-bottom: 40px;
+            }
+          }
+          .hide__on__mobile {
+            @include md {
+              display: none;
+            }
+          }
+
+          .planets__group {
             position: relative;
-            padding: 90px 60px;
-
-            .circle-r {
-                position: absolute;
-                z-index: -1;
-                top: -5%;
-                right: -5%;
-                @include lg {
-                    width: 384px;
-                    height: 384px;
-                    top: 0;
-                    right: -15%;
-                }
-                @include sm {
-                    width: 278px;
-                    height: 278px;
-                    bottom: -22%;
-                    top: unset;
-                    right: -20%;
-                }
+            #planet__front {
+              position: absolute;
+              top: 20%;
+              left: 15%;
+              width: 350px;
+              z-index: 2;
+              @include xl {
+                top: 15%;
+                left: 10%;
+              }
+              @include lg {
+                top: 25%;
+                left: 20%;
+                width: 200px;
+              }
+              @include md {
+                top: 20%;
+                left: 15%;
+                width: 350px;
+              }
+              @include sm {
+                top: 25%;
+                left: 20%;
+                width: 200px;
+              }
+              @media (max-width: 400px) {
+                top: 20%;
+                left: 15%;
+                width: 180px;
+              }
             }
-
-            .circle-l {
-                position: absolute;
-                z-index: -1;
-                bottom: -50%;
-                left: -5%;
-                @include lg {
-                    width: 384px;
-                    height: 384px;
-                    bottom: -30%;
-                    left: 0;
-                }
-                @include sm {
-                    width: 278px;
-                    height: 278px;
-                    top: 5%;
-                    left: -10%;
-                }
+            #planet__back {
+              position: absolute;
+              top: 15%;
+              left: 50%;
+              width: 200px;
+              z-index: 2;
+              @include xl {
+                top: 10%;
+                left: 45%;
+              }
+              @include lg {
+                top: 15%;
+                left: 50%;
+                width: 130px;
+              }
+              @include md {
+                top: 15%;
+                left: 50%;
+                width: 200px;
+              }
+              @include sm {
+                top: 15%;
+                left: 45%;
+                width: 130px;
+              }
+              @media (max-width: 400px) {
+                width: 100px;
+              }
             }
-
-            &__container {
-                max-width: 1110px;
-                margin: 0 auto;
-                .universe__protocol {
-                    background: 
-                        linear-gradient($white,$white) padding-box,
-                        linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
-                    border: 1px solid transparent;
-                    backdrop-filter: blur(20px);
-                    border-radius: 20px;
-                    padding: 72px 95px;
-                    opacity: 0.9;
-                    @include lg {
-                        padding: 50px 50px;
-                    }
-                    @include sm {
-                        padding: 40px 25px;
-                    }
-    
-                    h1.title {
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 36px;
-                        line-height: 140%;
-                        color: $black;
-                        @include lg {
-                            font-size: 26px;
-                        }
-                        @include sm {
-                            font-size: 20px;
-                            max-width: 285px;
-                        }
-                    }
-                    p.info {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 18px;
-                        line-height: 150%;
-                        color: $black;
-                        margin: 22px 0;
-                        @include sm {
-                            font-size: 16px;
-                            margin: 18px 0;
-                        }
-                    }
-                    p.desc {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 16px;
-                        line-height: 160%;
-                        color: rgba(0, 0, 0, 0.6);
-                        @include lg {
-                            font-size: 14px;
-                        }
-                    }
-                    @include md {
-                        margin-bottom: 100px;
-                    }
-                    @include sm {
-                        margin-bottom: 60px;
-                    }
-                }
+            #planet__middle {
+              position: absolute;
+              top: 14%;
+              left: 7%;
+              width: 250px;
+              z-index: 1;
+              @include xl {
+                top: 9%;
+                left: 2%;
+              }
+              @include lg {
+                top: 21%;
+                left: 19%;
+                width: 150px;
+              }
+              @include md {
+                top: 16%;
+                left: 13%;
+                width: 250px;
+              }
+              @include sm {
+                top: 21%;
+                left: 19%;
+                width: 150px;
+              }
+              @media (max-width: 400px) {
+                width: 120px;
+              }
             }
-            @include sm {
-                padding: 60px 20px 20px;
-            }
-        }
-        .about__section {
-            padding: 90px 60px;
-            &__container {
-                max-width: 1110px;
-                margin: 0 auto;
-    
-                .blocks {
-                    position: relative;
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    grid-gap: 50px;
-                    align-items: center;
-    
-                    > div:nth-child(4) {
-                        @include md {
-                            grid-row-start: 3;
-                        }
-                    }
-    
-                    .universe__original__characters__img {
-                        width: 410px;
-                        height: 380px;
-                        object-fit: cover;
-                        @include lg {
-                            width: 100%;
-                            height: 100%;
-                        }
-                    }
-    
-                    .show__on__mobile {
-                        display: none;
-                        @include md {
-                            display: block;
-                            margin-top: 60px;
-                            margin-bottom: 40px;
-                        }
-                    }
-                    .hide__on__mobile {
-                        @include md {
-                            display: none;
-                        }
-                    }
-
-                    .planets__group {
-                        position: relative;
-                        #planet__front {
-                            position: absolute;
-                            top: 20%;
-                            left: 15%;
-                            width: 350px;
-                            z-index: 2;
-                            @include xl {
-                                top: 15%;
-                                left: 10%;
-                            }
-                            @include lg {
-                                top: 25%;
-                                left: 20%;
-                                width: 200px;
-                            }
-                            @include md {
-                                top: 20%;
-                                left: 15%;
-                                width: 350px;
-                            }
-                            @include sm {
-                                top: 25%;
-                                left: 20%;
-                                width: 200px;
-                            }
-                            @media (max-width: 400px) {
-                                top: 20%;
-                                left: 15%;
-                                width: 180px;
-                            }
-                        }
-                        #planet__back {
-                            position: absolute;
-                            top: 15%;
-                            left: 50%;
-                            width: 200px;
-                            z-index: 2;
-                            @include xl {
-                                top: 10%;
-                                left: 45%;
-                            }
-                            @include lg {
-                                top: 15%;
-                                left: 50%;
-                                width: 130px;
-                            }
-                            @include md {
-                                top: 15%;
-                                left: 50%;
-                                width: 200px;
-                            }
-                            @include sm {
-                                top: 15%;
-                                left: 45%;
-                                width: 130px;
-                            }
-                            @media (max-width: 400px) {
-                                width: 100px;
-                            }
-                        }
-                        #planet__middle {
-                            position: absolute;
-                            top: 14%;
-                            left: 7%;
-                            width: 250px;
-                            z-index: 1;
-                            @include xl {
-                                top: 9%;
-                                left: 2%;
-                            }
-                            @include lg {
-                                top: 21%;
-                                left: 19%;
-                                width: 150px;
-                            }
-                            @include md {
-                                top: 16%;
-                                left: 13%;
-                                width: 250px;
-                            }
-                            @include sm {
-                                top: 21%;
-                                left: 19%;
-                                width: 150px;
-                            }
-                            @media (max-width: 400px) {
-                                width: 120px;
-                            }
-                        }
-                        @include lg {
-                            min-width: 380px;
-                        }
-                        @include sm {
-                            min-width: auto;
-                        }
-                    }
-    
-                    h1.title {
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 36px;
-                        line-height: 140%;
-                        color: $black;
-                        margin-bottom: 20px;
-                        @include lg {
-                            font-size: 20px;
-                        }
-                    }
-    
-                    p.desc {
-                        margin: 40px 0;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 16px;
-                        line-height: 160%;
-                        color: rgba(0, 0, 0, 0.6);
-                        @include lg {
-                            font-size: 14px;
-                        }
-                        @include md {
-                            margin-top: 0;
-                        }
-                        @include sm {
-                            font-size: 16px;
-                        }
-                    }
-                    button {
-                        @include sm {
-                            width: 100%;
-                        }
-                    }
-                    .coming__soon {
-                        background: rgba(0, 0, 0, 0.05);
-                        border-radius: 12px;
-                        padding: 6px 12px;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 14px;
-                        line-height: 150%;
-                        color: rgba(0, 0, 0, 0.4);
-                        @include md {
-                            display: inline-block;
-                            margin-bottom: 20px;
-                        }
-                    }
-                    .subscribe__form {
-                        span {
-                            display: block;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: bold;
-                            font-size: 14px;
-                            line-height: 22px;
-                            color: $black;
-                        }
-                        .form__group {
-                            position: relative;
-                            input {
-                                width: 100%;
-                                border: 1px solid rgba(0, 0, 0, 0.1);
-                                box-sizing: border-box;
-                                border-radius: 12px;
-                                padding: 15px;
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 16px;
-                                line-height: 20px;
-                                margin-bottom: 14px;
-    
-                                &::placeholder {
-                                    color: rgba(0, 0, 0, 0.2);
-                                }
-                            }
-                            button {
-                                position: absolute;
-                                right: 4px;
-                                top: 4px;
-                                @include sm {
-                                    position: relative;
-                                }
-                            }
-                        }
-                    }
-                    @include lg {
-                        align-items: flex-start;
-                    }
-                    @include md {
-                        grid-gap: 20px;
-                        grid-template-columns: 1fr;
-                        align-items: center;
-                    }
-                }
-            }
-            @include sm {
-                padding: 20px 20px;
-            }
-        }
-
-    }
-
-    .non__fungible__universe__section {
-        position: relative;
-        padding: 150px 60px;
-        background-color: $black;
-
-        .ellipse-l {
-            position: absolute;
-            bottom: -80px;
-            left: 180px;
-            transform: rotate(-90deg);
             @include lg {
-                bottom: -100px;
-                left: 150px;
+              min-width: 380px;
             }
             @include sm {
-                height: 200px;
-                bottom: -50px;
-                left: 50px;
+              min-width: auto;
             }
-        }
+          }
 
-        .ellipse-r {
-            position: absolute;
-            top: 100px;
-            right: 80px;
-            transform: rotate(180deg);
+          h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 36px;
+            line-height: 140%;
+            color: $black;
+            margin-bottom: 20px;
             @include lg {
-                top: 30px;
-                right: 30px;
+              font-size: 20px;
+            }
+          }
+
+          p.desc {
+            margin: 40px 0;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+            @include lg {
+              font-size: 14px;
+            }
+            @include md {
+              margin-top: 0;
             }
             @include sm {
-                height: 200px;
+              font-size: 16px;
             }
-        }
-
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-
-            h1.title {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 36px;
-                line-height: 140%;
-                color: $white;
-                margin-bottom: 40px;
-                @include lg {
-                    font-size: 26px;
-                }
+          }
+          button {
+            @include sm {
+              width: 100%;
             }
-            .nfu__grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                grid-gap: 30px;
-
-                &__item {
-                    background: 
-                        linear-gradient($black,$black) padding-box,
-                        linear-gradient(to right, #2AD0CA, #E1F664, #FEB0FE, #ABB3FC, #5DF7A4, #58C4F6) border-box;
-                    border: 1px solid transparent;
-                    border-radius: 10px;
-                    padding: 45px 30px;
-                    cursor: pointer;
-                    transition: all .3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-
-                    h2.title {
-                        margin: 30px 0 15px;
-                        font-family: $sharpGroteskSemiBoldFont;
-                        font-style: normal;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 130%;
-                        letter-spacing: 0.2px;
-                        color: $white;
-                    }
-                    p.desc {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 14px;
-                        line-height: 160%;
-                        color: rgba(255, 255, 255, 0.7);
-                    }
-
-                    &:hover {
-                        transform: scale(1.02);
-                        box-shadow: 0 2px 10px 1px rgba(136, 120, 172, 0.2);
-                    }
-                }
-
-                @include lg {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                @include sm {
-                    grid-template-columns: 1fr;
-                }
+          }
+          .coming__soon {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 150%;
+            color: rgba(0, 0, 0, 0.4);
+            @include md {
+              display: inline-block;
+              margin-bottom: 20px;
             }
-        }
-
-        @include md {
-            padding: 100px 20px;
-        }
-    }
-    .buy__universe__nfts__section {
-        position: relative;
-        padding: 80px 60px;
-        background-image: url('../../assets/images/buy-universe-nft-bg-desktop.png');
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-
-        &__container {
-            max-width: 1110px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 50px;
-            align-items: center;
-
-            h1.title {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 36px;
-                line-height: 140%;
-                color: $black;
-                white-space: nowrap;
-                @include lg {
-                    font-size: 26px;
-                }
-                @include md {
-                    white-space: pre-wrap;
-                }
-                @include sm {
-                    text-align: center;
-                }
+          }
+          .subscribe__form {
+            span {
+              display: block;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 22px;
+              color: $black;
             }
-            p.desc {
-                margin: 15px 0 30px;
+            .form__group {
+              position: relative;
+              input {
+                width: 100%;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 12px;
+                padding: 15px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: normal;
                 font-size: 16px;
-                line-height: 160%;
-                color: $black;
-                min-width: 583px;
-                @include lg {
-                    min-width: auto;
+                line-height: 20px;
+                margin-bottom: 14px;
+
+                &::placeholder {
+                  color: rgba(0, 0, 0, 0.2);
                 }
+              }
+              button {
+                position: absolute;
+                right: 4px;
+                top: 4px;
                 @include sm {
-                    text-align: center;
+                  position: relative;
                 }
+              }
             }
-            .coming__soon {
-                background: rgba(0, 0, 0, 0.05);
-                border-radius: 12px;
-                padding: 10px 16px;
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 14px;
-                line-height: 150%;
-                color: rgba(0, 0, 0, 0.4);
-                @include sm {
-                    display: block;
-                    width: 120px;
-                    margin: 0 auto;
-                }
-            }
-            > div:nth-child(2) {
-                @include sm {
-                    grid-row-start: 1;
-                }
-            }
-            @include sm {
-                grid-template-columns: 1fr;
-                justify-items: center;
-            }
+          }
+          @include lg {
+            align-items: flex-start;
+          }
+          @include md {
+            grid-gap: 20px;
+            grid-template-columns: 1fr;
+            align-items: center;
+          }
         }
+      }
+      @include sm {
+        padding: 20px 20px;
+      }
+    }
+  }
+
+  .non__fungible__universe__section {
+    position: relative;
+    padding: 150px 60px;
+    background-color: $black;
+
+    .ellipse-l {
+      position: absolute;
+      bottom: -80px;
+      left: 180px;
+      transform: rotate(-90deg);
+      @include lg {
+        bottom: -100px;
+        left: 150px;
+      }
+      @include sm {
+        height: 200px;
+        bottom: -50px;
+        left: 50px;
+      }
+    }
+
+    .ellipse-r {
+      position: absolute;
+      top: 100px;
+      right: 80px;
+      transform: rotate(180deg);
+      @include lg {
+        top: 30px;
+        right: 30px;
+      }
+      @include sm {
+        height: 200px;
+      }
+    }
+
+    &__container {
+      max-width: 1110px;
+      margin: 0 auto;
+
+      h1.title {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 140%;
+        color: $white;
+        margin-bottom: 40px;
         @include lg {
-            background-image: url('../../assets/images/buy-universe-nft-bg-tablet.png');
+          font-size: 26px;
         }
-        @include md {
-            padding: 60px 20px;
+      }
+      .nfu__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 30px;
+
+        .fadeInUp {
+          position: relative;
+          height: 100%;
+        }
+
+        &__item {
+          background: linear-gradient($black, $black) padding-box,
+            linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
+          border: 1px solid transparent;
+          border-radius: 10px;
+          padding: 45px 30px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+          h2.title {
+            margin: 30px 0 15px;
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 130%;
+            letter-spacing: 0.2px;
+            color: $white;
+          }
+          p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 46px;
+          }
+
+          &:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 10px 1px rgba(136, 120, 172, 0.2);
+          }
+          button {
+            background: $black;
+            color: $white;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 20px;
+            position: absolute;
+            bottom: 0;
+
+            img {
+              margin-left: 10px;
+            }
+
+            &:disabled {
+              font-weight: 500;
+              opacity: 0.2;
+            }
+          }
+        }
+
+        @include lg {
+          grid-template-columns: repeat(2, 1fr);
         }
         @include sm {
-            background-image: url('../../assets/images/buy-universe-nft-bg-mobile.png');
+          grid-template-columns: 1fr;
         }
+      }
     }
+
+    @include md {
+      padding: 100px 20px;
+    }
+  }
+  .buy__universe__nfts__section {
+    position: relative;
+    padding: 80px 60px;
+    background-image: url('../../assets/images/buy-universe-nft-bg-desktop.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    &__container {
+      max-width: 1110px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 50px;
+      align-items: center;
+
+      h1.title {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 140%;
+        color: $black;
+        white-space: nowrap;
+        @include lg {
+          font-size: 26px;
+        }
+        @include md {
+          white-space: pre-wrap;
+        }
+        @include sm {
+          text-align: center;
+        }
+      }
+      p.desc {
+        margin: 15px 0 30px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+        min-width: 583px;
+        @include lg {
+          min-width: auto;
+        }
+        @include sm {
+          text-align: center;
+        }
+      }
+      .coming__soon {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        padding: 10px 16px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.4);
+        @include sm {
+          display: block;
+          width: 120px;
+          margin: 0 auto;
+        }
+      }
+      > div:nth-child(2) {
+        @include sm {
+          grid-row-start: 1;
+        }
+      }
+      @include sm {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+    @include lg {
+      background-image: url('../../assets/images/buy-universe-nft-bg-tablet.png');
+    }
+    @include md {
+      padding: 60px 20px;
+    }
+    @include sm {
+      background-image: url('../../assets/images/buy-universe-nft-bg-mobile.png');
+    }
+  }
 }
