@@ -24,7 +24,7 @@ const PlaceBid = ({ auction, bidders, setBidders }) => (
             <PlaceBidPopup
               onClose={close}
               onAuctionId={auction.id}
-              onAuctionTitle={auction.title}
+              onAuctionTitle={auction.name}
               onArtistName={auction.artist.name}
               onBidders={bidders}
               onSetBidders={setBidders}

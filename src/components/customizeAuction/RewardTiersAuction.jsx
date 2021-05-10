@@ -59,8 +59,8 @@ const RewardTiersAuction = ({ values, onChange }) => {
                 <div className="tier__title">
                   <h4>{tier.name}</h4>
                   <div className="pick__color">
-                    <CustomColorPicker />
                     <p>Pick tier color</p>
+                    <CustomColorPicker />
                   </div>
                   <div className="tier__description">
                     <div className="winners">
@@ -72,7 +72,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     <div className="winners">
                       Minimum bid per tier:{' '}
                       <b>
-                        {tier.minBid} {bidtype && bidtype}
+                        {tier.minBid} {bidtype}
                       </b>
                     </div>
                   </div>

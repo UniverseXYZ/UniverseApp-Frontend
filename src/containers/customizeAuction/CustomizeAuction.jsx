@@ -11,12 +11,21 @@ import AppContext from '../../ContextAPI';
 
 const CustomizeAuction = () => {
   const history = useHistory();
-  const { auction, setAuction, loggedInArtist, myAuctions, setMyAuctions } = useContext(AppContext);
+  const {
+    auction,
+    setAuction,
+    loggedInArtist,
+    myAuctions,
+    setMyAuctions,
+    activeAuctions,
+    setActiveAuctions,
+  } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
     link: '',
     promoImage: null,
     backgroundImage: null,
+    hasBlur: '',
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(
     auction.tiers.map((tier) => ({ id: tier.id }))
@@ -72,17 +81,23 @@ const CustomizeAuction = () => {
         newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
         newAuction.promoImage = domainAndBranding.promoImage;
         newAuction.backgroundImage = domainAndBranding.backgroundImage;
+        newAuction.hasBlur = domainAndBranding.hasBlur;
         newAuction.tiers = auction.tiers.map((tier) => {
           const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
           return { ...tier, ...rewardTier };
         });
         if (loggedInArtist.name && loggedInArtist.avatar) {
           newAuction.artist = loggedInArtist;
-          console.log(newAuction);
           history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
             auction: newAuction,
           });
           setTimeout(() => {
+            if (
+              new Date() < new Date(newAuction.endDate) &&
+              new Date() >= new Date(newAuction.startDate)
+            ) {
+              setActiveAuctions([...activeAuctions, newAuction]);
+            }
             setMyAuctions([...myAuctions, newAuction]);
             setAuction({ tiers: [] });
           }, 1000);

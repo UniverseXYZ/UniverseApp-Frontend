@@ -14,7 +14,7 @@ const RewardTiers = ({ auction }) => (
       </p>
 
       <div className="tiers__section">
-        {auction.rewardTiers.map((tier) => (
+        {auction.tiers.map((tier) => (
           <div className="tier__box" key={uuid()}>
             <div className="tier__nfts__container">
               <div className="tier__nfts">
@@ -22,8 +22,8 @@ const RewardTiers = ({ auction }) => (
                   (nft, index) =>
                     index < 3 && (
                       <div className="nft__image" key={nft.id}>
-                        <img src={nft.image} alt={nft.name} />
-                        {index === 2 && (
+                        <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                        {tier.nfts.length > 3 && (
                           <span className="show__more">{`+${tier.nfts.length - 3} more`}</span>
                         )}
                       </div>
@@ -33,28 +33,17 @@ const RewardTiers = ({ auction }) => (
             </div>
             <div className="tier__details">
               <div className="tier__title">
-                <h2>
-                  {tier.type === 'platinum'
-                    ? 'Platinum tier'
-                    : tier.type === 'gold'
-                    ? 'Gold tier'
-                    : 'Silver tier'}
-                </h2>
+                <h2>{tier.name}</h2>
                 <span
                   style={{
-                    backgroundColor:
-                      tier.type === 'platinum'
-                        ? '#80CCDF'
-                        : tier.type === 'gold'
-                        ? '#DDBC45'
-                        : '#BCBCBC',
+                    backgroundColor: '#BCBCBC',
                   }}
                 />
               </div>
               <div className="tier__info">
-                <span>{`Bidders #${tier.bidders}`}</span>
+                <span>Bidders #10</span>
                 <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
-                <span>{`Minimum bid: ${tier.minimumBid} ETH`}</span>
+                <span>{`Minimum bid: ${tier.minBid} ETH`}</span>
               </div>
               <div className="tier__description">{tier.description}</div>
               <div className="preview__nfts">

@@ -74,8 +74,8 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             style={{ height: '100%' }}
           >
             <img
-              src={onTier.nfts[selectedNFTIndex].image}
-              alt={onTier.nfts[selectedNFTIndex].title}
+              src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].previewImage)}
+              alt={onTier.nfts[selectedNFTIndex].name}
             />
           </Animated>
         </div>
@@ -85,26 +85,15 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <div className="tier__title">
             <span
               style={{
-                backgroundColor:
-                  onTier.type === 'platinum'
-                    ? '#80CCDF'
-                    : onTier.type === 'gold'
-                    ? '#DDBC45'
-                    : '#BCBCBC',
+                backgroundColor: '#BCBCBC',
               }}
             />
-            <h2>
-              {onTier.type === 'platinum'
-                ? 'Platinum Tier'
-                : onTier.type === 'gold'
-                ? 'Gold Tier'
-                : 'Silver Tier'}
-            </h2>
+            <h2>{onTier.name}</h2>
           </div>
           <div className="tier__info">
-            <span>{`Bidders #${onTier.bidders}`}</span>
+            <span>Bidders #10</span>
             <span>{`${onTier.nftsPerWinner} NFTs per winner`}</span>
-            <span>{`Minimum bid: ${onTier.minimumBid} ETH`}</span>
+            <span>{`Minimum bid: ${onTier.minBid} ETH`}</span>
           </div>
           <div className="tier__nfts">
             {onTier.nfts.map((nft, index) => (
@@ -114,30 +103,34 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                 onClick={() => setSelectedNFTIndex(index)}
                 aria-hidden="true"
               >
-                <img src={nft.image} alt={nft.name} />
+                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
               </div>
             ))}
           </div>
         </div>
         <div className="nft__details">
-          <h2 className="nft__title">{onTier.nfts[selectedNFTIndex].title}</h2>
+          <h2 className="nft__title">{onTier.nfts[selectedNFTIndex].name}</h2>
           <div className="nft__released">
             <div className="item">
               <span>Released</span>
-              <p>{onTier.nfts[selectedNFTIndex].releasedDate}</p>
+              <p>{`${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[1]} ${
+                onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[2]
+              }, ${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[3]}`}</p>
             </div>
-            <div className="item">
-              <span>Collection</span>
-              <p>
-                <img
-                  src={onTier.nfts[selectedNFTIndex].collectionAvatar}
-                  alt={onTier.nfts[selectedNFTIndex].collectionName}
-                />
-                {onTier.nfts[selectedNFTIndex].collectionName}
-              </p>
-            </div>
+            {onTier.nfts[selectedNFTIndex].type === 'collection' && (
+              <div className="item">
+                <span>Collection</span>
+                <p>
+                  <img
+                    src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].collectionAvatar)}
+                    alt={onTier.nfts[selectedNFTIndex].collectionName}
+                  />
+                  {onTier.nfts[selectedNFTIndex].collectionName}
+                </p>
+              </div>
+            )}
           </div>
-          <div className="description">{onTier.description}</div>
+          <div className="description">{onTier.nfts[selectedNFTIndex].description}</div>
         </div>
       </div>
     </div>

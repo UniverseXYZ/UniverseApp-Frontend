@@ -29,13 +29,17 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    .bg.empty {
+    .bg {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: conic-gradient(
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      &.empty {
+        background: conic-gradient(
           from 176.21deg at 50% 50%,
           #000000 -24.66deg,
           #ffffff 0.25deg,
@@ -49,10 +53,11 @@
           #000000 335.2deg,
           #000000 335.34deg,
           #ffffff 360.25deg
-        ),
+          ),
         radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
-      background-blend-mode: screen, normal;
-      opacity: 0.1;
+        background-blend-mode: screen, normal;
+        opacity: 0.1;
+      }
     }
     &__container {
       max-width: 1110px;
@@ -274,7 +279,7 @@
               font-weight: bold;
               font-size: 14px;
               line-height: 150%;
-              background-color: $white;
+              background-color: transparent;
               text-decoration: underline;
               color: $black;
             }
