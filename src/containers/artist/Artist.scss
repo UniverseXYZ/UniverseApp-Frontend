@@ -2,6 +2,22 @@
 @import '../../assets/scss/mixins';
 
 .artist__page {
+  .artist__personal__logo {
+    position: fixed;
+    top: 20px;
+    z-index: 999;
+    left: 220px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 0 10px 24px;
+    background: $white;
+    @include lg {
+      left: 100px;
+    }
+    @include sm {
+      left: 80px;
+      padding: 10px 0 10px 14px;
+    }
+  }
   .artist__details__section {
     position: relative;
     padding: 60px 60px;

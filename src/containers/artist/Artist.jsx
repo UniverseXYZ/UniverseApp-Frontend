@@ -27,6 +27,9 @@ const Artist = () => {
     <div className="artist__page">
       <ArtistDetails onArtist={artist} />
       <ArtistPageTabs onArtist={artist} />
+      <div className="artist__personal__logo">
+        <img src={artist.personalLogo} alt="Artist personal logo" />
+      </div>
     </div>
   ) : (
     <Redirect to="/" />

@@ -396,64 +396,67 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
         </div>
       )}
       {isCreatingAction && tierById && (
-        <div className="container selected-ntf">
-          <div className="infoSelect-div">
-            <span>Number of winners : {tierById.winners}</span>
-            <span>NFTs per winner : {tierById.nftsPerWinner}</span>
-            {tierById.nftsPerWinner > previewNFTs.length && (
-              <span className="err-select">
-                You have not selected enough NFTs for this reward tier
-              </span>
-            )}
-          </div>
-          <div className="sel-info">
-            <div className="img-div">
-              {previewNFTs.map((nft, index) => (
-                <div key={nft.id} className="imgs">
-                  {nft.previewImage.type === 'video/mp4' && (
-                    <video
-                      className="smallView-image"
-                      onMouseOver={(event) => event.target.play()}
-                      onFocus={(event) => event.target.play()}
-                      onMouseOut={(event) => event.target.pause()}
-                      onBlur={(event) => event.target.pause()}
-                    >
-                      <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                      <track kind="captions" />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
-                  {nft.previewImage.type === 'audio/mpeg' && (
-                    <img className="smallView-image" src={mp3Icon} alt={nft.name} />
-                  )}
-                  {nft.previewImage.type !== 'audio/mpeg' &&
-                    nft.previewImage.type !== 'video/mp4' && (
-                      <img
+        // <div>
+        <div className="selected-ntf">
+          <div className="container selected-body">
+            <div className="infoSelect-div">
+              <span>Number of winners : {tierById.winners}</span>
+              <span>NFTs per winner : {tierById.nftsPerWinner}</span>
+              <div className="img-div">
+                {previewNFTs.map((nft, index) => (
+                  <div key={nft.id} className="imgs">
+                    {nft.previewImage.type === 'video/mp4' && (
+                      <video
                         className="smallView-image"
-                        src={URL.createObjectURL(nft.previewImage)}
-                        alt={nft.name}
-                      />
+                        onMouseOver={(event) => event.target.play()}
+                        onFocus={(event) => event.target.play()}
+                        onMouseOut={(event) => event.target.pause()}
+                        onBlur={(event) => event.target.pause()}
+                      >
+                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
                     )}
-                  <img
-                    className="del-img"
-                    src={crossSmall}
-                    onClick={() => handledeleteNft(nft)}
-                    alt="delete"
-                    aria-hidden="true"
-                  />
-                </div>
-              ))}
+                    {nft.previewImage.type === 'audio/mpeg' && (
+                      <img className="smallView-image" src={mp3Icon} alt={nft.name} />
+                    )}
+                    {nft.previewImage.type !== 'audio/mpeg' &&
+                      nft.previewImage.type !== 'video/mp4' && (
+                        <img
+                          className="smallView-image"
+                          src={URL.createObjectURL(nft.previewImage)}
+                          alt={nft.name}
+                        />
+                      )}
+                    <img
+                      className="del-img"
+                      src={crossSmall}
+                      onClick={() => handledeleteNft(nft)}
+                      alt="delete"
+                      aria-hidden="true"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="continue-nft">
-              {tierById && Number(tierById.nftsPerWinner) === Number(previewNFTs.length) ? (
-                <Button onClick={() => handleContinue(previewNFTs)} className="light-button">
-                  Continue
-                </Button>
-              ) : (
-                <Button className="light-button" disabled>
-                  Continue
-                </Button>
+            <div className="sel-info">
+              {tierById.nftsPerWinner > previewNFTs.length && (
+                <span className="err-select">
+                  You have not selected enough NFTs for this reward tier
+                </span>
               )}
+              <div className="continue-nft">
+                {tierById && Number(tierById.nftsPerWinner) === Number(previewNFTs.length) ? (
+                  <Button onClick={() => handleContinue(previewNFTs)} className="light-button">
+                    Continue
+                  </Button>
+                ) : (
+                  <Button className="light-button" disabled>
+                    Continue
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
