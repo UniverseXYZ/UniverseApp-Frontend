@@ -54,9 +54,7 @@ const DomainAndBranding = ({ values, onChange }) => {
               onChange={handleHeadline}
             />
             {!validHeadline && (
-              <p className="error__text">
-                &quot;Auction website link&quot; is not allowed to be empty
-              </p>
+              <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
             )}
           </div>
           <div className="upload__promo">
@@ -118,9 +116,16 @@ const DomainAndBranding = ({ values, onChange }) => {
             <h5>
               Auction link <img src={infoIcon} alt="Info" />
             </h5>
-            <Input type="text" value={values.link} onChange={handleLink} />
+            <Input
+              type="text"
+              value={values.link}
+              onChange={handleLink}
+              placeholder="Enter the auction link"
+            />
             {!validLink && (
-              <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
+              <p className="error__text">
+                &quot;Auction website link&quot; is not allowed to be empty
+              </p>
             )}
           </div>
           <div className="upload__background">
@@ -153,7 +158,10 @@ const DomainAndBranding = ({ values, onChange }) => {
                     type="checkbox"
                     className="toggle-switch-checkbox"
                     name="toggleSwitch"
-                    onChange={() => setBlur(!blur)}
+                    value={values.hasBlur}
+                    onChange={(e) =>
+                      onChange((prevValues) => ({ ...prevValues, hasBlur: e.target.checked }))
+                    }
                   />
                   <label htmlFor="toggleSwitch" className="toggle-switch-label">
                     <span className="toggle-switch-inner" />
@@ -216,12 +224,7 @@ const DomainAndBranding = ({ values, onChange }) => {
 };
 
 DomainAndBranding.propTypes = {
-  values: PropTypes.exact({
-    headline: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    promoImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
-    backgroundImage: PropTypes.oneOfType([PropTypes.null, PropTypes.string, PropTypes.object]),
-  }),
+  values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
 };
 
@@ -229,6 +232,7 @@ DomainAndBranding.defaultProps = {
   values: {
     promoImage: '',
     backgroundImage: '',
+    hasBlur: false,
   },
 };
 export default DomainAndBranding;

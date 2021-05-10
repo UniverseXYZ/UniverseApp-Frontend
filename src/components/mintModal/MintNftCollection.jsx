@@ -280,6 +280,7 @@ const MintNftCollection = ({ onClick }) => {
                 description: nft.description,
                 numberOfEditions: Number(nft.editions),
                 generatedEditions: nft.generatedEditions,
+                releasedDate: new Date(),
               });
             });
             setMyNFTs(newMyNFTs);

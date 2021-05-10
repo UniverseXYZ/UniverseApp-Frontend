@@ -251,7 +251,7 @@ const PlaceBidPopup = ({
 
 PlaceBidPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
-  onAuctionId: PropTypes.number.isRequired,
+  onAuctionId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   onAuctionTitle: PropTypes.string.isRequired,
   onArtistName: PropTypes.string.isRequired,
   onBidders: PropTypes.oneOfType([PropTypes.array]).isRequired,

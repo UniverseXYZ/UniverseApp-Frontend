@@ -50,6 +50,7 @@ const App = () => {
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
+  const [activeAuctions, setActiveAuctions] = useState([]);
   const [auction, setAuction] = useState({ tiers: [] });
   const [selectedNft, setSelectedNft] = useState([]);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
@@ -128,6 +129,8 @@ const App = () => {
         setMyNFTs,
         myAuctions,
         setMyAuctions,
+        activeAuctions,
+        setActiveAuctions,
         selectAllIsChecked,
         setSelectAllIsChecked,
         auction,

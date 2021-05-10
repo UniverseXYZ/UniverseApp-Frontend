@@ -47,10 +47,6 @@ const Lists = ({ data, perPage, offset }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(selectedNFTIds);
-  }, [selectedNFTIds]);
-
   return (
     <div className="nfts__lists">
       {sliceData.map((nft, index) => (

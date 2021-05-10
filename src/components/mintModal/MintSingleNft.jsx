@@ -218,6 +218,7 @@ const MintSingleNft = ({ onClick }) => {
                 generatedEditions: mintingGeneratedEditions,
                 properties,
                 percentAmount,
+                releasedDate: new Date(),
               },
             ]);
             setShowModal(false);

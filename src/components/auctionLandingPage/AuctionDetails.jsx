@@ -15,11 +15,12 @@ import PlaceBidPopup from '../popups/PlaceBidPopup';
 import Button from '../button/Button';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
-  const { windowSize, loggedInArtist } = useContext(AppContext);
-  const getAllAuctionsForCurrentArtist = PLACEHOLDER_ACTIVE_AUCTIONS.filter(
+  const { windowSize, loggedInArtist, myAuctions } = useContext(AppContext);
+  const getAllAuctionsForCurrentArtist = myAuctions.filter(
     (act) => act.artist.id === onAuction.artist.id
   );
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
+
   const [sliderSettings, setSliderSettings] = useState({
     dots: false,
     infinite: false,
@@ -54,26 +55,26 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const d = (new Date(selectedAuction.endDate) - Date.now()) / 1000;
-      const days = Math.floor(d / 86400);
-      const hours = Math.floor(d / 3600) % 24;
-      const minutes = Math.floor(d / 60) % 60;
-      const seconds = d % 60;
-      if (days < 0) {
-        clearInterval(interval);
-        setSelectedAuctionEnded(true);
-      } else {
-        setSelectedAuctionEnded(false);
-        setCountdown({
-          days: parseInt(days, 10),
-          hours: parseInt(hours, 10),
-          minutes: parseInt(minutes, 10),
-          seconds: parseInt(seconds, 10),
-        });
-      }
-    }, 1000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(() => {
+    const d = (new Date(selectedAuction.endDate) - Date.now()) / 1000;
+    const days = Math.floor(d / 86400);
+    const hours = Math.floor(d / 3600) % 24;
+    const minutes = Math.floor(d / 60) % 60;
+    const seconds = d % 60;
+    if (days < 0) {
+      // clearInterval(interval);
+      setSelectedAuctionEnded(true);
+    } else {
+      setSelectedAuctionEnded(false);
+      setCountdown({
+        days: parseInt(days, 10),
+        hours: parseInt(hours, 10),
+        minutes: parseInt(minutes, 10),
+        seconds: parseInt(seconds, 10),
+      });
+    }
+    // }, 1000);
+    // return () => clearInterval(interval);
   }, [selectedAuction]);
 
   useEffect(() => {
@@ -124,13 +125,14 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, []);
 
   return (
-    <div
-      className="auction__details__section"
-      // style={{
-      //   background: selectedAuction.background ? `url(${selectedAuction.background})` : '#F8FBFF',
-      // }}
-    >
-      <div className="bg" />
+    <div className="auction__details__section">
+      <div
+        className={`bg ${!selectedAuction.backgroundImage ? 'empty' : ''}`}
+        style={{
+          backgroundImage: `url(${URL.createObjectURL(selectedAuction.backgroundImage)})`,
+          filter: selectedAuction.hasBlur ? 'blur(20px)' : 'blur(0px)',
+        }}
+      />
       <div className="auction__details__section__container">
         {getAllAuctionsForCurrentArtist.length && getAllAuctionsForCurrentArtist.length > 1 ? (
           <Slider {...sliderSettings}>
@@ -189,20 +191,27 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
             <div className="auction__details__box">
               <div
                 className={`auction__details__box__image ${
-                  selectedAuction.image ? '' : 'show__avatar'
+                  selectedAuction.promoImage ? '' : 'show__avatar'
                 }`}
               >
-                <img className="original" src={selectedAuction.image} alt={selectedAuction.title} />
+                <img
+                  className="original"
+                  src={URL.createObjectURL(selectedAuction.promoImage)}
+                  alt={selectedAuction.name}
+                />
                 <img
                   className="artist__image"
-                  src={selectedAuction.artist.avatar}
-                  alt={selectedAuction.title}
+                  src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                  alt={selectedAuction.name}
                 />
               </div>
               <div className="auction__details__box__info">
-                <h1 className="title">{selectedAuction.title}</h1>
+                <h1 className="title">{selectedAuction.name}</h1>
                 <div className="artist__details">
-                  <img src={selectedAuction.artist.avatar} alt={selectedAuction.artist.name} />
+                  <img
+                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                    alt={selectedAuction.artist.name}
+                  />
                   <span>by</span>
                   <button
                     type="button"
@@ -336,7 +345,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                           <PlaceBidPopup
                             onClose={close}
                             onAuctionId={selectedAuction.id}
-                            onAuctionTitle={selectedAuction.title}
+                            onAuctionTitle={selectedAuction.name}
                             onArtistName={selectedAuction.artist.name}
                             onBidders={bidders}
                             onSetBidders={setBidders}
