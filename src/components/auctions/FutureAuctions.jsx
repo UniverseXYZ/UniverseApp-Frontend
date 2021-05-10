@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+/* eslint-disable react/destructuring-assignment */
+import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
+import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import moment from 'moment';
 import uuid from 'react-uuid';
+import { useHistory } from 'react-router-dom';
 import Button from '../button/Button';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -16,7 +19,7 @@ import Input from '../input/Input';
 
 import Pagination from '../pagination/Pagionation';
 
-const FutureAuctions = () => {
+const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
   const [hideEndIcon, setHideEndIcon] = useState(true);
   const [shownActionId, setshownActionId] = useState(null);
@@ -24,6 +27,7 @@ const FutureAuctions = () => {
   const [data, setData] = useState(FUTURE_ACTIONS_DATA);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const history = useHistory();
 
   const handleRemove = (id) => {
     setData((d) => d.filter((item) => item.id !== id));
@@ -37,6 +41,11 @@ const FutureAuctions = () => {
     setSearchByName('');
   };
 
+  useEffect(() => {
+    console.log('myAuctions', myAuctions);
+    window['__react-beautiful-dnd-disable-dev-warnings'] = true;
+  }, []);
+  console.log(myAuctions);
   return (
     <div className="future-auctions">
       <div className="input-search">
@@ -51,9 +60,19 @@ const FutureAuctions = () => {
           placeholder="Search by name"
         />
       </div>
-      {data
+      {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+        .filter(
+          (item) =>
+            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
+            !(
+              moment(item.endDate).isAfter(moment.now()) &&
+              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+                moment(item.startDate).isBefore(moment.now())) > 0 &&
+              item.launch
+            )
+        )
         .map((futureAuction) => (
           <div className="auction" key={futureAuction.id}>
             <div className="auction-header">
@@ -91,7 +110,7 @@ const FutureAuctions = () => {
               </div>
               <div
                 className={`total-dates ${
-                  moment(futureAuction.launchDate).isBefore(moment.now()) ? 'dateError' : ''
+                  moment(futureAuction.startDate).isBefore(moment.now()) ? 'dateError' : ''
                 }`}
               >
                 <p
@@ -102,9 +121,9 @@ const FutureAuctions = () => {
                 >
                   Launch date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{futureAuction.launchDate}</Moment>
+                    <Moment format="MMMM DD, hh:mm">{futureAuction.startDate}</Moment>
                   </b>
-                  {moment(futureAuction.launchDate).isBefore(moment.now()) && (
+                  {moment(futureAuction.startDate).isBefore(moment.now()) && (
                     <div className="launch__date__info">
                       {hideLaunchIcon === futureAuction.id && (
                         <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
@@ -158,7 +177,15 @@ const FutureAuctions = () => {
                   <img src={doneIcon} alt="Done" />
                   <div className="hz-line1" />
                 </div>
-                <Button className="light-border-button">Edit auction</Button>
+                <Button
+                  className="light-border-button"
+                  onClick={() => {
+                    setAuction(futureAuction);
+                    history.push('/auction-settings', futureAuction.id);
+                  }}
+                >
+                  Edit auction
+                </Button>
               </div>
               <div className="step-2">
                 <h6>Step2</h6>
@@ -191,7 +218,14 @@ const FutureAuctions = () => {
                   )}
                 </div>
                 {futureAuction.mint === true && futureAuction.landingCustom === false ? (
-                  <Button className="light-border-button">Set up landing page</Button>
+                  <Button
+                    className="light-border-button"
+                    onClick={() => {
+                      history.push('/customize-auction-landing-page');
+                    }}
+                  >
+                    Set up landing page
+                  </Button>
                 ) : (
                   <Button className="light-border-button" disabled>
                     Set up landing page
@@ -255,87 +289,37 @@ const FutureAuctions = () => {
             </div>
 
             <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
-              <div className="tier">
-                <div className="tier-header">
-                  <h3>{futureAuction.platinumTier.name}</h3>
-                  <div className="tier-header-description">
-                    <p>
-                      NFTs per winner: <b>{futureAuction.platinumTier.nftsPerWinner}</b>
-                    </p>
-                    <p>
-                      Winners: <b>{futureAuction.platinumTier.winners}</b>
-                    </p>
-                    <p>
-                      Total NFTs: <b>{futureAuction.platinumTier.totalNFTs}</b>
-                    </p>
-                  </div>
-                </div>
-                <div className="tier-body">
-                  {futureAuction.platinumTier.nfts.map((nft) => (
-                    <div className="tier-image" key={uuid()}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
-                      <div className="tier-image-main">
-                        <img src={nft} alt="NFT" />
+              {console.log(futureAuction.tiers)}
+              {futureAuction.tiers &&
+                futureAuction.tiers.map((tier) => (
+                  <div className="tier">
+                    <div className="tier-header">
+                      <h3>{tier.name}</h3>
+                      <div className="tier-header-description">
+                        <p>
+                          NFTs per winner: <b>{tier.nftsPerWinner}</b>
+                        </p>
+                        <p>
+                          Winners: <b>{tier.winners}</b>
+                        </p>
+                        <p>
+                          Total NFTs: <b>{tier.totalNFTs}</b>
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className="tier">
-                <div className="tier-header">
-                  <h3>{futureAuction.goldTier.name}</h3>
-                  <div className="tier-header-description">
-                    <p>
-                      NFTs per winner: <b>{futureAuction.goldTier.nftsPerWinner}</b>
-                    </p>
-                    <p>
-                      Winners: <b>{futureAuction.goldTier.winners}</b>
-                    </p>
-                    <p>
-                      Total NFTs: <b>{futureAuction.goldTier.totalNFTs}</b>
-                    </p>
-                  </div>
-                </div>
-                <div className="tier-body">
-                  {futureAuction.goldTier.nfts.map((nft) => (
-                    <div className="tier-image" key={uuid()}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
-                      <div className="tier-image-main">
-                        <img src={nft} alt="NFT" />
-                      </div>
+                    <div className="tier-body">
+                      {tier.nfts.map((nft) => (
+                        <div className="tier-image" key={uuid()}>
+                          <div className="tier-image-second" />
+                          <div className="tier-image-first" />
+                          <div className="tier-image-main">
+                            <img src={nft} alt="NFT" />
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className="tier">
-                <div className="tier-header">
-                  <h3>{futureAuction.silverTier.name}</h3>
-                  <div className="tier-header-description">
-                    <p>
-                      NFTs per winner: <b>{futureAuction.silverTier.nftsPerWinner}</b>
-                    </p>
-                    <p>
-                      Winners: <b>{futureAuction.silverTier.winners}</b>
-                    </p>
-                    <p>
-                      Total NFTs: <b>{futureAuction.silverTier.totalNFTs}</b>
-                    </p>
                   </div>
-                </div>
-                <div className="tier-body">
-                  {futureAuction.silverTier.nfts.map((nft) => (
-                    <div className="tier-image" key={uuid()}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
-                      <div className="tier-image-main">
-                        <img src={nft} alt="NFT" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                ))}
               <Button
                 className="light-border-button"
                 onClick={() => handleRemove(futureAuction.id)}
@@ -346,10 +330,16 @@ const FutureAuctions = () => {
           </div>
         ))}
       <div className="pagination__container">
-        <Pagination data={data} perPage={perPage} setOffset={setOffset} />
+        <Pagination data={myAuctions} perPage={perPage} setOffset={setOffset} />
       </div>
     </div>
   );
+};
+
+FutureAuctions.propTypes = {
+  myAuctions: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setMyAuctions: PropTypes.func.isRequired,
+  setAuction: PropTypes.func.isRequired,
 };
 
 export default FutureAuctions;

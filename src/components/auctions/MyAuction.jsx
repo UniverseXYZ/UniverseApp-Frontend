@@ -36,7 +36,7 @@ const MyAuction = () => {
       }
     }, 25);
   };
-
+  console.log(auction);
   const handleTabLeftScrolling = () => {
     let scrollAmount = 100;
     const slideTimer = setInterval(() => {
@@ -77,9 +77,26 @@ const MyAuction = () => {
 
   useEffect(() => {
     if (auction.tiers.length) {
-      setMyAuctions([...myAuctions, auction]);
+      setMyAuctions((prevValues) => {
+        let foundAuction = false;
+
+        const modifiedMyAuctions = prevValues.map((myAuction) => {
+          if (myAuction.id === auction.id) {
+            foundAuction = true;
+            return { ...auction };
+          }
+          return myAuction;
+        });
+
+        if (foundAuction) {
+          return modifiedMyAuctions;
+        }
+        return [...modifiedMyAuctions, auction];
+      });
+
       setAuction({ tiers: [] });
     }
+    console.log(myAuctions);
     function handleHideButton() {
       if (window.innerWidth < 576) {
         if (AUCTIONS_DATA.length > 0) {
@@ -176,7 +193,15 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 && AUCTIONS_DATA.length ? <FutureAuctions /> : <></>}
+        {selectedTabIndex === 1 && AUCTIONS_DATA.length ? (
+          <FutureAuctions
+            myAuctions={myAuctions}
+            setMyAuctions={setMyAuctions}
+            setAuction={setAuction}
+          />
+        ) : (
+          <></>
+        )}
         {selectedTabIndex === 1 && !AUCTIONS_DATA.length ? (
           <div className="empty__auction">
             <h3>No scheduled auctions found</h3>
@@ -195,7 +220,11 @@ const MyAuction = () => {
           <></>
         )}
 
-        {selectedTabIndex === 2 && AUCTIONS_DATA.length ? <PastAuctions /> : <></>}
+        {selectedTabIndex === 2 && AUCTIONS_DATA.length ? (
+          <PastAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
+        ) : (
+          <></>
+        )}
         {selectedTabIndex === 2 && !AUCTIONS_DATA.length ? (
           <div className="empty__auction">
             <h3>No past auctions found</h3>

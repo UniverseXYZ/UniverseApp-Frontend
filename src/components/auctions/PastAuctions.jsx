@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Moment from 'react-moment';
 import moment from 'moment';
 import uuid from 'react-uuid';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -16,8 +18,9 @@ import Input from '../input/Input';
 import copyIcon from '../../assets/images/copy1.svg';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation';
+import MyAccount from '../../containers/myAccount/MyAccount';
 
-const PastAuctions = () => {
+const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -31,6 +34,11 @@ const PastAuctions = () => {
   const clearInput = () => {
     setSearchByName('');
   };
+
+  useEffect(() => {
+    console.log('myAuctions', myAuctions);
+    window['__react-beautiful-dnd-disable-dev-warnings'] = true;
+  }, []);
 
   return (
     <div className="past-auctions">
@@ -46,8 +54,10 @@ const PastAuctions = () => {
           placeholder="Search by name"
         />
       </div>
-      {PAST_ACTIONS_DATA.slice(offset, offset + perPage)
+      {myAuctions
+        .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+        .filter((item) => moment(item.endDate).isBefore(moment.now()) && auction.launch)
         .map((pastAuction) => (
           <div className="auction past-auction" key={pastAuction.id}>
             <div className="auction-header">
@@ -106,7 +116,7 @@ const PastAuctions = () => {
                   Launch date:{' '}
                   <b>
                     {' '}
-                    <Moment format="MMMM DD, hh:mm">{pastAuction.launchDate}</Moment>
+                    <Moment format="MMMM DD, hh:mm">{pastAuction.startDate}</Moment>
                   </b>
                 </p>
               </div>
@@ -155,95 +165,48 @@ const PastAuctions = () => {
               </div>
             </div>
             <div hidden={shownActionId !== pastAuction.id} className="auctions-tier">
-              <div className="tier">
-                <div className="tier-header">
-                  <h3>{pastAuction.platinumTier.name}</h3>
-                  <div className="tier-header-description">
-                    <p>
-                      NFTs per winner: <b>{pastAuction.platinumTier.nftsPerWinner}</b>
-                    </p>
-                    <p>
-                      Winners: <b>{pastAuction.platinumTier.winners}</b>
-                    </p>
-                    <p>
-                      Total NFTs: <b>{pastAuction.platinumTier.totalNFTs}</b>
-                    </p>
+              {pastAuction.tiers.map((tier) => (
+                <div className="tier">
+                  <div className="tier-header">
+                    <h3>{tier.name}</h3>
+                    <div className="tier-header-description">
+                      <p>
+                        NFTs per winner: <b>{tier.nftsPerWinner}</b>
+                      </p>
+                      <p>
+                        Winners: <b>{tier.winners}</b>
+                      </p>
+                      <p>
+                        Total NFTs: <b>{tier.totalNFTs}</b>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="tier-body">
+                    {tier.nfts.map((nft) => (
+                      <div className="tier-image" key={uuid()}>
+                        <div className="tier-image-second" />
+                        <div className="tier-image-first" />
+                        <div className="tier-image-main">
+                          <img src={nft} alt="NFT" />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="tier-body">
-                  {pastAuction.platinumTier.nfts.map((nft) => (
-                    <div className="tier-image" key={uuid()}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
-                      <div className="tier-image-main">
-                        <img src={nft} alt="NFT" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="tier">
-                <div className="tier-header">
-                  <h3>{pastAuction.goldTier.name}</h3>
-                  <div className="tier-header-description">
-                    <p>
-                      NFTs per winner: <b>{pastAuction.goldTier.nftsPerWinner}</b>
-                    </p>
-                    <p>
-                      Winners: <b>{pastAuction.goldTier.winners}</b>
-                    </p>
-                    <p>
-                      Total NFTs: <b>{pastAuction.goldTier.totalNFTs}</b>
-                    </p>
-                  </div>
-                </div>
-                <div className="tier-body">
-                  {pastAuction.goldTier.nfts.map((nft) => (
-                    <div className="tier-image" key={uuid()}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
-                      <div className="tier-image-main">
-                        <img src={nft} alt="NFT" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="tier">
-                <div className="tier-header">
-                  <h3>{pastAuction.silverTier.name}</h3>
-                  <div className="tier-header-description">
-                    <p>
-                      NFTs per winner: <b>{pastAuction.silverTier.nftsPerWinner}</b>
-                    </p>
-                    <p>
-                      Winners: <b>{pastAuction.silverTier.winners}</b>
-                    </p>
-                    <p>
-                      Total NFTs: <b>{pastAuction.silverTier.totalNFTs}</b>
-                    </p>
-                  </div>
-                </div>
-                <div className="tier-body">
-                  {pastAuction.silverTier.nfts.map((nft) => (
-                    <div className="tier-image" key={uuid()}>
-                      <div className="tier-image-second" />
-                      <div className="tier-image-first" />
-                      <div className="tier-image-main">
-                        <img src={nft} alt="NFT" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         ))}
       <div className="pagination__container">
-        <Pagination data={PAST_ACTIONS_DATA} perPage={perPage} setOffset={setOffset} />
+        <Pagination data={myAuctions} perPage={perPage} setOffset={setOffset} />
       </div>
     </div>
   );
+};
+
+PastAuctions.propTypes = {
+  myAuctions: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setMyAuctions: PropTypes.func.isRequired,
 };
 
 export default PastAuctions;

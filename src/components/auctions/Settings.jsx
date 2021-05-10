@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import Select from 'react-select';
 import moment from 'moment';
+import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input';
@@ -35,7 +36,15 @@ const AuctionSettings = () => {
 
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction, bidtype, setBidtype, options } = useContext(AppContext);
+  const {
+    auction,
+    setAuction,
+    myAuctions,
+    setMyAuctions,
+    bidtype,
+    setBidtype,
+    options,
+  } = useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -98,8 +107,11 @@ const AuctionSettings = () => {
     setShowAddToken(false);
   };
   const bid = options.find((element) => element.value === bidtype);
-  const isEditingAuction = location.state === '/auction-review';
-  console.log(bid);
+  const isEditingAuction = location.state !== undefined;
+  // const isEditingAuction = location.state === '/auction-review';
+
+  console.log(location.state !== undefined);
+  console.log(location.state);
   const handleAddAuction = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
@@ -139,18 +151,23 @@ const AuctionSettings = () => {
     }
 
     if (auctionFieldsValid && bidFieldsValid) {
-      setAuction((prevValue) => ({
-        ...prevValue,
-        name: values.name,
-        startingBid: values.startingBid,
-        startDate: moment(values.startDate).format(),
-        endDate: moment(values.endDate).format(),
-        tiers: minBid
-          ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
-          : prevValue.tiers,
-      }));
+      if (!auction.id) {
+        setAuction((prevValue) => ({
+          ...prevValue,
+          id: uuid(),
+          launch: false,
+          name: values.name,
+          startingBid: values.startingBid,
+          startDate: moment(values.startDate).format(),
+          endDate: moment(values.endDate).format(),
+          tiers: minBid
+            ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
+            : prevValue.tiers,
+        }));
+      }
       history.push('/auction-review', location.pathname);
     }
+    console.log(auction);
   };
 
   const handleOnChange = (event) => {

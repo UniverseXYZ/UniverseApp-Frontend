@@ -34,10 +34,10 @@ const CustomizeAuction = () => {
         if (descriptionCount === rewardTiersAuction.length) desc = true;
       }
       if (desc) {
-        history.push('/my-auctions');
         setTimeout(() => {
           setAuction((prevValues) => ({
             ...prevValues,
+            launch: true,
             headline: domainAndBranding.headline,
             link: domainAndBranding.link,
             promoImage: domainAndBranding.promoImage,
@@ -47,6 +47,7 @@ const CustomizeAuction = () => {
               return { ...tier, ...rewardTier };
             }),
           }));
+          history.push('/my-auctions');
         }, 1000);
       }
     }
