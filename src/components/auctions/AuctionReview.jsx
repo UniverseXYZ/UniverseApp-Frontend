@@ -110,7 +110,7 @@ const AuctionReview = () => {
             <Button
               className="light-border-button"
               onClick={() => {
-                history.push('/auction-settings', location.pathname);
+                history.push('/auction-settings', auction.id);
               }}
             >
               Edit <img src={pencil} alt="edit-icon" />

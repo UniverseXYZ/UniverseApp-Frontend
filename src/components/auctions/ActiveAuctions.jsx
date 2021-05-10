@@ -17,6 +17,7 @@ import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
+  console.log(myAuctions);
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -47,6 +48,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
     newAuctions.splice(destination.index, 0, draggingAuction[0]);
 
     setMyAuctions(newAuctions);
+    console.log(myAuctions);
   };
 
   useEffect(() => {
@@ -75,6 +77,13 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
               {myAuctions
                 .slice(offset, offset + perPage)
                 .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+                .filter(
+                  (item) =>
+                    moment(item.endDate).isAfter(moment.now()) &&
+                    (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+                      moment(item.startDate).isBefore(moment.now())) > 0 &&
+                    item.launch
+                )
                 .slice(offset, offset + perPage)
                 .map((activeAuction, index) => (
                   <Draggable draggableId={activeAuction.name} index={index} key={uuid()}>
@@ -254,7 +263,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
         </Droppable>
       </DragDropContext>
       <div className="pagination__container">
-        <Pagination data={ACTIVE_ACTIONS_DATA} perPage={perPage} setOffset={setOffset} />
+        <Pagination data={myAuctions} perPage={perPage} setOffset={setOffset} />
       </div>
     </div>
   );
