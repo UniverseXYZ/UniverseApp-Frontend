@@ -134,25 +134,60 @@ const MyNFTs = () => {
       </Popup>
       {myNFTs.length || savedNfts.length || savedCollections.length ? (
         <>
-          <div className="mynfts__page__header">
-            <h1 className="title">My NFTs</h1>
-            <div className="create__mint__btns">
-              {selectedTabIndex === 1 && (
-                <button
-                  type="button"
-                  className="mint__btn"
-                  onClick={handleMintSelected}
-                  disabled={checkSelectedSavedNfts()}
-                >
-                  Mint selected
-                </button>
-              )}
-              <button type="button" className="mint__btn" onClick={handleOpen}>
-                Create NFT
-              </button>
+          {isCreatingAction ? (
+            <div className="select-nfts">
+              <div
+                className="back-rew"
+                onClick={() => {
+                  history.push('/reward-tiers');
+                }}
+                aria-hidden="true"
+              >
+                <img src={arrow} alt="back" />
+                <span>Create reward tier</span>
+              </div>
+
+              <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
+                <h1 className="title">Select NFT</h1>
+                <div className="create__mint__btns">
+                  {selectedTabIndex === 1 && (
+                    <button
+                      type="button"
+                      className="mint__btn"
+                      onClick={handleMintSelected}
+                      disabled={checkSelectedSavedNfts()}
+                    >
+                      Mint selected
+                    </button>
+                  )}
+                  <button type="button" className="mint__btn" onClick={handleOpen}>
+                    Create NFT
+                  </button>
+                </div>
+                {showModal && <MintModal open={showModal} onClose={handleClose} />}
+              </div>
             </div>
-            {showModal && <MintModal open={showModal} onClose={handleClose} />}
-          </div>
+          ) : (
+            <div className="mynfts__page__header">
+              <h1 className="title">My NFTs</h1>
+              <div className="create__mint__btns">
+                {selectedTabIndex === 1 && (
+                  <button
+                    type="button"
+                    className="mint__btn"
+                    onClick={handleMintSelected}
+                    disabled={checkSelectedSavedNfts()}
+                  >
+                    Mint selected
+                  </button>
+                )}
+                <button type="button" className="mint__btn" onClick={handleOpen}>
+                  Create NFT
+                </button>
+              </div>
+              {showModal && <MintModal open={showModal} onClose={handleClose} />}
+            </div>
+          )}
 
           <div className="mynfts__page__body">
             <ul className="tabs">

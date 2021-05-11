@@ -62,7 +62,7 @@ const MyAuction = () => {
 
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth < 500) {
+      if (window.innerWidth < 400) {
         document.querySelector('.tab__right__arrow').style.display = 'flex';
       } else {
         document.querySelector('.tab__right__arrow').style.display = 'none';
@@ -99,7 +99,7 @@ const MyAuction = () => {
     console.log(myAuctions);
     function handleHideButton() {
       if (window.innerWidth < 576) {
-        if (AUCTIONS_DATA.length > 0) {
+        if (myAuctions.length > 0) {
           setHideButton(true);
         } else {
           setHideButton(false);
@@ -111,8 +111,9 @@ const MyAuction = () => {
     window.addEventListener('resize', handleHideButton);
     handleHideButton();
 
-    return () => window.removeEventListener('resize', handleHideButton);
+    // return () => window.removeEventListener('resize', handleHideButton);
   }, []);
+  console.log(hideButton);
 
   return (
     <div className="container auction__page">
