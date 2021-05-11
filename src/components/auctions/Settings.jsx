@@ -66,7 +66,7 @@ const AuctionSettings = () => {
     endDate: true,
   });
 
-  const [bidValues, setBidValues] = useState({});
+  const [bidValues, setBidValues] = useState([]);
   const [values, setValues] = useState({
     name: '',
     startingBid: '',
@@ -110,8 +110,6 @@ const AuctionSettings = () => {
   const isEditingAuction = location.state !== undefined;
   // const isEditingAuction = location.state === '/auction-review';
 
-  console.log(location.state !== undefined);
-  console.log(location.state);
   const handleAddAuction = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
@@ -133,19 +131,20 @@ const AuctionSettings = () => {
     }
 
     if (minBid === true) {
-      let currentMinBid = 0;
-      // eslint-disable-next-line no-restricted-syntax, guard-for-in
-      for (const key in bidValues) {
-        if (currentMinBid < bidValues[key]) {
-          currentMinBid = bidValues[key];
-          setErrorArray((prevValue) => prevValue.filter((tierId) => tierId !== key));
-        } else {
-          setErrorArray((prevValue) => [...prevValue, key]);
-          return;
-        }
-      }
+      let isValid = true;
       setErrorArray([]);
-      bidFieldsValid = true;
+      // eslint-disable-next-line consistent-return
+      bidValues.forEach((item, index) => {
+        if (index < bidValues.length - 1 && bidValues[index + 1] > bidValues[index]) {
+          console.log(index + 1);
+          setErrorArray((prevValue) => [...prevValue, index + 1]);
+          isValid = false;
+          return isValid;
+        }
+      });
+      if (isValid) {
+        bidFieldsValid = true;
+      }
     } else {
       bidFieldsValid = true;
     }
@@ -161,24 +160,21 @@ const AuctionSettings = () => {
           startDate: moment(values.startDate).format(),
           endDate: moment(values.endDate).format(),
           tiers: minBid
-            ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
+            ? prevValue.tiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.tiers,
         }));
       }
       history.push('/auction-review', location.pathname);
     }
-    console.log(auction);
   };
 
   const handleOnChange = (event) => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
 
-  const handleBidChange = (event) => {
-    setBidValues((prevValue) => ({
-      ...prevValue,
-      [event.target.id]: event.target.value,
-    }));
+  const handleBidChange = (event, index) => {
+    bidValues[index] = +event.target.value;
+    setBidValues(bidValues);
   };
 
   const handleClickOutside = (event) => {
@@ -438,7 +434,7 @@ const AuctionSettings = () => {
             <div className="tiers-inp">
               {auction.tiers.length > 0 &&
                 minBid === true &&
-                auction.tiers.map((tier, _index) => (
+                auction.tiers.map((tier, index) => (
                   <div className="tiers-part">
                     <span className="bid-type">
                       {bid.img && <img src={bid.img} alt="icon" />}
@@ -449,11 +445,11 @@ const AuctionSettings = () => {
                       name="tierBid"
                       label={tier.name}
                       error={
-                        errorArray.includes(tier.id)
+                        errorArray.includes(index)
                           ? 'The minimum bid for this tier cannot be lower than for the tier below'
                           : undefined
                       }
-                      onChange={handleBidChange}
+                      onChange={(e) => handleBidChange(e, index)}
                       id={tier.id}
                       placeholder="0.1"
                       value={bidValues[tier.id]}

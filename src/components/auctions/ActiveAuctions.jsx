@@ -17,7 +17,6 @@ import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
-  console.log(myAuctions);
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -48,11 +47,9 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
     newAuctions.splice(destination.index, 0, draggingAuction[0]);
 
     setMyAuctions(newAuctions);
-    console.log(myAuctions);
   };
 
   useEffect(() => {
-    console.log('myAuctions', myAuctions);
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
 

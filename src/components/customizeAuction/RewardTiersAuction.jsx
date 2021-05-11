@@ -9,7 +9,7 @@ import CustomColorPicker from './CustomColorPicker';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {
-  const { auction, setAuction, bidtype } = useContext(AppContext);
+  const { auction, setAuction, bidtype, windowSize } = useContext(AppContext);
   const arrLength = auction.tiers.length;
   const [elRefs, setElRefs] = useState([]);
 
@@ -58,10 +58,12 @@ const RewardTiersAuction = ({ values, onChange }) => {
               <div className="tier__header">
                 <div className="tier__title">
                   <h4>{tier.name}</h4>
-                  <div className="pick__color">
-                    <p>Pick tier color</p>
-                    <CustomColorPicker />
-                  </div>
+                  {windowSize.width < 576 && (
+                    <div className="pick__color">
+                      <p>Pick tier color</p>
+                      <CustomColorPicker index={i} onChange={onChange} />
+                    </div>
+                  )}
                   <div className="tier__description">
                     <div className="winners">
                       Winners: <b>{tier.winners}</b>
@@ -70,17 +72,19 @@ const RewardTiersAuction = ({ values, onChange }) => {
                       NFTs per winner: <b>{tier.nftsPerWinner}</b>
                     </div>
                     <div className="winners">
-                      Minimum bid per tier:{' '}
+                      Minimum bid per tier:
                       <b>
                         {tier.minBid} {bidtype}
                       </b>
                     </div>
                   </div>
                 </div>
-                <div className="pick__color">
-                  <p>Pick tier color</p>
-                  <CustomColorPicker />
-                </div>
+                {windowSize.width > 576 && (
+                  <div className="pick__color">
+                    <p>Pick tier color</p>
+                    <CustomColorPicker index={i} onChange={onChange} />
+                  </div>
+                )}
               </div>
 
               <div className="tier__body">

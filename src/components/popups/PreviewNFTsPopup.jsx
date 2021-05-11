@@ -85,7 +85,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <div className="tier__title">
             <span
               style={{
-                backgroundColor: '#BCBCBC',
+                backgroundColor: onTier.color.hex,
               }}
             />
             <h2>{onTier.name}</h2>

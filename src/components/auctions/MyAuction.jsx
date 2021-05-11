@@ -36,7 +36,7 @@ const MyAuction = () => {
       }
     }, 25);
   };
-  console.log(auction);
+
   const handleTabLeftScrolling = () => {
     let scrollAmount = 100;
     const slideTimer = setInterval(() => {
@@ -96,7 +96,6 @@ const MyAuction = () => {
 
       setAuction({ tiers: [] });
     }
-    console.log(myAuctions);
     function handleHideButton() {
       if (window.innerWidth < 576) {
         if (AUCTIONS_DATA.length > 0) {
