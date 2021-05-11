@@ -994,8 +994,10 @@
     line-height: 160%;
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 24px;
+    max-width: 255px;
     @include md {
       text-align: center;
+      max-width: 100%;
     }
   }
   button {

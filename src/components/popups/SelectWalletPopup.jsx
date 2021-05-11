@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
-import metamaskLogo from '../../assets/images/metamask.svg';
-import ledgerLogo from '../../assets/images/ledger.svg';
-import keystoreLogo from '../../assets/images/keystore.svg';
-import trezorLogo from '../../assets/images/trezor.svg';
-import coinbaseLogo from '../../assets/images/coinbase.svg';
-import walletConnectLogo from '../../assets/images/wallet-connect.svg';
+import metamaskLogo from '../../assets/images/metamask.png';
+import ledgerLogo from '../../assets/images/ledger.png';
+import keystoreLogo from '../../assets/images/keystore.png';
+import trezorLogo from '../../assets/images/trezor.png';
+import coinbaseLogo from '../../assets/images/coinbase.png';
+import walletConnectLogo from '../../assets/images/wallet-connect.png';
 import closeIcon from '../../assets/images/close-menu.svg';
 
 const SelectWalletPopup = (props) => {

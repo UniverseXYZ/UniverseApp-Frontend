@@ -14,6 +14,7 @@ const Main = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [nameEditing, setNameEditing] = useState(true);
   const [placeholderText, setPlaceholderText] = useState('your-address');
+  const [inputName, setInputName] = useState('inp empty');
 
   const accountInput = useRef(null);
 
@@ -24,19 +25,24 @@ const Main = () => {
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
 
   const handleOnFocus = () => {
-    if (!loggedInArtist.universePageAddress) {
+    if (!loggedInArtist.universePageAddress && accountPage === 'universe.xyz/your-address') {
       setAccountPage('universe.xyz/');
+      setInputName('inp');
     }
   };
 
   const handleOnBlur = () => {
-    if (!loggedInArtist.universePageAddress) {
+    if (!loggedInArtist.universePageAddress && accountPage === 'universe.xyz/') {
       setAccountPage('universe.xyz/your-address');
+      setInputName('inp empty');
     }
   };
 
   const saveDisplayChanges = () => {
-    const page = accountPage.substring(13);
+    let page = accountPage.substring(13);
+    if (page === 'your-address') {
+      page = '';
+    }
     setAccountPage(page);
     setLoggedInArtist({
       ...loggedInArtist,
@@ -48,10 +54,23 @@ const Main = () => {
   };
   const cancelDisplayChanges = () => {
     setAccountName(loggedInArtist.name);
-    setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress}`);
+    if (loggedInArtist.universePageAddress) {
+      setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress}`);
+    } else {
+      setAccountPage('universe.xyz/your-address');
+    }
+
     setAccountImage(loggedInArtist.avatar);
     setNameEditing(true);
   };
+
+  useEffect(() => {
+    if (loggedInArtist.universePageAddress) {
+      setInputName('inp');
+    } else {
+      setInputName('inp empty');
+    }
+  }, []);
 
   return (
     <div className="my-account container">
@@ -165,8 +184,7 @@ const Main = () => {
 
               <Input
                 placeholder="Enter your universe page address"
-                // className={`inp ${!loggedInArtist.universePageAddress && }`}
-                className="inp"
+                className={inputName}
                 value={accountPage}
                 onChange={(e) =>
                   e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
