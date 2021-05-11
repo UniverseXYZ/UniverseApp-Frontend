@@ -9,6 +9,7 @@ const AuctionOwnerDetails = ({ artist }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('ssssss', artist);
     // Here need to get artist details
     setTimeout(() => {
       setLoading(false);
@@ -27,10 +28,18 @@ const AuctionOwnerDetails = ({ artist }) => {
               <h1 className="title">{`About ${artist.name}`}</h1>
               <p className="desc">{artist.about}</p>
               <div className="social__links">
-                <a href={artist.instagramUrl} target="_blank" rel="noreferrer">
+                <a
+                  href={`https://www.instagram.com/${artist.instagramLink}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <img src={instagramIcon} alt="Instagram" />
                 </a>
-                <a href={artist.twitterUrl} target="_blank" rel="noreferrer">
+                <a
+                  href={`https://twitter.com/${artist.twitterLink}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <img src={twitterIcon} alt="Twitter" />
                 </a>
               </div>

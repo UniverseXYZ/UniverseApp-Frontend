@@ -86,6 +86,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, [bidders]);
 
   useEffect(() => {
+    console.log(selectedAuction);
     // Here need to get Auction details
     setTimeout(() => {
       setLoading(false);
@@ -129,7 +130,9 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
       <div
         className={`bg ${!selectedAuction.backgroundImage ? 'empty' : ''}`}
         style={{
-          backgroundImage: `url(${URL.createObjectURL(selectedAuction.backgroundImage)})`,
+          backgroundImage: selectedAuction.backgroundImage
+            ? `url(${URL.createObjectURL(selectedAuction.backgroundImage)})`
+            : '',
           filter: selectedAuction.hasBlur ? 'blur(20px)' : 'blur(0px)',
         }}
       />

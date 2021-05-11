@@ -10,7 +10,6 @@ const ActiveAuctionsTab = () => {
   const { activeAuctions } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
-  console.log('******', activeAuctions);
 
   return (
     <div className="active__auctions__tab">

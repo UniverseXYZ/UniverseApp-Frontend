@@ -36,7 +36,7 @@ const RewardTiers = ({ auction }) => (
                 <h2>{tier.name}</h2>
                 <span
                   style={{
-                    backgroundColor: '#BCBCBC',
+                    backgroundColor: tier.color.hex,
                   }}
                 />
               </div>
