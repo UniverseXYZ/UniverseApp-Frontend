@@ -34,7 +34,7 @@ const Welcome = () => {
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
             <p className="desc">
               Launch your own community-driven NFT universe baked with social tools, media services,
-              and distribution - underpinned by the native $KEK token.
+              and distribution - underpinned by the native $XYZ token.
             </p>
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>

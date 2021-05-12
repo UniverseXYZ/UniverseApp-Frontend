@@ -28,7 +28,7 @@ const NonFungibleUniverse = () => {
       description:
         'Creating a decentralized NFT launch system that is made by artists for artists.',
       loaded: false,
-      action: 'Explore',
+      action: 'Coming soon',
     },
     {
       id: 3,
@@ -63,7 +63,7 @@ const NonFungibleUniverse = () => {
       description:
         'kekDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
       loaded: false,
-      action: 'Explore',
+      action: 'Coming soon',
     },
   ]);
 
