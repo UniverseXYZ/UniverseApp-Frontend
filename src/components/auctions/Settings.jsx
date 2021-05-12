@@ -163,6 +163,17 @@ const AuctionSettings = () => {
             ? prevValue.tiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.tiers,
         }));
+      } else {
+        setAuction((prevValue) => ({
+          ...prevValue,
+          name: values.name,
+          startingBid: values.startingBid,
+          startDate: moment(values.startDate).format(),
+          endDate: moment(values.endDate).format(),
+          tiers: minBid
+            ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
+            : prevValue.tiers,
+        }));
       }
       history.push('/auction-review', location.pathname);
     }

@@ -1219,3 +1219,66 @@
   padding: 0;
   margin-top: 30px;
 }
+
+.mintNfts {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  height: 296;
+  background: $white;
+  box-shadow: 0 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  padding: 40px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+
+  h3 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-weight: 600px;
+    font-size: 26px;
+    line-height: 140%;
+    letter-spacing: 0.2px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .first-p{
+    line-height: 10px;
+  }
+  p{
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 10px 0;
+    span{
+      color: #000000;
+    }
+  }
+  .btns{
+    text-align: center;
+    margin-top: 30px;
+    button{
+      margin-right: 12px;
+    }
+  }
+  .logo-success-div{
+    text-align: center;
+    margin-bottom: 32px;
+    z-index: 100;
+  }
+}

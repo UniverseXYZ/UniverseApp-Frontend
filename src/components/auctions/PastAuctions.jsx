@@ -57,7 +57,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => moment(item.endDate).isBefore(moment.now()) && auction.launch)
+        .filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
         .map((pastAuction) => (
           <div className="auction past-auction" key={pastAuction.id}>
             <div className="auction-header">
@@ -71,7 +71,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                       <span />
                     </div>
                     <CopyToClipboard
-                      text={pastAuction.auctionLink}
+                      text={`${window.location.origin}/${pastAuction.link}`}
                       onCopy={() => {
                         setCopied(true);
                         setTimeout(() => {
@@ -177,7 +177,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                         Winners: <b>{tier.winners}</b>
                       </p>
                       <p>
-                        Total NFTs: <b>{tier.totalNFTs}</b>
+                        Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
                       </p>
                     </div>
                   </div>
