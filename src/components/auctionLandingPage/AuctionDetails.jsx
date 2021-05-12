@@ -197,16 +197,19 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   selectedAuction.promoImage ? '' : 'show__avatar'
                 }`}
               >
-                <img
-                  className="original"
-                  src={URL.createObjectURL(selectedAuction.promoImage)}
-                  alt={selectedAuction.name}
-                />
-                <img
-                  className="artist__image"
-                  src={URL.createObjectURL(selectedAuction.artist.avatar)}
-                  alt={selectedAuction.name}
-                />
+                {selectedAuction.promoImage ? (
+                  <img
+                    className="original"
+                    src={URL.createObjectURL(selectedAuction.promoImage)}
+                    alt={selectedAuction.name}
+                  />
+                ) : (
+                  <img
+                    className="artist__image"
+                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                    alt={selectedAuction.name}
+                  />
+                )}
               </div>
               <div className="auction__details__box__info">
                 <h1 className="title">{selectedAuction.name}</h1>

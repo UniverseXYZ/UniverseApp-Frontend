@@ -207,13 +207,15 @@ const MobileView = (props) => {
                       <div>
                         <button
                           type="button"
-                          onClick={() => {
-                            setShowMenu(false);
-                            history.push('/minting-and-auctions/marketplace/active-auctions');
-                          }}
+                          className="disable"
+                          // onClick={() => {
+                          //   setShowMenu(false);
+                          //   history.push('/minting-and-auctions/marketplace/active-auctions');
+                          // }}
                         >
                           <img src={auctionHouseIcon} alt="Auction House" />
-                          Auction house
+                          <span>Auction house</span>
+                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
@@ -246,7 +248,12 @@ const MobileView = (props) => {
                         </button>
                       </div>
                       <div>
-                        <button type="button">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
+                          }
+                        >
                           <img src={whitepaperIcon} alt="Whitepaper" />
                           Whitepaper
                         </button>
@@ -268,21 +275,24 @@ const MobileView = (props) => {
                     <div>
                       <p className="title">DAO</p>
                       <div>
-                        <button type="button">
+                        <button type="button" className="disable">
                           <img src={governanceIcon} alt="Governance" />
-                          Governance
+                          <span>Governance</span>
+                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
-                        <button type="button">
+                        <button type="button" className="disable">
                           <img src={yieldFarmingIcon} alt="Yield Farming" />
-                          Yield farming
+                          <span>Yield farming</span>
+                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
-                        <button type="button">
+                        <button type="button" className="disable">
                           <img src={docsIcon} alt="Docs" />
-                          Docs
+                          <span>Docs</span>
+                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                     </div>
