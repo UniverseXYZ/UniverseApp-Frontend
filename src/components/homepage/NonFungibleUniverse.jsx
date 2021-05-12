@@ -95,8 +95,14 @@ const NonFungibleUniverse = () => {
                   </SkeletonTheme>
                 </div>
               )}
-              <div style={{ display: nfu.loaded ? 'block' : 'none', height: '100%' }}>
-                <AnimatedOnScroll animationIn="fadeInUp">
+              <div
+                style={{
+                  display: nfu.loaded ? 'block' : 'none',
+                  height: '100%',
+                  position: 'relative',
+                }}
+              >
+                <AnimatedOnScroll animationIn="fadeIn">
                   <img src={nfu.icon} alt={nfu.title} onLoad={() => handleLoaded(index)} />
                   <h2 className="title">{nfu.title}</h2>
                   <p className="desc">{nfu.description}</p>
