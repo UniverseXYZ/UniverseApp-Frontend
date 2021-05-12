@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import TimKang from '../../assets/images/team/Tim-Kang.png';
 import TylerWard from '../../assets/images/team/Tyler-Ward.png';
 import TroyMurray from '../../assets/images/team/Troy-Murray.png';
@@ -205,22 +206,24 @@ const UniverseCreators = () => {
       <h1 className="title">Universe Creators</h1>
       <div className="creators">
         {creators.map((creator, index) => (
-          <div className="creator" key={creator.id}>
-            {!creator.loaded && (
-              <Skeleton
-                height={255}
-                style={{ width: window.screen.width < 576 ? '255px' : '100%' }}
+          <AnimatedOnScroll animationIn="fadeIn">
+            <div className="creator" key={creator.id}>
+              {!creator.loaded && (
+                <Skeleton
+                  height={255}
+                  style={{ width: window.screen.width < 576 ? '255px' : '100%' }}
+                />
+              )}
+              <img
+                src={creator.avatar}
+                alt={creator.name}
+                title={creator.name}
+                onLoad={() => handleLoaded(index)}
+                style={{ display: creator.loaded ? 'block' : 'none' }}
               />
-            )}
-            <img
-              src={creator.avatar}
-              alt={creator.name}
-              title={creator.name}
-              onLoad={() => handleLoaded(index)}
-              style={{ display: creator.loaded ? 'block' : 'none' }}
-            />
-            <h2>{creator.name}</h2>
-          </div>
+              <h2>{creator.name}</h2>
+            </div>
+          </AnimatedOnScroll>
         ))}
       </div>
     </div>

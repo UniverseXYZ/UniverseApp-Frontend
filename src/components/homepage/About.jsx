@@ -8,10 +8,10 @@ import circleImg from '../../assets/images/circle.svg';
 import blockOne from '../../assets/images/homepage-block1.png';
 import universeMintingLogo from '../../assets/images/universe-minting.svg';
 import universeAuctionsLogo from '../../assets/images/universe-auctions.svg';
-import bgImage from '../../assets/images/bg-min.png';
-import planetFrontImage from '../../assets/images/planet-front-min.png';
-import planetBackImage from '../../assets/images/planet-back-min.png';
-import planetMiddleImage from '../../assets/images/planet-middle-min.png';
+import bgImage from '../../assets/images/planets-bg.png';
+import planetFrontImage from '../../assets/images/planet-front.png';
+import planetBackImage from '../../assets/images/planet-back.png';
+import planetMiddleImage from '../../assets/images/planet-middle.png';
 import Button from '../button/Button';
 import SubscribePopup from '../popups/SubscribePopup';
 
@@ -72,7 +72,7 @@ const About = () => {
         <img id="circle-r" className="circle-r" src={circleImg} alt="Circle" />
         <img id="circle-l" className="circle-l" src={circleImg} alt="Circle" />
         <div className="universe__protocol__section__container">
-          <AnimatedOnScroll animationIn="fadeInUp">
+          <AnimatedOnScroll animationIn="fadeIn">
             <div className="universe__protocol">
               <h1 className="title">Universe Protocol and the Universe DAO</h1>
               <p className="info">
@@ -94,7 +94,7 @@ const About = () => {
         <div className="about__section__container">
           <div className="blocks">
             {/* Block 1 */}
-            <AnimatedOnScroll animationIn="fadeInUp">
+            <AnimatedOnScroll animationIn="fadeIn">
               <img
                 className="show__on__mobile"
                 src={universeMintingLogo}
@@ -110,7 +110,7 @@ const About = () => {
                 }}
               />
             </AnimatedOnScroll>
-            <AnimatedOnScroll animationIn="fadeInUp">
+            <AnimatedOnScroll animationIn="fadeIn">
               <img className="hide__on__mobile" src={universeMintingLogo} alt="Universe Minting" />
               <p className="desc">
                 Galaxies are a collection of minted NFT&apos;s these galaxies represent the IP of
@@ -126,7 +126,7 @@ const About = () => {
             </AnimatedOnScroll>
 
             {/* Block 2 */}
-            <AnimatedOnScroll animationIn="fadeInUp">
+            <AnimatedOnScroll animationIn="fadeIn">
               <img
                 className="hide__on__mobile"
                 src={universeAuctionsLogo}
@@ -148,7 +148,7 @@ const About = () => {
                 Coming soon
               </Button>
             </AnimatedOnScroll>
-            <AnimatedOnScroll animationIn="fadeInUp">
+            <AnimatedOnScroll animationIn="fadeIn">
               <img
                 className="show__on__mobile"
                 src={universeAuctionsLogo}
@@ -164,12 +164,12 @@ const About = () => {
 
             {/* Block 3 */}
             <AnimatedOnScroll
-              animationIn="fadeInUp"
+              animationIn="fadeIn"
               style={{ display: 'flex', justifyContent: 'center' }}
             >
               <Lottie options={defaultOptions} />
             </AnimatedOnScroll>
-            <AnimatedOnScroll animationIn="fadeInUp">
+            <AnimatedOnScroll animationIn="fadeIn">
               <h1 className="title">Universe Original Characters and Lore</h1>
               <span className="coming__soon">Coming soon</span>
               <p className="desc">

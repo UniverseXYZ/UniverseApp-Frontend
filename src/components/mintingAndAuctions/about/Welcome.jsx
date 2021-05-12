@@ -16,16 +16,16 @@ const Welcome = () => {
       <img className="ellipse-r" src={ellipses} alt="Ellipses" />
       <div className="welcome__section__container">
         <div className="left">
-          <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={200}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
             <h1 className="title">Welcome to a Universe made for Artists by Artists</h1>
           </AnimatedOnScroll>
-          <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={400}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
             <p className="desc">
               Mint single or multiple NFTs, create and edit NFT Collections, and run auctions with
               multiple NFTs per winner. In this Universe anything is possible.
             </p>
           </AnimatedOnScroll>
-          <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={600}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
               <Button className="light-button">Set up auction</Button>
               <Button
@@ -37,7 +37,7 @@ const Welcome = () => {
             </div>
           </AnimatedOnScroll>
         </div>
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <div className="right">
             {!loaded && (
               <SkeletonTheme color="#202020" highlightColor="#444">
