@@ -6,6 +6,7 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
+import Popup from 'reactjs-popup';
 import Button from '../button/Button';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -16,6 +17,9 @@ import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import { FUTURE_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import Input from '../input/Input';
+import MintNftsPopup from '../popups/MintNftsPopup';
+import MintCongratsPopup from '../popups/MintCongratsPopup';
+import SetUpPopup from '../popups/SetUpPopup';
 
 import Pagination from '../pagination/Pagionation';
 
@@ -28,6 +32,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
   const history = useHistory();
+  const [mintCongratsPopupOpen, setMintCongratsPopupOpen] = useState(false);
 
   const handleRemove = (id) => {
     setData((d) => d.filter((item) => item.id !== id));
@@ -41,11 +46,20 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     setSearchByName('');
   };
 
+  const handleMintCongratsPopupOpen = () => {
+    setMintCongratsPopupOpen(true);
+  };
+
+  const handleMintCongratsPopupClose = () => {
+    setMintCongratsPopupOpen(false);
+  };
+
   useEffect(() => {
     console.log('myAuctions', myAuctions);
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
   console.log(myAuctions);
+
   return (
     <div className="future-auctions">
       <div className="input-search">
@@ -78,9 +92,13 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             <div className="auction-header">
               <div className="auction-header-button">
                 <h3>{futureAuction.name}</h3>
-                <Button className="light-button" disabled>
+                <Popup trigger={<Button className="light-button">Set up auction</Button>}>
+                  {(close) => <SetUpPopup onClose={close} onAuctionId={futureAuction.id} />}
+                </Popup>
+
+                {/* <Button className="light-button" disabled>
                   Set up auction
-                </Button>
+                </Button> */}
               </div>
               <div className="launch-auction">
                 {/* <Button className="light-button" disabled>Set up auction</Button> */}
@@ -200,7 +218,23 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     Mint NFTs
                   </Button>
                 ) : (
-                  <Button className="light-button">Mint NFTs</Button>
+                  <>
+                    <Popup trigger={<Button className="light-button">Mint NFTs</Button>}>
+                      {(close) => (
+                        <MintNftsPopup
+                          onClose={close}
+                          onAuctionId={futureAuction.id}
+                          handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
+                        />
+                      )}
+                    </Popup>
+                    <Popup open={mintCongratsPopupOpen}>
+                      <MintCongratsPopup
+                        onClose={handleMintCongratsPopupClose}
+                        onAuctionId={futureAuction.id}
+                      />
+                    </Popup>
+                  </>
                 )}
               </div>
               <div className="step-3">
@@ -217,15 +251,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     <img alt="landing_page" src={doneIcon} />
                   )}
                 </div>
-                {futureAuction.mint === true && futureAuction.landingCustom === false ? (
-                  <Button
-                    className="light-border-button"
-                    onClick={() => {
-                      history.push('/customize-auction-landing-page');
-                    }}
-                  >
-                    Set up landing page
-                  </Button>
+                {futureAuction.mint === true ? (
+                  <Button className="light-border-button">Set up landing page</Button>
                 ) : (
                   <Button className="light-border-button" disabled>
                     Set up landing page
@@ -261,7 +288,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <div className="step-1">
                   <h6>Step 1</h6>
                   <h4>Auction set up</h4>
-                  <Button className="light-border-button">Edit auction</Button>
+                  <Button
+                    className="light-border-button"
+                    onClick={() => {
+                      setAuction(futureAuction);
+                      history.push('/auction-settings', futureAuction.id);
+                    }}
+                  >
+                    Edit auction
+                  </Button>
                 </div>
                 <div className="step-2">
                   <h6>Step2</h6>
@@ -271,7 +306,23 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       Mint NFTs
                     </Button>
                   ) : (
-                    <Button className="light-button">Mint NFTs</Button>
+                    <>
+                      <Popup trigger={<Button className="light-button">Mint NFTs</Button>}>
+                        {(close) => (
+                          <MintNftsPopup
+                            onClose={close}
+                            onAuctionId={futureAuction.id}
+                            handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
+                          />
+                        )}
+                      </Popup>
+                      <Popup open={mintCongratsPopupOpen}>
+                        <MintCongratsPopup
+                          onClose={handleMintCongratsPopupClose}
+                          onAuctionId={futureAuction.id}
+                        />
+                      </Popup>
+                    </>
                   )}
                 </div>
                 <div className="step-3">
@@ -303,7 +354,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           Winners: <b>{tier.winners}</b>
                         </p>
                         <p>
-                          Total NFTs: <b>{tier.totalNFTs}</b>
+                          Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
                         </p>
                       </div>
                     </div>

@@ -123,7 +123,14 @@ const CustomizeAuction = () => {
       </div>
       <div className="customize__auction_title">
         <h2>Customize auction landing page</h2>
-        <Button className="light-border-button">Preview</Button>
+        <Button
+          className="light-border-button"
+          onClick={() => {
+            history.push('/my-auctions');
+          }}
+        >
+          Preview
+        </Button>
       </div>
       <DomainAndBranding values={domainAndBranding} onChange={setDomainAndBranding} />
       <RewardTiersAuction values={rewardTiersAuction} onChange={setRewardTiersAuction} />

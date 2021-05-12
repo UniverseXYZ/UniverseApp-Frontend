@@ -237,7 +237,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
                                     Winners: <b>{tier.winners}</b>
                                   </p>
                                   <p>
-                                    Total NFTs: <b>45</b>
+                                    Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
                                   </p>
                                 </div>
                               </div>
