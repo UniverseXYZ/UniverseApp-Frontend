@@ -49,6 +49,12 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
     setMyAuctions(newAuctions);
   };
 
+  const handleChangeCopy = (index) => {
+    const newAuctions = [...myAuctions];
+    newAuctions[index].copied = !newAuctions[index].copied;
+    setMyAuctions(newAuctions);
+  };
+
   useEffect(() => {
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
@@ -99,16 +105,16 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
                             </div>
                             <div className="copy-div">
                               <div className="copy" title="Copy to clipboard">
-                                <div className="copied-div" hidden={!copied}>
+                                <div className="copied-div" hidden={!activeAuction.copied}>
                                   URL copied!
                                   <span />
                                 </div>
                                 <CopyToClipboard
                                   text={`${window.location.origin}/${activeAuction.link}`}
                                   onCopy={() => {
-                                    setCopied(true);
+                                    handleChangeCopy(index);
                                     setTimeout(() => {
-                                      setCopied(false);
+                                      handleChangeCopy(index);
                                     }, 1000);
                                   }}
                                 >

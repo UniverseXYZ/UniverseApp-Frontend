@@ -1,6 +1,12 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/mixins';
 
+.container {
+  @include lg {
+    width: 100%;
+  }
+}
+
 .back-rew > span {
   text-align: center;
   color: #000000;

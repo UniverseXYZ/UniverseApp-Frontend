@@ -688,6 +688,9 @@
           transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
         }
       }
+      @include md {
+        margin-left: -11px;
+      }
     }
   }
   .bid_info {

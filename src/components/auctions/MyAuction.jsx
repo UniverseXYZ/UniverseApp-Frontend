@@ -62,7 +62,7 @@ const MyAuction = () => {
 
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth < 400) {
+      if (window.innerWidth < 500) {
         document.querySelector('.tab__right__arrow').style.display = 'flex';
       } else {
         document.querySelector('.tab__right__arrow').style.display = 'none';

@@ -50,6 +50,7 @@ const CustomizeAuction = () => {
             launch: true,
             headline: domainAndBranding.headline,
             link: domainAndBranding.link,
+            copied: false,
             promoImage: domainAndBranding.promoImage,
             backgroundImage: domainAndBranding.backgroundImage,
             tiers: prevValues.tiers.map((tier) => {
@@ -80,6 +81,7 @@ const CustomizeAuction = () => {
         newAuction.id = uuid();
         newAuction.headline = domainAndBranding.headline;
         newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+        newAuction.copied = false;
         newAuction.promoImage = domainAndBranding.promoImage;
         newAuction.backgroundImage = domainAndBranding.backgroundImage;
         newAuction.hasBlur = domainAndBranding.hasBlur;
