@@ -11,10 +11,10 @@ const DigitalTools = () => (
       <h1 className="title">Digital Tools to Empower Artists</h1>
       <div className="blocks">
         {/* Block 1 */}
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <img src={blockOne} alt="Block" />
         </AnimatedOnScroll>
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <h2 className="title">Efficient collection curating and launching</h2>
           <p className="desc">
             Curate large collections of 100s or even 1000s of NFTs: Our tools allow you to easily
@@ -26,7 +26,7 @@ const DigitalTools = () => (
         </AnimatedOnScroll>
 
         {/* Block 2 */}
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <h2 className="title">Easy to use UI for minting and selling NFTs</h2>
           <p className="desc">
             We have combined UI and flows from industry leaders and tweaked it slightly to make an
@@ -36,15 +36,15 @@ const DigitalTools = () => (
           </p>
           <Button className="light-border-button">Set up auction</Button>
         </AnimatedOnScroll>
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <img src={blockTwo} alt="Block" />
         </AnimatedOnScroll>
 
         {/* Block 3 */}
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <img src={blockThree} alt="Block" />
         </AnimatedOnScroll>
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <h2 className="title">Powerful platform for auctioning NFTs</h2>
           <p className="desc">
             Sell any NFT in your collection whether you created it or bought it on the secondary

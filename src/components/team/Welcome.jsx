@@ -7,10 +7,10 @@ const Welcome = () => (
     <img className="ellipse-l" src={ellipses} alt="Ellipses" />
     <img className="ellipse-r" src={ellipses} alt="Ellipses" />
     <div className="welcome__section__container">
-      <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={200}>
+      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
         <h1 className="title">Meet the Universe Crew</h1>
       </AnimatedOnScroll>
-      <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={1000}>
+      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={1000}>
         <p className="desc">
           Our team is full of creators, artists and DeFi minds from all over the world with a shared
           goal in mind, empower artists.

@@ -23,7 +23,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
     <div className="active__auctions__list">
       {sliceData.map((auction) =>
         !loading ? (
-          <Animated animationIn="fadeInUp" key={auction.id}>
+          <Animated animationIn="fadeIn" key={auction.id}>
             <div className="active__auction__item">
               <div className="title">
                 <h1>{auction.name}</h1>
@@ -112,7 +112,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
               </div>
             </div>
             <div className="auction__img">
-              <Skeleton height={200} />
+              <Skeleton height={290} width={290} />
             </div>
             <div className="auction__details">
               <div>

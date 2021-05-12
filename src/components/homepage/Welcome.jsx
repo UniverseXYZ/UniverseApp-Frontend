@@ -28,16 +28,16 @@ const Welcome = () => {
       <img className="ellipse-r" src={ellipses} alt="Ellipses" />
       <div className="welcome__section__container">
         <div className="left">
-          <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={200}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
             <h1 className="title">Welcome to the NFT Universe built on Ethereum</h1>
           </AnimatedOnScroll>
-          <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={400}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
             <p className="desc">
               Launch your own community-driven NFT universe baked with social tools, media services,
               and distribution - underpinned by the native $KEK token.
             </p>
           </AnimatedOnScroll>
-          <AnimatedOnScroll animationIn="fadeInUp" animationInDelay={600}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
               <Button className="light-button">Whitepaper</Button>
               <Popup
@@ -52,7 +52,7 @@ const Welcome = () => {
             </div>
           </AnimatedOnScroll>
         </div>
-        <AnimatedOnScroll animationIn="fadeInUp">
+        <AnimatedOnScroll animationIn="fadeIn">
           <div className="right">
             {!loaded && (
               <SkeletonTheme color="#202020" highlightColor="#444">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Justin3LAU from '../../assets/images/team/Justin-3LAU.png';
 import DillonFrancis from '../../assets/images/team/Dillon-Francis.png';
 import AndréAnjos from '../../assets/images/team/André-Anjos.png';
@@ -373,22 +374,24 @@ const UniverseContributors = () => {
       <h1 className="title">Universe Contributors</h1>
       <div className="contributors">
         {contributors.map((contributor, index) => (
-          <div className="contributor" key={contributor.id}>
-            {!contributor.loaded && (
-              <Skeleton
-                height={160}
-                style={{ width: window.screen.width < 576 ? '160px' : '100%' }}
+          <AnimatedOnScroll animationIn="fadeIn">
+            <div className="contributor" key={contributor.id}>
+              {!contributor.loaded && (
+                <Skeleton
+                  height={160}
+                  style={{ width: window.screen.width < 576 ? '160px' : '100%' }}
+                />
+              )}
+              <img
+                src={contributor.avatar}
+                alt={contributor.name}
+                title={contributor.name}
+                onLoad={() => handleLoaded(index)}
+                style={{ display: contributor.loaded ? 'block' : 'none' }}
               />
-            )}
-            <img
-              src={contributor.avatar}
-              alt={contributor.name}
-              title={contributor.name}
-              onLoad={() => handleLoaded(index)}
-              style={{ display: contributor.loaded ? 'block' : 'none' }}
-            />
-            <h2>{contributor.name}</h2>
-          </div>
+              <h2>{contributor.name}</h2>
+            </div>
+          </AnimatedOnScroll>
         ))}
       </div>
     </div>
