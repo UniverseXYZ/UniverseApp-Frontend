@@ -152,16 +152,16 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={() => <Homepage />} />
           <Route exact path="/about" component={() => <About />} />
-          <Route
+          {/* <Route
             exact
             path="/minting-and-auctions/marketplace/active-auctions"
             component={() => <Marketplace />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             exact
             path="/minting-and-auctions/marketplace/future-auctions"
             component={() => <Marketplace />}
-          />
+          /> */}
           <Route exact path="/my-nfts" component={() => <MyNFTs />} />
           <Route exact path="/my-account" component={() => <MyAccount />} />
           <Route exact path="/my-auctions" component={() => <Auctions />} />

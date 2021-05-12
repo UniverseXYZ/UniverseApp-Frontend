@@ -41,17 +41,18 @@ import InternetPaul from '../../assets/images/team/Internet-Paul.png';
 import MiguelNabais from '../../assets/images/team/Miguel-Nabais.png';
 import MarcWeinstein from '../../assets/images/team/Marc-Weinstein.png';
 import LesBorsai from '../../assets/images/team/Les-Borsai.png';
-import SpencerNoon from '../../assets/images/team/Spencer-Noon.png';
+import ArtiaMoghbel from '../../assets/images/team/Artia-Moghbel.png';
 import HomerShillson from '../../assets/images/team/Homer-Shillson.png';
 import AntonBukov from '../../assets/images/team/Anton-Bukov.png';
 import RahillaZafar from '../../assets/images/team/Rahilla-Zafar.png';
 import TekinSalimi from '../../assets/images/team/Tekin-Salimi.png';
-import JakeBrukhman from '../../assets/images/team/Jake-Brukhman.png';
+import OlafCarsonWee from '../../assets/images/team/Olaf-Carson-Wee.png';
 import WhaleShark from '../../assets/images/team/WhaleShark.png';
 import Gmoney from '../../assets/images/team/Gmoney.png';
 import RobbieFerguson from '../../assets/images/team/Robbie-Ferguson.png';
 import AndréNabais from '../../assets/images/team/André-Nabais.png';
 import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
+import HarrisonHines from '../../assets/images/team/Harrison-Hines.png';
 
 const UniverseContributors = () => {
   const [contributors, setContributors] = useState([
@@ -123,8 +124,8 @@ const UniverseContributors = () => {
     },
     {
       id: 12,
-      name: 'Akin Sawyer',
-      avatar: AkinSawyer,
+      name: 'Rob Leshner',
+      avatar: RobLeshner,
       loaded: false,
     },
     {
@@ -177,8 +178,8 @@ const UniverseContributors = () => {
     },
     {
       id: 21,
-      name: 'Rob Leshner',
-      avatar: RobLeshner,
+      name: 'Akin Sawyer',
+      avatar: AkinSawyer,
       loaded: false,
     },
     {
@@ -297,8 +298,8 @@ const UniverseContributors = () => {
     },
     {
       id: 41,
-      name: 'Spencer Noon',
-      avatar: SpencerNoon,
+      name: 'Artia Moghbel - Dfinity',
+      avatar: ArtiaMoghbel,
       loaded: false,
     },
     {
@@ -327,8 +328,8 @@ const UniverseContributors = () => {
     },
     {
       id: 46,
-      name: 'Jake Brukhman',
-      avatar: JakeBrukhman,
+      name: 'Olaf Carson-Wee – Polychain',
+      avatar: OlafCarsonWee,
       loaded: false,
     },
     {
@@ -359,6 +360,12 @@ const UniverseContributors = () => {
       id: 51,
       name: 'Luke Lombe',
       avatar: LukeLombe,
+      loaded: false,
+    },
+    {
+      id: 52,
+      name: 'Harrison Hines',
+      avatar: HarrisonHines,
       loaded: false,
     },
   ]);

@@ -27,10 +27,12 @@ const Footer = () => {
               <ul>
                 <li>PRODUCTS</li>
                 <li
-                  onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
-                  aria-hidden="true"
+                  className="disable"
+                  // onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
+                  // aria-hidden="true"
                 >
                   Auction house
+                  <span className="tooltiptext">Coming soon</span>
                 </li>
                 <li className="disable">
                   NFT Marketplace
@@ -48,7 +50,14 @@ const Footer = () => {
                 <li onClick={() => history.push('/about')} aria-hidden="true">
                   About
                 </li>
-                <li>Whitepaper</li>
+                <li
+                  onClick={() =>
+                    window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
+                  }
+                  aria-hidden="true"
+                >
+                  Whitepaper
+                </li>
                 <li onClick={() => history.push('/team')} aria-hidden="true">
                   Team
                 </li>
@@ -57,9 +66,18 @@ const Footer = () => {
             <div className="coming-soon">
               <ul>
                 <li>DAO</li>
-                <li>Governance</li>
-                <li>Yield farming</li>
-                <li>Docs</li>
+                <li className="disable">
+                  Governance
+                  <span className="tooltiptext">Coming soon</span>
+                </li>
+                <li className="disable">
+                  Yield farming
+                  <span className="tooltiptext">Coming soon</span>
+                </li>
+                <li className="disable">
+                  Docs
+                  <span className="tooltiptext">Coming soon</span>
+                </li>
               </ul>
             </div>
           </div>

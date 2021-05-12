@@ -51,13 +51,13 @@ const UniverseCreators = () => {
     },
     {
       id: 4,
-      name: 'Milad Mostavi - DMOB',
+      name: 'Milad Mostavi',
       avatar: MiladMostavi,
       loaded: false,
     },
     {
       id: 5,
-      name: 'Dragos Rizescu - DMOB',
+      name: 'Dragos Rizescu',
       avatar: DragosRizescu,
       loaded: false,
     },
@@ -159,7 +159,7 @@ const UniverseCreators = () => {
     },
     {
       id: 22,
-      name: 'Cezar Paraschiv - DMOB',
+      name: 'Cezar Paraschiv',
       avatar: CezarParaschiv,
       loaded: false,
     },
