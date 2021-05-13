@@ -8,7 +8,20 @@ import AppContext from '../../ContextAPI';
 const MintCongratsPopup = ({ onClose, onAuctionId }) => {
   const { auction, setAuction, myAuctions, setMyAuctions } = useContext(AppContext);
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
-  console.log(auction1);
+
+  useEffect(
+    () => () => {
+      setMyAuctions((prevValues) =>
+        prevValues.map((prevAuction) => {
+          if (prevAuction.id === onAuctionId) {
+            return { ...prevAuction, mint: true };
+          }
+          return prevAuction;
+        })
+      );
+    },
+    []
+  );
 
   return (
     <div className="mintNfts">
