@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import auctionsAccordionOne from '../../../../assets/images/auctions-accordion1.png';
 import auctionsAccordionTwo from '../../../../assets/images/auctions-accordion2.png';
 import auctionsAccordionThree from '../../../../assets/images/auctions-accordion3.png';
 import auctionsAccordionFour from '../../../../assets/images/auctions-accordion4.png';
-import Button from '../../../button/Button';
 
 const AuctionsTab = () => {
   const [isFirstAccordionOpened, setIsFirstAccordionOpened] = useState(false);
   const [isSecondAccordionOpened, setIsSecondAccordionOpened] = useState(false);
   const [isThirdAccordionOpened, setIsThirdAccordionOpened] = useState(false);
   const [isFourthAccordionOpened, setIsFourthAccordionOpened] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (document.querySelectorAll('.accordion__item__body')) {
+        const elems = document.querySelectorAll('.accordion__item__body');
+        elems.forEach((el, i) => {
+          el.style.animationDuration = '.5s';
+        });
+      }
+    }, 500);
+  }, []);
 
   return (
     <div className="accordion">

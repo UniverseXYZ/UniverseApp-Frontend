@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
+import Popup from 'reactjs-popup';
 import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
 import Button from '../../../button/Button';
@@ -32,6 +33,7 @@ import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
+import SubscribePopup from '../../../popups/SubscribePopup';
 
 const MobileView = (props) => {
   const {
@@ -300,9 +302,12 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li className="sign__in">
-                    <button type="button" onClick={() => setShowSelectWallet(true)}>
+                    <Popup trigger={<button type="button">Join newsletter</button>}>
+                      {(close) => <SubscribePopup close={close} />}
+                    </Popup>
+                    {/* <button type="button" onClick={() => setShowSelectWallet(true)}>
                       Sign In
-                    </button>
+                    </button> */}
                   </li>
                 )}
               </>

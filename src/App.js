@@ -24,7 +24,7 @@ import AuctionReview from './containers/auctionReview/AuctionReview';
 import BidOptions from './utils/fixtures/BidOptions';
 
 const App = () => {
-  const [isWalletConnected, setIsWalletConnected] = useState(true);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -74,16 +74,16 @@ const App = () => {
       });
     }
     function handleScroll() {
-      if (window.scrollY > 400) {
+      if (window.scrollY > 0) {
         if (document.querySelector('header')) {
-          document.querySelector('header').style.position = 'fixed';
+          document.querySelector('header').classList.remove('dark');
         }
         if (document.querySelector('.artist__personal__logo')) {
           document.querySelector('.artist__personal__logo').style.position = 'fixed';
         }
-      } else {
+      } else if (window.scrollY <= 0) {
         if (document.querySelector('header')) {
-          document.querySelector('header').style.position = 'relative';
+          document.querySelector('header').classList.add('dark');
         }
         if (document.querySelector('.artist__personal__logo')) {
           document.querySelector('.artist__personal__logo').style.position = 'absolute';

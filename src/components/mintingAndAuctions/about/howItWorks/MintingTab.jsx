@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
-import { Animated } from 'react-animated-css';
+import React, { useState, useEffect } from 'react';
 import mintingAccordionOne from '../../../../assets/images/minting-accordion1.png';
 import mintingAccordionTwo from '../../../../assets/images/minting-accordion2.png';
 import mintingAccordionThree from '../../../../assets/images/minting-accordion3.png';
-import Button from '../../../button/Button';
 
 const MintingTab = () => {
   const [isFirstAccordionOpened, setIsFirstAccordionOpened] = useState(false);
   const [isSecondAccordionOpened, setIsSecondAccordionOpened] = useState(false);
   const [isThirdAccordionOpened, setIsThirdAccordionOpened] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (document.querySelectorAll('.accordion__item__body')) {
+        const elems = document.querySelectorAll('.accordion__item__body');
+        elems.forEach((el, i) => {
+          el.style.animationDuration = '.5s';
+        });
+      }
+    }, 500);
+  }, []);
 
   return (
     <div className="accordion">

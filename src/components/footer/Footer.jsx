@@ -94,8 +94,18 @@ const Footer = () => {
             <span>Powered by xyzDAO.</span>
           </div>
           <div className="icons">
-            <img src={twitter} alt="twiter" />
-            <img src={discord} alt="discord" />
+            <img
+              src={twitter}
+              alt="twiter"
+              aria-hidden="true"
+              onClick={() => window.open('https://twitter.com/universe_xyz')}
+            />
+            <img
+              src={discord}
+              alt="discord"
+              aria-hidden="true"
+              onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
+            />
           </div>
         </div>
       </div>
