@@ -17,7 +17,7 @@ const NonFungibleUniverse = () => {
       icon: nfuSocialNetworkIcon,
       title: 'NFT Social Network',
       description:
-        'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate ideas without fear of an idea or art being censored.',
+        'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate NFT ideas within the guidelines voted on by the community.',
       loaded: false,
       action: 'Coming soon',
     },
@@ -61,7 +61,7 @@ const NonFungibleUniverse = () => {
       icon: nfuGovernanceIcon,
       title: 'DAO and Governance',
       description:
-        'kekDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
+        'xyzDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things. is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
       loaded: false,
       action: 'Coming soon',
     },

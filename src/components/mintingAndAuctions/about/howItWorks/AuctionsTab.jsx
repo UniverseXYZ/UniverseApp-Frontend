@@ -28,9 +28,9 @@ const AuctionsTab = () => {
         <div className={`accordion__item__body ${isFirstAccordionOpened ? 'open' : ''}`}>
           <p className="desc">
             Reward tiers are what makes this auction type unique, it allows you to place multiple
-            NFTs into a reward. For instance, Justin’s Tier One aka Platinum gave you all 11 song
-            NFTs and Gold Tier gave you 7 song NFTs. <br />
-            <br /> You can do it like Justin or put different NFTs in every slot. It is completely
+            NFTs into a reward. For instance, 3LAU’s Tier One aka Platinum gave you all 11 song NFTs
+            and Gold Tier gave you 7 song NFTs. <br />
+            <br /> You can do it like 3LAU or put different NFTs in every slot. It is completely
             customizable and up to you.
           </p>
           <img src={auctionsAccordionOne} alt="Set Up Reward Tiers" />
@@ -102,9 +102,9 @@ const AuctionsTab = () => {
         </div>
       </div>
 
-      <div className="launch__app__btn">
+      {/* <div className="launch__app__btn">
         <Button className="light-button">Set up auction</Button>
-      </div>
+      </div> */}
     </div>
   );
 };

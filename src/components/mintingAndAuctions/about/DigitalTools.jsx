@@ -22,7 +22,9 @@ const DigitalTools = () => (
             time can be extremely difficult, however our step by step set up and review process
             allows you to prevent mistakes and launch a beautiful and consistent collection.
           </p>
-          <Button className="light-border-button">Create NFT collection</Button>
+          <Button className="light-border-button" disabled>
+            Coming soon
+          </Button>
         </AnimatedOnScroll>
 
         {/* Block 2 */}
@@ -34,7 +36,9 @@ const DigitalTools = () => (
             <br /> We offer step by step instructions for the entire process, so you wont get stuck
             or confused.
           </p>
-          <Button className="light-border-button">Set up auction</Button>
+          <Button className="light-border-button" disabled>
+            Coming soon
+          </Button>
         </AnimatedOnScroll>
         <AnimatedOnScroll animationIn="fadeIn">
           <img src={blockTwo} alt="Block" />
@@ -49,11 +53,13 @@ const DigitalTools = () => (
           <p className="desc">
             Sell any NFT in your collection whether you created it or bought it on the secondary
             market or another platform. You will be able to bundle an Euler beat with a Hashmask or
-            a Punk then sell it to the highest bidder and give the second highest bidder a
-            participation trophy you minted on Rarible or Opensea. This Auction will allow you to
-            mix and match 100s of NFTs in tiers to be bid on.
+            a Punk then sell it to the highest bidder and give the second highest gets 10 Hashmasks
+            and a Beeple. This Auction will allow you to mix and match 100s of NFTs in tiers to be
+            bid on.
           </p>
-          <Button className="light-border-button">Open marketplace</Button>
+          <Button className="light-border-button" disabled>
+            Coming soon
+          </Button>
         </AnimatedOnScroll>
       </div>
     </div>
