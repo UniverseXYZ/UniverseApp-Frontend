@@ -320,7 +320,7 @@ const AuctionSettings = () => {
                   readOnly
                   onClick={() => setShowStartDate(true)}
                   id="startDate"
-                  label="Start Date"
+                  label="Start date"
                   autoComplete="off"
                   value={
                     values.startDate
@@ -380,7 +380,7 @@ const AuctionSettings = () => {
                   />
                 </span>
                 {hideIcon1 && (
-                  <Animated animationIn="zoomIn">
+                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                     <div className="info-text">
                       <p>
                         Any bid in the last 3 minutes of an auction will extend the auction for an
@@ -419,17 +419,18 @@ const AuctionSettings = () => {
                   <input type="checkbox" checked={minBid} onChange={handeClick} />
                   <span className="slider round" />
                 </label>
+                {hideIcon2 && (
+                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                    <div className="info-text">
+                      <p>
+                        Minimum bid parameter may be used to make sure that NFTs from the tier will
+                        not be sold under the target price value.
+                      </p>
+                    </div>
+                  </Animated>
+                )}
               </div>
-              {hideIcon2 && (
-                <Animated animationIn="zoomIn">
-                  <div className="info-text">
-                    <p>
-                      Any bid in the last 3 minutes of an auction will extend the auction for an
-                      additional 3 minutes.
-                    </p>
-                  </div>
-                </Animated>
-              )}
+
               {minBid === true && (
                 <div className="bid-text">
                   <ul>

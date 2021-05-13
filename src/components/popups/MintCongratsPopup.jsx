@@ -29,7 +29,7 @@ const MintCongratsPopup = ({ onClose, onAuctionId }) => {
       <div className="logo-success-div">
         <img src={coloredSuccess} alt="success" />
       </div>
-      <h3>Success!</h3>
+      <h4>Success!</h4>
       <p>
         All <span>64 NFTs</span> from <span>5 collections</span> are minted
       </p>
