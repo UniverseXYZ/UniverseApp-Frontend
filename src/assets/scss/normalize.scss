@@ -84,10 +84,10 @@ mark,
 audio,
 center,
 ruby {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
 }
 
 article,
@@ -101,152 +101,157 @@ hgroup,
 menu,
 nav,
 section {
-    display: block;
+  display: block;
 }
 
 ol,
 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 *,
 *:focus {
-    outline: none !important;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+  outline: none !important;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* width */
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar:horizontal {
-    width: 0px;
-    height: 0px;
+  width: 0px;
+  height: 0px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: $white; 
+  background: $white;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #E1E1E1; 
+  background: #e1e1e1;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #E1E1E1; 
+  background: #e1e1e1;
 }
 
 ::selection {
-    background-color: $black;
-    color: $white;
+  background-color: $black;
+  color: $white;
 }
 
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 textarea {
-    resize: none;
+  resize: none;
 }
 
 a {
-    display: inline-block;
-    text-decoration: none;
+  display: inline-block;
+  text-decoration: none;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 input,
 button,
 select {
-    display: inline-block;
-    padding: 0;
-    border: 0;
+  display: inline-block;
+  padding: 0;
+  border: 0;
 }
 
 img {
-    max-width: 100%;
-    max-height: 100%;
-    vertical-align: middle;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #FCFEFD;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  background-color: #fcfefd;
+  overflow-x: hidden;
 
-    &.no__scroll {
-        overflow: hidden;
+  &.no__scroll {
+    overflow: hidden;
 
-        .whole-modal {
-            animation: fadeIn .3s ease-in-out forwards;
-        }
-        .mod-div {
-            animation: slideIn .3s ease-in-out forwards;
-
-            @include lg{
-                animation: tabletModalSlideIn .3s ease-in-out forwards;
-            }
-            @include sm{
-                animation: mobileModalSlideIn .3s ease-in-out forwards;
-            }
-        }
+    .whole-modal {
+      animation: fadeIn 0.3s ease-in-out forwards;
     }
+    .mod-div {
+      animation: slideIn 0.3s ease-in-out forwards;
+
+      @include lg {
+        animation: tabletModalSlideIn 0.3s ease-in-out forwards;
+      }
+      @include sm {
+        animation: mobileModalSlideIn 0.3s ease-in-out forwards;
+      }
+    }
+  }
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .container {
-    width: 100%;
-    padding: 0 20px;
-    margin: 60px auto;
+  width: 100%;
+  padding: 0 20px;
+  margin: 60px auto;
 }
 
 .w-100 {
-    width: 100%;
+  width: 100%;
 }
 
 .w-50 {
-    width: 50%;
+  width: 50%;
 }
 
-
 @media (min-width: $screen-md-max) {
-    .container {
-        width: 750px;
-    }
+  .container {
+    width: 750px;
+  }
 }
 
 @media (min-width: $screen-lg-max) {
-    .container {
-        width: 970px;
-    }
+  .container {
+    width: 970px;
+  }
 }
 
 @media (min-width: $screen-xl-max) {
-    .container {
-        width: 1110px;
-    }
+  .container {
+    width: 1110px;
+  }
 }
