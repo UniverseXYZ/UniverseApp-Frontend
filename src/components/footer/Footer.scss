@@ -235,6 +235,9 @@ footer {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      img {
+        cursor: pointer;
+      }
       img:last-child {
         padding-left: 15px;
       }

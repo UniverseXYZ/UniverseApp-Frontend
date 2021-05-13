@@ -23,6 +23,7 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
+import SubscribePopup from '../../../popups/SubscribePopup';
 
 const DesktopView = ({
   ethereumAddress,
@@ -283,6 +284,15 @@ const DesktopView = ({
             <Popup
               trigger={
                 <button type="button" className="sign__in">
+                  Join newsletter
+                </button>
+              }
+            >
+              {(close) => <SubscribePopup close={close} />}
+            </Popup>
+            {/* <Popup
+              trigger={
+                <button type="button" className="sign__in">
                   Sign In
                 </button>
               }
@@ -297,7 +307,7 @@ const DesktopView = ({
                   setSelectedWallet={setSelectedWallet}
                 />
               )}
-            </Popup>
+            </Popup> */}
           </li>
         )}
       </ul>

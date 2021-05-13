@@ -26,6 +26,7 @@ import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
+import SubscribePopup from '../../../popups/SubscribePopup';
 
 const TabletView = (props) => {
   const {
@@ -291,7 +292,10 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
-                <Popup trigger={<button type="button">Sign in</button>}>
+                <Popup trigger={<button type="button">Join newsletter</button>}>
+                  {(close) => <SubscribePopup close={close} />}
+                </Popup>
+                {/* <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
@@ -302,7 +306,7 @@ const TabletView = (props) => {
                       setSelectedWallet={setSelectedWallet}
                     />
                   )}
-                </Popup>
+                </Popup> */}
               </li>
             )}
           </ul>
