@@ -7,8 +7,8 @@ const BuyUniverseNFTs = () => (
       <div>
         <h1 className="title">Buy Universe NFTs</h1>
         <p className="desc">
-          A constant stream of default tokens are released every day. These tokens are distributed
-          between investors, contributors, and the community.
+          The Universe Protocol is a community bootstrapping engine. It&apos;s designed to embed
+          community building mechanics into the way you mint and monetize NFTs.
         </p>
         <span className="coming__soon">Coming soon</span>
       </div>

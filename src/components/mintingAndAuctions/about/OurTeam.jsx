@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import TimKangImg from '../../../assets/images/Tim-Kang.png';
 import TylerWardImg from '../../../assets/images/Tyler-Ward.png';
 import TroyMurrayImg from '../../../assets/images/Troy-Murray.png';
-import JustinBlauImg from '../../../assets/images/Justin-3LAU.png';
+import MarkWardImg from '../../../assets/images/Mark-Ward.png';
 import RyanShtirmerImg from '../../../assets/images/Ryan-Shtirmer.png';
 import Button from '../../button/Button';
 
@@ -28,8 +28,8 @@ const OurTeam = () => {
             <h3>Troy Murray</h3>
           </div>
           <div className="member">
-            <img src={JustinBlauImg} alt="Justin 3LAU" />
-            <h3>Justin 3LAU</h3>
+            <img src={MarkWardImg} alt="Mark Ward" />
+            <h3>Mark Ward</h3>
           </div>
           <div className="member">
             <img src={RyanShtirmerImg} alt="Ryan Shtirmer" />
