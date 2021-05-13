@@ -26,13 +26,14 @@ const MintNftsPopup = ({ onClose, onAuctionId, handleMintCongratsPopupOpen }) =>
   return (
     <div className="mintNfts">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
-      <h3>Set up the auction</h3>
+      <h3>Mint NFTs</h3>
       <p>
-        You’re going to mint <span>64</span> NFTs from <span>5 collections.</span>
+        You’re going to mint <span>64</span> NFTs from <span>5 collections.</span> The estimated
+        total gas cost you need to pay is about <span> 24.6 ETH ($43,000)</span>
       </p>
-      <p>
+      {/* <p>
         The estimated total gas cost you need to pay is about <span> 24.6 ETH ($43,000)</span>
-      </p>
+      </p> */}
       <div className="btns">
         <Button className="light-button" onClick={handleMintClick}>
           Mint
