@@ -56,6 +56,7 @@ const App = () => {
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
+  const [website, setWebsite] = useState(true);
 
   const handleClickOutside = (event, className, ref, cb) => {
     if (!event.target.classList.contains(className)) {
@@ -145,6 +146,8 @@ const App = () => {
         setBidtype,
         options,
         setOptions,
+        website,
+        setWebsite,
       }}
     >
       <Routes>

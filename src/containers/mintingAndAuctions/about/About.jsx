@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import MetaTags from 'react-meta-tags';
 import Welcome from '../../../components/mintingAndAuctions/about/Welcome';
 import './About.scss';
 import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTools';
 import HowItWorks from '../../../components/mintingAndAuctions/about/howItWorks/HowItWorks';
 import OurTeam from '../../../components/mintingAndAuctions/about/OurTeam';
+import AppContext from '../../../ContextAPI';
 
 const About = () => {
+  const { setWebsite } = useContext(AppContext);
   useEffect(() => {
     window.scrollTo(0, 0);
+    setWebsite(true);
   }, []);
   return (
     <div className="about__page">

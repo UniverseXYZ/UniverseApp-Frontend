@@ -10,14 +10,8 @@ import ActiveAuctions from './ActiveAuctions';
 import PastAuctions from './PastAuctions';
 
 const MyAuction = () => {
-  const {
-    selectedTabIndex,
-    setSelectedTabIndex,
-    myAuctions,
-    setMyAuctions,
-    auction,
-    setAuction,
-  } = useContext(AppContext);
+  const { myAuctions, setMyAuctions, auction, setAuction } = useContext(AppContext);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
   const [hideButton, setHideButton] = useState(false);
   const history = useHistory();
@@ -112,7 +106,6 @@ const MyAuction = () => {
 
     // return () => window.removeEventListener('resize', handleHideButton);
   }, []);
-  console.log(hideButton);
 
   return (
     <div className="container auction__page">
