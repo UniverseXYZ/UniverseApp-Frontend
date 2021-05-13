@@ -205,7 +205,7 @@ const AuctionSettings = () => {
   });
 
   useEffect(() => {
-    if (isEditingAuction) {
+    if (auction.id || isEditingAuction) {
       setValues({
         name: auction.name,
         startingBid: auction.startingBid,
@@ -221,7 +221,7 @@ const AuctionSettings = () => {
       //   {}
       // );
     }
-  }, [isEditingAuction]);
+  }, [auction.id]);
   return (
     <div className="auction-settings container">
       <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">

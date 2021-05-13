@@ -50,7 +50,6 @@ const CustomizeAuction = () => {
             launch: true,
             headline: domainAndBranding.headline,
             link: domainAndBranding.link,
-            copied: false,
             promoImage: domainAndBranding.promoImage,
             backgroundImage: domainAndBranding.backgroundImage,
             tiers: prevValues.tiers.map((tier) => {

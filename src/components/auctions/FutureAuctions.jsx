@@ -58,7 +58,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     console.log('myAuctions', myAuctions);
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
-  console.log(myAuctions);
 
   return (
     <div className="future-auctions">
@@ -95,10 +94,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <Popup trigger={<Button className="light-button">Set up auction</Button>}>
                   {(close) => <SetUpPopup onClose={close} onAuctionId={futureAuction.id} />}
                 </Popup>
-
-                {/* <Button className="light-button" disabled>
-                  Set up auction
-                </Button> */}
               </div>
               <div className="launch-auction">
                 {/* <Button className="light-button" disabled>Set up auction</Button> */}
@@ -252,7 +247,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   )}
                 </div>
                 {futureAuction.mint === true ? (
-                  <Button className="light-border-button">Set up landing page</Button>
+                  <Button
+                    className="light-border-button"
+                    onClick={() => {
+                      setAuction(futureAuction);
+                      history.push('/customize-auction-landing-page', futureAuction.id);
+                    }}
+                  >
+                    Set up landing page
+                  </Button>
                 ) : (
                   <Button className="light-border-button" disabled>
                     Set up landing page
@@ -329,7 +332,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   <h6>Step 3</h6>
                   <h4>Landing page customization</h4>
                   {futureAuction.mint === true && futureAuction.landingCustom === false ? (
-                    <Button className="light-border-button">Set up landing page</Button>
+                    <Button
+                      className="light-border-button"
+                      onClick={() => {
+                        setAuction(futureAuction);
+                        history.push('/customize-auction-landing-page', futureAuction.id);
+                      }}
+                    >
+                      Set up landing page
+                    </Button>
                   ) : (
                     <Button className="light-border-button" disabled>
                       Set up landing page
