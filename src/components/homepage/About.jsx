@@ -74,7 +74,7 @@ const About = () => {
         <div className="universe__protocol__section__container">
           <AnimatedOnScroll animationIn="fadeIn">
             <div className="universe__protocol">
-              <h1 className="title">Universe Protocol and the Universe DAO</h1>
+              <h1 className="title">Universe Protocol and the xyzDAO</h1>
               <p className="info">
                 Meta: To create a system that doesn’t live off the backs of artists and creates a
                 sustainable ecosystem for artists and fans alike.
@@ -113,14 +113,22 @@ const About = () => {
             <AnimatedOnScroll animationIn="fadeIn">
               <img className="hide__on__mobile" src={universeMintingLogo} alt="Universe Minting" />
               <p className="desc">
-                Galaxies are a collection of minted NFT&apos;s these galaxies represent the IP of
-                that particular item in the universe and its community can create art for: shows,
-                merch, music festivals, etc. These Galaxies can also contain other planets within
-                them, other NFT collections of art, shows, merch and music festivals. For future
-                build outs, we hope to one day turn these into mini DAOs along with an integrated
-                social network.
+                In the Universe, an NFT is minted for each item in a Collection. Each collection of
+                art can include a variety of digital formats including video formats, music, and
+                more. Collections can also hold sub-collections in them. This allows for the
+                creation of additional NFTs such as layers of art, shows, merchandise, music. etc.
+                that can evolve over time under one umbrella community structure. <br />
+                <br /> In this way the Universe Protocol allows content to grow over time with
+                community input, yet retain programmatic links back to its origins and the original
+                creators. <br />
+                <br /> In future build outs we hope to enable the ability to turn collections into
+                mini DAOs along with an integrated social network.
               </p>
-              <Button className="light-button" onClick={() => history.push('/about')} disabled>
+              <Button
+                className="light-button"
+                // onClick={() => history.push('/about')}
+                disabled
+              >
                 Coming soon
               </Button>
             </AnimatedOnScroll>
@@ -133,15 +141,17 @@ const About = () => {
                 alt="Universe Auctions"
               />
               <p className="desc">
-                We are developing a trustless and decentralized auction house for NFT&apos;s where
-                anyone holding an NFT can put up the Galaxy and/or the collection of Planets up for
-                auction. These auctions can also facilitate swaps of other tokens. You will be able
-                to pay with specific ERC-20 and ETH. The xyzDAO will take a small fee of every
-                auction.
+                We are developing a trustless decentralized auction house for NFTs. You can use
+                existing NFTs or mint new collections and create a multi-tier auction with multiple
+                winners. At its simplest, you can set up a single tier reserve price english auction
+                that is well known. There will be ZERO FEES for initial auctions, with all revenue
+                going to the creator - we are here to empower artists at our core. However, the
+                xyzDAO will take a 2% fee on every resale on the Universe platform to support
+                continued innovation.
               </p>
               <Button
                 className="light-button"
-                onClick={() => history.push('/about')}
+                // onClick={() => history.push('/about')}
                 style={{ marginBottom: '60px' }}
                 disabled
               >
@@ -173,10 +183,10 @@ const About = () => {
               <h1 className="title">Universe Original Characters and Lore</h1>
               <span className="coming__soon">Coming soon</span>
               <p className="desc">
-                We are creating a whole universe of 69 original characters with stories and lore to
-                lay the framework and showcase the potential for xyzDAO. We will show you how to
-                create a universe of your own, build with us and help the Universe of NFTs never
-                stops expanding.
+                The initial Core Collection will be released to showcase the ease of use for
+                aspiring artists to build and release their own NFT franchise using the features of
+                the Universe Protocol. The Core Collection provides an example for aspiring artists
+                for how to build out your franchise using the features of the Universe Protocol.
               </p>
               <div className="subscribe__form">
                 <span htmlFor="subscribeInp">Subscribe to stay updated on the latest news</span>

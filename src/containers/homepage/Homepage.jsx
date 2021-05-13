@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import MetaTags from 'react-meta-tags';
 import About from '../../components/homepage/About';
 import BuyUniverseNFTs from '../../components/homepage/BuyUniverseNFTs';
 import './Homepage.scss';
@@ -11,14 +12,16 @@ const Homepage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(true);
-    document.title = 'Universe Minting - Homepage';
-    return () => {
-      document.title = 'Universe Minting';
-    };
   }, []);
-
   return (
     <div className="homepage">
+      <MetaTags>
+        <title>Universe XYZ - The NFT Universe Built on Ethereum</title>
+        <meta
+          name="description"
+          content="Launch your own community-driven NFT universe baked with social tools, media services, and distribution - underpinned by the native $XYZ token."
+        />
+      </MetaTags>
       <Welcome />
       <About />
       <NonFungibleUniverse />
@@ -26,5 +29,4 @@ const Homepage = () => {
     </div>
   );
 };
-
 export default Homepage;

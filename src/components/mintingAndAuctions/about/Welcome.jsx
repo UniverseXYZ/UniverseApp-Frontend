@@ -25,7 +25,7 @@ const Welcome = () => {
               multiple NFTs per winner. In this Universe anything is possible.
             </p>
           </AnimatedOnScroll>
-          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
+          {/* <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
               <Button className="light-button">Set up auction</Button>
               <Button
@@ -35,7 +35,7 @@ const Welcome = () => {
                 Open marketplace
               </Button>
             </div>
-          </AnimatedOnScroll>
+          </AnimatedOnScroll> */}
         </div>
         <AnimatedOnScroll animationIn="fadeIn">
           <div className="right">

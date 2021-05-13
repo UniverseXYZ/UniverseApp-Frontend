@@ -79,9 +79,9 @@ const MintingTab = () => {
         </div>
       </div>
 
-      <div className="launch__app__btn">
+      {/* <div className="launch__app__btn">
         <Button className="light-button">Launch app</Button>
-      </div>
+      </div> */}
     </div>
   );
 };

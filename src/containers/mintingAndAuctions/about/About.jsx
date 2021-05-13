@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import MetaTags from 'react-meta-tags';
 import Welcome from '../../../components/mintingAndAuctions/about/Welcome';
 import './About.scss';
 import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTools';
@@ -11,14 +12,16 @@ const About = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(true);
-    document.title = 'Universe Minting - Minting & Auctions - About';
-    return () => {
-      document.title = 'Universe Minting';
-    };
   }, []);
-
   return (
     <div className="about__page">
+      <MetaTags>
+        <title>A Universe Made for Artists by Artists – Universe XYZ</title>
+        <meta
+          name="description"
+          content="Mint single or multiple NFTs, create and edit NFT Collections, and run auctions with multiple NFTs per winner. In this Universe anything is possible."
+        />
+      </MetaTags>
       <Welcome />
       <DigitalTools />
       <HowItWorks />
@@ -26,5 +29,4 @@ const About = () => {
     </div>
   );
 };
-
 export default About;

@@ -91,13 +91,13 @@ const App = () => {
       }
     }
 
-    window.addEventListener('resize', handleResize);
+    // window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll);
     handleResize();
     handleScroll();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      // window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);

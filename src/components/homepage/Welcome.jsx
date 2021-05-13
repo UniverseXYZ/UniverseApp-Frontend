@@ -39,7 +39,12 @@ const Welcome = () => {
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              <Button className="light-button">Whitepaper</Button>
+              <Button
+                className="light-button"
+                onClick={() => window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')}
+              >
+                Whitepaper
+              </Button>
               <Popup
                 trigger={
                   <button type="button" className="light-border-button">
