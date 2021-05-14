@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
+import closeIcon from '../../assets/images/cross.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import Button from '../button/Button';
 
 const EndDateCalendar = React.forwardRef(
-  ({ monthNames, values, setValues, endDateTemp, setEndDateTemp, setShowEndDate }, ref) => {
+  (
+    { monthNames, values, setValues, endDateTemp, setEndDateTemp, setShowEndDate, onClose },
+    ref
+  ) => {
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const timezones = [
@@ -161,7 +165,7 @@ const EndDateCalendar = React.forwardRef(
           format: endDateTemp.format,
         });
       }
-      setShowEndDate(false);
+      onClose();
     };
 
     const handleSaveClick = () => {
@@ -176,14 +180,14 @@ const EndDateCalendar = React.forwardRef(
             endDateTemp.minutes
           ),
         }));
-        setShowEndDate(false);
+        onClose();
       } else {
         setEndDateTemp((prevState) => ({
           ...prevState,
           hours: '12',
           minutes: '00',
         }));
-        setShowEndDate(false);
+        onClose();
       }
     };
 
@@ -206,32 +210,46 @@ const EndDateCalendar = React.forwardRef(
       createDaysArray();
     }, [selectedDate]);
 
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    useEffect(() => {
+      document.addEventListener('click', handleClickOutside, true);
+      return () => {
+        document.removeEventListener('click', handleClickOutside, true);
+      };
+    });
+
     return (
       <div className="calendar" ref={ref}>
-        <div className="calendar__header">
-          <h2>{`${monthNames[selectedDate.month]} ${selectedDate.year}`}</h2>
-          <div className="month__changers">
-            <button type="button" onClick={() => changeMonth('prev')}>
+        <div className="calendar-first">
+          <div className="calendar__header">
+            <button className="left-btn" type="button" onClick={() => changeMonth('prev')}>
               <img className="left" src={arrow} alt="Left arrow" />
             </button>
-            <button type="button" onClick={() => changeMonth('next')}>
-              <img className="right" src={arrow} alt="Right arrow" />
-            </button>
+            <h2>{`${monthNames[selectedDate.month]} ${selectedDate.year}`}</h2>
+            <div className="month__changers">
+              <button type="button" onClick={() => changeMonth('next')}>
+                <img className="right" src={arrow} alt="Right arrow" />
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div className="calendar__body">
-          <div className="week__days">
-            {weekNames.map((week) => (
-              <div key={uuid()}>{week}</div>
-            ))}
-          </div>
-          {currentMonth.map((week) => (
-            <div key={uuid()} className="week__days__numbers">
-              {week.map((day, index) => (
-                <div
-                  key={uuid()}
-                  className={`
+          <div className="calendar__body">
+            <div className="week__days">
+              {weekNames.map((week) => (
+                <div key={uuid()}>{week}</div>
+              ))}
+            </div>
+            {currentMonth.map((week) => (
+              <div key={uuid()} className="week__days__numbers">
+                {week.map((day, index) => (
+                  <div
+                    key={uuid()}
+                    className={`
                     ${
                       day === endDateTemp.day &&
                       monthNames[selectedDate.month] === endDateTemp.month &&
@@ -270,18 +288,19 @@ const EndDateCalendar = React.forwardRef(
                     ${index === 0 ? 'startEdge' : ''}
                     ${index === 6 ? 'endEdge' : ''}
                   `}
-                  aria-hidden="true"
-                  onClick={() => handleDayClick(day)}
-                  style={{ cursor: day ? 'pointer' : 'default' }}
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-          ))}
+                    aria-hidden="true"
+                    onClick={() => handleDayClick(day)}
+                    style={{ cursor: day ? 'pointer' : 'default' }}
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-
         <div className="calendar__footer">
+          <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
           <div className="timezone">
             <div className="label">Time zone:</div>
             <div
@@ -362,6 +381,7 @@ EndDateCalendar.propTypes = {
   endDateTemp: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setEndDateTemp: PropTypes.func.isRequired,
   setShowEndDate: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EndDateCalendar;
