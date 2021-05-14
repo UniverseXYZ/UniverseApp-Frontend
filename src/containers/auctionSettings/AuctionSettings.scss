@@ -47,8 +47,16 @@
       .date__input {
         position: relative;
         width: 100%;
+
+        .callendar__image {
+          position: absolute;
+          right: 0;
+          top: 23px;
+          height: 52px;
+        }
       }
       .intup-l {
+        position: relative;
         width: 100%;
         input {
           width: 100%;
@@ -56,6 +64,7 @@
         .inp-label,
         p {
           margin-bottom: 1px;
+          line-height: 22px;
         }
       }
 
@@ -94,7 +103,7 @@
         width: 100px;
         height: 34px;
         right: 8px;
-        top: 28px;
+        top: 32px;
         border-radius: 6px;
         button {
           width: 100%;

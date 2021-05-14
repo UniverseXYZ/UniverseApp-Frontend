@@ -12,6 +12,7 @@ import LoadingPopup from '../popups/LoadingPopup';
 import CongratsPopup from '../popups/CongratsPopup';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
+import notificationIcon from '../../assets/images/notification.svg';
 
 const MyNFTs = () => {
   const {
@@ -51,6 +52,7 @@ const MyNFTs = () => {
 
     return !res.length;
   };
+  console.log(savedNfts.length);
 
   const handleMintSelected = () => {
     document.getElementById('loading-hidden-btn').click();
@@ -192,13 +194,31 @@ const MyNFTs = () => {
           <div className="mynfts__page__body">
             <ul className="tabs">
               {tabs.map((tab, index) => (
+                // tabs here //
                 <li
                   key={uuid()}
                   className={selectedTabIndex === index ? 'active' : ''}
                   onClick={() => setSelectedTabIndex(index)}
                   aria-hidden="true"
                 >
-                  {tab}
+                  {index === 1 && savedNfts.length > 0 ? (
+                    <>
+                      <div className="notification">
+                        {tab}
+                        <span>{savedNfts.length}</span>
+                      </div>
+                    </>
+                  ) : index === 2 && savedCollections.length > 0 ? (
+                    <>
+                      <div className="notification">
+                        {tab}
+                        <span>{savedCollections.length}</span>
+                      </div>
+                    </>
+                  ) : (
+                    tab
+                  )}
+                  {/* {tab} {selectedNft.length} */}
                 </li>
               ))}
             </ul>

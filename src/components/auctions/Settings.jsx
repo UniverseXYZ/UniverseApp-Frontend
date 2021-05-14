@@ -6,6 +6,7 @@ import Select from 'react-select';
 import moment from 'moment';
 import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
+import callendarIcon from '../../assets/images/calendar.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input';
 import infoIcon from '../../assets/images/icon.svg';
@@ -335,6 +336,13 @@ const AuctionSettings = () => {
                   }
                   error={isValidFields.startDate ? undefined : 'Start date is required!'}
                 />
+                <img
+                  aria-hidden="true"
+                  className="callendar__image"
+                  src={callendarIcon}
+                  alt="Callendar"
+                  onClick={() => setShowStartDate(true)}
+                />
                 {showStartDate && (
                   <StartDateCalendar
                     ref={startDateRef}
@@ -367,6 +375,13 @@ const AuctionSettings = () => {
                       : ''
                   }
                   error={isValidFields.endDate ? undefined : 'End date is required!'}
+                />
+                <img
+                  aria-hidden="true"
+                  className="callendar__image"
+                  src={callendarIcon}
+                  alt="Callendar"
+                  onClick={() => setShowEndDate(true)}
                 />
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
