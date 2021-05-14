@@ -110,7 +110,7 @@ const About = () => {
                 The Universe is forever expanding at an accelerated rate, all while the xyzDAO
                 controls the future and the fate of this project. Starting with an array of tools
                 and a mission to empower artists, with a DAO that will be governed by the $XYZ token
-                and its community. xyzDAO will be guided by the stars and the carbon that surraunds
+                and its community. xyzDAO will be guided by the stars and the carbon that surrounds
                 them as we travel into the cosmic unknowns.
               </p>
             </div>
