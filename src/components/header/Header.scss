@@ -40,10 +40,13 @@ header {
         }
 
         .desktop__nav ul li .sign__in {
-            background: 
-                linear-gradient($black, $black) padding-box,
-                linear-gradient(to right, #BCEB00, #00EAEA) border-box;
+            background-image: linear-gradient(101deg, #bceb00, #00eaea);
+            background-origin: border-box;
+            box-shadow: 2px 1000px 1px $black inset;
             color: $white;
+            &:hover {
+                box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
+            }
         }
 
         .tablet__nav button.hamburger {

@@ -74,9 +74,8 @@ const Footer = () => {
                   Yield farming
                   <span className="tooltiptext">Coming soon</span>
                 </li>
-                <li className="disable">
+                <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
                   Docs
-                  <span className="tooltiptext">Coming soon</span>
                 </li>
               </ul>
             </div>

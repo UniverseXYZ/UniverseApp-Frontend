@@ -281,10 +281,9 @@ const TabletView = (props) => {
                     </button>
                   </div>
                   <div>
-                    <button type="button" className="disable">
+                    <button type="button" onClick={() => window.open('https://docs.universe.xyz/')}>
                       <img src={docsIcon} alt="Docs" />
                       <span>Docs</span>
-                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                 </div>

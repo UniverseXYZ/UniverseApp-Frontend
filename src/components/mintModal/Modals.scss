@@ -1488,6 +1488,8 @@
         display: flex;
         align-items: center;
         margin-bottom: 10px;
+        width: fit-content;
+        position: relative;
         h4 {
           font-family: $sharpGroteskMediumFont;
           font-weight: 600;
@@ -1495,6 +1497,24 @@
           line-height: 130%;
           letter-spacing: 0.2px;
           color: $black;
+        }
+        .royalities-info-text {
+          position: absolute;
+          background: $white;
+          padding: 16px 16px 18px 16px;
+          box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          width: 226px;
+          bottom: 20px;
+          left: 100%;
+          transform: translateX(-50%);
+
+          p {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            line-height: 150%;
+            color: $black;
+          }
         }
         img {
           margin-left: 6px;
