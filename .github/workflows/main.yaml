@@ -37,12 +37,12 @@ jobs:
 
     - name: Install dependencies
       if: steps.node-cache.outputs.cache-hit != 'true'
-      run: npm install
+      run: yarn install
       env:
         CI: false
 
     - name: Build
-      run: npm run build
+      run: yarn build
 
     - name: Save artifacts
       uses: actions/upload-artifact@v2
