@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
@@ -19,6 +19,8 @@ const CustomizeAuction = () => {
     setMyAuctions,
     activeAuctions,
     setActiveAuctions,
+    futureAuctions,
+    setFutureAuctions,
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
@@ -44,21 +46,34 @@ const CustomizeAuction = () => {
         if (descriptionCount === rewardTiersAuction.length) desc = true;
       }
       if (desc) {
-        setTimeout(() => {
-          setAuction((prevValues) => ({
-            ...prevValues,
-            launch: true,
-            headline: domainAndBranding.headline,
-            link: domainAndBranding.link,
-            promoImage: domainAndBranding.promoImage,
-            backgroundImage: domainAndBranding.backgroundImage,
-            tiers: prevValues.tiers.map((tier) => {
-              const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-              return { ...tier, ...rewardTier };
-            }),
-          }));
+        const newAuction = { ...auction };
+        newAuction.id = uuid();
+        newAuction.headline = domainAndBranding.headline;
+        newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+        newAuction.copied = false;
+        newAuction.promoImage = domainAndBranding.promoImage;
+        newAuction.backgroundImage = domainAndBranding.backgroundImage;
+        newAuction.hasBlur = domainAndBranding.hasBlur;
+        newAuction.tiers = auction.tiers.map((tier) => {
+          const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
+          return { ...tier, ...rewardTier };
+        });
+        if (loggedInArtist.name && loggedInArtist.avatar) {
+          newAuction.artist = loggedInArtist;
           history.push('/my-auctions');
-        }, 1000);
+          setTimeout(() => {
+            if (
+              new Date() < new Date(newAuction.endDate) &&
+              new Date() >= new Date(newAuction.startDate)
+            ) {
+              setActiveAuctions([...activeAuctions, newAuction]);
+            } else if (new Date() < new Date(newAuction.startDate)) {
+              setFutureAuctions([...futureAuctions, newAuction]);
+            }
+            setMyAuctions([...myAuctions, newAuction]);
+            setAuction({ tiers: [] });
+          }, 1000);
+        }
       }
     }
   };
@@ -107,6 +122,10 @@ const CustomizeAuction = () => {
       }
     }
   };
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   return (
     <div className="container customize__auction">

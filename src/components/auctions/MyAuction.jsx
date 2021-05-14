@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
+import moment from 'moment';
 import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
@@ -164,12 +165,26 @@ const MyAuction = () => {
             <span> Go to my profile.</span>
           </p>
         </div>
-        {selectedTabIndex === 0 && myAuctions.length ? (
+        {selectedTabIndex === 0 &&
+        myAuctions.filter(
+          (item) =>
+            moment(item.endDate).isAfter(moment.now()) &&
+            (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+              moment(item.startDate).isBefore(moment.now())) > 0 &&
+            item.launch
+        ).length ? (
           <ActiveAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
         ) : (
           <></>
         )}
-        {selectedTabIndex === 0 && !myAuctions.length ? (
+        {selectedTabIndex === 0 &&
+        !myAuctions.filter(
+          (item) =>
+            moment(item.endDate).isAfter(moment.now()) &&
+            (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+              moment(item.startDate).isBefore(moment.now())) > 0 &&
+            item.launch
+        ).length ? (
           <div className="empty__auction">
             <h3>No active auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>
@@ -186,7 +201,17 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 && AUCTIONS_DATA.length ? (
+        {selectedTabIndex === 1 &&
+        myAuctions.filter(
+          (item) =>
+            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
+            !(
+              moment(item.endDate).isAfter(moment.now()) &&
+              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+                moment(item.startDate).isBefore(moment.now())) > 0 &&
+              item.launch
+            )
+        ).length ? (
           <FutureAuctions
             myAuctions={myAuctions}
             setMyAuctions={setMyAuctions}
@@ -195,7 +220,17 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 && !AUCTIONS_DATA.length ? (
+        {selectedTabIndex === 1 &&
+        !myAuctions.filter(
+          (item) =>
+            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
+            !(
+              moment(item.endDate).isAfter(moment.now()) &&
+              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+                moment(item.startDate).isBefore(moment.now())) > 0 &&
+              item.launch
+            )
+        ).length ? (
           <div className="empty__auction">
             <h3>No scheduled auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>
@@ -213,12 +248,16 @@ const MyAuction = () => {
           <></>
         )}
 
-        {selectedTabIndex === 2 && AUCTIONS_DATA.length ? (
+        {selectedTabIndex === 2 &&
+        myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
+          .length ? (
           <PastAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
         ) : (
           <></>
         )}
-        {selectedTabIndex === 2 && !AUCTIONS_DATA.length ? (
+        {selectedTabIndex === 2 &&
+        !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
+          .length ? (
           <div className="empty__auction">
             <h3>No past auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>

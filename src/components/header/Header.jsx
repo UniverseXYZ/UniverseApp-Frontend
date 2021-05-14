@@ -52,7 +52,7 @@ const Header = ({ location }) => {
     } else if (website && !showMenu) {
       document.querySelector('header').classList.add('dark');
     }
-  }, [showMenu]);
+  }, [showMenu, website]);
 
   return (
     <header>

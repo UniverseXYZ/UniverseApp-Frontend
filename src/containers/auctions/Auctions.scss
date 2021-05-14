@@ -25,7 +25,6 @@
       font-style: normal;
       font-weight: 600;
       font-size: 16px;
-      // text-transform: uppercase;
       line-height: 20px;
       color: $black;
       padding: 11px 26px;
@@ -170,8 +169,8 @@
     ul.tabs {
       display: flex;
       align-items: center;
-      overflow-x: hidden;
       margin-right: 40px;
+      overflow-x: auto;
 
       li {
         margin-right: 40px;
@@ -180,7 +179,6 @@
         font-weight: 500;
         font-size: 16px;
         line-height: 20px;
-        // text-transform: uppercase;
         color: rgba(0, 0, 0, 0.4);
         padding-bottom: 9px;
         cursor: pointer;

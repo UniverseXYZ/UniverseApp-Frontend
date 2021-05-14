@@ -28,14 +28,13 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideEndIcon, setHideEndIcon] = useState(true);
   const [shownActionId, setshownActionId] = useState(null);
   const [offset, setOffset] = useState(0);
-  const [data, setData] = useState(FUTURE_ACTIONS_DATA);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
   const history = useHistory();
   const [mintCongratsPopupOpen, setMintCongratsPopupOpen] = useState(false);
 
   const handleRemove = (id) => {
-    setData((d) => d.filter((item) => item.id !== id));
+    setMyAuctions((d) => d.filter((item) => item.id !== id));
   };
 
   const handleSearch = (value) => {
@@ -53,11 +52,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const handleMintCongratsPopupClose = () => {
     setMintCongratsPopupOpen(false);
   };
-
-  useEffect(() => {
-    console.log('myAuctions', myAuctions);
-    window['__react-beautiful-dnd-disable-dev-warnings'] = true;
-  }, []);
 
   return (
     <div className="future-auctions">
@@ -351,7 +345,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             </div>
 
             <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
-              {console.log(futureAuction.tiers)}
               {futureAuction.tiers &&
                 futureAuction.tiers.map((tier) => (
                   <div className="tier">

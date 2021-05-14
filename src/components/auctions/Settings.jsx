@@ -115,8 +115,8 @@ const AuctionSettings = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
       startingBid: values.startingBid.trim().length !== 0,
-      startDate: moment(values.startDate).format().trim().length !== 0,
-      endDate: moment(values.endDate).format().trim().length !== 0,
+      startDate: values.startDate.length !== 0,
+      endDate: values.endDate.length !== 0,
       name: values.name.trim().length !== 0,
     }));
 
@@ -188,22 +188,6 @@ const AuctionSettings = () => {
     bidValues[index] = +event.target.value;
     setBidValues(bidValues);
   };
-
-  const handleClickOutside = (event) => {
-    if (startDateRef.current && !startDateRef.current.contains(event.target)) {
-      setShowStartDate(false);
-    }
-    if (endDateRef.current && !endDateRef.current.contains(event.target)) {
-      setShowEndDate(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  });
 
   useEffect(() => {
     if (auction.id || isEditingAuction) {
@@ -316,72 +300,93 @@ const AuctionSettings = () => {
             </div>
             <div className="infoDiv">
               <div className="date__input">
-                <Input
-                  type="text"
-                  readOnly
-                  onClick={() => setShowStartDate(true)}
-                  id="startDate"
-                  label="Start date"
-                  autoComplete="off"
-                  value={
-                    values.startDate
-                      ? `${values.startDate.toString().split(' ')[1]} ${
-                          values.startDate.toString().split(' ')[2]
-                        }, ${
-                          values.startDate.toString().split(' ')[3]
-                        }, ${values.startDate.toString().split(' ')[4].substring(0, 5)} ${
-                          startDateTemp.timezone
-                        }`
-                      : ''
+                <Popup
+                  trigger={
+                    <Input
+                      type="text"
+                      readOnly
+                      id="startDate"
+                      label="Start date"
+                      autoComplete="off"
+                      value={
+                        values.startDate
+                          ? `${values.startDate.toString().split(' ')[1]} ${
+                              values.startDate.toString().split(' ')[2]
+                            }, ${
+                              values.startDate.toString().split(' ')[3]
+                            }, ${values.startDate.toString().split(' ')[4].substring(0, 5)} ${
+                              startDateTemp.timezone
+                            }`
+                          : ''
+                      }
+                      error={isValidFields.startDate ? undefined : 'Start date is required!'}
+                    />
                   }
-                  error={isValidFields.startDate ? undefined : 'Start date is required!'}
-                />
+                >
+                  {(close) => (
+                    <StartDateCalendar
+                      ref={startDateRef}
+                      monthNames={monthNames}
+                      values={values}
+                      setValues={setValues}
+                      startDateTemp={startDateTemp}
+                      setStartDateTemp={setStartDateTemp}
+                      onClose={close}
+                    />
+                  )}
+                </Popup>
                 <img
                   aria-hidden="true"
                   className="callendar__image"
                   src={callendarIcon}
                   alt="Callendar"
-                  onClick={() => setShowStartDate(true)}
+                  // onClick={() => setShowStartDate(true)}
                 />
-                {showStartDate && (
-                  <StartDateCalendar
-                    ref={startDateRef}
-                    monthNames={monthNames}
-                    values={values}
-                    setValues={setValues}
-                    startDateTemp={startDateTemp}
-                    setStartDateTemp={setStartDateTemp}
-                    setShowStartDate={setShowStartDate}
-                  />
-                )}
               </div>
               <div className="date__input">
-                <Input
-                  type="text"
-                  readOnly
-                  onClick={() => setShowEndDate(true)}
-                  id="endDate"
-                  label="End date"
-                  autoComplete="off"
-                  value={
-                    values.endDate
-                      ? `${values.endDate.toString().split(' ')[1]} ${
-                          values.endDate.toString().split(' ')[2]
-                        }, ${
-                          values.endDate.toString().split(' ')[3]
-                        }, ${values.endDate.toString().split(' ')[4].substring(0, 5)} ${
-                          endDateTemp.timezone
-                        }`
-                      : ''
+                <Popup
+                  trigger={
+                    <Input
+                      type="text"
+                      readOnly
+                      onClick={() => setShowEndDate(true)}
+                      id="endDate"
+                      label="End date"
+                      autoComplete="off"
+                      value={
+                        values.endDate
+                          ? `${values.endDate.toString().split(' ')[1]} ${
+                              values.endDate.toString().split(' ')[2]
+                            }, ${
+                              values.endDate.toString().split(' ')[3]
+                            }, ${values.endDate.toString().split(' ')[4].substring(0, 5)} ${
+                              endDateTemp.timezone
+                            }`
+                          : ''
+                      }
+                      error={isValidFields.endDate ? undefined : 'End date is required!'}
+                    />
                   }
-                  error={isValidFields.endDate ? undefined : 'End date is required!'}
-                />
+                >
+                  {(close) => (
+                    <EndDateCalendar
+                      ref={endDateRef}
+                      monthNames={monthNames}
+                      values={values}
+                      setValues={setValues}
+                      endDateTemp={endDateTemp}
+                      setEndDateTemp={setEndDateTemp}
+                      setShowEndDate={setShowEndDate}
+                      onClose={close}
+                    />
+                  )}
+                </Popup>
                 <img
                   aria-hidden="true"
                   className="callendar__image"
                   src={callendarIcon}
                   alt="Callendar"
-                  onClick={() => setShowEndDate(true)}
+                  // onClick={() => setShowStartDate(true)}
                 />
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
@@ -403,17 +408,6 @@ const AuctionSettings = () => {
                       </p>
                     </div>
                   </Animated>
-                )}
-                {showEndDate && (
-                  <EndDateCalendar
-                    ref={endDateRef}
-                    monthNames={monthNames}
-                    values={values}
-                    setValues={setValues}
-                    endDateTemp={endDateTemp}
-                    setEndDateTemp={setEndDateTemp}
-                    setShowEndDate={setShowEndDate}
-                  />
                 )}
               </div>
             </div>

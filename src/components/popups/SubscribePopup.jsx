@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
 import Button from '../button/Button';
@@ -11,7 +12,24 @@ const SubscribePopup = ({ close }) => {
   const handleSubscribe = () => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(email).toLowerCase())) {
-      setSubscribed(true);
+      const config = {
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        params: {
+          email,
+        },
+      };
+      axios
+        .get('http://198.211.98.236/addContact', config)
+        .then((response) => {
+          if (response.status === 200) {
+            setSubscribed(true);
+          } else {
+            alert('OOPS! Something went wrong.');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       alert('Email address is invalid.');
     }

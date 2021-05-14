@@ -2,6 +2,7 @@ import { useState, useEffect, React } from 'react';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import { handleClickOutside } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
@@ -51,20 +52,13 @@ const App = () => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
+  const [futureAuctions, setFutureAuctions] = useState([]);
   const [auction, setAuction] = useState({ tiers: [] });
   const [selectedNft, setSelectedNft] = useState([]);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
-
-  const handleClickOutside = (event, className, ref, cb) => {
-    if (!event.target.classList.contains(className)) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        cb(false);
-      }
-    }
-  };
 
   useEffect(() => {
     function handleResize() {
@@ -73,11 +67,16 @@ const App = () => {
         height: window.innerHeight,
       });
     }
+    if (!website) {
+      document.querySelector('header').classList.remove('dark');
+    }
     function handleScroll() {
       if (window.scrollY > 0) {
         if (document.querySelector('header')) {
           document.querySelector('header').style.position = 'fixed';
-          document.querySelector('header').classList.remove('dark');
+          if (website) {
+            document.querySelector('header').classList.remove('dark');
+          }
         }
         if (document.querySelector('.artist__personal__logo')) {
           document.querySelector('.artist__personal__logo').style.position = 'fixed';
@@ -85,7 +84,9 @@ const App = () => {
       } else if (window.scrollY <= 0) {
         if (document.querySelector('header')) {
           document.querySelector('header').style.position = 'relative';
-          document.querySelector('header').classList.add('dark');
+          if (website) {
+            document.querySelector('header').classList.add('dark');
+          }
         }
         if (document.querySelector('.artist__personal__logo')) {
           document.querySelector('.artist__personal__logo').style.position = 'absolute';
@@ -102,7 +103,7 @@ const App = () => {
       // window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [website]);
 
   return (
     <AppContext.Provider
@@ -134,6 +135,8 @@ const App = () => {
         setMyAuctions,
         activeAuctions,
         setActiveAuctions,
+        futureAuctions,
+        setFutureAuctions,
         selectAllIsChecked,
         setSelectAllIsChecked,
         auction,
