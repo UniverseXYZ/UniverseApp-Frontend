@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Animated } from 'react-animated-css';
 import AppContext from '../../ContextAPI';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
@@ -18,6 +19,7 @@ const Lists = ({ data, perPage, offset }) => {
   const [openEditions, setOpenEditions] = useState(null);
   const [selected, Setselected] = useState([]);
   const [data1, setData] = useState([]);
+  const [hideIcon, setHideIcon] = useState(false);
 
   const tierId = location.state;
   const tierById = auction.tiers.find((element) => element.id === tierId);
@@ -75,7 +77,27 @@ const Lists = ({ data, perPage, offset }) => {
                     </>
                   )}
                 {tierById && tierById.winners > nft.generatedEditions.length && (
-                  <img className="nonicon__icon" src={nonSelecting} alt="Check Icon" />
+                  <>
+                    <img
+                      className="nonicon__icon"
+                      src={nonSelecting}
+                      alt="Check Icon"
+                      onMouseOver={() => setHideIcon(true)}
+                      onFocus={() => setHideIcon(true)}
+                      onMouseLeave={() => setHideIcon(false)}
+                      onBlur={() => setHideIcon(false)}
+                    />
+                    {hideIcon && (
+                      <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                        <div className="warning-text">
+                          <p>
+                            This NFT has doesn&apos;t have enough editions to be entered into this
+                            tier. You must have the equal amount of winners as NFTs available.
+                          </p>
+                        </div>
+                      </Animated>
+                    )}
+                  </>
                 )}
               </>
             )}

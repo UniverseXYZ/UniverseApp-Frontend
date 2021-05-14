@@ -6,6 +6,7 @@ import Select from 'react-select';
 import moment from 'moment';
 import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
+import callendarIcon from '../../assets/images/calendar.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input';
 import infoIcon from '../../assets/images/icon.svg';
@@ -334,7 +335,13 @@ const AuctionSettings = () => {
                     />
                   )}
                 </Popup>
-                {/* {showStartDate && (    )} */}
+                <img
+                  aria-hidden="true"
+                  className="callendar__image"
+                  src={callendarIcon}
+                  alt="Callendar"
+                  // onClick={() => setShowStartDate(true)}
+                />
               </div>
               <div className="date__input">
                 <Popup
@@ -374,6 +381,13 @@ const AuctionSettings = () => {
                     />
                   )}
                 </Popup>
+                <img
+                  aria-hidden="true"
+                  className="callendar__image"
+                  src={callendarIcon}
+                  alt="Callendar"
+                  // onClick={() => setShowStartDate(true)}
+                />
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
                   <img
@@ -395,7 +409,6 @@ const AuctionSettings = () => {
                     </div>
                   </Animated>
                 )}
-                {/* {showEndDate && (   )} */}
               </div>
             </div>
           </div>

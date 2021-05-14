@@ -149,6 +149,31 @@
           margin-right: 20px;
           font-size: 14px;
         }
+        .notification {
+          position: relative;
+          img {
+            position: absolute;
+            top: -10px;
+          }
+          span {
+            position: absolute;
+            right: -13px;
+            top: -10px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 10px;
+            line-height: 150%;
+            color: $black;
+            background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
       }
     }
 
@@ -682,6 +707,26 @@
               position: absolute;
               top: 9px;
               right: 7px;
+            }
+            .warning-text {
+              position: absolute;
+              width: 240px;
+              background: white;
+              padding: 16px;
+              box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+              border-radius: 12px;
+              bottom: 7px;
+              left: 100%;
+              transform: translateX(-50%);
+
+              p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 150%;
+                color: $black;
+              }
             }
           }
           .check__icon {
