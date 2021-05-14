@@ -2,6 +2,7 @@ import { useState, useEffect, React } from 'react';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import { handleClickOutside } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
@@ -58,14 +59,6 @@ const App = () => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
-
-  const handleClickOutside = (event, className, ref, cb) => {
-    if (!event.target.classList.contains(className)) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        cb(false);
-      }
-    }
-  };
 
   useEffect(() => {
     function handleResize() {
