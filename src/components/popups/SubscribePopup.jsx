@@ -19,7 +19,7 @@ const SubscribePopup = ({ close }) => {
         },
       };
       axios
-        .get('http://198.211.98.236/addContact', config)
+        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
         .then((response) => {
           if (response.status === 200) {
             setSubscribed(true);
