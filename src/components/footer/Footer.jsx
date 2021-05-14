@@ -1,15 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import Popup from 'reactjs-popup';
 import './Footer.scss';
 import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
 import twitter from '../../assets/images/Twitter.svg';
 import discord from '../../assets/images/Discord.svg';
-import Btn from '../button/Button';
+import SubscribePopup from '../popups/SubscribePopup';
 
 const Footer = () => {
   const history = useHistory();
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = () => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(String(email).toLowerCase())) {
+      const config = {
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        params: {
+          email,
+        },
+      };
+      axios
+        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
+        .then((response) => {
+          if (response.status === 200) {
+            setEmail('');
+            document.getElementById('subscribed-hidden-btn').click();
+          } else {
+            alert('OOPS! Something went wrong.');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert('Email address is invalid.');
+    }
+  };
   return (
     <footer>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="subscribed-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <SubscribePopup close={close} showCongrats />}
+      </Popup>
       <div className="footer">
         <div className="footer__container">
           <div className="universe">
@@ -18,8 +60,15 @@ const Footer = () => {
             </div>
             <div className="subscribe">
               <p>Stay up to date with our newsletter</p>
-              <input placeholder="Enter your email" />
-              <Btn className="light-button">Subscribe</Btn>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button type="button" className="light-button" onClick={handleSubscribe}>
+                Subscribe
+              </button>
             </div>
           </div>
           <div className="universe-list">
