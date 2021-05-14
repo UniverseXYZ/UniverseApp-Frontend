@@ -61,7 +61,7 @@ const NonFungibleUniverse = () => {
       icon: nfuGovernanceIcon,
       title: 'DAO and Governance',
       description:
-        'xyzDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things. is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
+        'xyzDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
       loaded: false,
       action: 'Coming soon',
     },

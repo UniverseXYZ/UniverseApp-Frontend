@@ -38,6 +38,7 @@ const MintSingleNft = ({ onClick }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
+  const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
   const [percentAmount, setPercentAmount] = useState('');
   const [royalities, setRoyalities] = useState(true);
   const inputFile = useRef(null);
@@ -465,8 +466,24 @@ const MintSingleNft = ({ onClick }) => {
           {editableNFTType !== 'collection' && (
             <div className="royalities">
               <div className="title">
-                <h4>Royalties</h4>
-                <img src={infoIcon} alt="Info Icon" />
+                <h4
+                  onMouseOver={() => setHideRoyalitiesInfo(true)}
+                  onFocus={() => setHideRoyalitiesInfo(true)}
+                  onMouseLeave={() => setHideRoyalitiesInfo(false)}
+                  onBlur={() => setHideRoyalitiesInfo(false)}
+                >
+                  Royalties <img src={infoIcon} alt="Info Icon" />
+                </h4>
+                {hideRoyalitiesInfo && (
+                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                    <div className="royalities-info-text">
+                      <p>
+                        Royalties determines the percentage you, as a creator, will get from sales
+                        of this NFT on the secondary markets.
+                      </p>
+                    </div>
+                  </Animated>
+                )}
                 <label className="switch">
                   <input
                     type="checkbox"

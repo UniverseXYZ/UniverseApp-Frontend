@@ -172,14 +172,13 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://docs.universe.xyz/');
                 }}
               >
                 <img src={docsIcon} alt="Docs" />
                 <span>Docs</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
           </div>
