@@ -21,8 +21,11 @@ const SubscribePopup = ({ close }) => {
       axios
         .get('http://198.211.98.236/addContact', config)
         .then((response) => {
-          console.log(response);
-          setSubscribed(true);
+          if (response.status === 200) {
+            setSubscribed(true);
+          } else {
+            alert('OOPS! Something went wrong.');
+          }
         })
         .catch((error) => {
           console.log(error);
