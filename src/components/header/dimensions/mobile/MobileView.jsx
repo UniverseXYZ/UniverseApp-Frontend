@@ -209,15 +209,15 @@ const MobileView = (props) => {
                       <div>
                         <button
                           type="button"
-                          className="disable"
-                          // onClick={() => {
-                          //   setShowMenu(false);
-                          //   history.push('/minting-and-auctions/marketplace/active-auctions');
-                          // }}
+                          // className="disable"
+                          onClick={() => {
+                            setShowMenu(false);
+                            history.push('/minting-and-auctions/marketplace/active-auctions');
+                          }}
                         >
                           <img src={auctionHouseIcon} alt="Auction House" />
                           <span>Auction house</span>
-                          <span className="tooltiptext">Coming soon</span>
+                          {/* <span className="tooltiptext">Coming soon</span> */}
                         </button>
                       </div>
                       <div>
@@ -304,12 +304,12 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li className="sign__in">
-                    <Popup trigger={<button type="button">Join newsletter</button>}>
+                    {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                       {(close) => <SubscribePopup close={close} />}
-                    </Popup>
-                    {/* <button type="button" onClick={() => setShowSelectWallet(true)}>
+                    </Popup> */}
+                    <button type="button" onClick={() => setShowSelectWallet(true)}>
                       Sign In
-                    </button> */}
+                    </button>
                   </li>
                 )}
               </>
