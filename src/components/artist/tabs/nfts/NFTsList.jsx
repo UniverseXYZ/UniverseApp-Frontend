@@ -39,7 +39,11 @@ const NFTsList = ({ data, perPage, offset }) => {
                 )}
                 {nft.previewImage.type !== 'audio/mpeg' &&
                   nft.previewImage.type !== 'video/mp4' && (
-                    <img className="preview-image" src={nft.previewImage.url} alt={nft.name} />
+                    <img
+                      className="preview-image"
+                      src={URL.createObjectURL(nft.previewImage)}
+                      alt={nft.name}
+                    />
                   )}
                 {nft.previewImage.type === 'video/mp4' && (
                   <img className="video__icon" src={videoIcon} alt="Video Icon" />
