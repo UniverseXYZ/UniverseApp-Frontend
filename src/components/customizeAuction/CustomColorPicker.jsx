@@ -28,6 +28,10 @@ const CustomColorPicker = ({ index, onChange }) => {
   };
 
   useEffect(() => {
+    onChange((prevValues) => prevValues.map((tier) => ({ ...tier, color })));
+  }, []);
+
+  useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);

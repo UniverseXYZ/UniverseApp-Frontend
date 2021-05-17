@@ -2,7 +2,7 @@ import { useState, useEffect, React } from 'react';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
-import { handleClickOutside } from './utils/helpers';
+import { handleClickOutside, handleScroll } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
@@ -61,47 +61,20 @@ const App = () => {
   const [website, setWebsite] = useState(true);
 
   useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
     if (!website) {
       document.querySelector('header').classList.remove('dark');
     }
-    function handleScroll() {
-      if (window.scrollY > 0) {
-        if (document.querySelector('header')) {
-          document.querySelector('header').style.position = 'fixed';
-          if (website) {
-            document.querySelector('header').classList.remove('dark');
-          }
-        }
-        if (document.querySelector('.artist__personal__logo')) {
-          document.querySelector('.artist__personal__logo').style.position = 'fixed';
-        }
-      } else if (window.scrollY <= 0) {
-        if (document.querySelector('header')) {
-          document.querySelector('header').style.position = 'relative';
-          if (website) {
-            document.querySelector('header').classList.add('dark');
-          }
-        }
-        if (document.querySelector('.artist__personal__logo')) {
-          document.querySelector('.artist__personal__logo').style.position = 'absolute';
-        }
-      }
-    }
 
-    // window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll);
-    handleResize();
-    handleScroll();
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    handleScroll(website);
+
+    window.addEventListener('scroll', () => handleScroll(website));
 
     return () => {
-      // window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', () => handleScroll(website));
     };
   }, [website]);
 

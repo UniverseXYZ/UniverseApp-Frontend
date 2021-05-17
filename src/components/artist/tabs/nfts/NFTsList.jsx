@@ -22,7 +22,7 @@ const NFTsList = ({ data, perPage, offset }) => {
     <div className="nfts__lists">
       {sliceData.map((nft) =>
         !loading ? (
-          <Animated animationIn="fadeInUp" key={uuid()}>
+          <Animated animationIn="fadeIn" key={uuid()}>
             <div className="nft__box">
               <div className="nft__box__image">
                 {nft.previewImage.type === 'video/mp4' && (

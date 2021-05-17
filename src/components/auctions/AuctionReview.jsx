@@ -55,7 +55,6 @@ const AuctionReview = () => {
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
-      console.log(auction);
       document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
         document.getElementById('popup-root').remove();

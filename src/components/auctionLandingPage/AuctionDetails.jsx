@@ -86,7 +86,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, [bidders]);
 
   useEffect(() => {
-    console.log(selectedAuction);
     // Here need to get Auction details
     setTimeout(() => {
       setLoading(false);
