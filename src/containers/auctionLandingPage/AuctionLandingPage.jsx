@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import './AuctionLandingPage.scss';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers';
 import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails';
 import PlaceBid from '../../components/auctionLandingPage/PlaceBid';
-import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
+import AppContext from '../../ContextAPI';
 
 const AuctionLandingPage = () => {
+  const { setWebsite } = useContext(AppContext);
   const location = useLocation();
   const selectedAuction = location.state ? location.state.auction : null;
   const artist = selectedAuction?.artist;
@@ -19,6 +19,7 @@ const AuctionLandingPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setWebsite(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
       // Fake data for testing

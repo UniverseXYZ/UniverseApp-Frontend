@@ -52,7 +52,6 @@ const MyNFTs = () => {
 
     return !res.length;
   };
-  console.log(savedNfts.length);
 
   const handleMintSelected = () => {
     document.getElementById('loading-hidden-btn').click();
