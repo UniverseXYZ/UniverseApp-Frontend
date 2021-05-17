@@ -5,7 +5,7 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
 import Button from '../button/Button';
 
-const SubscribePopup = ({ close }) => {
+const SubscribePopup = ({ close, showCongrats }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -48,7 +48,7 @@ const SubscribePopup = ({ close }) => {
         <img src={subscribeIcon} alt="Subscribe" />
       </div>
       <div className="w-50">
-        {!subscribed ? (
+        {!subscribed && !showCongrats ? (
           <>
             <h1 className="title">Subscribe for news & updates</h1>
             <p className="desc">Don’t miss the updates from us!</p>
@@ -80,6 +80,11 @@ const SubscribePopup = ({ close }) => {
 
 SubscribePopup.propTypes = {
   close: PropTypes.func.isRequired,
+  showCongrats: PropTypes.bool,
+};
+
+SubscribePopup.defaultProps = {
+  showCongrats: false,
 };
 
 export default SubscribePopup;

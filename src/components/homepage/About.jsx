@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import axios from 'axios';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
-import { useHistory } from 'react-router-dom';
 import Lottie from 'react-lottie';
 import animationData from '../../utils/animations/cards_animation.json';
 import circleImg from '../../assets/images/circle.svg';
@@ -16,7 +16,34 @@ import Button from '../button/Button';
 import SubscribePopup from '../popups/SubscribePopup';
 
 const About = () => {
-  const history = useHistory();
+  const [email, setEmail] = useState('');
+
+  const handleSubscribe = () => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(String(email).toLowerCase())) {
+      const config = {
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        params: {
+          email,
+        },
+      };
+      axios
+        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
+        .then((response) => {
+          if (response.status === 200) {
+            setEmail('');
+            document.getElementById('sub-hidden-btn').click();
+          } else {
+            alert('OOPS! Something went wrong.');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert('Email address is invalid.');
+    }
+  };
 
   const defaultOptions = {
     loop: true,
@@ -82,8 +109,8 @@ const About = () => {
               <p className="desc">
                 The Universe is forever expanding at an accelerated rate, all while the xyzDAO
                 controls the future and the fate of this project. Starting with an array of tools
-                and a mission to empover artists, with a DAO that will be governed by the $XYZ token
-                and its community. xyzDAO will be guided by the stars and the carbon that surraunds
+                and a mission to empower artists, with a DAO that will be governed by the $XYZ token
+                and its community. xyzDAO will be guided by the stars and the carbon that surrounds
                 them as we travel into the cosmic unknowns.
               </p>
             </div>
@@ -191,15 +218,27 @@ const About = () => {
               <div className="subscribe__form">
                 <span htmlFor="subscribeInp">Subscribe to stay updated on the latest news</span>
                 <div className="form__group">
-                  <input id="subscribeInp" type="email" placeholder="Enter your email" />
+                  <input
+                    id="subscribeInp"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button type="button" className="light-button" onClick={handleSubscribe}>
+                    Subscribe
+                  </button>
                   <Popup
                     trigger={
-                      <button type="button" className="light-button">
-                        Subscribe
-                      </button>
+                      <button
+                        type="button"
+                        id="sub-hidden-btn"
+                        aria-label="hidden"
+                        style={{ display: 'none' }}
+                      />
                     }
                   >
-                    {(close) => <SubscribePopup close={close} />}
+                    {(close) => <SubscribePopup close={close} showCongrats />}
                   </Popup>
                 </div>
               </div>
