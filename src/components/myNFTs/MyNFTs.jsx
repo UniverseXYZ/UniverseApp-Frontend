@@ -194,7 +194,6 @@ const MyNFTs = () => {
           <div className="mynfts__page__body">
             <ul className="tabs">
               {tabs.map((tab, index) => (
-                // tabs here //
                 <li
                   key={uuid()}
                   className={selectedTabIndex === index ? 'active' : ''}

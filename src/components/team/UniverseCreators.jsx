@@ -15,7 +15,7 @@ import ViacheslavRybak from '../../assets/images/team/Viacheslav-Rybak.png';
 import AndonMitev from '../../assets/images/team/Andon-Mitev.png';
 import DmytroDmytrychenko from '../../assets/images/team/Dmytro-Dmytrychenko.png';
 import DimaDutka from '../../assets/images/team/Dima-Dutka.png';
-import AlexHolmes from '../../assets/images/team/Alex-Holmes.png';
+import AlgernonHolmes from '../../assets/images/team/Alex-Holmes.png';
 import NicholasWard from '../../assets/images/team/Nicholas-Ward.png';
 import RockoMoran from '../../assets/images/team/Rocko-Moran.png';
 import MikeProtsenko from '../../assets/images/team/Mike-Protsenko.png';
@@ -117,8 +117,8 @@ const UniverseCreators = () => {
     },
     {
       id: 15,
-      name: 'Alex Holmes',
-      avatar: AlexHolmes,
+      name: 'Algernon Holmes',
+      avatar: AlgernonHolmes,
       loaded: false,
     },
     {
