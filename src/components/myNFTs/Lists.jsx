@@ -75,8 +75,8 @@ const Lists = ({ data, perPage, offset }) => {
                 <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                   <div className="warning-text">
                     <p>
-                      This NFT has doesn&apos;t have enough editions to be entered into this tier.
-                      You must have the equal amount of winners as NFTs available.
+                      This NFT doesn&apos;t have enough editions to be entered into this tier. You
+                      must have the equal amount of winners as NFTs available.
                     </p>
                   </div>
                 </Animated>
