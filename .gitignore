@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+commit.sh
+merge-develop.sh
+new-branch.sh
