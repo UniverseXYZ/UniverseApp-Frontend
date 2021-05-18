@@ -86,7 +86,7 @@ SelectWalletPopup.propTypes = {
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,
-  selectedWallet: PropTypes.bool.isRequired,
+  selectedWallet: PropTypes.string.isRequired,
   setSelectedWallet: PropTypes.func.isRequired,
 };
 
