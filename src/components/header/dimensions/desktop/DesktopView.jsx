@@ -26,6 +26,8 @@ import signOutIcon from '../../../../assets/images/sign-out.svg';
 import SubscribePopup from '../../../popups/SubscribePopup';
 
 const DesktopView = ({
+  isWalletConnected,
+  setIsWalletConnected,
   ethereumAddress,
   handleConnectWallet,
   showInstallWalletPopup,
@@ -33,7 +35,6 @@ const DesktopView = ({
   selectedWallet,
   setSelectedWallet,
 }) => {
-  const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
@@ -315,6 +316,8 @@ const DesktopView = ({
 };
 
 DesktopView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,

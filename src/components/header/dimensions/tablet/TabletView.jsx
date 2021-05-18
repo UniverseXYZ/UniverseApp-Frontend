@@ -30,6 +30,8 @@ import SubscribePopup from '../../../popups/SubscribePopup';
 
 const TabletView = (props) => {
   const {
+    isWalletConnected,
+    setIsWalletConnected,
     ethereumAddress,
     handleConnectWallet,
     showInstallWalletPopup,
@@ -39,7 +41,7 @@ const TabletView = (props) => {
     showMenu,
     setShowMenu,
   } = props;
-  const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+  const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -316,6 +318,8 @@ const TabletView = (props) => {
 };
 
 TabletView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,

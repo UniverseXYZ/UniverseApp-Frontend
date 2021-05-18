@@ -25,7 +25,6 @@ import AuctionReview from './containers/auctionReview/AuctionReview';
 import BidOptions from './utils/fixtures/BidOptions';
 
 const App = () => {
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -36,17 +35,12 @@ const App = () => {
     instagramLink: '',
     twitterLink: '',
   });
-  const [yourBalance, setYourBalance] = useState(48.24);
+  const [myBalance, setMyBalance] = useState(48.24);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [activeView, setActiveView] = useState(null);
   const [savedNFTsID, setSavedNFTsID] = useState(null);
   const [savedCollectionID, setSavedCollectionID] = useState(null);
-  const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
-  });
   const [savedNfts, setSavedNfts] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
@@ -55,7 +49,6 @@ const App = () => {
   const [futureAuctions, setFutureAuctions] = useState([]);
   const [auction, setAuction] = useState({ tiers: [] });
   const [selectedNft, setSelectedNft] = useState([]);
-  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
@@ -65,10 +58,6 @@ const App = () => {
       document.querySelector('header').classList.remove('dark');
     }
 
-    setWindowSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
     handleScroll(website);
 
     window.addEventListener('scroll', () => handleScroll(website));
@@ -81,12 +70,10 @@ const App = () => {
   return (
     <AppContext.Provider
       value={{
-        isWalletConnected,
-        setIsWalletConnected,
         loggedInArtist,
         setLoggedInArtist,
-        yourBalance,
-        setYourBalance,
+        myBalance,
+        setMyBalance,
         handleClickOutside,
         savedNfts,
         setSavedNfts,
@@ -110,16 +97,10 @@ const App = () => {
         setActiveAuctions,
         futureAuctions,
         setFutureAuctions,
-        selectAllIsChecked,
-        setSelectAllIsChecked,
         auction,
         setAuction,
-        windowSize,
-        setWindowSize,
         selectedNft,
         setSelectedNft,
-        selectedNFTIds,
-        setSelectedNFTIds,
         bidtype,
         setBidtype,
         options,

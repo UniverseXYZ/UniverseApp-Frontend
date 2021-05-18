@@ -9,7 +9,7 @@ import CustomColorPicker from './CustomColorPicker';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {
-  const { auction, setAuction, bidtype, windowSize } = useContext(AppContext);
+  const { auction, bidtype } = useContext(AppContext);
   const arrLength = auction.tiers.length;
   const [elRefs, setElRefs] = useState([]);
 
@@ -58,7 +58,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
               <div className="tier__header">
                 <div className="tier__title">
                   <h4>{tier.name}</h4>
-                  {windowSize.width < 576 && (
+                  {window.innerWidth < 576 && (
                     <div className="pick__color">
                       <p>Pick tier color</p>
                       <CustomColorPicker index={i} onChange={onChange} />
@@ -79,7 +79,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     </div>
                   </div>
                 </div>
-                {windowSize.width > 576 && (
+                {window.innerWidth > 576 && (
                   <div className="pick__color">
                     <p>Pick tier color</p>
                     <CustomColorPicker index={i} onChange={onChange} />

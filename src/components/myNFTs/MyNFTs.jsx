@@ -30,6 +30,7 @@ const MyNFTs = () => {
     auction,
     setAuction,
   } = useContext(AppContext);
+  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
@@ -217,12 +218,16 @@ const MyNFTs = () => {
                   ) : (
                     tab
                   )}
-                  {/* {tab} {selectedNft.length} */}
                 </li>
               ))}
             </ul>
             {selectedTabIndex === 0 && (
-              <Wallet filteredNFTs={filteredNFTs} setFilteredNFTs={setFilteredNFTs} />
+              <Wallet
+                filteredNFTs={filteredNFTs}
+                setFilteredNFTs={setFilteredNFTs}
+                selectedNFTIds={selectedNFTIds}
+                setSelectedNFTIds={setSelectedNFTIds}
+              />
             )}
             {selectedTabIndex === 1 && <SavedNFTs />}
             {selectedTabIndex === 2 && <SavedCollections />}

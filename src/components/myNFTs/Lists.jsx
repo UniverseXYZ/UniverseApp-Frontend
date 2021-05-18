@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
@@ -8,18 +8,15 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 
-const Lists = ({ data, perPage, offset }) => {
+const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => {
   const sliceData = data.slice(offset, offset + perPage);
-  console.log('sliceData', sliceData);
 
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
 
-  const { auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
+  const { auction } = useContext(AppContext);
 
   const [openEditions, setOpenEditions] = useState(null);
-  const [selected, Setselected] = useState([]);
-  const [data1, setData] = useState([]);
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
 
@@ -259,6 +256,8 @@ Lists.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
   perPage: PropTypes.number.isRequired,
   offset: PropTypes.number.isRequired,
+  selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setSelectedNFTIds: PropTypes.func.isRequired,
 };
 
 export default Lists;
