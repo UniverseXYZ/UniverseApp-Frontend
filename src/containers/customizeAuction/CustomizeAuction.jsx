@@ -35,50 +35,81 @@ const CustomizeAuction = () => {
 
   const handleSaveClose = () => {
     if (domainAndBranding.headline && domainAndBranding.link) {
-      let descriptionCount = 0;
-      let desc = false;
-      if (rewardTiersAuction) {
-        for (let i = 0; i < rewardTiersAuction.length; i += 1) {
-          if (rewardTiersAuction[i].description !== '') {
-            descriptionCount += 1;
+      const newAuction = { ...auction };
+      newAuction.id = uuid();
+      newAuction.headline = domainAndBranding.headline;
+      newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+      newAuction.copied = false;
+      newAuction.promoImage = domainAndBranding.promoImage;
+      newAuction.backgroundImage = domainAndBranding.backgroundImage;
+      newAuction.hasBlur = domainAndBranding.hasBlur;
+      newAuction.tiers = auction.tiers.map((tier) => {
+        const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
+        return { ...tier, ...rewardTier };
+      });
+      if (loggedInArtist.name && loggedInArtist.avatar) {
+        newAuction.artist = loggedInArtist;
+        history.push('/my-auctions');
+        setTimeout(() => {
+          if (
+            new Date() < new Date(newAuction.endDate) &&
+            new Date() >= new Date(newAuction.startDate)
+          ) {
+            setActiveAuctions([...activeAuctions, newAuction]);
+          } else if (new Date() < new Date(newAuction.startDate)) {
+            setFutureAuctions([...futureAuctions, newAuction]);
           }
-        }
-        if (descriptionCount === rewardTiersAuction.length) desc = true;
-      }
-      if (desc) {
-        const newAuction = { ...auction };
-        newAuction.id = uuid();
-        newAuction.headline = domainAndBranding.headline;
-        newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
-        newAuction.copied = false;
-        newAuction.promoImage = domainAndBranding.promoImage;
-        newAuction.backgroundImage = domainAndBranding.backgroundImage;
-        newAuction.hasBlur = domainAndBranding.hasBlur;
-        newAuction.tiers = auction.tiers.map((tier) => {
-          const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-          return { ...tier, ...rewardTier };
-        });
-        if (loggedInArtist.name && loggedInArtist.avatar) {
-          newAuction.artist = loggedInArtist;
-          history.push('/my-auctions');
-          setTimeout(() => {
-            if (
-              new Date() < new Date(newAuction.endDate) &&
-              new Date() >= new Date(newAuction.startDate)
-            ) {
-              setActiveAuctions([...activeAuctions, newAuction]);
-            } else if (new Date() < new Date(newAuction.startDate)) {
-              setFutureAuctions([...futureAuctions, newAuction]);
-            }
-            setMyAuctions([...myAuctions, newAuction]);
-            setAuction({ tiers: [] });
-          }, 1000);
-        }
+          setMyAuctions([...myAuctions, newAuction]);
+          setAuction({ tiers: [] });
+        }, 1000);
       }
     }
   };
 
   const handleSavePreview = () => {
+    let descriptionCount = 0;
+    let desc = false;
+    if (rewardTiersAuction) {
+      for (let i = 0; i < rewardTiersAuction.length; i += 1) {
+        if (rewardTiersAuction[i].description !== '') {
+          descriptionCount += 1;
+        }
+      }
+      if (descriptionCount === rewardTiersAuction.length) desc = true;
+    }
+    if (desc) {
+      const newAuction = { ...auction };
+      newAuction.id = uuid();
+      newAuction.headline = domainAndBranding.headline;
+      newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+      newAuction.copied = false;
+      newAuction.promoImage = domainAndBranding.promoImage;
+      newAuction.backgroundImage = domainAndBranding.backgroundImage;
+      newAuction.hasBlur = domainAndBranding.hasBlur;
+      newAuction.tiers = auction.tiers.map((tier) => {
+        const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
+        return { ...tier, ...rewardTier };
+      });
+      if (loggedInArtist.name && loggedInArtist.avatar) {
+        newAuction.artist = loggedInArtist;
+        history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
+          auction: newAuction,
+        });
+        setTimeout(() => {
+          if (
+            new Date() < new Date(newAuction.endDate) &&
+            new Date() >= new Date(newAuction.startDate)
+          ) {
+            setActiveAuctions([...activeAuctions, newAuction]);
+          }
+          setMyAuctions([...myAuctions, newAuction]);
+          setAuction({ tiers: [] });
+        }, 1000);
+      }
+    }
+  };
+
+  const handlePreview = () => {
     if (domainAndBranding.headline && domainAndBranding.link) {
       let descriptionCount = 0;
       let desc = false;
@@ -123,10 +154,6 @@ const CustomizeAuction = () => {
     }
   };
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
-
   return (
     <div className="container customize__auction">
       <div
@@ -141,12 +168,7 @@ const CustomizeAuction = () => {
       </div>
       <div className="customize__auction_title">
         <h2>Customize auction landing page</h2>
-        <Button
-          className="light-border-button"
-          onClick={() => {
-            history.push('/my-auctions');
-          }}
-        >
+        <Button className="light-border-button" onClick={handlePreview}>
           Preview
         </Button>
       </div>
