@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Routes, StaticRouter, Redirect, Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import { providers } from 'ethers';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
@@ -52,6 +53,83 @@ const App = () => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
+  const [web3Provider, setWeb3Provider] = useState(null);
+  const [address, setAddress] = useState('');
+  const [signer, setSigner] = useState('');
+  const [wethBalance, setWethBalance] = useState(0);
+  const [usdEthBalance, setUsdEthBalance] = useState(0);
+  const [usdWethBalance, setUsdWethBalance] = useState(0);
+  const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
+  const [universeERC721Contract, setUniverseERC721Contract] = useState(null);
+
+  const connectWeb3 = async (ethereum, provider) => {
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const balance = await provider.getBalance(accounts[0]);
+    const network = await provider.getNetwork();
+    const ethPrice = await getEthPriceEtherscan();
+    const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+
+    const { contracts } = Contracts[network.chainId];
+    const auctionFactoryContractResult = new Contract(
+      contracts.AuctionFactory.address,
+      contracts.AuctionFactory.abi,
+      signerResult
+    );
+    const universeERC721ContractResult = new Contract(
+      contracts.MockNFT.address,
+      contracts.MockNFT.abi,
+      signerResult
+    );
+    const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
+    // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
+
+    setIsWalletConnected(true);
+    setAddress(accounts[0]);
+    setSigner(provider.getSigner(accounts[0]).connectUnchecked());
+    setYourBalance(utils.formatEther(balance));
+    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
+    setWethBalance(utils.formatEther(wethBalanceResult.result));
+    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
+    setAuctionFactoryContract(auctionFactoryContractResult);
+    setUniverseERC721Contract(universeERC721ContractResult);
+  };
+
+  const isMetaMaskConnected = async (provider) => {
+    const accounts = await provider.listAccounts();
+    return accounts.length > 0;
+  };
+
+  useEffect(async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const { ethereum } = window;
+
+      const provider = new providers.Web3Provider(window.ethereum);
+      const isConnected = await isMetaMaskConnected(provider);
+      setWeb3Provider(provider);
+
+      console.log(provider);
+      if (provider && isConnected) {
+        await connectWeb3(ethereum, provider);
+      } else {
+        console.log('Please install/connect MetaMask!');
+      }
+
+      ethereum.on('accountsChanged', async ([account]) => {
+        if (account) {
+          await connectWeb3(ethereum, provider);
+        } else {
+          setIsWalletConnected(false);
+        }
+      });
+
+      ethereum.on('chainChanged', async (networkId) => {
+        window.location.reload();
+      });
+    } else {
+      console.log('Please install/connect MetaMask!');
+    }
+  }, []);
 
   useEffect(() => {
     if (!website) {
@@ -107,6 +185,23 @@ const App = () => {
         setOptions,
         website,
         setWebsite,
+        address,
+        setAddress,
+        usdEthBalance,
+        setUsdEthBalance,
+        wethBalance,
+        setWethBalance,
+        usdWethBalance,
+        setUsdWethBalance,
+        web3Provider,
+        setWeb3Provider,
+        auctionFactoryContract,
+        setAuctionFactoryContract,
+        universeERC721Contract,
+        setUniverseERC721Contract,
+        signer,
+        setSigner,
+        connectWeb3,
       }}
     >
       <Header />
