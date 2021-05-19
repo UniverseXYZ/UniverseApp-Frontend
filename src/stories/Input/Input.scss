@@ -1,0 +1,56 @@
+@import '../../assets/scss/variables';
+
+.intup-l {
+  display: flex;
+  flex-direction: column-reverse;
+  .inp-label {
+    position: relative;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    color: $black;
+    margin-bottom: 10px;
+  }
+  input.inp {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 15px;
+    width: 300px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+    color: black;
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
+    &:focus {
+      outline: none;
+      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+      border: 1px solid transparent;
+    }
+    &:disabled {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 12px;
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  input.inp:disabled + .inp-label {
+    color: rgba(0, 0, 0, 0.4);
+  }
+  .error-inp {
+    border: 1px solid #FF4949 !important;
+    border-radius: 12px;
+    padding: 15px;
+    color: #FF4949!important;
+    &::placeholder {
+      color: #FF4949!important;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+@import '../../assets/scss/variables';
+
+.light-button {
+  border: none;
+  padding: 11px 26px;
+  background: $primary-bg-color;
+  box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  // display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: $black;
+  transition: 50ms ease-in;
+  &:hover {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+      linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+  }
+  &:disabled {
+    background: rgba(0, 0, 0, 0.05);
+    color: rgba(0, 0, 0, 0.2);
+    box-shadow: none;
+  }
+}
+
+.light-border-button {
+  // display: flex;
+  align-items: center;
+  padding: 11px 26px;
+  justify-content: center;
+  padding: 11px 26px 11px 26px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background-image: linear-gradient(101deg, #bceb00, #00eaea);
+  background-origin: border-box;
+  box-shadow: 2px 1000px 1px #fff inset;
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: $black;
+  transition: 50ms ease-in;
+  &:disabled {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.2);
+    box-shadow: none;
+    background: $white;
+  }
+  &:hover {
+    box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
+  }
+}
