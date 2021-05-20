@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
+import './ReviewReward.scss';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
 import arrow from '../../assets/images/arrow.svg';
@@ -26,11 +27,11 @@ const Reward = () => {
   const tierById = auction.tiers.find((element) => element.id === tierId);
 
   const handleEdit = (id) => {
-    document.body.classList.add('no__scroll');
+    window.document.body.classList.add('no__scroll');
   };
 
   const handleRemove = (id) => {
-    document.body.classList.add('no__scroll');
+    window.document.body.classList.add('no__scroll');
     setAuction({
       ...auction,
       tiers: [

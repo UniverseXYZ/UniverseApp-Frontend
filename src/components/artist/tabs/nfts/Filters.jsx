@@ -40,13 +40,13 @@ const NFTsFilters = () => {
   };
 
   useEffect(() => {
-    document.addEventListener(
+    window.document.addEventListener(
       'click',
       (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened),
       true
     );
     return () => {
-      document.removeEventListener(
+      window.document.removeEventListener(
         'click',
         (e) => handleClickOutside(e, 'target', ref, setIsCollectionDropdownOpened),
         true

@@ -4,9 +4,9 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
+import './AuctionReview.scss';
+import './Tiers.scss';
 import arrow from '../../assets/images/arrow.svg';
-import union from '../../assets/images/Union.svg';
-import icon from '../../assets/images/auction_icon.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import ethIcon from '../../assets/images/bid_icon.svg';
@@ -55,10 +55,10 @@ const AuctionReview = () => {
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
-      document.getElementById('loading-hidden-btn').click();
+      window.document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
-        document.getElementById('popup-root').remove();
-        document.getElementById('congrats-hidden-btn').click();
+        window.document.getElementById('popup-root').remove();
+        window.document.getElementById('congrats-hidden-btn').click();
       }, 2000);
       setTimeout(() => {
         history.push('/customize-auction-landing-page');

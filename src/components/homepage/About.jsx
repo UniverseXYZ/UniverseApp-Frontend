@@ -32,7 +32,7 @@ const About = () => {
         .then((response) => {
           if (response.status === 200) {
             setEmail('');
-            document.getElementById('sub-hidden-btn').click();
+            window.document.getElementById('sub-hidden-btn').click();
           } else {
             alert('OOPS! Something went wrong.');
           }
@@ -55,16 +55,16 @@ const About = () => {
   };
 
   useEffect(() => {
-    const circleR = document.querySelector('#circle-r');
-    const circleL = document.querySelector('#circle-l');
-    const planetFront = document.querySelector('#planet__front');
-    const planetBack = document.querySelector('#planet__back');
-    const planetMiddle = document.querySelector('#planet__middle');
+    const circleR = window.document.querySelector('#circle-r');
+    const circleL = window.document.querySelector('#circle-l');
+    const planetFront = window.document.querySelector('#planet__front');
+    const planetBack = window.document.querySelector('#planet__back');
+    const planetMiddle = window.document.querySelector('#planet__middle');
 
     const scrollLoop = () => {
-      if (document.querySelector('.about__section')) {
+      if (window.document.querySelector('.about__section')) {
         const yScrollPosition = window.scrollY;
-        const aboutOffsetTop = document.querySelector('.about__section').offsetTop;
+        const aboutOffsetTop = window.document.querySelector('.about__section').offsetTop;
 
         circleR.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
           yScrollPosition * -0.2
@@ -86,7 +86,7 @@ const About = () => {
       }
     };
 
-    if (document.querySelector('.about__section')) {
+    if (window.document.querySelector('.about__section')) {
       requestAnimationFrame(scrollLoop);
     }
 

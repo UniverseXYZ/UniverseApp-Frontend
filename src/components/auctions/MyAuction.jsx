@@ -20,13 +20,13 @@ const MyAuction = () => {
   const handleTabRightScrolling = () => {
     let scrollAmount = 0;
     const slideTimer = setInterval(() => {
-      document.querySelector('.tabs').scrollLeft += 10;
+      window.document.querySelector('.tabs').scrollLeft += 10;
       scrollAmount += 10;
       if (scrollAmount >= 100) {
         window.clearInterval(slideTimer);
-        document.querySelector('.tab__left__arrow').style.display = 'flex';
-        if (document.querySelector('.tabs').scrollLeft > 100) {
-          document.querySelector('.tab__right__arrow').style.display = 'none';
+        window.document.querySelector('.tab__left__arrow').style.display = 'flex';
+        if (window.document.querySelector('.tabs').scrollLeft > 100) {
+          window.document.querySelector('.tab__right__arrow').style.display = 'none';
         }
       }
     }, 25);
@@ -35,13 +35,13 @@ const MyAuction = () => {
   const handleTabLeftScrolling = () => {
     let scrollAmount = 100;
     const slideTimer = setInterval(() => {
-      document.querySelector('.tabs').scrollLeft -= 10;
+      window.document.querySelector('.tabs').scrollLeft -= 10;
       scrollAmount -= 10;
       if (scrollAmount <= 0) {
         window.clearInterval(slideTimer);
-        document.querySelector('.tab__right__arrow').style.display = 'flex';
-        if (document.querySelector('.tabs').scrollLeft <= 0) {
-          document.querySelector('.tab__left__arrow').style.display = 'none';
+        window.document.querySelector('.tab__right__arrow').style.display = 'flex';
+        if (window.document.querySelector('.tabs').scrollLeft <= 0) {
+          window.document.querySelector('.tab__left__arrow').style.display = 'none';
         }
       }
     }, 25);
@@ -49,19 +49,19 @@ const MyAuction = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Universe Minting - My Auctions';
+    window.document.title = 'Universe Minting - My Auctions';
     return () => {
-      document.title = 'Universe Minting';
+      window.document.title = 'Universe Minting';
     };
   }, []);
 
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 500) {
-        document.querySelector('.tab__right__arrow').style.display = 'flex';
+        window.document.querySelector('.tab__right__arrow').style.display = 'flex';
       } else {
-        document.querySelector('.tab__right__arrow').style.display = 'none';
-        document.querySelector('.tab__left__arrow').style.display = 'none';
+        window.document.querySelector('.tab__right__arrow').style.display = 'none';
+        window.document.querySelector('.tab__left__arrow').style.display = 'none';
       }
     }
     window.addEventListener('resize', handleResize);

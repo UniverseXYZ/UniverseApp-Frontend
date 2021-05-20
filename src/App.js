@@ -7,10 +7,10 @@ import AppContext from './ContextAPI';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import Auctions from './containers/auctions/Auction';
-import RewardTiers from './containers/rewardTiers/RewardTiers';
-import CreateTiers from './containers/createTiers/CreateTiers';
-import ReviewReward from './containers/reviewReward/ReviewReward';
-import MyNFTs from './containers/myNFTs/MyNFTs';
+import RewardTiers from './components/rewardTiers/RewardTiers';
+import CreateTiers from './components/createTiers/Create';
+import ReviewReward from './components/reviewReward/ReviewReward';
+import MyNFTs from './components/myNFTs/MyNFTs';
 import Artist from './containers/artist/Artist';
 import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage';
 import Homepage from './containers/homepage/Homepage';
@@ -18,10 +18,9 @@ import About from './containers/mintingAndAuctions/about/About';
 import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace';
 import MyAccount from './containers/myAccount/MyAccount';
 import CustomizeAuction from './containers/customizeAuction/CustomizeAuction';
-import AuctionDetails from './components/auctionLandingPage/AuctionDetails';
-import AuctionSettings from './containers/auctionSettings/AuctionSettings';
+import AuctionSettings from './components/auctions/Settings';
 import Team from './containers/team/Team';
-import AuctionReview from './containers/auctionReview/AuctionReview';
+import AuctionReview from './components/auctions/AuctionReview';
 import BidOptions from './utils/fixtures/BidOptions';
 
 const App = () => {
@@ -55,7 +54,7 @@ const App = () => {
 
   useEffect(() => {
     if (!website) {
-      document.querySelector('header').classList.remove('dark');
+      window.document.querySelector('header').classList.remove('dark');
     }
 
     handleScroll(website);
