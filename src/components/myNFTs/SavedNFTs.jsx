@@ -49,8 +49,8 @@ const SavedNFTs = () => {
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('three__dots')) {
       if (ref.current && !ref.current.contains(event.target)) {
-        if (document.getElementById('popup-root')) {
-          if (!document.getElementById('popup-root').hasChildNodes()) {
+        if (window.document.getElementById('popup-root')) {
+          if (!window.document.getElementById('popup-root').hasChildNodes()) {
             setShowDropdown(false);
           }
         } else {
@@ -72,14 +72,14 @@ const SavedNFTs = () => {
   }, [savedNfts]);
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
+    window.document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      window.document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
   const handleEdit = (id) => {
-    document.body.classList.add('no__scroll');
+    window.document.body.classList.add('no__scroll');
     setSavedNFTsID(id);
     setActiveView('single');
     setShowModal(true);

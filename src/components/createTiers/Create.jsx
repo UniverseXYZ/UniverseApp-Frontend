@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
+import './CreateTiers.scss';
+import '../auctions/Tiers.scss';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';

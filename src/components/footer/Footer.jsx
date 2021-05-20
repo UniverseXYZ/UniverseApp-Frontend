@@ -26,7 +26,7 @@ const Footer = () => {
         .then((response) => {
           if (response.status === 200) {
             setEmail('');
-            document.getElementById('subscribed-hidden-btn').click();
+            window.document.getElementById('subscribed-hidden-btn').click();
           } else {
             alert('OOPS! Something went wrong.');
           }

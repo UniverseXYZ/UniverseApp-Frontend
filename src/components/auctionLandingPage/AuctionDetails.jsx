@@ -106,18 +106,18 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
 
   useEffect(() => {
     // Prev Icon
-    const prev = document.querySelector('.slick-prev');
+    const prev = window.document.querySelector('.slick-prev');
     if (prev) {
-      const prevIcon = document.createElement('img');
+      const prevIcon = window.document.createElement('img');
       prevIcon.src = leftArrow;
       prev.innerHTML = '';
       prev.appendChild(prevIcon);
     }
 
     // Next icon
-    const next = document.querySelector('.slick-next');
+    const next = window.document.querySelector('.slick-next');
     if (next) {
-      const nextIcon = document.createElement('img');
+      const nextIcon = window.document.createElement('img');
       nextIcon.src = leftArrow;
       next.innerHTML = '';
       next.appendChild(nextIcon);

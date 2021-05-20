@@ -45,7 +45,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
-    document.querySelector('.animate__filters__popup').style.display = 'none';
+    window.document.querySelector('.animate__filters__popup').style.display = 'none';
     setIndexes([]);
   };
   const closeCollectionMobile = () => {
@@ -56,7 +56,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
     setCollections(newCollections);
     setIndexes([]);
     setMobileVersion(true);
-    document.querySelector('.animate__filters__popup').style.display = 'none';
+    window.document.querySelector('.animate__filters__popup').style.display = 'none';
   };
 
   const clearFiltersMobile = () => {
@@ -116,9 +116,11 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
 
   const handleFiltersClick = () => {
     setMobileVersion(false);
-    document.body.classList.add('no__scroll');
-    document.querySelector('.filter__by__collection_mobile').style.top = `${window.scrollY}px`;
-    document.querySelector('.animate__filters__popup').style.display = 'block';
+    window.document.body.classList.add('no__scroll');
+    window.document.querySelector(
+      '.filter__by__collection_mobile'
+    ).style.top = `${window.scrollY}px`;
+    window.document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
   const handleContinue = (prevNFTs) => {
@@ -185,9 +187,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
   }, [collections, searchByName]);
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
+    window.document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      window.document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
@@ -214,7 +216,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
               alt=""
               onClick={() => {
                 closeCollectionMobile();
-                document.body.classList.remove('no__scroll');
+                window.document.body.classList.remove('no__scroll');
               }}
               aria-hidden="true"
             />
@@ -227,7 +229,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
                 className="light-button"
                 onClick={() => {
                   handleCollectionsMobile();
-                  document.body.classList.remove('no__scroll');
+                  window.document.body.classList.remove('no__scroll');
                 }}
               >
                 Apply Filter

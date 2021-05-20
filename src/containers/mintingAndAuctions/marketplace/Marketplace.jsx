@@ -10,9 +10,9 @@ const Marketplace = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(true);
-    document.title = 'Universe Minting - Minting & Auctions - Marketplace';
+    window.document.title = 'Universe Minting - Minting & Auctions - Marketplace';
     return () => {
-      document.title = 'Universe Minting';
+      window.document.title = 'Universe Minting';
     };
   }, []);
 

@@ -20,7 +20,7 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(false);
-    document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
+    window.document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
       // Fake data for testing
       setBidders([
@@ -107,7 +107,7 @@ const AuctionLandingPage = () => {
       ]);
     }
     return () => {
-      document.title = 'Universe Minting';
+      window.document.title = 'Universe Minting';
     };
   }, [selectedAuction]);
 

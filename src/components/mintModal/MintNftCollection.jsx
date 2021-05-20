@@ -164,7 +164,7 @@ const MintNftCollection = ({ onClick }) => {
   };
 
   const handleEdit = (id) => {
-    document.body.classList.add('no__scroll');
+    window.document.body.classList.add('no__scroll');
     setCollectionNFTsID(id);
     setShowCollectible(true);
   };
@@ -172,8 +172,8 @@ const MintNftCollection = ({ onClick }) => {
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('three__dots')) {
       if (ref.current && !ref.current.contains(event.target)) {
-        if (document.getElementById('popup-root')) {
-          if (!document.getElementById('popup-root').hasChildNodes()) {
+        if (window.document.getElementById('popup-root')) {
+          if (!window.document.getElementById('popup-root').hasChildNodes()) {
             setShowDropdown(false);
           }
         } else {
@@ -184,9 +184,9 @@ const MintNftCollection = ({ onClick }) => {
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
+    window.document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      window.document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
@@ -256,15 +256,15 @@ const MintNftCollection = ({ onClick }) => {
           setSavedCollectionID(null);
         }
         setShowModal(false);
-        document.body.classList.remove('no__scroll');
+        window.document.body.classList.remove('no__scroll');
       }
     }
     if (mintNowClick) {
       if (!errors.collectionName && !errors.collectible) {
-        document.getElementById('loading-hidden-btn').click();
+        window.document.getElementById('loading-hidden-btn').click();
         setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
+          window.document.getElementById('popup-root').remove();
+          window.document.getElementById('congrats-hidden-btn').click();
           setTimeout(() => {
             const newMyNFTs = [...myNFTs];
             collectionNFTs.forEach((nft) => {
@@ -285,7 +285,7 @@ const MintNftCollection = ({ onClick }) => {
             });
             setMyNFTs(newMyNFTs);
             setShowModal(false);
-            document.body.classList.remove('no__scroll');
+            window.document.body.classList.remove('no__scroll');
           }, 2000);
         }, 3000);
       }

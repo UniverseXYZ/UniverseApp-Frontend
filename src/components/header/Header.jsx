@@ -41,17 +41,17 @@ const Header = ({ location }) => {
       location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
       location.pathname === '/team'
     ) {
-      document.querySelector('header').classList.add('dark');
+      window.document.querySelector('header').classList.add('dark');
     } else {
-      document.querySelector('header').classList.remove('dark');
+      window.document.querySelector('header').classList.remove('dark');
     }
   }, [location.pathname]);
 
   useEffect(() => {
     if (website && showMenu) {
-      document.querySelector('header').classList.remove('dark');
+      window.document.querySelector('header').classList.remove('dark');
     } else if (website && !showMenu) {
-      document.querySelector('header').classList.add('dark');
+      window.document.querySelector('header').classList.add('dark');
     }
   }, [showMenu, website]);
 

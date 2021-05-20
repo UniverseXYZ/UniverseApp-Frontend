@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import uuid from 'react-uuid';
+import './RewardTiers.scss';
+import '../auctions/Tiers.scss';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 import icon from '../../assets/images/auction_icon.svg';

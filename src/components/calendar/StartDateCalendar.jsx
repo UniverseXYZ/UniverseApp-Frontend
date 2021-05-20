@@ -220,9 +220,9 @@ const StartDateCalendar = React.forwardRef(
     };
 
     useEffect(() => {
-      document.addEventListener('click', handleClickOutside, true);
+      window.document.addEventListener('click', handleClickOutside, true);
       return () => {
-        document.removeEventListener('click', handleClickOutside, true);
+        window.document.removeEventListener('click', handleClickOutside, true);
       };
     });
 

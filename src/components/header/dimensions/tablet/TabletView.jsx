@@ -50,20 +50,20 @@ const TabletView = (props) => {
 
   useEffect(() => {
     if (showMenu) {
-      document.body.classList.add('no__scroll');
+      window.document.body.classList.add('no__scroll');
     } else {
-      document.body.classList.remove('no__scroll');
+      window.document.body.classList.remove('no__scroll');
     }
   }, [showMenu]);
 
   useEffect(() => {
-    document.addEventListener(
+    window.document.addEventListener(
       'click',
       (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
       true
     );
     return () => {
-      document.removeEventListener(
+      window.document.removeEventListener(
         'click',
         (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
         true
