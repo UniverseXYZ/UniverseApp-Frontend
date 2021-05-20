@@ -72,7 +72,7 @@ const App = () => {
 
   const authenticateWithSignedMessage = async () => {
     const challnegeUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/getChallenge`;
-    const challengeResult = await fetch(challnegeUrl).then((res) =>
+    const challengeResult = await fetch(challnegeUrl, { credentials: 'include' }).then((res) =>
       res.text().then((data) => data)
     );
     const signedMessageResult = await signer.signMessage(challengeResult);
@@ -83,11 +83,12 @@ const App = () => {
 
     const loginUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
     const authenticationResult = await fetch(loginUrl, {
+      credentials: 'include',
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
-      data: JSON.stringify({ address: `${address}`, signature: signedMessageResult }),
+      body: JSON.stringify({ address: `${address}`, signature: signedMessageResult }),
     });
 
     if (authenticationResult.ok) {
