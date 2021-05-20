@@ -2,6 +2,7 @@ import { useState, useEffect, React } from 'react';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import { useQuery } from '@apollo/client';
 import { handleClickOutside } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header';
@@ -23,6 +24,7 @@ import AuctionSettings from './containers/auctionSettings/AuctionSettings';
 import Team from './containers/team/Team';
 import AuctionReview from './containers/auctionReview/AuctionReview';
 import BidOptions from './utils/fixtures/BidOptions';
+import { queryAuctions } from './utils/graphql/queries';
 
 const App = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -59,6 +61,19 @@ const App = () => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
+  const { data } = useQuery(queryAuctions);
+
+  useEffect(() => {
+    if (data) {
+      setMyAuctions(
+        data.auctionEntities.map((graphAuction) => ({
+          ...graphAuction,
+          startDate: graphAuction.startBlockNumber,
+          endDate: graphAuction.endBlockNumber,
+        }))
+      );
+    }
+  }, [data]);
 
   useEffect(() => {
     function handleResize() {
