@@ -71,40 +71,37 @@ const App = () => {
 
   const connectWeb3 = async (ethereum, provider) => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const balance = await provider.getBalance(accounts[0]);
-    const network = await provider.getNetwork();
-    const ethPrice = await getEthPriceEtherscan();
-    const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
-    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+    const signerResult = await provider.getSigner(accounts[0]).connectUnchecked();
 
-    const { contracts } = Contracts[network.chainId];
-    const auctionFactoryContractResult = new Contract(
-      contracts.AuctionFactory.address,
-      contracts.AuctionFactory.abi,
-      signerResult
-    );
-    const universeERC721ContractResult = new Contract(
-      contracts.MockNFT.address,
-      contracts.MockNFT.abi,
-      signerResult
-    );
-    const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
-    // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
-
-    setIsWalletConnected(true);
     setAddress(accounts[0]);
-    setSigner(provider.getSigner(accounts[0]).connectUnchecked());
-    setYourBalance(utils.formatEther(balance));
-    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
-    setWethBalance(utils.formatEther(wethBalanceResult.result));
-    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalance.result));
-    setAuctionFactoryContract(auctionFactoryContractResult);
-    setUniverseERC721Contract(universeERC721ContractResult);
+    setSigner(signerResult);
   };
 
-  const isMetaMaskConnected = async (provider) => {
-    const accounts = await provider.listAccounts();
-    return accounts.length > 0;
+  const authenticateWithSignedMessage = async () => {
+    const challnegeUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/getChallenge`;
+    const challengeResult = await fetch(challnegeUrl).then((res) =>
+      res.text().then((data) => data)
+    );
+    const signedMessageResult = await signer.signMessage(challengeResult);
+
+    console.log('address', address);
+    console.log('challengeResult', challengeResult);
+    console.log('signedMessageResult', signedMessageResult);
+
+    const loginUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
+    const authenticationResult = await fetch(loginUrl, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify({ address: `${address}`, signature: signedMessageResult }),
+    });
+
+    if (authenticationResult.ok) {
+      console.log('Authorization completed');
+    } else {
+      console.error('Authorization failed', authenticationResult);
+    }
   };
 
   useEffect(async () => {
@@ -112,15 +109,9 @@ const App = () => {
       const { ethereum } = window;
 
       const provider = new providers.Web3Provider(window.ethereum);
-      const isConnected = await isMetaMaskConnected(provider);
       setWeb3Provider(provider);
 
-      console.log(provider);
-      if (provider && isConnected) {
-        await connectWeb3(ethereum, provider);
-      } else {
-        console.log('Please install/connect MetaMask!');
-      }
+      await connectWeb3(ethereum, provider);
 
       ethereum.on('accountsChanged', async ([account]) => {
         if (account) {
@@ -137,6 +128,10 @@ const App = () => {
       console.log('Please install/connect MetaMask!');
     }
   }, []);
+
+  useEffect(async () => {
+    if (signer && address) authenticateWithSignedMessage();
+  }, [signer, address]);
 
   useEffect(() => {
     function handleResize() {
@@ -248,6 +243,7 @@ const App = () => {
         signer,
         setSigner,
         connectWeb3,
+        authenticateWithSignedMessage,
       }}
     >
       <Routes>
