@@ -1,0 +1,76 @@
+@import '../../assets/scss/variables';
+
+.intup-l {
+  display: flex;
+  flex-direction: column-reverse;
+  width: fit-content;
+  position: relative;
+  .inp-label {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    color: $black;
+    margin-bottom: 10px;
+  }
+  input.inp {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 15px;
+    width: 300px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+    color: black;
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
+    &:focus {
+      outline: none;
+      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+      border: 1px solid transparent;
+    }
+    &:disabled {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 12px;
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  input.inp:disabled + .inp-label {
+    color: rgba(0, 0, 0, 0.4);
+  }
+  .error-inp {
+    border: 1px solid #ff4949 !important;
+    border-radius: 12px;
+    padding: 15px;
+    color: #ff4949 !important;
+    &::placeholder {
+      color: #ff4949 !important;
+    }
+  }
+  .arrow__down {
+    position: absolute;
+    width: 14.5px;
+    height: 8.62px;
+    right: 12px;
+    bottom: 21px;
+  }
+  .shape {
+    position: absolute;
+    right: 12px;
+    bottom: 21px;
+    width: 12px;
+    height: 16px;
+  }
+  .info-icon {
+    position: absolute;
+    right: 30px;
+    bottom: 21px;
+  }
+}
