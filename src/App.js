@@ -53,7 +53,6 @@ const App = () => {
   const [website, setWebsite] = useState(true);
 
   useEffect(() => {
-    console.log(process.env);
     if (!website) {
       window.document.querySelector('header').classList.remove('dark');
     }

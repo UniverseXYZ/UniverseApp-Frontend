@@ -381,8 +381,8 @@ const UniverseContributors = () => {
       <h1 className="title">Universe Contributors</h1>
       <div className="contributors">
         {contributors.map((contributor, index) => (
-          <AnimatedOnScroll animationIn="fadeIn">
-            <div className="contributor" key={contributor.id}>
+          <AnimatedOnScroll animationIn="fadeIn" key={contributor.id}>
+            <div className="contributor">
               {!contributor.loaded && (
                 <Skeleton
                   height={160}
