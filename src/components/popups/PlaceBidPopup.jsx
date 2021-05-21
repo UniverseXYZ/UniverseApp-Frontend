@@ -8,6 +8,7 @@ import infoIcon from '../../assets/images/icon.svg';
 import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
+import { placeETHBid } from '../../utils/api/services';
 
 const PlaceBidPopup = ({
   onClose,
@@ -75,22 +76,28 @@ const PlaceBidPopup = ({
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (clicked) {
       if (!error) {
-        setShowBidSubmitted(true);
-        setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
-        const newBidders = [...onBidders];
+        try {
+          await placeETHBid(auctionFactoryContract, onAuctionId, yourBid);
 
-        newBidders.push({
-          id: uuid(),
-          aucionId: onAuctionId,
-          artistId: loggedInArtist.id,
-          name: loggedInArtist.name,
-          bid: parseFloat(yourBid),
-          rewardTier,
-        });
-        onSetBidders(newBidders);
+          setShowBidSubmitted(true);
+          setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
+          const newBidders = [...onBidders];
+
+          newBidders.push({
+            id: uuid(),
+            aucionId: onAuctionId,
+            artistId: loggedInArtist.id,
+            name: loggedInArtist.name,
+            bid: parseFloat(yourBid),
+            rewardTier,
+          });
+          onSetBidders(newBidders);
+        } catch (e) {
+          console.log(e?.error?.message);
+        }
       }
     }
   }, [error, clicked]);

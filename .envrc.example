@@ -1,0 +1,5 @@
+# Infura ID
+export REACT_APP_INFURA_ID=""
+
+# Etherscan API KEY
+export REACT_APP_ETHERSCAN_API_KEY=""

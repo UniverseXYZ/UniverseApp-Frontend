@@ -1,8 +1,8 @@
 import { useState, useEffect, React } from 'react';
 import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
+import { Contract, providers, utils } from 'ethers';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
-import { providers } from 'ethers';
 import { handleClickOutside } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header';
@@ -24,12 +24,15 @@ import AuctionSettings from './containers/auctionSettings/AuctionSettings';
 import Team from './containers/team/Team';
 import AuctionReview from './containers/auctionReview/AuctionReview';
 import BidOptions from './utils/fixtures/BidOptions';
+import { getEthPriceEtherscan, getWethBalanceEtherscan } from './utils/api/etherscan';
+import Contracts from './contracts/contracts.json';
+import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 
 const App = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
-    name: '',
+    name: 'Donald Duck',
     universePageAddress: '',
     avatar: null,
     about: '',
@@ -71,10 +74,40 @@ const App = () => {
 
   const connectWeb3 = async (ethereum, provider) => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const signerResult = await provider.getSigner(accounts[0]).connectUnchecked();
+    const balance = await provider.getBalance(accounts[0]);
+    const network = await provider.getNetwork();
+    const ethPrice = await getEthPriceEtherscan();
+    const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
+    const { contracts } = Contracts[network.chainId];
+    const auctionFactoryContractResult = new Contract(
+      contracts.AuctionFactory.address,
+      contracts.AuctionFactory.abi,
+      signerResult
+    );
+    const universeERC721ContractResult = new Contract(
+      contracts.MockNFT.address,
+      contracts.MockNFT.abi,
+      signerResult
+    );
+    const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
+    // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
+
+    setIsWalletConnected(true);
     setAddress(accounts[0]);
     setSigner(signerResult);
+    setYourBalance(utils.formatEther(balance));
+    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
+    setWethBalance(utils.formatEther(wethBalanceResult.result));
+    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalanceResult.result));
+    setAuctionFactoryContract(auctionFactoryContractResult);
+    setUniverseERC721Contract(universeERC721ContractResult);
+  };
+
+  const isMetaMaskConnected = async (provider) => {
+    const accounts = await provider.listAccounts();
+    return accounts.length > 0;
   };
 
   const authenticateWithSignedMessage = async () => {
@@ -110,9 +143,14 @@ const App = () => {
       const { ethereum } = window;
 
       const provider = new providers.Web3Provider(window.ethereum);
+      const isConnected = await isMetaMaskConnected(provider);
       setWeb3Provider(provider);
 
-      await connectWeb3(ethereum, provider);
+      if (provider && isConnected) {
+        await connectWeb3(ethereum, provider);
+      } else {
+        console.log('Please install/connect MetaMask!');
+      }
 
       ethereum.on('accountsChanged', async ([account]) => {
         if (account) {

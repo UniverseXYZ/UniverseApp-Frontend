@@ -27,6 +27,7 @@ import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 
 const TabletView = (props) => {
   const {
@@ -39,7 +40,15 @@ const TabletView = (props) => {
     showMenu,
     setShowMenu,
   } = props;
-  const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+  } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -99,7 +108,9 @@ const TabletView = (props) => {
                 <div className="dropdown__header">
                   <div className="copy-div">
                     <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <div className="ethereum__address">
+                      {shortenEthereumAddress(ethereumAddress)}
+                    </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -124,13 +135,13 @@ const TabletView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
                   <div className="group2">
                     <img src={Group2} alt="WETH" />
-                    <span className="first-span">6,24 WETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                    <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                   </div>
                 </div>
                 <div className="dropdown__body">

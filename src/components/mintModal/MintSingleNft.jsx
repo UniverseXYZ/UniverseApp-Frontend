@@ -18,11 +18,19 @@ import delateIcon from '../../assets/images/inactive.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
+import { mintSingleERC721 } from '../../utils/api/services';
 
 const MintSingleNft = ({ onClick }) => {
-  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
-    AppContext
-  );
+  const {
+    savedNfts,
+    setSavedNfts,
+    setShowModal,
+    savedNFTsID,
+    myNFTs,
+    setMyNFTs,
+    universeERC721Contract,
+    address,
+  } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
@@ -149,7 +157,7 @@ const MintSingleNft = ({ onClick }) => {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
         const generatedEditions = [];
@@ -197,35 +205,41 @@ const MintSingleNft = ({ onClick }) => {
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        document.getElementById('loading-hidden-btn').click();
-        setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
+        try {
+          document.getElementById('loading-hidden-btn').click();
+          const tokenId = await mintSingleERC721(universeERC721Contract, address, '');
+          console.log(tokenId);
           setTimeout(() => {
-            const mintingGeneratedEditions = [];
+            document.getElementById('popup-root').remove();
+            document.getElementById('congrats-hidden-btn').click();
+            setTimeout(() => {
+              const mintingGeneratedEditions = [];
 
-            for (let i = 0; i < editions; i += 1) {
-              mintingGeneratedEditions.push(uuid().split('-')[0]);
-            }
-            setMyNFTs([
-              ...myNFTs,
-              {
-                id: uuid(),
-                type: 'single',
-                previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                generatedEditions: mintingGeneratedEditions,
-                properties,
-                percentAmount,
-                releasedDate: new Date(),
-              },
-            ]);
-            setShowModal(false);
-            document.body.classList.remove('no__scroll');
-          }, 2000);
-        }, 3000);
+              for (let i = 0; i < editions; i += 1) {
+                mintingGeneratedEditions.push(uuid().split('-')[0]);
+              }
+              setMyNFTs([
+                ...myNFTs,
+                {
+                  id: uuid(),
+                  type: 'single',
+                  previewImage,
+                  name,
+                  description,
+                  numberOfEditions: Number(editions),
+                  generatedEditions: mintingGeneratedEditions,
+                  properties,
+                  percentAmount,
+                  releasedDate: new Date(),
+                },
+              ]);
+              setShowModal(false);
+              document.body.classList.remove('no__scroll');
+            }, 2000);
+          }, 3000);
+        } catch (e) {
+          console.log(e?.error?.message);
+        }
       }
     }
   }, [errors, saveForLateClick, savedNfts]);

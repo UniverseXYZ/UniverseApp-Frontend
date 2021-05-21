@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 import './DesktopView.scss';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup';
 import Icon from '../../../../assets/images/icon1.svg';
@@ -33,7 +34,15 @@ const DesktopView = ({
   selectedWallet,
   setSelectedWallet,
 }) => {
-  const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+  } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
@@ -198,7 +207,7 @@ const DesktopView = ({
               <div className="dropdown__header">
                 <div className="copy-div">
                   <img className="icon-img" src={Icon} alt="icon" />
-                  <div className="ethereum__address">{ethereumAddress}</div>
+                  <div className="ethereum__address">{shortenEthereumAddress(ethereumAddress)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">
                       <div className="copied-div" hidden={!copied}>
@@ -224,13 +233,13 @@ const DesktopView = ({
 
                 <div className="group1">
                   <img src={Group1} alt="ETH" />
-                  <span className="first-span">6,24 ETH</span>
-                  <span className="second-span">$10,554</span>
+                  <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                  <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                 </div>
                 <div className="group2">
                   <img src={Group2} alt="WETH" />
-                  <span className="first-span">6,24 WETH</span>
-                  <span className="second-span">$10,554</span>
+                  <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                  <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                 </div>
               </div>
               <div className="dropdown__body">
@@ -283,7 +292,7 @@ const DesktopView = ({
             <Popup
               trigger={
                 <button type="button" className="sign__in">
-                  Join newsletter
+                  Sign In
                 </button>
               }
             >
