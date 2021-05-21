@@ -26,6 +26,8 @@ import signOutIcon from '../../../../assets/images/sign-out.svg';
 import SubscribePopup from '../../../popups/SubscribePopup';
 
 const DesktopView = ({
+  isWalletConnected,
+  setIsWalletConnected,
   ethereumAddress,
   handleConnectWallet,
   showInstallWalletPopup,
@@ -33,7 +35,6 @@ const DesktopView = ({
   selectedWallet,
   setSelectedWallet,
 }) => {
-  const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
@@ -57,15 +58,15 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                className="disable"
+                // className="disable"
                 onClick={() => {
-                  // history.push('/minting-and-auctions/marketplace/active-auctions');
+                  history.push('/minting-and-auctions/marketplace/active-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
                 type="button"
@@ -280,7 +281,7 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
+            {/* <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Join newsletter
@@ -288,8 +289,8 @@ const DesktopView = ({
               }
             >
               {(close) => <SubscribePopup close={close} />}
-            </Popup>
-            {/* <Popup
+            </Popup> */}
+            <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Sign In
@@ -306,7 +307,7 @@ const DesktopView = ({
                   setSelectedWallet={setSelectedWallet}
                 />
               )}
-            </Popup> */}
+            </Popup>
           </li>
         )}
       </ul>
@@ -315,6 +316,8 @@ const DesktopView = ({
 };
 
 DesktopView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,

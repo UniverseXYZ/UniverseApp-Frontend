@@ -12,9 +12,9 @@ const MyAccount = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(false);
-    document.title = 'Universe Minting - My Profile';
+    window.document.title = 'Universe Minting - My Profile';
     return () => {
-      document.title = 'Universe Minting';
+      window.document.title = 'Universe Minting';
     };
   }, []);
 

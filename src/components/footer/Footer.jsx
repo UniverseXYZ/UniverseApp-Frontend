@@ -4,8 +4,10 @@ import Popup from 'reactjs-popup';
 import './Footer.scss';
 import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
-import twitter from '../../assets/images/Twitter.svg';
-import discord from '../../assets/images/Discord.svg';
+import twitterIcon from '../../assets/images/Twitter.svg';
+import discordIcon from '../../assets/images/Discord.svg';
+import mediumIcon from '../../assets/images/medium-icon.svg';
+import youtubeIcon from '../../assets/images/youtube-icon.svg';
 import SubscribePopup from '../popups/SubscribePopup';
 
 const Footer = () => {
@@ -26,7 +28,7 @@ const Footer = () => {
         .then((response) => {
           if (response.status === 200) {
             setEmail('');
-            document.getElementById('subscribed-hidden-btn').click();
+            window.document.getElementById('subscribed-hidden-btn').click();
           } else {
             alert('OOPS! Something went wrong.');
           }
@@ -143,16 +145,32 @@ const Footer = () => {
           </div>
           <div className="icons">
             <img
-              src={twitter}
-              alt="twiter"
+              src={twitterIcon}
+              alt="Twiter"
               aria-hidden="true"
               onClick={() => window.open('https://twitter.com/universe_xyz')}
             />
             <img
-              src={discord}
-              alt="discord"
+              src={discordIcon}
+              alt="Discord"
               aria-hidden="true"
               onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
+            />
+            <img
+              src={youtubeIcon}
+              alt="Youtube"
+              aria-hidden="true"
+              onClick={() =>
+                window.open(
+                  'http://youtube.com/channel/UCWt00md9T2b4iTsHWp_Fapw?sub_confirmation=1'
+                )
+              }
+            />
+            <img
+              src={mediumIcon}
+              alt="Medium"
+              aria-hidden="true"
+              onClick={() => window.open('https://medium.com/universe-xyz')}
             />
           </div>
         </div>

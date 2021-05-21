@@ -12,13 +12,13 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
   const ref = useRef(null);
 
   useEffect(() => {
-    document.addEventListener(
+    window.document.addEventListener(
       'click',
       (e) => handleClickOutside(e, 'items__per__page', ref, setShowDropdown),
       true
     );
     return () => {
-      document.removeEventListener(
+      window.document.removeEventListener(
         'click',
         (e) => handleClickOutside(e, 'items__per__page', ref, setShowDropdown),
         true

@@ -23,12 +23,12 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
     <div className="active__auctions__list">
       {sliceData.map((auction) =>
         !loading ? (
-          <Animated animationIn="fadeInUp" key={auction.id}>
+          <Animated animationIn="fadeIn" key={auction.id}>
             <div className="active__auction__item">
               <div className="title">
                 <h1>{auction.title}</h1>
                 <div className="artist__details">
-                  <img src={auction.artist.avatar} alt={auction.artist.name} />
+                  <img src={URL.createObjectURL(auction.artist.avatar)} alt={auction.artist.name} />
                   <span>by</span>
                   <button type="button">{auction.artist.name}</button>
                 </div>

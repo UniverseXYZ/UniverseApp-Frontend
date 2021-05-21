@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import MetaTags from 'react-meta-tags';
+import { Helmet } from 'react-helmet';
 import UniverseContributors from '../../components/team/UniverseContributors';
 import UniverseCreators from '../../components/team/UniverseCreators';
 import Welcome from '../../components/team/Welcome';
@@ -14,13 +14,13 @@ const Team = () => {
   }, []);
   return (
     <div className="team__page">
-      <MetaTags>
+      <Helmet>
         <title>Meet the Universe Crew – Universe XYZ</title>
         <meta
           name="description"
           content="The Universe team is full of creators, artists and DeFi minds from all over the world with a shared goal in mind, empower artists."
         />
-      </MetaTags>
+      </Helmet>
       <Welcome />
       <div className="team__section">
         <div className="team__section__container">

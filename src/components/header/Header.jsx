@@ -10,7 +10,8 @@ import MobileView from './dimensions/mobile/MobileView';
 import AppContext from '../../ContextAPI';
 
 const Header = ({ location }) => {
-  const { setIsWalletConnected, website } = useContext(AppContext);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const { website } = useContext(AppContext);
   const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
 
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -40,17 +41,17 @@ const Header = ({ location }) => {
       location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
       location.pathname === '/team'
     ) {
-      document.querySelector('header').classList.add('dark');
+      window.document.querySelector('header').classList.add('dark');
     } else {
-      document.querySelector('header').classList.remove('dark');
+      window.document.querySelector('header').classList.remove('dark');
     }
   }, [location.pathname]);
 
   useEffect(() => {
     if (website && showMenu) {
-      document.querySelector('header').classList.remove('dark');
+      window.document.querySelector('header').classList.remove('dark');
     } else if (website && !showMenu) {
-      document.querySelector('header').classList.add('dark');
+      window.document.querySelector('header').classList.add('dark');
     }
   }, [showMenu, website]);
 
@@ -65,6 +66,8 @@ const Header = ({ location }) => {
         </Link>
       </div>
       <DesktopView
+        isWalletConnected={isWalletConnected}
+        setIsWalletConnected={setIsWalletConnected}
         ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
@@ -73,6 +76,8 @@ const Header = ({ location }) => {
         setSelectedWallet={setSelectedWallet}
       />
       <TabletView
+        isWalletConnected={isWalletConnected}
+        setIsWalletConnected={setIsWalletConnected}
         ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
@@ -83,6 +88,8 @@ const Header = ({ location }) => {
         setShowMenu={setShowMenu}
       />
       <MobileView
+        isWalletConnected={isWalletConnected}
+        setIsWalletConnected={setIsWalletConnected}
         ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}

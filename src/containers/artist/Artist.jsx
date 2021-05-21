@@ -17,9 +17,9 @@ const Artist = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = `Universe Minting - Artist - ${artist?.name}`;
+    window.document.title = `Universe Minting - Artist - ${artist?.name}`;
     return () => {
-      document.title = 'Universe Minting';
+      window.document.title = 'Universe Minting';
     };
   }, []);
 

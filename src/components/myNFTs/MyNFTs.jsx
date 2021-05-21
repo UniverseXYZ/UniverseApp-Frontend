@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useLocation, useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
+import './MyNFTs.scss';
 import Wallet from './Wallet';
 import SavedNFTs from './SavedNFTs';
 import SavedCollections from './SavedCollections';
@@ -12,7 +13,6 @@ import LoadingPopup from '../popups/LoadingPopup';
 import CongratsPopup from '../popups/CongratsPopup';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
-import notificationIcon from '../../assets/images/notification.svg';
 
 const MyNFTs = () => {
   const {
@@ -27,9 +27,9 @@ const MyNFTs = () => {
     myNFTs,
     setMyNFTs,
     selectedNft,
-    auction,
-    setAuction,
+    setWebsite,
   } = useContext(AppContext);
+  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
@@ -37,14 +37,14 @@ const MyNFTs = () => {
   const history = useHistory();
 
   const handleClose = () => {
-    document.body.classList.remove('no__scroll');
+    window.document.body.classList.remove('no__scroll');
     setShowModal(false);
   };
 
   const handleOpen = () => {
     setActiveView(null);
     setShowModal(true);
-    document.body.classList.add('no__scroll');
+    window.document.body.classList.add('no__scroll');
   };
 
   const checkSelectedSavedNfts = () => {
@@ -52,13 +52,12 @@ const MyNFTs = () => {
 
     return !res.length;
   };
-  console.log(savedNfts.length);
 
   const handleMintSelected = () => {
-    document.getElementById('loading-hidden-btn').click();
+    window.document.getElementById('loading-hidden-btn').click();
     setTimeout(() => {
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
+      window.document.getElementById('popup-root').remove();
+      window.document.getElementById('congrats-hidden-btn').click();
       setTimeout(() => {
         const newMyNFTs = [...myNFTs];
         savedNfts.forEach((nft) => {
@@ -98,9 +97,10 @@ const MyNFTs = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Universe Minting - My NFTs';
+    setWebsite(false);
+    window.document.title = 'Universe Minting - My NFTs';
     return () => {
-      document.title = 'Universe Minting';
+      window.document.title = 'Universe Minting';
     };
   }, []);
 
@@ -194,7 +194,6 @@ const MyNFTs = () => {
           <div className="mynfts__page__body">
             <ul className="tabs">
               {tabs.map((tab, index) => (
-                // tabs here //
                 <li
                   key={uuid()}
                   className={selectedTabIndex === index ? 'active' : ''}
@@ -218,12 +217,16 @@ const MyNFTs = () => {
                   ) : (
                     tab
                   )}
-                  {/* {tab} {selectedNft.length} */}
                 </li>
               ))}
             </ul>
             {selectedTabIndex === 0 && (
-              <Wallet filteredNFTs={filteredNFTs} setFilteredNFTs={setFilteredNFTs} />
+              <Wallet
+                filteredNFTs={filteredNFTs}
+                setFilteredNFTs={setFilteredNFTs}
+                selectedNFTIds={selectedNFTIds}
+                setSelectedNFTIds={setSelectedNFTIds}
+              />
             )}
             {selectedTabIndex === 1 && <SavedNFTs />}
             {selectedTabIndex === 2 && <SavedCollections />}

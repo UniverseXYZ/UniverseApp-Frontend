@@ -30,6 +30,8 @@ import SubscribePopup from '../../../popups/SubscribePopup';
 
 const TabletView = (props) => {
   const {
+    isWalletConnected,
+    setIsWalletConnected,
     ethereumAddress,
     handleConnectWallet,
     showInstallWalletPopup,
@@ -39,7 +41,7 @@ const TabletView = (props) => {
     showMenu,
     setShowMenu,
   } = props;
-  const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+  const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -48,20 +50,20 @@ const TabletView = (props) => {
 
   useEffect(() => {
     if (showMenu) {
-      document.body.classList.add('no__scroll');
+      window.document.body.classList.add('no__scroll');
     } else {
-      document.body.classList.remove('no__scroll');
+      window.document.body.classList.remove('no__scroll');
     }
   }, [showMenu]);
 
   useEffect(() => {
-    document.addEventListener(
+    window.document.addEventListener(
       'click',
       (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
       true
     );
     return () => {
-      document.removeEventListener(
+      window.document.removeEventListener(
         'click',
         (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
         true
@@ -199,15 +201,15 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      className="disable"
-                      // onClick={() => {
-                      //   setShowMenu(false);
-                      //   history.push('/minting-and-auctions/marketplace/active-auctions');
-                      // }}
+                      // className="disable"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                      }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
-                      <span className="tooltiptext">Coming soon</span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
                   <div>
@@ -291,10 +293,10 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
-                <Popup trigger={<button type="button">Join newsletter</button>}>
+                {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
-                </Popup>
-                {/* <Popup trigger={<button type="button">Sign in</button>}>
+                </Popup> */}
+                <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
@@ -305,7 +307,7 @@ const TabletView = (props) => {
                       setSelectedWallet={setSelectedWallet}
                     />
                   )}
-                </Popup> */}
+                </Popup>
               </li>
             )}
           </ul>
@@ -316,6 +318,8 @@ const TabletView = (props) => {
 };
 
 TabletView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,

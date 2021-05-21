@@ -14,8 +14,8 @@ import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 
-const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
-  const { myNFTs, auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
+const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTIds }) => {
+  const { myNFTs, auction, setAuction } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
@@ -45,7 +45,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
-    document.querySelector('.animate__filters__popup').style.display = 'none';
+    window.document.querySelector('.animate__filters__popup').style.display = 'none';
     setIndexes([]);
   };
   const closeCollectionMobile = () => {
@@ -56,7 +56,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
     setCollections(newCollections);
     setIndexes([]);
     setMobileVersion(true);
-    document.querySelector('.animate__filters__popup').style.display = 'none';
+    window.document.querySelector('.animate__filters__popup').style.display = 'none';
   };
 
   const clearFiltersMobile = () => {
@@ -116,9 +116,11 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 
   const handleFiltersClick = () => {
     setMobileVersion(false);
-    document.body.classList.add('no__scroll');
-    document.querySelector('.filter__by__collection_mobile').style.top = `${window.scrollY}px`;
-    document.querySelector('.animate__filters__popup').style.display = 'block';
+    window.document.body.classList.add('no__scroll');
+    window.document.querySelector(
+      '.filter__by__collection_mobile'
+    ).style.top = `${window.scrollY}px`;
+    window.document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
   const handleContinue = (prevNFTs) => {
@@ -185,9 +187,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
   }, [collections, searchByName]);
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
+    window.document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      window.document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
@@ -214,7 +216,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
               alt=""
               onClick={() => {
                 closeCollectionMobile();
-                document.body.classList.remove('no__scroll');
+                window.document.body.classList.remove('no__scroll');
               }}
               aria-hidden="true"
             />
@@ -227,7 +229,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
                 className="light-button"
                 onClick={() => {
                   handleCollectionsMobile();
-                  document.body.classList.remove('no__scroll');
+                  window.document.body.classList.remove('no__scroll');
                 }}
               >
                 Apply Filter
@@ -377,7 +379,13 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
           </div>
           {filteredNFTs.length ? (
             <>
-              <Lists data={filteredNFTs} perPage={perPage} offset={offset} />
+              <Lists
+                data={filteredNFTs}
+                perPage={perPage}
+                offset={offset}
+                selectedNFTIds={selectedNFTIds}
+                setSelectedNFTIds={setSelectedNFTIds}
+              />
 
               <div className="pagination__container">
                 <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
@@ -468,6 +476,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 Wallet.propTypes = {
   filteredNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setFilteredNFTs: PropTypes.func.isRequired,
+  selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setSelectedNFTIds: PropTypes.func.isRequired,
 };
 
 export default Wallet;

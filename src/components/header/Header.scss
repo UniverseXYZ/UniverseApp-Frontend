@@ -2,82 +2,83 @@
 @import '../../assets/scss/_mixins';
 
 header {
-    position: relative;
-    top: 0;
-    width: 100%;
-    z-index: 999;
-    padding: 11.5px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    background-color: $white;
-    transition: background-color .3s, color .3s, opacity .3s ease-in;
-    
-    &.dark {
-        background-color: $black;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  min-height: 88px;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  padding: 11.5px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: $white;
+  transition: background-color 0.3s, color 0.3s, opacity 0.3s ease-in;
 
-        .app__logo {
-            .dark {
-                display: none;
-            }
-            .light {
-                display: block;
-            }
-        }
+  &.dark {
+    background-color: $black;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
-        .desktop__nav ul li .menu-li {
-            color: $white;
-
-            img.arrow {
-                filter: invert(1);
-            }
-        }
-
-        .desktop__nav ul li .myAccount {
-            border-left: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .desktop__nav ul li .sign__in {
-            background-image: linear-gradient(101deg, #bceb00, #00eaea);
-            background-origin: border-box;
-            box-shadow: 2px 1000px 1px $black inset;
-            color: $white;
-            &:hover {
-                box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
-            }
-        }
-
-        .tablet__nav button.hamburger {
-            background-color: $black;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-
-            img {
-                filter: invert(1);
-            }
-        }
-
-        .mobile__nav button.hamburger {
-            background-color: $black;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-
-            img {
-                filter: invert(1);
-            }
-        }
-    }
-    
     .app__logo {
-        .dark {
-            display: block;
-        }
-        .light {
-            display: none;
-        }
+      .dark {
+        display: none;
+      }
+      .light {
+        display: block;
+      }
     }
 
-    @include sm {
-        padding: 11.5px 20px;
+    .desktop__nav ul li .menu-li {
+      color: $white;
+
+      img.arrow {
+        filter: invert(1);
+      }
     }
+
+    .desktop__nav ul li .myAccount {
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .desktop__nav ul li .sign__in {
+      background-image: linear-gradient(101deg, #bceb00, #00eaea);
+      background-origin: border-box;
+      box-shadow: 2px 1000px 1px $black inset;
+      color: $white;
+      &:hover {
+        box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
+      }
+    }
+
+    .tablet__nav button.hamburger {
+      background-color: $black;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      img {
+        filter: invert(1);
+      }
+    }
+
+    .mobile__nav button.hamburger {
+      background-color: $black;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      img {
+        filter: invert(1);
+      }
+    }
+  }
+
+  .app__logo {
+    .dark {
+      display: block;
+    }
+    .light {
+      display: none;
+    }
+  }
+
+  @include sm {
+    padding: 11.5px 20px;
+  }
 }

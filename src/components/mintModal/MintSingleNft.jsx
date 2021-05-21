@@ -192,15 +192,15 @@ const MintSingleNft = ({ onClick }) => {
           );
         }
         setShowModal(false);
-        document.body.classList.remove('no__scroll');
+        window.document.body.classList.remove('no__scroll');
       }
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        document.getElementById('loading-hidden-btn').click();
+        window.document.getElementById('loading-hidden-btn').click();
         setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
+          window.document.getElementById('popup-root').remove();
+          window.document.getElementById('congrats-hidden-btn').click();
           setTimeout(() => {
             const mintingGeneratedEditions = [];
 
@@ -223,7 +223,7 @@ const MintSingleNft = ({ onClick }) => {
               },
             ]);
             setShowModal(false);
-            document.body.classList.remove('no__scroll');
+            window.document.body.classList.remove('no__scroll');
           }, 2000);
         }, 3000);
       }

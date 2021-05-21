@@ -20,7 +20,7 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
     <div className="future__auctions__list">
       {sliceData.map((auction) =>
         !loading ? (
-          <Animated animationIn="fadeInUp" key={auction.id}>
+          <Animated animationIn="fadeIn" key={auction.id}>
             <div className="future__auction__item">
               <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
                 <img className="original" src={auction.image} alt={auction.title} />

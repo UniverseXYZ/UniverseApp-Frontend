@@ -9,7 +9,6 @@ const AuctionOwnerDetails = ({ artist }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('ssssss', artist);
     // Here need to get artist details
     setTimeout(() => {
       setLoading(false);

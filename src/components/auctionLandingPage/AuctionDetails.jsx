@@ -15,7 +15,7 @@ import PlaceBidPopup from '../popups/PlaceBidPopup';
 import Button from '../button/Button';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
-  const { windowSize, loggedInArtist, myAuctions } = useContext(AppContext);
+  const { loggedInArtist, myAuctions } = useContext(AppContext);
   const getAllAuctionsForCurrentArtist = myAuctions.filter(
     (act) => act.artist.id === onAuction.artist.id
   );
@@ -86,7 +86,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, [bidders]);
 
   useEffect(() => {
-    console.log(selectedAuction);
     // Here need to get Auction details
     setTimeout(() => {
       setLoading(false);
@@ -94,31 +93,31 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, [loading]);
 
   useEffect(() => {
-    if (windowSize.width >= 993) {
+    if (window.innerWidth >= 993) {
       setSliderSettings({ ...sliderSettings, slidesToShow: 4 });
     }
-    if (windowSize.width < 993) {
+    if (window.innerWidth < 993) {
       setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
     }
-    if (windowSize.width < 576) {
+    if (window.innerWidth < 576) {
       setSliderSettings({ ...sliderSettings, slidesToShow: 1 });
     }
-  }, [windowSize]);
+  }, [window.innerWidth]);
 
   useEffect(() => {
     // Prev Icon
-    const prev = document.querySelector('.slick-prev');
+    const prev = window.document.querySelector('.slick-prev');
     if (prev) {
-      const prevIcon = document.createElement('img');
+      const prevIcon = window.document.createElement('img');
       prevIcon.src = leftArrow;
       prev.innerHTML = '';
       prev.appendChild(prevIcon);
     }
 
     // Next icon
-    const next = document.querySelector('.slick-next');
+    const next = window.document.querySelector('.slick-next');
     if (next) {
-      const nextIcon = document.createElement('img');
+      const nextIcon = window.document.createElement('img');
       nextIcon.src = leftArrow;
       next.innerHTML = '';
       next.appendChild(nextIcon);
@@ -412,7 +411,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
         ) : (
           <div className="auction__details__box">
             <div className="auction__details__box__image">
-              <Skeleton height={windowSize.width > 768 ? 445 : 335} />
+              <Skeleton height={window.innerWidth > 768 ? 445 : 335} />
             </div>
             <div className="auction__details__box__info">
               <h1 className="title">
@@ -473,10 +472,10 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
               </div>
               <div className="auction__details__box__top__bidders__footer">
                 <div className="your__bid">
-                  <Skeleton width={windowSize.width > 576 && 100} />
+                  <Skeleton width={window.innerWidth > 576 && 100} />
                 </div>
                 <div className="place__bid">
-                  <Skeleton width={windowSize.width > 576 && 100} height={40} />
+                  <Skeleton width={window.innerWidth > 576 && 100} height={40} />
                 </div>
               </div>
             </div>

@@ -28,9 +28,13 @@ const CustomColorPicker = ({ index, onChange }) => {
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
+    onChange((prevValues) => prevValues.map((tier) => ({ ...tier, color })));
+  }, []);
+
+  useEffect(() => {
+    window.document.addEventListener('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener('click', handleClickOutside, true);
+      window.document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
