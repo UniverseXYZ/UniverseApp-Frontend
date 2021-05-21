@@ -7,6 +7,10 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
     "ethers": "^5.1.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
@@ -27,6 +31,7 @@
     "react-moment": "^1.1.1",
     "react-paginate": "^7.1.2",
     "react-router-dom": "^5.2.0",
+    "react-router-sitemap": "^1.2.0",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.0",
     "react-slick": "^0.28.1",
@@ -42,7 +47,8 @@
     "precommit": "lint-staged",
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,js,jsx}\"",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "sitemap": "babel-node ./sitemap-generator.js"
   },
   "lint-staged": {
     "*.{js,jsx}": [
