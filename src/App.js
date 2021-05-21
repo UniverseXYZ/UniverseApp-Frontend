@@ -1,10 +1,10 @@
-import { useState, useEffect, React } from 'react';
-import { BrowserRouter as Routes, Redirect, Route, Switch } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Routes, StaticRouter, Redirect, Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import AppContext from './ContextAPI';
-import Header from './components/header/Header';
+import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer';
 import Auctions from './containers/auctions/Auction';
 import RewardTiers from './components/rewardTiers/RewardTiers';
@@ -53,7 +53,6 @@ const App = () => {
   const [website, setWebsite] = useState(true);
 
   useEffect(() => {
-    console.log(process.env);
     if (!website) {
       window.document.querySelector('header').classList.remove('dark');
     }
@@ -109,9 +108,9 @@ const App = () => {
         setWebsite,
       }}
     >
-      <Routes>
+      <StaticRouter>
         <Header />
-        <Switch>
+        {/* <Switch>
           <Route exact path="/" component={() => <Homepage />} />
           <Route exact path="/about" component={() => <About />} />
           <Route
@@ -148,8 +147,8 @@ const App = () => {
           </Route>
           <Route path="*" component={() => <Redirect to="/" />} />
         </Switch>
-        <Footer />
-      </Routes>
+        <Footer /> */}
+      </StaticRouter>
     </AppContext.Provider>
   );
 };
