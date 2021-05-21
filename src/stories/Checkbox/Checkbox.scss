@@ -1,8 +1,56 @@
 @import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
 
-input {
-  background: $white;
-  border: 1px solid #e0e0e0;
-  box-sizing: border-box;
-  border-radius: 8px;
+.custom__checkbox {
+  margin-bottom: 20px;
+
+  label {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    text-decoration-line: underline;
+    color: $black;
+    cursor: pointer;
+
+    input {
+      @include css-checkbox(20px, $black, $white);
+      + .default {
+        &:hover {
+          border: 1px solid rgba(0, 0, 0, 0.6);
+          // opacity: 0;
+        }
+        &:hover:after {
+          opacity: 0;
+        }
+      }
+
+      + .on__hover {
+        border: 1px solid rgba(0, 0, 0, 0.6);
+        &:hover:after {
+          opacity: 0;
+        }
+      }
+
+      + .indeterminate {
+        &:after {
+          transform: none;
+          top: 35%;
+          left: 35%;
+          width: 6px;
+          height: 2px;
+        }
+      }
+
+      &:disabled {
+        + i {
+          background: #f8f8f8;
+          &::after {
+            opacity: 0;
+            border-color: #f8f8f8;
+          }
+        }
+      }
+    }
+  }
 }

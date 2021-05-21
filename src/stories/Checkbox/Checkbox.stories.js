@@ -6,7 +6,8 @@ export default {
   component: Checkbox,
 };
 
-export const Default = () => <Checkbox className="default" />;
-export const Hover = () => <Checkbox className="onHover" />;
-export const Checked = () => <Checkbox className="default" checked />;
-export const Disabled = () => <Checkbox className="default" disabled />;
+export const Default = () => <Checkbox className="default" disabled={false} />;
+export const Hover = () => <Checkbox className="on__hover" checked={false} disabled={false} />;
+export const Checked = () => <Checkbox checked />;
+export const Disabled = () => <Checkbox disabled />;
+export const Indeterminate = () => <Checkbox className="indeterminate" checked />;

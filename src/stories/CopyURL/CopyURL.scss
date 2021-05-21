@@ -1,0 +1,76 @@
+@import '../../assets/scss/variables';
+
+.copy-div {
+  position: relative;
+  padding: 7px 8px;
+  width: fit-content;
+  margin-top: 50px;
+  border-radius: 12px;
+
+  .copy > span {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 18px;
+    color: #000000;
+    opacity: 0.4;
+  }
+  .copyImg {
+    margin-right: 5px;
+  }
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    .copy > span {
+      opacity: 0.6;
+    }
+  }
+  &:active {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+  }
+  .copy > span {
+    opacity: 0.6;
+  }
+  .copied-div {
+    position: absolute;
+    min-width: 95px;
+    height: fit-content;
+    background: #000;
+    border-radius: 100px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 150%;
+    text-align: center;
+    color: #ffffff;
+    top: -100%;
+    left: -12%;
+    padding: 5px 13px;
+
+    span {
+      position: absolute;
+      width: 7.6px;
+      height: 7.6px;
+      left: 55px;
+      top: 24px;
+      background: #000;
+      transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+    }
+  }
+}
+
+.on__hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  .copy > span {
+    opacity: 0.6;
+  }
+}
+
+.pressed {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
