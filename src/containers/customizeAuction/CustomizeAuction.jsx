@@ -3,10 +3,10 @@ import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
-import Button from '../../components/button/Button';
-import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding';
-import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuction';
-import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction';
+import Button from '../../components/button/Button.jsx';
+import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding.jsx';
+import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuction.jsx';
+import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction.jsx';
 import AppContext from '../../ContextAPI';
 
 const CustomizeAuction = () => {

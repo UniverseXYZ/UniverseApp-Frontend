@@ -4,11 +4,11 @@ import { useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
-import LoadingPopup from '../popups/LoadingPopup';
-import CongratsPopup from '../popups/CongratsPopup';
+import LoadingPopup from '../popups/LoadingPopup.jsx';
+import CongratsPopup from '../popups/CongratsPopup.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import defaultImage from '../../assets/images/default-img.svg';
@@ -192,15 +192,15 @@ const MintSingleNft = ({ onClick }) => {
           );
         }
         setShowModal(false);
-        window.document.body.classList.remove('no__scroll');
+        document.body.classList.remove('no__scroll');
       }
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        window.document.getElementById('loading-hidden-btn').click();
+        document.getElementById('loading-hidden-btn').click();
         setTimeout(() => {
-          window.document.getElementById('popup-root').remove();
-          window.document.getElementById('congrats-hidden-btn').click();
+          document.getElementById('popup-root').remove();
+          document.getElementById('congrats-hidden-btn').click();
           setTimeout(() => {
             const mintingGeneratedEditions = [];
 
@@ -223,7 +223,7 @@ const MintSingleNft = ({ onClick }) => {
               },
             ]);
             setShowModal(false);
-            window.document.body.classList.remove('no__scroll');
+            document.body.classList.remove('no__scroll');
           }, 2000);
         }, 3000);
       }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import NFTsTab from './nfts/NFTsTab';
+import NFTsTab from './nfts/NFTsTab.jsx';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
-import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab';
-import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab';
-import PastAuctionsTab from './pastAuctions/PastAuctionsTab';
+import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
+import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
+import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 
 const Tabs = ({ onArtist }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -12,13 +12,13 @@ const Tabs = ({ onArtist }) => {
   const handleTabRightScrolling = () => {
     let scrollAmount = 0;
     const slideTimer = setInterval(() => {
-      window.document.querySelector('.tabs').scrollLeft += 10;
+      document.querySelector('.tabs').scrollLeft += 10;
       scrollAmount += 10;
       if (scrollAmount >= 100) {
         window.clearInterval(slideTimer);
-        window.document.querySelector('.tab__left__arrow').style.display = 'flex';
-        if (window.document.querySelector('.tabs').scrollLeft > 100) {
-          window.document.querySelector('.tab__right__arrow').style.display = 'none';
+        document.querySelector('.tab__left__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft > 100) {
+          document.querySelector('.tab__right__arrow').style.display = 'none';
         }
       }
     }, 25);
@@ -27,13 +27,13 @@ const Tabs = ({ onArtist }) => {
   const handleTabLeftScrolling = () => {
     let scrollAmount = 100;
     const slideTimer = setInterval(() => {
-      window.document.querySelector('.tabs').scrollLeft -= 10;
+      document.querySelector('.tabs').scrollLeft -= 10;
       scrollAmount -= 10;
       if (scrollAmount <= 0) {
         window.clearInterval(slideTimer);
-        window.document.querySelector('.tab__right__arrow').style.display = 'flex';
-        if (window.document.querySelector('.tabs').scrollLeft <= 0) {
-          window.document.querySelector('.tab__left__arrow').style.display = 'none';
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft <= 0) {
+          document.querySelector('.tab__left__arrow').style.display = 'none';
         }
       }
     }, 25);
@@ -42,10 +42,10 @@ const Tabs = ({ onArtist }) => {
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 600) {
-        window.document.querySelector('.tab__right__arrow').style.display = 'flex';
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
       } else {
-        window.document.querySelector('.tab__right__arrow').style.display = 'none';
-        window.document.querySelector('.tab__left__arrow').style.display = 'none';
+        document.querySelector('.tab__right__arrow').style.display = 'none';
+        document.querySelector('.tab__left__arrow').style.display = 'none';
       }
     }
     window.addEventListener('resize', handleResize);

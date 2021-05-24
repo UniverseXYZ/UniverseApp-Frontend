@@ -9,13 +9,13 @@ import './AuctionSettings.scss';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import AppContext from '../../ContextAPI';
-import Input from '../input/Input';
+import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import AddToken from '../popups/AddTokenPopup';
-import StartDateCalendar from '../calendar/StartDateCalendar';
-import EndDateCalendar from '../calendar/EndDateCalendar';
+import AddToken from '../popups/AddTokenPopup.jsx';
+import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
+import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 
 const AuctionSettings = () => {
   const d = new Date();

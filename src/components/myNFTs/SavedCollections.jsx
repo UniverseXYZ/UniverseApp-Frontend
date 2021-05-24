@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
-import RemovePopup from '../popups/RemoveNftPopup';
+import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedCollections = () => {
   const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } = useContext(
@@ -17,8 +17,8 @@ const SavedCollections = () => {
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('three__dots')) {
       if (ref.current && !ref.current.contains(event.target)) {
-        if (window.document.getElementById('popup-root')) {
-          if (!window.document.getElementById('popup-root').hasChildNodes()) {
+        if (document.getElementById('popup-root')) {
+          if (!document.getElementById('popup-root').hasChildNodes()) {
             setShowDropdown(false);
           }
         } else {
@@ -29,14 +29,14 @@ const SavedCollections = () => {
   };
 
   useEffect(() => {
-    window.document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener('click', handleClickOutside, true);
     return () => {
-      window.document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
   const handleEdit = (id) => {
-    window.document.body.classList.add('no__scroll');
+    document.body.classList.add('no__scroll');
     setSavedCollectionID(id);
     setActiveView('collection');
     setShowModal(true);

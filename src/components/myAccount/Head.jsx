@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 
 const Head = () => {
   const { loggedInArtist } = useContext(AppContext);

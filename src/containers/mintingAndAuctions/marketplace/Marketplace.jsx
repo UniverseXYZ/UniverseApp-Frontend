@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import './Marketplace.scss';
-import CreateYourAuction from '../../../components/mintingAndAuctions/marketplace/tabs/CreateYourAuction';
-import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs';
-import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome';
+import CreateYourAuction from '../../../components/mintingAndAuctions/marketplace/tabs/CreateYourAuction.jsx';
+import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs.jsx';
+import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome.jsx';
 import AppContext from '../../../ContextAPI';
 
 const Marketplace = () => {
@@ -10,9 +10,9 @@ const Marketplace = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(true);
-    window.document.title = 'Universe Minting - Minting & Auctions - Marketplace';
+    document.title = 'Universe Minting - Minting & Auctions - Marketplace';
     return () => {
-      window.document.title = 'Universe Minting';
+      document.title = 'Universe Minting';
     };
   }, []);
 

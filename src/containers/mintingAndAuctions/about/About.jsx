@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 import { Helmet } from 'react-helmet';
-import Welcome from '../../../components/mintingAndAuctions/about/Welcome';
+import Welcome from '../../../components/mintingAndAuctions/about/Welcome.jsx';
 import './About.scss';
-import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTools';
-import HowItWorks from '../../../components/mintingAndAuctions/about/howItWorks/HowItWorks';
-import OurTeam from '../../../components/mintingAndAuctions/about/OurTeam';
+import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTools.jsx';
+import HowItWorks from '../../../components/mintingAndAuctions/about/howItWorks/HowItWorks.jsx';
+import OurTeam from '../../../components/mintingAndAuctions/about/OurTeam.jsx';
 import AppContext from '../../../ContextAPI';
 
 const About = () => {

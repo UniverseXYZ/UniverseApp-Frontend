@@ -3,14 +3,14 @@ import Popup from 'reactjs-popup';
 import { useLocation, useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './MyNFTs.scss';
-import Wallet from './Wallet';
-import SavedNFTs from './SavedNFTs';
-import SavedCollections from './SavedCollections';
-import MintModal from '../mintModal/MintModal';
+import Wallet from './Wallet.jsx';
+import SavedNFTs from './SavedNFTs.jsx';
+import SavedCollections from './SavedCollections.jsx';
+import MintModal from '../mintModal/MintModal.jsx';
 import AppContext from '../../ContextAPI';
 import '../mintModal/Modals.scss';
-import LoadingPopup from '../popups/LoadingPopup';
-import CongratsPopup from '../popups/CongratsPopup';
+import LoadingPopup from '../popups/LoadingPopup.jsx';
+import CongratsPopup from '../popups/CongratsPopup.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 
@@ -37,14 +37,14 @@ const MyNFTs = () => {
   const history = useHistory();
 
   const handleClose = () => {
-    window.document.body.classList.remove('no__scroll');
+    document.body.classList.remove('no__scroll');
     setShowModal(false);
   };
 
   const handleOpen = () => {
     setActiveView(null);
     setShowModal(true);
-    window.document.body.classList.add('no__scroll');
+    document.body.classList.add('no__scroll');
   };
 
   const checkSelectedSavedNfts = () => {
@@ -54,10 +54,10 @@ const MyNFTs = () => {
   };
 
   const handleMintSelected = () => {
-    window.document.getElementById('loading-hidden-btn').click();
+    document.getElementById('loading-hidden-btn').click();
     setTimeout(() => {
-      window.document.getElementById('popup-root').remove();
-      window.document.getElementById('congrats-hidden-btn').click();
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-hidden-btn').click();
       setTimeout(() => {
         const newMyNFTs = [...myNFTs];
         savedNfts.forEach((nft) => {
@@ -98,9 +98,9 @@ const MyNFTs = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(false);
-    window.document.title = 'Universe Minting - My NFTs';
+    document.title = 'Universe Minting - My NFTs';
     return () => {
-      window.document.title = 'Universe Minting';
+      document.title = 'Universe Minting';
     };
   }, []);
 

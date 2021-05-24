@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, withRouter } from 'react-router-dom';
-import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab';
-import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab';
+import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
+import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 
 const Tabs = ({ location }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);

@@ -4,7 +4,7 @@ import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import './ReviewReward.scss';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import pencil from '../../assets/images/pencil.svg';
 import infoIcon from '../../assets/images/icon.svg';
@@ -27,11 +27,11 @@ const Reward = () => {
   const tierById = auction.tiers.find((element) => element.id === tierId);
 
   const handleEdit = (id) => {
-    window.document.body.classList.add('no__scroll');
+    document.body.classList.add('no__scroll');
   };
 
   const handleRemove = (id) => {
-    window.document.body.classList.add('no__scroll');
+    document.body.classList.add('no__scroll');
     setAuction({
       ...auction,
       tiers: [

@@ -5,7 +5,7 @@ import moment from 'moment';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIconRed from '../../assets/images/Vector.svg';
@@ -14,11 +14,11 @@ import doneIcon from '../../assets/images/Completed.svg';
 import { AUCTIONS_DATA, PAST_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
-import Input from '../input/Input';
+import Input from '../input/Input.jsx';
 import copyIcon from '../../assets/images/copy1.svg';
 import '../pagination/Pagination.scss';
-import Pagination from '../pagination/Pagionation';
-import MyAccount from '../../containers/myAccount/MyAccount';
+import Pagination from '../pagination/Pagionation.jsx';
+import MyAccount from '../../containers/myAccount/MyAccount.jsx';
 
 const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);

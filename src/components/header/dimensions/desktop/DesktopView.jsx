@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
-import SelectWalletPopup from '../../../popups/SelectWalletPopup';
+import AppContext from '../../../../ContextAPI';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import Icon from '../../../../assets/images/icon1.svg';
 import copyIcon from '../../../../assets/images/copy.svg';
-import AppContext from '../../../../ContextAPI';
 import arrowUP from '../../../../assets/images/arrow-down.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
 import Group2 from '../../../../assets/images/Group2.svg';
@@ -23,7 +24,6 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
 
 const DesktopView = ({
   isWalletConnected,
