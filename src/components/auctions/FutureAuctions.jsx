@@ -7,7 +7,7 @@ import moment from 'moment';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIconRed from '../../assets/images/Vector.svg';
@@ -16,12 +16,11 @@ import searchIcon from '../../assets/images/search-icon.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import { FUTURE_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
-import Input from '../input/Input';
-import MintNftsPopup from '../popups/MintNftsPopup';
-import MintCongratsPopup from '../popups/MintCongratsPopup';
-import SetUpPopup from '../popups/SetUpPopup';
-
-import Pagination from '../pagination/Pagionation';
+import Input from '../input/Input.jsx';
+import MintNftsPopup from '../popups/MintNftsPopup.jsx';
+import MintCongratsPopup from '../popups/MintCongratsPopup.jsx';
+import SetUpPopup from '../popups/SetUpPopup.jsx';
+import Pagination from '../pagination/Pagionation.jsx';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);

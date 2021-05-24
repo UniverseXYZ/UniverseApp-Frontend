@@ -4,10 +4,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Lists from './Lists';
-import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import Pagination from '../pagination/Pagionation';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
+import Pagination from '../pagination/Pagionation.jsx';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
@@ -45,7 +45,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
-    window.document.querySelector('.animate__filters__popup').style.display = 'none';
+    document.querySelector('.animate__filters__popup').style.display = 'none';
     setIndexes([]);
   };
   const closeCollectionMobile = () => {
@@ -56,7 +56,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
     setCollections(newCollections);
     setIndexes([]);
     setMobileVersion(true);
-    window.document.querySelector('.animate__filters__popup').style.display = 'none';
+    document.querySelector('.animate__filters__popup').style.display = 'none';
   };
 
   const clearFiltersMobile = () => {
@@ -116,11 +116,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
 
   const handleFiltersClick = () => {
     setMobileVersion(false);
-    window.document.body.classList.add('no__scroll');
-    window.document.querySelector(
-      '.filter__by__collection_mobile'
-    ).style.top = `${window.scrollY}px`;
-    window.document.querySelector('.animate__filters__popup').style.display = 'block';
+    document.body.classList.add('no__scroll');
+    document.querySelector('.filter__by__collection_mobile').style.top = `${window.scrollY}px`;
+    document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
   const handleContinue = (prevNFTs) => {
@@ -187,9 +185,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
   }, [collections, searchByName]);
 
   useEffect(() => {
-    window.document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener('click', handleClickOutside, true);
     return () => {
-      window.document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
@@ -216,7 +214,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
               alt=""
               onClick={() => {
                 closeCollectionMobile();
-                window.document.body.classList.remove('no__scroll');
+                document.body.classList.remove('no__scroll');
               }}
               aria-hidden="true"
             />
@@ -229,7 +227,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
                 className="light-button"
                 onClick={() => {
                   handleCollectionsMobile();
-                  window.document.body.classList.remove('no__scroll');
+                  document.body.classList.remove('no__scroll');
                 }}
               >
                 Apply Filter

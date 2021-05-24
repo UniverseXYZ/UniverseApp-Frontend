@@ -5,7 +5,7 @@ import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import closeIcon from '../../assets/images/cross.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 
 const StartDateCalendar = React.forwardRef(
   (
@@ -220,9 +220,9 @@ const StartDateCalendar = React.forwardRef(
     };
 
     useEffect(() => {
-      window.document.addEventListener('click', handleClickOutside, true);
+      document.addEventListener('click', handleClickOutside, true);
       return () => {
-        window.document.removeEventListener('click', handleClickOutside, true);
+        document.removeEventListener('click', handleClickOutside, true);
       };
     });
 

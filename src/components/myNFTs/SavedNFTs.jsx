@@ -7,7 +7,7 @@ import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import AppContext from '../../ContextAPI';
-import RemovePopup from '../popups/RemoveNftPopup';
+import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } = useContext(
@@ -49,8 +49,8 @@ const SavedNFTs = () => {
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('three__dots')) {
       if (ref.current && !ref.current.contains(event.target)) {
-        if (window.document.getElementById('popup-root')) {
-          if (!window.document.getElementById('popup-root').hasChildNodes()) {
+        if (document.getElementById('popup-root')) {
+          if (!document.getElementById('popup-root').hasChildNodes()) {
             setShowDropdown(false);
           }
         } else {
@@ -72,14 +72,14 @@ const SavedNFTs = () => {
   }, [savedNfts]);
 
   useEffect(() => {
-    window.document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener('click', handleClickOutside, true);
     return () => {
-      window.document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   });
 
   const handleEdit = (id) => {
-    window.document.body.classList.add('no__scroll');
+    document.body.classList.add('no__scroll');
     setSavedNFTsID(id);
     setActiveView('single');
     setShowModal(true);

@@ -4,8 +4,8 @@ import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Popup from 'reactjs-popup';
 import ellipses from '../../assets/images/ellipses.svg';
 import heroVideo from '../../assets/images/hero_video.mp4';
-import Button from '../button/Button';
-import SubscribePopup from '../popups/SubscribePopup';
+import Button from '../button/Button.jsx';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 
 const Welcome = () => {
   const [loaded, setLoaded] = useState(false);

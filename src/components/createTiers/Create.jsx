@@ -6,8 +6,8 @@ import './CreateTiers.scss';
 import '../auctions/Tiers.scss';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 
 const Create = () => {

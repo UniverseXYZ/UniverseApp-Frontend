@@ -3,8 +3,8 @@ import AppContext from '../../ContextAPI';
 import instagramLogo from '../../assets/images/instagram-outlined.svg';
 import twitterLogo from '../../assets/images/icons_twitter.svg';
 import pencilIcon from '../../assets/images/edit.svg';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 
 const Social = () => {
   const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);

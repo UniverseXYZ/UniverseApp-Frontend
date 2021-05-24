@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/cross.svg';
 import coloredSuccess from '../../assets/images/coloredSuccess.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 
 const MintCongratsPopup = ({ onClose, onAuctionId }) => {

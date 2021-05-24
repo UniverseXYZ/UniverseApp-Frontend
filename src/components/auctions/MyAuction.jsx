@@ -6,9 +6,9 @@ import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
-import FutureAuctions from './FutureAuctions';
-import ActiveAuctions from './ActiveAuctions';
-import PastAuctions from './PastAuctions';
+import FutureAuctions from './FutureAuctions.jsx';
+import ActiveAuctions from './ActiveAuctions.jsx';
+import PastAuctions from './PastAuctions.jsx';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, auction, setAuction } = useContext(AppContext);
@@ -20,13 +20,13 @@ const MyAuction = () => {
   const handleTabRightScrolling = () => {
     let scrollAmount = 0;
     const slideTimer = setInterval(() => {
-      window.document.querySelector('.tabs').scrollLeft += 10;
+      document.querySelector('.tabs').scrollLeft += 10;
       scrollAmount += 10;
       if (scrollAmount >= 100) {
         window.clearInterval(slideTimer);
-        window.document.querySelector('.tab__left__arrow').style.display = 'flex';
-        if (window.document.querySelector('.tabs').scrollLeft > 100) {
-          window.document.querySelector('.tab__right__arrow').style.display = 'none';
+        document.querySelector('.tab__left__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft > 100) {
+          document.querySelector('.tab__right__arrow').style.display = 'none';
         }
       }
     }, 25);
@@ -35,13 +35,13 @@ const MyAuction = () => {
   const handleTabLeftScrolling = () => {
     let scrollAmount = 100;
     const slideTimer = setInterval(() => {
-      window.document.querySelector('.tabs').scrollLeft -= 10;
+      document.querySelector('.tabs').scrollLeft -= 10;
       scrollAmount -= 10;
       if (scrollAmount <= 0) {
         window.clearInterval(slideTimer);
-        window.document.querySelector('.tab__right__arrow').style.display = 'flex';
-        if (window.document.querySelector('.tabs').scrollLeft <= 0) {
-          window.document.querySelector('.tab__left__arrow').style.display = 'none';
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft <= 0) {
+          document.querySelector('.tab__left__arrow').style.display = 'none';
         }
       }
     }, 25);
@@ -49,19 +49,19 @@ const MyAuction = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    window.document.title = 'Universe Minting - My Auctions';
+    document.title = 'Universe Minting - My Auctions';
     return () => {
-      window.document.title = 'Universe Minting';
+      document.title = 'Universe Minting';
     };
   }, []);
 
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 500) {
-        window.document.querySelector('.tab__right__arrow').style.display = 'flex';
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
       } else {
-        window.document.querySelector('.tab__right__arrow').style.display = 'none';
-        window.document.querySelector('.tab__left__arrow').style.display = 'none';
+        document.querySelector('.tab__right__arrow').style.display = 'none';
+        document.querySelector('.tab__left__arrow').style.display = 'none';
       }
     }
     window.addEventListener('resize', handleResize);

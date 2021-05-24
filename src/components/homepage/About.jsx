@@ -12,8 +12,8 @@ import bgImage from '../../assets/images/planets-bg.png';
 import planetFrontImage from '../../assets/images/planet-front.png';
 import planetBackImage from '../../assets/images/planet-back.png';
 import planetMiddleImage from '../../assets/images/planet-middle.png';
-import Button from '../button/Button';
-import SubscribePopup from '../popups/SubscribePopup';
+import Button from '../button/Button.jsx';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 
 const About = () => {
   const [email, setEmail] = useState('');
@@ -32,7 +32,7 @@ const About = () => {
         .then((response) => {
           if (response.status === 200) {
             setEmail('');
-            window.document.getElementById('sub-hidden-btn').click();
+            document.getElementById('sub-hidden-btn').click();
           } else {
             alert('OOPS! Something went wrong.');
           }
@@ -55,16 +55,16 @@ const About = () => {
   };
 
   useEffect(() => {
-    const circleR = window.document.querySelector('#circle-r');
-    const circleL = window.document.querySelector('#circle-l');
-    const planetFront = window.document.querySelector('#planet__front');
-    const planetBack = window.document.querySelector('#planet__back');
-    const planetMiddle = window.document.querySelector('#planet__middle');
+    const circleR = document.querySelector('#circle-r');
+    const circleL = document.querySelector('#circle-l');
+    const planetFront = document.querySelector('#planet__front');
+    const planetBack = document.querySelector('#planet__back');
+    const planetMiddle = document.querySelector('#planet__middle');
 
     const scrollLoop = () => {
-      if (window.document.querySelector('.about__section')) {
+      if (document.querySelector('.about__section')) {
         const yScrollPosition = window.scrollY;
-        const aboutOffsetTop = window.document.querySelector('.about__section').offsetTop;
+        const aboutOffsetTop = document.querySelector('.about__section').offsetTop;
 
         circleR.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
           yScrollPosition * -0.2
@@ -86,7 +86,7 @@ const About = () => {
       }
     };
 
-    if (window.document.querySelector('.about__section')) {
+    if (document.querySelector('.about__section')) {
       requestAnimationFrame(scrollLoop);
     }
 

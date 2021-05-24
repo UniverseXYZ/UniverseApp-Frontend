@@ -8,7 +8,7 @@ import twitterIcon from '../../assets/images/Twitter.svg';
 import discordIcon from '../../assets/images/Discord.svg';
 import mediumIcon from '../../assets/images/medium-icon.svg';
 import youtubeIcon from '../../assets/images/youtube-icon.svg';
-import SubscribePopup from '../popups/SubscribePopup';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 
 const Footer = () => {
   const history = useHistory();
@@ -28,7 +28,7 @@ const Footer = () => {
         .then((response) => {
           if (response.status === 200) {
             setEmail('');
-            window.document.getElementById('subscribed-hidden-btn').click();
+            document.getElementById('subscribed-hidden-btn').click();
           } else {
             alert('OOPS! Something went wrong.');
           }

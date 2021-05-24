@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/cross.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 
 const SetUpPopup = ({ onClose, onAuctionId }) => {

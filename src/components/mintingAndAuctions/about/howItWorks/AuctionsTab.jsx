@@ -12,8 +12,8 @@ const AuctionsTab = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (window.document.querySelectorAll('.accordion__item__body')) {
-        const elems = window.document.querySelectorAll('.accordion__item__body');
+      if (document.querySelectorAll('.accordion__item__body')) {
+        const elems = document.querySelectorAll('.accordion__item__body');
         elems.forEach((el, i) => {
           el.style.animationDuration = '.5s';
         });

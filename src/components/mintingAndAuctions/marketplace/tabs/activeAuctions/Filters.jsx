@@ -11,13 +11,13 @@ const ActiveAuctionsFilters = () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    window.document.addEventListener(
+    document.addEventListener(
       'click',
       (e) => handleClickOutside(e, 'dropdown', ref, setIsDropdownOpened),
       true
     );
     return () => {
-      window.document.removeEventListener(
+      document.removeEventListener(
         'click',
         (e) => handleClickOutside(e, 'dropdown', ref, setIsDropdownOpened),
         true
