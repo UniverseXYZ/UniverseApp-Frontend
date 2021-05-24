@@ -1,0 +1,97 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.pagination {
+  display: flex;
+  align-items: center;
+
+  li {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+
+    &.previous {
+      a {
+        padding: 0;
+      }
+    }
+
+    &.next {
+      a {
+        padding: 0;
+      }
+    }
+
+    &.disabled {
+      background: rgba(0, 0, 0, 0.1);
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+      border: 1px solid transparent;
+    }
+
+    a {
+      padding: 5px 10px;
+      cursor: pointer;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 14px;
+      color: $black;
+    }
+  }
+}
+
+.arrows {
+  &.previous,
+  &.next {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  &.disabled {
+    background: rgba(0, 0, 0, 0.1);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.page,
+.etc {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+
+  p {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    color: $black;
+  }
+
+  &.active {
+    background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+    border: 1px solid transparent;
+  }
+}
