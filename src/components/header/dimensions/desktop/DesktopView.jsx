@@ -58,15 +58,15 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                className="disable"
+                // className="disable"
                 onClick={() => {
-                  // history.push('/minting-and-auctions/marketplace/active-auctions');
+                  history.push('/minting-and-auctions/marketplace/active-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
                 type="button"
@@ -281,7 +281,7 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
+            {/* <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Join newsletter
@@ -289,8 +289,8 @@ const DesktopView = ({
               }
             >
               {(close) => <SubscribePopup close={close} />}
-            </Popup>
-            {/* <Popup
+            </Popup> */}
+            <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Sign In
@@ -307,7 +307,7 @@ const DesktopView = ({
                   setSelectedWallet={setSelectedWallet}
                 />
               )}
-            </Popup> */}
+            </Popup>
           </li>
         )}
       </ul>

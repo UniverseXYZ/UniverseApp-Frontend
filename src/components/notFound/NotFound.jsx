@@ -11,6 +11,10 @@ const NotFound = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(false);
+    document.title = `Universe Minting - 404 - page not found`;
+    return () => {
+      document.title = 'Universe Minting';
+    };
   }, []);
   return (
     <div className="not__found__page">
