@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Artist.scss';
 import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 import AppContext from '../../ContextAPI';
+import NotFound from '../../components/notFound/NotFound.jsx';
 
 const Artist = () => {
   const location = useLocation();
@@ -32,7 +33,7 @@ const Artist = () => {
       </div>
     </div>
   ) : (
-    <Redirect to="/" />
+    <NotFound />
   );
 };
 

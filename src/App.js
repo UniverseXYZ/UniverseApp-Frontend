@@ -22,6 +22,7 @@ import AuctionSettings from './components/auctions/Settings.jsx';
 import Team from './containers/team/Team.jsx';
 import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
+import NotFound from './components/notFound/NotFound.jsx';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -144,7 +145,7 @@ const App = () => {
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />
         </Route>
-        <Route path="*" component={() => <Redirect to="/" />} />
+        <Route path="*" component={() => <NotFound />} />
       </Switch>
       <Footer />
     </AppContext.Provider>

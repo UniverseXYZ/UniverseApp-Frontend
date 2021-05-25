@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
@@ -8,6 +8,7 @@ import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
 import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails.jsx';
 import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
 import AppContext from '../../ContextAPI';
+import NotFound from '../../components/notFound/NotFound.jsx';
 
 const AuctionLandingPage = () => {
   const { setWebsite } = useContext(AppContext);
@@ -123,7 +124,7 @@ const AuctionLandingPage = () => {
       </div>
     </div>
   ) : (
-    <Redirect to="/" />
+    <NotFound />
   );
 };
 
