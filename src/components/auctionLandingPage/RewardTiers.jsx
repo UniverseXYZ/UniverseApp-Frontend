@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import PreviewNFTsPopup from '../popups/PreviewNFTsPopup';
+import PreviewNFTsPopup from '../popups/PreviewNFTsPopup.jsx';
 
 const RewardTiers = ({ auction }) => (
   <div className="reward__tiers__section">

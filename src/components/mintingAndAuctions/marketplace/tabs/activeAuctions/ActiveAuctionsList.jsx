@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import Skeleton from 'react-loading-skeleton';
-import Button from '../../../../button/Button';
+import Button from '../../../../button/Button.jsx';
 
 const ActiveAuctionsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);

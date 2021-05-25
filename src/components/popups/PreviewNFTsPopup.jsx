@@ -25,9 +25,9 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
   };
 
   useEffect(() => {
-    window.document.body.classList.add('no__scroll');
+    document.body.classList.add('no__scroll');
 
-    return () => window.document.body.classList.remove('no__scroll');
+    return () => document.body.classList.remove('no__scroll');
   }, []);
 
   return (

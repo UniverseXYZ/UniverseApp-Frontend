@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
-import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails';
-import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails';
-import RewardTiers from '../../components/auctionLandingPage/RewardTiers';
-import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails';
-import PlaceBid from '../../components/auctionLandingPage/PlaceBid';
+import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
+import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
+import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
+import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails.jsx';
+import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
 import AppContext from '../../ContextAPI';
+import NotFound from '../../components/notFound/NotFound.jsx';
 
 const AuctionLandingPage = () => {
   const { setWebsite } = useContext(AppContext);
@@ -20,7 +21,7 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     setWebsite(false);
-    window.document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
+    document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
       // Fake data for testing
       setBidders([
@@ -107,7 +108,7 @@ const AuctionLandingPage = () => {
       ]);
     }
     return () => {
-      window.document.title = 'Universe Minting';
+      document.title = 'Universe Minting';
     };
   }, [selectedAuction]);
 
@@ -123,7 +124,7 @@ const AuctionLandingPage = () => {
       </div>
     </div>
   ) : (
-    <Redirect to="/" />
+    <NotFound />
   );
 };
 

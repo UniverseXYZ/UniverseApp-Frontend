@@ -32,9 +32,9 @@ const CustomColorPicker = ({ index, onChange }) => {
   }, []);
 
   useEffect(() => {
-    window.document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener('click', handleClickOutside, true);
     return () => {
-      window.document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('click', handleClickOutside, true);
     };
   });
 

@@ -386,7 +386,7 @@ const UniverseContributors = () => {
               {!contributor.loaded && (
                 <Skeleton
                   height={160}
-                  style={{ width: window.screen.width < 576 ? '160px' : '100%' }}
+                  style={{ width: window.innerWidth < 576 ? '160px' : '100%' }}
                 />
               )}
               <img

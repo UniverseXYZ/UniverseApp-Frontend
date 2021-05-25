@@ -1,8 +1,8 @@
 import { Animated } from 'react-animated-css';
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';

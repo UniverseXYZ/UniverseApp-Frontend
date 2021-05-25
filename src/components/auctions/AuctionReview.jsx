@@ -20,10 +20,10 @@ import checkIcon from '../../assets/images/check.svg';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
-import CongratsAuctionPopup from '../popups/CongratsAuctionPopup';
-import LoadingPopup from '../popups/LoadingPopup';
+import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
+import LoadingPopup from '../popups/LoadingPopup.jsx';
 
 const AuctionReview = () => {
   const location = useLocation();
@@ -55,10 +55,10 @@ const AuctionReview = () => {
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
-      window.document.getElementById('loading-hidden-btn').click();
+      document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
-        window.document.getElementById('popup-root').remove();
-        window.document.getElementById('congrats-hidden-btn').click();
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
       }, 2000);
       setTimeout(() => {
         history.push('/customize-auction-landing-page');

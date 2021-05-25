@@ -17,18 +17,18 @@ const Pagination = ({ data, perPage, setOffset }) => {
 
   useEffect(() => {
     // Prev Icon
-    const prev = window.document.querySelector('.previous a');
+    const prev = document.querySelector('.previous a');
     if (prev) {
-      const prevIcon = window.document.createElement('img');
+      const prevIcon = document.createElement('img');
       prevIcon.src = leftArrow;
       prev.innerHTML = '';
       prev.appendChild(prevIcon);
     }
 
     // Next Icon
-    const next = window.document.querySelector('.next a');
+    const next = document.querySelector('.next a');
     if (next) {
-      const nextIcon = window.document.createElement('img');
+      const nextIcon = document.createElement('img');
       nextIcon.src = rightArrow;
       next.innerHTML = '';
       next.appendChild(nextIcon);

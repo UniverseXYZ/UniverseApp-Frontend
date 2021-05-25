@@ -211,7 +211,7 @@ const UniverseCreators = () => {
               {!creator.loaded && (
                 <Skeleton
                   height={255}
-                  style={{ width: window.screen.width < 576 ? '255px' : '100%' }}
+                  style={{ width: window.innerWidth < 576 ? '255px' : '100%' }}
                 />
               )}
               <img

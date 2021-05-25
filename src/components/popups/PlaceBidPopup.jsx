@@ -6,7 +6,7 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 
 const PlaceBidPopup = ({

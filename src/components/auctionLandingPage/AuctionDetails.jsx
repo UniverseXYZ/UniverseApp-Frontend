@@ -10,9 +10,9 @@ import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctions
 import leftArrow from '../../assets/images/arrow.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
-import BidRankingsPopup from '../popups/BidRankingsPopup';
-import PlaceBidPopup from '../popups/PlaceBidPopup';
-import Button from '../button/Button';
+import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
+import PlaceBidPopup from '../popups/PlaceBidPopup.jsx';
+import Button from '../button/Button.jsx';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   const { loggedInArtist, myAuctions } = useContext(AppContext);
@@ -106,18 +106,18 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
 
   useEffect(() => {
     // Prev Icon
-    const prev = window.document.querySelector('.slick-prev');
+    const prev = document.querySelector('.slick-prev');
     if (prev) {
-      const prevIcon = window.document.createElement('img');
+      const prevIcon = document.createElement('img');
       prevIcon.src = leftArrow;
       prev.innerHTML = '';
       prev.appendChild(prevIcon);
     }
 
     // Next icon
-    const next = window.document.querySelector('.slick-next');
+    const next = document.querySelector('.slick-next');
     if (next) {
-      const nextIcon = window.document.createElement('img');
+      const nextIcon = document.createElement('img');
       nextIcon.src = leftArrow;
       next.innerHTML = '';
       next.appendChild(nextIcon);

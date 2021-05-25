@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Pagination from '../../../pagination/Pagionation';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
-import FutureAuctionsList from './FutureAuctionsList';
+import Pagination from '../../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
+import FutureAuctionsList from './FutureAuctionsList.jsx';
 import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../utils/fixtures/FutureAuctionsDummyData';
 
 const FutureAuctionsTab = () => {

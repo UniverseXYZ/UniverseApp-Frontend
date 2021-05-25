@@ -2,10 +2,10 @@
 /* eslint-disable no-shadow */
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import CustomColorPicker from './CustomColorPicker';
+import CustomColorPicker from './CustomColorPicker.jsx';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {

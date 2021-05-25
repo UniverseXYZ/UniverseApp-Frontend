@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Pagination from '../../../pagination/Pagionation';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
-import PastAuctionsList from './PastAuctionsList';
+import Pagination from '../../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
+import PastAuctionsList from './PastAuctionsList.jsx';
 import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../utils/fixtures/PastAuctionsDummyData';
 
 const PastAuctionsTab = () => {

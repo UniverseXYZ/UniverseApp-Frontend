@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import './TabletView.scss';
-import SelectWalletPopup from '../../../popups/SelectWalletPopup';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import accountIcon from '../../../../assets/images/icon1.svg';
@@ -26,7 +26,7 @@ import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 
 const TabletView = (props) => {
   const {
@@ -50,20 +50,20 @@ const TabletView = (props) => {
 
   useEffect(() => {
     if (showMenu) {
-      window.document.body.classList.add('no__scroll');
+      document.body.classList.add('no__scroll');
     } else {
-      window.document.body.classList.remove('no__scroll');
+      document.body.classList.remove('no__scroll');
     }
   }, [showMenu]);
 
   useEffect(() => {
-    window.document.addEventListener(
+    document.addEventListener(
       'click',
       (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
       true
     );
     return () => {
-      window.document.removeEventListener(
+      document.removeEventListener(
         'click',
         (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
         true

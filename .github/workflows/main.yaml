@@ -41,7 +41,7 @@ jobs:
         CI: false
 
     - name: Build
-      run: yarn build
+      run: yarn build:ssr
 
     - name: Save artifacts
       uses: actions/upload-artifact@v2

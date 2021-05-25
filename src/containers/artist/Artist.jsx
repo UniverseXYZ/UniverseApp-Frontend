@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Artist.scss';
-import ArtistDetails from '../../components/artist/ArtistDetails';
-import ArtistPageTabs from '../../components/artist/tabs/Tabs';
+import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
+import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 import AppContext from '../../ContextAPI';
+import NotFound from '../../components/notFound/NotFound.jsx';
 
 const Artist = () => {
   const location = useLocation();
@@ -17,9 +18,9 @@ const Artist = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    window.document.title = `Universe Minting - Artist - ${artist?.name}`;
+    document.title = `Universe Minting - Artist - ${artist?.name}`;
     return () => {
-      window.document.title = 'Universe Minting';
+      document.title = 'Universe Minting';
     };
   }, []);
 
@@ -32,7 +33,7 @@ const Artist = () => {
       </div>
     </div>
   ) : (
-    <Redirect to="/" />
+    <NotFound />
   );
 };
 
