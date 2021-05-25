@@ -151,25 +151,23 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://dao.universe.xyz/governance/overview');
                 }}
               >
                 <img src={governanceIcon} alt="Governance" />
                 <span>Governance</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://dao.universe.xyz/yield-farming');
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
