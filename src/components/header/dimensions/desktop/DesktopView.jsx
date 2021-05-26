@@ -42,6 +42,7 @@ const DesktopView = ({
     usdEthBalance,
     wethBalance,
     usdWethBalance,
+    authenticateWithSignedMessage,
   } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
@@ -289,15 +290,13 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
-              trigger={
-                <button type="button" className="sign__in">
-                  Sign In
-                </button>
-              }
+            <button
+              type="button"
+              className="sign__in"
+              onClick={() => authenticateWithSignedMessage()}
             >
-              {(close) => <SubscribePopup close={close} />}
-            </Popup>
+              Sign In
+            </button>
             {/* <Popup
               trigger={
                 <button type="button" className="sign__in">

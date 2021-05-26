@@ -315,9 +315,7 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li className="sign__in">
-                    <Popup trigger={<button type="button">Join newsletter</button>}>
-                      {(close) => <SubscribePopup close={close} />}
-                    </Popup>
+                    <button type="button">Sign In</button>
                     {/* <button type="button" onClick={() => setShowSelectWallet(true)}>
                       Sign In
                     </button> */}

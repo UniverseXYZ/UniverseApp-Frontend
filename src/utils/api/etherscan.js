@@ -11,6 +11,7 @@ export const getEthPriceEtherscan = async () => {
 };
 
 export const getWethBalanceEtherscan = async (address, chainId) => {
+  console.log(chainId, address);
   const wethContract = Contracts[chainId].contracts.WrappedEther.address;
   const result = await fetchJson(
     `https://api-rinkeby.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${wethContract}&address=${address}&tag=latest&apikey=${
