@@ -7,18 +7,12 @@ import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import AppContext from '../../ContextAPI';
-import RemovePopup from '../popups/RemoveNftPopup';
+import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedNFTs = () => {
-  const {
-    savedNfts,
-    setSavedNfts,
-    setActiveView,
-    setShowModal,
-    setSavedNFTsID,
-    selectAllIsChecked,
-    setSelectAllIsChecked,
-  } = useContext(AppContext);
+  const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
+    useContext(AppContext);
+  const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);

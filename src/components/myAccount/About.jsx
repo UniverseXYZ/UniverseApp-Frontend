@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import pencilIcon from '../../assets/images/edit.svg';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 
 const About = () => {
   const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);

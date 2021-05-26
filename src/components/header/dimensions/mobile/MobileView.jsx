@@ -6,7 +6,7 @@ import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
-import Button from '../../../button/Button';
+import Button from '../../../button/Button.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
@@ -220,15 +220,15 @@ const MobileView = (props) => {
                       <div>
                         <button
                           type="button"
-                          className="disable"
-                          // onClick={() => {
-                          //   setShowMenu(false);
-                          //   history.push('/minting-and-auctions/marketplace/active-auctions');
-                          // }}
+                          // className="disable"
+                          onClick={() => {
+                            setShowMenu(false);
+                            history.push('/minting-and-auctions/marketplace/active-auctions');
+                          }}
                         >
                           <img src={auctionHouseIcon} alt="Auction House" />
                           <span>Auction house</span>
-                          <span className="tooltiptext">Coming soon</span>
+                          {/* <span className="tooltiptext">Coming soon</span> */}
                         </button>
                       </div>
                       <div>
@@ -316,9 +316,6 @@ const MobileView = (props) => {
                 {!isWalletConnected && (
                   <li className="sign__in">
                     <button type="button">Sign In</button>
-                    {/* <button type="button" onClick={() => setShowSelectWallet(true)}>
-                      Sign In
-                    </button> */}
                   </li>
                 )}
               </>

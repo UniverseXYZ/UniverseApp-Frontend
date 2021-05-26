@@ -20,7 +20,7 @@ const PastAuctionsList = ({ data, perPage, offset }) => {
     <div className="active__auctions__list past">
       {sliceData.map((auction) =>
         !loading ? (
-          <Animated animationIn="fadeInUp" key={auction.id}>
+          <Animated animationIn="fadeIn" key={auction.id}>
             <div className="active__auction__item">
               <div className="title">
                 <h1>{auction.title}</h1>

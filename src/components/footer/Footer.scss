@@ -237,9 +237,10 @@ footer {
       align-items: center;
       img {
         cursor: pointer;
+        padding-right: 15px;
       }
       img:last-child {
-        padding-left: 15px;
+        padding-right: 0;
       }
       @include sm {
         grid-column: 2/3;

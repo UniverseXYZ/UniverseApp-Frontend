@@ -1,7 +1,7 @@
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import infoIcon from '../../assets/images/icon.svg';

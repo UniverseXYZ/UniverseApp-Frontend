@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import './TabletView.scss';
-import SelectWalletPopup from '../../../popups/SelectWalletPopup';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import accountIcon from '../../../../assets/images/icon1.svg';
@@ -210,15 +210,15 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      className="disable"
-                      // onClick={() => {
-                      //   setShowMenu(false);
-                      //   history.push('/minting-and-auctions/marketplace/active-auctions');
-                      // }}
+                      // className="disable"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                      }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
-                      <span className="tooltiptext">Coming soon</span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
                   <div>
@@ -303,18 +303,6 @@ const TabletView = (props) => {
             {!isWalletConnected && (
               <li className="sign__in">
                 <button type="button">Sign In</button>
-                {/* <Popup trigger={<button type="button">Sign in</button>}>
-                  {(close) => (
-                    <SelectWalletPopup
-                      close={close}
-                      handleConnectWallet={handleConnectWallet}
-                      showInstallWalletPopup={showInstallWalletPopup}
-                      setShowInstallWalletPopup={setShowInstallWalletPopup}
-                      selectedWallet={selectedWallet}
-                      setSelectedWallet={setSelectedWallet}
-                    />
-                  )}
-                </Popup> */}
               </li>
             )}
           </ul>

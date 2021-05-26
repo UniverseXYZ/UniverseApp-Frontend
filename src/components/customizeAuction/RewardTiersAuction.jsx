@@ -2,14 +2,14 @@
 /* eslint-disable no-shadow */
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import CustomColorPicker from './CustomColorPicker';
+import CustomColorPicker from './CustomColorPicker.jsx';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {
-  const { auction, setAuction, bidtype, windowSize } = useContext(AppContext);
+  const { auction, bidtype } = useContext(AppContext);
   const arrLength = auction.tiers.length;
   const [elRefs, setElRefs] = useState([]);
 
@@ -58,7 +58,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
               <div className="tier__header">
                 <div className="tier__title">
                   <h4>{tier.name}</h4>
-                  {windowSize.width < 576 && (
+                  {window.innerWidth < 576 && (
                     <div className="pick__color">
                       <p>Pick tier color</p>
                       <CustomColorPicker index={i} onChange={onChange} />
@@ -79,7 +79,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     </div>
                   </div>
                 </div>
-                {windowSize.width > 576 && (
+                {window.innerWidth > 576 && (
                   <div className="pick__color">
                     <p>Pick tier color</p>
                     <CustomColorPicker index={i} onChange={onChange} />

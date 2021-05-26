@@ -2,10 +2,12 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
+import './CreateTiers.scss';
+import '../auctions/Tiers.scss';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 
 const Create = () => {
@@ -66,7 +68,18 @@ const Create = () => {
   }, [tierById]);
 
   const handleChange = (event) => {
-    setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
+    const value = event.target.value.replace(/[^\d]/, '');
+    if (event.target.id === 'winners') {
+      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 21 || !value)) {
+        setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
+      }
+    } else if (event.target.id === 'nftsPerWinner') {
+      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 6 || !value)) {
+        setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
+      }
+    } else {
+      setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
+    }
   };
 
   const handleClick = () => {
@@ -133,7 +146,7 @@ const Create = () => {
           </div>
           <Input
             id="winners"
-            type="number"
+            type="text"
             error={isValidFields.winners ? undefined : 'Number of winners is required!'}
             className="inp"
             value={values.winners}
@@ -162,7 +175,7 @@ const Create = () => {
           </div>
           <Input
             id="nftsPerWinner"
-            type="number"
+            type="text"
             error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'}
             className="inp"
             value={values.nftsPerWinner}

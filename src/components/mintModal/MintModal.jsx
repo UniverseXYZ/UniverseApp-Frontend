@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import './Modals.scss';
-import MintNft from './MintNft';
-import MintNftCollection from './MintNftCollection';
-import MintSingleNft from './MintSingleNft';
-import PopupComponent from '../popups/Popup';
+import MintNft from './MintNft.jsx';
+import MintNftCollection from './MintNftCollection.jsx';
+import MintSingleNft from './MintSingleNft.jsx';
+import PopupComponent from '../popups/Popup.jsx';
 import AppContext from '../../ContextAPI';
 
 const MintModal = ({ open, onClose, ...restProps }) => {

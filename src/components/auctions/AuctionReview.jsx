@@ -4,9 +4,9 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
+import './AuctionReview.scss';
+import './Tiers.scss';
 import arrow from '../../assets/images/arrow.svg';
-import union from '../../assets/images/Union.svg';
-import icon from '../../assets/images/auction_icon.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import ethIcon from '../../assets/images/bid_icon.svg';
@@ -20,10 +20,10 @@ import checkIcon from '../../assets/images/check.svg';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
-import CongratsAuctionPopup from '../popups/CongratsAuctionPopup';
-import LoadingPopup from '../popups/LoadingPopup';
+import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
+import LoadingPopup from '../popups/LoadingPopup.jsx';
 
 const AuctionReview = () => {
   const location = useLocation();
@@ -55,7 +55,6 @@ const AuctionReview = () => {
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
-      console.log(auction);
       document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
         document.getElementById('popup-root').remove();

@@ -4,18 +4,18 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Lists from './Lists';
-import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import Pagination from '../pagination/Pagionation';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
+import Pagination from '../pagination/Pagionation.jsx';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 
-const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
-  const { myNFTs, auction, setAuction, selectedNFTIds, setSelectedNFTIds } = useContext(AppContext);
+const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTIds }) => {
+  const { myNFTs, auction, setAuction } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
@@ -377,7 +377,13 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
           </div>
           {filteredNFTs.length ? (
             <>
-              <Lists data={filteredNFTs} perPage={perPage} offset={offset} />
+              <Lists
+                data={filteredNFTs}
+                perPage={perPage}
+                offset={offset}
+                selectedNFTIds={selectedNFTIds}
+                setSelectedNFTIds={setSelectedNFTIds}
+              />
 
               <div className="pagination__container">
                 <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
@@ -468,6 +474,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs }) => {
 Wallet.propTypes = {
   filteredNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setFilteredNFTs: PropTypes.func.isRequired,
+  selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setSelectedNFTIds: PropTypes.func.isRequired,
 };
 
 export default Wallet;

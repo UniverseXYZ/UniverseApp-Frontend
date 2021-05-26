@@ -3,7 +3,7 @@ import AppContext from '../../ContextAPI';
 import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 
 const PersonalLogo = () => {
   const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);

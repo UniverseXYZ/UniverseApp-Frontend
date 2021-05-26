@@ -5,14 +5,15 @@ import { providers, utils } from 'ethers';
 import './Header.scss';
 import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
-import DesktopView from './dimensions/desktop/DesktopView';
-import TabletView from './dimensions/tablet/TabletView';
-import MobileView from './dimensions/mobile/MobileView';
+import DesktopView from './dimensions/desktop/DesktopView.jsx';
+import TabletView from './dimensions/tablet/TabletView.jsx';
+import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
 
 const Header = ({ location }) => {
-  const { setIsWalletConnected, windowSize, address, connectWeb3, website } =
+  const { isWalletConnected, setIsWalletConnected, windowSize, address, connectWeb3, website } =
     useContext(AppContext);
+  const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
 
   const [selectedWallet, setSelectedWallet] = useState('');
   const [installed, setInstalled] = useState(true);
@@ -71,6 +72,8 @@ const Header = ({ location }) => {
       </div>
       <DesktopView
         ethereumAddress={address}
+        isWalletConnected={isWalletConnected}
+        setIsWalletConnected={setIsWalletConnected}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -79,6 +82,8 @@ const Header = ({ location }) => {
       />
       <TabletView
         ethereumAddress={address}
+        isWalletConnected={isWalletConnected}
+        setIsWalletConnected={setIsWalletConnected}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -89,6 +94,8 @@ const Header = ({ location }) => {
       />
       <MobileView
         ethereumAddress={address}
+        isWalletConnected={isWalletConnected}
+        setIsWalletConnected={setIsWalletConnected}
         handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}
         setShowSelectWallet={setShowSelectWallet}

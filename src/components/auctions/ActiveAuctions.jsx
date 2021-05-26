@@ -12,9 +12,9 @@ import { ACTIVE_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import copyIcon from '../../assets/images/copy1.svg';
-import Input from '../input/Input';
+import Input from '../input/Input.jsx';
 import '../pagination/Pagination.scss';
-import Pagination from '../pagination/Pagionation';
+import Pagination from '../pagination/Pagionation.jsx';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);

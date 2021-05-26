@@ -24,3 +24,5 @@ yarn-error.log*
 commit.sh
 merge-develop.sh
 new-branch.sh
+/yarn.lock
+/package-lock.json

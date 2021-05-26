@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
-import RemovePopup from '../popups/RemoveNftPopup';
+import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedCollections = () => {
   const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } =

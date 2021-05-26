@@ -3,7 +3,7 @@ import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import blockOne from '../../../assets/images/about-page-block1.png';
 import blockTwo from '../../../assets/images/about-page-block2.png';
 import blockThree from '../../../assets/images/about-page-block3.png';
-import Button from '../../button/Button';
+import Button from '../../button/Button.jsx';
 
 const DigitalTools = () => (
   <div className="digital__tools__section">

@@ -5,7 +5,7 @@ import TylerWardImg from '../../../assets/images/Tyler-Ward.png';
 import TroyMurrayImg from '../../../assets/images/Troy-Murray.png';
 import MarkWardImg from '../../../assets/images/Mark-Ward.png';
 import RyanShtirmerImg from '../../../assets/images/Ryan-Shtirmer.png';
-import Button from '../../button/Button';
+import Button from '../../button/Button.jsx';
 
 const OurTeam = () => {
   const history = useHistory();

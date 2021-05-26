@@ -12,7 +12,7 @@ import KainWarwick from '../../assets/images/team/Kain-Warwick.png';
 import StaniKulechov from '../../assets/images/team/Stani-Kulechov.png';
 import SantiagoSantos from '../../assets/images/team/Santiago-Santos.png';
 import MattHunter from '../../assets/images/team/Matt-Hunter.png';
-import AkinSawyer from '../../assets/images/team/Akin-Sawyer.png';
+import AkinSawyerr from '../../assets/images/team/Akin-Sawyer.png';
 import QuinnAbraham from '../../assets/images/team/Quinn-Abraham.png';
 import BillyLuedtke from '../../assets/images/team/Billy-Luedtke.png';
 import TomShaughnessy from '../../assets/images/team/Tom-Shaughnessy.png';
@@ -178,8 +178,8 @@ const UniverseContributors = () => {
     },
     {
       id: 21,
-      name: 'Akin Sawyer',
-      avatar: AkinSawyer,
+      name: 'Akin Sawyerr',
+      avatar: AkinSawyerr,
       loaded: false,
     },
     {
@@ -381,12 +381,12 @@ const UniverseContributors = () => {
       <h1 className="title">Universe Contributors</h1>
       <div className="contributors">
         {contributors.map((contributor, index) => (
-          <AnimatedOnScroll animationIn="fadeIn">
-            <div className="contributor" key={contributor.id}>
+          <AnimatedOnScroll animationIn="fadeIn" key={contributor.id}>
+            <div className="contributor">
               {!contributor.loaded && (
                 <Skeleton
                   height={160}
-                  style={{ width: window.screen.width < 576 ? '160px' : '100%' }}
+                  style={{ width: window.innerWidth < 576 ? '160px' : '100%' }}
                 />
               )}
               <img

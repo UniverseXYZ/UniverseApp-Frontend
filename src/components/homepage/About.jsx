@@ -12,8 +12,8 @@ import bgImage from '../../assets/images/planets-bg.png';
 import planetFrontImage from '../../assets/images/planet-front.png';
 import planetBackImage from '../../assets/images/planet-back.png';
 import planetMiddleImage from '../../assets/images/planet-middle.png';
-import Button from '../button/Button';
-import SubscribePopup from '../popups/SubscribePopup';
+import Button from '../button/Button.jsx';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 
 const About = () => {
   const [email, setEmail] = useState('');
