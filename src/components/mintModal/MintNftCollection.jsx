@@ -29,6 +29,8 @@ const MintNftCollection = ({ onClick }) => {
     setSavedCollectionID,
     myNFTs,
     setMyNFTs,
+    myCollections,
+    setMyCollections,
   } = useContext(AppContext);
 
   const [collectionNFTs, setCollectionNFTs] = useState([]);
@@ -281,9 +283,19 @@ const MintNftCollection = ({ onClick }) => {
                 numberOfEditions: Number(nft.editions),
                 generatedEditions: nft.generatedEditions,
                 releasedDate: new Date(),
+                properties: nft.properties,
               });
             });
             setMyNFTs(newMyNFTs);
+            setMyCollections([
+              ...myCollections,
+              {
+                id: collectionName,
+                previewImage: coverImage || randomColor(),
+                name: collectionName,
+                tokenName,
+              },
+            ]);
             setShowModal(false);
             document.body.classList.remove('no__scroll');
           }, 2000);

@@ -13,14 +13,14 @@ import LoadingPopup from '../popups/LoadingPopup.jsx';
 import CongratsPopup from '../popups/CongratsPopup.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
+import tabArrow from '../../assets/images/tab-arrow.svg';
+import MyCollections from './MyCollections.jsx';
 
 const MyNFTs = () => {
   const {
     savedNfts,
     savedCollections,
     setSavedNfts,
-    selectedTabIndex,
-    setSelectedTabIndex,
     showModal,
     setShowModal,
     setActiveView,
@@ -29,8 +29,9 @@ const MyNFTs = () => {
     selectedNft,
     setWebsite,
   } = useContext(AppContext);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
+  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Saved Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
@@ -52,6 +53,53 @@ const MyNFTs = () => {
 
     return !res.length;
   };
+
+  const handleTabRightScrolling = () => {
+    let scrollAmount = 0;
+    const slideTimer = setInterval(() => {
+      document.querySelector('.tabs').scrollLeft += 10;
+      scrollAmount += 10;
+      if (scrollAmount >= 100) {
+        window.clearInterval(slideTimer);
+        document.querySelector('.tab__left__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft > 100) {
+          document.querySelector('.tab__right__arrow').style.display = 'none';
+        }
+      }
+    }, 25);
+  };
+
+  const handleTabLeftScrolling = () => {
+    let scrollAmount = 100;
+    const slideTimer = setInterval(() => {
+      document.querySelector('.tabs').scrollLeft -= 10;
+      scrollAmount -= 10;
+      if (scrollAmount <= 0) {
+        window.clearInterval(slideTimer);
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft <= 0) {
+          document.querySelector('.tab__left__arrow').style.display = 'none';
+        }
+      }
+    }, 25);
+  };
+
+  useEffect(() => {
+    function handleResize() {
+      if (document.querySelector('.tab__right__arrow')) {
+        if (window.innerWidth < 530) {
+          document.querySelector('.tab__right__arrow').style.display = 'flex';
+        } else {
+          document.querySelector('.tab__right__arrow').style.display = 'none';
+          document.querySelector('.tab__left__arrow').style.display = 'none';
+        }
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleMintSelected = () => {
     document.getElementById('loading-hidden-btn').click();
@@ -152,7 +200,7 @@ const MyNFTs = () => {
               <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
                 <h1 className="title">Select NFT</h1>
                 <div className="create__mint__btns">
-                  {selectedTabIndex === 1 && (
+                  {selectedTabIndex === 2 && (
                     <button
                       type="button"
                       className="mint__btn"
@@ -173,7 +221,7 @@ const MyNFTs = () => {
             <div className="mynfts__page__header">
               <h1 className="title">My NFTs</h1>
               <div className="create__mint__btns">
-                {selectedTabIndex === 1 && (
+                {selectedTabIndex === 2 && (
                   <button
                     type="button"
                     className="mint__btn"
@@ -192,34 +240,54 @@ const MyNFTs = () => {
           )}
 
           <div className="mynfts__page__body">
-            <ul className="tabs">
-              {tabs.map((tab, index) => (
-                <li
-                  key={uuid()}
-                  className={selectedTabIndex === index ? 'active' : ''}
-                  onClick={() => setSelectedTabIndex(index)}
+            <div className="tabs__wrapper">
+              <div className="tab__left__arrow">
+                <img
+                  onClick={handleTabLeftScrolling}
                   aria-hidden="true"
-                >
-                  {index === 1 && savedNfts.length > 0 ? (
-                    <>
-                      <div className="notification">
-                        {tab}
-                        <span>{savedNfts.length}</span>
-                      </div>
-                    </>
-                  ) : index === 2 && savedCollections.length > 0 ? (
-                    <>
-                      <div className="notification">
-                        {tab}
-                        <span>{savedCollections.length}</span>
-                      </div>
-                    </>
-                  ) : (
-                    tab
-                  )}
-                </li>
-              ))}
-            </ul>
+                  src={tabArrow}
+                  alt="Tab left arrow"
+                />
+              </div>
+              <div className="tabs">
+                <ul className="tab_items">
+                  {tabs.map((tab, index) => (
+                    <li
+                      key={uuid()}
+                      className={selectedTabIndex === index ? 'active' : ''}
+                      onClick={() => setSelectedTabIndex(index)}
+                      aria-hidden="true"
+                    >
+                      {index === 1 && savedNfts.length > 0 ? (
+                        <>
+                          <div className="notification">
+                            {tab}
+                            <span>{savedNfts.length}</span>
+                          </div>
+                        </>
+                      ) : index === 2 && savedCollections.length > 0 ? (
+                        <>
+                          <div className="notification">
+                            {tab}
+                            <span>{savedCollections.length}</span>
+                          </div>
+                        </>
+                      ) : (
+                        tab
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="tab__right__arrow">
+                <img
+                  onClick={handleTabRightScrolling}
+                  aria-hidden="true"
+                  src={tabArrow}
+                  alt="Tab right arrow"
+                />
+              </div>
+            </div>
             {selectedTabIndex === 0 && (
               <Wallet
                 filteredNFTs={filteredNFTs}
@@ -228,8 +296,9 @@ const MyNFTs = () => {
                 setSelectedNFTIds={setSelectedNFTIds}
               />
             )}
-            {selectedTabIndex === 1 && <SavedNFTs />}
-            {selectedTabIndex === 2 && <SavedCollections />}
+            {selectedTabIndex === 1 && <MyCollections />}
+            {selectedTabIndex === 2 && <SavedNFTs />}
+            {selectedTabIndex === 3 && <SavedCollections />}
           </div>
         </>
       ) : isCreatingAction ? (
