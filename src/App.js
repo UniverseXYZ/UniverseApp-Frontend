@@ -36,14 +36,15 @@ const App = () => {
     twitterLink: '',
   });
   const [myBalance, setMyBalance] = useState(48.24);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [activeView, setActiveView] = useState(null);
   const [savedNFTsID, setSavedNFTsID] = useState(null);
   const [savedCollectionID, setSavedCollectionID] = useState(null);
+  const [myCollectionID, setMyCollectionID] = useState(null);
   const [savedNfts, setSavedNfts] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
+  const [myCollections, setMyCollections] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -77,8 +78,6 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
-        selectedTabIndex,
-        setSelectedTabIndex,
         showModal,
         setShowModal,
         savedCollections,
@@ -89,8 +88,12 @@ const App = () => {
         setSavedNFTsID,
         savedCollectionID,
         setSavedCollectionID,
+        myCollectionID,
+        setMyCollectionID,
         myNFTs,
         setMyNFTs,
+        myCollections,
+        setMyCollections,
         myAuctions,
         setMyAuctions,
         activeAuctions,

@@ -120,10 +120,45 @@
   }
 
   &__body {
-    ul.tabs {
+    .tabs__wrapper {
+      position: relative;
+      .tab__left__arrow {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        justify-content: flex-end;
+        transform: rotate(180deg);
+        pointer-events: none;
+        img {
+          pointer-events: all;
+        }
+      }
+      .tab__right__arrow {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        justify-content: flex-end;
+        pointer-events: none;
+        img {
+          pointer-events: all;
+        }
+      }
+    }
+    .tabs {
       display: flex;
       align-items: center;
       margin-bottom: 40px;
+      overflow-x: auto;
+      ul.tab_items {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        min-width: 460px;
+        white-space: nowrap;
 
       li {
         margin-right: 40px;
@@ -144,10 +179,10 @@
           color: $black;
           border-bottom: 1px solid $black;
         }
-        @include sm {
-          margin-right: 20px;
-          font-size: 14px;
-        }
+        // @include sm {
+        //   margin-right: 20px;
+        //   font-size: 14px;
+        // }
         .notification {
           position: relative;
           img {
@@ -174,6 +209,7 @@
           }
         }
       }
+    }
     }
 
     .tab__wallet {
@@ -723,12 +759,14 @@
               height: 100%;
               object-fit: cover;
               border-radius: 12px;
+              cursor: pointer;
             }
             img.preview-image {
               width: 100%;
               height: 100%;
               object-fit: cover;
               border-radius: 12px;
+              cursor: pointer;
             }
             .video__icon {
               position: absolute;
@@ -1217,12 +1255,14 @@
               height: 100%;
               object-fit: cover;
               border-radius: 12px;
+              cursor: pointer;
             }
             img.preview-image {
               width: 100%;
               height: 100%;
               object-fit: cover;
               border-radius: 12px;
+              cursor: pointer;
             }
 
             .check__icon {
