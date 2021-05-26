@@ -18,6 +18,8 @@ import delateIcon from '../../assets/images/inactive.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
+import createIcon from '../../assets/images/create.svg';
+import universeImage from '../../assets/images/universe-img.svg';
 
 const MintSingleNft = ({ onClick }) => {
   const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
@@ -41,6 +43,8 @@ const MintSingleNft = ({ onClick }) => {
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
   const [percentAmount, setPercentAmount] = useState('');
   const [royalities, setRoyalities] = useState(true);
+  const [hideProperties, setHideProperties] = useState(false);
+  const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
   const [editableNFTType, setEditableNFTType] = useState('');
@@ -404,6 +408,21 @@ const MintSingleNft = ({ onClick }) => {
             value={editions}
           />
         </div>
+        <div className="single-nft-choose-collection">
+          <h4>Choose collection</h4>
+          <div className="choose__collection">
+            <div className="create">
+              <img src={createIcon} alt="Create Icon" />
+              <h5>Create</h5>
+              <p>ERC-721</p>
+            </div>
+            <div className="universe">
+              <img src={universeImage} alt="Universe" />
+              <h5>Universe</h5>
+              <p>XYZ</p>
+            </div>
+          </div>
+        </div>
         <div className="single-nft-properties">
           <div className="single-nft-properties-header">
             <h4
@@ -424,40 +443,56 @@ const MintSingleNft = ({ onClick }) => {
                 </div>
               </Animated>
             )}
-          </div>
-          {properties.map((elm, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div className="properties" key={i}>
-              <div className="property-name">
-                <h5>Property name</h5>
-                <Input
-                  className="inp"
-                  placeholder="Enter NFT property"
-                  value={elm.name}
-                  onChange={(e) => propertyChangesName(i, e.target.value)}
-                />
-              </div>
-              <div className="property-value">
-                <h5>Value</h5>
-                <Input
-                  className="inp"
-                  placeholder="Enter value"
-                  value={elm.value}
-                  onChange={(e) => propertyChangesValue(i, e.target.value)}
-                />
-              </div>
-              <img
-                src={delateIcon}
-                alt="Delete"
-                onClick={() => removeProperty(i)}
-                aria-hidden="true"
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={propertyCheck}
+                onChange={(e) => setPropertyCheck(e.target.checked)}
               />
-              <Button className="light-border-button" onClick={() => removeProperty(i)}>
-                Remove
-              </Button>
-            </div>
-          ))}
-          <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
+              <span className="slider round" />
+            </label>
+          </div>
+          {properties.map(
+            (elm, i) =>
+              // eslint-disable-next-line react/no-array-index-key
+              propertyCheck && (
+                <div className="properties">
+                  <div className="property-name">
+                    <h5>Property name</h5>
+                    <Input
+                      className="inp"
+                      placeholder="Enter NFT property"
+                      value={elm.name}
+                      onChange={(e) => propertyChangesName(i, e.target.value)}
+                    />
+                  </div>
+                  <div className="property-value">
+                    <h5>Value</h5>
+                    <Input
+                      className="inp"
+                      placeholder="Enter value"
+                      value={elm.value}
+                      onChange={(e) => propertyChangesValue(i, e.target.value)}
+                    />
+                  </div>
+                  <img
+                    src={delateIcon}
+                    alt="Delete"
+                    onClick={() => removeProperty(i)}
+                    aria-hidden="true"
+                  />
+                  <Button className="light-border-button" onClick={() => removeProperty(i)}>
+                    Remove
+                  </Button>
+                </div>
+              )
+          )}
+          <div
+            hidden={!propertyCheck}
+            className="property-add"
+            onClick={() => addProperty()}
+            aria-hidden="true"
+          >
             <h5>
               <img src={addIcon} alt="Add" />
               Add property

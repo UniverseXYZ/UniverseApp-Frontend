@@ -45,9 +45,20 @@ const CreateNftCol = (props) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
+  const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
+  const [royalities, setRoyalities] = useState(true);
+  const [percentAmount, setPercentAmount] = useState('');
   const inputFile = useRef(null);
 
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
+
+  const handleInputChange = (val) => {
+    if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
+      if (val <= 100) {
+        setPercentAmount(val);
+      }
+    }
+  };
   const removeProperty = (index) => {
     const temp = [...properties];
     temp.splice(index, 1);
@@ -389,7 +400,7 @@ const CreateNftCol = (props) => {
                     <div className="info-text">
                       <p>
                         Total amount of NFTs that will be distributed to the current reward tier
-                        winners
+                        winners.
                       </p>
                     </div>
                   </Animated>
@@ -417,8 +428,8 @@ const CreateNftCol = (props) => {
                   <Animated animationIn="zoomIn">
                     <div className="properties-info-text">
                       <p>
-                        Adding properties allows you to specify the character NFT traits and any
-                        other details you would like to specify.
+                        Adding properties allows you to specify the character NFT traits, the goods
+                        NFT sizes, or any other details you would like to specify.
                       </p>
                     </div>
                   </Animated>
@@ -463,6 +474,55 @@ const CreateNftCol = (props) => {
                   Add property
                 </h5>
               </div>
+            </div>
+            <div className="royalities">
+              <div className="title">
+                <h4
+                  onMouseOver={() => setHideRoyalitiesInfo(true)}
+                  onFocus={() => setHideRoyalitiesInfo(true)}
+                  onMouseLeave={() => setHideRoyalitiesInfo(false)}
+                  onBlur={() => setHideRoyalitiesInfo(false)}
+                >
+                  Royalties <img src={infoIcon} alt="Info Icon" />
+                </h4>
+                {hideRoyalitiesInfo && (
+                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                    <div className="royalities-info-text">
+                      <p>
+                        Royalties determines the percentage you, as a creator, will get from sales
+                        of this NFT on the secondary markets.
+                      </p>
+                    </div>
+                  </Animated>
+                )}
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={royalities}
+                    onChange={(e) => setRoyalities(e.target.checked)}
+                  />
+                  <span className="slider round" />
+                </label>
+              </div>
+              {royalities && (
+                <Animated animationIn="fadeIn">
+                  <div className="percent__amount">
+                    <div className="inp__container">
+                      <Input
+                        type="text"
+                        label="Percent amount"
+                        inputMode="numeric"
+                        pattern="[0-9]"
+                        placeholder="Enter percent amount"
+                        value={percentAmount}
+                        onChange={(e) => handleInputChange(e.target.value)}
+                      />
+                      <span>%</span>
+                    </div>
+                    <span className="suggested">Suggested: 10%, 20%, 30%</span>
+                  </div>
+                </Animated>
+              )}
             </div>
             <div className="nft-coll-buttons">
               {!collectionNFTsID ? (
