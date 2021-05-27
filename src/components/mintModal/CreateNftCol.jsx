@@ -252,6 +252,8 @@ const CreateNftCol = (props) => {
           setDescription('');
           setEditions(1);
           setPreviewImage(null);
+          setPercentAmount('');
+          setProperties([{ name: '', value: '' }]);
         }
         setClicked(false);
       }

@@ -54,7 +54,7 @@ const RemovePopup = ({
 
 RemovePopup.propTypes = {
   close: PropTypes.func.isRequired,
-  nftID: PropTypes.number.isRequired,
+  nftID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   removedItemName: PropTypes.string.isRequired,
   removeFrom: PropTypes.string.isRequired,
   collectionNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,

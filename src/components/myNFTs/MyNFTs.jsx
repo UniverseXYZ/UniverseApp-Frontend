@@ -28,6 +28,8 @@ const MyNFTs = () => {
     setMyNFTs,
     selectedNft,
     setWebsite,
+    myCollections,
+    setMyCollections,
   } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
@@ -127,6 +129,8 @@ const MyNFTs = () => {
                 collectionId: nft.collectionName,
                 collectionName: nft.collectionName,
                 collectionAvatar: nft.collectionAvatar,
+                collectionDescription: nft.collectionDescription,
+                shortURL: nft.shortURL,
                 previewImage: nft.previewImage,
                 name: nft.name,
                 description: nft.description,
@@ -258,14 +262,14 @@ const MyNFTs = () => {
                       onClick={() => setSelectedTabIndex(index)}
                       aria-hidden="true"
                     >
-                      {index === 1 && savedNfts.length > 0 ? (
+                      {index === 2 && savedNfts.length > 0 ? (
                         <>
                           <div className="notification">
                             {tab}
                             <span>{savedNfts.length}</span>
                           </div>
                         </>
-                      ) : index === 2 && savedCollections.length > 0 ? (
+                      ) : index === 3 && savedCollections.length > 0 ? (
                         <>
                           <div className="notification">
                             {tab}

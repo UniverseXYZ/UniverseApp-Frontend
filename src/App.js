@@ -23,6 +23,7 @@ import Team from './containers/team/Team.jsx';
 import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
+import Collection from './containers/collection/Collection.jsx';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -144,6 +145,9 @@ const App = () => {
         <Route exact path="/auction-review" component={() => <AuctionReview />} />
         <Route exact path="/:artist">
           <Artist />
+        </Route>
+        <Route exact path="/c/:collectionId">
+          <Collection />
         </Route>
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../../ContextAPI';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
@@ -13,6 +14,7 @@ const SavedCollections = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);
+  const history = useHistory();
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('three__dots')) {
@@ -47,7 +49,16 @@ const SavedCollections = () => {
       {savedCollections.length ? (
         <div className="saved__collections__lists">
           {savedCollections.map((collection) => (
-            <div className="saved__collection__box" key={uuid()}>
+            <div
+              className="saved__collection__box"
+              key={uuid()}
+              aria-hidden="true"
+              onClick={() =>
+                history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                  collection,
+                })
+              }
+            >
               <div className="saved__collection__box__header">
                 {typeof collection.previewImage === 'string' &&
                 collection.previewImage.startsWith('#') ? (
@@ -79,7 +90,8 @@ const SavedCollections = () => {
                 <button
                   type="button"
                   className="three__dots"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setShowDropdown(!showDropdown);
                     setDropdownID(collection.id);
                   }}
@@ -108,7 +120,7 @@ const SavedCollections = () => {
                         {(close) => (
                           <RemovePopup
                             close={close}
-                            nftID={Number(collection.id)}
+                            nftID={collection.id}
                             removedItemName={collection.name}
                             removeFrom="savedCollection"
                           />
