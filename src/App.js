@@ -119,8 +119,6 @@ const App = () => {
       res.text().then((data) => data)
     );
 
-    console.log(signer);
-
     if (signer) {
       const signedMessageResult = await signer?.signMessage(challengeResult);
 
