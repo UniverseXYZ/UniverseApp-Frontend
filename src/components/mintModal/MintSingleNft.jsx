@@ -20,6 +20,7 @@ import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
 import universeImage from '../../assets/images/universe-img.svg';
+import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
 
 const MintSingleNft = ({ onClick }) => {
   const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
@@ -412,7 +413,10 @@ const MintSingleNft = ({ onClick }) => {
           <h4>Choose collection</h4>
           <div className="choose__collection">
             <div className="create">
-              <img src={createIcon} alt="Create Icon" />
+              <Popup trigger={<img aria-hidden="true" src={createIcon} alt="Create Icon" />}>
+                {(close) => <CreateCollectionPopup onClose={close} />}
+              </Popup>
+
               <h5>Create</h5>
               <p>ERC-721</p>
             </div>

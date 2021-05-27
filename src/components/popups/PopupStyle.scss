@@ -752,56 +752,56 @@
       color: $black;
     }
     .nft__creator {
-        display: flex;
-        align-items: center;
-        margin-top: 25px;
-        margin-bottom: 25px;
-        .item {
-          margin-right: 40px;
+      display: flex;
+      align-items: center;
+      margin-top: 25px;
+      margin-bottom: 25px;
+      .item {
+        margin-right: 40px;
 
-          span {
-            display: block;
-            font-family: $spaceGroteskFont;
+        span {
+          display: block;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.4);
+          margin-bottom: 4px;
+        }
+        p {
+          display: flex;
+          align-items: center;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 160%;
+          color: $black;
+          white-space: nowrap;
+          img {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            margin-right: 6px;
+          }
+          .random__bg__color {
+            margin-right: 6px;
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $sharpGroteskMediumFont;
             font-style: normal;
             font-weight: 500;
             font-size: 12px;
-            line-height: 160%;
-            color: rgba(0, 0, 0, 0.4);
-            margin-bottom: 4px;
-          }
-          p {
-            display: flex;
-            align-items: center;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
-            line-height: 160%;
+            text-transform: uppercase;
             color: $black;
-            white-space: nowrap;
-            img {
-              width: 26px;
-              height: 26px;
-              border-radius: 50%;
-              margin-right: 6px;
-            }
-            .random__bg__color {
-              margin-right: 6px;
-              height: 26px;
-              width: 26px;
-              border-radius: 50%;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              font-family: $sharpGroteskMediumFont;
-              font-style: normal;
-              font-weight: 500;
-              font-size: 12px;
-              text-transform: uppercase;
-              color: $black;
-            }
           }
         }
+      }
     }
     .tabs {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -1589,5 +1589,178 @@
   @include sm {
     width: 94%;
     padding: 40px 26px;
+  }
+}
+
+.create__collection {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 440px;
+  padding: 40px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  h1 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 140%;
+    color: $black;
+    margin-bottom: 24px;
+  }
+  .collection__cover__image {
+    display: flex;
+    margin-bottom: 24px;
+
+    .cover__picture {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      min-height: 120px;
+      background: $white;
+      border: 1px solid #d4d4d4;
+      box-sizing: border-box;
+      border-radius: 12px;
+      margin-right: 24px;
+
+      .cover__image {
+        width: 120px;
+        min-height: 120px;
+        object-fit: cover;
+      }
+    }
+
+    .cover__description {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 22px;
+        color: $black;
+      }
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 160%;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 6px;
+        margin-bottom: 12px;
+      }
+      button {
+        width: fit-content;
+      }
+    }
+  }
+  .intup-l {
+    width: 100%;
+
+    label {
+      line-height: 22px;
+      margin-bottom: 1px;
+    }
+
+    input {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      color: $black;
+      width: 100%;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+  .token__name {
+    margin-top: 16px;
+    margin-bottom: 24px;
+
+    .intup-l {
+      margin-bottom: 6px;
+    }
+
+    .token-text {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 150%;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+  label {
+    font-family: $spaceGroteskFont;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 22px;
+    color: $black;
+    margin-bottom: 1px;
+  }
+  textarea {
+    font-family: $spaceGroteskFont;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 20px;
+    color: $black;
+    height: 86px;
+    margin-bottom: 16px;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+  .empty {
+    background: linear-gradient(to right, #000000 130px, rgba(0, 0, 0, 0.2) 10%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .button__div {
+    display: flex;
+    margin-top: 24px;
+    width: 100%;
+
+    button {
+      width: 100%;
+      &.light-button {
+        margin-right: 12px;
+
+        @include sm {
+          margin-bottom: 20px;
+        }
+      }
+    }
+    @include sm {
+      display: grid;
+    }
+  }
+  @include sm {
+    width: 90%;
   }
 }
