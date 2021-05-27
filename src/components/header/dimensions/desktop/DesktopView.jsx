@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
-import SelectWalletPopup from '../../../popups/SelectWalletPopup';
+import AppContext from '../../../../ContextAPI';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import Icon from '../../../../assets/images/icon1.svg';
 import copyIcon from '../../../../assets/images/copy.svg';
-import AppContext from '../../../../ContextAPI';
 import arrowUP from '../../../../assets/images/arrow-down.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
 import Group2 from '../../../../assets/images/Group2.svg';
@@ -23,9 +24,10 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
 
 const DesktopView = ({
+  isWalletConnected,
+  setIsWalletConnected,
   ethereumAddress,
   handleConnectWallet,
   showInstallWalletPopup,
@@ -33,7 +35,6 @@ const DesktopView = ({
   selectedWallet,
   setSelectedWallet,
 }) => {
-  const { isWalletConnected, setIsWalletConnected } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
@@ -150,25 +151,23 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://dao.universe.xyz/governance/overview');
                 }}
               >
                 <img src={governanceIcon} alt="Governance" />
                 <span>Governance</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://dao.universe.xyz/yield-farming');
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
@@ -315,6 +314,8 @@ const DesktopView = ({
 };
 
 DesktopView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,

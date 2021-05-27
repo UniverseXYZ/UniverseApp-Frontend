@@ -4,11 +4,11 @@ import { useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
-import LoadingPopup from '../popups/LoadingPopup';
-import CongratsPopup from '../popups/CongratsPopup';
+import LoadingPopup from '../popups/LoadingPopup.jsx';
+import CongratsPopup from '../popups/CongratsPopup.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import defaultImage from '../../assets/images/default-img.svg';
@@ -20,9 +20,8 @@ import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 
 const MintSingleNft = ({ onClick }) => {
-  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
-    AppContext
-  );
+  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } =
+    useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
     edition: '',

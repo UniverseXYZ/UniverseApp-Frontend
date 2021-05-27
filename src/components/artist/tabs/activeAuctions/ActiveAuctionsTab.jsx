@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Pagination from '../../../pagination/Pagionation';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
-import ActiveAuctionsList from './ActiveAuctionsList';
+import Pagination from '../../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
+import ActiveAuctionsList from './ActiveAuctionsList.jsx';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../utils/fixtures/ActiveAuctionsDummyData';
 
 const ActiveAuctionsTab = () => {

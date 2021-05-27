@@ -6,7 +6,7 @@ import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
-import Button from '../../../button/Button';
+import Button from '../../../button/Button.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
@@ -33,10 +33,12 @@ import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 
 const MobileView = (props) => {
   const {
+    isWalletConnected,
+    setIsWalletConnected,
     ethereumAddress,
     handleConnectWallet,
     setShowMenu,
@@ -48,7 +50,7 @@ const MobileView = (props) => {
     setShowInstallWalletPopup,
     selectedWallet,
   } = props;
-  const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+  const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -210,10 +212,10 @@ const MobileView = (props) => {
                         <button
                           type="button"
                           className="disable"
-                          // onClick={() => {
-                          //   setShowMenu(false);
-                          //   history.push('/minting-and-auctions/marketplace/active-auctions');
-                          // }}
+                          onClick={() => {
+                            setShowMenu(false);
+                            // history.push('/minting-and-auctions/marketplace/active-auctions');
+                          }}
                         >
                           <img src={auctionHouseIcon} alt="Auction House" />
                           <span>Auction house</span>
@@ -277,17 +279,23 @@ const MobileView = (props) => {
                     <div>
                       <p className="title">DAO</p>
                       <div>
-                        <button type="button" className="disable">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            window.open('https://dao.universe.xyz/governance/overview')
+                          }
+                        >
                           <img src={governanceIcon} alt="Governance" />
                           <span>Governance</span>
-                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
-                        <button type="button" className="disable">
+                        <button
+                          type="button"
+                          onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                        >
                           <img src={yieldFarmingIcon} alt="Yield Farming" />
                           <span>Yield farming</span>
-                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
@@ -383,6 +391,8 @@ const MobileView = (props) => {
 };
 
 MobileView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,

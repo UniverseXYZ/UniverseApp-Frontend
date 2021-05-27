@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import NFTsTab from './nfts/NFTsTab';
+import NFTsTab from './nfts/NFTsTab.jsx';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
-import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab';
-import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab';
-import PastAuctionsTab from './pastAuctions/PastAuctionsTab';
+import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
+import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
+import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 
 const Tabs = ({ onArtist }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);

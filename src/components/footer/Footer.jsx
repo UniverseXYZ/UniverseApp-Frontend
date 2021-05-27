@@ -4,16 +4,19 @@ import Popup from 'reactjs-popup';
 import './Footer.scss';
 import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
-import twitter from '../../assets/images/Twitter.svg';
-import discord from '../../assets/images/Discord.svg';
-import SubscribePopup from '../popups/SubscribePopup';
+import twitterIcon from '../../assets/images/Twitter.svg';
+import discordIcon from '../../assets/images/Discord.svg';
+import mediumIcon from '../../assets/images/medium-icon.svg';
+import youtubeIcon from '../../assets/images/youtube-icon.svg';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 
 const Footer = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
 
   const handleSubscribe = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(email).toLowerCase())) {
       const config = {
         headers: { 'Access-Control-Allow-Origin': '*' },
@@ -115,13 +118,17 @@ const Footer = () => {
             <div className="coming-soon">
               <ul>
                 <li>DAO</li>
-                <li className="disable">
+                <li
+                  aria-hidden="true"
+                  onClick={() => window.open('https://dao.universe.xyz/governance/overview')}
+                >
                   Governance
-                  <span className="tooltiptext">Coming soon</span>
                 </li>
-                <li className="disable">
+                <li
+                  aria-hidden="true"
+                  onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                >
                   Yield farming
-                  <span className="tooltiptext">Coming soon</span>
                 </li>
                 <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
                   Docs
@@ -143,16 +150,32 @@ const Footer = () => {
           </div>
           <div className="icons">
             <img
-              src={twitter}
-              alt="twiter"
+              src={twitterIcon}
+              alt="Twiter"
               aria-hidden="true"
               onClick={() => window.open('https://twitter.com/universe_xyz')}
             />
             <img
-              src={discord}
-              alt="discord"
+              src={discordIcon}
+              alt="Discord"
               aria-hidden="true"
               onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
+            />
+            <img
+              src={youtubeIcon}
+              alt="Youtube"
+              aria-hidden="true"
+              onClick={() =>
+                window.open(
+                  'http://youtube.com/channel/UCWt00md9T2b4iTsHWp_Fapw?sub_confirmation=1'
+                )
+              }
+            />
+            <img
+              src={mediumIcon}
+              alt="Medium"
+              aria-hidden="true"
+              onClick={() => window.open('https://medium.com/universe-xyz')}
             />
           </div>
         </div>

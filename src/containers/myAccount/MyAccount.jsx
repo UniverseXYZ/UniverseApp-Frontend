@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from 'react';
-import Main from '../../components/myAccount/Main';
+import Main from '../../components/myAccount/Main.jsx';
 import './MyAccount.scss';
-import About from '../../components/myAccount/About';
-import PersonalLogo from '../../components/myAccount/PersonalLogo';
-import Social from '../../components/myAccount/Social';
-import Head from '../../components/myAccount/Head';
+import About from '../../components/myAccount/About.jsx';
+import PersonalLogo from '../../components/myAccount/PersonalLogo.jsx';
+import Social from '../../components/myAccount/Social.jsx';
+import Head from '../../components/myAccount/Head.jsx';
 import AppContext from '../../ContextAPI';
 
 const MyAccount = () => {

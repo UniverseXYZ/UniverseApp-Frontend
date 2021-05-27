@@ -12,14 +12,15 @@ import bgImage from '../../assets/images/planets-bg.png';
 import planetFrontImage from '../../assets/images/planet-front.png';
 import planetBackImage from '../../assets/images/planet-back.png';
 import planetMiddleImage from '../../assets/images/planet-middle.png';
-import Button from '../button/Button';
-import SubscribePopup from '../popups/SubscribePopup';
+import Button from '../button/Button.jsx';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 
 const About = () => {
   const [email, setEmail] = useState('');
 
   const handleSubscribe = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(email).toLowerCase())) {
       const config = {
         headers: { 'Access-Control-Allow-Origin': '*' },

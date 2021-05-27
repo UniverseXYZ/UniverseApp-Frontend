@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown';
-import Pagination from '../../../../pagination/Pagionation';
-import ActiveAuctionsList from './ActiveAuctionsList';
-import ActiveAuctionsFilters from './Filters';
+import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
+import Pagination from '../../../../pagination/Pagionation.jsx';
+import ActiveAuctionsList from './ActiveAuctionsList.jsx';
+import ActiveAuctionsFilters from './Filters.jsx';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../../utils/fixtures/ActiveAuctionsDummyData';
 import AppContext from '../../../../../ContextAPI';
 

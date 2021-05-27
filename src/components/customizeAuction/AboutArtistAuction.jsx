@@ -1,9 +1,9 @@
 import React from 'react';
-import Button from '../button/Button';
-import About from '../myAccount/About';
-import Main from '../myAccount/Main';
-import PersonalLogo from '../myAccount/PersonalLogo';
-import Social from '../myAccount/Social';
+import Button from '../button/Button.jsx';
+import About from '../myAccount/About.jsx';
+import Main from '../myAccount/Main.jsx';
+import PersonalLogo from '../myAccount/PersonalLogo.jsx';
+import Social from '../myAccount/Social.jsx';
 import warningIcon from '../../assets/images/Exclamation.svg';
 
 const AboutArtistAuction = () => (

@@ -1,21 +1,21 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import Popup from 'reactjs-popup';
+import 'react-datepicker/dist/react-datepicker.css';
 import { Animated } from 'react-animated-css';
-import Select from 'react-select';
+import Popup from 'reactjs-popup';
 import moment from 'moment';
 import uuid from 'react-uuid';
+import './AuctionSettings.scss';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import AppContext from '../../ContextAPI';
-import Input from '../input/Input';
+import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
-import 'react-datepicker/dist/react-datepicker.css';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import AddToken from '../popups/AddTokenPopup';
-import StartDateCalendar from '../calendar/StartDateCalendar';
-import EndDateCalendar from '../calendar/EndDateCalendar';
+import AddToken from '../popups/AddTokenPopup.jsx';
+import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
+import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 
 const AuctionSettings = () => {
   const d = new Date();
@@ -37,15 +37,8 @@ const AuctionSettings = () => {
 
   const location = useLocation();
   const history = useHistory();
-  const {
-    auction,
-    setAuction,
-    myAuctions,
-    setMyAuctions,
-    bidtype,
-    setBidtype,
-    options,
-  } = useContext(AppContext);
+  const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
+    useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -55,6 +48,7 @@ const AuctionSettings = () => {
   const [errorArray, setErrorArray] = useState([]);
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
+  const [dropDown, setDropDown] = useState('');
 
   const handleSearch = (value) => {
     setsearchByNameAndAddress(value);
@@ -96,6 +90,11 @@ const AuctionSettings = () => {
   });
   const handleShow = () => {
     setOpenList(!openList);
+    if (openList) {
+      setDropDown('active');
+    } else {
+      setDropDown('');
+    }
   };
   const handleChange = (key) => {
     setBidtype(key);
@@ -241,7 +240,7 @@ const AuctionSettings = () => {
                 />
 
                 <div className="drop-down">
-                  <button type="button" onClick={() => handleShow()}>
+                  <button type="button" className={dropDown} onClick={() => handleShow()}>
                     {bid.img && <img src={bid.img} alt="icon" />}
                     <span className="button-name">{bid.name}</span>
                     <img src={arrowDown} alt="arrow" />
@@ -300,94 +299,96 @@ const AuctionSettings = () => {
             </div>
             <div className="infoDiv">
               <div className="date__input">
-                <Popup
-                  trigger={
-                    <Input
-                      type="text"
-                      readOnly
-                      id="startDate"
-                      label="Start date"
-                      autoComplete="off"
-                      value={
-                        values.startDate
-                          ? `${values.startDate.toString().split(' ')[1]} ${
-                              values.startDate.toString().split(' ')[2]
-                            }, ${
-                              values.startDate.toString().split(' ')[3]
-                            }, ${values.startDate.toString().split(' ')[4].substring(0, 5)} ${
-                              startDateTemp.timezone
-                            }`
-                          : ''
-                      }
-                      error={isValidFields.startDate ? undefined : 'Start date is required!'}
-                    />
-                  }
-                >
-                  {(close) => (
-                    <StartDateCalendar
-                      ref={startDateRef}
-                      monthNames={monthNames}
-                      values={values}
-                      setValues={setValues}
-                      startDateTemp={startDateTemp}
-                      setStartDateTemp={setStartDateTemp}
-                      onClose={close}
-                    />
-                  )}
-                </Popup>
-                <img
-                  aria-hidden="true"
-                  className="callendar__image"
-                  src={callendarIcon}
-                  alt="Callendar"
-                  // onClick={() => setShowStartDate(true)}
-                />
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    type="text"
+                    readOnly
+                    id="startDate"
+                    label="Start date"
+                    autoComplete="off"
+                    value={
+                      values.startDate
+                        ? `${values.startDate.toString().split(' ')[1]} ${
+                            values.startDate.toString().split(' ')[2]
+                          }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
+                            .toString()
+                            .split(' ')[4]
+                            .substring(0, 5)} ${startDateTemp.timezone}`
+                        : ''
+                    }
+                    error={isValidFields.startDate ? undefined : 'Start date is required!'}
+                  />
+                  <Popup
+                    trigger={
+                      <img
+                        aria-hidden="true"
+                        className="callendar__image"
+                        src={callendarIcon}
+                        alt="Callendar"
+                        // onClick={() => setShowStartDate(true)}
+                      />
+                    }
+                  >
+                    {(close) => (
+                      <StartDateCalendar
+                        ref={startDateRef}
+                        monthNames={monthNames}
+                        values={values}
+                        setValues={setValues}
+                        startDateTemp={startDateTemp}
+                        setStartDateTemp={setStartDateTemp}
+                        onClose={close}
+                      />
+                    )}
+                  </Popup>
+                </div>
               </div>
               <div className="date__input">
-                <Popup
-                  trigger={
-                    <Input
-                      type="text"
-                      readOnly
-                      onClick={() => setShowEndDate(true)}
-                      id="endDate"
-                      label="End date"
-                      autoComplete="off"
-                      value={
-                        values.endDate
-                          ? `${values.endDate.toString().split(' ')[1]} ${
-                              values.endDate.toString().split(' ')[2]
-                            }, ${
-                              values.endDate.toString().split(' ')[3]
-                            }, ${values.endDate.toString().split(' ')[4].substring(0, 5)} ${
-                              endDateTemp.timezone
-                            }`
-                          : ''
-                      }
-                      error={isValidFields.endDate ? undefined : 'End date is required!'}
-                    />
-                  }
-                >
-                  {(close) => (
-                    <EndDateCalendar
-                      ref={endDateRef}
-                      monthNames={monthNames}
-                      values={values}
-                      setValues={setValues}
-                      endDateTemp={endDateTemp}
-                      setEndDateTemp={setEndDateTemp}
-                      setShowEndDate={setShowEndDate}
-                      onClose={close}
-                    />
-                  )}
-                </Popup>
-                <img
-                  aria-hidden="true"
-                  className="callendar__image"
-                  src={callendarIcon}
-                  alt="Callendar"
-                  // onClick={() => setShowStartDate(true)}
-                />
+                <div style={{ position: 'relative' }}>
+                  <Input
+                    type="text"
+                    readOnly
+                    onClick={() => setShowEndDate(true)}
+                    id="endDate"
+                    label="End date"
+                    autoComplete="off"
+                    value={
+                      values.endDate
+                        ? `${values.endDate.toString().split(' ')[1]} ${
+                            values.endDate.toString().split(' ')[2]
+                          }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
+                            .toString()
+                            .split(' ')[4]
+                            .substring(0, 5)} ${endDateTemp.timezone}`
+                        : ''
+                    }
+                    error={isValidFields.endDate ? undefined : 'End date is required!'}
+                  />
+                  <Popup
+                    trigger={
+                      <img
+                        aria-hidden="true"
+                        className="callendar__image"
+                        src={callendarIcon}
+                        alt="Callendar"
+                        // onClick={() => setShowStartDate(true)}
+                      />
+                    }
+                  >
+                    {(close) => (
+                      <EndDateCalendar
+                        ref={endDateRef}
+                        monthNames={monthNames}
+                        values={values}
+                        setValues={setValues}
+                        endDateTemp={endDateTemp}
+                        setEndDateTemp={setEndDateTemp}
+                        setShowEndDate={setShowEndDate}
+                        onClose={close}
+                      />
+                    )}
+                  </Popup>
+                </div>
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
                   <img
@@ -457,24 +458,27 @@ const AuctionSettings = () => {
                 minBid === true &&
                 auction.tiers.map((tier, index) => (
                   <div className="tiers-part">
-                    <span className="bid-type">
-                      {bid.img && <img src={bid.img} alt="icon" />}
-                      <span className="button-name">{bid.name}</span>
-                    </span>
-                    <Input
-                      type="number"
-                      name="tierBid"
-                      label={tier.name}
-                      error={
-                        errorArray.includes(index)
-                          ? 'The minimum bid for this tier cannot be lower than for the tier below'
-                          : undefined
-                      }
-                      onChange={(e) => handleBidChange(e, index)}
-                      id={tier.id}
-                      placeholder="0.1"
-                      value={bidValues[tier.id]}
-                    />
+                    <div style={{ position: 'relative', marginBottom: '20px' }}>
+                      <span className="bid-type">
+                        {bid.img && <img src={bid.img} alt="icon" />}
+                        <span className="button-name">{bid.name}</span>
+                      </span>
+
+                      <Input
+                        type="number"
+                        name="tierBid"
+                        label={tier.name}
+                        error={
+                          errorArray.includes(index)
+                            ? 'The minimum bid for this tier cannot be lower than for the tier below'
+                            : undefined
+                        }
+                        onChange={(e) => handleBidChange(e, index)}
+                        id={tier.id}
+                        placeholder="0.1"
+                        value={bidValues[tier.id]}
+                      />
+                    </div>
                   </div>
                 ))}
             </div>

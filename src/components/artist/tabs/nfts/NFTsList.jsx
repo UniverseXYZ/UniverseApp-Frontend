@@ -22,7 +22,7 @@ const NFTsList = ({ data, perPage, offset }) => {
     <div className="nfts__lists">
       {sliceData.map((nft) =>
         !loading ? (
-          <Animated animationIn="fadeInUp" key={uuid()}>
+          <Animated animationIn="fadeIn" key={uuid()}>
             <div className="nft__box">
               <div className="nft__box__image">
                 {nft.previewImage.type === 'video/mp4' && (
@@ -39,7 +39,11 @@ const NFTsList = ({ data, perPage, offset }) => {
                 )}
                 {nft.previewImage.type !== 'audio/mpeg' &&
                   nft.previewImage.type !== 'video/mp4' && (
-                    <img className="preview-image" src={nft.previewImage.url} alt={nft.name} />
+                    <img
+                      className="preview-image"
+                      src={URL.createObjectURL(nft.previewImage)}
+                      alt={nft.name}
+                    />
                   )}
                 {nft.previewImage.type === 'video/mp4' && (
                   <img className="video__icon" src={videoIcon} alt="Video Icon" />

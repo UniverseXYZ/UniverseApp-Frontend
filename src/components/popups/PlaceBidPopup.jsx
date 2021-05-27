@@ -6,7 +6,7 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import currencyIcon from '../../assets/images/currency-eth.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 
 const PlaceBidPopup = ({
@@ -17,7 +17,7 @@ const PlaceBidPopup = ({
   onBidders,
   onSetBidders,
 }) => {
-  const { loggedInArtist, yourBalance, setYourBalance } = useContext(AppContext);
+  const { loggedInArtist, myBalance, setMyBalance } = useContext(AppContext);
   const PLACEHOLDER_SERVICE__FEE = 0.105;
   const [yourBid, setYourBid] = useState('');
   const [totalBidAmount, setTotalBidAmount] = useState(0);
@@ -46,7 +46,7 @@ const PlaceBidPopup = ({
           setTotalBidAmount(0 + parseFloat(val));
         }
       }
-      if (val && !val.endsWith('.') && val < yourBalance) {
+      if (val && !val.endsWith('.') && val < myBalance) {
         setError('');
       }
       // just for testing
@@ -66,7 +66,7 @@ const PlaceBidPopup = ({
       setError('"Your bid" field is required.');
     } else if (yourBid.endsWith('.')) {
       setError('Incorrect bid amount.');
-    } else if (parseFloat(yourBid) > yourBalance) {
+    } else if (parseFloat(yourBid) > myBalance) {
       setError('Not enough funds');
     } else if (!loggedInArtist.name) {
       setError('Please first fill in your profile.');
@@ -79,7 +79,7 @@ const PlaceBidPopup = ({
     if (clicked) {
       if (!error) {
         setShowBidSubmitted(true);
-        setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
+        setMyBalance(parseFloat(myBalance) - parseFloat(yourBid));
         const newBidders = [...onBidders];
 
         newBidders.push({
@@ -167,7 +167,7 @@ const PlaceBidPopup = ({
           <div className="total">
             <div className="total_row">
               <div className="label">Your balance</div>
-              <div className="value">{`${yourBalance.toString().substring(0, 5)} ETH`}</div>
+              <div className="value">{`${myBalance.toString().substring(0, 5)} ETH`}</div>
             </div>
             <div className="total_row">
               <div

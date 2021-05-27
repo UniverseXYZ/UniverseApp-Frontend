@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import './AuctionLandingPage.scss';
-import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails';
-import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails';
-import RewardTiers from '../../components/auctionLandingPage/RewardTiers';
-import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails';
-import PlaceBid from '../../components/auctionLandingPage/PlaceBid';
-import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
+import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
+import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
+import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
+import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails.jsx';
+import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
+import AppContext from '../../ContextAPI';
+import NotFound from '../../components/notFound/NotFound.jsx';
 
 const AuctionLandingPage = () => {
+  const { setWebsite } = useContext(AppContext);
   const location = useLocation();
   const selectedAuction = location.state ? location.state.auction : null;
   const artist = selectedAuction?.artist;
@@ -19,6 +20,7 @@ const AuctionLandingPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setWebsite(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
       // Fake data for testing
@@ -122,7 +124,7 @@ const AuctionLandingPage = () => {
       </div>
     </div>
   ) : (
-    <Redirect to="/" />
+    <NotFound />
   );
 };
 

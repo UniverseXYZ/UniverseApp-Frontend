@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import metamaskLogo from '../../assets/images/metamask.png';
 import ledgerLogo from '../../assets/images/ledger.png';
 import keystoreLogo from '../../assets/images/keystore.png';
@@ -86,7 +86,7 @@ SelectWalletPopup.propTypes = {
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,
-  selectedWallet: PropTypes.bool.isRequired,
+  selectedWallet: PropTypes.string.isRequired,
   setSelectedWallet: PropTypes.func.isRequired,
 };
 

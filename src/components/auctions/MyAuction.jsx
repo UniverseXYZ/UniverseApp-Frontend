@@ -6,9 +6,9 @@ import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
-import FutureAuctions from './FutureAuctions';
-import ActiveAuctions from './ActiveAuctions';
-import PastAuctions from './PastAuctions';
+import FutureAuctions from './FutureAuctions.jsx';
+import ActiveAuctions from './ActiveAuctions.jsx';
+import PastAuctions from './PastAuctions.jsx';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, auction, setAuction } = useContext(AppContext);

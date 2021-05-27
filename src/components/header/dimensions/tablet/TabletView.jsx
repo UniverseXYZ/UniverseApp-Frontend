@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import './TabletView.scss';
-import SelectWalletPopup from '../../../popups/SelectWalletPopup';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import accountIcon from '../../../../assets/images/icon1.svg';
@@ -26,10 +26,12 @@ import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 
 const TabletView = (props) => {
   const {
+    isWalletConnected,
+    setIsWalletConnected,
     ethereumAddress,
     handleConnectWallet,
     showInstallWalletPopup,
@@ -39,7 +41,7 @@ const TabletView = (props) => {
     showMenu,
     setShowMenu,
   } = props;
-  const { isWalletConnected, setIsWalletConnected, handleClickOutside } = useContext(AppContext);
+  const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -200,10 +202,10 @@ const TabletView = (props) => {
                     <button
                       type="button"
                       className="disable"
-                      // onClick={() => {
-                      //   setShowMenu(false);
-                      //   history.push('/minting-and-auctions/marketplace/active-auctions');
-                      // }}
+                      onClick={() => {
+                        setShowMenu(false);
+                        // history.push('/minting-and-auctions/marketplace/active-auctions');
+                      }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
@@ -267,17 +269,21 @@ const TabletView = (props) => {
                 <div>
                   <p className="title">DAO</p>
                   <div>
-                    <button type="button" className="disable">
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://dao.universe.xyz/governance/overview')}
+                    >
                       <img src={governanceIcon} alt="Governance" />
                       <span>Governance</span>
-                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
-                    <button type="button" className="disable">
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                    >
                       <img src={yieldFarmingIcon} alt="Yield Farming" />
                       <span>Yield farming</span>
-                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
@@ -316,6 +322,8 @@ const TabletView = (props) => {
 };
 
 TabletView.propTypes = {
+  isWalletConnected: PropTypes.bool.isRequired,
+  setIsWalletConnected: PropTypes.func.isRequired,
   ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
