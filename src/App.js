@@ -64,8 +64,16 @@ const App = () => {
   const [usdWethBalance, setUsdWethBalance] = useState(0);
   const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
   const [universeERC721Contract, setUniverseERC721Contract] = useState(null);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [yourBalance, setYourBalance] = useState(0);
 
-  const connectWeb3 = async (ethereum, provider) => {
+  const connectWeb3 = async () => {
+    const { ethereum } = window;
+
+    await ethereum.enable();
+    const provider = new providers.Web3Provider(ethereum);
+    setWeb3Provider(provider);
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const balance = await provider.getBalance(accounts[0]);
     const network = await provider.getNetwork();
@@ -98,56 +106,62 @@ const App = () => {
     setUniverseERC721Contract(universeERC721ContractResult);
   };
 
-  const isMetaMaskConnected = async (provider) => {
+  const isMetaMaskConnected = async () => {
+    const provider = new providers.Web3Provider(window.ethereum);
     const accounts = await provider.listAccounts();
     return accounts.length > 0;
   };
 
-  const authenticateWithSignedMessage = async () => {
+  const signMessage = async () => {
     const challnegeUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/getChallenge`;
     const challengeResult = await fetch(challnegeUrl, { credentials: 'include' }).then((res) =>
       res.text().then((data) => data)
     );
-    const signedMessageResult = await signer.signMessage(challengeResult);
 
-    console.log('address', address);
-    console.log('challengeResult', challengeResult);
-    console.log('signedMessageResult', signedMessageResult);
+    console.log(signer);
 
-    const loginUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
-    const authenticationResult = await fetch(loginUrl, {
-      credentials: 'include',
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ address: `${address}`, signature: signedMessageResult }),
-    });
+    if (signer) {
+      const signedMessageResult = await signer?.signMessage(challengeResult);
 
-    if (authenticationResult.ok) {
-      console.log('Authorization completed');
-    } else {
-      console.error('Authorization failed', authenticationResult);
+      const loginUrl = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
+      const authenticationResult = await fetch(loginUrl, {
+        credentials: 'include',
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address: `${address}`, signature: signedMessageResult }),
+      });
+
+      if (authenticationResult.ok) {
+        setIsAuthenticated(true);
+        console.log('Authorization completed');
+      } else {
+        setIsAuthenticated(false);
+        console.error('Authorization failed', authenticationResult);
+      }
     }
+  };
+
+  const authenticateWithSignedMessage = async () => {
+    await connectWeb3();
   };
 
   useEffect(async () => {
     if (typeof window.ethereum !== 'undefined') {
       const { ethereum } = window;
 
-      const provider = new providers.Web3Provider(window.ethereum);
-      const isConnected = await isMetaMaskConnected(provider);
-      setWeb3Provider(provider);
+      await connectWeb3();
 
-      if (provider && isConnected) {
-        await connectWeb3(ethereum, provider);
-      } else {
+      const provider = new providers.Web3Provider(ethereum);
+
+      if (!provider) {
         console.log('Please install/connect MetaMask!');
       }
 
       ethereum.on('accountsChanged', async ([account]) => {
         if (account) {
-          await connectWeb3(ethereum, provider);
+          await connectWeb3();
         } else {
           setIsWalletConnected(false);
         }
@@ -162,7 +176,7 @@ const App = () => {
   }, []);
 
   useEffect(async () => {
-    if (signer && address) authenticateWithSignedMessage();
+    if (signer && address) signMessage();
   }, [signer, address]);
 
   useEffect(() => {
@@ -237,6 +251,11 @@ const App = () => {
         setSigner,
         connectWeb3,
         authenticateWithSignedMessage,
+        isWalletConnected,
+        setIsWalletConnected,
+        yourBalance,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       <Header />

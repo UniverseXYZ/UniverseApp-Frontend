@@ -43,6 +43,7 @@ const DesktopView = ({
     wethBalance,
     usdWethBalance,
     authenticateWithSignedMessage,
+    isAuthenticated,
   } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
@@ -193,7 +194,7 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected ? (
+        {isWalletConnected && isAuthenticated ? (
           <li>
             <button
               type="button"

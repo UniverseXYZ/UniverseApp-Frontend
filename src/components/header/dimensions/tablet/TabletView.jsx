@@ -48,6 +48,7 @@ const TabletView = (props) => {
     usdEthBalance,
     wethBalance,
     usdWethBalance,
+    isAuthenticated,
   } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -80,7 +81,7 @@ const TabletView = (props) => {
 
   return (
     <div className="tablet__nav">
-      {isWalletConnected && (
+      {isWalletConnected && isAuthenticated ? (
         <div className="wallet__connected__tablet">
           <img
             className="account__icon hide__on__tablet"
@@ -191,7 +192,7 @@ const TabletView = (props) => {
             </Animated>
           )}
         </div>
-      )}
+      ) : null}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
@@ -302,7 +303,9 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
-                <button type="button">Sign In</button>
+                <button type="button" onClick={() => authenticateWithSignedMessage()}>
+                  Sign In
+                </button>
               </li>
             )}
           </ul>

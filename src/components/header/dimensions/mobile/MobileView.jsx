@@ -50,6 +50,7 @@ const MobileView = (props) => {
     selectedWallet,
   } = props;
   const {
+    isAuthenticated,
     isWalletConnected,
     setIsWalletConnected,
     handleClickOutside,
@@ -88,7 +89,7 @@ const MobileView = (props) => {
 
   return (
     <div className="mobile__nav">
-      {isWalletConnected && (
+      {isWalletConnected && isAuthenticated ? (
         <div className="wallet__connected__tablet">
           <img
             className="account__icon hide__on__tablet"
@@ -199,7 +200,7 @@ const MobileView = (props) => {
             </Animated>
           )}
         </div>
-      )}
+      ) : null}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
@@ -315,7 +316,9 @@ const MobileView = (props) => {
                 </li>
                 {!isWalletConnected && (
                   <li className="sign__in">
-                    <button type="button">Sign In</button>
+                    <button type="button" onClick={() => authenticateWithSignedMessage()}>
+                      Sign In
+                    </button>
                   </li>
                 )}
               </>
