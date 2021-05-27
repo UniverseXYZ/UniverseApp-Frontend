@@ -118,13 +118,17 @@ const Footer = () => {
             <div className="coming-soon">
               <ul>
                 <li>DAO</li>
-                <li className="disable">
+                <li
+                  aria-hidden="true"
+                  onClick={() => window.open('https://dao.universe.xyz/governance/overview')}
+                >
                   Governance
-                  <span className="tooltiptext">Coming soon</span>
                 </li>
-                <li className="disable">
+                <li
+                  aria-hidden="true"
+                  onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                >
                   Yield farming
-                  <span className="tooltiptext">Coming soon</span>
                 </li>
                 <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
                   Docs

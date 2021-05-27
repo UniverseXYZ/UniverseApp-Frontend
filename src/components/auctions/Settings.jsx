@@ -313,8 +313,7 @@ const AuctionSettings = () => {
                           }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
                             .toString()
                             .split(' ')[4]
-                            .substring(0, 5)}
-                            ${startDateTemp.timezone}`
+                            .substring(0, 5)} ${startDateTemp.timezone}`
                         : ''
                     }
                     error={isValidFields.startDate ? undefined : 'Start date is required!'}
@@ -360,8 +359,7 @@ const AuctionSettings = () => {
                           }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
                             .toString()
                             .split(' ')[4]
-                            .substring(0, 5)}
-                            ${endDateTemp.timezone}`
+                            .substring(0, 5)} ${endDateTemp.timezone}`
                         : ''
                     }
                     error={isValidFields.endDate ? undefined : 'End date is required!'}

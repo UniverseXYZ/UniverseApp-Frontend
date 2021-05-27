@@ -211,15 +211,15 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      // className="disable"
+                      className="disable"
                       onClick={() => {
                         setShowMenu(false);
-                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                        // history.push('/minting-and-auctions/marketplace/active-auctions');
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
-                      {/* <span className="tooltiptext">Coming soon</span> */}
+                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
@@ -279,17 +279,21 @@ const TabletView = (props) => {
                 <div>
                   <p className="title">DAO</p>
                   <div>
-                    <button type="button" className="disable">
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://dao.universe.xyz/governance/overview')}
+                    >
                       <img src={governanceIcon} alt="Governance" />
                       <span>Governance</span>
-                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
-                    <button type="button" className="disable">
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                    >
                       <img src={yieldFarmingIcon} alt="Yield Farming" />
                       <span>Yield farming</span>
-                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
