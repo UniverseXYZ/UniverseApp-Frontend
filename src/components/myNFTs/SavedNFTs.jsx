@@ -10,9 +10,8 @@ import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedNFTs = () => {
-  const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } = useContext(
-    AppContext
-  );
+  const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
+    useContext(AppContext);
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);

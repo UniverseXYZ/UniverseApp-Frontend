@@ -269,14 +269,14 @@
           background: linear-gradient($white, $white) padding-box,
             linear-gradient(to right, #bceb01, #9ceb28) border-box;
           border: 1px solid transparent;
-          width: 340px;
+          width: 375px;
 
           @include xl {
-            width: 270px;
+            width: 303px;
           }
 
           @include lg {
-            width: 180px;
+            width: 225px;
           }
         }
       }
@@ -298,14 +298,14 @@
           height: 0px;
           z-index: 5;
           border: 1px solid rgba(0, 0, 0, 0.1);
-          width: 360px;
+          width: 376px;
 
           @include xl {
-            width: 300px;
+            width: 306px;
           }
 
           @include lg {
-            width: 220px;
+            width: 230px;
           }
         }
       }
@@ -542,7 +542,7 @@
 
     img {
       position: absolute;
-      right: 21px;
+      padding-left: 16px;
       top: 17px;
       height: 20px;
     }
@@ -562,8 +562,7 @@
     font-size: 16px;
     line-height: 20px;
     font-family: $spaceGroteskFont;
-    padding: 15px 16px;
-
+    padding: 15px 16px 15px 46px;
     &:focus {
       background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
       border: 1px solid transparent;
