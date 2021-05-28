@@ -8,8 +8,9 @@ import removeIcon from '../../assets/images/remove.svg';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedCollections = () => {
-  const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } =
-    useContext(AppContext);
+  const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } = useContext(
+    AppContext
+  );
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);
@@ -55,6 +56,7 @@ const SavedCollections = () => {
               onClick={() =>
                 history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
                   collection,
+                  saved: true,
                 })
               }
             >

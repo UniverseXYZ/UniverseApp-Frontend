@@ -30,8 +30,9 @@ const MyNFTs = () => {
     setWebsite,
     myCollections,
     setMyCollections,
+    myNFTsSelectedTabIndex,
+    setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Saved Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
@@ -204,7 +205,7 @@ const MyNFTs = () => {
               <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
                 <h1 className="title">Select NFT</h1>
                 <div className="create__mint__btns">
-                  {selectedTabIndex === 2 && (
+                  {myNFTsSelectedTabIndex === 2 && (
                     <button
                       type="button"
                       className="mint__btn"
@@ -225,7 +226,7 @@ const MyNFTs = () => {
             <div className="mynfts__page__header">
               <h1 className="title">My NFTs</h1>
               <div className="create__mint__btns">
-                {selectedTabIndex === 2 && (
+                {myNFTsSelectedTabIndex === 2 && (
                   <button
                     type="button"
                     className="mint__btn"
@@ -258,8 +259,8 @@ const MyNFTs = () => {
                   {tabs.map((tab, index) => (
                     <li
                       key={uuid()}
-                      className={selectedTabIndex === index ? 'active' : ''}
-                      onClick={() => setSelectedTabIndex(index)}
+                      className={myNFTsSelectedTabIndex === index ? 'active' : ''}
+                      onClick={() => setMyNFTsSelectedTabIndex(index)}
                       aria-hidden="true"
                     >
                       {index === 2 && savedNfts.length > 0 ? (
@@ -292,7 +293,7 @@ const MyNFTs = () => {
                 />
               </div>
             </div>
-            {selectedTabIndex === 0 && (
+            {myNFTsSelectedTabIndex === 0 && (
               <Wallet
                 filteredNFTs={filteredNFTs}
                 setFilteredNFTs={setFilteredNFTs}
@@ -300,9 +301,9 @@ const MyNFTs = () => {
                 setSelectedNFTIds={setSelectedNFTIds}
               />
             )}
-            {selectedTabIndex === 1 && <MyCollections />}
-            {selectedTabIndex === 2 && <SavedNFTs />}
-            {selectedTabIndex === 3 && <SavedCollections />}
+            {myNFTsSelectedTabIndex === 1 && <MyCollections />}
+            {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
+            {myNFTsSelectedTabIndex === 3 && <SavedCollections />}
           </div>
         </>
       ) : isCreatingAction ? (

@@ -19,6 +19,7 @@ const MyCollections = () => {
               onClick={() =>
                 history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
                   collection,
+                  saved: false,
                 })
               }
             >

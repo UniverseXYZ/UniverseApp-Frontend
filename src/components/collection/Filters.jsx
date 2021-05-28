@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import searchIcon from '../../assets/images/search.svg';
 import AppContext from '../../ContextAPI';
 
-const Filters = () => {
+const Filters = ({ search, setSearch }) => {
   const { handleClickOutside } = useContext(AppContext);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Sort by');
-  const [search, setSearch] = useState('');
   const ref = useRef(null);
 
   useEffect(() => {
@@ -103,6 +103,11 @@ const Filters = () => {
       </div>
     </div>
   );
+};
+
+Filters.propTypes = {
+  search: PropTypes.string.isRequired,
+  setSearch: PropTypes.func.isRequired,
 };
 
 export default Filters;
