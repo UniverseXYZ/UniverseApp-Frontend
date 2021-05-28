@@ -26,3 +26,9 @@ merge-develop.sh
 new-branch.sh
 /yarn.lock
 /package-lock.json
+<<<<<<< HEAD
+=======
+commit.sh
+merge-develop.sh
+new-branch.sh
+>>>>>>> 3c3a42b6d6dbe0ec0408524a1f6f3c5a33e35c70

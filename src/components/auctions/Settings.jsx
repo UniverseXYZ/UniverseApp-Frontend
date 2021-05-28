@@ -37,8 +37,15 @@ const AuctionSettings = () => {
 
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
-    useContext(AppContext);
+  const {
+    auction,
+    setAuction,
+    myAuctions,
+    setMyAuctions,
+    bidtype,
+    setBidtype,
+    options,
+  } = useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -310,10 +317,10 @@ const AuctionSettings = () => {
                       values.startDate
                         ? `${values.startDate.toString().split(' ')[1]} ${
                             values.startDate.toString().split(' ')[2]
-                          }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
-                            .toString()
-                            .split(' ')[4]
-                            .substring(0, 5)} ${startDateTemp.timezone}`
+                          }, ${values.startDate.toString().split(' ')[3]},
+                          ${values.startDate.toString().split(' ')[4].substring(0, 5)} ${
+                            startDateTemp.timezone
+                          }`
                         : ''
                     }
                     error={isValidFields.startDate ? undefined : 'Start date is required!'}
@@ -356,10 +363,10 @@ const AuctionSettings = () => {
                       values.endDate
                         ? `${values.endDate.toString().split(' ')[1]} ${
                             values.endDate.toString().split(' ')[2]
-                          }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
-                            .toString()
-                            .split(' ')[4]
-                            .substring(0, 5)} ${endDateTemp.timezone}`
+                          }, ${values.endDate.toString().split(' ')[3]},
+                          ${values.endDate.toString().split(' ')[4].substring(0, 5)} ${
+                            endDateTemp.timezone
+                          }`
                         : ''
                     }
                     error={isValidFields.endDate ? undefined : 'End date is required!'}
