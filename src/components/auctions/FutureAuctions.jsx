@@ -13,6 +13,7 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIconRed from '../../assets/images/Vector.svg';
 import doneIcon from '../../assets/images/Completed.svg';
 import searchIcon from '../../assets/images/search-icon.svg';
+import searchIconGray from '../../assets/images/search-gray.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import { FUTURE_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
@@ -55,10 +56,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="future-auctions">
       <div className="input-search">
-        <button type="button" onClick={clearInput} className="clear-input">
-          Clear
-        </button>
-        <img src={searchIcon} alt="search" />
+        <img src={searchIconGray} alt="search" />
         <Input
           className="searchInp"
           onChange={(e) => handleSearch(e.target.value)}
@@ -84,9 +82,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             <div className="auction-header">
               <div className="auction-header-button">
                 <h3>{futureAuction.name}</h3>
-                <Popup trigger={<Button className="light-button">Set up auction</Button>}>
-                  {(close) => <SetUpPopup onClose={close} onAuctionId={futureAuction.id} />}
-                </Popup>
               </div>
               <div className="launch-auction">
                 {/* <Button className="light-button" disabled>Set up auction</Button> */}
@@ -190,12 +185,12 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     history.push('/auction-settings', futureAuction.id);
                   }}
                 >
-                  Edit auction
+                  Edit
                 </Button>
               </div>
               <div className="step-2">
                 <h6>Step2</h6>
-                <h4>NFT minting</h4>
+                <h4>Customize landing page</h4>
                 <div className="circle">
                   <img hidden={!futureAuction.mint} src={doneIcon} alt="Done" />
                   <img hidden={futureAuction.mint} src={emptyMark} alt="Empty mark" />
@@ -203,11 +198,11 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 </div>
                 {futureAuction.mint === true ? (
                   <Button disabled className="light-button">
-                    Mint NFTs
+                    Start
                   </Button>
                 ) : (
                   <>
-                    <Popup trigger={<Button className="light-button">Mint NFTs</Button>}>
+                    <Popup trigger={<Button className="light-button">Start</Button>}>
                       {(close) => (
                         <MintNftsPopup
                           onClose={close}
@@ -227,7 +222,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
               </div>
               <div className="step-3">
                 <h6>Step 3</h6>
-                <h4>Landing page customization</h4>
+                <h4>Finalize auction</h4>
                 <div className="circle">
                   {!futureAuction.landingCustom && !futureAuction.mint && (
                     <img alt="landing_page" src={emptyWhite} />
@@ -247,11 +242,11 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       history.push('/customize-auction-landing-page', futureAuction.id);
                     }}
                   >
-                    Set up landing page
+                    Start
                   </Button>
                 ) : (
                   <Button className="light-border-button" disabled>
-                    Set up landing page
+                    Start
                   </Button>
                 )}
               </div>

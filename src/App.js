@@ -7,6 +7,7 @@ import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
 import Auctions from './containers/auctions/Auction.jsx';
+import SetupAuction from './components/setupAuction/SetupAuction';
 import RewardTiers from './components/rewardTiers/RewardTiers.jsx';
 import CreateTiers from './components/createTiers/Create.jsx';
 import ReviewReward from './components/reviewReward/ReviewReward.jsx';
@@ -117,6 +118,8 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={() => <Homepage />} />
         <Route exact path="/about" component={() => <About />} />
+        <Route path="/setup-auction" component={() => <SetupAuction />} />
+
         <Route
           exact
           path="/minting-and-auctions/marketplace/active-auctions"
