@@ -55,12 +55,21 @@ const MintNftCollection = ({ onClick }) => {
     shorturl: '',
   });
 
+  // console.log(myCollections);
+
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
 
   const handleOnFocus = () => {
     setShortURL('universe.xyz/c/');
     setInputClass('inp');
+  };
+
+  const handleOnBlur = () => {
+    if (shortURL === 'universe.xyz/c/') {
+      setShortURL('universe.xyz/c/shorturl');
+      setInputClass('inp empty');
+    }
   };
 
   const handleCollectionName = (value) => {
@@ -358,10 +367,6 @@ const MintNftCollection = ({ onClick }) => {
     }
   }, [errors]);
 
-  console.log(inputClass);
-  console.log(shortURL.length);
-  console.log(errors.shorturl);
-
   return !showCollectible ? (
     <div className="mintNftCollection-div">
       <Popup
@@ -477,6 +482,7 @@ const MintNftCollection = ({ onClick }) => {
             e.target.value.startsWith('universe.xyz/c/') && handleShortUrl(e.target.value)
           }
           onFocus={() => handleOnFocus()}
+          onBlur={() => handleOnBlur()}
         />
       </div>
       <div className="collection__nfts">

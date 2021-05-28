@@ -13,17 +13,70 @@ const CreateCollectionPopup = ({ onClose }) => {
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
   const [inputClass, setInputClass] = useState('inp empty');
-  const [shortURL, setShortURL] = useState('');
+  const [shortURL, setShortURL] = useState('universe.xyz/c/shorturl');
+
+  const [errors, setErrors] = useState({ collectionName: '', tokenName: '', shorturl: '' });
+  const [collection, setCollection] = useState({
+    collectionName: '',
+    tokenName: '',
+    coverImage: null,
+    shortURL: '',
+  });
+
+  const { myCollections } = useContext(AppContext);
+  console.log(myCollections);
 
   const handleOnFocus = () => {
-    setShortURL('universe.xyz/c/');
-    setInputClass('inp');
+    if (shortURL === 'universe.xyz/c/shorturl') {
+      setShortURL('universe.xyz/c/');
+    }
+  };
+  const handleOnBlur = () => {
+    if (shortURL === 'universe.xyz/c/') {
+      setShortURL('universe.xyz/c/shorturl');
+      setInputClass('inp empty');
+    }
   };
 
   const handleShortUrl = (value) => {
     setShortURL(value);
     setInputClass('inp');
   };
+
+  const handleCollectionName = (value) => {
+    setCollectionName(value);
+    setErrors({
+      ...errors,
+      collectionName: !value ? '“Collection name” is not allowed to be empty' : '',
+    });
+  };
+
+  const handleTokenName = (value) => {
+    setTokenName(value);
+    setErrors({
+      ...errors,
+      collectionName: !value ? '“Token name” is not allowed to be empty' : '',
+    });
+  };
+
+  const handleMinting = () => {
+    setErrors({
+      collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
+      tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
+      shorturl:
+        shortURL === 'universe.xyz/c/shorturl' ? '“Short URL” is not allowed to be empty' : '',
+    });
+    // for (let i = 0; i < myCollections.length; ) {
+    //   if (myCollections[i].name === collectionName) {
+    //     setErrors((prevErrors) => ({
+    //       ...prevErrors,
+    //       collectionName: '“Collection name” already exists',
+    //     }));
+    //     break;
+    //   }
+    // }
+  };
+
   return (
     <div className="create__collection">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
@@ -56,6 +109,7 @@ const CreateCollectionPopup = ({ onClose }) => {
         className="inp"
         placeholder="Enter the Collection name"
         value={collectionName}
+        error={errors.collectionName}
         onChange={(e) => setCollectionName(e.target.value)}
       />
       <div className="token__name">
@@ -64,9 +118,10 @@ const CreateCollectionPopup = ({ onClose }) => {
           className="inp"
           placeholder="$ART"
           value={tokenName}
+          error={errors.tokenName}
           onChange={(e) => setTokenName(e.target.value)}
         />
-        <p className="token-text">Token name cannot be changed in future</p>
+        {!errors.tokenName && <p className="token-text">Token name cannot be changed in future</p>}
       </div>
       <label>Description (optional)</label>
       <textarea
@@ -79,13 +134,18 @@ const CreateCollectionPopup = ({ onClose }) => {
         className={inputClass}
         label="Short URL"
         placeholder="universe.xyz/c/shorturl"
+        value={shortURL}
+        error={errors.shorturl}
+        onFocus={() => handleOnFocus()}
+        onBlur={() => handleOnBlur()}
         onChange={(e) =>
           e.target.value.startsWith('universe.xyz/c/') && handleShortUrl(e.target.value)
         }
-        onFocus={() => handleOnFocus()}
       />
       <div className="button__div">
-        <Button className="light-button">Mint now</Button>
+        <Button className="light-button" onClick={() => handleMinting()}>
+          Mint now
+        </Button>
         <Button className="light-border-button">Save for later</Button>
       </div>
     </div>
