@@ -34,12 +34,10 @@ import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 
 const MobileView = (props) => {
   const {
-    isWalletConnected,
-    setIsWalletConnected,
-    ethereumAddress,
     handleConnectWallet,
     setShowMenu,
     setShowSelectWallet,
@@ -50,7 +48,18 @@ const MobileView = (props) => {
     setShowInstallWalletPopup,
     selectedWallet,
   } = props;
-  const { handleClickOutside } = useContext(AppContext);
+  const {
+    address,
+    isAuthenticated,
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+    connectWeb3,
+  } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -81,7 +90,7 @@ const MobileView = (props) => {
 
   return (
     <div className="mobile__nav">
-      {isWalletConnected && (
+      {isWalletConnected && isAuthenticated ? (
         <div className="wallet__connected__tablet">
           <img
             className="account__icon hide__on__tablet"
@@ -109,7 +118,7 @@ const MobileView = (props) => {
                 <div className="dropdown__header">
                   <div className="copy-div">
                     <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <div className="ethereum__address">{shortenEthereumAddress(address)}</div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -117,7 +126,7 @@ const MobileView = (props) => {
                           <span />
                         </div>
                         <CopyToClipboard
-                          text={ethereumAddress}
+                          text={address}
                           onCopy={() => {
                             setCopied(true);
                             setTimeout(() => {
@@ -134,13 +143,13 @@ const MobileView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
                   <div className="group2">
                     <img src={Group2} alt="WETH" />
-                    <span className="first-span">6,24 WETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                    <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                   </div>
                 </div>
                 <div className="dropdown__body">
@@ -190,7 +199,7 @@ const MobileView = (props) => {
             </Animated>
           )}
         </div>
-      )}
+      ) : null}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
@@ -310,16 +319,13 @@ const MobileView = (props) => {
                     </div>
                   </div>
                 </li>
-                {!isWalletConnected && (
+                {!isWalletConnected && !isAuthenticated ? (
                   <li className="sign__in">
-                    <Popup trigger={<button type="button">Join newsletter</button>}>
-                      {(close) => <SubscribePopup close={close} />}
-                    </Popup>
-                    {/* <button type="button" onClick={() => setShowSelectWallet(true)}>
+                    <button type="button" onClick={() => connectWeb3()}>
                       Sign In
-                    </button> */}
+                    </button>
                   </li>
-                )}
+                ) : null}
               </>
             ) : (
               <div className="select_wallet__section">
@@ -391,9 +397,6 @@ const MobileView = (props) => {
 };
 
 MobileView.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,

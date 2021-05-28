@@ -20,8 +20,9 @@ import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 
 const MintSingleNft = ({ onClick }) => {
-  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } =
-    useContext(AppContext);
+  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
+    AppContext
+  );
   const [errors, setErrors] = useState({
     name: '',
     edition: '',

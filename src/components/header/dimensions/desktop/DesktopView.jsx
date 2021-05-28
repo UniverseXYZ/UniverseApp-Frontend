@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 import './DesktopView.scss';
 import AppContext from '../../../../ContextAPI';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
@@ -26,9 +27,6 @@ import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 
 const DesktopView = ({
-  isWalletConnected,
-  setIsWalletConnected,
-  ethereumAddress,
   handleConnectWallet,
   showInstallWalletPopup,
   setShowInstallWalletPopup,
@@ -41,6 +39,18 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+    connectWeb3,
+    isAuthenticated,
+    address,
+  } = useContext(AppContext);
 
   return (
     <div className="desktop__nav">
@@ -182,7 +192,7 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected ? (
+        {isWalletConnected && isAuthenticated ? (
           <li>
             <button
               type="button"
@@ -197,7 +207,7 @@ const DesktopView = ({
               <div className="dropdown__header">
                 <div className="copy-div">
                   <img className="icon-img" src={Icon} alt="icon" />
-                  <div className="ethereum__address">{ethereumAddress}</div>
+                  <div className="ethereum__address">{shortenEthereumAddress(address)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">
                       <div className="copied-div" hidden={!copied}>
@@ -205,7 +215,7 @@ const DesktopView = ({
                         <span />
                       </div>
                       <CopyToClipboard
-                        text={ethereumAddress}
+                        text={address}
                         onCopy={() => {
                           setCopied(true);
                           setTimeout(() => {
@@ -223,13 +233,13 @@ const DesktopView = ({
 
                 <div className="group1">
                   <img src={Group1} alt="ETH" />
-                  <span className="first-span">6,24 ETH</span>
-                  <span className="second-span">$10,554</span>
+                  <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                  <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                 </div>
                 <div className="group2">
                   <img src={Group2} alt="WETH" />
-                  <span className="first-span">6,24 WETH</span>
-                  <span className="second-span">$10,554</span>
+                  <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                  <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                 </div>
               </div>
               <div className="dropdown__body">
@@ -279,15 +289,9 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
-              trigger={
-                <button type="button" className="sign__in">
-                  Join newsletter
-                </button>
-              }
-            >
-              {(close) => <SubscribePopup close={close} />}
-            </Popup>
+            <button type="button" className="sign__in" onClick={() => connectWeb3()}>
+              Sign In
+            </button>
             {/* <Popup
               trigger={
                 <button type="button" className="sign__in">
@@ -314,9 +318,6 @@ const DesktopView = ({
 };
 
 DesktopView.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,
