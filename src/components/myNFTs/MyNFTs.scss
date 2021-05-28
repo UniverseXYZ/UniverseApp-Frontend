@@ -153,6 +153,7 @@
       align-items: center;
       margin-bottom: 40px;
       overflow-x: auto;
+      min-height: 60px;
       ul.tab_items {
         display: flex;
         justify-content: flex-start;
@@ -1289,12 +1290,15 @@
               font-weight: bold;
               font-size: 14px;
               color: $black;
+              word-break: break-word;
             }
             .three__dots {
               position: relative;
               display: flex;
               align-items: center;
-              // gap: 3px;
+              height: 15px;
+              width: 20px;
+              background-color: $white;
               span {
                 height: 4px;
                 width: 4px;
@@ -1482,6 +1486,7 @@
           border: 1px solid rgba(0, 0, 0, 0.1);
           box-sizing: border-box;
           border-radius: 12px;
+          cursor: pointer;
 
           &__header {
             height: 80px;
@@ -1550,6 +1555,9 @@
               display: flex;
               align-items: center;
               gap: 3px;
+              height: 15px;
+              width: 20px;
+              background-color: $white;
               span {
                 height: 4px;
                 width: 4px;

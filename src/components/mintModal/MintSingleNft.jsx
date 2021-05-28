@@ -23,8 +23,9 @@ import universeImage from '../../assets/images/universe-img.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
 
 const MintSingleNft = ({ onClick }) => {
-  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } =
-    useContext(AppContext);
+  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
+    AppContext
+  );
   const [errors, setErrors] = useState({
     name: '',
     edition: '',

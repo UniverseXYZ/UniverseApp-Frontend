@@ -1,16 +1,28 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 
 const MyCollections = () => {
   const { myCollections } = useContext(AppContext);
+  const history = useHistory();
 
   return (
     <div className="tab__saved__collections">
       {myCollections.length ? (
         <div className="saved__collections__lists">
           {myCollections.map((collection) => (
-            <div className="saved__collection__box" key={uuid()}>
+            <div
+              className="saved__collection__box"
+              key={uuid()}
+              aria-hidden="true"
+              onClick={() =>
+                history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                  collection,
+                  saved: false,
+                })
+              }
+            >
               <div className="saved__collection__box__header">
                 {typeof collection.previewImage === 'string' &&
                 collection.previewImage.startsWith('#') ? (
@@ -45,7 +57,7 @@ const MyCollections = () => {
         </div>
       ) : (
         <div className="empty__nfts">
-          <h3>No Saved Collections found</h3>
+          <h3>No Collection found</h3>
         </div>
       )}
     </div>

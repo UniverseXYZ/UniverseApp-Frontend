@@ -6,6 +6,7 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import AppContext from '../../ContextAPI';
 import buyerImage from '../../assets/images/nft-buyer.png';
 import hrefIcon from '../../assets/images/href.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
 
 const NFTPopup = ({ onClose, onNFT }) => {
   const { loggedInArtist } = useContext(AppContext);
@@ -24,9 +25,23 @@ const NFTPopup = ({ onClose, onNFT }) => {
         <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
 
         <div className="show__selected__nft__image">
-          <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
-            <img src={URL.createObjectURL(onNFT.previewImage)} alt={onNFT.previewImage} />
-          </Animated>
+          {onNFT.previewImage.type === 'video/mp4' && (
+            <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
+              <video controls>
+                <source src={URL.createObjectURL(onNFT.previewImage)} type="video/mp4" />
+                <track kind="captions" />
+                Your browser does not support the video tag.
+              </video>
+            </Animated>
+          )}
+          {onNFT.previewImage.type === 'audio/mpeg' && (
+            <img className="preview-image" src={mp3Icon} alt={onNFT.name} />
+          )}
+          {onNFT.previewImage.type !== 'audio/mpeg' && onNFT.previewImage.type !== 'video/mp4' && (
+            <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
+              <img src={URL.createObjectURL(onNFT.previewImage)} alt={onNFT.previewImage} />
+            </Animated>
+          )}
         </div>
       </div>
       <div className="details">

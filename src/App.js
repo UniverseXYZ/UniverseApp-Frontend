@@ -24,6 +24,7 @@ import Team from './containers/team/Team.jsx';
 import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
+import Collection from './containers/collection/Collection.jsx';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -38,6 +39,7 @@ const App = () => {
   });
   const [myBalance, setMyBalance] = useState(48.24);
   const [showModal, setShowModal] = useState(false);
+  const [myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex] = useState(0);
   const [activeView, setActiveView] = useState(null);
   const [savedNFTsID, setSavedNFTsID] = useState(null);
   const [savedCollectionID, setSavedCollectionID] = useState(null);
@@ -81,6 +83,8 @@ const App = () => {
         setSavedNfts,
         showModal,
         setShowModal,
+        myNFTsSelectedTabIndex,
+        setMyNFTsSelectedTabIndex,
         savedCollections,
         setSavedCollections,
         activeView,
@@ -147,6 +151,9 @@ const App = () => {
         <Route exact path="/auction-review" component={() => <AuctionReview />} />
         <Route exact path="/:artist">
           <Artist />
+        </Route>
+        <Route exact path="/c/:collectionId">
+          <Collection />
         </Route>
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />

@@ -5,8 +5,9 @@ import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 
 const SetUpPopup = ({ onClose, onAuctionId }) => {
-  const { auction, setAuction, myAuctions, setMyAuctions, options, setOptions } =
-    useContext(AppContext);
+  const { auction, setAuction, myAuctions, setMyAuctions, options, setOptions } = useContext(
+    AppContext
+  );
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
   console.log(auction1);
 

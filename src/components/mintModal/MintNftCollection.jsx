@@ -64,6 +64,8 @@ const MintNftCollection = ({ onClick }) => {
   };
 
   const handleCollectionName = (value) => {
+    setSaveForLateClick(false);
+    setMintNowClick(false);
     setCollectionName(value);
     setErrors({
       ...errors,
@@ -72,6 +74,8 @@ const MintNftCollection = ({ onClick }) => {
   };
 
   const handleTokenName = (value) => {
+    setSaveForLateClick(false);
+    setMintNowClick(false);
     setTokenName(value);
     setErrors({
       ...errors,
@@ -80,6 +84,8 @@ const MintNftCollection = ({ onClick }) => {
   };
 
   const handleShortUrl = (value) => {
+    setSaveForLateClick(false);
+    setMintNowClick(false);
     setShortURL(value);
     setErrors({
       ...errors,
@@ -116,10 +122,8 @@ const MintNftCollection = ({ onClick }) => {
         : [];
       if ((collectionNameExists.length || existsInMyNfts.length) && !savedCollectionID) {
         setErrors({
+          ...errors,
           collectionName: '“Collection name” already exists',
-          tokenName: '“Token name” already exists',
-          collectible: '',
-          shorturl: '“Short URL” already exists',
         });
       } else {
         setErrors({
@@ -252,6 +256,9 @@ const MintNftCollection = ({ onClick }) => {
       setCollectionName(res[0].name);
       setCoverImage(res[0].previewImage);
       setTokenName(res[0].tokenName);
+      setDescription(res[0].description);
+      setShortURL(res[0].shortURL);
+      console.log('res', res);
     }
   }, [collectionNFTs]);
 
@@ -266,6 +273,8 @@ const MintNftCollection = ({ onClick }) => {
               previewImage: coverImage || randomColor(),
               name: collectionName,
               tokenName,
+              description,
+              shortURL,
             },
           ]);
           if (collectionNFTs.length) {
@@ -285,6 +294,8 @@ const MintNftCollection = ({ onClick }) => {
                     previewImage: coverImage || randomColor(),
                     name: collectionName,
                     tokenName,
+                    description,
+                    shortURL,
                   }
                 : item
             )
@@ -298,6 +309,8 @@ const MintNftCollection = ({ onClick }) => {
                     collectionName,
                     collectionAvatar: coverImage,
                     tokenName,
+                    collectionDescription: description,
+                    shortURL,
                   }
                 : item
             )
@@ -331,6 +344,8 @@ const MintNftCollection = ({ onClick }) => {
                 collectionName,
                 collectionAvatar: coverImage || randomColor(),
                 tokenName,
+                collectionDescription: description,
+                shortURL,
                 previewImage: nft.previewImage,
                 name: nft.name,
                 description: nft.description,
@@ -348,6 +363,8 @@ const MintNftCollection = ({ onClick }) => {
                 previewImage: coverImage || randomColor(),
                 name: collectionName,
                 tokenName,
+                description,
+                shortURL,
               },
             ]);
             setShowModal(false);
@@ -357,10 +374,6 @@ const MintNftCollection = ({ onClick }) => {
       }
     }
   }, [errors]);
-
-  console.log(inputClass);
-  console.log(shortURL.length);
-  console.log(errors.shorturl);
 
   return !showCollectible ? (
     <div className="mintNftCollection-div">
@@ -469,7 +482,6 @@ const MintNftCollection = ({ onClick }) => {
         <Input
           label="Short URL"
           className={inputClass}
-          // className="inp"
           error={errors.shorturl}
           placeholder="universe.xyz/c/shorturl"
           value={shortURL}
