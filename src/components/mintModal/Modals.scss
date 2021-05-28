@@ -572,12 +572,12 @@
       line-height: 20px;
     }
     .empty {
-      background: linear-gradient(to right, #000000 134px, rgba(0, 0, 0, 0.2) 10%);
+      background: linear-gradient(to right, #000000 137px, rgba(0, 0, 0, 0.2) 10%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .empty__error {
-      background: linear-gradient(to right, #000000 133px, #ff4949 10%);
+      background: linear-gradient(to right, #000000 137px, #ff4949 10%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       border: 1px solid #ff4949;
@@ -1569,9 +1569,6 @@
     .choose__collection {
       display: flex;
 
-      .create {
-        margin-right: 20px;
-      }
       .create,
       .universe {
         display: flex;
@@ -1584,6 +1581,7 @@
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         border-radius: 12px;
+        margin-right: 20px;
 
         h5 {
           font-family: $spaceGroteskFont;

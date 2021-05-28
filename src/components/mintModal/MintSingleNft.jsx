@@ -23,9 +23,15 @@ import universeImage from '../../assets/images/universe-img.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
 
 const MintSingleNft = ({ onClick }) => {
-  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } = useContext(
-    AppContext
-  );
+  const {
+    savedNfts,
+    setSavedNfts,
+    setShowModal,
+    savedNFTsID,
+    myNFTs,
+    setMyNFTs,
+    myCollections,
+  } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
@@ -44,7 +50,6 @@ const MintSingleNft = ({ onClick }) => {
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
   const [percentAmount, setPercentAmount] = useState('');
   const [royalities, setRoyalities] = useState(true);
-  const [hideProperties, setHideProperties] = useState(false);
   const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
@@ -420,11 +425,19 @@ const MintSingleNft = ({ onClick }) => {
               <h5>Create</h5>
               <p>ERC-721</p>
             </div>
-            <div className="universe">
-              <img src={universeImage} alt="Universe" />
-              <h5>Universe</h5>
-              <p>XYZ</p>
-            </div>
+            {myCollections.map((elm, i) => (
+              <div className="universe">
+                {typeof elm.previewImage === 'string' && elm.previewImage.startsWith('#') ? (
+                  <div className="random__bg__color" style={{ backgroundColor: elm.previewImage }}>
+                    {elm.name.charAt(0)}
+                  </div>
+                ) : (
+                  <img src={URL.createObjectURL(elm.previewImage)} alt="Universe" />
+                )}
+                <h5>{elm.name}</h5>
+                <p>{elm.tokenName}</p>
+              </div>
+            ))}
           </div>
         </div>
         <div className="single-nft-properties">

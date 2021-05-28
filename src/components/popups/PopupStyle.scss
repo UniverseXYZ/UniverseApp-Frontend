@@ -1625,6 +1625,11 @@
     line-height: 140%;
     color: $black;
     margin-bottom: 24px;
+
+    @include sm {
+      font-size: 20px;
+      line-height: 130%;
+    }
   }
   .collection__cover__image {
     display: flex;
