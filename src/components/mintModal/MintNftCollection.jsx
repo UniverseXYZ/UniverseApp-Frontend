@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import randomColor from 'randomcolor';
+import { defaultColors } from '../../utils/helpers.js';
 import Input from '../input/Input.jsx';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
@@ -267,7 +267,6 @@ const MintNftCollection = ({ onClick }) => {
       setTokenName(res[0].tokenName);
       setDescription(res[0].description);
       setShortURL(res[0].shortURL);
-      console.log('res', res);
     }
   }, [collectionNFTs]);
 
@@ -279,7 +278,8 @@ const MintNftCollection = ({ onClick }) => {
             ...savedCollections,
             {
               id: collectionName,
-              previewImage: coverImage || randomColor(),
+              previewImage:
+                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
               name: collectionName,
               tokenName,
               description,
@@ -300,7 +300,8 @@ const MintNftCollection = ({ onClick }) => {
                 ? {
                     ...item,
                     id: collectionName,
-                    previewImage: coverImage || randomColor(),
+                    previewImage:
+                      coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
                     name: collectionName,
                     tokenName,
                     description,
@@ -351,7 +352,8 @@ const MintNftCollection = ({ onClick }) => {
                 type: 'collection',
                 collectionId: collectionName,
                 collectionName,
-                collectionAvatar: coverImage || randomColor(),
+                collectionAvatar:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
                 tokenName,
                 collectionDescription: description,
                 shortURL,
@@ -369,7 +371,8 @@ const MintNftCollection = ({ onClick }) => {
               ...myCollections,
               {
                 id: collectionName,
-                previewImage: coverImage || randomColor(),
+                previewImage:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
                 name: collectionName,
                 tokenName,
                 description,

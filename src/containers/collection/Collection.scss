@@ -3,21 +3,40 @@
 
 .collection__page {
     &__cover {
+        position: relative;
         height: 210px;
         width: 100%;
-        img {
+        overflow: hidden;
+        img.bg {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            &.blur {
+                filter: blur(8px);
+            }
         }
         .random__bg__color {
             width: 100%;
             height: 100%;
         }
+        .upload {
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 11px;
+            cursor: pointer;
+            z-index: 1;
+            img {
+                filter: invert(1);
+            }
+        }
     }
     .collection__details__section {
         padding: 80px 60px;
         .collection__details__container {
+            position: relative;
             max-width: 1110px;
             margin: -180px auto 0;
             .collection__image {

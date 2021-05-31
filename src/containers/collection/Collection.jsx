@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import NotFound from '../../components/notFound/NotFound.jsx';
@@ -27,6 +27,7 @@ const Collection = () => {
     showModal,
     setShowModal,
     setSavedNFTsID,
+    savedCollections,
   } = useContext(AppContext);
   const location = useLocation();
   const selectedCollection = location.state ? location.state.collection : null;
@@ -36,6 +37,7 @@ const Collection = () => {
   const [dropdownID, setDropdownID] = useState(0);
   const [search, setSearch] = useState('');
   const ref = useRef(null);
+  const history = useHistory();
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
@@ -101,9 +103,25 @@ const Collection = () => {
     setFilteredNFTs(newNFTs);
   }, [savedNfts]);
 
+  useEffect(() => {
+    let check = false;
+    savedCollections.forEach((col) => {
+      if (
+        selectedCollection.id === col.id &&
+        selectedCollection.description === col.description &&
+        selectedCollection.previewImage.name === col.previewImage.name
+      ) {
+        check = true;
+      }
+    });
+    if (selectedCollection && !check) {
+      history.push('/my-nfts');
+    }
+  }, [savedCollections]);
+
   return selectedCollection ? (
     <div className="collection__page">
-      <Cover selectedCollection={selectedCollection} />
+      <Cover selectedCollection={selectedCollection} saved={location.state.saved} />
 
       <div className="collection__details__section">
         <div className="collection__details__container">
