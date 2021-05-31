@@ -432,7 +432,9 @@ const MintSingleNft = ({ onClick }) => {
                     {elm.name.charAt(0)}
                   </div>
                 ) : (
-                  <img src={URL.createObjectURL(elm.previewImage)} alt="Universe" />
+                  <div>
+                    <img src={URL.createObjectURL(elm.previewImage)} alt="Universe" />
+                  </div>
                 )}
                 <h5>{elm.name}</h5>
                 <p>{elm.tokenName}</p>

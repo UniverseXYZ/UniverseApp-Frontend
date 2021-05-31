@@ -16,31 +16,37 @@ const CreateCollectionPopup = ({ onClose }) => {
   const [shortURL, setShortURL] = useState('universe.xyz/c/shorturl');
 
   const [errors, setErrors] = useState({ collectionName: '', tokenName: '', shorturl: '' });
-  const [collection, setCollection] = useState({
-    collectionName: '',
-    tokenName: '',
-    coverImage: null,
-    shortURL: '',
-  });
+  const [saveForLateClick, setSaveForLateClick] = useState(false);
+  const [mintNowClick, setMintNowClick] = useState(false);
 
-  const { myCollections } = useContext(AppContext);
+  const { myCollections, savedCollections, myNFTs } = useContext(AppContext);
   console.log(myCollections);
 
   const handleOnFocus = () => {
     if (shortURL === 'universe.xyz/c/shorturl') {
       setShortURL('universe.xyz/c/');
+      setInputClass('inp');
     }
   };
   const handleOnBlur = () => {
     if (shortURL === 'universe.xyz/c/') {
       setShortURL('universe.xyz/c/shorturl');
-      setInputClass('inp empty');
+      setInputClass('error-inp empty__error');
     }
   };
 
   const handleShortUrl = (value) => {
     setShortURL(value);
     setInputClass('inp');
+    setErrors({
+      ...errors,
+      shorturl: value.length <= 15 ? '“Short URL” is not allowed to be empty' : '',
+    });
+    if (value.length <= 15 || value === 'universe.xyz/c/shorturl') {
+      setInputClass('error-inp empty__error');
+    } else {
+      setInputClass('inp');
+    }
   };
 
   const handleCollectionName = (value) => {
@@ -55,26 +61,48 @@ const CreateCollectionPopup = ({ onClose }) => {
     setTokenName(value);
     setErrors({
       ...errors,
-      collectionName: !value ? '“Token name” is not allowed to be empty' : '',
+      tokenName: !value ? '“Token name” is not allowed to be empty' : '',
     });
   };
 
   const handleMinting = () => {
+    setSaveForLateClick(false);
+    setMintNowClick(true);
     setErrors({
       collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
       tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
       shorturl:
         shortURL === 'universe.xyz/c/shorturl' ? '“Short URL” is not allowed to be empty' : '',
     });
-    // for (let i = 0; i < myCollections.length; ) {
-    //   if (myCollections[i].name === collectionName) {
-    //     setErrors((prevErrors) => ({
-    //       ...prevErrors,
-    //       collectionName: '“Collection name” already exists',
-    //     }));
-    //     break;
-    //   }
-    // }
+    if (collectionName) {
+      const collectionNameExists = savedCollections.length
+        ? savedCollections.filter(
+            (collection) => collection.name.toLowerCase() === collectionName.toLowerCase()
+          )
+        : [];
+      const existsInMyNfts = myNFTs.length
+        ? myNFTs.filter((nft) => nft.collectionName?.toLowerCase() === collectionName.toLowerCase())
+        : [];
+    }
+    if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+      setInputClass('empty__error');
+    } else {
+      setInputClass('inp');
+    }
+  };
+
+  const handleSaveForLater = () => {
+    setErrors({
+      collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
+      tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
+      shorturl:
+        shortURL === 'universe.xyz/c/shorturl' ? '“Short URL” is not allowed to be empty' : '',
+    });
+    if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+      setInputClass('empty__error');
+    } else {
+      setInputClass('inp');
+    }
   };
 
   return (
@@ -110,7 +138,7 @@ const CreateCollectionPopup = ({ onClose }) => {
         placeholder="Enter the Collection name"
         value={collectionName}
         error={errors.collectionName}
-        onChange={(e) => setCollectionName(e.target.value)}
+        onChange={(e) => handleCollectionName(e.target.value)}
       />
       <div className="token__name">
         <Input
@@ -119,7 +147,7 @@ const CreateCollectionPopup = ({ onClose }) => {
           placeholder="$ART"
           value={tokenName}
           error={errors.tokenName}
-          onChange={(e) => setTokenName(e.target.value)}
+          onChange={(e) => handleTokenName(e.target.value)}
         />
         {!errors.tokenName && <p className="token-text">Token name cannot be changed in future</p>}
       </div>
@@ -146,7 +174,9 @@ const CreateCollectionPopup = ({ onClose }) => {
         <Button className="light-button" onClick={() => handleMinting()}>
           Mint now
         </Button>
-        <Button className="light-border-button">Save for later</Button>
+        <Button className="light-border-button" onClick={() => handleSaveForLater()}>
+          Save for later
+        </Button>
       </div>
     </div>
   );
