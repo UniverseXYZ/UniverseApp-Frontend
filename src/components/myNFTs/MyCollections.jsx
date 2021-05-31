@@ -6,6 +6,7 @@ import AppContext from '../../ContextAPI';
 const MyCollections = () => {
   const { myCollections } = useContext(AppContext);
   const history = useHistory();
+  console.log('myCollections', myCollections);
 
   return (
     <div className="tab__saved__collections">
@@ -24,14 +25,20 @@ const MyCollections = () => {
               }
             >
               <div className="saved__collection__box__header">
-                {typeof collection.previewImage === 'string' &&
-                collection.previewImage.startsWith('#') ? (
+                {collection.bgImage ? (
+                  <img src={URL.createObjectURL(collection.bgImage)} alt={collection.name} />
+                ) : typeof collection.previewImage === 'string' &&
+                  collection.previewImage.startsWith('#') ? (
                   <div
                     className="random__bg__color"
                     style={{ backgroundColor: collection.previewImage }}
                   />
                 ) : (
-                  <img src={URL.createObjectURL(collection.previewImage)} alt={collection.name} />
+                  <img
+                    className="blur"
+                    src={URL.createObjectURL(collection.previewImage)}
+                    alt={collection.name}
+                  />
                 )}
               </div>
               <div className="saved__collection__box__body">

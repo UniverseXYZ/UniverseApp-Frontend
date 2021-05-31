@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import randomColor from 'randomcolor';
+import { defaultColors } from '../../utils/helpers';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
@@ -177,7 +177,8 @@ const CreateNftCol = (props) => {
               type: 'collection',
               collectionId: collectionName,
               collectionName,
-              collectionAvatar: coverImage || randomColor(),
+              collectionAvatar:
+                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
               previewImage,
               name,
               description,
