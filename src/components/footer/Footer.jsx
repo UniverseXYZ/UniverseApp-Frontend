@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
 import twitterIcon from '../../assets/images/Twitter.svg';
 import discordIcon from '../../assets/images/Discord.svg';
+import coinGesco from '../../assets/images/Coin-Gecko.svg';
 import mediumIcon from '../../assets/images/medium-icon.svg';
 import youtubeIcon from '../../assets/images/youtube-icon.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
@@ -117,13 +118,19 @@ const Footer = () => {
             <div className="coming-soon">
               <ul>
                 <li>DAO</li>
-                <li className="disable">
+                <li
+                  aria-hidden="true"
+                  onClick={() => window.open('https://dao.universe.xyz/governance')}
+                >
                   Governance
-                  <span className="tooltiptext">Coming soon</span>
+                  {/* <span className="tooltiptext">Coming soon</span> */}
                 </li>
-                <li className="disable">
+                <li
+                  aria-hidden="true"
+                  onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                >
                   Yield farming
-                  <span className="tooltiptext">Coming soon</span>
+                  {/* <span className="tooltiptext">Coming soon</span> */}
                 </li>
                 <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
                   Docs
@@ -155,6 +162,12 @@ const Footer = () => {
               alt="Discord"
               aria-hidden="true"
               onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
+            />
+            <img
+              src={coinGesco}
+              alt="Coin Gesko"
+              aria-hidden="true"
+              onClick={() => window.open('https://www.coingecko.com/en/coins/universe-xyz')}
             />
             <img
               src={youtubeIcon}
