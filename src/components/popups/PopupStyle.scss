@@ -1778,122 +1778,136 @@
     width: 90%;
   }
 }
-.select-token{
-  transform: translate(-40%, -70%);
-  z-index: 100;
-  overflow-x: auto;
-  position: absolute;
-  width: 445px;
-  min-height: 280px;
-  right: -14px;
-  top: 40px;
-  background: #ffffff;
-  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+.select-token {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
   border-radius: 12px;
-  @include lg {
-    transform: translate(0, -70%);
-  }
-  @include sm {
-    transform: translate(10%, -70%);
-  }
+  width: 440px;
+  min-height: 280px;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+
   .close {
     position: absolute;
     right: -13px;
     top: -13px;
     background: white;
-    z-index: 9999;
     width: 26px;
     height: 26px;
     padding: 5px;
     border-radius: 50%;
   }
-.option-list {
-
-  h1 {
-    font-family: $spaceGroteskFont;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 22px;
-    color: #000000;
-  }
-  .searchInp {
-    height: 50px;
-    border: 1px solid #d4d4d4;
-    box-sizing: border-box;
-    border-radius: 12px;
-    font-size: 16px;
-    line-height: 20px;
-    font-family: $spaceGroteskFont;
-    padding: 15px 16px;
-    color: #cacaca;
-    margin-left: unset !important;
-    margin-top: 8px;
-    width: 400px;
-
-    &:focus {
-      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-      border: 1px solid transparent;
-      color: #000;
-    }
-  }
-  .searchDiv {
-    padding: 20px;
-    height: 112px;
-    border-top: none;
-    &:hover {
-      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-    }
-  }
-  li {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding-left: 20px;
-    height: 50px;
-    &:hover {
-      background: #f6faf3;
-    }
-    .img-name {
-      width: 100%;
-      height: 100%;
-    }
-    img {
-      padding: 17px 12px 0 0;
-      margin: 0;
-    }
-    .imgDefSpan {
-      padding-right: 33px;
-    }
-    .dai-name {
-      font-family: $spaceGroteskFont;
+  .option-list {
+    h1 {
+      font-family: $sharpGroteskMediumFont;
       font-style: normal;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 20px;
-      // display: flex;
-      align-items: center;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
       color: #000000;
     }
-    .subtitle {
-      position: absolute;
-      left: 12%;
-      margin-top: -15px;
+    .searchInp {
+      // height: 50px;
+      border: 1px solid #d4d4d4;
+      box-sizing: border-box;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 20px;
       font-family: $spaceGroteskFont;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 10px;
-      line-height: 0;
-      display: flex;
-      align-items: center;
-      color: rgba(0, 0, 0, 0.4);
+      padding: 15px 16px;
+      color: #cacaca;
+      margin-left: unset !important;
+      margin-top: 8px;
+      width: 100%;
+
+      &:focus {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent;
+        color: #000;
+      }
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+    .searchDiv {
+      padding: 40px 40px 20px;
+      height: fit-content;
+      border-top: none;
+      &:hover {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+      }
+
+      .intup-l {
+        width: 100%;
+      }
+      @include sm {
+        padding: 20px;
+      }
+    }
+    li {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding-left: 40px;
+      height: 60px;
+      &:hover {
+        background: #f6faf3;
+      }
+      .img-name {
+        width: 100%;
+        height: 100%;
+      }
+      img {
+        padding: 20.5px 12px 0 0;
+        margin: 0;
+      }
+      .imgDefSpan {
+        padding-right: 33px;
+      }
+      .dai-name {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        // display: flex;
+        align-items: center;
+        color: #000000;
+      }
+      .subtitle {
+        position: absolute;
+        left: 72px;
+        margin-top: -26px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 13px;
+        display: flex;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.4);
+
+        @include sm {
+          left: 52px;
+        }
+      }
+      @include sm {
+        padding-left: 20px;
+      }
     }
   }
-}
+  @include sm {
+    width: 90%;
+  }
 }
 .token-div {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px 40px;
   .add-token {
-    margin: 20px;
-    width: 89% !important;
+    // margin: 20px 40px;
+    width: 100%;
     border-radius: 12px;
   }
 }

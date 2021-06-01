@@ -37,7 +37,7 @@ const SelectTokenPopup = ({ onClose }) => {
             <Input
               onChange={(e) => handleSearch(e.target.value)}
               value={searchByNameAndAddress}
-              placeholder="Search name or paste ERC-20 contract address"
+              placeholder="Search name or paste address"
               className="searchInp"
             />
           </div>
