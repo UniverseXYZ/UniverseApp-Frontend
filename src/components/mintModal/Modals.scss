@@ -1568,6 +1568,7 @@
 
     .choose__collection {
       display: flex;
+      flex-wrap: wrap;
 
       .create,
       .universe {
@@ -1582,11 +1583,16 @@
         box-sizing: border-box;
         border-radius: 12px;
         margin-right: 20px;
+        margin-top: 10px;
+        padding: 10px;
+        cursor: pointer;
 
         div {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+          }
         }
 
         .random__bg__color {
@@ -1596,7 +1602,7 @@
           align-items: center;
           display: flex;
           justify-content: center;
-          font-size: $sharpGroteskMediumFont;
+          font-family: $sharpGroteskMediumFont;
         }
 
         h5 {
@@ -1606,15 +1612,17 @@
           line-height: 20px;
           color: $black;
           margin-top: 12px;
+          text-align: center;
         }
         p {
+          text-align: center;
           font-family: $spaceGroteskFont;
           font-weight: normal;
           font-size: 12px;
           line-height: 150%;
           color: rgba(0, 0, 0, 0.4);
         }
-        &:hover {
+        &.selected {
           background: linear-gradient($white, $white) padding-box,
             linear-gradient(to right, #bceb00, #00eaea) border-box;
           border: 1px solid transparent;

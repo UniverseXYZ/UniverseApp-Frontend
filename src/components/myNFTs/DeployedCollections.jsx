@@ -3,16 +3,15 @@ import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 
-const MyCollections = () => {
-  const { myCollections } = useContext(AppContext);
+const DeployedCollections = () => {
+  const { deployedCollections } = useContext(AppContext);
   const history = useHistory();
-  console.log('myCollections', myCollections);
 
   return (
     <div className="tab__saved__collections">
-      {myCollections.length ? (
+      {deployedCollections.length ? (
         <div className="saved__collections__lists">
-          {myCollections.map((collection) => (
+          {deployedCollections.map((collection) => (
             <div
               className="saved__collection__box"
               key={uuid()}
@@ -71,4 +70,4 @@ const MyCollections = () => {
   );
 };
 
-export default MyCollections;
+export default DeployedCollections;

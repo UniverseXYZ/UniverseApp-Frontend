@@ -29,8 +29,8 @@ const MintNftCollection = ({ onClick }) => {
     setSavedCollectionID,
     myNFTs,
     setMyNFTs,
-    myCollections,
-    setMyCollections,
+    deployedCollections,
+    setDeployedCollections,
   } = useContext(AppContext);
 
   const [collectionNFTs, setCollectionNFTs] = useState([]);
@@ -112,9 +112,14 @@ const MintNftCollection = ({ onClick }) => {
   const handleSaveForLater = () => {
     setMintNowClick(false);
     setSaveForLateClick(true);
-    if (!collectionName) {
+    if (
+      !collectionName ||
+      !tokenName ||
+      shortURL.length <= 15 ||
+      shortURL === 'universe.xyz/c/shorturl'
+    ) {
       setErrors({
-        collectionName: '“Collection name” is not allowed to be empty',
+        collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: '',
         shorturl:
@@ -122,6 +127,11 @@ const MintNftCollection = ({ onClick }) => {
             ? '“Short URL” is not allowed to be empty'
             : '',
       });
+      if (errors.shorturl?.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+        setInputClass('empty__error');
+      } else {
+        setInputClass('inp');
+      }
     } else {
       const collectionNameExists = savedCollections.length
         ? savedCollections.filter(
@@ -144,11 +154,6 @@ const MintNftCollection = ({ onClick }) => {
           shorturl: '',
         });
       }
-    }
-    if (errors.shorturl?.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
-      setInputClass('empty__error');
-    } else {
-      setInputClass('inp');
     }
   };
 
@@ -274,7 +279,11 @@ const MintNftCollection = ({ onClick }) => {
 
   useEffect(() => {
     if (saveForLateClick) {
-      if (!errors.collectionName) {
+      if (
+        !errors.collectionName &&
+        !errors.tokenName &&
+        errors.shorturl !== 'universe.xyz/c/shorturl'
+      ) {
         if (!savedCollectionID) {
           setSavedCollections([
             ...savedCollections,
@@ -341,7 +350,12 @@ const MintNftCollection = ({ onClick }) => {
       }
     }
     if (mintNowClick) {
-      if (!errors.collectionName && !errors.collectible) {
+      if (
+        !errors.collectionName &&
+        !errors.tokenName &&
+        errors.shorturl !== 'universe.xyz/c/shorturl' &&
+        !errors.collectible
+      ) {
         document.getElementById('loading-hidden-btn').click();
         setTimeout(() => {
           document.getElementById('popup-root').remove();
@@ -369,8 +383,8 @@ const MintNftCollection = ({ onClick }) => {
               });
             });
             setMyNFTs(newMyNFTs);
-            setMyCollections([
-              ...myCollections,
+            setDeployedCollections([
+              ...deployedCollections,
               {
                 id: collectionName,
                 previewImage:

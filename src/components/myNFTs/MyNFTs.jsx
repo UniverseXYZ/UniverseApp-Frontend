@@ -14,7 +14,7 @@ import CongratsPopup from '../popups/CongratsPopup.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
-import MyCollections from './MyCollections.jsx';
+import DeployedCollections from './DeployedCollections.jsx';
 
 const MyNFTs = () => {
   const {
@@ -29,8 +29,8 @@ const MyNFTs = () => {
     setMyNFTs,
     selectedNft,
     setWebsite,
-    myCollections,
-    setMyCollections,
+    deployedCollections,
+    setDeployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
@@ -167,11 +167,11 @@ const MyNFTs = () => {
           (v, i, a) => a.findIndex((t) => t.collectionId === v.collectionId) === i
         );
         const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-        const newMyCollections = [...myCollections];
+        const newdeployedCollections = [...deployedCollections];
         tempArr.forEach((arr) => {
           savedCollections.forEach((col) => {
             if (col.id === arr.collectionId) {
-              newMyCollections.push({
+              newdeployedCollections.push({
                 id: col.id,
                 previewImage: arr.collectionAvatar,
                 name: col.name,
@@ -182,7 +182,7 @@ const MyNFTs = () => {
             }
           });
         });
-        setMyCollections(newMyCollections);
+        setDeployedCollections(newdeployedCollections);
         setMyNFTs(newMyNFTs);
         setSavedNfts(newSavedNFTs);
       }, 2000);
@@ -228,7 +228,10 @@ const MyNFTs = () => {
       >
         {(close) => <CongratsPopup onClose={close} />}
       </Popup>
-      {myNFTs.length || savedNfts.length || savedCollections.length ? (
+      {myNFTs.length ||
+      deployedCollections.length ||
+      savedNfts.length ||
+      savedCollections.length ? (
         <>
           {isCreatingAction ? (
             <div className="select-nfts">
@@ -342,7 +345,7 @@ const MyNFTs = () => {
                 setSelectedNFTIds={setSelectedNFTIds}
               />
             )}
-            {myNFTsSelectedTabIndex === 1 && <MyCollections />}
+            {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
             {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
             {myNFTsSelectedTabIndex === 3 && <SavedCollections />}
           </div>
