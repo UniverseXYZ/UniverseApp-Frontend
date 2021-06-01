@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
+import moment from 'moment';
 import arrow from '../../assets/images/arrow.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import closeIcon from '../../assets/images/cross.svg';
@@ -95,7 +96,7 @@ const StartDateCalendar = React.forwardRef(
 
     const handleHoursChange = (val) => {
       const value = val.replace(/[^\d]/, '');
-      if (value.length < 3 && Number(value) < 13) {
+      if (value.length < 3 && Number(value) < 25) {
         setStartDateTemp((prevState) => ({
           ...prevState,
           hours: value,
@@ -186,7 +187,7 @@ const StartDateCalendar = React.forwardRef(
       } else {
         setStartDateTemp((prevState) => ({
           ...prevState,
-          hours: '12',
+          hours: '24',
           minutes: '00',
         }));
         onClose();
@@ -231,6 +232,7 @@ const StartDateCalendar = React.forwardRef(
         <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
         <div className="calendar__wrapper">
           <div className="calendar-first">
+            <h1>Start date</h1>
             <div className="calendar__header">
               <button className="left-btn" type="button" onClick={() => changeMonth('prev')}>
                 <img className="left" src={arrow} alt="Left arrow" />
@@ -307,12 +309,8 @@ const StartDateCalendar = React.forwardRef(
           <div className="calendar__footer">
             <div className="timezone">
               <div className="label">Time zone:</div>
-              <div
-                className="selected__timezone"
-                aria-hidden="true"
-                onClick={() => setShowTimezones(!showTimezones)}
-              >
-                {startDateTemp.timezone}
+              <div className="selected__timezone" aria-hidden="true">
+                {/* {startDateTemp.timezone}
                 <img src={arrowDown} alt="Arrow Down" className={showTimezones ? 'rotate' : ''} />
 
                 {showTimezones && (
@@ -332,10 +330,11 @@ const StartDateCalendar = React.forwardRef(
                       </li>
                     ))}
                   </ul>
-                )}
+                )} */}
+                Your time zone is UTC+3
               </div>
             </div>
-            <div className="time__format">
+            {/* <div className="time__format">
               <div
                 className={startDateTemp.format === 'AM' ? 'selected' : ''}
                 aria-hidden="true"
@@ -350,7 +349,7 @@ const StartDateCalendar = React.forwardRef(
               >
                 PM
               </div>
-            </div>
+            </div> */}
             <div className="time">
               <input
                 type="text"

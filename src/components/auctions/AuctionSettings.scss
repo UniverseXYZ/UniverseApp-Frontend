@@ -20,7 +20,6 @@
   }
   .up-side {
     // position: relative;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     // padding-bottom: 40px;
     // width: fit-content;
     .infoDiv {
@@ -415,15 +414,15 @@
     line-height: 18px;
     color: #ff4949;
   }
-  .token-div {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    .add-token {
-      margin: 20px;
-      width: 89% !important;
-      border-radius: 12px;
-    }
-  }
+
   .light-button {
     margin-top: 51px;
+  }
+  .btn-div{
+    float: right;
+    margin-bottom: 7%;
+    .light-border-button{
+      margin-right: 15px;
+    }
   }
 }
