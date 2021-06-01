@@ -55,8 +55,6 @@ const MintNftCollection = ({ onClick }) => {
     shorturl: '',
   });
 
-  // console.log(myCollections);
-
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
 
@@ -68,7 +66,11 @@ const MintNftCollection = ({ onClick }) => {
   const handleOnBlur = () => {
     if (shortURL === 'universe.xyz/c/') {
       setShortURL('universe.xyz/c/shorturl');
-      setInputClass('inp empty');
+      setInputClass('error-inp empty__error');
+      setErrors({
+        ...errors,
+        shorturl: '“Short URL” is not allowed to be empty',
+      });
     }
   };
 
@@ -143,7 +145,7 @@ const MintNftCollection = ({ onClick }) => {
         });
       }
     }
-    if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+    if (errors.shorturl?.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
       setInputClass('empty__error');
     } else {
       setInputClass('inp');
