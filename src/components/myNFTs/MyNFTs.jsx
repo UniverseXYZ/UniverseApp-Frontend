@@ -35,7 +35,7 @@ const MyNFTs = () => {
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Saved Collections'];
+  const tabs = ['Wallet', 'Collections', 'Saved NFTs'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
