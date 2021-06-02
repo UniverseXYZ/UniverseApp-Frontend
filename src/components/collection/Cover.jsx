@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
 import AppContext from '../../ContextAPI';
 
-const Cover = ({ selectedCollection, saved }) => {
-  const { savedCollections, setSavedCollections } = useContext(AppContext);
+const Cover = ({ selectedCollection }) => {
+  const { deployedCollections, setDeployedCollections } = useContext(AppContext);
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection.bgImage);
 
   const onInputChange = (e) => {
     if (e.target.files[0]) {
       setBgImage(e.target.files[0]);
-      setSavedCollections(
-        savedCollections.map((item) =>
+      setDeployedCollections(
+        deployedCollections.map((item) =>
           item.id === selectedCollection.id
             ? {
                 ...item,
@@ -26,12 +26,10 @@ const Cover = ({ selectedCollection, saved }) => {
 
   return (
     <div className="collection__page__cover">
-      {saved && (
-        <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
-          <img src={uploadIcon} alt="Upload" />
-          <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
-        </div>
-      )}
+      <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
+        <img src={uploadIcon} alt="Upload" />
+        <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
+      </div>
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
       ) : typeof selectedCollection.previewImage === 'string' &&
@@ -53,7 +51,6 @@ const Cover = ({ selectedCollection, saved }) => {
 
 Cover.propTypes = {
   selectedCollection: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  saved: PropTypes.bool.isRequired,
 };
 
 export default Cover;
