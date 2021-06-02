@@ -60,7 +60,7 @@ const DesktopView = ({
                 type="button"
                 className="disable"
                 onClick={() => {
-                  history.push('/minting-and-auctions/marketplace/active-auctions');
+                  // history.push('/minting-and-auctions/marketplace/active-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >

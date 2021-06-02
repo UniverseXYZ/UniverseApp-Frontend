@@ -204,7 +204,7 @@ const TabletView = (props) => {
                       className="disable"
                       onClick={() => {
                         setShowMenu(false);
-                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                        // history.push('/minting-and-auctions/marketplace/active-auctions');
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
