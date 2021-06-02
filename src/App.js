@@ -123,7 +123,7 @@ const App = () => {
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
 
-        {/* <Route path="/setup-auction" component={() => <SetupAuction />} />
+        <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
           exact
           path="/minting-and-auctions/marketplace/active-auctions"
@@ -156,7 +156,7 @@ const App = () => {
         </Route>
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />
-        </Route> */}
+        </Route>
 
         <Route path="*" component={() => <NotFound />} />
       </Switch>
