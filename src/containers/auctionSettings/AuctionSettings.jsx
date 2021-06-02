@@ -1,5 +1,6 @@
 import React from 'react';
+import Settings from '../../components/auctions/Settings';
 
-const AuctionSettings = () => <h1>AuctionSettings</h1>;
+const AuctionSettings = () => <Settings />;
 
 export default AuctionSettings;

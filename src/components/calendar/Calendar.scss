@@ -10,7 +10,7 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
-  width: 660px;
+  width: 336px;
   .close {
     position: absolute;
     right: -13px;
@@ -24,12 +24,23 @@
     cursor: pointer;
   }
   .calendar__wrapper {
-    display: flex;
+    // display: flex  ;
     overflow-y: auto;
     
     @include md {
-      max-height: 400px;
+      // max-height: 400px;
       display: block;
+    }
+    .calendar-first{
+      h1{
+        font-family: $sharpGroteskSemiBoldFont;
+        padding: 34px 0 0px 30px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 130%;
+        color: #000000;
+      }
     }
   }
 
@@ -68,7 +79,7 @@
 
   &__body {
     overflow: hidden;
-    padding: 24px 30px;
+    padding: 22px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     .week__days {
@@ -146,11 +157,12 @@
   }
   &__footer {
     padding: 24px 30px;
-    padding-top: 15%;
+    padding-top: 8%;
     .timezone {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-bottom: 6%;
       .label {
         font-family: $spaceGroteskFont;
         font-style: normal;
@@ -160,54 +172,13 @@
         color: $black;
       }
       .selected__timezone {
-        position: relative;
-        background: rgba(0, 0, 0, 0.02);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-sizing: border-box;
-        border-radius: 10px;
-        padding: 3px 15px;
         font-family: $spaceGroteskFont;
         font-style: normal;
-        font-weight: bold;
+        font-weight: 500;
         font-size: 12px;
         line-height: 22px;
-        color: $black;
-        cursor: pointer;
-        img {
-          margin-left: 12px;
-          transition: 0.5s ease-in-out;
-          &.rotate {
-            transform: rotate(180deg);
-          }
-        }
-        ul {
-          position: absolute;
-          top: 32px;
-          left: 0;
-          width: 100%;
-          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-          background: $white;
-          border-radius: 12px;
-          padding: 6px;
-          max-height: 250px;
-          overflow-y: auto;
-
-          li {
-            text-align: center;
-            padding: 6px 15px;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 22px;
-            color: $black;
-
-            &:hover {
-              background: rgba(0, 0, 0, 0.05);
-              border-radius: 6px;
-            }
-          }
-        }
+        text-align: right;
+        color: rgba(0, 0, 0, 0.4);        
       }
     }
     .time__format {

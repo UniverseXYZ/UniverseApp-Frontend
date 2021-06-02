@@ -279,17 +279,23 @@ const MobileView = (props) => {
                     <div>
                       <p className="title">DAO</p>
                       <div>
-                        <button type="button" className="disable">
+                        <button
+                          type="button"
+                          onClick={() => window.open('https://dao.universe.xyz/governance')}
+                        >
                           <img src={governanceIcon} alt="Governance" />
                           <span>Governance</span>
-                          <span className="tooltiptext">Coming soon</span>
+                          {/* <span className="tooltiptext">Coming soon</span> */}
                         </button>
                       </div>
                       <div>
-                        <button type="button" className="disable">
+                        <button
+                          type="button"
+                          onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                        >
                           <img src={yieldFarmingIcon} alt="Yield Farming" />
                           <span>Yield farming</span>
-                          <span className="tooltiptext">Coming soon</span>
+                          {/* <span className="tooltiptext">Coming soon</span> */}
                         </button>
                       </div>
                       <div>
