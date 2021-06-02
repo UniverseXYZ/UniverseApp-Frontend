@@ -20,7 +20,6 @@ const MyNFTs = () => {
   const {
     savedNfts,
     savedCollections,
-    setSavedCollections,
     setSavedNfts,
     showModal,
     setShowModal,
@@ -30,7 +29,6 @@ const MyNFTs = () => {
     selectedNft,
     setWebsite,
     deployedCollections,
-    setDeployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
@@ -112,7 +110,6 @@ const MyNFTs = () => {
       document.getElementById('congrats-hidden-btn').click();
       setTimeout(() => {
         const newMyNFTs = [...myNFTs];
-        let tempArr = [];
         savedNfts.forEach((nft) => {
           if (nft.selected) {
             if (nft.type === 'single') {
@@ -128,22 +125,6 @@ const MyNFTs = () => {
                 percentAmount: nft.percentAmount || '',
               });
             } else {
-              tempArr.push({
-                id: nft.id,
-                type: nft.type,
-                collectionId: nft.collectionName,
-                collectionName: nft.collectionName,
-                collectionAvatar: nft.collectionAvatar,
-                collectionDescription: nft.collectionDescription,
-                shortURL: nft.shortURL,
-                previewImage: nft.previewImage,
-                name: nft.name,
-                description: nft.description,
-                numberOfEditions: Number(nft.numberOfEditions),
-                generatedEditions: nft.generatedEditions,
-                properties: nft.properties,
-                percentAmount: nft.percentAmount || '',
-              });
               newMyNFTs.push({
                 id: nft.id,
                 type: nft.type,
@@ -163,27 +144,8 @@ const MyNFTs = () => {
             }
           }
         });
-        tempArr = tempArr.filter(
-          (v, i, a) => a.findIndex((t) => t.collectionId === v.collectionId) === i
-        );
-        const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-        const newdeployedCollections = [...deployedCollections];
-        tempArr.forEach((arr) => {
-          savedCollections.forEach((col) => {
-            if (col.id === arr.collectionId) {
-              newdeployedCollections.push({
-                id: col.id,
-                previewImage: arr.collectionAvatar,
-                name: col.name,
-                tokenName: col.tokenName,
-                description: col.description,
-                shortURL: col.shortURL,
-              });
-            }
-          });
-        });
-        setDeployedCollections(newdeployedCollections);
         setMyNFTs(newMyNFTs);
+        const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
         setSavedNfts(newSavedNFTs);
       }, 2000);
     }, 3000);
