@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url> <loc>http://localhost/</loc> </url>
-<url> <loc>http://localhost/</loc> </url>
-<url> <loc>http://localhost/</loc> </url>
-<url> <loc>http://localhost/about</loc> </url>
-<url> <loc>http://localhost/my-account</loc> </url>
-<url> <loc>http://localhost/team</loc> </url>
-<url> <loc>http://localhost/:artist</loc> </url>
-<url> <loc>http://localhost/:artist/:auction</loc> </url>
+<url> <loc>https://universe.xyz/</loc> </url>
+<url> <loc>https://universe.xyz/about</loc> </url>
+<url> <loc>https://universe.xyz/team</loc> </url>
 </urlset>

@@ -6,10 +6,7 @@ export default (
     <Switch>
       <Route path="/" />
       <Route path="/about" />
-      <Route path="/my-account" />
       <Route path="/team" />
-      <Route path="/:artist" />
-      <Route path="/:artist/:auction" />
     </Switch>
   </Routes>
 );

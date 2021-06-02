@@ -121,8 +121,9 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={() => <Homepage />} />
         <Route exact path="/about" component={() => <About />} />
-        <Route path="/setup-auction" component={() => <SetupAuction />} />
+        <Route exact path="/team" component={() => <Team />} />
 
+        {/* <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
           exact
           path="/minting-and-auctions/marketplace/active-auctions"
@@ -145,8 +146,6 @@ const App = () => {
           path="/customize-auction-landing-page"
           component={() => <CustomizeAuction />}
         />
-        <Route exact path="/team" component={() => <Team />} />
-
         <Route exact path="/auction-settings" component={() => <AuctionSettings />} />
         <Route exact path="/auction-review" component={() => <AuctionReview />} />
         <Route exact path="/:artist">
@@ -157,7 +156,8 @@ const App = () => {
         </Route>
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />
-        </Route>
+        </Route> */}
+
         <Route path="*" component={() => <NotFound />} />
       </Switch>
       <Footer />
