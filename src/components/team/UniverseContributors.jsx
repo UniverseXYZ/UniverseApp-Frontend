@@ -10,7 +10,7 @@ import HowardLawrence from '../../assets/images/team/Howard-Lawrence.png';
 import AaronMcDonald from '../../assets/images/team/Aaron-McDonald.png';
 import KainWarwick from '../../assets/images/team/Kain-Warwick.png';
 import StaniKulechov from '../../assets/images/team/Stani-Kulechov.png';
-import SantiagoSantos from '../../assets/images/team/Santiago-Santos.png';
+import SantiagoRSantos from '../../assets/images/team/Santiago-R-Santos.png';
 import MattHunter from '../../assets/images/team/Matt-Hunter.png';
 import AkinSawyerr from '../../assets/images/team/Akin-Sawyer.png';
 import QuinnAbraham from '../../assets/images/team/Quinn-Abraham.png';
@@ -112,8 +112,8 @@ const UniverseContributors = () => {
     },
     {
       id: 10,
-      name: 'Santiago Santos',
-      avatar: SantiagoSantos,
+      name: 'Santiago R Santos',
+      avatar: SantiagoRSantos,
       loaded: false,
     },
     {
@@ -238,7 +238,7 @@ const UniverseContributors = () => {
     },
     {
       id: 31,
-      name: 'Kevin Xu',
+      name: 'Fully Allocated',
       avatar: KevinXu,
       loaded: false,
     },

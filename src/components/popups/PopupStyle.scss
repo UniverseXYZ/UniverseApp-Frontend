@@ -661,6 +661,285 @@
     padding: 30px;
   }
 }
+.nft__popup {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  overflow-y: auto;
+
+  .slider {
+    position: relative;
+    display: flex;
+    background-color: $black;
+    .close {
+      cursor: pointer;
+      position: absolute;
+      right: 30px;
+      top: 30px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 50%;
+      padding: 8px;
+      background-color: $white;
+      z-index: 1;
+      @include lg {
+        position: fixed;
+        right: 20px;
+        top: 20px;
+        padding: 3px;
+      }
+    }
+
+    .show__selected__nft__image {
+      height: 100%;
+      max-width: 60%;
+      width: 100%;
+      margin: auto;
+      img,
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      @include lg {
+        max-width: 100%;
+        height: 80%;
+      }
+      @include md {
+        max-height: 100%;
+        max-width: 80%;
+      }
+      @include sm {
+        max-width: 100%;
+        height: 100%;
+      }
+    }
+    @include lg {
+      max-height: 800px;
+    }
+  }
+  .details {
+    background-color: $white;
+    // overflow-y: auto;
+    padding: 30px;
+
+    .nft__title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      color: $black;
+      word-break: break-all;
+    }
+    .genesis__link {
+      margin: 6px 0px 12px;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 160%;
+      color: rgba(0, 0, 0, 0.4);
+    }
+    .description {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 160%;
+      color: $black;
+    }
+    .nft__creator {
+      display: flex;
+      align-items: center;
+      margin-top: 25px;
+      margin-bottom: 25px;
+      .item {
+        margin-right: 40px;
+
+        span {
+          display: block;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.4);
+          margin-bottom: 4px;
+        }
+        p {
+          display: flex;
+          align-items: center;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 160%;
+          color: $black;
+          white-space: nowrap;
+          img {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            margin-right: 6px;
+          }
+          .random__bg__color {
+            margin-right: 6px;
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $black;
+          }
+        }
+      }
+    }
+    .tabs {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      button {
+        padding-bottom: 9px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-size: 14px;
+        line-height: 140%;
+        color: $black;
+        background: none;
+
+        &.selected {
+          font-weight: bold;
+          border-bottom: 2px solid $black;
+        }
+
+        &:first-child {
+          margin-right: 20px;
+        }
+      }
+    }
+    .tab__content {
+      margin: 30px 0;
+      .no__properties {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 22px;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.6);
+      }
+      .property__container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        .property__box {
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-sizing: border-box;
+          border-radius: 12px;
+          padding: 13px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          .property__name {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 160%;
+            text-align: center;
+            text-transform: uppercase;
+            color: $black;
+          }
+          .property__value {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 160%;
+            color: $black;
+          }
+          .property__percent {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.4);
+          }
+        }
+        @include lg {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @include md {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @include sm {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .history__container {
+        .boughtBy__box {
+          display: flex;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-sizing: border-box;
+          border-radius: 12px;
+          padding: 15px;
+          margin-bottom: 12px;
+          img.buyerImage {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 15px;
+          }
+          .info {
+            flex: 1;
+            .buyer__name {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 160%;
+              color: rgba(0, 0, 0, 0.4);
+              b {
+                color: $black;
+              }
+            }
+            .time {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 12px;
+              line-height: 160%;
+              color: rgba(0, 0, 0, 0.4);
+            }
+          }
+        }
+      }
+    }
+    @include lg {
+      padding: 40px 60px;
+    }
+    @include sm {
+      padding: 40px 20px;
+    }
+  }
+  @include lg {
+    grid-template-columns: 1fr;
+  }
+}
 .preview__nfts__popup {
   position: fixed;
   left: 0;
@@ -780,13 +1059,13 @@
       max-width: 60%;
       width: 100%;
       margin: auto;
-      img {
+      img,
+      video {
         width: 100%;
         height: 100%;
         object-fit: contain;
       }
       @include lg {
-        // max-height: 500px;
         max-width: 100%;
         height: 80%;
       }
@@ -838,7 +1117,6 @@
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        // gap: 12px;
         span {
           background: rgba(0, 0, 0, 0.05);
           border-radius: 12px;
@@ -893,11 +1171,11 @@
         letter-spacing: 0.2px;
         color: $black;
         margin-bottom: 20px;
+        word-break: break-all;
       }
       .nft__released {
         display: flex;
         align-items: center;
-        // gap: 40px;
         margin-bottom: 25px;
         .item {
           margin-right: 40px;
@@ -1315,5 +1593,320 @@
   @include sm {
     width: 94%;
     padding: 40px 26px;
+  }
+}
+
+.create__collection {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 440px;
+  padding: 40px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  h1 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 140%;
+    color: $black;
+    margin-bottom: 24px;
+
+    @include sm {
+      font-size: 20px;
+      line-height: 130%;
+    }
+  }
+  .collection__cover__image {
+    display: flex;
+    margin-bottom: 24px;
+
+    .cover__picture {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      min-height: 120px;
+      background: $white;
+      border: 1px solid #d4d4d4;
+      box-sizing: border-box;
+      border-radius: 12px;
+      margin-right: 24px;
+
+      .cover__image {
+        width: 120px;
+        min-height: 120px;
+        object-fit: cover;
+      }
+    }
+
+    .cover__description {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 22px;
+        color: $black;
+      }
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 160%;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 6px;
+        margin-bottom: 12px;
+      }
+      button {
+        width: fit-content;
+      }
+    }
+  }
+  .intup-l {
+    width: 100%;
+
+    label {
+      line-height: 22px;
+      margin-bottom: 1px;
+    }
+
+    input {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      color: $black;
+      width: 100%;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+  .token__name {
+    margin-top: 16px;
+    margin-bottom: 24px;
+
+    .intup-l {
+      margin-bottom: 6px;
+    }
+
+    .token-text {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 150%;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+  label {
+    font-family: $spaceGroteskFont;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 22px;
+    color: $black;
+    margin-bottom: 1px;
+  }
+  textarea {
+    font-family: $spaceGroteskFont;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 20px;
+    color: $black;
+    height: 86px;
+    margin-bottom: 16px;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+  .empty {
+    background: linear-gradient(to right, #000000 132px, rgba(0, 0, 0, 0.2) 10%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .empty__error {
+    background: linear-gradient(to right, #000000 132px, #ff4949 10%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .button__div {
+    display: flex;
+    margin-top: 24px;
+    width: 100%;
+
+    button {
+      width: 100%;
+      &.light-button {
+
+        @include sm {
+          margin-bottom: 20px;
+        }
+      }
+    }
+    @include sm {
+      display: grid;
+    }
+  }
+  @include sm {
+    width: 90%;
+  }
+}
+.select-token {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 440px;
+  min-height: 280px;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+  .option-list {
+    h1 {
+      font-family: $sharpGroteskMediumFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      color: #000000;
+    }
+    .searchInp {
+      // height: 50px;
+      border: 1px solid #d4d4d4;
+      box-sizing: border-box;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 20px;
+      font-family: $spaceGroteskFont;
+      padding: 15px 16px;
+      color: #cacaca;
+      margin-left: unset !important;
+      margin-top: 8px;
+      width: 100%;
+
+      &:focus {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent;
+        color: #000;
+      }
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+    .searchDiv {
+      padding: 40px 40px 20px;
+      height: fit-content;
+      border-top: none;
+      &:hover {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+      }
+
+      .intup-l {
+        width: 100%;
+      }
+      @include sm {
+        padding: 20px;
+      }
+    }
+    li {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding-left: 40px;
+      height: 60px;
+      &:hover {
+        background: #f6faf3;
+      }
+      .img-name {
+        width: 100%;
+        height: 100%;
+      }
+      img {
+        padding: 20.5px 12px 0 0;
+        margin: 0;
+      }
+      .imgDefSpan {
+        padding-right: 33px;
+      }
+      .dai-name {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        // display: flex;
+        align-items: center;
+        color: #000000;
+      }
+      .subtitle {
+        position: absolute;
+        left: 72px;
+        margin-top: -26px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 13px;
+        display: flex;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.4);
+
+        @include sm {
+          left: 52px;
+        }
+      }
+      @include sm {
+        padding-left: 20px;
+      }
+    }
+  }
+  @include sm {
+    width: 90%;
+  }
+}
+.token-div {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px 40px;
+  .add-token {
+    // margin: 20px 40px;
+    width: 100%;
+    border-radius: 12px;
   }
 }

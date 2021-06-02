@@ -62,9 +62,6 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
   return (
     <div className="active-auctions">
       <div className="input-search">
-        <button type="button" onClick={clearInput} className="clear-input">
-          Clear
-        </button>
         <img src={searchIcon} alt="search" />
         <Input
           className="searchInp"

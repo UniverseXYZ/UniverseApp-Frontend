@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
 import twitterIcon from '../../assets/images/Twitter.svg';
 import discordIcon from '../../assets/images/Discord.svg';
+import coinGesco from '../../assets/images/Coin-Gecko.svg';
 import mediumIcon from '../../assets/images/medium-icon.svg';
 import youtubeIcon from '../../assets/images/youtube-icon.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
@@ -15,7 +16,8 @@ const Footer = () => {
   const [email, setEmail] = useState('');
 
   const handleSubscribe = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(email).toLowerCase())) {
       const config = {
         headers: { 'Access-Control-Allow-Origin': '*' },
@@ -119,7 +121,7 @@ const Footer = () => {
                 <li>DAO</li>
                 <li
                   aria-hidden="true"
-                  onClick={() => window.open('https://dao.universe.xyz/governance/overview')}
+                  onClick={() => window.open('https://dao.universe.xyz/governance')}
                 >
                   Governance
                 </li>
@@ -159,6 +161,12 @@ const Footer = () => {
               alt="Discord"
               aria-hidden="true"
               onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
+            />
+            <img
+              src={coinGesco}
+              alt="Coin Gesko"
+              aria-hidden="true"
+              onClick={() => window.open('https://www.coingecko.com/en/coins/universe-xyz')}
             />
             <img
               src={youtubeIcon}

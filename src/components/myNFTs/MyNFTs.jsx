@@ -13,14 +13,15 @@ import LoadingPopup from '../popups/LoadingPopup.jsx';
 import CongratsPopup from '../popups/CongratsPopup.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import union from '../../assets/images/Union.svg';
+import tabArrow from '../../assets/images/tab-arrow.svg';
+import DeployedCollections from './DeployedCollections.jsx';
 
 const MyNFTs = () => {
   const {
     savedNfts,
     savedCollections,
+    setSavedCollections,
     setSavedNfts,
-    selectedTabIndex,
-    setSelectedTabIndex,
     showModal,
     setShowModal,
     setActiveView,
@@ -28,9 +29,13 @@ const MyNFTs = () => {
     setMyNFTs,
     selectedNft,
     setWebsite,
+    deployedCollections,
+    setDeployedCollections,
+    myNFTsSelectedTabIndex,
+    setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Saved NFTs', 'Saved Collections'];
+  const tabs = ['Wallet', 'Collections', 'Saved NFTs'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
@@ -53,6 +58,53 @@ const MyNFTs = () => {
     return !res.length;
   };
 
+  const handleTabRightScrolling = () => {
+    let scrollAmount = 0;
+    const slideTimer = setInterval(() => {
+      document.querySelector('.tabs').scrollLeft += 10;
+      scrollAmount += 10;
+      if (scrollAmount >= 100) {
+        window.clearInterval(slideTimer);
+        document.querySelector('.tab__left__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft > 100) {
+          document.querySelector('.tab__right__arrow').style.display = 'none';
+        }
+      }
+    }, 25);
+  };
+
+  const handleTabLeftScrolling = () => {
+    let scrollAmount = 100;
+    const slideTimer = setInterval(() => {
+      document.querySelector('.tabs').scrollLeft -= 10;
+      scrollAmount -= 10;
+      if (scrollAmount <= 0) {
+        window.clearInterval(slideTimer);
+        document.querySelector('.tab__right__arrow').style.display = 'flex';
+        if (document.querySelector('.tabs').scrollLeft <= 0) {
+          document.querySelector('.tab__left__arrow').style.display = 'none';
+        }
+      }
+    }, 25);
+  };
+
+  useEffect(() => {
+    function handleResize() {
+      if (document.querySelector('.tab__right__arrow')) {
+        if (window.innerWidth < 530) {
+          document.querySelector('.tab__right__arrow').style.display = 'flex';
+        } else {
+          document.querySelector('.tab__right__arrow').style.display = 'none';
+          document.querySelector('.tab__left__arrow').style.display = 'none';
+        }
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleMintSelected = () => {
     document.getElementById('loading-hidden-btn').click();
     setTimeout(() => {
@@ -60,6 +112,7 @@ const MyNFTs = () => {
       document.getElementById('congrats-hidden-btn').click();
       setTimeout(() => {
         const newMyNFTs = [...myNFTs];
+        let tempArr = [];
         savedNfts.forEach((nft) => {
           if (nft.selected) {
             if (nft.type === 'single') {
@@ -71,25 +124,66 @@ const MyNFTs = () => {
                 description: nft.description,
                 numberOfEditions: Number(nft.numberOfEditions),
                 generatedEditions: nft.generatedEditions,
+                properties: nft.properties,
+                percentAmount: nft.percentAmount || '',
               });
             } else {
+              tempArr.push({
+                id: nft.id,
+                type: nft.type,
+                collectionId: nft.collectionName,
+                collectionName: nft.collectionName,
+                collectionAvatar: nft.collectionAvatar,
+                collectionDescription: nft.collectionDescription,
+                shortURL: nft.shortURL,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.numberOfEditions),
+                generatedEditions: nft.generatedEditions,
+                properties: nft.properties,
+                percentAmount: nft.percentAmount || '',
+              });
               newMyNFTs.push({
                 id: nft.id,
                 type: nft.type,
                 collectionId: nft.collectionName,
                 collectionName: nft.collectionName,
                 collectionAvatar: nft.collectionAvatar,
+                collectionDescription: nft.collectionDescription,
+                shortURL: nft.shortURL,
                 previewImage: nft.previewImage,
                 name: nft.name,
                 description: nft.description,
                 numberOfEditions: Number(nft.numberOfEditions),
                 generatedEditions: nft.generatedEditions,
+                properties: nft.properties,
+                percentAmount: nft.percentAmount || '',
               });
             }
           }
         });
-        setMyNFTs(newMyNFTs);
+        tempArr = tempArr.filter(
+          (v, i, a) => a.findIndex((t) => t.collectionId === v.collectionId) === i
+        );
         const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
+        const newdeployedCollections = [...deployedCollections];
+        tempArr.forEach((arr) => {
+          savedCollections.forEach((col) => {
+            if (col.id === arr.collectionId) {
+              newdeployedCollections.push({
+                id: col.id,
+                previewImage: arr.collectionAvatar,
+                name: col.name,
+                tokenName: col.tokenName,
+                description: col.description,
+                shortURL: col.shortURL,
+              });
+            }
+          });
+        });
+        setDeployedCollections(newdeployedCollections);
+        setMyNFTs(newMyNFTs);
         setSavedNfts(newSavedNFTs);
       }, 2000);
     }, 3000);
@@ -134,7 +228,10 @@ const MyNFTs = () => {
       >
         {(close) => <CongratsPopup onClose={close} />}
       </Popup>
-      {myNFTs.length || savedNfts.length || savedCollections.length ? (
+      {myNFTs.length ||
+      deployedCollections.length ||
+      savedNfts.length ||
+      savedCollections.length ? (
         <>
           {isCreatingAction ? (
             <div className="select-nfts">
@@ -152,7 +249,7 @@ const MyNFTs = () => {
               <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
                 <h1 className="title">Select NFT</h1>
                 <div className="create__mint__btns">
-                  {selectedTabIndex === 1 && (
+                  {myNFTsSelectedTabIndex === 2 && (
                     <button
                       type="button"
                       className="mint__btn"
@@ -173,7 +270,7 @@ const MyNFTs = () => {
             <div className="mynfts__page__header">
               <h1 className="title">My NFTs</h1>
               <div className="create__mint__btns">
-                {selectedTabIndex === 1 && (
+                {myNFTsSelectedTabIndex === 2 && (
                   <button
                     type="button"
                     className="mint__btn"
@@ -192,35 +289,55 @@ const MyNFTs = () => {
           )}
 
           <div className="mynfts__page__body">
-            <ul className="tabs">
-              {tabs.map((tab, index) => (
-                <li
-                  key={uuid()}
-                  className={selectedTabIndex === index ? 'active' : ''}
-                  onClick={() => setSelectedTabIndex(index)}
+            <div className="tabs__wrapper">
+              <div className="tab__left__arrow">
+                <img
+                  onClick={handleTabLeftScrolling}
                   aria-hidden="true"
-                >
-                  {index === 1 && savedNfts.length > 0 ? (
-                    <>
-                      <div className="notification">
-                        {tab}
-                        <span>{savedNfts.length}</span>
-                      </div>
-                    </>
-                  ) : index === 2 && savedCollections.length > 0 ? (
-                    <>
-                      <div className="notification">
-                        {tab}
-                        <span>{savedCollections.length}</span>
-                      </div>
-                    </>
-                  ) : (
-                    tab
-                  )}
-                </li>
-              ))}
-            </ul>
-            {selectedTabIndex === 0 && (
+                  src={tabArrow}
+                  alt="Tab left arrow"
+                />
+              </div>
+              <div className="tabs">
+                <ul className="tab_items">
+                  {tabs.map((tab, index) => (
+                    <li
+                      key={uuid()}
+                      className={myNFTsSelectedTabIndex === index ? 'active' : ''}
+                      onClick={() => setMyNFTsSelectedTabIndex(index)}
+                      aria-hidden="true"
+                    >
+                      {index === 2 && savedNfts.length > 0 ? (
+                        <>
+                          <div className="notification">
+                            {tab}
+                            <span>{savedNfts.length}</span>
+                          </div>
+                        </>
+                      ) : index === 3 && savedCollections.length > 0 ? (
+                        <>
+                          <div className="notification">
+                            {tab}
+                            <span>{savedCollections.length}</span>
+                          </div>
+                        </>
+                      ) : (
+                        tab
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="tab__right__arrow">
+                <img
+                  onClick={handleTabRightScrolling}
+                  aria-hidden="true"
+                  src={tabArrow}
+                  alt="Tab right arrow"
+                />
+              </div>
+            </div>
+            {myNFTsSelectedTabIndex === 0 && (
               <Wallet
                 filteredNFTs={filteredNFTs}
                 setFilteredNFTs={setFilteredNFTs}
@@ -228,8 +345,9 @@ const MyNFTs = () => {
                 setSelectedNFTIds={setSelectedNFTIds}
               />
             )}
-            {selectedTabIndex === 1 && <SavedNFTs />}
-            {selectedTabIndex === 2 && <SavedCollections />}
+            {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
+            {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
+            {myNFTsSelectedTabIndex === 3 && <SavedCollections />}
           </div>
         </>
       ) : isCreatingAction ? (

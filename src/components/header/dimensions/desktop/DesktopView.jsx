@@ -153,7 +153,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://dao.universe.xyz/governance/overview');
+                  window.open('https://dao.universe.xyz/governance');
                 }}
               >
                 <img src={governanceIcon} alt="Governance" />

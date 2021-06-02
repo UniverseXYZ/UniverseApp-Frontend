@@ -271,7 +271,7 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      onClick={() => window.open('https://dao.universe.xyz/governance/overview')}
+                      onClick={() => window.open('https://dao.universe.xyz/governance')}
                     >
                       <img src={governanceIcon} alt="Governance" />
                       <span>Governance</span>

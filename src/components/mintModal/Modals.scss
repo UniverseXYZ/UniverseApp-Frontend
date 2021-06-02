@@ -241,6 +241,7 @@
   letter-spacing: 0.2px;
   color: $black;
 }
+
 .collection__nfts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -313,6 +314,7 @@
         font-weight: bold;
         font-size: 14px;
         color: $black;
+        word-break: break-word;
       }
       .three__dots {
         position: relative;
@@ -520,16 +522,72 @@
         color: #ff4949;
       }
     }
+    .token-text {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 150%;
+      color: rgba(0, 0, 0, 0.6);
+      margin-top: -14px;
+    }
   }
 }
 .name-image > .input-l {
   width: 40%;
 }
+
+.collection__description {
+  margin-top: 20px;
+  label {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 1px;
+    color: $black;
+  }
+  textarea {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 16px;
+    min-height: 86px;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
+  }
+  .intup-l {
+    width: 100%;
+    input {
+      width: 100%;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+    }
+    .empty {
+      background: linear-gradient(to right, #000000 133px, rgba(0, 0, 0, 0.2) 10%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .empty__error {
+      border: 1px solid #ff4949;
+      background: linear-gradient(to right, #000000 133px, #ff4949 10%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
 .create-col {
-  border: 1px solid;
-  border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
-  background: linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
+  background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+  border: 1px solid transparent;
   border-radius: 12px;
   cursor: pointer;
   display: flex;
@@ -826,7 +884,6 @@
               border-radius: 12px;
               object-fit: fill;
               image-rendering: pixelated;
-              
 
               @include md {
                 width: 137px;
@@ -1083,6 +1140,152 @@
             font-size: 16px;
             line-height: 20px;
             color: $black;
+          }
+        }
+      }
+      .royalities {
+        margin-top: 40px;
+        .title {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          width: fit-content;
+          position: relative;
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 130%;
+            letter-spacing: 0.2px;
+            color: $black;
+          }
+          .royalities-info-text {
+            position: absolute;
+            background: $white;
+            padding: 16px 16px 18px 16px;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            width: 226px;
+            bottom: 20px;
+            left: 100%;
+            transform: translateX(-50%);
+
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              line-height: 150%;
+              color: $black;
+            }
+          }
+          img {
+            margin-left: 6px;
+            margin-right: 15px;
+          }
+          .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 24px;
+          }
+
+          .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+          }
+
+          .slider:before {
+            position: absolute;
+            content: '';
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+          }
+
+          input:checked + .slider {
+            background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+          }
+
+          input:checked + .slider:before {
+            -webkit-transform: translateX(16px);
+            -ms-transform: translateX(16px);
+            transform: translateX(16px);
+          }
+
+          /* Rounded sliders */
+          .slider.round {
+            border-radius: 50px;
+          }
+
+          .slider.round:before {
+            border-radius: 50%;
+          }
+        }
+        .percent__amount {
+          .inp__container {
+            position: relative;
+            margin-bottom: 6px;
+            .intup-l {
+              width: 100%;
+              input {
+                width: 100%;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+                &::placeholder {
+                  font-family: $spaceGroteskFont;
+                  font-weight: normal;
+                  font-size: 16px;
+                  line-height: 20px;
+                  color: rgba(0, 0, 0, 0.2);
+                }
+              }
+            }
+            span {
+              position: absolute;
+              top: 35px;
+              right: 1px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 16px;
+              line-height: 20px;
+              color: $black;
+              display: flex;
+              height: 40px;
+              width: 50px;
+              align-items: center;
+              justify-content: center;
+              background-color: $white;
+              border-radius: 12px;
+            }
+          }
+          .suggested {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 150%;
+            color: rgba(0, 0, 0, 0.6);
           }
         }
       }
@@ -1352,6 +1555,85 @@
     }
   }
 
+  .single-nft-choose-collection {
+    margin-top: 40px;
+    h4 {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      color: $black;
+      margin-bottom: 16px;
+    }
+
+    .choose__collection {
+      display: flex;
+      flex-wrap: wrap;
+
+      .create,
+      .universe {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 140px;
+        height: 140px;
+        background: $white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 12px;
+        margin-right: 20px;
+        margin-top: 10px;
+        padding: 10px;
+        cursor: pointer;
+
+        div {
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+          }
+        }
+
+        .random__bg__color {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          align-items: center;
+          display: flex;
+          justify-content: center;
+          font-family: $sharpGroteskMediumFont;
+        }
+
+        h5 {
+          font-family: $spaceGroteskFont;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 20px;
+          color: $black;
+          margin-top: 12px;
+          text-align: center;
+        }
+        p {
+          text-align: center;
+          font-family: $spaceGroteskFont;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 150%;
+          color: rgba(0, 0, 0, 0.4);
+        }
+        &.selected {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+        }
+        @include sm {
+          width: 100%;
+        }
+      }
+    }
+  }
+
   .single-nft-properties {
     margin-top: 40px;
 
@@ -1361,7 +1643,7 @@
       width: fit-content;
 
       h4 {
-        font-family: $sharpGroteskMediumFont;
+        font-family: $sharpGroteskSemiBoldFont;
         font-weight: 600;
         font-size: 16px;
         line-height: 130%;
@@ -1387,6 +1669,63 @@
           line-height: 150%;
           color: $black;
         }
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+        margin-left: 15px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: '';
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(16px);
+        -ms-transform: translateX(16px);
+        transform: translateX(16px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 50px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
       }
     }
 
@@ -1494,7 +1833,7 @@
         width: fit-content;
         position: relative;
         h4 {
-          font-family: $sharpGroteskMediumFont;
+          font-family: $sharpGroteskSemiBoldFont;
           font-weight: 600;
           font-size: 16px;
           line-height: 130%;

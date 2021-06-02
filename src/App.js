@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Routes, StaticRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import { handleClickOutside, handleScroll } from './utils/helpers';
@@ -7,6 +7,7 @@ import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
 import Auctions from './containers/auctions/Auction.jsx';
+import SetupAuction from './components/setupAuction/SetupAuction';
 import RewardTiers from './components/rewardTiers/RewardTiers.jsx';
 import CreateTiers from './components/createTiers/Create.jsx';
 import ReviewReward from './components/reviewReward/ReviewReward.jsx';
@@ -23,6 +24,7 @@ import Team from './containers/team/Team.jsx';
 import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
+import Collection from './containers/collection/Collection.jsx';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -36,14 +38,16 @@ const App = () => {
     twitterLink: '',
   });
   const [myBalance, setMyBalance] = useState(48.24);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex] = useState(0);
   const [activeView, setActiveView] = useState(null);
   const [savedNFTsID, setSavedNFTsID] = useState(null);
   const [savedCollectionID, setSavedCollectionID] = useState(null);
+  const [myCollectionID, setMyCollectionID] = useState(null);
   const [savedNfts, setSavedNfts] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
+  const [deployedCollections, setDeployedCollections] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -77,10 +81,10 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
-        selectedTabIndex,
-        setSelectedTabIndex,
         showModal,
         setShowModal,
+        myNFTsSelectedTabIndex,
+        setMyNFTsSelectedTabIndex,
         savedCollections,
         setSavedCollections,
         activeView,
@@ -89,8 +93,12 @@ const App = () => {
         setSavedNFTsID,
         savedCollectionID,
         setSavedCollectionID,
+        myCollectionID,
+        setMyCollectionID,
         myNFTs,
         setMyNFTs,
+        deployedCollections,
+        setDeployedCollections,
         myAuctions,
         setMyAuctions,
         activeAuctions,
@@ -113,6 +121,9 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={() => <Homepage />} />
         <Route exact path="/about" component={() => <About />} />
+        <Route exact path="/team" component={() => <Team />} />
+
+        {/* <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
           exact
           path="/minting-and-auctions/marketplace/active-auctions"
@@ -135,16 +146,18 @@ const App = () => {
           path="/customize-auction-landing-page"
           component={() => <CustomizeAuction />}
         />
-        <Route exact path="/team" component={() => <Team />} />
-
         <Route exact path="/auction-settings" component={() => <AuctionSettings />} />
         <Route exact path="/auction-review" component={() => <AuctionReview />} />
         <Route exact path="/:artist">
           <Artist />
         </Route>
+        <Route exact path="/c/:collectionId">
+          <Collection />
+        </Route>
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />
-        </Route>
+        </Route> */}
+
         <Route path="*" component={() => <NotFound />} />
       </Switch>
       <Footer />

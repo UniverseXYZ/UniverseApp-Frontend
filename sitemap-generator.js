@@ -6,7 +6,7 @@ const Sitemap = require('react-router-sitemap').default;
 const router = require('./sitemap-routes').default;
 
 function generateSitemap() {
-  return new Sitemap(router).build('http://localhost:3000/').save('./public/sitemap.xml');
+  return new Sitemap(router).build('https://universe.xyz/').save('./public/sitemap.xml');
 }
 
 generateSitemap();
