@@ -297,10 +297,10 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
-                <Popup trigger={<button type="button">Join newsletter</button>}>
+                {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
-                </Popup>
-                {/* <Popup trigger={<button type="button">Sign in</button>}>
+                </Popup> */}
+                <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
@@ -311,7 +311,7 @@ const TabletView = (props) => {
                       setSelectedWallet={setSelectedWallet}
                     />
                   )}
-                </Popup> */}
+                </Popup>
               </li>
             )}
           </ul>

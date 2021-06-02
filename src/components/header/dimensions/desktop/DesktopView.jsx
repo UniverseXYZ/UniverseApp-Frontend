@@ -279,7 +279,7 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
+            {/* <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Join newsletter
@@ -287,8 +287,8 @@ const DesktopView = ({
               }
             >
               {(close) => <SubscribePopup close={close} />}
-            </Popup>
-            {/* <Popup
+            </Popup> */}
+            <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Sign In
@@ -305,7 +305,7 @@ const DesktopView = ({
                   setSelectedWallet={setSelectedWallet}
                 />
               )}
-            </Popup> */}
+            </Popup>
           </li>
         )}
       </ul>
