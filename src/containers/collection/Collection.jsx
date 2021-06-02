@@ -12,14 +12,8 @@ import MintModal from '../../components/mintModal/MintModal.jsx';
 import NFTs from '../../components/collection/NFTs.jsx';
 
 const Collection = () => {
-  const {
-    myNFTs,
-    savedNfts,
-    setWebsite,
-    showModal,
-    setShowModal,
-    deployedCollections,
-  } = useContext(AppContext);
+  const { myNFTs, savedNfts, setWebsite, showModal, setShowModal, deployedCollections } =
+    useContext(AppContext);
   const location = useLocation();
   const selectedCollection = location.state ? location.state.collection : null;
   const [collectionNFTs, setCollectionNFTs] = useState([]);
