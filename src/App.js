@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Routes, StaticRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import { handleClickOutside, handleScroll } from './utils/helpers';
@@ -47,7 +47,7 @@ const App = () => {
   const [savedNfts, setSavedNfts] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
-  const [myCollections, setMyCollections] = useState([]);
+  const [deployedCollections, setDeployedCollections] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -97,8 +97,8 @@ const App = () => {
         setMyCollectionID,
         myNFTs,
         setMyNFTs,
-        myCollections,
-        setMyCollections,
+        deployedCollections,
+        setDeployedCollections,
         myAuctions,
         setMyAuctions,
         activeAuctions,

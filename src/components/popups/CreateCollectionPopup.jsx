@@ -5,6 +5,7 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
+import { defaultColors } from '../../utils/helpers';
 
 const CreateCollectionPopup = ({ onClose }) => {
   const inputFile = useRef(null);
@@ -16,11 +17,9 @@ const CreateCollectionPopup = ({ onClose }) => {
   const [shortURL, setShortURL] = useState('universe.xyz/c/shorturl');
 
   const [errors, setErrors] = useState({ collectionName: '', tokenName: '', shorturl: '' });
-  const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
 
-  const { myCollections, savedCollections, myNFTs } = useContext(AppContext);
-  console.log(myCollections);
+  const { deployedCollections, setDeployedCollections, myNFTs } = useContext(AppContext);
 
   const handleOnFocus = () => {
     if (shortURL === 'universe.xyz/c/shorturl') {
@@ -36,6 +35,7 @@ const CreateCollectionPopup = ({ onClose }) => {
   };
 
   const handleShortUrl = (value) => {
+    setMintNowClick(false);
     setShortURL(value);
     setInputClass('inp');
     setErrors({
@@ -50,6 +50,7 @@ const CreateCollectionPopup = ({ onClose }) => {
   };
 
   const handleCollectionName = (value) => {
+    setMintNowClick(false);
     setCollectionName(value);
     setErrors({
       ...errors,
@@ -58,6 +59,7 @@ const CreateCollectionPopup = ({ onClose }) => {
   };
 
   const handleTokenName = (value) => {
+    setMintNowClick(false);
     setTokenName(value);
     setErrors({
       ...errors,
@@ -66,44 +68,68 @@ const CreateCollectionPopup = ({ onClose }) => {
   };
 
   const handleMinting = () => {
-    setSaveForLateClick(false);
     setMintNowClick(true);
-    setErrors({
-      collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
-      tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
-      shorturl:
-        shortURL === 'universe.xyz/c/shorturl' ? '“Short URL” is not allowed to be empty' : '',
-    });
-    if (collectionName) {
-      const collectionNameExists = savedCollections.length
-        ? savedCollections.filter(
+    if (
+      !collectionName ||
+      !tokenName ||
+      shortURL.length <= 15 ||
+      shortURL === 'universe.xyz/c/shorturl'
+    ) {
+      setErrors({
+        collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
+        tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
+        shorturl:
+          shortURL.length <= 15 || shortURL === 'universe.xyz/c/shorturl'
+            ? '“Short URL” is not allowed to be empty'
+            : '',
+      });
+      if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+        setInputClass('empty__error');
+      } else {
+        setInputClass('inp');
+      }
+    } else {
+      const collectionNameExists = deployedCollections.length
+        ? deployedCollections.filter(
             (collection) => collection.name.toLowerCase() === collectionName.toLowerCase()
           )
         : [];
       const existsInMyNfts = myNFTs.length
         ? myNFTs.filter((nft) => nft.collectionName?.toLowerCase() === collectionName.toLowerCase())
         : [];
-    }
-    if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
-      setInputClass('empty__error');
-    } else {
-      setInputClass('inp');
+      if (collectionNameExists.length || existsInMyNfts.length) {
+        setErrors({
+          ...errors,
+          collectionName: '“Collection name” already exists',
+        });
+      } else {
+        setErrors({
+          collectionName: '',
+          tokenName: '',
+          shorturl: '',
+        });
+      }
     }
   };
 
-  const handleSaveForLater = () => {
-    setErrors({
-      collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
-      tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
-      shorturl:
-        shortURL === 'universe.xyz/c/shorturl' ? '“Short URL” is not allowed to be empty' : '',
-    });
-    if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
-      setInputClass('empty__error');
-    } else {
-      setInputClass('inp');
+  useEffect(() => {
+    if (mintNowClick) {
+      if (!errors.collectionName && !errors.tokenName && !errors.shorturl) {
+        setDeployedCollections([
+          ...deployedCollections,
+          {
+            id: collectionName,
+            previewImage:
+              coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+            name: collectionName,
+            tokenName,
+            description,
+            shortURL,
+          },
+        ]);
+      }
     }
-  };
+  }, [errors]);
 
   return (
     <div className="create__collection">
@@ -172,10 +198,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       />
       <div className="button__div">
         <Button className="light-button" onClick={() => handleMinting()}>
-          Mint now
-        </Button>
-        <Button className="light-border-button" onClick={() => handleSaveForLater()}>
-          Save for later
+          Create now
         </Button>
       </div>
     </div>

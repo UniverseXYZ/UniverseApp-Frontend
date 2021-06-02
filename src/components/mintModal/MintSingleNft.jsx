@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
@@ -19,7 +18,6 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
-import universeImage from '../../assets/images/universe-img.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
 
 const MintSingleNft = ({ onClick }) => {
@@ -30,7 +28,7 @@ const MintSingleNft = ({ onClick }) => {
     savedNFTsID,
     myNFTs,
     setMyNFTs,
-    myCollections,
+    deployedCollections,
   } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
@@ -53,7 +51,7 @@ const MintSingleNft = ({ onClick }) => {
   const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
-  const [editableNFTType, setEditableNFTType] = useState('');
+  const [selectedCollection, setSelectedCollection] = useState(null);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -143,9 +141,6 @@ const MintSingleNft = ({ onClick }) => {
     }
   };
 
-  const location = useLocation();
-  const isCreatingAction = location.pathname === '/select-nfts';
-
   useEffect(() => {
     if (savedNFTsID) {
       const res = savedNfts.filter((item) => item.id === savedNFTsID);
@@ -155,7 +150,6 @@ const MintSingleNft = ({ onClick }) => {
       setPreviewImage(res[0].previewImage);
       setPercentAmount(res[0].percentAmount);
       setProperties(res[0].properties);
-      setEditableNFTType(res[0].type);
     }
   }, []);
 
@@ -168,21 +162,45 @@ const MintSingleNft = ({ onClick }) => {
           generatedEditions.push(uuid().split('-')[0]);
         }
         if (!savedNFTsID) {
-          setSavedNfts([
-            ...savedNfts,
-            {
-              id: uuid(),
-              previewImage,
-              name,
-              description,
-              numberOfEditions: editions,
-              generatedEditions,
-              properties,
-              percentAmount,
-              type: 'single',
-              selected: false,
-            },
-          ]);
+          if (selectedCollection) {
+            setSavedNfts([
+              ...savedNfts,
+              {
+                id: uuid(),
+                type: 'collection',
+                collectionId: selectedCollection.id,
+                collectionName: selectedCollection.name,
+                collectionAvatar: selectedCollection.previewImage,
+                collectionDescription: selectedCollection.description,
+                shortURL: selectedCollection.shortURL,
+                tokenName: selectedCollection.tokenName,
+                previewImage,
+                name,
+                description,
+                numberOfEditions: Number(editions),
+                generatedEditions,
+                properties,
+                percentAmount,
+                selected: false,
+              },
+            ]);
+          } else {
+            setSavedNfts([
+              ...savedNfts,
+              {
+                id: uuid(),
+                type: 'single',
+                previewImage,
+                name,
+                description,
+                numberOfEditions: editions,
+                generatedEditions,
+                properties,
+                percentAmount,
+                selected: false,
+              },
+            ]);
+          }
         } else {
           setSavedNfts(
             savedNfts.map((item) =>
@@ -217,21 +235,45 @@ const MintSingleNft = ({ onClick }) => {
             for (let i = 0; i < editions; i += 1) {
               mintingGeneratedEditions.push(uuid().split('-')[0]);
             }
-            setMyNFTs([
-              ...myNFTs,
-              {
-                id: uuid(),
-                type: 'single',
-                previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                generatedEditions: mintingGeneratedEditions,
-                properties,
-                percentAmount,
-                releasedDate: new Date(),
-              },
-            ]);
+            if (selectedCollection) {
+              setMyNFTs([
+                ...myNFTs,
+                {
+                  id: uuid(),
+                  type: 'collection',
+                  collectionId: selectedCollection.id,
+                  collectionName: selectedCollection.name,
+                  collectionAvatar: selectedCollection.previewImage,
+                  collectionDescription: selectedCollection.description,
+                  shortURL: selectedCollection.shortURL,
+                  tokenName: selectedCollection.tokenName,
+                  previewImage,
+                  name,
+                  description,
+                  numberOfEditions: Number(editions),
+                  generatedEditions: mintingGeneratedEditions,
+                  properties,
+                  percentAmount,
+                  releasedDate: new Date(),
+                },
+              ]);
+            } else {
+              setMyNFTs([
+                ...myNFTs,
+                {
+                  id: uuid(),
+                  type: 'single',
+                  previewImage,
+                  name,
+                  description,
+                  numberOfEditions: Number(editions),
+                  generatedEditions: mintingGeneratedEditions,
+                  properties,
+                  percentAmount,
+                  releasedDate: new Date(),
+                },
+              ]);
+            }
             setShowModal(false);
             document.body.classList.remove('no__scroll');
           }, 2000);
@@ -414,34 +456,54 @@ const MintSingleNft = ({ onClick }) => {
             value={editions}
           />
         </div>
-        <div className="single-nft-choose-collection">
-          <h4>Choose collection</h4>
-          <div className="choose__collection">
-            <div className="create">
-              <Popup trigger={<img aria-hidden="true" src={createIcon} alt="Create Icon" />}>
+        {!savedNFTsID && (
+          <div className="single-nft-choose-collection">
+            <h4>Choose collection</h4>
+            <div className="choose__collection">
+              <Popup
+                trigger={
+                  <div className="create">
+                    <img aria-hidden="true" src={createIcon} alt="Create Icon" />
+                    <h5>Create</h5>
+                    <p>ERC-721</p>
+                  </div>
+                }
+              >
                 {(close) => <CreateCollectionPopup onClose={close} />}
               </Popup>
 
-              <h5>Create</h5>
-              <p>ERC-721</p>
+              {deployedCollections.map((col) => (
+                <div
+                  key={uuid()}
+                  className={`universe${
+                    selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                  }`}
+                  aria-hidden="true"
+                  onClick={() =>
+                    selectedCollection && selectedCollection.id === col.id
+                      ? setSelectedCollection(null)
+                      : setSelectedCollection(col)
+                  }
+                >
+                  {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                    <div
+                      className="random__bg__color"
+                      style={{ backgroundColor: col.previewImage }}
+                    >
+                      {col.name.charAt(0)}
+                    </div>
+                  ) : (
+                    <div>
+                      <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                    </div>
+                  )}
+                  <h5>{col.name}</h5>
+                  <p>{col.tokenName}</p>
+                </div>
+              ))}
             </div>
-            {myCollections.map((elm, i) => (
-              <div className="universe">
-                {typeof elm.previewImage === 'string' && elm.previewImage.startsWith('#') ? (
-                  <div className="random__bg__color" style={{ backgroundColor: elm.previewImage }}>
-                    {elm.name.charAt(0)}
-                  </div>
-                ) : (
-                  <div>
-                    <img src={URL.createObjectURL(elm.previewImage)} alt="Universe" />
-                  </div>
-                )}
-                <h5>{elm.name}</h5>
-                <p>{elm.tokenName}</p>
-              </div>
-            ))}
           </div>
-        </div>
+        )}
         <div className="single-nft-properties">
           <div className="single-nft-properties-header">
             <h4
@@ -517,57 +579,57 @@ const MintSingleNft = ({ onClick }) => {
               Add property
             </h5>
           </div>
-          {editableNFTType !== 'collection' && (
-            <div className="royalities">
-              <div className="title">
-                <h4
-                  onMouseOver={() => setHideRoyalitiesInfo(true)}
-                  onFocus={() => setHideRoyalitiesInfo(true)}
-                  onMouseLeave={() => setHideRoyalitiesInfo(false)}
-                  onBlur={() => setHideRoyalitiesInfo(false)}
-                >
-                  Royalties <img src={infoIcon} alt="Info Icon" />
-                </h4>
-                {hideRoyalitiesInfo && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                    <div className="royalities-info-text">
-                      <p>
-                        Royalties determines the percentage you, as a creator, will get from sales
-                        of this NFT on the secondary markets.
-                      </p>
-                    </div>
-                  </Animated>
-                )}
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={royalities}
-                    onChange={(e) => setRoyalities(e.target.checked)}
-                  />
-                  <span className="slider round" />
-                </label>
-              </div>
-              {royalities && (
-                <Animated animationIn="fadeIn">
-                  <div className="percent__amount">
-                    <div className="inp__container">
-                      <Input
-                        type="text"
-                        label="Percent amount"
-                        inputMode="numeric"
-                        pattern="[0-9]"
-                        placeholder="Enter percent amount"
-                        value={percentAmount}
-                        onChange={(e) => handleInputChange(e.target.value)}
-                      />
-                      <span>%</span>
-                    </div>
-                    <span className="suggested">Suggested: 10%, 20%, 30%</span>
+          {/* {editableNFTType !== 'collection' && ( */}
+          <div className="royalities">
+            <div className="title">
+              <h4
+                onMouseOver={() => setHideRoyalitiesInfo(true)}
+                onFocus={() => setHideRoyalitiesInfo(true)}
+                onMouseLeave={() => setHideRoyalitiesInfo(false)}
+                onBlur={() => setHideRoyalitiesInfo(false)}
+              >
+                Royalties <img src={infoIcon} alt="Info Icon" />
+              </h4>
+              {hideRoyalitiesInfo && (
+                <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                  <div className="royalities-info-text">
+                    <p>
+                      Royalties determines the percentage you, as a creator, will get from sales of
+                      this NFT on the secondary markets.
+                    </p>
                   </div>
                 </Animated>
               )}
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={royalities}
+                  onChange={(e) => setRoyalities(e.target.checked)}
+                />
+                <span className="slider round" />
+              </label>
             </div>
-          )}
+            {royalities && (
+              <Animated animationIn="fadeIn">
+                <div className="percent__amount">
+                  <div className="inp__container">
+                    <Input
+                      type="text"
+                      label="Percent amount"
+                      inputMode="numeric"
+                      pattern="[0-9]"
+                      placeholder="Enter percent amount"
+                      value={percentAmount}
+                      onChange={(e) => handleInputChange(e.target.value)}
+                    />
+                    <span>%</span>
+                  </div>
+                  <span className="suggested">Suggested: 10%, 20%, 30%</span>
+                </div>
+              </Animated>
+            )}
+          </div>
+          {/* )} */}
         </div>
         {(errors.name || errors.edition || errors.previewImage) && (
           <div className="single__final__error">

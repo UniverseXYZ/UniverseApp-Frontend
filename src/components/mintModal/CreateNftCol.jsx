@@ -149,6 +149,7 @@ const CreateNftCol = (props) => {
         setEditions(getCollectionNFT[0].numberOfEditions);
         setPreviewImage(getCollectionNFT[0].previewImage);
         setProperties(getCollectionNFT[0].properties);
+        setPercentAmount(getCollectionNFT[0].percentAmount);
       }
       const getSavedNFT = savedNfts.filter((item) => item.id === collectionNFTsID);
       if (getSavedNFT.length) {
@@ -157,6 +158,7 @@ const CreateNftCol = (props) => {
         setEditions(getSavedNFT[0].numberOfEditions);
         setPreviewImage(getSavedNFT[0].previewImage);
         setProperties(getSavedNFT[0].properties);
+        setPercentAmount(getSavedNFT[0].percentAmount);
       }
     }
   }, []);
