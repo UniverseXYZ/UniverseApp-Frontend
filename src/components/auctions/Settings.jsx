@@ -171,7 +171,7 @@ const AuctionSettings = () => {
           //   : prevValue.tiers,
         }));
       }
-      history.push('/auction-review', location.pathname);
+      history.push('/setup-auction/reward-tiers', location.pathname);
     }
   };
 
