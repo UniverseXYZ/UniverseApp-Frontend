@@ -49,16 +49,6 @@ const RewardTiers = () => {
 
   return (
     <div className="container reward-tiers">
-      <div
-        className="back-rew"
-        onClick={() => {
-          history.push('/my-auctions');
-        }}
-        aria-hidden="true"
-      >
-        <img src={arrow} alt="back" />
-        <span>My auctions</span>
-      </div>
       <div>
         <div className="head-part">
           <h2 className="tier-title">Reward tiers</h2>
@@ -258,6 +248,15 @@ const RewardTiers = () => {
             </Button>
           </div>
         )}
+      </div>
+      <div className="btn-div">
+        <Button
+          className="light-border-button"
+          onClick={() => history.push('/setup-auction/auction-settings')}
+        >
+          Back
+        </Button>
+        <Button className="light-button">Continue</Button>
       </div>
     </div>
   );

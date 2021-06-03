@@ -1,5 +1,6 @@
 import React from 'react';
+import RewardTier from '../../components/rewardTiers/RewardTiers';
 
-const RewardTiers = () => <h1>RewardTiers</h1>;
+const RewardTiers = () => <RewardTier />;
 
 export default RewardTiers;
