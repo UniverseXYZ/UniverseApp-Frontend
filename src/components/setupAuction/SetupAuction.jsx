@@ -41,8 +41,8 @@ const SetupAuction = () => {
         >
           <img src={arrow} alt="back" />
           <span>My auctions</span>
-          <h1 className="set-text">Set up auction</h1>
         </div>
+        <h1 className="set-text">Set up auction</h1>
       </div>
       <div className="tabs__section">
         <div className="tabs container">

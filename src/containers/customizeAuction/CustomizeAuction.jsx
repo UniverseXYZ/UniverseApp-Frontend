@@ -155,33 +155,35 @@ const CustomizeAuction = () => {
   };
 
   return (
-    <div className="container customize__auction">
-      <div
-        className="back-rew"
-        onClick={() => {
-          history.push('/reward-tiers');
-        }}
-        aria-hidden="true"
-      >
-        <img src={arrow} alt="back" />
-        <span>Reward tiers</span>
-      </div>
-      <div className="customize__auction_title">
-        <h2>Customize auction landing page</h2>
-        <Button className="light-border-button" onClick={handlePreview}>
-          Preview
-        </Button>
-      </div>
-      <DomainAndBranding values={domainAndBranding} onChange={setDomainAndBranding} />
-      <RewardTiersAuction values={rewardTiersAuction} onChange={setRewardTiersAuction} />
-      <AboutArtistAuction />
-      <div className="customize-buttons">
-        <Button className="light-button" onClick={handleSaveClose}>
-          Save and close
-        </Button>
-        <Button className="light-border-button" onClick={handleSavePreview}>
-          Save and preview
-        </Button>
+    <div className="customize__auction">
+      <div className="container ">
+        <div
+          className="back-rew"
+          onClick={() => {
+            history.push('/my-auctions');
+          }}
+          aria-hidden="true"
+        >
+          <img src={arrow} alt="back" />
+          <span>My auctions</span>
+        </div>
+        <div className="customize__auction_title">
+          <h2>Customize auction landing page</h2>
+          <Button className="light-border-button" onClick={handlePreview}>
+            Preview
+          </Button>
+        </div>
+        <DomainAndBranding values={domainAndBranding} onChange={setDomainAndBranding} />
+        <RewardTiersAuction values={rewardTiersAuction} onChange={setRewardTiersAuction} />
+        <AboutArtistAuction />
+        <div className="customize-buttons">
+          <Button className="light-button" onClick={handleSaveClose}>
+            Save and close
+          </Button>
+          <Button className="light-border-button" onClick={handleSavePreview}>
+            Save and preview
+          </Button>
+        </div>
       </div>
     </div>
   );

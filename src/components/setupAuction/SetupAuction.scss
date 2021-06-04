@@ -5,13 +5,13 @@
     background-image: url('../../assets/images/pink-bg1.png');
     background-size: 100% 200px;
     background-repeat: no-repeat;
-    @include lg {
-        background-image: url('../../assets/images/pink-bg2.png');
-        background-size: cover;
-    }
-    @include sm {
-    background-image: url('../../assets/images/pink-bg3.png');
-        }
+    // @include lg {
+    //     background-image: url('../../assets/images/pink-bg2.png');
+    //     background-size: cover;
+    // }
+    // @include sm {
+    //     background-image: url('../../assets/images/pink-bg3.png');
+    // }
     .set-text{
         font-family: $sharpGroteskSemiBoldFont;   
         font-style: normal;
@@ -34,7 +34,7 @@
         button{
             min-width: 300px;
             min-height: 50px;
-            background: #FFFFFF;
+            background: $white;
             border-radius: 4px;
             position: relative;
             font-family: $sharpGroteskMediumFont;

@@ -1,5 +1,6 @@
 import React from 'react';
+import AuctionReview from '../../components/auctions/AuctionReview';
 
-const ReviewAuction = () => <h1>ReviewAuction</h1>;
+const ReviewAuction = () => <AuctionReview />;
 
 export default ReviewAuction;

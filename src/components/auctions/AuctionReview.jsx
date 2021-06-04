@@ -26,13 +26,11 @@ import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
 
 const AuctionReview = () => {
+  const { auction, setAuction, bidtype, setBidype } = useContext(AppContext);
   const location = useLocation();
   const history = useHistory();
   const [shownActionId, setShownActionId] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
-
-  const { auction, setAuction } = useContext(AppContext);
-  const { bidtype, setBidype } = useContext(AppContext);
   const [bidicon, setBidicon] = useState(null);
 
   useEffect(() => {
@@ -92,28 +90,24 @@ const AuctionReview = () => {
       >
         {(close) => <CongratsAuctionPopup onClose={close} />}
       </Popup>
-      <div
-        className="back-rew"
-        onClick={() => {
-          history.push('/auction-settings');
-        }}
-        aria-hidden="true"
-      >
-        <img src={arrow} alt="back" />
-        <span>Auctions settings</span>
-      </div>
       <div>
         <div className="head-part">
-          <h2 className="tier-title">Auction review</h2>
+          <h2 className="tier-title">Review auction</h2>
+          <p>Review the auction settings and reward tiers</p>
+        </div>
+
+        <div className="auction-settings-head">
+          <h2 className="auction-settings-title">Auction settings</h2>
           {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
-            <Button
-              className="light-border-button"
+            <button
+              type="button"
+              className="edit-auction-settings"
               onClick={() => {
-                history.push('/auction-settings', auction.id);
+                history.push('/setup-auction/auction-settings', auction.id);
               }}
             >
               Edit <img src={pencil} alt="edit-icon" />
-            </Button>
+            </button>
           )}
         </div>
         {auction.name && auction.startingBid && auction.startDate && auction.endDate && (
@@ -155,93 +149,105 @@ const AuctionReview = () => {
                     onMouseLeave={() => setHideIcon(false)}
                     onBlur={() => setHideIcon(false)}
                   />
+                  {hideIcon && (
+                    <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                      <div className="info-text">
+                        <p>
+                          Any bid in the last 3 minutes of an auction will extend the auction for an
+                          additional 3 minutes.
+                        </p>
+                      </div>
+                    </Animated>
+                  )}
                 </span>
-                {hideIcon && (
-                  <Animated animationIn="zoomIn">
-                    <div className="info-text">
-                      <p>
-                        Any bid in the last 3 minutes of an auction will extend the auction for an
-                        additional 3 minutes.
-                      </p>
-                    </div>
-                  </Animated>
-                )}
               </div>
             </div>
           </div>
         )}
-        {auction.tiers.length > 0 &&
-          auction.tiers.map((tier) => (
-            <div key={tier.id} className="view-tier">
-              <div className="auction-header">
-                <div className="img_head">
-                  <div className="img_head_title">
-                    <h3>{tier.name}</h3>
-                  </div>
-                  <div className="winners__edit__btn">
-                    <div className="winners">
-                      <div className="tier-winners">
-                        <h4>
-                          Winners:&nbsp;<b>{tier.winners}</b>
-                        </h4>
-                      </div>
-                      <div className="tier-perwinners">
-                        <h4>
-                          NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
-                        </h4>
-                      </div>
-                      <div className="tier-minbid">
-                        <h4>
-                          Minimum bid per tier:&nbsp;
-                          <b>
-                            {tier.minBid} <span className="bidtype">{bidtype}</span>
-                          </b>
-                        </h4>
-                      </div>
-                    </div>
-                    <Button
-                      className="light-border-button"
-                      onClick={() => {
-                        history.push('/create-tiers', tier.id);
-                      }}
-                    >
-                      Edit <img src={pencil} alt="edit-icon" />
-                    </Button>
-                  </div>
+        <div className="reward-tiers-head">
+          <h2 className="reward-tiers-title">Reward tiers</h2>
+          <button
+            type="button"
+            className="edit-reward-tiers"
+            onClick={() => {
+              history.push('/setup-auction/reward-tiers');
+            }}
+          >
+            Edit <img src={pencil} alt="edit-icon" />
+          </button>
+        </div>
+        {auction.tiers.length === 0 && (
+          <div key={1} className="view-tier">
+            <div className="auction-header">
+              <div className="img_head">
+                <div className="img_head_title">
+                  {/* <h3>{tier.name}</h3> */}
+                  <h3>Platinum tier</h3>
                 </div>
-                <div className="edit-show">
-                  <div className="edit-btn">
-                    <Button
-                      className="light-border-button"
-                      onClick={() => {
-                        history.push('/create-tiers', tier.id);
-                      }}
-                    >
-                      Edit <img src={pencil} alt="edit-icon" />
-                    </Button>
+                <div className="winners__edit__btn">
+                  <div className="winners">
+                    <div className="tier-perwinners">
+                      <h4>
+                        {/* NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b> */}
+                        NFTs per winner:&nbsp;<b>3</b>
+                      </h4>
+                    </div>
+                    <div className="tier-winners">
+                      <h4>
+                        {/* Winners:&nbsp;<b>{tier.winners}</b> */}
+                        Winners:&nbsp;<b>5</b>
+                      </h4>
+                    </div>
+                    <div className="tier-minbid">
+                      <h4>
+                        Total NFTs:&nbsp;
+                        <b>15</b>
+                      </h4>
+                    </div>
                   </div>
-                  <div className="launch-auction">
-                    {shownActionId === tier.id ? (
-                      <img
-                        src={arrowUp}
-                        alt="Arrow up"
-                        onClick={() => setShownActionId(null)}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <img
-                        src={arrowDown}
-                        alt="Arrow Down"
-                        onClick={() => setShownActionId(tier.id)}
-                        aria-hidden="true"
-                      />
-                    )}
-                  </div>
+                  {/* <Button
+                    className="light-border-button"
+                    onClick={() => {
+                      history.push('/create-tiers', 1);
+                    }}
+                  >
+                    Edit <img src={pencil} alt="edit-icon" />
+                  </Button> */}
                 </div>
               </div>
-              <div hidden={shownActionId !== tier.id} className="auctions-tier">
-                <div className="auction-reward">
-                  {tier.nfts.map((nft) => (
+              {/* <div className="edit-show">
+                <div className="edit-btn">
+                  <Button
+                    className="light-border-button"
+                    onClick={() => {
+                      history.push('/create-tiers', 1);
+                    }}
+                  >
+                    Edit <img src={pencil} alt="edit-icon" />
+                  </Button>
+                </div>
+                <div className="launch-auction">
+                  {shownActionId === 1 ? (
+                    <img
+                      src={arrowUp}
+                      alt="Arrow up"
+                      onClick={() => setShownActionId(null)}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <img
+                      src={arrowDown}
+                      alt="Arrow Down"
+                      onClick={() => setShownActionId(1)}
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
+              </div> */}
+            </div>
+            <div hidden={shownActionId !== 1} className="auctions-tier">
+              <div className="auction-reward">
+                {/* {tier.nfts.map((nft) => (
                     <div className="auction-reward__box">
                       <div className="auction-reward__box__image">
                         {nft.previewImage.type === 'video/mp4' && (
@@ -308,11 +314,11 @@ const AuctionReview = () => {
                         </>
                       )}
                     </div>
-                  ))}
-                </div>
+                  ))} */}
               </div>
             </div>
-          ))}
+          </div>
+        )}
       </div>
       <div className="message">
         <span>
@@ -323,9 +329,17 @@ const AuctionReview = () => {
           landing page to host your launch. Once you launch anyone can start bidding.
         </h1>
       </div>
-      <Button className="light-button" onClick={handleSetAuction}>
-        Set up auction
-      </Button>
+      <div className="btn-div">
+        <Button
+          className="light-border-button"
+          onClick={() => history.push('/setup-auction/reward-tiers')}
+        >
+          Back
+        </Button>
+        <Button className="light-button" onClick={handleSetAuction}>
+          Set up auction
+        </Button>
+      </div>
     </div>
   );
 };

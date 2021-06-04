@@ -3,10 +3,11 @@
 
 .auction-reward {
   .head-part {
-    display: flex;
-    justify-content: space-between;
     .tier-title {
-      //   width: 87%;
+      font-size: 20px;
+    }
+    p {
+      margin-top: 16px;
     }
     button {
       @include sm {
@@ -15,14 +16,15 @@
     }
   }
   .view-tier {
-    margin-top: 60px;
+    margin-bottom: 12px;
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    padding: 34px 30px;
+    padding: 26px 30px;
     .auction-header {
       display: flex;
+      justify-content: space-between;
       width: 100%;
     }
     .auctions-tier {
@@ -68,9 +70,8 @@
           .tier-winners,
           .tier-perwinners,
           .tier-minbid {
-            background: rgba(0, 0, 0, 0.05);
             border-radius: 12px;
-            margin-right: 12px;
+            margin-right: 11px;
             white-space: nowrap;
             h4 {
               position: static;
@@ -358,9 +359,63 @@
       grid-template-columns: 1fr;
     }
   }
+  .auction-settings-head {
+    display: flex;
+    justify-content: space-between;
+    .auction-settings-title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      color: $black;
+    }
+    button.edit-auction-settings {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: $black;
+      background: none;
+      img {
+        margin-left: 12px;
+      }
+    }
+  }
+  .reward-tiers-head {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    .reward-tiers-title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      color: $black;
+    }
+    button.edit-reward-tiers {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: $black;
+      background: none;
+      img {
+        margin-left: 12px;
+      }
+    }
+  }
   .auction-inf {
     display: flex;
-    margin-top: 40px;
+    margin-top: 20px;
 
     .name-bid {
       margin-right: 30px;
@@ -441,6 +496,7 @@
     }
   }
   .auction-ext {
+    position: relative;
     margin-top: 3px;
     display: flex;
     font-size: 12px !important;
@@ -452,8 +508,10 @@
   }
   .info-text {
     position: absolute;
-    background: #ffffff;
-    color: #000000;
+    right: 0;
+    top: 15px;
+    background: $white;
+    color: $black;
     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
     border-radius: 12px;
     width: 230px;
@@ -461,7 +519,6 @@
     padding: 16px;
     font-size: 12px;
     font-family: $spaceGroteskFont;
-    left: 57%;
     p {
       font-weight: normal !important;
     }
@@ -502,10 +559,24 @@
       padding: 18px 20px;
     }
   }
-  .light-button {
-    margin-top: 40px;
+  .btn-div {
+    margin-top: 60px;
+    .light-border-button {
+      @include sm {
+        margin-top: 14px;
+        margin-right: 0px;
+      }
+    }
+    button {
+      @include sm {
+        width: 100%;
+      }
+    }
     @include sm {
-      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column-reverse;
+      float: none;
     }
   }
 }

@@ -118,7 +118,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction
@@ -192,7 +192,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction
@@ -238,7 +238,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction
@@ -265,7 +265,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction

@@ -121,11 +121,9 @@ const AuctionSettings = () => {
 
     if (values.name && values.startingBid && values.startDate && values.endDate) {
       if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
-        console.log('aa');
         auctionFieldsValid = true;
       }
     }
-    console.log(minBid);
     if (minBid === true) {
       let isValid = true;
       setErrorArray([]);
