@@ -209,7 +209,7 @@ const MyNFTs = () => {
               </div>
 
               <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
-                <h1 className="title">Select NFT</h1>
+                <h1 className="title">Select NFTssss</h1>
                 <div className="create__mint__btns">
                   {myNFTsSelectedTabIndex === 2 && (
                     <button
