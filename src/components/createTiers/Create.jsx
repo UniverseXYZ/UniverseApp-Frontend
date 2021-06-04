@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import './CreateTiers.scss';
 import '../auctions/Tiers.scss';
+import Wallet from '../myNFTs/Wallet';
+import '../myNFTs/MyNFTs.scss';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
@@ -18,6 +20,9 @@ const Create = () => {
   const { auction, setAuction, bidtype, setBidtype, options } = useContext(AppContext);
   const [minBid, setMinBId] = useState(false);
   const bid = options.find((element) => element.value === bidtype);
+
+  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
+  const [filteredNFTs, setFilteredNFTs] = useState([]);
 
   const [values, setValues] = useState({
     name: '',
@@ -49,14 +54,14 @@ const Create = () => {
               { ...tierById, ...values },
             ],
           });
-          history.push('/select-nfts', tierId);
+          // history.push('/select-nfts', tierId);
         } else {
           const createdTierId = uuid();
           setAuction({
             ...auction,
             tiers: [...auction.tiers, { ...values, id: createdTierId, nfts: [], minBid: '' }],
           });
-          history.push('/select-nfts', createdTierId);
+          // history.push('/select-nfts', createdTierId);
         }
       }
     }
@@ -97,6 +102,7 @@ const Create = () => {
       ...prevValues,
       nftsPerWinner: values.nftsPerWinner.trim().length !== 0,
     }));
+    console.log(auction);
   };
 
   return (
@@ -127,7 +133,7 @@ const Create = () => {
       <div className="tier-info container">
         <p className="tier-setting">Tier settings</p>
         <div className="tiersInp">
-          <div>
+          <div className="inps">
             <Input
               id="name"
               error={isValidFields.name ? undefined : 'Tier name is required!'}
@@ -202,16 +208,16 @@ const Create = () => {
                 <img
                   src={infoIcon}
                   alt="Info Icon"
-                  onMouseOver={() => setHideIcon2(true)}
-                  onFocus={() => setHideIcon2(true)}
-                  onMouseLeave={() => setHideIcon2(false)}
-                  onBlur={() => setHideIcon2(false)}
+                  onMouseOver={() => setHideIcon(true)}
+                  onFocus={() => setHideIcon(true)}
+                  onMouseLeave={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon(false)}
                 />
                 <label className="switch">
                   <input type="checkbox" checked={minBid} onChange={handeClick} />
                   <span className="slider round" />
                 </label>
-                {hideIcon2 && (
+                {hideIcon && (
                   <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
                     <div className="info-text">
                       <p>
@@ -223,32 +229,53 @@ const Create = () => {
                 )}
               </div>
 
-              {minBid === true && (
-                <div className="bid-text">
-                  <ul>
-                    <li>You are able to set the minimum bid for each tier.</li>
-                    <li className="min-li">
-                      You are only able to set the minimum bid for the tier when the tier above has
-                      equal or higher minimum bid.
-                    </li>
-                  </ul>
-                </div>
-              )}
+              <div className="bid-text">
+                <ul>
+                  <li>You are able to set the minimum bid for each tier.</li>
+                  <li className="min-li">
+                    You are only able to set the minimum bid for the tier when the tier above has
+                    equal or higher minimum bid.
+                  </li>
+                </ul>
+              </div>
             </div>
             <div className="tiers-inp">
               <div className="tiers-part">
                 <div style={{ position: 'relative', marginBottom: '20px' }}>
-                  <span className="bid-type">
+                  <span className={minBid === true ? 'bid-type' : 'bid-type disabled'}>
                     {bid.img && <img src={bid.img} alt="icon" />}
                     <span className="button-name">{bid.name}</span>
                   </span>
-
-                  <Input type="number" name="tierBid" placeholder="0.1" />
+                  {minBid === true ? (
+                    <Input type="number" name="tierBid" placeholder="0.1" />
+                  ) : (
+                    <Input type="number" name="tierBid" placeholder="0.1" disabled />
+                  )}
                 </div>
               </div>
             </div>
+            {/* <Button onClick={handleClick}>Ok</Button> */}
           </div>
         </div>
+      </div>
+      <span className="hr-line" />
+      <div className="selectNftPart container">
+        <h1>Select NFTs</h1>
+        <p>
+          You can only select minted NFTs from your wallet. If you want to create NFTs, go to&nbsp;
+          <a>
+            <Link to="/select-nfts">Minting.</Link>
+          </a>
+          <p className="second-line">
+            Your progress with the current auction will be automatically saved.
+          </p>
+        </p>
+        <Wallet
+          filteredNFTs={filteredNFTs}
+          setFilteredNFTs={setFilteredNFTs}
+          selectedNFTIds={selectedNFTIds}
+          setSelectedNFTIds={setSelectedNFTIds}
+        />
       </div>
     </>
   );
