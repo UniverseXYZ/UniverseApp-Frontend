@@ -216,6 +216,72 @@
 }
 
     .tab__wallet {
+      .empty__filter__nfts {
+        h3 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 22px;
+          text-align: center;
+          color: $black;
+        }
+      }
+      .empty__nfts {
+        margin-top: 100px;
+        h3 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 22px;
+          text-align: center;
+          color: $black;
+          margin-bottom: 23px;
+        }
+        p.desc {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 18px;
+          text-align: center;
+          color: rgba(0, 0, 0, 0.6);
+          margin: 0 auto 24px;
+
+          &:disabled {
+            cursor: not-allowed;
+            background: #e6e6e6;
+            box-shadow: none;
+          }
+        }
+        button.set_up {
+          display: block;
+          margin: 0 auto;
+          background: $primary-bg-color;
+          box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+          border-radius: 12px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: $black;
+          padding: 11px 26px;
+
+          @include sm {
+            width: 100%;
+          }
+        }
+      }
+      .empty__collections {
+        width: 100%;
+        h3 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 22px;
+          text-align: center;
+          color: $black;
+        }
+      }
       .animate__filters__popup {
         position: absolute;
         width: 100%;
@@ -694,7 +760,7 @@
         .nonicon__icon {
           position: absolute;
           top: 23px;
-          right: 23px;
+          left: 23px;
           z-index: 9;
         }
 
@@ -807,6 +873,10 @@
               font-weight: bold;
               font-size: 14px;
               color: $black;
+              -webkit-line-clamp: 1;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
             }
             .editions-btn {
               width: 60px;
@@ -817,12 +887,12 @@
               font-size: 12px;
               line-height: 18px;
               align-items: center;
-              color: #000000;
+              color: $black;
               border: 1px solid rgba(0, 0, 0, 0.1);
-              background: #fff;
+              background: $white;
               border-radius: 12px;
               flex-grow: 0;
-              margin: 0px 2px;
+              margin: 0px 2px 6px;
             }
             .ed-num {
               text-align: end;

@@ -42,7 +42,7 @@ const Create = () => {
   const location = useLocation();
   const tierId = location.state;
   const tierById = auction.tiers.find((element) => element.id === tierId);
-  console.log(auction);
+
   useEffect(() => {
     if (values.name) {
       if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
@@ -264,7 +264,7 @@ const Create = () => {
         <p>
           You can only select minted NFTs from your wallet. If you want to create NFTs, go to&nbsp;
           <a>
-            <Link to="/select-nfts">Minting.</Link>
+            <Link to="/my-nfts">Minting.</Link>
           </a>
           <p className="second-line">
             Your progress with the current auction will be automatically saved.
@@ -275,6 +275,9 @@ const Create = () => {
           setFilteredNFTs={setFilteredNFTs}
           selectedNFTIds={selectedNFTIds}
           setSelectedNFTIds={setSelectedNFTIds}
+          tierName={values.name}
+          winners={Number(values.winners)}
+          nftsPerWinner={Number(values.nftsPerWinner)}
         />
       </div>
     </>

@@ -57,7 +57,7 @@ const RewardTiers = () => {
             10 tiers in one auction.
           </p>
         </div>
-        <DragDropContext onDragEnd={onDragEnd}>
+        {/* <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppableId">
             {(provided) => (
               <div key={uuid()} ref={provided.innerRef} {...provided.droppableProps}>
@@ -221,7 +221,7 @@ const RewardTiers = () => {
               </div>
             )}
           </Droppable>
-        </DragDropContext>
+        </DragDropContext> */}
         <div
           className="create-rew-tier"
           onClick={() => {
@@ -236,7 +236,7 @@ const RewardTiers = () => {
             <p>Create reward tier</p>
           </div>
         </div>
-        {auction.tiers.length > 0 && (
+        {/* {auction.tiers.length > 0 && (
           <div className="set-up">
             <Button
               className="light-button"
@@ -247,7 +247,7 @@ const RewardTiers = () => {
               Set up auction
             </Button>
           </div>
-        )}
+        )} */}
       </div>
       <div className="btn-div">
         <Button

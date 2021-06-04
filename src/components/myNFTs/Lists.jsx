@@ -10,11 +10,19 @@ import checkIcon from '../../assets/images/check.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import NFTPopup from '../popups/NFTPopup';
 
-const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => {
+const Lists = ({
+  data,
+  perPage,
+  offset,
+  selectedNFTIds,
+  setSelectedNFTIds,
+  winners,
+  nftsPerWinner,
+}) => {
   const sliceData = data.slice(offset, offset + perPage);
 
   const location = useLocation();
-  const isCreatingAction = location.pathname === '/select-nfts';
+  const isCreatingAction = location.pathname === '/create-tiers';
 
   const { auction } = useContext(AppContext);
 
@@ -22,8 +30,7 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const tierId = location.state;
-  const tierById = auction.tiers.find((element) => element.id === tierId);
+  const tierById = !!(winners && nftsPerWinner);
 
   const activateInfo = (index) => {
     setHideIcon(true);
@@ -31,12 +38,9 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
   };
 
   const handleSavedNfts = (clickedNFT) => {
-    if (tierById) {
-      if (isCreatingAction && tierById.winners <= clickedNFT.generatedEditions.length) {
-        if (
-          tierById.nftsPerWinner > selectedNFTIds.length ||
-          selectedNFTIds.includes(clickedNFT.id)
-        )
+    if (isCreatingAction) {
+      if (tierById && winners <= clickedNFT.generatedEditions.length) {
+        if (nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
           setSelectedNFTIds((prevValue) => {
             const nftIndex = prevValue.findIndex((nft) => nft === clickedNFT.id);
             if (nftIndex !== -1) {
@@ -49,7 +53,7 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
   };
   const handleShow = (nft) => {
     if (tierById) {
-      if (selectedNFTIds.includes(nft.id) && tierById.winners <= nft.generatedEditions.length) {
+      if (selectedNFTIds.includes(nft.id) && winners <= nft.generatedEditions.length) {
         setOpenEditions(openEditions ? null : nft.id);
       }
     }
@@ -59,7 +63,7 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
     <div className="nfts__lists">
       {sliceData.map((nft, index) => (
         <div style={{ position: 'relative' }} key={nft.id}>
-          {tierById && tierById.winners > nft.generatedEditions.length && (
+          {tierById && winners > nft.generatedEditions.length ? (
             <>
               <img
                 className="nonicon__icon"
@@ -81,12 +85,14 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
                 </Animated>
               )}
             </>
+          ) : (
+            <></>
           )}
           <div
             className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${
-              (tierById && tierById.winners > nft.generatedEditions.length) ||
+              (tierById && winners > nft.generatedEditions.length) ||
               (tierById &&
-                tierById.nftsPerWinner === selectedNFTIds.length &&
+                nftsPerWinner === selectedNFTIds.length &&
                 !selectedNFTIds.includes(nft.id))
                 ? 'disabled'
                 : ''
@@ -102,17 +108,17 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
                 <>
                   {selectedNFTIds.includes(nft.id) &&
                     tierById &&
-                    tierById.winners <= nft.generatedEditions.length && (
+                    winners <= nft.generatedEditions.length && (
                       <>
                         <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
                         <span className="selected-number">
-                          {selectedNFTIds.length}/{tierById.winners}
+                          {winners}/{nft.generatedEditions.length}
                         </span>{' '}
                       </>
                     )}
                 </>
               )}
-              {nft.previewImage.type === 'video/mp4' && (
+              {nft.previewImage.type === 'video/mp4' && !isCreatingAction && (
                 <Popup
                   trigger={
                     <video
@@ -130,30 +136,56 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
                   {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                 </Popup>
               )}
-              {nft.previewImage.type === 'audio/mpeg' && (
+              {nft.previewImage.type === 'video/mp4' && isCreatingAction && (
+                <video
+                  onMouseOver={(event) => event.target.play()}
+                  onFocus={(event) => event.target.play()}
+                  onMouseOut={(event) => event.target.pause()}
+                  onBlur={(event) => event.target.pause()}
+                >
+                  <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                  <track kind="captions" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+              {nft.previewImage.type === 'audio/mpeg' && !isCreatingAction && (
                 <Popup trigger={<img className="preview-image" src={mp3Icon} alt={nft.name} />}>
                   {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                 </Popup>
               )}
-              {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' && (
-                <Popup
-                  trigger={
-                    <img
-                      className="preview-image"
-                      src={URL.createObjectURL(nft.previewImage)}
-                      alt={nft.name}
-                    />
-                  }
-                >
-                  {(close) => <NFTPopup onClose={close} onNFT={nft} />}
-                </Popup>
+              {nft.previewImage.type === 'audio/mpeg' && isCreatingAction && (
+                <img className="preview-image" src={mp3Icon} alt={nft.name} />
               )}
+              {nft.previewImage.type !== 'audio/mpeg' &&
+                nft.previewImage.type !== 'video/mp4' &&
+                !isCreatingAction && (
+                  <Popup
+                    trigger={
+                      <img
+                        className="preview-image"
+                        src={URL.createObjectURL(nft.previewImage)}
+                        alt={nft.name}
+                      />
+                    }
+                  >
+                    {(close) => <NFTPopup onClose={close} onNFT={nft} />}
+                  </Popup>
+                )}
+              {nft.previewImage.type !== 'audio/mpeg' &&
+                nft.previewImage.type !== 'video/mp4' &&
+                isCreatingAction && (
+                  <img
+                    className="preview-image"
+                    src={URL.createObjectURL(nft.previewImage)}
+                    alt={nft.name}
+                  />
+                )}
               {nft.previewImage.type === 'video/mp4' && (
                 <img className="video__icon" src={videoIcon} alt="Video Icon" />
               )}
             </div>
-            <div className="nft__box__name">
-              <h3>{nft.name}</h3>
+            <div className={`nft__box__name ${isCreatingAction ? 'no__hover' : ''}`}>
+              <h3 title={nft.name}>{nft.name}</h3>
               {nft.type === 'single' || (nft.type === 'collection' && isCreatingAction) ? (
                 nft.generatedEditions.length > 1 ? (
                   <div className="collection__count">
@@ -180,27 +212,28 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
                         </ul>
                       </>
                     )}
-                    {nft.type === 'single' && (
+                    {/* {nft.type === 'single' && (
                       <div className="ed-num">{`x${nft.generatedEditions.length}`}</div>
-                    )}
+                    )} */}
                     {!(
                       selectedNFTIds.includes(nft.id) &&
                       tierById &&
-                      tierById.winners <= nft.generatedEditions.length
-                    ) && (
-                      <div
-                        className="generatedEditions"
-                        style={{
-                          gridTemplateColumns: `repeat(${Math.ceil(
-                            nft.generatedEditions.length / 10
-                          )}, auto)`,
-                        }}
-                      >
-                        {nft.generatedEditions.map((edition) => (
-                          <div key={edition}>{`#${edition}`}</div>
-                        ))}
-                      </div>
-                    )}
+                      winners <= nft.generatedEditions.length
+                    ) &&
+                      !isCreatingAction && (
+                        <div
+                          className="generatedEditions"
+                          style={{
+                            gridTemplateColumns: `repeat(${Math.ceil(
+                              nft.generatedEditions.length / 10
+                            )}, auto)`,
+                          }}
+                        >
+                          {nft.generatedEditions.map((edition) => (
+                            <div key={edition}>{`#${edition}`}</div>
+                          ))}
+                        </div>
+                      )}
                   </div>
                 ) : (
                   <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
@@ -231,10 +264,10 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
                   </>
                 )}
               </div>
-              {nft.type === 'collection' ? (
-                nft.generatedEditions.length > 1 ? (
-                  <div className="collection__count">
-                    {`x${nft.generatedEditions.length}`}
+              {nft.generatedEditions.length > 1 ? (
+                <div className="collection__count">
+                  {`x${nft.generatedEditions.length}`}
+                  {!isCreatingAction ? (
                     <div
                       className="generatedEditions"
                       style={{
@@ -247,12 +280,12 @@ const Lists = ({ data, perPage, offset, selectedNFTIds, setSelectedNFTIds }) => 
                         <div key={edition}>{`#${edition}`}</div>
                       ))}
                     </div>
-                  </div>
-                ) : (
-                  <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
-                )
+                  ) : (
+                    <></>
+                  )}
+                </div>
               ) : (
-                <></>
+                <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
               )}
             </div>
             {nft.generatedEditions.length > 1 && (
@@ -274,6 +307,13 @@ Lists.propTypes = {
   offset: PropTypes.number.isRequired,
   selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setSelectedNFTIds: PropTypes.func.isRequired,
+  winners: PropTypes.number,
+  nftsPerWinner: PropTypes.number,
+};
+
+Lists.defaultProps = {
+  winners: null,
+  nftsPerWinner: null,
 };
 
 export default Lists;
