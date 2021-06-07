@@ -24,6 +24,12 @@ const SelectTokenPopup = ({ onClose }) => {
     setsearchByNameAndAddress(value);
   };
 
+  useEffect(() => {
+    document.body.classList.add('no__scroll');
+
+    return () => document.body.classList.remove('no__scroll');
+  }, []);
+
   return (
     <div className="select-token">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
