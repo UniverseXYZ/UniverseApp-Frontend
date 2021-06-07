@@ -29,14 +29,24 @@ const CustomizeAuction = () => {
     backgroundImage: null,
     hasBlur: '',
   });
-  const [rewardTiersAuction, setRewardTiersAuction] = useState(
-    auction.tiers.map((tier) => ({ id: tier.id }))
-  );
+  const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
+  const [saveAndPreview, setSaveAndPreview] = useState(false);
+
+  useEffect(() => {
+    if (auction) {
+      setDomainAndBranding({
+        headline: auction.headline || '',
+        link: auction.link || '',
+        promoImage: auction.promoImage || null,
+        backgroundImage: auction.backgroundImage || null,
+        hasBlur: auction.hasBlur || '',
+      });
+    }
+  }, []);
 
   const handleSaveClose = () => {
     if (domainAndBranding.headline && domainAndBranding.link) {
       const newAuction = { ...auction };
-      newAuction.id = uuid();
       newAuction.headline = domainAndBranding.headline;
       newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
       newAuction.copied = false;
@@ -59,7 +69,7 @@ const CustomizeAuction = () => {
           } else if (new Date() < new Date(newAuction.startDate)) {
             setFutureAuctions([...futureAuctions, newAuction]);
           }
-          setMyAuctions([...myAuctions, newAuction]);
+          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setAuction({ tiers: [] });
         }, 1000);
       }
@@ -79,7 +89,6 @@ const CustomizeAuction = () => {
     }
     if (desc) {
       const newAuction = { ...auction };
-      newAuction.id = uuid();
       newAuction.headline = domainAndBranding.headline;
       newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
       newAuction.copied = false;
@@ -92,19 +101,22 @@ const CustomizeAuction = () => {
       });
       if (loggedInArtist.name && loggedInArtist.avatar) {
         newAuction.artist = loggedInArtist;
-        history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
-          auction: newAuction,
-        });
+        setSaveAndPreview(true);
+        setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
         setTimeout(() => {
           if (
             new Date() < new Date(newAuction.endDate) &&
             new Date() >= new Date(newAuction.startDate)
           ) {
             setActiveAuctions([...activeAuctions, newAuction]);
+          } else if (new Date() < new Date(newAuction.startDate)) {
+            setFutureAuctions([...futureAuctions, newAuction]);
           }
-          setMyAuctions([...myAuctions, newAuction]);
           setAuction({ tiers: [] });
-        }, 1000);
+          history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
+            auction: newAuction,
+          });
+        }, 500);
       }
     }
   };
@@ -123,7 +135,6 @@ const CustomizeAuction = () => {
       }
       if (desc) {
         const newAuction = { ...auction };
-        newAuction.id = uuid();
         newAuction.headline = domainAndBranding.headline;
         newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
         newAuction.copied = false;
@@ -136,19 +147,21 @@ const CustomizeAuction = () => {
         });
         if (loggedInArtist.name && loggedInArtist.avatar) {
           newAuction.artist = loggedInArtist;
-          history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
-            auction: newAuction,
-          });
+          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setTimeout(() => {
             if (
               new Date() < new Date(newAuction.endDate) &&
               new Date() >= new Date(newAuction.startDate)
             ) {
               setActiveAuctions([...activeAuctions, newAuction]);
+            } else if (new Date() < new Date(newAuction.startDate)) {
+              setFutureAuctions([...futureAuctions, newAuction]);
             }
-            setMyAuctions([...myAuctions, newAuction]);
             setAuction({ tiers: [] });
-          }, 1000);
+            history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
+              auction: newAuction,
+            });
+          }, 500);
         }
       }
     }
@@ -180,7 +193,11 @@ const CustomizeAuction = () => {
           <Button className="light-button" onClick={handleSaveClose}>
             Save and close
           </Button>
-          <Button className="light-border-button" onClick={handleSavePreview}>
+          <Button
+            className="light-border-button"
+            onClick={handleSavePreview}
+            disabled={saveAndPreview}
+          >
             Save and preview
           </Button>
         </div>

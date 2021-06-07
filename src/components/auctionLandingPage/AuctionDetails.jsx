@@ -6,7 +6,6 @@ import Skeleton from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import Slider from 'react-slick';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import leftArrow from '../../assets/images/arrow.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';

@@ -184,48 +184,54 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <h6>Step2</h6>
                 <h4>Customize landing page</h4>
                 <div className="circle">
-                  <img hidden={!futureAuction.mint} src={doneIcon} alt="Done" />
-                  <img hidden={futureAuction.mint} src={emptyMark} alt="Empty mark" />
+                  <img
+                    hidden={!futureAuction.headline && !futureAuction.link}
+                    src={doneIcon}
+                    alt="Done"
+                  />
+                  <img
+                    hidden={futureAuction.headline || futureAuction.link}
+                    src={emptyMark}
+                    alt="Empty mark"
+                  />
                   <div className="hz-line2" />
                 </div>
-                {futureAuction.mint === true ? (
-                  <Button disabled className="light-button">
-                    Start
-                  </Button>
-                ) : (
-                  <Button
-                    className="light-button"
-                    onClick={() => {
-                      setAuction(futureAuction);
-                      history.push('/customize-auction-landing-page', futureAuction.id);
-                    }}
+                <Button
+                  className={
+                    futureAuction.headline || futureAuction.link
+                      ? 'light-border-button'
+                      : 'light-button'
+                  }
+                  onClick={() => {
+                    setAuction(futureAuction);
+                    history.push('/customize-auction-landing-page', futureAuction.id);
+                  }}
+                >
+                  {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
+                </Button>
+                {/* <>
+                  <Popup
+                    trigger={
+                      <button type="button" className="light-button">
+                        Start
+                      </button>
+                    }
                   >
-                    Start
-                  </Button>
-                  // <>
-                  //   <Popup
-                  //     trigger={
-                  //       <button type="button" className="light-button">
-                  //         Start
-                  //       </button>
-                  //     }
-                  //   >
-                  //     {(close) => (
-                  //       <MintNftsPopup
-                  //         onClose={close}
-                  //         onAuctionId={futureAuction.id}
-                  //         handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
-                  //       />
-                  //     )}
-                  //   </Popup>
-                  //   <Popup open={mintCongratsPopupOpen}>
-                  //     <MintCongratsPopup
-                  //       onClose={handleMintCongratsPopupClose}
-                  //       onAuctionId={futureAuction.id}
-                  //     />
-                  //   </Popup>
-                  // </>
-                )}
+                    {(close) => (
+                      <MintNftsPopup
+                        onClose={close}
+                        onAuctionId={futureAuction.id}
+                        handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
+                      />
+                    )}
+                  </Popup>
+                  <Popup open={mintCongratsPopupOpen}>
+                    <MintCongratsPopup
+                      onClose={handleMintCongratsPopupClose}
+                      onAuctionId={futureAuction.id}
+                    />
+                  </Popup>
+                </> */}
               </div>
               <div className="step-3">
                 <h6>Step 3</h6>
@@ -266,8 +272,16 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 </div>
                 <div className="hz-line1" />
                 <div className="circle">
-                  <img hidden={!futureAuction.mint} src={doneIcon} alt="Done" />
-                  <img hidden={futureAuction.mint} src={emptyMark} alt="Empty mark" />
+                  <img
+                    hidden={!futureAuction.headline && !futureAuction.link}
+                    src={doneIcon}
+                    alt="Done"
+                  />
+                  <img
+                    hidden={futureAuction.headline || futureAuction.link}
+                    src={emptyMark}
+                    alt="Empty mark"
+                  />
                 </div>
                 <div className="hz-line2" />
                 <div className="circle">
@@ -299,35 +313,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <div className="step-2">
                   <h6>Step2</h6>
                   <h4>Customize landing page</h4>
-                  {futureAuction.mint === true ? (
-                    <Button disabled className="light-button">
-                      Start
-                    </Button>
-                  ) : (
-                    <>
-                      <Popup
-                        trigger={
-                          <button type="button" className="light-button">
-                            Start
-                          </button>
-                        }
-                      >
-                        {(close) => (
-                          <MintNftsPopup
-                            onClose={close}
-                            onAuctionId={futureAuction.id}
-                            handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
-                          />
-                        )}
-                      </Popup>
-                      <Popup open={mintCongratsPopupOpen}>
-                        <MintCongratsPopup
-                          onClose={handleMintCongratsPopupClose}
-                          onAuctionId={futureAuction.id}
-                        />
-                      </Popup>
-                    </>
-                  )}
+                  <Button
+                    className="light-button"
+                    onClick={() => {
+                      setAuction(futureAuction);
+                      history.push('/customize-auction-landing-page', futureAuction.id);
+                    }}
+                  >
+                    Start
+                  </Button>
                 </div>
                 <div className="step-3">
                   <h6>Step 3</h6>

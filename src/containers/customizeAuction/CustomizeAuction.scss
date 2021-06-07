@@ -460,6 +460,10 @@
               line-height: 150%;
               font-weight: normal;
 
+              b {
+                text-transform: uppercase;
+              }
+
               @include sm {
                 margin-right: 4px;
                 margin-bottom: 10px;

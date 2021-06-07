@@ -9,7 +9,7 @@ const PlaceBid = ({ auction, bidders, setBidders }) => (
     <div className="place__bid__section__container">
       <div>
         <h1 className="title">Place a bid</h1>
-        <p className="desc">Bid to win 1 of 45 NFT bundles</p>
+        <p className="desc">Bid to win 1 of {auction.totalNFTs} NFT bundles</p>
       </div>
       <div className="place__bid__btn">
         <Popup
