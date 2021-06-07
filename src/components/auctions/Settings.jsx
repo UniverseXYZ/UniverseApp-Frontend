@@ -61,6 +61,10 @@ const AuctionSettings = () => {
     setsearchByNameAndAddress(value);
   };
 
+  const handleEdit = () => {
+    document.body.classList.add('no__scroll');
+  };
+
   const [isValidFields, setIsValidFields] = useState({
     name: true,
     startingBid: true,
@@ -250,6 +254,7 @@ const AuctionSettings = () => {
                   </button> */}
                   <Popup
                     nested
+                    handleEdit
                     trigger={
                       <button type="button" className={dropDown}>
                         {bid.img && <img src={bid.img} alt="icon" />}

@@ -51,6 +51,12 @@ const EndDateCalendar = React.forwardRef(
         : d.getMonth(),
     });
 
+    useEffect(() => {
+      document.body.classList.add('no__scroll');
+
+      return () => document.body.classList.remove('no__scroll');
+    }, []);
+
     const createDaysArray = () => {
       const dateArr = [];
       const lastDay = new Date(selectedDate.year, selectedDate.month + 1, 0);

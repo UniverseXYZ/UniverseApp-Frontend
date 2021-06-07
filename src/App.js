@@ -25,6 +25,7 @@ import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
+import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -140,6 +141,7 @@ const App = () => {
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
         <Route exact path="/review-reward" component={() => <ReviewReward />} />
         <Route exact path="/select-nfts" component={() => <MyNFTs />} />
+        <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
         <Route
           exact
           path="/customize-auction-landing-page"

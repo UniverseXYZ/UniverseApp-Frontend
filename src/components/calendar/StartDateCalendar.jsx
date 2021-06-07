@@ -227,6 +227,12 @@ const StartDateCalendar = React.forwardRef(
       };
     });
 
+    useEffect(() => {
+      document.body.classList.add('no__scroll');
+
+      return () => document.body.classList.remove('no__scroll');
+    }, []);
+
     return (
       <div className="calendar" ref={ref}>
         <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
