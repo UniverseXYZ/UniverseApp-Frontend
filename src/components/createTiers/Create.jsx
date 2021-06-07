@@ -19,6 +19,7 @@ const Create = () => {
   const [hideIcon2, setHideIcon2] = useState(false);
   const { auction, setAuction, bidtype, setBidtype, options } = useContext(AppContext);
   const [minBid, setMinBId] = useState(false);
+  const [minBidValue, setMinBidValue] = useState('');
   const bid = options.find((element) => element.value === bidtype);
 
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
@@ -42,7 +43,7 @@ const Create = () => {
   const location = useLocation();
   const tierId = location.state;
   const tierById = auction.tiers.find((element) => element.id === tierId);
-  console.log(auction);
+
   useEffect(() => {
     if (values.name) {
       if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
@@ -74,6 +75,10 @@ const Create = () => {
         winners: tierById.winners,
         nftsPerWinner: tierById.nftsPerWinner,
       });
+      if (tierById.minBidValue) {
+        setMinBidValue(tierById.minBidValue);
+        setMinBId(true);
+      }
     }
   }, [tierById]);
 
@@ -247,7 +252,13 @@ const Create = () => {
                     <span className="button-name">{bid.name}</span>
                   </span>
                   {minBid === true ? (
-                    <Input type="number" name="tierBid" placeholder="0.1" />
+                    <Input
+                      type="number"
+                      name="tierBid"
+                      placeholder="0.1"
+                      value={minBidValue}
+                      onChange={(e) => setMinBidValue(e.target.value)}
+                    />
                   ) : (
                     <Input type="number" name="tierBid" placeholder="0.1" disabled />
                   )}
@@ -264,7 +275,7 @@ const Create = () => {
         <p>
           You can only select minted NFTs from your wallet. If you want to create NFTs, go to&nbsp;
           <a>
-            <Link to="/select-nfts">Minting.</Link>
+            <Link to="/my-nfts">Minting.</Link>
           </a>
           <p className="second-line">
             Your progress with the current auction will be automatically saved.
@@ -275,6 +286,10 @@ const Create = () => {
           setFilteredNFTs={setFilteredNFTs}
           selectedNFTIds={selectedNFTIds}
           setSelectedNFTIds={setSelectedNFTIds}
+          tierName={values.name}
+          winners={Number(values.winners)}
+          nftsPerWinner={Number(values.nftsPerWinner)}
+          minBidValue={minBidValue}
         />
       </div>
     </>

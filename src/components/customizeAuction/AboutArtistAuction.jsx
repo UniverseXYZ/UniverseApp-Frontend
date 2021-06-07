@@ -22,6 +22,13 @@ const AboutArtistAuction = () => (
     <About />
     <PersonalLogo />
     <Social />
+    <div className="landing__page__warning">
+      <img src={warningIcon} alt="Warning" />
+      <p>
+        Your landing page will be automatically published after you successfully complete all
+        transactions on the Finalize Auction step.
+      </p>
+    </div>
   </div>
 );
 export default AboutArtistAuction;

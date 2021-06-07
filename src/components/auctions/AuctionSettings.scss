@@ -49,9 +49,9 @@
 
         .callendar__image {
           position: absolute;
-          right: 0;
-          bottom: 0px;
-          height: 52px;
+          right: 1px;
+          top: 24px;
+          height: 50px;
         }
       }
       .intup-l {
@@ -102,9 +102,12 @@
         width: 100px;
         height: 34px;
         right: 8px;
-        bottom: 9px;
+        top: 32px;
         border-radius: 6px;
         button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 100%;
           height: 100%;
           background: rgba(0, 0, 0, 0.02);

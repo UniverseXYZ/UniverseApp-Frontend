@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import moment from 'moment';
-import { AUCTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
@@ -71,33 +70,29 @@ const MyAuction = () => {
   }, []);
 
   useEffect(() => {
-    if (auction.tiers.length) {
-      setMyAuctions((prevValues) => {
-        let foundAuction = false;
+    // if (auction.tiers.length) {
+    //   setMyAuctions((prevValues) => {
+    //     let foundAuction = false;
 
-        const modifiedMyAuctions = prevValues.map((myAuction) => {
-          if (myAuction.id === auction.id) {
-            foundAuction = true;
-            return { ...auction };
-          }
-          return myAuction;
-        });
+    //     const modifiedMyAuctions = prevValues.map((myAuction) => {
+    //       if (myAuction.id === auction.id) {
+    //         foundAuction = true;
+    //         return { ...auction };
+    //       }
+    //       return myAuction;
+    //     });
 
-        if (foundAuction) {
-          return modifiedMyAuctions;
-        }
-        return [...modifiedMyAuctions, auction];
-      });
+    //     if (foundAuction) {
+    //       return modifiedMyAuctions;
+    //     }
+    //     return [...modifiedMyAuctions, auction];
+    //   });
 
-      setAuction({ tiers: [] });
-    }
+    //   setAuction({ tiers: [] });
+    // }
     function handleHideButton() {
       if (window.innerWidth < 576) {
-        if (myAuctions.length > 0) {
-          setHideButton(true);
-        } else {
-          setHideButton(false);
-        }
+        setHideButton(false);
       } else {
         setHideButton(true);
       }
@@ -105,7 +100,7 @@ const MyAuction = () => {
     window.addEventListener('resize', handleHideButton);
     handleHideButton();
 
-    // return () => window.removeEventListener('resize', handleHideButton);
+    return () => window.removeEventListener('resize', handleHideButton);
   }, []);
 
   return (
@@ -118,7 +113,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction
@@ -192,7 +187,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction
@@ -238,7 +233,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction
@@ -265,7 +260,7 @@ const MyAuction = () => {
               type="button"
               className="set_up"
               onClick={() => {
-                history.push('/reward-tiers');
+                history.push('/setup-auction');
               }}
             >
               Set up auction

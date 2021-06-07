@@ -15,7 +15,7 @@ const CreateYourAuction = () => {
           <button
             type="button"
             onClick={() => {
-              history.push('/reward-tiers');
+              history.push('/setup-auction');
             }}
           >
             <span>Set up auction</span>

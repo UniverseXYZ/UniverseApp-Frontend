@@ -3,10 +3,11 @@
 
 .auction-reward {
   .head-part {
-    display: flex;
-    justify-content: space-between;
     .tier-title {
-      //   width: 87%;
+      font-size: 20px;
+    }
+    p {
+      margin-top: 16px;
     }
     button {
       @include sm {
@@ -15,18 +16,19 @@
     }
   }
   .view-tier {
-    margin-top: 60px;
+    margin-bottom: 12px;
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    padding: 34px 30px;
+    padding: 26px 30px;
     .auction-header {
       display: flex;
+      justify-content: space-between;
       width: 100%;
     }
     .auctions-tier {
-      margin-top: 30px;
+      margin-top: 20px;
 
       @include lg {
         margin-top: 24px;
@@ -68,9 +70,8 @@
           .tier-winners,
           .tier-perwinners,
           .tier-minbid {
-            background: rgba(0, 0, 0, 0.05);
             border-radius: 12px;
-            margin-right: 12px;
+            margin-right: 11px;
             white-space: nowrap;
             h4 {
               position: static;
@@ -159,7 +160,6 @@
     }
     .edit-show {
       display: flex;
-      // width: 18%;
       button {
         display: flex;
         img {
@@ -176,9 +176,8 @@
     }
   }
   .auction-reward {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
 
     .auction-reward__box {
       background: $white;
@@ -187,13 +186,12 @@
       border-radius: 12px;
       padding: 12px;
       position: relative;
+      margin-right: 20px;
 
       &__image {
         position: relative;
-        margin-bottom: 12px;
-        cursor: pointer;
-        height: 230px;
-        width: 230px;
+        height: 88px;
+        width: 88px;
 
         video {
           width: 100%;
@@ -206,12 +204,6 @@
           height: 100%;
           object-fit: cover;
           border-radius: 12px;
-        }
-
-        .check__icon {
-          position: absolute;
-          top: 8px;
-          left: 8px;
         }
         .video__icon {
           position: absolute;
@@ -229,121 +221,29 @@
           height: 312px;
         }
       }
-
-      &__name {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-
-        h3 {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          color: $black;
-        }
-        .three__dots {
-          position: relative;
-          display: flex;
-          align-items: center;
-          gap: 3px;
-          span {
-            height: 4px;
-            width: 4px;
-            background-color: $black;
-            border-radius: 50%;
-          }
-        }
-      }
-
-      &__footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        .ed-count {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          line-height: 21px;
-          text-align: right;
-          color: #000000;
-        }
-        .collection__details {
-          display: flex;
-          align-items: center;
-          .random__bg__color {
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: $sharpGroteskMediumFont;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 12px;
-            text-transform: uppercase;
-            color: $black;
-          }
-          img {
-            height: 20px;
-            width: 20px;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-          span {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 300;
-            font-size: 12px;
-            color: $black;
-            margin-left: 6px;
-          }
-        }
-        div.collection__count {
-          position: relative;
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          color: $black;
-          cursor: default;
-
-          &:hover {
-            .generatedEditions {
-              display: grid;
-              grid-column-gap: 10px;
-              grid-row-gap: 5px;
-              z-index: 1;
-            }
-          }
-        }
-      }
-
       &__highlight__one {
         position: absolute;
-        bottom: -8px;
+        bottom: -9px;
+        background-color: $white;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-left: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-left-radius: 150px;
         border-bottom-right-radius: 150px;
-        width: 95%;
+        width: 89%;
         height: 8px;
         left: 8px;
       }
       &__highlight__two {
         position: absolute;
-        bottom: -16px;
+        bottom: -18px;
+        background-color: $white;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-left: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-left-radius: 150px;
         border-bottom-right-radius: 150px;
-        width: 90%;
+        width: 77%;
         height: 8px;
         left: 16px;
       }
@@ -358,9 +258,63 @@
       grid-template-columns: 1fr;
     }
   }
+  .auction-settings-head {
+    display: flex;
+    justify-content: space-between;
+    .auction-settings-title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      color: $black;
+    }
+    button.edit-auction-settings {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: $black;
+      background: none;
+      img {
+        margin-left: 12px;
+      }
+    }
+  }
+  .reward-tiers-head {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    .reward-tiers-title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      color: $black;
+    }
+    button.edit-reward-tiers {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: $black;
+      background: none;
+      img {
+        margin-left: 12px;
+      }
+    }
+  }
   .auction-inf {
     display: flex;
-    margin-top: 40px;
+    margin-top: 20px;
 
     .name-bid {
       margin-right: 30px;
@@ -441,6 +395,7 @@
     }
   }
   .auction-ext {
+    position: relative;
     margin-top: 3px;
     display: flex;
     font-size: 12px !important;
@@ -452,8 +407,10 @@
   }
   .info-text {
     position: absolute;
-    background: #ffffff;
-    color: #000000;
+    right: 0;
+    top: 15px;
+    background: $white;
+    color: $black;
     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
     border-radius: 12px;
     width: 230px;
@@ -461,7 +418,6 @@
     padding: 16px;
     font-size: 12px;
     font-family: $spaceGroteskFont;
-    left: 57%;
     p {
       font-weight: normal !important;
     }
@@ -502,10 +458,24 @@
       padding: 18px 20px;
     }
   }
-  .light-button {
-    margin-top: 40px;
+  .btn-div {
+    margin-top: 60px;
+    .light-border-button {
+      @include sm {
+        margin-top: 14px;
+        margin-right: 0px;
+      }
+    }
+    button {
+      @include sm {
+        width: 100%;
+      }
+    }
     @include sm {
-      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column-reverse;
+      float: none;
     }
   }
 }
