@@ -1,5 +1,5 @@
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { Animated } from 'react-animated-css';
-import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
@@ -8,8 +8,10 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
+import AppContext from '../../ContextAPI.js';
 
 const DomainAndBranding = ({ values, onChange }) => {
+  const { auction } = useContext(AppContext);
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
   const [blur, setBlur] = useState(false);
@@ -34,6 +36,7 @@ const DomainAndBranding = ({ values, onChange }) => {
       setValidHeadline(e.target.value.trim().length !== 0);
     }
   };
+
   return (
     <div>
       <div className="domain__branding">
@@ -53,7 +56,7 @@ const DomainAndBranding = ({ values, onChange }) => {
               value={values.headline}
               onChange={handleHeadline}
             />
-            {!validHeadline && (
+            {!validHeadline && !values.headline && (
               <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
             )}
           </div>
@@ -122,7 +125,7 @@ const DomainAndBranding = ({ values, onChange }) => {
               onChange={handleLink}
               placeholder="Enter the auction link"
             />
-            {!validLink && (
+            {!validLink && !values.link && (
               <p className="error__text">
                 &quot;Auction website link&quot; is not allowed to be empty
               </p>

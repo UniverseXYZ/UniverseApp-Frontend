@@ -119,9 +119,13 @@ const AuctionLandingPage = () => {
       <RewardTiers auction={selectedAuction} />
       <AuctionOwnerDetails artist={artist} />
       <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
-      <div className="artist__personal__logo">
-        <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
-      </div>
+      {artist && artist.personalLogo ? (
+        <div className="artist__personal__logo">
+          <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <NotFound />

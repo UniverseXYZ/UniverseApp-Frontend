@@ -43,7 +43,7 @@ const RewardTiers = ({ auction }) => (
               <div className="tier__info">
                 <span>Bidders #10</span>
                 <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
-                <span>{`Minimum bid: ${tier.minBid} ETH`}</span>
+                {tier.minBidValue ? <span>{`Minimum bid: ${tier.minBidValue} ETH`}</span> : <></>}
               </div>
               <div className="tier__description">{tier.description}</div>
               <div className="preview__nfts">
