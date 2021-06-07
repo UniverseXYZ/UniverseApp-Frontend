@@ -19,6 +19,7 @@ const Create = () => {
   const [hideIcon2, setHideIcon2] = useState(false);
   const { auction, setAuction, bidtype, setBidtype, options } = useContext(AppContext);
   const [minBid, setMinBId] = useState(false);
+  const [minBidValue, setMinBidValue] = useState('');
   const bid = options.find((element) => element.value === bidtype);
 
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
@@ -74,6 +75,10 @@ const Create = () => {
         winners: tierById.winners,
         nftsPerWinner: tierById.nftsPerWinner,
       });
+      if (tierById.minBidValue) {
+        setMinBidValue(tierById.minBidValue);
+        setMinBId(true);
+      }
     }
   }, [tierById]);
 
@@ -247,7 +252,13 @@ const Create = () => {
                     <span className="button-name">{bid.name}</span>
                   </span>
                   {minBid === true ? (
-                    <Input type="number" name="tierBid" placeholder="0.1" />
+                    <Input
+                      type="number"
+                      name="tierBid"
+                      placeholder="0.1"
+                      value={minBidValue}
+                      onChange={(e) => setMinBidValue(e.target.value)}
+                    />
                   ) : (
                     <Input type="number" name="tierBid" placeholder="0.1" disabled />
                   )}
@@ -278,6 +289,7 @@ const Create = () => {
           tierName={values.name}
           winners={Number(values.winners)}
           nftsPerWinner={Number(values.nftsPerWinner)}
+          minBidValue={minBidValue}
         />
       </div>
     </>

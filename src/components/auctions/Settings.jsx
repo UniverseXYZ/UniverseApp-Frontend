@@ -105,8 +105,6 @@ const AuctionSettings = () => {
   };
   const bid = options.find((element) => element.value === bidtype);
   const isEditingAuction = location.state !== undefined;
-  // const isEditingAuction = location.state === '/auction-review';
-
   const handleAddAuction = () => {
     setIsValidFields((prevValues) => ({
       ...prevValues,
@@ -183,7 +181,7 @@ const AuctionSettings = () => {
   };
 
   useEffect(() => {
-    if (auction.id || isEditingAuction) {
+    if (isEditingAuction) {
       setValues({
         name: auction.name,
         startingBid: auction.startingBid,
@@ -198,8 +196,11 @@ const AuctionSettings = () => {
       //   }),
       //   {}
       // );
+    } else if (!isEditingAuction && auction.id) {
+      setAuction({ tiers: [] });
     }
-  }, [auction.id]);
+  }, []);
+
   return (
     <div className="auction-settings container">
       {/* <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">

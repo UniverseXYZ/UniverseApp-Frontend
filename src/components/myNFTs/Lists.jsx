@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
@@ -31,6 +31,7 @@ const Lists = ({
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const tierById = !!(winners && nftsPerWinner);
+  const editMode = auction.tiers.find((element) => element.id === location.state);
 
   const activateInfo = (index) => {
     setHideIcon(true);
@@ -51,6 +52,16 @@ const Lists = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (editMode) {
+      const newSelectedNFTIds = [];
+      editMode.nfts.forEach((nft) => {
+        newSelectedNFTIds.push(nft.id);
+      });
+      setSelectedNFTIds(newSelectedNFTIds);
+    }
+  }, []);
   const handleShow = (nft) => {
     if (tierById) {
       if (selectedNFTIds.includes(nft.id) && winners <= nft.generatedEditions.length) {

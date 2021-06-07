@@ -1,12 +1,11 @@
 /* eslint-disable no-cond-assign */
 import React, { useState, useEffect, useContext } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
 import './AuctionReview.scss';
 import './Tiers.scss';
-import arrow from '../../assets/images/arrow.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import ethIcon from '../../assets/images/bid_icon.svg';
@@ -16,9 +15,6 @@ import bondIcon from '../../assets/images/bond_icon.svg';
 import snxIcon from '../../assets/images/snx.svg';
 import yellowIcon from '../../assets/images/yellowIcon.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
-import checkIcon from '../../assets/images/check.svg';
-import arrowUp from '../../assets/images/Arrow_Up.svg';
-import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
@@ -26,12 +22,11 @@ import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
 
 const AuctionReview = () => {
-  const { auction, setAuction, bidtype, setBidype } = useContext(AppContext);
-  const location = useLocation();
+  const { auction, setAuction, bidtype, myAuctions, setMyAuctions } = useContext(AppContext);
   const history = useHistory();
-  const [shownActionId, setShownActionId] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);
+  const isEditingAuction = myAuctions.filter((a) => a.id === auction.id);
 
   useEffect(() => {
     if (bidtype === 'eth') {
@@ -53,14 +48,40 @@ const AuctionReview = () => {
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
+      let totalNFTs = 0;
+      auction.tiers.forEach((tier) => {
+        totalNFTs += tier.winners * tier.nftsPerWinner;
+      });
       document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
         document.getElementById('popup-root').remove();
         document.getElementById('congrats-hidden-btn').click();
       }, 2000);
       setTimeout(() => {
-        history.push('/customize-auction-landing-page');
+        const newAuction = { ...auction };
+        newAuction.totalNFTs = totalNFTs;
+        setMyAuctions([...myAuctions, newAuction]);
+        setAuction({ tiers: [] });
+        history.push('/my-auctions');
       }, 6000);
+    }
+  };
+
+  const handleSaveAuction = () => {
+    if (auction && auction.tiers.length) {
+      let totalNFTs = 0;
+      auction.tiers.forEach((tier) => {
+        totalNFTs += tier.winners * tier.nftsPerWinner;
+      });
+      document.getElementById('loading-hidden-btn').click();
+      setTimeout(() => {
+        document.getElementById('popup-root').remove();
+        const newAuction = { ...auction };
+        newAuction.totalNFTs = totalNFTs;
+        setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
+        setAuction({ tiers: [] });
+        history.push('/my-auctions');
+      }, 2000);
     }
   };
 
@@ -176,36 +197,34 @@ const AuctionReview = () => {
             Edit <img src={pencil} alt="edit-icon" />
           </button>
         </div>
-        {auction.tiers.length === 0 && (
-          <div key={1} className="view-tier">
-            <div className="auction-header">
-              <div className="img_head">
-                <div className="img_head_title">
-                  {/* <h3>{tier.name}</h3> */}
-                  <h3>Platinum tier</h3>
-                </div>
-                <div className="winners__edit__btn">
-                  <div className="winners">
-                    <div className="tier-perwinners">
-                      <h4>
-                        {/* NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b> */}
-                        NFTs per winner:&nbsp;<b>3</b>
-                      </h4>
-                    </div>
-                    <div className="tier-winners">
-                      <h4>
-                        {/* Winners:&nbsp;<b>{tier.winners}</b> */}
-                        Winners:&nbsp;<b>5</b>
-                      </h4>
-                    </div>
-                    <div className="tier-minbid">
-                      <h4>
-                        Total NFTs:&nbsp;
-                        <b>15</b>
-                      </h4>
-                    </div>
+        {auction.tiers.length &&
+          auction.tiers.map((tier) => (
+            <div key={tier.id} className="view-tier">
+              <div className="auction-header">
+                <div className="img_head">
+                  <div className="img_head_title">
+                    <h3>{tier.name}</h3>
                   </div>
-                  {/* <Button
+                  <div className="winners__edit__btn">
+                    <div className="winners">
+                      <div className="tier-perwinners">
+                        <h4>
+                          NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
+                        </h4>
+                      </div>
+                      <div className="tier-winners">
+                        <h4>
+                          Winners:&nbsp;<b>{tier.winners}</b>
+                        </h4>
+                      </div>
+                      <div className="tier-minbid">
+                        <h4>
+                          Total NFTs:&nbsp;
+                          <b>{tier.nftsPerWinner * tier.winners}</b>
+                        </h4>
+                      </div>
+                    </div>
+                    {/* <Button
                     className="light-border-button"
                     onClick={() => {
                       history.push('/create-tiers', 1);
@@ -213,41 +232,12 @@ const AuctionReview = () => {
                   >
                     Edit <img src={pencil} alt="edit-icon" />
                   </Button> */}
+                  </div>
                 </div>
               </div>
-              {/* <div className="edit-show">
-                <div className="edit-btn">
-                  <Button
-                    className="light-border-button"
-                    onClick={() => {
-                      history.push('/create-tiers', 1);
-                    }}
-                  >
-                    Edit <img src={pencil} alt="edit-icon" />
-                  </Button>
-                </div>
-                <div className="launch-auction">
-                  {shownActionId === 1 ? (
-                    <img
-                      src={arrowUp}
-                      alt="Arrow up"
-                      onClick={() => setShownActionId(null)}
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <img
-                      src={arrowDown}
-                      alt="Arrow Down"
-                      onClick={() => setShownActionId(1)}
-                      aria-hidden="true"
-                    />
-                  )}
-                </div>
-              </div> */}
-            </div>
-            <div hidden={shownActionId !== 1} className="auctions-tier">
-              <div className="auction-reward">
-                {/* {tier.nfts.map((nft) => (
+              <div className="auctions-tier">
+                <div className="auction-reward">
+                  {tier.nfts.map((nft) => (
                     <div className="auction-reward__box">
                       <div className="auction-reward__box__image">
                         {nft.previewImage.type === 'video/mp4' && (
@@ -276,36 +266,6 @@ const AuctionReview = () => {
                         {nft.previewImage.type === 'video/mp4' && (
                           <img className="video__icon" src={videoIcon} alt="Video Icon" />
                         )}
-                        {nft.selected && (
-                          <img className="check__icon" src={checkIcon} alt="Check Icon" />
-                        )}
-                      </div>
-                      <div className="auction-reward__box__name">
-                        <h3>{nft.name}</h3>
-                      </div>
-                      <div className="auction-reward__box__footer">
-                        <div className="collection__details">
-                          {nft.type === 'collection' && (
-                            <>
-                              {typeof nft.collectionAvatar === 'string' &&
-                              nft.collectionAvatar.startsWith('#') ? (
-                                <div
-                                  className="random__bg__color"
-                                  style={{ backgroundColor: nft.collectionAvatar }}
-                                >
-                                  {nft.collectionName.charAt(0)}
-                                </div>
-                              ) : (
-                                <img
-                                  src={URL.createObjectURL(nft.collectionAvatar)}
-                                  alt={nft.collectionName}
-                                />
-                              )}
-                              <span>{nft.collectionName}</span>
-                            </>
-                          )}
-                        </div>
-                        <span className="ed-count">{`x${nft.generatedEditions.length}`}</span>
                       </div>
                       {nft.generatedEditions.length > 1 && (
                         <>
@@ -314,11 +274,11 @@ const AuctionReview = () => {
                         </>
                       )}
                     </div>
-                  ))} */}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          ))}
       </div>
       <div className="message">
         <span>
@@ -336,9 +296,15 @@ const AuctionReview = () => {
         >
           Back
         </Button>
-        <Button className="light-button" onClick={handleSetAuction}>
-          Set up auction
-        </Button>
+        {isEditingAuction.length ? (
+          <Button className="light-button" onClick={handleSaveAuction}>
+            Save changes
+          </Button>
+        ) : (
+          <Button className="light-button" onClick={handleSetAuction}>
+            Set up auction
+          </Button>
+        )}
       </div>
     </div>
   );

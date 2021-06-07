@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom';
 import AuctionSettings from '../../containers/auctionSettings/AuctionSettings';
 import RewardTiers from '../../containers/rewardTiers/RewardTiers';
@@ -13,8 +13,10 @@ import RewardIconActive from '../../assets/images/ion_layers.svg';
 import RewardIcon from '../../assets/images/ion_layers-disactive.svg';
 import ReviewIcon from '../../assets/images/eye-review.svg';
 import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
+import AppContext from '../../ContextAPI';
 
 const SetupAuction = () => {
+  const { auction } = useContext(AppContext);
   const history = useHistory();
   const location = useLocation();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -51,7 +53,9 @@ const SetupAuction = () => {
               <div className="tab_items">
                 <div
                   id="tabsdiv"
-                  onClick={() => history.push('/setup-auction/auction-settings')}
+                  onClick={() =>
+                    history.push('/setup-auction/auction-settings', auction && auction.id)
+                  }
                   className={selectedTabIndex === 0 ? 'active' : ''}
                 >
                   <span className="first-triangle" />
@@ -66,8 +70,24 @@ const SetupAuction = () => {
                 </div>
                 <div
                   id="tabsdiv"
-                  onClick={() => history.push('/setup-auction/reward-tiers')}
-                  className={selectedTabIndex === 1 ? 'active' : ''}
+                  onClick={() =>
+                    auction.name &&
+                    auction.startingBid &&
+                    auction.startDate &&
+                    auction.endDate &&
+                    history.push('/setup-auction/reward-tiers')
+                  }
+                  className={`
+                    ${selectedTabIndex === 1 ? 'active' : ''} 
+                    ${
+                      !auction.name ||
+                      !auction.startingBid ||
+                      !auction.startDate ||
+                      !auction.endDate
+                        ? 'disabled'
+                        : ''
+                    }
+                  `}
                 >
                   <span className="first-triangle" />
                   <button type="button">
@@ -81,8 +101,26 @@ const SetupAuction = () => {
                 </div>
                 <div
                   id="tabsdiv"
-                  onClick={() => history.push('/setup-auction/review-auction')}
-                  className={selectedTabIndex === 2 ? 'active' : ''}
+                  onClick={() =>
+                    auction.name &&
+                    auction.startingBid &&
+                    auction.startDate &&
+                    auction.endDate &&
+                    auction.tiers.length &&
+                    history.push('/setup-auction/review-auction')
+                  }
+                  className={`
+                    ${selectedTabIndex === 2 ? 'active' : ''} 
+                    ${
+                      !auction.name ||
+                      !auction.startingBid ||
+                      !auction.startDate ||
+                      !auction.endDate ||
+                      !auction.tiers.length
+                        ? 'disabled'
+                        : ''
+                    }
+                  `}
                 >
                   <span className="first-triangle" />
                   <button type="button">

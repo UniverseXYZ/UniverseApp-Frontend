@@ -22,6 +22,7 @@ const Wallet = ({
   tierName,
   winners,
   nftsPerWinner,
+  minBidValue,
 }) => {
   const { myNFTs, auction, setAuction } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
@@ -49,6 +50,7 @@ const Wallet = ({
   const location = useLocation();
   const isCreatingAction = location.pathname === '/create-tiers';
   const tierById = !!(winners && nftsPerWinner);
+  const editMode = auction.tiers.find((element) => element.id === location.state);
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
@@ -129,19 +131,40 @@ const Wallet = ({
   };
 
   const handleContinue = (prevNFTs) => {
-    setAuction({
-      ...auction,
-      tiers: [
-        ...auction.tiers,
-        {
-          id: uuid(),
-          name: tierName,
-          winners,
-          nftsPerWinner,
-          nfts: prevNFTs,
-        },
-      ],
-    });
+    if (!editMode) {
+      setAuction({
+        ...auction,
+        tiers: [
+          ...auction.tiers,
+          {
+            id: uuid(),
+            name: tierName,
+            winners,
+            nftsPerWinner,
+            minBidValue,
+            nfts: prevNFTs,
+          },
+        ],
+      });
+    } else {
+      const newTiers = [];
+      auction.tiers.forEach((tier) => {
+        if (tier.id === editMode.id) {
+          tier.name = tierName;
+          tier.winners = winners;
+          tier.nftsPerWinner = nftsPerWinner;
+          tier.minBidValue = minBidValue;
+          tier.nfts = prevNFTs;
+          newTiers.push(tier);
+        } else {
+          newTiers.push(tier);
+        }
+      });
+      setAuction({
+        ...auction,
+        tiers: newTiers,
+      });
+    }
     setSelectedNFTIds([]);
     history.push('/setup-auction/reward-tiers');
   };
@@ -504,12 +527,14 @@ Wallet.propTypes = {
   tierName: PropTypes.string,
   winners: PropTypes.number,
   nftsPerWinner: PropTypes.number,
+  minBidValue: PropTypes.string,
 };
 
 Wallet.defaultProps = {
   tierName: '',
   winners: null,
   nftsPerWinner: null,
+  minBidValue: '',
 };
 
 export default Wallet;

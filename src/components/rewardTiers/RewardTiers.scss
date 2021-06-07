@@ -50,7 +50,7 @@
             .winners__edit__btn{
                 .winners{
                     display: flex;
-                    .tier-winners, .tier-perwinners{
+                    .tier-winners, .tier-perwinners, .tier-minbid {
                         
                         background: rgba(0, 0, 0, 0.05);
                         border-radius: 12px;
@@ -72,7 +72,10 @@
                             flex: none;
                             order: 0;
                             flex-grow: 0;
-                            margin: 6px 16px ;
+                            margin: 6px 16px;
+                            b {
+                                text-transform: uppercase;
+                            }
                         }
                         @include sm{
                             margin-bottom: 10px;
@@ -166,7 +169,6 @@
             &__image {
                 position: relative;
                 margin-bottom: 12px;
-                cursor: pointer;
                 height: 230px;
                 width: 230px;
 
