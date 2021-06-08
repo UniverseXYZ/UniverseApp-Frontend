@@ -26,8 +26,9 @@ import CezarParaschiv from '../../assets/images/team/Cezar-Paraschiv.png';
 import AlexMissivrenko from '../../assets/images/team/Alex-Missivrenko.png';
 import MariaMosiy from '../../assets/images/team/Maria-Mosiy.png';
 import IvanMykolaiv from '../../assets/images/team/Ivan-Mykolaiv.png';
-import PavloBabenko from '../../assets/images/team/Pavlo-Babenko.png';
+import VictoriaDutka from '../../assets/images/team/Victoria-Dutka.png';
 import SergePiven from '../../assets/images/team/Serge-Piven.png';
+import PavloBabenko from '../../assets/images/team/Pavlo-Babenko.png';
 
 const UniverseCreators = () => {
   const [creators, setCreators] = useState([
@@ -183,14 +184,20 @@ const UniverseCreators = () => {
     },
     {
       id: 26,
-      name: 'Pavlo Babenko',
-      avatar: PavloBabenko,
+      name: 'Victoria Dutka',
+      avatar: VictoriaDutka,
       loaded: false,
     },
     {
       id: 27,
       name: 'Serge Piven',
       avatar: SergePiven,
+      loaded: false,
+    },
+    {
+      id: 28,
+      name: 'Pavlo Babenko',
+      avatar: PavloBabenko,
       loaded: false,
     },
   ]);

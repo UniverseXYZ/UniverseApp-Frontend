@@ -53,6 +53,7 @@ import RobbieFerguson from '../../assets/images/team/Robbie-Ferguson.png';
 import AndréNabais from '../../assets/images/team/André-Nabais.png';
 import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
 import HarrisonHines from '../../assets/images/team/Harrison-Hines.png';
+import ScottPlowman from '../../assets/images/team/Scott-Plowman.png';
 
 const UniverseContributors = () => {
   const [contributors, setContributors] = useState([
@@ -328,7 +329,7 @@ const UniverseContributors = () => {
     },
     {
       id: 46,
-      name: 'Olaf Carson-Wee – Polychain',
+      name: 'Olaf Carson-Wee',
       avatar: OlafCarsonWee,
       loaded: false,
     },
@@ -366,6 +367,12 @@ const UniverseContributors = () => {
       id: 52,
       name: 'Harrison Hines',
       avatar: HarrisonHines,
+      loaded: false,
+    },
+    {
+      id: 53,
+      name: 'Scott Plowman',
+      avatar: ScottPlowman,
       loaded: false,
     },
   ]);
