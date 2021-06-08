@@ -1,0 +1,45 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+@font-face {
+    font-family: Sharp Grotesk;
+    src: url(../../assets//fonts/SharpGrotesk/SharpGroteskSmBold.woff2);
+}
+.polymorphs {
+    .welcome__section {
+        .right {
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .welcome--marquee {
+            span {
+                font-family: Sharp Grotesk;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 19.371px;
+                line-height: 100%;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                mix-blend-mode: normal;  
+                margin: 0 2px; 
+            }
+            .marquee--text--polymorph {
+                background-blend-mode: screen;
+                background: conic-gradient(from 176.21deg at 50% 50%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg);
+                background: radial-gradient(95.11% 95.11% at 36.64% 4.89%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                
+            }
+            .marquee--text--universe {
+                background: radial-gradient(95.11% 95.11% at 36.64% 4.89%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%),
+                conic-gradient(from 176.21deg at 50% 50%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg);
+                background-clip: text;
+                -webkit-text-stroke: 2px transparent;
+                color: $black;
+                letter-spacing: 2px;
+            }
+        }
+    }
+}
