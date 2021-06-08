@@ -24,6 +24,7 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs-icon.svg';
 
 const DesktopView = ({
   isWalletConnected,
@@ -37,6 +38,7 @@ const DesktopView = ({
 }) => {
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
+  const [isPolymorphsDropdownOpened, setIsPolymorphsDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -88,6 +90,41 @@ const DesktopView = ({
               >
                 <img src={socialMediaIcon} alt="Social Media" />
                 <span>Social media</span>
+                <span className="tooltiptext">Coming soon</span>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="menu-li"
+            onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
+          >
+            <span className="nav__link__title">NFT Drops</span>
+            <img className="arrow" src={arrowUP} alt="arrow" />
+          </button>
+          <div className="dropdown minting-drop">
+            <div className="dropdown__body">
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/polymorphs');
+                  setIsPolymorphsDropdownOpened(false);
+                }}
+              >
+                <img src={polymorphsIcon} alt="Polymorphs" />
+                <span>Polymorphs</span>
+              </button>
+              <button
+                type="button"
+                className="disable"
+                onClick={() => {
+                  setIsMintingDropdownOpened(false);
+                }}
+              >
+                <img src={marketplaceIcon} alt="NFT Marketplace" />
+                <span>Core drops</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>

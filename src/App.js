@@ -26,6 +26,7 @@ import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
+import Polymorphs from './containers/polymorphs/Polymorphs';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -123,6 +124,7 @@ const App = () => {
         <Route exact path="/" component={() => <Homepage />} />
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
+        <Route exact path="/polymorphs" component={() => <Polymorphs />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
