@@ -27,6 +27,8 @@ import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -233,6 +235,28 @@ const MobileView = (props) => {
                         <button type="button" className="disable">
                           <img src={socialMediaIcon} alt="Social Media" />
                           <span>Social media</span>
+                          <span className="tooltiptext">Coming soon</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="title">NFT Drops</p>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowMenu(false);
+                            history.push('/polymorphs');
+                          }}
+                        >
+                          <img src={polymorphsIcon} alt="Polymorphs" />
+                          <span>Polymorphs</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button type="button" className="disable">
+                          <img src={coreDropsIcon} alt="Core drops" />
+                          <span>Core drops</span>
                           <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>

@@ -15,6 +15,8 @@ import Group2 from '../../../../assets/images/Group2.svg';
 import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -88,6 +90,37 @@ const DesktopView = ({
               >
                 <img src={socialMediaIcon} alt="Social Media" />
                 <span>Social media</span>
+                <span className="tooltiptext">Coming soon</span>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button type="button" className="menu-li">
+            <span className="nav__link__title">NFT drops</span>
+            <img className="arrow" src={arrowUP} alt="arrow" />
+          </button>
+          <div className="dropdown minting-drop">
+            <div className="dropdown__body">
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/polymorphs');
+                  setIsMintingDropdownOpened(false);
+                }}
+              >
+                <img src={polymorphsIcon} alt="Polymorphs" />
+                <span>Polymorphs</span>
+              </button>
+              <button
+                type="button"
+                className="disable"
+                onClick={() => {
+                  setIsMintingDropdownOpened(false);
+                }}
+              >
+                <img src={coreDropsIcon} alt="Core drops" />
+                <span>Core drops</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
