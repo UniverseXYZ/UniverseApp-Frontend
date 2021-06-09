@@ -160,26 +160,16 @@ const MyAuction = () => {
             <span> Go to my profile.</span>
           </p>
         </div>
-        {selectedTabIndex === 0 &&
-        myAuctions.filter(
-          (item) =>
-            moment(item.endDate).isAfter(moment.now()) &&
-            (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-              moment(item.startDate).isBefore(moment.now())) > 0 &&
-            item.launch
-        ).length ? (
-          <ActiveAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
+        {selectedTabIndex === 0 && myAuctions.filter((item) => item.launch).length ? (
+          <ActiveAuctions
+            myAuctions={myAuctions}
+            setMyAuctions={setMyAuctions}
+            setAuction={setAuction}
+          />
         ) : (
           <></>
         )}
-        {selectedTabIndex === 0 &&
-        !myAuctions.filter(
-          (item) =>
-            moment(item.endDate).isAfter(moment.now()) &&
-            (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-              moment(item.startDate).isBefore(moment.now())) > 0 &&
-            item.launch
-        ).length ? (
+        {selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length ? (
           <div className="empty__auction">
             <h3>No active auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>

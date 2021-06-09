@@ -37,7 +37,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                 <Button
                   className="light-button"
                   onClick={() =>
-                    history.push(`/${auction.artist.name.split(' ')[1]}/${auction.title}`, {
+                    history.push(`/${auction.artist.name.split(' ')[0]}/${auction.title}`, {
                       id: auction.id,
                     })
                   }

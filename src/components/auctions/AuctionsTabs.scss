@@ -61,6 +61,12 @@
       display: flex;
       align-items: center;
 
+      button {
+        img {
+          margin-left: 12px;
+        }
+      }
+
       .line {
         width: 0;
         height: 42px;
@@ -70,6 +76,13 @@
 
         @include md {
           display: none;
+        }
+      }
+      .arrow {
+        padding: 11px;
+        border-radius: 12px;
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
         }
       }
       img {
@@ -522,6 +535,16 @@
     float: right;
     margin-top: -85px;
 
+    button {
+      font-family: $spaceGroteskFont;
+      font-size: 14px;
+      line-height: 150%;
+      text-decoration-line: underline;
+      color: $black;
+      margin-right: 16px;
+      background: transparent;
+    }
+
     .intup-l {
       input {
         min-width: 350px;
@@ -632,6 +655,7 @@
       position: relative;
       padding: 7px 8px 7px 11px;
       width: fit-content;
+      margin-left: 7px;
 
       .copy > span {
         font-family: $spaceGroteskFont;
