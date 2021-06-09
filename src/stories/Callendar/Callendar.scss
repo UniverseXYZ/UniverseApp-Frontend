@@ -1,0 +1,269 @@
+@import '../../assets/scss/variables';
+
+.calendar {
+  position: relative;
+  // left: 50%;
+  // top: 50%;
+  // transform: translate(-50%, -50%);
+  // z-index: 10;
+  background: $white;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  width: 336px;
+  // display: flex;
+
+  h1 {
+    font-family: $sharpGroteskMediumFont;
+    padding: 34px 0 0 30px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 130%;
+    color: $black;
+    margin: 0px;
+  }
+
+  &__header {
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left-btn {
+      background-color: #ffffff;
+      border: none;
+    }
+    h3 {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 22px;
+      color: $black;
+      margin: 0px;
+    }
+    .month__changers {
+      display: flex;
+      align-items: center;
+      button {
+        background-color: $white;
+        border: none;
+        img {
+          cursor: pointer;
+
+          &.right {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
+  &__body {
+    overflow: hidden;
+    padding: 22px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .week__days {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      div {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 125%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.4);
+        width: 40px;
+        height: 40px;
+      }
+    }
+    .week__days__numbers {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      div {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 125%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: $black;
+        width: 40px;
+        height: 40px;
+        margin: 3px 0;
+
+        &.selectedStartDay {
+          background: #5fea73;
+          border-top-left-radius: 12px;
+          border-bottom-left-radius: 12px;
+          font-weight: bold;
+        }
+        &.selectedEndDay {
+          background: #5fea73;
+          border-top-right-radius: 12px;
+          border-bottom-right-radius: 12px;
+          font-weight: bold;
+        }
+        &.inRange {
+          background: rgba(95, 234, 115, 0.4);
+          font-weight: bold;
+        }
+        &.startEdge {
+          border-top-left-radius: 12px;
+          border-bottom-left-radius: 12px;
+        }
+        &.endEdge {
+          border-top-right-radius: 12px;
+          border-bottom-right-radius: 12px;
+        }
+      }
+    }
+  }
+  &__footer {
+    padding: 28px 30px 30px 30px;
+    .timezone {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      .label {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 22px;
+        color: $black;
+      }
+      .selected__timezone {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 22px;
+        text-align: right;
+        color: rgba(0, 0, 0, 0.4);
+        img {
+          margin-left: 12px;
+          transition: 0.5s ease-in-out;
+          &.rotate {
+            transform: rotate(180deg);
+          }
+        }
+        ul {
+          position: absolute;
+          top: 32px;
+          left: 0;
+          width: 100%;
+          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+          background: $white;
+          border-radius: 12px;
+          padding: 6px;
+          max-height: 250px;
+          overflow-y: auto;
+
+          li {
+            text-align: center;
+            padding: 6px 15px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 22px;
+            color: $black;
+
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+              border-radius: 6px;
+            }
+          }
+        }
+      }
+    }
+    .close {
+      position: absolute;
+      right: -13px;
+      top: -13px;
+      background: white;
+      z-index: 9999;
+      width: 16px;
+      height: 16px;
+      padding: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .time__format {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      margin-top: 10px;
+
+      margin-bottom: 10px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      > div {
+        width: 50%;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 140%;
+        text-align: center;
+        color: $black;
+        padding: 4px;
+        cursor: pointer;
+        &.selected {
+          background-color: $white;
+          border-radius: 6px;
+        }
+      }
+    }
+    .time {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 10px;
+      input {
+        border-radius: 10px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 28px;
+        line-height: 22px;
+        text-align: center;
+        color: $black;
+        padding: 16px 0px;
+        width: 127px;
+        border: none;
+      }
+      span {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        color: $black;
+      }
+    }
+    .actions {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 16px;
+      button {
+        margin-top: 0;
+      }
+    }
+  }
+}
