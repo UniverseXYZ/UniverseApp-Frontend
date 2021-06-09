@@ -146,7 +146,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 onClick={() => {
                   setSelectedAuction(act);
                   setLoading(true);
-                  history.push(`/${act.artist.name.split(' ')[1]}/${act.title}`, { id: act.id });
+                  history.push(`/${act.artist.name.split(' ')[0]}/${act.title}`, { id: act.id });
                 }}
                 aria-hidden="true"
               >
@@ -220,7 +220,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   <button
                     type="button"
                     onClick={() =>
-                      history.push(`/${selectedAuction.artist.name.split(' ')[1]}`, {
+                      history.push(`/${selectedAuction.artist.name.split(' ')[0]}`, {
                         id: selectedAuction.artist.id,
                       })
                     }

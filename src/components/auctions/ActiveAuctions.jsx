@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Moment from 'react-moment';
@@ -7,28 +8,27 @@ import moment from 'moment';
 import uuid from 'react-uuid';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
-import searchIcon from '../../assets/images/search-icon.svg';
-import { ACTIVE_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
+import searchIcon from '../../assets/images/search-gray.svg';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import copyIcon from '../../assets/images/copy1.svg';
+import editIcon from '../../assets/images/edit.svg';
 import Input from '../input/Input.jsx';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
+import Button from '../button/Button';
 
-const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
+const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState(null);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const history = useHistory();
 
   const handleSearch = (value) => {
     setSearchByName(value);
-  };
-
-  const clearInput = () => {
-    setSearchByName('');
   };
 
   const onDragEnd = (result) => {
@@ -49,12 +49,6 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
     setMyAuctions(newAuctions);
   };
 
-  const handleChangeCopy = (index) => {
-    const newAuctions = [...myAuctions];
-    newAuctions[index].copied = !newAuctions[index].copied;
-    setMyAuctions(newAuctions);
-  };
-
   useEffect(() => {
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
@@ -62,12 +56,19 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
   return (
     <div className="active-auctions">
       <div className="input-search">
+        {searchByName ? (
+          <button type="button" onClick={() => setSearchByName('')}>
+            Clear
+          </button>
+        ) : (
+          <></>
+        )}
         <img src={searchIcon} alt="search" />
         <Input
           className="searchInp"
           onChange={(e) => handleSearch(e.target.value)}
           value={searchByName}
-          placeholder="Search by name"
+          placeholder="Search"
         />
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -77,13 +78,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
               {myAuctions
                 .slice(offset, offset + perPage)
                 .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-                .filter(
-                  (item) =>
-                    moment(item.endDate).isAfter(moment.now()) &&
-                    (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                      moment(item.startDate).isBefore(moment.now())) > 0 &&
-                    item.launch
-                )
+                .filter((item) => item.launch)
                 .slice(offset, offset + perPage)
                 .map((activeAuction, index) => (
                   <Draggable draggableId={activeAuction.name} index={index} key={uuid()}>
@@ -102,47 +97,75 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
                             </div>
                             <div className="copy-div">
                               <div className="copy" title="Copy to clipboard">
-                                <div className="copied-div" hidden={!activeAuction.copied}>
-                                  URL copied!
-                                  <span />
-                                </div>
-                                <CopyToClipboard
-                                  text={`${window.location.origin}/${activeAuction.link}`}
-                                  onCopy={() => {
-                                    handleChangeCopy(index);
-                                    setTimeout(() => {
-                                      handleChangeCopy(index);
-                                    }, 1000);
-                                  }}
-                                >
-                                  <span>
-                                    <img
-                                      src={copyIcon}
-                                      alt="Copy to clipboard icon"
-                                      className="copyImg"
-                                    />
-                                    Copy URL
-                                  </span>
-                                </CopyToClipboard>
+                                {copied && copiedIndex === index && (
+                                  <div className="copied-div">
+                                    URL copied!
+                                    <span />
+                                  </div>
+                                )}
+                                {activeAuction.artist ? (
+                                  <CopyToClipboard
+                                    text={`${window.location.origin}/${
+                                      activeAuction.artist.name.split(' ')[0]
+                                    }/${activeAuction.link}`}
+                                    onCopy={() => {
+                                      setCopied(true);
+                                      setCopiedIndex(index);
+                                      setTimeout(() => {
+                                        setCopied(false);
+                                        setCopiedIndex(null);
+                                      }, 1000);
+                                    }}
+                                  >
+                                    <span>
+                                      <img
+                                        src={copyIcon}
+                                        alt="Copy to clipboard icon"
+                                        className="copyImg"
+                                      />
+                                      Copy URL
+                                    </span>
+                                  </CopyToClipboard>
+                                ) : (
+                                  <></>
+                                )}
                               </div>
                             </div>
                           </div>
                           <div className="launch-auction">
-                            {shownActionId === activeAuction.name ? (
-                              <img
-                                src={arrowUp}
-                                onClick={() => setShownActionId(null)}
-                                alt="Arrow up"
-                                aria-hidden="true"
-                              />
+                            {moment(activeAuction.endDate).isAfter(moment.now()) &&
+                            (moment(activeAuction.endDate).diff(moment(activeAuction.startDate)) >
+                              0 && moment(activeAuction.startDate).isBefore(moment.now())) > 0 ? (
+                              <Button
+                                className="light-border-button"
+                                onClick={() => {
+                                  setAuction(activeAuction);
+                                  history.push('/customize-auction-landing-page', activeAuction.id);
+                                }}
+                              >
+                                <span>Edit landing page</span>
+                                <img src={editIcon} alt="Edit" />
+                              </Button>
                             ) : (
-                              <img
-                                src={arrowDown}
-                                onClick={() => setShownActionId(activeAuction.name)}
-                                alt="Arrow down"
-                                aria-hidden="true"
-                              />
+                              <></>
                             )}
+                            <div className="arrow">
+                              {shownActionId === activeAuction.name ? (
+                                <img
+                                  src={arrowUp}
+                                  onClick={() => setShownActionId(null)}
+                                  alt="Arrow up"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <img
+                                  src={arrowDown}
+                                  onClick={() => setShownActionId(activeAuction.name)}
+                                  alt="Arrow down"
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </div>
                           </div>
                         </div>
                         <div className="auctions-launch-dates">
@@ -161,7 +184,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
                                       moment(activeAuction.startDate)
                                     )
                                   )
-                                  .format('H : mm : ss')}
+                                  .format('HH:mm:ss')}
                               </b>
                             </p>
                           </div>
@@ -272,6 +295,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions }) => {
 ActiveAuctions.propTypes = {
   myAuctions: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setMyAuctions: PropTypes.func.isRequired,
+  setAuction: PropTypes.func.isRequired,
 };
 
 export default ActiveAuctions;

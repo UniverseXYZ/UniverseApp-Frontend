@@ -36,7 +36,7 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                   <button
                     type="button"
                     onClick={() =>
-                      history.push(`/${auction.artist.name.split(' ')[1]}`, {
+                      history.push(`/${auction.artist.name.split(' ')[0]}`, {
                         id: auction.artist.id,
                       })
                     }

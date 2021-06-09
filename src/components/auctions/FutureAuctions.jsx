@@ -49,6 +49,13 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="future-auctions">
       <div className="input-search">
+        {searchByName ? (
+          <button type="button" onClick={() => setSearchByName('')}>
+            Clear
+          </button>
+        ) : (
+          <></>
+        )}
         <img src={searchIconGray} alt="search" />
         <Input
           className="searchInp"
@@ -77,22 +84,24 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <h3>{futureAuction.name}</h3>
               </div>
               <div className="launch-auction">
-                <div className="line" />
-                {shownActionId === futureAuction.id ? (
-                  <img
-                    src={arrowUp}
-                    onClick={() => setshownActionId(null)}
-                    alt="Arrow up"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <img
-                    src={arrowDown}
-                    onClick={() => setshownActionId(futureAuction.id)}
-                    alt="Arrow down"
-                    aria-hidden="true"
-                  />
-                )}
+                {/* <div className="line" /> */}
+                <div className="arrow">
+                  {shownActionId === futureAuction.id ? (
+                    <img
+                      src={arrowUp}
+                      onClick={() => setshownActionId(null)}
+                      alt="Arrow up"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <img
+                      src={arrowDown}
+                      onClick={() => setshownActionId(futureAuction.id)}
+                      alt="Arrow down"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
               </div>
             </div>
             <div className="auctions-launch-dates">
@@ -237,23 +246,25 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <h6>Step 3</h6>
                 <h4>Finalize auction</h4>
                 <div className="circle">
-                  {!futureAuction.landingCustom && !futureAuction.mint && (
+                  {/* {!futureAuction.landingCustom && !futureAuction.mint && (
                     <img alt="landing_page" src={emptyWhite} />
-                  )}
-                  {futureAuction.mint && !futureAuction.landingCustom && (
+                  )} */}
+                  {/* {futureAuction.headline || futureAuction.link && (
                     <img alt="landing_page" src={emptyMark} />
-                  )}
-                  {futureAuction.mint && futureAuction.landingCustom && (
-                    <img alt="landing_page" src={doneIcon} />
+                  )} */}
+                  {futureAuction.headline || futureAuction.link ? (
+                    <img alt="landing_page" src={emptyMark} />
+                  ) : (
+                    <></>
                   )}
                 </div>
-                {futureAuction.mint === true ? (
+                {futureAuction.headline || futureAuction.link ? (
                   <Button
                     className="light-button"
-                    onClick={() => {
-                      setAuction(futureAuction);
-                      history.push('/customize-auction-landing-page', futureAuction.id);
-                    }}
+                    // onClick={() => {
+                    //   setAuction(futureAuction);
+                    //   history.push('/finalize-auction', futureAuction.id);
+                    // }}
                   >
                     Start
                   </Button>
@@ -285,15 +296,14 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 </div>
                 <div className="hz-line2" />
                 <div className="circle">
-                  {!futureAuction.landingCustom && !futureAuction.mint && (
-                    <img alt="landing_page" src={emptyWhite} />
-                  )}
-                  {futureAuction.mint && !futureAuction.landingCustom && (
+                  {futureAuction.headline || futureAuction.link ? (
                     <img alt="landing_page" src={emptyMark} />
+                  ) : (
+                    <></>
                   )}
-                  {futureAuction.mint && futureAuction.landingCustom && (
+                  {/* {futureAuction.mint && futureAuction.landingCustom && (
                     <img alt="landing_page" src={doneIcon} />
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="steps">
@@ -314,25 +324,29 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   <h6>Step2</h6>
                   <h4>Customize landing page</h4>
                   <Button
-                    className="light-button"
+                    className={
+                      futureAuction.headline || futureAuction.link
+                        ? 'light-border-button'
+                        : 'light-button'
+                    }
                     onClick={() => {
                       setAuction(futureAuction);
                       history.push('/customize-auction-landing-page', futureAuction.id);
                     }}
                   >
-                    Start
+                    {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
                   </Button>
                 </div>
                 <div className="step-3">
                   <h6>Step 3</h6>
                   <h4>Finalize auction</h4>
-                  {futureAuction.mint === true && futureAuction.landingCustom === false ? (
+                  {futureAuction.headline || futureAuction.link ? (
                     <Button
                       className="light-button"
-                      onClick={() => {
-                        setAuction(futureAuction);
-                        history.push('/customize-auction-landing-page', futureAuction.id);
-                      }}
+                      // onClick={() => {
+                      //   setAuction(futureAuction);
+                      //   history.push('/finalize-auction', futureAuction.id);
+                      // }}
                     >
                       Start
                     </Button>
