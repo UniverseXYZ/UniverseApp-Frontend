@@ -318,6 +318,14 @@
               height: 461px;
               position: relative;
               margin: 0 auto;
+              @include sm {
+                width: 290px;
+                height: 332px;
+              }
+            }
+            #gradient-bg {
+              height: 100%;
+              width: 100%;
             }
             #hummer {
               position: absolute;
@@ -329,129 +337,81 @@
               @include lg {
                 width: 257px;
               }
+              @include sm {
+                width: 190px;
+              }
             }
             #squareOne {
               position: absolute;
               top: 80px;
               right: 140px;
+              @include sm {
+                height: 17px;
+                width: 17px;
+                top: 60px;
+                right: 130px;
+              }
             }
             #squareTwo {
               position: absolute;
               left: 0px;
               top: 45%;
+              @include sm {
+                height: 13px;
+                width: 13px;
+                left: 40px;
+              }
             }
             #squareThree {
               position: absolute;
               top: 45%;
               right: 80px;
+              @include sm {
+                height: 17px;
+                width: 17px;
+                right: 85px;
+              }
             }
             #squareFour {
               position: absolute;
               bottom: 90px;
               left: 45px;
+              @include sm {
+                height: 25px;
+                width: 25px;
+                bottom: 108px;
+              }
             }
             #squareFive {
               position: absolute;
               top: 107px;
               left: 90px;
+              @include sm {
+                height: 17px;
+                width: 17px;
+                top: 80px;
+                left: 80px;
+              }
             }
             #squareSix {
               position: absolute;
               bottom: 80px;
               right: 140px;
+              @include sm {
+                height: 17px;
+                width: 17px;
+                bottom: 90px;
+              }
             }
             #squareSeven {
               position: absolute;
               top: 40px;
               left: 20px;
-            }
-            #planet__front {
-              position: absolute;
-              top: 20%;
-              left: 15%;
-              width: 350px;
-              z-index: 2;
-              @include xl {
-                top: 15%;
-                left: 10%;
-              }
-              @include lg {
-                top: 25%;
-                left: 20%;
-                width: 200px;
-              }
-              @include md {
-                top: 20%;
-                left: 15%;
-                width: 350px;
-              }
               @include sm {
-                top: 25%;
-                left: 20%;
-                width: 200px;
-              }
-              @media (max-width: 400px) {
-                top: 20%;
-                left: 15%;
-                width: 180px;
-              }
-            }
-            #planet__back {
-              position: absolute;
-              top: 15%;
-              left: 50%;
-              width: 200px;
-              z-index: 2;
-              @include xl {
-                top: 10%;
-                left: 45%;
-              }
-              @include lg {
-                top: 15%;
-                left: 50%;
-                width: 130px;
-              }
-              @include md {
-                top: 15%;
-                left: 50%;
-                width: 200px;
-              }
-              @include sm {
-                top: 15%;
-                left: 45%;
-                width: 130px;
-              }
-              @media (max-width: 400px) {
-                width: 100px;
-              }
-            }
-            #planet__middle {
-              position: absolute;
-              top: 14%;
-              left: 7%;
-              width: 250px;
-              z-index: 1;
-              @include xl {
-                top: 9%;
-                left: 2%;
-              }
-              @include lg {
-                top: 21%;
-                left: 19%;
-                width: 150px;
-              }
-              @include md {
-                top: 16%;
-                left: 13%;
-                width: 250px;
-              }
-              @include sm {
-                top: 21%;
-                left: 19%;
-                width: 150px;
-              }
-              @media (max-width: 400px) {
-                width: 120px;
+                height: 17px;
+                width: 17px;
+                top: 50px;
+                left: 50px;
               }
             }
             @include lg {
