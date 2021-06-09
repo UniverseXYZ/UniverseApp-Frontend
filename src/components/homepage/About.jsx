@@ -12,9 +12,6 @@ import blockThree from '../../assets/images/homepage-block3.png';
 import universeMintingLogo from '../../assets/images/universe-minting.svg';
 import universeAuctionsLogo from '../../assets/images/universe-auctions.svg';
 import bgImage from '../../assets/images/planets-bg.png';
-import planetFrontImage from '../../assets/images/planet-front.png';
-import planetBackImage from '../../assets/images/planet-back.png';
-import planetMiddleImage from '../../assets/images/planet-middle.png';
 import hummerImage from '../../assets/images/hummer.png';
 import squareOne from '../../assets/images/square1.png';
 import squareTwo from '../../assets/images/square2.png';
@@ -64,44 +61,60 @@ const About = () => {
     },
   };
 
-  // useEffect(() => {
-  //   const circleR = document.querySelector('#circle-r');
-  //   const circleL = document.querySelector('#circle-l');
-  //   const planetFront = document.querySelector('#planet__front');
-  //   const planetBack = document.querySelector('#planet__back');
-  //   const planetMiddle = document.querySelector('#planet__middle');
+  useEffect(() => {
+    const circleR = document.querySelector('#circle-r');
+    const circleL = document.querySelector('#circle-l');
+    const squareOneEl = document.querySelector('#squareOne');
+    const squareTwoEl = document.querySelector('#squareTwo');
+    const squareThreeEl = document.querySelector('#squareThree');
+    const squareFourEl = document.querySelector('#squareFour');
+    const squareFiveEl = document.querySelector('#squareFive');
+    const squareSixEl = document.querySelector('#squareSix');
+    const squareSevenEl = document.querySelector('#squareSeven');
 
-  //   const scrollLoop = () => {
-  //     if (document.querySelector('.about__section')) {
-  //       const yScrollPosition = window.scrollY;
-  //       const aboutOffsetTop = document.querySelector('.about__section').offsetTop;
+    const scrollLoop = () => {
+      if (document.querySelector('.about__section')) {
+        const yScrollPosition = window.scrollY;
+        const aboutOffsetTop = document.querySelector('.about__section').offsetTop;
 
-  //       circleR.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
-  //         yScrollPosition * -0.2
-  //       }px, 0)`;
-  //       circleL.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
-  //         yScrollPosition * -0.2
-  //       }px, 0) rotate(180deg)`;
-  //       planetFront.style.transform = `translate3d(${
-  //         (yScrollPosition - aboutOffsetTop) * 0.01
-  //       }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
-  //       planetBack.style.transform = `translate3d(${(yScrollPosition - aboutOffsetTop) * 0.02}px, ${
-  //         (yScrollPosition - aboutOffsetTop) * 0.02
-  //       }px, 0)`;
-  //       planetMiddle.style.transform = `translate3d(${
-  //         (yScrollPosition - aboutOffsetTop) * -0.01
-  //       }px, ${(yScrollPosition - aboutOffsetTop) * -0.01}px, 0)`;
+        circleR.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
+          yScrollPosition * -0.2
+        }px, 0)`;
+        circleL.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
+          yScrollPosition * -0.2
+        }px, 0) rotate(180deg)`;
+        squareOneEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+        squareTwoEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+        squareThreeEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+        squareFourEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+        squareFiveEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+        squareSixEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+        squareSevenEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.01
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
 
-  //       requestAnimationFrame(scrollLoop);
-  //     }
-  //   };
+        requestAnimationFrame(scrollLoop);
+      }
+    };
 
-  //   if (document.querySelector('.about__section')) {
-  //     requestAnimationFrame(scrollLoop);
-  //   }
+    if (document.querySelector('.about__section')) {
+      requestAnimationFrame(scrollLoop);
+    }
 
-  //   return () => cancelAnimationFrame(scrollLoop);
-  // }, []);
+    return () => cancelAnimationFrame(scrollLoop);
+  }, []);
 
   return (
     <div className="describe__section">
@@ -208,7 +221,7 @@ const About = () => {
               />
               <div className="planets__group">
                 <div className="squares__container">
-                  <img src={bgImage} alt="Block" />
+                  <img id="gradient-bg" src={bgImage} alt="Block" />
                   <img id="hummer" src={hummerImage} alt="Hummer" />
                   <img id="squareOne" src={squareOne} alt="Square" />
                   <img id="squareTwo" src={squareTwo} alt="Square" />
@@ -218,9 +231,6 @@ const About = () => {
                   <img id="squareSix" src={squareSix} alt="Square" />
                   <img id="squareSeven" src={squareSeven} alt="Square" />
                 </div>
-                {/* <img id="planet__front" src={planetFrontImage} alt="Planet Front" />
-                <img id="planet__back" src={planetBackImage} alt="Planet Back" />
-                <img id="planet__middle" src={planetMiddleImage} alt="Planet Middle" /> */}
               </div>
             </AnimatedOnScroll>
           </div>
