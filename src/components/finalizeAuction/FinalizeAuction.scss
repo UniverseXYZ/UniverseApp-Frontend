@@ -49,6 +49,9 @@
             linear-gradient(to right, #bceb00, #00eaea) border-box;
           border: 1px solid transparent;
           border-radius: 50%;
+          img{
+            margin-bottom: 5px;
+          }
         }
         .line {
           margin-left: 10px;
@@ -139,12 +142,30 @@
           padding: 30px;
           // width: 328px;
           margin-right: 30px;
+          .approve-btn{
+            padding: 11px 14px 11px 16px;
+          }
 
+          .random__bg__color {
+            height: 80px;
+            width: 80px;margin-right: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $black;
+          }
           img {
             width: 80px;
             height: 80px;
             object-fit: cover;
             margin-right: 30px;
+            border-radius: 50%;
 
             @include sm {
               width: 60px;
@@ -152,7 +173,11 @@
               margin-right: 18px;
             }
           }
-
+          .checkmark{
+            width: 20px;
+            height: 20px;
+            margin-right: 0;
+          }
           h3 {
             font-family: $spaceGroteskFont;
             font-style: normal;

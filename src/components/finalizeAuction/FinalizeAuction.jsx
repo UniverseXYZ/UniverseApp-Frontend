@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router';
 import Popup from 'reactjs-popup';
+import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
 import warningIcon from '../../assets/images/Exclamation.svg';
@@ -10,11 +11,46 @@ import NFT3 from '../../assets/images/ntf3.svg';
 import NFT4 from '../../assets/images/ntf4.svg';
 import NFT6 from '../../assets/images/ntf6.svg';
 import doneIcon from '../../assets/images/Completed.svg';
+import completedCheckmark from '../../assets/images/completedCheckmark.svg';
+
 import SuccessPopup from '../popups/SuccessPopup';
 import LeavePopup from '../popups/LeavePopup';
+import AppContext from '../../ContextAPI';
 
 const FinalizeAuction = () => {
   const history = useHistory();
+  const {
+    auction,
+    setAuction,
+    loggedInArtist,
+    myAuctions,
+    setMyAuctions,
+    activeAuctions,
+    setActiveAuctions,
+    futureAuctions,
+    setFutureAuctions,
+    savedCollections,
+    deployedCollections,
+  } = useContext(AppContext);
+  const [proceed, setProceed] = useState(false);
+  const [approvals, setApprovals] = useState(1);
+
+  console.log(proceed);
+  console.log(approvals);
+  console.log(auction);
+
+  const handleProceed = () => {
+    setProceed(true);
+    // setAuction((prevValue) => ({
+    //   ...prevValue,
+    //   launch: true,
+    // }));
+    setApprovals(approvals + 1);
+  };
+
+  const handleClick = () => {
+    setApprovals(approvals + 1);
+  };
 
   return (
     <div className="finalize__auction">
@@ -51,9 +87,18 @@ const FinalizeAuction = () => {
                 <img src={warningIcon} alt="Warning" />
                 <p>You will not be able to make any changes to the auction if you proceed</p>
               </div>
-              <Popup trigger={<Button className="light-button">Proceed</Button>}>
+              {proceed ? (
+                <Button className="light-button" disabled>
+                  Completed <img src={completedCheckmark} alt="completed" />
+                </Button>
+              ) : (
+                <Button className="light-button" onClick={handleProceed}>
+                  Proceed
+                </Button>
+              )}
+              {/* <Popup trigger={<Button className="light-button">Proceed</Button>}>
                 {(close) => <LeavePopup onClose={close} />}
-              </Popup>
+              </Popup> */}
             </div>
           </div>
           <div className="create__auction">
@@ -74,33 +119,49 @@ const FinalizeAuction = () => {
                 </p>
               </div>
               <div className="collections">
-                <div className="collection__div">
-                  <img src={collectionImg} alt="Collection" />
-                  <div>
-                    <h3>Collection name</h3>
-                    <Button className="light-button" disabled>
-                      Approve
-                    </Button>
+                {deployedCollections.length ? (
+                  deployedCollections.map((collection, index) => (
+                    <div className="collection__div">
+                      {collection.bgImage ? (
+                        <img src={URL.createObjectURL(collection.bgImage)} alt={collection.name} />
+                      ) : typeof collection.previewImage === 'string' &&
+                        collection.previewImage.startsWith('#') ? (
+                        <div
+                          className="random__bg__color"
+                          style={{ backgroundColor: collection.previewImage }}
+                        />
+                      ) : (
+                        <img
+                          className="blur"
+                          src={URL.createObjectURL(collection.previewImage)}
+                          alt={collection.name}
+                        />
+                      )}
+                      {/* <img src={collectionImg} alt="Collection" /> */}
+                      <div>
+                        <h3>{collection.name}</h3>
+                        {approvals === index + 2 ? (
+                          <Button className="light-button approve-btn" onClick={handleClick}>
+                            Approve
+                          </Button>
+                        ) : approvals > index + 2 ? (
+                          <Button className="light-button approve-btn" disabled>
+                            Approved
+                            <img className="checkmark" src={completedCheckmark} alt="Approved" />
+                          </Button>
+                        ) : (
+                          <Button className="light-button approve-btn" disabled>
+                            Approve
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="empty__nfts">
+                    <h3>No Saved Collections found</h3>
                   </div>
-                </div>
-                <div className="collection__div">
-                  <img src={collectionImg} alt="Collection" />
-                  <div>
-                    <h3>Collection name</h3>
-                    <Button className="light-button" disabled>
-                      Approve
-                    </Button>
-                  </div>
-                </div>
-                <div className="collection__div">
-                  <img src={collectionImg} alt="Collection" />
-                  <div>
-                    <h3>Collection name</h3>
-                    <Button className="light-button" disabled>
-                      Approve
-                    </Button>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -111,143 +172,56 @@ const FinalizeAuction = () => {
             <div className="create__auction__body">
               <h2>Deposit NFTs</h2>
               <p className="auction__description">Deposit 55 NFTs to the auction contract</p>
-              <div className="transaction">
-                <div className="transaction__details">
-                  <div className="transaction__header">
-                    <h4>Transaction 1</h4>
-                    <div className="head">
-                      <p>
-                        Slot: <b>5</b>
-                      </p>
-                      <p>
-                        Total NFTs: <b>15</b>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="transaction__body">
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT3} alt="NFT3" />
+              {auction.tiers.map((tier, tierIndex) => (
+                <div className="transaction">
+                  <div className="transaction__details">
+                    <div className="transaction__header">
+                      <h4>{tier.name}</h4>
+                      <div className="head">
+                        <p>
+                          Slot: <b>{tier.winners}</b>
+                        </p>
+                        <p>
+                          Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
+                        </p>
                       </div>
                     </div>
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT4} alt="NFT4" />
-                      </div>
-                    </div>
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT6} alt="NFT6" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="deposit__button">
-                  <Button className="light-button" disabled>
-                    Deposit
-                  </Button>
-                </div>
-              </div>
-              <div className="transaction">
-                <div className="transaction__details">
-                  <div className="transaction__header">
-                    <h4>Transaction 2</h4>
-                    <div className="head">
-                      <p>
-                        Slot: <b>10</b>
-                      </p>
-                      <p>
-                        Total NFTs: <b>20</b>
-                      </p>
+                    <div className="transaction__body">
+                      {tier.nfts.map(
+                        (nft, index) =>
+                          index < 3 && (
+                            <div className="transaction__image" key={nft.id}>
+                              <div className="first" />
+                              <div className="second" />
+                              <div className="image-main">
+                                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                {tier.nfts.length > 3 && (
+                                  <span className="show__more">{`+${
+                                    tier.nfts.length - 3
+                                  } more`}</span>
+                                )}
+                              </div>
+                            </div>
+                          )
+                      )}
                     </div>
                   </div>
-                  <div className="transaction__body">
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT3} alt="NFT3" />
-                      </div>
-                    </div>
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT4} alt="NFT4" />
-                      </div>
-                    </div>
+                  <div className="deposit__button">
+                    {approvals === deployedCollections.length + 2 ? (
+                      <Button className="light-button">Deposit</Button>
+                    ) : approvals > deployedCollections.length + 2 ? (
+                      <Button className="light-button" disabled>
+                        Deposited
+                        <img className="checkmark" src={completedCheckmark} alt="Deposited" />
+                      </Button>
+                    ) : (
+                      <Button className="light-button" disabled>
+                        Deposit
+                      </Button>
+                    )}
                   </div>
                 </div>
-                <div className="deposit__button">
-                  <Button className="light-button" disabled>
-                    Deposit
-                  </Button>
-                </div>
-              </div>
-              <div className="transaction">
-                <div className="transaction__details">
-                  <div className="transaction__header">
-                    <h4>Transaction 3</h4>
-                    <div className="head">
-                      <p>
-                        Slot: <b>10</b>
-                      </p>
-                      <p>
-                        Total NFTs: <b>10</b>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="transaction__body">
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT3} alt="NFT3" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="deposit__button">
-                  <Button className="light-button" disabled>
-                    Deposit
-                  </Button>
-                </div>
-              </div>
-              <div className="transaction">
-                <div className="transaction__details">
-                  <div className="transaction__header">
-                    <h4>Transaction 4</h4>
-                    <div className="head">
-                      <p>
-                        Slot: <b>10</b>
-                      </p>
-                      <p>
-                        Total NFTs: <b>10</b>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="transaction__body">
-                    <div className="transaction__image">
-                      <div className="first" />
-                      <div className="second" />
-                      <div className="image-main">
-                        <img src={NFT3} alt="NFT3" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="deposit__button">
-                  <Button className="light-button" disabled>
-                    Deposit
-                  </Button>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

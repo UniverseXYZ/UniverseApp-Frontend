@@ -45,7 +45,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const handleMintCongratsPopupClose = () => {
     setMintCongratsPopupOpen(false);
   };
-
+  console.log(myAuctions[0]);
   return (
     <div className="future-auctions">
       <div className="input-search">
@@ -220,6 +220,11 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 </Button>
                 {/* <>
                   <Popup
+
+
+
+
+                  
                     trigger={
                       <button type="button" className="light-button">
                         Start
@@ -261,10 +266,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 {futureAuction.headline || futureAuction.link ? (
                   <Button
                     className="light-button"
-                    // onClick={() => {
-                    //   setAuction(futureAuction);
-                    //   history.push('/finalize-auction', futureAuction.id);
-                    // }}
+                    onClick={() => {
+                      setAuction(futureAuction);
+                      history.push('/finalize-auction', futureAuction.id);
+                    }}
                   >
                     Start
                   </Button>
