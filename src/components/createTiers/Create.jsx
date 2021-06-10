@@ -8,7 +8,6 @@ import Wallet from '../myNFTs/Wallet';
 import '../myNFTs/MyNFTs.scss';
 import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 
@@ -55,14 +54,12 @@ const Create = () => {
               { ...tierById, ...values },
             ],
           });
-          // history.push('/select-nfts', tierId);
         } else {
           const createdTierId = uuid();
           setAuction({
             ...auction,
             tiers: [...auction.tiers, { ...values, id: createdTierId, nfts: [], minBid: '' }],
           });
-          // history.push('/select-nfts', createdTierId);
         }
       }
     }
@@ -265,7 +262,6 @@ const Create = () => {
                 </div>
               </div>
             </div>
-            {/* <Button onClick={handleClick}>Ok</Button> */}
           </div>
         </div>
       </div>
