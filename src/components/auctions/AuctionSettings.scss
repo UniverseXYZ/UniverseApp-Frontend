@@ -262,15 +262,20 @@
     line-height: 18px;
     color: #ff4949;
   }
-
-  .light-button {
-    margin-top: 51px;
-  }
-  .btn-div{
+  .btn-div {
     float: right;
-    margin-bottom: 7%;
-    .light-border-button{
+    margin-bottom: 80px;
+    margin-top: 40px;
+    .light-border-button {
       margin-right: 15px;
+      @include sm {
+        margin-right: 0%;
+        margin-bottom: 20px;
+      }
+    }
+    @include sm {
+      display: grid;
+      width: 100%;
     }
   }
 }

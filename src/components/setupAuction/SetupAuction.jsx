@@ -2,9 +2,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect, useContext } from 'react';
 import { Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom';
-import AuctionSettings from '../../containers/auctionSettings/AuctionSettings';
-import RewardTiers from '../../containers/rewardTiers/RewardTiers';
-import ReviewAuction from '../../containers/reviewAuction/ReviewAuction';
+import AuctionSettings from '../auctions/Settings';
+import RewardTiers from '../rewardTiers/RewardTiers';
+import ReviewAuction from '../auctions/AuctionReview';
 import './SetupAuction.scss';
 import arrow from '../../assets/images/arrow.svg';
 import SettingIconActive from '../../assets/images/settings-solid.svg';

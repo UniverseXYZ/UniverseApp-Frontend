@@ -6,9 +6,9 @@
   background-size: cover;
   @include sm {
     background-image: url('../../assets/images/tier-bg1.svg');
-    }
+  }
   @include lg {
-  background-image: url('../../assets/images/tier-bg2.svg');
+    background-image: url('../../assets/images/tier-bg2.svg');
   }
 }
 
@@ -28,7 +28,6 @@
 
 .head-part {
   margin-top: 20px;
-  // margin-bottom: 40px;
   .tier-title {
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
@@ -142,8 +141,7 @@
   display: flex;
   position: relative;
   flex-direction: column;
-  // margin-top: 10%;
-  .tier-setting{
+  .tier-setting {
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
@@ -152,17 +150,23 @@
     color: #000000;
     margin-bottom: 10px;
   }
-  .tiersInp{
+  .tiersInp {
     width: 100%;
     display: flex;
+    justify-content: space-between;
+
+    @include md {
+      display: grid;
+    }
   }
   .intup-l {
     margin-bottom: 20px;
-    
+    width: 100%;
+
     input {
       @include lg {
-        width: 475px;
-        // width: 100%;
+        // width: 475px;
+        width: 100%;
       }
     }
 
@@ -170,21 +174,29 @@
       width: 100%;
     }
   }
-  .inps{
-    width: 50%;
+  .inps {
+    width: 45%;
+    input {
+      width: 100%;
+    }
+    @include md {
+      width: 100%;
+      margin-bottom: 30px;
+    }
   }
-   .minBidPart{
-    background: #FFFFFF;
+  .minBidPart {
+    background: #ffffff;
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-    border-radius: 10px;  
+    border-radius: 10px;
+    padding: 40px 40px 20px;
     width: 50%;
-    .bid-part{
+
+    .bid-part {
       .bid-info {
         position: relative;
         display: flex;
         margin-bottom: 16px;
         align-items: center;
-        margin: 44px 40px 30px 40px;
         width: 100%;
 
         h1 {
@@ -209,7 +221,7 @@
         font-size: 14px;
         line-height: 22px;
         color: rgba(0, 0, 0, 0.6);
-        margin-left: 60px;
+        margin-left: 20px;
         ul {
           list-style-position: outside;
           list-style: inherit;
@@ -236,33 +248,29 @@
       }
       @include md {
         width: 100%;
-        margin-bottom: 20px;
       }
     }
     .tiers-part {
-      // position: relative;
-      // padding-left: 45px;
       width: 100%;
       .intup-l {
         margin-top: 20px;
-        margin-left: 40px;
         width: 100%;
         input {
-          // width: 100%;
+          width: 100%;
         }
       }
-      
+
       .bid-type {
         position: absolute;
-        bottom: 38%;
-        right: 12%;
+        bottom: 35px;
+        right: 15px;
         display: flex;
         align-items: center;
-        .button-name{
+        .button-name {
           padding-left: 10px;
         }
       }
-      .bid-type.disabled{
+      .bid-type.disabled {
         opacity: 0.2;
       }
     }
@@ -326,9 +334,10 @@
     }
     @include md {
       display: block;
+      width: 100%;
     }
   }
-  
+
   .tier-info_icon {
     position: relative;
     display: flex;
@@ -358,7 +367,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // margin-top: 4%;
 
   .light-border-button {
     margin-right: 7%;
@@ -424,20 +432,29 @@
     align-items: flex-end;
   }
 }
-.btn-div{
+.btn-div {
   float: right;
-  margin-bottom: 7%;
-  .light-border-button{
+  margin-bottom: 80px;
+  margin-top: 40px;
+  .light-border-button {
     margin-right: 15px;
+    @include sm {
+      margin-right: 0%;
+      margin-bottom: 20px;
+    }
+  }
+  @include sm {
+    display: grid;
+    width: 100%;
   }
 }
-.hr-line{
+.hr-line {
   border-bottom: 1px solid #000000;
   opacity: 0.1;
-  width: 1110px;
+  width: 100%;
 }
-.selectNftPart{
-  h1{
+.selectNftPart {
+  h1 {
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
@@ -445,18 +462,18 @@
     line-height: 140%;
     color: #000000;
   }
-  p{
+  p {
     font-family: $spaceGroteskFont;
     font-weight: normal;
     font-size: 14px;
     line-height: 160%;
     color: rgba(0, 0, 0, 0.6);
-      a{
-        color: #000000;
-        text-decoration: underline;
-      }
-      .second-line{
-        margin-bottom: 40px;
-      }
+    a {
+      color: #000000;
+      text-decoration: underline;
+    }
+    .second-line {
+      margin-bottom: 40px;
+    }
   }
 }
