@@ -11,7 +11,6 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIconRed from '../../assets/images/Vector.svg';
 import searchIcon from '../../assets/images/search-gray.svg';
 import doneIcon from '../../assets/images/Completed.svg';
-import { AUCTIONS_DATA, PAST_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import Input from '../input/Input.jsx';
@@ -22,10 +21,12 @@ import MyAccount from '../../containers/myAccount/MyAccount.jsx';
 
 const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);
-  const [copied, setCopied] = useState(false);
-  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [copied, setCopied] = useState({
+    state: false,
+    index: null,
+  });
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(3);
   const [searchByName, setSearchByName] = useState('');
 
   const handleSearch = (value) => {
@@ -53,17 +54,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter(
-          (item) =>
-            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
-            !(
-              moment(item.endDate).isAfter(moment.now()) &&
-              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0 &&
-              item.launch
-            )
-        )
-        // .filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
+        .filter((item) => moment(item.endDate).isBefore(moment.now()))
         .map((pastAuction, index) => (
           <div className="auction past-auction" key={pastAuction.id}>
             <div className="auction-header">
@@ -71,7 +62,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <h3>{pastAuction.name}</h3>
                 <div className="copy-div">
                   <div className="copy" title="Copy to clipboard">
-                    {copied && copiedIndex === index && (
+                    {copied.state && copied.index === index && (
                       <div className="copied-div">
                         URL copied!
                         <span />
@@ -83,11 +74,15 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                           pastAuction.link
                         }`}
                         onCopy={() => {
-                          setCopied(true);
-                          setCopiedIndex(index);
+                          setCopied({
+                            state: true,
+                            index,
+                          });
                           setTimeout(() => {
-                            setCopied(false);
-                            setCopiedIndex(null);
+                            setCopied({
+                              state: false,
+                              index: null,
+                            });
                           }, 1000);
                         }}
                       >
@@ -133,7 +128,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   Launch date:{' '}
                   <b>
                     {' '}
-                    <Moment format="MMMM DD, hh:mm">{pastAuction.startDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{pastAuction.startDate}</Moment>
                   </b>
                 </p>
               </div>
@@ -141,7 +136,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <p>
                   End date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{pastAuction.endDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{pastAuction.endDate}</Moment>
                   </b>
                 </p>
               </div>

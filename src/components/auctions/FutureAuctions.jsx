@@ -25,7 +25,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideEndIcon, setHideEndIcon] = useState(true);
   const [shownActionId, setshownActionId] = useState(null);
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(3);
   const [searchByName, setSearchByName] = useState('');
   const history = useHistory();
   const [mintCongratsPopupOpen, setMintCongratsPopupOpen] = useState(false);
@@ -45,7 +45,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const handleMintCongratsPopupClose = () => {
     setMintCongratsPopupOpen(false);
   };
-  console.log(myAuctions[0]);
+
   return (
     <div className="future-auctions">
       <div className="input-search">
@@ -69,12 +69,12 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
         .filter(
           (item) =>
-            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
+            !item.launch &&
+            !moment(item.endDate).isBefore(moment.now()) &&
             !(
               moment(item.endDate).isAfter(moment.now()) &&
               (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0 &&
-              item.launch
+                moment(item.startDate).isBefore(moment.now())) > 0
             )
         )
         .map((futureAuction) => (
@@ -123,7 +123,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 >
                   Launch date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{futureAuction.startDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{futureAuction.startDate}</Moment>
                   </b>
                   {moment(futureAuction.startDate).isBefore(moment.now()) && (
                     <div className="launch__date__info">
@@ -153,7 +153,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 >
                   End date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{futureAuction.endDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{futureAuction.endDate}</Moment>
                   </b>
                   {moment(futureAuction.endDate).isBefore(moment.now()) && (
                     <div className="end__date__info">
@@ -218,34 +218,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 >
                   {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
                 </Button>
-                {/* <>
-                  <Popup
-
-
-
-
-                  
-                    trigger={
-                      <button type="button" className="light-button">
-                        Start
-                      </button>
-                    }
-                  >
-                    {(close) => (
-                      <MintNftsPopup
-                        onClose={close}
-                        onAuctionId={futureAuction.id}
-                        handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
-                      />
-                    )}
-                  </Popup>
-                  <Popup open={mintCongratsPopupOpen}>
-                    <MintCongratsPopup
-                      onClose={handleMintCongratsPopupClose}
-                      onAuctionId={futureAuction.id}
-                    />
-                  </Popup>
-                </> */}
               </div>
               <div className="step-3">
                 <h6>Step 3</h6>
@@ -260,7 +232,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   {futureAuction.headline || futureAuction.link ? (
                     <img alt="landing_page" src={emptyMark} />
                   ) : (
-                    <></>
+                    <img alt="landing_page" src={emptyWhite} />
                   )}
                 </div>
                 {futureAuction.headline || futureAuction.link ? (
@@ -304,7 +276,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   {futureAuction.headline || futureAuction.link ? (
                     <img alt="landing_page" src={emptyMark} />
                   ) : (
-                    <></>
+                    <img alt="landing_page" src={emptyWhite} />
                   )}
                   {/* {futureAuction.mint && futureAuction.landingCustom && (
                     <img alt="landing_page" src={doneIcon} />
