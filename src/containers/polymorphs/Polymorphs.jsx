@@ -4,6 +4,7 @@ import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png
 import About from '../../components/polymorphs/About';
 import Characters from '../../components/polymorphs/Characters';
 import Section4 from '../../components/polymorphs/Section4';
+import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import './Polymorphs.scss';
 
 const marquee = () => (
@@ -48,6 +49,7 @@ const Polymorphs = () => {
       </div>
       <Characters />
       <Section4 />
+      <PolymorphsActivity />
     </div>
   );
 };

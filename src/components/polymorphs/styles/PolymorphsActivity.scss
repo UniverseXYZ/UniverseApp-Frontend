@@ -1,0 +1,64 @@
+.polymorphs--activity--wrapper--center {
+    display: block;
+    padding: 60px 0;
+    h2 {
+        font-family: Sharp Grotesk;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 26px;
+        line-height: 140%;
+        text-align: center;
+        color: #000000;
+        margin: 60px 0;
+    }
+    .table--polymorphs--activity {
+        border-collapse: separate;
+        border-spacing: 0 15px;
+        thead {
+            th {
+                font-family: Space Grotesk;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 22px;
+                text-align: center;
+                color: rgba(0, 0, 0, 0.3);
+            }
+        }
+        tbody {
+            tr td:first-child {
+                border-top-left-radius: 15px;
+                border-bottom-left-radius: 15px;
+            }
+            tr td:last-child {
+                border-top-right-radius: 15px;
+                border-bottom-right-radius: 15px;
+            }
+            .row {
+                height: 70px;
+                background: #FFFFFF;
+                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                border-radius: 12px;
+                width: 100%;
+                margin: 12px 0;
+                td {
+                    text-align: center;
+                    vertical-align: middle;
+                }
+                .td--name {
+                    font-family: Space Grotesk;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 16px;
+                    line-height: 160%;
+                    color: #000000;
+                }
+            }
+        }
+    }
+    .pagination__container {
+        ul {
+            margin: 0 auto;
+        }
+    }
+}
