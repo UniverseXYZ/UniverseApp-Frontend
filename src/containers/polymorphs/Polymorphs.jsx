@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-// import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png';
 import About from '../../components/polymorphs/About';
 import Characters from '../../components/polymorphs/Characters';
-// import Button from '../../components/button/Button.jsx';
-// import Section3LeftImageBrowser from '../../assets/images/polymorph-Section3 - Left-characters-(desktop)-min.png';
-// import Section3RightImageBrowser from '../../assets/images/polymorph-Section3 - Right-characters-(desktop)-min.png';
 import './Polymorphs.scss';
 
 const marquee = () => (

@@ -2,8 +2,11 @@ import React, { useLayoutEffect, useEffect, useState } from 'react';
 import './styles/Characters.scss';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Button from '../button/Button.jsx';
+import WrapperCenter from './WrapperCenter';
 import Section3LeftImageBrowser from '../../assets/images/polymorph-Section3 - Left-characters-(desktop)-min.png';
 import Section3RightImageBrowser from '../../assets/images/polymorph-Section3 - Right-characters-(desktop)-min.png';
+import Section3MobileTopImg from '../../assets/images/Section-3-Top-characters-(mobile)-min.png';
+import Section3MobileBottomImg from '../../assets/images/Section-3-Bottom-characters-(mobile)-min.png';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -27,30 +30,37 @@ const Characters = () => {
 
   useEffect(() => {
     getWindow(window.innerWidth, setWindows);
+    if (windows === 'browser' || windows === 'table') {
+      setSection3Images({ left: Section3LeftImageBrowser, right: Section3RightImageBrowser });
+    } else if (windows === 'mobile') {
+      setSection3Images({ left: Section3MobileTopImg, right: Section3MobileBottomImg });
+    }
   }, [windows]);
 
   return (
     <div className="polymorphs--characters">
-      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
-        <div className="polymorph--section3--left--block">
-          <img alt="img" src={section3Images.left} />
-        </div>
-        {console.log(windows)}
-      </AnimatedOnScroll>
-      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-        <div className="polymorph--section3--center--block">
-          <div className="section3--center--child--block">
-            <h2>10 characters and 40+ traits</h2>
-            <p>Our original characters need no introduction</p>
-            <Button className="light-button">Mint polymorph</Button>
+      <WrapperCenter className="polymorphs--characters--wrapper">
+        <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
+          <div className="polymorph--section3--left--block">
+            <img alt="img" src={section3Images.left} />
           </div>
-        </div>
-      </AnimatedOnScroll>
-      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
-        <div className="polymorph--section3--right--block">
-          <img src={section3Images.right} alt="img" />
-        </div>
-      </AnimatedOnScroll>
+          {console.log(windows)}
+        </AnimatedOnScroll>
+        <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
+          <div className="polymorph--section3--center--block">
+            <div className="section3--center--child--block">
+              <h2>10 characters and 40+ traits</h2>
+              <p>Our original characters need no introduction</p>
+              <Button className="light-button">Mint polymorph</Button>
+            </div>
+          </div>
+        </AnimatedOnScroll>
+        <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
+          <div className="polymorph--section3--right--block">
+            <img src={section3Images.right} alt="img" />
+          </div>
+        </AnimatedOnScroll>
+      </WrapperCenter>
     </div>
   );
 };
