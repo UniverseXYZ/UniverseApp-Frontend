@@ -13,6 +13,8 @@ import NFT3 from '../../assets/images/ntf3.svg';
 import NFT4 from '../../assets/images/ntf4.svg';
 import NFT6 from '../../assets/images/ntf6.svg';
 import doneIcon from '../../assets/images/Completed.svg';
+import emptyMark from '../../assets/images/emptyMark.svg';
+import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import LeavePopup from '../popups/LeavePopup';
 import AppContext from '../../ContextAPI';
@@ -33,10 +35,6 @@ const FinalizeAuction = () => {
     }
   }, [loadingApproval]);
 
-  console.log(deployedCollections.length);
-  console.log(approvals);
-  console.log(auction);
-
   const handleProceed = () => {
     setProceed(true);
     setApprovals(approvals + 1);
@@ -52,7 +50,6 @@ const FinalizeAuction = () => {
   };
 
   const handleLastDeposit = () => {
-    console.log('fdsfsd');
     setApprovals(approvals + 1);
     setAuction((prevValue) => ({
       ...prevValue,
@@ -81,18 +78,24 @@ const FinalizeAuction = () => {
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                <img src={doneIcon} alt="Done" />
+                {proceed ? (
+                  <img src={doneIcon} alt="Done" />
+                ) : (
+                  <img src={emptyMark} alt="Empty mark" />
+                )}
               </div>
-              <div className="line colored" />
+              <div className={`line ${proceed ? 'colored' : ''}`} />
             </div>
             <div className="create__auction__body">
-              <h2>Craete auction</h2>
+              <h2>Create auction</h2>
               <p className="auction__description">
                 Proceed with the transaction to create the auction instance on the blockchain
               </p>
               <div className="warning__div">
                 <img src={warningIcon} alt="Warning" />
-                <p>You will not be able to make any changes to the auction if you proceed</p>
+                <p>
+                  You will not be able to make any changes to the auction settings if you proceed
+                </p>
               </div>
               {proceed ? (
                 <Button className="light-button" disabled>
@@ -110,7 +113,13 @@ const FinalizeAuction = () => {
           </div>
           <div className="create__auction">
             <div className="step">
-              <div className="circle" />
+              <div className="circle">
+                {proceed ? (
+                  <img alt="Empty mark" src={emptyMark} />
+                ) : (
+                  <img alt="Empty white" src={emptyWhite} />
+                )}
+              </div>
               <div className="line" />
             </div>
             <div className="create__auction__body">
@@ -178,7 +187,7 @@ const FinalizeAuction = () => {
                   ))
                 ) : (
                   <div className="empty__nfts">
-                    <h3>No Saved Collections found</h3>
+                    <h3>No Collections found</h3>
                   </div>
                 )}
               </div>
@@ -186,7 +195,13 @@ const FinalizeAuction = () => {
           </div>
           <div className="create__auction">
             <div className="step">
-              <div className="circle" />
+              <div className="circle">
+                {proceed ? (
+                  <img alt="Empty mark" src={emptyMark} />
+                ) : (
+                  <img alt="Empty white" src={emptyWhite} />
+                )}
+              </div>
             </div>
             <div className="create__auction__body">
               <h2>Deposit NFTs</h2>

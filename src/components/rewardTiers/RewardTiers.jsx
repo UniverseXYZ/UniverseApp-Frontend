@@ -18,10 +18,6 @@ const RewardTiers = () => {
 
   const { auction, bidtype } = useContext(AppContext);
 
-  useEffect(() => {
-    window['__react-beautiful-dnd-disable-dev-warnings'] = true;
-  }, []);
-
   return (
     <div className="container reward-tiers">
       <div>
@@ -194,7 +190,7 @@ const RewardTiers = () => {
       <div className="btn-div">
         <Button
           className="light-border-button"
-          onClick={() => history.push('/setup-auction/auction-settings')}
+          onClick={() => history.push('/setup-auction/auction-settings', auction.id)}
         >
           Back
         </Button>

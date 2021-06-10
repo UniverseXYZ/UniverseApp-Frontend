@@ -10,10 +10,10 @@ import ActiveAuctions from './ActiveAuctions.jsx';
 import PastAuctions from './PastAuctions.jsx';
 
 const MyAuction = () => {
-  const { myAuctions, setMyAuctions, auction, setAuction } = useContext(AppContext);
+  const { myAuctions, setMyAuctions, auction, setAuction, loggedInArtist } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
-  const [hideButton, setHideButton] = useState(false);
+  const [showButton, setShowButton] = useState(true);
   const history = useHistory();
 
   const handleTabRightScrolling = () => {
@@ -90,31 +90,55 @@ const MyAuction = () => {
 
     //   setAuction({ tiers: [] });
     // }
-    function handleHideButton() {
+    function handleShowButton() {
       if (window.innerWidth < 576) {
-        setHideButton(false);
+        if (selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length) {
+          setShowButton(false);
+        } else if (
+          selectedTabIndex === 1 &&
+          !myAuctions.filter(
+            (item) =>
+              !item.launch &&
+              !moment(item.endDate).isBefore(moment.now()) &&
+              !(
+                moment(item.endDate).isAfter(moment.now()) &&
+                (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
+                  moment(item.startDate).isBefore(moment.now())) > 0
+              )
+          ).length
+        ) {
+          setShowButton(false);
+        } else if (
+          selectedTabIndex === 2 &&
+          !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length
+        ) {
+          setShowButton(false);
+        } else {
+          setShowButton(true);
+        }
       } else {
-        setHideButton(true);
+        setShowButton(true);
       }
     }
-    window.addEventListener('resize', handleHideButton);
-    handleHideButton();
+    window.addEventListener('resize', handleShowButton);
+    handleShowButton();
 
-    return () => window.removeEventListener('resize', handleHideButton);
-  }, []);
+    return () => window.removeEventListener('resize', handleShowButton);
+  }, [selectedTabIndex]);
 
   return (
     <div className="container auction__page">
       <div className="auction__page__header">
         <h1 className="title">My auctions</h1>
-        {hideButton && (
+        {showButton && (
           <div>
             <button
               type="button"
-              className="set_up"
-              onClick={() => {
-                history.push('/setup-auction');
-              }}
+              className="light-button set_up"
+              onClick={() =>
+                loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
+              }
+              disabled={!loggedInArtist.name || !loggedInArtist.avatar}
             >
               Set up auction
             </button>
@@ -171,14 +195,29 @@ const MyAuction = () => {
         )}
         {selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length ? (
           <div className="empty__auction">
+            {!loggedInArtist.name || !loggedInArtist.avatar ? (
+              <div className="warning__div">
+                <img src={Exclamation} alt="Warning" />
+                <p>
+                  Please, fill out the profile details before you set up an auction.{' '}
+                  <button type="button" onClick={() => history.push('/my-account')}>
+                    Go to my profile
+                  </button>
+                  .
+                </p>
+              </div>
+            ) : (
+              <></>
+            )}
             <h3>No active auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>
             <button
               type="button"
-              className="set_up"
-              onClick={() => {
-                history.push('/setup-auction');
-              }}
+              className="light-button set_up"
+              onClick={() =>
+                loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
+              }
+              disabled={!loggedInArtist.name || !loggedInArtist.avatar}
             >
               Set up auction
             </button>
@@ -189,12 +228,12 @@ const MyAuction = () => {
         {selectedTabIndex === 1 &&
         myAuctions.filter(
           (item) =>
-            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
+            !item.launch &&
+            !moment(item.endDate).isBefore(moment.now()) &&
             !(
               moment(item.endDate).isAfter(moment.now()) &&
               (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0 &&
-              item.launch
+                moment(item.startDate).isBefore(moment.now())) > 0
             )
         ).length ? (
           <FutureAuctions
@@ -208,23 +247,38 @@ const MyAuction = () => {
         {selectedTabIndex === 1 &&
         !myAuctions.filter(
           (item) =>
-            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
+            !item.launch &&
+            !moment(item.endDate).isBefore(moment.now()) &&
             !(
               moment(item.endDate).isAfter(moment.now()) &&
               (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0 &&
-              item.launch
+                moment(item.startDate).isBefore(moment.now())) > 0
             )
         ).length ? (
           <div className="empty__auction">
+            {!loggedInArtist.name || !loggedInArtist.avatar ? (
+              <div className="warning__div">
+                <img src={Exclamation} alt="Warning" />
+                <p>
+                  Please, fill out the profile details before you set up an auction.{' '}
+                  <button type="button" onClick={() => history.push('/my-account')}>
+                    Go to my profile
+                  </button>
+                  .
+                </p>
+              </div>
+            ) : (
+              <></>
+            )}
             <h3>No scheduled auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>
             <button
               type="button"
-              className="set_up"
-              onClick={() => {
-                history.push('/setup-auction');
-              }}
+              className="light-button set_up"
+              onClick={() =>
+                loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
+              }
+              disabled={!loggedInArtist.name || !loggedInArtist.avatar}
             >
               Set up auction
             </button>
@@ -234,24 +288,37 @@ const MyAuction = () => {
         )}
 
         {selectedTabIndex === 2 &&
-        myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
-          .length ? (
+        myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length ? (
           <PastAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
         ) : (
           <></>
         )}
         {selectedTabIndex === 2 &&
-        !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
-          .length ? (
+        !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length ? (
           <div className="empty__auction">
+            {!loggedInArtist.name || !loggedInArtist.avatar ? (
+              <div className="warning__div">
+                <img src={Exclamation} alt="Warning" />
+                <p>
+                  Please, fill out the profile details before you set up an auction.{' '}
+                  <button type="button" onClick={() => history.push('/my-account')}>
+                    Go to my profile
+                  </button>
+                  .
+                </p>
+              </div>
+            ) : (
+              <></>
+            )}
             <h3>No past auctions found</h3>
             <p className="desc">Create your first auction by clicking the button below</p>
             <button
               type="button"
-              className="set_up"
-              onClick={() => {
-                history.push('/setup-auction');
-              }}
+              className="light-button set_up"
+              onClick={() =>
+                loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
+              }
+              disabled={!loggedInArtist.name || !loggedInArtist.avatar}
             >
               Set up auction
             </button>

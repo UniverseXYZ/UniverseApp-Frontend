@@ -62,6 +62,11 @@
       align-items: center;
 
       button {
+        &.hide__on__mobile {
+          @include md {
+            display: none;
+          }
+        }
         img {
           margin-left: 12px;
         }
@@ -81,6 +86,7 @@
       .arrow {
         padding: 11px;
         border-radius: 12px;
+        margin-left: 5px;
         &:hover {
           background: rgba(0, 0, 0, 0.05);
         }
@@ -167,6 +173,21 @@
       @include lg {
         margin-bottom: 10px;
         width: fit-content;
+      }
+    }
+
+    .show__on__mobile {
+      display: none;
+      width: 100%;
+      margin-top: 20px;
+      button {
+        width: 100%;
+      }
+      img {
+        margin-left: 12px;
+      }
+      @include md {
+        display: block;
       }
     }
 
