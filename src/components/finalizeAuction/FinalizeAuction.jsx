@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
+import Skeleton from 'react-loading-skeleton';
+import SuccessPopup from '../popups/SuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
 import warningIcon from '../../assets/images/Exclamation.svg';
@@ -12,46 +14,51 @@ import NFT4 from '../../assets/images/ntf4.svg';
 import NFT6 from '../../assets/images/ntf6.svg';
 import doneIcon from '../../assets/images/Completed.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
-
-import SuccessPopup from '../popups/SuccessPopup';
 import LeavePopup from '../popups/LeavePopup';
 import AppContext from '../../ContextAPI';
 
 const FinalizeAuction = () => {
   const history = useHistory();
-  const {
-    auction,
-    setAuction,
-    loggedInArtist,
-    myAuctions,
-    setMyAuctions,
-    activeAuctions,
-    setActiveAuctions,
-    futureAuctions,
-    setFutureAuctions,
-    savedCollections,
-    deployedCollections,
-  } = useContext(AppContext);
+  const { auction, setAuction, loggedInArtist, deployedCollections } = useContext(AppContext);
   const [proceed, setProceed] = useState(false);
   const [approvals, setApprovals] = useState(1);
+  const [loadingApproval, setLoadingApproval] = useState(undefined);
 
-  console.log(proceed);
+  useEffect(() => {
+    if (loadingApproval !== undefined) {
+      setTimeout(() => {
+        setApprovals(loadingApproval + 1);
+        setLoadingApproval(undefined);
+      }, 1000);
+    }
+  }, [loadingApproval]);
+
+  console.log(deployedCollections.length);
   console.log(approvals);
   console.log(auction);
 
   const handleProceed = () => {
     setProceed(true);
-    // setAuction((prevValue) => ({
-    //   ...prevValue,
-    //   launch: true,
-    // }));
     setApprovals(approvals + 1);
   };
 
   const handleClick = () => {
+    setLoadingApproval(approvals);
+    // setApprovals(approvals + 1);
+  };
+
+  const handleDeposit = () => {
     setApprovals(approvals + 1);
   };
 
+  const handleLastDeposit = () => {
+    console.log('fdsfsd');
+    setApprovals(approvals + 1);
+    setAuction((prevValue) => ({
+      ...prevValue,
+      launch: true,
+    }));
+  };
   return (
     <div className="finalize__auction">
       <div className="finalize container">
@@ -137,22 +144,34 @@ const FinalizeAuction = () => {
                           alt={collection.name}
                         />
                       )}
-                      {/* <img src={collectionImg} alt="Collection" /> */}
                       <div>
                         <h3>{collection.name}</h3>
-                        {approvals === index + 2 ? (
-                          <Button className="light-button approve-btn" onClick={handleClick}>
-                            Approve
-                          </Button>
-                        ) : approvals > index + 2 ? (
-                          <Button className="light-button approve-btn" disabled>
-                            Approved
-                            <img className="checkmark" src={completedCheckmark} alt="Approved" />
+                        {loadingApproval !== index + 2 ? (
+                          <Button
+                            className="light-button approve-btn"
+                            disabled={approvals !== index + 2}
+                            onClick={handleClick}
+                          >
+                            {approvals > index + 2 ? (
+                              <>
+                                Approved
+                                <img
+                                  src={completedCheckmark}
+                                  className="checkmark"
+                                  alt="Approved"
+                                />
+                              </>
+                            ) : (
+                              'Approve'
+                            )}
                           </Button>
                         ) : (
-                          <Button className="light-button approve-btn" disabled>
-                            Approve
-                          </Button>
+                          <div className="loading-ring">
+                            <div />
+                            <div />
+                            <div />
+                            <div />
+                          </div>
                         )}
                       </div>
                     </div>
@@ -207,9 +226,24 @@ const FinalizeAuction = () => {
                     </div>
                   </div>
                   <div className="deposit__button">
-                    {approvals === deployedCollections.length + 2 ? (
-                      <Button className="light-button">Deposit</Button>
-                    ) : approvals > deployedCollections.length + 2 ? (
+                    {approvals === deployedCollections.length + 2 + tierIndex &&
+                    auction.tiers.length !== tierIndex + 1 ? (
+                      <Button className="light-button" onClick={handleDeposit}>
+                        Deposit
+                      </Button>
+                    ) : approvals === deployedCollections.length + 2 + tierIndex &&
+                      auction.tiers.length === tierIndex + 1 ? (
+                      <Popup
+                        nested
+                        trigger={
+                          <Button className="light-button" onClick={handleLastDeposit}>
+                            Deposit
+                          </Button>
+                        }
+                      >
+                        {(close) => <SuccessPopup onClose={close} onAuction={auction} />}
+                      </Popup>
+                    ) : approvals > deployedCollections.length + 2 + tierIndex ? (
                       <Button className="light-button" disabled>
                         Deposited
                         <img className="checkmark" src={completedCheckmark} alt="Deposited" />
