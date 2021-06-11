@@ -5,6 +5,7 @@ import About from '../../components/polymorphs/About';
 import Characters from '../../components/polymorphs/Characters';
 import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
+import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
 
 const marquee = () => (
@@ -62,6 +63,7 @@ const Polymorphs = () => {
       <Characters />
       <Section4 />
       <PolymorphsActivity mobile={mobile} />
+      <Section6 />
     </div>
   );
 };

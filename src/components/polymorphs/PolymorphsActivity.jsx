@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from '../pagination/Pagionation';
 import WrapperCenter from './WrapperCenter';
