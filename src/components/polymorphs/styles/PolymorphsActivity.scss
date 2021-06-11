@@ -44,14 +44,33 @@
                 td {
                     text-align: center;
                     vertical-align: middle;
+                    font-family: Space Grotesk;
                 }
                 .td--name {
-                    font-family: Space Grotesk;
                     font-style: normal;
                     font-weight: bold;
                     font-size: 16px;
                     line-height: 160%;
                     color: #000000;
+                }
+                .td--price {
+                    .price--eth {
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 16px;
+                        line-height: 160%;
+                        text-align: right;
+                        color: #000000;
+                    }
+                    .price--usd {
+                        font-family: Space Grotesk;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 16px;
+                        line-height: 160%;
+                        text-align: right;
+                        color: rgba(0, 0, 0, 0.4);
+                    }
                 }
             }
         }

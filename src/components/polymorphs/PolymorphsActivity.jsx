@@ -26,13 +26,14 @@ const PolymorphsActivity = () => {
   return (
     <WrapperCenter className="polymorphs--activity--wrapper--center">
       <h2>Recent Polymorphs activity</h2>
+      {console.log(offset)}
       <PolymorphsActivityTable
         className="table--polymorphs--activity"
         tableHead={tableHead}
         rows={getRows(mockData, dataKeys)}
       />
       <div className="pagination__container">
-        <Pagination data={dataKeys} perPage={1} setOffset={setOffset} />
+        <Pagination data={dataKeys} perPage={5} setOffset={setOffset} />
       </div>
     </WrapperCenter>
   );

@@ -14,7 +14,7 @@ const WelcomeWrapper = (props) => {
     props;
 
   return (
-    <div className="welcome__section">
+    <div className="welcome--section">
       {ellipsesLeft && <img className="ellipse-l" src={ellipses} alt="Ellipses" />}
       {ellipsesRight && <img className="ellipse-r" src={ellipses} alt="Ellipses" />}
       <div className="welcome__section__container">
