@@ -25,7 +25,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     index: null,
   });
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(3);
+  const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
   const history = useHistory();
 
