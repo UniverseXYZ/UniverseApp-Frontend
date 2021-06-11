@@ -25,7 +25,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideEndIcon, setHideEndIcon] = useState(true);
   const [shownActionId, setshownActionId] = useState(null);
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(3);
+  const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
   const history = useHistory();
   const [mintCongratsPopupOpen, setMintCongratsPopupOpen] = useState(false);
@@ -67,16 +67,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter(
-          (item) =>
-            !item.launch &&
-            !moment(item.endDate).isBefore(moment.now()) &&
-            !(
-              moment(item.endDate).isAfter(moment.now()) &&
-              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0
-            )
-        )
+        .filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
         .map((futureAuction) => (
           <div className="auction" key={uuid()}>
             <div className="auction-header">
@@ -215,6 +206,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     setAuction(futureAuction);
                     history.push('/customize-auction-landing-page', futureAuction.id);
                   }}
+                  disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                 >
                   {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
                 </Button>
@@ -223,12 +215,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <h6>Step 3</h6>
                 <h4>Finalize auction</h4>
                 <div className="circle">
-                  {/* {!futureAuction.landingCustom && !futureAuction.mint && (
-                    <img alt="landing_page" src={emptyWhite} />
-                  )} */}
-                  {/* {futureAuction.headline || futureAuction.link && (
-                    <img alt="landing_page" src={emptyMark} />
-                  )} */}
                   {futureAuction.headline || futureAuction.link ? (
                     <img alt="landing_page" src={emptyMark} />
                   ) : (
@@ -242,6 +228,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       setAuction(futureAuction);
                       history.push('/finalize-auction', futureAuction.id);
                     }}
+                    disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                   >
                     Start
                   </Button>
@@ -310,6 +297,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       setAuction(futureAuction);
                       history.push('/customize-auction-landing-page', futureAuction.id);
                     }}
+                    disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                   >
                     {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
                   </Button>
@@ -324,6 +312,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       //   setAuction(futureAuction);
                       //   history.push('/finalize-auction', futureAuction.id);
                       // }}
+                      disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                     >
                       Start
                     </Button>

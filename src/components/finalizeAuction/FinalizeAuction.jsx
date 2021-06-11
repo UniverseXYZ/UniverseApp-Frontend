@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import Skeleton from 'react-loading-skeleton';
@@ -21,10 +21,33 @@ import AppContext from '../../ContextAPI';
 
 const FinalizeAuction = () => {
   const history = useHistory();
-  const { auction, setAuction, loggedInArtist, deployedCollections } = useContext(AppContext);
+  const {
+    auction,
+    myAuctions,
+    setMyAuctions,
+    loggedInArtist,
+    deployedCollections,
+    setDeployedCollections,
+  } = useContext(AppContext);
   const [proceed, setProceed] = useState(false);
   const [approvals, setApprovals] = useState(1);
   const [loadingApproval, setLoadingApproval] = useState(undefined);
+  const [collections, setCollections] = useState([]);
+  const [approvedCollections, setApprovedCollections] = useState([]);
+
+  useEffect(() => {
+    let arr = [];
+    deployedCollections.forEach((item) => {
+      auction.tiers.forEach((tier) => {
+        if (tier.nfts.filter((nft) => nft.collectionId === item.id && !item.approved).length) {
+          arr.push(item);
+        }
+      });
+    });
+    arr = arr.filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);
+    setCollections(arr);
+    setApprovedCollections(deployedCollections);
+  }, []);
 
   useEffect(() => {
     if (loadingApproval !== undefined) {
@@ -40,9 +63,11 @@ const FinalizeAuction = () => {
     setApprovals(approvals + 1);
   };
 
-  const handleClick = () => {
+  const handleClick = (id) => {
+    setApprovedCollections(
+      approvedCollections.map((item) => (item.id === id ? { ...item, approved: true } : item))
+    );
     setLoadingApproval(approvals);
-    // setApprovals(approvals + 1);
   };
 
   const handleDeposit = () => {
@@ -51,13 +76,31 @@ const FinalizeAuction = () => {
 
   const handleLastDeposit = () => {
     setApprovals(approvals + 1);
-    setAuction((prevValue) => ({
-      ...prevValue,
-      launch: true,
-    }));
+    setTimeout(() => {
+      setDeployedCollections(approvedCollections);
+      setMyAuctions(
+        myAuctions.map((item) => (item.id === auction.id ? { ...item, launch: true } : item))
+      );
+      setTimeout(() => {
+        document.getElementById('success-hidden-btn').click();
+      }, 1000);
+    }, 1000);
   };
+
   return (
     <div className="finalize__auction">
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="success-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <SuccessPopup onClose={close} onAuction={auction} />}
+      </Popup>
       <div className="finalize container">
         <div
           className="back-rew"
@@ -98,7 +141,7 @@ const FinalizeAuction = () => {
                 </p>
               </div>
               {proceed ? (
-                <Button className="light-button" disabled>
+                <Button className="light-border-button" disabled>
                   Completed <img src={completedCheckmark} alt="completed" />
                 </Button>
               ) : (
@@ -111,92 +154,107 @@ const FinalizeAuction = () => {
               </Popup> */}
             </div>
           </div>
-          <div className="create__auction">
-            <div className="step">
-              <div className="circle">
-                {proceed ? (
-                  <img alt="Empty mark" src={emptyMark} />
-                ) : (
-                  <img alt="Empty white" src={emptyWhite} />
-                )}
+          {collections.length ? (
+            <div className="create__auction">
+              <div className="step">
+                <div className="circle">
+                  {proceed && approvals - 2 !== collections.length ? (
+                    <img alt="Empty mark" src={emptyMark} />
+                  ) : proceed && approvals - 2 === collections.length ? (
+                    <img alt="Empty mark" src={doneIcon} />
+                  ) : (
+                    <img alt="Empty white" src={emptyWhite} />
+                  )}
+                </div>
+                <div
+                  className={`line ${
+                    proceed && approvals - 2 === collections.length ? 'colored' : ''
+                  }`}
+                />
               </div>
-              <div className="line" />
-            </div>
-            <div className="create__auction__body">
-              <h2>Set approvals</h2>
-              <p className="auction__description">
-                Approve NFTs for depositing into the auction contract
-              </p>
-              <div className="warning__div">
-                <img src={warningIcon} alt="Warning" />
-                <p>
-                  Depending on the gas fee cost, you may need to have a significant amount of ETH to
-                  proceed
+              <div className="create__auction__body">
+                <h2>Set approvals</h2>
+                <p className="auction__description">
+                  Approve NFTs for depositing into the auction contract
                 </p>
-              </div>
-              <div className="collections">
-                {deployedCollections.length ? (
-                  deployedCollections.map((collection, index) => (
-                    <div className="collection__div">
-                      {collection.bgImage ? (
-                        <img src={URL.createObjectURL(collection.bgImage)} alt={collection.name} />
-                      ) : typeof collection.previewImage === 'string' &&
-                        collection.previewImage.startsWith('#') ? (
-                        <div
-                          className="random__bg__color"
-                          style={{ backgroundColor: collection.previewImage }}
-                        />
-                      ) : (
-                        <img
-                          className="blur"
-                          src={URL.createObjectURL(collection.previewImage)}
-                          alt={collection.name}
-                        />
-                      )}
-                      <div>
-                        <h3>{collection.name}</h3>
-                        {loadingApproval !== index + 2 ? (
-                          <Button
-                            className="light-button approve-btn"
-                            disabled={approvals !== index + 2}
-                            onClick={handleClick}
-                          >
-                            {approvals > index + 2 ? (
-                              <>
-                                Approved
-                                <img
-                                  src={completedCheckmark}
-                                  className="checkmark"
-                                  alt="Approved"
-                                />
-                              </>
-                            ) : (
-                              'Approve'
-                            )}
-                          </Button>
+                <div className="warning__div">
+                  <img src={warningIcon} alt="Warning" />
+                  <p>
+                    Depending on the gas fee cost, you may need to have a significant amount of ETH
+                    to proceed
+                  </p>
+                </div>
+                <div className="collections">
+                  {collections.length ? (
+                    collections.map((collection, index) => (
+                      <div className="collection__div">
+                        {collection.bgImage ? (
+                          <img
+                            src={URL.createObjectURL(collection.bgImage)}
+                            alt={collection.name}
+                          />
+                        ) : typeof collection.previewImage === 'string' &&
+                          collection.previewImage.startsWith('#') ? (
+                          <div
+                            className="random__bg__color"
+                            style={{ backgroundColor: collection.previewImage }}
+                          />
                         ) : (
-                          <div className="loading-ring">
-                            <div />
-                            <div />
-                            <div />
-                            <div />
-                          </div>
+                          <img
+                            className="blur"
+                            src={URL.createObjectURL(collection.previewImage)}
+                            alt={collection.name}
+                          />
                         )}
+                        <div>
+                          <h3>{collection.name}</h3>
+                          {loadingApproval !== index + 2 ? (
+                            <Button
+                              className={`${
+                                approvals > index + 2 ? 'light-border-button' : 'light-button'
+                              } approve-btn`}
+                              disabled={approvals !== index + 2}
+                              onClick={() => handleClick(collection.id)}
+                            >
+                              {approvals > index + 2 ? (
+                                <>
+                                  Approved
+                                  <img
+                                    src={completedCheckmark}
+                                    className="checkmark"
+                                    alt="Approved"
+                                  />
+                                </>
+                              ) : (
+                                'Approve'
+                              )}
+                            </Button>
+                          ) : (
+                            <div className="loading-ring">
+                              <div />
+                              <div />
+                              <div />
+                              <div />
+                            </div>
+                          )}
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="empty__nfts">
+                      <h3>No Collections found</h3>
                     </div>
-                  ))
-                ) : (
-                  <div className="empty__nfts">
-                    <h3>No Collections found</h3>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                {proceed ? (
+                {proceed && approvals - 2 === collections.length ? (
                   <img alt="Empty mark" src={emptyMark} />
                 ) : (
                   <img alt="Empty white" src={emptyWhite} />
@@ -241,25 +299,18 @@ const FinalizeAuction = () => {
                     </div>
                   </div>
                   <div className="deposit__button">
-                    {approvals === deployedCollections.length + 2 + tierIndex &&
+                    {approvals === collections.length + 2 + tierIndex &&
                     auction.tiers.length !== tierIndex + 1 ? (
                       <Button className="light-button" onClick={handleDeposit}>
                         Deposit
                       </Button>
-                    ) : approvals === deployedCollections.length + 2 + tierIndex &&
+                    ) : approvals === collections.length + 2 + tierIndex &&
                       auction.tiers.length === tierIndex + 1 ? (
-                      <Popup
-                        nested
-                        trigger={
-                          <Button className="light-button" onClick={handleLastDeposit}>
-                            Deposit
-                          </Button>
-                        }
-                      >
-                        {(close) => <SuccessPopup onClose={close} onAuction={auction} />}
-                      </Popup>
-                    ) : approvals > deployedCollections.length + 2 + tierIndex ? (
-                      <Button className="light-button" disabled>
+                      <button type="button" className="light-button" onClick={handleLastDeposit}>
+                        Deposit
+                      </button>
+                    ) : approvals > collections.length + 2 + tierIndex ? (
+                      <Button className="light-border-button" disabled>
                         Deposited
                         <img className="checkmark" src={completedCheckmark} alt="Deposited" />
                       </Button>

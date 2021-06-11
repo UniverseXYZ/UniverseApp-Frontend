@@ -226,16 +226,8 @@ const MyAuction = () => {
           <></>
         )}
         {selectedTabIndex === 1 &&
-        myAuctions.filter(
-          (item) =>
-            !item.launch &&
-            !moment(item.endDate).isBefore(moment.now()) &&
-            !(
-              moment(item.endDate).isAfter(moment.now()) &&
-              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0
-            )
-        ).length ? (
+        myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
+          .length ? (
           <FutureAuctions
             myAuctions={myAuctions}
             setMyAuctions={setMyAuctions}
@@ -245,16 +237,8 @@ const MyAuction = () => {
           <></>
         )}
         {selectedTabIndex === 1 &&
-        !myAuctions.filter(
-          (item) =>
-            !item.launch &&
-            !moment(item.endDate).isBefore(moment.now()) &&
-            !(
-              moment(item.endDate).isAfter(moment.now()) &&
-              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0
-            )
-        ).length ? (
+        !myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
+          .length ? (
           <div className="empty__auction">
             {!loggedInArtist.name || !loggedInArtist.avatar ? (
               <div className="warning__div">
