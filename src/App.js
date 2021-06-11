@@ -47,6 +47,7 @@ const App = () => {
   const [savedCollectionID, setSavedCollectionID] = useState(null);
   const [myCollectionID, setMyCollectionID] = useState(null);
   const [savedNfts, setSavedNfts] = useState([]);
+  const [universeNFTs, setUniverseNFTs] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
   const [deployedCollections, setDeployedCollections] = useState([]);
@@ -83,6 +84,8 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
+        universeNFTs,
+        setUniverseNFTs,
         showModal,
         setShowModal,
         myNFTsSelectedTabIndex,

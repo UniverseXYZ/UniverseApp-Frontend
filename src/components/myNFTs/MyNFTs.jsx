@@ -5,6 +5,7 @@ import uuid from 'react-uuid';
 import './MyNFTs.scss';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
+import UniverseNFTs from './UniverseNFTs.jsx';
 import SavedCollections from './SavedCollections.jsx';
 import MintModal from '../mintModal/MintModal.jsx';
 import AppContext from '../../ContextAPI';
@@ -33,7 +34,7 @@ const MyNFTs = () => {
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Collections', 'Saved NFTs'];
+  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
@@ -309,7 +310,7 @@ const MyNFTs = () => {
             )}
             {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
             {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
-            {myNFTsSelectedTabIndex === 3 && <SavedCollections />}
+            {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
           </div>
         </>
       ) : isCreatingAction ? (
