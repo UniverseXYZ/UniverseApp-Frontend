@@ -7,6 +7,9 @@
     @include xl {
         padding: 60px;
     }
+    @include sm {
+        padding: 10px 20px;
+    }
     
     h2 {
         font-family: Sharp Grotesk;
@@ -17,6 +20,9 @@
         text-align: center;
         color: #000000;
         margin: 60px 0;
+        @include sm {
+            font-size: 20px;
+        }
     }
     .table--polymorphs--activity {
         border-collapse: separate;
@@ -169,6 +175,9 @@
                 }
             }
         }
+    }
+    .mobile--table--polymorphs--activity {
+        min-height: 400px;
     }
     .pagination__container {
         ul {

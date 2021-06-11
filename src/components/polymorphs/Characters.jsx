@@ -44,7 +44,6 @@ const Characters = () => {
           <div className="polymorph--section3--left--block">
             <img alt="img" src={section3Images.left} />
           </div>
-          {console.log(windows)}
         </AnimatedOnScroll>
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="polymorph--section3--center--block">

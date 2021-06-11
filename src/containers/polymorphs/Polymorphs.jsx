@@ -29,8 +29,20 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
-  const x = 15;
-  console.log(x);
+  const [mobile, setMobile] = useState(false);
+
+  useLayoutEffect(() => {
+    function handleResize() {
+      if (+window.innerWidth <= 575) setMobile(true);
+      else setMobile(false);
+    }
+    window.addEventListener('resize', handleResize);
+  });
+
+  useEffect(() => {
+    if (+window.innerWidth <= 575) setMobile(true);
+  }, [window.innerWidth]);
+
   return (
     <div className="polymorphs">
       <WelcomeWrapper
@@ -49,7 +61,7 @@ const Polymorphs = () => {
       </div>
       <Characters />
       <Section4 />
-      <PolymorphsActivity />
+      <PolymorphsActivity mobile={mobile} />
     </div>
   );
 };
