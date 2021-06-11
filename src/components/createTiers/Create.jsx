@@ -10,6 +10,7 @@ import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
+import UniverseNFTs from '../myNFTs/UniverseNFTs';
 
 const Create = () => {
   const history = useHistory();
@@ -278,6 +279,16 @@ const Create = () => {
           </p>
         </p>
         <Wallet
+          filteredNFTs={filteredNFTs}
+          setFilteredNFTs={setFilteredNFTs}
+          selectedNFTIds={selectedNFTIds}
+          setSelectedNFTIds={setSelectedNFTIds}
+          tierName={values.name}
+          winners={Number(values.winners)}
+          nftsPerWinner={Number(values.nftsPerWinner)}
+          minBidValue={minBidValue}
+        />
+        <UniverseNFTs
           filteredNFTs={filteredNFTs}
           setFilteredNFTs={setFilteredNFTs}
           selectedNFTIds={selectedNFTIds}
