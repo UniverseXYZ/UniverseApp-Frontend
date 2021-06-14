@@ -24,7 +24,7 @@ const CustomizeAuction = () => {
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
-    link: '',
+    link: `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`,
     promoImage: null,
     backgroundImage: null,
     hasBlur: '',
@@ -36,7 +36,7 @@ const CustomizeAuction = () => {
     if (auction) {
       setDomainAndBranding({
         headline: auction.headline || '',
-        link: auction.link || '',
+        link: auction.link || `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`,
         promoImage: auction.promoImage || null,
         backgroundImage: auction.backgroundImage || null,
         hasBlur: auction.hasBlur || '',
