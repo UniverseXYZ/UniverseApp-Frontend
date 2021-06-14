@@ -109,6 +109,9 @@
     @include sm {
         height: 165px;
     }
+    >div {
+        height: 100%;
+    }
     .section6--end--block {
         margin: 0 auto;
         display: flex;

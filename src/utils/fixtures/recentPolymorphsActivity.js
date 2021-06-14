@@ -1,7 +1,7 @@
-import img1 from '../assets/images/polymorph-section5-min-img.png';
-import img2 from '../assets/images/polymorph-section5-min-img2.png';
-import img3 from '../assets/images/polymorph-section5-min-img3.png';
-import img4 from '../assets/images/polymorph-section5-min-img4.png';
+import img1 from '../../assets/images/polymorph-section5-min-img.png';
+import img2 from '../../assets/images/polymorph-section5-min-img2.png';
+import img3 from '../../assets/images/polymorph-section5-min-img3.png';
+import img4 from '../../assets/images/polymorph-section5-min-img4.png';
 
 export default {
   polymorphUniqId1: {

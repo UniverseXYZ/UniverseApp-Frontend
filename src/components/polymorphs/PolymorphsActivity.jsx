@@ -6,7 +6,7 @@ import PolymorphsActivityTable from './PolymorphsActivityTable';
 import PolymorphsActivityTableRow from './PolymorphsActivityTableRow';
 import PolymorphsActivityTableRowMobile from './PolymorphsActivityTableRowMobile';
 import './styles/PolymorphsActivity.scss';
-import mockData from '../../__mockData/recentPolymorphsActivity';
+import mockData from '../../utils/fixtures/recentPolymorphsActivity';
 
 const tableHead = [
   { labelText: '', className: '' },

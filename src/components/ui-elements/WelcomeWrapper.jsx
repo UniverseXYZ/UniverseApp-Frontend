@@ -10,8 +10,17 @@ import SubscribePopup from '../popups/SubscribePopup.jsx';
 import './styles/WelcomeWrapper.scss';
 
 const WelcomeWrapper = (props) => {
-  const { ellipsesLeft, ellipsesRight, title, hintText, btnText, popupBtnText, children, marquee } =
-    props;
+  const {
+    ellipsesLeft,
+    ellipsesRight,
+    title,
+    hintText,
+    btnText,
+    btnOnClick,
+    popupBtnText,
+    children,
+    marquee,
+  } = props;
 
   return (
     <div className="welcome--section">
@@ -27,21 +36,22 @@ const WelcomeWrapper = (props) => {
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              <Button
-                className="light-button"
-                onClick={() => window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')}
-              >
-                {btnText}
-              </Button>
-              <Popup
-                trigger={
-                  <button type="button" className="light-border-button">
-                    {popupBtnText}
-                  </button>
-                }
-              >
-                {(close) => <SubscribePopup close={close} />}
-              </Popup>
+              {!!btnText.length && (
+                <Button className="light-button" onClick={btnOnClick}>
+                  {btnText}
+                </Button>
+              )}
+              {!!popupBtnText.length && (
+                <Popup
+                  trigger={
+                    <button type="button" className="light-border-button">
+                      {popupBtnText}
+                    </button>
+                  }
+                >
+                  {(close) => <SubscribePopup close={close} />}
+                </Popup>
+              )}
             </div>
           </AnimatedOnScroll>
         </div>
@@ -63,8 +73,9 @@ WelcomeWrapper.propTypes = {
   ellipsesRight: PropTypes.bool,
   title: PropTypes.string.isRequired,
   hintText: PropTypes.string,
-  btnText: PropTypes.string.isRequired,
-  popupBtnText: PropTypes.string.isRequired,
+  btnText: PropTypes.string,
+  btnOnClick: PropTypes.func,
+  popupBtnText: PropTypes.string,
   children: PropTypes.node,
   marquee: PropTypes.node,
 };
@@ -75,6 +86,9 @@ WelcomeWrapper.defaultProps = {
   hintText: '',
   children: null,
   marquee: null,
+  btnText: '',
+  btnOnClick: () => {},
+  popupBtnText: '',
 };
 
 export default WelcomeWrapper;
