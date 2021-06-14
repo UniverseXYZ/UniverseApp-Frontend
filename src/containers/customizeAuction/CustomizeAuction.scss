@@ -242,6 +242,15 @@
 
       .auction__link__input {
         margin-bottom: 42px;
+
+        input {
+          font-weight: bold;
+        }
+        .empty {
+          background: linear-gradient(to right, #000000 31%, rgba(0, 0, 0, 0.2) 10%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
       }
 
       .upload__background {
@@ -677,39 +686,39 @@
     margin-top: 64px;
 
     .landing__page__warning {
-        display: flex;
-        border: 1px solid #e4b613;
-        box-sizing: border-box;
-        border-radius: 12px;
-        max-width: 646px;
-        padding: 20px 20px 22px 24px;
-        margin-bottom: 42px;
+      display: flex;
+      border: 1px solid #e4b613;
+      box-sizing: border-box;
+      border-radius: 12px;
+      max-width: 646px;
+      padding: 20px 20px 22px 24px;
+      margin-bottom: 42px;
 
-        img {
-          width: 18px;
-          height: 18px;
-          margin-right: 13px;
-          margin-top: 4px;
+      img {
+        width: 18px;
+        height: 18px;
+        margin-right: 13px;
+        margin-top: 4px;
 
-          @include sm {
-            margin: auto;
-          }
-        }
-        p {
-          font-family: $spaceGroteskFont;
-          font-weight: 600;
-          font-size: 16px;
-          line-height: 160%;
-          color: #e4b613;
-        }
-        @include lg {
-          width: 100%;
-        }
         @include sm {
-          display: grid;
-          text-align: center;
+          margin: auto;
         }
       }
+      p {
+        font-family: $spaceGroteskFont;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: #e4b613;
+      }
+      @include lg {
+        width: 100%;
+      }
+      @include sm {
+        display: grid;
+        text-align: center;
+      }
+    }
 
     .about__artist__header {
       display: flex;
