@@ -2,7 +2,7 @@ import React from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
-import ImgRow1 from '../../assets/images/polymorph-technology.png';
+import ImgRow1 from '../../assets/images/Section1-Illustration-min.png';
 import ImgRow2Chart from '../../assets/images/chart-min.png';
 import ImgRow2Background from '../../assets/images/Background-min.jpg';
 import './styles/About.scss';
@@ -39,6 +39,7 @@ const About = () => (
         }
         rightBlock={row1RightBlock()}
         rightClassName="new--technology"
+        leftClassName="polymorph--section1--row1--left--block"
       />
     </WrapperCenter>
     <WrapperCenter className="about--wrapper--row2">
