@@ -25,16 +25,20 @@ const rightBlock = () => (
 );
 
 const Section6 = () => (
-  <div className="polymorphs--section6">
-    <WrapperCenter className="wrapper--center--section6--two-columns">
-      <WrapperCenterTwoColumns leftBlock={leftBlock()} rightBlock={rightBlock()} />
-    </WrapperCenter>
-    <div className="section6--end--block">
-      {/* <img src={Section6EndImg} alt="img" /> */}
-      <h2>Now it’s time to mint your own unique polymorph</h2>
-      <Button className="light-button">Mint polymorph</Button>
+  <>
+    <div className="polymorphs--section6">
+      <WrapperCenter className="wrapper--center--section6--two-columns">
+        <WrapperCenterTwoColumns leftBlock={leftBlock()} rightBlock={rightBlock()} />
+      </WrapperCenter>
     </div>
-  </div>
+    <div className="section6--end--block--parent">
+      <div className="section6--end--block">
+        {/* <img src={Section6EndImg} alt="img" /> */}
+        <h2>Now it’s time to mint your own unique polymorph</h2>
+        <Button className="light-button">Mint polymorph</Button>
+      </div>
+    </div>
+  </>
 );
 
 export default Section6;
