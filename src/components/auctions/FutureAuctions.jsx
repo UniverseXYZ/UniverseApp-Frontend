@@ -49,6 +49,13 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="future-auctions">
       <div className="input-search">
+        {searchByName ? (
+          <button type="button" onClick={() => setSearchByName('')}>
+            Clear
+          </button>
+        ) : (
+          <></>
+        )}
         <img src={searchIconGray} alt="search" />
         <Input
           className="searchInp"
@@ -60,16 +67,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter(
-          (item) =>
-            !(moment(item.endDate).isBefore(moment.now()) && item.launch) &&
-            !(
-              moment(item.endDate).isAfter(moment.now()) &&
-              (moment(item.endDate).diff(moment(item.startDate)) > 0 &&
-                moment(item.startDate).isBefore(moment.now())) > 0 &&
-              item.launch
-            )
-        )
+        .filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
         .map((futureAuction) => (
           <div className="auction" key={uuid()}>
             <div className="auction-header">
@@ -77,22 +75,24 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <h3>{futureAuction.name}</h3>
               </div>
               <div className="launch-auction">
-                <div className="line" />
-                {shownActionId === futureAuction.id ? (
-                  <img
-                    src={arrowUp}
-                    onClick={() => setshownActionId(null)}
-                    alt="Arrow up"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <img
-                    src={arrowDown}
-                    onClick={() => setshownActionId(futureAuction.id)}
-                    alt="Arrow down"
-                    aria-hidden="true"
-                  />
-                )}
+                {/* <div className="line" /> */}
+                <div className="arrow">
+                  {shownActionId === futureAuction.id ? (
+                    <img
+                      src={arrowUp}
+                      onClick={() => setshownActionId(null)}
+                      alt="Arrow up"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <img
+                      src={arrowDown}
+                      onClick={() => setshownActionId(futureAuction.id)}
+                      alt="Arrow down"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
               </div>
             </div>
             <div className="auctions-launch-dates">
@@ -114,7 +114,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 >
                   Launch date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{futureAuction.startDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{futureAuction.startDate}</Moment>
                   </b>
                   {moment(futureAuction.startDate).isBefore(moment.now()) && (
                     <div className="launch__date__info">
@@ -144,7 +144,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 >
                   End date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{futureAuction.endDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{futureAuction.endDate}</Moment>
                   </b>
                   {moment(futureAuction.endDate).isBefore(moment.now()) && (
                     <div className="end__date__info">
@@ -206,54 +206,29 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     setAuction(futureAuction);
                     history.push('/customize-auction-landing-page', futureAuction.id);
                   }}
+                  disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                 >
                   {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
                 </Button>
-                {/* <>
-                  <Popup
-                    trigger={
-                      <button type="button" className="light-button">
-                        Start
-                      </button>
-                    }
-                  >
-                    {(close) => (
-                      <MintNftsPopup
-                        onClose={close}
-                        onAuctionId={futureAuction.id}
-                        handleMintCongratsPopupOpen={handleMintCongratsPopupOpen}
-                      />
-                    )}
-                  </Popup>
-                  <Popup open={mintCongratsPopupOpen}>
-                    <MintCongratsPopup
-                      onClose={handleMintCongratsPopupClose}
-                      onAuctionId={futureAuction.id}
-                    />
-                  </Popup>
-                </> */}
               </div>
               <div className="step-3">
                 <h6>Step 3</h6>
                 <h4>Finalize auction</h4>
                 <div className="circle">
-                  {!futureAuction.landingCustom && !futureAuction.mint && (
+                  {futureAuction.headline || futureAuction.link ? (
+                    <img alt="landing_page" src={emptyMark} />
+                  ) : (
                     <img alt="landing_page" src={emptyWhite} />
                   )}
-                  {futureAuction.mint && !futureAuction.landingCustom && (
-                    <img alt="landing_page" src={emptyMark} />
-                  )}
-                  {futureAuction.mint && futureAuction.landingCustom && (
-                    <img alt="landing_page" src={doneIcon} />
-                  )}
                 </div>
-                {futureAuction.mint === true ? (
+                {futureAuction.headline || futureAuction.link ? (
                   <Button
                     className="light-button"
                     onClick={() => {
                       setAuction(futureAuction);
-                      history.push('/customize-auction-landing-page', futureAuction.id);
+                      history.push('/finalize-auction', futureAuction.id);
                     }}
+                    disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                   >
                     Start
                   </Button>
@@ -285,15 +260,14 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 </div>
                 <div className="hz-line2" />
                 <div className="circle">
-                  {!futureAuction.landingCustom && !futureAuction.mint && (
+                  {futureAuction.headline || futureAuction.link ? (
+                    <img alt="landing_page" src={emptyMark} />
+                  ) : (
                     <img alt="landing_page" src={emptyWhite} />
                   )}
-                  {futureAuction.mint && !futureAuction.landingCustom && (
-                    <img alt="landing_page" src={emptyMark} />
-                  )}
-                  {futureAuction.mint && futureAuction.landingCustom && (
+                  {/* {futureAuction.mint && futureAuction.landingCustom && (
                     <img alt="landing_page" src={doneIcon} />
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="steps">
@@ -314,25 +288,31 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   <h6>Step2</h6>
                   <h4>Customize landing page</h4>
                   <Button
-                    className="light-button"
+                    className={
+                      futureAuction.headline || futureAuction.link
+                        ? 'light-border-button'
+                        : 'light-button'
+                    }
                     onClick={() => {
                       setAuction(futureAuction);
                       history.push('/customize-auction-landing-page', futureAuction.id);
                     }}
+                    disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                   >
-                    Start
+                    {futureAuction.headline || futureAuction.link ? 'Edit' : 'Start'}
                   </Button>
                 </div>
                 <div className="step-3">
                   <h6>Step 3</h6>
                   <h4>Finalize auction</h4>
-                  {futureAuction.mint === true && futureAuction.landingCustom === false ? (
+                  {futureAuction.headline || futureAuction.link ? (
                     <Button
                       className="light-button"
-                      onClick={() => {
-                        setAuction(futureAuction);
-                        history.push('/customize-auction-landing-page', futureAuction.id);
-                      }}
+                      // onClick={() => {
+                      //   setAuction(futureAuction);
+                      //   history.push('/finalize-auction', futureAuction.id);
+                      // }}
+                      disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                     >
                       Start
                     </Button>

@@ -15,6 +15,8 @@ import Group2 from '../../../../assets/images/Group2.svg';
 import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -24,7 +26,6 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
-import polymorphsIcon from '../../../../assets/images/polymorphs-icon.svg';
 
 const DesktopView = ({
   isWalletConnected,
@@ -101,7 +102,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">NFT Drops</span>
+            <span className="nav__link__title">NFT drops</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -110,20 +111,13 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   history.push('/polymorphs');
-                  setIsPolymorphsDropdownOpened(false);
                 }}
               >
                 <img src={polymorphsIcon} alt="Polymorphs" />
                 <span>Polymorphs</span>
               </button>
-              <button
-                type="button"
-                className="disable"
-                onClick={() => {
-                  setIsMintingDropdownOpened(false);
-                }}
-              >
-                <img src={marketplaceIcon} alt="NFT Marketplace" />
+              <button type="button" className="disable">
+                <img src={coreDropsIcon} alt="Core drops" />
                 <span>Core drops</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>

@@ -29,6 +29,7 @@ const Lists = ({
   const [openEditions, setOpenEditions] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [selectedNft, SetSelectedNft] = useState([]);
 
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction.tiers.find((element) => element.id === location.state);
@@ -62,6 +63,14 @@ const Lists = ({
       setSelectedNFTIds(newSelectedNFTIds);
     }
   }, []);
+
+  useEffect(() => {
+    if (selectedNFTIds) {
+      const selected = sliceData.filter((nft) => selectedNFTIds.includes(nft.id));
+      SetSelectedNft(selected);
+    }
+  }, [selectedNFTIds]);
+
   const handleShow = (nft) => {
     if (tierById) {
       if (selectedNFTIds.includes(nft.id) && winners <= nft.generatedEditions.length) {
@@ -277,7 +286,9 @@ const Lists = ({
               </div>
               {nft.generatedEditions.length > 1 ? (
                 <div className="collection__count">
-                  {`x${nft.generatedEditions.length}`}
+                  {selectedNFTIds && selectedNFTIds.includes(nft.id)
+                    ? `x${nft.generatedEditions.length - winners}`
+                    : `x${nft.generatedEditions.length}`}
                   {!isCreatingAction ? (
                     <div
                       className="generatedEditions"

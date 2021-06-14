@@ -45,10 +45,13 @@
         .circle {
           height: 20px;
           width: 20px;
-          background: linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #bceb00, #00eaea) border-box;
-          border: 1px solid transparent;
-          border-radius: 50%;
+          // background: linear-gradient($white, $white) padding-box,
+          //   linear-gradient(to right, #bceb00, #00eaea) border-box;
+          // border: 1px solid transparent;
+          // border-radius: 50%;
+          img {
+            margin-bottom: 5px;
+          }
         }
         .line {
           margin-left: 10px;
@@ -129,6 +132,7 @@
       }
       .collections {
         display: flex;
+        flex-wrap: wrap;
         margin-bottom: 60px;
 
         .collection__div {
@@ -136,15 +140,35 @@
           background: $white;
           box-shadow: 0 10px 40px rgba(136, 120, 172, 0.2);
           border-radius: 12px;
-          padding: 30px;
-          // width: 328px;
+          padding: 30px 60px 30px 30px;
           margin-right: 30px;
-
+          margin-bottom: 30px;
+          .approve-btn{
+            padding: 11px 14px 11px 16px;
+          }
+          // h3{
+          //   padding: 11px 70px 0 16px;
+          // }
+          .random__bg__color {
+            height: 80px;
+            width: 80px;margin-right: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $black;
+          }
           img {
             width: 80px;
             height: 80px;
             object-fit: cover;
             margin-right: 30px;
+            border-radius: 50%;
 
             @include sm {
               width: 60px;
@@ -152,7 +176,11 @@
               margin-right: 18px;
             }
           }
-
+          .checkmark{
+            width: 20px;
+            height: 20px;
+            margin-right: 0;
+          }
           h3 {
             font-family: $spaceGroteskFont;
             font-style: normal;

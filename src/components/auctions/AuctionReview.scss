@@ -184,14 +184,15 @@
       border: 1px solid rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
       border-radius: 12px;
-      padding: 12px;
+      padding: 6px;
       position: relative;
       margin-right: 20px;
+      margin-bottom: 40px;
 
       &__image {
         position: relative;
-        height: 88px;
-        width: 88px;
+        height: 75px;
+        width: 75px;
 
         video {
           width: 100%;
@@ -210,53 +211,53 @@
           top: 9px;
           right: 7px;
         }
-        @include lg {
-          width: 100%;
-          height: 129px;
-          text-align: center;
-          margin: auto;
-        }
-        @include sm {
-          width: 100%;
-          height: 312px;
-        }
+        // @include lg {
+        //   width: 100%;
+        //   height: 129px;
+        //   text-align: center;
+        //   margin: auto;
+        // }
+        // @include sm {
+        //   width: 100%;
+        //   height: 312px;
+        // }
       }
       &__highlight__one {
         position: absolute;
-        bottom: -9px;
-        background-color: $white;
+        bottom: -5px;
+        background-color: #ffffff;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-left: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-left-radius: 150px;
         border-bottom-right-radius: 150px;
-        width: 89%;
-        height: 8px;
-        left: 8px;
+        width: 75px;
+        height: 4px;
+        left: 6px;
       }
       &__highlight__two {
         position: absolute;
-        bottom: -18px;
-        background-color: $white;
+        bottom: -9px;
+        background-color: #ffffff;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-left: 1px solid rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-left-radius: 150px;
         border-bottom-right-radius: 150px;
-        width: 77%;
-        height: 8px;
-        left: 16px;
+        width: 63px;
+        height: 4px;
+        left: 12px;
       }
     }
-    @include lg {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    @include md {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @include sm {
-      grid-template-columns: 1fr;
-    }
+    // @include lg {
+    //   grid-template-columns: repeat(3, 1fr);
+    // }
+    // @include md {
+    //   grid-template-columns: repeat(2, 1fr);
+    // }
+    // @include sm {
+    //   grid-template-columns: 1fr;
+    // }
   }
   .auction-settings-head {
     display: flex;

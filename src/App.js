@@ -8,7 +8,7 @@ import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
 import Auctions from './containers/auctions/Auction.jsx';
 import SetupAuction from './components/setupAuction/SetupAuction';
-import RewardTiers from './components/rewardTiers/RewardTiers.jsx';
+import RewardTiers from './components/rewardTiers/RewardTiers';
 import CreateTiers from './components/createTiers/Create.jsx';
 import ReviewReward from './components/reviewReward/ReviewReward.jsx';
 import MyNFTs from './components/myNFTs/MyNFTs.jsx';
@@ -47,6 +47,7 @@ const App = () => {
   const [savedCollectionID, setSavedCollectionID] = useState(null);
   const [myCollectionID, setMyCollectionID] = useState(null);
   const [savedNfts, setSavedNfts] = useState([]);
+  const [universeNFTs, setUniverseNFTs] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
   const [deployedCollections, setDeployedCollections] = useState([]);
@@ -83,6 +84,8 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
+        universeNFTs,
+        setUniverseNFTs,
         showModal,
         setShowModal,
         myNFTsSelectedTabIndex,
@@ -140,9 +143,9 @@ const App = () => {
         <Route exact path="/my-nfts" component={() => <MyNFTs />} />
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
-        <Route exact path="/reward-tiers" component={() => <RewardTiers />} />
+        {/* <Route exact path="/reward-tiers" component={() => <RewardTiers />} /> */}
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
-        <Route exact path="/review-reward" component={() => <ReviewReward />} />
+        {/* <Route exact path="/review-reward" component={() => <ReviewReward />} /> */}
         <Route exact path="/select-nfts" component={() => <MyNFTs />} />
         <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
         <Route
@@ -150,7 +153,7 @@ const App = () => {
           path="/customize-auction-landing-page"
           component={() => <CustomizeAuction />}
         />
-        <Route exact path="/auction-settings" component={() => <AuctionSettings />} />
+        {/* <Route exact path="/auction-settings" component={() => <AuctionSettings />} /> */}
         <Route exact path="/auction-review" component={() => <AuctionReview />} />
         <Route exact path="/:artist">
           <Artist />
