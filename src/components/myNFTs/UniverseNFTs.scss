@@ -14,7 +14,7 @@
         margin-bottom: 15px;
   
       span  {
-        font-family: "Sharp Grotesk SemiBold", sans-serif;
+        font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
@@ -52,7 +52,7 @@
     .universe_search_by_name_label{
       margin-bottom: 15px;
       span{
-        font-family: "Sharp Grotesk SemiBold", sans-serif;
+        font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
@@ -80,36 +80,58 @@
           color: #cacaca;
           background-image: url("../../assets/images/Search.png");
           background-repeat: no-repeat;
-          text-indent: 20px;
+          text-indent: 25px;
       }
     }
   }
   }
   
-  .polymorph{
-    height: 21px;
-    width: 102px;
-    left: 12px;
-    top: 255px;
-    border-radius: nullpx;
-    >p{
-      font-family: Space Grotesk;
-      font-size: 14px;
+  // .polymorph{
+  //   height: 21px;
+  //   width: 102px;
+  //   left: 12px;
+  //   top: 255px;
+  //   border-radius: nullpx;
+  //   >p{
+  //     font-family: $spaceGroteskFont;
+  //     font-size: 14px;
+  //     font-style: normal;
+  //     font-weight: 700;
+  //     line-height: 21px;
+  //     letter-spacing: 0px;
+  //     text-align: left;
+  //     color: brown;
+  //   }
+  // }
+  .universe_select{
+    border: 1px solid #d4d4d4;
+    width: 514px;
+    height: 50px;
+    border-radius: 12px;
+    font-family: $spaceGroteskFont;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    padding-left: 10px;
+    >option{
+      font-family: $spaceGroteskFont;
+      font-size: 16px;
       font-style: normal;
-      font-weight: 700;
-      line-height: 21px;
-      letter-spacing: 0px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0em;
       text-align: left;
     }
-  }
-  
+  } 
 }
-
 
 .nft_box_footer{
   display: flex;
 >p{
-  font-family: Space Grotesk;
+  font-family: $spaceGroteskFont;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -139,13 +161,40 @@
     width: 110px;
     left: 0px;
     top: 0px;
-    border-radius: nullpx;
-    font-family: Space Grotesk;
+    font-family: $spaceGroteskFont;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: 20px;
     letter-spacing: 0em;
     text-align: left;
+  }
+}
+.polymorph{
+  height: 21px;
+  width: 102px;
+  left: 12px;
+  top: 255px;
+  >p{
+    font-family: $spaceGroteskFont;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0px;
+    text-align: left;
+  }
+}
+.nft_box_footer {
+  margin-top: 10px;
+  >p{
+    font-family: $spaceGroteskFont;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0px;
+    text-align: left;
+    padding-left: 10px;
   }
 }
