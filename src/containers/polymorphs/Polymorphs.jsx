@@ -5,6 +5,7 @@ import About from '../../components/polymorphs/About';
 import Characters from '../../components/polymorphs/Characters';
 import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
+import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
 
 const marquee = () => (
@@ -29,8 +30,20 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
-  const x = 15;
-  console.log(x);
+  const [mobile, setMobile] = useState(false);
+
+  useLayoutEffect(() => {
+    function handleResize() {
+      if (+window.innerWidth <= 575) setMobile(true);
+      else setMobile(false);
+    }
+    window.addEventListener('resize', handleResize);
+  });
+
+  useEffect(() => {
+    if (+window.innerWidth <= 575) setMobile(true);
+  }, [window.innerWidth]);
+
   return (
     <div className="polymorphs">
       <WelcomeWrapper
@@ -49,7 +62,8 @@ const Polymorphs = () => {
       </div>
       <Characters />
       <Section4 />
-      <PolymorphsActivity />
+      <PolymorphsActivity mobile={mobile} />
+      <Section6 />
     </div>
   );
 };
