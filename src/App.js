@@ -27,6 +27,7 @@ import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs';
+import MintPolymorph from './containers/polymorphs/MintPolymorph';
 
 const App = () => {
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -128,6 +129,7 @@ const App = () => {
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
+        <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route

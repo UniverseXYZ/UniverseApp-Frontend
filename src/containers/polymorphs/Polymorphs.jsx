@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png';
 import About from '../../components/polymorphs/About';
@@ -30,6 +31,7 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
+  const history = useHistory();
   const [mobile, setMobile] = useState(false);
 
   useLayoutEffect(() => {
@@ -51,6 +53,7 @@ const Polymorphs = () => {
         hintText="A mutating universe where genes are randomly scrambled when bought, traded or transfered."
         popupBtnText="My polymorphs"
         btnText="Mint polymorph"
+        btnOnClick={() => history.push('/mint-polymorph')}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}
