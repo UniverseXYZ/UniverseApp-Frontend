@@ -323,7 +323,7 @@ const MintNftCollection = ({ onClick }) => {
               label="Collection name"
               className="inp"
               error={errors.collectionName}
-              placeholder="Enter the Collection Name"
+              placeholder="Enter the collection name"
               onChange={(e) => handleCollectionName(e.target.value)}
               value={collectionName}
             />
@@ -676,7 +676,7 @@ const MintNftCollection = ({ onClick }) => {
         <div className="collection__final__error">
           <p className="error-message">
             Something went wrong. Please fix the errors in the fields above and try again. The
-            buttons will be enabled after fixes.
+            button will be enabled after fixes.
           </p>
         </div>
       )}
@@ -687,20 +687,16 @@ const MintNftCollection = ({ onClick }) => {
             <Button
               className="light-button"
               onClick={handleMinting}
-              disabled={
-                errors.collectionName || errors.tokenName || errors.shorturl || errors.collectible
-              }
+              disabled={!collectionName || !tokenName || !shortURL || !collectionNFTs.length}
             >
-              Create
+              Create now
             </Button>
           </>
         ) : (
           <Button
             className="light-button"
             onClick={handleSaveForLater}
-            disabled={
-              errors.collectionName || errors.tokenName || errors.shorturl || errors.collectible
-            }
+            disabled={!collectionName || !tokenName || !shortURL || !collectionNFTs.length}
           >
             Save changes
           </Button>
