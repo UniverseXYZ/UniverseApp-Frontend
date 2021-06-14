@@ -1,8 +1,8 @@
 import React from 'react';
+import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import Section6LeftImg from '../../assets/images/Section6-Illustration-min.png';
-import Section6EndImg from '../../assets/images/Section7-Background-min.png';
 import Button from '../button/Button.jsx';
 
 import './styles/Section6.scss';
@@ -32,11 +32,12 @@ const Section6 = () => (
       </WrapperCenter>
     </div>
     <div className="section6--end--block--parent">
-      <div className="section6--end--block">
-        {/* <img src={Section6EndImg} alt="img" /> */}
-        <h2>Now it’s time to mint your own unique polymorph</h2>
-        <Button className="light-button">Mint polymorph</Button>
-      </div>
+      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+        <div className="section6--end--block">
+          <h2>Now it’s time to mint your own unique polymorph</h2>
+          <Button className="light-button">Mint polymorph</Button>
+        </div>
+      </AnimatedOnScroll>
     </div>
   </>
 );

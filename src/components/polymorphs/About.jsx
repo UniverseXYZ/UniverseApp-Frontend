@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
@@ -46,8 +45,10 @@ const About = () => (
       <WrapperCenterTwoColumns
         rightBlock={
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
-            <img alt="img" src={ImgRow2Chart} className="dominant--image" />
-            {/* <img alt="img" src={ImgRow2Background} className="row2--background" /> */}
+            <div className="images--charts--parent">
+              <img alt="img" src={ImgRow2Chart} className="dominant--image" />
+              <img alt="img" src={ImgRow2Background} className="row2--background" />
+            </div>
           </AnimatedOnScroll>
         }
         leftBlock={row2LeftBlock()}

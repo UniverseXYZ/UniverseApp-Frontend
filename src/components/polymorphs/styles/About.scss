@@ -2,8 +2,12 @@
 @import '../../../assets/scss/mixins';
 
 .about--wrapper--row1 {
-    min-height: 425px;
+    min-height: 500px;
     width: 90%;
+    overflow: hidden;
+    @include lg {
+        min-height: 355px;
+    }
     @include sm {
         width: 100%;
         flex-wrap: nowrap;
@@ -56,8 +60,12 @@
     
 }
 .about--wrapper--row2 {
-    min-height: 425px;
+    min-height: 500px;
     width: 90%;
+    overflow: hidden;
+    @include lg {
+        min-height: 355px;
+    }
     @include sm {
         width: 100%;
         flex-wrap: nowrap;
@@ -111,26 +119,46 @@
         position: relative;
         display: flex;
         align-items: center;
-        justify-content: center;
-        .dominant--image {
-            z-index: 10;
-            position: relative;
-            max-height: 400px;
+        justify-content: flex-start;
+        @include sm {
+            min-height: 400px;
+            justify-content: center ;
         }
-        // .row2--background {
-        //     @include sm {
-        //         max-height: 300px;
-        //         height: 300px;
-        //         top: -65px;
-        //         width: 80%;
-        //         left: 70px;
-        //         object-fit: cover;
-        //     }
-        //     position: absolute;
-        //     right: -100px;
-        //     top: -35px;
-        //     height: 600px;
-        //     max-height: 600px;
-        // }
+        .images--charts--parent {
+            @include sm {
+                text-align: center;
+            }
+            .dominant--image {
+                z-index: 10;
+                position: relative;
+                width: 500px;
+                @include xl {
+                    width: 415px;
+                }
+                @include lg {
+                    width: 325px;
+                }
+            }
+            .row2--background {
+                position: absolute;
+                left: 45px;
+                max-height: 150%;
+                bottom: -70px;
+                @include xl {
+                    bottom: -55px;
+                }
+                @include lg {
+                    bottom: -40px;
+                }
+                @include sm {
+                    bottom: 20px;
+                    top: 0;
+                    margin: auto;
+                    max-height: 400px;
+                    height: 380px;
+                }
+            }
+        }
+        
     } 
 }
