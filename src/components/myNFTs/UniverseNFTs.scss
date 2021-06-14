@@ -1,114 +1,151 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/_mixins';
 
-.universe{
+.univers_NFTs{
   position: relative;
-  display: flex;
+  display: grid;
   grid-template-columns: auto auto;
   grid-gap: 30px;
-}
-
-.universe_filter {
-  width: 540px;
-  padding: 24px 20px;
-
-  .universe_filter_label {
-      margin-bottom: 15px;
-
-    span  {
-      font-family: "Sharp Grotesk SemiBold", sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      letter-spacing: 0.2px;
-      color: #000000;
-      margin-right: 15px;
-    }
-  }
-
-  .universe_filter_input {
-    input {
-      background: $white;
-      border: 1px solid #d4d4d4;
-      box-sizing: border-box;
-      border-radius: 12px;
-      width: 100%;
-      padding: 15px;
-
-      &::placeholder {
-        font-family: $spaceGroteskFont;
+  .universe_filter {
+    width: 514px;
+    padding: 24px 1px;
+  
+    .universe_filter_label {
+        margin-bottom: 15px;
+  
+      span  {
+        font-family: "Sharp Grotesk SemiBold", sans-serif;
         font-style: normal;
-        font-weight: normal;
+        font-weight: 600;
         font-size: 16px;
-        color: #cacaca;
+        letter-spacing: 0.2px;
+        color: #000000;
+        margin-right: 15px;
+      }
+    }
+  
+    .universe_filter_input {
+      width: 514px;
+      input {
+        background: $white;
+        border: 1px solid #d4d4d4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: 100%;
+        padding: 15px;
+  
+        &::placeholder {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: #cacaca;
+        }
       }
     }
   }
-}
-
-.universe_search_by_name{
-  width: 540px;
-  padding: 24px 20px;
-
-  .universe_search_by_name_label{
-    margin-bottom: 15px;
-    span{
-      font-family: "Sharp Grotesk SemiBold", sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      letter-spacing: 0.2px;
-      color: #000000;
-      margin-right: 15px;
-    }
-  }
-
-  .search_by_name_input{
-    input {
-      background: $white;
-      border: 1px solid #d4d4d4;
-      box-sizing: border-box;
-      border-radius: 12px;
-      width: 100%;
-      padding: 15px;
-
-      &::placeholder {
-        font-family: $spaceGroteskFont;
+  
+  .universe_search_by_name{
+    width: 514px;
+    padding: 24px 1px;
+  
+    .universe_search_by_name_label{
+      margin-bottom: 15px;
+      span{
+        font-family: "Sharp Grotesk SemiBold", sans-serif;
         font-style: normal;
-        font-weight: normal;
+        font-weight: 600;
         font-size: 16px;
-        color: #cacaca;
+        letter-spacing: 0.2px;
+        color: #000000;
+        margin-right: 15px;
+      }
+    }
+  
+    .search_by_name_input{
+      width: 514px;
+      input {
+        background: $white;
+        border: 1px solid #d4d4d4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: 100%;
+        padding: 15px;
+  
+        &::placeholder {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: #cacaca;
+          background-image: url("../../assets/images/Search.png");
+          background-repeat: no-repeat;
+          text-indent: 20px;
+      }
     }
   }
-}
+  }
+  
+  .polymorph{
+    height: 21px;
+    width: 102px;
+    left: 12px;
+    top: 255px;
+    border-radius: nullpx;
+    >p{
+      font-family: Space Grotesk;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 21px;
+      letter-spacing: 0px;
+      text-align: left;
+    }
+  }
+  
 }
 
-.polymorph{
-  height: 21px;
-  width: 102px;
-  left: 12px;
-  top: 255px;
-  border-radius: nullpx;
-  >p{
-    font-family: Space Grotesk;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 21px;
-    letter-spacing: 0px;
-    text-align: left;
-  }
-}
 
 .nft_box_footer{
   display: flex;
-  >p{
+>p{
+  font-family: Space Grotesk;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+}
+
+.dropdown_search{
+  height: 166px;
+  width: 514px;
+  left: 165px;
+  top: 401px;
+  border-radius: 12px;
+  padding: 8px;
+  z-index: 999;
+  >ul>div {
+    height: 50px;
+    width: 498px;
+    left: 8px;
+    top: 8px;
+    border-radius: 6px;
+  }
+  >ul>div>li {
+    height: 20px;
+    width: 110px;
+    left: 0px;
+    top: 0px;
+    border-radius: nullpx;
     font-family: Space Grotesk;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
-    font-weight: 400;
-    line-height: 18px;
-    letter-spacing: 0px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
     text-align: left;
   }
 }
