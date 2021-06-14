@@ -707,7 +707,8 @@
       }
       @include lg {
         max-width: 100%;
-        height: 80%;
+        padding: 60px;
+        // height: 80%;
       }
       @include md {
         max-height: 100%;
@@ -716,6 +717,7 @@
       @include sm {
         max-width: 100%;
         height: 100%;
+        padding: 0;
       }
     }
     @include lg {
@@ -781,6 +783,7 @@
           line-height: 160%;
           color: $black;
           white-space: nowrap;
+          cursor: pointer;
           img {
             width: 26px;
             height: 26px;
