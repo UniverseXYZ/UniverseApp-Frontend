@@ -10,12 +10,19 @@
             padding: 0 60px;
             overflow: hidden;
         }
+        @include sm {
+            padding: 0 20px;
+        }
         .welcome__section__container {
             max-width: 1110px;
             width: 100%;
             padding-left: 0;
             @include xl {
                 overflow: visible;
+            }
+            @include lg {
+                min-height: 685px;
+                height: auto;
             }
         }
         .right {
@@ -35,6 +42,9 @@
                 top: 50px;
                 @include xl {
                     height: auto;
+                }
+                @include lg {
+                    max-width: 100%;
                 }
             }
             img {
