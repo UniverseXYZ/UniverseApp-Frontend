@@ -5,6 +5,7 @@ import MintTypeImg from '../../assets/images/eventTypeMint.svg';
 import TradeTypeImg from '../../assets/images/eventTypeTrade.svg';
 import ListedTypeImg from '../../assets/images/eventTypeListed.svg';
 import TransferTypeImg from '../../assets/images/eventTypeTransfer.svg';
+import './styles/PolymorphsActivityTableRowMobile.scss';
 
 const getTypeImage = (type) => {
   if (type === 'scramble') {
@@ -22,40 +23,36 @@ const getTypeImage = (type) => {
   return TransferTypeImg;
 };
 
-const PolymorphsActivityTableRow = (props) => {
+const PolymorphsActivityTableRowMobile = (props) => {
   const { data, className } = props;
-
+  const { image, name, skin, event, priceETH, priceUSD } = data;
   return (
-    <tr className={`row ${className}`}>
-      <td className="td--image">
-        <div className="polymorph--table--image--block">
-          <img alt="img" src={data.image} />
+    <div className={`item table--row--mobile ${className}`}>
+      <div className="left--block image--block">
+        <div>
+          <img alt="img" src={image} />
         </div>
-      </td>
-      <td className="td--name">
-        <span>{data.name}</span>
-      </td>
-      <td className="td--skin">
-        <span>{data.skin}</span>
-      </td>
-      <td className="td--event">
-        <span>
-          <div className="flex--event--block">
-            <div className={`event--type event--type--${data.event}`}>
-              <img alt="img" src={getTypeImage(data.event)} />
-            </div>
-            <div className="text--event">{data.event}</div>
+      </div>
+      <div className="center--block data--block">
+        <p className="name--block">
+          {name} . <span>{skin}</span>
+        </p>
+        <div className="event--block">
+          <div className="event--type--icon-block">
+            <img alt="img" src={getTypeImage(event)} />
           </div>
-        </span>
-      </td>
-      <td className="td--price">
-        <span className="price--eth">{data.priceETH} ETH</span>
-        <span className="price--usd"> (${data.priceUSD})</span>
-      </td>
-    </tr>
+          <p className="event--text">{event}</p>
+        </div>
+      </div>
+      <div className="right--block price--block">
+        <p className="price--eth">{priceETH} ETH</p>
+        <p className="price--usd">${priceUSD}</p>
+      </div>
+    </div>
   );
 };
-PolymorphsActivityTableRow.propTypes = {
+
+PolymorphsActivityTableRowMobile.propTypes = {
   data: PropTypes.shape({
     image: PropTypes.string,
     name: PropTypes.string,
@@ -67,8 +64,8 @@ PolymorphsActivityTableRow.propTypes = {
   className: PropTypes.string,
 };
 
-PolymorphsActivityTableRow.defaultProps = {
+PolymorphsActivityTableRowMobile.defaultProps = {
   className: '',
 };
 
-export default PolymorphsActivityTableRow;
+export default PolymorphsActivityTableRowMobile;

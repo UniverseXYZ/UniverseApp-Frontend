@@ -11,12 +11,14 @@ import backgroundTransparent from '../../assets/images/background1.svg';
 import AppContext from '../../ContextAPI.js';
 
 const DomainAndBranding = ({ values, onChange }) => {
-  const { auction } = useContext(AppContext);
+  const { auction, loggedInArtist } = useContext(AppContext);
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
   const [blur, setBlur] = useState(false);
   const [auctionHeadline, setAuctionHeadline] = useState('');
-  const [auctionLink, setAuctionLink] = useState('universe.xyz/3LAU/auction1');
+  const [auctionLink, setAuctionLink] = useState(
+    `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`
+  );
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
@@ -24,10 +26,34 @@ const DomainAndBranding = ({ values, onChange }) => {
   const [validHeadline, setValidHeadline] = useState(false);
   const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
+  const [inputStyle, setInputStyle] = useState('inp empty');
 
   const handleLink = (e) => {
     onChange((prevValues) => ({ ...prevValues, link: e.target.value }));
     setValidLink(e.target.value.trim().length !== 0);
+  };
+  console.log(inputStyle);
+
+  const handleFocus = () => {
+    if (
+      values.link === `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1` &&
+      inputStyle === 'inp empty'
+    ) {
+      onChange((prevValues) => ({
+        ...prevValues,
+        link: `universe.xyz/${loggedInArtist.name.split(' ')[0]}/`,
+      }));
+      setInputStyle('inp');
+    }
+  };
+  const handleBlur = () => {
+    if (values.link === `universe.xyz/${loggedInArtist.name.split(' ')[0]}/`) {
+      onChange((prevValues) => ({
+        ...prevValues,
+        link: `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`,
+      }));
+      setInputStyle('inp empty');
+    }
   };
 
   const handleHeadline = (e) => {
@@ -119,10 +145,17 @@ const DomainAndBranding = ({ values, onChange }) => {
             <h5>
               Auction link <img src={infoIcon} alt="Info" />
             </h5>
+            {/* Auction link */}
             <Input
               type="text"
+              className="inp"
               value={values.link}
-              onChange={handleLink}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              onChange={(e) =>
+                e.target.value.startsWith(`universe.xyz/${loggedInArtist.name.split(' ')[0]}/`) &&
+                handleLink(e)
+              }
               placeholder="Enter the auction link"
             />
             {!validLink && !values.link && (

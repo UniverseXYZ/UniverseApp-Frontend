@@ -1,7 +1,7 @@
 @import '../../../assets/scss/variables';
 @import '../../../assets/scss/mixins';
 
-.welcome__section {
+.welcome--section {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -35,7 +35,7 @@
       }
     }
 
-    &__container {
+    .welcome__section__container {
       display: flex;
       align-items: center;
       justify-content: space-between;

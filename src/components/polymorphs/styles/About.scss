@@ -2,8 +2,11 @@
 @import '../../../assets/scss/mixins';
 
 .about--wrapper--row1 {
-    min-height: 425px;
+    min-height: 500px;
     width: 90%;
+    @include lg {
+        min-height: 355px;
+    }
     @include sm {
         width: 100%;
         flex-wrap: nowrap;
@@ -14,6 +17,25 @@
             max-width: 627px;
             width: 100%;
             align-items: center;
+        }
+    }
+    .polymorph--section1--row1--left--block {
+        img {
+            position: relative;
+            right: 45px;
+            @include xl {
+                right: 30px;
+            }
+            @include lg {
+                right: 10px;
+            }
+            @include sm {
+                right: 0;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+            }
         }
     }
     .new--technology {
@@ -56,8 +78,12 @@
     
 }
 .about--wrapper--row2 {
-    min-height: 425px;
+    min-height: 500px;
     width: 90%;
+    overflow: hidden;
+    @include lg {
+        min-height: 355px;
+    }
     @include sm {
         width: 100%;
         flex-wrap: nowrap;
@@ -94,9 +120,11 @@
         p {
             @include lg {
                 font-size: 14px;
+                padding-right: 20px;
             }
             @include sm {
                 font-size: 14px;
+                padding: 0;
             }
             margin-top: 1.1vw;
             font-family: Space Grotesk;
@@ -105,32 +133,53 @@
             font-size: 16px;
             line-height: 160%;
             color: #666666;
+            padding-right: 60px;
         }
     }
     .relased--right--block {
         position: relative;
         display: flex;
         align-items: center;
-        justify-content: center;
-        .dominant--image {
-            z-index: 10;
-            position: relative;
-            max-height: 400px;
+        justify-content: flex-start;
+        @include sm {
+            min-height: 400px;
+            justify-content: center ;
         }
-        // .row2--background {
-        //     @include sm {
-        //         max-height: 300px;
-        //         height: 300px;
-        //         top: -65px;
-        //         width: 80%;
-        //         left: 70px;
-        //         object-fit: cover;
-        //     }
-        //     position: absolute;
-        //     right: -100px;
-        //     top: -35px;
-        //     height: 600px;
-        //     max-height: 600px;
-        // }
+        .images--charts--parent {
+            @include sm {
+                text-align: center;
+            }
+            .dominant--image {
+                z-index: 10;
+                position: relative;
+                width: 500px;
+                @include xl {
+                    width: 415px;
+                }
+                @include lg {
+                    width: 325px;
+                }
+            }
+            .row2--background {
+                position: absolute;
+                left: 45px;
+                max-height: 150%;
+                bottom: -70px;
+                @include xl {
+                    bottom: -55px;
+                }
+                @include lg {
+                    bottom: -40px;
+                }
+                @include sm {
+                    bottom: 20px;
+                    top: 0;
+                    margin: auto;
+                    max-height: 400px;
+                    height: 380px;
+                }
+            }
+        }
+        
     } 
 }

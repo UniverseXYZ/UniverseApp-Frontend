@@ -890,10 +890,10 @@
                 height: 137px;
               }
 
-              @include sm {
-                width: 110px;
-                height: 110px;
-              }
+              // @include sm {
+              //   width: 110px;
+              //   height: 110px;
+              // }
             }
 
             @include md {

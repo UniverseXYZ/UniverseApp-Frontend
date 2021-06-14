@@ -28,9 +28,13 @@ const Artist = () => {
     <div className="artist__page">
       <ArtistDetails onArtist={artist} />
       <ArtistPageTabs onArtist={artist} />
-      <div className="artist__personal__logo">
-        <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
-      </div>
+      {artist.personalLogo ? (
+        <div className="artist__personal__logo">
+          <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <NotFound />

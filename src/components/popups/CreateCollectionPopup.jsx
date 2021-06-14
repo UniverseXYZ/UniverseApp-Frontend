@@ -161,7 +161,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       <Input
         label="Collection name"
         className="inp"
-        placeholder="Enter the Collection name"
+        placeholder="Enter the collection name"
         value={collectionName}
         error={errors.collectionName}
         onChange={(e) => handleCollectionName(e.target.value)}
@@ -198,7 +198,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       />
       <div className="button__div">
         <Button className="light-button" onClick={() => handleMinting()}>
-          Create
+          Create now
         </Button>
       </div>
     </div>
