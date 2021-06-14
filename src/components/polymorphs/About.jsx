@@ -11,9 +11,9 @@ const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
     <h2>New technology</h2>
     <p>
-      A first in the Universe and on the blockchain, we’ve built technology that allows you to
-      scramble your Polymorph’s characteristics at random. When you mint, you will get a random skin
-      that is permanent. All the traits and wearables can be scrambled at random.
+      A first in the Universe and on the blockchain. We`ve built technology that allows you to
+      scramble your Polymorph`s wearables at random. Once minted, your Morph`s base skin is the only
+      permanent feature and will never change. Will you be able to scramble your perfect Polymorph?
     </p>
   </AnimatedOnScroll>
 );
@@ -22,8 +22,8 @@ const row2LeftBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
     <h2>Released via Bonding Curve</h2>
     <p>
-      The Polymorphs will be originally released via a bonding curve. A bonding curve is a
-      distribution method that increase the price of mints as the mint number increases.
+      The Polymorphs will be released via a bonding curve. A bonding curve is a distribution method
+      that increases the price of mints as the amount of minted Polymorphs increases.
     </p>
   </AnimatedOnScroll>
 );
