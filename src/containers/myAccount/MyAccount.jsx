@@ -10,7 +10,6 @@ import AppContext from '../../ContextAPI';
 const MyAccount = () => {
   const { setWebsite } = useContext(AppContext);
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     document.title = 'Universe Minting - My Profile';
     return () => {
