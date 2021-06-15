@@ -29,28 +29,32 @@ const DomainAndBranding = ({ values, onChange }) => {
   const [inputStyle, setInputStyle] = useState('inp empty');
 
   const handleLink = (e) => {
-    onChange((prevValues) => ({ ...prevValues, link: e.target.value }));
+    onChange((prevValues) => ({ ...prevValues, link: e.target.value, status: 'filled' }));
     setValidLink(e.target.value.trim().length !== 0);
   };
-  console.log(inputStyle);
 
   const handleFocus = () => {
     if (
-      values.link === `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1` &&
-      inputStyle === 'inp empty'
+      values.link.toLowerCase() ===
+      `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`
     ) {
       onChange((prevValues) => ({
         ...prevValues,
-        link: `universe.xyz/${loggedInArtist.name.split(' ')[0]}/`,
+        link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
+        status: 'empty',
       }));
       setInputStyle('inp');
     }
   };
   const handleBlur = () => {
-    if (values.link === `universe.xyz/${loggedInArtist.name.split(' ')[0]}/`) {
+    if (
+      values.link.toLowerCase() ===
+      `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
+    ) {
       onChange((prevValues) => ({
         ...prevValues,
-        link: `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`,
+        link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
+        status: 'empty',
       }));
       setInputStyle('inp empty');
     }
@@ -153,16 +157,19 @@ const DomainAndBranding = ({ values, onChange }) => {
               onFocus={handleFocus}
               onBlur={handleBlur}
               onChange={(e) =>
-                e.target.value.startsWith(`universe.xyz/${loggedInArtist.name.split(' ')[0]}/`) &&
+                e.target.value
+                  .toLowerCase()
+                  .startsWith(`universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`) &&
                 handleLink(e)
               }
               placeholder="Enter the auction link"
             />
-            {!validLink && !values.link && (
-              <p className="error__text">
-                &quot;Auction website link&quot; is not allowed to be empty
-              </p>
-            )}
+            {(!validLink && !values.link) ||
+              (values.status === 'empty' && (
+                <p className="error__text">
+                  &quot;Auction website link&quot; is not allowed to be empty
+                </p>
+              ))}
           </div>
           <div className="upload__background">
             <div className="upload__background__title">

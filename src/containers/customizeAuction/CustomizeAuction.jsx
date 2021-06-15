@@ -24,10 +24,11 @@ const CustomizeAuction = () => {
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
-    link: `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`,
+    link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
     promoImage: null,
     backgroundImage: null,
     hasBlur: '',
+    status: 'empty',
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
@@ -36,16 +37,28 @@ const CustomizeAuction = () => {
     if (auction) {
       setDomainAndBranding({
         headline: auction.headline || '',
-        link: auction.link || `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`,
+        link:
+          auction.link ||
+          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
         promoImage: auction.promoImage || null,
         backgroundImage: auction.backgroundImage || null,
         hasBlur: auction.hasBlur || '',
+        status:
+          auction.link &&
+          auction.link.toLowerCase() !==
+            `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`
+            ? 'filled'
+            : 'empty',
       });
     }
   }, []);
 
   const handleSaveClose = () => {
-    if (domainAndBranding.headline && domainAndBranding.link) {
+    if (
+      domainAndBranding.headline &&
+      domainAndBranding.link &&
+      domainAndBranding.status === 'filled'
+    ) {
       const newAuction = { ...auction };
       newAuction.headline = domainAndBranding.headline;
       newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
@@ -113,7 +126,7 @@ const CustomizeAuction = () => {
             setFutureAuctions([...futureAuctions, newAuction]);
           }
           setAuction({ tiers: [] });
-          history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
+          history.push(newAuction.link.replace('universe.xyz', ''), {
             auction: newAuction,
           });
         }, 500);
@@ -158,7 +171,7 @@ const CustomizeAuction = () => {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
             setAuction({ tiers: [] });
-            history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
+            history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,
             });
           }, 500);
