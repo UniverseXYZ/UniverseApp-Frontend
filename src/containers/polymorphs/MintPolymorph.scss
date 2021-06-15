@@ -12,7 +12,7 @@
                 max-width: 730px;
                 width: 100%;
                 text-align: center;
-                // min-height: 230px;
+                min-height: 200px;
                 h1 {
 
                 }
@@ -31,7 +31,7 @@
                 width: 100%;
             }
             .right {
-                position: relative;
+                position: relative;                
                 .welcome--slider--bonding--curve {
                     width: 100%;
                     min-height: 305px;
@@ -42,6 +42,11 @@
                     .row1 {
                         font-family: $spaceGroteskFont;
                         .alert--info {
+                            position: absolute;
+                            left: 215px;
+                            right: 0;
+                            top: -65px;
+                            margin: auto;
                             width: 265px;
                             height: 105px;
                             box-sizing: border-box;
@@ -80,6 +85,16 @@
                                 letter-spacing: 0.5px;
                             }
                         }
+                    }
+                    .mint--polymorph--welcome--slider {
+                        width: 90%;
+                        margin: 20px auto 80px;
+                    }
+                    button {
+                        display: block;
+                        margin: 0 auto;
+                        width: 145px;
+                        height: 42px;
                     }
                 }
             }
