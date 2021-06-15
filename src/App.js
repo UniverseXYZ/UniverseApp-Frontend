@@ -148,7 +148,7 @@ const App = () => {
         {/* <Route exact path="/reward-tiers" component={() => <RewardTiers />} /> */}
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
         {/* <Route exact path="/review-reward" component={() => <ReviewReward />} /> */}
-        <Route exact path="/select-nfts" component={() => <MyNFTs />} />
+        {/* <Route exact path="/select-nfts" component={() => <MyNFTs />} /> */}
         <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
         <Route
           exact

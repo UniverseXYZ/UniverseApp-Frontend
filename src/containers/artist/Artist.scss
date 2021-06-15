@@ -10,6 +10,10 @@
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     padding: 10px 0 10px 24px;
     background: $white;
+    img {
+      width: 78px;
+      height: 21px;
+    }
     @include lg {
       left: 100px;
     }
@@ -46,21 +50,27 @@
       .avatar {
         display: flex;
         align-items: center;
+        min-width: 280px;
+        min-height: 280px;
         img {
-          min-width: 280px;
-          min-height: 280px;
+          width: 280px;
+          height: 280px;
           object-fit: cover;
           border-radius: 50%;
           @include lg {
-            min-width: 220px;
-            min-height: 220px;
+            width: 220px;
+            height: 220px;
           }
           @include sm {
-            min-width: auto;
-            min-height: auto;
+            width: auto;
+            height: auto;
             width: 90px;
             height: 90px;
           }
+        }
+        @include sm {
+          min-width: auto;
+          min-height: auto;
         }
       }
       .info {
@@ -866,6 +876,7 @@
               margin-bottom: 12px;
               height: 230px;
               width: 100%;
+              cursor: pointer;
               video {
                 width: 100%;
                 height: 100%;

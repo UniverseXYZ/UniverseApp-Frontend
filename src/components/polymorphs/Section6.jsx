@@ -16,7 +16,7 @@ const leftBlock = () => (
 const rightBlock = () => (
   <div>
     <div className="coming-soon">Coming soon</div>
-    <h2>Make your own Morphing NFTs</h2>
+    <h2>Make your own Morphing NFTs</h2>
     <p>
       We want you to also be able to mint your own morphing creations. We just need some time to set
       it up.

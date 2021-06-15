@@ -84,26 +84,26 @@ const About = () => {
           yScrollPosition * -0.2
         }px, 0) rotate(180deg)`;
         squareOneEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
         squareTwoEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
         squareThreeEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
         squareFourEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
         squareFiveEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
         squareSixEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
         squareSevenEl.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
 
         requestAnimationFrame(scrollLoop);
       }

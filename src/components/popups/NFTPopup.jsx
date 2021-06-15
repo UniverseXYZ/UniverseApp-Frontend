@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
@@ -9,11 +10,17 @@ import hrefIcon from '../../assets/images/href.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 
 const NFTPopup = ({ onClose, onNFT }) => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist, deployedCollections } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [collection, setCollection] = useState({});
   const PLACEHOLDER_NFT_BUYER = 'Fran Solo';
+  const history = useHistory();
 
   useEffect(() => {
+    if (onNFT.type === 'collection') {
+      const getCollection = deployedCollections.filter((col) => col.id === onNFT.collectionId);
+      setCollection(getCollection[0]);
+    }
     document.body.classList.add('no__scroll');
 
     return () => document.body.classList.remove('no__scroll');
@@ -58,7 +65,14 @@ const NFTPopup = ({ onClose, onNFT }) => {
           {loggedInArtist.name && loggedInArtist.avatar && (
             <div className="item">
               <span>Creator</span>
-              <p>
+              <p
+                aria-hidden="true"
+                onClick={() =>
+                  history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
+                    id: loggedInArtist.id,
+                  })
+                }
+              >
                 <img src={URL.createObjectURL(loggedInArtist.avatar)} alt={loggedInArtist.name} />
                 {loggedInArtist.name}
               </p>
@@ -67,7 +81,15 @@ const NFTPopup = ({ onClose, onNFT }) => {
           {onNFT.type === 'collection' && (
             <div className="item">
               <span>Collection</span>
-              <p>
+              <p
+                aria-hidden="true"
+                onClick={() =>
+                  history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                    collection,
+                    saved: false,
+                  })
+                }
+              >
                 {typeof onNFT.collectionAvatar === 'string' &&
                 onNFT.collectionAvatar.startsWith('#') ? (
                   <b
@@ -140,13 +162,15 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   <div>
                     <img
                       className="buyerImage"
-                      src={URL.createObjectURL(loggedInArtist.avatar)}
+                      // src={URL.createObjectURL(loggedInArtist.avatar)}
+                      src={buyerImage}
                       alt="seller"
                     />
                   </div>
                   <div className="info">
                     <div className="buyer__name">
-                      Put on sale by <b>{loggedInArtist.name}</b>
+                      {/* Put on sale by <b>{loggedInArtist.name}</b> */}
+                      Put on sale by <b>{PLACEHOLDER_NFT_BUYER}</b>
                     </div>
                     <div className="time">2 weeks ago</div>
                   </div>
@@ -158,13 +182,15 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   <div>
                     <img
                       className="buyerImage"
-                      src={URL.createObjectURL(loggedInArtist.avatar)}
+                      // src={URL.createObjectURL(loggedInArtist.avatar)}
+                      src={buyerImage}
                       alt="seller"
                     />
                   </div>
                   <div className="info">
                     <div className="buyer__name">
-                      Minted by <b>{loggedInArtist.name}</b>
+                      {/* Minted by <b>{loggedInArtist.name}</b> */}
+                      Minted by <b>{PLACEHOLDER_NFT_BUYER}</b>
                     </div>
                     <div className="time">2 weeks ago</div>
                   </div>

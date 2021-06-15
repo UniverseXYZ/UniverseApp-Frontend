@@ -9,15 +9,7 @@ const Head = () => {
   const [universePage, setUniversePage] = useState(true);
 
   useEffect(() => {
-    if (
-      loggedInArtist.name &&
-      loggedInArtist.universePageAddress &&
-      loggedInArtist.avatar &&
-      loggedInArtist.about &&
-      loggedInArtist.personalLogo &&
-      loggedInArtist.instagramLink &&
-      loggedInArtist.twitterLink
-    ) {
+    if (loggedInArtist.name && loggedInArtist.universePageAddress && loggedInArtist.avatar) {
       setUniversePage(false);
     } else {
       setUniversePage(true);
@@ -25,15 +17,7 @@ const Head = () => {
   }, []);
 
   const handlePreviewClick = () => {
-    if (
-      loggedInArtist.name &&
-      loggedInArtist.universePageAddress &&
-      loggedInArtist.avatar &&
-      loggedInArtist.about &&
-      loggedInArtist.personalLogo &&
-      loggedInArtist.instagramLink &&
-      loggedInArtist.twitterLink
-    ) {
+    if (loggedInArtist.name && loggedInArtist.universePageAddress && loggedInArtist.avatar) {
       history.push(`/${loggedInArtist.name.split(' ')[0]}`, { id: loggedInArtist.id });
     } else {
       alert('Please first fill in all fields.');
