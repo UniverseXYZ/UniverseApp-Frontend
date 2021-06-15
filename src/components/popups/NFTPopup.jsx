@@ -68,7 +68,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
               <p
                 aria-hidden="true"
                 onClick={() =>
-                  history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
+                  history.push(`/${loggedInArtist.universePageAddress}`, {
                     id: loggedInArtist.id,
                   })
                 }

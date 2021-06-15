@@ -6,7 +6,7 @@ export const PLACEHOLDER_ARTISTS = [
     id: 1,
     name: 'Justin 3LAU',
     avatar: artistAvatar,
-    address: 'http://localhost:3000/3LAU',
+    universePageAddress: `${window.location.origin}/3LAU`,
     about:
       'Cras vel eget vitae quis scelerisque arcu ut. Tristique velit nec sed sit massa. Odio molestie velit purus at blandit. Lacus, fusce imperdiet velit augue neque tincidunt diam fringilla in. Natoque ipsum ipsum eget pellentesque. Magna felis, praesent ornare tincidunt nunc.',
     personalLogo: artistLogo,
@@ -17,7 +17,7 @@ export const PLACEHOLDER_ARTISTS = [
     id: 2,
     name: 'Justin 3LAU',
     avatar: artistAvatar,
-    address: 'http://localhost:3000/3LAU',
+    universePageAddress: `${window.location.origin}/3LAU`,
     about:
       'Cras vel eget vitae quis scelerisque arcu ut. Tristique velit nec sed sit massa. Odio molestie velit purus at blandit. Lacus, fusce imperdiet velit augue neque tincidunt diam fringilla in. Natoque ipsum ipsum eget pellentesque. Magna felis, praesent ornare tincidunt nunc.',
     personalLogo: artistLogo,
@@ -28,7 +28,7 @@ export const PLACEHOLDER_ARTISTS = [
     id: 3,
     name: 'Justin 3LAU',
     avatar: artistAvatar,
-    address: 'http://localhost:3000/3LAU',
+    universePageAddress: `${window.location.origin}/3LAU`,
     about:
       'Cras vel eget vitae quis scelerisque arcu ut. Tristique velit nec sed sit massa. Odio molestie velit purus at blandit. Lacus, fusce imperdiet velit augue neque tincidunt diam fringilla in. Natoque ipsum ipsum eget pellentesque. Magna felis, praesent ornare tincidunt nunc.',
     personalLogo: artistLogo,
@@ -39,7 +39,7 @@ export const PLACEHOLDER_ARTISTS = [
     id: 4,
     name: 'Justin 3LAU',
     avatar: artistAvatar,
-    address: 'http://localhost:3000/3LAU',
+    universePageAddress: `${window.location.origin}/3LAU`,
     about:
       'Cras vel eget vitae quis scelerisque arcu ut. Tristique velit nec sed sit massa. Odio molestie velit purus at blandit. Lacus, fusce imperdiet velit augue neque tincidunt diam fringilla in. Natoque ipsum ipsum eget pellentesque. Magna felis, praesent ornare tincidunt nunc.',
     personalLogo: artistLogo,
@@ -50,7 +50,7 @@ export const PLACEHOLDER_ARTISTS = [
     id: 5,
     name: 'Justin 3LAU',
     avatar: artistAvatar,
-    address: 'http://localhost:3000/3LAU',
+    universePageAddress: `${window.location.origin}/3LAU`,
     about:
       'Cras vel eget vitae quis scelerisque arcu ut. Tristique velit nec sed sit massa. Odio molestie velit purus at blandit. Lacus, fusce imperdiet velit augue neque tincidunt diam fringilla in. Natoque ipsum ipsum eget pellentesque. Magna felis, praesent ornare tincidunt nunc.',
     personalLogo: artistLogo,
