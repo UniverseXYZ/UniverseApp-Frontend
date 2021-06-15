@@ -74,7 +74,7 @@ const SelectTokenPopup = ({ onClose }) => {
             nested
             trigger={
               <button type="button" className="light-border-button add-token" onClick={onClose}>
-                Add token
+                Add custom token
               </button>
             }
           >
