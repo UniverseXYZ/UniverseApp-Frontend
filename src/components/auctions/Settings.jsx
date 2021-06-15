@@ -77,8 +77,8 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -87,8 +87,8 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
