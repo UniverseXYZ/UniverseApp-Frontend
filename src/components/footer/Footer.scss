@@ -279,6 +279,9 @@ footer {
         span:first-child {
           margin-right: 30px;
         }
+        span {
+          cursor: pointer;
+        }
         @include md {
           width: 100%;
           flex-wrap: wrap;

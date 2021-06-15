@@ -156,8 +156,9 @@ const EndDateCalendar = React.forwardRef(
           month: monthNames[d.getMonth()],
           day: d.getDate(),
           year: d.getFullYear(),
-          hours: '12',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
           timezone: 'GMT +04:00',
           format: 'AM',
         });
@@ -191,8 +192,9 @@ const EndDateCalendar = React.forwardRef(
       } else {
         setEndDateTemp((prevState) => ({
           ...prevState,
-          hours: '24',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
         }));
         onClose();
       }
@@ -257,7 +259,8 @@ const EndDateCalendar = React.forwardRef(
               {currentMonth.map((week) => (
                 <div key={uuid()} className="week__days__numbers">
                   {week.map((day, index) => (
-                    <div
+                    <button
+                      type="button"
                       key={uuid()}
                       className={`
                     ${
@@ -303,7 +306,7 @@ const EndDateCalendar = React.forwardRef(
                       style={{ cursor: day ? 'pointer' : 'default' }}
                     >
                       {day}
-                    </div>
+                    </button>
                   ))}
                 </div>
               ))}

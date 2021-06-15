@@ -152,8 +152,9 @@ const StartDateCalendar = React.forwardRef(
           month: monthNames[d.getMonth()],
           day: d.getDate(),
           year: d.getFullYear(),
-          hours: '12',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
           timezone: 'GMT +04:00',
           format: 'AM',
         });
@@ -187,8 +188,9 @@ const StartDateCalendar = React.forwardRef(
       } else {
         setStartDateTemp((prevState) => ({
           ...prevState,
-          hours: '24',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
         }));
         onClose();
       }
@@ -260,7 +262,8 @@ const StartDateCalendar = React.forwardRef(
               {currentMonth.map((week) => (
                 <div key={uuid()} className="week__days__numbers">
                   {week.map((day, index) => (
-                    <div
+                    <button
+                      type="button"
                       key={uuid()}
                       className={`
                     ${
@@ -304,9 +307,14 @@ const StartDateCalendar = React.forwardRef(
                       aria-hidden="true"
                       onClick={() => handleDayClick(day)}
                       style={{ cursor: day ? 'pointer' : 'default' }}
+                      disabled={
+                        new Date(
+                          new Date(selectedDate.year, selectedDate.month, day).toDateString()
+                        ) < new Date(new Date().toDateString())
+                      }
                     >
                       {day}
-                    </div>
+                    </button>
                   ))}
                 </div>
               ))}
@@ -314,7 +322,7 @@ const StartDateCalendar = React.forwardRef(
           </div>
           <div className="calendar__footer">
             <div className="timezone">
-              <div className="label">Time zone:</div>
+              <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
                 {/* {startDateTemp.timezone}
                 <img src={arrowDown} alt="Arrow Down" className={showTimezones ? 'rotate' : ''} />

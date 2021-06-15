@@ -78,7 +78,7 @@ const AuctionSettings = () => {
     day: d.getDate(),
     year: d.getFullYear(),
     hours: new Date().getHours(),
-    minutes: new Date().getMinutes(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -88,7 +88,7 @@ const AuctionSettings = () => {
     day: d.getDate(),
     year: d.getFullYear(),
     hours: new Date().getHours(),
-    minutes: new Date().getMinutes(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
