@@ -1,24 +1,15 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-unused-prop-types */
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
 import '../pagination/Pagination.scss';
-import checkIcon from '../../assets/images/check.svg';
-import editIcon from '../../assets/images/edit.svg';
-import removeIcon from '../../assets/images/remove.svg';
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import videoIcon from '../../assets/images/video-icon.svg';
-import AppContext from '../../ContextAPI';
-import RemovePopup from '../popups/RemoveNftPopup.jsx';
 import main1 from '../../assets/images/main1.png';
+import main2 from '../../assets/images/main2.png';
+import main3 from '../../assets/images/main3.png';
 import './UniverseNFTs.scss';
 import cover from '../../assets/images/cover.png';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import Lists from './Lists';
-import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
+// import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 
 const UniverseNFTs = () => {
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
