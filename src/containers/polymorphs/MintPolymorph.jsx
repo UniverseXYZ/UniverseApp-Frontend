@@ -12,6 +12,12 @@ const MintPolymorph = () => (
     >
       <div className="welcome--slider--bonding--curve">
         <div className="row1">
+          <div className="alert--info">
+            <p>
+              The Bonding Curve contract will mint you an original Polymorph. This base skin will be
+              permanent but the traits and items will be morphable at any time.
+            </p>
+          </div>
           <h5>Bonding curve</h5>
           <p>
             12500/25000
