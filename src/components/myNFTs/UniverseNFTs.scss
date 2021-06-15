@@ -1,7 +1,7 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/_mixins';
 
-.univers_NFTs{
+.universe_NFTs{
   position: relative;
   display: grid;
   grid-template-columns: auto auto;
@@ -21,26 +21,6 @@
         letter-spacing: 0.2px;
         color: #000000;
         margin-right: 15px;
-      }
-    }
-  
-    .universe_filter_input {
-      width: 514px;
-      input {
-        background: $white;
-        border: 1px solid #d4d4d4;
-        box-sizing: border-box;
-        border-radius: 12px;
-        width: 100%;
-        padding: 15px;
-  
-        &::placeholder {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 16px;
-          color: #cacaca;
-        }
       }
     }
   }
@@ -86,48 +66,68 @@
   }
   }
   
-  // .polymorph{
-  //   height: 21px;
-  //   width: 102px;
-  //   left: 12px;
-  //   top: 255px;
-  //   border-radius: nullpx;
-  //   >p{
-  //     font-family: $spaceGroteskFont;
-  //     font-size: 14px;
-  //     font-style: normal;
-  //     font-weight: 700;
-  //     line-height: 21px;
-  //     letter-spacing: 0px;
-  //     text-align: left;
-  //     color: brown;
-  //   }
-  // }
-  .universe_select{
+  .universe_dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background: $white;
     border: 1px solid #d4d4d4;
-    width: 514px;
-    height: 50px;
+    box-sizing: border-box;
     border-radius: 12px;
-    font-family: $spaceGroteskFont;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: left;
-    padding-left: 10px;
-    >option{
-      font-family: $spaceGroteskFont;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 20px;
-      letter-spacing: 0em;
-      text-align: left;
+    padding: 15px 16px;
+    cursor: pointer;
+    height: 47px;
+    &.opened {
+        background: linear-gradient($white, $white) padding-box,
+            linear-gradient(175deg, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent;
+        .arrow__down {
+            transform: rotate(180deg);
+        }
     }
-  } 
-}
+    .selected__universe__item {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        color: $black;
+    }
+    .arrow__down {
+        width: 14px;
+        transition: 0.5s ease;
+    }
+    .sort__dropdown {
+        position: absolute;
+        top: 55px;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+        ul {
+            background: $white;
+            box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            padding: 8px;
 
+            li {
+                padding: 15px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 20px;
+                color: $black;
+                border-radius: 6px;
+                height: 50px;
+                &:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                }
+            }
+        }
+    }
+}
+}
 .nft_box_footer{
   display: flex;
 >p{
@@ -141,35 +141,6 @@
 }
 }
 
-.dropdown_search{
-  height: 166px;
-  width: 514px;
-  left: 165px;
-  top: 401px;
-  border-radius: 12px;
-  padding: 8px;
-  z-index: 999;
-  >ul>div {
-    height: 50px;
-    width: 498px;
-    left: 8px;
-    top: 8px;
-    border-radius: 6px;
-  }
-  >ul>div>li {
-    height: 20px;
-    width: 110px;
-    left: 0px;
-    top: 0px;
-    font-family: $spaceGroteskFont;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-}
 .polymorph{
   height: 21px;
   width: 102px;
