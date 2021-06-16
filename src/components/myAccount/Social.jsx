@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Animated } from 'react-animated-css';
 import AppContext from '../../ContextAPI';
 import instagramLogo from '../../assets/images/instagram-outlined.svg';
 import twitterLogo from '../../assets/images/icons_twitter.svg';
@@ -68,37 +69,39 @@ const Social = () => {
               </Button>
             </div>
           ) : (
-            <div className="account-grid-social-editing">
-              <div className="instagram">
-                <h5>Instagram profile</h5>
-                <img alt="" src={instagramLogo} />
-                <Input
-                  placeholder="instagram.com/username"
-                  className="inp"
-                  value={instagramLink}
-                  onChange={(e) => setInstagramLink(e.target.value)}
-                />
-              </div>
-              <div className="twitter">
-                <h5>Twitter profile</h5>
-                <img alt="" src={twitterLogo} />
-                <Input
-                  placeholder="twitter.com/username"
-                  className="inp"
-                  value={twitterLink}
-                  onChange={(e) => setTwitterLink(e.target.value)}
-                />
-              </div>
+            <Animated animationIn="zoomIn">
+              <div className="account-grid-social-editing">
+                <div className="instagram">
+                  <h5>Instagram profile</h5>
+                  <img alt="" src={instagramLogo} />
+                  <Input
+                    placeholder="instagram.com/username"
+                    className="inp"
+                    value={instagramLink}
+                    onChange={(e) => setInstagramLink(e.target.value)}
+                  />
+                </div>
+                <div className="twitter">
+                  <h5>Twitter profile</h5>
+                  <img alt="" src={twitterLogo} />
+                  <Input
+                    placeholder="twitter.com/username"
+                    className="inp"
+                    value={twitterLink}
+                    onChange={(e) => setTwitterLink(e.target.value)}
+                  />
+                </div>
 
-              <div className="account-display-buttons">
-                <Button className="light-button" onClick={() => saveSocialChanges()}>
-                  Save changes
-                </Button>
-                <Button className="light-border-button" onClick={() => cancelSocialChanges()}>
-                  Cancel
-                </Button>
+                <div className="account-display-buttons">
+                  <Button className="light-button" onClick={() => saveSocialChanges()}>
+                    Save changes
+                  </Button>
+                  <Button className="light-border-button" onClick={() => cancelSocialChanges()}>
+                    Cancel
+                  </Button>
+                </div>
               </div>
-            </div>
+            </Animated>
           )}
         </div>
       </div>

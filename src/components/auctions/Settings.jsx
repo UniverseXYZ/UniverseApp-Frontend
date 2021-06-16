@@ -111,13 +111,15 @@ const AuctionSettings = () => {
   const bid = options.find((element) => element.value === bidtype);
   const isEditingAuction = location.state !== undefined;
   const handleAddAuction = () => {
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
-      startingBid: values.startingBid.trim().length !== 0,
-      startDate: values.startDate.length !== 0,
-      endDate: values.endDate.length !== 0,
-      name: values.name.trim().length !== 0,
-    }));
+    setTimeout(() => {
+      setIsValidFields((prevValues) => ({
+        ...prevValues,
+        startingBid: values.startingBid.trim().length !== 0,
+        startDate: values.startDate.length !== 0,
+        endDate: values.endDate.length !== 0,
+        name: values.name.trim().length !== 0,
+      }));
+    }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
@@ -368,14 +370,12 @@ const AuctionSettings = () => {
                   />
                 </span>
                 {hideIcon1 && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                    <div className="info-text">
-                      <p>
-                        Any bid in the last 3 minutes of an auction will extend the auction for an
-                        additional 3 minutes.
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="info-text">
+                    <p>
+                      Any bid in the last 3 minutes of an auction will extend the auction for an
+                      additional 3 minutes.
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
