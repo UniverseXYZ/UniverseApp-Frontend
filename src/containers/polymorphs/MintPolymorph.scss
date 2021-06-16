@@ -3,6 +3,16 @@
 
 .mint--polymorph {
     .welcome--section {
+        @include xl {
+            padding: 0 60px;
+        }
+        
+        @include lg {
+            padding: 0 60px;
+        }
+        @include md {
+            padding: 0 20px;
+        }
         .welcome__section__container {
             padding: 0;
             max-width: 1110px;
@@ -13,10 +23,24 @@
                 width: 100%;
                 text-align: center;
                 min-height: 200px;
+                @include lg {
+                    height: 205px;
+                    // padding: 0 80px;
+                }       
+                @include sm {
+                    min-height: 260px;
+                }
                 h1 {
-
+                    font-size: 48px;
+                    @include sm {
+                        font-size: 26px;
+                    }
                 }
                 p {
+                    @include lg {
+                        width: 80%;
+                        margin: 0 auto;
+                    }
                     max-width: 1110px;
                     font-style: normal;
                     font-weight: normal;
@@ -31,73 +55,102 @@
                 width: 100%;
             }
             .right {
-                position: relative;                
-                .welcome--slider--bonding--curve {
-                    width: 100%;
-                    min-height: 305px;
-                    background: rgba(255, 255, 255, 0.1);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    box-sizing: border-box;
-                    border-radius: 12px;
-                    .row1 {
-                        font-family: $spaceGroteskFont;
-                        .alert--info {
-                            position: absolute;
-                            left: 215px;
-                            right: 0;
-                            top: -65px;
-                            margin: auto;
-                            width: 265px;
-                            height: 105px;
-                            box-sizing: border-box;
-                            padding: 15px;
-                            background-color: $white;
-                            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                            border-radius: 12px;
-                            p {
-                                text-align: left;
-                                color: $black;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 12px;
-                                line-height: 150%;
-                            }
-                        }
-                        h5 {
-                            margin: 40px 0 15px;
-                            font-family: $sharpGroteskMediumFont;
-                            text-align: center;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 20px;
-                            line-height: 130%;
-                            color: #FFFFFF;
-                        }
-                        p{
-                            text-align: center;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 14px;
-                            line-height: 140%;
-                            color: #FFFFFF;
-                            span {
-                                color: rgba(255, 255, 255, 0.5);
-                                letter-spacing: 0.5px;
-                            }
-                        }
+                position: relative;
+                div {
+                    @include lg {
+                        max-width: 800px;
                     }
-                    .mint--polymorph--welcome--slider {
-                        width: 90%;
-                        margin: 20px auto 80px;
-                    }
-                    button {
-                        display: block;
-                        margin: 0 auto;
-                        width: 145px;
-                        height: 42px;
+                }            
+            }
+        }
+    }
+    .section4 {
+        background-position: center;
+        background-size: 100% 100%;
+        width: 100%;
+        height: 500px;
+        background-repeat: no-repeat;
+        background-image: url("../../assets/images/mint-polymorph-section4-bg.png");
+        overflow: hidden;
+        .section4--child {
+            width: 100%;
+            height: 100%;
+            height: 500px;
+            background-image: linear-gradient(white 10%, transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            @include xl {
+                padding: 0 60px;
+            }
+            @include lg {
+                padding: 0 20px;
+            }
+            .welcome--slider--bonding--curve {
+                margin: 0 auto;
+                background-color: $white;
+                -webkit-box-shadow: 0px 0px 20px 0.01px rgba(0, 0, 0, 0.2); 
+                box-shadow: 0px 0px 20px 0.01px rgba(0, 0, 0, 0.2);
+                .alert--info {
+                    display: none;
+                }
+                h5 {
+                    color: $black;
+                }
+                p {
+                    color: $black;
+                    span {
+                        color: rgba(0, 0, 0, 0.5);
                     }
                 }
+                .bubble {
+                    color: rgba(0, 0, 0, 0.2);
+                    border: 1px solid rgba(0, 0, 0, 0.2);
+                    // background-color: ;
+                    span {
+                        color: $black;
+                    }
+                    
+                }
+                .bubble::before {
+                    background-color: $white !important;
+                    border-color: rgba(0, 0, 0, 0.2);
+                }
+                input[type=range]::-webkit-slider-thumb {
+                    background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
+                    border: 6px solid $white !important;
+                }
+                .input[type=range]::-moz-range-thumb {
+                    background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
+                    border: 6px solid $white !important;
+                }
             }
+            // .background--vertical--text--block {
+            //     width: 100%;
+            //     max-width: 1110px;
+            //     height: 500px;
+            //     position: absolute;
+            //     left: 0;
+            //     right: 0;
+            //     top: 0;
+            //     bottom: 0;
+            //     margin: auto;
+            //     >p {
+            //         transform: rotate(-90deg) scale(0.2, 1);
+            //         font-family: Sharp Grotesk;
+            //         font-style: normal;
+            //         font-weight: 900;
+            //         font-size: 463.017px;
+            //         color: #000000;
+            //         opacity: 0.4;
+            //         height: 1110px;
+            //         display: flex;
+            //         align-items: flex-end;
+            //     }
+            // }
+            
         }
     }
 }

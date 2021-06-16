@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
-import HorizontalRangeSlider from '../../components/ui-elements/HorizontalRangeSlider';
-import Button from '../../components/button/Button';
+import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
+import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurve';
 import './MintPolymorph.scss';
 
 const MintPolymorph = () => {
@@ -14,33 +14,17 @@ const MintPolymorph = () => {
         ellipsesLeft={false}
         ellipsesRight={false}
       >
-        <div className="welcome--slider--bonding--curve">
-          <div className="row1">
-            <div className="alert--info">
-              <p>
-                The Bonding Curve contract will mint you an original Polymorph. This base skin will
-                be permanent but the traits and items will be morphable at any time.
-              </p>
-            </div>
-            <h5>Bonding curve</h5>
-            <p>
-              12500/25000
-              <span> Minted</span>
-            </p>
-          </div>
-          <HorizontalRangeSlider
-            value={sliderValue}
-            setValue={settSliderValue}
-            labelLeft="0.1 ETH"
-            labelRight="24 ETH"
-            className="mint--polymorph--welcome--slider"
-            min={0.1}
-            max={24}
-            step={0.1}
-          />
-          <Button className="light-button">Mint now</Button>
-        </div>
+        <BondingCurve value={sliderValue} />
       </WelcomeWrapper>
+      <Section2HorizontalScroll />
+      <div className="section4">
+        <div className="section4--child">
+          <BondingCurve value={sliderValue} />
+          {/* <div className="background--vertical--text--block">
+            <p>pellentesque.</p>
+          </div> */}
+        </div>
+      </div>
     </div>
   );
 };
