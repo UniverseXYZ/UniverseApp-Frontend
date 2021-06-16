@@ -82,6 +82,7 @@ const AuctionSettings = () => {
     timezone: 'GMT +04:00',
     format: 'AM',
   });
+  console.log(startDateTemp);
 
   const [endDateTemp, setEndDateTemp] = useState({
     month: monthNames[d.getMonth()],
@@ -215,6 +216,9 @@ const AuctionSettings = () => {
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
+          <p className="tier-description">
+            Start setting up your auction with filling out the name, starting bid and schedule.
+          </p>
         </div>
         <div className="setting-form">
           <div className="up-side">
