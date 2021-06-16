@@ -114,9 +114,10 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                   )}
                                   {activeAuction.artist ? (
                                     <CopyToClipboard
-                                      text={`${window.location.origin}/${
-                                        activeAuction.artist.name.split(' ')[0]
-                                      }/${activeAuction.link}`}
+                                      text={`${activeAuction.link.replace(
+                                        'universe.xyz',
+                                        window.location.origin
+                                      )}`}
                                       onCopy={() => {
                                         setCopied({
                                           state: true,

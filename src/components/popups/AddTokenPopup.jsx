@@ -68,11 +68,11 @@ const AddTokenPopup = ({ onClose }) => {
       />
       {isValid.address && isValid.name && isValid.subtitle ? (
         <Button className="light-button" onClick={handleAddToken}>
-          Add token
+          Add custom token
         </Button>
       ) : (
         <Button className="light-button" disabled onClick={handleAddToken}>
-          Add token
+          Add custom token
         </Button>
       )}
     </div>

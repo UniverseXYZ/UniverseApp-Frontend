@@ -279,6 +279,13 @@ footer {
         span:first-child {
           margin-right: 30px;
         }
+        span {
+          cursor: pointer;
+          &:hover {
+            color: $white;
+            transition: .3s;
+          }
+        }
         @include md {
           width: 100%;
           flex-wrap: wrap;

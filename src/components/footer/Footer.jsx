@@ -223,8 +223,26 @@ const Footer = () => {
             <span>Universe.xyz © 2021. Open-sourced.</span>
           </div>
           <div className="powered-by">
-            <span>Add liquidity to SushiSwap USDC/XYZ pool</span>
-            <span>SushiSwap USDC/XYZ market</span>
+            <span
+              aria-hidden="true"
+              onClick={() =>
+                window.open(
+                  'https://app.sushi.com/add/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48/0x618679df9efcd19694bb1daa8d00718eacfa2883'
+                )
+              }
+            >
+              Add liquidity to SushiSwap USDC/XYZ pool
+            </span>
+            <span
+              aria-hidden="true"
+              onClick={() =>
+                window.open(
+                  'https://app.sushi.com/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0x618679df9efcd19694bb1daa8d00718eacfa2883'
+                )
+              }
+            >
+              SushiSwap USDC/XYZ market
+            </span>
           </div>
         </div>
       </div>

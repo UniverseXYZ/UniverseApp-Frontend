@@ -18,7 +18,7 @@ const Head = () => {
 
   const handlePreviewClick = () => {
     if (loggedInArtist.name && loggedInArtist.universePageAddress && loggedInArtist.avatar) {
-      history.push(`/${loggedInArtist.name.split(' ')[0]}`, { id: loggedInArtist.id });
+      history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id });
     } else {
       alert('Please first fill in all fields.');
     }

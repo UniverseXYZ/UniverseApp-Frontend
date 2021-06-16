@@ -45,6 +45,7 @@ const AuctionReview = () => {
       setBidicon(snxIcon);
     }
   }, []);
+  console.log(myAuctions);
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
@@ -140,7 +141,7 @@ const AuctionReview = () => {
               </div>
               <div className="startDate">
                 <p>Start date</p>
-                <span>{moment(auction.startDate).format('MMMM DD, YYYY')}</span>
+                <span>{moment(auction.startDate).format('MMMM DD, YYYY, HH:mm')} EST</span>
               </div>
             </div>
             <div className="date-part">
@@ -159,7 +160,7 @@ const AuctionReview = () => {
               </div>
               <div className="endDate">
                 <p>End date</p>
-                <span>{moment(auction.endDate).format('MMMM DD, YYYY')}</span>
+                <span>{moment(auction.endDate).format('MMMM DD, YYYY, HH:mm')} EST</span>
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
                   <img

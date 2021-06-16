@@ -77,18 +77,19 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
+  console.log(startDateTemp);
 
   const [endDateTemp, setEndDateTemp] = useState({
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -215,6 +216,9 @@ const AuctionSettings = () => {
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
+          <p className="tier-description">
+            Start setting up your auction with filling out the name, starting bid and schedule.
+          </p>
         </div>
         <div className="setting-form">
           <div className="up-side">

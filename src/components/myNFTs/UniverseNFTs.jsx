@@ -1,26 +1,18 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/no-unused-prop-types */
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
 import '../pagination/Pagination.scss';
-import checkIcon from '../../assets/images/check.svg';
-import editIcon from '../../assets/images/edit.svg';
-import removeIcon from '../../assets/images/remove.svg';
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import videoIcon from '../../assets/images/video-icon.svg';
-import AppContext from '../../ContextAPI';
-import RemovePopup from '../popups/RemoveNftPopup.jsx';
 import main1 from '../../assets/images/main1.png';
+import main2 from '../../assets/images/main2.png';
+import main3 from '../../assets/images/main3.png';
 import './UniverseNFTs.scss';
 import cover from '../../assets/images/cover.png';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import Lists from './Lists';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
+import arrowDown from '../../assets/images/arrow-down.svg';
 
-const UniverseNFTs = () => {
+const UniverseNFTs = (selectedNFTIds, setSelectedNFTIds, winners, nftsPerWinner) => {
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
@@ -32,20 +24,9 @@ const UniverseNFTs = () => {
   const [mobileVersion, setMobileVersion] = useState(true);
   const [draftCollections, setDraftCollections] = useState([]);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
-  // const data = UNIVERSE_NFTS
-
-  const handleUniverseNfts = (index) => {
-    const newUniverseNfts = [...universeNFTs];
-    newUniverseNfts[index].selected = !newUniverseNfts[index].selected;
-
-    setUniverseNFTs(newUniverseNfts);
-  };
-
-  const handleCollections = (index) => {
-    const newCollections = [...collections];
-    newCollections[index].selected = !newCollections[index].selected;
-    setCollections(newCollections);
-  };
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [selectedItem, setSelectedItem] = useState('All characters');
+  const sliceData = UNIVERSE_NFTS.slice(offset, offset + perPage);
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
@@ -72,23 +53,54 @@ const UniverseNFTs = () => {
   return (
     <div className="tab__saved__nfts">
       <div className="tab__wallet">
-        <div className="univers_NFTs">
+        <div className="universe_NFTs">
           <div className="universe_filter">
             <div className="universe_filter_label">
               <span>Filter</span>
             </div>
-            <div className="universe_filter_input">
-              {/* <input
-                  className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
-                  type="text"
-                  placeholder="Browse collections..."
-                  onFocus={() => setIsCollectionDropdownOpened(true)}
-                /> */}
-              <select className="universe_select">
-                <option selected="">All characters</option>
-                <option>OG characters</option>
-                <option>My polymorphs</option>
-              </select>
+            <div>
+              <div
+                ref={ref}
+                className={`universe_dropdown ${isDropdownOpened ? 'opened' : ''}`}
+                onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+                aria-hidden="true"
+              >
+                <span className="selected__universe__item">{selectedItem}</span>
+                <img className="arrow__down" src={arrowDown} alt="Arrow" />
+                {isDropdownOpened && (
+                  <div className="sort__dropdown">
+                    <ul>
+                      <li
+                        onClick={() => {
+                          setSelectedItem('All characters');
+                          setIsDropdownOpened(false);
+                        }}
+                        aria-hidden="true"
+                      >
+                        All characters
+                      </li>
+                      <li
+                        onClick={() => {
+                          setSelectedItem('OG characters');
+                          setIsDropdownOpened(false);
+                        }}
+                        aria-hidden="true"
+                      >
+                        OG characters
+                      </li>
+                      <li
+                        onClick={() => {
+                          setSelectedItem('My polymorphs');
+                          setIsDropdownOpened(false);
+                        }}
+                        aria-hidden="true"
+                      >
+                        My polymorphs
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -105,75 +117,53 @@ const UniverseNFTs = () => {
               />
             </div>
           </div>
-          {isCollectionDropdownOpened && (
-            <div ref={ref} className="collections__dropdown">
-              {collections.length ? (
-                collections.map((collection, index) => (
-                  <button
-                    type="button"
-                    key={collection.id}
-                    className={collection.selected ? 'selected' : ''}
-                    onClick={() => handleCollections(index)}
-                  >
-                    {typeof collection.avatar === 'string' && collection.avatar.startsWith('#') ? (
-                      <div
-                        className="random__bg__color"
-                        style={{ backgroundColor: collection.avatar }}
-                      >
-                        {collection.name.charAt(0)}
-                      </div>
-                    ) : (
-                      <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
-                    )}
-                    <span>{collection.name}</span>
-                  </button>
-                ))
-              ) : (
-                <div className="dropdown_search">
-                  <ul>
-                    <div>
-                      <li>All characters</li>
-                    </div>
-                    <div>
-                      <li>OG characters</li>
-                    </div>
-                    <div>
-                      <li>My polymorphs</li>
-                    </div>
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
         </div>
         <div className="nfts__lists">
-          <div className="nft__box">
-            <div>
-              <img src={main1} alt="dlk" />
-            </div>
-            <div className="polymorph">
-              <p>Polymorph #22</p>
-            </div>
-            <div className="nft_box_footer">
-              <img src={cover} alt="nsdn" />
-              <p>Universe Polymorphs</p>
-            </div>
-          </div>
+          {sliceData.map((elm) =>
+            elm.previewImage.type === 'image/png' ? (
+              <div className="nft__box">
+                <div>
+                  <img alt={elm.name} src={elm.previewImage.url} />
+                </div>
+                <div className="polymorph">
+                  <p>{elm.name}</p>
+                </div>
+                <div className="nft_box_footer">
+                  <img alt="fjffd" src={elm.collectionAvatar} />
+                  <p>{elm.collectionName}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="nft__box">
+                <div className="videoicon">
+                  <img alt="videocover" src={elm.videoavatar} />
+                </div>
+                <div className="video_box">
+                  <video
+                    onMouseOver={(event) => event.target.play()}
+                    onFocus={(event) => event.target.play()}
+                    onMouseOut={(event) => event.target.pause()}
+                    onBlur={(event) => event.target.pause()}
+                  >
+                    <source src={elm.previewImage.url} type="video/mp4" />
+                    <track kind="captions" />
+                  </video>
+                </div>
+                <div className="polymorph">
+                  <p>{elm.name}</p>
+                </div>
+                <div className="nft_box_footer">
+                  <img alt="fjffd" src={elm.collectionAvatar} />
+                  <p>{elm.collectionName}</p>
+                </div>
+              </div>
+            )
+          )}
         </div>
-        {/* {filteredNFTs.length ? (
+        {sliceData.length ? (
           <div>
-            <Lists
-              data={filteredNFTs}
-              perPage={perPage}
-              offset={offset}
-              selectedNFTIds={selectedNFTIds}
-              setSelectedNFTIds={setSelectedNFTIds}
-              winners={Number(winners)}
-              nftsPerWinner={Number(nftsPerWinner)}
-            />
-
             <div className="pagination__container">
-              <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
+              <Pagination data={UNIVERSE_NFTS} perPage={perPage} setOffset={setOffset} />
               <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
             </div>
           </div>
@@ -181,7 +171,7 @@ const UniverseNFTs = () => {
           <div className="empty__filter__nfts">
             <h3>No NFTs found</h3>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
