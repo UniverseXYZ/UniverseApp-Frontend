@@ -5,14 +5,12 @@
   position: relative;
   display: grid;
   grid-template-columns: auto auto;
-  grid-gap: 30px;
-  .universe_filter {
-    width: 514px;
-    padding: 24px 1px;
-  
+  grid-gap: 28px;
+    .universe_filter {
+        width: 518px;
+        padding: 24px 1px;   
     .universe_filter_label {
         margin-bottom: 15px;
-  
       span  {
         font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
@@ -28,7 +26,7 @@
   .universe_search_by_name{
     width: 514px;
     padding: 24px 1px;
-  
+    margin-bottom: 15px;
     .universe_search_by_name_label{
       margin-bottom: 15px;
       span{
@@ -78,6 +76,7 @@
     padding: 15px 16px;
     cursor: pointer;
     height: 47px;
+    margin-bottom: 15px;
     &.opened {
         background: linear-gradient($white, $white) padding-box,
             linear-gradient(175deg, #bceb00, #00eaea) border-box;
@@ -128,6 +127,23 @@
     }
 }
 }
+.video_box{
+  height: 215px;
+  width: 231px;
+  position: relative;
+  >video{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+}
+.videoicon{
+  position: absolute;
+  z-index: 99;
+  top: 20px;
+  right: 20px;
+}
 .nft_box_footer{
   display: flex;
 >p{
@@ -143,7 +159,6 @@
 
 .polymorph{
   height: 21px;
-  width: 102px;
   left: 12px;
   top: 255px;
   >p{

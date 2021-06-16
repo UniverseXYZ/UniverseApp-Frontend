@@ -119,20 +119,46 @@ const UniverseNFTs = (selectedNFTIds, setSelectedNFTIds, winners, nftsPerWinner)
           </div>
         </div>
         <div className="nfts__lists">
-          {sliceData.map((elm) => (
-            <div className="nft__box">
-              <div>
-                <img alt="ffff" src={elm.previewImage.url} />
+          {sliceData.map((elm) =>
+            elm.previewImage.type === 'image/png' ? (
+              <div className="nft__box">
+                <div>
+                  <img alt={elm.name} src={elm.previewImage.url} />
+                </div>
+                <div className="polymorph">
+                  <p>{elm.name}</p>
+                </div>
+                <div className="nft_box_footer">
+                  <img alt="fjffd" src={elm.collectionAvatar} />
+                  <p>{elm.collectionName}</p>
+                </div>
               </div>
-              <div className="polymorph">
-                <p>{elm.name}</p>
+            ) : (
+              <div className="nft__box">
+                <div className="videoicon">
+                  <img alt="videocover" src={elm.videoavatar} />
+                </div>
+                <div className="video_box">
+                  <video
+                    onMouseOver={(event) => event.target.play()}
+                    onFocus={(event) => event.target.play()}
+                    onMouseOut={(event) => event.target.pause()}
+                    onBlur={(event) => event.target.pause()}
+                  >
+                    <source src={elm.previewImage.url} type="video/mp4" />
+                    <track kind="captions" />
+                  </video>
+                </div>
+                <div className="polymorph">
+                  <p>{elm.name}</p>
+                </div>
+                <div className="nft_box_footer">
+                  <img alt="fjffd" src={elm.collectionAvatar} />
+                  <p>{elm.collectionName}</p>
+                </div>
               </div>
-              <div className="nft_box_footer">
-                <img alt="fjffd" src={elm.collectionAvatar} />
-                <p>{elm.collectionName}</p>
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
         {sliceData.length ? (
           <div>
