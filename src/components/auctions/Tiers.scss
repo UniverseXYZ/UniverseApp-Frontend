@@ -32,16 +32,17 @@
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
-    font-size: 32px;
-    line-height: 140%;
+    font-size: 20px;
+    line-height: 130%;
     color: $black;
+    margin-bottom: 16px;
 
     @include sm {
-      font-size: 26px;
+      font-size: 16px;
     }
   }
   p {
-    margin-top: 5px;
+    // margin-top: 5px;
     margin-bottom: 40px;
     font-family: $spaceGroteskFont;
     font-style: normal;
