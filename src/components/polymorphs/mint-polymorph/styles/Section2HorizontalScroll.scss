@@ -1,0 +1,61 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/mixins';
+
+.section2--horizontal--scroll--parent {
+    width: 100%;
+    min-height: 800px;
+    background: radial-gradient(171.4% 283.45% at -7.47% -21.19%, rgba(42, 208, 202, 0.2) 0%, rgba(225, 246, 100, 0.2) 22.92%, rgba(254, 176, 254, 0.2) 46.88%, rgba(171, 179, 252, 0.2) 68.23%, rgba(93, 247, 164, 0.2) 87.5%, rgba(88, 196, 246, 0.2) 100%), #FFFFFF;
+    h3 {
+        max-width: 1110px;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        padding: 80px 0 0;
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-size: 32px;
+        color: #000000;
+    }
+    .row2--unique--skins {
+        max-width: 1110px;
+        width: 100%;
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-size: 105px;
+        line-height: 140%;
+        margin: 0 auto;
+        text-align: center;
+        letter-spacing: -1px;
+        color: #000000;
+        mix-blend-mode: overlay;
+        position: relative;
+        top: 120px;
+    }
+    .horizontal--scroll--parent {
+        width: 100%;
+        height: 350px;
+        .child--scroll--1 {
+            margin-left: 40vw !important;
+        }
+        .child--scroll--9 {
+            margin-right: 40vw !important;
+        }
+        .child--scroll {
+            width: 330px;
+            height: 330px;
+            margin: 0 100px;
+            p {
+                text-align: center;
+                font-family:$spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 140%;
+                color: #000000;
+                position: relative;
+                bottom: 20px;
+            }
+        }
+    }
+}
+    
