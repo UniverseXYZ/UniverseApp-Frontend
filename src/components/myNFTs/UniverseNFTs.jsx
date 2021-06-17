@@ -1,54 +1,37 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import uuid from 'react-uuid';
+import React, { useState, useEffect, useRef } from 'react';
 import '../pagination/Pagination.scss';
-import main1 from '../../assets/images/main1.png';
-import main2 from '../../assets/images/main2.png';
-import main3 from '../../assets/images/main3.png';
 import './UniverseNFTs.scss';
-import cover from '../../assets/images/cover.png';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import Lists from './Lists';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import arrowDown from '../../assets/images/arrow-down.svg';
 
-const UniverseNFTs = (selectedNFTIds, setSelectedNFTIds, winners, nftsPerWinner) => {
-  const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [dropdownID, setDropdownID] = useState(0);
+const UniverseNFTs = () => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
   const ref = useRef(null);
-  const [indexes, setIndexes] = useState([]);
-  const [collections, setCollections] = useState([]);
-  const [mobileVersion, setMobileVersion] = useState(true);
-  const [draftCollections, setDraftCollections] = useState([]);
-  const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('All characters');
-  const sliceData = UNIVERSE_NFTS.slice(offset, offset + perPage);
+  const [searchByName, setSearchByName] = useState('');
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
       if (ref.current && !ref.current.contains(event.target)) {
-        setIsCollectionDropdownOpened(false);
+        setIsDropdownOpened(false);
       }
     }
-  };
-
-  const clearFilters = () => {
-    const newCollections = [...collections];
-    newCollections.forEach((collection) => {
-      collection.selected = false;
-    });
-
-    setCollections(newCollections);
-    setSearchByName('');
   };
 
   const handleSearchByName = (value) => {
     setSearchByName(value);
   };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   return (
     <div className="tab__saved__nfts">
@@ -106,64 +89,74 @@ const UniverseNFTs = (selectedNFTIds, setSelectedNFTIds, winners, nftsPerWinner)
 
           <div className="universe_search_by_name">
             <div className="universe_search_by_name_label">
-              <span>Seach by name</span>
+              <span>Search by name</span>
             </div>
             <div className="search_by_name_input">
               <input
                 type="text"
                 placeholder="Start typing"
-                // value={searchByName}
-                // onChange={(e) => handleSearchByName(e.target.value)}
+                value={searchByName}
+                onChange={(e) => handleSearchByName(e.target.value)}
               />
             </div>
           </div>
         </div>
         <div className="nfts__lists">
-          {sliceData.map((elm) =>
-            elm.previewImage.type === 'image/png' ? (
-              <div className="nft__box">
-                <div>
-                  <img alt={elm.name} src={elm.previewImage.url} />
+          {UNIVERSE_NFTS.slice(offset, offset + perPage)
+            .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+            .map((elm) =>
+              elm.previewImage.type === 'image/png' ? (
+                <div className="nft__box">
+                  <div className="nft__box__image">
+                    <img className="preview-image" alt={elm.name} src={elm.previewImage.url} />
+                  </div>
+                  <div className="polymorph">
+                    <p>{elm.name}</p>
+                  </div>
+                  <div className="nft_box_footer">
+                    <img alt="fjffd" src={elm.collectionAvatar} />
+                    <p>{elm.collectionName}</p>
+                  </div>
                 </div>
-                <div className="polymorph">
-                  <p>{elm.name}</p>
+              ) : (
+                <div className="nft__box">
+                  <div className="videoicon">
+                    <img alt="videocover" src={elm.videoavatar} />
+                  </div>
+                  <div className="nft__box__image">
+                    <video
+                      onMouseOver={(event) => event.target.play()}
+                      onFocus={(event) => event.target.play()}
+                      onMouseOut={(event) => event.target.pause()}
+                      onBlur={(event) => event.target.pause()}
+                    >
+                      <source src={elm.previewImage.url} type="video/mp4" />
+                      <track kind="captions" />
+                    </video>
+                  </div>
+                  <div className="polymorph">
+                    <p>{elm.name}</p>
+                  </div>
+                  <div className="nft_box_footer">
+                    <img alt="fjffd" src={elm.collectionAvatar} />
+                    <p>{elm.collectionName}</p>
+                  </div>
                 </div>
-                <div className="nft_box_footer">
-                  <img alt="fjffd" src={elm.collectionAvatar} />
-                  <p>{elm.collectionName}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="nft__box">
-                <div className="videoicon">
-                  <img alt="videocover" src={elm.videoavatar} />
-                </div>
-                <div className="video_box">
-                  <video
-                    onMouseOver={(event) => event.target.play()}
-                    onFocus={(event) => event.target.play()}
-                    onMouseOut={(event) => event.target.pause()}
-                    onBlur={(event) => event.target.pause()}
-                  >
-                    <source src={elm.previewImage.url} type="video/mp4" />
-                    <track kind="captions" />
-                  </video>
-                </div>
-                <div className="polymorph">
-                  <p>{elm.name}</p>
-                </div>
-                <div className="nft_box_footer">
-                  <img alt="fjffd" src={elm.collectionAvatar} />
-                  <p>{elm.collectionName}</p>
-                </div>
-              </div>
-            )
-          )}
+              )
+            )}
         </div>
-        {sliceData.length ? (
+        {UNIVERSE_NFTS.length &&
+        UNIVERSE_NFTS.filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+          .length ? (
           <div>
             <div className="pagination__container">
-              <Pagination data={UNIVERSE_NFTS} perPage={perPage} setOffset={setOffset} />
+              <Pagination
+                data={UNIVERSE_NFTS.filter((item) =>
+                  item.name.toLowerCase().includes(searchByName.toLowerCase())
+                )}
+                perPage={perPage}
+                setOffset={setOffset}
+              />
               <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
             </div>
           </div>
