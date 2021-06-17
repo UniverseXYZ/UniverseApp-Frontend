@@ -4,11 +4,15 @@
 .universe_NFTs {
   position: relative;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 28px;
-    .universe_filter {
-        width: 518px;
-        padding: 24px 1px;   
+  margin-bottom: 40px;
+
+  @include md {
+    grid-template-columns: 1fr;
+  }
+
+  .universe_filter {   
     .universe_filter_label {
         margin-bottom: 15px;
       span  {
@@ -24,9 +28,6 @@
   }
 
   .universe_search_by_name {
-    width: 514px;
-    padding: 24px 1px;
-    margin-bottom: 15px;
     .universe_search_by_name_label{
       margin-bottom: 15px;
       span {
@@ -41,7 +42,6 @@
     }
 
     .search_by_name_input {
-      width: 514px;
       input {
         background: $white;
         border: 1px solid #d4d4d4;
@@ -56,9 +56,13 @@
           font-weight: normal;
           font-size: 16px;
           color: #cacaca;
-          // background-image: url('../../assets/images/Search.png');
+          background-image: url('../../assets/images/search-gray.svg');
           background-repeat: no-repeat;
           text-indent: 25px;
+        }
+        &:focus {
+          background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
         }
       }
     }
