@@ -3,6 +3,7 @@ import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
 import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurve';
+import Section3Randomise from '../../components/polymorphs/mint-polymorph/Section3Randomise';
 import './MintPolymorph.scss';
 
 const MintPolymorph = () => {
@@ -18,6 +19,7 @@ const MintPolymorph = () => {
         <BondingCurve value={sliderValue} />
       </WelcomeWrapper>
       <Section2HorizontalScroll />
+      <Section3Randomise />
       <div className="section4">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="section4--child">
