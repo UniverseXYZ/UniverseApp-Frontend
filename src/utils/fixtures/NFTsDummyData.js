@@ -1,5 +1,5 @@
 import uuid from 'react-uuid';
-import testVideo from '../../assets/images/file_example_MP4_480_1_5MG.mp4';
+import testVideo from '../../assets/images/testvideo.mp4';
 import testImage from '../../assets/images/ntf3.svg';
 import testCollectionAvatar from '../../assets/images/test-collection-avatar.svg';
 
