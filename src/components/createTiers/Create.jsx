@@ -158,11 +158,9 @@ const Create = () => {
                   Number of winners <img src={infoIcon} alt="Info Icon" />
                 </span>
                 {hideIcon1 && (
-                  <Animated animationIn="zoomIn">
-                    <div className="info-text t1">
-                      <p>Amount of people who will get NFTs from the current reward tier.</p>
-                    </div>
-                  </Animated>
+                  <div className="info-text t1">
+                    <p>Amount of people who will get NFTs from the current reward tier.</p>
+                  </div>
                 )}
               </span>
             </div>
@@ -187,11 +185,9 @@ const Create = () => {
                   NFTs per winner <img src={infoIcon} alt="Info Icon" />
                 </span>
                 {hideIcon2 && (
-                  <Animated animationIn="zoomIn">
-                    <div className="info-text t2">
-                      <p>Amount of NFTs each winner of this reward tier is going to get.</p>
-                    </div>
-                  </Animated>
+                  <div className="info-text t2">
+                    <p>Amount of NFTs each winner of this reward tier is going to get.</p>
+                  </div>
                 )}
               </span>
             </div>
@@ -221,14 +217,12 @@ const Create = () => {
                   <span className="slider round" />
                 </label>
                 {hideIcon && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                    <div className="info-text">
-                      <p>
-                        Minimum bid parameter may be used to make sure that NFTs from the tier will
-                        not be sold under the target price value.
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="info-text">
+                    <p>
+                      Minimum bid parameter may be used to make sure that NFTs from the tier will
+                      not be sold under the target price value.
+                    </p>
+                  </div>
                 )}
               </div>
 

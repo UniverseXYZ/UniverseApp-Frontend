@@ -172,14 +172,12 @@ const AuctionReview = () => {
                     onBlur={() => setHideIcon(false)}
                   />
                   {hideIcon && (
-                    <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                      <div className="info-text">
-                        <p>
-                          Any bid in the last 3 minutes of an auction will extend the auction for an
-                          additional 3 minutes.
-                        </p>
-                      </div>
-                    </Animated>
+                    <div className="info-text">
+                      <p>
+                        Any bid in the last 3 minutes of an auction will extend the auction for an
+                        additional 3 minutes.
+                      </p>
+                    </div>
                   )}
                 </span>
               </div>

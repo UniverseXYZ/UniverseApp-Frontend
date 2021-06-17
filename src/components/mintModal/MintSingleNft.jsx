@@ -469,14 +469,12 @@ const MintSingleNft = ({ onClick }) => {
               Number of editions <img src={infoIcon} alt="Info Icon" />
             </h5>
             {hideIcon && (
-              <Animated animationIn="zoomIn">
-                <div className="info-text">
-                  <p>
-                    NFTs are minted to our auction contract by default. Turn the toggle on if you
-                    want them to be minted to your wallet instead.
-                  </p>
-                </div>
-              </Animated>
+              <div className="info-text">
+                <p>
+                  NFTs are minted to our auction contract by default. Turn the toggle on if you want
+                  them to be minted to your wallet instead.
+                </p>
+              </div>
             )}
           </div>
           <Input
@@ -544,14 +542,12 @@ const MintSingleNft = ({ onClick }) => {
               Properties (optional) <img src={infoIcon} alt="Info Icon" />
             </h4>
             {hideIcon1 && (
-              <Animated animationIn="zoomIn">
-                <div className="properties-info-text">
-                  <p>
-                    Adding properties allows you to specify the character traits. This will allow
-                    users to easily search for your NFT.
-                  </p>
-                </div>
-              </Animated>
+              <div className="properties-info-text">
+                <p>
+                  Adding properties allows you to specify the character traits. This will allow
+                  users to easily search for your NFT.
+                </p>
+              </div>
             )}
             <label className="switch">
               <input
@@ -620,14 +616,12 @@ const MintSingleNft = ({ onClick }) => {
                 Royalties <img src={infoIcon} alt="Info Icon" />
               </h4>
               {hideRoyalitiesInfo && (
-                <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                  <div className="royalities-info-text">
-                    <p>
-                      Royalties determines the percentage you, as a creator, will get from sales of
-                      this NFT on the secondary markets.
-                    </p>
-                  </div>
-                </Animated>
+                <div className="royalities-info-text">
+                  <p>
+                    Royalties determines the percentage you, as a creator, will get from sales of
+                    this NFT on the secondary markets.
+                  </p>
+                </div>
               )}
               <label className="switch">
                 <input
@@ -639,23 +633,21 @@ const MintSingleNft = ({ onClick }) => {
               </label>
             </div>
             {royalities && (
-              <Animated animationIn="fadeIn">
-                <div className="percent__amount">
-                  <div className="inp__container">
-                    <Input
-                      type="text"
-                      label="Percent amount"
-                      inputMode="numeric"
-                      pattern="[0-9]"
-                      placeholder="Enter percent amount"
-                      value={percentAmount}
-                      onChange={(e) => handleInputChange(e.target.value)}
-                    />
-                    <span>%</span>
-                  </div>
-                  <span className="suggested">Suggested: 10%, 20%, 30%</span>
+              <div className="percent__amount">
+                <div className="inp__container">
+                  <Input
+                    type="text"
+                    label="Percent amount"
+                    inputMode="numeric"
+                    pattern="[0-9]"
+                    placeholder="Enter percent amount"
+                    value={percentAmount}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                  />
+                  <span>%</span>
                 </div>
-              </Animated>
+                <span className="suggested">Suggested: 10%, 20%, 30%</span>
+              </div>
             )}
           </div>
           {/* )} */}

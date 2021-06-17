@@ -11,8 +11,10 @@
     padding: 10px 0 10px 24px;
     background: $white;
     img {
-      width: 78px;
-      height: 21px;
+      max-width: 78px;
+      max-height: 25px;
+      object-fit: fill;
+      image-rendering: pixelated;
     }
     @include lg {
       left: 100px;
