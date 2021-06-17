@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
 import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurve';
@@ -18,12 +19,14 @@ const MintPolymorph = () => {
       </WelcomeWrapper>
       <Section2HorizontalScroll />
       <div className="section4">
-        <div className="section4--child">
-          <BondingCurve value={sliderValue} />
-          {/* <div className="background--vertical--text--block">
-            <p>pellentesque.</p>
-          </div> */}
-        </div>
+        <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
+          <div className="section4--child">
+            <BondingCurve value={sliderValue} />
+            {/* <div className="background--vertical--text--block">
+              <p>pellentesque.</p>
+            </div> */}
+          </div>
+        </AnimatedOnScroll>
       </div>
     </div>
   );
