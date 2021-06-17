@@ -278,7 +278,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     className="light-border-button"
                     onClick={() => {
                       setAuction(futureAuction);
-                      history.push('/auction-settings', futureAuction.id);
+                      history.push('/setup-auction/auction-settings', futureAuction.id);
                     }}
                   >
                     Edit
@@ -308,10 +308,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   {futureAuction.headline || futureAuction.link ? (
                     <Button
                       className="light-button"
-                      // onClick={() => {
-                      //   setAuction(futureAuction);
-                      //   history.push('/finalize-auction', futureAuction.id);
-                      // }}
+                      onClick={() => {
+                        setAuction(futureAuction);
+                        history.push('/finalize-auction', futureAuction.id);
+                      }}
                       disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                     >
                       Start
