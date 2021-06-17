@@ -120,101 +120,101 @@ const Main = () => {
             </div>
           </div>
         ) : (
-          <div className="account-grid-name1">
-            <div className="account-picture">
-              <div className="account-image">
-                {accountImage && (
-                  <img
-                    className="account-img"
-                    src={URL.createObjectURL(accountImage)}
-                    alt="Avatar"
+          <Animated animationIn="zoomIn">
+            <div className="account-grid-name1">
+              <div className="account-picture">
+                <div className="account-image">
+                  {accountImage && (
+                    <img
+                      className="account-img"
+                      src={URL.createObjectURL(accountImage)}
+                      alt="Avatar"
+                    />
+                  )}
+                  {!accountImage && loggedInArtist.avatar && (
+                    <img
+                      className="account-img"
+                      src={URL.createObjectURL(loggedInArtist.avatar)}
+                      alt="Avatar"
+                    />
+                  )}
+                  {!accountImage && !loggedInArtist.avatar && (
+                    <img className="default-img" src={defaultImage} alt="Avatar" />
+                  )}
+                </div>
+                <div className="account-picture-editing">
+                  <p>We recomend an image of at least 400x400.</p>
+                  <Button
+                    className="light-border-button"
+                    onClick={() => accountInput.current.click()}
+                  >
+                    Choose file
+                  </Button>
+                  <input
+                    type="file"
+                    className="inp-disable"
+                    ref={accountInput}
+                    onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
                   />
-                )}
-                {!accountImage && loggedInArtist.avatar && (
-                  <img
-                    className="account-img"
-                    src={URL.createObjectURL(loggedInArtist.avatar)}
-                    alt="Avatar"
-                  />
-                )}
-                {!accountImage && !loggedInArtist.avatar && (
-                  <img className="default-img" src={defaultImage} alt="Avatar" />
-                )}
+                </div>
               </div>
-              <div className="account-picture-editing">
-                <p>We recomend an image of at least 400x400.</p>
-                <Button
-                  className="light-border-button"
-                  onClick={() => accountInput.current.click()}
-                >
-                  Choose file
-                </Button>
-                <input
-                  type="file"
-                  className="inp-disable"
-                  ref={accountInput}
-                  onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
+              <div className="account-grid-name-editing">
+                <h5>Display name</h5>
+                <Input
+                  placeholder="Enter your display name"
+                  className="inp"
+                  value={accountName}
+                  onChange={(e) => setAccountName(e.target.value)}
                 />
-              </div>
-            </div>
-            <div className="account-grid-name-editing">
-              <h5>Display name</h5>
-              <Input
-                placeholder="Enter your display name"
-                className="inp"
-                value={accountName}
-                onChange={(e) => setAccountName(e.target.value)}
-              />
-              <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
-                Universe page address
-                <div className="universe__page__address">
-                  <img src={infoIcon} alt="Info Icon" />
-                  {hideIcon && (
-                    <Animated animationIn="zoomIn">
+                <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
+                  Universe page address
+                  <div className="universe__page__address">
+                    <img src={infoIcon} alt="Info Icon" />
+                    {hideIcon && (
                       <div className="info-text1">
                         <p>
                           Universe page is your own brand landing page within the Universe
                           ecosystem. It can contain your logo, description, and social links.
                         </p>
                       </div>
-                    </Animated>
-                  )}
-                </div>
-              </h5>
+                    )}
+                  </div>
+                </h5>
 
-              <Input
-                placeholder="Enter your universe page address"
-                className={inputName}
-                value={accountPage}
-                onChange={(e) =>
-                  e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
-                }
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
-              />
-              {accountName !== loggedInArtist.name ||
-              accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||
-              (accountImage &&
-                loggedInArtist.avatar &&
-                accountImage.name !== loggedInArtist.avatar.name) ? (
-                <div className="display-warning">
-                  <img alt="" src={warningIcon} />
-                  <p>
-                    Your edits will be visible on the My Universe landing page but will not be
-                    displayed on the current running auctions landing pages.
-                  </p>
+                <Input
+                  placeholder="Enter your universe page address"
+                  className={inputName}
+                  value={accountPage}
+                  onChange={(e) =>
+                    e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
+                  }
+                  onFocus={handleOnFocus}
+                  onBlur={handleOnBlur}
+                />
+                {accountName !== loggedInArtist.name ||
+                accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||
+                (accountImage &&
+                  loggedInArtist.avatar &&
+                  accountImage.name !== loggedInArtist.avatar.name) ? (
+                  <div className="display-warning">
+                    <img alt="" src={warningIcon} />
+                    <p>
+                      Your edits will be visible on the My Universe landing page but will not be
+                      displayed on the current running auctions landing pages.
+                    </p>
+                  </div>
+                ) : null}
+                <div className="account-display-buttons">
+                  <Button className="light-button" onClick={() => saveDisplayChanges()}>
+                    Save changes
+                  </Button>
+                  <Button className="light-border-button" onClick={() => cancelDisplayChanges()}>
+                    Cancel
+                  </Button>
                 </div>
-              ) : null}
-              <div className="account-display-buttons">
-                <Button className="light-button" onClick={() => saveDisplayChanges()}>
-                  Save changes
-                </Button>
-                <Button className="light-border-button" onClick={() => cancelDisplayChanges()}>
-                  Cancel
-                </Button>
               </div>
             </div>
-          </div>
+          </Animated>
         )}
       </div>
     </div>

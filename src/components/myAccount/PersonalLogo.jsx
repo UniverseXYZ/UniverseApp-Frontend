@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
+import { Animated } from 'react-animated-css';
 import AppContext from '../../ContextAPI';
 import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
@@ -46,48 +47,50 @@ const PersonalLogo = () => {
               </Button>
             </div>
           ) : (
-            <div className="account-grid-logo-editing">
-              <div className="import-logo">
-                <img alt="" className="cloud" src={cloudIcon} />
-                <h5>Drop your file here</h5>
-                <p>(min 300x300px, SVG/PNG/JPEG, max 1mb)</p>
-                <input
-                  type="file"
-                  className="inp-disable"
-                  ref={logoInput}
-                  onChange={(e) => e.target.files[0] && setLogo(e.target.files[0])}
-                />
-                <Button className="light-border-button" onClick={() => logoInput.current.click()}>
-                  Choose file
-                </Button>
-                <div className="import-logo-preview">
-                  <h6>Preview</h6>
-                  <div className="logo-picture">
-                    {logo && (
-                      <img className="logo-img" src={URL.createObjectURL(logo)} alt="Cover" />
-                    )}
-                    {!logo && loggedInArtist.personalLogo && (
-                      <img
-                        className="logo-img"
-                        src={URL.createObjectURL(loggedInArtist.personalLogo)}
-                        alt="Cover"
-                      />
-                    )}
-                    {!loggedInArtist.personalLogo && !logo && (
-                      <img className="default-image" src={defaultImage} alt="Cover" />
-                    )}
+            <Animated animationIn="zoomIn">
+              <div className="account-grid-logo-editing">
+                <div className="import-logo">
+                  <img alt="" className="cloud" src={cloudIcon} />
+                  <h5>Drop your file here</h5>
+                  <p>(min 300x300px, SVG/PNG/JPEG, max 1mb)</p>
+                  <input
+                    type="file"
+                    className="inp-disable"
+                    ref={logoInput}
+                    onChange={(e) => e.target.files[0] && setLogo(e.target.files[0])}
+                  />
+                  <Button className="light-border-button" onClick={() => logoInput.current.click()}>
+                    Choose file
+                  </Button>
+                  <div className="import-logo-preview">
+                    <h6>Preview</h6>
+                    <div className="logo-picture">
+                      {logo && (
+                        <img className="logo-img" src={URL.createObjectURL(logo)} alt="Cover" />
+                      )}
+                      {!logo && loggedInArtist.personalLogo && (
+                        <img
+                          className="logo-img"
+                          src={URL.createObjectURL(loggedInArtist.personalLogo)}
+                          alt="Cover"
+                        />
+                      )}
+                      {!loggedInArtist.personalLogo && !logo && (
+                        <img className="default-image" src={defaultImage} alt="Cover" />
+                      )}
+                    </div>
                   </div>
                 </div>
+                <div className="account-display-buttons">
+                  <Button className="light-button" onClick={() => saveLogoChanges()}>
+                    Save changes
+                  </Button>
+                  <Button className="light-border-button" onClick={() => cancelLogoChanges()}>
+                    Cancel
+                  </Button>
+                </div>
               </div>
-              <div className="account-display-buttons">
-                <Button className="light-button" onClick={() => saveLogoChanges()}>
-                  Save changes
-                </Button>
-                <Button className="light-border-button" onClick={() => cancelLogoChanges()}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
+            </Animated>
           )}
         </div>
       </div>

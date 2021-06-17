@@ -401,14 +401,12 @@ const CreateNftCol = (props) => {
                   Number of editions <img src={infoIcon} alt="Info Icon" />
                 </h5>
                 {hideIcon && (
-                  <Animated animationIn="zoomIn">
-                    <div className="info-text">
-                      <p>
-                        Total amount of NFTs that will be distributed to the current reward tier
-                        winners.
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="info-text">
+                    <p>
+                      Total amount of NFTs that will be distributed to the current reward tier
+                      winners.
+                    </p>
+                  </div>
                 )}
               </div>
               <Input
@@ -430,14 +428,12 @@ const CreateNftCol = (props) => {
                   Properties (optional) <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideIcon1 && (
-                  <Animated animationIn="zoomIn">
-                    <div className="properties-info-text">
-                      <p>
-                        Adding properties allows you to specify the character NFT traits, the goods
-                        NFT sizes, or any other details you would like to specify.
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="properties-info-text">
+                    <p>
+                      Adding properties allows you to specify the character NFT traits, the goods
+                      NFT sizes, or any other details you would like to specify.
+                    </p>
+                  </div>
                 )}
               </div>
 
@@ -491,14 +487,12 @@ const CreateNftCol = (props) => {
                   Royalties <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideRoyalitiesInfo && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                    <div className="royalities-info-text">
-                      <p>
-                        Royalties determines the percentage you, as a creator, will get from sales
-                        of this NFT on the secondary markets.
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="royalities-info-text">
+                    <p>
+                      Royalties determines the percentage you, as a creator, will get from sales of
+                      this NFT on the secondary markets.
+                    </p>
+                  </div>
                 )}
                 <label className="switch">
                   <input

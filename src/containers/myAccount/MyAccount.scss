@@ -466,6 +466,9 @@
           }
         }
       }
+      .animated.zoomIn{
+        width: 100%;
+      }
       .account-grid-about-editing {
         width: 100%;
         textarea {
@@ -498,6 +501,9 @@
       width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
+      .animated.zoomIn{
+        width: 100%;
+      }
 
       h5 {
         font-family: $spaceGroteskFont;
@@ -636,6 +642,9 @@
       width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
+      .animated.zoomIn{
+        width: 100%;
+      }
 
       h5 {
         font-family: $spaceGroteskFont;
