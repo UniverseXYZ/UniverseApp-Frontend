@@ -5,6 +5,13 @@
     width: 100%;
     min-height: 800px;
     background: radial-gradient(171.4% 283.45% at -7.47% -21.19%, rgba(42, 208, 202, 0.2) 0%, rgba(225, 246, 100, 0.2) 22.92%, rgba(254, 176, 254, 0.2) 46.88%, rgba(171, 179, 252, 0.2) 68.23%, rgba(93, 247, 164, 0.2) 87.5%, rgba(88, 196, 246, 0.2) 100%), #FFFFFF;
+    position: relative;
+    @include lg {
+        min-height: 650px;
+    }
+    @include sm {
+        min-height: 495px;
+    }
     h3 {
         max-width: 1110px;
         width: 100%;
@@ -15,6 +22,10 @@
         font-style: normal;
         font-size: 32px;
         color: #000000;
+        margin-bottom: 150px;
+        @include lg {
+            font-size: 26px;
+        }
     }
     .row2--unique--skins {
         max-width: 1110px;
@@ -28,14 +39,40 @@
         letter-spacing: -1px;
         color: #000000;
         mix-blend-mode: overlay;
-        position: relative;
-        top: 120px;
+        position: absolute;
+        top: 250px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        @include xl {
+            font-size: 80px;
+            padding: 0 60px;
+        }
+        @include lg {
+            font-size: 80px;
+            padding: 0 30px;
+        }
+        @include sm {
+            font-size: 50px;
+            padding: 0 20px;
+            font-size: 45px;
+        }
     }
     .horizontal--scroll--parent {
         width: 100%;
         height: 350px;
         .child--scroll--1 {
             margin-left: 40vw !important;
+            @include lg {
+                margin-left: 35vw !important;
+            }
+            // @include md {
+            //     margin-left: 30vw;
+            // }
+            // @include sm {
+            //     margin-left: 25vw !important;
+            // }
         }
         .child--scroll--9 {
             margin-right: 40vw !important;
@@ -43,7 +80,18 @@
         .child--scroll {
             width: 330px;
             height: 330px;
-            margin: 0 100px;
+            margin: 0 80px;
+            @include xl {
+                margin: 0 50px;
+            }
+            @include lg {
+                margin: 0 15px;
+            }
+            @include sm {
+                width: 200px;
+                height: 200px;
+                margin: 0;
+            }
             p {
                 text-align: center;
                 font-family:$spaceGroteskFont;
