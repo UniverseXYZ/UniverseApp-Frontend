@@ -67,15 +67,18 @@
             @include lg {
                 margin-left: 35vw !important;
             }
-            // @include md {
-            //     margin-left: 30vw;
-            // }
-            // @include sm {
-            //     margin-left: 25vw !important;
-            // }
+            @include sm {
+                margin-left: 20vw !important;
+            }
         }
         .child--scroll--9 {
             margin-right: 40vw !important;
+            @include lg {
+                margin-right: 35vw !important;
+            }
+            @include sm {
+                margin-right: 20vw !important;
+            }
         }
         .child--scroll {
             width: 330px;
