@@ -4,17 +4,16 @@
 .artist__page {
   .artist__personal__logo {
     position: fixed;
-    top: 20px;
+    top: 12px;
     z-index: 999;
     left: 220px;
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     padding: 10px 0 10px 24px;
     background: $white;
     img {
-      max-width: 78px;
-      max-height: 25px;
-      object-fit: fill;
-      image-rendering: pixelated;
+      width: 80px;
+      height: 44px;
+      object-fit: contain;
     }
     @include lg {
       left: 100px;
@@ -272,6 +271,8 @@
       .tab__content {
         .empty__nfts {
           width: 100%;
+          margin-top: 100px;
+          margin-bottom: 40px;
           h3 {
             font-family: $spaceGroteskFont;
             font-style: normal;
