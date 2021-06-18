@@ -368,15 +368,15 @@ const AuctionSettings = () => {
                     onMouseLeave={() => setHideIcon1(false)}
                     onBlur={() => setHideIcon1(false)}
                   />
+                  {hideIcon1 && (
+                    <div className="info-text">
+                      <p>
+                        Any bid in the last 3 minutes of an auction will extend the auction for an
+                        additional 3 minutes.
+                      </p>
+                    </div>
+                  )}
                 </span>
-                {hideIcon1 && (
-                  <div className="info-text">
-                    <p>
-                      Any bid in the last 3 minutes of an auction will extend the auction for an
-                      additional 3 minutes.
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
           </div>

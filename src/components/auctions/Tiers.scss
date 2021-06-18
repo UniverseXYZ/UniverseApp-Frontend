@@ -237,13 +237,13 @@
         color: #000000;
         box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
         border-radius: 12px;
-        width: 250px;
+        width: 274px;
         min-height: 70px;
         padding: 16px;
         font-size: 12px;
         font-family: $spaceGroteskFont;
-        bottom: 20px;
-        left: 60%;
+        bottom: 26px;
+        left: 180px;
         transform: translateX(-50%);
         font-weight: normal;
       }
@@ -258,6 +258,15 @@
         width: 100%;
         input {
           width: 100%;
+          font-family: $spaceGroteskFont;
+          font-weight: normal;
+          font-style: normal;
+          font-size: 16px;
+          line-height: 20px;
+
+          &::placeholder {
+            color: rgba(0, 0, 0, 0.2);
+          }
         }
       }
 
@@ -269,6 +278,11 @@
         align-items: center;
         .button-name {
           padding-left: 10px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 20px;
         }
       }
       .bid-type.disabled {
@@ -350,10 +364,11 @@
       color: #000000;
       box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
       border-radius: 12px;
-      width: 229px;
-      min-height: 70px;
+      width: 235px;
+      height: fit-content;
       padding: 16px;
       font-size: 12px;
+      line-height: 150%;
       font-family: $spaceGroteskFont;
       bottom: 25px;
       left: 100%;
