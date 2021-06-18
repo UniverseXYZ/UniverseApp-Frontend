@@ -1,37 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import HorizontalRangeSlider from '../../ui-elements/HorizontalRangeSlider';
+import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button';
+import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
+import PriceETHIconWhite from '../../../assets/images/PriceETHIconWhite.png';
+import PriceETHIconBlack from '../../../assets/images/PriceETHIconBlack.png';
 import './styles/BondingCurve.scss';
 
 const BondingCurve = (props) => {
-  const { value, setValue, min, max, step } = props;
+  const { value, setValue, min, max, step, colorPriceIcon } = props;
+  const [quantity, setQuantity] = useState(1);
+
   return (
     <div className="welcome--slider--bonding--curve">
       <div className="row1">
-        <div className="alert--info">
+        <h5>Distribution curve</h5>
+      </div>
+      <HorizontalSlider />
+      <div className="row3--section">
+        <QuantityUpDownGroup value={quantity} onChange={setQuantity} labelText="Quantity" />
+        <Button className="light-button">Mint now</Button>
+        <div className="price--block">
           <p>
-            The Bonding Curve contract will mint you an original Polymorph. This base skin will be
-            permanent but the traits and items will be morphable at any time.
+            <span className="price--label">Price :</span>
+            <img
+              alt="img"
+              src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
+            />
+            {(quantity * 0.0777).toFixed(4)}
           </p>
         </div>
-        <h5>Bonding curve</h5>
-        <p>
-          12500/25000
-          <span> Minted</span>
-        </p>
       </div>
-      <HorizontalRangeSlider
-        value={value}
-        setValue={setValue}
-        labelLeft="0.1 ETH"
-        labelRight="24 ETH"
-        className="mint--polymorph--welcome--slider"
-        min={min}
-        max={max}
-        step={step}
-      />
-      <Button className="light-button">Mint now</Button>
     </div>
   );
 };
@@ -42,6 +41,7 @@ BondingCurve.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
+  colorPriceIcon: PropTypes.string,
 };
 
 BondingCurve.defaultProps = {
@@ -49,6 +49,7 @@ BondingCurve.defaultProps = {
   min: 0.1,
   max: 24,
   step: 0.1,
+  colorPriceIcon: 'white',
 };
 
 export default BondingCurve;

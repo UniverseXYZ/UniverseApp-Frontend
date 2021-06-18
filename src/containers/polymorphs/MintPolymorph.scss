@@ -93,39 +93,45 @@
                 background-color: $white;
                 -webkit-box-shadow: 0px 0px 20px 0.01px rgba(0, 0, 0, 0.2); 
                 box-shadow: 0px 0px 20px 0.01px rgba(0, 0, 0, 0.2);
-                .alert--info {
-                    display: none;
-                }
                 h5 {
                     color: $black;
                 }
                 p {
                     color: $black;
-                    span {
-                        color: rgba(0, 0, 0, 0.5);
+                }
+                .row3--section {
+                    .quantity--input--group {
+                        .controll-box {
+                            color: $black;
+                            border: 1px solid rgba(0, 0, 0, 0.2);
+                            button {
+                                background-color: rgba(0, 0, 0, 0.2);
+                                color: $black;
+                            }
+                        }
                     }
                 }
-                .bubble {
-                    color: rgba(0, 0, 0, 0.2);
-                    border: 1px solid rgba(0, 0, 0, 0.2);
-                    // background-color: ;
-                    span {
-                        color: $black;
-                    }
+                // .bubble {
+                //     color: rgba(0, 0, 0, 0.2);
+                //     border: 1px solid rgba(0, 0, 0, 0.2);
+                //     // background-color: ;
+                //     span {
+                //         color: $black;
+                //     }
                     
-                }
-                .bubble::before {
-                    background-color: $white !important;
-                    border-color: rgba(0, 0, 0, 0.2);
-                }
-                input[type=range]::-webkit-slider-thumb {
-                    background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
-                    border: 6px solid $white !important;
-                }
-                .input[type=range]::-moz-range-thumb {
-                    background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
-                    border: 6px solid $white !important;
-                }
+                // }
+                // .bubble::before {
+                //     background-color: $white !important;
+                //     border-color: rgba(0, 0, 0, 0.2);
+                // }
+                // input[type=range]::-webkit-slider-thumb {
+                //     background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
+                //     border: 6px solid $white !important;
+                // }
+                // .input[type=range]::-moz-range-thumb {
+                //     background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
+                //     border: 6px solid $white !important;
+                // }
             }
             // .background--vertical--text--block {
             //     width: 100%;

@@ -30,6 +30,8 @@ const MintPolymorph = () => {
         hintText="Here is where we will mint Polymorphs. Polymorphs are completely random. Once you own a Polymorph the items can be morphed again multiple times to your liking."
         ellipsesLeft={false}
         ellipsesRight={false}
+        // bgTextLeft
+        // bgTextRight
       >
         <BondingCurve value={sliderValue} />
       </WelcomeWrapper>
@@ -38,7 +40,7 @@ const MintPolymorph = () => {
       <div className="section4">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="section4--child">
-            <BondingCurve value={sliderValue} />
+            <BondingCurve value={sliderValue} colorPriceIcon="black" />
             {/* <div className="background--vertical--text--block">
               <p>pellentesque.</p>
             </div> */}
