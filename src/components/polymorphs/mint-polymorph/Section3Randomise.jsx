@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Marquee from 'react-fast-marquee';
 import WrapperCenter from '../WrapperCenter';
@@ -42,7 +43,17 @@ const marqueText = () => (
   </>
 );
 
-const Section3Randomise = () => {
+const title = () => (
+  <>
+    <h3 className="tittle--randomise--block">Play with the traits</h3>
+    <p className="hint--text--randomise--block">
+      Experiment with a collection of 40+ traits by clicking the button below
+    </p>
+  </>
+);
+
+const Section3Randomise = (props) => {
+  const { mobile } = props;
   const [randomBgNumber, setRandomBgNumber] = useState(0);
   const [randomHeadwearsNumber, setRandomHeadwearsNumber] = useState(1);
   const [randomPantsNumber, setRandomPantsNumber] = useState(1);
@@ -54,12 +65,14 @@ const Section3Randomise = () => {
     randomIndex(randomPantsNumber, setRandomPantsNumber);
     randomIndex(randomTorsoNumber, setRandomTorsoNumber);
   };
+  console.log(mobile);
   return (
     <div className="section3--randomise--parent">
       <WrapperCenter>
         <WrapperCenterTwoColumns
           leftBlock={
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
+              {!!mobile && title()}
               <div className="left--randomise--img--block--parent">
                 <div
                   className="left--randomise--img--block--child"
@@ -106,8 +119,7 @@ const Section3Randomise = () => {
           }
           rightBlock={
             <div className="right--randomise--block--parent">
-              <h3>Play with the traits</h3>
-              <p>Experiment with a collection of 40+ traits by clicking the button below </p>
+              {!mobile && title()}
               <div className="warning--popup--info">
                 <div className="warning--popup--info--child">
                   <img alt="title" src={IconInfoYellow} />
@@ -128,6 +140,14 @@ const Section3Randomise = () => {
       </WrapperCenter>
     </div>
   );
+};
+
+Section3Randomise.propTypes = {
+  mobile: PropTypes.bool,
+};
+
+Section3Randomise.defaultProps = {
+  mobile: false,
 };
 
 export default Section3Randomise;

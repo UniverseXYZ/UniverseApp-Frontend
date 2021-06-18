@@ -9,14 +9,31 @@
         }
         @include lg {
             padding: 0 20px;
+            min-height: 750px;
         }
         @include md {
             padding: 0 20px;
+            min-height: 600px;
         }
+        @include sm {
+            flex-direction: column;
+            justify-content: center;
+            min-height: 550px;
+            .wrapper--left--column {
+                width: 100%;
+            }
+            .wrapper--right--column {
+                width: 100%;
+            }
+        }
+        
     }
     .left--randomise--img--block--parent {
         overflow: hidden;
         filter: drop-shadow(0px 10px 40px rgba(136, 120, 172, 0.2));
+        @include sm {
+            margin: 30px 0;
+        }
         .left--randomise--img--block--child {
             max-width: 540px;
             width: 100%;
@@ -33,6 +50,9 @@
             }
             @include md {
                 border-radius: 15px;
+            }
+            @include sm {
+                border-radius: 4.8%;
             }
             overflow: hidden;
             .headwears--img {
@@ -135,38 +155,16 @@
         @include xl {
             padding: 0 30px;
         }
+        @include sm {
+            padding: 0;
+        }
         .right--randomise--block--parent {
             max-width: 450px;
             margin: 0 auto;
-            h3 {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-size: 32px;
-                line-height: 140%;
-                color: #000000;
-                margin: 20px 0;
-                @include xl {
-                    font-size: 26px;
-                }
-                @include lg {
-                    font-size: 21px;
-                }
-            }
-            p {
-                font-family:  $spaceGroteskFont;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 18px;
-                line-height: 150%;
-                color: rgba(0, 0, 0, 0.6);
-                margin-bottom: 40px;
-                @include lg {
-                    font-size: 13px;
-                    margin-bottom: 20px;
-                }
-                @include md {
-                    margin-bottom: 20px;
-                }
+            @include sm {
+                display: flex;
+                flex-direction: column-reverse;
+                max-width:  576px;
             }
             .warning--popup--info {
                 max-width: 445px;
@@ -177,6 +175,10 @@
                 box-sizing: border-box;
                 @include lg {
                     padding: 15px;
+                }
+                @include sm {
+                    margin-bottom: 50px;
+                    max-width: 576px;
                 }
                 .warning--popup--info--child {
                     display: flex;
@@ -207,6 +209,11 @@
                 @include md {
                     margin-top: 20px;
                 }
+                @include sm {
+                    width: 100%;
+                    margin-top: 0;
+                    margin-bottom: 30px;
+                }
                 img {
                     position: relative;
                     left: 8px;
@@ -217,6 +224,40 @@
             }
         } 
     }
-    
-    
+    .tittle--randomise--block {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-size: 32px;
+        line-height: 140%;
+        color: #000000;
+        margin: 20px 0;
+        @include xl {
+            font-size: 26px;
+        }
+        @include lg {
+            font-size: 21px;
+        }
+        @include sm {
+            text-align: center;
+        }
+    }
+    .hint--text--randomise--block {
+        font-family:  $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 40px;
+        @include lg {
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        @include md {
+            margin-bottom: 20px;
+        }
+        @include sm {
+            text-align: center;
+        }
+    }
 }
