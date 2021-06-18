@@ -102,8 +102,10 @@ const MyAccount = () => {
         setTwitterLink={setTwitterLink}
         instagramLink={instagramLink}
         setInstagramLink={setInstagramLink}
+        saveChanges={saveChanges}
+        cancelChanges={cancelChanges}
       />
-      <div className="my-account container">
+      {/* <div className="my-account container">
         <div className="account-grid-container">
           <div className="account-display-buttons">
             <Button className="light-button" onClick={() => saveChanges()}>
@@ -114,7 +116,7 @@ const MyAccount = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

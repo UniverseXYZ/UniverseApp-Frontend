@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Logo from '../../assets/images/light.svg';
 import twitterIcon from '../../assets/images/twitter-icon.svg';
 import discordIcon from '../../assets/images/discord-icon.svg';
-import coinGesco from '../../assets/images/coin-gecko-icon.svg';
+import coinGesco from '../../assets/images/coin-gecko-icon.png';
 import youtubeIcon from '../../assets/images/youtube.svg';
 import mediumIcon from '../../assets/images/medium.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';

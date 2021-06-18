@@ -8,7 +8,14 @@ import pencilIcon from '../../assets/images/edit.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 
-const Social = ({ twitterLink, setTwitterLink, instagramLink, setInstagramLink }) => {
+const Social = ({
+  twitterLink,
+  setTwitterLink,
+  instagramLink,
+  setInstagramLink,
+  saveChanges,
+  cancelChanges,
+}) => {
   const { loggedInArtist } = useContext(AppContext);
   const [showSocial, setShowSocial] = useState(true);
 
@@ -92,14 +99,14 @@ const Social = ({ twitterLink, setTwitterLink, instagramLink, setInstagramLink }
               <></>
             )}
 
-            {/* <div className="account-display-buttons">
-                  <Button className="light-button" onClick={() => saveSocialChanges()}>
-                    Save changes
-                  </Button>
-                  <Button className="light-border-button" onClick={() => cancelSocialChanges()}>
-                    Cancel
-                  </Button>
-                </div> */}
+            <div className="account-display-buttons">
+              <Button className="light-button" onClick={() => saveChanges()}>
+                Save changes
+              </Button>
+              <Button className="light-border-button" onClick={() => cancelChanges()}>
+                Cancel
+              </Button>
+            </div>
           </div>
           {/* </Animated> */}
           {/* )} */}
@@ -114,6 +121,8 @@ Social.propTypes = {
   setTwitterLink: PropTypes.func,
   instagramLink: PropTypes.string,
   setInstagramLink: PropTypes.func,
+  saveChanges: PropTypes.func,
+  cancelChanges: PropTypes.func,
 };
 
 Social.defaultProps = {
@@ -121,6 +130,8 @@ Social.defaultProps = {
   setTwitterLink: () => {},
   instagramLink: '',
   setInstagramLink: () => {},
+  saveChanges: () => {},
+  cancelChanges: () => {},
 };
 
 export default Social;
