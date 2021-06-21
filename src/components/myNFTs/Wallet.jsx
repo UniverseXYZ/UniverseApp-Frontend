@@ -449,7 +449,7 @@ const Wallet = ({
           </button>
         </div>
       )}
-      {isCreatingAction && tierById && (
+      {isCreatingAction && (
         // <div>
         <div className="selected-ntf">
           <div className="container selected-body">

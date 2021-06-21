@@ -45,7 +45,6 @@ const AuctionReview = () => {
       setBidicon(snxIcon);
     }
   }, []);
-  console.log(myAuctions);
 
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {

@@ -654,11 +654,69 @@
         line-height: 22px;
         color: rgba(0, 0, 0, 0.4);
         min-width: 285px;
+        margin-bottom: 14px;
 
         @include lg {
           min-width: 185px;
           margin-bottom: 20px;
         }
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+        margin-bottom: 20px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: '';
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(16px);
+        -ms-transform: translateX(16px);
+        transform: translateX(16px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 50px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
       }
 
       .account-grid-social-edit {
@@ -810,6 +868,7 @@
       }
       @include sm {
         display: grid;
+        justify-content: unset;
       }
     }
 

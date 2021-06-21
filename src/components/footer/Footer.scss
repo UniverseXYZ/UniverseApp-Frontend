@@ -23,10 +23,10 @@ footer {
           width: 100%;
           p {
             color: $white;
-            font-family: $spaceGroteskFont;
+            font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 12px;
             margin-bottom: 14px;
             line-height: 22px;
             @include md {
@@ -79,10 +79,10 @@ footer {
           position: relative;
           p {
             color: $white;
-            font-family: $spaceGroteskFont;
+            font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 12px;
             margin-bottom: 14px;
             line-height: 22px;
             @include md {
@@ -100,6 +100,10 @@ footer {
               cursor: pointer;
               margin-right: 15px;
               padding: 15px;
+              img {
+                width: 22px;
+                height: 22px;
+              }
               @include sm {
                 padding: 10px;
               }

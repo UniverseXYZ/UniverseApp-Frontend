@@ -44,14 +44,14 @@
       }
 
       .date__input {
-        // position: relative;
+        position: relative;
         width: 100%;
 
         .callendar__image {
           position: absolute;
-          right: 1px;
-          top: 24px;
-          height: 50px;
+          right: 0px;
+          top: 23px;
+          height: 52px;
         }
       }
       .intup-l {
@@ -93,8 +93,8 @@
         font-size: 12px;
         font-family: $spaceGroteskFont;
         bottom: 25px;
-        left: 68%;
-        transform: translateX(-50%);
+        left: 100%;
+        transform: translateX(-100%);
         font-weight: normal;
       }
       .drop-down {
