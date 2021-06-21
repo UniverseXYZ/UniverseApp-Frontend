@@ -30,10 +30,10 @@ const MintPolymorph = () => {
         hintText="Here is where we will mint Polymorphs. Polymorphs are completely random. Once you own a Polymorph the items can be morphed again multiple times to your liking."
         ellipsesLeft={false}
         ellipsesRight={false}
-        // bgTextLeft
-        // bgTextRight
+        bgTextLeft
+        bgTextRight
       >
-        <BondingCurve value={sliderValue} max={10000} mobile={mobile} />
+        <BondingCurve value={sliderValue} max={10000} mobile={mobile} blur />
       </WelcomeWrapper>
       <Section2HorizontalScroll />
       <Section3Randomise mobile={mobile} />

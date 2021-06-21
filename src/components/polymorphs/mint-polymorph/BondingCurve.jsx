@@ -5,14 +5,18 @@ import Button from '../../button/Button';
 import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
 import PriceETHIconWhite from '../../../assets/images/PriceETHIconWhite.png';
 import PriceETHIconBlack from '../../../assets/images/PriceETHIconBlack.png';
+import backgroundTextLeft from '../../../assets/images/MintPolymorph-welcome-bg-left.png';
+import backgroundTextRight from '../../../assets/images/MintPolymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
 
 const BondingCurve = (props) => {
-  const { value, setValue, min, max, colorPriceIcon, color1, color2, mobile } = props;
+  const { value, setValue, min, max, colorPriceIcon, color1, color2, mobile, blur } = props;
   const [quantity, setQuantity] = useState(1);
 
   return (
     <div className="welcome--slider--bonding--curve">
+      {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
+      {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
         <h5>Distribution curve</h5>
       </div>
@@ -47,6 +51,7 @@ BondingCurve.propTypes = {
   color1: PropTypes.string,
   color2: PropTypes.string,
   mobile: PropTypes.bool,
+  blur: PropTypes.bool,
 };
 
 BondingCurve.defaultProps = {
@@ -57,6 +62,7 @@ BondingCurve.defaultProps = {
   color1: 'white',
   color2: 'black',
   mobile: false,
+  blur: false,
 };
 
 export default BondingCurve;

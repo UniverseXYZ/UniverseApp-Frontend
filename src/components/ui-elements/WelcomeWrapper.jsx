@@ -30,9 +30,23 @@ const WelcomeWrapper = (props) => {
     <div className="welcome--section">
       {ellipsesLeft && <img className="ellipse-l" src={ellipses} alt="Ellipses" />}
       {ellipsesRight && <img className="ellipse-r" src={ellipses} alt="Ellipses" />}
-      {bgTextLeft && <img className="text-l" src={backgroundTextLeft} alt="Ellipses" />}
-      {bgTextRight && <img className="text-r" src={backgroundTextRight} alt="Ellipses" />}
       <div className="welcome__section__container">
+        {bgTextLeft && (
+          <div className="text-l">
+            <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+              <img src={backgroundTextLeft} alt="Ellipses" />
+            </AnimatedOnScroll>
+            <div className="opacity-l" />
+          </div>
+        )}
+        {bgTextRight && (
+          <div className="text-r">
+            <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+              <img src={backgroundTextRight} alt="Ellipses" />
+            </AnimatedOnScroll>
+            <div className="opacity-r" />
+          </div>
+        )}
         <div className="left">
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
             <h1 className="title">{title}</h1>

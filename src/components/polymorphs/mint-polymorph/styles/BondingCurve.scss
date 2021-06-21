@@ -11,6 +11,7 @@
     border-radius: 12px;
     position: relative;
     padding: 0 80px;
+    overflow: hidden;
     @include lg {
         padding: 0 50px;
     }
@@ -19,6 +20,25 @@
     }
     @include sm {
         min-height: 335px;
+    }
+    .left--blur {
+        position: absolute;
+        left: 80px;
+        top: 240px;
+        width: 250px;
+        filter: blur(40px);
+        @include sm {
+            left: 0;
+        }
+    }
+    .right--blur {
+        position: absolute;
+        right: -95px;
+        bottom: 235px;
+        filter: blur(40px);
+        width: 250px;
+        height: 450px;
+        max-height: 450px;
     }
     .row1 {
         font-family: $spaceGroteskFont;
@@ -45,10 +65,6 @@
             }
         }
     }
-    // .mint--polymorph--welcome--slider {
-    //     width: 90%;
-    //     margin: 20px auto 80px;
-    // }
     .row3--section {
         display: flex;
         justify-content: space-between;
