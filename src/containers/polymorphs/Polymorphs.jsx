@@ -52,7 +52,7 @@ const Polymorphs = () => {
         title="Polymorph Universe"
         hintText="A mutating universe where genes are randomly scrambled when bought, traded or transfered."
         popupBtnText="My polymorphs"
-        btnText="Mint polymorph"
+        btnText="Mint a morph"
         btnOnClick={() => history.push('/mint-polymorph')}
         ellipsesLeft={false}
         ellipsesRight={false}
