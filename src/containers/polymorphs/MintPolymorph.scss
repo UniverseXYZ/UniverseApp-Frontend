@@ -93,6 +93,9 @@
                 background-color: $white;
                 -webkit-box-shadow: 0px 0px 20px 0.01px rgba(0, 0, 0, 0.2); 
                 box-shadow: 0px 0px 20px 0.01px rgba(0, 0, 0, 0.2);
+                .parent--horizontall--slider {
+                    box-shadow: inset 0px 0px 20px #9a9a9a2e;
+                }
                 h5 {
                     color: $black;
                 }
@@ -111,52 +114,7 @@
                         }
                     }
                 }
-                // .bubble {
-                //     color: rgba(0, 0, 0, 0.2);
-                //     border: 1px solid rgba(0, 0, 0, 0.2);
-                //     // background-color: ;
-                //     span {
-                //         color: $black;
-                //     }
-                    
-                // }
-                // .bubble::before {
-                //     background-color: $white !important;
-                //     border-color: rgba(0, 0, 0, 0.2);
-                // }
-                // input[type=range]::-webkit-slider-thumb {
-                //     background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
-                //     border: 6px solid $white !important;
-                // }
-                // .input[type=range]::-moz-range-thumb {
-                //     background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
-                //     border: 6px solid $white !important;
-                // }
             }
-            // .background--vertical--text--block {
-            //     width: 100%;
-            //     max-width: 1110px;
-            //     height: 500px;
-            //     position: absolute;
-            //     left: 0;
-            //     right: 0;
-            //     top: 0;
-            //     bottom: 0;
-            //     margin: auto;
-            //     >p {
-            //         transform: rotate(-90deg) scale(0.2, 1);
-            //         font-family: Sharp Grotesk;
-            //         font-style: normal;
-            //         font-weight: 900;
-            //         font-size: 463.017px;
-            //         color: #000000;
-            //         opacity: 0.4;
-            //         height: 1110px;
-            //         display: flex;
-            //         align-items: flex-end;
-            //     }
-            // }
-            
         }
     }
 }

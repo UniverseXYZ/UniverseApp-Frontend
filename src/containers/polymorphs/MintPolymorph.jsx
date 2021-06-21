@@ -7,7 +7,7 @@ import Section3Randomise from '../../components/polymorphs/mint-polymorph/Sectio
 import './MintPolymorph.scss';
 
 const MintPolymorph = () => {
-  const [sliderValue, settSliderValue] = useState(3);
+  const [sliderValue, settSliderValue] = useState(4520);
   const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
@@ -33,14 +33,21 @@ const MintPolymorph = () => {
         // bgTextLeft
         // bgTextRight
       >
-        <BondingCurve value={sliderValue} />
+        <BondingCurve value={sliderValue} max={10000} mobile={mobile} />
       </WelcomeWrapper>
       <Section2HorizontalScroll />
       <Section3Randomise mobile={mobile} />
       <div className="section4">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="section4--child">
-            <BondingCurve value={sliderValue} colorPriceIcon="black" />
+            <BondingCurve
+              value={sliderValue}
+              colorPriceIcon="black"
+              color1="black"
+              color2="black"
+              max={10000}
+              mobile={mobile}
+            />
             {/* <div className="background--vertical--text--block">
               <p>pellentesque.</p>
             </div> */}
