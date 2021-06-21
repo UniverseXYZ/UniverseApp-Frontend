@@ -2044,3 +2044,133 @@
     width: 90%;
   }
 }
+.polymorph_popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 439px;
+  // min-height: 579px;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  text-align: center;
+  padding: 40px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+  h1 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 140%;
+    color: $black;
+    margin-bottom: 14px;
+    padding: 0 10px;
+
+    @include sm {
+      padding: 0%;
+      font-size: 20px;
+    }
+  }
+  p {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 160%;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 30px;
+  }
+  .polymorph_confirmation_image {
+    img {
+      height: 295px;
+      width: 295px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    &.img2x2 {
+      display: grid;
+      grid-template-columns: 140px 140px;
+      justify-content: center;
+      grid-gap: 15px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+      @media (max-width: 375px) {
+        grid-template-columns: 115px 115px;
+      }
+    }
+    &.img3x2 {
+      display: grid;
+      grid-template-columns: 89px 89px 89px;
+      justify-content: center;
+      grid-gap: 14px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+      @media (max-width: 375px) {
+        grid-template-columns: 72px 72px 72px;
+      }
+    }
+    &.img4x3 {
+      display: grid;
+      grid-template-columns: 66px 66px 66px 66px;
+      justify-content: center;
+      grid-gap: 10px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+      @media (max-width: 375px) {
+        grid-template-columns: 54px 54px 54px 54px;
+      }
+    }
+    &.img5x4 {
+      display: grid;
+      grid-template-columns: 52px 52px 52px 52px 52px;
+      justify-content: center;
+      grid-gap: 9px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+      @media (max-width: 375px) {
+        grid-template-columns: 42px 42px 42px 42px 42px;
+      }
+    }
+    @include sm {
+      width: 100%;
+    }
+  }
+  .button__div_polymorph {
+    margin-top: 40px;
+    .light-button {
+      margin-right: 12px;
+      @include sm {
+        margin-right: 0%;
+        margin-bottom: 20px;
+      }
+    }
+    @include sm {
+      display: grid;
+    }
+  }
+  @include sm {
+    width: 90%;
+    padding: 20px;
+  }
+}
