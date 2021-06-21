@@ -26,6 +26,7 @@ import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs';
 import MintPolymorph from './containers/polymorphs/MintPolymorph';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
+import { getEthPriceEtherscan } from './utils/api/etherscan';
 
 const App = () => {
   const location = useLocation();
@@ -61,6 +62,12 @@ const App = () => {
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
+  const [ethPrice, setEthPrice] = useState({});
+
+  const getEthPrice = async () => {
+    const ethUsdPice = await getEthPriceEtherscan();
+    setEthPrice(ethUsdPice);
+  };
 
   useEffect(() => {
     if (!website) {
@@ -79,6 +86,10 @@ const App = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  useEffect(async () => {
+    getEthPrice();
+  }, []);
 
   return (
     <AppContext.Provider
@@ -128,6 +139,8 @@ const App = () => {
         setWebsite,
         editProfileButtonClick,
         setEditProfileButtonClick,
+        ethPrice,
+        setEthPrice,
       }}
     >
       <Header />
