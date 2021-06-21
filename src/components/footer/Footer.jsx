@@ -191,6 +191,9 @@ const Footer = () => {
                   <li onClick={() => history.push('/team')} aria-hidden="true">
                     Team
                   </li>
+                  <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
+                    Docs
+                  </li>
                 </ul>
               </div>
               <div>
@@ -207,9 +210,6 @@ const Footer = () => {
                     onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                   >
                     Yield farming
-                  </li>
-                  <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
-                    Docs
                   </li>
                 </ul>
               </div>
