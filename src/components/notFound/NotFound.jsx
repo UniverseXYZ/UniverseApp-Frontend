@@ -9,7 +9,6 @@ const NotFound = () => {
   const { setWebsite } = useContext(AppContext);
   const history = useHistory();
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     document.title = `Universe Minting - 404 - page not found`;
     return () => {

@@ -37,7 +37,6 @@ const Collection = () => {
   }, [search]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     const newNFTs = [];
     if (location.state) {

@@ -166,6 +166,16 @@ const DesktopView = ({
                 <img src={teamIcon} alt="Team" />
                 Team
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://docs.universe.xyz/');
+                }}
+              >
+                <img src={docsIcon} alt="Docs" />
+                <span>Docs</span>
+              </button>
             </div>
           </div>
         </li>
@@ -199,16 +209,6 @@ const DesktopView = ({
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsDAODropdownOpened(false);
-                  window.open('https://docs.universe.xyz/');
-                }}
-              >
-                <img src={docsIcon} alt="Docs" />
-                <span>Docs</span>
               </button>
             </div>
           </div>

@@ -26,7 +26,7 @@ const MintPolymorph = () => {
   return (
     <div className="mint--polymorph">
       <WelcomeWrapper
-        title="Mint Polymorph"
+        title="Mint a morph"
         hintText="Here is where we will mint Polymorphs. Polymorphs are completely random. Once you own a Polymorph the items can be morphed again multiple times to your liking."
         ellipsesLeft={false}
         ellipsesRight={false}

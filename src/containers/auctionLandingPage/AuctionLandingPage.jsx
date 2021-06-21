@@ -19,7 +19,6 @@ const AuctionLandingPage = () => {
   const [bidders, setBidders] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {

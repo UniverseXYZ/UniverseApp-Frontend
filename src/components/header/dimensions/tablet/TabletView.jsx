@@ -289,6 +289,12 @@ const TabletView = (props) => {
                       Team
                     </button>
                   </div>
+                  <div>
+                    <button type="button" onClick={() => window.open('https://docs.universe.xyz/')}>
+                      <img src={docsIcon} alt="Docs" />
+                      <span>Docs</span>
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <p className="title">DAO</p>
@@ -308,12 +314,6 @@ const TabletView = (props) => {
                     >
                       <img src={yieldFarmingIcon} alt="Yield Farming" />
                       <span>Yield farming</span>
-                    </button>
-                  </div>
-                  <div>
-                    <button type="button" onClick={() => window.open('https://docs.universe.xyz/')}>
-                      <img src={docsIcon} alt="Docs" />
-                      <span>Docs</span>
                     </button>
                   </div>
                 </div>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
+import Popup from 'reactjs-popup';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import arrowDown from '../../assets/images/arrow-down.svg';
+import MintPolymorphConfirmationPopup from '../popups/MintPolymorphConfirmationPopup';
 
 const UniverseNFTs = () => {
   const [offset, setOffset] = useState(0);

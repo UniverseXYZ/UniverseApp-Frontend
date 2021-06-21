@@ -130,6 +130,9 @@ const Wallet = ({
     document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
+  console.log(previewNFTs);
+  console.log(nftsPerWinner);
+
   const handleContinue = (prevNFTs) => {
     if (!editMode) {
       setAuction({
@@ -492,6 +495,11 @@ const Wallet = ({
                     />
                   </div>
                 ))}
+                {Array(nftsPerWinner - previewNFTs.length)
+                  .fill(0)
+                  .map((el, i) => (
+                    <div className="placeholder" />
+                  ))}
               </div>
             </div>
             <div className="sel-info">

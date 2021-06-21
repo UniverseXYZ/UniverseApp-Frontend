@@ -50,7 +50,7 @@ const Characters = () => {
             <div className="section3--center--child--block">
               <h2>10 characters and 40+ traits</h2>
               <p>Our original characters need no introduction</p>
-              <Button className="light-button">Mint polymorph</Button>
+              <Button className="light-button">Mint a morph</Button>
             </div>
           </div>
         </AnimatedOnScroll>

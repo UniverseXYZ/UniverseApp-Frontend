@@ -35,7 +35,7 @@ const Section6 = () => (
       <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
         <div className="section6--end--block">
           <h2>Now it’s time to mint your own unique polymorph</h2>
-          <Button className="light-button">Mint polymorph</Button>
+          <Button className="light-button">Mint a morph</Button>
         </div>
       </AnimatedOnScroll>
     </div>
