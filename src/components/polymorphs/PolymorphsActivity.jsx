@@ -16,16 +16,28 @@ const tableHead = [
   { labelText: 'Price', className: '' },
 ];
 
-const getRows = (dataObject, dataKeys) =>
+const getRows = (dataObject, dataKeys, ethPrice) =>
   dataKeys.map((elem, index) => {
     const item = dataObject[elem];
-    return <PolymorphsActivityTableRow data={item} key={index.toString()} />;
+    return <PolymorphsActivityTableRow data={item} key={index.toString()} ethPrice={ethPrice} />;
   });
 
+const convertArrayToObject = (array, key) => {
+  const initialValue = {};
+  return array.reduce(
+    (obj, item) => ({
+      ...obj,
+      [item[key]]: item,
+    }),
+    initialValue
+  );
+};
+
 const PolymorphsActivity = (props) => {
-  const { mobile } = props;
+  const { mobile, morphEntities, ethPrice } = props;
   const [offset, setOffset] = useState(0);
-  const dataKeys = Object.keys(mockData);
+  const morphEntitiesData = convertArrayToObject(morphEntities, 'id');
+  const dataKeys = Object.keys(morphEntitiesData);
 
   return (
     <WrapperCenter className="polymorphs--activity--wrapper--center">
@@ -34,14 +46,20 @@ const PolymorphsActivity = (props) => {
         <PolymorphsActivityTable
           className="table--polymorphs--activity"
           tableHead={!mobile ? tableHead : []}
-          rows={getRows(mockData, dataKeys.slice(offset, offset + 5))}
+          rows={getRows(morphEntitiesData, dataKeys.slice(offset, offset + 5), ethPrice)}
         />
       )}
       {mobile && (
         <div className="mobile--table--polymorphs--activity">
           {dataKeys.slice(offset, offset + 5).map((elem, index) => {
-            const item = mockData[elem];
-            return <PolymorphsActivityTableRowMobile data={item} key={index.toString()} />;
+            const item = morphEntitiesData[elem];
+            return (
+              <PolymorphsActivityTableRowMobile
+                data={item}
+                key={index.toString()}
+                ethPrice={ethPrice}
+              />
+            );
           })}
         </div>
       )}
@@ -54,10 +72,14 @@ const PolymorphsActivity = (props) => {
 
 PolymorphsActivity.propTypes = {
   mobile: PropTypes.bool,
+  morphEntities: PropTypes.oneOfType([PropTypes.array]),
+  ethPrice: PropTypes.string,
 };
 
 PolymorphsActivity.defaultProps = {
   mobile: false,
+  morphEntities: [],
+  ethPrice: '',
 };
 
 export default PolymorphsActivity;
