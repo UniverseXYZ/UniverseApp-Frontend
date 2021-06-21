@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import { handleClickOutside, handleScroll } from './utils/helpers';
@@ -30,6 +30,7 @@ import Polymorphs from './containers/polymorphs/Polymorphs';
 import MintPolymorph from './containers/polymorphs/MintPolymorph';
 
 const App = () => {
+  const location = useLocation();
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -74,6 +75,10 @@ const App = () => {
       window.removeEventListener('scroll', () => handleScroll(website));
     };
   }, [website]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   return (
     <AppContext.Provider

@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
+import backArrow from '../../assets/images/arrow.svg';
 
-const AddTokenPopup = ({ onClose }) => {
-  const { auction, setAuction, options, setOptions } = useContext(AppContext);
+const AddTokenPopup = ({ setShowAddTokenPopup }) => {
+  const { setOptions } = useContext(AppContext);
   const [token, setToken] = useState({
     value: '',
     name: '',
@@ -41,7 +41,10 @@ const AddTokenPopup = ({ onClose }) => {
 
   return (
     <div className="add__token">
-      <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
+      <div className="back-rew" onClick={() => setShowAddTokenPopup(false)} aria-hidden="true">
+        <img src={backArrow} alt="back" />
+        <span>Select bid token (ERC-20)</span>
+      </div>
       <h3>Add token</h3>
       <Input
         id="address"
@@ -78,8 +81,13 @@ const AddTokenPopup = ({ onClose }) => {
     </div>
   );
 };
+
 AddTokenPopup.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  setShowAddTokenPopup: PropTypes.func,
+};
+
+AddTokenPopup.defaultProps = {
+  setShowAddTokenPopup: () => {},
 };
 
 export default AddTokenPopup;

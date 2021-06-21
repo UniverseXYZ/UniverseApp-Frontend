@@ -51,9 +51,6 @@ const MyAccount = () => {
     setTimeout(() => {
       if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
         document.getElementById('congrats-hidden-btn').click();
-        console.log('accountName', accountName);
-        console.log('accountPage', accountPage);
-        console.log('accountImage', accountImage);
       }
     }, 500);
   };

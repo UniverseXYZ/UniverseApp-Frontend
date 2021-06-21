@@ -123,7 +123,6 @@ const MyNFTs = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     document.title = 'Universe Minting - My NFTs';
     return () => {

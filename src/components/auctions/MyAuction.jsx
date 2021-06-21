@@ -18,7 +18,6 @@ const MyAuction = () => {
   const history = useHistory();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     document.title = 'Universe Minting - My Auctions';
     return () => {
       document.title = 'Universe Minting';

@@ -82,7 +82,6 @@ const AuctionSettings = () => {
     timezone: 'GMT +04:00',
     format: 'AM',
   });
-  console.log(startDateTemp);
 
   const [endDateTemp, setEndDateTemp] = useState({
     month: monthNames[d.getMonth()],
@@ -135,7 +134,6 @@ const AuctionSettings = () => {
       // eslint-disable-next-line consistent-return
       bidValues.forEach((item, index) => {
         if (index < bidValues.length - 1 && bidValues[index + 1] > bidValues[index]) {
-          console.log(index + 1);
           setErrorArray((prevValue) => [...prevValue, index + 1]);
           isValid = false;
           return isValid;

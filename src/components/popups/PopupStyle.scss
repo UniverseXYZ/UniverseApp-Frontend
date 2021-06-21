@@ -27,15 +27,6 @@
   }
 }
 .add__token {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 440px;
-  height: 471px;
-  background: $white;
-  box-shadow: 0 10px 40px rgba(136, 120, 172, 0.2);
-  border-radius: 12px;
   padding: 40px;
 
   .close {
@@ -52,11 +43,12 @@
 
   h3 {
     font-family: $sharpGroteskSemiBoldFont;
-    font-weight: 600px;
+    font-weight: 600;
     font-size: 26px;
     line-height: 140%;
     letter-spacing: 0.2px;
     margin-bottom: 24px;
+    margin-top: 30px;
   }
 
   label {
@@ -93,7 +85,6 @@
   }
 
   @include sm {
-    width: 90%;
     padding: 40px 20px;
   }
 }
@@ -1838,8 +1829,9 @@
       padding: 40px 40px 20px;
       height: fit-content;
       border-top: none;
+      border-radius: 12px;
       &:hover {
-        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+        background: $white;
       }
 
       .intup-l {
