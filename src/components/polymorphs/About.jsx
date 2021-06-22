@@ -20,11 +20,8 @@ const row1RightBlock = () => (
 
 const row2LeftBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <h2>Released via Bonding Curve</h2>
-    <p>
-      The Polymorphs will be released via a bonding curve. A bonding curve is a distribution method
-      that increases the price of mints as the amount of minted Polymorphs increases.
-    </p>
+    <h2>Released via Distribution Curve</h2>
+    <p>The Polymorphs will be originally released via a flat curve.</p>
   </AnimatedOnScroll>
 );
 

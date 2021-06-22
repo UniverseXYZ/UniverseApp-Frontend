@@ -11,39 +11,37 @@
     border-radius: 12px;
     position: relative;
     padding: 0 80px;
+    overflow: hidden;
     @include lg {
         padding: 0 50px;
     }
     @include md {
         padding: 0 20px;
     }
+    @include sm {
+        min-height: 335px;
+    }
+    .left--blur {
+        position: absolute;
+        left: 80px;
+        top: 240px;
+        width: 250px;
+        filter: blur(40px);
+        @include sm {
+            left: 0;
+        }
+    }
+    .right--blur {
+        position: absolute;
+        right: -95px;
+        bottom: 235px;
+        filter: blur(40px);
+        width: 250px;
+        height: 450px;
+        max-height: 450px;
+    }
     .row1 {
         font-family: $spaceGroteskFont;
-        .alert--info {
-            @include lg {
-                display: none;
-            }
-            position: absolute;
-            left: 215px;
-            right: 0;
-            top: -65px;
-            margin: auto;
-            width: 265px !important;
-            height: 105px;
-            box-sizing: border-box;
-            padding: 15px;
-            background-color: $white;
-            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-            border-radius: 12px;
-            p {
-                text-align: left;
-                color: $black;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 12px;
-                line-height: 150%;
-            }
-        }
         h5 {
             margin: 40px 0 15px;
             font-family: $sharpGroteskMediumFont;
@@ -67,17 +65,94 @@
             }
         }
     }
-    .mint--polymorph--welcome--slider {
-        width: 90%;
-        margin: 20px auto 80px;
+    .row3--section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @include lg {
+            align-items: flex-end;
+        }
+        .quantity--input--group {
+            width: 215px !important;
+            height: 50px;
+            @include sm {
+                max-width: 160px;
+                width: 50% !important;
+            }
+            .label--block {
+                width: 45% !important;
+                @include sm {
+                    max-width: 160px !important;
+                    width: 100% !important;
+                }
+            }
+            .controll-box {
+                height: 50px;
+                @include lg {
+                    margin: 5px 0 0;
+                }
+                @include sm {
+                    width: 100% !important;
+                    max-width: 160px !important;
+                }
+            }
+            button {
+                line-height: 1;
+            }
+            @include lg {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                min-height: 80px;
+            }
+        }
+        .price--block {
+            width: 25% !important;
+            min-height: 30px;
+            @include sm {
+                min-height: 70px;
+                max-width: 160px;
+                width: 50% !important;
+            }
+            p {
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                font-family: Space Grotesk;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 150%;
+                .price--label {
+                    font-weight: 100;
+                    font-size: 14px;
+                }
+                @include lg {
+                    flex-direction: column;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    min-height: 70px;
+                }
+                span {
+                    @include lg {
+                        display: block;
+                    }
+                }
+            }
+            img {
+                margin: 0 5px 0 10px;
+            }
+        }
     }
-    button {
+    .light-button {
         display: block;
-        margin: 0 auto;
         width: 145px;
         height: 42px;
+        box-shadow: 0px 10px 20px rgba(93, 247, 164, 0.2);
         @include sm {
             width: 100%;
+            margin: 15px 0 0;
         }
     }
 }

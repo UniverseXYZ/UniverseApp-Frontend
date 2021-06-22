@@ -5,6 +5,8 @@ import Marquee from 'react-fast-marquee';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Popup from 'reactjs-popup';
 import ellipses from '../../assets/images/ellipses.svg';
+import backgroundTextLeft from '../../assets/images/MintPolymorph-welcome-bg-left.png';
+import backgroundTextRight from '../../assets/images/MintPolymorph-welcome-bg-right.png';
 import Button from '../button/Button.jsx';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
 import './styles/WelcomeWrapper.scss';
@@ -20,6 +22,8 @@ const WelcomeWrapper = (props) => {
     popupBtnText,
     children,
     marquee,
+    bgTextLeft,
+    bgTextRight,
   } = props;
 
   return (
@@ -27,6 +31,22 @@ const WelcomeWrapper = (props) => {
       {ellipsesLeft && <img className="ellipse-l" src={ellipses} alt="Ellipses" />}
       {ellipsesRight && <img className="ellipse-r" src={ellipses} alt="Ellipses" />}
       <div className="welcome__section__container">
+        {bgTextLeft && (
+          <div className="text-l">
+            <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+              <img src={backgroundTextLeft} alt="Ellipses" />
+            </AnimatedOnScroll>
+            <div className="opacity-l" />
+          </div>
+        )}
+        {bgTextRight && (
+          <div className="text-r">
+            <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+              <img src={backgroundTextRight} alt="Ellipses" />
+            </AnimatedOnScroll>
+            <div className="opacity-r" />
+          </div>
+        )}
         <div className="left">
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
             <h1 className="title">{title}</h1>
@@ -78,6 +98,8 @@ WelcomeWrapper.propTypes = {
   popupBtnText: PropTypes.string,
   children: PropTypes.node,
   marquee: PropTypes.node,
+  bgTextLeft: PropTypes.bool,
+  bgTextRight: PropTypes.bool,
 };
 
 WelcomeWrapper.defaultProps = {
@@ -89,6 +111,8 @@ WelcomeWrapper.defaultProps = {
   btnText: '',
   btnOnClick: () => {},
   popupBtnText: '',
+  bgTextLeft: false,
+  bgTextRight: false,
 };
 
 export default WelcomeWrapper;
