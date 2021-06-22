@@ -32,7 +32,7 @@ const MintPolymorph = () => {
     <div className="mint--polymorph">
       <WelcomeWrapper
         title="Mint a morph"
-        hintText="Here is where we will mint Polymorphs. Polymorphs are completely random. Once you own a Polymorph the items can be morphed again multiple times to your liking."
+        hintText="Mint a polymorph with it's own unique genetic code. Once you have minted a morph, you will be able to scramble and morph its genes as you please."
         ellipsesLeft={false}
         ellipsesRight={false}
         bgTextLeft
