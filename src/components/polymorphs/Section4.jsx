@@ -26,10 +26,8 @@ const leftBlock = (windows) => (
 const rightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
     <div className="section4--right--block">
-      <h2>Mint a Polymorphic NFT that will scramble its genes when told to</h2>
-      <p>
-        Mint a Polymorphic NFT that will scramble its genes when minted or when its told to morph.
-      </p>
+      <h2>Scramble its Genes on Demand</h2>
+      <p>Mint a Polymorphic NFT whose genes can be scrambled and morphed by its owner.</p>
       <Button className="light-button">Mint now</Button>
     </div>
   </AnimatedOnScroll>
