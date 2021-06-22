@@ -65,7 +65,6 @@ const Section3Randomise = (props) => {
     randomIndex(randomPantsNumber, setRandomPantsNumber);
     randomIndex(randomTorsoNumber, setRandomTorsoNumber);
   };
-  console.log(mobile);
   return (
     <div className="section3--randomise--parent">
       <WrapperCenter>
