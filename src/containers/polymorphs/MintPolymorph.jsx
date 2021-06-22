@@ -15,19 +15,19 @@ const MintPolymorph = () => {
   });
 
   useEffect(() => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     if (+window.innerWidth <= 576) setMobile(true);
     else setMobile(false);
   }, []);
 
-  useLayoutEffect(() => {
-    function handleResize() {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-      if (+window.innerWidth <= 576) setMobile(true);
-      else setMobile(false);
-    }
-    window.addEventListener('resize', handleResize);
-  });
-  console.log(windowSize);
+  // useLayoutEffect(() => {
+  //   function handleResize() {
+  //     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+  //     if (+window.innerWidth <= 576) setMobile(true);
+  //     else setMobile(false);
+  //   }
+  //   window.addEventListener('resize', handleResize);
+  // });
   return (
     <div className="mint--polymorph">
       <WelcomeWrapper
