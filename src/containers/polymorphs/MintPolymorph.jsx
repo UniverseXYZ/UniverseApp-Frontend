@@ -5,7 +5,7 @@ import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph
 import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurve';
 import Section3Randomise from '../../components/polymorphs/mint-polymorph/Section3Randomise';
 import './MintPolymorph.scss';
-​
+
 const MintPolymorph = () => {
   const [sliderValue, settSliderValue] = useState(4520);
   const [mobile, setMobile] = useState(false);
@@ -13,13 +13,13 @@ const MintPolymorph = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-​
+
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     if (+window.innerWidth <= 576) setMobile(true);
     else setMobile(false);
   }, []);
-​
+
   // useLayoutEffect(() => {
   //   function handleResize() {
   //     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -62,5 +62,5 @@ const MintPolymorph = () => {
     </div>
   );
 };
-​
+
 export default MintPolymorph;
