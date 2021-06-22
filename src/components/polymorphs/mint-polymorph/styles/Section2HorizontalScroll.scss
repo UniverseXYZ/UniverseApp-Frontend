@@ -10,7 +10,7 @@
         min-height: 650px;
     }
     @include sm {
-        min-height: 495px;
+        min-height: 440px;
     }
     h3 {
         max-width: 1110px;
@@ -25,6 +25,9 @@
         margin-bottom: 150px;
         @include lg {
             font-size: 26px;
+        }
+        @include sm {
+            margin-bottom: 70px;
         }
     }
     .row2--unique--skins {
@@ -54,58 +57,74 @@
             padding: 0 30px;
         }
         @include sm {
-            font-size: 50px;
+            // font-size: 50px;
             padding: 0 20px;
             font-size: 45px;
+            top: 180px;
         }
     }
     .horizontal--scroll--parent {
         width: 100%;
-        height: 350px;
-        .child--scroll--1 {
-            margin-left: 40vw !important;
-            @include lg {
-                margin-left: 35vw !important;
-            }
-            @include sm {
-                margin-left: 20vw !important;
-            }
+        height: 20vw;
+        position: relative;
+        @include sm {
+            overflow: hidden;
+            height: 40vw;
         }
-        .child--scroll--9 {
-            margin-right: 40vw !important;
-            @include lg {
-                margin-right: 35vw !important;
-            }
-            @include sm {
-                margin-right: 20vw !important;
-            }
-        }
-        .child--scroll {
-            width: 330px;
-            height: 330px;
-            margin: 0 80px;
+        .horizontal--scroll--child {
+            width: 20vw !important;
+            transform: rotate(-90deg);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            overflow-y: scroll;
             @include xl {
-                margin: 0 50px;
-            }
-            @include lg {
-                margin: 0 15px;
+                width: 350px !important;
             }
             @include sm {
-                width: 200px;
-                height: 200px;
-                margin: 0;
+                width: 35vw !important;
             }
-            p {
-                text-align: center;
-                font-family:$spaceGroteskFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 14px;
-                line-height: 140%;
-                color: #000000;
+            .child--scroll {
+                transform: rotate(90deg);
+                height: 20vw;
+                width: 20vw;
                 position: relative;
-                bottom: 20px;
+                @include xl {
+                    height: 350px;
+                    width: 350px;
+                }
+                @include lg {
+                    height: 34vw;
+                    width: 34vw;
+                }
+                p {
+                    position: absolute;
+                    bottom: 0;
+                    text-align: center;
+                    width: 100%;
+                    text-align: center;
+                    font-family:$spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 140%;
+                    color: $black;
+                    @include sm {
+                        font-size: 12px;
+                    }
+                }
             }
+        }
+        .horizontal--scroll--child::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        .horizontal--scroll--child::-moz-scrollbar {
+            display: none;
         }
     }
 }

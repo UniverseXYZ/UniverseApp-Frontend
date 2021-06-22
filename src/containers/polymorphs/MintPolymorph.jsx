@@ -9,20 +9,25 @@ import './MintPolymorph.scss';
 const MintPolymorph = () => {
   const [sliderValue, settSliderValue] = useState(4520);
   const [mobile, setMobile] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   useEffect(() => {
     if (+window.innerWidth <= 576) setMobile(true);
     else setMobile(false);
-  }, [mobile]);
+  }, []);
 
   useLayoutEffect(() => {
     function handleResize() {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
       if (+window.innerWidth <= 576) setMobile(true);
       else setMobile(false);
     }
     window.addEventListener('resize', handleResize);
   });
-
+  console.log(windowSize);
   return (
     <div className="mint--polymorph">
       <WelcomeWrapper
@@ -35,7 +40,7 @@ const MintPolymorph = () => {
       >
         <BondingCurve value={sliderValue} max={10000} mobile={mobile} blur />
       </WelcomeWrapper>
-      <Section2HorizontalScroll />
+      <Section2HorizontalScroll width={windowSize.width} height={windowSize.height} />
       <Section3Randomise mobile={mobile} />
       <div className="section4">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
