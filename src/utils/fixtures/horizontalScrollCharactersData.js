@@ -8,6 +8,7 @@ import MariguannaImg from '../../assets/images/Mariguanna-min.png';
 import OgreImg from '../../assets/images/Ogre-min.png';
 import VikingImg from '../../assets/images/Viking-min.png';
 import XYZbotImg from '../../assets/images/XYZbot-min.png';
+import FrankieImg from '../../assets/images/frankie.png';
 
 export default [
   { img: PaulImg, name: 'Paul' },
@@ -19,4 +20,6 @@ export default [
   { img: MariguannaImg, name: 'Mariguanna' },
   { img: OgreImg, name: 'Ogre' },
   { img: XYZbotImg, name: 'XYZbot' },
+  { img: VikingImg, name: 'Viking' },
+  { img: FrankieImg, name: 'Frankie' },
 ];
