@@ -307,7 +307,8 @@ const Lists = ({
                   )}
                 </div>
               ) : (
-                <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
+                <></>
+                // <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
               )}
             </div>
             {nft.generatedEditions.length > 1 && (
