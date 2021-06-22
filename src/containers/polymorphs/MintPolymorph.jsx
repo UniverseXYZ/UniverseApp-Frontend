@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
@@ -7,7 +7,7 @@ import Section3Randomise from '../../components/polymorphs/mint-polymorph/Sectio
 import './MintPolymorph.scss';
 
 const MintPolymorph = () => {
-  const [sliderValue, settSliderValue] = useState(4520);
+  const [sliderValue] = useState(4520);
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -20,14 +20,6 @@ const MintPolymorph = () => {
     else setMobile(false);
   }, []);
 
-  // useLayoutEffect(() => {
-  //   function handleResize() {
-  //     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-  //     if (+window.innerWidth <= 576) setMobile(true);
-  //     else setMobile(false);
-  //   }
-  //   window.addEventListener('resize', handleResize);
-  // });
   return (
     <div className="mint--polymorph">
       <WelcomeWrapper
@@ -53,9 +45,6 @@ const MintPolymorph = () => {
               max={10000}
               mobile={mobile}
             />
-            {/* <div className="background--vertical--text--block">
-              <p>pellentesque.</p>
-            </div> */}
           </div>
         </AnimatedOnScroll>
       </div>
