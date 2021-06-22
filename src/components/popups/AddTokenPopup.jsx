@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import EthereumAddress from 'ethereum-address';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
@@ -11,7 +12,7 @@ const AddTokenPopup = ({ setShowAddTokenPopup }) => {
     value: '',
     name: '',
     img: null,
-    subtitle: '',
+    subtitle: '18',
     address: '',
   });
   const [isValid, setIsValid] = useState({
@@ -24,17 +25,30 @@ const AddTokenPopup = ({ setShowAddTokenPopup }) => {
     setIsValid((prevValues) => ({
       ...prevValues,
       subtitle: token.subtitle.trim().length !== 0,
-      address: token.address.trim().length !== 0,
+      address: token.address.trim().length !== 0 && EthereumAddress.isAddress(token.address),
       name: token.name.trim().length !== 0,
     }));
   }, [token]);
 
-  const handleTokenChange = (event) => {
-    setToken((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
-    setToken((prevValues) => ({ ...prevValues, value: token.name }));
+  const handleAddressChange = (event) => {
+    setToken((prevValues) => ({ ...prevValues, address: event.target.value }));
   };
+
+  const handleSymbolChange = (event) => {
+    if (/^[a-zA-Z]+$/.test(event.target.value)) {
+      setToken((prevValues) => ({ ...prevValues, name: event.target.value }));
+      setToken((prevValues) => ({ ...prevValues, value: event.target.value }));
+    }
+  };
+
+  const handleDecimalChange = (event) => {
+    if (/^\d+$/.test(event.target.value)) {
+      setToken((prevValues) => ({ ...prevValues, subtitle: event.target.value }));
+    }
+  };
+
   const handleAddToken = () => {
-    if (token.name && token.address && token.subtitle) {
+    if (token.name && EthereumAddress.isAddress(token.address) && token.subtitle) {
       setOptions((prevValues) => [...prevValues, token]);
     }
   };
@@ -52,7 +66,7 @@ const AddTokenPopup = ({ setShowAddTokenPopup }) => {
         placeholder="0x0000"
         label="Token Contract Address"
         value={token.address}
-        onChange={handleTokenChange}
+        onChange={handleAddressChange}
       />
       <Input
         id="name"
@@ -60,14 +74,14 @@ const AddTokenPopup = ({ setShowAddTokenPopup }) => {
         placeholder="Name"
         label="Token Symbol"
         value={token.name}
-        onChange={handleTokenChange}
+        onChange={handleSymbolChange}
       />
       <Input
         id="subtitle"
         className="inp"
         label="Decimal and Precision"
         value={token.subtitle}
-        onChange={handleTokenChange}
+        onChange={handleDecimalChange}
       />
       {isValid.address && isValid.name && isValid.subtitle ? (
         <Button className="light-button" onClick={handleAddToken}>
