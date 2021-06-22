@@ -130,9 +130,6 @@ const Wallet = ({
     document.querySelector('.animate__filters__popup').style.display = 'block';
   };
 
-  console.log(previewNFTs);
-  console.log(nftsPerWinner);
-
   const handleContinue = (prevNFTs) => {
     if (!editMode) {
       setAuction({
