@@ -13,8 +13,19 @@ import backgroundTextRight from '../../../assets/images/MintPolymorph-welcome-bg
 import './styles/BondingCurve.scss';
 
 const BondingCurve = (props) => {
-  const { value, setValue, min, max, colorPriceIcon, color1, color2, mobile, blur } = props;
-  const [quantity, setQuantity] = useState(1);
+  const {
+    value,
+    setValue,
+    min,
+    max,
+    colorPriceIcon,
+    color1,
+    color2,
+    mobile,
+    blur,
+    quantity,
+    setQuantity,
+  } = props;
 
   const mintPolymorph = () => {
     document.getElementById('loading-hidden-btn').click();
@@ -95,6 +106,8 @@ BondingCurve.propTypes = {
   color2: PropTypes.string,
   mobile: PropTypes.bool,
   blur: PropTypes.bool,
+  quantity: PropTypes.number.isRequired,
+  setQuantity: PropTypes.func.isRequired,
 };
 
 BondingCurve.defaultProps = {

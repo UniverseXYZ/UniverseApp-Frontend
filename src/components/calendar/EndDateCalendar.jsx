@@ -304,6 +304,11 @@ const EndDateCalendar = React.forwardRef(
                       aria-hidden="true"
                       onClick={() => handleDayClick(day)}
                       style={{ cursor: day ? 'pointer' : 'default' }}
+                      disabled={
+                        new Date(
+                          new Date(selectedDate.year, selectedDate.month, day).toDateString()
+                        ) < new Date(new Date().toDateString())
+                      }
                     >
                       {day}
                     </button>
