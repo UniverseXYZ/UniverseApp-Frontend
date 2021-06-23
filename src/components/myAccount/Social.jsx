@@ -9,6 +9,8 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 
 const Social = ({
+  showSocial,
+  setShowSocial,
   twitterLink,
   setTwitterLink,
   instagramLink,
@@ -17,13 +19,14 @@ const Social = ({
   cancelChanges,
 }) => {
   const { loggedInArtist } = useContext(AppContext);
-  const [showSocial, setShowSocial] = useState(true);
+  // const [showSocial, setShowSocial] = useState(true);
+  // console.log(showSocial);
 
   return (
     <div className="my-account container">
       <div className="account-grid-container">
         <div className="account-grid-social">
-          <div>
+          <div className="social">
             <h5>Social</h5>
             <label className="switch">
               <input
@@ -121,6 +124,8 @@ Social.propTypes = {
   setTwitterLink: PropTypes.func,
   instagramLink: PropTypes.string,
   setInstagramLink: PropTypes.func,
+  showSocial: PropTypes.bool,
+  setShowSocial: PropTypes.func,
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
 };
@@ -130,6 +135,8 @@ Social.defaultProps = {
   setTwitterLink: () => {},
   instagramLink: '',
   setInstagramLink: () => {},
+  showSocial: null,
+  setShowSocial: () => {},
   saveChanges: () => {},
   cancelChanges: () => {},
 };
