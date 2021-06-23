@@ -11,14 +11,14 @@ import XYZbotImg from '../../assets/images/XYZbot-min.png';
 import FrankieImg from '../../assets/images/frankie.png';
 
 export default [
-  { img: PaulImg, name: 'Paul' },
+  { img: PaulImg, name: 'Vitalik' },
   { img: GlennImg, name: 'Glenn' },
   { img: ClownImg, name: 'Charles' },
   { img: DiamondPawsImg, name: 'Diamond Paws' },
-  { img: esCrowImg, name: 'EsCrow' },
+  { img: esCrowImg, name: 'esCrow' },
   { img: GoldtoothImg, name: 'Goldtooth' },
   { img: MariguannaImg, name: 'Mariguanna' },
-  { img: OgreImg, name: 'Grishnak' },
+  { img: OgreImg, name: 'Troll God' },
   { img: XYZbotImg, name: 'XYZbot' },
   { img: VikingImg, name: 'Ragnar' },
   { img: FrankieImg, name: 'Frankie' },
