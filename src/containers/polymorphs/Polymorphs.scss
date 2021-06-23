@@ -25,6 +25,11 @@
                 height: auto;
             }
         }
+        .left {
+            p.desc {
+                max-width: 430px;
+            }
+        }
         .right {
             position: absolute;
             top: 0;
