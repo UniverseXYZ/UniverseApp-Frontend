@@ -122,10 +122,7 @@ const Section3Randomise = (props) => {
               <div className="warning--popup--info">
                 <div className="warning--popup--info--child">
                   <img alt="title" src={IconInfoYellow} />
-                  <p>
-                    This is just a test run and it doesn’t relate to the polimorph you mint via the
-                    bonding curve
-                  </p>
+                  <p>This is just a test run and it doesn’t relate to the polymorph you mint.</p>
                 </div>
               </div>
               <Button className="light-button" onClick={globalRandom}>
