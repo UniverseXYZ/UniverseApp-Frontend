@@ -25,6 +25,11 @@
                 height: auto;
             }
         }
+        .left {
+            p.desc {
+                max-width: 430px;
+            }
+        }
         .right {
             position: absolute;
             top: 0;
@@ -62,8 +67,18 @@
             }
         }
         .welcome--marquee {
+            position: relative;
+            .border--top {
+                height: 1px;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                margin-bottom: 2px;
+                background-image: linear-gradient(90deg, rgba(42,208,202,0.5018382352941176) 0%, rgba(225,246,100,0.5) 20%, rgba(254,176,254,0.5) 40%, rgba(171,179,252,0.5) 60%, rgba(93,247,164,0.5) 80%, rgba(88,196,246,0.5) 100%);
+            }
             span {
-                font-family: $sharpGroteskMediumFont;
+                font-family: $sharpGroteskSemiBoldFont;
                 font-style: normal;
                 font-weight: bold;
                 font-size: 19.371px;
