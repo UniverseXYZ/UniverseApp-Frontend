@@ -11,12 +11,12 @@ import Section3Border from '../../../assets/images/mint-polymorph-section3-borde
 import './styles/Section3Randomise.scss';
 import IconInfoYellow from '../../../assets/images/yellowIcon.svg';
 
-const randomIndex = (state, setState) => {
-  const random = Math.floor(Math.random() * 4);
-  if (state === random) {
-    if (random === 3) setState(random - 1);
-    else setState(random + 1);
-  }
+const randomIndex = (state, setState, length) => {
+  const random = Math.floor(Math.random() * length);
+  // if (state === random) {
+  //   if (random === length) setState(random - 1);
+  //   else setState(random + 1);
+  // }
   return setState(random);
 };
 
@@ -56,14 +56,24 @@ const Section3Randomise = (props) => {
   const { mobile } = props;
   const [randomBgNumber, setRandomBgNumber] = useState(0);
   const [randomHeadwearsNumber, setRandomHeadwearsNumber] = useState(1);
-  const [randomPantsNumber, setRandomPantsNumber] = useState(1);
+  const [randomPantsNumber, setRandomPantsNumber] = useState(3);
   const [randomTorsoNumber, setRandomTorsoNumber] = useState(3);
-  const { person, backgrounds, headwears, pants, torso } = personData;
+  const [randomGlassesNumber, setRandomGlassesNumber] = useState(0);
+  const [randomShoesNumber, setRandomShoesNumber] = useState(1);
+  const [randomLeftHandNumber, setRandomLeftHandNumber] = useState(1);
+  const [randomRightHandNumber, setRandomRightHandNumber] = useState(0);
+
+  const { person, backgrounds, headwears, pants, torso, glasses, shoes, leftHand, rightHand } =
+    personData;
   const globalRandom = () => {
-    randomIndex(randomBgNumber, setRandomBgNumber);
-    randomIndex(randomHeadwearsNumber, setRandomHeadwearsNumber);
-    randomIndex(randomPantsNumber, setRandomPantsNumber);
-    randomIndex(randomTorsoNumber, setRandomTorsoNumber);
+    randomIndex(randomBgNumber, setRandomBgNumber, backgrounds.length);
+    randomIndex(randomHeadwearsNumber, setRandomHeadwearsNumber, headwears.length);
+    randomIndex(randomPantsNumber, setRandomPantsNumber, pants.length);
+    randomIndex(randomTorsoNumber, setRandomTorsoNumber, torso.length);
+    randomIndex(randomGlassesNumber, setRandomGlassesNumber, glasses.length);
+    randomIndex(randomShoesNumber, setRandomShoesNumber, shoes.length);
+    randomIndex(randomLeftHandNumber, setRandomLeftHandNumber, leftHand.length);
+    randomIndex(randomRightHandNumber, setRandomRightHandNumber, rightHand.length);
   };
   return (
     <div className="section3--randomise--parent">
@@ -111,6 +121,22 @@ const Section3Randomise = (props) => {
                   )}
                   {!!torso[randomTorsoNumber] && (
                     <img src={torso[randomTorsoNumber]} alt="img" className="torso--img" />
+                  )}
+                  {!!glasses[randomGlassesNumber] && (
+                    <img src={glasses[randomGlassesNumber]} alt="img" className="glasses--img" />
+                  )}
+                  {!!shoes[randomShoesNumber] && (
+                    <img src={shoes[randomShoesNumber]} alt="img" className="shoes--img" />
+                  )}
+                  {!!leftHand[randomLeftHandNumber] && (
+                    <img src={leftHand[randomLeftHandNumber]} alt="img" className="lefthand--img" />
+                  )}
+                  {!!rightHand[randomRightHandNumber] && (
+                    <img
+                      src={rightHand[randomRightHandNumber]}
+                      alt="img"
+                      className="righthand--img"
+                    />
                   )}
                 </div>
               </div>
