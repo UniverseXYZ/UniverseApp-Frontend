@@ -97,7 +97,8 @@
                 }
             }
             button {
-                line-height: 1;
+                width: 40px !important;
+                height: 40px !important;
             }
             @include lg {
                 flex-direction: column;
@@ -105,6 +106,9 @@
                 justify-content: center;
                 min-height: 80px;
             }
+        }
+        .light-button {
+            height: 50px !important;
         }
         .price--block {
             width: 25% !important;

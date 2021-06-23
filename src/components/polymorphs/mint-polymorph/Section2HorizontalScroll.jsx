@@ -20,7 +20,7 @@ const Section2HorizontalScroll = (props) => {
   return (
     <div className="section2--horizontal--scroll--parent">
       <h3>Possible base characters</h3>
-      <p className="row2--unique--skins">10 unique skins</p>
+      <p className="row2--unique--skins">11 unique skins</p>
       <div className="horizontal--scroll--parent">
         <div className="horizontal--scroll--child" style={{ height: `${scrollWidth}px` }}>
           {child(charactersData)}
