@@ -40,6 +40,7 @@ const App = () => {
     personalLogo: null,
     instagramLink: '',
     twitterLink: '',
+    social: true,
   });
   const [myBalance, setMyBalance] = useState(48.24);
   const [showModal, setShowModal] = useState(false);
