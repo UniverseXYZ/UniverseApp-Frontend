@@ -1,0 +1,65 @@
+@import '../../assets/scss/variables';
+h1{
+  font-family: $sharpGroteskSemiBoldFont;
+  font-style: normal;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 120%;
+}
+h2{
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 140%;
+}h3{
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 140%;
+}h4{
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 140%;
+}h5{
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 130%;
+}h6{
+  font-family: $sharpGroteskMediumFont;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 130%;
+}
+.paragraph_sm18{
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 150%;
+}
+.paragraph_sm16{
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 160%;
+}.paragraph_sm14{
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 160%;
+}.paragraph_sm12{
+  font-family: $spaceGroteskFont;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 150%;
+}
