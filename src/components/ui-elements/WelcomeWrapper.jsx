@@ -81,6 +81,7 @@ const WelcomeWrapper = (props) => {
       </div>
       {marquee && (
         <Marquee gradient={false} className="welcome--marquee">
+          <div className="border--top" />
           {marquee}
         </Marquee>
       )}
