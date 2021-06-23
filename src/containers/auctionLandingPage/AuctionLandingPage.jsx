@@ -120,7 +120,9 @@ const AuctionLandingPage = () => {
       <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
       {artist && artist.personalLogo ? (
         <div className="artist__personal__logo">
-          <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+          <div>
+            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+          </div>
         </div>
       ) : (
         <></>

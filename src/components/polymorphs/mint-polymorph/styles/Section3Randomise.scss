@@ -55,20 +55,10 @@
                 border-radius: 4.8%;
             }
             overflow: hidden;
-            .headwears--img {
+            .headwears--img, .pants--img, .torso--img, .glasses--img, .shoes--img, .lefthand--img, .righthand--img {
                 position: absolute;
                 left: 0;
                 top: 0;
-            }
-            .pants--img {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-            .torso--img {
-                position: absolute;
-                left: 0;
-                right: 0;
             }
             .randomise--border--image {
                 position: absolute;

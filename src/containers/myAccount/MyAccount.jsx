@@ -7,7 +7,6 @@ import PersonalLogo from '../../components/myAccount/PersonalLogo.jsx';
 import Social from '../../components/myAccount/Social.jsx';
 import Head from '../../components/myAccount/Head.jsx';
 import AppContext from '../../ContextAPI';
-import Button from '../../components/button/Button.jsx';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
 
 const MyAccount = () => {
@@ -112,18 +111,6 @@ const MyAccount = () => {
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
       />
-      {/* <div className="my-account container">
-        <div className="account-grid-container">
-          <div className="account-display-buttons">
-            <Button className="light-button" onClick={() => saveChanges()}>
-              Save changes
-            </Button>
-            <Button className="light-border-button" onClick={() => cancelChanges()}>
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };

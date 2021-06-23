@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import Popup from 'reactjs-popup';
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
-import Button from '../../button/Button';
+import Button from '../../button/Button.jsx';
+import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup.jsx';
+import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
 import PriceETHIconWhite from '../../../assets/images/PriceETHIconWhite.png';
 import PriceETHIconBlack from '../../../assets/images/PriceETHIconBlack.png';
@@ -10,11 +13,54 @@ import backgroundTextRight from '../../../assets/images/MintPolymorph-welcome-bg
 import './styles/BondingCurve.scss';
 
 const BondingCurve = (props) => {
-  const { value, setValue, min, max, colorPriceIcon, color1, color2, mobile, blur } = props;
-  const [quantity, setQuantity] = useState(1);
+  const {
+    value,
+    setValue,
+    min,
+    max,
+    colorPriceIcon,
+    color1,
+    color2,
+    mobile,
+    blur,
+    quantity,
+    setQuantity,
+  } = props;
+
+  const mintPolymorph = () => {
+    document.getElementById('loading-hidden-btn').click();
+    setTimeout(() => {
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-hidden-btn').click();
+    }, 2000);
+  };
 
   return (
     <div className="welcome--slider--bonding--curve">
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="loading-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <LoadingPopup onClose={close} />}
+      </Popup>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <MintPolymorphConfirmationPopup onClose={close} quantity={quantity} />}
+      </Popup>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
@@ -23,7 +69,11 @@ const BondingCurve = (props) => {
       <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
       <div className="row3--section">
         <QuantityUpDownGroup value={quantity} onChange={setQuantity} labelText="Quantity" />
-        {!mobile && <Button className="light-button">Mint now</Button>}
+        {!mobile && (
+          <Button className="light-button" onClick={mintPolymorph}>
+            Mint now
+          </Button>
+        )}
         <div className="price--block">
           <p>
             <span className="price--label">Price :</span>
@@ -37,7 +87,11 @@ const BondingCurve = (props) => {
           </p>
         </div>
       </div>
-      {!!mobile && <Button className="light-button">Mint now</Button>}
+      {!!mobile && (
+        <Button className="light-button" onClick={mintPolymorph}>
+          Mint now
+        </Button>
+      )}
     </div>
   );
 };
@@ -52,6 +106,8 @@ BondingCurve.propTypes = {
   color2: PropTypes.string,
   mobile: PropTypes.bool,
   blur: PropTypes.bool,
+  quantity: PropTypes.number.isRequired,
+  setQuantity: PropTypes.func.isRequired,
 };
 
 BondingCurve.defaultProps = {

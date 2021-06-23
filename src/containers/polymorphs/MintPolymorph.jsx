@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
@@ -7,35 +7,40 @@ import Section3Randomise from '../../components/polymorphs/mint-polymorph/Sectio
 import './MintPolymorph.scss';
 
 const MintPolymorph = () => {
-  const [sliderValue, settSliderValue] = useState(4520);
+  const [quantity, setQuantity] = useState(1);
+  const [sliderValue] = useState(4520);
   const [mobile, setMobile] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   useEffect(() => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     if (+window.innerWidth <= 576) setMobile(true);
     else setMobile(false);
-  }, [mobile]);
-
-  useLayoutEffect(() => {
-    function handleResize() {
-      if (+window.innerWidth <= 576) setMobile(true);
-      else setMobile(false);
-    }
-    window.addEventListener('resize', handleResize);
-  });
+  }, []);
 
   return (
     <div className="mint--polymorph">
       <WelcomeWrapper
         title="Mint a morph"
-        hintText="Here is where we will mint Polymorphs. Polymorphs are completely random. Once you own a Polymorph the items can be morphed again multiple times to your liking."
+        hintText="Mint a polymorph with it's own unique genetic code. Once you have minted a morph, you will be able to scramble and morph its genes as you please."
         ellipsesLeft={false}
         ellipsesRight={false}
         bgTextLeft
         bgTextRight
       >
-        <BondingCurve value={sliderValue} max={10000} mobile={mobile} blur />
+        <BondingCurve
+          value={sliderValue}
+          max={10000}
+          mobile={mobile}
+          blur
+          quantity={quantity}
+          setQuantity={setQuantity}
+        />
       </WelcomeWrapper>
-      <Section2HorizontalScroll />
+      <Section2HorizontalScroll width={windowSize.width} height={windowSize.height} />
       <Section3Randomise mobile={mobile} />
       <div className="section4">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
@@ -47,10 +52,9 @@ const MintPolymorph = () => {
               color2="black"
               max={10000}
               mobile={mobile}
+              quantity={quantity}
+              setQuantity={setQuantity}
             />
-            {/* <div className="background--vertical--text--block">
-              <p>pellentesque.</p>
-            </div> */}
           </div>
         </AnimatedOnScroll>
       </div>

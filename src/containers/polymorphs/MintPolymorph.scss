@@ -28,7 +28,6 @@
                 min-height: 200px;
                 @include lg {
                     height: 205px;
-                    // padding: 0 80px;
                 }       
                 @include sm {
                     min-height: 260px;

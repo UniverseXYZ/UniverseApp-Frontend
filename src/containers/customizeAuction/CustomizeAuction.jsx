@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
-import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
 import Button from '../../components/button/Button.jsx';
 import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding.jsx';

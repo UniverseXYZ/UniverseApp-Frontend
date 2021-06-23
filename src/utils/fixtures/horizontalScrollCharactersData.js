@@ -8,15 +8,18 @@ import MariguannaImg from '../../assets/images/Mariguanna-min.png';
 import OgreImg from '../../assets/images/Ogre-min.png';
 import VikingImg from '../../assets/images/Viking-min.png';
 import XYZbotImg from '../../assets/images/XYZbot-min.png';
+import FrankieImg from '../../assets/images/frankie.png';
 
 export default [
   { img: PaulImg, name: 'Paul' },
   { img: GlennImg, name: 'Glenn' },
-  { img: ClownImg, name: 'Clown' },
+  { img: ClownImg, name: 'Charles' },
   { img: DiamondPawsImg, name: 'Diamond Paws' },
-  { img: esCrowImg, name: 'Crow' },
+  { img: esCrowImg, name: 'EsCrow' },
   { img: GoldtoothImg, name: 'Goldtooth' },
   { img: MariguannaImg, name: 'Mariguanna' },
-  { img: OgreImg, name: 'Ogre' },
+  { img: OgreImg, name: 'Grishnak' },
   { img: XYZbotImg, name: 'XYZbot' },
+  { img: VikingImg, name: 'Ragnar' },
+  { img: FrankieImg, name: 'Frankie' },
 ];
