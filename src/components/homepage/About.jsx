@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
+import { useHistory } from 'react-router-dom';
 import Lottie from 'react-lottie';
 import Button from '../button/Button.jsx';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
@@ -22,6 +23,7 @@ import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
 
 const About = () => {
+  const history = useHistory();
   const [email, setEmail] = useState('');
 
   const handleSubscribe = () => {
@@ -247,12 +249,11 @@ const About = () => {
               <span className="new">New</span>
               <h1 className="title mh">Polymorph Universe</h1>
               <p className="desc">
-                A mutating universe where genes are <br /> randomly scrambled when bought, traded or{' '}
-                <br />
+                A mutating universe where genes are <br /> randomly scrambled when bought, traded or
                 transfered.
               </p>
-              <Button className="light-button" disabled>
-                Coming soon
+              <Button className="light-button" onClick={() => history.push('/polymorphs')}>
+                Learn more
               </Button>
             </AnimatedOnScroll>
           </div>
