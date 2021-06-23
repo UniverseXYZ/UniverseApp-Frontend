@@ -268,6 +268,13 @@
           button {
             margin: auto;
           }
+          .error__text {
+            padding-top: 4px;
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            line-height: 150%;
+            color: #ff4949;
+          }
 
           @include lg {
             width: 160px;
@@ -292,13 +299,14 @@
 
       .account-grid-name-editing {
         position: relative;
-        margin-top: 30px;
+        margin-top: 10px;
         h5 {
           display: flex;
           align-items: center;
           font-family: $spaceGroteskFont;
           font-size: 14px;
           line-height: 22px;
+          margin-top: 20px;
         }
 
         .intup-l {
@@ -314,7 +322,7 @@
           font-family: $spaceGroteskFont;
           font-size: 16px;
           line-height: 20px;
-          margin-bottom: 20px;
+          // margin-bottom: 20px;
 
           &::placeholder {
             color: rgba(0, 0, 0, 0.2);
@@ -331,6 +339,13 @@
           @include lg {
             width: 100%;
           }
+        }
+        .error__text {
+          padding-top: 4px;
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          line-height: 150%;
+          color: #ff4949;
         }
 
         .empty {
@@ -371,6 +386,7 @@
           box-sizing: border-box;
           border-radius: 12px;
           margin-bottom: 20px;
+          margin-top: 20px;
 
           p {
             padding-left: 31px;
@@ -466,7 +482,7 @@
           }
         }
       }
-      .animated.zoomIn{
+      .animated.zoomIn {
         width: 100%;
       }
       .account-grid-about-editing {
@@ -501,7 +517,7 @@
       width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
-      .animated.zoomIn{
+      .animated.zoomIn {
         width: 100%;
       }
 
@@ -604,7 +620,7 @@
             }
             .logo-picture {
               background-color: $white;
-              border: 1px dashed rgba(0, 0, 0, 0.1);
+              border: 1px solid rgba(0, 0, 0, 0.1);
               box-sizing: border-box;
               border-radius: 10px;
 
@@ -642,8 +658,14 @@
       width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
-      .animated.zoomIn{
+      .animated.zoomIn {
         width: 100%;
+      }
+      .social {
+        @include md {
+          display: flex;
+          justify-content: space-between;
+        }
       }
 
       h5 {
@@ -866,6 +888,15 @@
           margin-bottom: 15px;
         }
       }
+      // @include lg {
+      //   margin-left: 185px;
+      //   margin-bottom: 40px;
+      // }
+
+      // @include md {
+      //   margin-left: 0%;
+      // }
+
       @include sm {
         display: grid;
         justify-content: unset;
@@ -873,7 +904,7 @@
     }
 
     button {
-      height: max-content;
+      // height: max-content;
       span {
         margin-right: 12px;
         &.hide__on__mobile {

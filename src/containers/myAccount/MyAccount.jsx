@@ -22,6 +22,8 @@ const MyAccount = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
+  const [showSocial, setShowSocial] = useState(loggedInArtist.social);
+  console.log(showSocial);
 
   useEffect(() => {
     setWebsite(false);
@@ -46,7 +48,13 @@ const MyAccount = () => {
       personalLogo: logo,
       instagramLink,
       twitterLink,
+      social: showSocial,
     });
+    if (!showSocial) {
+      setShowSocial(false);
+    } else {
+      setShowSocial(true);
+    }
     setTimeout(() => {
       if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
         document.getElementById('congrats-hidden-btn').click();
@@ -98,6 +106,8 @@ const MyAccount = () => {
         setTwitterLink={setTwitterLink}
         instagramLink={instagramLink}
         setInstagramLink={setInstagramLink}
+        showSocial={showSocial}
+        setShowSocial={setShowSocial}
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
       />

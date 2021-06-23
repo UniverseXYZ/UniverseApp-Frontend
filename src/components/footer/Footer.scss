@@ -8,7 +8,6 @@ footer {
   margin-top: auto;
 
   .footer {
-    
     .footer__top {
       padding: 60px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -46,7 +45,7 @@ footer {
               width: 100%;
               padding: 11px;
               height: 50px;
-  
+
               &::placeholder {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
@@ -63,7 +62,7 @@ footer {
               position: absolute;
               right: 4px;
               bottom: 4px;
-      
+
               @include md {
                 position: relative;
                 top: 14px;
@@ -142,6 +141,7 @@ footer {
             display: flex;
             align-items: center;
             margin-bottom: 16px;
+            margin-left: -5px;
           }
           p {
             font-family: $spaceGroteskFont;
@@ -155,7 +155,6 @@ footer {
               max-width: none;
             }
           }
-          
         }
 
         .universe-list {
@@ -287,7 +286,7 @@ footer {
           cursor: pointer;
           &:hover {
             color: $white;
-            transition: .3s;
+            transition: 0.3s;
           }
         }
         @include md {
