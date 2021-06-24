@@ -59,6 +59,7 @@ const App = () => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
+  const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
 
   useEffect(() => {
     if (!website) {
@@ -124,6 +125,8 @@ const App = () => {
         setOptions,
         website,
         setWebsite,
+        editProfileButtonClick,
+        setEditProfileButtonClick,
       }}
     >
       <Header />

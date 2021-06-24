@@ -10,7 +10,13 @@ import AppContext from '../../ContextAPI';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
 
 const MyAccount = () => {
-  const { setWebsite, loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const {
+    setWebsite,
+    loggedInArtist,
+    setLoggedInArtist,
+    editProfileButtonClick,
+    setEditProfileButtonClick,
+  } = useContext(AppContext);
   const [about, setAbout] = useState(loggedInArtist.about);
   const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
@@ -23,7 +29,6 @@ const MyAccount = () => {
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [showSocial, setShowSocial] = useState(loggedInArtist.social);
-  console.log(showSocial);
 
   useEffect(() => {
     setWebsite(false);
@@ -34,6 +39,7 @@ const MyAccount = () => {
   }, []);
 
   const saveChanges = () => {
+    setEditProfileButtonClick(true);
     let page = accountPage.substring(13);
     if (page === 'your-address') {
       page = '';
@@ -98,6 +104,7 @@ const MyAccount = () => {
         setAccountPage={setAccountPage}
         accountImage={accountImage}
         setAccountImage={setAccountImage}
+        editProfileButtonClick={editProfileButtonClick}
       />
       <About about={about} setAbout={setAbout} />
       <PersonalLogo logo={logo} setLogo={setLogo} />
