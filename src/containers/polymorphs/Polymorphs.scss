@@ -37,7 +37,7 @@
             right: 0;
             margin: auto;
             @include xl {
-                width: 115%;
+                width: 122%;
             }
             @include lg {
                 width: 100%;
@@ -53,8 +53,14 @@
                 }
             }
             img {
+                max-width: 781px;
+                max-height: 532px;
+                object-fit: cover;
                 width: 100%;
                 height: 100%;
+                @include sm {
+                    right: 0;
+                }
             }
             @include xl {
                 position: relative;

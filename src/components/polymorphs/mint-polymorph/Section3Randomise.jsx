@@ -5,7 +5,7 @@ import Marquee from 'react-fast-marquee';
 import WrapperCenter from '../WrapperCenter';
 import WrapperCenterTwoColumns from '../WrapperCenterTwoColumns';
 import Button from '../../button/Button';
-import RandomiseIconBTN from '../../../assets/images/Randomise.png';
+import RandomiseIconBTN from '../../../assets/images/Randomise.svg';
 import personData from '../../../utils/fixtures/randomisePersonData';
 import Section3Border from '../../../assets/images/mint-polymorph-section3-border.png';
 import './styles/Section3Randomise.scss';
@@ -47,7 +47,8 @@ const title = () => (
   <>
     <h3 className="tittle--randomise--block">Play with the traits</h3>
     <p className="hint--text--randomise--block">
-      Experiment with a collection of 40+ traits by clicking the button below
+      Experiment with a collection of 200+ traits by clicking the button below. The base skin is
+      permanent upon mint.
     </p>
   </>
 );

@@ -121,6 +121,7 @@ const Main = ({
                 ref={accountInput}
                 onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
               />
+              {!accountImage && <p className="error__text">&quot;File&quot; is required.</p>}
             </div>
           </div>
           <div className="account-grid-name-editing">
@@ -131,6 +132,9 @@ const Main = ({
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
             />
+            {!accountName && (
+              <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
+            )}
             <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
               Universe page address
               <div className="universe__page__address">
@@ -156,6 +160,11 @@ const Main = ({
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
             />
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') && (
+              <p className="error__text">
+                &quot;Universee page address&quot; is not allowed to be empty
+              </p>
+            )}
             {accountName !== loggedInArtist.name ||
             accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||
             (accountImage &&

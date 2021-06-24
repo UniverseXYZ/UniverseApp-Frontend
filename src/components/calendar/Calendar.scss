@@ -26,13 +26,13 @@
   .calendar__wrapper {
     // display: flex  ;
     overflow-y: auto;
-    
+
     @include md {
       // max-height: 400px;
       display: block;
     }
-    .calendar-first{
-      h1{
+    .calendar-first {
+      h1 {
         font-family: $sharpGroteskSemiBoldFont;
         padding: 34px 0 0px 30px;
         font-style: normal;
@@ -124,12 +124,15 @@
 
         &.selectedStartDay {
           background: #5fea73;
+          // border-radius: 12px;
           border-top-left-radius: 12px;
           border-bottom-left-radius: 12px;
           font-weight: bold;
         }
         &.selectedEndDay {
           background: #5fea73;
+          // border-top-left-radius: 12px;
+          // border-bottom-left-radius: 12px;
           border-top-right-radius: 12px;
           border-bottom-right-radius: 12px;
           font-weight: bold;
@@ -179,7 +182,7 @@
         font-size: 12px;
         line-height: 22px;
         text-align: right;
-        color: rgba(0, 0, 0, 0.4);        
+        color: rgba(0, 0, 0, 0.4);
       }
     }
     .time__format {
