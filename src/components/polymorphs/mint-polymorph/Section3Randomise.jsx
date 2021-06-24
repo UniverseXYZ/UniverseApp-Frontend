@@ -47,8 +47,7 @@ const title = () => (
   <>
     <h3 className="tittle--randomise--block">Play with the traits</h3>
     <p className="hint--text--randomise--block">
-      Experiment with a collection of 200+ traits by clicking the button below. The base skin is
-      permanent upon mint.
+      Experiment with a collection of 200+ traits by clicking the button below.
     </p>
   </>
 );

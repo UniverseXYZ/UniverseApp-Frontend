@@ -18,24 +18,24 @@ const Section2HorizontalScroll = (props) => {
     setScrollWidth(width);
   }, [width]);
 
-  useEffect(() => {
-    const horizontalSection = document.querySelector('.horizontal--scroll--child');
-    const horizontalSectionParent = document.querySelector('.section2--horizontal--scroll--parent');
-    function runOnScroll() {
-      if (
-        horizontalSection.offsetHeight + horizontalSection.scrollTop ===
-        horizontalSection.scrollHeight
-      ) {
-        horizontalSectionParent.classList.remove('fixed');
-        document.body.classList.remove('no__scroll');
-      } else if (horizontalSection.scrollTop === 0) {
-        horizontalSectionParent.classList.remove('fixed');
-        document.body.classList.remove('no__scroll');
-      }
-    }
-    horizontalSection.addEventListener('scroll', runOnScroll, { passive: true });
-    return () => horizontalSection.removeEventListener('scroll', runOnScroll, { passive: true });
-  }, []);
+  // useEffect(() => {
+  //   const horizontalSection = document.querySelector('.horizontal--scroll--child');
+  //   const horizontalSectionParent = document.querySelector('.section2--horizontal--scroll--parent');
+  //   function runOnScroll() {
+  //     if (
+  //       horizontalSection.offsetHeight + horizontalSection.scrollTop ===
+  //       horizontalSection.scrollHeight
+  //     ) {
+  //       horizontalSectionParent.classList.remove('fixed');
+  //       document.body.classList.remove('no__scroll');
+  //     } else if (horizontalSection.scrollTop === 0) {
+  //       horizontalSectionParent.classList.remove('fixed');
+  //       document.body.classList.remove('no__scroll');
+  //     }
+  //   }
+  //   horizontalSection.addEventListener('scroll', runOnScroll, { passive: true });
+  //   return () => horizontalSection.removeEventListener('scroll', runOnScroll, { passive: true });
+  // }, []);
 
   return (
     <div className="section2--horizontal--scroll--parent">

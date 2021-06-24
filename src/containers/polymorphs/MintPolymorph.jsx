@@ -21,28 +21,28 @@ const MintPolymorph = () => {
     else setMobile(false);
   }, []);
 
-  useEffect(() => {
-    const horizontalSection = document.querySelector('.section2--horizontal--scroll--parent');
-    const randomizeSection = document.querySelector('.section3--randomise--parent');
-    function runOnScroll() {
-      if (
-        window.scrollY > horizontalSection.offsetTop &&
-        window.scrollY < horizontalSection.offsetTop + 80
-      ) {
-        horizontalSection.classList.add('fixed');
-        document.body.classList.add('no__scroll');
-      }
-    }
-    window.addEventListener('scroll', runOnScroll, { passive: true });
+  // useEffect(() => {
+  //   const horizontalSection = document.querySelector('.section2--horizontal--scroll--parent');
+  //   const randomizeSection = document.querySelector('.section3--randomise--parent');
+  //   function runOnScroll() {
+  //     if (
+  //       window.scrollY > horizontalSection.offsetTop &&
+  //       window.scrollY < horizontalSection.offsetTop + 80
+  //     ) {
+  //       horizontalSection.classList.add('fixed');
+  //       document.body.classList.add('no__scroll');
+  //     }
+  //   }
+  //   window.addEventListener('scroll', runOnScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', runOnScroll, { passive: true });
-  }, []);
+  //   return () => window.removeEventListener('scroll', runOnScroll, { passive: true });
+  // }, []);
 
   return (
     <div className="mint--polymorph">
       <WelcomeWrapper
-        title="Mint a morph"
-        hintText="Mint a polymorph with its own unique genetic code. Once you have minted a morph, you will be able to scramble and morph its genes as you please. All the traits in a polymorph can be altered by scrambling, except for the character itself, which is permanent."
+        title="Mint a Morph"
+        hintText="Mint a polymorph with its own unique genetic code. Once you have minted a morph, you will be able to scramble and morph its genes as you please. All the traits in a polymorph can be altered by scrambling."
         ellipsesLeft={false}
         ellipsesRight={false}
         bgTextLeft

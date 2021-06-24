@@ -9,22 +9,22 @@ import './styles/About.scss';
 
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <h2>New technology</h2>
+    <h2>New Technology</h2>
     <p>
-      A first in the Universe and on the blockchain, we’ve built technology that allows you to
-      scramble your Polymorph’s characteristics at random. When you mint, you will get a random skin
-      that is permanent. All the traits and wearables can be scrambled at random.
+      A first in the Universe and on the blockchain, we’ve built technology that allows you to morph
+      your Polymorph’s characteristics. When you mint, you will get a random Polymorph with traits
+      and wearables that can be scrambled.
     </p>
   </AnimatedOnScroll>
 );
 
 const row2LeftBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <h2>Released via Distribution Curve</h2>
+    <h2>Fair Launch</h2>
     <p>
-      The Polymorphs will cost .0777 ETH per Polymorph. The full scramble feature is a fixed cost of
-      .01 ETH which scrambles all the traits except the base skin. The single trait morph is on a
-      rising price curve that gets reset after you fully scramble.
+      The Polymorphs will be released on a flat curve. 10,000 Polymorphs can be minted for 0.0777
+      ETH each. Up to 20 Polymorphs can be minted in one transaction. Minted Polymorphs can be sold
+      on any ERC-721-compatible marketplace.
     </p>
   </AnimatedOnScroll>
 );

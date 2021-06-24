@@ -67,16 +67,16 @@
                 z-index: 70 !important;
             }
             .marquee--top, .marquee--right, .marquee--bottom, .marquee--left {
-                font-family: Sharp Grotesk;
+                font-family: $sharpGroteskBoldFont;
                 font-style: normal;
                 font-weight: bold;
-                font-size: 5.72184px;
+                font-size: 10px;
                 line-height: 140%;
                 display: flex;
                 align-items: center;
                 text-align: center;
                 text-transform: uppercase;
-                color: #000000;
+                color: $black;
                 mix-blend-mode: normal;
                 opacity: 0.1;
                 display: flex;
@@ -89,7 +89,7 @@
             }
             .marquee--top {
                 position: absolute;
-                top: 3px;
+                top: 1px;
                 left: 0;
                 right: 0;
                 z-index: 71 !important;
@@ -116,7 +116,7 @@
             }
             .marquee--bottom {
                 position: absolute;
-                bottom: 3px;
+                bottom: 1px;
                 left: 0;
                 right: 0;
                 z-index: 73 !important;
