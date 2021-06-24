@@ -103,6 +103,9 @@ footer {
                 width: 22px;
                 height: 22px;
               }
+              &:hover {
+                background: rgba(255, 255, 255, 0.15);
+              }
               @include sm {
                 padding: 10px;
               }
