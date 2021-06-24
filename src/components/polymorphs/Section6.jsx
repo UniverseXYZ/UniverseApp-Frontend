@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
@@ -24,22 +25,27 @@ const rightBlock = () => (
   </div>
 );
 
-const Section6 = () => (
-  <>
-    <div className="polymorphs--section6">
-      <WrapperCenter className="wrapper--center--section6--two-columns">
-        <WrapperCenterTwoColumns leftBlock={leftBlock()} rightBlock={rightBlock()} />
-      </WrapperCenter>
-    </div>
-    <div className="section6--end--block--parent">
-      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-        <div className="section6--end--block">
-          <h2>Now it’s time to mint your own unique polymorph</h2>
-          <Button className="light-button">Mint a morph</Button>
-        </div>
-      </AnimatedOnScroll>
-    </div>
-  </>
-);
+const Section6 = () => {
+  const history = useHistory();
+  return (
+    <>
+      <div className="polymorphs--section6">
+        <WrapperCenter className="wrapper--center--section6--two-columns">
+          <WrapperCenterTwoColumns leftBlock={leftBlock()} rightBlock={rightBlock()} />
+        </WrapperCenter>
+      </div>
+      <div className="section6--end--block--parent">
+        <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+          <div className="section6--end--block">
+            <h2>Now it’s time to mint your own unique polymorph</h2>
+            <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
+              Mint a morph
+            </Button>
+          </div>
+        </AnimatedOnScroll>
+      </div>
+    </>
+  );
+};
 
 export default Section6;

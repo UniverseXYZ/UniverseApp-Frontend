@@ -22,18 +22,28 @@
             position: relative;
             overflow: visible;
             .left {
-                max-width: 730px;
+                max-width: 900px;
                 width: 100%;
                 text-align: center;
                 min-height: 200px;
+                .links {
+                    margin: 0;
+                }
                 @include lg {
-                    height: 205px;
+                    min-height: 255px;
                 }       
                 @include sm {
-                    min-height: 260px;
+                    min-height: 265px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
                 }
                 h1 {
                     font-size: 48px;
+                    @include lg {
+                        margin-bottom: 3vw;
+                    }
                     @include sm {
                         font-size: 26px;
                     }
@@ -43,10 +53,15 @@
                         width: 80%;
                         margin: 0 auto;
                     }
+                    @include sm {
+                        font-size: 14px;
+                        width: 100%;
+                    }
+                    font-family: $spaceGroteskFont;
                     max-width: 1110px;
                     font-style: normal;
                     font-weight: normal;
-                    font-size: 16px;
+                    font-size: 18px;
                     line-height: 160%;
                     text-align: center;
                     color: #FFFFFF;
@@ -111,10 +126,16 @@
                     .quantity--input--group {
                         .controll-box {
                             color: $black;
-                            border: 1px solid rgba(0, 0, 0, 0.2);
+                            border: 1px solid rgba(0, 0, 0, 0.1);
                             button {
-                                background-color: rgba(0, 0, 0, 0.2);
+                                background-color: rgba(0, 0, 0, 0.05);
                                 color: $black;
+                                div {
+                                    background-color: $black;
+                                }
+                                &:hover {
+                                    background-color: rgba(0, 0, 0, 0.1);
+                                }
                             }
                         }
                     }

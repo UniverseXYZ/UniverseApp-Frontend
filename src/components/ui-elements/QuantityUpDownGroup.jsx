@@ -35,16 +35,16 @@ QuantityUpDownGroup.propTypes = {
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   className: PropTypes.string,
-  btnLeftText: PropTypes.string || PropTypes.node,
-  btnRightText: PropTypes.string || PropTypes.node,
+  btnLeftText: PropTypes.node,
+  btnRightText: PropTypes.node,
 };
 
 QuantityUpDownGroup.defaultProps = {
   min: 1,
   max: 20,
   className: '',
-  btnLeftText: '-',
-  btnRightText: '+',
+  btnLeftText: null,
+  btnRightText: null,
 };
 
 export default QuantityUpDownGroup;

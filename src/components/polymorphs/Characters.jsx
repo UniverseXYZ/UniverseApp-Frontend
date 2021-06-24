@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import './styles/Characters.scss';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Button from '../button/Button.jsx';
@@ -15,6 +16,7 @@ const getWindow = (width, changeStateFunc) => {
 };
 
 const Characters = () => {
+  const history = useHistory();
   const [windows, setWindows] = useState('browser');
   const [section3Images, setSection3Images] = useState({
     left: Section3LeftImageBrowser,
@@ -50,7 +52,9 @@ const Characters = () => {
             <div className="section3--center--child--block">
               <h2>10 characters and 40+ traits</h2>
               <p>Our original characters need no introduction</p>
-              <Button className="light-button">Mint a morph</Button>
+              <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
+                Mint a morph
+              </Button>
             </div>
           </div>
         </AnimatedOnScroll>

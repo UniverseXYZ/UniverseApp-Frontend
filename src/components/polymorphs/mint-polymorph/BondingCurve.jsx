@@ -6,8 +6,8 @@ import Button from '../../button/Button.jsx';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup.jsx';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
-import PriceETHIconWhite from '../../../assets/images/PriceETHIconWhite.png';
-import PriceETHIconBlack from '../../../assets/images/PriceETHIconBlack.png';
+import PriceETHIconWhite from '../../../assets/images/ethereum-white.svg';
+import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
 import backgroundTextLeft from '../../../assets/images/MintPolymorph-welcome-bg-left.png';
 import backgroundTextRight from '../../../assets/images/MintPolymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
@@ -68,7 +68,18 @@ const BondingCurve = (props) => {
       </div>
       <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
       <div className="row3--section">
-        <QuantityUpDownGroup value={quantity} onChange={setQuantity} labelText="Quantity" />
+        <QuantityUpDownGroup
+          value={quantity}
+          onChange={setQuantity}
+          labelText="Quantity"
+          btnLeftText={<div className="down--quantity" />}
+          btnRightText={
+            <>
+              <div className="up--quantity--horizontal" />
+              <div className="up--quantity--vertical" />
+            </>
+          }
+        />
         {!mobile && (
           <Button className="light-button" onClick={mintPolymorph}>
             Mint now

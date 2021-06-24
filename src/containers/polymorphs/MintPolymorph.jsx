@@ -25,7 +25,7 @@ const MintPolymorph = () => {
     <div className="mint--polymorph">
       <WelcomeWrapper
         title="Mint a morph"
-        hintText="Mint a polymorph with it's own unique genetic code. Once you have minted a morph, you will be able to scramble and morph its genes as you please."
+        hintText="Mint a polymorph with its own unique genetic code. Once you have minted a morph, you will be able to scramble and morph its genes as you please. All the traits in a polymorph can be altered by scrambling, except for the character itself, which is permanent."
         ellipsesLeft={false}
         ellipsesRight={false}
         bgTextLeft
