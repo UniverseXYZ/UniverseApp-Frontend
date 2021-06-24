@@ -17,11 +17,11 @@ const QuantityUpDownGroup = (props) => {
       </div>
       <div className="controll-box">
         <button type="button" className="btn--down" onClick={() => downClick(value, onChange)}>
-          <span>{btnLeftText}</span>
+          {btnLeftText}
         </button>
         <div className="value">{value}</div>
         <button type="button" className="btn--up" onClick={() => upClick(value, onChange)}>
-          <span>{btnRightText}</span>
+          {btnRightText}
         </button>
       </div>
     </div>
@@ -35,16 +35,16 @@ QuantityUpDownGroup.propTypes = {
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   className: PropTypes.string,
-  btnLeftText: PropTypes.string || PropTypes.node,
-  btnRightText: PropTypes.string || PropTypes.node,
+  btnLeftText: PropTypes.node,
+  btnRightText: PropTypes.node,
 };
 
 QuantityUpDownGroup.defaultProps = {
   min: 1,
   max: 20,
   className: '',
-  btnLeftText: '-',
-  btnRightText: '+',
+  btnLeftText: null,
+  btnRightText: null,
 };
 
 export default QuantityUpDownGroup;

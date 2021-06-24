@@ -88,6 +88,8 @@
             }
             .controll-box {
                 height: 50px;
+                justify-content: space-between;
+                padding: 0 4px;
                 @include lg {
                     margin: 5px 0 0;
                 }
@@ -99,6 +101,28 @@
             button {
                 width: 40px !important;
                 height: 40px !important;
+                border-radius: 8px !important;
+                display: block;
+                position: relative;
+                background-color: rgba(255, 255, 255, 0.1);
+                transition: 0.2s;
+                .down--quantity, .up--quantity--horizontal, .up--quantity--vertical {
+                    width: 40%;
+                    height: 1px;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    margin: auto;
+                    background-color: $white;
+                }
+                .up--quantity--vertical {
+                    transform: rotate(90deg);
+                }
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
             }
             @include lg {
                 flex-direction: column;
@@ -153,7 +177,7 @@
         position: relative;
         display: block;
         width: 145px;
-        height: 42px;
+        height: 50px;
         box-shadow: 0px 10px 20px rgba(93, 247, 164, 0.2);
         @include sm {
             width: 100%;

@@ -68,7 +68,18 @@ const BondingCurve = (props) => {
       </div>
       <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
       <div className="row3--section">
-        <QuantityUpDownGroup value={quantity} onChange={setQuantity} labelText="Quantity" />
+        <QuantityUpDownGroup
+          value={quantity}
+          onChange={setQuantity}
+          labelText="Quantity"
+          btnLeftText={<div className="down--quantity" />}
+          btnRightText={
+            <>
+              <div className="up--quantity--horizontal" />
+              <div className="up--quantity--vertical" />
+            </>
+          }
+        />
         {!mobile && (
           <Button className="light-button" onClick={mintPolymorph}>
             Mint now

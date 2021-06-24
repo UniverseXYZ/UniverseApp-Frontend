@@ -126,10 +126,16 @@
                     .quantity--input--group {
                         .controll-box {
                             color: $black;
-                            border: 1px solid rgba(0, 0, 0, 0.2);
+                            border: 1px solid rgba(0, 0, 0, 0.1);
                             button {
-                                background-color: rgba(0, 0, 0, 0.2);
+                                background-color: rgba(0, 0, 0, 0.05);
                                 color: $black;
+                                div {
+                                    background-color: $black;
+                                }
+                                &:hover {
+                                    background-color: rgba(0, 0, 0, 0.1);
+                                }
                             }
                         }
                     }
