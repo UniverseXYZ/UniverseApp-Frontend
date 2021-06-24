@@ -166,24 +166,25 @@
                 }
             }
             .row2--background {
+                // filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
                 position: absolute;
-                left: 120px;
-                max-height: 150%;
-                bottom: -70px;
+                left: 85px;
+                max-height: 170%;
+                bottom: -83px;
                 @include xl {
-                    bottom: -55px;
-                    left: 100px;
+                    bottom: -62px;
+                    left: 70px;
                 }
                 @include lg {
-                    bottom: -40px;
-                    left: 9vw;
+                    bottom: -50px;
+                    left: 4vw;
                 }
                 @include sm {
-                    bottom: 20px;
+                    bottom: 40px;
                     top: 0;
                     margin: auto;
                     max-height: 600px;
-                    height: 90vw;
+                    height: 100vw;
                     left: 15vw;
                 }
             }

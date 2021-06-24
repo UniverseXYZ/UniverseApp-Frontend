@@ -50,7 +50,7 @@ const Characters = () => {
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="polymorph--section3--center--block">
             <div className="section3--center--child--block">
-              <h2>10 characters and 40+ traits</h2>
+              <h2>11 characters and 200+ traits</h2>
               <p>Our original characters need no introduction</p>
               <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
                 Mint a morph
