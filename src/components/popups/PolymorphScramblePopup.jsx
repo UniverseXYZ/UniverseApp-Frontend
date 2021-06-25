@@ -15,19 +15,6 @@ const PolymorphScramblePopup = ({ onClose }) => {
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
   const [selectedTrait, setSelectedTrait] = useState(null);
 
-  const importTraits = (folder) => {
-    const r = require.context(
-      '../../assets/images/randomise-person-images/background-img',
-      false,
-      /\.(png|svg)$/
-    );
-
-    return r
-      .keys()
-      .map(r)
-      .map((m) => m.default);
-  };
-
   const traits = [
     {
       label: 'Headwear',
@@ -213,18 +200,18 @@ const PolymorphScramblePopup = ({ onClose }) => {
   };
 
   return (
-    <div className="popup-div">
+    <div className="scramble-popup-div">
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />
       </button>
 
       <div className="scramble--popup">
         <div className="scramble--popup--content">
-          <div className="avatar--wrapper ">
-            <img src={person} className="avatar" alt="avatar" />
+          <div className="avatar-wrapper-popup">
+            <img src={person} className="avatar-popup" alt="avatar" />
           </div>
 
-          <div className="scramble--options">
+          <div className="scramble--options--popup">
             <div className="name">{selectedNftForScramble.name}</div>
 
             <Tabs items={tabs} />
