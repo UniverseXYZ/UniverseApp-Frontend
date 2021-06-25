@@ -60,6 +60,27 @@
                 left: 0;
                 top: 0;
             }
+            .shoes--img {
+                z-index: 2;
+            }
+            .pants--img {
+                z-index: 3;
+            }
+            .torso--img {
+                z-index: 4;
+            }
+            .glasses--img {
+                z-index: 5;
+            }
+            .headwears--img {
+                z-index: 6;
+            }
+            .lefthand--img {
+                z-index: 7;
+            }
+            .righthand--img {
+                z-index: 8;
+            }
             .randomise--border--image {
                 position: absolute;
                 left: 0;
