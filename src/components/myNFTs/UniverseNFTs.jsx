@@ -117,7 +117,7 @@ const UniverseNFTs = () => {
                   aria-hidden="true"
                   onClick={() => {
                     setSelectedNftForScramble(elm);
-                    history.push(`/scramble-polymorph`);
+                    history.push(`/polymorphs/${elm.id}`);
                   }}
                 >
                   <div className="nft__box__image">
