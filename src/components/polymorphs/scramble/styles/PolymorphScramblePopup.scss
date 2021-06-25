@@ -1,10 +1,48 @@
 @import '../../../../assets/scss/variables';
 @import '../../../../assets/scss/mixins';
 
-.popup-div {
-  max-width: 85%;
-  width: auto;
+.scramble-popup-div {
+  max-height: 90%;
+  overflow-x: auto;
+  width: 450px;
   padding: 70px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  box-shadow: 0 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+
+  @include lg {
+    max-width: 520px;
+    width: 70%;
+  }
+  @include sm {
+    padding: 40px 26px;
+    width: 85%;
+  }
+
+  .popup-close {
+    cursor: pointer;
+    padding: 2px 8px;
+    margin-top: -12px;
+    margin-right: -12px;
+    line-height: 2em;
+    background-color: $white;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  @media (min-width: 600px) {
+    width: 520px;
+  }
+
+  @media (min-width: 1200px) {
+    width: 1000px;
+  }
 
   .scramble--popup {
     margin: 0 auto;
@@ -24,11 +62,13 @@
         flex-wrap: wrap;
       }
 
-      .avatar--wrapper {
+      .avatar-wrapper-popup {
+        flex-basis: 445px;
+        flex-shrink: 0;
 
-        .avatar {
+        .avatar-popup {
           height: 445px;
-          width: 445px;
+          width: 100%;
           max-width: 90%;
 
           background-repeat: no-repeat;
@@ -43,7 +83,7 @@
 
       }
 
-      .scramble--options {
+      .scramble--options--popup {
         height: 445px;
         width: 445px;
         max-width: 90%;

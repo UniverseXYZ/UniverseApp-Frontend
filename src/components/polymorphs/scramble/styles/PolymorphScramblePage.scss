@@ -19,7 +19,7 @@
 
 @media (min-width: $screen-xl-max) {
   .container {
-    width: 1170px;
+    width: 1230px;
   }
 }
 
@@ -27,35 +27,51 @@
   font-family: Space Grotesk, sans-serif;
   font-style: normal;
 
-  .go--back--wrapper {
-    cursor: pointer;
-    margin-bottom: 50px;
-    margin-top: -20px;
-
-    span {
-      margin-left: 10px;
-      font-weight: 500;
-      font-size: 16px;
-    }
-
-  }
-
   .scramble--content {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
 
-    .avatar--wrapper {
-      position: relative;
+    @media (min-width: $screen-sm-max) {
+      justify-content: space-between;
+    }
 
-      img {
-        position: absolute;
+    .avatar--wrapper {
+      margin: 0 auto 100px;
+      position: relative;
+      height: 270px;
+      flex-basis: 350px;
+      flex-grow: 0;
+
+      .go--back--wrapper {
         top: 0;
         left: 0;
-        right: 0;
+        cursor: pointer;
+        margin-top: -20px;
+        flex-basis: 100%;
+        margin-left: 0;
+
+        span {
+          margin-left: 10px;
+          font-weight: 500;
+          font-size: 16px;
+        }
+
+      }
+
+      @media (min-width: $screen-md-max) {
         height: 500px;
-        max-width: 500px;
+        flex-basis: 500px;
+      }
+
+      img.avatar {
+        display: block;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
 
         background-repeat: no-repeat;
         background-size: 100%;
@@ -75,32 +91,32 @@
         z-index: 2;
       }
 
-      .headWear {
-        z-index: 3;
-      }
-
-      .eyeWear {
-        z-index: 3;
-      }
-
-      .torso {
-        z-index: 3;
-      }
-
-      .pants {
-        z-index: 3;
-      }
-
       .footwear {
         z-index: 3;
       }
 
+      .pants {
+        z-index: 4;
+      }
+
+      .torso {
+        z-index: 5;
+      }
+
+      .eyeWear {
+        z-index: 6;
+      }
+
+      .headWear {
+        z-index: 7;
+      }
+
       .leftHand {
-        z-index: 3;
+        z-index: 8;
       }
 
       .rightHand {
-        z-index: 3;
+        z-index: 9;
       }
 
     }
@@ -132,16 +148,21 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: center;
         margin-bottom: 40px;
+
+        @media (min-width: $screen-md-max) {
+          justify-content: space-between
+        }
       }
 
       .metadata {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        flex-wrap: wrap;
         margin-bottom: 40px;
-        padding: 15px;
+        padding: 0 15px;
 
         background: rgba(0, 0, 0, 0.02);
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -151,15 +172,26 @@
         .genome--string--name {
           font-weight: 500;
           font-size: 16px;
-
-          color: #000000;
+          padding-top: 15px;
         }
 
         .genome--string--value {
           font-weight: 500;
+          padding: 15px 0;
           font-size: 16px;
-
           color: #4D66EB;
+        }
+
+      }
+
+      .light-button {
+        width: 90%;
+        display: block;
+        margin: 0 auto;
+
+        @media (min-width: $screen-md-max) {
+          margin: unset!important;
+          width: unset;
         }
 
       }
