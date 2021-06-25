@@ -34,7 +34,7 @@ const WelcomeWrapper = (props) => {
         {bgTextLeft && (
           <div className="text-l">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundTextLeft} alt="Ellipses" />
+              <img src={backgroundTextLeft} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-l" />
           </div>
@@ -42,7 +42,7 @@ const WelcomeWrapper = (props) => {
         {bgTextRight && (
           <div className="text-r">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundTextRight} alt="Ellipses" />
+              <img src={backgroundTextRight} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-r" />
           </div>

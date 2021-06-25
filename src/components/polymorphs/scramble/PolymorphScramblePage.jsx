@@ -12,6 +12,8 @@ import './styles/PolymorphScramblePage.scss';
 import PolymorphScramblePopup from '../../popups/PolymorphScramblePopup';
 import LoadingPopup from '../../popups/LoadingPopup';
 import PolymorphScrambleCongratulationPopup from '../../popups/PolymorphScrambleCongratulationPopup';
+import NotFound from '../../notFound/NotFound';
+import { isEmpty } from '../../../utils/helpers';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -87,15 +89,11 @@ const PolymorphScramblePage = () => {
     },
   ];
 
-  const onGoBack = () => {
-    history.goBack();
-  };
-
   const onOpenOptionsPopUp = () => {
     document.getElementById('popup-hidden-btn').click();
   };
 
-  return (
+  return !isEmpty(selectedNftForScramble) ? (
     <div className="container scramble--wrapper">
       <Popup
         trigger={
@@ -136,7 +134,11 @@ const PolymorphScramblePage = () => {
 
       <div className="scramble--content">
         <div className="avatar--wrapper">
-          <div className="go--back--wrapper" aria-hidden="true" onClick={onGoBack}>
+          <div
+            className="go--back--wrapper"
+            aria-hidden="true"
+            onClick={() => history.push('/my-nfts')}
+          >
             <img src={backArrow} alt="go back" />
             <span>My NFTs</span>
           </div>
@@ -225,6 +227,8 @@ const PolymorphScramblePage = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <NotFound />
   );
 };
 
