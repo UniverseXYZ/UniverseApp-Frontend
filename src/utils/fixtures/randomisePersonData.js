@@ -119,27 +119,30 @@ import Glasses9 from '../../assets/images/randomise-person-images/glasses-img/Su
 import Glasses10 from '../../assets/images/randomise-person-images/glasses-img/VR-Set.png';
 
 // shoes
-import Shoes1 from '../../assets/images/randomise-person-images/shoes-img/Amish-Shoes.png';
-import Shoes2 from '../../assets/images/randomise-person-images/shoes-img/Astronaut-Footwear.png';
-import Shoes3 from '../../assets/images/randomise-person-images/shoes-img/Basketball-Shoes.png';
-import Shoes4 from '../../assets/images/randomise-person-images/shoes-img/Black-Ninja-Boots.png';
-import Shoes5 from '../../assets/images/randomise-person-images/shoes-img/Black-Oxfords.png';
-import Shoes6 from '../../assets/images/randomise-person-images/shoes-img/Brown-Oxfords.png';
-import Shoes7 from '../../assets/images/randomise-person-images/shoes-img/Brown-Spartan-Sandals.png';
-import Shoes8 from '../../assets/images/randomise-person-images/shoes-img/Clown-Boots.png';
-import Shoes9 from '../../assets/images/randomise-person-images/shoes-img/Golden-Knights-Boots.png';
-import Shoes10 from '../../assets/images/randomise-person-images/shoes-img/Golden-Shoes.png';
-import Shoes11 from '../../assets/images/randomise-person-images/shoes-img/Golf-Shoes.png';
-import Shoes12 from '../../assets/images/randomise-person-images/shoes-img/Ice-Skates.png';
-import Shoes13 from '../../assets/images/randomise-person-images/shoes-img/Loafers.png';
-import Shoes14 from '../../assets/images/randomise-person-images/shoes-img/Marine-Boots.png';
-import Shoes15 from '../../assets/images/randomise-person-images/shoes-img/Platinum-Spartan-Sandals.png';
-import Shoes16 from '../../assets/images/randomise-person-images/shoes-img/Red-Football-Cleats.png';
-import Shoes17 from '../../assets/images/randomise-person-images/shoes-img/Red-Soccer-Cleats.png';
-import Shoes18 from '../../assets/images/randomise-person-images/shoes-img/Silver-Knights-Boots.png';
-import Shoes19 from '../../assets/images/randomise-person-images/shoes-img/Sneakers.png';
-import Shoes20 from '../../assets/images/randomise-person-images/shoes-img/Sushi-Chef-Shoes.png';
-import Shoes21 from '../../assets/images/randomise-person-images/shoes-img/White_Yellow-Football-Cleats.png';
+import Shoes1 from '../../assets/images/randomise-person-images/shoes-img/amish-ahoes.png';
+import Shoes2 from '../../assets/images/randomise-person-images/shoes-img/astronaut-footwear.png';
+import Shoes3 from '../../assets/images/randomise-person-images/shoes-img/basketball-shoes.png';
+import Shoes4 from '../../assets/images/randomise-person-images/shoes-img/black-dress-shoes.png';
+import Shoes5 from '../../assets/images/randomise-person-images/shoes-img/black-ninja-boots.png';
+import Shoes6 from '../../assets/images/randomise-person-images/shoes-img/brown-dress-shoes.png';
+import Shoes7 from '../../assets/images/randomise-person-images/shoes-img/brown-spartan-sandals.png';
+import Shoes8 from '../../assets/images/randomise-person-images/shoes-img/chemical-protection-boots.png';
+import Shoes9 from '../../assets/images/randomise-person-images/shoes-img/clown-boots.png';
+import Shoes10 from '../../assets/images/randomise-person-images/shoes-img/golden-knights-boots.png';
+import Shoes11 from '../../assets/images/randomise-person-images/shoes-img/golden-shoes.png';
+import Shoes12 from '../../assets/images/randomise-person-images/shoes-img/golf-shoes.png';
+import Shoes13 from '../../assets/images/randomise-person-images/shoes-img/ice-skates.png';
+import Shoes14 from '../../assets/images/randomise-person-images/shoes-img/loafers.png';
+import Shoes15 from '../../assets/images/randomise-person-images/shoes-img/marine-boots.png';
+import Shoes16 from '../../assets/images/randomise-person-images/shoes-img/red-soccer-cleats.png';
+import Shoes17 from '../../assets/images/randomise-person-images/shoes-img/samurai-boots.png';
+import Shoes18 from '../../assets/images/randomise-person-images/shoes-img/silver-knights-boots.png';
+import Shoes19 from '../../assets/images/randomise-person-images/shoes-img/sneakers.png';
+import Shoes20 from '../../assets/images/randomise-person-images/shoes-img/sushi-chef-shoes.png';
+import Shoes21 from '../../assets/images/randomise-person-images/shoes-img/tennis-socks-shoes.png';
+import Shoes22 from '../../assets/images/randomise-person-images/shoes-img/white-yellow-football-cleats.png';
+import Shoes23 from '../../assets/images/randomise-person-images/shoes-img/platinum-spartan-sandals.png';
+import Shoes24 from '../../assets/images/randomise-person-images/shoes-img/red-football-cleats.png';
 
 // left hand
 import LeftHand1 from '../../assets/images/randomise-person-images/leftHand-images/American-Football-Left.png';
@@ -326,6 +329,9 @@ export default {
     Shoes19,
     Shoes20,
     Shoes21,
+    Shoes22,
+    Shoes23,
+    Shoes24,
   ],
   leftHand: [
     null,
