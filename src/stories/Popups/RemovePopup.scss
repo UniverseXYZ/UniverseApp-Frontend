@@ -16,7 +16,7 @@
 
 .popup-close {
     cursor: pointer;
-    padding: 2px 8px;
+    padding: 6px 0px;
     margin-top: -12px;
     margin-right: -12px;
     line-height: 2em;
@@ -25,16 +25,21 @@
     position: absolute;
     top: 0;
     right: 0;
+    border: none;
+    >img{
+        width: 16px;
+        height: 20px;
+    }
 }
 
 .popup-title {
     text-align: center;
     h4 {
-        font-family: $sharpGroteskSemiBoldFont;
-        font-weight: 800;
+        font-family: $sharpGroteskBoldFont;
+        font-weight: 600;
         font-size: 26px;
         line-height: 36.4px;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.2px;
         margin-top: 20px;
     }
 }
@@ -69,7 +74,7 @@
     >button{
     margin-right: 12px;
     font-family: $spaceGroteskFont;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
     line-height: 20,42px;
     }

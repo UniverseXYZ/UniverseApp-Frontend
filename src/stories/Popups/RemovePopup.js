@@ -1,11 +1,13 @@
 import React from 'react';
 import Button from '../../components/button/Button';
 import './RemovePopup.scss';
-import closeIcon from '../../assets/images/crossclose.png';
+import closeIcon from '../../assets/images/cross.svg';
 
-const RemovePopup = () => (
+const Popups = () => (
   <div className="popup-div remove-popup">
-    <img src={closeIcon} alt="icon" className="popup-close" />
+    <button type="button" className="popup-close">
+      <img src={closeIcon} alt="" />
+    </button>
     <div className="popup-title">
       <h4>Are you sure?</h4>
     </div>
@@ -21,4 +23,4 @@ const RemovePopup = () => (
     </div>
   </div>
 );
-export default RemovePopup;
+export default Popups;

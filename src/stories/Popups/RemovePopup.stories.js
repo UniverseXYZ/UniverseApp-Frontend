@@ -1,8 +1,8 @@
 import React from 'react';
-import RemovePopup from './RemovePopup';
+import Popups from './RemovePopup';
 
 export default {
-  title: 'Form/RemovePopup',
-  component: RemovePopup,
+  title: 'Form/Popups',
+  component: Popups,
 };
-export const RemovePopups = () => <RemovePopup />;
+export const RemovePopups = () => <Popups />;
