@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
-import Popup from 'reactjs-popup';
+import uuid from 'react-uuid';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import MintPolymorphConfirmationPopup from '../popups/MintPolymorphConfirmationPopup';
+import AppContext from '../../ContextAPI';
 
 const UniverseNFTs = () => {
+  const { setSelectedNftForScramble } = useContext(AppContext);
+  const history = useHistory();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
   const ref = useRef(null);
@@ -108,7 +111,15 @@ const UniverseNFTs = () => {
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
               elm.previewImage.type === 'image/png' ? (
-                <div className="nft__box">
+                <div
+                  key={uuid()}
+                  className="nft__box"
+                  aria-hidden="true"
+                  onClick={() => {
+                    setSelectedNftForScramble(elm);
+                    history.push(`/scramble-polymorph`);
+                  }}
+                >
                   <div className="nft__box__image">
                     <img className="preview-image" alt={elm.name} src={elm.previewImage.url} />
                   </div>
@@ -121,7 +132,7 @@ const UniverseNFTs = () => {
                   </div>
                 </div>
               ) : (
-                <div className="nft__box">
+                <div key={uuid()} className="nft__box">
                   <div className="videoicon">
                     <img alt="videocover" src={elm.videoavatar} />
                   </div>

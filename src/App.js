@@ -25,6 +25,7 @@ import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs';
 import MintPolymorph from './containers/polymorphs/MintPolymorph';
+import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
 
 const App = () => {
   const location = useLocation();
@@ -55,7 +56,7 @@ const App = () => {
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
   const [auction, setAuction] = useState({ tiers: [] });
-  const [selectedNft, setSelectedNft] = useState([]);
+  const [selectedNftForScramble, setSelectedNftForScramble] = useState([]);
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [website, setWebsite] = useState(true);
@@ -117,8 +118,8 @@ const App = () => {
         setFutureAuctions,
         auction,
         setAuction,
-        selectedNft,
-        setSelectedNft,
+        selectedNftForScramble,
+        setSelectedNftForScramble,
         bidtype,
         setBidtype,
         options,
@@ -136,6 +137,7 @@ const App = () => {
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
+        <Route exact path="/scramble-polymorph" component={() => <PolymorphScramblePage />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route

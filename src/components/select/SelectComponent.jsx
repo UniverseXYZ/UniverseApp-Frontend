@@ -1,0 +1,73 @@
+import React from 'react';
+import './SelectComponent.scss';
+import PropTypes from 'prop-types';
+import Select from 'react-select';
+
+const SelectComponent = (props) => {
+  const { options, onChange, value, placeholder } = props;
+  const styles = {
+    control: (base, state) => ({
+      ...base,
+      fontFamily: 'Space Grotesk, sans-serif',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      border: '1px solid rgba(0, 0, 0, 0.1);',
+      opacity: '0.7',
+      boxShadow: 'none',
+      '&:hover': {
+        border: '1px solid rgba(0, 0, 0, 0.1);',
+      },
+    }),
+    dropdownIndicator: (base, state) => ({
+      ...base,
+      color: '#000000',
+      transform: state.isFocused ? 'rotate(180deg)' : null,
+      // transform: state.menuIsOpen && state.isFocused ? 'rotate(180deg)' : null,
+    }),
+    option: (base, state) => ({
+      ...base,
+      color: '#000000',
+      fontFamily: 'Space Grotesk, sans-serif',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      padding: '15px',
+      opacity: state.isFocused ? '1' : '0.7',
+      background: state.isSelected || state.isFocused ? 'rgba(0, 0, 0, 0.05)' : null,
+      borderRadius: '6px',
+    }),
+  };
+
+  return (
+    <Select
+      options={options}
+      onChange={onChange}
+      value={value}
+      placeholder={placeholder}
+      styles={styles}
+      components={{
+        IndicatorSeparator: () => null,
+      }}
+    />
+  );
+};
+
+SelectComponent.defaultProps = {
+  placeholder: '',
+  value: null,
+};
+
+SelectComponent.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.number]),
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  value: PropTypes.objectOf({
+    label: PropTypes.string,
+  }),
+};
+
+export default SelectComponent;
