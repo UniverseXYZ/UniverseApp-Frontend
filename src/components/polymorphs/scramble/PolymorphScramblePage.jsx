@@ -131,7 +131,7 @@ const PolymorphScramblePage = () => {
       >
         {(close) => <PolymorphScrambleCongratulationPopup onClose={close} />}
       </Popup>
-
+      `{' '}
       <div className="scramble--content">
         <div className="avatar--wrapper">
           <div
@@ -142,7 +142,6 @@ const PolymorphScramblePage = () => {
             <img src={backArrow} alt="go back" />
             <span>My NFTs</span>
           </div>
-
           {selectedNftForScramble.background ? (
             <img
               src={selectedNftForScramble.background}
