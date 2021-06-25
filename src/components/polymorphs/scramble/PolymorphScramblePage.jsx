@@ -131,56 +131,63 @@ const PolymorphScramblePage = () => {
       >
         {(close) => <PolymorphScrambleCongratulationPopup onClose={close} />}
       </Popup>
-
-      <div
-        className="go--back--wrapper"
-        aria-hidden="true"
-        onClick={() => history.push('/my-nfts')}
-      >
-        <img src={backArrow} alt="go back" />
-        <span>My NFTs</span>
-      </div>
-
+      `{' '}
       <div className="scramble--content">
         <div className="avatar--wrapper">
+          <div
+            className="go--back--wrapper"
+            aria-hidden="true"
+            onClick={() => history.push('/my-nfts')}
+          >
+            <img src={backArrow} alt="go back" />
+            <span>My NFTs</span>
+          </div>
           {selectedNftForScramble.background ? (
-            <img src={selectedNftForScramble.background} className="background" alt="background" />
+            <img
+              src={selectedNftForScramble.background}
+              className="avatar background"
+              alt="background"
+            />
           ) : (
             ''
           )}
-          <img src={person} className="person" alt="person" />
+          <img src={person} className="avatar person" alt="person" />
           {selectedNftForScramble.headWear ? (
-            <img src={selectedNftForScramble.headWear} className="headWear" alt="headWear" />
+            <img src={selectedNftForScramble.headWear} className="avatar headWear" alt="headWear" />
           ) : (
             ''
           )}
           {selectedNftForScramble.eyeWear ? (
-            <img src={selectedNftForScramble.eyeWear} className="eyeWear" alt="eyeWear" />
+            <img src={selectedNftForScramble.eyeWear} className="avatar eyeWear" alt="eyeWear" />
           ) : (
             ''
           )}
           {selectedNftForScramble.torso ? (
-            <img src={selectedNftForScramble.torso} className="torso" alt="torso" />
+            <img src={selectedNftForScramble.torso} className="avatar torso" alt="torso" />
           ) : (
             ''
           )}
           {selectedNftForScramble.pants ? (
-            <img src={selectedNftForScramble.pants} className="pants" alt="pants" />
+            <img src={selectedNftForScramble.pants} className="avatar pants" alt="pants" />
           ) : (
             ''
           )}
           {selectedNftForScramble.footWear ? (
-            <img src={selectedNftForScramble.footWear} className="footWear" alt="footWear" />
+            <img src={selectedNftForScramble.footWear} className="avatar footWear" alt="footWear" />
           ) : (
             ''
           )}
           {selectedNftForScramble.leftHand ? (
-            <img src={selectedNftForScramble.leftHand} className="leftHand" alt="leftHand" />
+            <img src={selectedNftForScramble.leftHand} className="avatar leftHand" alt="leftHand" />
           ) : (
             ''
           )}
           {selectedNftForScramble.rightHand ? (
-            <img src={selectedNftForScramble.rightHand} className="rightHand" alt="rightHand" />
+            <img
+              src={selectedNftForScramble.rightHand}
+              className="avatar rightHand"
+              alt="rightHand"
+            />
           ) : (
             ''
           )}
