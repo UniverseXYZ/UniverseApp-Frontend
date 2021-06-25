@@ -42,6 +42,10 @@
       top: 0;
       left: 100px;
       text-align: end;
+      .elipses-bg{
+        mix-blend-mode: normal;
+        filter: blur(6px);
+      }
       img {
         @include sm {
           height: 250px;
