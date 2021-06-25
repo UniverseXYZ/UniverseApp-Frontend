@@ -4,31 +4,36 @@ import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
-import soldier from '../../assets/images/soldier.png';
+import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
+import { PLACEHOLDER_MINTED_POLYMORPHS } from '../../utils/fixtures/MintedPolymorphsDummyData.js';
 
 const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
   const history = useHistory();
-  const [polymorphs, setPolymorphs] = useState([]);
+  const [polymorphs, setPolymorphs] = useState(PLACEHOLDER_MINTED_POLYMORPHS);
+  const [minted, setMinted] = useState(false);
+  useEffect(() => {
+    const arr = polymorphs.sort(() => Math.random() - Math.random()).slice(0, quantity);
+    setPolymorphs(arr);
+  }, []);
 
   useEffect(() => {
-    const newPolymorphs = [];
-    for (let i = 0; i < quantity; i += 1) {
-      newPolymorphs.push({
-        id: uuid,
-        polymorph: soldier,
-      });
-    }
-    setPolymorphs(newPolymorphs);
+    const timer1 = setTimeout(() => {
+      setMinted(true);
+    }, 5000);
+    return () => {
+      clearTimeout(timer1);
+    };
   }, []);
 
   return (
     <div className="polymorph_popup">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       <h1>Congratulations!</h1>
-      <p>
+      <p className="desc">
         You have successfully minted your {polymorphs.length > 1 ? polymorphs.length : ''}{' '}
         Polymorphic Universe NFT
       </p>
+      {!minted ? <p className="info">Your Polymoprhs may take up to 2 minutes to load</p> : <></>}
       <div
         className={`polymorph_confirmation_image ${
           polymorphs.length > 1 && polymorphs.length < 5 ? 'img2x2' : ''
@@ -36,9 +41,25 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
         ${polymorphs.length > 6 && polymorphs.length < 13 ? 'img4x3' : ''}
         ${polymorphs.length > 12 && polymorphs.length < 21 ? 'img5x4' : ''}`}
       >
-        {polymorphs.map((elm) => (
-          <img src={elm.polymorph} alt="soldier" key={uuid()} />
-        ))}
+        {polymorphs.map((elm) =>
+          minted ? (
+            <img src={elm.polymorphImg} alt="polymorph" key={uuid()} />
+          ) : (
+            <div className="loading" key={uuid()}>
+              <img src={loadingBg} alt="polymorph" key={uuid()} />
+              <div className="lds-roller">
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+          )
+        )}
       </div>
       <div className="button__div_polymorph">
         <Button className="light-button" onClick={() => history.push('/my-nfts')}>

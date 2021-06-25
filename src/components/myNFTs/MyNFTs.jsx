@@ -16,6 +16,7 @@ import union from '../../assets/images/Union.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
+import Tabs from '../tabs/Tabs';
 
 const MyNFTs = () => {
   const {
@@ -138,54 +139,19 @@ const MyNFTs = () => {
     myNFTs.length || deployedCollections.length || savedNfts.length || savedCollections.length;
 
   const renderTabsWrapper = () => (
-    <div className="container tabs__wrapper">
-      <div className="tab__left__arrow">
-        <img
-          onClick={handleTabLeftScrolling}
-          aria-hidden="true"
-          src={tabArrow}
-          alt="Tab left arrow"
-        />
-      </div>
-      <div className="tabs">
-        <ul className="tab_items">
-          {tabs.map((tab, index) => (
-            <li
-              key={uuid()}
-              className={myNFTsSelectedTabIndex === index ? 'active' : ''}
-              onClick={() => setMyNFTsSelectedTabIndex(index)}
-              aria-hidden="true"
-            >
-              {index === 2 && savedNfts.length > 0 ? (
-                <>
-                  <div className="notification">
-                    {tab}
-                    <span>{savedNfts.length}</span>
-                  </div>
-                </>
-              ) : index === 3 && savedCollections.length > 0 ? (
-                <>
-                  <div className="notification">
-                    {tab}
-                    <span>{savedCollections.length}</span>
-                  </div>
-                </>
-              ) : (
-                tab
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="tab__right__arrow">
-        <img
-          onClick={handleTabRightScrolling}
-          aria-hidden="true"
-          src={tabArrow}
-          alt="Tab right arrow"
-        />
-      </div>
-    </div>
+    <Tabs
+      items={tabs.map((tab, index) => ({
+        name: tab,
+        active: myNFTsSelectedTabIndex === index,
+        handler: setMyNFTsSelectedTabIndex.bind(this, index),
+        label:
+          index === 2 && savedNfts.length > 0
+            ? savedNfts.length
+            : index === 3 && savedCollections.length > 0
+            ? savedCollections.length
+            : null,
+      }))}
+    />
   );
 
   const renderPopups = () => (

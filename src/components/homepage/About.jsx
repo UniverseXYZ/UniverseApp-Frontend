@@ -249,8 +249,8 @@ const About = () => {
               <span className="new">New</span>
               <h1 className="title mh">Polymorph Universe</h1>
               <p className="desc">
-                A mutating universe where genes are <br /> randomly scrambled when bought, traded or
-                transfered.
+                A mutating universe where genes are randomly <br />
+                scrambled when bought, traded or transfered.
               </p>
               <Button className="light-button" onClick={() => history.push('/polymorphs')}>
                 Learn more

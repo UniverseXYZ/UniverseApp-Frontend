@@ -16,6 +16,7 @@ const Main = ({
   setAccountPage,
   accountImage,
   setAccountImage,
+  editProfileButtonClick,
 }) => {
   const { loggedInArtist } = useContext(AppContext);
   const [hideIcon, setHideIcon] = useState(false);
@@ -121,7 +122,9 @@ const Main = ({
                 ref={accountInput}
                 onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
               />
-              {!accountImage && <p className="error__text">&quot;File&quot; is required.</p>}
+              {!accountImage && editProfileButtonClick && (
+                <p className="error__text">&quot;File&quot; is required.</p>
+              )}
             </div>
           </div>
           <div className="account-grid-name-editing">
@@ -132,7 +135,7 @@ const Main = ({
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
             />
-            {!accountName && (
+            {!accountName && editProfileButtonClick && (
               <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
             )}
             <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
@@ -160,11 +163,12 @@ const Main = ({
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
             />
-            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') && (
-              <p className="error__text">
-                &quot;Universee page address&quot; is not allowed to be empty
-              </p>
-            )}
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+              editProfileButtonClick && (
+                <p className="error__text">
+                  &quot;Universe page address&quot; is not allowed to be empty
+                </p>
+              )}
             {accountName !== loggedInArtist.name ||
             accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||
             (accountImage &&
@@ -202,6 +206,7 @@ Main.propTypes = {
   setAccountPage: PropTypes.func,
   accountImage: PropTypes.oneOfType([PropTypes.any]),
   setAccountImage: PropTypes.func,
+  editProfileButtonClick: PropTypes.bool,
 };
 
 Main.defaultProps = {
@@ -211,6 +216,7 @@ Main.defaultProps = {
   setAccountPage: () => {},
   accountImage: null,
   setAccountImage: () => {},
+  editProfileButtonClick: false,
 };
 
 export default Main;

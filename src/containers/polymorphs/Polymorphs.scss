@@ -7,11 +7,11 @@
 .polymorphs {
     .welcome--section {
         @include xl {
-            padding: 0 60px;
+            padding: 0;
             overflow: hidden;
         }
         @include sm {
-            padding: 0 20px;
+            padding: 0;
         }
         .welcome__section__container {
             max-width: 1110px;
@@ -19,17 +19,21 @@
             padding-left: 0;
             @include xl {
                 overflow: visible;
+                padding: 0 60px;
             }
             @include lg {
                 min-height: 685px;
                 height: auto;
             }
-        }
-        .left {
-            p.desc {
-                max-width: 430px;
+            @include sm {
+                padding: 0 20px;
             }
         }
+        // .left {
+        //     p.desc {
+        //         max-width: 430px;
+        //     }
+        // }
         .right {
             position: absolute;
             top: 0;
@@ -78,7 +82,7 @@
                 background-image: linear-gradient(90deg, rgba(42,208,202,0.5018382352941176) 0%, rgba(225,246,100,0.5) 20%, rgba(254,176,254,0.5) 40%, rgba(171,179,252,0.5) 60%, rgba(93,247,164,0.5) 80%, rgba(88,196,246,0.5) 100%);
             }
             span {
-                font-family: $sharpGroteskSemiBoldFont;
+                font-family: $sharpGroteskBoldFont;
                 font-style: normal;
                 font-weight: bold;
                 font-size: 19.371px;

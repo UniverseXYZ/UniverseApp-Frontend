@@ -1,0 +1,171 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/mixins';
+
+.container {
+  max-width: 90%;
+}
+
+@media (min-width: $screen-md-max) {
+  .container {
+    width: 600px;
+  }
+}
+
+@media (min-width: $screen-lg-max) {
+  .container {
+    width: 900px;
+  }
+}
+
+@media (min-width: $screen-xl-max) {
+  .container {
+    width: 1170px;
+  }
+}
+
+.scramble--wrapper {
+  font-family: Space Grotesk, sans-serif;
+  font-style: normal;
+
+  .go--back--wrapper {
+    cursor: pointer;
+    margin-bottom: 50px;
+    margin-top: -20px;
+
+    span {
+      margin-left: 10px;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+  }
+
+  .scramble--content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .avatar--wrapper {
+      position: relative;
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 500px;
+        max-width: 500px;
+
+        background-repeat: no-repeat;
+        background-size: 100%;
+        mix-blend-mode: normal;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+
+        filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
+        border-radius: 12px;
+      }
+
+      .background {
+        z-index: 1;
+      }
+
+      .person {
+        z-index: 2;
+      }
+
+      .headWear {
+        z-index: 3;
+      }
+
+      .eyeWear {
+        z-index: 3;
+      }
+
+      .torso {
+        z-index: 3;
+      }
+
+      .pants {
+        z-index: 3;
+      }
+
+      .footwear {
+        z-index: 3;
+      }
+
+      .leftHand {
+        z-index: 3;
+      }
+
+      .rightHand {
+        z-index: 3;
+      }
+
+    }
+
+    .scramble--options {
+      width: 560px;
+      max-width: 90%;
+
+      .name {
+        font-weight: 600;
+        font-size: 26px;
+        line-height: 140%;
+      }
+
+      .description {
+        margin-top: 20px;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 160%;
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      .tabs__wrapper {
+        padding: 0;
+        margin: 30px 0 20px 0;
+      }
+
+      .scramble--properties {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 40px;
+      }
+
+      .metadata {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        padding: 15px;
+
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 12px;
+
+        .genome--string--name {
+          font-weight: 500;
+          font-size: 16px;
+
+          color: #000000;
+        }
+
+        .genome--string--value {
+          font-weight: 500;
+          font-size: 16px;
+
+          color: #4D66EB;
+        }
+
+      }
+
+    }
+
+  }
+
+}

@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
+import { useHistory } from 'react-router-dom';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import './styles/Section4.scss';
@@ -23,15 +24,22 @@ const leftBlock = (windows) => (
   </AnimatedOnScroll>
 );
 
-const rightBlock = () => (
-  <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <div className="section4--right--block">
-      <h2>Scramble its Genes on Demand</h2>
-      <p>Mint a Polymorphic NFT whose genes can be scrambled and morphed by its owner.</p>
-      <Button className="light-button">Mint now</Button>
-    </div>
-  </AnimatedOnScroll>
-);
+const rightBlock = () => {
+  const history = useHistory();
+  return (
+    <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
+      <div className="section4--right--block">
+        <h2>Mint a Polymorphic NFT that will scramble its genes when told to</h2>
+        <p>
+          Mint a Polymorphic NFT that will scramble its genes when minted or when its told to morph.
+        </p>
+        <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
+          Mint a morph
+        </Button>
+      </div>
+    </AnimatedOnScroll>
+  );
+};
 
 const Section4 = () => {
   const [windows, setWindows] = useState('browser');

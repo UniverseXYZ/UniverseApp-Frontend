@@ -3,25 +3,29 @@ import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import ImgRow1 from '../../assets/images/Section1-Illustration-min.png';
-import ImgRow2Chart from '../../assets/images/chart-min.png';
-import ImgRow2Background from '../../assets/images/Background-min.jpg';
+import ImgRow2Chart from '../../assets/images/chart-min1.svg';
+import ImgRow2Background from '../../assets/images/curve-bg.jpg';
 import './styles/About.scss';
 
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <h2>New technology</h2>
+    <h2>New Technology</h2>
     <p>
-      A first in the Universe and on the blockchain. We`ve built technology that allows you to
-      scramble your Polymorph`s wearables at random. Once minted, your Morph`s base skin is the only
-      permanent feature and will never change. Will you be able to scramble your perfect Polymorph?
+      A first in the Universe and on the blockchain, we’ve built technology that allows you to morph
+      your Polymorph’s characteristics. When you mint, you will get a random Polymorph with traits
+      and wearables that can be scrambled.
     </p>
   </AnimatedOnScroll>
 );
 
 const row2LeftBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <h2>Released via Distribution Curve</h2>
-    <p>The Polymorphs will be originally released via a flat curve.</p>
+    <h2>Fair Launch</h2>
+    <p>
+      The Polymorphs will be released on a flat curve. 10,000 Polymorphs can be minted for 0.0777
+      ETH each. Up to 20 Polymorphs can be minted in one transaction. Minted Polymorphs can be sold
+      on any ERC-721-compatible marketplace.
+    </p>
   </AnimatedOnScroll>
 );
 

@@ -1,0 +1,112 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/mixins';
+
+.popup-div {
+  max-width: 85%;
+  width: auto;
+  padding: 70px;
+
+  .scramble--popup {
+    margin: 0 auto;
+    font-family: Space Grotesk, sans-serif;
+    line-height: 160%;
+    font-style: normal;
+    display: flex;
+
+    .scramble--popup--content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 auto;
+
+      @media (max-width: 1100px) {
+        flex-wrap: wrap;
+      }
+
+      .avatar--wrapper {
+
+        .avatar {
+          height: 445px;
+          width: 445px;
+          max-width: 90%;
+
+          background-repeat: no-repeat;
+          background-size: 100%;
+          mix-blend-mode: normal;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-sizing: border-box;
+
+          filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
+          border-radius: 12px;
+        }
+
+      }
+
+      .scramble--options {
+        height: 445px;
+        width: 445px;
+        max-width: 90%;
+
+        .name {
+          font-weight: 600;
+          font-size: 26px;
+          line-height: 140%;
+        }
+
+        .description {
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.6);
+          margin-bottom: 30px;
+        }
+
+        .traits--popup {
+          margin-bottom: 30px;
+        }
+
+        .scramble--action {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 30px;
+
+          .scramble--price {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 20px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            font-feature-settings: 'ss02' on, 'ss03' on, 'ss04' on;
+
+            img {
+              margin-right: 10px;
+            }
+
+          }
+
+          .light-button {
+            width: 65%;
+          }
+
+        }
+
+        .next-price-description {
+          font-size: 14px;
+          font-weight: bold;
+          color: #E4B613;
+        }
+
+        .tabs__wrapper {
+          padding: 0;
+          margin: 30px 0 30px 0;
+        }
+
+      }
+
+    }
+
+  }
+
+}

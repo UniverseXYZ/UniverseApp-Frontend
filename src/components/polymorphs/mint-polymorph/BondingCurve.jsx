@@ -8,8 +8,8 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
 import PriceETHIconWhite from '../../../assets/images/ethereum-white.svg';
 import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
-import backgroundTextLeft from '../../../assets/images/MintPolymorph-welcome-bg-left.png';
-import backgroundTextRight from '../../../assets/images/MintPolymorph-welcome-bg-right.png';
+import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg-left.png';
+import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
 
 const BondingCurve = (props) => {

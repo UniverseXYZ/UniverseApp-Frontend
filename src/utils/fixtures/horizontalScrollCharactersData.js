@@ -19,7 +19,7 @@ export default [
   { img: GoldtoothImg, name: 'Goldtooth' },
   { img: MariguannaImg, name: 'Mariguanna' },
   { img: OgreImg, name: 'Troll God' },
-  { img: XYZbotImg, name: 'XYZbot' },
+  { img: XYZbotImg, name: 'X-YZ' },
   { img: VikingImg, name: 'Ragnar' },
   { img: FrankieImg, name: 'Frankie' },
 ];

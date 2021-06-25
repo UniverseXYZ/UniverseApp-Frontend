@@ -5,8 +5,8 @@ import Marquee from 'react-fast-marquee';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import Popup from 'reactjs-popup';
 import ellipses from '../../assets/images/ellipses.svg';
-import backgroundTextLeft from '../../assets/images/MintPolymorph-welcome-bg-left.png';
-import backgroundTextRight from '../../assets/images/MintPolymorph-welcome-bg-right.png';
+import backgroundTextLeft from '../../assets/images/mint-polymorph-welcome-bg-left.png';
+import backgroundTextRight from '../../assets/images/mint-polymorph-welcome-bg-right.png';
 import Button from '../button/Button.jsx';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
 import './styles/WelcomeWrapper.scss';
@@ -34,7 +34,7 @@ const WelcomeWrapper = (props) => {
         {bgTextLeft && (
           <div className="text-l">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundTextLeft} alt="Ellipses" />
+              <img src={backgroundTextLeft} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-l" />
           </div>
@@ -42,7 +42,7 @@ const WelcomeWrapper = (props) => {
         {bgTextRight && (
           <div className="text-r">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundTextRight} alt="Ellipses" />
+              <img src={backgroundTextRight} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-r" />
           </div>
