@@ -139,9 +139,8 @@
             max-width: 20vw;
             height: 20vw;
             p {
-                width: 20vw !important;
+                width: 100% !important;
                 bottom: 0;
-                text-align: center;
                 width: 100%;
                 text-align: center;
                 font-family:$spaceGroteskFont;
@@ -160,13 +159,26 @@
                 //     font-size: 12px !important;
                 // }
             }
+            img {
+                max-width: 20vw;
+                @include xl {
+                    max-width: 20vw;
+                }
+                @include md {
+                    max-width: 35vw;
+                }
+                @include sm {
+                    max-width: 34vw;
+                }
+            }
             @include xl {
                 height: 350px;
                 width: 350px;
             }
-            @include lg {
-                height: 34vw;
-                width: 34vw;
+            @include md {
+                height: 35vw;
+                width: 35vw;
+                max-width: 35vw;
             }
         }
     } 
