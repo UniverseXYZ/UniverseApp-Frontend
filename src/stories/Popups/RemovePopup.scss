@@ -1,0 +1,76 @@
+@import '../../assets/scss/variables';
+
+.popup-div {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    background: $white;
+    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+    border-radius: 12px;
+    max-width: 520px;
+    width: 100%;
+    height: 280px;
+}
+
+.popup-close {
+    cursor: pointer;
+    padding: 2px 8px;
+    margin-top: -12px;
+    margin-right: -12px;
+    line-height: 2em;
+    background-color: $white;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.popup-title {
+    text-align: center;
+    h4 {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-weight: 800;
+        font-size: 26px;
+        line-height: 36.4px;
+        letter-spacing: 0.8px;
+        margin-top: 20px;
+    }
+}
+
+.popup-text {
+    text-align: center;
+    padding-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-text>p {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+    padding: 0 40px;
+}
+
+.popup-btns {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.popup-btns {
+    >button{
+    margin-right: 12px;
+    font-family: $spaceGroteskFont;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20,42px;
+    }
+}
