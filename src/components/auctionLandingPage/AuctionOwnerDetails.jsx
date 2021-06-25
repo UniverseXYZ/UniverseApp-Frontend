@@ -49,8 +49,8 @@ const AuctionOwnerDetails = ({ artist }) => {
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
-              height={window.screen.width > 576 ? 280 : 90}
-              width={window.screen.width > 576 ? 280 : 90}
+              height={window.innerWidth > 576 ? 280 : 90}
+              width={window.innerWidth > 576 ? 280 : 90}
               circle
             />
             <h2 className="show__on__mobile">

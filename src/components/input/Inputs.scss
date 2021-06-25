@@ -6,7 +6,7 @@
   box-sizing: border-box;
   border-radius: 12px;
   // height: 50px;
-  padding: 15px;
+  padding: 15px 16px;
   width: 100%;
 }
 .inp-light-border {
@@ -36,6 +36,9 @@ span.inp-label,
   border: 1px solid red !important;
   border-radius: 12px;
   padding: 15px;
+  &::placeholder {
+    color: red!important;
+  }
 }
 .error-message {
   font-family: $spaceGroteskFont;

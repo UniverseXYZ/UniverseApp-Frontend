@@ -2,10 +2,10 @@
 /* eslint-disable no-shadow */
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
-import CustomColorPicker from './CustomColorPicker';
+import CustomColorPicker from './CustomColorPicker.jsx';
 import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange }) => {
@@ -23,6 +23,31 @@ const RewardTiersAuction = ({ values, onChange }) => {
       })
     );
   };
+
+  // useEffect(() => {
+  //   auction.tiers.forEach((tier) => {
+  //     if (tier.description) {
+  //       onChange((prevValues) =>
+  //         prevValues.map((t) => {
+  //           if (t.id === tier.id) {
+  //             return { ...tier, description: tier.description };
+  //           }
+  //           return tier;
+  //         })
+  //       );
+  //     }
+  //     if (tier.tierImg) {
+  //       onChange((prevValues) =>
+  //         prevValues.map((t) => {
+  //           if (t.id === tier.id) {
+  //             return { ...tier, tierImg: tier.tierImg };
+  //           }
+  //           return tier;
+  //         })
+  //       );
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
     setElRefs((elr) =>
@@ -50,8 +75,9 @@ const RewardTiersAuction = ({ values, onChange }) => {
       {auction &&
         auction.tiers.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
-          const image = values.find((valuesTier) => valuesTier.id === tier.id).tierImg;
-          // console.log(values[0].description.length);
+          const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
+          const image = checkTier ? checkTier.tierImg : null;
+          const description = checkTier ? checkTier.description : null;
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -61,7 +87,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
                   {window.innerWidth < 576 && (
                     <div className="pick__color">
                       <p>Pick tier color</p>
-                      <CustomColorPicker index={i} onChange={onChange} />
+                      <CustomColorPicker index={i} onChange={onChange} onColor={tier.color} />
                     </div>
                   )}
                   <div className="tier__description">
@@ -71,18 +97,22 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     <div className="winners">
                       NFTs per winner: <b>{tier.nftsPerWinner}</b>
                     </div>
-                    <div className="winners">
-                      Minimum bid per tier:
-                      <b>
-                        {tier.minBid} {bidtype}
-                      </b>
-                    </div>
+                    {tier.minBidValue ? (
+                      <div className="winners">
+                        Minimum bid per tier:
+                        <b>
+                          {` ${tier.minBidValue}`} {bidtype}
+                        </b>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
                 {window.innerWidth > 576 && (
                   <div className="pick__color">
                     <p>Pick tier color</p>
-                    <CustomColorPicker index={i} onChange={onChange} />
+                    <CustomColorPicker index={i} onChange={onChange} onColor={tier.color} />
                   </div>
                 )}
               </div>
@@ -100,12 +130,10 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     className="inp"
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
-                    value={values.find((valuesTier) => valuesTier.id === tier.id).description}
+                    value={description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
-                  {!values.find((valuesTier) => valuesTier.id === tier.id).description?.trim() && (
-                    <p className="error__text">Fill out the description</p>
-                  )}
+                  {!description && <p className="error__text">Fill out the description</p>}
                 </div>
                 <div className="upload__image">
                   <h4>Upload tier image (optional)</h4>

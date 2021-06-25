@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
+import './ReviewReward.scss';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrow from '../../assets/images/arrow.svg';
 import pencil from '../../assets/images/pencil.svg';
 import infoIcon from '../../assets/images/icon.svg';

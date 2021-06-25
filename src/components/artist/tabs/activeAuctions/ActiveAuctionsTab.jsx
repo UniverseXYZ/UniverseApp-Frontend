@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-import Pagination from '../../../pagination/Pagionation';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
-import ActiveAuctionsList from './ActiveAuctionsList';
+import Pagination from '../../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
+import ActiveAuctionsList from './ActiveAuctionsList.jsx';
 import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../utils/fixtures/ActiveAuctionsDummyData';
+import AppContext from '../../../../ContextAPI.js';
 
 const ActiveAuctionsTab = () => {
+  const { myAuctions, activeAuctions, futureAuctions } = useContext(AppContext);
+  console.log('myAuctions', myAuctions);
+  console.log('activeAuctions', activeAuctions);
+  console.log('futureAuctions', futureAuctions);
   const location = useLocation();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);

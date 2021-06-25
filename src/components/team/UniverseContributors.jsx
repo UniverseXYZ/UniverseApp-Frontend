@@ -10,7 +10,7 @@ import HowardLawrence from '../../assets/images/team/Howard-Lawrence.png';
 import AaronMcDonald from '../../assets/images/team/Aaron-McDonald.png';
 import KainWarwick from '../../assets/images/team/Kain-Warwick.png';
 import StaniKulechov from '../../assets/images/team/Stani-Kulechov.png';
-import SantiagoSantos from '../../assets/images/team/Santiago-Santos.png';
+import SantiagoRSantos from '../../assets/images/team/Santiago-R-Santos.png';
 import MattHunter from '../../assets/images/team/Matt-Hunter.png';
 import AkinSawyerr from '../../assets/images/team/Akin-Sawyer.png';
 import QuinnAbraham from '../../assets/images/team/Quinn-Abraham.png';
@@ -53,6 +53,7 @@ import RobbieFerguson from '../../assets/images/team/Robbie-Ferguson.png';
 import AndréNabais from '../../assets/images/team/André-Nabais.png';
 import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
 import HarrisonHines from '../../assets/images/team/Harrison-Hines.png';
+import ScottPlowman from '../../assets/images/team/Scott-Plowman.png';
 
 const UniverseContributors = () => {
   const [contributors, setContributors] = useState([
@@ -112,8 +113,8 @@ const UniverseContributors = () => {
     },
     {
       id: 10,
-      name: 'Santiago Santos',
-      avatar: SantiagoSantos,
+      name: 'Santiago R Santos',
+      avatar: SantiagoRSantos,
       loaded: false,
     },
     {
@@ -238,7 +239,7 @@ const UniverseContributors = () => {
     },
     {
       id: 31,
-      name: 'Kevin Xu',
+      name: 'Fully Allocated',
       avatar: KevinXu,
       loaded: false,
     },
@@ -328,7 +329,7 @@ const UniverseContributors = () => {
     },
     {
       id: 46,
-      name: 'Olaf Carson-Wee – Polychain',
+      name: 'Olaf Carson-Wee',
       avatar: OlafCarsonWee,
       loaded: false,
     },
@@ -368,6 +369,12 @@ const UniverseContributors = () => {
       avatar: HarrisonHines,
       loaded: false,
     },
+    {
+      id: 53,
+      name: 'Scott Plowman',
+      avatar: ScottPlowman,
+      loaded: false,
+    },
   ]);
 
   const handleLoaded = (idx) => {
@@ -381,12 +388,12 @@ const UniverseContributors = () => {
       <h1 className="title">Universe Contributors</h1>
       <div className="contributors">
         {contributors.map((contributor, index) => (
-          <AnimatedOnScroll animationIn="fadeIn">
-            <div className="contributor" key={contributor.id}>
+          <AnimatedOnScroll animationIn="fadeIn" key={contributor.id}>
+            <div className="contributor">
               {!contributor.loaded && (
                 <Skeleton
                   height={160}
-                  style={{ width: window.screen.width < 576 ? '160px' : '100%' }}
+                  style={{ width: window.innerWidth < 576 ? '160px' : '100%' }}
                 />
               )}
               <img

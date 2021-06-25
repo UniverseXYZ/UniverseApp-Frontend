@@ -4,17 +4,26 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Lists from './Lists';
-import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import Pagination from '../pagination/Pagionation';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
+import Pagination from '../pagination/Pagionation.jsx';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import '../pagination/Pagination.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 
-const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTIds }) => {
+const Wallet = ({
+  filteredNFTs,
+  setFilteredNFTs,
+  selectedNFTIds,
+  setSelectedNFTIds,
+  tierName,
+  winners,
+  nftsPerWinner,
+  minBidValue,
+}) => {
   const { myNFTs, auction, setAuction } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -39,9 +48,9 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
   };
 
   const location = useLocation();
-  const isCreatingAction = location.pathname === '/select-nfts';
-  const tierId = location.state;
-  const tierById = auction.tiers.find((element) => element.id === tierId);
+  const isCreatingAction = location.pathname === '/create-tiers';
+  const tierById = !!(winners && nftsPerWinner);
+  const editMode = auction.tiers.find((element) => element.id === location.state);
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
@@ -122,15 +131,42 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
   };
 
   const handleContinue = (prevNFTs) => {
-    setAuction({
-      ...auction,
-      tiers: [
-        ...auction.tiers.filter((tier) => tier.id !== tierById.id),
-        { ...tierById, nfts: prevNFTs },
-      ],
-    });
+    if (!editMode) {
+      setAuction({
+        ...auction,
+        tiers: [
+          ...auction.tiers,
+          {
+            id: uuid(),
+            name: tierName,
+            winners,
+            nftsPerWinner,
+            minBidValue,
+            nfts: prevNFTs,
+          },
+        ],
+      });
+    } else {
+      const newTiers = [];
+      auction.tiers.forEach((tier) => {
+        if (tier.id === editMode.id) {
+          tier.name = tierName;
+          tier.winners = winners;
+          tier.nftsPerWinner = nftsPerWinner;
+          tier.minBidValue = minBidValue;
+          tier.nfts = prevNFTs;
+          newTiers.push(tier);
+        } else {
+          newTiers.push(tier);
+        }
+      });
+      setAuction({
+        ...auction,
+        tiers: newTiers,
+      });
+    }
     setSelectedNFTIds([]);
-    history.push('/review-reward', tierId);
+    history.push('/setup-auction/reward-tiers');
   };
 
   useEffect(() => {
@@ -271,7 +307,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
                     </button>
                   ))
                 ) : (
-                  <div className="empty__nfts">
+                  <div className="empty__collections">
                     <h3>No Collections found</h3>
                   </div>
                 )}
@@ -303,7 +339,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
 
             <div className="search__by__name">
               <div className="search__by__name__label">
-                <span>Seach by name</span>
+                <span>Search by name</span>
               </div>
               <div className="search__by__name__input">
                 <input
@@ -344,7 +380,7 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
                     </button>
                   ))
                 ) : (
-                  <div className="empty__nfts">
+                  <div className="empty__collections">
                     <h3>No Collections found</h3>
                   </div>
                 )}
@@ -383,6 +419,8 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
                 offset={offset}
                 selectedNFTIds={selectedNFTIds}
                 setSelectedNFTIds={setSelectedNFTIds}
+                winners={Number(winners)}
+                nftsPerWinner={Number(nftsPerWinner)}
               />
 
               <div className="pagination__container">
@@ -391,23 +429,33 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
               </div>
             </>
           ) : (
-            <div className="empty__nfts">
+            <div className="empty__filter__nfts">
               <h3>No NFTs found</h3>
             </div>
           )}
         </>
       ) : (
         <div className="empty__nfts">
-          <h3>No NFTs found</h3>
+          <h3>No NFTs found in your wallet</h3>
+          <p className="desc">Mint some NFTs by clicking the button below</p>
+          <button
+            type="button"
+            className="set_up"
+            onClick={() => {
+              history.push('/my-nfts');
+            }}
+          >
+            Go to Minting
+          </button>
         </div>
       )}
-      {isCreatingAction && tierById && (
+      {isCreatingAction && (
         // <div>
         <div className="selected-ntf">
           <div className="container selected-body">
             <div className="infoSelect-div">
-              <span>Number of winners : {tierById.winners}</span>
-              <span>NFTs per winner : {tierById.nftsPerWinner}</span>
+              <span>Number of winners : {winners}</span>
+              <span>NFTs per winner : {nftsPerWinner}</span>
               <div className="img-div">
                 {previewNFTs.map((nft, index) => (
                   <div key={nft.id} className="imgs">
@@ -444,16 +492,21 @@ const Wallet = ({ filteredNFTs, setFilteredNFTs, selectedNFTIds, setSelectedNFTI
                     />
                   </div>
                 ))}
+                {Array(nftsPerWinner - previewNFTs.length)
+                  .fill(0)
+                  .map((el, i) => (
+                    <div className="placeholder" />
+                  ))}
               </div>
             </div>
             <div className="sel-info">
-              {tierById.nftsPerWinner > previewNFTs.length && (
+              {nftsPerWinner > previewNFTs.length && (
                 <span className="err-select">
                   You have not selected enough NFTs for this reward tier
                 </span>
               )}
               <div className="continue-nft">
-                {tierById && Number(tierById.nftsPerWinner) === Number(previewNFTs.length) ? (
+                {tierById && Number(nftsPerWinner) === Number(previewNFTs.length) ? (
                   <Button onClick={() => handleContinue(previewNFTs)} className="light-button">
                     Continue
                   </Button>
@@ -476,6 +529,17 @@ Wallet.propTypes = {
   setFilteredNFTs: PropTypes.func.isRequired,
   selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setSelectedNFTIds: PropTypes.func.isRequired,
+  tierName: PropTypes.string,
+  winners: PropTypes.number,
+  nftsPerWinner: PropTypes.number,
+  minBidValue: PropTypes.string,
+};
+
+Wallet.defaultProps = {
+  tierName: '',
+  winners: null,
+  nftsPerWinner: null,
+  minBidValue: '',
 };
 
 export default Wallet;

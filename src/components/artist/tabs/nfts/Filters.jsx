@@ -75,7 +75,7 @@ const NFTsFilters = () => {
         </div>
         <div className="search__by__name">
           <div className="search__by__name__label">
-            <span>Seach by name</span>
+            <span>Search by name</span>
           </div>
           <div className="search__by__name__input">
             <input

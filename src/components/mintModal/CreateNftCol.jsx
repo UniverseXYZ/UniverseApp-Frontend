@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import randomColor from 'randomcolor';
+import { defaultColors } from '../../utils/helpers';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import Button from '../button/Button.jsx';
+import Input from '../input/Input.jsx';
 import defaultImage from '../../assets/images/default-img.svg';
 import sizeDownIcon from '../../assets/images/size-down.svg';
 import sizeUpIcon from '../../assets/images/size-up.svg';
@@ -45,9 +45,20 @@ const CreateNftCol = (props) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
+  const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
+  const [royalities, setRoyalities] = useState(true);
+  const [percentAmount, setPercentAmount] = useState('');
   const inputFile = useRef(null);
 
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
+
+  const handleInputChange = (val) => {
+    if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
+      if (val <= 100) {
+        setPercentAmount(val);
+      }
+    }
+  };
   const removeProperty = (index) => {
     const temp = [...properties];
     temp.splice(index, 1);
@@ -138,6 +149,7 @@ const CreateNftCol = (props) => {
         setEditions(getCollectionNFT[0].numberOfEditions);
         setPreviewImage(getCollectionNFT[0].previewImage);
         setProperties(getCollectionNFT[0].properties);
+        setPercentAmount(getCollectionNFT[0].percentAmount);
       }
       const getSavedNFT = savedNfts.filter((item) => item.id === collectionNFTsID);
       if (getSavedNFT.length) {
@@ -146,6 +158,7 @@ const CreateNftCol = (props) => {
         setEditions(getSavedNFT[0].numberOfEditions);
         setPreviewImage(getSavedNFT[0].previewImage);
         setProperties(getSavedNFT[0].properties);
+        setPercentAmount(getSavedNFT[0].percentAmount);
       }
     }
   }, []);
@@ -166,7 +179,8 @@ const CreateNftCol = (props) => {
               type: 'collection',
               collectionId: collectionName,
               collectionName,
-              collectionAvatar: coverImage || randomColor(),
+              collectionAvatar:
+                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
               previewImage,
               name,
               description,
@@ -241,6 +255,8 @@ const CreateNftCol = (props) => {
           setDescription('');
           setEditions(1);
           setPreviewImage(null);
+          setPercentAmount('');
+          setProperties([{ name: '', value: '' }]);
         }
         setClicked(false);
       }
@@ -385,14 +401,12 @@ const CreateNftCol = (props) => {
                   Number of editions <img src={infoIcon} alt="Info Icon" />
                 </h5>
                 {hideIcon && (
-                  <Animated animationIn="zoomIn">
-                    <div className="info-text">
-                      <p>
-                        Total amount of NFTs that will be distributed to the current reward tier
-                        winners
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="info-text">
+                    <p>
+                      Total amount of NFTs that will be distributed to the current reward tier
+                      winners.
+                    </p>
+                  </div>
                 )}
               </div>
               <Input
@@ -414,14 +428,12 @@ const CreateNftCol = (props) => {
                   Properties (optional) <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideIcon1 && (
-                  <Animated animationIn="zoomIn">
-                    <div className="properties-info-text">
-                      <p>
-                        Adding properties allows you to specify the character NFT traits and any
-                        other details you would like to specify.
-                      </p>
-                    </div>
-                  </Animated>
+                  <div className="properties-info-text">
+                    <p>
+                      Adding properties allows you to specify the character NFT traits, the goods
+                      NFT sizes, or any other details you would like to specify.
+                    </p>
+                  </div>
                 )}
               </div>
 
@@ -463,6 +475,53 @@ const CreateNftCol = (props) => {
                   Add property
                 </h5>
               </div>
+            </div>
+            <div className="royalities">
+              <div className="title">
+                <h4
+                  onMouseOver={() => setHideRoyalitiesInfo(true)}
+                  onFocus={() => setHideRoyalitiesInfo(true)}
+                  onMouseLeave={() => setHideRoyalitiesInfo(false)}
+                  onBlur={() => setHideRoyalitiesInfo(false)}
+                >
+                  Royalties <img src={infoIcon} alt="Info Icon" />
+                </h4>
+                {hideRoyalitiesInfo && (
+                  <div className="royalities-info-text">
+                    <p>
+                      Royalties determines the percentage you, as a creator, will get from sales of
+                      this NFT on the secondary markets.
+                    </p>
+                  </div>
+                )}
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={royalities}
+                    onChange={(e) => setRoyalities(e.target.checked)}
+                  />
+                  <span className="slider round" />
+                </label>
+              </div>
+              {royalities && (
+                <Animated animationIn="fadeIn">
+                  <div className="percent__amount">
+                    <div className="inp__container">
+                      <Input
+                        type="text"
+                        label="Percent amount"
+                        inputMode="numeric"
+                        pattern="[0-9]"
+                        placeholder="Enter percent amount"
+                        value={percentAmount}
+                        onChange={(e) => handleInputChange(e.target.value)}
+                      />
+                      <span>%</span>
+                    </div>
+                    <span className="suggested">Suggested: 10%, 20%, 30%</span>
+                  </div>
+                </Animated>
+              )}
             </div>
             <div className="nft-coll-buttons">
               {!collectionNFTsID ? (

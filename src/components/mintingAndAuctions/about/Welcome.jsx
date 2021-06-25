@@ -3,7 +3,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import ellipses from '../../../assets/images/ellipses.svg';
-import Button from '../../button/Button';
+import Button from '../../button/Button.jsx';
 import welcomeImg from '../../../assets/images/about-page-welcome.png';
 
 const Welcome = () => {
