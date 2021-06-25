@@ -54,6 +54,7 @@ const Polymorphs = () => {
         popupBtnText="My polymorphs"
         btnText="Mint a morph"
         btnOnClick={() => history.push('/mint-polymorph')}
+        btnAnotherOnClick={() => history.push('/my-nfts')}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}
