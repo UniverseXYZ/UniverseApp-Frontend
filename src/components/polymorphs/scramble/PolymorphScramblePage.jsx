@@ -131,7 +131,6 @@ const PolymorphScramblePage = () => {
       >
         {(close) => <PolymorphScrambleCongratulationPopup onClose={close} />}
       </Popup>
-      `{' '}
       <div className="scramble--content">
         <div className="avatar--wrapper">
           <div
