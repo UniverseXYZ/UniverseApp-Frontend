@@ -33,7 +33,8 @@ const WEAR_TO_GENE_POSITION_MAP = {
 };
 
 const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolymorphGene }) => {
-  const { selectedNftForScramble, polymorphContract } = useContext(AppContext);
+  const { convertPolymorphObjects, polymorphContract, userPolymorphs, setUserPolymorphs } =
+    useContext(AppContext);
   const [singleTraitTabSelected, setSingleTraitSelected] = useState(true);
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
   const [selectedTrait, setSelectedTrait] = useState('');
@@ -127,6 +128,17 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
       // Update the Gene
       const gene = await polymorphContract.geneOf(id);
       setPolymorphGene(shortenEthereumAddress(gene.toString()));
+
+      // Update userPolymorphs
+      const newPolymorph = convertPolymorphObjects([data]);
+      const updatedPolymorphs = userPolymorphs.map((existingPolymorph) => {
+        if (existingPolymorph.id === newPolymorph[0].id) {
+          return newPolymorph[0];
+        }
+        return existingPolymorph;
+      });
+
+      setUserPolymorphs(updatedPolymorphs);
 
       // Close the modal
       document.getElementById('popup-root').remove();
