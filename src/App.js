@@ -106,7 +106,6 @@ const App = () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const balance = await provider.getBalance(accounts[0]);
     const network = await provider.getNetwork();
-    const ethUsdPice = await getEthPriceCoingecko();
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
     if (network.chainId !== 3) {
@@ -129,10 +128,8 @@ const App = () => {
       setAddress(accounts[0]);
       setSigner(signerResult);
       setYourBalance(utils.formatEther(balance));
-      setUsdEthBalance(ethUsdPice.market_data.current_price.usd * utils.formatEther(balance));
       setIsWalletConnected(true);
       setEthereumNetwork(network);
-      setEthPrice(ethUsdPice);
 
       setPolymorphContract(polymorphContractInstance);
       setTotalPolymorphs(totalMinted.toNumber());
@@ -170,7 +167,15 @@ const App = () => {
     const metadataURIs = userNftIds?.map((id) => `${POLYMORPH_BASE_URI}${id}`);
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
     const polymorphNFTs = convertPolymorphObjects(nftMetadataObjects);
-    setUserPolymorphs(polymorphNFTs);
+    if (polymorphNFTs) {
+      setUserPolymorphs(polymorphNFTs);
+    }
+  };
+
+  const getEthPriceData = async (balance) => {
+    const ethUsdPice = await getEthPriceCoingecko();
+    setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
+    setEthPrice(ethUsdPice);
   };
 
   useEffect(() => {
@@ -195,7 +200,10 @@ const App = () => {
     if (data) {
       fetchUserPolymorphsTheGraph(data);
     }
-  }, [data]);
+    if (yourBalance) {
+      getEthPriceData(yourBalance);
+    }
+  }, [data, yourBalance]);
 
   useEffect(async () => {
     if (typeof window.ethereum !== 'undefined') {
