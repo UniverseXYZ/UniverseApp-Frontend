@@ -54,6 +54,7 @@ const title = () => (
 
 const Section3Randomise = (props) => {
   const { mobile } = props;
+  const [randomPersonNumber, setRandomPersonNumber] = useState(0);
   const [randomBgNumber, setRandomBgNumber] = useState(0);
   const [randomHeadwearsNumber, setRandomHeadwearsNumber] = useState(1);
   const [randomPantsNumber, setRandomPantsNumber] = useState(3);
@@ -66,6 +67,7 @@ const Section3Randomise = (props) => {
   const { person, backgrounds, headwears, pants, torso, glasses, shoes, leftHand, rightHand } =
     personData;
   const globalRandom = () => {
+    randomIndex(randomPersonNumber, setRandomPersonNumber, person.length);
     randomIndex(randomBgNumber, setRandomBgNumber, backgrounds.length);
     randomIndex(randomHeadwearsNumber, setRandomHeadwearsNumber, headwears.length);
     randomIndex(randomPantsNumber, setRandomPantsNumber, pants.length);
@@ -115,7 +117,10 @@ const Section3Randomise = (props) => {
                       className="headwears--img"
                     />
                   )}
-                  <img alt="img" src={person} />
+                  {!!person[randomPersonNumber] && (
+                    <img src={person[randomPersonNumber]} alt="img" className="person--img" />
+                  )}
+                  {/* <img alt="img" src={person} /> */}
                   {!!pants[randomPantsNumber] && (
                     <img src={pants[randomPantsNumber]} alt="img" className="pants--img" />
                   )}

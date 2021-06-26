@@ -19,8 +19,8 @@ const rightBlock = () => (
     <div className="coming-soon">Coming soon</div>
     <h2>Make your own Morphing NFTs</h2>
     <p>
-      We also want you to be able to mint your own morphing creations here on Universe. We just need
-      a little time to set it up.
+      We want you to also be able to design your own morphing creations. We just need some time to
+      set it up.
     </p>
   </div>
 );
