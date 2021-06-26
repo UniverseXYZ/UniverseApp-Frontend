@@ -284,6 +284,10 @@
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 500px;
+  flex-basis: 500px;
+
 
   .lds-roller {
     position: absolute;
