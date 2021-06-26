@@ -258,7 +258,7 @@ export default {
     Headwear6,
     Headwear7,
     Headwear8,
-    Headwear9,
+    // Headwear9,
     Headwear10,
     Headwear11,
     Headwear12,
