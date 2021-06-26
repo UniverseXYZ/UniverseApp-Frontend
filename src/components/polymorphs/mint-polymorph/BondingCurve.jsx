@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
+import uuid from 'react-uuid';
 import { utils, BigNumber, FixedNumber } from 'ethers';
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button.jsx';
@@ -30,6 +31,7 @@ const BondingCurve = (props) => {
     setQuantity,
   } = props;
   const [mintedTokens, setMintedTokens] = useState([]);
+  const [loaderTriggerID, setLoaderTriggerId] = useState(uuid());
 
   const {
     polymorphContract,
@@ -61,13 +63,17 @@ const BondingCurve = (props) => {
   };
 
   const triggerLoadingPopup = () => {
-    document.getElementById('loading-polymorph-hidden-btn').click();
+    const selector = `loading-polymorph-hidden-btn${loaderTriggerID}`;
+    const button = document.getElementById(selector);
+    button.click();
   };
 
   const triggerSuccessPopup = () => {
     setTimeout(() => {
       document.getElementById('popup-root').remove();
-      document.getElementById('congrats-polymorph-hidden-btn').click();
+      const selector = `congrats-polymorph-hidden-btn${loaderTriggerID}`;
+      const button = document.getElementById(selector);
+      button.click();
     }, 1000);
   };
 
@@ -114,7 +120,7 @@ const BondingCurve = (props) => {
         trigger={
           <button
             type="button"
-            id="loading-polymorph-hidden-btn"
+            id={`loading-polymorph-hidden-btn${loaderTriggerID}`}
             aria-label="hidden"
             style={{ display: 'none' }}
           />
@@ -126,7 +132,7 @@ const BondingCurve = (props) => {
         trigger={
           <button
             type="button"
-            id="congrats-polymorph-hidden-btn"
+            id={`congrats-polymorph-hidden-btn${loaderTriggerID}`}
             aria-label="hidden"
             style={{ display: 'none' }}
           />
