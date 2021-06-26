@@ -7,13 +7,12 @@ import closeIcon from '../../assets/images/cross.svg';
 import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 import { PLACEHOLDER_MINTED_POLYMORPHS } from '../../utils/fixtures/MintedPolymorphsDummyData.js';
 
-const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
+const MintPolymorphConfirmationPopup = ({ onClose, quantity, mintedNFTs }) => {
   const history = useHistory();
   const [polymorphs, setPolymorphs] = useState(PLACEHOLDER_MINTED_POLYMORPHS);
   const [minted, setMinted] = useState(false);
   useEffect(() => {
-    const arr = polymorphs.sort(() => Math.random() - Math.random()).slice(0, quantity);
-    setPolymorphs(arr);
+    setPolymorphs(mintedNFTs);
   }, []);
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
       >
         {polymorphs.map((elm) =>
           minted ? (
-            <img src={elm.polymorphImg} alt="polymorph" key={uuid()} />
+            <img src={elm.data.image} alt="polymorph" key={uuid()} />
           ) : (
             <div className="loading" key={uuid()}>
               <img src={loadingBg} alt="polymorph" key={uuid()} />
@@ -76,6 +75,7 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
 MintPolymorphConfirmationPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  mintedNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default MintPolymorphConfirmationPopup;

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
 import Button from '../../../button/Button.jsx';
@@ -39,9 +40,6 @@ import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 
 const MobileView = (props) => {
   const {
-    isWalletConnected,
-    setIsWalletConnected,
-    ethereumAddress,
     handleConnectWallet,
     setShowMenu,
     setShowSelectWallet,
@@ -52,11 +50,22 @@ const MobileView = (props) => {
     setShowInstallWalletPopup,
     selectedWallet,
   } = props;
-  const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
   const history = useHistory();
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+    connectWeb3,
+    isAuthenticated,
+    address,
+  } = useContext(AppContext);
 
   useEffect(() => {
     if (showMenu) {
@@ -111,7 +120,7 @@ const MobileView = (props) => {
                 <div className="dropdown__header">
                   <div className="copy-div">
                     <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <div className="ethereum__address">{shortenEthereumAddress(address)}</div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -119,7 +128,7 @@ const MobileView = (props) => {
                           <span />
                         </div>
                         <CopyToClipboard
-                          text={ethereumAddress}
+                          text={address}
                           onCopy={() => {
                             setCopied(true);
                             setTimeout(() => {
@@ -136,17 +145,17 @@ const MobileView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
-                  <div className="group2">
+                  {/* <div className="group2">
                     <img src={Group2} alt="WETH" />
                     <span className="first-span">6,24 WETH</span>
                     <span className="second-span">$10,554</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="dropdown__body">
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => {
                       history.push('/my-account');
@@ -155,7 +164,7 @@ const MobileView = (props) => {
                   >
                     <img src={myProfileIcon} alt="My Profile" />
                     My profile
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     onClick={() => {
@@ -166,7 +175,7 @@ const MobileView = (props) => {
                     <img src={myNFTsIcon} alt="My NFTs" />
                     My NFTs
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => {
                       history.push('/my-auctions');
@@ -175,7 +184,7 @@ const MobileView = (props) => {
                   >
                     <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     className="signOut"
@@ -337,7 +346,7 @@ const MobileView = (props) => {
                     {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                       {(close) => <SubscribePopup close={close} />}
                     </Popup> */}
-                    <button type="button" onClick={() => setShowSelectWallet(true)}>
+                    <button type="button" onClick={() => connectWeb3()}>
                       Sign In
                     </button>
                   </li>
@@ -413,9 +422,6 @@ const MobileView = (props) => {
 };
 
 MobileView.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,
