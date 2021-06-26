@@ -22,7 +22,7 @@ const Section2HorizontalScroll = (props) => {
   useLayoutEffect(() => {
     let bool = false;
     let sc = 0;
-    window.addEventListener('scroll', (event) => {
+    function runOnScroll() {
       const header = document.querySelector('header');
       const parent = document.querySelector('.section2--horizontal--scroll--parent');
       const horizontalScroll = document.querySelector('.horizontall--slider');
@@ -47,7 +47,10 @@ const Section2HorizontalScroll = (props) => {
           horizontalScroll.style.transform = `translate3d(-${transitionEndLimit}px, 0px, 0px) scale3d(1, 1, 1)`;
         }
       }
-    });
+    }
+    window.addEventListener('scroll', runOnScroll);
+
+    return () => window.removeEventListener('scroll', runOnScroll);
   });
   return (
     <div

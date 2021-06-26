@@ -150,10 +150,10 @@ table {
   background: #e1e1e1;
 }
 
-::selection {
-  background-color: $black;
-  color: $white;
-}
+// ::selection {
+//   background-color: $black;
+//   color: $white;
+// }
 
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {

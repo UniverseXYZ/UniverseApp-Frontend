@@ -19,8 +19,8 @@ const rightBlock = () => (
     <div className="coming-soon">Coming soon</div>
     <h2>Make your own Morphing NFTs</h2>
     <p>
-      We want you to also be able to mint your own morphing creations. We just need some time to set
-      it up.
+      We also want you to be able to mint your own morphing creations here on Universe. We just need
+      a little time to set it up.
     </p>
   </div>
 );
@@ -37,7 +37,7 @@ const Section6 = () => {
       <div className="section6--end--block--parent">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
           <div className="section6--end--block">
-            <h2>Now it’s time to mint your own unique polymorph</h2>
+            <h2>It&apos;s now time to mint your own unique polymorph</h2>
             <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
               Mint a morph
             </Button>
