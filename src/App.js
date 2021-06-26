@@ -175,7 +175,7 @@ const App = () => {
   const fetchUserPolymorphsTheGraph = async (theGraphData) => {
     const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
     const metadataURIs = userNftIds?.map(
-      (id) => `https://polymorphmetadata.uc.r.appspot.com/token/${id}`
+      (id) => `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=${id}`
     );
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
     setUserPolymorphs(nftMetadataObjects);
