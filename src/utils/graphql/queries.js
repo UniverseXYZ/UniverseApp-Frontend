@@ -15,7 +15,7 @@ export const queryAuctions = gql`
 
 export const transferPolymorphs = (ownerAddress) => gql`
   query Polymorphs {
-    transferEntities(where: { to: "${ownerAddress}" }) {
+    transferEntities(first: 1000, where: { to: "${ownerAddress}" }) {
       from
       id
       to
