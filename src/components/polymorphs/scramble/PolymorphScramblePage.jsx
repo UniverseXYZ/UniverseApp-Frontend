@@ -20,7 +20,7 @@ import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
-  const { selectedNftForScramble, polymorphContract } = useContext(AppContext);
+  const { address, polymorphContract } = useContext(AppContext);
 
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
@@ -28,6 +28,14 @@ const PolymorphScramblePage = () => {
   const [polymorphData, setPolymorphData] = useState({});
   const [polymorpGene, setPolymorphGene] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+
+  useEffect(async () => {
+    if (!polymorphId || !polymorphContract) return;
+    const ownerOf = await polymorphContract.ownerOf(polymorphId);
+    const owner = ownerOf.toLowerCase() === address.toLowerCase();
+    setIsOwner(owner);
+  }, [polymorphId, polymorphContract]);
 
   useEffect(async () => {
     if (!polymorphId) return;
@@ -161,10 +169,11 @@ const PolymorphScramblePage = () => {
               <div className="genome--string--value"> {polymorpGene}</div>
             </div>
           )}
-
-          <Button className="light-button" onClick={onOpenOptionsPopUp}>
-            Scramble options
-          </Button>
+          {isOwner ? (
+            <Button className="light-button" onClick={onOpenOptionsPopUp}>
+              Scramble options
+            </Button>
+          ) : null}
         </div>
       </div>
     </div>
