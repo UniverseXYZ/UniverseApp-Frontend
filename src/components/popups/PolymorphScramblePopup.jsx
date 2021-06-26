@@ -178,6 +178,7 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
 
               <div className="scramble--action">
                 <div className="scramble--price">
+                  <img src={ethIcon} alt="" />
                   {singleTraitTabSelected ? morphSingleGenePrise : randomizeGenePrise}
                 </div>
                 <Button

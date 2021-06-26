@@ -16,6 +16,7 @@ import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
+import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -26,12 +27,14 @@ const PolymorphScramblePage = () => {
   const [polymorphId, setPolymorphId] = useState(useParams().id);
   const [polymorphData, setPolymorphData] = useState({});
   const [polymorpGene, setPolymorphGene] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(async () => {
     if (!polymorphId) return;
+    setLoading(true);
     const data = await getPolymorphMeta(polymorphId);
     setPolymorphData(data);
-    console.log(data);
+    setLoading(false);
   }, [polymorphId]);
 
   useEffect(async () => {
@@ -73,9 +76,10 @@ const PolymorphScramblePage = () => {
 
   const attributes = getAttributesMapping(polymorphData?.data?.attributes);
 
-  return (
+  return !loading ? (
     <div className="container scramble--wrapper">
       <Popup
+        closeOnDocumentClick={false}
         trigger={
           <button
             type="button"
@@ -108,6 +112,7 @@ const PolymorphScramblePage = () => {
         {(close) => <LoadingPopup onClose={close} />}
       </Popup>
       <Popup
+        closeOnDocumentClick={false}
         trigger={
           <button
             type="button"
@@ -161,6 +166,20 @@ const PolymorphScramblePage = () => {
             Scramble options
           </Button>
         </div>
+      </div>
+    </div>
+  ) : (
+    <div className="loading" key={uuid()}>
+      <img src={loadingBg} alt="polymorph" key={uuid()} />
+      <div className="lds-roller">
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
       </div>
     </div>
   );
