@@ -114,11 +114,15 @@ const PolymorphScramblePopup = ({ onClose }) => {
       label: 'Right-hand accessory',
       value: 'rightHand',
       list: require
-        .context('../../assets/images/randomise-person-images/rightHand-img', false, /\.(png|svg)$/)
+        .context(
+          '../../assets/images/randomise-person-images/rightHand-images',
+          false,
+          /\.(png|svg)$/
+        )
         .keys()
         .map(
           require.context(
-            '../../assets/images/randomise-person-images/rightHand-img',
+            '../../assets/images/randomise-person-images/rightHand-images',
             false,
             /\.(png|svg)$/
           )

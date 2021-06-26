@@ -8,7 +8,6 @@ import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
-import AppContext from '../../ContextAPI';
 
 const marquee = () => (
   <p>
