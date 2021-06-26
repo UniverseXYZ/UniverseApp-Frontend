@@ -8,3 +8,8 @@ export const getEthPriceEtherscan = async () => {
   );
   return result;
 };
+
+export const getEthPriceCoingecko = async () => {
+  const result = await fetchJson(`https://api.coingecko.com/api/v3/coins/ethereum`);
+  return result;
+};

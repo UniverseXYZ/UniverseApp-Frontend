@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const queryAuctions = gql`
   query Polymorphs {
-    tokenMorphedEntities {
+    tokenMorphedEntities(first: 100, orderBy: timestamp, orderDirection: desc) {
       id
       newGene
       oldGene
@@ -13,9 +13,9 @@ export const queryAuctions = gql`
   }
 `;
 
-export const transferPolymorphs = gql`
+export const transferPolymorphs = (ownerAddress) => gql`
   query Polymorphs {
-    transferEntities {
+    transferEntities(where: { to: "${ownerAddress}" }) {
       from
       id
       to

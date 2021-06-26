@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Contract, providers, utils } from 'ethers';
 import { Route, Switch, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import Popup from 'reactjs-popup';
+import { useQuery } from '@apollo/client';
 import { handleClickOutside, handleScroll } from './utils/helpers';
+import Contracts from './Contracts.json';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
@@ -26,7 +31,9 @@ import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs';
 import MintPolymorph from './containers/polymorphs/MintPolymorph';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
-import { getEthPriceEtherscan } from './utils/api/etherscan';
+import { getEthPriceCoingecko } from './utils/api/etherscan';
+import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
+import { transferPolymorphs } from './utils/graphql/queries';
 
 const App = () => {
   const location = useLocation();
@@ -63,10 +70,116 @@ const App = () => {
   const [website, setWebsite] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [ethPrice, setEthPrice] = useState({});
+  const [web3Provider, setWeb3Provider] = useState(null);
+  const [address, setAddress] = useState('');
+  const [signer, setSigner] = useState('');
+  const [wethBalance, setWethBalance] = useState(0);
+  const [usdEthBalance, setUsdEthBalance] = useState(0);
+  const [usdWethBalance, setUsdWethBalance] = useState(0);
+  const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
+  const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [yourBalance, setYourBalance] = useState(0);
 
-  const getEthPrice = async () => {
-    const ethUsdPice = await getEthPriceEtherscan();
-    setEthPrice(ethUsdPice);
+  const [userPolymorphs, setUserPolymorphs] = useState([]);
+  const [payableAmount, setPayableAmount] = useState(0.1);
+  const [totalPolymorphs, setTotalPolymorphs] = useState(0);
+  const [polymorphBaseURI, setPolymorphBaseURI] = useState('');
+  const [polymorphPrice, setPolymorphPrice] = useState(0);
+  const [ethereumNetwork, setEthereumNetwork] = useState('');
+  const [polymorphContract, setPolymorphContract] = useState(null);
+  // const { data } = useQuery(transferPolymorphs(address));
+
+  const triggerWrongNetworkPopup = async () => {
+    document.getElementById('wrong-network-hidden-btn').click();
+  };
+
+  const connectWeb3 = async () => {
+    const { ethereum } = window;
+
+    await ethereum.request({ method: 'eth_requestAccounts' });
+    const provider = new providers.Web3Provider(ethereum);
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const balance = await provider.getBalance(accounts[0]);
+    const network = await provider.getNetwork();
+    const ethUsdPice = await getEthPriceCoingecko();
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+
+    if (network.chainId !== 3) {
+      triggerWrongNetworkPopup();
+    } else {
+      const polymContract =
+        Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
+
+      const polymorphContractInstance = new Contract(
+        polymContract?.address,
+        polymContract?.abi,
+        signerResult
+      );
+
+      const totalMinted = await polymorphContractInstance.lastTokenId();
+      const polymorphBaseURIData = await polymorphContractInstance.baseURI();
+      const polymPrice = await polymorphContractInstance.polymorphPrice();
+
+      setWeb3Provider(provider);
+      setAddress(accounts[0]);
+      setSigner(signerResult);
+      setYourBalance(utils.formatEther(balance));
+      setUsdEthBalance(ethUsdPice.market_data.current_price.usd * utils.formatEther(balance));
+      setIsWalletConnected(true);
+      setEthereumNetwork(network);
+      setEthPrice(ethUsdPice);
+
+      setPolymorphContract(polymorphContractInstance);
+      setTotalPolymorphs(totalMinted.toNumber());
+      setPolymorphBaseURI(polymorphBaseURIData);
+      setPolymorphPrice(utils.formatEther(polymPrice));
+    }
+  };
+
+  const fetchTokenIds = async (erc721Contract, ownerAddress) => {
+    const nftBalance = await erc721Contract.balanceOf(ownerAddress);
+    const tokenIdPromises = [];
+    for (let i = 0; i < parseInt(nftBalance.toNumber(), 10); i += 1) {
+      tokenIdPromises.push(erc721Contract.tokenOfOwnerByIndex(ownerAddress, i));
+    }
+    return Promise.all(tokenIdPromises).then((tokenIds) =>
+      tokenIds.map((obj) => parseInt(obj.toNumber(), 10))
+    );
+  };
+
+  const fetchMetadataURIs = async (tokenIds, erc721Contract) => {
+    const metadataURIPromises = [];
+    for (let i = 0; i < tokenIds.length; i += 1) {
+      metadataURIPromises.push(erc721Contract.tokenURI(tokenIds[i]));
+    }
+    return Promise.all(metadataURIPromises);
+  };
+
+  const fetchTokensMetadataJson = async (metadataURIs) => {
+    const metadataPromises = [];
+    for (let i = 0; i < metadataURIs?.length; i += 1) {
+      metadataPromises.push(axios(metadataURIs[i]));
+    }
+    return Promise.all(metadataPromises);
+  };
+
+  const fetchUserPolymorphs = async (erc721Contract, ownerAddress) => {
+    const userNftIds = await fetchTokenIds(erc721Contract, ownerAddress);
+    const metadataURIs = await fetchMetadataURIs(userNftIds, erc721Contract);
+    const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+    return nftMetadataObjects;
+  };
+
+  const fetchUserPolymorphsTheGraph = async (theGraphData) => {
+    const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
+    const metadataURIs = userNftIds?.map(
+      (id) => `https://polymorphmetadata.uc.r.appspot.com/token/${id}`
+    );
+    const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+    setUserPolymorphs(nftMetadataObjects);
+    return nftMetadataObjects;
   };
 
   useEffect(() => {
@@ -87,8 +200,36 @@ const App = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
+  // useEffect(() => {
+  //   if (data) {
+  //     fetchUserPolymorphsTheGraph(data);
+  //   }
+  // }, [data]);
+
   useEffect(async () => {
-    getEthPrice();
+    if (typeof window.ethereum !== 'undefined') {
+      const { ethereum } = window;
+
+      await connectWeb3();
+
+      const provider = new providers.Web3Provider(ethereum);
+
+      if (!provider) {
+        console.log('Please install/connect MetaMask!');
+      }
+      ethereum.on('accountsChanged', async ([account]) => {
+        if (account) {
+          await connectWeb3();
+        } else {
+          setIsWalletConnected(false);
+        }
+      });
+      ethereum.on('chainChanged', async (networkId) => {
+        window.location.reload();
+      });
+    } else {
+      console.log('Please install/connect MetaMask!');
+    }
   }, []);
 
   return (
@@ -141,6 +282,34 @@ const App = () => {
         setEditProfileButtonClick,
         ethPrice,
         setEthPrice,
+        address,
+        setAddress,
+        usdEthBalance,
+        setUsdEthBalance,
+        wethBalance,
+        setWethBalance,
+        usdWethBalance,
+        setUsdWethBalance,
+        web3Provider,
+        setWeb3Provider,
+        auctionFactoryContract,
+        setAuctionFactoryContract,
+        universeERC721CoreContract,
+        setUniverseERC721CoreContract,
+        signer,
+        setSigner,
+        connectWeb3,
+        isWalletConnected,
+        setIsWalletConnected,
+        isAuthenticated,
+        setIsAuthenticated,
+        yourBalance,
+        totalPolymorphs,
+        setTotalPolymorphs,
+        polymorphContract,
+        setPolymorphContract,
+        polymorphBaseURI,
+        setPolymorphBaseURI,
       }}
     >
       <Header />
@@ -187,6 +356,18 @@ const App = () => {
         <Route path="*" component={() => <NotFound />} />
       </Switch>
       <Footer />
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="wrong-network-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <WrongNetworkPopup onClose={close} />}
+      </Popup>
     </AppContext.Provider>
   );
 };

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
+import axios from 'axios';
+import { utils, BigNumber, FixedNumber } from 'ethers';
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button.jsx';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup.jsx';
@@ -11,6 +13,7 @@ import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
 import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg-left.png';
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
+import AppContext from '../../../ContextAPI';
 
 const BondingCurve = (props) => {
   const {
@@ -27,6 +30,16 @@ const BondingCurve = (props) => {
     setQuantity,
     light,
   } = props;
+  const [mintedTokens, setMintedTokens] = useState([]);
+
+  const {
+    polymorphContract,
+    totalPolymorphs,
+    setTotalPolymorphs,
+    polymorphBaseURI,
+    signer,
+    connectWeb3,
+  } = useContext(AppContext);
 
   const mintPolymorph = () => {
     if (value + quantity <= max) {
@@ -41,13 +54,71 @@ const BondingCurve = (props) => {
     }
   };
 
+  const fetchTokensMetadataJson = async (metadataURIs) => {
+    const metadataPromises = [];
+    for (let i = 0; i < metadataURIs?.length; i += 1) {
+      metadataPromises.push(axios(metadataURIs[i]));
+    }
+    return Promise.all(metadataPromises);
+  };
+
+  const closeSuccessPopup = () => {
+    setTotalPolymorphs(totalPolymorphs + quantity);
+  };
+
+  const triggerLoadingPopup = () => {
+    document.getElementById('loading-polymorph-hidden-btn').click();
+  };
+
+  const triggerSuccessPopup = () => {
+    setTimeout(() => {
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-polymorph-hidden-btn').click();
+    }, 1000);
+  };
+
+  const mintPolymorphs = async (amount) => {
+    // if (!signer) await connectWeb3();
+    const mintedIds = [];
+    const overrideOptions = {
+      value: BigNumber.from((utils.parseEther('0.0777') * amount).toString()),
+    };
+
+    try {
+      const mintTx = await polymorphContract?.functions['bulkBuy(uint256)'](
+        amount,
+        overrideOptions
+      );
+
+      triggerLoadingPopup();
+
+      const receipt = await mintTx?.wait();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const event of receipt.events) {
+        if (event.event !== 'Transfer') {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        mintedIds.push(event.args.tokenId.toString());
+      }
+
+      const metadataURIs = mintedIds.map((id) => `${polymorphBaseURI}${id}`);
+      const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+
+      setMintedTokens(nftMetadataObjects);
+      triggerSuccessPopup();
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <div className="welcome--slider--bonding--curve">
       <Popup
         trigger={
           <button
             type="button"
-            id="loading-hidden-btn"
+            id="loading-polymorph-hidden-btn"
             aria-label="hidden"
             style={{ display: 'none' }}
           />
@@ -59,13 +130,19 @@ const BondingCurve = (props) => {
         trigger={
           <button
             type="button"
-            id="congrats-hidden-btn"
+            id="congrats-polymorph-hidden-btn"
             aria-label="hidden"
             style={{ display: 'none' }}
           />
         }
       >
-        {(close) => <MintPolymorphConfirmationPopup onClose={close} quantity={quantity} />}
+        {(close) => (
+          <MintPolymorphConfirmationPopup
+            onClose={closeSuccessPopup}
+            quantity={quantity}
+            mintedNFTs={mintedTokens}
+          />
+        )}
       </Popup>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}

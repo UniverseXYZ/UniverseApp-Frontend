@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
 import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurve';
 import Section3Randomise from '../../components/polymorphs/mint-polymorph/Section3Randomise';
 import './MintPolymorph.scss';
+import AppContext from '../../ContextAPI';
 
 const MintPolymorph = () => {
   const [quantity, setQuantity] = useState(1);
@@ -14,6 +15,8 @@ const MintPolymorph = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  const { totalPolymorphs } = useContext(AppContext);
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -49,9 +52,9 @@ const MintPolymorph = () => {
         bgTextRight
       >
         <BondingCurve
-          value={sliderValue}
           setValue={setSliderValue}
-          max={30}
+          value={totalPolymorphs}
+          max={10000}
           mobile={mobile}
           blur
           quantity={quantity}
@@ -65,8 +68,8 @@ const MintPolymorph = () => {
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="section4--child">
             <BondingCurve
-              value={sliderValue}
               setValue={setSliderValue}
+              value={totalPolymorphs}
               colorPriceIcon="black"
               color1="black"
               color2="black"
