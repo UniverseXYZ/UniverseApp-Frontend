@@ -360,7 +360,7 @@ const App = () => {
           />
         }
       >
-        {(close) => <WrongNetworkPopup onClose={close} />}
+        {(close) => <WrongNetworkPopup close={close} />}
       </Popup>
     </AppContext.Provider>
   );
