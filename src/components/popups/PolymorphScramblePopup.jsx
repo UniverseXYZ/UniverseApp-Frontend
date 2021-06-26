@@ -88,37 +88,28 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
     onClose();
     document.getElementById('loading-hidden-btn').click();
 
-    if (singleTraitTabSelected) {
-      // Take the Gene Position
-      const genePosition = WEAR_TO_GENE_POSITION_MAP[selectedTrait?.label];
-      if (!genePosition) {
-        alert('There is no such Gene !');
-        return;
-      }
+    try {
+      if (singleTraitTabSelected) {
+        // Take the Gene Position
+        const genePosition = WEAR_TO_GENE_POSITION_MAP[selectedTrait?.label];
+        if (!genePosition) {
+          alert('There is no such Gene !');
+          return;
+        }
 
-      try {
         // Morph a Gene
         const genomeChangePrice = await polymorphContract.priceForGenomeChange(id);
         const morphGeneT = await polymorphContract.morphGene(id, genePosition, {
           value: genomeChangePrice,
         });
         await morphGeneT.wait();
-      } catch (err) {
-        alert(err.message || err);
-      }
-    } else {
-      try {
+      } else {
         if (!id) return;
         // Randomize Genom
         const amount = await polymorphContract.randomizeGenomePrice();
         const randomizeT = await polymorphContract.randomizeGenome(id, { value: amount });
         await randomizeT.wait();
-      } catch (err) {
-        alert(err.message || err);
       }
-    }
-
-    try {
       // Update the view //
 
       // Get the new Meta
