@@ -304,6 +304,7 @@ const App = () => {
         isAuthenticated,
         setIsAuthenticated,
         yourBalance,
+        setYourBalance,
         totalPolymorphs,
         setTotalPolymorphs,
         polymorphContract,

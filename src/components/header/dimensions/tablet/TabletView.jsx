@@ -57,6 +57,10 @@ const TabletView = (props) => {
     connectWeb3,
     isAuthenticated,
     address,
+    setUserPolymorphs,
+    setAddress,
+    setYourBalance,
+    setUsdEthBalance,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -183,6 +187,10 @@ const TabletView = (props) => {
                     onClick={() => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
+                      setUserPolymorphs([]);
+                      setAddress(null);
+                      setYourBalance(0);
+                      setUsdEthBalance(0);
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />
