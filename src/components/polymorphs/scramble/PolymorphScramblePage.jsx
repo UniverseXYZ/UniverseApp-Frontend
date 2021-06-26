@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import AppContext from '../../../ContextAPI';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
 // import person from '../../../assets/images/randomise-person-images/person.png';
@@ -29,6 +30,7 @@ const PolymorphScramblePage = () => {
   const [polymorpGene, setPolymorphGene] = useState('');
   const [loading, setLoading] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(async () => {
     if (!polymorphId || !polymorphContract) return;
@@ -48,7 +50,7 @@ const PolymorphScramblePage = () => {
   useEffect(async () => {
     if (!polymorphId || !polymorphContract) return;
     const gene = await polymorphContract.geneOf(polymorphId);
-    setPolymorphGene(shortenEthereumAddress(gene.toString()));
+    setPolymorphGene(gene.toString());
   }, [polymorphId, polymorphContract]);
 
   const tabs = [
@@ -182,7 +184,29 @@ const PolymorphScramblePage = () => {
           ) : (
             <div className="metadata">
               <div className="genome--string--name">Genome string</div>
-              <div className="genome--string--value"> {polymorpGene}</div>
+              <div className="copy-div">
+                <div className="copy__div">
+                  <div className="copy" title="Copy to clipboard">
+                    <div className="copied-div" hidden={!copied}>
+                      Gene copied!
+                      <span />
+                    </div>
+                    <CopyToClipboard
+                      text={polymorpGene}
+                      onCopy={() => {
+                        setCopied(true);
+                        setTimeout(() => {
+                          setCopied(false);
+                        }, 1000);
+                      }}
+                    >
+                      <div className="genome--string--value">
+                        {shortenEthereumAddress(polymorpGene)}
+                      </div>
+                    </CopyToClipboard>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           {isOwner ? (
