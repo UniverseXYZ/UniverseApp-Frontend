@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
@@ -33,6 +33,7 @@ const BondingCurve = (props) => {
   const [mintedTokens, setMintedTokens] = useState([]);
   const [mintedPolymorphs, setMintedPolymorphs] = useState([]);
   const [loaderTriggerID, setLoaderTriggerId] = useState(uuid());
+  const [totalMintedValue, setTotalMintedValue] = useState(0);
 
   const {
     polymorphContract,
@@ -47,13 +48,9 @@ const BondingCurve = (props) => {
     setUserPolymorphs,
   } = useContext(AppContext);
 
-  const mintPolymorph = () => {
-    document.getElementById('loading-hidden-btn').click();
-    setTimeout(() => {
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
-    }, 2000);
-  };
+  useEffect(() => {
+    setTotalMintedValue(value);
+  }, [value]);
 
   const fetchTokensMetadataJson = async (metadataURIs) => {
     const metadataPromises = [];
@@ -84,7 +81,6 @@ const BondingCurve = (props) => {
   };
 
   const mintPolymorphs = async (amount) => {
-    // if (!signer) await connectWeb3();
     const mintedIds = [];
     const overrideOptions = {
       value: BigNumber.from((utils.parseEther('0.0777') * amount).toString()),
@@ -116,6 +112,7 @@ const BondingCurve = (props) => {
       setMintedTokens(nftMetadataObjects);
       const polymorphNFTs = userPolymorphs.concat(convertPolymorphObjects(nftMetadataObjects));
       setMintedPolymorphs(polymorphNFTs);
+      setTotalMintedValue(totalPolymorphs + quantity);
       triggerSuccessPopup();
     } catch (err) {
       alert(err.message || error);
@@ -161,7 +158,13 @@ const BondingCurve = (props) => {
       <div className="row1">
         <h5>Distribution curve</h5>
       </div>
-      <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
+      <HorizontalSlider
+        max={max}
+        value={totalMintedValue}
+        min={min}
+        color1={color1}
+        color2={color2}
+      />
       <div className="row3--section">
         <QuantityUpDownGroup
           value={quantity}
