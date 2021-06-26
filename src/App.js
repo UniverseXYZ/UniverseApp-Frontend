@@ -191,12 +191,6 @@ const App = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  useEffect(() => {
-    if (data) {
-      fetchUserPolymorphsTheGraph(data);
-    }
-  }, [data]);
-
   useEffect(async () => {
     if (typeof window.ethereum !== 'undefined') {
       const { ethereum } = window;
@@ -304,6 +298,7 @@ const App = () => {
         setPolymorphBaseURI,
         userPolymorphs,
         setUserPolymorphs,
+        fetchUserPolymorphsTheGraph,
       }}
     >
       <Header />
@@ -328,7 +323,9 @@ const App = () => {
           path="/minting-and-auctions/marketplace/future-auctions"
           component={() => <Marketplace />}
         />
-        <Route exact path="/my-nfts" component={() => <MyNFTs />} />
+        <Route exact path="/my-nfts">
+          <MyNFTs />
+        </Route>
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
