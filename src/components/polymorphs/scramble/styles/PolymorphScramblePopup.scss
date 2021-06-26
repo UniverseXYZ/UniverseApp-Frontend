@@ -1,11 +1,8 @@
 @import '../../../../assets/scss/variables';
 @import '../../../../assets/scss/mixins';
 
-.scramble-popup-div {
+.scramble-popup {
   max-height: 90%;
-  overflow-x: auto;
-  width: 450px;
-  padding: 70px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -13,13 +10,11 @@
   background: $white;
   box-shadow: 0 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
-
   @include lg {
     max-width: 520px;
     width: 70%;
   }
   @include sm {
-    padding: 40px 26px;
     width: 85%;
   }
 
@@ -44,109 +39,144 @@
     width: 1000px;
   }
 
-  .scramble--popup {
-    margin: 0 auto;
-    font-family: Space Grotesk, sans-serif;
-    line-height: 160%;
-    font-style: normal;
-    display: flex;
+  .scramble-popup-div {
+    overflow-y: auto;
+    padding: 70px;
+    max-height: calc(100vh - 88px);
 
-    .scramble--popup--content {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      margin: 0 auto;
-
-      @media (max-width: 1100px) {
-        flex-wrap: wrap;
-      }
-
-      .avatar-wrapper-popup {
-        flex-basis: 445px;
-        flex-shrink: 0;
-
-        .avatar-popup {
-          height: 445px;
-          width: 100%;
-          max-width: 90%;
-
-          background-repeat: no-repeat;
-          background-size: 100%;
-          mix-blend-mode: normal;
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          box-sizing: border-box;
-
-          filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
-          border-radius: 12px;
-        }
-
-      }
-
-      .scramble--options--popup {
-        height: 445px;
-        width: 445px;
-        max-width: 90%;
-
-        .name {
-          font-weight: 600;
-          font-size: 26px;
-          line-height: 140%;
-        }
-
-        .description {
-          font-weight: normal;
-          font-size: 14px;
-          line-height: 160%;
-          color: rgba(0, 0, 0, 0.6);
-          margin-bottom: 30px;
-        }
-
-        .traits--popup {
-          margin-bottom: 30px;
-        }
-
-        .scramble--action {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 30px;
-
-          .scramble--price {
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 20px;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            font-feature-settings: 'ss02' on, 'ss03' on, 'ss04' on;
-
-            img {
-              margin-right: 10px;
-            }
-
-          }
-
-          .light-button {
-            width: 65%;
-          }
-
-        }
-
-        .next-price-description {
-          font-size: 14px;
-          font-weight: bold;
-          color: #E4B613;
-        }
-
-        .tabs__wrapper {
-          padding: 0;
-          margin: 30px 0 30px 0;
-        }
-
-      }
-
+    &::-webkit-scrollbar {
+      width: 0px;
     }
-
+  
+    .scramble--popup {
+      // margin: 0 auto;
+      font-family: $spaceGroteskFont;
+      line-height: 160%;
+      font-style: normal;
+      // display: flex;
+  
+      .scramble--popup--content {
+        display: flex;
+        // flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        // margin: 0 auto;
+  
+        @media (max-width: 1200px) {
+          flex-wrap: wrap;
+        }
+  
+        .avatar-wrapper-popup {
+          // flex-basis: 445px;
+          // flex-shrink: 0;
+          margin-right: 50px;
+          @media (max-width: 1200px) {
+            margin-right: 0px;
+            margin-bottom: 40px;
+          }
+  
+          .avatar-popup {
+            height: 445px;
+            width: 100%;
+            object-fit: contain;
+            // max-width: 90%;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            mix-blend-mode: normal;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
+            border-radius: 12px;
+            @include lg {
+              height: 344px;
+            }
+            @include sm {
+              height: 295px;
+            }
+          }
+  
+        }
+  
+        .scramble--options--popup {
+          // height: 445px;
+          width: 445px;
+          // max-width: 90%;
+          
+          @media (max-width: 1200px) {
+            width: 100%;
+          }
+  
+          .name {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 130%;
+            color: $black;
+            @include lg {
+              font-size: 16px;
+            }
+          }
+  
+          .description {
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 30px;
+          }
+  
+          .traits--popup {
+            margin-bottom: 30px;
+          }
+  
+          .scramble--action {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+  
+            .scramble--price {
+              font-weight: bold;
+              font-size: 16px;
+              line-height: 20px;
+              display: flex;
+              align-items: center;
+              text-align: center;
+              font-feature-settings: 'ss02' on, 'ss03' on, 'ss04' on;
+  
+              img {
+                margin-right: 10px;
+              }
+  
+            }
+  
+            .light-button {
+              width: 65%;
+            }
+  
+          }
+  
+          .next-price-description {
+            font-size: 14px;
+            font-weight: bold;
+            color: #E4B613;
+          }
+  
+          .tabs__wrapper {
+            padding: 0;
+            margin: 30px 0 30px 0;
+          }
+  
+        }
+  
+      }
+  
+    }
+    @include lg {
+      padding: 40px;
+    }
+    @include sm {
+      padding: 20px;
+    }
   }
-
 }

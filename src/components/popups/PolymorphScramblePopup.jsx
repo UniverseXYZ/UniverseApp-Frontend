@@ -204,59 +204,60 @@ const PolymorphScramblePopup = ({ onClose }) => {
   };
 
   return (
-    <div className="scramble-popup-div">
+    <div className="scramble-popup">
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />
       </button>
-
-      <div className="scramble--popup">
-        <div className="scramble--popup--content">
-          <div className="avatar-wrapper-popup">
-            <img src={person} className="avatar-popup" alt="avatar" />
-          </div>
-
-          <div className="scramble--options--popup">
-            <div className="name">{selectedNftForScramble.name}</div>
-
-            <Tabs items={tabs} />
-            {singleTraitTabSelected ? (
-              <>
-                <div className="description">
-                  Mutating a single trait means you can morph a hat or morph a torso. This option
-                  will only morph 1 gene.
-                </div>
-
-                <div className="traits--popup">
-                  <SelectComponent
-                    options={traits}
-                    onChange={(trait) => setSelectedTrait(trait)}
-                    placeholder="Pick a trait type to scramble"
-                    value={selectedTrait}
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="description">
-                This option will scramble all the genes and give you a completely new polymorph
-                style.
-              </div>
-            )}
-
-            <div className="scramble--action">
-              <div className="scramble--price">
-                <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : 0.16}
-              </div>
-              <Button
-                className="light-button"
-                onClick={onScramble}
-                disabled={!selectedTrait && singleTraitTabSelected}
-              >
-                Scramble
-              </Button>
+      <div className="scramble-popup-div">
+        <div className="scramble--popup">
+          <div className="scramble--popup--content">
+            <div className="avatar-wrapper-popup">
+              <img src={person} className="avatar-popup" alt="avatar" />
             </div>
 
-            <div className="next-price-description">
-              * Your next scramble will cost more that last one
+            <div className="scramble--options--popup">
+              <div className="name">{selectedNftForScramble.name}</div>
+
+              <Tabs items={tabs} />
+              {singleTraitTabSelected ? (
+                <>
+                  <div className="description">
+                    Mutating a single trait means you can morph a hat or morph a torso. This option
+                    will only morph 1 gene.
+                  </div>
+
+                  <div className="traits--popup">
+                    <SelectComponent
+                      options={traits}
+                      onChange={(trait) => setSelectedTrait(trait)}
+                      placeholder="Pick a trait type to scramble"
+                      value={selectedTrait}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="description">
+                  This option will scramble all the genes and give you a completely new polymorph
+                  style.
+                </div>
+              )}
+
+              <div className="scramble--action">
+                <div className="scramble--price">
+                  <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : 0.16}
+                </div>
+                <Button
+                  className="light-button"
+                  onClick={onScramble}
+                  disabled={!selectedTrait && singleTraitTabSelected}
+                >
+                  Scramble
+                </Button>
+              </div>
+
+              <div className="next-price-description">
+                * Your next scramble will cost more that last one
+              </div>
             </div>
           </div>
         </div>
