@@ -305,6 +305,7 @@ const App = () => {
         userPolymorphs,
         setUserPolymorphs,
         fetchUserPolymorphsTheGraph,
+        convertPolymorphObjects,
       }}
     >
       <Header />

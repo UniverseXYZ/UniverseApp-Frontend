@@ -18,11 +18,16 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity, mintedNFTs }) => {
   useEffect(() => {
     const timer1 = setTimeout(() => {
       setMinted(true);
-    }, 5000);
+    }, 3000);
     return () => {
       clearTimeout(timer1);
     };
   }, []);
+
+  const navigateMyPolymorphs = () => {
+    onClose();
+    history.push('/my-nfts');
+  };
 
   return (
     <div className="polymorph_popup">
@@ -61,7 +66,7 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity, mintedNFTs }) => {
         )}
       </div>
       <div className="button__div_polymorph">
-        <Button className="light-button" onClick={() => history.push('/my-nfts')}>
+        <Button className="light-button" onClick={() => navigateMyPolymorphs()}>
           My polymorphs
         </Button>
         <Button className="light-border-button" onClick={onClose}>

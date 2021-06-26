@@ -31,6 +31,7 @@ const BondingCurve = (props) => {
     setQuantity,
   } = props;
   const [mintedTokens, setMintedTokens] = useState([]);
+  const [mintedPolymorphs, setMintedPolymorphs] = useState([]);
   const [loaderTriggerID, setLoaderTriggerId] = useState(uuid());
 
   const {
@@ -40,6 +41,10 @@ const BondingCurve = (props) => {
     polymorphBaseURI,
     signer,
     connectWeb3,
+    address,
+    convertPolymorphObjects,
+    userPolymorphs,
+    setUserPolymorphs,
   } = useContext(AppContext);
 
   const mintPolymorph = () => {
@@ -60,6 +65,7 @@ const BondingCurve = (props) => {
 
   const closeSuccessPopup = () => {
     setTotalPolymorphs(totalPolymorphs + quantity);
+    setUserPolymorphs(mintedPolymorphs);
   };
 
   const triggerLoadingPopup = () => {
@@ -108,6 +114,8 @@ const BondingCurve = (props) => {
       const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
 
       setMintedTokens(nftMetadataObjects);
+      const polymorphNFTs = userPolymorphs.concat(convertPolymorphObjects(nftMetadataObjects));
+      setMintedPolymorphs(polymorphNFTs);
       triggerSuccessPopup();
     } catch (err) {
       alert(err.message || error);
