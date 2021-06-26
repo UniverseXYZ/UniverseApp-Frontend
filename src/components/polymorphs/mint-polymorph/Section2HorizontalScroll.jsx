@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import './styles/Section2HorizontalScroll.scss';
 import charactersData from '../../../utils/fixtures/horizontalScrollCharactersData';
 
@@ -12,6 +13,7 @@ const child = (data) =>
   ));
 
 const Section2HorizontalScroll = (props) => {
+  const location = useLocation();
   const { width, height } = props;
   // const [scrollWidth, setScrollWidth] = useState(width);
   const [transparentBlockHeight, setTransparentBlockHeight] = useState(width);
@@ -27,13 +29,13 @@ const Section2HorizontalScroll = (props) => {
       const parent = document.querySelector('.section2--horizontal--scroll--parent');
       const horizontalScroll = document.querySelector('.horizontall--slider');
       const scrolItem = document.querySelector('.child--scroll');
-      const horizontalScrollWidth = charactersData.length * scrolItem.clientWidth;
+      const horizontalScrollWidth = charactersData.length * scrolItem?.clientWidth;
       const transitionEndLimit = horizontalScrollWidth - window.innerWidth;
-      setScrollSicky(parent.offsetTop - window.scrollY);
+      setScrollSicky(parent?.offsetTop - window.scrollY);
       setTransparentBlockHeight(transitionEndLimit);
       if (
-        scrollSticky === header.clientHeight + 1 &&
-        scrollSticky === parent.offsetTop - window.scrollY
+        scrollSticky === header?.clientHeight + 1 &&
+        scrollSticky === parent?.offsetTop - window.scrollY
       ) {
         if (!bool) {
           bool = true;
@@ -50,7 +52,7 @@ const Section2HorizontalScroll = (props) => {
     }
     window.addEventListener('scroll', runOnScroll);
 
-    return () => window.removeEventListener('scroll', runOnScroll);
+    // return () => window.removeEventListener('scroll', runOnScroll);
   });
   return (
     <div
