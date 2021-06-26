@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png';
@@ -8,6 +8,7 @@ import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
+import AppContext from '../../ContextAPI';
 
 const marquee = () => (
   <p>
