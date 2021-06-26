@@ -59,10 +59,6 @@ const PolymorphScramblePage = () => {
     },
   ];
 
-  const onGoBack = () => {
-    history.goBack();
-  };
-
   const onOpenOptionsPopUp = () => {
     document.getElementById('popup-root').remove();
     document.getElementById('popup-hidden-btn').click();
@@ -76,7 +72,6 @@ const PolymorphScramblePage = () => {
     }));
 
   const attributes = getAttributesMapping(polymorphData?.data?.attributes);
-  console.log('Scrabmlbe PAge rerender');
 
   return (
     <div className="container scramble--wrapper">
@@ -90,7 +85,15 @@ const PolymorphScramblePage = () => {
           />
         }
       >
-        {(close) => <PolymorphScramblePopup onClose={close} />}
+        {(close) => (
+          <PolymorphScramblePopup
+            onClose={close}
+            polymorph={polymorphData}
+            id={polymorphId}
+            setPolymorph={setPolymorphData}
+            setPolymorphGene={setPolymorphGene}
+          />
+        )}
       </Popup>
       <Popup
         trigger={
@@ -118,6 +121,7 @@ const PolymorphScramblePage = () => {
           <PolymorphScrambleCongratulationPopup
             onClose={close}
             onOpenOptionsPopUp={onOpenOptionsPopUp}
+            polymorph={polymorphData}
           />
         )}
       </Popup>
