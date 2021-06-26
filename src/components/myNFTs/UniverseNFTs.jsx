@@ -3,13 +3,16 @@ import { useHistory } from 'react-router-dom';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
+import { useQuery } from '@apollo/client';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AppContext from '../../ContextAPI';
+import { transferPolymorphs } from '../../utils/graphql/queries';
 
 const UniverseNFTs = () => {
-  const { setSelectedNftForScramble, userPolymorphs } = useContext(AppContext);
+  const { setSelectedNftForScramble, userPolymorphs, address, fetchUserPolymorphsTheGraph } =
+    useContext(AppContext);
   const history = useHistory();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
@@ -17,6 +20,7 @@ const UniverseNFTs = () => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('My polymorphs');
   const [searchByName, setSearchByName] = useState('');
+  const { data } = useQuery(transferPolymorphs(address));
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
@@ -29,6 +33,12 @@ const UniverseNFTs = () => {
   const handleSearchByName = (value) => {
     setSearchByName(value);
   };
+
+  useEffect(() => {
+    if (data) {
+      fetchUserPolymorphsTheGraph(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
