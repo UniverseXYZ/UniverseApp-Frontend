@@ -84,7 +84,7 @@ const PolymorphScramblePage = () => {
 
   const attributes = getAttributesMapping(polymorphData?.data?.attributes);
 
-  return !loading ? (
+  return (
     <div className="container scramble--wrapper">
       <Popup
         closeOnDocumentClick={false}
@@ -147,9 +147,25 @@ const PolymorphScramblePage = () => {
         <span>My NFTs</span>
       </div>
       <div className="scramble--content">
-        <div className="avatar--wrapper">
-          <img src={polymorphData?.data?.image} className="person" alt="Polymorph" />
-        </div>
+        {!loading ? (
+          <div className="avatar--wrapper">
+            <img src={polymorphData?.data?.image} className="person" alt="Polymorph" />
+          </div>
+        ) : (
+          <div className="loading" key={uuid()}>
+            <img src={loadingBg} alt="polymorph" key={uuid()} />
+            <div className="lds-roller">
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+          </div>
+        )}
 
         <div className="scramble--options">
           <div className="name">{polymorphData?.data?.name}</div>
@@ -175,20 +191,6 @@ const PolymorphScramblePage = () => {
             </Button>
           ) : null}
         </div>
-      </div>
-    </div>
-  ) : (
-    <div className="loading" key={uuid()}>
-      <img src={loadingBg} alt="polymorph" key={uuid()} />
-      <div className="lds-roller">
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
       </div>
     </div>
   );
