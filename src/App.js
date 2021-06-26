@@ -34,6 +34,7 @@ import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScr
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs } from './utils/graphql/queries';
+import cover from './assets/images/cover.png';
 
 const App = () => {
   const location = useLocation();
@@ -89,7 +90,9 @@ const App = () => {
   const [polymorphPrice, setPolymorphPrice] = useState(0);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [polymorphContract, setPolymorphContract] = useState(null);
-  // const { data } = useQuery(transferPolymorphs(address));
+  const { data } = useQuery(transferPolymorphs(address));
+  const POLYMORPH_BASE_URI =
+    'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=';
 
   const triggerWrongNetworkPopup = async () => {
     document.getElementById('wrong-network-hidden-btn').click();
@@ -138,24 +141,8 @@ const App = () => {
     }
   };
 
-  const fetchTokenIds = async (erc721Contract, ownerAddress) => {
-    const nftBalance = await erc721Contract.balanceOf(ownerAddress);
-    const tokenIdPromises = [];
-    for (let i = 0; i < parseInt(nftBalance.toNumber(), 10); i += 1) {
-      tokenIdPromises.push(erc721Contract.tokenOfOwnerByIndex(ownerAddress, i));
-    }
-    return Promise.all(tokenIdPromises).then((tokenIds) =>
-      tokenIds.map((obj) => parseInt(obj.toNumber(), 10))
-    );
-  };
-
-  const fetchMetadataURIs = async (tokenIds, erc721Contract) => {
-    const metadataURIPromises = [];
-    for (let i = 0; i < tokenIds.length; i += 1) {
-      metadataURIPromises.push(erc721Contract.tokenURI(tokenIds[i]));
-    }
-    return Promise.all(metadataURIPromises);
-  };
+  const extractTokenIdFromURI = (tokenURI) =>
+    tokenURI.substring(POLYMORPH_BASE_URI.length, tokenURI.length);
 
   const fetchTokensMetadataJson = async (metadataURIs) => {
     const metadataPromises = [];
@@ -165,21 +152,25 @@ const App = () => {
     return Promise.all(metadataPromises);
   };
 
-  const fetchUserPolymorphs = async (erc721Contract, ownerAddress) => {
-    const userNftIds = await fetchTokenIds(erc721Contract, ownerAddress);
-    const metadataURIs = await fetchMetadataURIs(userNftIds, erc721Contract);
-    const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
-    return nftMetadataObjects;
-  };
+  const convertPolymorphObjects = (nftMetadataObjects) =>
+    nftMetadataObjects.map((nft) => ({
+      id: extractTokenIdFromURI(nft?.config?.url),
+      type: 'collection',
+      previewImage: {
+        type: 'image/jpg',
+        url: nft?.data?.image,
+      },
+      name: nft?.data?.name,
+      collectionAvatar: cover,
+      collectionName: 'Universe Polymorphs',
+    }));
 
   const fetchUserPolymorphsTheGraph = async (theGraphData) => {
     const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
-    const metadataURIs = userNftIds?.map(
-      (id) => `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=${id}`
-    );
+    const metadataURIs = userNftIds?.map((id) => `${POLYMORPH_BASE_URI}${id}`);
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
-    setUserPolymorphs(nftMetadataObjects);
-    return nftMetadataObjects;
+    const polymorphNFTs = convertPolymorphObjects(nftMetadataObjects);
+    setUserPolymorphs(polymorphNFTs);
   };
 
   useEffect(() => {
@@ -200,11 +191,11 @@ const App = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  // useEffect(() => {
-  //   if (data) {
-  //     fetchUserPolymorphsTheGraph(data);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      fetchUserPolymorphsTheGraph(data);
+    }
+  }, [data]);
 
   useEffect(async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -220,6 +211,7 @@ const App = () => {
       ethereum.on('accountsChanged', async ([account]) => {
         if (account) {
           await connectWeb3();
+          await fetchUserPolymorphsTheGraph(data);
         } else {
           setIsWalletConnected(false);
         }
@@ -310,6 +302,8 @@ const App = () => {
         setPolymorphContract,
         polymorphBaseURI,
         setPolymorphBaseURI,
+        userPolymorphs,
+        setUserPolymorphs,
       }}
     >
       <Header />
