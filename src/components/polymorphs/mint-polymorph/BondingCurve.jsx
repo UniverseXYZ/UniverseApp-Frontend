@@ -96,7 +96,9 @@ const BondingCurve = (props) => {
         mintedIds.push(event.args.tokenId.toString());
       }
 
-      const metadataURIs = mintedIds.map((id) => `${polymorphBaseURI}${id}`);
+      const metadataURIs = mintedIds.map(
+        (id) => `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=${id}`
+      );
       const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
 
       setMintedTokens(nftMetadataObjects);
