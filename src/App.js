@@ -313,7 +313,9 @@ const App = () => {
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
-        <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
+        <Route exact path="/polymorphs/:id">
+          <PolymorphScramblePage />
+        </Route>
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
