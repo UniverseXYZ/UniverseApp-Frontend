@@ -19,31 +19,31 @@ import imgRagnar from '../../assets/images/Ragnar-small.png';
 import imgXYZBot from '../../assets/images/XYZbot-small.png';
 
 const characters = [
-  'DiamondPaws',
+  'Diamond Paws',
   'EsCrow',
   'Frankie',
   'Glenn',
-  'GoldTooth',
-  'Grishnak',
+  'Goldtooth',
+  'Troll God',
   'Charles',
   'Mariguana',
-  'Paul',
+  'Vitalik',
   'Ragnar',
-  'XYZBot',
+  'X-YZ',
 ];
 
 const characterImages = {
-  DiamondPaws: imgDiamondPaws,
+  'Diamond Paws': imgDiamondPaws,
   EsCrow: imgEsCrow,
   Frankie: imgFrankie,
   Glenn: imgGlenn,
-  GoldTooth: imgGoldtooth,
-  Grishnak: imgGrishnak,
+  Goldtooth: imgGoldtooth,
+  'Troll God': imgGrishnak,
   Charles: imgCharles,
   Mariguana: imgMariguana,
-  Paul: imgPaul,
+  Vitalik: imgPaul,
   Ragnar: imgRagnar,
-  XYZBot: imgXYZBot,
+  'X-YZ': imgXYZBot,
 };
 
 const getTypeImage = (type) => {
