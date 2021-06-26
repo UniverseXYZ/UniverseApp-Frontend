@@ -24,29 +24,28 @@ import Headwear5 from '../../assets/images/randomise-person-images/headwears-img
 import Headwear6 from '../../assets/images/randomise-person-images/headwears-img/Black-Ushanka.png';
 import Headwear7 from '../../assets/images/randomise-person-images/headwears-img/Blue-Beanie.png';
 import Headwear8 from '../../assets/images/randomise-person-images/headwears-img/Brown-Ushanka.png';
-import Headwear9 from '../../assets/images/randomise-person-images/headwears-img/Caesar-hat.png';
+import Headwear9 from '../../assets/images/randomise-person-images/headwears-img/Caesar-Hat.png';
 import Headwear10 from '../../assets/images/randomise-person-images/headwears-img/Clown-Headwear.png';
 import Headwear11 from '../../assets/images/randomise-person-images/headwears-img/Copter-Hat.png';
 import Headwear12 from '../../assets/images/randomise-person-images/headwears-img/Golden-Hat.png';
 import Headwear13 from '../../assets/images/randomise-person-images/headwears-img/Golden-Knights-Helmet.png';
 import Headwear14 from '../../assets/images/randomise-person-images/headwears-img/Golden-Spartan-Helmet.png';
 import Headwear15 from '../../assets/images/randomise-person-images/headwears-img/Green-Beanie.png';
-import Headwear16 from '../../assets/images/randomise-person-images/headwears-img/Grey-Football-Helmet-.png';
-import Headwear17 from '../../assets/images/randomise-person-images/headwears-img/Headphones.png';
-import Headwear18 from '../../assets/images/randomise-person-images/headwears-img/Marine-Helmet.png';
-import Headwear19 from '../../assets/images/randomise-person-images/headwears-img/Old-Hat.png';
-import Headwear20 from '../../assets/images/randomise-person-images/headwears-img/Platinum-Spartan-Helmet.png';
-import Headwear21 from '../../assets/images/randomise-person-images/headwears-img/Purple-Ushanka-.png';
-import Headwear22 from '../../assets/images/randomise-person-images/headwears-img/Rainbow-Cap.png';
-import Headwear23 from '../../assets/images/randomise-person-images/headwears-img/Red-Beanie.png';
-import Headwear24 from '../../assets/images/randomise-person-images/headwears-img/Red-Football-Helmet-.png';
-import Headwear25 from '../../assets/images/randomise-person-images/headwears-img/Silver-Knights-Helmet.png';
-import Headwear26 from '../../assets/images/randomise-person-images/headwears-img/Silver-Spartan-Helmet-.png';
-import Headwear27 from '../../assets/images/randomise-person-images/headwears-img/Straw-Farmers-Hat.png';
-import Headwear28 from '../../assets/images/randomise-person-images/headwears-img/Sushi-Chef-Hat.png';
-import Headwear29 from '../../assets/images/randomise-person-images/headwears-img/Traffic-Cone.png';
-import Headwear30 from '../../assets/images/randomise-person-images/headwears-img/Tuxedo-Hat.png';
-import Headwear31 from '../../assets/images/randomise-person-images/headwears-img/Violet-Beanie.png';
+import Headwear16 from '../../assets/images/randomise-person-images/headwears-img/Grey-Football-Helmet.png';
+import Headwear17 from '../../assets/images/randomise-person-images/headwears-img/Marine-Helmet.png';
+import Headwear18 from '../../assets/images/randomise-person-images/headwears-img/Old-Hat.png';
+import Headwear19 from '../../assets/images/randomise-person-images/headwears-img/Platinum-Spartan-Helmet.png';
+import Headwear20 from '../../assets/images/randomise-person-images/headwears-img/Purple-Ushanka.png';
+import Headwear21 from '../../assets/images/randomise-person-images/headwears-img/Rainbow-Cap.png';
+import Headwear22 from '../../assets/images/randomise-person-images/headwears-img/Red-Beanie.png';
+import Headwear23 from '../../assets/images/randomise-person-images/headwears-img/Red-Football-Helmet.png';
+import Headwear24 from '../../assets/images/randomise-person-images/headwears-img/Silver-Knights-Helmet.png';
+import Headwear25 from '../../assets/images/randomise-person-images/headwears-img/Silver-Spartan-Helmet.png';
+import Headwear26 from '../../assets/images/randomise-person-images/headwears-img/Straw-Farmers-Hat.png';
+import Headwear27 from '../../assets/images/randomise-person-images/headwears-img/Sushi-Chef-Hat.png';
+import Headwear28 from '../../assets/images/randomise-person-images/headwears-img/Traffic-Cone.png';
+import Headwear29 from '../../assets/images/randomise-person-images/headwears-img/Tuxedo-Hat.png';
+import Headwear30 from '../../assets/images/randomise-person-images/headwears-img/Violet-Beanie.png';
 
 // pants
 import Pant1 from '../../assets/images/randomise-person-images/pants-img/Amish-Pants.png';
@@ -58,23 +57,30 @@ import Pant6 from '../../assets/images/randomise-person-images/pants-img/Black-P
 import Pant7 from '../../assets/images/randomise-person-images/pants-img/Black-Soccer-Pants.png';
 import Pant8 from '../../assets/images/randomise-person-images/pants-img/Blue-Hockey-Pants.png';
 import Pant9 from '../../assets/images/randomise-person-images/pants-img/Blue-Jeans.png';
-import Pant10 from '../../assets/images/randomise-person-images/pants-img/Borat-Grey-Pants.png';
-import Pant11 from '../../assets/images/randomise-person-images/pants-img/Brazil-Pants.png';
-import Pant12 from '../../assets/images/randomise-person-images/pants-img/Classic-Plaid-Pants.png';
-import Pant13 from '../../assets/images/randomise-person-images/pants-img/Clown-Pants-.png';
-import Pant14 from '../../assets/images/randomise-person-images/pants-img/Golden-Pants.png';
-import Pant15 from '../../assets/images/randomise-person-images/pants-img/Gray-Jeans.png';
-import Pant16 from '../../assets/images/randomise-person-images/pants-img/Grey-Dress-Pants.png';
-import Pant17 from '../../assets/images/randomise-person-images/pants-img/Grey-Football-Pants.png';
-import Pant18 from '../../assets/images/randomise-person-images/pants-img/Marine-Pants.png';
-import Pant19 from '../../assets/images/randomise-person-images/pants-img/Rainbow-Pants.png';
-import Pant20 from '../../assets/images/randomise-person-images/pants-img/Red-Basketball-Pants.png';
-import Pant21 from '../../assets/images/randomise-person-images/pants-img/Red-Football-Pants.png';
-import Pant22 from '../../assets/images/randomise-person-images/pants-img/Ribbed-Zombie-Pants.png';
-import Pant23 from '../../assets/images/randomise-person-images/pants-img/Spartan-Pants.png';
-import Pant24 from '../../assets/images/randomise-person-images/pants-img/Sushi-Chef-Pants.png';
-import Pant25 from '../../assets/images/randomise-person-images/pants-img/Tennis-Pants.png';
-import Pant26 from '../../assets/images/randomise-person-images/pants-img/Tuxedo-Pants.png';
+import Pant10 from '../../assets/images/randomise-person-images/pants-img/Brazil-Pants.png';
+import Pant11 from '../../assets/images/randomise-person-images/pants-img/Cargo-Shorts.png';
+import Pant12 from '../../assets/images/randomise-person-images/pants-img/Chemical-Protection-Pants.png';
+import Pant13 from '../../assets/images/randomise-person-images/pants-img/Classic-Plaid-Pants.png';
+import Pant14 from '../../assets/images/randomise-person-images/pants-img/Clown-Pants.png';
+import Pant15 from '../../assets/images/randomise-person-images/pants-img/Golden-Grieves.png';
+import Pant16 from '../../assets/images/randomise-person-images/pants-img/Golden-Pants.png';
+import Pant17 from '../../assets/images/randomise-person-images/pants-img/Gray-Jeans.png';
+import Pant18 from '../../assets/images/randomise-person-images/pants-img/Grey-Dress-Pants.png';
+import Pant19 from '../../assets/images/randomise-person-images/pants-img/Grey-Football-Pants.png';
+import Pant20 from '../../assets/images/randomise-person-images/pants-img/Grey-Pants.png';
+import Pant21 from '../../assets/images/randomise-person-images/pants-img/Marine-Pants.png';
+import Pant22 from '../../assets/images/randomise-person-images/pants-img/Rainbow-Pants.png';
+import Pant23 from '../../assets/images/randomise-person-images/pants-img/Red-Basketball-Pants.png';
+import Pant24 from '../../assets/images/randomise-person-images/pants-img/Red-Football-Pants.png';
+import Pant25 from '../../assets/images/randomise-person-images/pants-img/Ribbed-Zombie-Pants.png';
+import Pant26 from '../../assets/images/randomise-person-images/pants-img/Samurai-Pants.png';
+import Pant27 from '../../assets/images/randomise-person-images/pants-img/Silver-Grieves.png';
+import Pant28 from '../../assets/images/randomise-person-images/pants-img/Spartan-Pants.png';
+import Pant29 from '../../assets/images/randomise-person-images/pants-img/Sushi-Chef-Pants.png';
+import Pant30 from '../../assets/images/randomise-person-images/pants-img/Taekwondo-Pants.png';
+import Pant31 from '../../assets/images/randomise-person-images/pants-img/Tennis-Pants.png';
+import Pant32 from '../../assets/images/randomise-person-images/pants-img/Tuxedo-Pants.png';
+import Pant33 from '../../assets/images/randomise-person-images/pants-img/Underwear.png';
 
 // torso
 import Torso1 from '../../assets/images/randomise-person-images/torso-img/Amish-Shirt.png';
@@ -83,40 +89,46 @@ import Torso3 from '../../assets/images/randomise-person-images/torso-img/Astron
 import Torso4 from '../../assets/images/randomise-person-images/torso-img/Beer-Mug-Tshirt.png';
 import Torso5 from '../../assets/images/randomise-person-images/torso-img/Black-Ninja-Robe.png';
 import Torso6 from '../../assets/images/randomise-person-images/torso-img/Blue-Hockey-Jersey.png';
-import Torso7 from '../../assets/images/randomise-person-images/torso-img/Borat-Grey-Suit.png';
-import Torso8 from '../../assets/images/randomise-person-images/torso-img/Bow-Tie-_-Suit.png';
-import Torso9 from '../../assets/images/randomise-person-images/torso-img/Brazil-Jersey.png';
-import Torso10 from '../../assets/images/randomise-person-images/torso-img/Clown-Jacket.png';
+import Torso7 from '../../assets/images/randomise-person-images/torso-img/Bow-Tie-Suit.png';
+import Torso8 from '../../assets/images/randomise-person-images/torso-img/Brazil-Jersey.png';
+import Torso9 from '../../assets/images/randomise-person-images/torso-img/Clown-Jacket.png';
+import Torso10 from '../../assets/images/randomise-person-images/torso-img/Golden-Armor.png';
 import Torso11 from '../../assets/images/randomise-person-images/torso-img/Golden-Jacket.png';
 import Torso12 from '../../assets/images/randomise-person-images/torso-img/Golden-Spartan-Armor.png';
-import Torso13 from '../../assets/images/randomise-person-images/torso-img/Marine-Shirt.png';
-import Torso14 from '../../assets/images/randomise-person-images/torso-img/Platinum-Spartan-Armor.png';
-import Torso15 from '../../assets/images/randomise-person-images/torso-img/Rainbow-Jacket.png';
-import Torso16 from '../../assets/images/randomise-person-images/torso-img/Red-Basketball-Jersey.png';
-import Torso17 from '../../assets/images/randomise-person-images/torso-img/Red-Football-Jersey.png';
-import Torso18 from '../../assets/images/randomise-person-images/torso-img/Red-Polo.png';
-import Torso19 from '../../assets/images/randomise-person-images/torso-img/Ribbed-Zombie-Shirt.png';
-import Torso20 from '../../assets/images/randomise-person-images/torso-img/Silver-Spartan-Armor-.png';
-import Torso21 from '../../assets/images/randomise-person-images/torso-img/Striped-Soccer-Jersey.png';
-import Torso22 from '../../assets/images/randomise-person-images/torso-img/Suit-_-Tie.png';
-import Torso23 from '../../assets/images/randomise-person-images/torso-img/Suit-Without-Tie.png';
-import Torso24 from '../../assets/images/randomise-person-images/torso-img/Sushi-Chef-Shirt.png';
-import Torso25 from '../../assets/images/randomise-person-images/torso-img/Tshirt-beer-mug.png';
-import Torso26 from '../../assets/images/randomise-person-images/torso-img/Tuxedo-Jacket.png';
-import Torso27 from '../../assets/images/randomise-person-images/torso-img/Weed-Plant-Tshirt.png';
-import Torso28 from '../../assets/images/randomise-person-images/torso-img/White-Football-Jersey.png';
+import Torso13 from '../../assets/images/randomise-person-images/torso-img/Grey-Jacket.png';
+import Torso14 from '../../assets/images/randomise-person-images/torso-img/Marine-Shirt.png';
+import Torso15 from '../../assets/images/randomise-person-images/torso-img/Platinum-Spartan-Armor.png';
+import Torso16 from '../../assets/images/randomise-person-images/torso-img/Rainbow-Jacket.png';
+import Torso17 from '../../assets/images/randomise-person-images/torso-img/Red-Basketball-Jersey.png';
+import Torso18 from '../../assets/images/randomise-person-images/torso-img/Red-Football-Jersey.png';
+import Torso19 from '../../assets/images/randomise-person-images/torso-img/Red-Collared-Shirt.png';
+import Torso20 from '../../assets/images/randomise-person-images/torso-img/Ribbed-Zombie-Shirt.png';
+import Torso21 from '../../assets/images/randomise-person-images/torso-img/Samurai-Armor.png';
+import Torso22 from '../../assets/images/randomise-person-images/torso-img/Silver-Armor.png';
+import Torso23 from '../../assets/images/randomise-person-images/torso-img/Silver-Spartan-Armor.png';
+import Torso24 from '../../assets/images/randomise-person-images/torso-img/Striped-Soccer-Jersey.png';
+import Torso25 from '../../assets/images/randomise-person-images/torso-img/Suit-Tie.png';
+import Torso26 from '../../assets/images/randomise-person-images/torso-img/Suit-Without-Tie.png';
+import Torso27 from '../../assets/images/randomise-person-images/torso-img/Sushi-Chef-Shirt.png';
+import Torso28 from '../../assets/images/randomise-person-images/torso-img/Taekwondo-Robe.png';
+import Torso29 from '../../assets/images/randomise-person-images/torso-img/Tennis-Shirt.png';
+import Torso30 from '../../assets/images/randomise-person-images/torso-img/Tuxedo-Jacket.png';
+import Torso31 from '../../assets/images/randomise-person-images/torso-img/Weed-Plant-Tshirt.png';
+import Torso32 from '../../assets/images/randomise-person-images/torso-img/White-Football-Jersey.png';
 
 // glasses
 import Glasses1 from '../../assets/images/randomise-person-images/glasses-img/3D-Glasses.png';
-import Glasses2 from '../../assets/images/randomise-person-images/glasses-img/Golden-Sunglasses.png';
-import Glasses3 from '../../assets/images/randomise-person-images/glasses-img/Kanye-Glasses.png';
-import Glasses4 from '../../assets/images/randomise-person-images/glasses-img/Monocle.png';
-import Glasses5 from '../../assets/images/randomise-person-images/glasses-img/Orange-Pit-Vipers.png';
-import Glasses6 from '../../assets/images/randomise-person-images/glasses-img/Purple-Pit-Vipers.png';
-import Glasses7 from '../../assets/images/randomise-person-images/glasses-img/Retro-Glasses.png';
-import Glasses8 from '../../assets/images/randomise-person-images/glasses-img/Round-Glasses.png';
-import Glasses9 from '../../assets/images/randomise-person-images/glasses-img/Sunglasses.png';
-import Glasses10 from '../../assets/images/randomise-person-images/glasses-img/VR-Set.png';
+import Glasses2 from '../../assets/images/randomise-person-images/glasses-img/Bar-Shades.png';
+import Glasses3 from '../../assets/images/randomise-person-images/glasses-img/Eye-Paint.png';
+import Glasses4 from '../../assets/images/randomise-person-images/glasses-img/Golden-Sunglasses.png';
+import Glasses5 from '../../assets/images/randomise-person-images/glasses-img/Monocle.png';
+import Glasses6 from '../../assets/images/randomise-person-images/glasses-img/Orange-Pit-Vipers.png';
+import Glasses7 from '../../assets/images/randomise-person-images/glasses-img/Purple-Pit-Vipers.png';
+import Glasses8 from '../../assets/images/randomise-person-images/glasses-img/Respirator.png';
+import Glasses9 from '../../assets/images/randomise-person-images/glasses-img/Retro-Glasses.png';
+import Glasses10 from '../../assets/images/randomise-person-images/glasses-img/Round-Glasses.png';
+import Glasses11 from '../../assets/images/randomise-person-images/glasses-img/Sunglasses.png';
+import Glasses12 from '../../assets/images/randomise-person-images/glasses-img/VR-Set.png';
 
 // shoes
 import Shoes1 from '../../assets/images/randomise-person-images/shoes-img/amish-ahoes.png';
@@ -150,50 +162,65 @@ import LeftHand2 from '../../assets/images/randomise-person-images/leftHand-imag
 import LeftHand3 from '../../assets/images/randomise-person-images/leftHand-images/Banana-Left.png';
 import LeftHand4 from '../../assets/images/randomise-person-images/leftHand-images/Basketball-Left.png';
 import LeftHand5 from '../../assets/images/randomise-person-images/leftHand-images/Beer-Left.png';
-import LeftHand6 from '../../assets/images/randomise-person-images/leftHand-images/Black-Pistol-Left.png';
-import LeftHand7 from '../../assets/images/randomise-person-images/leftHand-images/Blue-Lightsaber-Left.png';
-import LeftHand8 from '../../assets/images/randomise-person-images/leftHand-images/Bong-Left.png';
-import LeftHand9 from '../../assets/images/randomise-person-images/leftHand-images/Bow-Arrow-Left.png';
-import LeftHand10 from '../../assets/images/randomise-person-images/leftHand-images/Corn-Gun-Left.png';
-import LeftHand11 from '../../assets/images/randomise-person-images/leftHand-images/Double-Lightsaber-Red-Left.png';
-import LeftHand12 from '../../assets/images/randomise-person-images/leftHand-images/Double-Lightsaber-Yellow-Left.png';
-import LeftHand13 from '../../assets/images/randomise-person-images/leftHand-images/Football-Left.png';
-import LeftHand14 from '../../assets/images/randomise-person-images/leftHand-images/Golden-Spartan-Sword-Left.png';
-import LeftHand15 from '../../assets/images/randomise-person-images/leftHand-images/Golf-Club-Left.png';
-import LeftHand16 from '../../assets/images/randomise-person-images/leftHand-images/Green-Lightsaber-Left.png';
-import LeftHand17 from '../../assets/images/randomise-person-images/leftHand-images/Grenade-Left.png';
-import LeftHand18 from '../../assets/images/randomise-person-images/leftHand-images/Hockey-Stick-Left.png';
-import LeftHand19 from '../../assets/images/randomise-person-images/leftHand-images/Katana-Left.png';
-import LeftHand20 from '../../assets/images/randomise-person-images/leftHand-images/Platinum-Spartan-Sword-Left.png';
-import LeftHand21 from '../../assets/images/randomise-person-images/leftHand-images/PP7-Black-Gun-Left.png';
-import LeftHand22 from '../../assets/images/randomise-person-images/leftHand-images/PP7-Golden-Gun-Left.png';
-import LeftHand23 from '../../assets/images/randomise-person-images/leftHand-images/Purple-Lightsaber-Left.png';
-import LeftHand24 from '../../assets/images/randomise-person-images/leftHand-images/Red-Lightsaber-Left.png';
-import LeftHand25 from '../../assets/images/randomise-person-images/leftHand-images/Silver-Spartan-Sword-Left.png';
-import LeftHand26 from '../../assets/images/randomise-person-images/leftHand-images/Sushi-Knife-Left.png';
-import LeftHand27 from '../../assets/images/randomise-person-images/leftHand-images/Sword-Left.png';
-import LeftHand28 from '../../assets/images/randomise-person-images/leftHand-images/Tennis-Racket-Left.png';
+import LeftHand6 from '../../assets/images/randomise-person-images/leftHand-images/Big-Pistol-Left.png';
+import LeftHand7 from '../../assets/images/randomise-person-images/leftHand-images/Black-Pistol-Left.png';
+import LeftHand8 from '../../assets/images/randomise-person-images/leftHand-images/Blue-Lightsaber-Left.png';
+import LeftHand9 from '../../assets/images/randomise-person-images/leftHand-images/Bong-Left.png';
+import LeftHand10 from '../../assets/images/randomise-person-images/leftHand-images/Bow-Arrow-Left.png';
+import LeftHand11 from '../../assets/images/randomise-person-images/leftHand-images/Corn-Gun-Left.png';
+import LeftHand12 from '../../assets/images/randomise-person-images/leftHand-images/Diamond-Left.png';
+import LeftHand13 from '../../assets/images/randomise-person-images/leftHand-images/Double-Lightsaber-Blue-Left.png';
+import LeftHand14 from '../../assets/images/randomise-person-images/leftHand-images/Double-Lightsaber-Red-Left.png';
+import LeftHand15 from '../../assets/images/randomise-person-images/leftHand-images/Double-Lightsaber-Yellow-Left.png';
+import LeftHand16 from '../../assets/images/randomise-person-images/leftHand-images/Football-Left.png';
+import LeftHand17 from '../../assets/images/randomise-person-images/leftHand-images/Golden-Gun-Left.png';
+import LeftHand18 from '../../assets/images/randomise-person-images/leftHand-images/Golden-Spartan-Sword-Left.png';
+import LeftHand19 from '../../assets/images/randomise-person-images/leftHand-images/Golf-Club-Left.png';
+import LeftHand20 from '../../assets/images/randomise-person-images/leftHand-images/Green-Lightsaber-Left.png';
+import LeftHand21 from '../../assets/images/randomise-person-images/leftHand-images/Grenade-Left.png';
+import LeftHand22 from '../../assets/images/randomise-person-images/leftHand-images/Hockey-Stick-Left.png';
+import LeftHand23 from '../../assets/images/randomise-person-images/leftHand-images/Katana-Left.png';
+import LeftHand24 from '../../assets/images/randomise-person-images/leftHand-images/Platinum-Spartan-Sword-Left.png';
+import LeftHand25 from '../../assets/images/randomise-person-images/leftHand-images/Purple-Lightsaber-Left.png';
+import LeftHand26 from '../../assets/images/randomise-person-images/leftHand-images/Red-Lightsaber-Left.png';
+import LeftHand27 from '../../assets/images/randomise-person-images/leftHand-images/Shield-Left.png';
+import LeftHand28 from '../../assets/images/randomise-person-images/leftHand-images/Silver-Spartan-Sword-Left.png';
+import LeftHand29 from '../../assets/images/randomise-person-images/leftHand-images/Sushi-Knife-Left.png';
+import LeftHand30 from '../../assets/images/randomise-person-images/leftHand-images/Sword-Left.png';
+import LeftHand31 from '../../assets/images/randomise-person-images/leftHand-images/Tennis-Racket-Left.png';
 
 // right hand
-import RightHand1 from '../../assets/images/randomise-person-images/rightHand-img/American-Football-Right.png';
-import RightHand2 from '../../assets/images/randomise-person-images/rightHand-img/Basketball-Right.png';
-import RightHand3 from '../../assets/images/randomise-person-images/rightHand-img/Black-Pistol-Right.png';
-import RightHand4 from '../../assets/images/randomise-person-images/rightHand-img/Blue-Lightsaber-Right.png';
-import RightHand5 from '../../assets/images/randomise-person-images/rightHand-img/Corn-Gun-Right.png';
-import RightHand6 from '../../assets/images/randomise-person-images/rightHand-img/Double-Lightsaber-Red-Right.png';
-import RightHand7 from '../../assets/images/randomise-person-images/rightHand-img/Double-Lightsaber-Yellow-Right.png';
-import RightHand8 from '../../assets/images/randomise-person-images/rightHand-img/Football-Right.png';
-import RightHand9 from '../../assets/images/randomise-person-images/rightHand-img/Golden-Spartan-Sword-Right.png';
-import RightHand10 from '../../assets/images/randomise-person-images/rightHand-img/Green-Lightsaber-Right.png';
-import RightHand11 from '../../assets/images/randomise-person-images/rightHand-img/Grenade-Right.png';
-import RightHand12 from '../../assets/images/randomise-person-images/rightHand-img/Hockey-Stick-Right.png';
-import RightHand13 from '../../assets/images/randomise-person-images/rightHand-img/Katana-Right.png';
-import RightHand14 from '../../assets/images/randomise-person-images/rightHand-img/Platinum-Spartan-Sword-Right.png';
-import RightHand15 from '../../assets/images/randomise-person-images/rightHand-img/PP7-Black-Gun-Right.png';
-import RightHand16 from '../../assets/images/randomise-person-images/rightHand-img/PP7-Golden-Gun-Right.png';
-import RightHand17 from '../../assets/images/randomise-person-images/rightHand-img/Purple-Lightsaber-Right.png';
-import RightHand18 from '../../assets/images/randomise-person-images/rightHand-img/Red-Lightsaber-Right.png';
-import RightHand19 from '../../assets/images/randomise-person-images/rightHand-img/Silver-Spartan-Sword-Right.png';
+import RightHand1 from '../../assets/images/randomise-person-images/rightHand-images/American-Football-Right.png';
+import RightHand2 from '../../assets/images/randomise-person-images/rightHand-images/Amish-Pitch-Fork-Right.png';
+import RightHand3 from '../../assets/images/randomise-person-images/rightHand-images/Banana-Right.png';
+import RightHand4 from '../../assets/images/randomise-person-images/rightHand-images/Basketball-Right.png';
+import RightHand5 from '../../assets/images/randomise-person-images/rightHand-images/Beer-Right.png';
+import RightHand6 from '../../assets/images/randomise-person-images/rightHand-images/Big-Pistol-Right.png';
+import RightHand7 from '../../assets/images/randomise-person-images/rightHand-images/Black-Pistol-Right.png';
+import RightHand8 from '../../assets/images/randomise-person-images/rightHand-images/Blue-Lightsaber-Right.png';
+import RightHand9 from '../../assets/images/randomise-person-images/rightHand-images/Bong-Right.png';
+import RightHand10 from '../../assets/images/randomise-person-images/rightHand-images/Bow-Arrow-Right.png';
+import RightHand11 from '../../assets/images/randomise-person-images/rightHand-images/Corn-Gun-Right.png';
+import RightHand12 from '../../assets/images/randomise-person-images/rightHand-images/Diamond-Right.png';
+import RightHand13 from '../../assets/images/randomise-person-images/rightHand-images/Double-Lightsaber-Blue-Right.png';
+import RightHand14 from '../../assets/images/randomise-person-images/rightHand-images/Double-Lightsaber-Red-Right.png';
+import RightHand15 from '../../assets/images/randomise-person-images/rightHand-images/Double-Lightsaber-Yellow-Right.png';
+import RightHand16 from '../../assets/images/randomise-person-images/rightHand-images/Football-Right.png';
+import RightHand17 from '../../assets/images/randomise-person-images/rightHand-images/Golden-Gun-Right.png';
+import RightHand18 from '../../assets/images/randomise-person-images/rightHand-images/Golden-Spartan-Sword-Right.png';
+import RightHand19 from '../../assets/images/randomise-person-images/rightHand-images/Golf-Club-Right.png';
+import RightHand20 from '../../assets/images/randomise-person-images/rightHand-images/Green-Lightsaber-Right.png';
+import RightHand21 from '../../assets/images/randomise-person-images/rightHand-images/Grenade-Right.png';
+import RightHand22 from '../../assets/images/randomise-person-images/rightHand-images/Hockey-Stick-Right.png';
+import RightHand23 from '../../assets/images/randomise-person-images/rightHand-images/Katana-Right.png';
+import RightHand24 from '../../assets/images/randomise-person-images/rightHand-images/Platinum-Spartan-Sword-Right.png';
+import RightHand25 from '../../assets/images/randomise-person-images/rightHand-images/Purple-Lightsaber-Right.png';
+import RightHand26 from '../../assets/images/randomise-person-images/rightHand-images/Red-Lightsaber-Right.png';
+import RightHand27 from '../../assets/images/randomise-person-images/rightHand-images/Shield-Right.png';
+import RightHand28 from '../../assets/images/randomise-person-images/rightHand-images/Silver-Spartan-Sword-Right.png';
+import RightHand29 from '../../assets/images/randomise-person-images/rightHand-images/Sushi-Knife-Right.png';
+import RightHand30 from '../../assets/images/randomise-person-images/rightHand-images/Sword-Right.png';
+import RightHand31 from '../../assets/images/randomise-person-images/rightHand-images/Tennis-Racket-Right.png';
 
 export default {
   person: Person,
@@ -230,7 +257,6 @@ export default {
     Headwear28,
     Headwear29,
     Headwear30,
-    Headwear31,
   ],
   pants: [
     null,
@@ -261,6 +287,13 @@ export default {
     Pant24,
     Pant25,
     Pant26,
+    Pant27,
+    Pant28,
+    Pant29,
+    Pant30,
+    Pant31,
+    Pant32,
+    Pant33,
   ],
   torso: [
     null,
@@ -292,6 +325,10 @@ export default {
     Torso26,
     Torso27,
     Torso28,
+    Torso29,
+    Torso30,
+    Torso31,
+    Torso32,
   ],
   glasses: [
     null,
@@ -305,6 +342,8 @@ export default {
     Glasses8,
     Glasses9,
     Glasses10,
+    Glasses11,
+    Glasses12,
   ],
   shoes: [
     null,
@@ -363,6 +402,9 @@ export default {
     LeftHand26,
     LeftHand27,
     LeftHand28,
+    LeftHand29,
+    LeftHand30,
+    LeftHand31,
   ],
   rightHand: [
     null,
@@ -385,5 +427,17 @@ export default {
     RightHand17,
     RightHand18,
     RightHand19,
+    RightHand20,
+    RightHand21,
+    RightHand22,
+    RightHand23,
+    RightHand24,
+    RightHand25,
+    RightHand26,
+    RightHand27,
+    RightHand28,
+    RightHand29,
+    RightHand30,
+    RightHand31,
   ],
 };
