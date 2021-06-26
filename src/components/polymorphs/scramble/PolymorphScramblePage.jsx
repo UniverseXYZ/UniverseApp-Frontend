@@ -110,6 +110,7 @@ const PolymorphScramblePage = () => {
         )}
       </Popup>
       <Popup
+        closeOnDocumentClick={false}
         trigger={
           <button
             type="button"
