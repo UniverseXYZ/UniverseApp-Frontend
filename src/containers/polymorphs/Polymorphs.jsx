@@ -51,8 +51,6 @@ const Polymorphs = () => {
     if (+window.innerWidth <= 575) setMobile(true);
   }, [window.innerWidth]);
 
-  useEffect(() => {}, [data]);
-
   return (
     <div className="polymorphs">
       <WelcomeWrapper
