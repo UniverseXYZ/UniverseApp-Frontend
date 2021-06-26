@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
+import { utils } from 'ethers';
 import Tabs from '../tabs/Tabs';
 import Button from '../button/Button';
 import '../polymorphs/scramble/styles/PolymorphScramblePopup.scss';
@@ -7,13 +9,15 @@ import closeIcon from '../../assets/images/cross.svg';
 import ethIcon from '../../assets/images/eth.svg';
 import SelectComponent from '../select/SelectComponent';
 import AppContext from '../../ContextAPI';
-import person from '../../assets/images/randomise-person-images/person.png';
+import { getPolymorphMeta } from '../../utils/api/polymorphs.js';
+import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 
-const PolymorphScramblePopup = ({ onClose }) => {
-  const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
+const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolymorphGene }) => {
+  const { selectedNftForScramble, polymorphContract } = useContext(AppContext);
   const [singleTraitTabSelected, setSingleTraitSelected] = useState(true);
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
   const [selectedTrait, setSelectedTrait] = useState(null);
+  const [randomizeGenePrise, setRandomizeGenePrice] = useState('');
 
   const traits = [
     {
@@ -169,17 +173,21 @@ const PolymorphScramblePopup = ({ onClose }) => {
     },
   ];
 
+  useEffect(async () => {
+    try {
+      const amount = await polymorphContract.randomizeGenomePrice();
+      const formatedEther = utils.formatEther(amount);
+      setRandomizeGenePrice(formatedEther);
+    } catch (e) {
+      alert(e);
+    }
+  }, []);
+
   const getRandomInt = (max) => Math.floor(Math.random() * max);
 
-  const onScramble = () => {
+  const onScramble = async () => {
     onClose();
-
     document.getElementById('loading-hidden-btn').click();
-
-    setTimeout(() => {
-      document.getElementById('popup-root').remove();
-      document.getElementById('scramble-hidden-btn').click();
-    }, 2000);
 
     const traitsObj = {};
 
@@ -189,18 +197,36 @@ const PolymorphScramblePopup = ({ onClose }) => {
           selectedTrait.list[getRandomInt(selectedTrait.list.length)];
       }
     } else {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const trait of traits) {
-        if (trait.list.length !== 0) {
-          traitsObj[trait.value] = trait.list[getRandomInt(trait.list.length)];
-        }
+      try {
+        if (!id) return;
+        // Randomize Genom
+        const amount = await polymorphContract.randomizeGenomePrice();
+        const randomizeT = await polymorphContract.randomizeGenome(id, { value: amount });
+        const randomizeR = await randomizeT.wait();
+        console.log(randomizeR);
+
+        // Update the view //
+
+        // Get the new Meta
+        const data = await getPolymorphMeta(id);
+        setPolymorph(data);
+
+        // Update the Gene
+        const gene = await polymorphContract.geneOf(id);
+        setPolymorphGene(shortenEthereumAddress(gene.toString()));
+
+        // Close the modal
+        document.getElementById('popup-root').remove();
+        document.getElementById('scramble-hidden-btn').click();
+      } catch (e) {
+        alert(e);
       }
     }
 
-    setSelectedNftForScramble({
-      ...selectedNftForScramble,
-      ...traitsObj,
-    });
+    // setSelectedNftForScramble({
+    //   ...selectedNftForScramble,
+    //   ...traitsObj,
+    // });
   };
 
   return (
@@ -212,11 +238,11 @@ const PolymorphScramblePopup = ({ onClose }) => {
         <div className="scramble--popup">
           <div className="scramble--popup--content">
             <div className="avatar-wrapper-popup">
-              <img src={person} className="avatar-popup" alt="avatar" />
+              <img src={polymorph?.data?.image} className="avatar-popup" alt="avatar" />
             </div>
 
             <div className="scramble--options--popup">
-              <div className="name">{selectedNftForScramble.name}</div>
+              <div className="name">{polymorph?.data?.name}</div>
 
               <Tabs items={tabs} />
               {singleTraitTabSelected ? (
@@ -245,7 +271,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
 
               <div className="scramble--action">
                 <div className="scramble--price">
-                  <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : 0.16}
+                  <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : randomizeGenePrise}
                 </div>
                 <Button
                   className="light-button"
@@ -277,6 +303,10 @@ const PolymorphScramblePopup = ({ onClose }) => {
 
 PolymorphScramblePopup.propTypes = {
   onClose: PropTypes.func.isRequired,
+  setPolymorph: PropTypes.func.isRequired,
+  setPolymorphGene: PropTypes.func.isRequired,
+  polymorph: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default PolymorphScramblePopup;
