@@ -191,6 +191,12 @@ const App = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
+  useEffect(() => {
+    if (data) {
+      fetchUserPolymorphsTheGraph(data);
+    }
+  }, [data]);
+
   useEffect(async () => {
     if (typeof window.ethereum !== 'undefined') {
       const { ethereum } = window;
@@ -303,7 +309,9 @@ const App = () => {
     >
       <Header />
       <Switch>
-        <Route exact path="/" component={() => <Homepage />} />
+        <Route exact path="/">
+          <Homepage />
+        </Route>
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />

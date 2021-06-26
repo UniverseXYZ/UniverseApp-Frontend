@@ -9,6 +9,8 @@ import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AppContext from '../../ContextAPI';
 import { transferPolymorphs } from '../../utils/graphql/queries';
+import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
+import PolymorphImage from './PolymorphImage';
 
 const UniverseNFTs = () => {
   const { setSelectedNftForScramble, userPolymorphs, address, fetchUserPolymorphsTheGraph } =
@@ -33,12 +35,6 @@ const UniverseNFTs = () => {
   const handleSearchByName = (value) => {
     setSearchByName(value);
   };
-
-  useEffect(() => {
-    if (data) {
-      fetchUserPolymorphsTheGraph(data);
-    }
-  }, [data]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
@@ -130,9 +126,12 @@ const UniverseNFTs = () => {
                     history.push(`/polymorphs/${elm.id}`);
                   }}
                 >
-                  <div className="nft__box__image">
-                    <img className="preview-image" alt={elm.name} src={elm.previewImage.url} />
-                  </div>
+                  <PolymorphImage
+                    name={elm.name}
+                    placeholderImg={loadingBg}
+                    errorImg={loadingBg}
+                    src={elm.previewImage.url}
+                  />
                   <div className="polymorph">
                     <p>{elm.name}</p>
                   </div>
