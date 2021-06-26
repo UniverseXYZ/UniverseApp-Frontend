@@ -44,7 +44,7 @@
         font-family: $spaceGroteskFont;
         h5 {
             margin: 40px 0 15px;
-            font-family: $sharpGroteskMediumFont;
+            font-family: $sharpGroteskSemiBoldFont;
             text-align: center;
             font-style: normal;
             font-weight: 600;
@@ -70,7 +70,7 @@
         justify-content: space-between;
         align-items: center;
         @include lg {
-            align-items: flex-end;
+            align-items: flex-start;
         }
         .quantity--input--group {
             width: 215px !important;

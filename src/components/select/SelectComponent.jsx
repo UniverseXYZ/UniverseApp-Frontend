@@ -21,8 +21,7 @@ const SelectComponent = (props) => {
     dropdownIndicator: (base, state) => ({
       ...base,
       color: '#000000',
-      transform: state.isFocused ? 'rotate(180deg)' : null,
-      // transform: state.menuIsOpen && state.isFocused ? 'rotate(180deg)' : null,
+      transform: state.isFocused && state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
     }),
     option: (base, state) => ({
       ...base,

@@ -160,7 +160,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
       },
     },
     {
-      name: 'Scramble all trait',
+      name: 'Scramble all traits',
       active: allTraitsTabSelected,
       handler: () => {
         setSingleTraitSelected(false);
@@ -196,7 +196,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
         }
       }
     }
-    console.log('traits', traitsObj);
+
     setSelectedNftForScramble({
       ...selectedNftForScramble,
       ...traitsObj,

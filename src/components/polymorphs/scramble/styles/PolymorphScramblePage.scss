@@ -1,84 +1,112 @@
 @import '../../../../assets/scss/variables';
 @import '../../../../assets/scss/mixins';
 
-.container {
-  max-width: 90%;
-}
+// .container {
+//   max-width: 90%;
+// }
 
-@media (min-width: $screen-md-max) {
-  .container {
-    width: 600px;
-  }
-}
+// @media (min-width: $screen-md-max) {
+//   .container {
+//     width: 600px;
+//   }
+// }
 
-@media (min-width: $screen-lg-max) {
-  .container {
-    width: 900px;
-  }
-}
+// @media (min-width: $screen-lg-max) {
+//   .container {
+//     width: 900px;
+//   }
+// }
 
-@media (min-width: $screen-xl-max) {
-  .container {
-    width: 1230px;
-  }
-}
+// @media (min-width: $screen-xl-max) {
+//   .container {
+//     width: 1230px;
+//   }
+// }
 
 .scramble--wrapper {
-  font-family: Space Grotesk, sans-serif;
+  font-family: $spaceGroteskFont;
   font-style: normal;
 
-  .scramble--content {
-    width: 100%;
+  .go--back--wrapper {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 60px;
 
-    @media (min-width: $screen-sm-max) {
-      justify-content: space-between;
+    span {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 20px;
+      text-align: center;
+      color: $black;
+      margin-left: 10px;
     }
+    @include lg {
+      margin-bottom: 40px;
+    }
+  }
+
+  .scramble--content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 125px;
+    // width: 100%;
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: center;
+    // flex-wrap: wrap;
+
+    // @media (min-width: $screen-sm-max) {
+    //   justify-content: space-between;
+    // }
 
     .avatar--wrapper {
-      margin: 0 auto 100px;
-      position: relative;
-      height: 270px;
-      flex-basis: 350px;
-      flex-grow: 0;
+      height: 445px;
+      width: 445px;
+      // margin: 0 auto 100px;
+      // position: relative;
+      // height: 270px;
+      // flex-basis: 350px;
+      // flex-grow: 0;
 
-      .go--back--wrapper {
-        top: 0;
-        left: 0;
-        cursor: pointer;
-        margin-top: -20px;
-        flex-basis: 100%;
-        margin-left: 0;
+      // .go--back--wrapper {
+      //   top: 0;
+      //   left: 0;
+      //   cursor: pointer;
+      //   margin-top: -20px;
+      //   flex-basis: 100%;
+      //   margin-left: 0;
 
-        span {
-          margin-left: 10px;
-          font-weight: 500;
-          font-size: 16px;
-        }
+      //   span {
+      //     margin-left: 10px;
+      //     font-weight: 500;
+      //     font-size: 16px;
+      //   }
 
-      }
+      // }
 
-      @media (min-width: $screen-md-max) {
-        height: 500px;
-        flex-basis: 500px;
-      }
+      // @media (min-width: $screen-md-max) {
+      //   height: 500px;
+      //   flex-basis: 500px;
+      // }
 
       img.avatar {
-        display: block;
-        position: absolute;
-        top: 50px;
-        left: 0;
-        right: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        // display: block;
+        // position: absolute;
+        // top: 50px;
+        // left: 0;
+        // right: 0;
+        // background-repeat: no-repeat;
+        // background-size: 100%;
+        // mix-blend-mode: normal;
 
-        background-repeat: no-repeat;
-        background-size: 100%;
-        mix-blend-mode: normal;
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
-
         filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
         border-radius: 12px;
       }
@@ -119,20 +147,34 @@
         z-index: 9;
       }
 
+      @include lg {
+        width: 100%;
+        height: 714px;
+      }
+      @include md {
+        height: 335px;
+      }
     }
 
     .scramble--options {
-      width: 560px;
-      max-width: 90%;
+      // width: 560px;
+      // max-width: 90%;
 
       .name {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
         font-weight: 600;
         font-size: 26px;
         line-height: 140%;
+        color: $black;
+        @include md {
+          font-size: 20px;
+        }
       }
 
       .description {
-        margin-top: 20px;
+        margin-top: 16px;
+        margin-bottom: 40px;
         font-weight: normal;
         font-size: 16px;
         line-height: 160%;
@@ -141,18 +183,37 @@
 
       .tabs__wrapper {
         padding: 0;
-        margin: 30px 0 20px 0;
+        margin: 0px 0 20px 0;
+        max-width: 100%;
+        width: auto;
+        ul.tab_items {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          width: 100%;
+          min-width: auto;
+        }
       }
 
       .scramble--properties {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 20px;
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        // justify-content: center;
         margin-bottom: 40px;
-
-        @media (min-width: $screen-md-max) {
-          justify-content: space-between
+        
+        // @media (min-width: $screen-md-max) {
+          //   justify-content: space-between
+        // }
+        @include lg { 
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @include md { 
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @include sm { 
+          grid-template-columns: repeat(2, 1fr);
         }
       }
 
@@ -185,19 +246,26 @@
       }
 
       .light-button {
-        width: 90%;
-        display: block;
-        margin: 0 auto;
-
-        @media (min-width: $screen-md-max) {
-          margin: unset!important;
-          width: unset;
+        @include sm {
+          width: 100%;
         }
+        // width: 90%;
+        // display: block;
+        // margin: 0 auto;
+
+        // @media (min-width: $screen-md-max) {
+        //   margin: unset!important;
+        //   width: unset;
+        // }
 
       }
 
     }
-
+    @include xl {
+      grid-gap: 40px;
+    }
+    @include lg {
+      grid-template-columns: 1fr;
+    }
   }
-
 }
