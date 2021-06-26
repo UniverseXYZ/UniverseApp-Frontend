@@ -35,7 +35,8 @@ const MyNFTs = () => {
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
+  // const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
+  const tabs = ['Universe NFTs'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
@@ -222,7 +223,7 @@ const MyNFTs = () => {
         <div className="mynfts__page__gradient">
           <div className="container mynfts__page__header">
             <h1 className="title">My NFTs</h1>
-            <div className="create__mint__btns">
+            {/* <div className="create__mint__btns">
               {myNFTsSelectedTabIndex === 2 && (
                 <button
                   type="button"
@@ -237,14 +238,14 @@ const MyNFTs = () => {
                 Create NFT
               </button>
             </div>
-            {showModal && <MintModal open={showModal} onClose={handleClose} />}
+            {showModal && <MintModal open={showModal} onClose={handleClose} />} */}
           </div>
           {renderTabsWrapper()}
         </div>
       )}
 
       <div className="container mynfts__page__body">
-        {myNFTsSelectedTabIndex === 0 && (
+        {/* {myNFTsSelectedTabIndex === 0 && (
           <Wallet
             filteredNFTs={filteredNFTs}
             setFilteredNFTs={setFilteredNFTs}
@@ -254,7 +255,8 @@ const MyNFTs = () => {
         )}
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
         {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
-        {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
+        {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />} */}
+        <UniverseNFTs />
       </div>
     </>
   );
@@ -308,7 +310,8 @@ const MyNFTs = () => {
     <>
       {renderPopups()}
       <div className="mynfts__page">
-        {existsNFTs() ? renderIfNFTsExist() : renderIfNFTsNotExist()}
+        {/* {existsNFTs() ? renderIfNFTsExist() : renderIfNFTsNotExist()} */}
+        {renderIfNFTsExist()}
       </div>
     </>
   );

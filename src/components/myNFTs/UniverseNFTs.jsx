@@ -5,18 +5,17 @@ import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AppContext from '../../ContextAPI';
 
 const UniverseNFTs = () => {
-  const { setSelectedNftForScramble } = useContext(AppContext);
+  const { setSelectedNftForScramble, userPolymorphs } = useContext(AppContext);
   const history = useHistory();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('All characters');
+  const [selectedItem, setSelectedItem] = useState('My polymorphs');
   const [searchByName, setSearchByName] = useState('');
 
   const handleClickOutside = (event) => {
@@ -58,7 +57,7 @@ const UniverseNFTs = () => {
                 {isDropdownOpened && (
                   <div className="sort__dropdown">
                     <ul>
-                      <li
+                      {/* <li
                         onClick={() => {
                           setSelectedItem('All characters');
                           setIsDropdownOpened(false);
@@ -75,7 +74,7 @@ const UniverseNFTs = () => {
                         aria-hidden="true"
                       >
                         OG characters
-                      </li>
+                      </li> */}
                       <li
                         onClick={() => {
                           setSelectedItem('My polymorphs');
@@ -107,10 +106,11 @@ const UniverseNFTs = () => {
           </div>
         </div>
         <div className="nfts__lists">
-          {UNIVERSE_NFTS.slice(offset, offset + perPage)
+          {userPolymorphs
+            .slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
-              elm.previewImage.type === 'image/png' ? (
+              elm.previewImage.type === 'image/jpg' ? (
                 <div
                   key={uuid()}
                   className="nft__box"
@@ -158,13 +158,14 @@ const UniverseNFTs = () => {
               )
             )}
         </div>
-        {UNIVERSE_NFTS.length &&
-        UNIVERSE_NFTS.filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-          .length ? (
+        {userPolymorphs.length &&
+        userPolymorphs.filter((item) =>
+          item.name.toLowerCase().includes(searchByName.toLowerCase())
+        ).length ? (
           <div>
             <div className="pagination__container">
               <Pagination
-                data={UNIVERSE_NFTS.filter((item) =>
+                data={userPolymorphs.filter((item) =>
                   item.name.toLowerCase().includes(searchByName.toLowerCase())
                 )}
                 perPage={perPage}
