@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import AppContext from '../../../ContextAPI';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
-import person from '../../../assets/images/randomise-person-images/person.png';
+// import person from '../../../assets/images/randomise-person-images/person.png';
 import Button from '../../button/Button';
 import Tabs from '../../tabs/Tabs';
 import PolymorphScrambleProp from './PolymorphScrambleProp';
@@ -14,6 +14,7 @@ import LoadingPopup from '../../popups/LoadingPopup';
 import PolymorphScrambleCongratulationPopup from '../../popups/PolymorphScrambleCongratulationPopup';
 import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
+import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -21,6 +22,15 @@ const PolymorphScramblePage = () => {
 
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
+  const [polymorphId, setPolymorphId] = useState(useParams().id);
+  const [polymorphData, setPolymorphData] = useState({});
+
+  useEffect(async () => {
+    if (!polymorphId) return;
+    const data = await getPolymorphMeta(polymorphId);
+    setPolymorphData(data);
+    console.log(data);
+  }, [polymorphId]);
 
   const tabs = [
     {
@@ -41,58 +51,24 @@ const PolymorphScramblePage = () => {
     },
   ];
 
-  const properties = [
-    {
-      trait: 'Base character',
-      name: 'Charles',
-      chance: '28% have this trait',
-    },
-    {
-      trait: 'Eyewear',
-      name: 'Orange Sunglasses',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Headwear',
-      name: 'Marine Helmet',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Footwear',
-      name: 'Basketball Shoes',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Torso',
-      name: 'Clown Jacket',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Pants',
-      name: 'Marine Pants',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Left-hand accessory',
-      name: 'Golden Spartan Sword',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Right-hand accessory',
-      name: 'Double Degen Sword Red',
-      chance: '58% have this trait',
-    },
-    {
-      trait: 'Background',
-      name: 'Strong Bliss',
-      chance: '58% have this trait',
-    },
-  ];
+  const onGoBack = () => {
+    history.goBack();
+  };
 
   const onOpenOptionsPopUp = () => {
     document.getElementById('popup-root').remove();
     document.getElementById('popup-hidden-btn').click();
   };
+
+  const getAttributesMapping = (attributes = []) =>
+    attributes.map((attr) => ({
+      trait: attr.trait_type,
+      name: attr.value,
+      // chance: PropTypes.string.isRequired, //TODO:: We dont have it
+    }));
+
+  const attributes = getAttributesMapping(polymorphData?.data?.attributes);
+  console.log('Scrabmlbe PAge rerender');
 
   return !isEmpty(selectedNftForScramble) ? (
     <div className="container scramble--wrapper">
@@ -147,79 +123,19 @@ const PolymorphScramblePage = () => {
       </div>
       <div className="scramble--content">
         <div className="avatar--wrapper">
-          {/* <div
-            className="go--back--wrapper"
-            aria-hidden="true"
-            onClick={() => history.push('/my-nfts')}
-          >
-            <img src={backArrow} alt="go back" />
-            <span>My NFTs</span>
-          </div> */}
-          {selectedNftForScramble.background ? (
-            <img
-              src={selectedNftForScramble.background}
-              className="avatar background"
-              alt="background"
-            />
-          ) : (
-            ''
-          )}
-          <img src={person} className="avatar person" alt="person" />
-          {selectedNftForScramble.headWear ? (
-            <img src={selectedNftForScramble.headWear} className="avatar headWear" alt="headWear" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.eyeWear ? (
-            <img src={selectedNftForScramble.eyeWear} className="avatar eyeWear" alt="eyeWear" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.torso ? (
-            <img src={selectedNftForScramble.torso} className="avatar torso" alt="torso" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.pants ? (
-            <img src={selectedNftForScramble.pants} className="avatar pants" alt="pants" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.footWear ? (
-            <img src={selectedNftForScramble.footWear} className="avatar footWear" alt="footWear" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.leftHand ? (
-            <img src={selectedNftForScramble.leftHand} className="avatar leftHand" alt="leftHand" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.rightHand ? (
-            <img
-              src={selectedNftForScramble.rightHand}
-              className="avatar rightHand"
-              alt="rightHand"
-            />
-          ) : (
-            ''
-          )}
+          <img src={polymorphData?.data?.image} className="person" alt="Polymorph" />
         </div>
 
         <div className="scramble--options">
-          <div className="name">{selectedNftForScramble.name}</div>
-          <div className="description">
-            Charles the Clown is a citizen of the Polymorph Universe. Charles has a unique genetic
-            code that can be scrambled at anytime.
-          </div>
+          <div className="name">{polymorphData?.data?.name}</div>
+          <div className="description">{polymorphData?.data?.description}</div>
 
           <Tabs items={tabs} />
           {propertiesTabSelected ? (
             <>
               <div className="scramble--properties">
-                {properties.map((props) => (
-                  <PolymorphScrambleProp key={uuid()} data={props} />
-                ))}
+                {attributes.length &&
+                  attributes.map((props) => <PolymorphScrambleProp key={uuid()} data={props} />)}
               </div>
             </>
           ) : (
