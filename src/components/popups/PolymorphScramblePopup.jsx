@@ -158,8 +158,8 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
               {singleTraitTabSelected ? (
                 <>
                   <div className="description">
-                    Mutating a single trait means you can morph a hat or morph a torso. This option
-                    will only morph 1 gene.
+                    Mutating a single trait means you can morph a hat or morph a torso. This option will only morph 1
+                    gene.
                   </div>
 
                   <div className="traits--popup">
