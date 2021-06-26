@@ -36,7 +36,7 @@ const PolymorphImage = ({ src, placeholderImg, errorImg, name }) => {
           <div />
         </div>
       )}
-      <img className="preview-image" alt={name} src={imgSrc} />;
+      <img className="preview-image" alt={name} src={imgSrc} />
     </div>
   );
 };

@@ -251,11 +251,65 @@
 
         .genome--string--value {
           font-weight: 500;
-          padding: 15px 0;
           font-size: 16px;
           color: #4D66EB;
+          cursor: copy;
         }
-
+        .copy-div {
+          position: relative;
+          padding: 15px 20px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .copy__div {
+            // padding-top: 2px;
+            // padding-right: 8px;
+        
+            .copy > span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 18px;
+              color: $black;
+              opacity: 0.4;
+            }
+            .copyImg {
+              margin-right: 5px;
+              margin-left: 11px;
+            }
+            .copy > span {
+              opacity: 0.6;
+            }
+            .copied-div {
+              position: absolute;
+              width: fit-content;
+              height: 27px;
+              background: $black;
+              border-radius: 100px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 150%;
+              text-align: center;
+              color: $white;
+              margin-top: -20%;
+              left: 50%;
+              padding: 4px 12px;
+        
+              span {
+                position: absolute;
+                width: 7.6px;
+                height: 7.6px;
+                left: 48%;
+                top: 23px;
+                background: $black;
+                transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+              }
+            }
+          }
+        }
       }
 
       .light-button {

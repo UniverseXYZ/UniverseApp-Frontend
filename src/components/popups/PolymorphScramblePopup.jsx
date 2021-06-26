@@ -118,7 +118,7 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
 
       // Update the Gene
       const gene = await polymorphContract.geneOf(id);
-      setPolymorphGene(shortenEthereumAddress(gene.toString()));
+      setPolymorphGene(gene.toString());
 
       // Update userPolymorphs
       const newPolymorph = convertPolymorphObjects([data]);
