@@ -15,15 +15,17 @@ import PolymorphScrambleCongratulationPopup from '../../popups/PolymorphScramble
 import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
+import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
-  const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
+  const { selectedNftForScramble, polymorphContract } = useContext(AppContext);
 
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
   const [polymorphId, setPolymorphId] = useState(useParams().id);
   const [polymorphData, setPolymorphData] = useState({});
+  const [polymorpGene, setPolymorphGene] = useState('');
 
   useEffect(async () => {
     if (!polymorphId) return;
@@ -31,6 +33,12 @@ const PolymorphScramblePage = () => {
     setPolymorphData(data);
     console.log(data);
   }, [polymorphId]);
+
+  useEffect(async () => {
+    if (!polymorphId || !polymorphContract) return;
+    const gene = await polymorphContract.geneOf(polymorphId);
+    setPolymorphGene(shortenEthereumAddress(gene.toString()));
+  }, [polymorphId, polymorphContract]);
 
   const tabs = [
     {
@@ -70,7 +78,7 @@ const PolymorphScramblePage = () => {
   const attributes = getAttributesMapping(polymorphData?.data?.attributes);
   console.log('Scrabmlbe PAge rerender');
 
-  return !isEmpty(selectedNftForScramble) ? (
+  return (
     <div className="container scramble--wrapper">
       <Popup
         trigger={
@@ -141,11 +149,7 @@ const PolymorphScramblePage = () => {
           ) : (
             <div className="metadata">
               <div className="genome--string--name">Genome string</div>
-              <div className="genome--string--value">
-                {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(0, 14)}
-                {'...'}
-                {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(38)}
-              </div>
+              <div className="genome--string--value"> {polymorpGene}</div>
             </div>
           )}
 
@@ -155,8 +159,6 @@ const PolymorphScramblePage = () => {
         </div>
       </div>
     </div>
-  ) : (
-    <NotFound />
   );
 };
 
