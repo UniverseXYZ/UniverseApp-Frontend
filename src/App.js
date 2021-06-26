@@ -357,6 +357,7 @@ const App = () => {
       </Switch>
       <Footer />
       <Popup
+        closeOnDocumentClick={false}
         trigger={
           <button
             type="button"
