@@ -116,13 +116,14 @@ const BondingCurve = (props) => {
       setMintedTokens(nftMetadataObjects);
       triggerSuccessPopup();
     } catch (err) {
-      alert(err);
+      alert(err.message || error);
     }
   };
 
   return (
     <div className="welcome--slider--bonding--curve">
       <Popup
+        closeOnDocumentClick={false}
         trigger={
           <button
             type="button"
@@ -135,6 +136,7 @@ const BondingCurve = (props) => {
         {(close) => <LoadingPopup onClose={close} />}
       </Popup>
       <Popup
+        closeOnDocumentClick={false}
         trigger={
           <button
             type="button"
