@@ -88,7 +88,20 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
 
   const onScramble = async () => {
     onClose();
-    document.getElementById('loading-hidden-btn').click();
+    let loadingPopup = document.getElementById('loading-popup-div');
+    let overlay = document.getElementsByClassName('popup-overlay ');
+
+    if (loadingPopup) {
+      loadingPopup.style.display = 'block';
+      if (overlay[0]) {
+        overlay[0].style.display = 'block';
+      }
+    } else {
+      const showLoadingButton = document.getElementById('loading-hidden-btn');
+      if (showLoadingButton) {
+        showLoadingButton.click();
+      }
+    }
 
     try {
       if (singleTraitTabSelected) {
@@ -131,11 +144,20 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
         return existingPolymorph;
       });
 
-      setUserPolymorphs(updatedPolymorphs);
-
       // Close the modal
-      document.getElementById('popup-root').remove();
-      document.getElementById('scramble-hidden-btn').click();
+      loadingPopup = document.getElementById('loading-popup-div');
+      overlay = document.getElementsByClassName('popup-overlay ');
+
+      if (loadingPopup) {
+        loadingPopup.style.display = 'none';
+        if (overlay[0]) {
+          overlay[0].style.display = 'none';
+        }
+      }
+      const showCongratsButton = document.getElementById('scramble-hidden-btn');
+      if (showCongratsButton) {
+        showCongratsButton.click(); // show congrats
+      }
     } catch (err) {
       alert(err.message || err);
     }
