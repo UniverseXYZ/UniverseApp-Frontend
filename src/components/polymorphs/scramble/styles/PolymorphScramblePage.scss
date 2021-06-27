@@ -200,6 +200,11 @@
           li {
             cursor: pointer;
           }
+          @include lg {
+            li {
+              cursor: pointer;
+            }
+          }
         }
       }
 
