@@ -333,8 +333,11 @@ const App = () => {
         <Route exact path="/polymorphs/:id">
           <PolymorphScramblePage />
         </Route>
+        <Route exact path="/my-nfts">
+          <MyNFTs />
+        </Route>
 
-        <Route path="/setup-auction" component={() => <SetupAuction />} />
+        {/* <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
           exact
           path="/minting-and-auctions/marketplace/active-auctions"
@@ -345,9 +348,6 @@ const App = () => {
           path="/minting-and-auctions/marketplace/future-auctions"
           component={() => <Marketplace />}
         />
-        <Route exact path="/my-nfts">
-          <MyNFTs />
-        </Route>
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
@@ -366,7 +366,7 @@ const App = () => {
         </Route>
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />
-        </Route>
+        </Route> */}
 
         <Route path="*" component={() => <NotFound />} />
       </Switch>
