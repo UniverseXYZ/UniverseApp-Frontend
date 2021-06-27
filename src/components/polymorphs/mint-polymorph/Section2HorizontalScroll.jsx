@@ -15,6 +15,7 @@ const child = (data) =>
 const Section2HorizontalScroll = (props) => {
   const location = useLocation();
   const { width, height } = props;
+  console.log('width', width);
   // const [scrollWidth, setScrollWidth] = useState(width);
   const [transparentBlockHeight, setTransparentBlockHeight] = useState(width);
   const [scrollSticky, setScrollSicky] = useState(0);
@@ -57,7 +58,9 @@ const Section2HorizontalScroll = (props) => {
   return (
     <div
       className="block--horizontall--scroll--transparent"
-      style={{ height: `${transparentBlockHeight + 800}px` }}
+      style={{
+        height: `${width > 576 ? transparentBlockHeight + 1100 : transparentBlockHeight + 1600}px`,
+      }}
     >
       <div className="section2--horizontal--scroll--parent">
         <h3>Possible base characters</h3>
