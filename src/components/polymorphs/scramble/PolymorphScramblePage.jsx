@@ -188,29 +188,15 @@ const PolymorphScramblePage = () => {
           ) : (
             <div>
               <div className="metadata">
-                <div className="genome--string--name">Owner</div>
-                <div className="copy-div">
-                  <div className="copy__div">
-                    <div className="copy" title="Copy to clipboard">
-                      <div className="copied-div" hidden={!ownerCopied}>
-                        Owner copied!
-                        <span />
-                      </div>
-                      <CopyToClipboard
-                        text={morphOwner}
-                        onCopy={() => {
-                          setOwnerCopied(true);
-                          setTimeout(() => {
-                            setOwnerCopied(false);
-                          }, 1000);
-                        }}
-                      >
-                        <div className="genome--string--value">
-                          {morphOwner ? shortenEthereumAddress(morphOwner) : null}
-                        </div>
-                      </CopyToClipboard>
-                    </div>
-                  </div>
+                <div className="owner--string--name">Owner</div>
+                <div className="owner--string--value">
+                  <a
+                    href={`https://etherscan.io/token/${polymorphContract?.address}?a=${morphOwner}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {shortenEthereumAddress(morphOwner)}
+                  </a>
                 </div>
               </div>
               <div className="metadata">
