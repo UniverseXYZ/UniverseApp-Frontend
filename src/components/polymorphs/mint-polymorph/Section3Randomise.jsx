@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
+import { Animated } from 'react-animated-css';
 import Marquee from 'react-fast-marquee';
 import WrapperCenter from '../WrapperCenter';
 import WrapperCenterTwoColumns from '../WrapperCenterTwoColumns';
@@ -63,19 +64,26 @@ const Section3Randomise = (props) => {
   const [randomShoesNumber, setRandomShoesNumber] = useState(1);
   const [randomLeftHandNumber, setRandomLeftHandNumber] = useState(1);
   const [randomRightHandNumber, setRandomRightHandNumber] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const { person, backgrounds, headwears, pants, torso, glasses, shoes, leftHand, rightHand } =
     personData;
   const globalRandom = () => {
-    randomIndex(randomPersonNumber, setRandomPersonNumber, person.length);
-    randomIndex(randomBgNumber, setRandomBgNumber, backgrounds.length);
-    randomIndex(randomHeadwearsNumber, setRandomHeadwearsNumber, headwears.length);
-    randomIndex(randomPantsNumber, setRandomPantsNumber, pants.length);
-    randomIndex(randomTorsoNumber, setRandomTorsoNumber, torso.length);
-    randomIndex(randomGlassesNumber, setRandomGlassesNumber, glasses.length);
-    randomIndex(randomShoesNumber, setRandomShoesNumber, shoes.length);
-    randomIndex(randomLeftHandNumber, setRandomLeftHandNumber, leftHand.length);
-    randomIndex(randomRightHandNumber, setRandomRightHandNumber, rightHand.length);
+    setLoading(true);
+    setTimeout(() => {
+      randomIndex(randomPersonNumber, setRandomPersonNumber, person.length);
+      randomIndex(randomBgNumber, setRandomBgNumber, backgrounds.length);
+      randomIndex(randomHeadwearsNumber, setRandomHeadwearsNumber, headwears.length);
+      randomIndex(randomPantsNumber, setRandomPantsNumber, pants.length);
+      randomIndex(randomTorsoNumber, setRandomTorsoNumber, torso.length);
+      randomIndex(randomGlassesNumber, setRandomGlassesNumber, glasses.length);
+      randomIndex(randomShoesNumber, setRandomShoesNumber, shoes.length);
+      randomIndex(randomLeftHandNumber, setRandomLeftHandNumber, leftHand.length);
+      randomIndex(randomRightHandNumber, setRandomRightHandNumber, rightHand.length);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }, 1000);
   };
   return (
     <div className="section3--randomise--parent">
@@ -89,6 +97,26 @@ const Section3Randomise = (props) => {
                   className="left--randomise--img--block--child"
                   style={{ backgroundImage: `url(${backgrounds[randomBgNumber]})` }}
                 >
+                  {loading ? (
+                    <Animated
+                      animationIn="fadeIn"
+                      animationOut="fadeOut"
+                      className="loading--overlay"
+                    >
+                      <div className="lds-roller">
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                      </div>
+                    </Animated>
+                  ) : (
+                    <></>
+                  )}
                   <div className="marquee--top">
                     <Marquee gradient={false} direction="right">
                       {marqueText()}

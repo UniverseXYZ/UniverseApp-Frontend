@@ -161,8 +161,11 @@
           }
   
           .next-price-description {
-            font-size: 14px;
-            font-weight: bold;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 150%;
             color: #E4B613;
           }
   
