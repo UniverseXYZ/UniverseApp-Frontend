@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const queryAuctions = gql`
+export const morphedPolymorphs = gql`
   query Polymorphs {
     tokenMorphedEntities(first: 100, orderBy: timestamp, orderDirection: desc) {
       id
