@@ -74,6 +74,9 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
       const formatedEther = utils.formatEther(amount);
       setRandomizeGenePrice(formatedEther);
 
+      // Set first trait to be selected
+      setSelectedTrait(traits[0]);
+
       // Fetch single genom change price
       const genomChangePrice = await polymorphContract.priceForGenomeChange(id);
       const genomChangePriceToEther = utils.formatEther(genomChangePrice);
@@ -194,9 +197,9 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
 
               {singleTraitTabSelected ? (
                 <div className="next-price-description">
-                  * You’re about to morph the <b>Marine Pants</b>. Your next scramble will cost more
-                  that last one. You have the same chance to receive the trait you already have as
-                  the trait you may want.
+                  * You’re about to morph the <b>{selectedTrait?.label}</b>. Your next scramble will
+                  cost more than the last one. You have the same chance to receive the trait you
+                  already have as the trait you may want.
                 </div>
               ) : (
                 <div className="next-price-description">
