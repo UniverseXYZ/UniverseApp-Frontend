@@ -108,7 +108,7 @@ const App = () => {
     const network = await provider.getNetwork();
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
-    if (network.chainId !== 3) {
+    if (network.chainId !== 1) {
       triggerWrongNetworkPopup();
     } else {
       const polymContract =
