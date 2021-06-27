@@ -23,7 +23,13 @@ const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, pol
         <Button className="light-button" onClick={() => history.push('/my-nfts')}>
           My polymorphs
         </Button>
-        <Button className="light-border-button" onClick={onOpenOptionsPopUp}>
+        <Button
+          className="light-border-button"
+          onClick={() => {
+            onClose();
+            onOpenOptionsPopUp();
+          }}
+        >
           Scramble again
         </Button>
       </div>

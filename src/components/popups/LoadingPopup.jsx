@@ -5,7 +5,7 @@ import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 
 const LoadingPopup = ({ onClose }) => (
-  <div className="loading-div popup-div">
+  <div className="loading-div popup-div" id="loading-popup-div">
     <div className="loading-ring">
       <div />
       <div />

@@ -76,10 +76,8 @@ const PolymorphScramblePage = () => {
   ];
 
   const onOpenOptionsPopUp = () => {
-    if (document.getElementById('popup-root')) {
-      document.getElementById('popup-root').remove();
-    }
-    document.getElementById('popup-hidden-btn').click();
+    const scramblePopupButton = document.getElementById('popup-hidden-btn');
+    scramblePopupButton.click();
   };
 
   const getAttributesMapping = (attributes = []) =>
