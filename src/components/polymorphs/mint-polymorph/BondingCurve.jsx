@@ -94,6 +94,8 @@ const BondingCurve = (props) => {
   };
 
   const mintPolymorphs = async (amount) => {
+    if (!polymorphContract) return;
+
     const mintedIds = [];
     const overrideOptions = {
       value: BigNumber.from((utils.parseEther('0.0777') * amount).toString()),
