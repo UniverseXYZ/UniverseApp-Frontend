@@ -206,7 +206,7 @@ const PolymorphScramblePage = () => {
                         }}
                       >
                         <div className="genome--string--value">
-                          {shortenEthereumAddress(morphOwner)}
+                          {morphOwner ? shortenEthereumAddress(morphOwner) : null}
                         </div>
                       </CopyToClipboard>
                     </div>
