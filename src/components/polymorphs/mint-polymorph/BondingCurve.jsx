@@ -94,6 +94,14 @@ const BondingCurve = (props) => {
   };
 
   const mintPolymorphs = async (amount) => {
+    if (!polymorphContract) {
+      try {
+        await connectWeb3();
+      } catch (err) {
+        alert(err.message || error);
+      }
+    }
+
     if (!polymorphContract) return;
 
     const mintedIds = [];
