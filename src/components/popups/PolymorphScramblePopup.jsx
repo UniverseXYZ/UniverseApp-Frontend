@@ -28,8 +28,8 @@ const WEAR_TO_GENE_POSITION_MAP = {
   Footwear: GENE_POSITIONS_MAP.FOOTWEAR,
   Eyewear: GENE_POSITIONS_MAP.FACE,
   Headwear: GENE_POSITIONS_MAP.HEAD,
-  WeaponRight: GENE_POSITIONS_MAP.RIGHT_WEAPON,
-  WeaponLeft: GENE_POSITIONS_MAP.LEFT_WEAPON,
+  'Right Hand': GENE_POSITIONS_MAP.RIGHT_WEAPON,
+  'Left Hand': GENE_POSITIONS_MAP.LEFT_WEAPON,
 };
 
 const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolymorphGene }) => {
