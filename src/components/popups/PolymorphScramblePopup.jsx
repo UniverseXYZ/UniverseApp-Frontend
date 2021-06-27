@@ -237,8 +237,9 @@ const PolymorphScramblePopup = ({ onClose }) => {
                 </>
               ) : (
                 <div className="description">
-                  This option will scramble all the genes and give you a completely new polymorph
-                  style. This will also change the background and the base skin.
+                  Would you like to scramble your Polymorph into a brand new one? This will
+                  randomize the genome, and reset the cost of a single trait scramble back to 0.01
+                  ETH.
                 </div>
               )}
 
@@ -255,10 +256,17 @@ const PolymorphScramblePopup = ({ onClose }) => {
                 </Button>
               </div>
 
-              <div className="next-price-description">
-                * Your next scramble will cost more than the last one. You have the same chance of
-                receiving the trait you already have as the trait you may want.
-              </div>
+              {singleTraitTabSelected ? (
+                <div className="next-price-description">
+                  * You’re about to morph the <b>Marine Pants</b>. Your next scramble will cost more
+                  that last one. You have the same chance to receive the trait you already have as
+                  the trait you may want.
+                </div>
+              ) : (
+                <div className="next-price-description">
+                  * This action might change your Character trait and can not be reversed later!
+                </div>
+              )}
             </div>
           </div>
         </div>
