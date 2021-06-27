@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { utils } from 'ethers';
 import ScrambleTypeImg from '../../assets/images/eventTypeScramble.svg';
 import MintTypeImg from '../../assets/images/eventTypeMint.svg';
@@ -17,6 +18,7 @@ import imgMariguana from '../../assets/images/Mariguana-small.png';
 import imgPaul from '../../assets/images/Paul-small.png';
 import imgRagnar from '../../assets/images/Ragnar-small.png';
 import imgXYZBot from '../../assets/images/XYZbot-small.png';
+import './styles/PolymorphsActivityTableRow.scss';
 
 const characters = [
   'Diamond Paws',
@@ -87,6 +89,8 @@ const getCharacterBaseImage = (character) => characterImages[character];
 const PolymorphsActivityTableRow = (props) => {
   const { data, className, ethPrice } = props;
 
+  const history = useHistory();
+
   return (
     <tr className={`row ${className}`}>
       <td className="td--image">
@@ -95,7 +99,17 @@ const PolymorphsActivityTableRow = (props) => {
         </div>
       </td>
       <td className="td--name">
-        <span>{getName(data.tokenId)}</span>
+        <span>
+          <button
+            className="morph-button"
+            type="button"
+            onClick={() => {
+              history.push(`polymorphs/${data.tokenId}`);
+            }}
+          >
+            {getName(data.tokenId)}
+          </button>
+        </span>
       </td>
       <td className="td--skin">
         <span>{getSkinFromGenome(data.newGene)}</span>
