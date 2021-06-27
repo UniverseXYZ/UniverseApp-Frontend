@@ -33,7 +33,7 @@ import MintPolymorph from './containers/polymorphs/MintPolymorph';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
-import { transferPolymorphs } from './utils/graphql/queries';
+import { transferPolymorphs, morphedPolymorphs } from './utils/graphql/queries';
 import cover from './assets/images/cover.png';
 
 const App = () => {
@@ -324,7 +324,9 @@ const App = () => {
         </Route>
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
-        <Route exact path="/polymorphs" component={() => <Polymorphs />} />
+        <Route exact path="/polymorphs">
+          <Polymorphs />
+        </Route>
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/polymorphs/:id">
           <PolymorphScramblePage />

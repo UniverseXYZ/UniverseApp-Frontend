@@ -9,7 +9,7 @@ import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
-import { queryAuctions } from '../../utils/graphql/queries';
+import { morphedPolymorphs } from '../../utils/graphql/queries';
 import AppContext from '../../ContextAPI';
 
 const marquee = () => (
@@ -36,7 +36,7 @@ const marquee = () => (
 const Polymorphs = () => {
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
-  const { data } = useQuery(queryAuctions);
+  const { data } = useQuery(morphedPolymorphs);
   const { ethPrice } = useContext(AppContext);
 
   useLayoutEffect(() => {
