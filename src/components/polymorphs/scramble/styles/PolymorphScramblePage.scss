@@ -248,6 +248,20 @@
         box-sizing: border-box;
         border-radius: 12px;
 
+        .owner--string--name {
+          font-weight: 500;
+          font-size: 16px;
+          padding-top: 15px;
+        }
+
+        .owner--string--value {
+          font-weight: 500;
+          font-size: 16px;
+          color: #4D66EB;
+          padding: 15px 0;
+          cursor: pointer;
+        }
+
         .genome--string--name {
           font-weight: 500;
           font-size: 16px;
@@ -262,7 +276,7 @@
         }
         .copy-div {
           position: relative;
-          padding: 15px 20px;
+          padding: 15px 0px 15px 20px;
           display: flex;
           align-items: center;
           justify-content: space-between;
