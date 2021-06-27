@@ -13,6 +13,7 @@ import { getPolymorphMeta } from '../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 
 const GENE_POSITIONS_MAP = {
+  BACKGROUND: 1,
   PANTS: 2,
   TORSO: 3,
   FOOTWEAR: 4,
@@ -23,13 +24,14 @@ const GENE_POSITIONS_MAP = {
 };
 
 const WEAR_TO_GENE_POSITION_MAP = {
+  Background: GENE_POSITIONS_MAP.BACKGROUND,
   Pants: GENE_POSITIONS_MAP.PANTS,
   Torso: GENE_POSITIONS_MAP.TORSO,
   Footwear: GENE_POSITIONS_MAP.FOOTWEAR,
   Eyewear: GENE_POSITIONS_MAP.FACE,
   Headwear: GENE_POSITIONS_MAP.HEAD,
-  'Left Hand': GENE_POSITIONS_MAP.RIGHT_WEAPON,
   'Right Hand': GENE_POSITIONS_MAP.LEFT_WEAPON,
+  'Left Hand': GENE_POSITIONS_MAP.RIGHT_WEAPON,
 };
 
 const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolymorphGene }) => {
@@ -41,12 +43,9 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
   const [randomizeGenePrise, setRandomizeGenePrice] = useState('');
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
 
-  const traitableAttributes = polymorph.data.attributes.filter(
-    (attr) => WEAR_TO_GENE_POSITION_MAP[attr.trait_type]
-  );
-  const traits = traitableAttributes.map((attr) => ({
-    label: attr.trait_type,
-    value: attr.trait_type,
+  const traits = Object.keys(WEAR_TO_GENE_POSITION_MAP).map((key) => ({
+    label: key,
+    value: key,
   }));
 
   const tabs = [
