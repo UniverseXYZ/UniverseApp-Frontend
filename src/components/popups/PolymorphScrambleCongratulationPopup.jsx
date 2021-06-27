@@ -7,7 +7,7 @@ import closeIcon from '../../assets/images/cross.svg';
 import AppContext from '../../ContextAPI';
 import person from '../../assets/images/randomise-person-images/person.png';
 
-const PolymorphScrambleCongratulationPopup = ({ onClose }) => {
+const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp }) => {
   // const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
   const history = useHistory();
 
@@ -23,7 +23,7 @@ const PolymorphScrambleCongratulationPopup = ({ onClose }) => {
         <Button className="light-button" onClick={() => history.push('/my-nfts')}>
           My polymorphs
         </Button>
-        <Button className="light-border-button" onClick={onClose}>
+        <Button className="light-border-button" onClick={onOpenOptionsPopUp}>
           Scramble again
         </Button>
       </div>
@@ -33,6 +33,7 @@ const PolymorphScrambleCongratulationPopup = ({ onClose }) => {
 
 PolymorphScrambleCongratulationPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
+  onOpenOptionsPopUp: PropTypes.func.isRequired,
 };
 
 export default PolymorphScrambleCongratulationPopup;

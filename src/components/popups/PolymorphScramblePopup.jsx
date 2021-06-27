@@ -238,7 +238,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
               ) : (
                 <div className="description">
                   This option will scramble all the genes and give you a completely new polymorph
-                  style.
+                  style. This will also change the background and the base skin.
                 </div>
               )}
 
@@ -256,7 +256,8 @@ const PolymorphScramblePopup = ({ onClose }) => {
               </div>
 
               <div className="next-price-description">
-                * Your next scramble will cost more that last one
+                * Your next scramble will cost more than the last one. You have the same chance of
+                receiving the trait you already have as the trait you may want.
               </div>
             </div>
           </div>

@@ -90,6 +90,7 @@ const PolymorphScramblePage = () => {
   ];
 
   const onOpenOptionsPopUp = () => {
+    document.getElementById('popup-root').remove();
     document.getElementById('popup-hidden-btn').click();
   };
 
@@ -129,7 +130,12 @@ const PolymorphScramblePage = () => {
           />
         }
       >
-        {(close) => <PolymorphScrambleCongratulationPopup onClose={close} />}
+        {(close) => (
+          <PolymorphScrambleCongratulationPopup
+            onClose={close}
+            onOpenOptionsPopUp={onOpenOptionsPopUp}
+          />
+        )}
       </Popup>
       <div
         className="go--back--wrapper"

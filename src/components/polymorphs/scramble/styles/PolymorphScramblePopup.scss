@@ -40,10 +40,14 @@
   }
 
   .scramble-popup-div {
-    overflow-y: auto;
     padding: 70px;
     max-height: calc(100vh - 88px);
-
+    
+    @media (max-width: 1200px) {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
     &::-webkit-scrollbar {
       width: 0px;
     }

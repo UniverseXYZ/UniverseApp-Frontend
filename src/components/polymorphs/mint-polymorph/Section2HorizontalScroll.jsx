@@ -32,7 +32,7 @@ const Section2HorizontalScroll = (props) => {
       const horizontalScrollWidth = charactersData.length * scrolItem?.clientWidth;
       const transitionEndLimit = horizontalScrollWidth - window.innerWidth;
       setScrollSicky(parent?.offsetTop - window.scrollY);
-      setTransparentBlockHeight(transitionEndLimit);
+      // setTransparentBlockHeight(transitionEndLimit);
       if (
         scrollSticky === header?.clientHeight + 1 &&
         scrollSticky === parent?.offsetTop - window.scrollY
@@ -57,7 +57,7 @@ const Section2HorizontalScroll = (props) => {
   return (
     <div
       className="block--horizontall--scroll--transparent"
-      style={{ height: `${transparentBlockHeight + 1000}px` }}
+      style={{ height: `${transparentBlockHeight + 800}px` }}
     >
       <div className="section2--horizontal--scroll--parent">
         <h3>Possible base characters</h3>

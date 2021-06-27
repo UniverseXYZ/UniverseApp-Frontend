@@ -107,6 +107,9 @@
                 div {
                     margin-left: 5px;
                 }
+                @include lg {
+                    font-size: 6px;
+                }
             }
             .marquee--top {
                 position: absolute;
@@ -150,7 +153,7 @@
             .marquee--left {
                 position: absolute;
                 top: 0;
-                left: calc(-100% + 14px);;
+                left: calc(-100% + 14px);
                 right: 0;
                 bottom: 0;
                 z-index: 74;
@@ -159,6 +162,9 @@
                 width: 95%;
                 margin: auto;
                 // background-color: blueviolet;
+                @include lg {
+                    left: calc(-100% + 11px);
+                }
             }
         }
     }
