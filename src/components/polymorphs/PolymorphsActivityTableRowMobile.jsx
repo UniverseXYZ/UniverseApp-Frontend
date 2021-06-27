@@ -20,31 +20,31 @@ import imgRagnar from '../../assets/images/Ragnar-small.png';
 import imgXYZBot from '../../assets/images/XYZbot-small.png';
 
 const characters = [
-  'DiamondPaws',
+  'Diamond Paws',
   'EsCrow',
   'Frankie',
   'Glenn',
-  'GoldTooth',
-  'Grishnak',
+  'Goldtooth',
+  'Troll God',
   'Charles',
   'Mariguana',
-  'Paul',
+  'Vitalik',
   'Ragnar',
-  'XYZBot',
+  'X-YZ',
 ];
 
 const characterImages = {
-  DiamondPaws: imgDiamondPaws,
+  'Diamond Paws': imgDiamondPaws,
   EsCrow: imgEsCrow,
   Frankie: imgFrankie,
   Glenn: imgGlenn,
-  GoldTooth: imgGoldtooth,
-  Grishnak: imgGrishnak,
+  Goldtooth: imgGoldtooth,
+  'Troll God': imgGrishnak,
   Charles: imgCharles,
   Mariguana: imgMariguana,
-  Paul: imgPaul,
+  Vitalik: imgPaul,
   Ragnar: imgRagnar,
-  XYZBot: imgXYZBot,
+  'X-YZ': imgXYZBot,
 };
 
 const getTypeImage = (type) => {
@@ -77,11 +77,11 @@ const getTypeEvent = (type) => {
 };
 
 const getSkinFromGenome = (gene) => {
-  const genePosition = gene.substring(0, 2);
+  const genePosition = gene.slice(-2);
   return characters[parseInt(genePosition, 10) % 11];
 };
 
-const getName = (id) => `Polymorph #${id}`;
+const getName = (skin, id) => `${skin} #${id}`;
 
 const getCharacterBaseImage = (character) => characterImages[character];
 
@@ -97,7 +97,8 @@ const PolymorphsActivityTableRowMobile = (props) => {
       </div>
       <div className="center--block data--block">
         <p className="name--block">
-          {getName(data.tokenId)} . <span>{getSkinFromGenome(data.newGene)}</span>
+          {getName(getSkinFromGenome(data.newGene), data.tokenId)} .{' '}
+          <span>{getSkinFromGenome(data.newGene)}</span>
         </p>
         <div className="event--block">
           <div className="event--type--icon-block">
