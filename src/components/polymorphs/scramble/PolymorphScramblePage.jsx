@@ -30,13 +30,16 @@ const PolymorphScramblePage = () => {
   const [polymorpGene, setPolymorphGene] = useState('');
   const [loading, setLoading] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [morphOwner, setMorphOwner] = useState(false);
+  const [geneCopied, setGeneCopied] = useState(false);
+  const [ownerCopied, setOwnerCopied] = useState(false);
 
   useEffect(async () => {
     if (!polymorphId || !polymorphContract) return;
     const ownerOf = await polymorphContract.ownerOf(polymorphId);
     const owner = ownerOf.toLowerCase() === address.toLowerCase();
     setIsOwner(owner);
+    setMorphOwner(ownerOf);
   }, [polymorphId, polymorphContract]);
 
   useEffect(async () => {
@@ -183,28 +186,56 @@ const PolymorphScramblePage = () => {
               </div>
             </>
           ) : (
-            <div className="metadata">
-              <div className="genome--string--name">Genome string</div>
-              <div className="copy-div">
-                <div className="copy__div">
-                  <div className="copy" title="Copy to clipboard">
-                    <div className="copied-div" hidden={!copied}>
-                      Gene copied!
-                      <span />
-                    </div>
-                    <CopyToClipboard
-                      text={polymorpGene}
-                      onCopy={() => {
-                        setCopied(true);
-                        setTimeout(() => {
-                          setCopied(false);
-                        }, 1000);
-                      }}
-                    >
-                      <div className="genome--string--value">
-                        {shortenEthereumAddress(polymorpGene)}
+            <div>
+              <div className="metadata">
+                <div className="genome--string--name">Owner</div>
+                <div className="copy-div">
+                  <div className="copy__div">
+                    <div className="copy" title="Copy to clipboard">
+                      <div className="copied-div" hidden={!ownerCopied}>
+                        Owner copied!
+                        <span />
                       </div>
-                    </CopyToClipboard>
+                      <CopyToClipboard
+                        text={morphOwner}
+                        onCopy={() => {
+                          setOwnerCopied(true);
+                          setTimeout(() => {
+                            setOwnerCopied(false);
+                          }, 1000);
+                        }}
+                      >
+                        <div className="genome--string--value">
+                          {shortenEthereumAddress(morphOwner)}
+                        </div>
+                      </CopyToClipboard>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="metadata">
+                <div className="genome--string--name">Genome string</div>
+                <div className="copy-div">
+                  <div className="copy__div">
+                    <div className="copy" title="Copy to clipboard">
+                      <div className="copied-div" hidden={!geneCopied}>
+                        Gene copied!
+                        <span />
+                      </div>
+                      <CopyToClipboard
+                        text={polymorpGene}
+                        onCopy={() => {
+                          setGeneCopied(true);
+                          setTimeout(() => {
+                            setGeneCopied(false);
+                          }, 1000);
+                        }}
+                      >
+                        <div className="genome--string--value">
+                          {shortenEthereumAddress(polymorpGene)}
+                        </div>
+                      </CopyToClipboard>
+                    </div>
                   </div>
                 </div>
               </div>
