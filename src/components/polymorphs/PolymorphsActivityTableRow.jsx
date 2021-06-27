@@ -78,11 +78,11 @@ const getTypeEvent = (type) => {
 };
 
 const getSkinFromGenome = (gene) => {
-  const genePosition = gene.substring(0, 2);
+  const genePosition = gene.slice(-2);
   return characters[parseInt(genePosition, 10) % 11];
 };
 
-const getName = (id) => `Polymorph #${id}`;
+const getName = (skin, id) => `${skin} #${id}`;
 
 const getCharacterBaseImage = (character) => characterImages[character];
 
@@ -107,7 +107,7 @@ const PolymorphsActivityTableRow = (props) => {
               history.push(`polymorphs/${data.tokenId}`);
             }}
           >
-            {getName(data.tokenId)}
+            {getName(getSkinFromGenome(data.newGene), data.tokenId)}
           </button>
         </span>
       </td>
