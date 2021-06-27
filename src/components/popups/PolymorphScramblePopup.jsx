@@ -141,6 +141,10 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
     }
   };
 
+  const currentTrait = polymorph?.data?.attributes.find(
+    (attr) => attr?.trait_type === selectedTrait.label
+  );
+
   return (
     <div className="scramble-popup">
       <button type="button" className="popup-close" onClick={onClose}>
@@ -197,9 +201,12 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
 
               {singleTraitTabSelected ? (
                 <div className="next-price-description">
-                  * You’re about to morph the <b>{selectedTrait?.label}</b>. Your next scramble will
-                  cost more than the last one. You have the same chance to receive the trait you
-                  already have as the trait you may want.
+                  * You’re about to morph the &nbsp;
+                  <b>
+                    {selectedTrait?.label}: {currentTrait?.value}
+                  </b>
+                  . Your next scramble will ost more than the last one. You have the same chance to
+                  receive the trait you already have as the trait you may want.
                 </div>
               ) : (
                 <div className="next-price-description">
