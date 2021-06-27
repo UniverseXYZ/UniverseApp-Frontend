@@ -10,8 +10,7 @@ import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
 
 const Header = ({ location }) => {
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
-  const { website } = useContext(AppContext);
+  const { setIsWalletConnected, windowSize, connectWeb3, website } = useContext(AppContext);
   const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
 
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -20,13 +19,16 @@ const Header = ({ location }) => {
   const [showSelectWallet, setShowSelectWallet] = useState(false);
   const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
 
-  const handleConnectWallet = (wallet) => {
+  const handleConnectWallet = async (wallet) => {
     // Here need to check if selected wallet is installed in browser
     setSelectedWallet(wallet);
     if (installed) {
-      setIsWalletConnected(true);
-      setShowMenu(false);
-      setShowSelectWallet(false);
+      if (wallet === 'Metamask' && typeof window.ethereum !== 'undefined') {
+        await connectWeb3();
+        setIsWalletConnected(true);
+        setShowMenu(false);
+        setShowSelectWallet(false);
+      }
     } else {
       setShowInstallWalletPopup(true);
     }
@@ -39,6 +41,8 @@ const Header = ({ location }) => {
       location.pathname === '/about' ||
       location.pathname === '/minting-and-auctions/marketplace/active-auctions' ||
       location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
+      location.pathname === '/polymorphs' ||
+      location.pathname === '/mint-polymorph' ||
       location.pathname === '/team'
     ) {
       document.querySelector('header').classList.add('dark');
@@ -66,9 +70,6 @@ const Header = ({ location }) => {
         </Link>
       </div>
       <DesktopView
-        isWalletConnected={isWalletConnected}
-        setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -76,9 +77,6 @@ const Header = ({ location }) => {
         setSelectedWallet={setSelectedWallet}
       />
       <TabletView
-        isWalletConnected={isWalletConnected}
-        setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -88,9 +86,6 @@ const Header = ({ location }) => {
         setShowMenu={setShowMenu}
       />
       <MobileView
-        isWalletConnected={isWalletConnected}
-        setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}
         setShowSelectWallet={setShowSelectWallet}

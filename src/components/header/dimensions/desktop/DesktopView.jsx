@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 import './DesktopView.scss';
 import AppContext from '../../../../ContextAPI';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
@@ -15,6 +16,8 @@ import Group2 from '../../../../assets/images/Group2.svg';
 import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -26,9 +29,6 @@ import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 
 const DesktopView = ({
-  isWalletConnected,
-  setIsWalletConnected,
-  ethereumAddress,
   handleConnectWallet,
   showInstallWalletPopup,
   setShowInstallWalletPopup,
@@ -37,10 +37,27 @@ const DesktopView = ({
 }) => {
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
+  const [isPolymorphsDropdownOpened, setIsPolymorphsDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+    connectWeb3,
+    isAuthenticated,
+    address,
+    setUserPolymorphs,
+    setAddress,
+    setYourBalance,
+    setUsdEthBalance,
+  } = useContext(AppContext);
 
   return (
     <div className="desktop__nav">
@@ -97,6 +114,34 @@ const DesktopView = ({
           <button
             type="button"
             className="menu-li"
+            onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
+          >
+            <span className="nav__link__title">🔥 NFT drops</span>
+            <img className="arrow" src={arrowUP} alt="arrow" />
+          </button>
+          <div className="dropdown minting-drop">
+            <div className="dropdown__body">
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/polymorphs');
+                }}
+              >
+                <img src={polymorphsIcon} alt="Polymorphs" />
+                <span>Polymorphs</span>
+              </button>
+              <button type="button" className="disable">
+                <img src={coreDropsIcon} alt="Core drops" />
+                <span>Core drops</span>
+                <span className="tooltiptext">Coming soon</span>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="menu-li"
             onClick={() => setIsAboutDropdownOpened(!isAboutDropdownOpened)}
           >
             <span className="nav__link__title">Info</span>
@@ -135,6 +180,16 @@ const DesktopView = ({
                 <img src={teamIcon} alt="Team" />
                 Team
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://docs.universe.xyz/');
+                }}
+              >
+                <img src={docsIcon} alt="Docs" />
+                <span>Docs</span>
+              </button>
             </div>
           </div>
         </li>
@@ -169,16 +224,6 @@ const DesktopView = ({
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsDAODropdownOpened(false);
-                  window.open('https://docs.universe.xyz/');
-                }}
-              >
-                <img src={docsIcon} alt="Docs" />
-                <span>Docs</span>
-              </button>
             </div>
           </div>
         </li>
@@ -197,7 +242,7 @@ const DesktopView = ({
               <div className="dropdown__header">
                 <div className="copy-div">
                   <img className="icon-img" src={Icon} alt="icon" />
-                  <div className="ethereum__address">{ethereumAddress}</div>
+                  <div className="ethereum__address">{shortenEthereumAddress(address)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">
                       <div className="copied-div" hidden={!copied}>
@@ -205,7 +250,7 @@ const DesktopView = ({
                         <span />
                       </div>
                       <CopyToClipboard
-                        text={ethereumAddress}
+                        text={address}
                         onCopy={() => {
                           setCopied(true);
                           setTimeout(() => {
@@ -223,17 +268,17 @@ const DesktopView = ({
 
                 <div className="group1">
                   <img src={Group1} alt="ETH" />
-                  <span className="first-span">6,24 ETH</span>
-                  <span className="second-span">$10,554</span>
+                  <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                  <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                 </div>
-                <div className="group2">
+                {/* <div className="group2">
                   <img src={Group2} alt="WETH" />
                   <span className="first-span">6,24 WETH</span>
                   <span className="second-span">$10,554</span>
-                </div>
+                </div> */}
               </div>
               <div className="dropdown__body">
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     history.push('/my-account');
@@ -242,7 +287,7 @@ const DesktopView = ({
                 >
                   <img src={myProfileIcon} alt="My Profile" />
                   My profile
-                </button>
+                </button> */}
                 <button
                   type="button"
                   onClick={() => {
@@ -253,7 +298,7 @@ const DesktopView = ({
                   <img src={myNFTsIcon} alt="My NFTs" />
                   My NFTs
                 </button>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     history.push('/my-auctions');
@@ -262,13 +307,17 @@ const DesktopView = ({
                 >
                   <img src={auctionHouseIcon} alt="My Auctions" />
                   My auctions
-                </button>
+                </button> */}
                 <button
                   type="button"
                   className="signOut"
                   onClick={() => {
                     setIsAccountDropdownOpened(false);
                     setIsWalletConnected(!isWalletConnected);
+                    setUserPolymorphs([]);
+                    setAddress(null);
+                    setYourBalance(0);
+                    setUsdEthBalance(0);
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />
@@ -279,7 +328,7 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            <Popup
+            {/* <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Join newsletter
@@ -287,7 +336,7 @@ const DesktopView = ({
               }
             >
               {(close) => <SubscribePopup close={close} />}
-            </Popup>
+            </Popup> */}
             {/* <Popup
               trigger={
                 <button type="button" className="sign__in">
@@ -306,6 +355,9 @@ const DesktopView = ({
                 />
               )}
             </Popup> */}
+            <button type="button" className="sign__in" onClick={() => connectWeb3()}>
+              Sign In
+            </button>
           </li>
         )}
       </ul>
@@ -314,9 +366,6 @@ const DesktopView = ({
 };
 
 DesktopView.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,

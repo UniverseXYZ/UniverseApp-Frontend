@@ -12,7 +12,10 @@ const CongratsPopup = ({ onClose }) => (
       <h4>Congratulations</h4>
     </div>
     <div className="popup-text">
-      <p>NFT was successfully minted and should be displayed in your wallet shortly</p>
+      <p>
+        NFT Collection with collectibles was successfully created. It should be visible in your
+        wallet shortly.
+      </p>
     </div>
     <div className="popup-btns">
       <Button className="light-border-button" onClick={onClose}>

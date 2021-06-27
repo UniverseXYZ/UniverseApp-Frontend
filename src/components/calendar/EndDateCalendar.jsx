@@ -51,6 +51,12 @@ const EndDateCalendar = React.forwardRef(
         : d.getMonth(),
     });
 
+    useEffect(() => {
+      document.body.classList.add('no__scroll');
+
+      return () => document.body.classList.remove('no__scroll');
+    }, []);
+
     const createDaysArray = () => {
       const dateArr = [];
       const lastDay = new Date(selectedDate.year, selectedDate.month + 1, 0);
@@ -150,8 +156,9 @@ const EndDateCalendar = React.forwardRef(
           month: monthNames[d.getMonth()],
           day: d.getDate(),
           year: d.getFullYear(),
-          hours: '12',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
           timezone: 'GMT +04:00',
           format: 'AM',
         });
@@ -185,8 +192,9 @@ const EndDateCalendar = React.forwardRef(
       } else {
         setEndDateTemp((prevState) => ({
           ...prevState,
-          hours: '24',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
         }));
         onClose();
       }
@@ -251,7 +259,8 @@ const EndDateCalendar = React.forwardRef(
               {currentMonth.map((week) => (
                 <div key={uuid()} className="week__days__numbers">
                   {week.map((day, index) => (
-                    <div
+                    <button
+                      type="button"
                       key={uuid()}
                       className={`
                     ${
@@ -295,9 +304,14 @@ const EndDateCalendar = React.forwardRef(
                       aria-hidden="true"
                       onClick={() => handleDayClick(day)}
                       style={{ cursor: day ? 'pointer' : 'default' }}
+                      disabled={
+                        new Date(
+                          new Date(selectedDate.year, selectedDate.month, day).toDateString()
+                        ) < new Date(new Date().toDateString())
+                      }
                     >
                       {day}
-                    </div>
+                    </button>
                   ))}
                 </div>
               ))}

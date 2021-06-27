@@ -9,9 +9,8 @@ import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import infoIconRed from '../../assets/images/Vector.svg';
-import searchIcon from '../../assets/images/search-icon.svg';
+import searchIcon from '../../assets/images/search-gray.svg';
 import doneIcon from '../../assets/images/Completed.svg';
-import { AUCTIONS_DATA, PAST_ACTIONS_DATA } from '../../utils/fixtures/AuctionsDummyData';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import Input from '../input/Input.jsx';
@@ -22,7 +21,10 @@ import MyAccount from '../../containers/myAccount/MyAccount.jsx';
 
 const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState({
+    state: false,
+    index: null,
+  });
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
@@ -31,75 +33,86 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
     setSearchByName(value);
   };
 
-  const clearInput = () => {
-    setSearchByName('');
-  };
-
-  useEffect(() => {
-    console.log('myAuctions', myAuctions);
-    window['__react-beautiful-dnd-disable-dev-warnings'] = true;
-  }, []);
-
   return (
     <div className="past-auctions">
       <div className="input-search">
+        {searchByName ? (
+          <button type="button" onClick={() => setSearchByName('')}>
+            Clear
+          </button>
+        ) : (
+          <></>
+        )}
         <img src={searchIcon} alt="search" />
         <Input
           className="searchInp"
           onChange={(e) => handleSearch(e.target.value)}
           value={searchByName}
-          placeholder="Search by name"
+          placeholder="Search"
         />
       </div>
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => moment(item.endDate).isBefore(moment.now()) && item.launch)
-        .map((pastAuction) => (
+        .filter((item) => moment(item.endDate).isBefore(moment.now()))
+        .map((pastAuction, index) => (
           <div className="auction past-auction" key={pastAuction.id}>
             <div className="auction-header">
               <div className="img_head">
-                {/* <img className='auctionIcon' src={icon} alt='auction'/> */}
                 <h3>{pastAuction.name}</h3>
                 <div className="copy-div">
                   <div className="copy" title="Copy to clipboard">
-                    <div className="copied-div" hidden={!copied}>
-                      URL copied!
-                      <span />
-                    </div>
-                    <CopyToClipboard
-                      text={`${window.location.origin}/${pastAuction.link}`}
-                      onCopy={() => {
-                        setCopied(true);
-                        setTimeout(() => {
-                          setCopied(false);
-                        }, 1000);
-                      }}
-                    >
-                      <span>
-                        <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
-                        Copy URL
-                      </span>
-                    </CopyToClipboard>
+                    {copied.state && copied.index === index && (
+                      <div className="copied-div">
+                        URL copied!
+                        <span />
+                      </div>
+                    )}
+                    {pastAuction.artist ? (
+                      <CopyToClipboard
+                        text={`${pastAuction.link.replace('universe.xyz', window.location.origin)}`}
+                        onCopy={() => {
+                          setCopied({
+                            state: true,
+                            index,
+                          });
+                          setTimeout(() => {
+                            setCopied({
+                              state: false,
+                              index: null,
+                            });
+                          }, 1000);
+                        }}
+                      >
+                        <span>
+                          <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
+                          Copy URL
+                        </span>
+                      </CopyToClipboard>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
               </div>
               <div className="launch-auction">
-                {shownActionId === pastAuction.id ? (
-                  <img
-                    src={arrowUp}
-                    onClick={() => setShownActionId(null)}
-                    alt="Arrow up"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <img
-                    src={arrowDown}
-                    onClick={() => setShownActionId(pastAuction.id)}
-                    alt="Arrow down"
-                    aria-hidden="true"
-                  />
-                )}
+                <div className="arrow">
+                  {shownActionId === pastAuction.id ? (
+                    <img
+                      src={arrowUp}
+                      onClick={() => setShownActionId(null)}
+                      alt="Arrow up"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <img
+                      src={arrowDown}
+                      onClick={() => setShownActionId(pastAuction.id)}
+                      alt="Arrow down"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
               </div>
             </div>
             <div className="auctions-launch-dates">
@@ -113,7 +126,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   Launch date:{' '}
                   <b>
                     {' '}
-                    <Moment format="MMMM DD, hh:mm">{pastAuction.startDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{pastAuction.startDate}</Moment>
                   </b>
                 </p>
               </div>
@@ -121,7 +134,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <p>
                   End date:{' '}
                   <b>
-                    <Moment format="MMMM DD, hh:mm">{pastAuction.endDate}</Moment>
+                    <Moment format="MMMM DD, HH:mm">{pastAuction.endDate}</Moment>
                   </b>
                 </p>
               </div>
@@ -130,7 +143,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
               <div className="bids first">
                 <div className="boredred-div">
                   <span className="head">Total bids</span>
-                  <span className="value">{pastAuction.total_bids}</span>
+                  <span className="value">120</span>
                 </div>
                 <div>
                   <span className="head">Highest winning bid</span>
@@ -163,7 +176,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
             </div>
             <div hidden={shownActionId !== pastAuction.id} className="auctions-tier">
               {pastAuction.tiers.map((tier) => (
-                <div className="tier">
+                <div className="tier" key={uuid()}>
                   <div className="tier-header">
                     <h3>{tier.name}</h3>
                     <div className="tier-header-description">
@@ -184,7 +197,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                         <div className="tier-image-second" />
                         <div className="tier-image-first" />
                         <div className="tier-image-main">
-                          <img src={nft} alt="NFT" />
+                          <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
                         </div>
                       </div>
                     ))}

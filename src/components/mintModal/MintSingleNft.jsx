@@ -150,6 +150,12 @@ const MintSingleNft = ({ onClick }) => {
       setPreviewImage(res[0].previewImage);
       setPercentAmount(res[0].percentAmount);
       setProperties(res[0].properties);
+      if (res.length && res[0].collectionId) {
+        const getCollection = deployedCollections.filter((col) => col.id === res[0].collectionId);
+        if (getCollection.length) {
+          setSelectedCollection(getCollection[0]);
+        }
+      }
     }
   }, []);
 
@@ -201,12 +207,37 @@ const MintSingleNft = ({ onClick }) => {
               },
             ]);
           }
-        } else {
+        } else if (selectedCollection) {
           setSavedNfts(
             savedNfts.map((item) =>
               item.id === savedNFTsID
                 ? {
                     ...item,
+                    type: 'collection',
+                    collectionId: selectedCollection.id,
+                    collectionName: selectedCollection.name,
+                    collectionAvatar: selectedCollection.previewImage,
+                    collectionDescription: selectedCollection.description,
+                    shortURL: selectedCollection.shortURL,
+                    tokenName: selectedCollection.tokenName,
+                    previewImage,
+                    name,
+                    description,
+                    numberOfEditions: editions,
+                    generatedEditions,
+                    properties,
+                    percentAmount,
+                  }
+                : item
+            )
+          );
+        } else {
+          setSavedNfts(
+            savedNfts.map((item) =>
+              item.id === savedNFTsID
+                ? {
+                    id: uuid(),
+                    type: 'single',
                     previewImage,
                     name,
                     description,
@@ -438,14 +469,12 @@ const MintSingleNft = ({ onClick }) => {
               Number of editions <img src={infoIcon} alt="Info Icon" />
             </h5>
             {hideIcon && (
-              <Animated animationIn="zoomIn">
-                <div className="info-text">
-                  <p>
-                    NFTs are minted to our auction contract by default. Turn the toggle on if you
-                    want them to be minted to your wallet instead.
-                  </p>
-                </div>
-              </Animated>
+              <div className="info-text">
+                <p>
+                  NFTs are minted to our auction contract by default. Turn the toggle on if you want
+                  them to be minted to your wallet instead.
+                </p>
+              </div>
             )}
           </div>
           <Input
@@ -456,10 +485,11 @@ const MintSingleNft = ({ onClick }) => {
             value={editions}
           />
         </div>
-        {!savedNFTsID && (
-          <div className="single-nft-choose-collection">
-            <h4>Choose collection</h4>
-            <div className="choose__collection">
+        <div className="single-nft-choose-collection">
+          {deployedCollections.length ? <h4>Choose collection</h4> : <></>}
+          {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>}
+          <div className="choose__collection">
+            {!savedNFTsID && (
               <Popup
                 trigger={
                   <div className="create">
@@ -471,39 +501,36 @@ const MintSingleNft = ({ onClick }) => {
               >
                 {(close) => <CreateCollectionPopup onClose={close} />}
               </Popup>
+            )}
 
-              {deployedCollections.map((col) => (
-                <div
-                  key={uuid()}
-                  className={`universe${
-                    selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
-                  }`}
-                  aria-hidden="true"
-                  onClick={() =>
-                    selectedCollection && selectedCollection.id === col.id
-                      ? setSelectedCollection(null)
-                      : setSelectedCollection(col)
-                  }
-                >
-                  {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
-                    <div
-                      className="random__bg__color"
-                      style={{ backgroundColor: col.previewImage }}
-                    >
-                      {col.name.charAt(0)}
-                    </div>
-                  ) : (
-                    <div>
-                      <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
-                    </div>
-                  )}
-                  <h5>{col.name}</h5>
-                  <p>{col.tokenName}</p>
-                </div>
-              ))}
-            </div>
+            {deployedCollections.map((col) => (
+              <div
+                key={uuid()}
+                className={`universe${
+                  selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                }`}
+                aria-hidden="true"
+                onClick={() =>
+                  selectedCollection && selectedCollection.id === col.id
+                    ? setSelectedCollection(null)
+                    : setSelectedCollection(col)
+                }
+              >
+                {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                  <div className="random__bg__color" style={{ backgroundColor: col.previewImage }}>
+                    {col.name.charAt(0)}
+                  </div>
+                ) : (
+                  <div>
+                    <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                  </div>
+                )}
+                <h5>{col.name}</h5>
+                <p>{col.tokenName}</p>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
         <div className="single-nft-properties">
           <div className="single-nft-properties-header">
             <h4
@@ -515,14 +542,12 @@ const MintSingleNft = ({ onClick }) => {
               Properties (optional) <img src={infoIcon} alt="Info Icon" />
             </h4>
             {hideIcon1 && (
-              <Animated animationIn="zoomIn">
-                <div className="properties-info-text">
-                  <p>
-                    Adding properties allows you to specify the character traits. This will allow
-                    users to easily search for your NFT.
-                  </p>
-                </div>
-              </Animated>
+              <div className="properties-info-text">
+                <p>
+                  Adding properties allows you to specify the character traits. This will allow
+                  users to easily search for your NFT.
+                </p>
+              </div>
             )}
             <label className="switch">
               <input
@@ -537,7 +562,7 @@ const MintSingleNft = ({ onClick }) => {
             (elm, i) =>
               // eslint-disable-next-line react/no-array-index-key
               propertyCheck && (
-                <div className="properties">
+                <div key={uuid()} className="properties">
                   <div className="property-name">
                     <h5>Property name</h5>
                     <Input
@@ -591,14 +616,12 @@ const MintSingleNft = ({ onClick }) => {
                 Royalties <img src={infoIcon} alt="Info Icon" />
               </h4>
               {hideRoyalitiesInfo && (
-                <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                  <div className="royalities-info-text">
-                    <p>
-                      Royalties determines the percentage you, as a creator, will get from sales of
-                      this NFT on the secondary markets.
-                    </p>
-                  </div>
-                </Animated>
+                <div className="royalities-info-text">
+                  <p>
+                    Royalties determines the percentage you, as a creator, will get from sales of
+                    this NFT on the secondary markets.
+                  </p>
+                </div>
               )}
               <label className="switch">
                 <input
@@ -610,23 +633,21 @@ const MintSingleNft = ({ onClick }) => {
               </label>
             </div>
             {royalities && (
-              <Animated animationIn="fadeIn">
-                <div className="percent__amount">
-                  <div className="inp__container">
-                    <Input
-                      type="text"
-                      label="Percent amount"
-                      inputMode="numeric"
-                      pattern="[0-9]"
-                      placeholder="Enter percent amount"
-                      value={percentAmount}
-                      onChange={(e) => handleInputChange(e.target.value)}
-                    />
-                    <span>%</span>
-                  </div>
-                  <span className="suggested">Suggested: 10%, 20%, 30%</span>
+              <div className="percent__amount">
+                <div className="inp__container">
+                  <Input
+                    type="text"
+                    label="Percent amount"
+                    inputMode="numeric"
+                    pattern="[0-9]"
+                    placeholder="Enter percent amount"
+                    value={percentAmount}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                  />
+                  <span>%</span>
                 </div>
-              </Animated>
+                <span className="suggested">Suggested: 10%, 20%, 30%</span>
+              </div>
             )}
           </div>
           {/* )} */}

@@ -4,6 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 import './TabletView.scss';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
@@ -20,6 +21,8 @@ import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -30,9 +33,6 @@ import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 
 const TabletView = (props) => {
   const {
-    isWalletConnected,
-    setIsWalletConnected,
-    ethereumAddress,
     handleConnectWallet,
     showInstallWalletPopup,
     setShowInstallWalletPopup,
@@ -41,12 +41,27 @@ const TabletView = (props) => {
     showMenu,
     setShowMenu,
   } = props;
-  const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const ref = useRef(null);
   const history = useHistory();
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+    connectWeb3,
+    isAuthenticated,
+    address,
+    setUserPolymorphs,
+    setAddress,
+    setYourBalance,
+    setUsdEthBalance,
+  } = useContext(AppContext);
 
   useEffect(() => {
     if (showMenu) {
@@ -101,7 +116,7 @@ const TabletView = (props) => {
                 <div className="dropdown__header">
                   <div className="copy-div">
                     <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <div className="ethereum__address">{shortenEthereumAddress(address)}</div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -109,7 +124,7 @@ const TabletView = (props) => {
                           <span />
                         </div>
                         <CopyToClipboard
-                          text={ethereumAddress}
+                          text={address}
                           onCopy={() => {
                             setCopied(true);
                             setTimeout(() => {
@@ -126,17 +141,17 @@ const TabletView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
-                  <div className="group2">
+                  {/* <div className="group2">
                     <img src={Group2} alt="WETH" />
                     <span className="first-span">6,24 WETH</span>
                     <span className="second-span">$10,554</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="dropdown__body">
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => {
                       history.push('/my-account');
@@ -145,7 +160,7 @@ const TabletView = (props) => {
                   >
                     <img src={myProfileIcon} alt="My Profile" />
                     My profile
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     onClick={() => {
@@ -156,7 +171,7 @@ const TabletView = (props) => {
                     <img src={myNFTsIcon} alt="My NFTs" />
                     My NTFs
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => {
                       history.push('/my-auctions');
@@ -165,13 +180,17 @@ const TabletView = (props) => {
                   >
                     <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     className="signOut"
                     onClick={() => {
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
+                      setUserPolymorphs([]);
+                      setAddress(null);
+                      setYourBalance(0);
+                      setUsdEthBalance(0);
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />
@@ -228,6 +247,28 @@ const TabletView = (props) => {
                   </div>
                 </div>
                 <div>
+                  <p className="title">NFT Drops</p>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMenu(false);
+                        history.push('/polymorphs');
+                      }}
+                    >
+                      <img src={polymorphsIcon} alt="Polymorphs" />
+                      <span>Polymorphs</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button" className="disable">
+                      <img src={coreDropsIcon} alt="Core drops" />
+                      <span>Core drops</span>
+                      <span className="tooltiptext">Coming soon</span>
+                    </button>
+                  </div>
+                </div>
+                <div>
                   <p className="title">Info</p>
                   <div>
                     <button
@@ -265,6 +306,12 @@ const TabletView = (props) => {
                       Team
                     </button>
                   </div>
+                  <div>
+                    <button type="button" onClick={() => window.open('https://docs.universe.xyz/')}>
+                      <img src={docsIcon} alt="Docs" />
+                      <span>Docs</span>
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <p className="title">DAO</p>
@@ -286,20 +333,14 @@ const TabletView = (props) => {
                       <span>Yield farming</span>
                     </button>
                   </div>
-                  <div>
-                    <button type="button" onClick={() => window.open('https://docs.universe.xyz/')}>
-                      <img src={docsIcon} alt="Docs" />
-                      <span>Docs</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
-                <Popup trigger={<button type="button">Join newsletter</button>}>
+                {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
-                </Popup>
+                </Popup> */}
                 {/* <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
@@ -312,6 +353,9 @@ const TabletView = (props) => {
                     />
                   )}
                 </Popup> */}
+                <button type="button" onClick={() => connectWeb3()}>
+                  Sign In
+                </button>
               </li>
             )}
           </ul>
@@ -322,9 +366,9 @@ const TabletView = (props) => {
 };
 
 TabletView.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  ethereumAddress: PropTypes.string.isRequired,
+  // isWalletConnected: PropTypes.bool.isRequired,
+  // setIsWalletConnected: PropTypes.func.isRequired,
+  // ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,

@@ -8,7 +8,6 @@ import AppContext from '../../../ContextAPI';
 const Marketplace = () => {
   const { setWebsite } = useContext(AppContext);
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(true);
     document.title = 'Universe Minting - Minting & Auctions - Marketplace';
     return () => {

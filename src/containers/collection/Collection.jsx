@@ -37,7 +37,6 @@ const Collection = () => {
   }, [search]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     const newNFTs = [];
     if (location.state) {
@@ -74,7 +73,7 @@ const Collection = () => {
 
   return selectedCollection ? (
     <div className="collection__page">
-      <Cover selectedCollection={selectedCollection} saved={location.state.saved} />
+      <Cover selectedCollection={selectedCollection} />
 
       <div className="collection__details__section">
         <div className="collection__details__container">

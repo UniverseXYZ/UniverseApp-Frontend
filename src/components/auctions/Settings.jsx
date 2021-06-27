@@ -54,6 +54,10 @@ const AuctionSettings = () => {
     setsearchByNameAndAddress(value);
   };
 
+  const handleEdit = () => {
+    document.body.classList.add('no__scroll');
+  };
+
   const [isValidFields, setIsValidFields] = useState({
     name: true,
     startingBid: true,
@@ -73,8 +77,8 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -83,8 +87,8 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -105,34 +109,31 @@ const AuctionSettings = () => {
   };
   const bid = options.find((element) => element.value === bidtype);
   const isEditingAuction = location.state !== undefined;
-  // const isEditingAuction = location.state === '/auction-review';
-
   const handleAddAuction = () => {
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
-      startingBid: values.startingBid.trim().length !== 0,
-      startDate: values.startDate.length !== 0,
-      endDate: values.endDate.length !== 0,
-      name: values.name.trim().length !== 0,
-    }));
+    setTimeout(() => {
+      setIsValidFields((prevValues) => ({
+        ...prevValues,
+        startingBid: values.startingBid.trim().length !== 0,
+        startDate: values.startDate.length !== 0,
+        endDate: values.endDate.length !== 0,
+        name: values.name.trim().length !== 0,
+      }));
+    }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
 
     if (values.name && values.startingBid && values.startDate && values.endDate) {
       if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
-        console.log('aa');
         auctionFieldsValid = true;
       }
     }
-    console.log(minBid);
     if (minBid === true) {
       let isValid = true;
       setErrorArray([]);
       // eslint-disable-next-line consistent-return
       bidValues.forEach((item, index) => {
         if (index < bidValues.length - 1 && bidValues[index + 1] > bidValues[index]) {
-          console.log(index + 1);
           setErrorArray((prevValue) => [...prevValue, index + 1]);
           isValid = false;
           return isValid;
@@ -171,7 +172,7 @@ const AuctionSettings = () => {
           //   : prevValue.tiers,
         }));
       }
-      history.push('/auction-review', location.pathname);
+      history.push('/setup-auction/reward-tiers', location.pathname);
     }
   };
 
@@ -185,7 +186,7 @@ const AuctionSettings = () => {
   };
 
   useEffect(() => {
-    if (auction.id || isEditingAuction) {
+    if (isEditingAuction) {
       setValues({
         name: auction.name,
         startingBid: auction.startingBid,
@@ -200,8 +201,11 @@ const AuctionSettings = () => {
       //   }),
       //   {}
       // );
+    } else if (!isEditingAuction && auction.id) {
+      setAuction({ tiers: [] });
     }
-  }, [auction.id]);
+  }, []);
+
   return (
     <div className="auction-settings container">
       {/* <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
@@ -212,6 +216,9 @@ const AuctionSettings = () => {
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
+          <p className="tier-description">
+            Start setting up your auction with filling out the name, starting bid and schedule.
+          </p>
         </div>
         <div className="setting-form">
           <div className="up-side">
@@ -243,6 +250,7 @@ const AuctionSettings = () => {
                   </button> */}
                   <Popup
                     nested
+                    handleEdit
                     trigger={
                       <button type="button" className={dropDown}>
                         {bid.img && <img src={bid.img} alt="icon" />}
@@ -358,17 +366,15 @@ const AuctionSettings = () => {
                     onMouseLeave={() => setHideIcon1(false)}
                     onBlur={() => setHideIcon1(false)}
                   />
-                </span>
-                {hideIcon1 && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                  {hideIcon1 && (
                     <div className="info-text">
                       <p>
                         Any bid in the last 3 minutes of an auction will extend the auction for an
                         additional 3 minutes.
                       </p>
                     </div>
-                  </Animated>
-                )}
+                  )}
+                </span>
               </div>
             </div>
           </div>

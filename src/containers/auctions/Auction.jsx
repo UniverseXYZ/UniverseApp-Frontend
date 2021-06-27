@@ -6,7 +6,6 @@ import './Auctions.scss';
 const Auctions = () => {
   const { setWebsite } = useContext(AppContext);
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
   }, []);
   return <MyAuctions />;

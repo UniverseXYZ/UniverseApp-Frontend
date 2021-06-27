@@ -17,7 +17,6 @@ const Artist = () => {
     : null;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     document.title = `Universe Minting - Artist - ${artist?.name}`;
     return () => {
       document.title = 'Universe Minting';
@@ -28,9 +27,15 @@ const Artist = () => {
     <div className="artist__page">
       <ArtistDetails onArtist={artist} />
       <ArtistPageTabs onArtist={artist} />
-      <div className="artist__personal__logo">
-        <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
-      </div>
+      {artist.personalLogo ? (
+        <div className="artist__personal__logo">
+          <div>
+            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <NotFound />

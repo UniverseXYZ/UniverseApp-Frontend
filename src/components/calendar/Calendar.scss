@@ -26,13 +26,13 @@
   .calendar__wrapper {
     // display: flex  ;
     overflow-y: auto;
-    
+
     @include md {
       // max-height: 400px;
       display: block;
     }
-    .calendar-first{
-      h1{
+    .calendar-first {
+      h1 {
         font-family: $sharpGroteskSemiBoldFont;
         padding: 34px 0 0px 30px;
         font-style: normal;
@@ -84,7 +84,6 @@
 
     .week__days {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       div {
         font-family: $spaceGroteskFont;
@@ -107,9 +106,9 @@
     }
     .week__days__numbers {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      div {
+      button {
+        background: none;
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
@@ -122,16 +121,18 @@
         color: $black;
         width: 40px;
         height: 40px;
-        margin: 3px 0;
 
         &.selectedStartDay {
           background: #5fea73;
+          // border-radius: 12px;
           border-top-left-radius: 12px;
           border-bottom-left-radius: 12px;
           font-weight: bold;
         }
         &.selectedEndDay {
           background: #5fea73;
+          // border-top-left-radius: 12px;
+          // border-bottom-left-radius: 12px;
           border-top-right-radius: 12px;
           border-bottom-right-radius: 12px;
           font-weight: bold;
@@ -148,6 +149,9 @@
           border-top-right-radius: 12px;
           border-bottom-right-radius: 12px;
         }
+        &:disabled {
+          color: #d0d0d0;
+        }
         // @include sm {
         //   width: 30px;
         //   height: 30px;
@@ -162,7 +166,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 6%;
+      padding-bottom: 14px;
       .label {
         font-family: $spaceGroteskFont;
         font-style: normal;
@@ -178,7 +182,7 @@
         font-size: 12px;
         line-height: 22px;
         text-align: right;
-        color: rgba(0, 0, 0, 0.4);        
+        color: rgba(0, 0, 0, 0.4);
       }
     }
     .time__format {
@@ -239,7 +243,7 @@
       }
     }
     .actions {
-      margin-top: 64px;
+      margin-top: 14px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: 16px;

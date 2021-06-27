@@ -22,7 +22,7 @@
     display: flex;
     justify-content: space-between;
     // height: 42px;
-    // align-items: center;
+    align-items: center;
     margin-bottom: 20px;
 
     h3 {
@@ -61,6 +61,17 @@
       display: flex;
       align-items: center;
 
+      button {
+        &.hide__on__mobile {
+          @include md {
+            display: none;
+          }
+        }
+        img {
+          margin-left: 12px;
+        }
+      }
+
       .line {
         width: 0;
         height: 42px;
@@ -70,6 +81,14 @@
 
         @include md {
           display: none;
+        }
+      }
+      .arrow {
+        padding: 11px;
+        border-radius: 12px;
+        margin-left: 5px;
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
         }
       }
       img {
@@ -154,6 +173,21 @@
       @include lg {
         margin-bottom: 10px;
         width: fit-content;
+      }
+    }
+
+    .show__on__mobile {
+      display: none;
+      width: 100%;
+      margin-top: 20px;
+      button {
+        width: 100%;
+      }
+      img {
+        margin-left: 12px;
+      }
+      @include md {
+        display: block;
       }
     }
 
@@ -280,13 +314,13 @@
           }
         }
       }
-      button {
-        &.light-border-button {
-          background: linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #bceb00, #00eaea) border-box;
-          border: 1px solid transparent;
-        }
-      }
+      // button {
+      //   &.light-border-button {
+      //     background: linear-gradient($white, $white) padding-box,
+      //       linear-gradient(to right, #bceb00, #00eaea) border-box;
+      //     border: 1px solid transparent;
+      //   }
+      // }
     }
 
     .step-2 {
@@ -522,6 +556,16 @@
     float: right;
     margin-top: -85px;
 
+    button {
+      font-family: $spaceGroteskFont;
+      font-size: 14px;
+      line-height: 150%;
+      text-decoration-line: underline;
+      color: $black;
+      margin-right: 16px;
+      background: transparent;
+    }
+
     .intup-l {
       input {
         min-width: 350px;
@@ -632,6 +676,7 @@
       position: relative;
       padding: 7px 8px 7px 11px;
       width: fit-content;
+      margin-left: 7px;
 
       .copy > span {
         font-family: $spaceGroteskFont;

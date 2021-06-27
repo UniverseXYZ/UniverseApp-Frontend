@@ -19,7 +19,6 @@ const AuctionLandingPage = () => {
   const [bidders, setBidders] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
@@ -119,9 +118,15 @@ const AuctionLandingPage = () => {
       <RewardTiers auction={selectedAuction} />
       <AuctionOwnerDetails artist={artist} />
       <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
-      <div className="artist__personal__logo">
-        <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
-      </div>
+      {artist && artist.personalLogo ? (
+        <div className="artist__personal__logo">
+          <div>
+            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
     <NotFound />

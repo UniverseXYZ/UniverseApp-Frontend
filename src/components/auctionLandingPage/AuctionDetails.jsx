@@ -6,7 +6,6 @@ import Skeleton from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import Slider from 'react-slick';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 import leftArrow from '../../assets/images/arrow.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
@@ -147,7 +146,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 onClick={() => {
                   setSelectedAuction(act);
                   setLoading(true);
-                  history.push(`/${act.artist.name.split(' ')[1]}/${act.title}`, { id: act.id });
+                  history.push(`/${act.artist.name.split(' ')[0]}/${act.title}`, { id: act.id });
                 }}
                 aria-hidden="true"
               >
@@ -221,7 +220,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   <button
                     type="button"
                     onClick={() =>
-                      history.push(`/${selectedAuction.artist.name.split(' ')[1]}`, {
+                      history.push(`/${selectedAuction.artist.name.split(' ')[0]}`, {
                         id: selectedAuction.artist.id,
                       })
                     }

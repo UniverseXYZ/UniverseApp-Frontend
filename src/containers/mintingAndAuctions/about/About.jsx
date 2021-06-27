@@ -10,7 +10,6 @@ import AppContext from '../../../ContextAPI';
 const About = () => {
   const { setWebsite } = useContext(AppContext);
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(true);
   }, []);
   return (

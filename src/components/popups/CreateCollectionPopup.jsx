@@ -161,7 +161,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       <Input
         label="Collection name"
         className="inp"
-        placeholder="Enter the Collection name"
+        placeholder="Enter the collection name"
         value={collectionName}
         error={errors.collectionName}
         onChange={(e) => handleCollectionName(e.target.value)}

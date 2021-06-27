@@ -9,7 +9,6 @@ import './Team.scss';
 const Team = () => {
   const { setWebsite } = useContext(AppContext);
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(true);
   }, []);
   return (
