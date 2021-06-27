@@ -55,7 +55,7 @@ const UniverseNFTs = () => {
               <div
                 ref={ref}
                 className={`universe_dropdown ${isDropdownOpened ? 'opened' : ''}`}
-                onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+                // onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                 aria-hidden="true"
               >
                 <span className="selected__universe__item">{selectedItem}</span>
@@ -83,8 +83,8 @@ const UniverseNFTs = () => {
                       </li> */}
                       <li
                         onClick={() => {
-                          setSelectedItem('My polymorphs');
-                          setIsDropdownOpened(false);
+                          // setSelectedItem('My polymorphs');
+                          // setIsDropdownOpened(false);
                         }}
                         aria-hidden="true"
                       >
