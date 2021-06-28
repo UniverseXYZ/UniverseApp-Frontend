@@ -66,17 +66,8 @@ const Section3Randomise = (props) => {
   const [randomRightHandNumber, setRandomRightHandNumber] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const {
-    person,
-    backgrounds,
-    headwears,
-    pants,
-    torso,
-    glasses,
-    shoes,
-    leftHand,
-    rightHand,
-  } = personData;
+  const { person, backgrounds, headwears, pants, torso, glasses, shoes, leftHand, rightHand } =
+    personData;
   const globalRandom = () => {
     setLoading(true);
     setTimeout(() => {
