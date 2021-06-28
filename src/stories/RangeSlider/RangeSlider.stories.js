@@ -12,7 +12,7 @@ export const Default = () => {
 };
 
 export const Labels = () => {
-  const [values, setValues] = useState(500);
+  const [values, setValues] = useState(50);
   return (
     <HorizontalRangeSlider value={values} setValue={setValues} labelLeft="0" labelRight="100" />
   );
