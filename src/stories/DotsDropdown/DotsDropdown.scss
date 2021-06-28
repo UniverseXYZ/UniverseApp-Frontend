@@ -1,0 +1,49 @@
+@import '../../assets/scss/variables';
+
+.dots__dropdown {
+  .three__dots {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 150px;
+    background: $white;
+    border: none;
+
+    span {
+      height: 4px;
+      width: 4px;
+      background-color: $black;
+      border-radius: 50%;
+      margin-left: 3px;
+    }
+  }
+  .dropdown__list {
+    width: 161px;
+    background: $white;
+    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+    border-radius: 12px;
+    padding: 8px;
+
+    button {
+      background: $white;
+      padding: 17px;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 140%;
+    }
+    :hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    img {
+      width: 17px;
+      height: 17px;
+      border-radius: 0%;
+      margin-right: 8px;
+    }
+  }
+}

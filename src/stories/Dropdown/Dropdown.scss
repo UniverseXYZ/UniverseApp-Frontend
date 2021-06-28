@@ -54,6 +54,14 @@
       color: #ff4949 !important;
     }
   }
+  .hover {
+    border: 1px solid rgba(0, 0, 0, 0.4) !important;
+  }
+  .focus {
+    outline: none;
+    background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box !important;
+    border: 1px solid transparent !important;
+  }
   .arrow__down {
     position: absolute;
     width: 14.5px;

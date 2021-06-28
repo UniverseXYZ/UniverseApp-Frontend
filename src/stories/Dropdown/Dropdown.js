@@ -9,11 +9,7 @@ const Dropdown = (props) => {
   const { label, error, className, disabled, ...rest } = props;
   return (
     <div className="intup-l">
-      <input
-        className={`inp ${className} ${error ? 'error-inp' : ''}`}
-        disabled={disabled}
-        {...rest}
-      />
+      <input className={`inp ${className}`} disabled={disabled} {...rest} />
       {label && <label className="inp-label">{label}</label>}
       {disabled ? (
         <img className="shape" src={shape} alt="Shape" />
