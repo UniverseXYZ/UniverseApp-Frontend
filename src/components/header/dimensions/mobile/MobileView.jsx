@@ -6,7 +6,7 @@ import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
-import Button from '../../../button/Button';
+import Button from '../../../button/Button.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
@@ -27,13 +27,15 @@ import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 
 const MobileView = (props) => {
   const {
@@ -211,15 +213,15 @@ const MobileView = (props) => {
                       <div>
                         <button
                           type="button"
-                          // className="disable"
+                          className="disable"
                           onClick={() => {
                             setShowMenu(false);
-                            history.push('/minting-and-auctions/marketplace/active-auctions');
+                            // history.push('/minting-and-auctions/marketplace/active-auctions');
                           }}
                         >
                           <img src={auctionHouseIcon} alt="Auction House" />
                           <span>Auction house</span>
-                          {/* <span className="tooltiptext">Coming soon</span> */}
+                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
@@ -233,6 +235,28 @@ const MobileView = (props) => {
                         <button type="button" className="disable">
                           <img src={socialMediaIcon} alt="Social Media" />
                           <span>Social media</span>
+                          <span className="tooltiptext">Coming soon</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="title">NFT Drops</p>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowMenu(false);
+                            history.push('/polymorphs');
+                          }}
+                        >
+                          <img src={polymorphsIcon} alt="Polymorphs" />
+                          <span>Polymorphs</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button type="button" className="disable">
+                          <img src={coreDropsIcon} alt="Core drops" />
+                          <span>Core drops</span>
                           <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
@@ -275,23 +299,6 @@ const MobileView = (props) => {
                           Team
                         </button>
                       </div>
-                    </div>
-                    <div>
-                      <p className="title">DAO</p>
-                      <div>
-                        <button type="button" className="disable">
-                          <img src={governanceIcon} alt="Governance" />
-                          <span>Governance</span>
-                          <span className="tooltiptext">Coming soon</span>
-                        </button>
-                      </div>
-                      <div>
-                        <button type="button" className="disable">
-                          <img src={yieldFarmingIcon} alt="Yield Farming" />
-                          <span>Yield farming</span>
-                          <span className="tooltiptext">Coming soon</span>
-                        </button>
-                      </div>
                       <div>
                         <button
                           type="button"
@@ -299,6 +306,27 @@ const MobileView = (props) => {
                         >
                           <img src={docsIcon} alt="Docs" />
                           <span>Docs</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="title">DAO</p>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => window.open('https://dao.universe.xyz/governance')}
+                        >
+                          <img src={governanceIcon} alt="Governance" />
+                          <span>Governance</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                        >
+                          <img src={yieldFarmingIcon} alt="Yield Farming" />
+                          <span>Yield farming</span>
                         </button>
                       </div>
                     </div>

@@ -10,8 +10,39 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
-  width: 660px;
-  display: flex;
+  width: 336px;
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .calendar__wrapper {
+    // display: flex  ;
+    overflow-y: auto;
+
+    @include md {
+      // max-height: 400px;
+      display: block;
+    }
+    .calendar-first {
+      h1 {
+        font-family: $sharpGroteskSemiBoldFont;
+        padding: 34px 0 0px 30px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 130%;
+        color: #000000;
+      }
+    }
+  }
 
   &__header {
     padding: 24px 30px;
@@ -48,12 +79,11 @@
 
   &__body {
     overflow: hidden;
-    padding: 24px 30px;
+    padding: 22px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     .week__days {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       div {
         font-family: $spaceGroteskFont;
@@ -76,9 +106,9 @@
     }
     .week__days__numbers {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      div {
+      button {
+        background: none;
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
@@ -91,16 +121,18 @@
         color: $black;
         width: 40px;
         height: 40px;
-        margin: 3px 0;
 
         &.selectedStartDay {
           background: #5fea73;
+          // border-radius: 12px;
           border-top-left-radius: 12px;
           border-bottom-left-radius: 12px;
           font-weight: bold;
         }
         &.selectedEndDay {
           background: #5fea73;
+          // border-top-left-radius: 12px;
+          // border-bottom-left-radius: 12px;
           border-top-right-radius: 12px;
           border-bottom-right-radius: 12px;
           font-weight: bold;
@@ -117,6 +149,9 @@
           border-top-right-radius: 12px;
           border-bottom-right-radius: 12px;
         }
+        &:disabled {
+          color: #d0d0d0;
+        }
         // @include sm {
         //   width: 30px;
         //   height: 30px;
@@ -126,11 +161,12 @@
   }
   &__footer {
     padding: 24px 30px;
-    padding-top: 15%;
+    padding-top: 8%;
     .timezone {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-bottom: 14px;
       .label {
         font-family: $spaceGroteskFont;
         font-style: normal;
@@ -140,67 +176,14 @@
         color: $black;
       }
       .selected__timezone {
-        position: relative;
-        background: rgba(0, 0, 0, 0.02);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-sizing: border-box;
-        border-radius: 10px;
-        padding: 3px 15px;
         font-family: $spaceGroteskFont;
         font-style: normal;
-        font-weight: bold;
+        font-weight: 500;
         font-size: 12px;
         line-height: 22px;
-        color: $black;
-        cursor: pointer;
-        img {
-          margin-left: 12px;
-          transition: 0.5s ease-in-out;
-          &.rotate {
-            transform: rotate(180deg);
-          }
-        }
-        ul {
-          position: absolute;
-          top: 32px;
-          left: 0;
-          width: 100%;
-          box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-          background: $white;
-          border-radius: 12px;
-          padding: 6px;
-          max-height: 250px;
-          overflow-y: auto;
-
-          li {
-            text-align: center;
-            padding: 6px 15px;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 22px;
-            color: $black;
-
-            &:hover {
-              background: rgba(0, 0, 0, 0.05);
-              border-radius: 6px;
-            }
-          }
-        }
+        text-align: right;
+        color: rgba(0, 0, 0, 0.4);
       }
-    }
-    .close {
-      position: absolute;
-      right: -13px;
-      top: -13px;
-      background: white;
-      z-index: 9999;
-      width: 26px;
-      height: 26px;
-      padding: 5px;
-      border-radius: 50%;
-      cursor: pointer;
     }
     .time__format {
       background: rgba(0, 0, 0, 0.05);
@@ -260,7 +243,7 @@
       }
     }
     .actions {
-      margin-top: 64px;
+      margin-top: 14px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: 16px;
@@ -277,8 +260,7 @@
     }
   }
   @include md {
-    display: block;
     width: 100%;
-    max-width: 330px;
+    max-width: 290px;
   }
 }

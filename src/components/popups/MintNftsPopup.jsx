@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import closeIcon from '../../assets/images/cross.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
-import MintCongratsPopup from './MintCongratsPopup';
+import MintCongratsPopup from './MintCongratsPopup.jsx';
 
 const MintNftsPopup = ({ onClose, onAuctionId, handleMintCongratsPopupOpen }) => {
   const { auction, setAuction, myAuctions, setMyAuctions } = useContext(AppContext);

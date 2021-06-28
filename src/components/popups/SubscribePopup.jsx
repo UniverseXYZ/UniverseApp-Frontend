@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 
 const SubscribePopup = ({ close, showCongrats }) => {
   const [email, setEmail] = useState('');

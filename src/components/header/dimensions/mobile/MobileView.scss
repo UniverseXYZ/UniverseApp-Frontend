@@ -24,8 +24,10 @@
     position: absolute;
     right: 0;
     top: 80px;
-    width: 0;
-    max-height: 400px;
+    width: 100%;
+    height: 0;
+    // max-height: calc(100vh - 88px);
+    max-height: 546px;
     overflow-y: auto;
     padding: 20px;
     background-color: $white;

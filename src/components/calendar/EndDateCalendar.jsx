@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
+import moment from 'moment';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 
 const EndDateCalendar = React.forwardRef(
   (
@@ -49,6 +50,12 @@ const EndDateCalendar = React.forwardRef(
         ? monthNames.indexOf(values.endDate.toString().split(' ')[1])
         : d.getMonth(),
     });
+
+    useEffect(() => {
+      document.body.classList.add('no__scroll');
+
+      return () => document.body.classList.remove('no__scroll');
+    }, []);
 
     const createDaysArray = () => {
       const dateArr = [];
@@ -95,7 +102,7 @@ const EndDateCalendar = React.forwardRef(
 
     const handleHoursChange = (val) => {
       const value = val.replace(/[^\d]/, '');
-      if (value.length < 3 && Number(value) < 13) {
+      if (value.length < 3 && Number(value) < 25) {
         setEndDateTemp((prevState) => ({
           ...prevState,
           hours: value,
@@ -149,8 +156,9 @@ const EndDateCalendar = React.forwardRef(
           month: monthNames[d.getMonth()],
           day: d.getDate(),
           year: d.getFullYear(),
-          hours: '12',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
           timezone: 'GMT +04:00',
           format: 'AM',
         });
@@ -184,8 +192,9 @@ const EndDateCalendar = React.forwardRef(
       } else {
         setEndDateTemp((prevState) => ({
           ...prevState,
-          hours: '12',
-          minutes: '00',
+          hours: new Date().getHours(),
+          minutes:
+            new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
         }));
         onClose();
       }
@@ -225,31 +234,35 @@ const EndDateCalendar = React.forwardRef(
 
     return (
       <div className="calendar" ref={ref}>
-        <div className="calendar-first">
-          <div className="calendar__header">
-            <button className="left-btn" type="button" onClick={() => changeMonth('prev')}>
-              <img className="left" src={arrow} alt="Left arrow" />
-            </button>
-            <h2>{`${monthNames[selectedDate.month]} ${selectedDate.year}`}</h2>
-            <div className="month__changers">
-              <button type="button" onClick={() => changeMonth('next')}>
-                <img className="right" src={arrow} alt="Right arrow" />
+        <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
+        <div className="calendar__wrapper">
+          <div className="calendar-first">
+            <h1>End date</h1>
+            <div className="calendar__header">
+              <button className="left-btn" type="button" onClick={() => changeMonth('prev')}>
+                <img className="left" src={arrow} alt="Left arrow" />
               </button>
+              <h2>{`${monthNames[selectedDate.month]} ${selectedDate.year}`}</h2>
+              <div className="month__changers">
+                <button type="button" onClick={() => changeMonth('next')}>
+                  <img className="right" src={arrow} alt="Right arrow" />
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="calendar__body">
-            <div className="week__days">
-              {weekNames.map((week) => (
-                <div key={uuid()}>{week}</div>
-              ))}
-            </div>
-            {currentMonth.map((week) => (
-              <div key={uuid()} className="week__days__numbers">
-                {week.map((day, index) => (
-                  <div
-                    key={uuid()}
-                    className={`
+            <div className="calendar__body">
+              <div className="week__days">
+                {weekNames.map((week) => (
+                  <div key={uuid()}>{week}</div>
+                ))}
+              </div>
+              {currentMonth.map((week) => (
+                <div key={uuid()} className="week__days__numbers">
+                  {week.map((day, index) => (
+                    <button
+                      type="button"
+                      key={uuid()}
+                      className={`
                     ${
                       day === endDateTemp.day &&
                       monthNames[selectedDate.month] === endDateTemp.month &&
@@ -288,85 +301,86 @@ const EndDateCalendar = React.forwardRef(
                     ${index === 0 ? 'startEdge' : ''}
                     ${index === 6 ? 'endEdge' : ''}
                   `}
-                    aria-hidden="true"
-                    onClick={() => handleDayClick(day)}
-                    style={{ cursor: day ? 'pointer' : 'default' }}
-                  >
-                    {day}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="calendar__footer">
-          <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
-          <div className="timezone">
-            <div className="label">Time zone:</div>
-            <div
-              className="selected__timezone"
-              aria-hidden="true"
-              onClick={() => setShowTimezones(!showTimezones)}
-            >
-              {endDateTemp.timezone}
-              <img src={arrowDown} alt="Arrow Down" className={showTimezones ? 'rotate' : ''} />
-
-              {showTimezones && (
-                <ul>
-                  {timezones.map((tz) => (
-                    <li
-                      key={uuid()}
                       aria-hidden="true"
-                      onClick={() =>
-                        setEndDateTemp((prevState) => ({
-                          ...prevState,
-                          timezone: tz,
-                        }))
+                      onClick={() => handleDayClick(day)}
+                      style={{ cursor: day ? 'pointer' : 'default' }}
+                      disabled={
+                        new Date(
+                          new Date(selectedDate.year, selectedDate.month, day).toDateString()
+                        ) < new Date(new Date().toDateString())
                       }
                     >
-                      {tz}
-                    </li>
+                      {day}
+                    </button>
                   ))}
-                </ul>
-              )}
+                </div>
+              ))}
             </div>
           </div>
-          <div className="time__format">
-            <div
-              className={endDateTemp.format === 'AM' ? 'selected' : ''}
-              aria-hidden="true"
-              onClick={() => handleFormatClick('AM')}
-            >
-              AM
+          <div className="calendar__footer">
+            <div className="timezone">
+              <div className="label">Select time</div>
+              <div className="selected__timezone" aria-hidden="true">
+                {/* {endDateTemp.timezone}
+                <img src={arrowDown} alt="Arrow Down" className={showTimezones ? 'rotate' : ''} />
+                {showTimezones && (
+                  <ul>
+                    {timezones.map((tz) => (
+                      <li
+                        key={uuid()}
+                        aria-hidden="true"
+                        onClick={() =>
+                          setEndDateTemp((prevState) => ({
+                            ...prevState,
+                            timezone: tz,
+                          }))
+                        }
+                      >
+                        {tz}
+                      </li>
+                    ))}
+                  </ul>
+                )} */}
+                Your time zone is UTC+3
+              </div>
             </div>
-            <div
-              className={endDateTemp.format === 'PM' ? 'selected' : ''}
-              aria-hidden="true"
-              onClick={() => handleFormatClick('PM')}
-            >
-              PM
+            {/* <div className="time__format">
+              <div
+                className={endDateTemp.format === 'AM' ? 'selected' : ''}
+                aria-hidden="true"
+                onClick={() => handleFormatClick('AM')}
+              >
+                AM
+              </div>
+              <div
+                className={endDateTemp.format === 'PM' ? 'selected' : ''}
+                aria-hidden="true"
+                onClick={() => handleFormatClick('PM')}
+              >
+                PM
+              </div>
+            </div> */}
+            <div className="time">
+              <input
+                type="text"
+                value={endDateTemp.hours}
+                onChange={(e) => handleHoursChange(e.target.value)}
+              />
+              <span>:</span>
+              <input
+                type="text"
+                value={endDateTemp.minutes}
+                onChange={(e) => handleMinutesChange(e.target.value)}
+              />
             </div>
-          </div>
-          <div className="time">
-            <input
-              type="text"
-              value={endDateTemp.hours}
-              onChange={(e) => handleHoursChange(e.target.value)}
-            />
-            <span>:</span>
-            <input
-              type="text"
-              value={endDateTemp.minutes}
-              onChange={(e) => handleMinutesChange(e.target.value)}
-            />
-          </div>
-          <div className="actions">
-            <Button className="light-border-button" onClick={handleCancelClick}>
-              Cancel
-            </Button>
-            <Button className="light-button" onClick={handleSaveClick}>
-              Save
-            </Button>
+            <div className="actions">
+              <Button className="light-border-button" onClick={handleCancelClick}>
+                Cancel
+              </Button>
+              <Button className="light-button" onClick={handleSaveClick}>
+                Save
+              </Button>
+            </div>
           </div>
         </div>
       </div>

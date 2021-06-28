@@ -2,9 +2,9 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import NFTsList from './NFTsList';
 import { PLACEHOLDER_NFTS } from '../../../../utils/fixtures/NFTsDummyData';
-import NFTsFilters from './Filters';
-import Pagination from '../../../pagination/Pagionation';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
+import NFTsFilters from './Filters.jsx';
+import Pagination from '../../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
 import AppContext from '../../../../ContextAPI';
 
 const NFTsTab = ({ onArtist }) => {

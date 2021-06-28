@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Skeleton from 'react-loading-skeleton';
-import Button from '../../../button/Button';
+import Button from '../../../button/Button.jsx';
 
 const ActiveAuctionsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
@@ -37,7 +37,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                 <Button
                   className="light-button"
                   onClick={() =>
-                    history.push(`/${auction.artist.name.split(' ')[1]}/${auction.title}`, {
+                    history.push(`/${auction.artist.name.split(' ')[0]}/${auction.title}`, {
                       id: auction.id,
                     })
                   }

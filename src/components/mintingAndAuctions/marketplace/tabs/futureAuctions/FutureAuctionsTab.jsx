@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown';
-import Pagination from '../../../../pagination/Pagionation';
-import FutureAuctionsFilters from './Filters';
+import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
+import Pagination from '../../../../pagination/Pagionation.jsx';
+import FutureAuctionsFilters from './Filters.jsx';
 import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../../utils/fixtures/FutureAuctionsDummyData';
 import FutureAuctionsList from './FutureAuctionsList';
 

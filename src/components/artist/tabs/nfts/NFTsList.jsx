@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
+import Popup from 'reactjs-popup';
 import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
 import videoIcon from '../../../../assets/images/video-icon.svg';
+import NFTPopup from '../../../popups/NFTPopup';
 
 const NFTsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
@@ -26,24 +28,36 @@ const NFTsList = ({ data, perPage, offset }) => {
             <div className="nft__box">
               <div className="nft__box__image">
                 {nft.previewImage.type === 'video/mp4' && (
-                  <video
-                    onMouseOver={(event) => event.target.play()}
-                    onFocus={(event) => event.target.play()}
-                    onMouseOut={(event) => event.target.pause()}
-                    onBlur={(event) => event.target.pause()}
+                  <Popup
+                    trigger={
+                      <video
+                        onMouseOver={(event) => event.target.play()}
+                        onFocus={(event) => event.target.play()}
+                        onMouseOut={(event) => event.target.pause()}
+                        onBlur={(event) => event.target.pause()}
+                      >
+                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
+                    }
                   >
-                    <source src={nft.previewImage.url} type="video/mp4" />
-                    <track kind="captions" />
-                    Your browser does not support the video tag.
-                  </video>
+                    {(close) => <NFTPopup onClose={close} onNFT={nft} />}
+                  </Popup>
                 )}
                 {nft.previewImage.type !== 'audio/mpeg' &&
                   nft.previewImage.type !== 'video/mp4' && (
-                    <img
-                      className="preview-image"
-                      src={URL.createObjectURL(nft.previewImage)}
-                      alt={nft.name}
-                    />
+                    <Popup
+                      trigger={
+                        <img
+                          className="preview-image"
+                          src={URL.createObjectURL(nft.previewImage)}
+                          alt={nft.name}
+                        />
+                      }
+                    >
+                      {(close) => <NFTPopup onClose={close} onNFT={nft} />}
+                    </Popup>
                   )}
                 {nft.previewImage.type === 'video/mp4' && (
                   <img className="video__icon" src={videoIcon} alt="Video Icon" />
@@ -88,7 +102,10 @@ const NFTsList = ({ data, perPage, offset }) => {
                           {nft.collectionName.charAt(0)}
                         </div>
                       ) : (
-                        <img src={nft.collectionAvatar} alt={nft.collectionName} />
+                        <img
+                          src={URL.createObjectURL(nft.collectionAvatar)}
+                          alt={nft.collectionName}
+                        />
                       )}
                       <span>{nft.collectionName}</span>
                     </>

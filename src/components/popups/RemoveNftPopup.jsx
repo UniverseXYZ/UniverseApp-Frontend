@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from '../../ContextAPI';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 
@@ -20,6 +20,8 @@ const RemovePopup = ({
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
       setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'saved') {
+      console.log('sssssssss', savedNfts);
+      console.log('id', id);
       setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'savedCollection') {
       setSavedNfts(savedNfts.filter((item) => item.collectionId !== id));
@@ -54,11 +56,16 @@ const RemovePopup = ({
 
 RemovePopup.propTypes = {
   close: PropTypes.func.isRequired,
-  nftID: PropTypes.number.isRequired,
+  nftID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   removedItemName: PropTypes.string.isRequired,
   removeFrom: PropTypes.string.isRequired,
-  collectionNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setCollectionNFTs: PropTypes.func.isRequired,
+  collectionNFTs: PropTypes.oneOfType([PropTypes.array]),
+  setCollectionNFTs: PropTypes.func,
+};
+
+RemovePopup.defaultProps = {
+  collectionNFTs: [],
+  setCollectionNFTs: () => {},
 };
 
 export default RemovePopup;

@@ -20,6 +20,7 @@ const NonFungibleUniverse = () => {
         'With the rise of decentralization and blockchain technologies, the community needs a decentralized social forum where they can communicate NFT ideas within the guidelines voted on by the community.',
       loaded: false,
       action: 'Coming soon',
+      link: '',
     },
     {
       id: 2,
@@ -29,6 +30,7 @@ const NonFungibleUniverse = () => {
         'Creating a decentralized NFT launch system that is made by artists for artists.',
       loaded: false,
       action: 'Coming soon',
+      link: '',
     },
     {
       id: 3,
@@ -38,6 +40,7 @@ const NonFungibleUniverse = () => {
         'A universe of three initial planets with 23 OG characters each to memeify (69 total OG characters).',
       loaded: false,
       action: 'Coming soon',
+      link: '',
     },
     {
       id: 4,
@@ -46,6 +49,7 @@ const NonFungibleUniverse = () => {
       description: 'Games built with WEB3 at their forefront, not added in as an afterthought.',
       loaded: false,
       action: 'Coming soon',
+      link: '',
     },
     {
       id: 5,
@@ -55,6 +59,7 @@ const NonFungibleUniverse = () => {
         'A meeting place where fans and artists can meet and discover new ways a decentralized community can support and interact with their favorite WEB3 media protocols.',
       loaded: false,
       action: 'Coming soon',
+      link: '',
     },
     {
       id: 6,
@@ -63,7 +68,8 @@ const NonFungibleUniverse = () => {
       description:
         'xyzDAO is intent on leading the way in the adoption of new approaches, technologies, and standards that have been proven superior to the established way of doing things.',
       loaded: false,
-      action: 'Coming soon',
+      action: 'Explore',
+      link: 'https://dao.universe.xyz/',
     },
   ]);
 
@@ -107,7 +113,7 @@ const NonFungibleUniverse = () => {
                   <h2 className="title">{nfu.title}</h2>
                   <p className="desc">{nfu.description}</p>
                   {nfu.action === 'Explore' ? (
-                    <button type="button">
+                    <button type="button" onClick={() => window.open(nfu.link)}>
                       {nfu.action}
                       <img src={rightArrow} alt="Arrow" />
                     </button>

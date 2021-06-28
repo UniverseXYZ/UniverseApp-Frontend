@@ -75,22 +75,30 @@ const ArtistDetails = ({ onArtist }) => {
                 <h1 className="title">{loggedInArtist.name}</h1>
                 <p className="desc">{loggedInArtist.about}</p>
                 <div className="social__links">
-                  <a
-                    href={`https://www.instagram.com/${loggedInArtist.instagramLink}`}
-                    target="_blank"
-                    title={`https://www.instagram.com/${loggedInArtist.instagramLink}`}
-                    rel="noreferrer"
-                  >
-                    <img src={instagramIcon} alt="Instagram" />
-                  </a>
-                  <a
-                    href={`https://twitter.com/${loggedInArtist.twitterLink}`}
-                    target="_blank"
-                    title={`https://twitter.com/${loggedInArtist.twitterLink}`}
-                    rel="noreferrer"
-                  >
-                    <img src={twitterIcon} alt="Twitter" />
-                  </a>
+                  {loggedInArtist.instagramLink ? (
+                    <a
+                      href={`https://www.instagram.com/${loggedInArtist.instagramLink}`}
+                      target="_blank"
+                      title={`https://www.instagram.com/${loggedInArtist.instagramLink}`}
+                      rel="noreferrer"
+                    >
+                      <img src={instagramIcon} alt="Instagram" />
+                    </a>
+                  ) : (
+                    <></>
+                  )}
+                  {loggedInArtist.twitterLink ? (
+                    <a
+                      href={`https://twitter.com/${loggedInArtist.twitterLink}`}
+                      target="_blank"
+                      title={`https://twitter.com/${loggedInArtist.twitterLink}`}
+                      rel="noreferrer"
+                    >
+                      <img src={twitterIcon} alt="Twitter" />
+                    </a>
+                  ) : (
+                    <></>
+                  )}
                   <div className="copy-div">
                     <div className="copy" title="Copy to clipboard">
                       <div className="copied-div" hidden={!copied}>
@@ -122,8 +130,8 @@ const ArtistDetails = ({ onArtist }) => {
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
-              height={window.screen.width > 576 ? 280 : 90}
-              width={window.screen.width > 576 ? 280 : 90}
+              height={window.innerWidth > 576 ? 280 : 90}
+              width={window.innerWidth > 576 ? 280 : 90}
               circle
             />
             <h2 className="show__on__mobile">
