@@ -73,7 +73,7 @@ const MintPolymorph = () => {
               colorPriceIcon="black"
               color1="black"
               color2="black"
-              max={30}
+              max={10000}
               mobile={mobile}
               quantity={quantity}
               setQuantity={setQuantity}
