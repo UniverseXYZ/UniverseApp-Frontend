@@ -227,7 +227,7 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
                   <b>
                     {selectedTrait?.label}: {currentTrait?.value}
                   </b>
-                  . Your next scramble will ost more than the last one. You have the same chance to
+                  . Your next scramble will cost more than the last one. You have the same chance to
                   receive the trait you already have as the trait you may want.
                 </div>
               ) : (
