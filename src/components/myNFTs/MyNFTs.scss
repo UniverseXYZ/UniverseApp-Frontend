@@ -94,6 +94,7 @@
     -ms-transform: rotate(30deg);
     -o-transform: rotate(30deg);
     transform: rotateX(180deg);
+    box-shadow: $white 0px 50px 40px -2em inset;
   }
 
   &__header {

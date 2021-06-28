@@ -44,7 +44,7 @@
         font-family: $spaceGroteskFont;
         h5 {
             margin: 40px 0 15px;
-            font-family: $sharpGroteskMediumFont;
+            font-family: $sharpGroteskSemiBoldFont;
             text-align: center;
             font-style: normal;
             font-weight: 600;
@@ -70,7 +70,7 @@
         justify-content: space-between;
         align-items: center;
         @include lg {
-            align-items: flex-end;
+            align-items: flex-start;
         }
         .quantity--input--group {
             width: 215px !important;
@@ -169,7 +169,7 @@
                 }
             }
             img {
-                margin: 0 5px 0 10px;
+                margin: -5px 5px 0 10px;
             }
         }
     }
@@ -182,6 +182,14 @@
         @include sm {
             width: 100%;
             margin: 15px 0 0;
+        }
+        &.dark:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+        }
+        &.light:disabled {
+            box-shadow: none;
         }
     }
 }

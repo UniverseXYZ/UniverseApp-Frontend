@@ -102,7 +102,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">🔥 NFT drops</span>
+            <span className="nav__link__title">&#128293; NFT drops</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">

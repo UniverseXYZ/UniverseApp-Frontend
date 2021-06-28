@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png';
@@ -50,10 +50,11 @@ const Polymorphs = () => {
     <div className="polymorphs">
       <WelcomeWrapper
         title="Polymorph Universe"
-        hintText="A universe of polymorphic creatures with the power to mutate on demand."
+        hintText="A universe of polymorphic creatures with the power to mutate on demand"
         popupBtnText="My polymorphs"
         btnText="Mint a morph"
         btnOnClick={() => history.push('/mint-polymorph')}
+        btnAnotherOnClick={() => history.push('/my-nfts')}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}

@@ -6,6 +6,14 @@ import Select from 'react-select';
 const SelectComponent = (props) => {
   const { options, onChange, value, placeholder } = props;
   const styles = {
+    placeholder: (defaultStyles) => ({
+      ...defaultStyles,
+      color: '#CACACA',
+      fontFamily: 'Space Grotesk, sans-serif',
+      fontStyle: 'normal',
+      fontWeight: 'normal',
+      fontSize: '16px',
+    }),
     control: (base, state) => ({
       ...base,
       fontFamily: 'Space Grotesk, sans-serif',
@@ -21,8 +29,7 @@ const SelectComponent = (props) => {
     dropdownIndicator: (base, state) => ({
       ...base,
       color: '#000000',
-      transform: state.isFocused ? 'rotate(180deg)' : null,
-      // transform: state.menuIsOpen && state.isFocused ? 'rotate(180deg)' : null,
+      transform: state.isFocused && state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
     }),
     option: (base, state) => ({
       ...base,
@@ -47,6 +54,7 @@ const SelectComponent = (props) => {
       components={{
         IndicatorSeparator: () => null,
       }}
+      menuPlacement="auto"
     />
   );
 };
