@@ -49,6 +49,18 @@ const BondingCurve = (props) => {
     setUserPolymorphs,
   } = useContext(AppContext);
 
+  const mintPolymorph = () => {
+    if (value + quantity <= max) {
+      setValue(value + quantity);
+      document.getElementById('loading-hidden-btn').click();
+      setTimeout(() => {
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
+      }, 2000);
+    } else {
+      alert(`You can mint maximum ${max - value} morphs`);
+    }
+  };
   useEffect(() => {
     setTotalMintedValue(value);
   }, [value]);
