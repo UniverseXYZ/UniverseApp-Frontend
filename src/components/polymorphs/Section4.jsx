@@ -29,9 +29,10 @@ const rightBlock = () => {
   return (
     <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
       <div className="section4--right--block">
-        <h2>Mint a Polymorphic NFT that will scramble its genes when told to</h2>
+        <h2>Mint a Polymorphic NFT</h2>
         <p>
-          Mint a Polymorphic NFT that will scramble its genes when minted or when its told to morph.
+          Mint a Polymoprh with a unique genetic code. You can scramble your morph as many times as
+          you want to achieve the perfect Polymorph!
         </p>
         <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
           Mint a morph

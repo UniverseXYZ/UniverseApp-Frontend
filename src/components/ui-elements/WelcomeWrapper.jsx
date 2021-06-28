@@ -19,6 +19,7 @@ const WelcomeWrapper = (props) => {
     hintText,
     btnText,
     btnOnClick,
+    btnAnotherOnClick,
     popupBtnText,
     children,
     marquee,
@@ -61,7 +62,7 @@ const WelcomeWrapper = (props) => {
                   {btnText}
                 </Button>
               )}
-              {!!popupBtnText.length && (
+              {!!popupBtnText.length && !btnAnotherOnClick && (
                 <Popup
                   trigger={
                     <button type="button" className="light-border-button">
@@ -71,6 +72,11 @@ const WelcomeWrapper = (props) => {
                 >
                   {(close) => <SubscribePopup close={close} />}
                 </Popup>
+              )}
+              {!!popupBtnText.length && btnAnotherOnClick && (
+                <button type="button" className="light-border-button" onClick={btnAnotherOnClick}>
+                  {popupBtnText}
+                </button>
               )}
             </div>
           </AnimatedOnScroll>
@@ -96,6 +102,7 @@ WelcomeWrapper.propTypes = {
   hintText: PropTypes.string,
   btnText: PropTypes.string,
   btnOnClick: PropTypes.func,
+  btnAnotherOnClick: PropTypes.func,
   popupBtnText: PropTypes.string,
   children: PropTypes.node,
   marquee: PropTypes.node,
@@ -111,6 +118,7 @@ WelcomeWrapper.defaultProps = {
   marquee: null,
   btnText: '',
   btnOnClick: () => {},
+  btnAnotherOnClick: () => {},
   popupBtnText: '',
   bgTextLeft: false,
   bgTextRight: false,

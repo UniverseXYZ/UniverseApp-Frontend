@@ -22,4 +22,10 @@ export default [
   { img: XYZbotImg, name: 'X-YZ' },
   { img: VikingImg, name: 'Ragnar' },
   { img: FrankieImg, name: 'Frankie' },
+  { img: FrankieImg, name: 'Frankie' },
+  { img: FrankieImg, name: 'Frankie' },
+  { img: FrankieImg, name: 'Frankie' },
+  { img: FrankieImg, name: 'Frankie' },
+  { img: FrankieImg, name: 'Frankie' },
+  { img: FrankieImg, name: 'Frankie' },
 ];

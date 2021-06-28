@@ -6,40 +6,46 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   border-radius: 12px;
-  flex-basis: 150px;
-  flex-shrink: 0;
-  height: auto;
-  margin: 0 20px 25px 0;
-  flex-grow: 1;
-  padding: 15px;
-
-  font-family: Space Grotesk, sans-serif;
-  font-style: normal;
+  padding: 13px 5px;
   text-align: center;
+  // background: rgba(0, 0, 0, 0.02);
+  // border: 1px solid rgba(0, 0, 0, 0.1);
+  // box-sizing: border-box;
+  // border-radius: 12px;
+  // flex-basis: 150px;
+  // height: auto;
+  // margin-bottom: 25px;
+  // flex-grow: 0;
+  // padding: 3px 0;
+  // font-family: Space Grotesk, sans-serif;
+  // font-style: normal;
 
   .prop--trait {
-    margin-top: 10px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
     font-weight: 500;
-    font-size: 12px;
-
+    font-size: 10px;
+    line-height: 160%;
     text-transform: uppercase;
-
-    color: #000000;
+    color: $black;
   }
 
   .prop--name {
-    margin-top: 10px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
     font-weight: bold;
-    font-size: 14px;
-
-    color: #000000;
+    font-size: 12px;
+    line-height: 160%;
+    color: $black;
+    margin: 5px 0 2px;
   }
 
   .prop--chance {
-    margin-top: 10px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
     font-weight: normal;
-    font-size: 14px;
-
+    font-size: 12px;
+    line-height: 160%;
     color: rgba(0, 0, 0, 0.4);
   }
 

@@ -12,6 +12,7 @@
     overflow: hidden;
     display: flex;
     align-items: center;
+    box-shadow: inset 0 60px 60px -7px #fcfefd;
     @include sm {
         height: auto;
     }
@@ -32,6 +33,7 @@
             @include sm {
                 height: auto;
                 width: 100%;
+                object-fit: contain;
             }
             height: auto;
             position: relative;
@@ -63,7 +65,7 @@
                 }
                 p {
                     @include sm {
-                        padding: 0 20px;
+                        padding: 20px 20px 30px;
                     }
                     font-family: Space Grotesk;
                     font-style: normal;
@@ -80,6 +82,9 @@
                     margin-top: 1.2vw;
                     width: 175px;
                     height: 42px;
+                    @include sm {
+                        width: 90%;
+                    }
                 }
             }
         }

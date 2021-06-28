@@ -15,19 +15,6 @@ const PolymorphScramblePopup = ({ onClose }) => {
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
   const [selectedTrait, setSelectedTrait] = useState(null);
 
-  const importTraits = (folder) => {
-    const r = require.context(
-      '../../assets/images/randomise-person-images/background-img',
-      false,
-      /\.(png|svg)$/
-    );
-
-    return r
-      .keys()
-      .map(r)
-      .map((m) => m.default);
-  };
-
   const traits = [
     {
       label: 'Headwear',
@@ -127,11 +114,15 @@ const PolymorphScramblePopup = ({ onClose }) => {
       label: 'Right-hand accessory',
       value: 'rightHand',
       list: require
-        .context('../../assets/images/randomise-person-images/rightHand-img', false, /\.(png|svg)$/)
+        .context(
+          '../../assets/images/randomise-person-images/rightHand-images',
+          false,
+          /\.(png|svg)$/
+        )
         .keys()
         .map(
           require.context(
-            '../../assets/images/randomise-person-images/rightHand-img',
+            '../../assets/images/randomise-person-images/rightHand-images',
             false,
             /\.(png|svg)$/
           )
@@ -169,7 +160,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
       },
     },
     {
-      name: 'Scramble all trait',
+      name: 'Scramble all traits',
       active: allTraitsTabSelected,
       handler: () => {
         setSingleTraitSelected(false);
@@ -205,7 +196,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
         }
       }
     }
-    console.log('traits', traitsObj);
+
     setSelectedNftForScramble({
       ...selectedNftForScramble,
       ...traitsObj,
@@ -213,59 +204,69 @@ const PolymorphScramblePopup = ({ onClose }) => {
   };
 
   return (
-    <div className="popup-div">
+    <div className="scramble-popup">
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />
       </button>
-
-      <div className="scramble--popup">
-        <div className="scramble--popup--content">
-          <div className="avatar--wrapper ">
-            <img src={person} className="avatar" alt="avatar" />
-          </div>
-
-          <div className="scramble--options">
-            <div className="name">{selectedNftForScramble.name}</div>
-
-            <Tabs items={tabs} />
-            {singleTraitTabSelected ? (
-              <>
-                <div className="description">
-                  Mutating a single trait means you can morph a hat or morph a torso. This option
-                  will only morph 1 gene.
-                </div>
-
-                <div className="traits--popup">
-                  <SelectComponent
-                    options={traits}
-                    onChange={(trait) => setSelectedTrait(trait)}
-                    placeholder="Pick a trait type to scramble"
-                    value={selectedTrait}
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="description">
-                This option will scramble all the genes and give you a completely new polymorph
-                style.
-              </div>
-            )}
-
-            <div className="scramble--action">
-              <div className="scramble--price">
-                <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : 0.16}
-              </div>
-              <Button
-                className="light-button"
-                onClick={onScramble}
-                disabled={!selectedTrait && singleTraitTabSelected}
-              >
-                Scramble
-              </Button>
+      <div className="scramble-popup-div">
+        <div className="scramble--popup">
+          <div className="scramble--popup--content">
+            <div className="avatar-wrapper-popup">
+              <img src={person} className="avatar-popup" alt="avatar" />
             </div>
 
-            <div className="next-price-description">
-              * Your next scramble will cost more that last one
+            <div className="scramble--options--popup">
+              <div className="name">{selectedNftForScramble.name}</div>
+
+              <Tabs items={tabs} />
+              {singleTraitTabSelected ? (
+                <>
+                  <div className="description">
+                    Mutating a single trait means you can morph a hat or morph a torso. This option
+                    will only morph 1 gene.
+                  </div>
+
+                  <div className="traits--popup">
+                    <SelectComponent
+                      options={traits}
+                      onChange={(trait) => setSelectedTrait(trait)}
+                      placeholder="Pick a trait type to scramble"
+                      value={selectedTrait}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="description">
+                  Would you like to scramble your Polymorph into a brand new one? This will
+                  randomize the genome, and reset the cost of a single trait scramble back to 0.01
+                  ETH.
+                </div>
+              )}
+
+              <div className="scramble--action">
+                <div className="scramble--price">
+                  <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : 0.16}
+                </div>
+                <Button
+                  className="light-button"
+                  onClick={onScramble}
+                  disabled={!selectedTrait && singleTraitTabSelected}
+                >
+                  Scramble
+                </Button>
+              </div>
+
+              {singleTraitTabSelected ? (
+                <div className="next-price-description">
+                  * You’re about to morph the <b>Marine Pants</b>. Your next scramble will cost more
+                  that last one. You have the same chance to receive the trait you already have as
+                  the trait you may want.
+                </div>
+              ) : (
+                <div className="next-price-description">
+                  * This action might change your Character trait and can not be reversed later!
+                </div>
+              )}
             </div>
           </div>
         </div>
