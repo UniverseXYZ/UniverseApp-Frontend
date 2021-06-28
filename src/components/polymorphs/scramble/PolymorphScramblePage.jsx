@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { utils } from 'ethers';
 import { useHistory, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -33,6 +34,7 @@ const PolymorphScramblePage = () => {
   const [morphOwner, setMorphOwner] = useState(false);
   const [geneCopied, setGeneCopied] = useState(false);
   const [ownerCopied, setOwnerCopied] = useState(false);
+  const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
 
   useEffect(async () => {
     if (!polymorphId || !polymorphContract) return;
@@ -54,6 +56,13 @@ const PolymorphScramblePage = () => {
     if (!polymorphId || !polymorphContract) return;
     const gene = await polymorphContract.geneOf(polymorphId);
     setPolymorphGene(gene.toString());
+  }, [polymorphId, polymorphContract]);
+
+  useEffect(async () => {
+    if (!polymorphId || !polymorphContract) return;
+    const genomChangePrice = await polymorphContract.priceForGenomeChange(polymorphId);
+    const genomChangePriceToEther = utils.formatEther(genomChangePrice);
+    setMorphSingleGenePrice(genomChangePriceToEther);
   }, [polymorphId, polymorphContract]);
 
   const tabs = [
@@ -187,6 +196,10 @@ const PolymorphScramblePage = () => {
             </>
           ) : (
             <div>
+              <div className="metadata">
+                <div className="mp--string--name">Next Morph Price</div>
+                <div className="mp--string--value">{morphSingleGenePrise} ETH</div>
+              </div>
               <div className="metadata">
                 <div className="owner--string--name">Owner</div>
                 <div className="owner--string--value">
