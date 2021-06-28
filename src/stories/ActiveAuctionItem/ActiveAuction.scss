@@ -1,0 +1,152 @@
+@import '../../assets/scss/variables';
+.active__auction__item {
+  background: $white;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: grid;
+  grid-gap: 30px;
+  width: fit-content;
+
+  .title {
+    grid-column: 1/2;
+    h1 {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      letter-spacing: 0.2px;
+      color: $black;
+      margin-bottom: 10px;
+      margin-top: 12px;
+    }
+    .artist__details {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 22px;
+        height: 22px;
+        margin-right: 10px;
+        border-radius: 50%;
+      }
+      span {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        color: rgba(0, 0, 0, 0.4);
+        margin-right: 5px;
+      }
+      button {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        background-color: $white;
+        text-decoration: underline;
+        color: #4d66eb;
+        border: none;
+        padding: 0%;
+      }
+    }
+  }
+  .view__auction {
+    grid-column: 2/3;
+    display: flex;
+    justify-content: flex-end;
+    button {
+      height: fit-content;
+    }
+  }
+  .auction__img {
+    grid-column: 1/2;
+    min-width: 200px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    &.show__avatar {
+      background: conic-gradient(
+          from 176.21deg at 50% 50%,
+          #000000 -24.66deg,
+          #ffffff 0.25deg,
+          #000000 50.63deg,
+          #000000 51.97deg,
+          #ffffff 88.12deg,
+          #000000 142.5deg,
+          #ffffff 196.87deg,
+          #000000 256.87deg,
+          #ffffff 300deg,
+          #000000 335.2deg,
+          #000000 335.34deg,
+          #ffffff 360.25deg
+        ),
+        radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
+      background-blend-mode: screen, normal;
+      img.original {
+        display: none;
+      }
+      img.artist__image {
+        display: block;
+      }
+    }
+
+    img.original {
+      display: block;
+      width: 290px;
+      height: 290px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    img.artist__image {
+      display: none;
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid $white;
+    }
+  }
+  .auction__details {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 2/3;
+
+    > div {
+      width: 100%;
+    }
+
+    &__box {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 22px;
+        color: rgba(0, 0, 0, 0.4);
+        margin-bottom: -3px;
+        margin-top: 0px;
+      }
+      h3 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 160%;
+        color: $black;
+        margin: 0%;
+        span {
+          color: rgba(0, 0, 0, 0.4);
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
