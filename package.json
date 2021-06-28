@@ -15,7 +15,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
     "domino": "^2.1.6",
-    "ethereum-address": "0.0.4",
+    "ethereum-address": "^0.0.4",
     "ethers": "^5.3.1",
     "express": "^4.17.1",
     "history": "^5.0.0",
