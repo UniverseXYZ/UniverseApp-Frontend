@@ -8,7 +8,7 @@ import './MintPolymorph.scss';
 
 const MintPolymorph = () => {
   const [quantity, setQuantity] = useState(1);
-  const [sliderValue] = useState(4520);
+  const [sliderValue, setSliderValue] = useState(0);
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -50,11 +50,13 @@ const MintPolymorph = () => {
       >
         <BondingCurve
           value={sliderValue}
-          max={10000}
+          setValue={setSliderValue}
+          max={30}
           mobile={mobile}
           blur
           quantity={quantity}
           setQuantity={setQuantity}
+          light={false}
         />
       </WelcomeWrapper>
       <Section2HorizontalScroll width={windowSize.width} height={windowSize.height} />
@@ -64,13 +66,15 @@ const MintPolymorph = () => {
           <div className="section4--child">
             <BondingCurve
               value={sliderValue}
+              setValue={setSliderValue}
               colorPriceIcon="black"
               color1="black"
               color2="black"
-              max={10000}
+              max={30}
               mobile={mobile}
               quantity={quantity}
               setQuantity={setQuantity}
+              light
             />
           </div>
         </AnimatedOnScroll>

@@ -25,14 +25,20 @@ const BondingCurve = (props) => {
     blur,
     quantity,
     setQuantity,
+    light,
   } = props;
 
   const mintPolymorph = () => {
-    document.getElementById('loading-hidden-btn').click();
-    setTimeout(() => {
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
-    }, 2000);
+    if (value + quantity <= max) {
+      setValue(value + quantity);
+      document.getElementById('loading-hidden-btn').click();
+      setTimeout(() => {
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
+      }, 2000);
+    } else {
+      alert(`You can mint maximum ${max - value} morphs`);
+    }
   };
 
   return (
@@ -80,8 +86,13 @@ const BondingCurve = (props) => {
             </>
           }
         />
-        {!mobile && (
-          <Button className="light-button" onClick={mintPolymorph}>
+        {!mobile && !light && (
+          <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+            Mint now
+          </Button>
+        )}
+        {!mobile && light && (
+          <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
             Mint now
           </Button>
         )}
@@ -98,8 +109,13 @@ const BondingCurve = (props) => {
           </p>
         </div>
       </div>
-      {!!mobile && (
-        <Button className="light-button" onClick={mintPolymorph}>
+      {!!mobile && !light && (
+        <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+          Mint now
+        </Button>
+      )}
+      {!!mobile && light && (
+        <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
           Mint now
         </Button>
       )}
@@ -119,6 +135,7 @@ BondingCurve.propTypes = {
   blur: PropTypes.bool,
   quantity: PropTypes.number.isRequired,
   setQuantity: PropTypes.func.isRequired,
+  light: PropTypes.bool.isRequired,
 };
 
 BondingCurve.defaultProps = {
