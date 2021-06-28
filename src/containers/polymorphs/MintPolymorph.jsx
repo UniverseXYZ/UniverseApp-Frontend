@@ -9,7 +9,7 @@ import AppContext from '../../ContextAPI';
 
 const MintPolymorph = () => {
   const [quantity, setQuantity] = useState(1);
-  const [sliderValue] = useState(4520);
+  const [sliderValue, setSliderValue] = useState(0);
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -52,12 +52,14 @@ const MintPolymorph = () => {
         bgTextRight
       >
         <BondingCurve
+          setValue={setSliderValue}
           value={totalPolymorphs}
           max={10000}
           mobile={mobile}
           blur
           quantity={quantity}
           setQuantity={setQuantity}
+          light={false}
         />
       </WelcomeWrapper>
       <Section2HorizontalScroll width={windowSize.width} height={windowSize.height} />
@@ -66,6 +68,7 @@ const MintPolymorph = () => {
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
           <div className="section4--child">
             <BondingCurve
+              setValue={setSliderValue}
               value={totalPolymorphs}
               colorPriceIcon="black"
               color1="black"
@@ -74,6 +77,7 @@ const MintPolymorph = () => {
               mobile={mobile}
               quantity={quantity}
               setQuantity={setQuantity}
+              light
             />
           </div>
         </AnimatedOnScroll>

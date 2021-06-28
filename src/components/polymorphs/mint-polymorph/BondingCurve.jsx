@@ -29,6 +29,7 @@ const BondingCurve = (props) => {
     blur,
     quantity,
     setQuantity,
+    light,
   } = props;
   const [mintedTokens, setMintedTokens] = useState([]);
   const [mintedPolymorphs, setMintedPolymorphs] = useState([]);
@@ -188,8 +189,21 @@ const BondingCurve = (props) => {
             </>
           }
         />
-        {!mobile && (
-          <Button className="light-button" onClick={() => mintPolymorphs(quantity)}>
+        {!mobile && !light && (
+          <Button
+            className="light-button dark"
+            onClick={() => mintPolymorphs(quantity)}
+            disabled={value >= max}
+          >
+            Mint now
+          </Button>
+        )}
+        {!mobile && light && (
+          <Button
+            className="light-button light"
+            onClick={() => mintPolymorphs(quantity)}
+            disabled={value >= max}
+          >
             Mint now
           </Button>
         )}
@@ -206,8 +220,13 @@ const BondingCurve = (props) => {
           </p>
         </div>
       </div>
-      {!!mobile && (
-        <Button className="light-button" onClick={() => mintPolymorphs(quantity)}>
+      {!!mobile && !light && (
+        <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+          Mint now
+        </Button>
+      )}
+      {!!mobile && light && (
+        <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
           Mint now
         </Button>
       )}
@@ -227,6 +246,7 @@ BondingCurve.propTypes = {
   blur: PropTypes.bool,
   quantity: PropTypes.number.isRequired,
   setQuantity: PropTypes.func.isRequired,
+  light: PropTypes.bool.isRequired,
 };
 
 BondingCurve.defaultProps = {
