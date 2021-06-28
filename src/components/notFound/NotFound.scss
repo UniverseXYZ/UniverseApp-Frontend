@@ -1,0 +1,53 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.not__found__page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    &__box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-image: url('../../assets/images/404-bg.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 464px;
+        height: 400px;
+        margin: 150px auto;
+
+        h1 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 120px;
+            line-height: 120%;
+            text-align: center;
+            color: #13202B;
+            @include sm {
+                font-size: 80px;
+                margin-top: -60px;
+            }
+        }
+        p {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 150%;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 21px;
+        }
+        button {
+            width: 193px;
+        }
+        @include sm {
+            width: 335px;
+            height: 320px;
+            margin: 80px 20px;
+        }
+    }
+}

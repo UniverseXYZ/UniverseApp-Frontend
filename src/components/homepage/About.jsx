@@ -2,24 +2,33 @@ import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
+import { useHistory } from 'react-router-dom';
 import Lottie from 'react-lottie';
+import Button from '../button/Button.jsx';
+import SubscribePopup from '../popups/SubscribePopup.jsx';
 import animationData from '../../utils/animations/cards_animation.json';
 import circleImg from '../../assets/images/circle.svg';
 import blockOne from '../../assets/images/homepage-block1.png';
+import blockThree from '../../assets/images/homepage-block3.png';
 import universeMintingLogo from '../../assets/images/universe-minting.svg';
 import universeAuctionsLogo from '../../assets/images/universe-auctions.svg';
 import bgImage from '../../assets/images/planets-bg.png';
-import planetFrontImage from '../../assets/images/planet-front.png';
-import planetBackImage from '../../assets/images/planet-back.png';
-import planetMiddleImage from '../../assets/images/planet-middle.png';
-import Button from '../button/Button';
-import SubscribePopup from '../popups/SubscribePopup';
+import hummerImage from '../../assets/images/hummer.png';
+import squareOne from '../../assets/images/square1.png';
+import squareTwo from '../../assets/images/square2.png';
+import squareThree from '../../assets/images/square3.png';
+import squareFour from '../../assets/images/square4.png';
+import squareFive from '../../assets/images/square5.png';
+import squareSix from '../../assets/images/square6.png';
+import squareSeven from '../../assets/images/square7.png';
 
 const About = () => {
+  const history = useHistory();
   const [email, setEmail] = useState('');
 
   const handleSubscribe = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(email).toLowerCase())) {
       const config = {
         headers: { 'Access-Control-Allow-Origin': '*' },
@@ -57,9 +66,13 @@ const About = () => {
   useEffect(() => {
     const circleR = document.querySelector('#circle-r');
     const circleL = document.querySelector('#circle-l');
-    const planetFront = document.querySelector('#planet__front');
-    const planetBack = document.querySelector('#planet__back');
-    const planetMiddle = document.querySelector('#planet__middle');
+    const squareOneEl = document.querySelector('#squareOne');
+    const squareTwoEl = document.querySelector('#squareTwo');
+    const squareThreeEl = document.querySelector('#squareThree');
+    const squareFourEl = document.querySelector('#squareFour');
+    const squareFiveEl = document.querySelector('#squareFive');
+    const squareSixEl = document.querySelector('#squareSix');
+    const squareSevenEl = document.querySelector('#squareSeven');
 
     const scrollLoop = () => {
       if (document.querySelector('.about__section')) {
@@ -72,15 +85,27 @@ const About = () => {
         circleL.style.transform = `translate3d(${yScrollPosition * -0.05}px, ${
           yScrollPosition * -0.2
         }px, 0) rotate(180deg)`;
-        planetFront.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * 0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * 0.01}px, 0)`;
-        planetBack.style.transform = `translate3d(${(yScrollPosition - aboutOffsetTop) * 0.02}px, ${
+        squareOneEl.style.transform = `translate3d(${
           (yScrollPosition - aboutOffsetTop) * 0.02
-        }px, 0)`;
-        planetMiddle.style.transform = `translate3d(${
-          (yScrollPosition - aboutOffsetTop) * -0.01
-        }px, ${(yScrollPosition - aboutOffsetTop) * -0.01}px, 0)`;
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
+        squareTwoEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
+        squareThreeEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
+        squareFourEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
+        squareFiveEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
+        squareSixEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
+        squareSevenEl.style.transform = `translate3d(${
+          (yScrollPosition - aboutOffsetTop) * 0.02
+        }px, ${(yScrollPosition - aboutOffsetTop) * 0.02}px, 0)`;
 
         requestAnimationFrame(scrollLoop);
       }
@@ -142,14 +167,16 @@ const About = () => {
               <p className="desc">
                 In the Universe, an NFT is minted for each item in a Collection. Each collection of
                 art can include a variety of digital formats including video formats, music, and
-                more. Collections can also hold sub-collections in them. This allows for the
+                more. Collections can also hold sub-collections in them. This allows for the
                 creation of additional NFTs such as layers of art, shows, merchandise, music. etc.
                 that can evolve over time under one umbrella community structure. <br />
-                <br /> In this way the Universe Protocol allows content to grow over time with
-                community input, yet retain programmatic links back to its origins and the original
-                creators. <br />
-                <br /> In future build outs we hope to enable the ability to turn collections into
-                mini DAOs along with an integrated social network.
+                <div>
+                  In this way the Universe Protocol allows content to grow over time with community
+                  input, yet retain programmatic links back to its origins and the original
+                  creators. <br />
+                  <br /> In future build outs we hope to enable the ability to turn collections into
+                  mini DAOs along with an integrated social network.
+                </div>
               </p>
               <Button
                 className="light-button"
@@ -171,10 +198,13 @@ const About = () => {
                 We are developing a trustless decentralized auction house for NFTs. You can use
                 existing NFTs or mint new collections and create a multi-tier auction with multiple
                 winners. At its simplest, you can set up a single tier reserve price english auction
-                that is well known. There will be ZERO FEES for initial auctions, with all revenue
-                going to the creator - we are here to empower artists at our core. However, the
-                xyzDAO will take a 2% fee on every resale on the Universe platform to support
-                continued innovation.
+                that is well known.
+                <div>
+                  There will be <b>ZERO FEES</b> for initial auctions, with all revenue going to the
+                  creator - we are here to empower artists at our core. However, the xyzDAO will
+                  take a 2% fee on every resale on the Universe platform to support continued
+                  innovation.
+                </div>
               </p>
               <Button
                 className="light-button"
@@ -192,23 +222,50 @@ const About = () => {
                 alt="Universe Auctions"
               />
               <div className="planets__group">
-                <img src={bgImage} alt="Block" />
-                <img id="planet__front" src={planetFrontImage} alt="Planet Front" />
-                <img id="planet__back" src={planetBackImage} alt="Planet Back" />
-                <img id="planet__middle" src={planetMiddleImage} alt="Planet Middle" />
+                <div className="squares__container">
+                  <img id="gradient-bg" src={bgImage} alt="Block" />
+                  <img id="hummer" src={hummerImage} alt="Hummer" />
+                  <img id="squareOne" src={squareOne} alt="Square" />
+                  <img id="squareTwo" src={squareTwo} alt="Square" />
+                  <img id="squareThree" src={squareThree} alt="Square" />
+                  <img id="squareFour" src={squareFour} alt="Square" />
+                  <img id="squareFive" src={squareFive} alt="Square" />
+                  <img id="squareSix" src={squareSix} alt="Square" />
+                  <img id="squareSeven" src={squareSeven} alt="Square" />
+                </div>
               </div>
             </AnimatedOnScroll>
-
+          </div>
+        </div>
+      </div>
+      <div className="polymorphs__universe__section">
+        <div className="polymorphs__universe__section__container">
+          <div className="blocks">
             {/* Block 3 */}
-            <AnimatedOnScroll
-              animationIn="fadeIn"
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <Lottie options={defaultOptions} />
+            <AnimatedOnScroll animationIn="fadeIn">
+              <img src={blockThree} alt="Block" />
             </AnimatedOnScroll>
             <AnimatedOnScroll animationIn="fadeIn">
-              <h1 className="title">Universe Original Characters and Lore</h1>
+              <span className="new">New</span>
+              <h1 className="title mh">Polymorph Universe</h1>
+              <p className="desc">
+                A mutating universe where genes are randomly <br />
+                scrambled when bought, traded or transfered.
+              </p>
+              <Button className="light-button" onClick={() => history.push('/polymorphs')}>
+                Learn more
+              </Button>
+            </AnimatedOnScroll>
+          </div>
+        </div>
+      </div>
+      <div className="about__section">
+        <div className="about__section__container">
+          <div className="blocks diff">
+            {/* Block 4 */}
+            <AnimatedOnScroll animationIn="fadeIn">
               <span className="coming__soon">Coming soon</span>
+              <h1 className="title">Universe Original Characters and Lore</h1>
               <p className="desc">
                 The initial Core Collection will be released to showcase the ease of use for
                 aspiring artists to build and release their own NFT franchise using the features of
@@ -242,6 +299,12 @@ const About = () => {
                   </Popup>
                 </div>
               </div>
+            </AnimatedOnScroll>
+            <AnimatedOnScroll
+              animationIn="fadeIn"
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <Lottie options={defaultOptions} />
             </AnimatedOnScroll>
           </div>
         </div>

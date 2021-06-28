@@ -93,7 +93,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <div className="tier__info">
             <span>Bidders #10</span>
             <span>{`${onTier.nftsPerWinner} NFTs per winner`}</span>
-            <span>{`Minimum bid: ${onTier.minBid} ETH`}</span>
+            {onTier.minBidValue ? <span>{`Minimum bid: ${onTier.minBidValue} ETH`}</span> : <></>}
           </div>
           <div className="tier__nfts">
             {onTier.nfts.map((nft, index) => (

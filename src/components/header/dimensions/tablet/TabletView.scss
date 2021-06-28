@@ -34,7 +34,7 @@
         li {
             .grid__menu {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: repeat(4, 1fr);
                 padding: 40px 0;
                 p.title {
                     font-family: $spaceGroteskFont;
@@ -103,6 +103,9 @@
                     img {
                         margin-right: 8px;
                     }
+                }
+                @include md {
+                    grid-template-columns: repeat(3, 1fr);
                 }
             }
             &.sign__in {

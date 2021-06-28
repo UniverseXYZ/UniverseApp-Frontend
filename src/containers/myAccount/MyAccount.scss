@@ -268,6 +268,13 @@
           button {
             margin: auto;
           }
+          .error__text {
+            padding-top: 4px;
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            line-height: 150%;
+            color: #ff4949;
+          }
 
           @include lg {
             width: 160px;
@@ -292,13 +299,14 @@
 
       .account-grid-name-editing {
         position: relative;
-        margin-top: 30px;
+        margin-top: 10px;
         h5 {
           display: flex;
           align-items: center;
           font-family: $spaceGroteskFont;
           font-size: 14px;
           line-height: 22px;
+          margin-top: 20px;
         }
 
         .intup-l {
@@ -314,7 +322,7 @@
           font-family: $spaceGroteskFont;
           font-size: 16px;
           line-height: 20px;
-          margin-bottom: 20px;
+          // margin-bottom: 20px;
 
           &::placeholder {
             color: rgba(0, 0, 0, 0.2);
@@ -331,6 +339,13 @@
           @include lg {
             width: 100%;
           }
+        }
+        .error__text {
+          padding-top: 4px;
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          line-height: 150%;
+          color: #ff4949;
         }
 
         .empty {
@@ -371,6 +386,7 @@
           box-sizing: border-box;
           border-radius: 12px;
           margin-bottom: 20px;
+          margin-top: 20px;
 
           p {
             padding-left: 31px;
@@ -466,6 +482,9 @@
           }
         }
       }
+      .animated.zoomIn {
+        width: 100%;
+      }
       .account-grid-about-editing {
         width: 100%;
         textarea {
@@ -498,6 +517,9 @@
       width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
+      .animated.zoomIn {
+        width: 100%;
+      }
 
       h5 {
         font-family: $spaceGroteskFont;
@@ -598,7 +620,7 @@
             }
             .logo-picture {
               background-color: $white;
-              border: 1px dashed rgba(0, 0, 0, 0.1);
+              border: 1px solid rgba(0, 0, 0, 0.1);
               box-sizing: border-box;
               border-radius: 10px;
 
@@ -636,6 +658,15 @@
       width: 100%;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
+      .animated.zoomIn {
+        width: 100%;
+      }
+      .social {
+        @include md {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
 
       h5 {
         font-family: $spaceGroteskFont;
@@ -645,11 +676,69 @@
         line-height: 22px;
         color: rgba(0, 0, 0, 0.4);
         min-width: 285px;
+        margin-bottom: 14px;
 
         @include lg {
           min-width: 185px;
           margin-bottom: 20px;
         }
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+        margin-bottom: 20px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: '';
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(16px);
+        -ms-transform: translateX(16px);
+        transform: translateX(16px);
+      }
+
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 50px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
       }
 
       .account-grid-social-edit {
@@ -799,17 +888,23 @@
           margin-bottom: 15px;
         }
       }
+      // @include lg {
+      //   margin-left: 185px;
+      //   margin-bottom: 40px;
+      // }
+
+      // @include md {
+      //   margin-left: 0%;
+      // }
+
       @include sm {
         display: grid;
+        justify-content: unset;
       }
     }
 
     button {
-      height: max-content;
-      &.light-border-button {
-        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-        border: 1px solid transparent;
-      }
+      // height: max-content;
       span {
         margin-right: 12px;
         &.hide__on__mobile {

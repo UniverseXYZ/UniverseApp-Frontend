@@ -4,16 +4,19 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
-import SelectWalletPopup from '../../../popups/SelectWalletPopup';
+import AppContext from '../../../../ContextAPI';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
+import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import Icon from '../../../../assets/images/icon1.svg';
 import copyIcon from '../../../../assets/images/copy.svg';
-import AppContext from '../../../../ContextAPI';
 import arrowUP from '../../../../assets/images/arrow-down.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
 import Group2 from '../../../../assets/images/Group2.svg';
 import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
+import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -23,7 +26,6 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
-import SubscribePopup from '../../../popups/SubscribePopup';
 
 const DesktopView = ({
   isWalletConnected,
@@ -37,6 +39,7 @@ const DesktopView = ({
 }) => {
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [isMintingDropdownOpened, setIsMintingDropdownOpened] = useState(false);
+  const [isPolymorphsDropdownOpened, setIsPolymorphsDropdownOpened] = useState(false);
   const [isAboutDropdownOpened, setIsAboutDropdownOpened] = useState(false);
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -58,15 +61,15 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                // className="disable"
+                className="disable"
                 onClick={() => {
-                  history.push('/minting-and-auctions/marketplace/active-auctions');
+                  // history.push('/minting-and-auctions/marketplace/active-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
-                {/* <span className="tooltiptext">Coming soon</span> */}
+                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
@@ -88,6 +91,34 @@ const DesktopView = ({
               >
                 <img src={socialMediaIcon} alt="Social Media" />
                 <span>Social media</span>
+                <span className="tooltiptext">Coming soon</span>
+              </button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="menu-li"
+            onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
+          >
+            <span className="nav__link__title">&#128293; NFT drops</span>
+            <img className="arrow" src={arrowUP} alt="arrow" />
+          </button>
+          <div className="dropdown minting-drop">
+            <div className="dropdown__body">
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/polymorphs');
+                }}
+              >
+                <img src={polymorphsIcon} alt="Polymorphs" />
+                <span>Polymorphs</span>
+              </button>
+              <button type="button" className="disable">
+                <img src={coreDropsIcon} alt="Core drops" />
+                <span>Core drops</span>
                 <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
@@ -135,6 +166,16 @@ const DesktopView = ({
                 <img src={teamIcon} alt="Team" />
                 Team
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://docs.universe.xyz/');
+                }}
+              >
+                <img src={docsIcon} alt="Docs" />
+                <span>Docs</span>
+              </button>
             </div>
           </div>
         </li>
@@ -151,35 +192,23 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://dao.universe.xyz/governance');
                 }}
               >
                 <img src={governanceIcon} alt="Governance" />
                 <span>Governance</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
+                  window.open('https://dao.universe.xyz/yield-farming');
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
-                <span className="tooltiptext">Coming soon</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsDAODropdownOpened(false);
-                  window.open('https://docs.universe.xyz/');
-                }}
-              >
-                <img src={docsIcon} alt="Docs" />
-                <span>Docs</span>
               </button>
             </div>
           </div>

@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
-import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails';
-import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails';
-import RewardTiers from '../../components/auctionLandingPage/RewardTiers';
-import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails';
-import PlaceBid from '../../components/auctionLandingPage/PlaceBid';
+import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
+import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
+import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
+import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwnerDetails.jsx';
+import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
 import AppContext from '../../ContextAPI';
+import NotFound from '../../components/notFound/NotFound.jsx';
 
 const AuctionLandingPage = () => {
   const { setWebsite } = useContext(AppContext);
@@ -18,7 +19,6 @@ const AuctionLandingPage = () => {
   const [bidders, setBidders] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setWebsite(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
@@ -118,12 +118,18 @@ const AuctionLandingPage = () => {
       <RewardTiers auction={selectedAuction} />
       <AuctionOwnerDetails artist={artist} />
       <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
-      <div className="artist__personal__logo">
-        <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
-      </div>
+      {artist && artist.personalLogo ? (
+        <div className="artist__personal__logo">
+          <div>
+            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   ) : (
-    <Redirect to="/" />
+    <NotFound />
   );
 };
 

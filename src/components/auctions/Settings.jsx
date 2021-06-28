@@ -1,21 +1,21 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import Popup from 'reactjs-popup';
+import 'react-datepicker/dist/react-datepicker.css';
 import { Animated } from 'react-animated-css';
-import Select from 'react-select';
+import Popup from 'reactjs-popup';
 import moment from 'moment';
 import uuid from 'react-uuid';
+import './AuctionSettings.scss';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import AppContext from '../../ContextAPI';
-import Input from '../input/Input';
+import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
-import 'react-datepicker/dist/react-datepicker.css';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import AddToken from '../popups/AddTokenPopup';
-import StartDateCalendar from '../calendar/StartDateCalendar';
-import EndDateCalendar from '../calendar/EndDateCalendar';
+import SelectToken from '../popups/SelectTokenPopup.jsx';
+import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
+import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 
 const AuctionSettings = () => {
   const d = new Date();
@@ -37,15 +37,8 @@ const AuctionSettings = () => {
 
   const location = useLocation();
   const history = useHistory();
-  const {
-    auction,
-    setAuction,
-    myAuctions,
-    setMyAuctions,
-    bidtype,
-    setBidtype,
-    options,
-  } = useContext(AppContext);
+  const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
+    useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -59,6 +52,10 @@ const AuctionSettings = () => {
 
   const handleSearch = (value) => {
     setsearchByNameAndAddress(value);
+  };
+
+  const handleEdit = () => {
+    document.body.classList.add('no__scroll');
   };
 
   const [isValidFields, setIsValidFields] = useState({
@@ -80,8 +77,8 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -90,8 +87,8 @@ const AuctionSettings = () => {
     month: monthNames[d.getMonth()],
     day: d.getDate(),
     year: d.getFullYear(),
-    hours: '12',
-    minutes: '00',
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
     timezone: 'GMT +04:00',
     format: 'AM',
   });
@@ -110,40 +107,33 @@ const AuctionSettings = () => {
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
-  const handleClose = () => {
-    setShowAddToken(false);
-  };
   const bid = options.find((element) => element.value === bidtype);
   const isEditingAuction = location.state !== undefined;
-  // const isEditingAuction = location.state === '/auction-review';
-
   const handleAddAuction = () => {
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
-      startingBid: values.startingBid.trim().length !== 0,
-      startDate: values.startDate.length !== 0,
-      endDate: values.endDate.length !== 0,
-      name: values.name.trim().length !== 0,
-    }));
+    setTimeout(() => {
+      setIsValidFields((prevValues) => ({
+        ...prevValues,
+        startingBid: values.startingBid.trim().length !== 0,
+        startDate: values.startDate.length !== 0,
+        endDate: values.endDate.length !== 0,
+        name: values.name.trim().length !== 0,
+      }));
+    }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
 
     if (values.name && values.startingBid && values.startDate && values.endDate) {
       if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
-        if (auction.tiers.length > 0) {
-          auctionFieldsValid = true;
-        }
+        auctionFieldsValid = true;
       }
     }
-
     if (minBid === true) {
       let isValid = true;
       setErrorArray([]);
       // eslint-disable-next-line consistent-return
       bidValues.forEach((item, index) => {
         if (index < bidValues.length - 1 && bidValues[index + 1] > bidValues[index]) {
-          console.log(index + 1);
           setErrorArray((prevValue) => [...prevValue, index + 1]);
           isValid = false;
           return isValid;
@@ -177,12 +167,12 @@ const AuctionSettings = () => {
           startingBid: values.startingBid,
           startDate: moment(values.startDate).format(),
           endDate: moment(values.endDate).format(),
-          tiers: minBid
-            ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
-            : prevValue.tiers,
+          // tiers: minBid
+          //   ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
+          //   : prevValue.tiers,
         }));
       }
-      history.push('/auction-review', location.pathname);
+      history.push('/setup-auction/reward-tiers', location.pathname);
     }
   };
 
@@ -196,7 +186,7 @@ const AuctionSettings = () => {
   };
 
   useEffect(() => {
-    if (auction.id || isEditingAuction) {
+    if (isEditingAuction) {
       setValues({
         name: auction.name,
         startingBid: auction.startingBid,
@@ -211,18 +201,24 @@ const AuctionSettings = () => {
       //   }),
       //   {}
       // );
+    } else if (!isEditingAuction && auction.id) {
+      setAuction({ tiers: [] });
     }
-  }, [auction.id]);
+  }, []);
+
   return (
     <div className="auction-settings container">
-      <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
+      {/* <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
         <img src={arrow} alt="back" />
         <span>My auctions</span>
-      </div>
+      </div> */}
 
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
+          <p className="tier-description">
+            Start setting up your auction with filling out the name, starting bid and schedule.
+          </p>
         </div>
         <div className="setting-form">
           <div className="up-side">
@@ -247,60 +243,24 @@ const AuctionSettings = () => {
                 />
 
                 <div className="drop-down">
-                  <button type="button" className={dropDown} onClick={() => handleShow()}>
+                  {/* <button type="button" className={dropDown} onClick={() => handleShow()}>
                     {bid.img && <img src={bid.img} alt="icon" />}
                     <span className="button-name">{bid.name}</span>
                     <img src={arrowDown} alt="arrow" />
-                  </button>
-                  <ul className="option-list" hidden={openList}>
-                    <li className="searchDiv">
-                      <div>
-                        <h1>Select bid token (ERC-20)</h1>
-                        <Input
-                          onChange={(e) => handleSearch(e.target.value)}
-                          value={searchByNameAndAddress}
-                          placeholder="Search name or paste ERC-20 contract address"
-                          className="searchInp"
-                        />
-                      </div>
-                    </li>
-                    {options
-                      .filter(
-                        (item) =>
-                          item.name.toLowerCase().includes(searchByNameAndAddress.toLowerCase()) ||
-                          item.address.toLowerCase().includes(searchByNameAndAddress.toLowerCase())
-                      )
-                      .map((item) => (
-                        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-                        <li
-                          key={item.value ? item.value : item.name}
-                          onClick={() => handleChange(item.value)}
-                          onKeyPress={() => handleChange(item.value)}
-                          onKeyDown={() => handleChange(item.value)}
-                        >
-                          <div className="img-name">
-                            {item.img ? (
-                              <img src={item.img} alt="icon" />
-                            ) : (
-                              <span className="imgDefSpan" />
-                            )}
-                            <span className="dai-name">{item.name}</span>
-                          </div>
-                          {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
-                        </li>
-                      ))}
-                    <div className="token-div">
-                      <Popup
-                        trigger={
-                          <button type="button" className="light-border-button add-token">
-                            Add token
-                          </button>
-                        }
-                      >
-                        {(close) => <AddToken onClose={close} />}
-                      </Popup>
-                    </div>
-                  </ul>
+                  </button> */}
+                  <Popup
+                    nested
+                    handleEdit
+                    trigger={
+                      <button type="button" className={dropDown}>
+                        {bid.img && <img src={bid.img} alt="icon" />}
+                        <span className="button-name">{bid.name}</span>
+                        <img src={arrowDown} alt="arrow" />
+                      </button>
+                    }
+                  >
+                    {(close) => <SelectToken onClose={close} />}
+                  </Popup>
                 </div>
               </div>
             </div>
@@ -317,11 +277,10 @@ const AuctionSettings = () => {
                       values.startDate
                         ? `${values.startDate.toString().split(' ')[1]} ${
                             values.startDate.toString().split(' ')[2]
-                          }, ${
-                            values.startDate.toString().split(' ')[3]
-                          }, ${values.startDate.toString().split(' ')[4].substring(0, 5)} ${
-                            startDateTemp.timezone
-                          }`
+                          }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
+                            .toString()
+                            .split(' ')[4]
+                            .substring(0, 5)} ${startDateTemp.timezone}`
                         : ''
                     }
                     error={isValidFields.startDate ? undefined : 'Start date is required!'}
@@ -364,11 +323,10 @@ const AuctionSettings = () => {
                       values.endDate
                         ? `${values.endDate.toString().split(' ')[1]} ${
                             values.endDate.toString().split(' ')[2]
-                          }, ${
-                            values.endDate.toString().split(' ')[3]
-                          }, ${values.endDate.toString().split(' ')[4].substring(0, 5)} ${
-                            endDateTemp.timezone
-                          }`
+                          }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
+                            .toString()
+                            .split(' ')[4]
+                            .substring(0, 5)} ${endDateTemp.timezone}`
                         : ''
                     }
                     error={isValidFields.endDate ? undefined : 'End date is required!'}
@@ -408,22 +366,20 @@ const AuctionSettings = () => {
                     onMouseLeave={() => setHideIcon1(false)}
                     onBlur={() => setHideIcon1(false)}
                   />
-                </span>
-                {hideIcon1 && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                  {hideIcon1 && (
                     <div className="info-text">
                       <p>
                         Any bid in the last 3 minutes of an auction will extend the auction for an
                         additional 3 minutes.
                       </p>
                     </div>
-                  </Animated>
-                )}
+                  )}
+                </span>
               </div>
             </div>
           </div>
-          <div className="down-side">
-            <div className="bid-part">
+          {/* <div className="down-side"> */}
+          {/* <div className="bid-part">
               <div className="bid-info">
                 <h1>Minimum bid per tier</h1>
                 <img
@@ -461,8 +417,8 @@ const AuctionSettings = () => {
                   </ul>
                 </div>
               )}
-            </div>
-            <div className="tiers-inp">
+            </div> */}
+          {/* <div className="tiers-inp">
               {auction.tiers.length > 0 &&
                 minBid === true &&
                 auction.tiers.map((tier, index) => (
@@ -490,8 +446,8 @@ const AuctionSettings = () => {
                     </div>
                   </div>
                 ))}
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
         </div>
       </div>
       {(!isValidFields.startingBid ||
@@ -502,9 +458,14 @@ const AuctionSettings = () => {
           Something went wrong. Please, fix the errors in the fields above and try again
         </div>
       )}
-      <Button className="light-button" onClick={handleAddAuction}>
-        Review auction
-      </Button>
+      <div className="btn-div">
+        <Button className="light-border-button" onClick={() => history.push('/my-auctions')}>
+          Back
+        </Button>
+        <Button className="light-button" onClick={handleAddAuction}>
+          Continue
+        </Button>
+      </div>
     </div>
   );
 };

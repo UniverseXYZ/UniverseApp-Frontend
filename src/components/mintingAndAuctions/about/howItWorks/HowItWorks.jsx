@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AuctionsTab from './AuctionsTab';
-import MintingTab from './MintingTab';
+import AuctionsTab from './AuctionsTab.jsx';
+import MintingTab from './MintingTab.jsx';
 
 const HowItWorks = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);

@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
-import uuid from 'react-uuid';
 import arrow from '../../assets/images/arrow.svg';
-import Button from '../../components/button/Button';
-import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding';
-import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuction';
-import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction';
+import Button from '../../components/button/Button.jsx';
+import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding.jsx';
+import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuction.jsx';
+import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction.jsx';
 import AppContext from '../../ContextAPI';
 
 const CustomizeAuction = () => {
@@ -24,19 +23,42 @@ const CustomizeAuction = () => {
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
-    link: '',
+    link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
     promoImage: null,
     backgroundImage: null,
     hasBlur: '',
+    status: 'empty',
   });
-  const [rewardTiersAuction, setRewardTiersAuction] = useState(
-    auction.tiers.map((tier) => ({ id: tier.id }))
-  );
+  const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
+  const [saveAndPreview, setSaveAndPreview] = useState(false);
+
+  useEffect(() => {
+    if (auction) {
+      setDomainAndBranding({
+        headline: auction.headline || '',
+        link:
+          auction.link ||
+          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
+        promoImage: auction.promoImage || null,
+        backgroundImage: auction.backgroundImage || null,
+        hasBlur: auction.hasBlur || '',
+        status:
+          auction.link &&
+          auction.link.toLowerCase() !==
+            `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`
+            ? 'filled'
+            : 'empty',
+      });
+    }
+  }, []);
 
   const handleSaveClose = () => {
-    if (domainAndBranding.headline && domainAndBranding.link) {
+    if (
+      domainAndBranding.headline &&
+      domainAndBranding.link &&
+      domainAndBranding.status === 'filled'
+    ) {
       const newAuction = { ...auction };
-      newAuction.id = uuid();
       newAuction.headline = domainAndBranding.headline;
       newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
       newAuction.copied = false;
@@ -59,7 +81,7 @@ const CustomizeAuction = () => {
           } else if (new Date() < new Date(newAuction.startDate)) {
             setFutureAuctions([...futureAuctions, newAuction]);
           }
-          setMyAuctions([...myAuctions, newAuction]);
+          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setAuction({ tiers: [] });
         }, 1000);
       }
@@ -79,7 +101,6 @@ const CustomizeAuction = () => {
     }
     if (desc) {
       const newAuction = { ...auction };
-      newAuction.id = uuid();
       newAuction.headline = domainAndBranding.headline;
       newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
       newAuction.copied = false;
@@ -92,19 +113,22 @@ const CustomizeAuction = () => {
       });
       if (loggedInArtist.name && loggedInArtist.avatar) {
         newAuction.artist = loggedInArtist;
-        history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
-          auction: newAuction,
-        });
+        setSaveAndPreview(true);
+        setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
         setTimeout(() => {
           if (
             new Date() < new Date(newAuction.endDate) &&
             new Date() >= new Date(newAuction.startDate)
           ) {
             setActiveAuctions([...activeAuctions, newAuction]);
+          } else if (new Date() < new Date(newAuction.startDate)) {
+            setFutureAuctions([...futureAuctions, newAuction]);
           }
-          setMyAuctions([...myAuctions, newAuction]);
           setAuction({ tiers: [] });
-        }, 1000);
+          history.push(newAuction.link.replace('universe.xyz', ''), {
+            auction: newAuction,
+          });
+        }, 500);
       }
     }
   };
@@ -123,7 +147,6 @@ const CustomizeAuction = () => {
       }
       if (desc) {
         const newAuction = { ...auction };
-        newAuction.id = uuid();
         newAuction.headline = domainAndBranding.headline;
         newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
         newAuction.copied = false;
@@ -136,52 +159,60 @@ const CustomizeAuction = () => {
         });
         if (loggedInArtist.name && loggedInArtist.avatar) {
           newAuction.artist = loggedInArtist;
-          history.push(`/${loggedInArtist.name.split(' ')[0]}/${newAuction.link}`, {
-            auction: newAuction,
-          });
+          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setTimeout(() => {
             if (
               new Date() < new Date(newAuction.endDate) &&
               new Date() >= new Date(newAuction.startDate)
             ) {
               setActiveAuctions([...activeAuctions, newAuction]);
+            } else if (new Date() < new Date(newAuction.startDate)) {
+              setFutureAuctions([...futureAuctions, newAuction]);
             }
-            setMyAuctions([...myAuctions, newAuction]);
             setAuction({ tiers: [] });
-          }, 1000);
+            history.push(newAuction.link.replace('universe.xyz', ''), {
+              auction: newAuction,
+            });
+          }, 500);
         }
       }
     }
   };
 
   return (
-    <div className="container customize__auction">
-      <div
-        className="back-rew"
-        onClick={() => {
-          history.push('/reward-tiers');
-        }}
-        aria-hidden="true"
-      >
-        <img src={arrow} alt="back" />
-        <span>Reward tiers</span>
-      </div>
-      <div className="customize__auction_title">
-        <h2>Customize auction landing page</h2>
-        <Button className="light-border-button" onClick={handlePreview}>
-          Preview
-        </Button>
-      </div>
-      <DomainAndBranding values={domainAndBranding} onChange={setDomainAndBranding} />
-      <RewardTiersAuction values={rewardTiersAuction} onChange={setRewardTiersAuction} />
-      <AboutArtistAuction />
-      <div className="customize-buttons">
-        <Button className="light-button" onClick={handleSaveClose}>
-          Save and close
-        </Button>
-        <Button className="light-border-button" onClick={handleSavePreview}>
-          Save and preview
-        </Button>
+    <div className="customize__auction">
+      <div className="container ">
+        <div
+          className="back-rew"
+          onClick={() => {
+            history.push('/my-auctions');
+          }}
+          aria-hidden="true"
+        >
+          <img src={arrow} alt="back" />
+          <span>My auctions</span>
+        </div>
+        <div className="customize__auction_title">
+          <h2>Customize auction landing page</h2>
+          <Button className="light-border-button" onClick={handlePreview}>
+            Preview
+          </Button>
+        </div>
+        <DomainAndBranding values={domainAndBranding} onChange={setDomainAndBranding} />
+        <RewardTiersAuction values={rewardTiersAuction} onChange={setRewardTiersAuction} />
+        <AboutArtistAuction />
+        <div className="customize-buttons">
+          <Button className="light-button" onClick={handleSaveClose}>
+            Save and close
+          </Button>
+          <Button
+            className="light-border-button"
+            onClick={handleSavePreview}
+            disabled={saveAndPreview}
+          >
+            Save and preview
+          </Button>
+        </div>
       </div>
     </div>
   );

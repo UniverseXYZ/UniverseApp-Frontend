@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 
 const CongratsPopup = ({ onClose }) => (
@@ -12,7 +12,10 @@ const CongratsPopup = ({ onClose }) => (
       <h4>Congratulations</h4>
     </div>
     <div className="popup-text">
-      <p>NFT was successfully minted and should be displayed in your wallet shortly</p>
+      <p>
+        NFT Collection with collectibles was successfully created. It should be visible in your
+        wallet shortly.
+      </p>
     </div>
     <div className="popup-btns">
       <Button className="light-border-button" onClick={onClose}>

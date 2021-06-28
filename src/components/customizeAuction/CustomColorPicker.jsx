@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import 'react-color-palette/lib/css/styles.css';
 import arrowDown from '../../assets/images/arrow-down.svg';
 
-const CustomColorPicker = ({ index, onChange }) => {
+const CustomColorPicker = ({ index, onChange, onColor }) => {
   const [color, setColor] = useColor('hex', '#EABD16');
   const [hidePicker, setHidePicker] = useState(true);
   const ref = useRef(null);
@@ -28,7 +28,11 @@ const CustomColorPicker = ({ index, onChange }) => {
   };
 
   useEffect(() => {
-    onChange((prevValues) => prevValues.map((tier) => ({ ...tier, color })));
+    if (onColor) {
+      setColor(onColor);
+    } else {
+      onChange((prevValues) => prevValues.map((tier) => ({ ...tier, color })));
+    }
   }, []);
 
   useEffect(() => {
@@ -67,6 +71,11 @@ const CustomColorPicker = ({ index, onChange }) => {
 CustomColorPicker.propTypes = {
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
+  onColor: PropTypes.oneOfType([PropTypes.any]),
+};
+
+CustomColorPicker.defaultProps = {
+  onColor: null,
 };
 
 export default CustomColorPicker;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import Button from '../button/Button';
+import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 
 const CongratsAuctionPopup = ({ onClose }) => {
