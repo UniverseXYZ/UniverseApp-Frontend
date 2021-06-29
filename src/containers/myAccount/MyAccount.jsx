@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { useHistory } from 'react-router-dom';
 import Main from '../../components/myAccount/Main.jsx';
 import './MyAccount.scss';
 import About from '../../components/myAccount/About.jsx';
@@ -11,12 +12,14 @@ import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.j
 
 const MyAccount = () => {
   const {
-    setWebsite,
+    isWalletConnected,
+    setDarkMode,
     loggedInArtist,
     setLoggedInArtist,
     editProfileButtonClick,
     setEditProfileButtonClick,
   } = useContext(AppContext);
+  const history = useHistory();
   const [about, setAbout] = useState(loggedInArtist.about);
   const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
@@ -31,12 +34,18 @@ const MyAccount = () => {
   const [showSocial, setShowSocial] = useState(loggedInArtist.social);
 
   useEffect(() => {
-    setWebsite(false);
+    setDarkMode(false);
     document.title = 'Universe Minting - My Profile';
     return () => {
       document.title = 'Universe Minting';
     };
   }, []);
+
+  useEffect(() => {
+    if (!isWalletConnected) {
+      history.push('/');
+    }
+  }, [isWalletConnected]);
 
   const saveChanges = () => {
     setEditProfileButtonClick(true);

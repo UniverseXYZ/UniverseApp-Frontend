@@ -20,8 +20,6 @@ const RemovePopup = ({
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
       setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'saved') {
-      console.log('sssssssss', savedNfts);
-      console.log('id', id);
       setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'savedCollection') {
       setSavedNfts(savedNfts.filter((item) => item.collectionId !== id));

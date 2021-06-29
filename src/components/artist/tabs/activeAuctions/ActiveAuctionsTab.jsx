@@ -8,9 +8,6 @@ import AppContext from '../../../../ContextAPI.js';
 
 const ActiveAuctionsTab = () => {
   const { myAuctions, activeAuctions, futureAuctions } = useContext(AppContext);
-  console.log('myAuctions', myAuctions);
-  console.log('activeAuctions', activeAuctions);
-  console.log('futureAuctions', futureAuctions);
   const location = useLocation();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);

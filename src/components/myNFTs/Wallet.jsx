@@ -495,7 +495,7 @@ const Wallet = ({
                 {Array(nftsPerWinner - previewNFTs.length)
                   .fill(0)
                   .map((el, i) => (
-                    <div className="placeholder" />
+                    <div className="placeholder" key={uuid()} />
                   ))}
               </div>
             </div>

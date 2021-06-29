@@ -12,7 +12,7 @@ import MintModal from '../../components/mintModal/MintModal.jsx';
 import NFTs from '../../components/collection/NFTs.jsx';
 
 const Collection = () => {
-  const { myNFTs, savedNfts, setWebsite, showModal, setShowModal, deployedCollections } =
+  const { myNFTs, savedNfts, setDarkMode, showModal, setShowModal, deployedCollections } =
     useContext(AppContext);
   const location = useLocation();
   const selectedCollection = location.state ? location.state.collection : null;
@@ -37,7 +37,7 @@ const Collection = () => {
   }, [search]);
 
   useEffect(() => {
-    setWebsite(false);
+    setDarkMode(false);
     const newNFTs = [];
     if (location.state) {
       savedNfts.forEach((nft) => {

@@ -6,9 +6,9 @@ import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome.
 import AppContext from '../../../ContextAPI';
 
 const Marketplace = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   useEffect(() => {
-    setWebsite(true);
+    setDarkMode(true);
     document.title = 'Universe Minting - Minting & Auctions - Marketplace';
     return () => {
       document.title = 'Universe Minting';

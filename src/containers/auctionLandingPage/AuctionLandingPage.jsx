@@ -11,7 +11,7 @@ import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
 
 const AuctionLandingPage = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   const location = useLocation();
   const selectedAuction = location.state ? location.state.auction : null;
   const artist = selectedAuction?.artist;
@@ -19,7 +19,7 @@ const AuctionLandingPage = () => {
   const [bidders, setBidders] = useState([]);
 
   useEffect(() => {
-    setWebsite(false);
+    setDarkMode(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
     if (selectedAuction) {
       // Fake data for testing

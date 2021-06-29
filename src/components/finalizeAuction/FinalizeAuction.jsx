@@ -187,7 +187,7 @@ const FinalizeAuction = () => {
                 <div className="collections">
                   {collections.length ? (
                     collections.map((collection, index) => (
-                      <div className="collection__div">
+                      <div className="collection__div" key={uuid()}>
                         {collection.bgImage ? (
                           <img
                             src={URL.createObjectURL(collection.bgImage)}
@@ -265,7 +265,7 @@ const FinalizeAuction = () => {
               <h2>Deposit NFTs</h2>
               <p className="auction__description">Deposit 55 NFTs to the auction contract</p>
               {auction.tiers.map((tier, tierIndex) => (
-                <div className="transaction">
+                <div className="transaction" key={uuid()}>
                   <div className="transaction__details">
                     <div className="transaction__header">
                       <h4>{tier.name}</h4>

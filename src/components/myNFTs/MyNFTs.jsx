@@ -29,7 +29,7 @@ const MyNFTs = () => {
     myNFTs,
     setMyNFTs,
     selectedNft,
-    setWebsite,
+    setDarkMode,
     deployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
@@ -124,7 +124,7 @@ const MyNFTs = () => {
   };
 
   useEffect(() => {
-    setWebsite(false);
+    setDarkMode(false);
     document.title = 'Universe Minting - My NFTs';
     return () => {
       document.title = 'Universe Minting';

@@ -10,8 +10,7 @@ import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
 
 const Header = ({ location }) => {
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
-  const { website } = useContext(AppContext);
+  const { isWalletConnected, setIsWalletConnected, darkMode } = useContext(AppContext);
   const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
 
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -50,12 +49,12 @@ const Header = ({ location }) => {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (website && showMenu) {
+    if (darkMode && showMenu) {
       document.querySelector('header').classList.remove('dark');
-    } else if (website && !showMenu) {
+    } else if (darkMode && !showMenu) {
       document.querySelector('header').classList.add('dark');
     }
-  }, [showMenu, website]);
+  }, [showMenu, darkMode]);
 
   return (
     <header>

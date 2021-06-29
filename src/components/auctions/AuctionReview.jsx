@@ -6,6 +6,7 @@ import Popup from 'reactjs-popup';
 import moment from 'moment';
 import './AuctionReview.scss';
 import './Tiers.scss';
+import uuid from 'react-uuid';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import ethIcon from '../../assets/images/bid_icon.svg';
@@ -236,7 +237,7 @@ const AuctionReview = () => {
               <div className="auctions-tier">
                 <div className="auction-reward">
                   {tier.nfts.map((nft) => (
-                    <div className="auction-reward__box">
+                    <div className="auction-reward__box" key={uuid()}>
                       <div className="auction-reward__box__image">
                         {nft.previewImage.type === 'video/mp4' && (
                           <video
