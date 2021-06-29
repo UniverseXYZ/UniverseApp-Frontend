@@ -44,7 +44,7 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
 
   const traits = Object.keys(WEAR_TO_GENE_POSITION_MAP).map((key) => ({
-    label: key,
+    label: `${key}: ${polymorph?.data?.attributes.find((attr) => attr?.trait_type === key).value}`,
     value: key,
   }));
 
@@ -106,7 +106,7 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
     try {
       if (singleTraitTabSelected) {
         // Take the Gene Position
-        const genePosition = WEAR_TO_GENE_POSITION_MAP[selectedTrait?.label];
+        const genePosition = WEAR_TO_GENE_POSITION_MAP[selectedTrait?.value];
         if (!genePosition) {
           alert('There is no such Gene !');
           return;
