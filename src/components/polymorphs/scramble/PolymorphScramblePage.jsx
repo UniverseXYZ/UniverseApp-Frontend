@@ -57,13 +57,13 @@ const PolymorphScramblePage = () => {
 
   useEffect(async () => {
     if (!data) return;
-    const gene = data?.transferEntities[0]?.gene;
+    const gene = data?.tokenMorphedEntities[0]?.gene;
     setPolymorphGene(gene.toString());
   }, [data]);
 
   useEffect(async () => {
     if (!data) return;
-    const genomChangePrice = data?.transferEntities[0]?.priceForGenomeChange;
+    const genomChangePrice = data?.tokenMorphedEntities[0]?.priceForGenomeChange;
     const genomChangePriceToEther = utils.formatEther(genomChangePrice);
     setMorphSingleGenePrice(genomChangePriceToEther);
   }, [data]);
