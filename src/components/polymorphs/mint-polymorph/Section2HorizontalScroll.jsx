@@ -15,7 +15,6 @@ const child = (data) =>
 const Section2HorizontalScroll = (props) => {
   const location = useLocation();
   const { width, height } = props;
-  console.log('width', width);
   // const [scrollWidth, setScrollWidth] = useState(width);
   const [transparentBlockHeight, setTransparentBlockHeight] = useState(width);
   const [scrollSticky, setScrollSicky] = useState(0);

@@ -53,7 +53,7 @@ const MintPolymorph = () => {
       >
         <BondingCurve
           setValue={setSliderValue}
-          value={totalPolymorphs}
+          value={10000}
           max={10000}
           mobile={mobile}
           blur
@@ -69,7 +69,7 @@ const MintPolymorph = () => {
           <div className="section4--child">
             <BondingCurve
               setValue={setSliderValue}
-              value={totalPolymorphs}
+              value={10000}
               colorPriceIcon="black"
               color1="black"
               color2="black"
