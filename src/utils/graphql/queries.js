@@ -28,8 +28,10 @@ export const polymorphOwner = (tokenId) => gql`
   query Polymorphs {
     transferEntities(where: { tokenId: "${tokenId}" }) {
       to
-      gene
+    }
+    tokenMorphedEntities(where: { tokenId: "${tokenId}" }) {
       priceForGenomeChange
+      gene
     }
   }
 `;
