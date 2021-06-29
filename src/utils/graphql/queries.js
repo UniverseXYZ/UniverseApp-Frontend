@@ -23,3 +23,13 @@ export const transferPolymorphs = (ownerAddress) => gql`
     }
   }
 `;
+
+export const polymorphOwner = (tokenId) => gql`
+  query Polymorphs {
+    transferEntities(where: { tokenId: "${tokenId}" }) {
+      to
+      gene
+      priceForGenomeChange
+    }
+  }
+`;

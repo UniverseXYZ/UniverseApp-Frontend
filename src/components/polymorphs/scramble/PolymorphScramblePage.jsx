@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import Popup from 'reactjs-popup';
 import { utils } from 'ethers';
 import { useHistory, useParams } from 'react-router-dom';
@@ -19,10 +20,11 @@ import { isEmpty } from '../../../utils/helpers';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
+import { polymorphOwner } from '../../../utils/graphql/queries';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
-  const { address, polymorphContract } = useContext(AppContext);
+  const { address } = useContext(AppContext);
 
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
@@ -35,35 +37,36 @@ const PolymorphScramblePage = () => {
   const [geneCopied, setGeneCopied] = useState(false);
   const [ownerCopied, setOwnerCopied] = useState(false);
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
+  const { data } = useQuery(polymorphOwner(useParams().id));
 
-  useEffect(async () => {
-    if (!polymorphId || !polymorphContract) return;
-    const ownerOf = await polymorphContract.ownerOf(polymorphId);
-    const owner = ownerOf.toLowerCase() === address.toLowerCase();
+  useEffect(() => {
+    if (!data) return;
+    const ownerOf = data?.transferEntities[0]?.to;
+    const owner = ownerOf?.toLowerCase() === address?.toLowerCase();
     setIsOwner(owner);
     setMorphOwner(ownerOf);
-  }, [polymorphId, polymorphContract]);
+  }, [data, address]);
 
   useEffect(async () => {
     if (!polymorphId) return;
     setLoading(true);
-    const data = await getPolymorphMeta(polymorphId);
-    setPolymorphData(data);
+    const polymorphMeta = await getPolymorphMeta(polymorphId);
+    setPolymorphData(polymorphMeta);
     setLoading(false);
   }, [polymorphId]);
 
   useEffect(async () => {
-    if (!polymorphId || !polymorphContract) return;
-    const gene = await polymorphContract.geneOf(polymorphId);
+    if (!data) return;
+    const gene = data?.transferEntities[0]?.gene;
     setPolymorphGene(gene.toString());
-  }, [polymorphId, polymorphContract]);
+  }, [data]);
 
   useEffect(async () => {
-    if (!polymorphId || !polymorphContract) return;
-    const genomChangePrice = await polymorphContract.priceForGenomeChange(polymorphId);
+    if (!data) return;
+    const genomChangePrice = data?.transferEntities[0]?.priceForGenomeChange;
     const genomChangePriceToEther = utils.formatEther(genomChangePrice);
     setMorphSingleGenePrice(genomChangePriceToEther);
-  }, [polymorphId, polymorphContract]);
+  }, [data]);
 
   const tabs = [
     {
@@ -203,8 +206,9 @@ const PolymorphScramblePage = () => {
               <div className="metadata">
                 <div className="owner--string--name">Owner</div>
                 <div className="owner--string--value">
+                  {/* TODO: Take address from .env */}
                   <a
-                    href={`https://etherscan.io/token/${polymorphContract?.address}?a=${morphOwner}`}
+                    href={`https://etherscan.io/token/0x1cBB182322Aee8ce9F4F1f98d7460173ee30Af1F?a=${morphOwner}`}
                     target="_blank"
                     rel="noreferrer"
                   >
