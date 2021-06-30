@@ -6,7 +6,7 @@ export const handleClickOutside = (event, className, ref, cb) => {
   }
 };
 
-export const handleScroll = (website) => {
+export const handleScroll = (darkMode) => {
   if (window.scrollY > 0) {
     if (document.querySelector('header')) {
       document.querySelector('header').style.position = 'fixed';
@@ -15,7 +15,7 @@ export const handleScroll = (website) => {
   } else if (window.scrollY <= 0) {
     if (document.querySelector('header')) {
       document.querySelector('header').style.position = 'relative';
-      if (website) {
+      if (darkMode) {
         document.querySelector('header').classList.add('dark');
       } else {
         document.querySelector('header').classList.remove('dark');

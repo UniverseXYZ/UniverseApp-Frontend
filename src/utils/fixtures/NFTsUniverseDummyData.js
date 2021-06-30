@@ -1,4 +1,4 @@
-import testImage from '../../assets/images/main1.png';
+import testImage from '../../assets/images/soldier.png';
 import cover from '../../assets/images/cover.png';
 import testVideo from '../../assets/images/testvideo2.mp4';
 import videoIcon from '../../assets/images/video-icon.svg';
@@ -14,6 +14,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #1',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #2',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #3',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    scrambled: 'single',
   },
   {
     id: 4,
@@ -69,6 +72,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #6',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 7,
@@ -80,6 +84,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #7',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 8,
@@ -91,6 +96,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #8',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    scrambled: 'single',
   },
   {
     id: 9,
@@ -102,6 +108,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #9',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    scrambled: 'single',
   },
   {
     id: 10,
@@ -113,6 +120,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #10',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 11,
@@ -135,6 +143,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #12',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    scrambled: 'single',
   },
   {
     id: 13,
@@ -146,6 +155,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #13',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 14,
@@ -157,6 +167,7 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #14',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    scrambled: 'never',
   },
   {
     id: 15,

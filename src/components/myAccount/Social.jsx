@@ -20,7 +20,6 @@ const Social = ({
 }) => {
   const { loggedInArtist } = useContext(AppContext);
   // const [showSocial, setShowSocial] = useState(true);
-  // console.log(showSocial);
 
   return (
     <div className="my-account container">

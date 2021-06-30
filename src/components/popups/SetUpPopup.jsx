@@ -8,7 +8,6 @@ const SetUpPopup = ({ onClose, onAuctionId }) => {
   const { auction, setAuction, myAuctions, setMyAuctions, options, setOptions } =
     useContext(AppContext);
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
-  console.log(auction1);
 
   const handleTokenChange = (event) => {
     setToken((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));

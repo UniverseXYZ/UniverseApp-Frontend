@@ -105,7 +105,6 @@ const Create = () => {
       ...prevValues,
       nftsPerWinner: values.nftsPerWinner.trim().length !== 0,
     }));
-    console.log(auction);
   };
 
   return (
@@ -213,7 +212,7 @@ const Create = () => {
                   onBlur={() => setHideIcon(false)}
                 />
                 <label className="switch">
-                  <input type="checkbox" checked={minBid} onChange={handeClick} />
+                  <input type="checkbox" value={minBid} checked={minBid} onChange={handeClick} />
                   <span className="slider round" />
                 </label>
                 {hideIcon && (
@@ -265,9 +264,7 @@ const Create = () => {
         <h1>Select NFTs</h1>
         <p>
           You can only select minted NFTs from your wallet. If you want to create NFTs, go to&nbsp;
-          <a>
-            <Link to="/my-nfts">Minting.</Link>
-          </a>
+          <Link to="/my-nfts">Minting.</Link>
           <p className="second-line">
             Your progress with the current auction will be automatically saved.
           </p>

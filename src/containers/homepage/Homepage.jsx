@@ -8,9 +8,9 @@ import Welcome from '../../components/homepage/Welcome.jsx';
 import AppContext from '../../ContextAPI';
 
 const Homepage = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   useEffect(() => {
-    setWebsite(true);
+    setDarkMode(true);
   }, []);
   return (
     <div className="homepage">

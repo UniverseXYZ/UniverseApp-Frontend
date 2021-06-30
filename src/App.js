@@ -38,6 +38,7 @@ import cover from './assets/images/cover.png';
 
 const App = () => {
   const location = useLocation();
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -68,7 +69,7 @@ const App = () => {
   const [selectedNftForScramble, setSelectedNftForScramble] = useState({});
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
-  const [website, setWebsite] = useState(true);
+  const [darkMode, setDarkMode] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [ethPrice, setEthPrice] = useState({});
   const [web3Provider, setWeb3Provider] = useState(null);
@@ -79,7 +80,6 @@ const App = () => {
   const [usdWethBalance, setUsdWethBalance] = useState(0);
   const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [yourBalance, setYourBalance] = useState(0);
 
@@ -179,18 +179,18 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (!website) {
+    if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
     }
 
-    handleScroll(website);
+    handleScroll(darkMode);
 
-    window.addEventListener('scroll', () => handleScroll(website));
+    window.addEventListener('scroll', () => handleScroll(darkMode));
 
     return () => {
-      window.removeEventListener('scroll', () => handleScroll(website));
+      window.removeEventListener('scroll', () => handleScroll(darkMode));
     };
-  }, [website]);
+  }, [darkMode]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -235,6 +235,8 @@ const App = () => {
   return (
     <AppContext.Provider
       value={{
+        isWalletConnected,
+        setIsWalletConnected,
         loggedInArtist,
         setLoggedInArtist,
         myBalance,
@@ -276,8 +278,8 @@ const App = () => {
         setBidtype,
         options,
         setOptions,
-        website,
-        setWebsite,
+        darkMode,
+        setDarkMode,
         editProfileButtonClick,
         setEditProfileButtonClick,
         ethPrice,
@@ -299,8 +301,6 @@ const App = () => {
         signer,
         setSigner,
         connectWeb3,
-        isWalletConnected,
-        setIsWalletConnected,
         isAuthenticated,
         setIsAuthenticated,
         yourBalance,

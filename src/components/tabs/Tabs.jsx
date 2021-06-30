@@ -53,7 +53,7 @@ Tabs.propTypes = {
       name: PropTypes.string.isRequired,
       handler: PropTypes.func,
       active: PropTypes.bool.isRequired,
-      label: PropTypes.string,
+      label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     })
   ).isRequired,
 };

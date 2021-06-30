@@ -398,8 +398,12 @@ StartDateCalendar.propTypes = {
   setValues: PropTypes.func.isRequired,
   startDateTemp: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setStartDateTemp: PropTypes.func.isRequired,
-  setShowStartDate: PropTypes.func.isRequired,
+  setShowStartDate: PropTypes.func,
   onClose: PropTypes.func.isRequired,
+};
+
+StartDateCalendar.defaultProps = {
+  setShowStartDate: () => {},
 };
 
 export default StartDateCalendar;

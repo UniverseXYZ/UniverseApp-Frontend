@@ -4,9 +4,9 @@ import AppContext from '../../ContextAPI';
 import './Auctions.scss';
 
 const Auctions = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   useEffect(() => {
-    setWebsite(false);
+    setDarkMode(false);
   }, []);
   return <MyAuctions />;
 };

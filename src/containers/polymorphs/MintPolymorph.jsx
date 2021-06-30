@@ -8,6 +8,7 @@ import './MintPolymorph.scss';
 import AppContext from '../../ContextAPI';
 
 const MintPolymorph = () => {
+  const { setDarkMode } = useContext(AppContext);
   const [quantity, setQuantity] = useState(1);
   const [sliderValue, setSliderValue] = useState(0);
   const [mobile, setMobile] = useState(false);
@@ -19,27 +20,14 @@ const MintPolymorph = () => {
   const { totalPolymorphs } = useContext(AppContext);
 
   useEffect(() => {
+    setDarkMode(true);
+  }, []);
+
+  useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     if (+window.innerWidth <= 576) setMobile(true);
     else setMobile(false);
   }, []);
-
-  // useEffect(() => {
-  //   const horizontalSection = document.querySelector('.section2--horizontal--scroll--parent');
-  //   const randomizeSection = document.querySelector('.section3--randomise--parent');
-  //   function runOnScroll() {
-  //     if (
-  //       window.scrollY > horizontalSection.offsetTop &&
-  //       window.scrollY < horizontalSection.offsetTop + 80
-  //     ) {
-  //       horizontalSection.classList.add('fixed');
-  //       document.body.classList.add('no__scroll');
-  //     }
-  //   }
-  //   window.addEventListener('scroll', runOnScroll, { passive: true });
-
-  //   return () => window.removeEventListener('scroll', runOnScroll, { passive: true });
-  // }, []);
 
   return (
     <div className="mint--polymorph">

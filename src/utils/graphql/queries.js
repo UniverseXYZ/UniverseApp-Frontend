@@ -29,9 +29,21 @@ export const polymorphOwner = (tokenId) => gql`
     transferEntities(where: { tokenId: "${tokenId}" }) {
       to
     }
-    tokenMorphedEntities(where: { tokenId: "${tokenId}" }) {
+    tokenMorphedEntities(where: {tokenId: ${tokenId}, eventType_not: 2}, orderBy: timestamp, orderDirection: asc) {
       priceForGenomeChange
-      gene
+      newGene
+    }
+  }
+`;
+
+export const polymorphScrambleHistory = (tokenId) => gql`
+  query Polymorphs {
+    tokenMorphedEntities(where: {tokenId: ${tokenId}, eventType_not: 2}, orderBy: timestamp, orderDirection: asc) {
+      tokenId
+      oldGene
+      newGene
+      timestamp
+      price
     }
   }
 `;
