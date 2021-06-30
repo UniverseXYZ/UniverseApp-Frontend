@@ -14,11 +14,12 @@ import LoadingPopup from '../../popups/LoadingPopup';
 import PolymorphScrambleCongratulationPopup from '../../popups/PolymorphScrambleCongratulationPopup';
 import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
+import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
+import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
   const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
-
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
 
@@ -147,14 +148,22 @@ const PolymorphScramblePage = () => {
       </div>
       <div className="scramble--content">
         <div className="avatar--wrapper">
-          {/* <div
-            className="go--back--wrapper"
-            aria-hidden="true"
-            onClick={() => history.push('/my-nfts')}
-          >
-            <img src={backArrow} alt="go back" />
-            <span>My NFTs</span>
-          </div> */}
+          {selectedNftForScramble.scrambled && selectedNftForScramble.scrambled === 'single' ? (
+            <div className="scrambled">
+              <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
+              <span className="tooltiptext">Single trait scrambled</span>
+            </div>
+          ) : (
+            <></>
+          )}
+          {selectedNftForScramble.scrambled && selectedNftForScramble.scrambled === 'never' ? (
+            <div className="scrambled">
+              <img alt="Never scrambled badge" src={neverScrambledIcon} />
+              <span className="tooltiptext">Never scrambled</span>
+            </div>
+          ) : (
+            <></>
+          )}
           {selectedNftForScramble.background ? (
             <img
               src={selectedNftForScramble.background}
@@ -164,7 +173,11 @@ const PolymorphScramblePage = () => {
           ) : (
             ''
           )}
-          <img src={person} className="avatar person" alt="person" />
+          <img
+            src={selectedNftForScramble.previewImage.url}
+            className="avatar person"
+            alt="person"
+          />
           {selectedNftForScramble.headWear ? (
             <img src={selectedNftForScramble.headWear} className="avatar headWear" alt="headWear" />
           ) : (
