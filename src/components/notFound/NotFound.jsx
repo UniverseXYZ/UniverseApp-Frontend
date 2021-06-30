@@ -6,10 +6,10 @@ import './NotFound.scss';
 import notFoundImg from '../../assets/images/404img.png';
 
 const NotFound = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   const history = useHistory();
   useEffect(() => {
-    setWebsite(false);
+    setDarkMode(false);
     document.title = `Universe Minting - 404 - page not found`;
     return () => {
       document.title = 'Universe Minting';

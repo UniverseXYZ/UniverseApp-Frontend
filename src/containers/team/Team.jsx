@@ -7,9 +7,9 @@ import AppContext from '../../ContextAPI';
 import './Team.scss';
 
 const Team = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   useEffect(() => {
-    setWebsite(true);
+    setDarkMode(true);
   }, []);
   return (
     <div className="team__page">

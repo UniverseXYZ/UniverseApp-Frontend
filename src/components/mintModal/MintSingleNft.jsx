@@ -560,9 +560,9 @@ const MintSingleNft = ({ onClick }) => {
           </div>
           {properties.map(
             (elm, i) =>
-              // eslint-disable-next-line react/no-array-index-key
               propertyCheck && (
-                <div key={uuid()} className="properties">
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={i} className="properties">
                   <div className="property-name">
                     <h5>Property name</h5>
                     <Input

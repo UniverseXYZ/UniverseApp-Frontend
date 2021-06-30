@@ -8,9 +8,9 @@ import OurTeam from '../../../components/mintingAndAuctions/about/OurTeam.jsx';
 import AppContext from '../../../ContextAPI';
 
 const About = () => {
-  const { setWebsite } = useContext(AppContext);
+  const { setDarkMode } = useContext(AppContext);
   useEffect(() => {
-    setWebsite(true);
+    setDarkMode(true);
   }, []);
   return (
     <div className="about__page">

@@ -55,7 +55,7 @@ HorizontalRangeSlider.defaultProps = {
   min: 0,
   max: 100,
   rangeClassName: '',
-  setValue: (e) => console.log(e.target.value),
+  setValue: () => {},
   labelLeft: '',
   labelRight: '',
   step: 1,

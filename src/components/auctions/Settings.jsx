@@ -195,7 +195,6 @@ const AuctionSettings = () => {
       });
       // setBidValues(
       //   auction.tiers.reduce((acc, currentTier) => {
-      //     console.log(currentTier);
       //     acc[currentTier.id] = currentTier.minBid;
       //     return acc;
       //   }),

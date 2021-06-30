@@ -34,6 +34,7 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
+  const { setDarkMode } = useContext(AppContext);
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
   const { data } = useQuery(morphedPolymorphs);
@@ -46,6 +47,10 @@ const Polymorphs = () => {
     }
     window.addEventListener('resize', handleResize);
   });
+
+  useEffect(() => {
+    setDarkMode(true);
+  }, []);
 
   useEffect(() => {
     if (+window.innerWidth <= 575) setMobile(true);
