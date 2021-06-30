@@ -17,6 +17,8 @@ import LoadingPopup from '../../popups/LoadingPopup';
 import PolymorphScrambleCongratulationPopup from '../../popups/PolymorphScrambleCongratulationPopup';
 import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
+import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
+import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
@@ -25,7 +27,7 @@ import { polymorphOwner } from '../../../utils/graphql/queries';
 const PolymorphScramblePage = () => {
   const history = useHistory();
   const { address } = useContext(AppContext);
-
+  const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
   const [polymorphId, setPolymorphId] = useState(useParams().id);
@@ -57,13 +59,14 @@ const PolymorphScramblePage = () => {
 
   useEffect(async () => {
     if (!data) return;
-    const gene = data?.tokenMorphedEntities[0]?.gene;
+    const gene = data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.newGene;
     setPolymorphGene(gene.toString());
   }, [data]);
 
   useEffect(async () => {
     if (!data) return;
-    const genomChangePrice = data?.tokenMorphedEntities[0]?.priceForGenomeChange;
+    const genomChangePrice =
+      data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.priceForGenomeChange;
     const genomChangePriceToEther = utils.formatEther(genomChangePrice);
     setMorphSingleGenePrice(genomChangePriceToEther);
   }, [data]);

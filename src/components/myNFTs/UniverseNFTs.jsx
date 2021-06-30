@@ -4,10 +4,10 @@ import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
 import { useQuery } from '@apollo/client';
+import AppContext from '../../ContextAPI';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import AppContext from '../../ContextAPI';
 import { transferPolymorphs } from '../../utils/graphql/queries';
 import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 import PolymorphImage from './PolymorphImage';
@@ -131,7 +131,9 @@ const UniverseNFTs = () => {
                     placeholderImg={loadingBg}
                     errorImg={loadingBg}
                     src={elm.previewImage.url}
+                    tokenId={elm.id}
                   />
+
                   <div className="polymorph">
                     <p>{elm.name}</p>
                   </div>

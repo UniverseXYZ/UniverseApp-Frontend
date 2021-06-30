@@ -805,6 +805,98 @@
           cursor: pointer;
         }
 
+        .never-scrambled {
+          .tooltiptext {
+            visibility: hidden;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            width: 160px;
+            background-color: $black;
+            color: $white;
+            text-align: center;
+            border-radius: 100px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: -32px;
+            right: -63px;
+            &::after {
+              content: '';
+              position: absolute;
+              top: 100%;
+              left: 50%;
+              margin-left: -5px;
+              border-width: 5px;
+              border-style: solid;
+              border-color: black transparent transparent transparent;
+              @include md {
+                left: 86%;
+              }
+            }
+            @include md {
+              right: -5px;
+            }
+          }
+          &:hover {
+            .tooltiptext {
+              visibility: visible;
+            }
+          }
+          img {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+          }
+        }
+
+        .single-trait-scrambled {
+          .tooltiptext {
+            visibility: hidden;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            width: 160px;
+            background-color: $black;
+            color: $white;
+            text-align: center;
+            border-radius: 100px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: -32px;
+            right: -63px;
+            &::after {
+              content: '';
+              position: absolute;
+              top: 100%;
+              left: 50%;
+              margin-left: -5px;
+              border-width: 5px;
+              border-style: solid;
+              border-color: black transparent transparent transparent;
+              @include md {
+                left: 86%;
+              }
+            }
+            @include md {
+              right: -5px;
+            }
+          }
+          &:hover {
+            .tooltiptext {
+              visibility: visible;
+            }
+          }
+          img {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+          }
+        }
+
         .video__icon {
           position: absolute;
           top: 9px;
