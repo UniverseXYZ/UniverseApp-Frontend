@@ -15,10 +15,10 @@ const Section2Card = (props) => {
         <p>{description}</p>
       </div>
       <div className="buttons--group">
-        <Button className="light-button" type="button">
+        <Button className="light-button mint--reprint--btn" type="button">
           Mint Reprint
         </Button>
-        <Button className="light-border-button" type="button">
+        <Button className="light-border-button auction--btn" type="button">
           1/1 auction
         </Button>
       </div>
