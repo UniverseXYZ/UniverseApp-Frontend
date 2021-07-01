@@ -20,3 +20,15 @@ export const getPolymorphMeta = async (id) => {
   }
   return request;
 };
+
+/**
+ * @param {Array} metadataURIs metadata URIs
+ * @returns
+ */
+export const fetchTokensMetadataJson = async (metadataURIs) => {
+  const metadataPromises = [];
+  for (let i = 0; i < metadataURIs?.length; i += 1) {
+    metadataPromises.push(axios(metadataURIs[i]));
+  }
+  return Promise.all(metadataPromises);
+};

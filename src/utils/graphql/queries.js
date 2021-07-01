@@ -32,6 +32,10 @@ export const polymorphOwner = (tokenId) => gql`
     tokenMorphedEntities(where: {tokenId: ${tokenId}, eventType_not: 2}, orderBy: timestamp, orderDirection: asc) {
       priceForGenomeChange
       newGene
+      tokenId
+      oldGene
+      timestamp
+      price
     }
   }
 `;

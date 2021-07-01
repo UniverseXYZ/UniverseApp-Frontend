@@ -23,6 +23,7 @@ import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 import { polymorphOwner } from '../../../utils/graphql/queries';
+import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -39,6 +40,7 @@ const PolymorphScramblePage = () => {
   const [geneCopied, setGeneCopied] = useState(false);
   const [ownerCopied, setOwnerCopied] = useState(false);
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
+  const [scrambled, setScrambled] = useState('none');
   const { data } = useQuery(polymorphOwner(useParams().id));
 
   useEffect(() => {
@@ -69,6 +71,20 @@ const PolymorphScramblePage = () => {
       data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.priceForGenomeChange;
     const genomChangePriceToEther = utils.formatEther(genomChangePrice);
     setMorphSingleGenePrice(genomChangePriceToEther);
+  }, [data]);
+
+  useEffect(async () => {
+    if (!data) return;
+    const genomChangePrice =
+      data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.priceForGenomeChange;
+    const genomChangePriceToEther = utils.formatEther(genomChangePrice);
+    setMorphSingleGenePrice(genomChangePriceToEther);
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      setScrambled(getScrambleStatus(data.tokenMorphedEntities));
+    }
   }, [data]);
 
   const tabs = [
@@ -170,7 +186,23 @@ const PolymorphScramblePage = () => {
       <div className="scramble--content">
         {!loading ? (
           <div className="avatar--wrapper">
-            <img src={polymorphData?.data?.image} className="person" alt="Polymorph" />
+            {scrambled && scrambled === 'single' ? (
+              <div className="scrambled">
+                <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
+                <span className="tooltiptext">Single trait scrambled</span>
+              </div>
+            ) : (
+              <></>
+            )}
+            {scrambled && scrambled === 'never' ? (
+              <div className="scrambled">
+                <img alt="Never scrambled badge" src={neverScrambledIcon} />
+                <span className="tooltiptext">Never scrambled</span>
+              </div>
+            ) : (
+              <></>
+            )}
+            <img src={polymorphData?.data?.image} className="avatar person" alt="Polymorph" />
           </div>
         ) : (
           <div className="loading" key={uuid()}>
