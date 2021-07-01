@@ -5,6 +5,7 @@ import WelcomeWrapper from '../ui-elements/WelcomeWrapper';
 import Section2 from './planet1/Section2';
 import Section3 from './planet1/Section3';
 import Section4 from './planet1/Section4';
+import LeftTopImg from '../../assets/images/planet1-section2-left-top.png';
 import './PlanetContainer.scss';
 
 const PlanetContainer = (props) => {
@@ -22,6 +23,7 @@ const PlanetContainer = (props) => {
     fabled,
     mythical,
     legendary,
+    legendaryLeftTopImg,
   } = props;
   return (
     <div className={`planet--container ${className}`}>
@@ -38,7 +40,11 @@ const PlanetContainer = (props) => {
         {!!welcomeSectionImg.length && <img alt="img" src={welcomeSectionImg} />}
       </WelcomeWrapper>
       <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-        <Section2 title={section2Title} legendary={legendary} />
+        <Section2
+          title={section2Title}
+          legendary={legendary}
+          legendaryLeftTopImg={legendaryLeftTopImg}
+        />
       </AnimatedOnScroll>
       <Section3 fabled={fabled} title={section3Title} hintText={section3HintText} />
       <Section4 mythical={mythical} title={section4Title} hintText={section4HintText} />
@@ -78,6 +84,7 @@ PlanetContainer.propTypes = {
       image: PropTypes.string,
     })
   ).isRequired,
+  legendaryLeftTopImg: PropTypes.string,
 };
 
 PlanetContainer.defaultProps = {
@@ -89,6 +96,7 @@ PlanetContainer.defaultProps = {
   welcomeSectionImg: '',
   section4Title: '',
   section4HintText: '',
+  legendaryLeftTopImg: LeftTopImg,
 };
 
 export default PlanetContainer;

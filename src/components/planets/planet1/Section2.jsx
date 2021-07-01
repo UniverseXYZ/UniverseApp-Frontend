@@ -7,10 +7,12 @@ import LeftTopImg from '../../../assets/images/planet1-section2-left-top.png';
 import './styles/Section2.scss';
 
 const Section2 = (props) => {
-  const { title, legendary } = props;
+  const { title, legendary, legendaryLeftTopImg } = props;
   return (
     <div className="planet--section2">
-      <img src={LeftTopImg} alt="img" className="left--top--img" />
+      {!!legendaryLeftTopImg.length && (
+        <img src={legendaryLeftTopImg} alt="img" className="left--top--img" />
+      )}
       <WrapperCenter className="section--title">
         <h3>{title}</h3>
       </WrapperCenter>
@@ -33,10 +35,12 @@ Section2.propTypes = {
       image: PropTypes.string,
     })
   ).isRequired,
+  legendaryLeftTopImg: PropTypes.string,
 };
 
 Section2.defaultProps = {
   title: '',
+  legendaryLeftTopImg: '',
 };
 
 export default Section2;

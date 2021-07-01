@@ -28,6 +28,7 @@ import MintPolymorph from './containers/polymorphs/MintPolymorph';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
 import Planet1 from './containers/planets/Planet1';
 import Planet2 from './containers/planets/Planet2';
+import Planet3 from './containers/planets/Planet3';
 import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT';
 
 const App = () => {
@@ -145,6 +146,7 @@ const App = () => {
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/planet-one" component={() => <Planet1 />} />
         <Route exact path="/planet-two" component={() => <Planet2 />} />
+        <Route exact path="/planet-three" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
 
