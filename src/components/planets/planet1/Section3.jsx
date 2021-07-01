@@ -6,17 +6,17 @@ import Section2Card from './Section2Card';
 import './styles/Section3.scss';
 
 const Section3 = (props) => {
-  const { abakaFabled } = props;
+  const { fabled, title, hintText } = props;
   return (
-    <div className="planet--one--section3">
+    <div className="planet--section3">
       <WrapperCenter>
         <div className="title--block">
-          <h3>Adaka Fabled</h3>
-          <p>3 evolutions</p>
+          <h3>{title}</h3>
+          <p>{hintText}</p>
         </div>
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
           <div className="characters--parent--block">
-            {abakaFabled.map((elem, index) => (
+            {fabled.map((elem, index) => (
               <Section2Card {...elem} key={index.toString()} />
             ))}
           </div>
@@ -27,13 +27,20 @@ const Section3 = (props) => {
 };
 
 Section3.propTypes = {
-  abakaFabled: PropTypes.arrayOf(
+  fabled: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       description: PropTypes.string,
       image: PropTypes.string,
     })
   ).isRequired,
+  title: PropTypes.string,
+  hintText: PropTypes.string,
+};
+
+Section3.defaultProps = {
+  title: '',
+  hintText: '',
 };
 
 export default Section3;

@@ -1,3 +1,11 @@
+import Carter from '../../assets/images/planet1-charachters/characters-planet-reinrabbit.png';
+import Tim from '../../assets/images/planet1-charachters/characters-planet-kangeroo-elk.png';
+import Addy from '../../assets/images/planet1-charachters/characters-planet-speed-sloth.png';
+import John from '../../assets/images/planet1-charachters/characters-planet-drunk-cheetah.png';
+import Lucy from '../../assets/images/planet1-charachters/characters-planet-demon-duck.png';
+import Vick from '../../assets/images/planet1-charachters/characters-planet-falcon Fiend.png';
+
+// fabled
 import Daryl from '../../assets/images/planet1-charachters/characters-planet-yeti.png';
 import Simon from '../../assets/images/planet1-charachters/characters-planet-blizzard-bigfoot.png';
 import Viacheslav from '../../assets/images/planet1-charachters/characters-planet-avalanche-cyclops.png';
@@ -14,7 +22,16 @@ import Dillon from '../../assets/images/planet1-charachters/layer.png';
 import Balverine from '../../assets/images/planet1-charachters/howler-ape.png';
 import Kerchak from '../../assets/images/planet1-charachters/gorilla.png';
 
-export default [
+export const mythical = [
+  { name: 'Carter', description: 'Rainrabit', image: Carter },
+  { name: 'Tim', description: 'Kangaroo Elk', image: Tim },
+  { name: 'Addy', description: 'Speed Sloth', image: Addy },
+  { name: 'John John', description: 'Drunk Cheetah', image: John },
+  { name: 'Lucy', description: 'Deamon Duck', image: Lucy },
+  { name: 'Vick', description: 'Falcon Friend', image: Vick },
+];
+
+export const fabled = [
   { name: 'Daryl', description: 'Yeti', image: Daryl },
   { name: 'Simon', description: 'Blizzard Bigfoot', image: Simon },
   { name: 'Viacheslav', description: 'Avalanche Cyclops', image: Viacheslav },
@@ -30,4 +47,9 @@ export default [
   { name: 'Dillon', description: 'Ape Ape', image: Dillon },
   { name: 'Balverine', description: 'Howler Ape', image: Balverine },
   { name: 'Kerchak', description: 'Gorilla Ape', image: Kerchak },
+];
+
+export const legendary = [
+  { name: 'Tim', description: 'Kangaroo Elk', image: Tim },
+  { name: 'Carter', description: 'Rainrabit', image: Carter },
 ];

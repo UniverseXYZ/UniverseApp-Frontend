@@ -6,17 +6,17 @@ import Section2Card from './Section2Card';
 import './styles/Section4.scss';
 
 const Section4 = (props) => {
-  const { abakaMythical } = props;
+  const { mythical, title, hintText } = props;
   return (
-    <div className="planet--one--section4">
+    <div className="planet--section4">
       <WrapperCenter>
         <div className="title--block">
-          <h3>Adaka Mythical</h3>
-          <p>2 evolutions</p>
+          <h3>{title}</h3>
+          <p>{hintText}</p>
         </div>
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
           <div className="characters--parent--block">
-            {abakaMythical.map((elem, index) => (
+            {mythical.map((elem, index) => (
               <Section2Card {...elem} key={index.toString()} />
             ))}
           </div>
@@ -27,13 +27,20 @@ const Section4 = (props) => {
 };
 
 Section4.propTypes = {
-  abakaMythical: PropTypes.arrayOf(
+  mythical: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       description: PropTypes.string,
       image: PropTypes.string,
     })
   ).isRequired,
+  title: PropTypes.string,
+  hintText: PropTypes.string,
+};
+
+Section4.defaultProps = {
+  title: '',
+  hintText: '',
 };
 
 export default Section4;
