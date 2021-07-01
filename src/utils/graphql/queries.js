@@ -51,3 +51,12 @@ export const polymorphScrambleHistory = (tokenId) => gql`
     }
   }
 `;
+
+export const traitRarity = (searchedId) => gql`
+  query Polymorphs {
+    traits(where: {id: ${searchedId}}) {
+      id
+      rarity
+    }
+  }
+`;
