@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import PropTypes from 'prop-types';
-import { utils, BigNumber, FixedNumber } from 'ethers';
 import neverScrambledIcon from '../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
 import { polymorphScrambleHistory } from '../../utils/graphql/queries';
+import { getScrambleStatus } from '../../utils/helpers/polymorphs';
 
 const PolymorphImage = ({ src, placeholderImg, errorImg, name, tokenId }) => {
   const [imgSrc, setSrc] = useState(placeholderImg || src);
@@ -21,27 +21,6 @@ const PolymorphImage = ({ src, placeholderImg, errorImg, name, tokenId }) => {
     setSrc(errorImg || placeholderImg);
     setLoading(false);
   }, [errorImg, placeholderImg]);
-
-  // eslint-disable-next-line consistent-return
-  const getScrambleStatus = (scrambleEvents) => {
-    if (scrambleEvents.length === 1 && scrambleEvents[0].oldGene === '0') {
-      return 'never';
-    }
-    if (scrambleEvents.length > 1) {
-      let singleScramble = true;
-      for (let i = 2; i < scrambleEvents.length; i += 1) {
-        if (
-          BigNumber.from(scrambleEvents[i - 1].price) >= BigNumber.from(scrambleEvents[i].price)
-        ) {
-          singleScramble = false;
-        }
-      }
-      if (singleScramble) {
-        return 'single';
-      }
-      return 'none';
-    }
-  };
 
   useEffect(() => {
     const img = new Image();

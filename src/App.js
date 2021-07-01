@@ -34,7 +34,8 @@ import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScr
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs, morphedPolymorphs } from './utils/graphql/queries';
-import cover from './assets/images/cover.png';
+import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/polymorphs';
+import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 
 const App = () => {
   const location = useLocation();
@@ -91,8 +92,6 @@ const App = () => {
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [polymorphContract, setPolymorphContract] = useState(null);
   const { data } = useQuery(transferPolymorphs(address));
-  const POLYMORPH_BASE_URI =
-    'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=';
 
   const triggerWrongNetworkPopup = async () => {
     document.getElementById('wrong-network-hidden-btn').click();
@@ -137,30 +136,6 @@ const App = () => {
       setPolymorphPrice(utils.formatEther(polymPrice));
     }
   };
-
-  const extractTokenIdFromURI = (tokenURI) =>
-    tokenURI.substring(POLYMORPH_BASE_URI.length, tokenURI.length);
-
-  const fetchTokensMetadataJson = async (metadataURIs) => {
-    const metadataPromises = [];
-    for (let i = 0; i < metadataURIs?.length; i += 1) {
-      metadataPromises.push(axios(metadataURIs[i]));
-    }
-    return Promise.all(metadataPromises);
-  };
-
-  const convertPolymorphObjects = (nftMetadataObjects) =>
-    nftMetadataObjects.map((nft) => ({
-      id: extractTokenIdFromURI(nft?.config?.url),
-      type: 'collection',
-      previewImage: {
-        type: 'image/jpg',
-        url: nft?.data?.image,
-      },
-      name: nft?.data?.name,
-      collectionAvatar: cover,
-      collectionName: 'Universe Polymorphs',
-    }));
 
   const fetchUserPolymorphsTheGraph = async (theGraphData) => {
     const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
