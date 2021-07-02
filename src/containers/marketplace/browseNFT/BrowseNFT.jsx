@@ -7,6 +7,7 @@ import Submenu from '../../../components/submenu/Submenu';
 import AppContext from '../../../ContextAPI';
 import './BrowseNFT.scss';
 import SelectedFiltersAndSorting from '../../../components/marketplace/browseNFT/selectedFiltersAndSorting/SelectedFiltersAndSorting';
+import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
 
 const BrowseNFT = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -42,6 +43,7 @@ const BrowseNFT = () => {
           <Price />
           <Collections />
           <Creators />
+          <VerifiedOnly />
         </div>
         <div className="browse--nft--content">
           <SelectedFiltersAndSorting
