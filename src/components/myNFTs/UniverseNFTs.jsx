@@ -23,6 +23,11 @@ const UniverseNFTs = () => {
   const [selectedItem, setSelectedItem] = useState('My polymorphs');
   const [searchByName, setSearchByName] = useState('');
   const { data } = useQuery(transferPolymorphs(address));
+  const [displayItems, setDisplayItems] = useState([]);
+
+  useEffect(() => {
+    setDisplayItems(userPolymorphs);
+  }, [userPolymorphs]);
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
@@ -34,6 +39,12 @@ const UniverseNFTs = () => {
 
   const handleSearchByName = (value) => {
     setSearchByName(value);
+
+    const itemsTodisplay = userPolymorphs.filter(
+      (item) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+    );
+
+    setDisplayItems(itemsTodisplay);
   };
 
   useEffect(() => {
@@ -112,9 +123,9 @@ const UniverseNFTs = () => {
           </div>
         </div>
         <div className="nfts__lists">
-          {userPolymorphs
+          {displayItems
             .slice(offset, offset + perPage)
-            .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+            // .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
               elm.previewImage.type === 'image/jpg' ? (
                 <div
@@ -169,19 +180,10 @@ const UniverseNFTs = () => {
               )
             )}
         </div>
-        {userPolymorphs.length &&
-        userPolymorphs.filter((item) =>
-          item.name.toLowerCase().includes(searchByName.toLowerCase())
-        ).length ? (
+        {displayItems.length ? (
           <div>
             <div className="pagination__container">
-              <Pagination
-                data={userPolymorphs.filter((item) =>
-                  item.name.toLowerCase().includes(searchByName.toLowerCase())
-                )}
-                perPage={perPage}
-                setOffset={setOffset}
-              />
+              <Pagination data={displayItems} perPage={perPage} setOffset={setOffset} />
               <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
             </div>
           </div>
