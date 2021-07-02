@@ -240,6 +240,15 @@
                                 background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
                                 linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
                             }
+                            &:disabled {
+                                background: rgba(0, 0, 0, 0.05);
+                                color: rgba(0, 0, 0, 0.2);
+                                box-shadow: none;
+                                cursor: not-allowed;
+                                img {
+                                    opacity: 0.4;
+                                }
+                            }
                             img {
                                 transform: rotate(180deg);
                             }
@@ -338,7 +347,7 @@
 
         .browse--nft--content {
             background: linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%);
-            padding: 40px;
+            padding: 40px 40px 60px;
             .selected--filters--and--sorting {
                 display: flex;
                 justify-content: space-between;
@@ -352,15 +361,19 @@
                         align-items: center;
                         flex-wrap: wrap;
                         .light-border-button {
+                            display: flex;
                             cursor: default;
                             margin-bottom: 10px;
                             margin-right: 10px;
                             padding: 7.5px 20px;
-                            img {
+                            img.close {
                                 cursor: pointer;
                                 height: 10px;
                                 width: 10px;
                                 margin-left: 10px;
+                            }
+                            img.price {
+                                margin-right: 4px;
                             }
                         }
                         .results--count {
@@ -427,6 +440,7 @@
                             top: 52px;
                             left: 0px;
                             right: 0px;
+                            z-index: 1;
                             background: $white;
                             box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
                             border-radius: 12px;
@@ -447,6 +461,10 @@
                         }
                     }
                 }
+            }
+            .load--more--nfts {
+                margin-top: 40px;
+                width: 100%;
             }
         }
     }
