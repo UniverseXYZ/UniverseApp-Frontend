@@ -92,6 +92,8 @@ const App = () => {
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [polymorphContract, setPolymorphContract] = useState(null);
   const { data } = useQuery(transferPolymorphs(address));
+  const [myUniversNFTsSearchPhrase, setMyUniversNFTsSearchPhrase] = useState('');
+  const [myUniverseNFTsperPage, setMyUniverseNFTsPerPage] = useState(12);
 
   const triggerWrongNetworkPopup = async () => {
     document.getElementById('wrong-network-hidden-btn').click();
@@ -290,6 +292,10 @@ const App = () => {
         setUserPolymorphs,
         fetchUserPolymorphsTheGraph,
         convertPolymorphObjects,
+        myUniversNFTsSearchPhrase,
+        setMyUniversNFTsSearchPhrase,
+        myUniverseNFTsperPage,
+        setMyUniverseNFTsPerPage,
       }}
     >
       <Header />
