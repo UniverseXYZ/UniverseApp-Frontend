@@ -24,6 +24,7 @@ import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 import { polymorphOwner } from '../../../utils/graphql/queries';
 import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
+import GeneParser from '../../../utils/helpers/GeneParser.js';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -42,7 +43,7 @@ const PolymorphScramblePage = () => {
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
   const [scrambled, setScrambled] = useState('none');
   const { data } = useQuery(polymorphOwner(useParams().id));
-
+  const [traitsMap, setTraitsMap] = useState({});
   useEffect(() => {
     if (!data) return;
     const ownerOf = data?.transferEntities[0]?.to;
@@ -63,6 +64,8 @@ const PolymorphScramblePage = () => {
     if (!data) return;
     const gene = data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.newGene;
     setPolymorphGene(gene.toString());
+    const parsedGenes = GeneParser.parse(gene.toString());
+    setTraitsMap(parsedGenes);
   }, [data]);
 
   useEffect(async () => {
@@ -228,8 +231,13 @@ const PolymorphScramblePage = () => {
           {propertiesTabSelected ? (
             <>
               <div className="scramble--properties">
-                {attributes.length &&
-                  attributes.map((props) => <PolymorphScrambleProp key={uuid()} data={props} />)}
+                {attributes.length && Object.keys(traitsMap).length !== 0
+                  ? attributes.map((attributeProps) => {
+                      const chance = traitsMap[attributeProps.trait.toUpperCase()];
+                      attributeProps.chance = chance;
+                      return <PolymorphScrambleProp key={uuid()} data={attributeProps} />;
+                    })
+                  : null}
               </div>
             </>
           ) : (
