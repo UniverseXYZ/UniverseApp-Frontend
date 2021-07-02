@@ -6,6 +6,7 @@ import collectionImg from '../../assets/images/collection-img.png';
 import SetPrice from '../../components/sellNFT/SetPriceTabContent';
 import HighestBid from '../../components/sellNFT/HighestBidTabContent';
 import Bundle from '../../components/sellNFT/BundleTabContent';
+import Submenu from '../../components/submenu/Submenu';
 import './NFTMarketplace.scss';
 
 const headerTabLabels = [
@@ -22,6 +23,7 @@ const contents = [
 
 const NFTMarketplace = () => (
   <div className="nft--marketplace">
+    <Submenu title="NFT Marketplace" subtitles={['Browse NFTs', 'Activity']} />
     <CollectionName image={collectionImg} name="NFT name" price="0.5" />
     <SellNFTContainer title="Select your sell method" contentClassName="content--marketplace">
       <NFTMarketplaceTab headerLabels={headerTabLabels} contents={contents} />
