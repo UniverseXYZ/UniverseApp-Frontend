@@ -8,9 +8,12 @@ import AppContext from '../../../ContextAPI';
 import './BrowseNFT.scss';
 import SelectedFiltersAndSorting from '../../../components/marketplace/browseNFT/selectedFiltersAndSorting/SelectedFiltersAndSorting';
 import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
+import NFTsList from '../../../components/marketplace/browseNFT/NFTsList';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../../utils/fixtures/BrowseNFTsDummyData';
 
 const BrowseNFT = () => {
   const { setDarkMode } = useContext(AppContext);
+  const [selectedPrice, setSelectedPrice] = useState(null);
   const [saleTypeButtons, setSaleTypeButtons] = useState([
     {
       text: 'Buy Now',
@@ -40,7 +43,7 @@ const BrowseNFT = () => {
       <div className="browse--nft--grid">
         <div className="browse--nft--sidebar--filtration">
           <SaleType saleTypeButtons={saleTypeButtons} setSaleTypeButtons={setSaleTypeButtons} />
-          <Price />
+          <Price setSelectedPrice={setSelectedPrice} />
           <Collections />
           <Creators />
           <VerifiedOnly />
@@ -49,7 +52,13 @@ const BrowseNFT = () => {
           <SelectedFiltersAndSorting
             saleTypeButtons={saleTypeButtons}
             setSaleTypeButtons={setSaleTypeButtons}
+            selectedPrice={selectedPrice}
+            setSelectedPrice={setSelectedPrice}
           />
+          <NFTsList data={PLACEHOLDER_MARKETPLACE_NFTS} />
+          <button type="button" className="light-border-button load--more--nfts">
+            Load More
+          </button>
         </div>
       </div>
     </div>

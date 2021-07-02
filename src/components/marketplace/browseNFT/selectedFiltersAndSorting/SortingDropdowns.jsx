@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 
@@ -18,6 +18,24 @@ const SortingDropdowns = () => {
     'Recently Sold',
     'Most Liked',
   ];
+  const ref = useRef(null);
+  const ref2 = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowFirstDropdown(false);
+    }
+    if (ref2.current && !ref2.current.contains(event.target)) {
+      setShowSecondDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   return (
     <div className="nft--sorting">
@@ -25,6 +43,7 @@ const SortingDropdowns = () => {
         className="dropdown"
         aria-hidden="true"
         onClick={() => setShowFirstDropdown(!showFirstDropdown)}
+        ref={ref}
       >
         <span>{firstDropdownItems[selectedFirstDropdownIndex]}</span>
         <img src={arrowDown} alt="Arrow down" className={showFirstDropdown ? 'rotate' : ''} />
@@ -49,6 +68,7 @@ const SortingDropdowns = () => {
         className="dropdown"
         aria-hidden="true"
         onClick={() => setShowSecondDropdown(!showSecondDropdown)}
+        ref={ref2}
       >
         <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span>
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />

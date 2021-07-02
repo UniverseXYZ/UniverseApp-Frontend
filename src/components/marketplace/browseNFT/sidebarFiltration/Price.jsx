@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
+import PropTypes from 'prop-types';
 import InputRange from 'react-input-range';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import ethereumIcon from '../../../../assets/images/bid_icon.svg';
@@ -11,7 +12,7 @@ import snxIcon from '../../../../assets/images/snx.svg';
 import rightArrow from '../../../../assets/images/arrow.svg';
 import 'react-input-range/lib/css/index.css';
 
-const Price = () => {
+const Price = ({ setSelectedPrice }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
@@ -47,7 +48,7 @@ const Price = () => {
   ];
 
   const validateMinValue = (e) => {
-    setSliderValue({ ...sliderValue, min: e.target.value });
+    setSliderValue({ ...sliderValue, min: Number(e.target.value) });
     // const value = e.target.value.replace(/[^\d]/, '');
     // if (parseInt(value, 10) !== 0) {
     //   setMinValue(value);
@@ -55,7 +56,7 @@ const Price = () => {
   };
 
   const validateMaxValue = (e) => {
-    setSliderValue({ ...sliderValue, max: e.target.value });
+    setSliderValue({ ...sliderValue, max: Number(e.target.value) });
     // const value = e.target.value.replace(/[^\d]/, '');
     // if (parseInt(value, 10) !== 0) {
     //   setMaxValue(value);
@@ -119,6 +120,7 @@ const Price = () => {
                       key={uuid()}
                       aria-hidden="true"
                       onClick={() => setSelectedTokenIndex(index)}
+                      style={{ display: selectedTokenIndex === index ? 'none' : 'flex' }}
                     >
                       <div>
                         <img src={token.icon} alt={token.title} />
@@ -148,7 +150,7 @@ const Price = () => {
                 value={sliderValue.max}
                 onChange={validateMaxValue}
               />
-              <button type="button">
+              <button type="button" onClick={() => setSelectedPrice(sliderValue)}>
                 <img src={rightArrow} alt="Arrow right" />
               </button>
             </div>
@@ -159,7 +161,10 @@ const Price = () => {
                 minValue={0}
                 value={sliderValue}
                 onChange={(value) =>
-                  setSliderValue({ min: value.min.toFixed(1), max: value.max.toFixed(1) })
+                  setSliderValue({
+                    min: Number(value.min.toFixed(1)),
+                    max: Number(value.max.toFixed(1)),
+                  })
                 }
               />
             </div>
@@ -170,6 +175,14 @@ const Price = () => {
       )}
     </div>
   );
+};
+
+Price.propTypes = {
+  setSelectedPrice: PropTypes.func,
+};
+
+Price.defaultProps = {
+  setSelectedPrice: () => {},
 };
 
 export default Price;
