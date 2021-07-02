@@ -7,11 +7,9 @@ import './styles/PolymorphScrambleProp.scss';
 const PolymorphScrambleProp = ({ data }) => {
   const { data: characterRarityData, loading } = useQuery(traitRarity(data.chance));
 
-  if (loading) return null;
-
-  let rarity = '%';
-  if (characterRarityData.traits.length) {
-    rarity = `${parseFloat(characterRarityData.traits[0]?.rarity).toFixed(2)}%`;
+  let rarity = '';
+  if (characterRarityData?.traits?.length) {
+    rarity = `${Math.round(characterRarityData.traits[0]?.rarity, 10)}% have this trait`;
   }
   return (
     <div className="scramble--prop">

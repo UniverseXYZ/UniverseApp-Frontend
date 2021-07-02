@@ -252,7 +252,6 @@ const ITEMS = {
     'Squeaky Clean',
     'Strong Bliss',
     'Summer Salad',
-    'Winter Solstice',
   ],
 };
 
