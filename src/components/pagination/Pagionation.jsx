@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
+import AppContext from '../../ContextAPI';
 import leftArrow from '../../assets/images/left-arrow.svg';
 import rightArrow from '../../assets/images/right-arrow.svg';
 
 const Pagination = ({ data, perPage, setOffset }) => {
+  const { myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage } = useContext(AppContext);
   const [pageCount, setPageCount] = useState(0);
 
   const handlePageClick = (item) => {
     setOffset(Math.ceil(item.selected * perPage));
+    setMyUniverseNFTsActiverPage(item.selected);
   };
 
   useEffect(() => {
@@ -48,6 +51,7 @@ const Pagination = ({ data, perPage, setOffset }) => {
       containerClassName="pagination"
       subContainerClassName="pages pagination"
       activeClassName="active"
+      forcePage={myUniverseNFTsActiverPage}
     />
   );
 };

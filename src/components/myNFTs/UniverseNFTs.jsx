@@ -22,9 +22,11 @@ const UniverseNFTs = () => {
     setMyUniversNFTsSearchPhrase,
     myUniverseNFTsperPage,
     setMyUniverseNFTsPerPage,
+    setMyUniverseNFTsActiverPage,
+    myUniverseNFTsOffset,
+    setMyUniverseNFTsOffset,
   } = useContext(AppContext);
   const history = useHistory();
-  const [offset, setOffset] = useState(0);
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('My polymorphs');
@@ -52,6 +54,8 @@ const UniverseNFTs = () => {
   };
 
   const handleSearchByName = (value) => {
+    setMyUniverseNFTsActiverPage(0);
+    setMyUniverseNFTsOffset(0);
     setMyUniversNFTsSearchPhrase(value);
 
     const itemsTodisplay = userPolymorphs.filter(
@@ -138,7 +142,7 @@ const UniverseNFTs = () => {
         </div>
         <div className="nfts__lists">
           {displayItems
-            .slice(offset, offset + myUniverseNFTsperPage)
+            .slice(myUniverseNFTsOffset, myUniverseNFTsOffset + myUniverseNFTsperPage)
             // .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
               elm.previewImage.type === 'image/jpg' ? (
@@ -200,7 +204,7 @@ const UniverseNFTs = () => {
               <Pagination
                 data={displayItems}
                 perPage={myUniverseNFTsperPage}
-                setOffset={setOffset}
+                setOffset={setMyUniverseNFTsOffset}
               />
               <ItemsPerPageDropdown
                 perPage={myUniverseNFTsperPage}
