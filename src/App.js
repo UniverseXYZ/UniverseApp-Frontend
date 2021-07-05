@@ -23,14 +23,15 @@ import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
-import Polymorphs from './containers/polymorphs/Polymorphs';
-import MintPolymorph from './containers/polymorphs/MintPolymorph';
-import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
-import Planet1 from './containers/planets/Planet1';
-import Planet2 from './containers/planets/Planet2';
-import Planet3 from './containers/planets/Planet3';
-import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT';
-import CharectersDrop from './containers/charactersDrop/CharactersDrop';
+import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
+import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
+import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
+import Planet1 from './containers/planets/Planet1.jsx';
+import Planet2 from './containers/planets/Planet2.jsx';
+import Planet3 from './containers/planets/Planet3.jsx';
+import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
+import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
+import Search from './containers/search/Search.jsx';
 
 const App = () => {
   const location = useLocation();
@@ -150,6 +151,7 @@ const App = () => {
         <Route exact path="/planet-three" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
+        <Route exact path="/search" component={() => <Search />} />
 
         <Route exact path="/characters-drop" component={() => <CharectersDrop />} />
 
