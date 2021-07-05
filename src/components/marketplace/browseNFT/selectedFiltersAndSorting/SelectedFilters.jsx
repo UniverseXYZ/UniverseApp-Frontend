@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import closeIcon from '../../../../assets/images/close-menu.svg';
-import priceIcon from '../../../../assets/images/browse-nfts/price.svg';
+import priceIcon from '../../../../assets/images/marketplace/price.svg';
 
 const SelectedFilters = ({
   saleTypeButtons,

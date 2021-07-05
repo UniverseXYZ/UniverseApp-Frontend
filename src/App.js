@@ -23,10 +23,11 @@ import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
-import Polymorphs from './containers/polymorphs/Polymorphs';
-import MintPolymorph from './containers/polymorphs/MintPolymorph';
-import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
-import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT';
+import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
+import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
+import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
+import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
+import Search from './containers/search/Search.jsx';
 
 const App = () => {
   const location = useLocation();
@@ -143,6 +144,7 @@ const App = () => {
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
+        <Route exact path="/search" component={() => <Search />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
