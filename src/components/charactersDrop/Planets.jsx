@@ -34,7 +34,7 @@ const Planets = () => {
             leader, Arkenon banished all other inhabitants to live on the icy tundras of Adaka after
             a fall out over custard, 6000 years ago.
           </p>
-          <Button className="light-button">
+          <Button className="light-button" onClick={() => history.push('/planets/adaka')}>
             Discover <img src={RightIcon} alt="right-icon" />
           </Button>
         </div>
@@ -47,7 +47,7 @@ const Planets = () => {
             A thrill seeker’s paradise, Prosopon is host to a smattering of pretty inhospitable
             climates. However, there’s beauty for all that seek it on this little rock.
           </p>
-          <Button className="light-button">
+          <Button className="light-button" onClick={() => history.push('/planets/prosopon')}>
             Discover <img src={RightIcon} alt="right-icon" />
           </Button>
         </div>
@@ -72,7 +72,7 @@ const Planets = () => {
             top planet list just ranked it number 5 in it ‘Top 10 undersirable planets to live’
             list.
           </p>
-          <Button className="light-button">
+          <Button className="light-button" onClick={() => history.push('/planets/kuapo')}>
             Discover <img src={RightIcon} alt="right-icon" />
           </Button>
         </div>

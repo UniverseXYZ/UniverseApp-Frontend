@@ -146,14 +146,14 @@ const App = () => {
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
-        <Route exact path="/planet-one" component={() => <Planet1 />} />
-        <Route exact path="/planet-two" component={() => <Planet2 />} />
-        <Route exact path="/planet-three" component={() => <Planet3 />} />
+        <Route exact path="/planets/adaka" component={() => <Planet1 />} />
+        <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
+        <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
         <Route exact path="/search" component={() => <Search />} />
 
-        <Route exact path="/characters-drop" component={() => <CharectersDrop />} />
+        <Route exact path="/core-drops" component={() => <CharectersDrop />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
