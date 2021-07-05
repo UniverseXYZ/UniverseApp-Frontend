@@ -20,6 +20,7 @@ const Header = ({ location }) => {
   const [showSelectWallet, setShowSelectWallet] = useState(false);
   const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef();
 
   const handleSearchChange = (e) => {
@@ -57,6 +58,11 @@ const Header = ({ location }) => {
     } else {
       document.querySelector('header').classList.remove('dark');
     }
+    if (location.pathname === '/marketplace') {
+      setShowSearch(true);
+    } else {
+      setShowSearch(false);
+    }
   }, [location.pathname]);
 
   useEffect(() => {
@@ -76,17 +82,19 @@ const Header = ({ location }) => {
         <Link className="light" to="/">
           <img src={appLightLogo} alt="App Logo" />
         </Link>
-        <div className="search--field">
-          <img src={searchIcon} alt="Search" />
-          <input
-            type="text"
-            placeholder="Search"
-            ref={searchRef}
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-            onKeyDown={handleSearchChange}
-          />
-        </div>
+        {showSearch && (
+          <div className="search--field">
+            <img src={searchIcon} alt="Search" />
+            <input
+              type="text"
+              placeholder="Search"
+              ref={searchRef}
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+              onKeyDown={handleSearchChange}
+            />
+          </div>
+        )}
       </div>
       <DesktopView
         isWalletConnected={isWalletConnected}
