@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './NFTsList.scss';
-import heartIcon from '../../../assets/images/browse-nfts/heart.svg';
-import priceIcon from '../../../assets/images/browse-nfts/price.svg';
+import heartIcon from '../../../assets/images/marketplace/heart.svg';
+import priceIcon from '../../../assets/images/marketplace/price.svg';
 
 const NFTsList = ({ data }) => {
   console.log('data', data);
