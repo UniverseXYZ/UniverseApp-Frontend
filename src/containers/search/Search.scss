@@ -1,0 +1,18 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.search--page {
+    .container {
+        .title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 26px;
+            line-height: 140%;
+            color: rgba(0, 0, 0, 0.4);
+            span {
+                color: $black;
+            }
+        } 
+    }
+}

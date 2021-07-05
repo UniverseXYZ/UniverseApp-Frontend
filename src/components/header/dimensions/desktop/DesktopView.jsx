@@ -73,14 +73,15 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                className="disable"
+                // className="disable"
                 onClick={() => {
                   setIsMintingDropdownOpened(false);
+                  history.push('/marketplace');
                 }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
                 <span>NFT marketplace</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
                 type="button"
@@ -116,10 +117,16 @@ const DesktopView = ({
                 <img src={polymorphsIcon} alt="Polymorphs" />
                 <span>Polymorphs</span>
               </button>
-              <button type="button" className="disable">
+              <button
+                type="button"
+                // className="disable"
+                onClick={() => {
+                  history.push('/core-drops');
+                }}
+              >
                 <img src={coreDropsIcon} alt="Core drops" />
                 <span>Core drops</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
             </div>
           </div>
