@@ -26,6 +26,7 @@ import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs';
 import MintPolymorph from './containers/polymorphs/MintPolymorph';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
+import CharacterPage from './containers/characterPage/CharacterPage';
 
 const App = () => {
   const location = useLocation();
@@ -141,6 +142,7 @@ const App = () => {
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
+        <Route path="/character-page" component={() => <CharacterPage />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
