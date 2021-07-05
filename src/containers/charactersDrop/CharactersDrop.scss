@@ -18,12 +18,15 @@
             left: 85%;
             cursor: pointer;
             opacity: 0.5;
+            @include sm {
+                left: unset;
+            }
             img{
                 cursor: pointer;
                 transform: rotate( -270deg);
                 padding-top: 12px;
             }
-            p{    
+            button{    
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
             font-weight: 600;
@@ -32,6 +35,7 @@
             text-transform: uppercase;
             color: #FFFFFF;
             transform: rotate(-90deg);
+            background: transparent;
             }
         }
         
@@ -41,10 +45,25 @@
             justify-content: space-between;
             max-width: 1110px;
             margin: 0 auto;
+            @include lg {
+                text-align: center;
+                margin: 30px auto 50px;
+            }
+            @include sm {
+                font-size: 16px;
+                margin: 16px auto 30px;
+            }
 
             .left {
                 position: relative;
                 display: inline;
+                margin-left: 12%;
+                @include lg {
+                    margin-left: unset;
+                 }
+                 @include sm {                       
+                    margin-left: 20px;               
+                 }
                 h1 {
                     font-family: $sharpGroteskSemiBoldFont;
                     font-style: normal;
@@ -53,9 +72,21 @@
                     line-height: 100%;
                     letter-spacing: -2px;
                     color: #FFFFFF;
+                    @include lg {
+                        font-size: 60px;
+                     }
+                     @include sm {                       
+                     font-size: 38px;                 
+                     }
                 }
                 .title1{
                     margin-left: -30%;
+                    @include lg {
+                        margin-left: -65%;
+                     }
+                     @include sm     {
+                        margin-left: -2%;
+                     }
                 }
                 p.desc {
                     margin: 30px 0 50px;
@@ -69,14 +100,10 @@
                     b{
                         color: #FFFFFF;
                     }
-                    // @include lg {
-                    //     text-align: center;
-                    //     margin: 30px auto 50px;
-                    // }
-                    // @include sm {
-                    //     font-size: 16px;
-                    //     margin: 16px auto 30px;
-                    // }
+                    @include sm {
+                        margin-top: 15%;
+                        font-size: 16px;
+                    }
                 }   
             }
             .char-img1{
@@ -84,16 +111,47 @@
                 top: 11%;
                 left: -49%;
                 z-index: 99;
+                display: inline;
+                @include lg {
+                    max-width: 50%;
+                    left: -40%;
+                 }
+                 @include sm {   
+                    max-width: 35%;
+                    left: 0;
+                    top: 23%;
+                 }
             }
             .char-img2{
                 position: absolute;
                 top: -30%;
                 left: 22%;
+                display: inline;
+                @include lg {
+                    max-width: 32%;
+                    left: 40%;
+                    top: -26%;
+                 }
+                 @include sm {   
+                    max-width: 28%;
+                    left: 70%;
+                    top: -20%;
+                 }
             }
             .char-img3{
                 position: absolute;
                 top: 26%;
+                display: inline;
                 left: 60%;
+                @include lg {
+                    max-width: 35%;
+                    left: 75%;
+                 }
+                 @include sm {   
+                    max-width: 28%;
+                    left: 72%;
+                    top: 20%;
+                 }
             }
         }
     }
@@ -103,10 +161,21 @@
             height: 700px;
             width: 100%;
             display: flex;
+            @include lg {
+                height: 405px;
+             }
+             @include sm {   
+                display: flex;
+                height: 750px;
+             }
         
         .img-part{
             position: relative;
             width: 50%;
+            height: 100%;
+            @include sm {   
+                width: 100%;
+             }
         }
         .bg1{
                 background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 50%), linear-gradient(110.73deg, rgba(182, 220, 255, 0.2) -6.7%, rgba(184, 48, 248, 0.2) 105.32%), #FFFFFF;
@@ -119,12 +188,23 @@
                 .bg-text{
                     top: 32%;
                     mix-blend-mode: overlay;
+                    @include lg {
+                      width: 70%;
+                    }
                 }
                 .character-img{
                     top: 46%;
+                    @include lg {
+                        width: 70%;
+                    }
                 }
                 .bg-img{
                     top: 54%;
+                    @include lg {
+                        top: 58%;
+                        width: 80%;
+                        left: 55%;
+                    }
                 }
             }
         .bg2{
@@ -138,13 +218,27 @@
                 .bg-text{
                     top: 28%;
                     mix-blend-mode: overlay;
+                    @include lg {
+                        width: 70%;
+                    }
                 }
                 .character-img{
                     top: 34%;
                     filter: drop-shadow(0px 0px 100px #F1EFAB);
+                    @include lg {
+                        width: 85%;
+                    }
                 }
                 .bg-img{
                     top: 59%;
+                    @include lg {
+                        top: 55%;
+                        width: 77%;
+                        left: 47%;
+                    }
+                    @include lg {
+                        top: 52%;
+                    }
                 }
         }
         .bg3{
@@ -158,12 +252,23 @@
                 .bg-text{
                     top: 28%;
                     mix-blend-mode: overlay;
+                    @include lg {
+                        width: 70%;
+                    }
                 }
                 .character-img{
                     top: 29%;
+                    @include lg {
+                        width: 70%;
+                    }
                 }
                 .bg-img{
                     top: 62%;
+                    @include lg{
+                        top: 52%;
+                        width: 77%;
+                        left: 51%;
+                    }
                 }
             }
 
@@ -175,6 +280,9 @@
             width: 50%;
             padding: 4%;
             padding-top: 8%;
+            @include sm {   
+                width: 100%;
+            }
         .num{
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
@@ -194,9 +302,12 @@
             line-height: 140%;
             color: #000000;
             padding-bottom: 20px;
+            @include lg{
+            font-size: 26px;
+            }
         }
         .text-p{
-            font-family: Space Grotesk;
+            font-family:$spaceGroteskFont;
             font-style: normal;
             font-weight: normal;
             font-size: 18px;
@@ -204,6 +315,14 @@
             color: #666666;
             width: 58%;
             padding-bottom: 40px;
+            @include lg{
+                font-size: 14px;
+                width: 100%;
+            }
+                @include sm{
+                    padding-left: 10px;
+                    padding-right: 15px;
+                }
         }
         button{
             img{
@@ -211,26 +330,51 @@
             }
         }
       }
-     }   
+     }
+     .planet1, .planet3{
+        @include sm{
+           flex-direction: column-reverse;
+        }
+    }
+   .planet2{
+        @include sm{
+           flex-direction: column;
+         }   
+        }
     }
     .future_core_section{
         position: relative;
-        display: grid;
+        display: block;
         align-items: center;
         justify-content: center;
         background-color: $black;
         padding: 0 60px;
+        @include sm{
+            padding: unset;
+        }
         .char1{
             position: absolute;
             width: 100%;
             top: 55%;
             transform: rotate(1.01deg);
+            left: 0;
+            right: 0;
+            @include sm{
+                top: 31%;
+                transform: rotate(15.49deg);
+            }
         }
         .char2{
             position: absolute;
             width: 100%;
             top: 55%;
             transform: rotate(-5.51deg);
+            left: 0;
+            right: 0;
+            @include sm{
+                top: 31%;
+                transform: rotate(-20.94deg);
+            }
         }
         .future_core_head{
             padding-top:130px;
@@ -245,27 +389,96 @@
                 line-height: 140%;
                 text-align: center;
                 color: #FFFFFF;
+                @include lg {
+                    font-size: 26px;
+                    padding-left: 11%;  
+                    text-align: start;
+                }
+                @include sm {
+                    font-size: 26px;
+                    padding-left: 11%;
+                    text-align: start;
+                }
             }
         }
     }
     .img-info{
         display: flex;
         padding-left: 11%;
+        width: 100%;
+        @include sm {
+           display: block;
+        }
     }
     .polmorphic-part{
+        position: relative;
         z-index: 10;
         height: 532px;
         width: 540px;
-        background:url(../../assets/images/polmorphic1.svg), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
-        background-blend-mode: overlay, screen, normal;
+        background:url(../../assets/images/polmorphic.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+        background-size: 100% 100%;
         background-repeat: no-repeat;
         border-radius: 12px;
         margin-right: 15px;
+        @include lg {
+            background:url(../../assets/images/polmorphic-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+            width: 344px;
+            height: 375px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat
+        }
+        @include sm {
+            background-size: 100% 100%;
+            background:url(../../assets/images/polmorphic-mobile.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+            width: 335px;
+            height: 375px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            margin-right: unset;
+            margin-top: 15px;
+        }
+        @media (max-width: 440px) {
+            width: 250px;
+            height: 335px;
+          }
+          @media (max-width: 300px) {
+            width: 210px;
+            height: 270px;
+          } 
+          .vec-div{
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 8px;
+            position: absolute;
+            width: 69px;
+            height: 69px;
+            top: 30px;
+            left: 30px;
+            @include lg{
+                width: 54px;
+                height: 54px;
+            }
+            img{
+                left: 33%;
+                position: absolute;
+                top: 33%;
+                @include lg{
+                    width: 40%;
+                    top: 35%;
+                    left: 31%;
+                }
+            }
+          }
         .info-text{
-            padding: 40px;
+            padding: 0px 25px 25px  30px;
             position: absolute;
             bottom: 0;
-            width: 540px;
+            @include lg {
+                padding: 0 20px;
+              }
+              @include sm {
+                  font-size: 12px;
+              }  
          h1{
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
@@ -279,6 +492,13 @@
             order: 0;
             flex-grow: 0;
             margin: 12px 0px;
+        @include lg {
+            font-size: 16px;
+        }
+        @include sm {
+            font-size: 16px;
+
+        }
         }
          p{
             font-family: $spaceGroteskFont;
@@ -291,23 +511,86 @@
             order: 1;
             flex-grow: 0;
             margin: 12px 0px;
+            @include lg {
+                font-size: 12px;
+            }
+            @include sm {
+                font-size: 12px;
+    
+            }
         }
      }
     }
     .comics-part{
+        position: relative;
         z-index: 10;
         height: 532px;
         width: 540px;
-        background:url(../../assets/images/comics.svg), conic-gradient(from 203.44deg at 100% -7.8%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(212.34% 218.84% at 206.2% -109.87%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
-        background-blend-mode: overlay, screen, normal;
+        background:url(../../assets/images/comics.png), conic-gradient(from 203.44deg at 100% -7.8%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(212.34% 218.84% at 206.2% -109.87%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+        background-size: 100% 100%;
         background-repeat: no-repeat;
         border-radius: 12px;
         margin-left: 15px;
+        @include lg {
+            background:url(../../assets/images/comics-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+            width: 344px;
+            height: 375px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+        @include sm {
+            background-size: 100% 100%;
+            background:url(../../assets/images/comics-mobile.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+            width: 335px;
+            height: 375px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            margin-left: unset;
+            margin-top: 15px;
+        }
+        @media (max-width: 440px) {
+            width: 250px;
+            height: 335px;
+          }
+          @media (max-width: 300px) {
+            width: 210px;
+            height: 270px;  
+          } 
+          .vec-div{
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 8px;
+            position: absolute;
+            width: 69px;
+            height: 69px;
+            top: 30px;
+            left: 30px;
+            @include lg{
+                width: 54px;
+                height: 54px;
+            }
+            img{
+                left: 33%;
+                position: absolute;
+                top: 33%;
+                @include lg{
+                    width: 40%;
+                    top: 35%;
+                    left: 31%;
+                }
+            }
+          }
         .info-text{
-            padding: 40px;
+            padding: 0px 25px 25px  30px;
             position: absolute;
             bottom: 0;
-            width: 540px;
+            @include lg {
+              padding: 0 20px;
+            }
+            @include sm {
+                font-size: 12px;
+                padding: 0 20px;
+            }
             h1{
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
@@ -321,6 +604,13 @@
             order: 0;
             flex-grow: 0;
             margin: 12px 0px;
+            @include lg {
+                font-size: 16px;
+            }
+            @include sm {
+                font-size: 16px;
+    
+            }
             }
          p{
             font-family: $spaceGroteskFont;
@@ -333,6 +623,13 @@
             order: 1;
             flex-grow: 0;
             margin: 12px 0px;
+            @include lg {
+                font-size: 12px;
+            }
+            @include sm {
+                font-size: 12px;
+    
+            }
             }
          }
     }

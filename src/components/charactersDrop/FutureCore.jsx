@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
-import Comics from '../../assets/images/comics.svg';
-import Polmorphic from '../../assets/images/polmorphic.svg';
 import Frame from '../../assets/images/char-frame.png';
+import BookVector from '../../assets/images/play-vector.svg';
+import PlayVector from '../../assets/images/book-vector.svg';
 
 const FutureCore = () => {
   const history = useHistory();
@@ -18,7 +18,9 @@ const FutureCore = () => {
       </div>
       <div className="img-info">
         <div className="polmorphic-part">
-          {/* <img src={Polmorphic} alt="polmorphic-img" /> */}
+          <div className="vec-div">
+            <img src={PlayVector} alt="polymorphic" />
+          </div>
           <div className="info-text">
             <h1>Polmorphic v2 (Game)</h1>
             <p>
@@ -28,7 +30,9 @@ const FutureCore = () => {
           </div>
         </div>
         <div className="comics-part">
-          {/* <img src={Comics} alt="comics-img" /> */}
+          <div className="vec-div">
+            <img src={BookVector} alt="comics" />
+          </div>
           <div className="info-text">
             <h1>Comics</h1>
             <p>
