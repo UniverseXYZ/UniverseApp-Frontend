@@ -1,0 +1,10 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.date__input {
+    .callendar__image {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}

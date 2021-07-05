@@ -11,25 +11,35 @@
         font-family: $spaceGroteskFont;
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+        .animated {
+            width: 100%;
+            margin-top: 30px;
+        }
+        .switch--block {
+            margin-top: 15px;
+        }
         .row--child {
             display: flex;
             justify-content: space-between;
             width: 100%;
         }
         .left--block {
-            width: 60%;
+            width: 55%;
             height: 100%;
             max-width: 400px;
         }
         .right--block {
-            width: 40%;
+            width: 45%;
             height: 100%;
             text-align: right;
+            position: relative;
         }
         .intup-l {
             width: 100%;
             .inp {
                 width: 100%;
+                font-family: $spaceGroteskFont;
             }
         }
         .title {
@@ -50,6 +60,29 @@
             align-items: center;
             color: rgba(0, 0, 0, 0.4);
             margin-top: 3px;
+        }
+    }
+    .price--dropdown {
+        font-family: $spaceGroteskFont;
+        font-weight: normal;
+        max-width: 98px;
+        height: 34px;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        bottom: 0;
+        margin: auto;
+        p {
+            display: none;
+        }
+        > div:nth-child(1) {
+            margin-right: 5px;
+        }
+        .price--dropdown--items {
+            > div:nth-child(1) {
+                margin-right: 5px;
+            }
         }
     }
 }

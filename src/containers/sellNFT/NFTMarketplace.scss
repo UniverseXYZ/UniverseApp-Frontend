@@ -5,9 +5,12 @@
     .content--marketplace {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        // align-items: center;
         .marketplace--tab {
             width: 65%;
+        }
+        .summary--block--parent {
+            width: 35%;
         }
     }
 }
