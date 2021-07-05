@@ -13,16 +13,37 @@ import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 import PolymorphImage from './PolymorphImage';
 
 const UniverseNFTs = () => {
-  const { setSelectedNftForScramble, userPolymorphs, address, fetchUserPolymorphsTheGraph } =
-    useContext(AppContext);
+  const {
+    setSelectedNftForScramble,
+    userPolymorphs,
+    address,
+    fetchUserPolymorphsTheGraph,
+    myUniversNFTsSearchPhrase,
+    setMyUniversNFTsSearchPhrase,
+    myUniverseNFTsperPage,
+    setMyUniverseNFTsPerPage,
+    setMyUniverseNFTsActiverPage,
+    myUniverseNFTsOffset,
+    setMyUniverseNFTsOffset,
+  } = useContext(AppContext);
   const history = useHistory();
-  const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('My polymorphs');
-  const [searchByName, setSearchByName] = useState('');
   const { data } = useQuery(transferPolymorphs(address));
+  const [displayItems, setDisplayItems] = useState([]);
+
+  useEffect(() => {
+    let itemsTodisplay = userPolymorphs;
+
+    if (myUniversNFTsSearchPhrase) {
+      itemsTodisplay = userPolymorphs.filter(
+        (item) => item.name.toLowerCase().indexOf(myUniversNFTsSearchPhrase.toLowerCase()) > -1
+      );
+    }
+
+    setDisplayItems(itemsTodisplay);
+  }, [userPolymorphs]);
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
@@ -33,7 +54,15 @@ const UniverseNFTs = () => {
   };
 
   const handleSearchByName = (value) => {
-    setSearchByName(value);
+    setMyUniverseNFTsActiverPage(0);
+    setMyUniverseNFTsOffset(0);
+    setMyUniversNFTsSearchPhrase(value);
+
+    const itemsTodisplay = userPolymorphs.filter(
+      (item) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+    );
+
+    setDisplayItems(itemsTodisplay);
   };
 
   useEffect(() => {
@@ -105,16 +134,16 @@ const UniverseNFTs = () => {
               <input
                 type="text"
                 placeholder="Start typing"
-                value={searchByName}
+                value={myUniversNFTsSearchPhrase}
                 onChange={(e) => handleSearchByName(e.target.value)}
               />
             </div>
           </div>
         </div>
         <div className="nfts__lists">
-          {userPolymorphs
-            .slice(offset, offset + perPage)
-            .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+          {displayItems
+            .slice(myUniverseNFTsOffset, myUniverseNFTsOffset + myUniverseNFTsperPage)
+            // .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
               elm.previewImage.type === 'image/jpg' ? (
                 <div
@@ -169,20 +198,18 @@ const UniverseNFTs = () => {
               )
             )}
         </div>
-        {userPolymorphs.length &&
-        userPolymorphs.filter((item) =>
-          item.name.toLowerCase().includes(searchByName.toLowerCase())
-        ).length ? (
+        {displayItems.length ? (
           <div>
             <div className="pagination__container">
               <Pagination
-                data={userPolymorphs.filter((item) =>
-                  item.name.toLowerCase().includes(searchByName.toLowerCase())
-                )}
-                perPage={perPage}
-                setOffset={setOffset}
+                data={displayItems}
+                perPage={myUniverseNFTsperPage}
+                setOffset={setMyUniverseNFTsOffset}
               />
-              <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+              <ItemsPerPageDropdown
+                perPage={myUniverseNFTsperPage}
+                setPerPage={setMyUniverseNFTsPerPage}
+              />
             </div>
           </div>
         ) : (
