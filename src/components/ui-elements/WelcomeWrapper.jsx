@@ -98,8 +98,8 @@ const WelcomeWrapper = (props) => {
 WelcomeWrapper.propTypes = {
   ellipsesLeft: PropTypes.bool,
   ellipsesRight: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  hintText: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  hintText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   btnText: PropTypes.string,
   btnOnClick: PropTypes.func,
   btnAnotherOnClick: PropTypes.func,
@@ -113,7 +113,7 @@ WelcomeWrapper.propTypes = {
 WelcomeWrapper.defaultProps = {
   ellipsesLeft: true,
   ellipsesRight: true,
-  hintText: '',
+  hintText: '' || null,
   children: null,
   marquee: null,
   btnText: '',

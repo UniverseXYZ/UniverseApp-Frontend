@@ -26,6 +26,9 @@ import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
 import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
+import Planet1 from './containers/planets/Planet1.jsx';
+import Planet2 from './containers/planets/Planet2.jsx';
+import Planet3 from './containers/planets/Planet3.jsx';
 import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
 import Search from './containers/search/Search.jsx';
 
@@ -142,6 +145,9 @@ const App = () => {
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
+        <Route exact path="/planet-one" component={() => <Planet1 />} />
+        <Route exact path="/planet-two" component={() => <Planet2 />} />
+        <Route exact path="/planet-three" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
         <Route exact path="/search" component={() => <Search />} />
