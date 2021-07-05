@@ -30,6 +30,7 @@ import Planet1 from './containers/planets/Planet1.jsx';
 import Planet2 from './containers/planets/Planet2.jsx';
 import Planet3 from './containers/planets/Planet3.jsx';
 import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
+import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
 import Search from './containers/search/Search.jsx';
 
 const App = () => {
@@ -151,6 +152,8 @@ const App = () => {
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
         <Route exact path="/search" component={() => <Search />} />
+
+        <Route exact path="/characters-drop" component={() => <CharectersDrop />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
