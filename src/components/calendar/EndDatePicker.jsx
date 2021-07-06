@@ -34,6 +34,15 @@ const EndDatePicker = () => {
     timezone: 'GMT +04:00',
     format: 'AM',
   });
+  const formatDate = (date) => {
+    const dat = new Date(date);
+    const month = monthNames[dat.getMonth()];
+    const day = dat.getDate();
+    const year = dat.getFullYear();
+    const hours = dat.getHours();
+    const minute = dat.getMinutes();
+    return `${month} ${day}, ${year}, ${hours}:${minute} ${endDateTemp.timezone}`;
+  };
 
   return (
     <div className="date__input">
@@ -44,16 +53,7 @@ const EndDatePicker = () => {
           onClick={() => setShowEndDate(true)}
           id="endDate"
           autoComplete="off"
-          value={
-            values.endDate
-              ? `${values.endDate.toString().split(' ')[1]}
-              ${values.endDate.toString().split(' ')[2]},
-              ${values.endDate.toString().split(' ')[3]}, ${values.endDate
-                  .toString()
-                  .split(' ')[4]
-                  .substring(0, 5)} ${endDateTemp.timezone}`
-              : ''
-          }
+          value={values.endDate ? formatDate(values.endDate) : ''}
           //   error={!value.length ? undefined : 'End date is required!'}
         />
         <Popup
