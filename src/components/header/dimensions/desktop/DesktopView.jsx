@@ -117,10 +117,16 @@ const DesktopView = ({
                 <img src={polymorphsIcon} alt="Polymorphs" />
                 <span>Polymorphs</span>
               </button>
-              <button type="button" className="disable">
+              <button
+                type="button"
+                // className="disable"
+                onClick={() => {
+                  history.push('/core-drops');
+                }}
+              >
                 <img src={coreDropsIcon} alt="Core drops" />
                 <span>Core drops</span>
-                <span className="tooltiptext">Coming soon</span>
+                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
             </div>
           </div>
