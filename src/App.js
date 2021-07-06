@@ -33,6 +33,7 @@ import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
 import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
 import CharacterPage from './containers/characterPage/CharacterPage.jsx';
 import Search from './containers/search/Search.jsx';
+import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 
 const App = () => {
   const location = useLocation();
@@ -153,6 +154,7 @@ const App = () => {
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route path="/character-page" component={() => <CharacterPage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
+        <Route exact path="/nft-marketplace" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
 
