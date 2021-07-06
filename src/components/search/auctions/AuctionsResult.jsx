@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './AuctionsResult.scss';
 import uuid from 'react-uuid';
@@ -6,16 +6,25 @@ import moment from 'moment';
 import Button from '../../button/Button.jsx';
 
 const AuctionsResult = ({ query, data }) => {
-  console.log(query);
-  console.log(data);
+  const [showEndedAuctions, setShowEndedAuctions] = useState(false);
+
   return (
     <div className="auctions--search--result">
+      <div className="show--ended--auctions">
+        <p>Show Ended Auctions</p>
+        <label className="switch">
+          <input
+            type="checkbox"
+            value={showEndedAuctions}
+            checked={showEndedAuctions}
+            onChange={(e) => setShowEndedAuctions(e.target.checked)}
+          />
+          <span className="slider round" />
+        </label>
+      </div>
       {data
         .filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
         .map((auction) => {
-          // const duration = moment(auction.startDate).isBefore(moment.now())
-          //   ? moment.duration(moment(auction.endDate).diff(moment.now()))
-          //   : moment.duration(moment(auction.startDate).diff(moment.now()));
           const startsIn = moment(auction.startDate).isAfter(moment.now())
             ? moment.duration(moment(auction.startDate).diff(moment.now()))
             : null;
@@ -43,7 +52,6 @@ const AuctionsResult = ({ query, data }) => {
             : timeLeft
             ? timeLeft.seconds()
             : endedOn.seconds();
-          console.log(`${days}d ${hours}h ${minutes}m ${seconds}s`);
           return (
             <div className="auction--box" key={uuid()}>
               <div

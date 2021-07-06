@@ -11,7 +11,14 @@ import UsersResult from '../../components/search/users/UsersResult';
 import CollectionsResult from '../../components/search/collections/CollectionsResult';
 import CommunitiesResult from '../../components/search/communities/CommunitiesResult';
 import GalleriesResult from '../../components/search/galleries/GalleriesResult';
-import { PLACEHOLDER_MARKETPLACE_AUCTIONS } from '../../utils/fixtures/BrowseNFTsDummyData';
+import {
+  PLACEHOLDER_MARKETPLACE_AUCTIONS,
+  PLACEHOLDER_MARKETPLACE_NFTS,
+  PLACEHOLDER_MARKETPLACE_USERS,
+  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
+  PLACEHOLDER_MARKETPLACE_COMMUNITIES,
+  PLACEHOLDER_MARKETPLACE_GALLERIES,
+} from '../../utils/fixtures/BrowseNFTsDummyData';
 
 const Search = () => {
   const location = useLocation();
@@ -86,11 +93,21 @@ const Search = () => {
           {selectedTabIndex === 0 && (
             <AuctionsResult query={query} data={PLACEHOLDER_MARKETPLACE_AUCTIONS} />
           )}
-          {selectedTabIndex === 1 && <NFTsResult query={query} />}
-          {selectedTabIndex === 2 && <UsersResult query={query} />}
-          {selectedTabIndex === 3 && <CollectionsResult query={query} />}
-          {selectedTabIndex === 4 && <CommunitiesResult query={query} />}
-          {selectedTabIndex === 5 && <GalleriesResult query={query} />}
+          {selectedTabIndex === 1 && (
+            <NFTsResult query={query} data={PLACEHOLDER_MARKETPLACE_NFTS} />
+          )}
+          {selectedTabIndex === 2 && (
+            <UsersResult query={query} data={PLACEHOLDER_MARKETPLACE_USERS} />
+          )}
+          {selectedTabIndex === 3 && (
+            <CollectionsResult query={query} data={PLACEHOLDER_MARKETPLACE_COLLECTIONS} />
+          )}
+          {selectedTabIndex === 4 && (
+            <CommunitiesResult query={query} data={PLACEHOLDER_MARKETPLACE_COMMUNITIES} />
+          )}
+          {selectedTabIndex === 5 && (
+            <GalleriesResult query={query} data={PLACEHOLDER_MARKETPLACE_GALLERIES} />
+          )}
         </div>
       </div>
     </div>
