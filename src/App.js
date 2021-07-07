@@ -34,6 +34,7 @@ import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
 import CharacterPage from './containers/characterPage/CharacterPage.jsx';
 import Search from './containers/search/Search.jsx';
 import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
+import MyProfile from './containers/myProfile/MyProfile';
 
 const App = () => {
   const location = useLocation();
@@ -157,6 +158,7 @@ const App = () => {
         <Route exact path="/nft-marketplace" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
+        <Route exact path="/my-profile" component={() => <MyProfile />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
