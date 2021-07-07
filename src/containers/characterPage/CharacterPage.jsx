@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import characterImg from '../../assets/images/character.png';
 import Button from '../../components/button/Button';
-import listedIcon from '../../assets/images/listed.svg';
-import mintedIcon from '../../assets/images/minted.svg';
-import purchasedIcon from '../../assets/images/purchased.svg';
-import tranferredIcon from '../../assets/images/transferred.svg';
 import Pagination from '../../components/pagination/Pagionation';
 import './CharacterPage.scss';
+import {
+  PLACEHOLDER__GLOBAL__DATA,
+  PLACEHOLDER__ACTIVE__DATA,
+} from '../../utils/fixtures/CharacterPageDummyData';
 
 const CharacterPage = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const tabs = ['Global activity', '1/1 activity'];
-  const data = [{}];
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
   const [value, setValue] = useState(0);
@@ -40,7 +39,6 @@ const CharacterPage = () => {
                   max="25000"
                   onChange={(e) => setValue(e.target.value)}
                 />
-                {/* <div className="slider" /> */}
                 <div
                   className="minted__div"
                   style={{
@@ -80,230 +78,72 @@ const CharacterPage = () => {
           </ul>
           {selectedTabIndex === 0 && (
             <div className="global__activity">
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(255, 178, 62, 0.1)' }}>
-                  <img src={listedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere #424</h4>
-                    <p className="action">
-                      <span>Listed</span> by 0xf4b4a5 3 hours ago
-                    </p>
+              {PLACEHOLDER__GLOBAL__DATA.slice(offset, offset + perPage).map((elm, i) => (
+                <div className="activity__div">
+                  <div className="icon__div" style={{ background: `${elm.background}` }}>
+                    <img src={elm.icon} alt="Listed" />
                   </div>
-                  <div className="price">
-                    <h4>2.00 ETH</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(108, 158, 255, 0.1)' }}>
-                  <img src={mintedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere #427</h4>
-                    <p className="action">
-                      <span>Minted</span> by 0xf4b4a5 2 days ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 COMP</h4>
-                    <p>$84</p>
+                  <div className="activity__description">
+                    <div>
+                      <h4>{elm.name}</h4>
+                      {elm.status === 'transferred' ? (
+                        <p className="action">
+                          0xf4b4a5 <span>{elm.status}</span> {elm.text}
+                        </p>
+                      ) : (
+                        <p className="action">
+                          <span>{elm.status}</span> {elm.text}
+                        </p>
+                      )}
+                    </div>
+                    <div className="price">
+                      <h4>{elm.cash}</h4>
+                      <p>{elm.price}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(78, 208, 75, 0.1)' }}>
-                  <img src={purchasedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere #342</h4>
-                    <p className="action">
-                      <span>Purchased</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>1.00 BOND</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(209, 70, 243, 0.1)' }}>
-                  <img src={tranferredIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere #287</h4>
-                    <p className="action">
-                      0xf4b4a5 <span>transferred</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 LINK</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(255, 178, 62, 0.1)' }}>
-                  <img src={listedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere #424</h4>
-                    <p className="action">
-                      <span>Listed</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 ETH</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(108, 158, 255, 0.1)' }}>
-                  <img src={mintedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere #424</h4>
-                    <p className="action">
-                      <span>Minted</span> by 0xf4b4a5 2 days ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 ETH</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           )}
           {selectedTabIndex === 1 && (
-            <div className="global__activity">
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(209, 70, 243, 0.1)' }}>
-                  <img src={tranferredIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere 1/1</h4>
-                    <p className="action">
-                      0xf4b4a5 <span>transferred</span> by 0xf4b4a5 3 hours ago
-                    </p>
+            <div className="active__activity">
+              {PLACEHOLDER__ACTIVE__DATA.slice(offset, offset + perPage).map((elm, i) => (
+                <div className="activity__div">
+                  <div className="icon__div" style={{ background: `${elm.background}` }}>
+                    <img src={elm.icon} alt="Listed" />
                   </div>
-                  <div className="price">
-                    <h4>1.00 BOND</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(78, 208, 75, 0.1)' }}>
-                  <img src={purchasedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere 1/1</h4>
-                    <p className="action">
-                      <span>Purchased</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 COMP</h4>
-                    <p>$84</p>
+                  <div className="activity__description">
+                    <div>
+                      <h4>{elm.name}</h4>
+                      {elm.status === 'transferred' ? (
+                        <p className="action">
+                          0xf4b4a5 <span>{elm.status}</span> {elm.text}
+                        </p>
+                      ) : (
+                        <p className="action">
+                          <span>{elm.status}</span> {elm.text}
+                        </p>
+                      )}
+                    </div>
+                    <div className="price">
+                      <h4>{elm.cash}</h4>
+                      <p>{elm.price}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(255, 178, 62, 0.1)' }}>
-                  <img src={listedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere 1/1</h4>
-                    <p className="action">
-                      <span>Listed</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 ETH</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(209, 70, 243, 0.1)' }}>
-                  <img src={tranferredIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere 1/1</h4>
-                    <p className="action">
-                      0xf4b4a5 <span>transferred</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 LINK</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(209, 70, 243, 0.1)' }}>
-                  <img src={tranferredIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere 1/1</h4>
-                    <p className="action">
-                      0xf4b4a5 <span>transferred</span> by 0xf4b4a5 3 hours ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 ETH</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="activity__div">
-                <div className="icon__div" style={{ background: 'rgba(108, 158, 255, 0.1)' }}>
-                  <img src={mintedIcon} alt="Listed" />
-                </div>
-                <div className="activity__description">
-                  <div>
-                    <h4>Zhamere 1/1</h4>
-                    <p className="action">
-                      <span>Minted</span> by 0xf4b4a5 2 days ago
-                    </p>
-                  </div>
-                  <div className="price">
-                    <h4>2.00 ETH</h4>
-                    <p>$84</p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           )}
         </div>
-        <div className="pagination__container">
-          <Pagination data={data} perPage={perPage} setOffset={setOffset} />
-        </div>
+        {selectedTabIndex === 0 ? (
+          <div className="pagination__container">
+            <Pagination data={PLACEHOLDER__GLOBAL__DATA} perPage={perPage} setOffset={setOffset} />
+          </div>
+        ) : (
+          <div className="pagination__container">
+            <Pagination data={PLACEHOLDER__ACTIVE__DATA} perPage={perPage} setOffset={setOffset} />
+          </div>
+        )}
         <div className="character__planet">
           <h1 className="character__planet__header">More from this planet</h1>
           <div className="planet__items__list">
