@@ -25,9 +25,11 @@ const Header = ({ location }) => {
 
   const handleSearchChange = (e) => {
     if (e.keyCode === 13) {
-      history.push(`/search`, { query: searchValue });
-      setSearchValue('');
-      searchRef.current.blur();
+      if (searchValue) {
+        history.push(`/search`, { query: searchValue });
+        setSearchValue('');
+        searchRef.current.blur();
+      }
     }
   };
 
@@ -58,7 +60,7 @@ const Header = ({ location }) => {
     } else {
       document.querySelector('header').classList.remove('dark');
     }
-    if (location.pathname === '/marketplace') {
+    if (location.pathname === '/marketplace' || location.pathname === '/search') {
       setShowSearch(true);
     } else {
       setShowSearch(false);
