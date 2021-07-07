@@ -1,0 +1,113 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
+
+.summary--block--parent {
+    width: 100%;
+    padding:0 30px;
+    .invoce--block {
+        max-width: 350px;
+        width: 100%;
+        min-height: 350px;
+        background-color: $white;
+        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        border-radius: 12px;
+        h5 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 23px;
+            display: flex;
+            align-items: center;
+            color: #000000;
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .listing--block, .fees--block {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+            h5 {
+                font-size: 16px;
+                padding:0 0 14px;
+                border-bottom: none;
+            }
+            p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 18px;
+                display: flex;
+                align-items: center;
+                color: $black;
+                margin: 4px 0;
+                display: flex;
+                align-items: center;
+                span {
+                    img {
+                        margin: 0 5px;
+                    }
+                    margin-right: 5px;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 14px;
+                    line-height: 18px;
+                    display: flex;
+                    align-items: center;
+                    color: #000000;
+                }
+            }
+            button {
+                width: 100%;
+                font-size: 16px;
+                margin: 20px 0 0;
+            }
+        }
+        .fees--block {
+            border-bottom: none;
+            h5 {
+                padding: 0;
+            }
+            p {
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 15px;
+                display: flex;
+                align-items: center;
+                margin: 3px 0;
+                color: rgba(0, 0, 0, 0.4);
+            }
+            .invoce--bottom--block {
+                .row--one, .row--two, .row--total {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    .center--paragraph {
+                        width: 65%;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        max-width: 185px;
+                    }
+                }
+                .row--two {
+                    margin: 2px 0;
+                    .center--paragraph {
+                        width: 50%;
+                        max-width: 155px;
+                    }
+                }
+                .row--total {
+                    margin: 2px 0;
+                    p {
+                        color: $black;
+                        font-style: normal;
+                        font-weight: 600;
+                        font-size: 12px;
+                        line-height: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

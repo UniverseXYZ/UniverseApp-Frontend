@@ -244,10 +244,16 @@ const TabletView = (props) => {
                     </button>
                   </div>
                   <div>
-                    <button type="button" className="disable">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        history.push('/core-drops');
+                      }}
+                      // className="disable"
+                    >
                       <img src={coreDropsIcon} alt="Core drops" />
                       <span>Core drops</span>
-                      <span className="tooltiptext">Coming soon</span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
                 </div>

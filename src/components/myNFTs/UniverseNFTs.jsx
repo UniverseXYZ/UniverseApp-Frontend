@@ -3,11 +3,13 @@ import { useHistory } from 'react-router-dom';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
+import AppContext from '../../ContextAPI';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import AppContext from '../../ContextAPI';
+import neverScrambledIcon from '../../assets/images/never-scrambled-badge.svg';
+import singleTraitScrambledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
 
 const UniverseNFTs = () => {
   const { setSelectedNftForScramble } = useContext(AppContext);
@@ -122,6 +124,22 @@ const UniverseNFTs = () => {
                 >
                   <div className="nft__box__image">
                     <img className="preview-image" alt={elm.name} src={elm.previewImage.url} />
+                    {elm.scrambled && elm.scrambled === 'never' ? (
+                      <div className="never-scrambled">
+                        <img alt="Never scrambled badge" src={neverScrambledIcon} />
+                        <span className="tooltiptext">Never scrambled</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    {elm.scrambled && elm.scrambled === 'single' ? (
+                      <div className="single-trait-scrambled">
+                        <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
+                        <span className="tooltiptext">Single trait scrambled</span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                   <div className="polymorph">
                     <p>{elm.name}</p>

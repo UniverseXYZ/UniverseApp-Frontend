@@ -17,7 +17,7 @@
   transition: 50ms ease-in;
   &:hover {
     background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-      linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%)!important;
   }
   &:disabled {
     background: rgba(0, 0, 0, 0.05);
@@ -52,6 +52,6 @@
     cursor: not-allowed;
   }
   &:hover {
-    box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
+    box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset!important;
   }
 }
