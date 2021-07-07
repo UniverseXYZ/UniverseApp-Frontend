@@ -34,26 +34,21 @@ const Collections = () => {
         onClick={() => setShowFilters(!showFilters)}
       >
         <h3>Collections</h3>
-        <img src={arrowDown} alt="Arrow Down" className={showFilters ? 'rotate' : ''} />
       </div>
-      {showFilters ? (
-        <Animated animationIn="fadeIn">
-          <div className="browse--nft--sidebar--filtration--item--content">
-            <div className="search--field">
-              <input type="text" placeholder="Search collections" />
-              <img src={searchIcon} alt="Search" />
-            </div>
-            {collections.map((col) => (
-              <div className="collections--list" key={uuid()}>
-                <img src={col.avatar} alt={col.name} />
-                <p>{col.name}</p>
-              </div>
-            ))}
+      <Animated animationIn="fadeIn">
+        <div className="browse--nft--sidebar--filtration--item--content">
+          <div className="search--field">
+            <input type="text" placeholder="Search collections" />
+            <img src={searchIcon} alt="Search" />
           </div>
-        </Animated>
-      ) : (
-        <></>
-      )}
+          {collections.map((col) => (
+            <div className="collections--list" key={uuid()}>
+              <img src={col.avatar} alt={col.name} />
+              <p>{col.name}</p>
+            </div>
+          ))}
+        </div>
+      </Animated>
     </div>
   );
 };
