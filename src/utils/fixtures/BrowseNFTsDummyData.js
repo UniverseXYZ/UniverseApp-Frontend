@@ -1,19 +1,19 @@
 import nft1 from '../../assets/images/marketplace/nfts/nft1.png';
 import nft2 from '../../assets/images/marketplace/nfts/nft2.png';
-import nft3 from '../../assets/images/marketplace/nfts/nft3.png';
+import nft3 from '../../assets/images/marketplace/nfts/nft3.mp3';
 import nft4 from '../../assets/images/marketplace/nfts/nft4.png';
 import nft5 from '../../assets/images/marketplace/nfts/nft5.png';
 import nft6 from '../../assets/images/marketplace/nfts/nft6.png';
 import nft7 from '../../assets/images/marketplace/nfts/nft7.png';
 import nft8 from '../../assets/images/marketplace/nfts/nft8.png';
 import nft9 from '../../assets/images/marketplace/nfts/nft9.png';
-import nft10 from '../../assets/images/marketplace/nfts/nft10.png';
+import nft10 from '../../assets/images/marketplace/nfts/nft10.mp4';
 import nft11 from '../../assets/images/marketplace/nfts/nft11.png';
 import nft12 from '../../assets/images/marketplace/nfts/nft12.png';
 import nft13 from '../../assets/images/marketplace/nfts/nft13.png';
 import nft14 from '../../assets/images/marketplace/nfts/nft14.png';
 import nft15 from '../../assets/images/marketplace/nfts/nft15.png';
-import nft16 from '../../assets/images/marketplace/nfts/nft16.png';
+import nft16 from '../../assets/images/marketplace/nfts/nft16.mp4';
 import auction1 from '../../assets/images/marketplace/auctions/auction1.png';
 import auction2 from '../../assets/images/marketplace/auctions/auction2.png';
 import auction3 from '../../assets/images/marketplace/auctions/auction3.png';
@@ -57,7 +57,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 1,
       name: 'Collection1',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 1,
@@ -65,7 +65,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft1,
+    liked: false,
+    media: {
+      url: nft1,
+      type: 'image/png',
+    },
     name: 'NFT 1',
     price: 0.5,
     quantity: '1/10',
@@ -81,7 +85,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 2,
       name: 'Collection2',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 2,
@@ -89,7 +93,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft2,
+    liked: false,
+    media: {
+      url: nft2,
+      type: 'image/png',
+    },
     name: 'NFT 2',
     price: 0.5,
     quantity: '1/10',
@@ -105,7 +113,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 3,
       name: 'Collection3',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 3,
@@ -113,7 +121,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft3,
+    liked: false,
+    media: {
+      url: nft3,
+      type: 'audio/mpeg',
+    },
     name: 'NFT 3',
     price: 0.5,
     quantity: '1/10',
@@ -129,7 +141,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 4,
       name: 'Collection4',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 4,
@@ -137,7 +149,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft4,
+    liked: false,
+    media: {
+      url: nft4,
+      type: 'image/png',
+    },
     name: 'NFT 4',
     price: 0.5,
     quantity: '1/10',
@@ -153,7 +169,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 5,
       name: 'Collection5',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 5,
@@ -161,7 +177,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft5,
+    liked: false,
+    media: {
+      url: nft5,
+      type: 'image/png',
+    },
     name: 'NFT 5',
     price: 0.5,
     quantity: '1/10',
@@ -177,7 +197,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 6,
       name: 'Collection6',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 6,
@@ -185,7 +205,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft6,
+    liked: false,
+    media: {
+      url: nft6,
+      type: 'image/png',
+    },
     name: 'NFT 6',
     price: 0.5,
     quantity: '1/10',
@@ -201,7 +225,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 7,
       name: 'Collection7',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 7,
@@ -209,7 +233,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft7,
+    liked: false,
+    media: {
+      url: nft7,
+      type: 'image/png',
+    },
     name: 'NFT 7',
     price: 0.5,
     quantity: '1/10',
@@ -225,7 +253,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 8,
       name: 'Collection8',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 8,
@@ -233,7 +261,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft8,
+    liked: false,
+    media: {
+      url: nft8,
+      type: 'image/png',
+    },
     name: 'NFT 8',
     price: 0.5,
     quantity: '1/10',
@@ -249,7 +281,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 9,
       name: 'Collection9',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 9,
@@ -257,7 +289,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft9,
+    liked: false,
+    media: {
+      url: nft9,
+      type: 'image/png',
+    },
     name: 'NFT 9',
     price: 0.5,
     quantity: '1/10',
@@ -273,7 +309,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 10,
       name: 'Collection10',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 10,
@@ -281,7 +317,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft10,
+    liked: false,
+    media: {
+      url: nft10,
+      type: 'video/mp4',
+    },
     name: 'NFT 10',
     price: 0.5,
     quantity: '1/10',
@@ -297,7 +337,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 11,
       name: 'Collection11',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 11,
@@ -305,7 +345,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft11,
+    liked: false,
+    media: {
+      url: nft11,
+      type: 'image/png',
+    },
     name: 'NFT 11',
     price: 0.5,
     quantity: '1/10',
@@ -321,7 +365,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 12,
       name: 'Collection12',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 12,
@@ -329,7 +373,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft12,
+    liked: false,
+    media: {
+      url: nft12,
+      type: 'image/png',
+    },
     name: 'NFT 12',
     price: 0.5,
     quantity: '1/10',
@@ -345,7 +393,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 13,
       name: 'Collection13',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 13,
@@ -353,7 +401,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft13,
+    liked: false,
+    media: {
+      url: nft13,
+      type: 'image/png',
+    },
     name: 'NFT 13',
     price: 0.5,
     quantity: '1/10',
@@ -369,7 +421,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 14,
       name: 'Collection14',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 14,
@@ -377,7 +429,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft14,
+    liked: false,
+    media: {
+      url: nft14,
+      type: 'image/png',
+    },
     name: 'NFT 14',
     price: 0.5,
     quantity: '1/10',
@@ -393,7 +449,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 15,
       name: 'Collection15',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 15,
@@ -401,7 +457,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft15,
+    liked: false,
+    media: {
+      url: nft15,
+      type: 'image/png',
+    },
     name: 'NFT 15',
     price: 0.5,
     quantity: '1/10',
@@ -417,7 +477,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     collection: {
       id: 16,
       name: 'Collection16',
-      avatar: nft10,
+      avatar: nft9,
     },
     owner: {
       id: 16,
@@ -425,7 +485,11 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       avatar: user2,
     },
     likesCount: 24,
-    photo: nft16,
+    liked: false,
+    media: {
+      url: nft16,
+      type: 'video/mp4',
+    },
     name: 'NFT 16',
     price: 0.5,
     quantity: '1/10',
