@@ -1,0 +1,94 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
+
+.transactions--tab--content {
+    width: 100%;
+    .filters--section {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        overflow: hidden;
+        margin-bottom: 30px;
+        .filter--item {
+            padding: 7px 14px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 100px;
+            cursor: pointer;
+            margin-right: 12px;
+            user-select: none;
+            h5 {
+                text-transform: capitalize;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 18px;
+                align-items: center;
+                font-feature-settings: 'ss02' on, 'ss03' on, 'ss04' on;
+                color: $black;
+                display: flex;
+                align-items: center;
+                .icon {
+                    margin-right: 12px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+        .active {
+            background-color: rgba(0, 0, 0, 0.068);
+        }
+    }
+    .table--transactions--parent {
+        width: 100%;
+        .table--item--transactions {
+            width: 100%;
+            min-height: 105px;
+            background: #FFFFFF;
+            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            .img--block {
+                max-width: 65px;
+                min-height: 65px;
+                width: 100%;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .transactions--right--block {
+                width: calc(100% - 65px - 20px);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-left: 20px;
+                .transactions--description--block {
+                    font-family: $spaceGroteskFont;
+                    min-height: 65px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    h5 {
+                        // font-family: $spaceGroteskFont;
+                        font-size: 14px;
+                        line-height: 160%;
+                        color: #000000;
+                    }
+                    .hours--ago {
+                        // font-family: Space Grotesk;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 12px;
+                        line-height: 160%;
+                        color: rgba(0, 0, 0, 0.4);
+                    }
+                }
+            }
+        }
+    }
+}
