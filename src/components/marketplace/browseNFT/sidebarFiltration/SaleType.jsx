@@ -21,28 +21,23 @@ const SaleType = ({ saleTypeButtons, setSaleTypeButtons }) => {
         onClick={() => setShowFilters(!showFilters)}
       >
         <h3>Sale Type</h3>
-        <img src={arrowDown} alt="Arrow Down" className={showFilters ? 'rotate' : ''} />
       </div>
-      {showFilters ? (
-        <Animated animationIn="fadeIn">
-          <div className="browse--nft--sidebar--filtration--item--content">
-            <div className="sale--type--buttons">
-              {saleTypeButtons.map((item, index) => (
-                <button
-                  type="button"
-                  key={uuid()}
-                  className={item.selected ? 'selected' : ''}
-                  onClick={() => handleClick(index)}
-                >
-                  {item.text}
-                </button>
-              ))}
-            </div>
+      <Animated animationIn="fadeIn">
+        <div className="browse--nft--sidebar--filtration--item--content">
+          <div className="sale--type--buttons">
+            {saleTypeButtons.map((item, index) => (
+              <button
+                type="button"
+                key={uuid()}
+                className={item.selected ? 'selected' : ''}
+                onClick={() => handleClick(index)}
+              >
+                {item.text}
+              </button>
+            ))}
           </div>
-        </Animated>
-      ) : (
-        <></>
-      )}
+        </div>
+      </Animated>
     </div>
   );
 };
