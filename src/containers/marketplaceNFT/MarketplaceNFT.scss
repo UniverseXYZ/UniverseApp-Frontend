@@ -1,0 +1,321 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+.marketplace--nft--page {
+  display: grid;
+  grid-template-columns: 1fr 560px;
+  .Marketplace--img {
+    border-right: 1px solid #e4e4e4;
+    padding-bottom: 540px;
+    > img {
+      height: 600px;
+      width: 600px;
+      border-radius: 12px;
+      margin: auto;
+      display: block;
+      margin-top: 96px;
+    }
+  }
+  .Marketplace--settings {
+    padding-left: 50px;
+    padding-right: 40px;
+    margin-top: 96px;
+    .Marketplace--name {
+      .icon {
+        display: flex;
+        justify-content: space-between;
+        > * {
+          padding: 0 0 0 20px;
+        }
+        > p {
+          margin: auto;
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: left;
+        }
+        .share-open {
+          cursor: pointer;
+        }
+      }
+      display: flex;
+      justify-content: space-between;
+      > h1 {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-size: 26px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 36px;
+        letter-spacing: 0px;
+        text-align: left;
+      }
+    }
+    .Marketplace--number {
+      margin-top: 15px;
+      > p {
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 22px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #00000066;
+      }
+    }
+    .Marketplace--collections {
+      display: flex;
+      margin-top: 15px;
+      > div:not(:first-child) {
+        padding-left: 42px;
+      }
+      .Marketplace--creators {
+        display: flex;
+        .creator--name {
+          padding-left: 10px;
+          > p {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #00000066;
+          }
+          > h6 {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #000000;
+          }
+        }
+      }
+    }
+    .Marketplace--text {
+      margin-top: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      > p {
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        letter-spacing: 0px;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.4);
+        padding-bottom: 30px;
+        > span {
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0px;
+          text-align: left;
+          color: #000000;
+        }
+      }
+    }
+    .Marketplace--info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 30px;
+      .Marketplace--bid {
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        > p {
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+          color: rgba(0, 0, 0, 0.4);
+          > span {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: black;
+          }
+        }
+        > h1 {
+          font-family: $spaceGroteskFont;
+          font-size: 20px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0px;
+          text-align: left;
+          margin-top: 10px;
+        }
+        > h2 {
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+          color: #00000066;
+        }
+      }
+      .Marketplace--timer {
+        margin-left: 15px;
+        > p {
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+          color: #00000066;
+        }
+        .timer--value {
+          display: flex;
+          margin-top: 10px;
+          p:not(:first-child) {
+            padding-left: 35px;
+          }
+          > p {
+            font-family: $spaceGroteskFont;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 22px;
+            letter-spacing: 0px;
+            text-align: left;
+          }
+        }
+        .timer {
+          display: flex;
+          > h1 {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #00000066;
+          }
+          > h2 {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #00000066;
+            padding-left: 19px;
+          }
+          > h3 {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #00000066;
+            padding-left: 16px;
+          }
+          > h4 {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #00000066;
+            padding-left: 10px;
+          }
+        }
+      }
+    }
+    .Marketplace--buttons {
+      margin-top: 30px;
+      > button {
+        width: 100%;
+      }
+      .grey-button {
+        align-items: center;
+        padding: 11px 26px;
+        justify-content: center;
+        border-radius: 12px;
+        background-image: #eeeeee;
+        background-origin: border-box;
+        box-shadow: 2px 1000px 1px #eeeeee inset;
+        font-style: normal;
+        font-size: 16px;
+        line-height: 20px;
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 22px;
+        letter-spacing: 0em;
+        text-align: center;
+        color: #00000066;
+        transition: 50ms ease-in;
+        &:disabled {
+          color: rgba(0, 0, 0, 0.2);
+          box-shadow: none;
+          background: $white;
+          cursor: not-allowed;
+        }
+        &:hover {
+          box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
+        }
+      }
+    }
+    .tabs {
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      margin-top: 40px;
+      ul.tab_items {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        min-width: 460px;
+        white-space: nowrap;
+
+        li {
+          margin-right: 40px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 20px;
+          color: rgba(0, 0, 0, 0.4);
+          padding-bottom: 9px;
+          cursor: default;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &.active {
+            cursor: pointer;
+            color: $black;
+            border-bottom: 1px solid $black;
+          }
+        }
+      }
+    }
+  }
+}
