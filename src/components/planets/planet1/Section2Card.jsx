@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Legendary from '../../../assets/images/planet-section2-legendary.png';
 import Button from '../../button/Button';
@@ -6,6 +7,7 @@ import './styles/Section2Card.scss';
 
 const Section2Card = (props) => {
   const { name, description, image, legendary } = props;
+  const history = useHistory();
   return (
     <div className="section2--card--parent">
       {legendary && <img src={Legendary} alt="img" className="planet--card--legendary--image" />}
@@ -15,7 +17,11 @@ const Section2Card = (props) => {
         <p>{description}</p>
       </div>
       <div className="buttons--group">
-        <Button className="light-button mint--reprint--btn" type="button">
+        <Button
+          className="light-button mint--reprint--btn"
+          type="button"
+          onClick={() => history.push('/character-page')}
+        >
           Mint Reprint
         </Button>
         <Button className="light-border-button auction--btn" type="button">
