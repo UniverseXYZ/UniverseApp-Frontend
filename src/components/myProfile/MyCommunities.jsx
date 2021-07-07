@@ -7,7 +7,6 @@ const MyCommunities = (props) => {
   const { communities } = props;
   const [showCount, setShowCount] = useState(3);
   const [toggle, setToggle] = useState(false);
-  console.log(communities);
 
   useEffect(() => {
     if (toggle) setShowCount(communities.length);

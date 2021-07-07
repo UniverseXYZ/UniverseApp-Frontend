@@ -1,0 +1,39 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
+
+.gallery--section {
+    width: 100%;
+    min-height: 170px;
+    margin-top: 40px;
+    .title--section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-size: 16px;
+            line-height: 130%;
+            color: $black;
+        }
+        .section--action {
+            display: block;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 160%;
+            text-align: right;
+            text-decoration-line: underline;
+            cursor: pointer;
+        }
+    }
+    .gallery--content {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        :first-child {
+            margin-left: 0 !important;
+        }
+    }
+}
