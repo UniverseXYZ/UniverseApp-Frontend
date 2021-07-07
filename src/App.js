@@ -26,6 +26,7 @@ import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs';
 import MintPolymorph from './containers/polymorphs/MintPolymorph';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
+import MarketplaceNFT from './containers/marketplaceNFT/MarketplaceNFT';
 
 const App = () => {
   const location = useLocation();
@@ -141,6 +142,7 @@ const App = () => {
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
+        <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
 
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
