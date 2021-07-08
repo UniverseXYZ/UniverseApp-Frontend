@@ -34,26 +34,21 @@ const Creators = () => {
         onClick={() => setShowFilters(!showFilters)}
       >
         <h3>Creators</h3>
-        <img src={arrowDown} alt="Arrow Down" className={showFilters ? 'rotate' : ''} />
       </div>
-      {showFilters ? (
-        <Animated animationIn="fadeIn">
-          <div className="browse--nft--sidebar--filtration--item--content">
-            <div className="search--field">
-              <input type="text" placeholder="Search artists" />
-              <img src={searchIcon} alt="Search" />
-            </div>
-            {creators.map((creator) => (
-              <div className="creators--list" key={uuid()}>
-                <img src={creator.avatar} alt={creator.name} />
-                <p>{creator.name}</p>
-              </div>
-            ))}
+      <Animated animationIn="fadeIn">
+        <div className="browse--nft--sidebar--filtration--item--content">
+          <div className="search--field">
+            <input type="text" placeholder="Search artists" />
+            <img src={searchIcon} alt="Search" />
           </div>
-        </Animated>
-      ) : (
-        <></>
-      )}
+          {creators.map((creator) => (
+            <div className="creators--list" key={uuid()}>
+              <img src={creator.avatar} alt={creator.name} />
+              <p>{creator.name}</p>
+            </div>
+          ))}
+        </div>
+      </Animated>
     </div>
   );
 };

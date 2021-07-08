@@ -118,6 +118,10 @@
                             }
                         }
                     }
+                    .apply-button{
+                        margin-top: 10px;
+                        width: 100%;
+                    }
                     .price--dropdown {
                         display: flex;
                         align-items: center;
@@ -216,7 +220,7 @@
                             font-size: 16px;
                             line-height: 20px;
                             color: $black;
-                            width: 90px;
+                            width: 45%;
                             &::placeholder {
                                 color: rgba(0, 0, 0, 0.2);
                             }
@@ -465,6 +469,7 @@
             .load--more--nfts {
                 margin-top: 40px;
                 width: 100%;
+                box-shadow: 2px 1000px 1px #fcf9f5 inset;
             }
         }
     }

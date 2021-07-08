@@ -3,6 +3,7 @@ import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import InputRange from 'react-input-range';
+import Button from '../../../button/Button';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import ethereumIcon from '../../../../assets/images/bid_icon.svg';
 import daiIcon from '../../../../assets/images/dai_icon.svg';
@@ -17,6 +18,9 @@ const Price = ({ setSelectedPrice }) => {
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
+  const [disabledMin, setDisabledMin] = useState(false);
+  const [disabledMax, setDisabledMax] = useState(false);
+
   const ref = useRef(null);
 
   const bidTokens = [
@@ -48,7 +52,10 @@ const Price = ({ setSelectedPrice }) => {
   ];
 
   const validateMinValue = (e) => {
-    setSliderValue({ ...sliderValue, min: Number(e.target.value) });
+    if (Number(e.target.value) >= 0) {
+      setSliderValue({ ...sliderValue, min: Number(e.target.value) });
+      setDisabledMin(true);
+    }
     // const value = e.target.value.replace(/[^\d]/, '');
     // if (parseInt(value, 10) !== 0) {
     //   setMinValue(value);
@@ -56,13 +63,18 @@ const Price = ({ setSelectedPrice }) => {
   };
 
   const validateMaxValue = (e) => {
-    setSliderValue({ ...sliderValue, max: Number(e.target.value) });
+    if (Number(e.target.value) >= 0) {
+      setSliderValue({ ...sliderValue, max: Number(e.target.value) });
+      setDisabledMax(true);
+    }
+
     // const value = e.target.value.replace(/[^\d]/, '');
     // if (parseInt(value, 10) !== 0) {
     //   setMaxValue(value);
     // }
   };
-
+  console.log(disabledMin);
+  console.log(disabledMax);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setShowPriceDropdown(false);
@@ -84,95 +96,85 @@ const Price = ({ setSelectedPrice }) => {
         onClick={() => setShowFilters(!showFilters)}
       >
         <h3>Price</h3>
-        <img src={arrowDown} alt="Arrow Down" className={showFilters ? 'rotate' : ''} />
       </div>
-      {showFilters ? (
-        <Animated animationIn="fadeIn">
-          <div className="browse--nft--sidebar--filtration--item--content">
-            <div
-              className="price--dropdown"
-              aria-hidden="true"
-              onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-              ref={ref}
-            >
-              <div>
-                <img
-                  src={bidTokens[selectedTokenIndex].icon}
-                  alt={bidTokens[selectedTokenIndex].title}
-                />
-              </div>
-              <div>
-                <h6>{bidTokens[selectedTokenIndex].title}</h6>
-                <p>{bidTokens[selectedTokenIndex].subtitle}</p>
-              </div>
-              <div>
-                <img
-                  src={arrowDown}
-                  alt="Arrow Down"
-                  className={showPriceDropdown ? 'rotate' : ''}
-                />
-              </div>
-              {showPriceDropdown ? (
-                <div className="price--dropdown--items">
-                  {bidTokens.map((token, index) => (
-                    <div
-                      className="price--dropdown--item"
-                      key={uuid()}
-                      aria-hidden="true"
-                      onClick={() => setSelectedTokenIndex(index)}
-                      style={{ display: selectedTokenIndex === index ? 'none' : 'flex' }}
-                    >
-                      <div>
-                        <img src={token.icon} alt={token.title} />
-                      </div>
-                      <div>
-                        <h6>{token.title}</h6>
-                        <p>{token.subtitle}</p>
-                      </div>
+      <Animated animationIn="fadeIn">
+        <div className="browse--nft--sidebar--filtration--item--content">
+          <div
+            className="price--dropdown"
+            aria-hidden="true"
+            onClick={() => setShowPriceDropdown(!showPriceDropdown)}
+            ref={ref}
+          >
+            <div>
+              <img
+                src={bidTokens[selectedTokenIndex].icon}
+                alt={bidTokens[selectedTokenIndex].title}
+              />
+            </div>
+            <div>
+              <h6>{bidTokens[selectedTokenIndex].title}</h6>
+              <p>{bidTokens[selectedTokenIndex].subtitle}</p>
+            </div>
+            <div>
+              <img src={arrowDown} alt="Arrow Down" className={showPriceDropdown ? 'rotate' : ''} />
+            </div>
+            {showPriceDropdown ? (
+              <div className="price--dropdown--items">
+                {bidTokens.map((token, index) => (
+                  <div
+                    className="price--dropdown--item"
+                    key={uuid()}
+                    aria-hidden="true"
+                    onClick={() => setSelectedTokenIndex(index)}
+                    style={{ display: selectedTokenIndex === index ? 'none' : 'flex' }}
+                  >
+                    <div>
+                      <img src={token.icon} alt={token.title} />
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="min--max--fields">
-              <input
-                type="number"
-                placeholder="Min"
-                value={sliderValue.min}
-                onChange={validateMinValue}
-              />
-              <span className="to">to</span>
-              <input
-                type="number"
-                placeholder="Max"
-                value={sliderValue.max}
-                onChange={validateMaxValue}
-              />
-              <button type="button" onClick={() => setSelectedPrice(sliderValue)}>
-                <img src={rightArrow} alt="Arrow right" />
-              </button>
-            </div>
-            <div className="range--slider">
-              <InputRange
-                step={0.1}
-                maxValue={4}
-                minValue={0}
-                value={sliderValue}
-                onChange={(value) =>
-                  setSliderValue({
-                    min: Number(value.min.toFixed(1)),
-                    max: Number(value.max.toFixed(1)),
-                  })
-                }
-              />
-            </div>
+                    <div>
+                      <h6>{token.title}</h6>
+                      <p>{token.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
-        </Animated>
-      ) : (
-        <></>
-      )}
+          <div className="min--max--fields">
+            <input type="number" placeholder="Min" min="0" max="4" onChange={validateMinValue} />
+            <span className="to">to</span>
+            <input type="number" placeholder="Max" min="0" max="4" onChange={validateMaxValue} />
+          </div>
+          {disabledMax && disabledMin ? (
+            <Button
+              className="light-button apply-button"
+              onClick={() => setSelectedPrice(sliderValue)}
+            >
+              Apply
+            </Button>
+          ) : (
+            <Button className="light-button apply-button" disabled>
+              Apply
+            </Button>
+          )}
+          {/* <div className="range--slider">
+            <InputRange
+              step={0.1}
+              maxValue={4}
+              minValue={0}
+              value={sliderValue}
+              onChange={(value) =>
+                setSliderValue({
+                  min: Number(value.min.toFixed(1)),
+                  max: Number(value.max.toFixed(1)),
+                })
+              }
+            />
+          </div> */}
+        </div>
+      </Animated>
     </div>
   );
 };
