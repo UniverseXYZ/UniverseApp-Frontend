@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
-import NotFound from '../../components/notFound/NotFound';
-import tabArrow from '../../assets/images/tab-arrow.svg';
-import bigSearchIcon from '../../assets/images/marketplace/big-search.png';
-import './Search.scss';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
-import AuctionsResult from '../../components/search/auctions/AuctionsResult';
-import NFTsResult from '../../components/search/nfts/NFTsResult';
-import UsersResult from '../../components/search/users/UsersResult';
-import CollectionsResult from '../../components/search/collections/CollectionsResult';
-import CommunitiesResult from '../../components/search/communities/CommunitiesResult';
-import GalleriesResult from '../../components/search/galleries/GalleriesResult';
+import NotFound from '../../components/notFound/NotFound.jsx';
+import './Search.scss';
+import AuctionsResult from '../../components/search/auctions/AuctionsResult.jsx';
+import NFTsResult from '../../components/search/nfts/NFTsResult.jsx';
+import UsersResult from '../../components/search/users/UsersResult.jsx';
+import CollectionsResult from '../../components/search/collections/CollectionsResult.jsx';
+import CommunitiesResult from '../../components/search/communities/CommunitiesResult.jsx';
+import GalleriesResult from '../../components/search/galleries/GalleriesResult.jsx';
 import Button from '../../components/button/Button.jsx';
 import {
   PLACEHOLDER_MARKETPLACE_AUCTIONS,
@@ -21,6 +19,10 @@ import {
   PLACEHOLDER_MARKETPLACE_COMMUNITIES,
   PLACEHOLDER_MARKETPLACE_GALLERIES,
 } from '../../utils/fixtures/BrowseNFTsDummyData';
+import tabArrow from '../../assets/images/tab-arrow.svg';
+import searchIcon from '../../assets/images/search-gray.svg';
+import closeIcon from '../../assets/images/close-menu.svg';
+import bigSearchIcon from '../../assets/images/marketplace/big-search.png';
 
 const Search = () => {
   const location = useLocation();
@@ -29,28 +31,44 @@ const Search = () => {
   const tabs = ['Auctions', 'NFTs', 'Users', 'Collections', 'Communities', 'Galleries'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [resultsCount, setResultsCount] = useState(0);
+  const [searchValue, setSearchValue] = useState(location.state.query);
+  const searchRef = useRef();
+
+  const handleSearchKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      if (searchValue) {
+        setQuery(searchValue);
+        searchRef.current.blur();
+      }
+    }
+  };
 
   useEffect(() => {
     if (location.state) {
       setQuery(location.state.query);
     }
+  }, []);
+
+  useEffect(() => {
     const auctionsCount = PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-      item.name.toLowerCase().includes(location.state.query.toLowerCase())
+      item.name.toLowerCase().includes(query.toLowerCase())
     );
     const nftsCount = PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-      item.name.toLowerCase().includes(location.state.query.toLowerCase())
+      item.name.toLowerCase().includes(query.toLowerCase())
     );
     const usersCount = PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-      item.name.toLowerCase().includes(location.state.query.toLowerCase())
+      item.name.toLowerCase().includes(query.toLowerCase())
     );
     const collectionsCount = PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-      item.name.toLowerCase().includes(location.state.query.toLowerCase())
+      item.name.toLowerCase().includes(query.toLowerCase())
     );
     const communitiesCount = PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-      item.name.toLowerCase().includes(location.state.query.toLowerCase())
+      item.name.toLowerCase().includes(query.toLowerCase())
     );
     const galleriesCount = PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-      item.name.toLowerCase().includes(location.state.query.toLowerCase())
+      item.name
+        .toLowerCase()
+        .includes(query ? query.toLowerCase() : location.state.query.toLowerCase())
     );
     setResultsCount(
       auctionsCount.length +
@@ -60,7 +78,7 @@ const Search = () => {
         communitiesCount.length +
         galleriesCount.length
     );
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     function handleResize() {
@@ -85,7 +103,24 @@ const Search = () => {
     <div className="search--page">
       <div className="search--background">
         <div className="search--field">
-          <input type="text" placeholder="Search" />
+          <img className="search--icon" src={searchIcon} alt="Search" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            ref={searchRef}
+          />
+          {searchValue && (
+            <img
+              className="close--icon"
+              src={closeIcon}
+              alt="Close"
+              aria-hidden="true"
+              onClick={() => setSearchValue('')}
+            />
+          )}
         </div>
       </div>
       <div className="container">

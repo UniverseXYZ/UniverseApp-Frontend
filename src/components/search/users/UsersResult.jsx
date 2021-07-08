@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import './UsersResult.scss';
 import Button from '../../button/Button.jsx';
+import Pagination from '../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown.jsx';
 
 const UsersResult = ({ query, data }) => {
   const [users, setUsers] = useState(data);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(12);
 
   const handleFollow = (idx) => {
     const newUsers = [...users];
@@ -17,6 +21,7 @@ const UsersResult = ({ query, data }) => {
     <div className="users--search--result">
       {users
         .filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+        .slice(offset, offset + perPage)
         .map((user, i) => (
           <div className="user--box" key={uuid()}>
             <div className="details">
@@ -48,6 +53,14 @@ const UsersResult = ({ query, data }) => {
             </div>
           </div>
         ))}
+      {data.filter((item) => item.name.toLowerCase().includes(query.toLowerCase())).length ? (
+        <div className="pagination__container">
+          <Pagination data={data} perPage={perPage} setOffset={setOffset} />
+          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
