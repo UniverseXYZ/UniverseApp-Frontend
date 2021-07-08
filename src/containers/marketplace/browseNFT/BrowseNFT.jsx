@@ -39,7 +39,7 @@ const BrowseNFT = () => {
 
   return (
     <div className="browse--nft--page">
-      <Submenu title="NFT Marketplace" subtitles={['Browse NFTs', 'Activity']} />
+      {/* <Submenu title="NFT Marketplace" subtitles={['Browse NFTs', 'Activity']} /> */}
       <div className="browse--nft--grid">
         <div className="browse--nft--sidebar--filtration">
           <SaleType saleTypeButtons={saleTypeButtons} setSaleTypeButtons={setSaleTypeButtons} />
