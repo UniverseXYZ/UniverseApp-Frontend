@@ -619,7 +619,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     id: 11,
     name: 'Collection11',
     background: null,
-    photo: null,
+    photo: nft11,
     owner: {
       name: 'Justin 3LAU',
     },
@@ -638,7 +638,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
 export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   {
     id: 1,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 1',
     photo: community1,
     members: 10622,
     description:
@@ -646,7 +646,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 2,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 2',
     photo: community2,
     members: 10622,
     description:
@@ -654,7 +654,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 3,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 3',
     photo: community3,
     members: 10622,
     description:
@@ -662,7 +662,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 4,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 4',
     photo: community4,
     members: 10622,
     description:
@@ -670,7 +670,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 5,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 5',
     photo: community5,
     members: 10622,
     description:
@@ -678,7 +678,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 6,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 6',
     photo: community6,
     members: 10622,
     description:
@@ -686,7 +686,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 7,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 7',
     photo: community7,
     members: 10622,
     description:
@@ -694,7 +694,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
   },
   {
     id: 8,
-    name: 'CryptoPunks Verified',
+    name: 'CryptoPunks Verified 8',
     photo: community8,
     members: 10622,
     description:

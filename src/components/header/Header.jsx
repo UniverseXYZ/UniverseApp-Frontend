@@ -1,7 +1,16 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Link, useHistory, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import {
+  PLACEHOLDER_MARKETPLACE_AUCTIONS,
+  PLACEHOLDER_MARKETPLACE_NFTS,
+  PLACEHOLDER_MARKETPLACE_USERS,
+  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
+  PLACEHOLDER_MARKETPLACE_COMMUNITIES,
+  PLACEHOLDER_MARKETPLACE_GALLERIES,
+} from '../../utils/fixtures/BrowseNFTsDummyData';
 import './Header.scss';
+import Button from '../button/Button';
 import DesktopView from './dimensions/desktop/DesktopView.jsx';
 import TabletView from './dimensions/tablet/TabletView.jsx';
 import MobileView from './dimensions/mobile/MobileView.jsx';
@@ -9,6 +18,7 @@ import AppContext from '../../ContextAPI';
 import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
 import searchIcon from '../../assets/images/big-search.svg';
+import closeIcon from '../../assets/images/close-menu.svg';
 
 const Header = ({ location }) => {
   const { isWalletConnected, setIsWalletConnected, darkMode } = useContext(AppContext);
@@ -31,6 +41,11 @@ const Header = ({ location }) => {
         searchRef.current.blur();
       }
     }
+  };
+  const handleAllResults = () => {
+    history.push(`/search`, { query: searchValue });
+    setSearchValue('');
+    searchRef.current.blur();
   };
 
   const handleConnectWallet = (wallet) => {
@@ -86,15 +101,141 @@ const Header = ({ location }) => {
         </Link>
         {showSearch && (
           <div className="search--field">
-            <img src={searchIcon} alt="Search" />
+            <img className="search" src={searchIcon} alt="Search" />
             <input
               type="text"
+              className="inp"
               placeholder="Search"
               ref={searchRef}
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               onKeyDown={handleSearchChange}
             />
+            {searchValue.length > 0 && (
+              <>
+                <img
+                  className="close"
+                  src={closeIcon}
+                  alt="Close"
+                  onClick={() => setSearchValue('')}
+                  aria-hidden="true"
+                />
+                <div className="search__results">
+                  {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
+                    item.title.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ? (
+                    <div className="search__nfts">
+                      {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>NFTs</h4>}
+                      {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((nft) => (
+                        <div className="nft__div">
+                          <div className="nft--image">
+                            <img src={nft.photo} alt="NFT" />
+                          </div>
+                          <div className="nft--desc">
+                            <h5 className="nft--name">{nft.name}</h5>
+                            <p className="nft--price">
+                              {nft.price} ETH / {nft.quantity.split('/')[0]} of{' '}
+                              {nft.quantity.split('/')[1]}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Users</h4>}
+                      {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((user) => (
+                        <div className="users__div">
+                          <div className="user--avatar">
+                            <img src={user.avatar} alt="User" />
+                          </div>
+                          <div className="user--desc">
+                            <h5 className="user--name">{user.name}</h5>
+                            <p className="user--followers">{user.followers} Followers</p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
+                        item.title.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Auctions</h4>}
+                      {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
+                        item.title.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((auction) => (
+                        <div className="auction__div">
+                          <div className="auction--image">
+                            <img src={auction.photo} alt="Auction" />
+                          </div>
+                          <div className="auction--desc">
+                            <h5 className="auction--title">{auction.title}</h5>
+                            <p className="auction--artist">by {auction.creator.name}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Collections</h4>}
+                      {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((collection) => (
+                        <div className="collection__div">
+                          <div className="collection--image">
+                            <img src={collection.photo} alt="Coll" />
+                          </div>
+                          <div className="collection--desc">
+                            <h5 className="collection--name">{collection.name}</h5>
+                            <p className="collection--owner">by {collection.owner.name}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Communities</h4>}
+                      {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((communities) => (
+                        <div className="communities__div">
+                          <div className="communities--photo">
+                            <img src={communities.photo} alt="Comm" />
+                          </div>
+                          <div className="communities--desc">
+                            <h5 className="communities--name">{communities.name}</h5>
+                            <p className="communities--members">{communities.members} Members</p>
+                          </div>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        className="light-border-button"
+                        onClick={() => handleAllResults()}
+                      >
+                        All results
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="no__result">
+                      <p>No items found</p>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

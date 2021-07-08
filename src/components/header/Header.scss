@@ -73,21 +73,173 @@ header {
     display: flex;
     align-items: center;
     .search--field {
+      position: relative;
       display: flex;
       align-items: center;
       margin-left: 30px;
       padding-left: 30px;
       border-left: 1px solid rgba(0, 0, 0, 0.1);
+      .search {
+        position: absolute;
+        left: 48px;
+        width: 20px;
+        height: 20px;
+      }
       input {
-        margin-left: 20px;
+        // margin-left: 20px;
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
         font-size: 16px;
         line-height: 20px;
         color: $black;
+        padding: 15px 16px 15px 48px;
+        width: 440px;
+        border: 1px solid transparent;
         &::placeholder {
           color: rgba(0, 0, 0, 0.2);
+        }
+        &:focus {
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        &:active {
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+      .close {
+        position: absolute;
+        right: 20px;
+        width: 12px;
+        height: 12px;
+        cursor: pointer;
+      }
+      .search__results {
+        position: absolute;
+        width: 440px;
+        max-height: 522px;
+        height: fit-content;
+        background: white;
+        border-radius: 12px;
+        top: 52px;
+        box-shadow: 0 10px 36px rgba(136, 120, 172, 0.14);
+        padding: 24px 8px;
+        overflow-y: auto;
+
+        .search__nfts {
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 130%;
+            color: $black;
+            margin-left: 12px;
+            margin-bottom: 8px;
+          }
+          .nft__div,
+          .auction__div,
+          .collection__div {
+            display: flex;
+            padding: 10px 12px;
+            border-radius: 6px;
+
+            .nft--image,
+            .auction--image,
+            .collection--image {
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 5px;
+
+              img {
+                border-radius: 5px;
+              }
+            }
+            .nft--desc,
+            .auction--desc,
+            .collection--desc {
+              .nft--name,
+              .auction--title,
+              .collection--name {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 160%;
+                color: $black;
+              }
+              .nft--price,
+              .auction--artist,
+              .collection--owner {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+          .users__div,
+          .communities__div {
+            display: flex;
+            padding: 10px 12px;
+            border-radius: 6px;
+
+            .user--avatar,
+            .communities--photo {
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 50%;
+
+              img {
+                border-radius: 50%;
+              }
+            }
+            .user--desc,
+            .communities--desc {
+              .user--name,
+              .communities--name {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 160%;
+                color: $black;
+              }
+              .user--followers,
+              .communities--members {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+          button {
+            margin-top: 25px;
+            width: 100%;
+          }
+        }
+        .no__result {
+          padding: 12px;
+          p {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 150%;
+            color: $black;
+          }
         }
       }
     }
