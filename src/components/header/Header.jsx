@@ -19,6 +19,7 @@ import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
 import searchIcon from '../../assets/images/big-search.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
+import { defaultColors } from '../../utils/helpers';
 
 const Header = ({ location }) => {
   const { isWalletConnected, setIsWalletConnected, darkMode } = useContext(AppContext);
@@ -110,6 +111,7 @@ const Header = ({ location }) => {
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               onKeyDown={handleSearchChange}
+              onBlur={() => setSearchValue('')}
             />
             {searchValue.length > 0 && (
               <>
@@ -145,7 +147,7 @@ const Header = ({ location }) => {
                       ).map((nft) => (
                         <div className="nft__div">
                           <div className="nft--image">
-                            <img src={nft.photo} alt="NFT" />
+                            <img src={nft.media.url} alt="NFT" />
                           </div>
                           <div className="nft--desc">
                             <h5 className="nft--name">{nft.name}</h5>
@@ -195,9 +197,21 @@ const Header = ({ location }) => {
                         item.name.toLowerCase().includes(searchValue.toLowerCase())
                       ).map((collection) => (
                         <div className="collection__div">
-                          <div className="collection--image">
-                            <img src={collection.photo} alt="Coll" />
-                          </div>
+                          {!collection.photo ? (
+                            <div
+                              className="random--avatar--color"
+                              style={{
+                                backgroundColor:
+                                  defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                              }}
+                            >
+                              {collection.name.charAt(0)}
+                            </div>
+                          ) : (
+                            <div className="collection--image">
+                              <img src={collection.photo} alt="Coll" />
+                            </div>
+                          )}
                           <div className="collection--desc">
                             <h5 className="collection--name">{collection.name}</h5>
                             <p className="collection--owner">by {collection.owner.name}</p>

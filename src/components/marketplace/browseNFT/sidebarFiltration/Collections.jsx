@@ -5,6 +5,7 @@ import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import collectionImg from '../../../../assets/images/ntf1.svg';
 import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
+import { defaultColors } from '../../../../utils/helpers';
 
 const Collections = () => {
   const [showFilters, setShowFilters] = useState(true);
@@ -39,7 +40,19 @@ const Collections = () => {
             .filter((item) => item.name.toLowerCase().includes(searchByCollections.toLowerCase()))
             .map((col) => (
               <div className="collections--list" key={uuid()}>
-                <img src={col.photo} alt={col.name} />
+                {!col.photo ? (
+                  <div
+                    className="random--avatar--color"
+                    style={{
+                      backgroundColor:
+                        defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                    }}
+                  >
+                    {col.name.charAt(0)}
+                  </div>
+                ) : (
+                  <img src={col.photo} alt={col.name} />
+                )}
                 <p>{col.name}</p>
               </div>
             ))}
