@@ -10,9 +10,9 @@ import share from '../../assets/images/aaaa.svg';
 import SharePopup from '../popups/SharePopup';
 
 const TradingHistory = () => (
-  <div className="marketplace--bids">
-    <div className="bids--box">
-      <div className="box--avatar">
+  <div className="trading">
+    <div className="trading--box">
+      <div className="trading--avatar">
         <img src={icon1} alt="icon1" />
         <div>
           <h1>
@@ -32,12 +32,12 @@ const TradingHistory = () => (
         </div>
       </div>
     </div>
-    <div className="bids--box">
-      <div className="box--avatar">
+    <div className="trading--box">
+      <div className="trading--avatar">
         <img src={icon2} alt="icon2" />
         <div>
           <h1>
-            <span> Bought by </span> Bought by @dominixz
+            <span> Bought by </span>@dominixz
           </h1>
           <p>2 days ago</p>
         </div>
@@ -53,8 +53,8 @@ const TradingHistory = () => (
         </div>
       </div>
     </div>
-    <div className="bids--box">
-      <div className="box--avatar">
+    <div className="trading--box">
+      <div className="trading--avatar">
         <img src={icon3} alt="icon3" />
         <div>
           <h1>
@@ -74,8 +74,8 @@ const TradingHistory = () => (
         </div>
       </div>
     </div>
-    <div className="bids--box">
-      <div className="box--avatar">
+    <div className="trading--box">
+      <div className="trading--avatar">
         <img src={icon4} alt="icon4" />
         <div>
           <h1>
@@ -95,8 +95,8 @@ const TradingHistory = () => (
         </div>
       </div>
     </div>
-    <div className="bids--box">
-      <div className="box--avatar">
+    <div className="trading--box">
+      <div className="trading--avatar">
         <img src={icon5} alt="icon5" />
         <div>
           <h1>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
+import { useHistory } from 'react-router-dom';
 import './NFTsList.scss';
 import priceIcon from '../../../assets/images/marketplace/price.svg';
 import videoIcon from '../../../assets/images/marketplace/video-icon.svg';
@@ -9,6 +10,7 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 
 const NFTsList = ({ data }) => {
   const [nfts, setNFTs] = useState(data);
+  const history = useHistory();
 
   const handleLikeClick = (id) => {
     setNFTs((prevState) =>
@@ -23,7 +25,6 @@ const NFTsList = ({ data }) => {
       )
     );
   };
-
   return (
     <div className="browse--nft--list">
       {nfts.map((nft) => (
@@ -63,7 +64,11 @@ const NFTsList = ({ data }) => {
               <span>{nft.likesCount}</span>
             </div>
           </div>
-          <div className="nft--box--body">
+          <div
+            className="nft--box--body"
+            aria-hidden="true"
+            onClick={() => history.push(`/marketplace/nft/${nft.id}`)}
+          >
             {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
               <img className="nft--image" src={nft.media.url} alt={nft.name} />
             )}
