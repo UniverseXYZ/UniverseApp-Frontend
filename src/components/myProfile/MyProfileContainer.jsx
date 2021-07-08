@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from '../polymorphs/WrapperCenter';
 import CoverPhoto from './CoverPhoto';
 import UserDataBlock from './UserDataBlock';
 import MyCommunities from './MyCommunities';
 import RightBlockTopLinks from './RightBlockTopLinks';
 import GallerySection from './GallerySection';
+import RecentActivity from './RecentActivity';
 import marketplaceIcon from '../../assets/images/nft-marketplace.svg';
 import galleryIcon from '../../assets/images/my-nfts.svg';
 import auctionIcon from '../../assets/images/auction-house.svg';
@@ -36,6 +38,7 @@ const MyProfileContainer = (props) => {
     topNfts,
     saleOnNfts,
     auctions,
+    transactions,
   } = user;
   console.log(user);
   return (
@@ -54,20 +57,31 @@ const MyProfileContainer = (props) => {
           <MyCommunities communities={communities} />
         </div>
         <div className="right--column">
-          <RightBlockTopLinks links={rightTopLinks} />
-          <GallerySection gallery={topNfts} className="top--nfts" title="🔥 Top 5 NFTs" />
-          <GallerySection
-            gallery={saleOnNfts}
-            className="nfts--on--sale"
-            title="🛒 NFTs On Sale"
-            actionText="View all NFT listings"
-          />
-          <GallerySection
-            gallery={auctions}
-            className="featured--auctions"
-            title="🖲 Featured Auctions"
-            actionText="View all active auctions"
-          />
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
+            <RightBlockTopLinks links={rightTopLinks} />
+          </AnimatedOnScroll>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+            <GallerySection gallery={topNfts} className="top--nfts" title="🔥 Top 5 NFTs" />
+          </AnimatedOnScroll>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
+            <GallerySection
+              gallery={saleOnNfts}
+              className="nfts--on--sale"
+              title="🛒 NFTs On Sale"
+              actionText="View all NFT listings"
+            />
+          </AnimatedOnScroll>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
+            <GallerySection
+              gallery={auctions}
+              className="featured--auctions"
+              title="🖲 Featured Auctions"
+              actionText="View all active auctions"
+            />
+          </AnimatedOnScroll>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+            <RecentActivity transactions={transactions} />
+          </AnimatedOnScroll>
         </div>
       </WrapperCenter>
     </div>
@@ -106,6 +120,16 @@ MyProfileContainer.propTypes = {
       PropTypes.shape({
         image: PropTypes.string,
         name: PropTypes.string,
+      })
+    ),
+    transactions: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        type: PropTypes.string,
+        price: PropTypes.number,
+        priceTypes: PropTypes.string,
+        hoursAgo: PropTypes.number,
+        image: PropTypes.string,
       })
     ),
   }).isRequired,
