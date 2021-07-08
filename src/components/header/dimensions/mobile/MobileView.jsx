@@ -349,16 +349,16 @@ const MobileView = (props) => {
                     </div>
                   </div>
                 </li>
-                {!isWalletConnected && (
+                {/* {!isWalletConnected && (
                   <li className="sign__in">
-                    {/* <Popup trigger={<button type="button">Join newsletter</button>}>
+                    <Popup trigger={<button type="button">Join newsletter</button>}>
                       {(close) => <SubscribePopup close={close} />}
-                    </Popup> */}
+                    </Popup>
                     <button type="button" onClick={() => connectWeb3()}>
                       Sign In
                     </button>
                   </li>
-                )}
+                )} */}
               </>
             ) : (
               <div className="select_wallet__section">
