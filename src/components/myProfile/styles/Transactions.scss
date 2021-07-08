@@ -33,15 +33,49 @@
                     margin-right: 12px;
                     display: flex;
                     align-items: center;
+                    img {
+                        width: 12px;
+                        height: 12px;
+                    }
                 }
             }
         }
         .active {
-            background-color: rgba(0, 0, 0, 0.068);
+            &--listings {
+                background: #FFB23E;
+                h5 {
+                    color: $white;
+                }
+            }
+            &--sales {
+                background: #6FDD6C;
+                h5 {
+                    color: $white;
+                }
+            }
+            &--transferrs {
+                background: #D146F3;
+                h5 {
+                    color: $white;
+                }
+            }
+            &--offers {
+                background: #38D3E9;
+                h5 {
+                    color: $white;
+                }
+            }    
+            &--burns {
+                background: #E04300;
+                h5 {
+                    color: $white;
+                }
+            }  
         }
     }
     .table--transactions--parent {
         width: 100%;
+        min-height: 456px;
         .table--item--transactions {
             width: 100%;
             min-height: 105px;
@@ -79,6 +113,54 @@
                         line-height: 160%;
                         color: #000000;
                     }
+                    .center--row {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        .icon {
+                            height: 20px;
+                            width: 20px;
+                            border-radius: 50%;
+                            overflow: hidden;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            img {
+                                width: 10px;
+                                height: 10px;
+                            }
+                            &--listing {
+                                background: #FFB23E;
+                            }
+                            &--sale {
+                                background: #6FDD6C;
+                            }
+                            &--transfer {
+                                background: #D146F3;
+                            }
+                            &--offer {
+                                background: #38D3E9;
+                            }
+                            &--burn {
+                                background: #E04300;
+                            }
+                        }
+                        p {
+                            margin-left: 8px;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 160%;
+                            color: rgba(0, 0, 0, 0.4);
+                            span {
+                                color: $black;
+                                margin: 0 3px;
+                            }
+                            .price {
+                                text-transform: uppercase;
+                            }
+                        }
+                    }
                     .hours--ago {
                         // font-family: Space Grotesk;
                         font-style: normal;
@@ -90,5 +172,8 @@
                 }
             }
         }
+    }
+    .pagination {
+        margin: 0 auto;
     }
 }

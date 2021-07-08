@@ -88,6 +88,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: featuredAuctions3,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -96,6 +97,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: featuredAuctions5,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -104,6 +106,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: saleOnNft3,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -112,6 +115,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: saleOnNft3,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -120,6 +124,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: saleOnNft5,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -128,6 +133,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: saleOnNft4,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -136,6 +142,61 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: featuredAuctions3,
+      userName: 'Justin 3LAU',
+    },
+    {
+      name: 'Nft Name',
+      type: 'listing',
+      price: 0.037,
+      priceType: 'eth',
+      hoursAgo: 13,
+      image: featuredAuctions3,
+      userName: 'Justin 3LAU',
+    },
+    {
+      name: 'Nft Name',
+      type: 'listing',
+      price: 0.037,
+      priceType: 'eth',
+      hoursAgo: 13,
+      image: featuredAuctions3,
+      userName: 'Justin 3LAU',
+    },
+    {
+      name: 'Nft ',
+      type: 'listing',
+      price: 0.037,
+      priceType: 'eth',
+      hoursAgo: 13,
+      image: featuredAuctions3,
+      userName: 'Justin 3LAU',
+    },
+    {
+      name: 'Nft Name',
+      type: 'listing',
+      price: 0.037,
+      priceType: 'eth',
+      hoursAgo: 13,
+      image: featuredAuctions3,
+      userName: 'Justin 3LAU',
+    },
+    {
+      name: 'Nft Names',
+      type: 'listing',
+      price: 0.037,
+      priceType: 'eth',
+      hoursAgo: 13,
+      image: featuredAuctions3,
+      userName: 'Justin 3LAU',
+    },
+    {
+      name: 'Nft Name5',
+      type: 'listing',
+      price: 0.037,
+      priceType: 'eth',
+      hoursAgo: 13,
+      image: featuredAuctions3,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -144,6 +205,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: featuredAuctions4,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -152,6 +214,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: featuredAuctions4,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -160,6 +223,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: saleOnNft4,
+      userName: 'Justin 3LAU',
     },
     {
       name: 'Nft Name',
@@ -168,6 +232,7 @@ export default {
       priceType: 'eth',
       hoursAgo: 13,
       image: featuredAuctions4,
+      userName: 'Justin 3LAU',
     },
   ],
 };
