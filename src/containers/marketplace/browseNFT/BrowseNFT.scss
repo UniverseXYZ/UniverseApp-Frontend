@@ -2,475 +2,484 @@
 @import '../../../assets/scss/mixins';
 
 .browse--nft--page {
-    .browse--nft--grid {
-        display: grid;
-        grid-template-columns: 300px 1fr;
+  .browse--nft--grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
 
-        .browse--nft--sidebar--filtration {
+    .browse--nft--sidebar--filtration {
+      background: $white;
+      height: auto;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      &--item {
+        padding: 30px 20px;
+        &:not(:last-child) {
+          border-bottom: 1px solid #e4e4e4;
+        }
+        &--header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+          h3 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 150%;
+            color: $black;
+          }
+          img {
+            transition: 0.1s ease-in-out;
+            &.rotate {
+              transform: rotate(180deg);
+            }
+          }
+          .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            min-width: 40px;
+            height: 24px;
+          }
+
+          .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+          }
+
+          .slider:before {
+            position: absolute;
+            content: '';
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+          }
+
+          input:checked + .slider {
+            background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+              linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+          }
+
+          input:checked + .slider:before {
+            -webkit-transform: translateX(16px);
+            -ms-transform: translateX(16px);
+            transform: translateX(16px);
+          }
+
+          /* Rounded sliders */
+          .slider.round {
+            border-radius: 50px;
+          }
+
+          .slider.round:before {
+            border-radius: 50%;
+          }
+        }
+        &--content {
+          margin-top: 20px;
+          .sale--type--buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+            button {
+              padding: 15px 20px;
+              background: $white;
+              border: 1px solid rgba(0, 0, 0, 0.2);
+              box-sizing: border-box;
+              border-radius: 12px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              &.selected {
+                border: 1px solid transparent;
+                background-image: linear-gradient(101deg, #bceb00, #00eaea);
+                background-origin: border-box;
+                box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.7) inset;
+              }
+            }
+          }
+          .apply-button {
+            margin-top: 10px;
+            width: 100%;
+          }
+          .price--dropdown {
+            display: flex;
+            align-items: center;
             background: $white;
-            height: auto;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
-            &--item {
-                padding: 30px 20px;
-                &:not(:last-child) {
-                    border-bottom: 1px solid #E4E4E4;
-                }
-                &--header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    cursor: pointer;
-                    h3 {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: bold;
-                        font-size: 16px;
-                        line-height: 150%;
-                        color: $black;
-                    }
-                    img {
-                        transition: .1s ease-in-out;
-                        &.rotate {
-                            transform: rotate(180deg);
-                        }
-                    }
-                    .switch {
-                        position: relative;
-                        display: inline-block;
-                        width: 40px;
-                        min-width: 40px;
-                        height: 24px;
-                        }
-
-                        .switch input {
-                        opacity: 0;
-                        width: 0;
-                        height: 0;
-                        }
-
-                        .slider {
-                        position: absolute;
-                        cursor: pointer;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        background-color: #ccc;
-                        -webkit-transition: 0.4s;
-                        transition: 0.4s;
-                        }
-
-                        .slider:before {
-                        position: absolute;
-                        content: '';
-                        height: 16px;
-                        width: 16px;
-                        left: 4px;
-                        bottom: 4px;
-                        background-color: white;
-                        -webkit-transition: 0.4s;
-                        transition: 0.4s;
-                        }
-
-                        input:checked + .slider {
-                        background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-                            linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
-                        }
-
-                        input:checked + .slider:before {
-                        -webkit-transform: translateX(16px);
-                        -ms-transform: translateX(16px);
-                        transform: translateX(16px);
-                        }
-
-                        /* Rounded sliders */
-                        .slider.round {
-                        border-radius: 50px;
-                        }
-
-                        .slider.round:before {
-                        border-radius: 50%;
-                        }
-                    }
-                &--content {
-                    margin-top: 20px;
-                    .sale--type--buttons {
-                        display: grid;
-                        grid-template-columns: 1fr 1fr;
-                        grid-gap: 10px;
-                        button {
-                            padding: 15px 20px;
-                            background: $white;
-                            border: 1px solid rgba(0, 0, 0, 0.2);
-                            box-sizing: border-box;
-                            border-radius: 12px;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 14px;
-                            line-height: 140%;
-                            color: $black;
-                            &.selected {
-                                border: 1px solid transparent;
-                                background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                                background-origin: border-box;
-                                box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.7) inset;
-                            }
-                        }
-                    }
-                    .apply-button{
-                        margin-top: 10px;
-                        width: 100%;
-                    }
-                    .price--dropdown {
-                        display: flex;
-                        align-items: center;
-                        background: $white;
-                        border: 1px solid rgba(0, 0, 0, 0.1);
-                        box-sizing: border-box;
-                        border-radius: 12px;
-                        padding: 5px 15px;
-                        cursor: pointer;
-                        position: relative;
-                        > div:nth-child(1) {
-                            margin-right: 12px;
-                        }
-                        > div:nth-child(2) {
-                            flex: 1;
-                            h6 {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 18px;
-                                color: $black;
-                            }
-                            p {
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 10px;
-                                line-height: 13px;
-                                color: rgba(0, 0, 0, 0.4);
-                            }
-                        }
-                        > div:nth-child(3) {
-                            img {
-                                transition: .1s ease-in-out;
-                                &.rotate {
-                                    transform: rotate(180deg);
-                                }
-                            }
-                        }
-                        &--items {
-                            position: absolute;
-                            left: 0;
-                            right: 0;
-                            top: 43px;
-                            z-index: 10;
-                            background: $white;
-                            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-                            border-radius: 12px;
-                            padding: 7px 9px;
-                            .price--dropdown--item {
-                                display: flex;
-                                align-items: center;
-                                padding: 7px 9px;
-                                > div:nth-child(1) {
-                                    margin-right: 12px;
-                                }
-                                > div:nth-child(2) {
-                                    h6 {
-                                        font-family: $spaceGroteskFont;
-                                        font-style: normal;
-                                        font-weight: bold;
-                                        font-size: 14px;
-                                        line-height: 18px;
-                                        color: $black;
-                                    }
-                                    p {
-                                        font-family: $spaceGroteskFont;
-                                        font-style: normal;
-                                        font-weight: normal;
-                                        font-size: 10px;
-                                        line-height: 13px;
-                                        color: rgba(0, 0, 0, 0.4);
-                                    }
-                                }
-                                &:hover {
-                                    background: rgba(0, 0, 0, 0.05);
-                                    border-radius: 6px;
-                                }
-                            }
-                        }
-                    }
-                    .min--max--fields {
-                        margin-top: 20px;
-                        display: flex;
-                        align-items: center;
-                        input {
-                            background: $white;
-                            border: 1px solid rgba(0, 0, 0, 0.1);
-                            box-sizing: border-box;
-                            border-radius: 12px;
-                            padding: 11px 16px;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 16px;
-                            line-height: 20px;
-                            color: $black;
-                            width: 45%;
-                            &::placeholder {
-                                color: rgba(0, 0, 0, 0.2);
-                            }
-                        }
-                        span.to {
-                            margin: 0 7px;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 12px;
-                            line-height: 150%;
-                            color: $black;
-                        }
-                        button {
-                            background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
-                            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                            border-radius: 10.08px;
-                            margin-left: 10px;
-                            padding: 14px 11px;
-                            &:hover {
-                                background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-                                linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
-                            }
-                            &:disabled {
-                                background: rgba(0, 0, 0, 0.05);
-                                color: rgba(0, 0, 0, 0.2);
-                                box-shadow: none;
-                                cursor: not-allowed;
-                                img {
-                                    opacity: 0.4;
-                                }
-                            }
-                            img {
-                                transform: rotate(180deg);
-                            }
-                        }
-                    }
-                    .range--slider {
-                        margin-top: 20px;
-                        .input-range__label {
-                            display: none;
-                        }
-                        .input-range__slider {
-                            background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
-                            border: 3px solid white;
-                            height: 20px;
-                            margin-top: -0.85rem;
-                            width: 20px;
-                            box-shadow: 0px 7px 14px rgba(136, 120, 172, 0.2);
-                        }
-                        .input-range__track--active {
-                            background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
-                        }
-                    }
-                    .search--field {
-                        position: relative;
-                        margin-bottom: 20px;
-                        input {
-                            width: 100%;
-                            background: $white;
-                            border: 1px solid rgba(0, 0, 0, 0.1);
-                            box-sizing: border-box;
-                            border-radius: 12px;
-                            padding: 11px 48px;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 16px;
-                            line-height: 20px;
-                            color: $black;
-                            &::placeholder {
-                                color: rgba(0, 0, 0, 0.2);
-                            }
-                        }
-                        img {
-                            position: absolute;
-                            top: 13px;
-                            left: 18px;
-                        }
-                    }
-                    .collections--list {
-                        display: flex;
-                        align-items: center;
-                        &:not(:last-child) {
-                            margin-bottom: 12px;
-                        }
-                        img {
-                            width: 32px;
-                            height: 32px;
-                            object-fit: cover;
-                            margin-right: 10px;
-                            border-radius: 5px;
-                        }
-                        p {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 22px;
-                            color: $black;
-                        }
-                    }
-                    .creators--list {
-                        display: flex;
-                        align-items: center;
-                        &:not(:last-child) {
-                            margin-bottom: 12px;
-                        }
-                        img {
-                            width: 32px;
-                            height: 32px;
-                            object-fit: cover;
-                            margin-right: 10px;
-                            border-radius: 50%;
-                        }
-                        p {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 22px;
-                            color: $black;
-                        }
-                    }
-                }
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 12px;
+            padding: 5px 15px;
+            cursor: pointer;
+            position: relative;
+            > div:nth-child(1) {
+              margin-right: 12px;
             }
-        }
-
-        .browse--nft--content {
-            background: linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%);
-            padding: 40px 40px 60px;
-            .selected--filters--and--sorting {
+            > div:nth-child(2) {
+              flex: 1;
+              h6 {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 18px;
+                color: $black;
+              }
+              p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 10px;
+                line-height: 13px;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            > div:nth-child(3) {
+              img {
+                transition: 0.1s ease-in-out;
+                &.rotate {
+                  transform: rotate(180deg);
+                }
+              }
+            }
+            &--items {
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 43px;
+              z-index: 10;
+              background: $white;
+              box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+              border-radius: 12px;
+              padding: 7px 9px;
+              .price--dropdown--item {
                 display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                .selected--filters {
-                    display: flex;
-                    align-items: center;
-                    max-width: 500px;
-                    .show--selected--filters {
-                        display: flex;
-                        align-items: center;
-                        flex-wrap: wrap;
-                        .light-border-button {
-                            display: flex;
-                            cursor: default;
-                            margin-bottom: 10px;
-                            margin-right: 10px;
-                            padding: 7.5px 20px;
-                            img.close {
-                                cursor: pointer;
-                                height: 10px;
-                                width: 10px;
-                                margin-left: 10px;
-                            }
-                            img.price {
-                                margin-right: 4px;
-                            }
-                        }
-                        .results--count {
-                            margin-right: 16px;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 160%;
-                            color: $black;
-                            margin-bottom: 10px;
-                        }
-                        .clear--all--selected--filters {
-                            cursor: pointer;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 14px;
-                            line-height: 150%;
-                            text-decoration-line: underline;
-                            color: $black;
-                            margin-bottom: 10px;
-                        }
-                    }
+                align-items: center;
+                padding: 7px 9px;
+                > div:nth-child(1) {
+                  margin-right: 12px;
                 }
-                .nft--sorting {
-                    display: grid;
-                    grid-template-columns: auto auto;
-                    grid-gap: 16px;
-                    .dropdown {
-                        position: relative;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        cursor: pointer;
-                        padding: 15px;
-                        background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                        background-origin: border-box;
-                        box-shadow: 2px 1000px 1px $white inset;
-                        border-radius: 12px;
-                        border: 1px solid transparent;
-                        &:nth-child(1) {
-                            width: 160px;
-                        }
-                        &:nth-child(2) {
-                            width: 230px;
-                        }
-                        span {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: 500;
-                            font-size: 16px;
-                            line-height: 20px;
-                            color: $black;
-                        }
-                        img {
-                            transition: .1s ease-in-out;
-                            &.rotate {
-                                transform: rotate(180deg);
-                            }
-                        }
-                        &--items {
-                            position: absolute;
-                            top: 52px;
-                            left: 0px;
-                            right: 0px;
-                            z-index: 1;
-                            background: $white;
-                            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-                            border-radius: 12px;
-                            padding: 8px;
-                            .dropdown--item {
-                                padding: 15px;
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: 600;
-                                font-size: 14px;
-                                line-height: 140%;
-                                color: $black;
-                                &:hover {
-                                    background: rgba(0, 0, 0, 0.05);
-                                    border-radius: 6px;
-                                }
-                            }
-                        }
-                    }
+                > div:nth-child(2) {
+                  h6 {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 14px;
+                    line-height: 18px;
+                    color: $black;
+                  }
+                  p {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 10px;
+                    line-height: 13px;
+                    color: rgba(0, 0, 0, 0.4);
+                  }
                 }
+                &:hover {
+                  background: rgba(0, 0, 0, 0.05);
+                  border-radius: 6px;
+                }
+              }
             }
-            .load--more--nfts {
-                margin-top: 40px;
-                width: 100%;
-                box-shadow: 2px 1000px 1px #fcf9f5 inset;
+          }
+          .min--max--fields {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            input {
+              background: $white;
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              box-sizing: border-box;
+              border-radius: 12px;
+              padding: 11px 16px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 16px;
+              line-height: 20px;
+              color: $black;
+              width: 45%;
+              &::placeholder {
+                color: rgba(0, 0, 0, 0.2);
+              }
             }
+            span.to {
+              margin: 0 7px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 150%;
+              color: $black;
+            }
+            button {
+              background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+              box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+              border-radius: 10.08px;
+              margin-left: 10px;
+              padding: 14px 11px;
+              &:hover {
+                background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+                  linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+              }
+              &:disabled {
+                background: rgba(0, 0, 0, 0.05);
+                color: rgba(0, 0, 0, 0.2);
+                box-shadow: none;
+                cursor: not-allowed;
+                img {
+                  opacity: 0.4;
+                }
+              }
+              img {
+                transform: rotate(180deg);
+              }
+            }
+          }
+          .range--slider {
+            margin-top: 20px;
+            .input-range__label {
+              display: none;
+            }
+            .input-range__slider {
+              background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+              border: 3px solid white;
+              height: 20px;
+              margin-top: -0.85rem;
+              width: 20px;
+              box-shadow: 0px 7px 14px rgba(136, 120, 172, 0.2);
+            }
+            .input-range__track--active {
+              background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            }
+          }
+          .search--field {
+            position: relative;
+            margin-bottom: 20px;
+            input {
+              width: 100%;
+              background: $white;
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              box-sizing: border-box;
+              border-radius: 12px;
+              padding: 11px 48px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 16px;
+              line-height: 20px;
+              color: $black;
+              &::placeholder {
+                color: rgba(0, 0, 0, 0.2);
+              }
+            }
+            img {
+              position: absolute;
+              top: 13px;
+              left: 18px;
+            }
+          }
+          .collections--list {
+            display: flex;
+            align-items: center;
+            &:not(:last-child) {
+              margin-bottom: 12px;
+            }
+            img {
+              width: 32px;
+              height: 32px;
+              object-fit: cover;
+              margin-right: 10px;
+              border-radius: 5px;
+            }
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 22px;
+              color: $black;
+            }
+            .random--avatar--color {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 32px;
+              height: 32px;
+              margin-right: 10px;
+              border-radius: 5px;
+            }
+          }
+          .creators--list {
+            display: flex;
+            align-items: center;
+            &:not(:last-child) {
+              margin-bottom: 12px;
+            }
+            img {
+              width: 32px;
+              height: 32px;
+              object-fit: cover;
+              margin-right: 10px;
+              border-radius: 50%;
+            }
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 22px;
+              color: $black;
+            }
+          }
         }
+      }
     }
+
+    .browse--nft--content {
+      background: linear-gradient(127.59deg, #f2f3fb -1.33%, #fcf9f4 91.03%);
+      padding: 40px 40px 60px;
+      .selected--filters--and--sorting {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        .selected--filters {
+          display: flex;
+          align-items: center;
+          max-width: 500px;
+          .show--selected--filters {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            .light-border-button {
+              display: flex;
+              cursor: default;
+              margin-bottom: 10px;
+              margin-right: 10px;
+              padding: 7.5px 20px;
+              img.close {
+                cursor: pointer;
+                height: 10px;
+                width: 10px;
+                margin-left: 10px;
+              }
+              img.price {
+                margin-right: 4px;
+              }
+            }
+            .results--count {
+              margin-right: 16px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 160%;
+              color: $black;
+              margin-bottom: 10px;
+            }
+            .clear--all--selected--filters {
+              cursor: pointer;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 150%;
+              text-decoration-line: underline;
+              color: $black;
+              margin-bottom: 10px;
+            }
+          }
+        }
+        .nft--sorting {
+          display: grid;
+          grid-template-columns: auto auto;
+          grid-gap: 16px;
+          .dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 15px;
+            background-image: linear-gradient(101deg, #bceb00, #00eaea);
+            background-origin: border-box;
+            box-shadow: 2px 1000px 1px $white inset;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            &:nth-child(1) {
+              width: 160px;
+            }
+            &:nth-child(2) {
+              width: 230px;
+            }
+            span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 16px;
+              line-height: 20px;
+              color: $black;
+            }
+            img {
+              transition: 0.1s ease-in-out;
+              &.rotate {
+                transform: rotate(180deg);
+              }
+            }
+            &--items {
+              position: absolute;
+              top: 52px;
+              left: 0px;
+              right: 0px;
+              z-index: 1;
+              background: $white;
+              box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+              border-radius: 12px;
+              padding: 8px;
+              .dropdown--item {
+                padding: 15px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 140%;
+                color: $black;
+                &:hover {
+                  background: rgba(0, 0, 0, 0.05);
+                  border-radius: 6px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .load--more--nfts {
+        margin-top: 40px;
+        width: 100%;
+        box-shadow: 2px 1000px 1px #fcf9f5 inset;
+      }
+    }
+  }
 }

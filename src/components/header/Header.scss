@@ -155,6 +155,15 @@ header {
                 border-radius: 5px;
               }
             }
+            .random--avatar--color {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 5px;
+            }
             .nft--desc,
             .auction--desc,
             .collection--desc {
