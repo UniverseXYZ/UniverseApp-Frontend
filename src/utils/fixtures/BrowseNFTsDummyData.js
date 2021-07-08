@@ -769,7 +769,7 @@ export const PLACEHOLDER_MARKETPLACE_COMMUNITIES = [
 export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   {
     id: 1,
-    name: 'Gallery Gerhard Rink',
+    name: 'Gallery 1',
     likesCount: 24,
     liked: false,
     user: {
@@ -781,7 +781,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 2,
-    name: '8SIX Projects',
+    name: 'Gallery 2',
     likesCount: 24,
     liked: false,
     user: {
@@ -793,7 +793,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 3,
-    name: 'Ultraviolet #2',
+    name: 'Gallery 3',
     likesCount: 24,
     liked: false,
     user: {
@@ -805,7 +805,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 4,
-    name: '8SIX Projects',
+    name: 'Gallery 4',
     likesCount: 24,
     liked: false,
     user: {
@@ -817,7 +817,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 5,
-    name: 'Ultraviolet #2',
+    name: 'Gallery 5',
     likesCount: 24,
     liked: false,
     user: {
@@ -829,7 +829,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 6,
-    name: 'Gallery Gerhard Rink',
+    name: 'Gallery 6',
     likesCount: 24,
     liked: false,
     user: {
@@ -841,7 +841,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 7,
-    name: 'Gallery Gerhard Rink',
+    name: 'Gallery 7',
     likesCount: 24,
     liked: false,
     user: {
@@ -853,7 +853,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 8,
-    name: '8SIX Projects',
+    name: 'Gallery 8',
     likesCount: 24,
     liked: false,
     user: {
@@ -865,7 +865,7 @@ export const PLACEHOLDER_MARKETPLACE_GALLERIES = [
   },
   {
     id: 9,
-    name: 'Ultraviolet #2',
+    name: 'Gallery 9',
     likesCount: 24,
     liked: false,
     user: {

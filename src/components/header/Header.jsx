@@ -17,7 +17,7 @@ import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
 import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
-import searchIcon from '../../assets/images/big-search.svg';
+import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
@@ -38,7 +38,7 @@ const Header = ({ location }) => {
   const searchRef = useRef();
   const ref = useRef();
 
-  const handleSearchChange = (e) => {
+  const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
       if (searchValue) {
         history.push(`/search`, { query: searchValue });
@@ -92,7 +92,7 @@ const Header = ({ location }) => {
     } else {
       document.querySelector('header').classList.remove('dark');
     }
-    if (location.pathname === '/marketplace' || location.pathname === '/search') {
+    if (location.pathname === '/marketplace') {
       setShowSearch(true);
     } else {
       setShowSearch(false);
@@ -126,8 +126,7 @@ const Header = ({ location }) => {
               ref={searchRef}
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
-              onKeyDown={handleSearchChange}
-              // onBlur={() => setSearchValue('')}
+              onKeyDown={handleSearchKeyDown}
             />
             {searchValue.length > 0 && (
               <>

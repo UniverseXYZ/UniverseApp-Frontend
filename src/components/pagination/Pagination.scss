@@ -60,7 +60,7 @@
     span {
       font-family: $spaceGroteskFont;
       font-style: normal;
-      font-weight: 300;
+      font-weight: normal;
       font-size: 14px;
       color: $black;
       margin-right: 8px;
@@ -96,24 +96,21 @@
       width: 100%;
 
       ul {
+        padding: 8px;
         background: $white;
         box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
         border-radius: 12px;
         li {
-          padding: 10px;
+          padding: 8px;
           font-family: $spaceGroteskFont;
           font-style: normal;
-          font-weight: bold;
+          font-weight: notmal;
           font-size: 14px;
-          color: rgba(0, 0, 0, 0.4);
-          border-bottom: 2px solid #e5e5e5;
+          color: $black;
 
           &.active {
-            color: $black;
-          }
-
-          &:last-child {
-            border-bottom: none;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
           }
         }
       }
