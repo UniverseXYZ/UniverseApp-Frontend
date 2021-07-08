@@ -16,7 +16,7 @@ const lookTextUid = (text) => {
 };
 
 const UserDataBlock = (props) => {
-  const { name, avatar, uid, about, following, followers } = props;
+  const { name, avatar, uid, about, following, followers, color } = props;
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,6 @@ const UserDataBlock = (props) => {
       }, 5000);
     }
   }, [copied]);
-
   return (
     <div className="user--data--block">
       <div className="dots--section">
@@ -37,8 +36,9 @@ const UserDataBlock = (props) => {
         </div>
       </div>
       <div className="avatar--block--section">
-        <div className="avatar--img--bock">
-          <img src={avatar} alt="img" />
+        <div className="avatar--img--bock" style={!avatar ? { background: color } : {}}>
+          {!!avatar && <img src={avatar} alt="img" />}
+          {!avatar && <h1>{name[0]}</h1>}
           <div className="edit--avatar">
             <label htmlFor="avatar--upload">
               <div className="edit--avatar--child">
@@ -121,6 +121,7 @@ UserDataBlock.propTypes = {
   about: PropTypes.string,
   following: PropTypes.number,
   followers: PropTypes.number,
+  color: PropTypes.string,
 };
 
 UserDataBlock.defaultProps = {
@@ -130,6 +131,7 @@ UserDataBlock.defaultProps = {
   about: '',
   followers: 0,
   following: 0,
+  color: '#D7CCC8',
 };
 
 export default UserDataBlock;

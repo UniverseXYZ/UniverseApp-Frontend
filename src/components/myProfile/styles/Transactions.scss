@@ -108,7 +108,6 @@
                     flex-direction: column;
                     justify-content: space-between;
                     h5 {
-                        // font-family: $spaceGroteskFont;
                         font-size: 14px;
                         line-height: 160%;
                         color: #000000;
@@ -162,7 +161,6 @@
                         }
                     }
                     .hours--ago {
-                        // font-family: Space Grotesk;
                         font-style: normal;
                         font-weight: 500;
                         font-size: 12px;
@@ -175,5 +173,22 @@
     }
     .pagination {
         margin: 0 auto;
+    }
+    .empty--transactions--content {
+        width: 100%;
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        h3 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 22px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     }
 }

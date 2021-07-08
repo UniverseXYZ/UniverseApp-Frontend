@@ -28,7 +28,17 @@ const RecentActivity = (props) => {
   const [activeTab, setActiveTab] = useState(1);
   const contents = [
     { index: 0, content: <h5>coming soon posts</h5> },
-    { index: 1, content: <Transactions types={types} transactions={transactions} /> },
+    {
+      index: 1,
+      content: (
+        <Transactions
+          types={types}
+          transactions={transactions}
+          emptyContentText="You don’t have transaction activity yet"
+          btnText="Explore Universe"
+        />
+      ),
+    },
     { index: 2, content: <h5>coming soon liked</h5> },
   ];
   return (
