@@ -500,10 +500,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
 export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
   {
     id: 1,
-    title: 'Auction super long Title 1',
+    name: 'Auction super long Title 1',
     photo: auction1,
-    startDate: '2021-07-07 09:00:00',
-    endDate: '2021-07-08 09:00:00',
+    startDate: '2021-07-17 09:00:00',
+    endDate: '2021-07-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -515,10 +515,10 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
   },
   {
     id: 2,
-    title: 'Auction super long Title 2',
+    name: 'Auction super long Title 2',
     photo: auction2,
     startDate: '2021-07-06 12:00:00',
-    endDate: '2021-07-08 09:00:00',
+    endDate: '2021-07-18 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -530,7 +530,7 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
   },
   {
     id: 3,
-    title: 'Auction super long Title 3',
+    name: 'Auction super long Title 3',
     photo: auction3,
     startDate: '2021-07-04 09:00:00',
     endDate: '2021-07-05 09:00:00',

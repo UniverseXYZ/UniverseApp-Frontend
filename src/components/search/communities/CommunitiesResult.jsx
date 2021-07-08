@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'react-uuid';
 import './CommunitiesResult.scss';
 import Button from '../../button/Button.jsx';
 
@@ -8,7 +9,7 @@ const CommunitiesResult = ({ query, data }) => (
     {data
       .filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
       .map((community) => (
-        <div className="community--box">
+        <div className="community--box" key={uuid()}>
           <div className="community--box--header">
             <div className="avatar--title--members">
               <div>
