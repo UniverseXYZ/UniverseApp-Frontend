@@ -154,6 +154,12 @@ header {
               img {
                 border-radius: 5px;
               }
+              video {
+                width: 36px;
+                height: 36px;
+                object-fit: cover;
+                border-radius: 5px;
+              }
             }
             .random--avatar--color {
               display: flex;
@@ -193,13 +199,15 @@ header {
             }
           }
           .users__div,
-          .communities__div {
+          .communities__div,
+          .galleries__div {
             display: flex;
             padding: 10px 12px;
             border-radius: 6px;
 
             .user--avatar,
-            .communities--photo {
+            .communities--photo,
+            .galleries--photo {
               width: 36px;
               height: 36px;
               margin-right: 15px;
@@ -210,9 +218,11 @@ header {
               }
             }
             .user--desc,
-            .communities--desc {
+            .communities--desc,
+            .galleries--desc {
               .user--name,
-              .communities--name {
+              .communities--name,
+              .galleries--name {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: bold;
@@ -221,7 +231,8 @@ header {
                 color: $black;
               }
               .user--followers,
-              .communities--members {
+              .communities--members,
+              .galleries--likes {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: 600;
