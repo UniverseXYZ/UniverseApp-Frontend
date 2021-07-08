@@ -19,6 +19,9 @@ import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
 import searchIcon from '../../assets/images/big-search.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
+import mp3Icon from '../../assets/images/mp3-icon.png';
+import videoIcon from '../../assets/images/marketplace/video-icon.svg';
+import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors } from '../../utils/helpers';
 
 const Header = ({ location }) => {
@@ -33,6 +36,7 @@ const Header = ({ location }) => {
   const [searchValue, setSearchValue] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef();
+  const ref = useRef();
 
   const handleSearchChange = (e) => {
     if (e.keyCode === 13) {
@@ -60,6 +64,18 @@ const Header = ({ location }) => {
       setShowInstallWalletPopup(true);
     }
   };
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setSearchValue('');
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   useEffect(() => {
     setShowMenu(false);
@@ -111,7 +127,7 @@ const Header = ({ location }) => {
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               onKeyDown={handleSearchChange}
-              onBlur={() => setSearchValue('')}
+              // onBlur={() => setSearchValue('')}
             />
             {searchValue.length > 0 && (
               <>
@@ -122,7 +138,7 @@ const Header = ({ location }) => {
                   onClick={() => setSearchValue('')}
                   aria-hidden="true"
                 />
-                <div className="search__results">
+                <div className="search__results" ref={ref}>
                   {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
                     item.name.toLowerCase().includes(searchValue.toLowerCase())
                   ).length > 0 ||
@@ -130,14 +146,17 @@ const Header = ({ location }) => {
                     item.name.toLowerCase().includes(searchValue.toLowerCase())
                   ).length > 0 ||
                   PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                    item.title.toLowerCase().includes(searchValue.toLowerCase())
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
                   ).length > 0 ||
                   PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
                     item.name.toLowerCase().includes(searchValue.toLowerCase())
                   ).length > 0 ||
                   PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                     item.name.toLowerCase().includes(searchValue.toLowerCase())
-                  ).length > 0 ? (
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+                  ).length ? (
                     <div className="search__nfts">
                       {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
                         item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -147,7 +166,29 @@ const Header = ({ location }) => {
                       ).map((nft) => (
                         <div className="nft__div">
                           <div className="nft--image">
-                            <img src={nft.media.url} alt="NFT" />
+                            {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
+                              <img src={nft.media.url} alt="NFT" />
+                            )}
+                            {nft.media.type === 'video/mp4' && (
+                              <video
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                              >
+                                <source src={nft.media.url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
+                            )}
+                            {nft.media.type === 'audio/mpeg' && (
+                              <img className="nft--image" src={mp3Icon} alt={nft.name} />
+                            )}
+                            {nft.media.type === 'audio/mpeg' && (
+                              <div className="video__icon">
+                                <img src={audioIcon} alt="Video Icon" />
+                              </div>
+                            )}
                           </div>
                           <div className="nft--desc">
                             <h5 className="nft--name">{nft.name}</h5>
@@ -175,17 +216,17 @@ const Header = ({ location }) => {
                         </div>
                       ))}
                       {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                        item.title.toLowerCase().includes(searchValue.toLowerCase())
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
                       ).length > 0 && <h4>Auctions</h4>}
                       {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                        item.title.toLowerCase().includes(searchValue.toLowerCase())
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
                       ).map((auction) => (
                         <div className="auction__div">
                           <div className="auction--image">
                             <img src={auction.photo} alt="Auction" />
                           </div>
                           <div className="auction--desc">
-                            <h5 className="auction--title">{auction.title}</h5>
+                            <h5 className="auction--title">{auction.name}</h5>
                             <p className="auction--artist">by {auction.creator.name}</p>
                           </div>
                         </div>
@@ -231,6 +272,22 @@ const Header = ({ location }) => {
                           <div className="communities--desc">
                             <h5 className="communities--name">{communities.name}</h5>
                             <p className="communities--members">{communities.members} Members</p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+                      ).length > 0 && <h4>Galleries</h4>}
+                      {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((galleries) => (
+                        <div className="galleries__div">
+                          <div className="galleries--photo">
+                            <img src={galleries.photos[0]} alt="Gall" />
+                          </div>
+                          <div className="galleries--desc">
+                            <h5 className="galleries--name">{galleries.name}</h5>
+                            <p className="galleries--likes">{galleries.likesCount} Likes</p>
                           </div>
                         </div>
                       ))}
