@@ -10,20 +10,24 @@ const AuctionsResult = ({ query, data }) => {
 
   return (
     <div className="auctions--search--result">
-      <div className="show--ended--auctions">
-        <p>Show Ended Auctions</p>
-        <label className="switch">
-          <input
-            type="checkbox"
-            value={showEndedAuctions}
-            checked={showEndedAuctions}
-            onChange={(e) => setShowEndedAuctions(e.target.checked)}
-          />
-          <span className="slider round" />
-        </label>
-      </div>
+      {data.filter((item) => item.name.toLowerCase().includes(query.toLowerCase())).length ? (
+        <div className="show--ended--auctions">
+          <p>Show Ended Auctions</p>
+          <label className="switch">
+            <input
+              type="checkbox"
+              value={showEndedAuctions}
+              checked={showEndedAuctions}
+              onChange={(e) => setShowEndedAuctions(e.target.checked)}
+            />
+            <span className="slider round" />
+          </label>
+        </div>
+      ) : (
+        <></>
+      )}
       {data
-        .filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
+        .filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
         .map((auction) => {
           const startsIn = moment(auction.startDate).isAfter(moment.now())
             ? moment.duration(moment(auction.startDate).diff(moment.now()))
@@ -59,7 +63,7 @@ const AuctionsResult = ({ query, data }) => {
                   timeLeft ? 'timeLeft' : endedOn ? 'endedOn' : ''
                 }`}
               >
-                <img src={auction.photo} alt={auction.title} />
+                <img src={auction.photo} alt={auction.name} />
                 <div className="date">
                   <label>{startsIn ? 'Starts in' : timeLeft ? 'Time left' : 'Ended on'}</label>
                   <span>{`${Math.abs(days)}d ${Math.abs(hours)}h ${Math.abs(minutes)}m ${Math.abs(
@@ -69,7 +73,7 @@ const AuctionsResult = ({ query, data }) => {
               </div>
               <div className="auction--box--details">
                 <div className="title">
-                  <h2>{auction.title}</h2>
+                  <h2>{auction.name}</h2>
                   {timeLeft && <Button className="light-button">View Auction</Button>}
                 </div>
                 <div className="creator">

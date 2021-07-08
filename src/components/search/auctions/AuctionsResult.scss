@@ -6,9 +6,8 @@
     .show--ended--auctions {
         display: flex;
         align-items: center;
-        position: absolute;
-        right: 0;
-        top: -85px;
+        justify-content: flex-end;
+        margin-bottom: 20px;
         p {
             font-family: $spaceGroteskFont;
             font-style: normal;
@@ -24,6 +23,7 @@
             width: 40px;
             min-width: 40px;
             height: 24px;
+            margin-bottom: 0;
         }
         .switch input {
             opacity: 0;
