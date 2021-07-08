@@ -683,7 +683,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     id: 11,
     name: 'Collection11',
     background: null,
-    photo: null,
+    photo: nft11,
     owner: {
       name: 'Justin 3LAU',
     },
