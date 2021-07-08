@@ -36,16 +36,24 @@ const SelectWalletPopup = (props) => {
             <button type="button" onClick={() => handleConnectWallet('Metamask')}>
               <img src={metamaskLogo} alt="Metamask" />
             </button>
-            <button type="button" onClick={() => handleConnectWallet('Ledger')}>
+            <button className="disable" type="button" onClick={() => handleConnectWallet('Ledger')}>
               <img src={ledgerLogo} alt="Ledger" />
             </button>
-            <button type="button" onClick={() => handleConnectWallet('Keystore')}>
+            <button
+              className="disable"
+              type="button"
+              onClick={() => handleConnectWallet('Keystore')}
+            >
               <img src={keystoreLogo} alt="Keystore" />
             </button>
-            <button type="button" onClick={() => handleConnectWallet('Trezor')}>
+            <button className="disable" type="button" onClick={() => handleConnectWallet('Trezor')}>
               <img src={trezorLogo} alt="Trezor" />
             </button>
-            <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
+            <button
+              className="disable"
+              type="button"
+              onClick={() => handleConnectWallet('Coinbase')}
+            >
               <img src={coinbaseLogo} alt="Coinbase" />
             </button>
             <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>

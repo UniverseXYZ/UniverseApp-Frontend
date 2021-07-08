@@ -328,16 +328,7 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            {/* <Popup
-              trigger={
-                <button type="button" className="sign__in">
-                  Join newsletter
-                </button>
-              }
-            >
-              {(close) => <SubscribePopup close={close} />}
-            </Popup> */}
-            {/* <Popup
+            <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Sign In
@@ -354,10 +345,7 @@ const DesktopView = ({
                   setSelectedWallet={setSelectedWallet}
                 />
               )}
-            </Popup> */}
-            <button type="button" className="sign__in" onClick={() => connectWeb3()}>
-              Sign In
-            </button>
+            </Popup>
           </li>
         )}
       </ul>
