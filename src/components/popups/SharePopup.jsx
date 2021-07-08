@@ -7,7 +7,6 @@ import telegram from '../../assets/images/telegram.svg';
 import hh from '../../assets/images/hh.svg';
 import message from '../../assets/images/message.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
-import Input from '../input/Input';
 import { shareFriends } from '../../utils/fixtures/ShareWithFriendsDummyData';
 import Button from '../button/Button.jsx';
 
@@ -74,7 +73,7 @@ const SharePopup = (props) => {
         </div>
         <div className="friend--list">
           {shareFriends.map((elm) => (
-            <div className="friend--box">
+            <div className="friend--box" key={elm.value}>
               <div className="friend--avatar">
                 <img src={elm.userAvatar.url} alt="avatar" />
                 <h1>{elm.name}</h1>

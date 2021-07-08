@@ -13,9 +13,10 @@ import Owners from '../marketplaceTabComponents/Owners';
 import Bids from '../marketplaceTabComponents/Bids';
 import TradingHistory from '../marketplaceTabComponents/TradingHistory';
 import SharePopup from '../popups/SharePopup';
+import Offers from '../marketplaceTabComponents/Offers';
 
 const MarketplaceNFTDetails = () => {
-  const tabs = ['Properties', 'Owners', 'Bids', 'Trading History'];
+  const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   return (
@@ -124,7 +125,8 @@ const MarketplaceNFTDetails = () => {
           {selectedTabIndex === 0 && <Properties />}
           {selectedTabIndex === 1 && <Owners />}
           {selectedTabIndex === 2 && <Bids />}
-          {selectedTabIndex === 3 && <TradingHistory />}
+          {selectedTabIndex === 3 && <Offers />}
+          {selectedTabIndex === 4 && <TradingHistory />}
         </div>
       </div>
     </>

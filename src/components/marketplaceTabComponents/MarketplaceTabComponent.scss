@@ -91,22 +91,69 @@
 
 .marketplace--owners {
   margin-top: 30px;
+  .border-box {
+    padding: 2px 10px;
+    position: absolute;
+    margin: auto;
+    left: 23px;
+    top: -11px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(to right, #2ad0ca 0%, #e1f664 22.92%, #feb0fe 46.88%, #abb3fc 68.23%, #5df7a4 87.5%, #58c4f6 100%)
+        border-box;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    > p {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 8px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 11px;
+      letter-spacing: 0px;
+      background: -webkit-linear-gradient(#2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
   > div {
     width: 100%;
     background-color: white;
     margin-bottom: 12px;
     box-shadow: 0px 10px 36px 0px #8878ac24;
     border-radius: 12px;
-    display: flex;
-    > img {
-      padding-left: 25px;
-      padding-top: 20px;
-      padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-gap: 20px;
+    align-items: center;
+    padding: 20px 25px;
+    position: relative;
+    &.border {
+      background: linear-gradient(
+        95.11% 95.11% at 36.64% 4.89%,
+        #2ad0ca 0%,
+        #e1f664 22.92%,
+        #feb0fe 46.88%,
+        #abb3fc 68.23%,
+        #5df7a4 87.5%,
+        #58c4f6 100%
+      );
+      background: linear-gradient(#ffffff, #ffffff) padding-box,
+        linear-gradient(
+            to right,
+            #2ad0ca 0%,
+            #e1f664 22.92%,
+            #feb0fe 46.88%,
+            #abb3fc 68.23%,
+            #5df7a4 87.5%,
+            #58c4f6 100%
+          )
+          border-box;
+      border: 2px solid transparent;
     }
-    > div {
-      padding-left: 20px;
-      padding-top: 20px;
-      padding-bottom: 20px;
+    .sale-box {
       > h1 {
         font-family: $spaceGroteskFont;
         font-size: 14px;
@@ -128,7 +175,6 @@
     }
   }
 }
-
 .switch {
   position: relative;
   display: inline-block;
@@ -136,13 +182,11 @@
   height: 24px;
   margin-bottom: 20px;
 }
-
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
-
 .slider {
   position: absolute;
   cursor: pointer;
@@ -154,7 +198,6 @@
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
-
 .slider:before {
   position: absolute;
   content: '';
@@ -166,36 +209,82 @@
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
-
 input:checked + .slider {
   background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
 }
-
 input:checked + .slider:before {
   -webkit-transform: translateX(16px);
   -ms-transform: translateX(16px);
   transform: translateX(16px);
 }
-
-/* Rounded sliders */
 .slider.round {
   border-radius: 50px;
 }
-
 .slider.round:before {
   border-radius: 50%;
 }
-
 .marketplace--bids {
   margin-top: 40px;
-  > .bids--box {
+  .bids-border-box {
+    padding: 2px 10px;
+    position: absolute;
+    margin: auto;
+    left: 23px;
+    top: -11px;
+    background-color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(to right, #2ad0ca 0%, #e1f664 22.92%, #feb0fe 46.88%, #abb3fc 68.23%, #5df7a4 87.5%, #58c4f6 100%)
+        border-box;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    > p {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 8px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 11px;
+      letter-spacing: 0px;
+      background: -webkit-linear-gradient(#2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  > .bids--box {
     width: 100%;
     background-color: white;
     margin-bottom: 12px;
     box-shadow: 0px 10px 36px 0px #8878ac24;
     border-radius: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-gap: 20px;
+    position: relative;
+    &.border {
+      background: linear-gradient(
+        95.11% 95.11% at 36.64% 4.89%,
+        #2ad0ca 0%,
+        #e1f664 22.92%,
+        #feb0fe 46.88%,
+        #abb3fc 68.23%,
+        #5df7a4 87.5%,
+        #58c4f6 100%
+      );
+      background: linear-gradient(#ffffff, #ffffff) padding-box,
+        linear-gradient(
+            to right,
+            #2ad0ca 0%,
+            #e1f664 22.92%,
+            #feb0fe 46.88%,
+            #abb3fc 68.23%,
+            #5df7a4 87.5%,
+            #58c4f6 100%
+          )
+          border-box;
+      border: 2px solid transparent;
+    }
     > .box--avatar {
       display: flex;
       padding-left: 25px;
@@ -266,13 +355,8 @@ input:checked + .slider:before {
     }
   }
   .box--selected {
-    // background-color: rgba(0, 0, 0, 0.02);
-    // color: #00000066;
     background-color: rgb(237, 235, 234);
-    // background-color: #00000066;
-    // background-color: rgba(0, 0, 0, 1);
     box-shadow: 0px 10px 36px 0px rgba(136, 120, 172, 0.14);
-    // opacity: 0.05;
     > .box--avatar {
       > div {
         > h1 {
@@ -293,69 +377,195 @@ input:checked + .slider:before {
     }
   }
 }
-.tradinghistory--price {
-  display: flex;
-  > .shareicon {
-    padding-right: 25px;
-    padding-top: 28px;
-    padding-bottom: 28px;
-    position: relative;
-    cursor: pointer;
-    .tooltiptext {
-      visibility: hidden;
-      font-family: $spaceGroteskFont;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px;
-      width: 120px;
-      background-color: $black;
-      color: $white;
-      text-align: center;
-      border-radius: 100px;
-      padding: 5px 0;
-      position: absolute;
-      z-index: 1;
-      top: -13px;
-      left: 18%;
-      transform: translateX(-50%);
-      &::after {
-        content: '';
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: black transparent transparent transparent;
+
+.trading {
+  margin-top: 30px;
+  .trading--box {
+    width: 100%;
+    background-color: white;
+    margin-bottom: 12px;
+    box-shadow: 0px 10px 36px 0px #8878ac24;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .trading--avatar {
+      display: flex;
+      padding-left: 25px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      > div {
+        padding-left: 20px;
+        > h1 {
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: left;
+          > span {
+            color: #00000066;
+          }
+        }
+        > p {
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+          color: #00000066;
+        }
       }
     }
-    &:hover {
-      .tooltiptext {
-        visibility: visible;
+    .tradinghistory--price {
+      display: flex;
+      > .shareicon {
+        padding-right: 25px;
+        padding-top: 28px;
+        padding-bottom: 28px;
+        position: relative;
+        cursor: pointer;
+        .tooltiptext {
+          visibility: hidden;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          width: 120px;
+          background-color: $black;
+          color: $white;
+          text-align: center;
+          border-radius: 100px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          top: -13px;
+          left: 18%;
+          transform: translateX(-50%);
+          &::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+          }
+        }
+        &:hover {
+          .tooltiptext {
+            visibility: visible;
+          }
+        }
+      }
+      > .price {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-right: 18px;
+        > h2 {
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: right;
+        }
+        > h3 {
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: right;
+        }
       }
     }
   }
-  > .price {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-right: 18px;
-    > h2 {
+}
+
+.marketplace--offers {
+  margin-top: 40px;
+  > .offers--box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: white;
+    margin-bottom: 12px;
+    box-shadow: 0px 10px 36px 0px #8878ac24;
+    border-radius: 12px;
+    > .box-offers-avatar {
+      display: flex;
+      padding-left: 25px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      > div {
+        padding-left: 20px;
+        > h1 {
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: left;
+          > span {
+            color: #00000066;
+          }
+        }
+        > p {
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0em;
+          text-align: left;
+          color: #00000066;
+        }
+      }
+    }
+    .offers--price {
+      padding-right: 25px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      > h3 {
+        text-align: end;
+        font-family: $spaceGroteskFont;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: 0em;
+        color: #00000066;
+      }
+      > h2 {
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 22px;
+        letter-spacing: 0em;
+        text-align: right;
+      }
+    }
+  }
+  .marketplace--switchbox {
+    display: flex;
+    > h1 {
       font-family: $spaceGroteskFont;
-      font-size: 14px;
+      font-size: 16px;
       font-style: normal;
       font-weight: 700;
-      line-height: 22px;
+      line-height: 26px;
       letter-spacing: 0em;
-      text-align: right;
-    }
-    > h3 {
-      font-family: $spaceGroteskFont;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 19px;
-      letter-spacing: 0em;
-      text-align: right;
+      text-align: left;
+      padding-left: 13px;
     }
   }
 }

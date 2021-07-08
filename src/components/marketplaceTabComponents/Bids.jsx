@@ -19,7 +19,10 @@ const Bids = () => (
       </label>
       <h1>Display active only</h1>
     </div>
-    <div className="bids--box">
+    <div className="bids--box border">
+      <div className="bids-border-box">
+        <p>HIGHEST BID</p>
+      </div>
       <div className="box--avatar">
         <img src={icon1} alt="icon1" />
         <div>
