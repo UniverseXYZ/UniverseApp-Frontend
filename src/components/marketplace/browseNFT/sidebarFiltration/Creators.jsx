@@ -4,27 +4,16 @@ import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import creatorImg from '../../../../assets/images/Justin-3LAU.png';
+import { PLACEHOLDER_MARKETPLACE_USERS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 
 const Creators = () => {
   const [showFilters, setShowFilters] = useState(true);
-  const [creators, setCreators] = useState([
-    {
-      name: 'Justin 3LAU',
-      avatar: creatorImg,
-    },
-    {
-      name: 'John Dues',
-      avatar: creatorImg,
-    },
-    {
-      name: 'John Crypto Cartel',
-      avatar: creatorImg,
-    },
-    {
-      name: 'Justin 3LAU',
-      avatar: creatorImg,
-    },
-  ]);
+  const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
+  const [searchByCreators, setSearchByCreators] = useState('');
+
+  const handleSearch = (value) => {
+    setSearchByCreators(value);
+  };
 
   return (
     <div className="browse--nft--sidebar--filtration--item">
@@ -38,15 +27,22 @@ const Creators = () => {
       <Animated animationIn="fadeIn">
         <div className="browse--nft--sidebar--filtration--item--content">
           <div className="search--field">
-            <input type="text" placeholder="Search artists" />
+            <input
+              type="text"
+              placeholder="Search artists"
+              onChange={(e) => handleSearch(e.target.value)}
+              value={searchByCreators}
+            />
             <img src={searchIcon} alt="Search" />
           </div>
-          {creators.map((creator) => (
-            <div className="creators--list" key={uuid()}>
-              <img src={creator.avatar} alt={creator.name} />
-              <p>{creator.name}</p>
-            </div>
-          ))}
+          {creators
+            .filter((item) => item.name.toLowerCase().includes(searchByCreators.toLowerCase()))
+            .map((creator) => (
+              <div className="creators--list" key={uuid()}>
+                <img src={creator.avatar} alt={creator.name} />
+                <p>{creator.name}</p>
+              </div>
+            ))}
         </div>
       </Animated>
     </div>
