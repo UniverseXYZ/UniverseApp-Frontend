@@ -17,7 +17,7 @@ import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
 import appDarkLogo from '../../assets/images/dark.svg';
 import appLightLogo from '../../assets/images/light.svg';
-import searchIcon from '../../assets/images/big-search.svg';
+import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { defaultColors } from '../../utils/helpers';
 
@@ -34,7 +34,7 @@ const Header = ({ location }) => {
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef();
 
-  const handleSearchChange = (e) => {
+  const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
       if (searchValue) {
         history.push(`/search`, { query: searchValue });
@@ -76,7 +76,7 @@ const Header = ({ location }) => {
     } else {
       document.querySelector('header').classList.remove('dark');
     }
-    if (location.pathname === '/marketplace' || location.pathname === '/search') {
+    if (location.pathname === '/marketplace') {
       setShowSearch(true);
     } else {
       setShowSearch(false);
@@ -110,7 +110,7 @@ const Header = ({ location }) => {
               ref={searchRef}
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
-              onKeyDown={handleSearchChange}
+              onKeyDown={handleSearchKeyDown}
               onBlur={() => setSearchValue('')}
             />
             {searchValue.length > 0 && (
@@ -130,7 +130,7 @@ const Header = ({ location }) => {
                     item.name.toLowerCase().includes(searchValue.toLowerCase())
                   ).length > 0 ||
                   PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                    item.title.toLowerCase().includes(searchValue.toLowerCase())
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
                   ).length > 0 ||
                   PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
                     item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -175,17 +175,17 @@ const Header = ({ location }) => {
                         </div>
                       ))}
                       {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                        item.title.toLowerCase().includes(searchValue.toLowerCase())
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
                       ).length > 0 && <h4>Auctions</h4>}
                       {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                        item.title.toLowerCase().includes(searchValue.toLowerCase())
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
                       ).map((auction) => (
                         <div className="auction__div">
                           <div className="auction--image">
                             <img src={auction.photo} alt="Auction" />
                           </div>
                           <div className="auction--desc">
-                            <h5 className="auction--title">{auction.title}</h5>
+                            <h5 className="auction--title">{auction.name}</h5>
                             <p className="auction--artist">by {auction.creator.name}</p>
                           </div>
                         </div>

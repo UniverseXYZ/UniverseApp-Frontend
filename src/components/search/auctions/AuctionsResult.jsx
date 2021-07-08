@@ -4,9 +4,13 @@ import './AuctionsResult.scss';
 import uuid from 'react-uuid';
 import moment from 'moment';
 import Button from '../../button/Button.jsx';
+import Pagination from '../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown.jsx';
 
 const AuctionsResult = ({ query, data }) => {
   const [showEndedAuctions, setShowEndedAuctions] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(12);
 
   return (
     <div className="auctions--search--result">
@@ -28,6 +32,7 @@ const AuctionsResult = ({ query, data }) => {
       )}
       {data
         .filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+        .slice(offset, offset + perPage)
         .map((auction) => {
           const startsIn = moment(auction.startDate).isAfter(moment.now())
             ? moment.duration(moment(auction.startDate).diff(moment.now()))
@@ -112,6 +117,14 @@ const AuctionsResult = ({ query, data }) => {
             </div>
           );
         })}
+      {data.filter((item) => item.name.toLowerCase().includes(query.toLowerCase())).length ? (
+        <div className="pagination__container">
+          <Pagination data={data} perPage={perPage} setOffset={setOffset} />
+          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

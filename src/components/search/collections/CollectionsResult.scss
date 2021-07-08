@@ -2,7 +2,7 @@
 @import '../../../assets/scss/mixins';
 
 .collections--search--result {
-  .list {
+  &--grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 30px;
