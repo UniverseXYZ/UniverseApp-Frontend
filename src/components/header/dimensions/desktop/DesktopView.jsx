@@ -50,7 +50,6 @@ const DesktopView = ({
     usdEthBalance,
     wethBalance,
     usdWethBalance,
-    connectWeb3,
     isAuthenticated,
     address,
     setUserPolymorphs,

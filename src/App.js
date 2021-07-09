@@ -6,6 +6,7 @@ import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useQuery } from '@apollo/client';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import Contracts from './Contracts.json';
 import AppContext from './ContextAPI';
@@ -101,6 +102,71 @@ const App = () => {
     document.getElementById('wrong-network-hidden-btn').click();
   };
 
+  const connectWithWalletConnect = async () => {
+    console.log('wallet connect');
+    const walletconnect = new WalletConnectProvider({
+      infuraId: '1745e014e2ed4047acdaa135e869a11b',
+    });
+
+    console.log(walletconnect);
+
+    //  Enable session (triggers QR Code modal)
+    await walletconnect.disconnect();
+    await walletconnect.enable();
+
+    const provider = new providers.Web3Provider(walletconnect);
+
+    // Subscribe to accounts change
+    provider.on('accountsChanged', (accounts) => {
+      console.log(accounts);
+    });
+
+    // Subscribe to chainId change
+    provider.on('chainChanged', (chainId) => {
+      console.log(chainId);
+    });
+
+    // Subscribe to session disconnection
+    provider.on('disconnect', (code, reason) => {
+      console.log(code, reason);
+    });
+
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const balance = await provider.getBalance(accounts[0]);
+    const network = await provider.getNetwork();
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+
+    if (network.chainId !== 1) {
+      await walletconnect.disconnect();
+      triggerWrongNetworkPopup();
+    } else {
+      const polymContract =
+        Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
+
+      const polymorphContractInstance = new Contract(
+        polymContract?.address,
+        polymContract?.abi,
+        signerResult
+      );
+
+      const totalMinted = await polymorphContractInstance.lastTokenId();
+      const polymorphBaseURIData = await polymorphContractInstance.baseURI();
+      const polymPrice = await polymorphContractInstance.polymorphPrice();
+
+      setWeb3Provider(provider);
+      setAddress(accounts[0]);
+      setSigner(signerResult);
+      setYourBalance(utils.formatEther(balance));
+      setIsWalletConnected(true);
+      setEthereumNetwork(network);
+
+      setPolymorphContract(polymorphContractInstance);
+      setTotalPolymorphs(totalMinted.toNumber());
+      setPolymorphBaseURI(polymorphBaseURIData);
+      setPolymorphPrice(utils.formatEther(polymPrice));
+    }
+  };
+
   const connectWeb3 = async () => {
     const { ethereum } = window;
 
@@ -184,32 +250,32 @@ const App = () => {
     }
   }, [data, yourBalance]);
 
-  useEffect(async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const { ethereum } = window;
+  // useEffect(async () => {
+  //   if (typeof window.ethereum !== 'undefined') {
+  //     const { ethereum } = window;
 
-      await connectWeb3();
+  //     await connectWeb3();
 
-      const provider = new providers.Web3Provider(ethereum);
+  //     const provider = new providers.Web3Provider(ethereum);
 
-      if (!provider) {
-        console.log('Please install/connect MetaMask!');
-      }
-      ethereum.on('accountsChanged', async ([account]) => {
-        if (account) {
-          await connectWeb3();
-          await fetchUserPolymorphsTheGraph(data);
-        } else {
-          setIsWalletConnected(false);
-        }
-      });
-      ethereum.on('chainChanged', async (networkId) => {
-        window.location.reload();
-      });
-    } else {
-      console.log('Please install/connect MetaMask!');
-    }
-  }, []);
+  //     if (!provider) {
+  //       console.log('Please install/connect MetaMask!');
+  //     }
+  //     ethereum.on('accountsChanged', async ([account]) => {
+  //       if (account) {
+  //         await connectWeb3();
+  //         await fetchUserPolymorphsTheGraph(data);
+  //       } else {
+  //         setIsWalletConnected(false);
+  //       }
+  //     });
+  //     ethereum.on('chainChanged', async (networkId) => {
+  //       window.location.reload();
+  //     });
+  //   } else {
+  //     console.log('Please install/connect MetaMask!');
+  //   }
+  // }, []);
 
   return (
     <AppContext.Provider
@@ -302,6 +368,7 @@ const App = () => {
         setMyUniverseNFTsActiverPage,
         myUniverseNFTsOffset,
         setMyUniverseNFTsOffset,
+        connectWithWalletConnect,
       }}
     >
       <Header />

@@ -37,6 +37,7 @@ import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
+import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 
 const MobileView = (props) => {
   const {
@@ -62,7 +63,6 @@ const MobileView = (props) => {
     usdEthBalance,
     wethBalance,
     usdWethBalance,
-    connectWeb3,
     isAuthenticated,
     address,
     setUserPolymorphs,
@@ -349,16 +349,28 @@ const MobileView = (props) => {
                     </div>
                   </div>
                 </li>
-                {/* {!isWalletConnected && (
+                {!isWalletConnected && (
                   <li className="sign__in">
-                    <Popup trigger={<button type="button">Join newsletter</button>}>
-                      {(close) => <SubscribePopup close={close} />}
+                    <Popup
+                      trigger={
+                        <button type="button" className="sign__in">
+                          Sign In
+                        </button>
+                      }
+                    >
+                      {(close) => (
+                        <SelectWalletPopup
+                          close={close}
+                          handleConnectWallet={handleConnectWallet}
+                          showInstallWalletPopup={showInstallWalletPopup}
+                          setShowInstallWalletPopup={setShowInstallWalletPopup}
+                          selectedWallet={selectedWallet}
+                          setSelectedWallet={setSelectedWallet}
+                        />
+                      )}
                     </Popup>
-                    <button type="button" onClick={() => connectWeb3()}>
-                      Sign In
-                    </button>
                   </li>
-                )} */}
+                )}
               </>
             ) : (
               <div className="select_wallet__section">

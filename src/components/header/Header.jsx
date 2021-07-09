@@ -10,7 +10,13 @@ import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
 
 const Header = ({ location }) => {
-  const { isWalletConnected, setIsWalletConnected, darkMode, connectWeb3 } = useContext(AppContext);
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    darkMode,
+    connectWeb3,
+    connectWithWalletConnect,
+  } = useContext(AppContext);
   const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
 
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -28,6 +34,11 @@ const Header = ({ location }) => {
         setIsWalletConnected(true);
         setShowMenu(false);
         setShowSelectWallet(false);
+      } else if (wallet === 'WalletConnect') {
+        await connectWithWalletConnect();
+        // setIsWalletConnected(true);
+        // setShowMenu(false);
+        // setShowSelectWallet(false);
       }
     } else {
       setShowInstallWalletPopup(true);
