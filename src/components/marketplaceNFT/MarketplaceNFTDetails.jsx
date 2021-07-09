@@ -13,6 +13,7 @@ import Owners from '../marketplaceTabComponents/Owners';
 import Bids from '../marketplaceTabComponents/Bids';
 import TradingHistory from '../marketplaceTabComponents/TradingHistory';
 import SharePopup from '../popups/SharePopup';
+import NFTPlaceBid from '../popups/NFTPlaceBid';
 import Offers from '../marketplaceTabComponents/Offers';
 
 const MarketplaceNFTDetails = () => {
@@ -102,7 +103,15 @@ const MarketplaceNFTDetails = () => {
           </div>
         </div>
         <div className="Marketplace--buttons">
-          <Button className="light-button">Place a bid</Button>
+          <Popup
+            trigger={
+              <button type="button" className="light-button">
+                Place a bid
+              </button>
+            }
+          >
+            {(close) => <NFTPlaceBid close={close} />}
+          </Popup>
         </div>
         <div className="Marketplace--buttons">
           <Button className="grey-button">10% of sales will go to creator</Button>
