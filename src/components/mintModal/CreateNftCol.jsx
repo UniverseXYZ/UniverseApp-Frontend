@@ -454,8 +454,8 @@ const CreateNftCol = (props) => {
                     <Input
                       className="inp"
                       placeholder="Enter value"
-                      value={elm.value}
-                      onChange={(e) => propertyChangesValue(i, e.target.value)}
+                      // value={elm.value}
+                      // onChange={(e) => propertyChangesValue(i, e.target.value)}
                     />
                   </div>
                   <img

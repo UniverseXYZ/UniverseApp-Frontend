@@ -8,12 +8,14 @@ import uuid from 'react-uuid';
 import './AuctionSettings.scss';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
+import delateIcon from '../../assets/images/inactive.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 import Button from '../button/Button.jsx';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import SelectToken from '../popups/SelectTokenPopup.jsx';
+import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 
@@ -34,7 +36,7 @@ const AuctionSettings = () => {
     'Dec',
   ];
   const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
-
+  const [properties, setProperties] = useState([{ address: '', amount: '' }]);
   const location = useLocation();
   const history = useHistory();
   const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
@@ -50,6 +52,7 @@ const AuctionSettings = () => {
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
 
+  console.log(properties);
   const handleSearch = (value) => {
     setsearchByNameAndAddress(value);
   };
@@ -183,6 +186,27 @@ const AuctionSettings = () => {
   const handleBidChange = (event, index) => {
     bidValues[index] = +event.target.value;
     setBidValues(bidValues);
+  };
+
+  const addProperty = () => {
+    console.log('a');
+    const prevProperties = [...properties];
+    const temp = { name: '', value: '' };
+    prevProperties.push(temp);
+    setProperties(prevProperties);
+  };
+
+  const propertyChangesName = (index, val) => {
+    console.log(index);
+    const prevProperties = [...properties];
+    prevProperties[index].name = val;
+    setProperties(prevProperties);
+  };
+
+  const removeProperty = (index) => {
+    const temp = [...properties];
+    temp.splice(index, 1);
+    setProperties(temp);
   };
 
   useEffect(() => {
@@ -452,18 +476,43 @@ const AuctionSettings = () => {
           <h2 className="royalty-title">Royalty splits</h2>
         </div>
         <div className="royalty-form">
-          <Input
-            id="address"
-            onChange={handleOnChange}
-            label="Wallet address"
-            className="address-inp"
-          />
-          <Input
-            id="amount"
-            onChange={handleOnChange}
-            label="Percent amount"
-            className="amount-inp"
-          />
+          {properties.map((elm, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div className="properties" key={i}>
+              <div className="property-name">
+                <Input
+                  id="address"
+                  label="Wallet address"
+                  className="address-inp"
+                  value={elm.address}
+                  onChange={(e) => propertyChangesName(i, e.target.value)}
+                />
+              </div>
+              <div className="property-value">
+                <Input
+                  id="amount"
+                  label="Percent amount"
+                  className="amount-inp"
+                  value={elm.amount}
+                  onChange={(e) => propertyChangesName(i, e.target.value)}
+                />
+              </div>
+              <img
+                src={delateIcon}
+                alt="Delete"
+                className="remove-img"
+                onClick={() => removeProperty(i)}
+                aria-hidden="true"
+              />
+            </div>
+          ))}
+
+          <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
+            <h5>
+              <img src={addIcon} alt="Add" />
+              Add property
+            </h5>
+          </div>
         </div>
       </div>
       {(!isValidFields.startingBid ||
