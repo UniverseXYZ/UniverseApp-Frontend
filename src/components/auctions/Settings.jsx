@@ -448,6 +448,23 @@ const AuctionSettings = () => {
             </div> */}
           {/* </div> */}
         </div>
+        <div className="royalty-part">
+          <h2 className="royalty-title">Royalty splits</h2>
+        </div>
+        <div className="royalty-form">
+          <Input
+            id="address"
+            onChange={handleOnChange}
+            label="Wallet address"
+            className="address-inp"
+          />
+          <Input
+            id="amount"
+            onChange={handleOnChange}
+            label="Percent amount"
+            className="amount-inp"
+          />
+        </div>
       </div>
       {(!isValidFields.startingBid ||
         !isValidFields.startDate ||
