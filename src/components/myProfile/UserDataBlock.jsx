@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
+import Popup from 'reactjs-popup';
+import LoadingPopup from '../popups/LoadingPopup.jsx';
+import CropImagePopup from '../popups/CropImagePopup';
 import Button from '../button/Button';
 import editIcon from '../../assets/images/pencil.svg';
 import copyIcon from '../../assets/images/copy1.svg';
@@ -18,6 +21,8 @@ const lookTextUid = (text) => {
 const UserDataBlock = (props) => {
   const { name, avatar, uid, about, following, followers, color } = props;
   const [copied, setCopied] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [upload, setUpload] = useState(false);
 
   useEffect(() => {
     if (copied) {
@@ -25,9 +30,43 @@ const UserDataBlock = (props) => {
         setCopied(false);
       }, 5000);
     }
-  }, [copied]);
+    if (upload) {
+      document.getElementById('loading-hidden-btn').click();
+      setTimeout(() => {
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
+      }, 2000);
+      setUpload(false);
+    }
+  }, [copied, upload]);
   return (
     <div className="user--data--block">
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="loading-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <LoadingPopup onClose={close} />}
+      </Popup>
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => (
+          <CropImagePopup onClose={close} image={previewImage} title="Select profile photo" />
+        )}
+      </Popup>
       <div className="dots--section">
         <div className="dots--block">
           <span />
@@ -45,8 +84,20 @@ const UserDataBlock = (props) => {
                 <img src={editIcon} alt="img" />
               </div>
             </label>
-            <input id="avatar--upload" type="file" accept="image/png, image/gif, image/jpeg" />
+            <input
+              id="avatar--upload"
+              type="file"
+              accept="image/png, image/gif, image/jpeg"
+              onChange={(e) => {
+                // const previewUrl = URL.createObjectURL(e.target.files[0]);
+                setPreviewImage(e.target.files[0]);
+                if (e.target.files[0]) {
+                  setUpload(true);
+                }
+              }}
+            />
           </div>
+          {console.log(previewImage)}
         </div>
         <div className="report--profile--block">
           <div className="report--profile--child">
