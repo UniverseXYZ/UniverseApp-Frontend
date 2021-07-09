@@ -51,7 +51,7 @@ const Collections = () => {
                     {col.name.charAt(0)}
                   </div>
                 ) : (
-                  <img src={col.photo} alt={col.name} />
+                  <img className="collection--avatar" src={col.photo} alt={col.name} />
                 )}
                 <p>{col.name}</p>
               </div>

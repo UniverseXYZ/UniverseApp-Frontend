@@ -72,6 +72,7 @@ const App = () => {
   const [options, setOptions] = useState(BidOptions);
   const [darkMode, setDarkMode] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
+  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
 
   useEffect(() => {
     if (!darkMode) {
@@ -141,6 +142,8 @@ const App = () => {
         setDarkMode,
         editProfileButtonClick,
         setEditProfileButtonClick,
+        selectedTokenIndex,
+        setSelectedTokenIndex,
       }}
     >
       <Header />

@@ -1,8 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
+import AppContext from '../../../../ContextAPI';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import priceIcon from '../../../../assets/images/marketplace/price.svg';
+import ethereumIcon from '../../../../assets/images/bid_icon.svg';
+import daiIcon from '../../../../assets/images/dai_icon.svg';
+import usdcIcon from '../../../../assets/images/usdc_icon.svg';
+import bondIcon from '../../../../assets/images/bond_icon.svg';
+import snxIcon from '../../../../assets/images/snx.svg';
+
+const bidTokens = [
+  {
+    icon: ethereumIcon,
+    title: 'ETH',
+    subtitle: 'Ether',
+  },
+  {
+    icon: daiIcon,
+    title: 'DAI',
+    subtitle: 'DAI Stablecoin',
+  },
+  {
+    icon: usdcIcon,
+    title: 'USDC',
+    subtitle: 'USD Coin',
+  },
+  {
+    icon: bondIcon,
+    title: 'BOND',
+    subtitle: 'BarnBridge Governance Token',
+  },
+  {
+    icon: snxIcon,
+    title: 'SNX',
+    subtitle: 'Synthetix Network Token',
+  },
+];
 
 const SelectedFilters = ({
   saleTypeButtons,
@@ -11,6 +45,9 @@ const SelectedFilters = ({
   setSelectedPrice,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
+  const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
+
+  console.log(selectedTokenIndex);
 
   const handleClearAll = () => {
     const newSaleTypeButtons = [...saleTypeButtons];
@@ -57,8 +94,8 @@ const SelectedFilters = ({
         )}
         {selectedPrice && (
           <button type="button" className="light-border-button" key={uuid()}>
-            <img className="price" src={priceIcon} alt="Price" />
-            {`ETH: ${selectedPrice.min} - ${selectedPrice.max}`}
+            <img className="price" src={bidTokens[selectedTokenIndex].icon} alt="Price" />
+            {`${bidTokens[selectedTokenIndex].title}: ${selectedPrice.min} - ${selectedPrice.max}`}
             <img
               className="close"
               src={closeIcon}
