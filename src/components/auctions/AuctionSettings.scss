@@ -2,7 +2,7 @@
 @import '../../assets/scss/mixins';
 
 .auction-settings {
-  .setting-form {
+  .setting-form, .royalty-form {
     background: rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
@@ -16,6 +16,27 @@
     }
     @include sm {
       padding: 20px;
+    }
+  }
+  .royalty-form {
+    margin-top: 25px;
+    .address-inp{
+      width: 700px;
+      margin-right: 12px;
+    }
+    .amount-inp{
+      width: 120px;
+    }
+  }
+  .royalty-part{
+    margin-top: 60px;
+    .royalty-title{
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 130%;
+      color: #000000;
     }
   }
   .up-side {

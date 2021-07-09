@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
 import InputRange from 'react-input-range';
 import Button from '../../../button/Button';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
+import AppContext from '../../../../ContextAPI';
 import ethereumIcon from '../../../../assets/images/bid_icon.svg';
 import daiIcon from '../../../../assets/images/dai_icon.svg';
 import usdcIcon from '../../../../assets/images/usdc_icon.svg';
@@ -16,10 +17,11 @@ import 'react-input-range/lib/css/index.css';
 const Price = ({ setSelectedPrice }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
   const [disabledMin, setDisabledMin] = useState(false);
   const [disabledMax, setDisabledMax] = useState(false);
+
+  const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
 
   const ref = useRef(null);
 
