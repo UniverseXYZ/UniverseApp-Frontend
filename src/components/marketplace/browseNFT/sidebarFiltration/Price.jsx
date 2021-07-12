@@ -44,7 +44,7 @@ const Price = ({ setSelectedPrice }) => {
     {
       icon: bondIcon,
       title: 'BOND',
-      subtitle: 'BarnBridge Governance Token',
+      subtitle: 'BarnBridge Gov. Token',
     },
     {
       icon: snxIcon,
@@ -75,8 +75,7 @@ const Price = ({ setSelectedPrice }) => {
     //   setMaxValue(value);
     // }
   };
-  console.log(disabledMin);
-  console.log(disabledMax);
+
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setShowPriceDropdown(false);
@@ -114,8 +113,10 @@ const Price = ({ setSelectedPrice }) => {
               />
             </div>
             <div>
-              <h6>{bidTokens[selectedTokenIndex].title}</h6>
-              <p>{bidTokens[selectedTokenIndex].subtitle}</p>
+              <h6>
+                {bidTokens[selectedTokenIndex].title}
+                <p>({bidTokens[selectedTokenIndex].subtitle})</p>
+              </h6>
             </div>
             <div>
               <img src={arrowDown} alt="Arrow Down" className={showPriceDropdown ? 'rotate' : ''} />
@@ -134,8 +135,10 @@ const Price = ({ setSelectedPrice }) => {
                       <img src={token.icon} alt={token.title} />
                     </div>
                     <div>
-                      <h6>{token.title}</h6>
-                      <p>{token.subtitle}</p>
+                      <h6>
+                        {token.title}
+                        <p>({token.subtitle})</p>
+                      </h6>
                     </div>
                   </div>
                 ))}
