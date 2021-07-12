@@ -24,6 +24,7 @@ import priceIcon from '../../assets/images/marketplace/price.svg';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import NFTMakeOffer from '../popups/NFTMakeOffer';
 
 const MarketplaceNFTDetails = ({ data }) => {
   const [nfts, setNFTs] = useState(data);
@@ -148,7 +149,15 @@ const MarketplaceNFTDetails = ({ data }) => {
               >
                 {(close) => <NFTPlaceBid close={close} />}
               </Popup>
-              <Button className="light-border-button">Make offer</Button>
+              <Popup
+                trigger={
+                  <button type="button" className="light-border-button">
+                    Make offer
+                  </button>
+                }
+              >
+                {(close) => <NFTMakeOffer close={close} />}
+              </Popup>
             </div>
           </div>
         </div>
