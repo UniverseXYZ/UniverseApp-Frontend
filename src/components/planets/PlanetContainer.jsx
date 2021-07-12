@@ -51,7 +51,9 @@ const PlanetContainer = (props) => {
       </AnimatedOnScroll>
       <Section3 fabled={fabled} title={section3Title} hintText={section3HintText} />
       <Section4 mythical={mythical} title={section4Title} hintText={section4HintText} />
-      <Section5 planet1={section5Planet1} planet2={section5Planet2} />
+      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+        <Section5 planet1={section5Planet1} planet2={section5Planet2} />
+      </AnimatedOnScroll>
     </div>
   );
 };
