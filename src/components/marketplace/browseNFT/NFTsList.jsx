@@ -133,7 +133,6 @@ const NFTsList = ({ data }) => {
     </div>
   );
 };
-
 NFTsList.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]),
 };
@@ -141,5 +140,4 @@ NFTsList.propTypes = {
 NFTsList.defaultProps = {
   data: [],
 };
-
 export default NFTsList;
