@@ -20,7 +20,6 @@ import appLightLogo from '../../assets/images/light.svg';
 import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors } from '../../utils/helpers';
 
