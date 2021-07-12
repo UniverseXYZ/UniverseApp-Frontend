@@ -22,7 +22,7 @@ const Section2Card = (props) => {
           type="button"
           onClick={() => history.push('/character-page')}
         >
-          Mint Reprint
+          Mint reprint
         </Button>
         <Button className="light-border-button auction--btn" type="button">
           1/1 auction

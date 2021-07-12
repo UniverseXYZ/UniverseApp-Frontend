@@ -5,9 +5,12 @@ import uploadIcon from '../../assets/images/upload.svg';
 import './styles/CoverPhoto.scss';
 
 const CoverPhoto = (props) => {
-  const { coverPhoto, className } = props;
+  const { coverPhoto, className, color } = props;
   return (
-    <div className={`cover--photo ${className}`} style={{ backgroundImage: `url(${coverPhoto})` }}>
+    <div
+      className={`cover--photo ${className}`}
+      style={!coverPhoto ? { background: color } : { backgroundImage: `url(${coverPhoto})` }}
+    >
       <label htmlFor="upload--input">
         <img src={uploadIcon} alt="img" />
       </label>
@@ -19,11 +22,13 @@ const CoverPhoto = (props) => {
 CoverPhoto.propTypes = {
   className: PropTypes.string,
   coverPhoto: PropTypes.string,
+  color: PropTypes.string,
 };
 
 CoverPhoto.defaultProps = {
   className: '',
   coverPhoto: defaultCoverPhoto,
+  color: '#D7CCC8',
 };
 
 export default CoverPhoto;

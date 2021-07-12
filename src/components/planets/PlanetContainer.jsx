@@ -5,6 +5,7 @@ import WelcomeWrapper from '../ui-elements/WelcomeWrapper';
 import Section2 from './planet1/Section2';
 import Section3 from './planet1/Section3';
 import Section4 from './planet1/Section4';
+import Section5 from './planet1/Section5';
 import LeftTopImg from '../../assets/images/planet1-section2-left-top.png';
 import './PlanetContainer.scss';
 
@@ -24,6 +25,8 @@ const PlanetContainer = (props) => {
     mythical,
     legendary,
     legendaryLeftTopImg,
+    section5Planet1,
+    section5Planet2,
   } = props;
   return (
     <div className={`planet--container ${className}`}>
@@ -48,6 +51,7 @@ const PlanetContainer = (props) => {
       </AnimatedOnScroll>
       <Section3 fabled={fabled} title={section3Title} hintText={section3HintText} />
       <Section4 mythical={mythical} title={section4Title} hintText={section4HintText} />
+      <Section5 planet1={section5Planet1} planet2={section5Planet2} />
     </div>
   );
 };
@@ -85,6 +89,20 @@ PlanetContainer.propTypes = {
     })
   ).isRequired,
   legendaryLeftTopImg: PropTypes.string,
+  section5Planet1: PropTypes.shape({
+    className: PropTypes.string,
+    image: PropTypes.string,
+    title: PropTypes.string,
+    planet: PropTypes.string,
+    hintText: PropTypes.string,
+  }).isRequired,
+  section5Planet2: PropTypes.shape({
+    className: PropTypes.string,
+    image: PropTypes.string,
+    title: PropTypes.string,
+    planet: PropTypes.string,
+    hintText: PropTypes.string,
+  }).isRequired,
 };
 
 PlanetContainer.defaultProps = {

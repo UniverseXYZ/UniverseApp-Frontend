@@ -1,0 +1,46 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/mixins';
+
+.planet--section5 {
+    min-height: 885px;
+    background: url('../../../../assets/images/planet-section5-horizontal-text.png'), linear-gradient( $black 0, $black 100%);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+    .section--title {
+        color:$white;
+        text-align: center;
+        width: 100%;
+        margin: 100px auto 70px;
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 36px;
+        line-height: 140%;
+    }
+    .two--planet--cards--block {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left--planet {
+            width: calc(50% - 15px);
+            min-height: 565px;
+            border-radius: 12px;
+            background: url('../../../../assets/images/xyzDAO-bg-text.png'), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+            background-blend-mode: overlay, screen, normal;
+            .planet--image--block {
+                img {
+                    mix-blend-mode: overlay;
+                }
+            }
+        }
+        .right--planet {
+            width: calc(50% - 15px);
+            min-height: 565px;
+            border-radius: 12px;
+            background: url('../../../../assets/images/xyzDAO-bg-text.png'), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+            background-blend-mode: overlay, screen, normal;
+        }
+    }
+}
