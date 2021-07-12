@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import WrapperCenter from '../../polymorphs/WrapperCenter';
+import Button from '../../button/Button';
 import './styles/Section5.scss';
 
 const Section5 = (props) => {
@@ -14,10 +15,22 @@ const Section5 = (props) => {
             <div className="planet--image--block">
               <img src={planet1.image} alt="img" />
             </div>
+            <div className="description--block">
+              <p className="planet--number">{planet1.planet}</p>
+              <h3 className="planet--title">{planet1.title}</h3>
+              <p className="planet--hintText">{planet1.hintText}</p>
+              <Button className="light-button">Show characters</Button>
+            </div>
           </div>
           <div className="right--planet">
             <div className="planet--image--block">
               <img src={planet2.image} alt="img" />
+            </div>
+            <div className="description--block">
+              <p className="planet--number">{planet2.planet}</p>
+              <h3 className="planet--title">{planet2.title}</h3>
+              <p className="planet--hintText">{planet2.hintText}</p>
+              <Button className="light-button">Show characters</Button>
             </div>
           </div>
         </div>
