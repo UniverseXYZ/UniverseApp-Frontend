@@ -14,6 +14,8 @@ import Bids from '../marketplaceTabComponents/Bids';
 import TradingHistory from '../marketplaceTabComponents/TradingHistory';
 import SharePopup from '../popups/SharePopup';
 import Offers from '../marketplaceTabComponents/Offers';
+import unveiling from '../../assets/images/unveiling.svg';
+import pyramid from '../../assets/images/pyramid.svg';
 
 const MarketplaceNFTDetails = () => {
   const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History'];
@@ -128,7 +130,27 @@ const MarketplaceNFTDetails = () => {
           {selectedTabIndex === 3 && <Offers />}
           {selectedTabIndex === 4 && <TradingHistory />}
         </div>
+        <div className="theunveiling">
+          <div className="unveiling--box">
+            <img src={unveiling} alt="avatar" />
+            <div className="unveiling--info">
+              <h1>
+                <span>Highest bid by</span> The Unveiling
+              </h1>
+              <img src={pyramid} alt="pyramid" />
+              <p>
+                0.5<span>$142.39s</span>
+                <span>(10% of sales will go to creator)</span>
+              </p>
+            </div>
+          </div>
+          <div className="button--box">
+            <Button className="light-button">Place a bid</Button>
+            <Button className="light-border-button">Make offer</Button>
+          </div>
+        </div>
       </div>
+      <div />
     </>
   );
 };
