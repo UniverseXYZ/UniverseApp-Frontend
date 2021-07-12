@@ -16,7 +16,7 @@ const MarketplaceNFT = () => {
   });
 
   return selectedNFT ? (
-    <div className="marketplace--nft--page">
+    <div className="marketplace--nft--page1">
       <MarketplaceNFTDetails />
     </div>
   ) : (

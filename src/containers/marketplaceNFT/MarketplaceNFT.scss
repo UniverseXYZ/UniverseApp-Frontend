@@ -5,23 +5,27 @@
   grid-template-columns: 1fr 560px;
   .Marketplace--img {
     border-right: 1px solid #e4e4e4;
-    padding-bottom: 540px;
+    // padding-bottom: 570px;
+    padding-top: 60px;
+    max-height: 720px;
+    border-bottom: 1px solid black;
     > img {
       height: 600px;
       width: 600px;
       border-radius: 12px;
       margin: auto;
       display: block;
-      margin-top: 96px;
+      // margin-top: 96px;
     }
   }
   .Marketplace--settings {
     // padding-left: 50px;
     // padding-right: 40px;
     position: relative;
-    margin-top: 96px;
-    // overflow-y: scroll;
-    // max-height: 1000px;
+    padding-top: 63px;
+    overflow-y: auto;
+    max-height: 720px;
+    border-bottom: 1px solid black;
     .Marketplace--name {
       padding-left: 50px;
       padding-right: 40px;
@@ -134,169 +138,6 @@
         }
       }
     }
-    .Marketplace--info {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      margin-top: 30px;
-      padding-left: 50px;
-      padding-right: 40px;
-      .Marketplace--bid {
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        > p {
-          font-family: $spaceGroteskFont;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: 19px;
-          letter-spacing: 0em;
-          text-align: left;
-          color: rgba(0, 0, 0, 0.4);
-          > span {
-            font-family: $spaceGroteskFont;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 19px;
-            letter-spacing: 0em;
-            text-align: left;
-            color: black;
-          }
-        }
-        > h1 {
-          font-family: $spaceGroteskFont;
-          font-size: 20px;
-          font-style: normal;
-          font-weight: 700;
-          line-height: 22px;
-          letter-spacing: 0px;
-          text-align: left;
-          margin-top: 10px;
-        }
-        > h2 {
-          font-family: $spaceGroteskFont;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 700;
-          line-height: 19px;
-          letter-spacing: 0em;
-          text-align: left;
-          color: #00000066;
-        }
-      }
-      .Marketplace--timer {
-        margin-left: 15px;
-        > p {
-          font-family: $spaceGroteskFont;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 700;
-          line-height: 19px;
-          letter-spacing: 0em;
-          text-align: left;
-          color: #00000066;
-        }
-        .timer--value {
-          display: flex;
-          margin-top: 10px;
-          p:not(:first-child) {
-            padding-left: 35px;
-          }
-          > p {
-            font-family: $spaceGroteskFont;
-            font-size: 20px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 22px;
-            letter-spacing: 0px;
-            text-align: left;
-          }
-        }
-        .timer {
-          display: flex;
-          > h1 {
-            font-family: $spaceGroteskFont;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 19px;
-            letter-spacing: 0em;
-            text-align: left;
-            color: #00000066;
-          }
-          > h2 {
-            font-family: $spaceGroteskFont;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 19px;
-            letter-spacing: 0em;
-            text-align: left;
-            color: #00000066;
-            padding-left: 19px;
-          }
-          > h3 {
-            font-family: $spaceGroteskFont;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 19px;
-            letter-spacing: 0em;
-            text-align: left;
-            color: #00000066;
-            padding-left: 16px;
-          }
-          > h4 {
-            font-family: $spaceGroteskFont;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 19px;
-            letter-spacing: 0em;
-            text-align: left;
-            color: #00000066;
-            padding-left: 10px;
-          }
-        }
-      }
-    }
-    .Marketplace--buttons {
-      margin-top: 30px;
-      padding-left: 50px;
-      padding-right: 40px;
-      > button {
-        width: 100%;
-      }
-      .grey-button {
-        align-items: center;
-        padding: 11px 26px;
-        justify-content: center;
-        border-radius: 12px;
-        background-image: #eeeeee;
-        background-origin: border-box;
-        box-shadow: 2px 1000px 1px #eeeeee inset;
-        font-style: normal;
-        font-size: 16px;
-        line-height: 20px;
-        font-family: $spaceGroteskFont;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 22px;
-        letter-spacing: 0em;
-        text-align: center;
-        color: #00000066;
-        transition: 50ms ease-in;
-        &:disabled {
-          color: rgba(0, 0, 0, 0.2);
-          box-shadow: none;
-          background: $white;
-          cursor: not-allowed;
-        }
-        &:hover {
-          box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
-        }
-      }
-    }
     .tabs {
       display: flex;
       align-items: center;
@@ -340,7 +181,7 @@
     background-color: white;
     // opacity: 0.4;
     border-top: 1px solid red;
-    position: absolute;
+    position: sticky;
     bottom: 0px;
     .unveiling--box {
       display: flex;
@@ -389,6 +230,21 @@
       display: grid;
       grid-template-columns: auto auto;
       grid-gap: 20px;
+    }
+  }
+}
+.collection {
+  .collection--title {
+    padding-top: 80px;
+    width: 100%;
+    > h1 {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 26px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 36px;
+      letter-spacing: 0px;
+      text-align: center;
     }
   }
 }
