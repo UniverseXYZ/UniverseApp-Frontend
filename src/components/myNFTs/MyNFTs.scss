@@ -1371,7 +1371,7 @@
       cursor: pointer;
 
       input {
-        @include css-checkbox(16px, $black, $white);
+        @include css-checkbox(16px, $black, $white, 'middle', $white, 8px);
       }
     }
   }

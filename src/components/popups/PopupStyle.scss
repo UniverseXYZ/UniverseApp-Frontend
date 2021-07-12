@@ -2604,3 +2604,230 @@
   //   }
   // }
 }
+.checkout__popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 480px;
+  min-height: 280px;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  // padding: 40px 30px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+  .checkout__part {
+    padding: 40px 30px;
+    h2 {
+      font-family: $sharpGroteskMediumFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .checkout__header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+      }
+    }
+    .checkout__nft {
+      display: flex;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+      .nft__picture {
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+
+        img {
+          min-width: 80px;
+          min-height: 80px;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+      }
+      .nft__description {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        h5 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 22px;
+          color: $black;
+
+          img {
+            width: 10.32px;
+            height: 16px;
+            object-fit: cover;
+          }
+        }
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.4);
+        }
+        .nft__bid {
+          text-align: end;
+        }
+      }
+    }
+    .checkout__total {
+      display: flex;
+      justify-content: space-between;
+
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+      }
+      .total__bid {
+        text-align: end;
+        margin-bottom: 40px;
+
+        h3 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 18px;
+          line-height: 22px;
+          color: $black;
+
+          img {
+            width: 12px;
+            height: 18.6px;
+          }
+        }
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.4);
+        }
+      }
+    }
+    .checkout__checkbox {
+      display: flex;
+      margin-bottom: 30px;
+      .custom__checkbox {
+        label {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 300;
+          font-size: 14px;
+          text-decoration-line: underline;
+          color: $black;
+          cursor: pointer;
+
+          input {
+            @include css-checkbox(16px, $black, $white, 'middle', $black, 4px);
+          }
+        }
+      }
+
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        color: $black;
+        span {
+          text-decoration: underline;
+        }
+      }
+    }
+    .checkout__button {
+      display: flex;
+      justify-content: center;
+
+      .light-border-button {
+        margin-left: 15px;
+      }
+    }
+    .warning__div {
+      display: flex;
+      border: 1px solid #e4b613;
+      box-sizing: border-box;
+      border-radius: 12px;
+      background: #fdfcf9;
+      padding: 20px 20px 20px 24px;
+      margin-bottom: 30px;
+
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: #e4b613;
+        margin-left: 13px;
+      }
+    }
+  }
+  .congratulation__part {
+    padding: 50px 40px;
+
+    h1 {
+      font-family: $sharpGroteskMediumFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      text-align: center;
+      color: $black;
+      margin-bottom: 10px;
+    }
+    p {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 160%;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 30px;
+    }
+    img {
+      width: 295px;
+      height: 295px;
+    }
+  }
+}
