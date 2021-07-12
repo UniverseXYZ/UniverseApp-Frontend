@@ -56,6 +56,7 @@ const DesktopView = ({
     setAddress,
     setYourBalance,
     setUsdEthBalance,
+    resetConnectionState,
   } = useContext(AppContext);
 
   return (
@@ -226,7 +227,7 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected ? (
+        {isWalletConnected && address ? (
           <li>
             <button
               type="button"
@@ -310,13 +311,9 @@ const DesktopView = ({
                 <button
                   type="button"
                   className="signOut"
-                  onClick={() => {
+                  onClick={async () => {
                     setIsAccountDropdownOpened(false);
-                    setIsWalletConnected(!isWalletConnected);
-                    setUserPolymorphs([]);
-                    setAddress(null);
-                    setYourBalance(0);
-                    setUsdEthBalance(0);
+                    resetConnectionState();
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />

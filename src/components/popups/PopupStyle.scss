@@ -191,6 +191,14 @@
         opacity: 0.3;
       }
     }
+
+    @include xs {
+      grid-gap: 14px;
+
+      button {
+        padding: 32px 20px;
+      }
+    }
   }
   .links {
     margin-top: 40px;
@@ -198,6 +206,10 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
+  }
+
+  @include xs {
+    padding: 40px 20px;
   }
 }
 .wrong__network__popup {

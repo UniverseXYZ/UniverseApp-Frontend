@@ -8,6 +8,7 @@ import trezorLogo from '../../assets/images/trezor.png';
 import coinbaseLogo from '../../assets/images/coinbase.png';
 import walletConnectLogo from '../../assets/images/wallet-connect.png';
 import closeIcon from '../../assets/images/close-menu.svg';
+import { CONNECTORS_NAMES } from '../../utils/dictionary';
 
 const SelectWalletPopup = (props) => {
   const {
@@ -33,7 +34,7 @@ const SelectWalletPopup = (props) => {
           <h1 className="title">Select Wallet</h1>
           <p className="desc">Please pick a wallet to connect to Universe</p>
           <div className="wallets">
-            <button type="button" onClick={() => handleConnectWallet('Metamask')}>
+            <button type="button" onClick={() => handleConnectWallet(CONNECTORS_NAMES.MetaMask)}>
               <img src={metamaskLogo} alt="Metamask" />
             </button>
             <button className="disable" type="button" onClick={() => handleConnectWallet('Ledger')}>
@@ -56,7 +57,10 @@ const SelectWalletPopup = (props) => {
             >
               <img src={coinbaseLogo} alt="Coinbase" />
             </button>
-            <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>
+            <button
+              type="button"
+              onClick={() => handleConnectWallet(CONNECTORS_NAMES.WalletConnect)}
+            >
               <img src={walletConnectLogo} alt="WalletConnect" />
             </button>
           </div>

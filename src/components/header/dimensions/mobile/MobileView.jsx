@@ -38,6 +38,7 @@ import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
+import { CONNECTORS_NAMES } from '../../../../utils/dictionary';
 
 const MobileView = (props) => {
   const {
@@ -387,7 +388,10 @@ const MobileView = (props) => {
                     <h1 className="title">Select Wallet</h1>
                     <p className="desc">Please pick a wallet to connect to Universe</p>
                     <div className="wallets">
-                      <button type="button" onClick={() => handleConnectWallet('Metamask')}>
+                      <button
+                        type="button"
+                        onClick={() => handleConnectWallet(CONNECTORS_NAMES.MetaMask)}
+                      >
                         <img src={metamaskLogo} alt="Metamask" />
                       </button>
                       <button type="button" onClick={() => handleConnectWallet('Ledger')}>
@@ -402,7 +406,10 @@ const MobileView = (props) => {
                       <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
                         <img src={coinbaseLogo} alt="Coinbase" />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('WalletConnect')}>
+                      <button
+                        type="button"
+                        onClick={() => handleConnectWallet(CONNECTORS_NAMES.WalletConnect)}
+                      >
                         <img src={walletConnectLogo} alt="WalletConnect" />
                       </button>
                     </div>
