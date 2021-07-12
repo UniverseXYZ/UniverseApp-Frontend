@@ -10,7 +10,6 @@ const Section2 = (props) => {
   const { title, legendary, legendaryLeftTopImg } = props;
   return (
     <div className="planet--section2">
-      {/* <div className="opacity--block"> */}
       {!!legendaryLeftTopImg.length && (
         <img src={legendaryLeftTopImg} alt="img" className="left--top--img" />
       )}
@@ -23,7 +22,6 @@ const Section2 = (props) => {
           rightBlock={<Section2Card {...legendary[0]} legendary />}
         />
       </WrapperCenter>
-      {/* </div> */}
     </div>
   );
 };

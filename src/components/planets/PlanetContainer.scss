@@ -87,9 +87,13 @@
                     }
                 }
                 .links {
+                    @include md {
+                        margin-bottom: 80px;
+                        margin-top: 10px;
+                    }
                     button {
                         @include md {
-                            width: 100%;
+                            width: auto;
                             margin-bottom: 20px;
                         }
                     }
@@ -128,6 +132,8 @@
             }
         }
         .section--title {
+            position: relative;
+            z-index: 60;
             margin: 105px auto 60px;
             @include lg {
                 margin: 100px auto 60px;
@@ -269,7 +275,7 @@
                 padding: 60px;
             }
             @include md {
-                padding: 20px;
+                padding: 20px 20px 100px;
                 > div {
                     width: 100%;
                 }
