@@ -437,80 +437,172 @@
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
     cursor: pointer;
   }
-  .title {
-    font-family: $sharpGroteskSemiBoldFont;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 130%;
-    text-align: center;
-    color: $black;
-    margin-bottom: 30px;
-  }
-  .form {
-    label {
-      display: block;
-      font-family: $spaceGroteskFont;
+  .step1 {
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
       font-weight: 600;
-      font-size: 16px;
-      line-height: 160%;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
       color: $black;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
     }
-    .input--field {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-gap: 7px;
-      align-items: center;
-      background: $white;
-      border: 1px solid #D4D4D4;
-      box-sizing: border-box;
-      border-radius: 12px;
-      .currency--dropdown {
-        cursor: pointer;
-        padding: 8px;
-        > div {
-          background: rgba(0, 0, 0, 0.02);
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          box-sizing: border-box;
-          border-radius: 6px;
-          padding: 7px 10px;
-          span {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 140%;
-            color: $black;
-          }
-          img {
-            margin-left: 13px;
+    .form {
+      label {
+        display: block;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+        margin-bottom: 10px;
+      }
+      .input--field {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-gap: 7px;
+        align-items: center;
+        background: $white;
+        border: 1px solid #D4D4D4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        margin-bottom: 6px;
+        &.error {
+          border: 1px solid #FF4949;
+        }
+        .currency--dropdown {
+          cursor: pointer;
+          padding: 8px;
+          > div {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 6px;
+            padding: 7px 10px;
+            span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
           }
         }
+        input {
+          width: 100%;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 18px;
+          color: $black;
+          padding: 15px 0px;
+        }
+        .convert--to--dollar {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 140%;
+          color: rgba(0, 0, 0, 0.4);
+          padding: 15px 20px;
+          background: rgba(0, 0, 0, 0.02);
+          border-left: 1px solid #D4D4D4;
+          box-sizing: border-box;
+          border-radius: 0px 12px 12px 0px;
+        }
       }
-      input {
-        width: 100%;
+      p.error {
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
-        font-size: 14px;
-        line-height: 18px;
+        font-size: 12px;
+        line-height: 150%;
+        color: #FF4949;
+      }
+      .actions {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .light-button {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+  .step2 {
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
+      color: $black;
+      margin-bottom: 20px;
+    }
+    p.desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 160%;
+      text-align: center;
+      color: $black;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+    .loading--div {
+      position: relative;
+      height: 200px;
+    }
+  }
+  .step3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .check--icon {
+      width: 220px;
+    }
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      color: $black;
+      margin-top: 50px;
+      margin-bottom: 24px;
+    }
+    .desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 160%;
+      color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      b {
+        display: flex;
+        align-items: center;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
         color: $black;
-        padding: 15px 0px;
-      }
-      .convert--to--dollar {
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 140%;
-        color: rgba(0, 0, 0, 0.4);
-        padding: 15px 20px;
-        background: rgba(0, 0, 0, 0.02);
-        border-left: 1px solid #D4D4D4;
-        box-sizing: border-box;
-        border-radius: 0px 12px 12px 0px;
+        img {
+          margin: 0px 2px 0px 5px;
+        }
       }
     }
   }
@@ -2197,100 +2289,6 @@
   .polymorph_confirmation_image {
     .loading {
       position: relative;
-    }
-    .lds-roller {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: inline-block;
-      width: 80px;
-      height: 80px;
-    }
-    .lds-roller div {
-      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      transform-origin: 40px 40px;
-    }
-    .lds-roller div:after {
-      content: ' ';
-      display: block;
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin: -4px 0 0 -4px;
-    }
-    .lds-roller div:nth-child(1) {
-      animation-delay: -0.036s;
-    }
-    .lds-roller div:nth-child(1):after {
-      background: #adea12;
-      top: 63px;
-      left: 63px;
-    }
-    .lds-roller div:nth-child(2) {
-      animation-delay: -0.072s;
-    }
-    .lds-roller div:nth-child(2):after {
-      background: #90ea35;
-      top: 68px;
-      left: 56px;
-    }
-    .lds-roller div:nth-child(3) {
-      animation-delay: -0.108s;
-    }
-    .lds-roller div:nth-child(3):after {
-      background: #72ea5b;
-      top: 71px;
-      left: 48px;
-    }
-    .lds-roller div:nth-child(4) {
-      animation-delay: -0.144s;
-    }
-    .lds-roller div:nth-child(4):after {
-      background: #33eaaa;
-      top: 72px;
-      left: 40px;
-    }
-    .lds-roller div:nth-child(5) {
-      animation-delay: -0.18s;
-    }
-    .lds-roller div:nth-child(5):after {
-      background: #31eaae;
-      top: 71px;
-      left: 32px;
-    }
-    .lds-roller div:nth-child(6) {
-      animation-delay: -0.216s;
-    }
-    .lds-roller div:nth-child(6):after {
-      background: #00eaea;
-      top: 68px;
-      left: 24px;
-    }
-    .lds-roller div:nth-child(7) {
-      animation-delay: -0.252s;
-    }
-    .lds-roller div:nth-child(7):after {
-      background: #00eaea;
-      top: 63px;
-      left: 17px;
-    }
-    .lds-roller div:nth-child(8) {
-      animation-delay: -0.288s;
-    }
-    .lds-roller div:nth-child(8):after {
-      background: #00eaea;
-      top: 56px;
-      left: 12px;
-    }
-    @keyframes lds-roller {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
     }
     img {
       height: 295px;
