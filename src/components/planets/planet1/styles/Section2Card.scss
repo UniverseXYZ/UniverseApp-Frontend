@@ -20,6 +20,8 @@
         right: 3.5px;
         top: 7px;
         z-index: 50;
+        max-width: 50%;
+        max-height: 50%;
     }
     .image--block {
         width: 314px;
@@ -37,6 +39,8 @@
             right: 0;
             bottom: 0;
             margin: auto;
+            max-height: 90%;
+            max-width: 90%;
         }
     }
     .text--block {
