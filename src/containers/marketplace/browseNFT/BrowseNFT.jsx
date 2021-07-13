@@ -11,7 +11,7 @@ import SelectedFiltersAndSorting from '../../../components/marketplace/browseNFT
 import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
 import NFTsList from '../../../components/marketplace/browseNFT/NFTsList';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../../utils/fixtures/BrowseNFTsDummyData';
-import CheckOutPopup from '../../../components/popups/CheckOutPopup';
+import ReportPopup from '../../../components/popups/ReportPopup';
 
 const BrowseNFT = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -65,7 +65,7 @@ const BrowseNFT = () => {
               </button>
             }
           >
-            {(close) => <CheckOutPopup onClose={close} />}
+            {(close) => <ReportPopup onClose={close} />}
           </Popup>
         </div>
       </div>

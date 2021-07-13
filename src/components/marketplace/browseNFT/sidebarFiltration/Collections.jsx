@@ -15,6 +15,7 @@ const Collections = () => {
   const handleSearch = (value) => {
     setSearchByCollections(value);
   };
+  console.log(collections);
 
   return (
     <div className="browse--nft--sidebar--filtration--item">
