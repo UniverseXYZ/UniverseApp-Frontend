@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
@@ -24,12 +24,17 @@ import priceIcon from '../../assets/images/marketplace/price.svg';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import dot3 from '../../assets/images/3333dots.svg';
 
 const MarketplaceNFTDetails = ({ data }) => {
   const [nfts, setNFTs] = useState(data);
   const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
+  const ref = useRef(null);
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [selectedItem, setSelectedItem] = useState('...');
+
   const handleLikeClick = (id) => {
     setNFTs((prevState) =>
       prevState.map((el) =>
@@ -93,18 +98,55 @@ const MarketplaceNFTDetails = ({ data }) => {
                     )
                 )}
               </div>
-              <Popup trigger={<img src={share} alt="fsk" className="share-open" />}>
+              {/* <Popup trigger={<img src={share} alt="fsk" className="share-open" />}>
                 {(close) => (
                   <SharePopup
                     close={close}
-                    // handleConnectWallet={handleConnectWallet}
-                    // showInstallWalletPopup={showInstallWalletPopup}
-                    // setShowInstallWalletPopup={setShowInstallWalletPopup}
-                    // selectedWallet={selectedWallet}
-                    // setSelectedWallet={setSelectedWallet}
+                    handleConnectWallet={handleConnectWallet}
+                    showInstallWalletPopup={showInstallWalletPopup}
+                    setShowInstallWalletPopup={setShowInstallWalletPopup}
+                    selectedWallet={selectedWallet}
+                    setSelectedWallet={setSelectedWallet}
                   />
                 )}
-              </Popup>
+              </Popup> */}
+              {/* <img src={dot3} alt="icon" className="share-open" /> */}
+              {/* <div> */}
+              <div
+                ref={ref}
+                className={`share_dropdown ${isDropdownOpened ? 'opened' : ''}`}
+                onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+                aria-hidden="true"
+              >
+                <span className="selected__item">{selectedItem}</span>
+                {/* <img className="arrow__down" src={audioIcon} alt="Arrow" /> */}
+                {isDropdownOpened && (
+                  <div className="sort__share__dropdown">
+                    <ul>
+                      <li
+                        onClick={() => {
+                          setSelectedItem('All characters');
+                          setIsDropdownOpened(false);
+                        }}
+                        aria-hidden="true"
+                      >
+                        Share
+                      </li>
+                      <li
+                        onClick={() => {
+                          setSelectedItem('OG characters');
+                          setIsDropdownOpened(false);
+                        }}
+                        aria-hidden="true"
+                        className="dropdown__report"
+                      >
+                        Report
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+              {/* </div> */}
             </div>
           </div>
           <div className="Marketplace--number">
