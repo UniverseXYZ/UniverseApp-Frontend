@@ -4,12 +4,37 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import currencyIcon from '../../assets/images/marketplace/price.svg';
+import calendarIcon from '../../assets/images/calendar-small.svg';
 import congratsIcon from '../../assets/images/bid-submitted.png';
+import SmallCalendar from '../calendar/SmallCalendar.jsx';
 
-const NFTPlaceBid = ({ close }) => {
+const NFTMakeOffer = ({ close }) => {
   const [bidAmount, setBidAmount] = useState(0.25);
   const [loading, setLoading] = useState('');
   const [checkboxValue, setCheckboxValue] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const d = new Date();
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const [offerExpirationDate, setOfferExpirationDate] = useState({
+    month: monthNames[d.getMonth()],
+    day: d.getDate(),
+    year: d.getFullYear(),
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
+  });
 
   const handleClick = () => {
     setLoading('processing');
@@ -29,7 +54,7 @@ const NFTPlaceBid = ({ close }) => {
       />
       {!loading ? (
         <div className="step1">
-          <h1 className="title">Place a bid</h1>
+          <h1 className="title">Make an offer</h1>
           <div className="form">
             <label className="price">Price</label>
             <div className={`input--field ${!bidAmount ? 'error' : ''}`}>
@@ -54,6 +79,29 @@ const NFTPlaceBid = ({ close }) => {
               </div>
             </div>
             {!bidAmount && <p className="error">This field is required</p>}
+            <label className="offer--expiration">Offer Expiration</label>
+            <div className="input--field diff">
+              <div className="selected--date">
+                {`${offerExpirationDate.month} ${offerExpirationDate.day}, ${offerExpirationDate.year}, `}
+                <span>{`${offerExpirationDate.hours}:${offerExpirationDate.minutes} EST`}</span>
+              </div>
+              <div
+                className="calendar--icon"
+                aria-hidden="true"
+                onClick={() => setShowCalendar(!showCalendar)}
+              >
+                <img src={calendarIcon} alt="Calendar" />
+              </div>
+              {showCalendar && (
+                <SmallCalendar
+                  showCalendar={showCalendar}
+                  setShowCalendar={setShowCalendar}
+                  monthNames={monthNames}
+                  offerExpirationDate={offerExpirationDate}
+                  setOfferExpirationDate={setOfferExpirationDate}
+                />
+              )}
+            </div>
             <div className="checkout__checkbox">
               <div className="custom__checkbox">
                 <label htmlFor="toggleSelection">
@@ -84,9 +132,9 @@ const NFTPlaceBid = ({ close }) => {
         </div>
       ) : loading === 'processing' ? (
         <div className="step2">
-          <h1 className="title">Listing your item...</h1>
+          <h1 className="title">Making an offer...</h1>
           <p className="desc">
-            Just accept the signature request and wait for us to process your listing
+            Just accept the signature request and wait for us to process your offer
           </p>
           <div className="loading--div">
             <div className="lds-roller">
@@ -106,9 +154,16 @@ const NFTPlaceBid = ({ close }) => {
           <img className="check--icon" src={congratsIcon} alt="Congrats" />
           <h1 className="title">Congratulations!</h1>
           <p className="desc">
-            You have successfully placed a bid for
+            You have successfully made an offer for
             <b>
               <img src={currencyIcon} alt="Currency" /> {bidAmount}
+            </b>
+          </p>
+          <p className="desc">
+            that ends on
+            <b>
+              &nbsp;
+              {`${offerExpirationDate.month} ${offerExpirationDate.day}, ${offerExpirationDate.year}, ${offerExpirationDate.hours}:${offerExpirationDate.minutes} EST`}
             </b>
           </p>
           <Button className="light-border-button" onClick={close}>
@@ -120,8 +175,8 @@ const NFTPlaceBid = ({ close }) => {
   );
 };
 
-NFTPlaceBid.propTypes = {
+NFTMakeOffer.propTypes = {
   close: PropTypes.func.isRequired,
 };
 
-export default NFTPlaceBid;
+export default NFTMakeOffer;
