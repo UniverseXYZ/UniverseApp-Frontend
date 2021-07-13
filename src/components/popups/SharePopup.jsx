@@ -29,6 +29,12 @@ const SharePopup = (props) => {
       <div className="share--list">
         <div className="share--box">
           <div>
+            <img src={hh} alt="hh" />
+          </div>
+          <p>Copy Link</p>
+        </div>
+        <div className="share--box">
+          <div>
             <img src={twitter} alt="twitter" />
           </div>
           <p>Twitter</p>
@@ -44,12 +50,6 @@ const SharePopup = (props) => {
             <img src={telegram} alt="tg" />
           </div>
           <p>Telegram</p>
-        </div>
-        <div className="share--box">
-          <div>
-            <img src={hh} alt="hh" />
-          </div>
-          <p>Copy Link</p>
         </div>
         <div className="share--box">
           <div>

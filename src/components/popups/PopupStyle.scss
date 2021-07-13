@@ -437,81 +437,291 @@
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
     cursor: pointer;
   }
-  .title {
-    font-family: $sharpGroteskSemiBoldFont;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 130%;
-    text-align: center;
-    color: $black;
-    margin-bottom: 30px;
-  }
-  .form {
-    label {
-      display: block;
-      font-family: $spaceGroteskFont;
+  .step1 {
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
       font-weight: 600;
-      font-size: 16px;
-      line-height: 160%;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
       color: $black;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
     }
-    .input--field {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-gap: 7px;
-      align-items: center;
-      background: $white;
-      border: 1px solid #D4D4D4;
-      box-sizing: border-box;
-      border-radius: 12px;
-      .currency--dropdown {
-        cursor: pointer;
-        padding: 8px;
-        > div {
-          background: rgba(0, 0, 0, 0.02);
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          box-sizing: border-box;
-          border-radius: 6px;
-          padding: 7px 10px;
-          span {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 140%;
-            color: $black;
+    .form {
+      label.price {
+        display: block;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+        margin-bottom: 10px;
+      }
+      label.offer--expiration {
+        display: block;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+        margin-bottom: 10px;
+        margin-top: 30px;
+      }
+      .input--field {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-gap: 7px;
+        align-items: center;
+        background: $white;
+        border: 1px solid #D4D4D4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        margin-bottom: 6px;
+        &.diff {
+          grid-template-columns: 1fr auto;
+        }
+        &.error {
+          border: 1px solid #FF4949;
+        }
+        .currency--dropdown {
+          cursor: pointer;
+          padding: 8px;
+          > div {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 6px;
+            padding: 7px 10px;
+            span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
           }
-          img {
-            margin-left: 13px;
+        }
+        input.input--field--item {
+          width: 100%;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 18px;
+          color: $black;
+          padding: 15px 0px;
+        }
+        .convert--to--dollar {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 140%;
+          color: rgba(0, 0, 0, 0.4);
+          padding: 15px 20px;
+          background: rgba(0, 0, 0, 0.02);
+          border-left: 1px solid #D4D4D4;
+          box-sizing: border-box;
+          border-radius: 0px 12px 12px 0px;
+        }
+        .selected--date {
+          padding: 15px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 20px;
+          color: #1A1A1A;
+          span {
+            font-weight: normal;
+          }
+        }
+        .calendar--icon {
+          cursor: pointer;
+          width: 50px;
+          padding: 15px;
+          background: rgba(0, 0, 0, 0.02);
+          border-left: 1px solid #D4D4D4;
+          box-sizing: border-box;
+          border-radius: 0px 12px 12px 0px;
+        }
+        .calendar__wrapper {
+          position: absolute;
+          top: 52px;
+          right: 0;
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          .calendar__header {
+            padding: 12px 15px;
+            h2 {
+              font-size: 14px;
+            }
+            .left-btn:disabled {
+              cursor: not-allowed;
+              img {
+                opacity: 0.3;
+              }
+            }
+          }
+          .calendar__body {
+            padding: 19px 23px 0;
+            border-bottom: none;
+            .week__days {
+              div {
+                font-size: 12px;
+                width: 28px;
+                height: 28px;
+              }
+            }
+            .week__days__numbers {
+              button {
+                font-size: 12px;
+                width: 28px;
+                height: 28px;
+              }
+            }
+          }
+          .calendar__footer {
+            padding: 16px;
+            .time {
+              input {
+                width: 87px;
+                font-size: 16px;
+                padding: 11px;
+              }
+            }
           }
         }
       }
-      input {
-        width: 100%;
+      p.error {
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
-        font-size: 14px;
-        line-height: 18px;
+        font-size: 12px;
+        line-height: 150%;
+        color: #FF4949;
+      }
+      .checkout__checkbox {
+        display: flex;
+        align-items: center;
+        margin-top: 40px;
+        .custom__checkbox {
+          label {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 14px;
+            text-decoration-line: underline;
+            color: $black;
+            cursor: pointer;
+
+            input {
+              @include css-checkbox(16px, $black, $white, 'middle', $black, 4px);
+            }
+          }
+        }
+
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 150%;
+          color: $black;
+          span {
+            text-decoration: underline;
+          }
+        }
+      }
+      .actions {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .light-button {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+  .step2 {
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
+      color: $black;
+      margin-bottom: 20px;
+    }
+    p.desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 160%;
+      text-align: center;
+      color: $black;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+    .loading--div {
+      position: relative;
+      height: 200px;
+    }
+  }
+  .step3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .check--icon {
+      width: 220px;
+    }
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      color: $black;
+      margin-top: 50px;
+      margin-bottom: 24px;
+    }
+    .desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 160%;
+      color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      b {
+        display: flex;
+        align-items: center;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
         color: $black;
-        padding: 15px 0px;
+        img {
+          margin: 0px 2px 0px 5px;
+        }
       }
-      .convert--to--dollar {
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 140%;
-        color: rgba(0, 0, 0, 0.4);
-        padding: 15px 20px;
-        background: rgba(0, 0, 0, 0.02);
-        border-left: 1px solid #D4D4D4;
-        box-sizing: border-box;
-        border-radius: 0px 12px 12px 0px;
-      }
+    }
+    button.light-border-button {
+      margin-top: 40px;
     }
   }
 }
@@ -2198,100 +2408,6 @@
     .loading {
       position: relative;
     }
-    .lds-roller {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: inline-block;
-      width: 80px;
-      height: 80px;
-    }
-    .lds-roller div {
-      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      transform-origin: 40px 40px;
-    }
-    .lds-roller div:after {
-      content: ' ';
-      display: block;
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin: -4px 0 0 -4px;
-    }
-    .lds-roller div:nth-child(1) {
-      animation-delay: -0.036s;
-    }
-    .lds-roller div:nth-child(1):after {
-      background: #adea12;
-      top: 63px;
-      left: 63px;
-    }
-    .lds-roller div:nth-child(2) {
-      animation-delay: -0.072s;
-    }
-    .lds-roller div:nth-child(2):after {
-      background: #90ea35;
-      top: 68px;
-      left: 56px;
-    }
-    .lds-roller div:nth-child(3) {
-      animation-delay: -0.108s;
-    }
-    .lds-roller div:nth-child(3):after {
-      background: #72ea5b;
-      top: 71px;
-      left: 48px;
-    }
-    .lds-roller div:nth-child(4) {
-      animation-delay: -0.144s;
-    }
-    .lds-roller div:nth-child(4):after {
-      background: #33eaaa;
-      top: 72px;
-      left: 40px;
-    }
-    .lds-roller div:nth-child(5) {
-      animation-delay: -0.18s;
-    }
-    .lds-roller div:nth-child(5):after {
-      background: #31eaae;
-      top: 71px;
-      left: 32px;
-    }
-    .lds-roller div:nth-child(6) {
-      animation-delay: -0.216s;
-    }
-    .lds-roller div:nth-child(6):after {
-      background: #00eaea;
-      top: 68px;
-      left: 24px;
-    }
-    .lds-roller div:nth-child(7) {
-      animation-delay: -0.252s;
-    }
-    .lds-roller div:nth-child(7):after {
-      background: #00eaea;
-      top: 63px;
-      left: 17px;
-    }
-    .lds-roller div:nth-child(8) {
-      animation-delay: -0.288s;
-    }
-    .lds-roller div:nth-child(8):after {
-      background: #00eaea;
-      top: 56px;
-      left: 12px;
-    }
-    @keyframes lds-roller {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
     img {
       height: 295px;
       width: 295px;
@@ -2431,13 +2547,14 @@
         font-family: $spaceGroteskFont;
         font-size: 14px;
         font-style: normal;
-        font-weight: 400;
+        font-weight: normal;
         line-height: 22px;
         letter-spacing: 0px;
         text-align: center;
+        color: $black;
       }
       > div {
-        border: 1px solid black;
+        border: 1px solid #C4C4C4;
         height: 62px;
         width: 62px;
         border-radius: 50%;
@@ -2603,4 +2720,282 @@
   //     }
   //   }
   // }
+}
+.crop--image--popup--parent {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px 60px;
+  background: $white;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  max-width: 620px;
+  width: 100%;
+  min-height: 525px;
+  .cropper--section {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 16px;
+    position: relative;
+    .reactEasyCrop_CropArea {
+      border-radius: 50%;
+    }
+  }
+  .title {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 130%;
+    color: $black;
+    margin-bottom: 30px;
+  }
+  .range--slider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input {
+      width: 100%;
+    }
+  }
+  .crop--btn--group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 30px;
+    button {
+      height: 42px;
+      margin-left: 12px;
+    }
+  }
+}
+
+.checkout__popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 480px;
+  min-height: 280px;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  // padding: 40px 30px;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+  .checkout__part {
+    padding: 40px 30px;
+    h2 {
+      font-family: $sharpGroteskMediumFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .checkout__header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+      }
+    }
+    .checkout__nft {
+      display: flex;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+      .nft__picture {
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+
+        img {
+          min-width: 80px;
+          min-height: 80px;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+      }
+      .nft__description {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        h5 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 22px;
+          color: $black;
+
+          img {
+            width: 10.32px;
+            height: 16px;
+            object-fit: cover;
+          }
+        }
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.4);
+        }
+        .nft__bid {
+          text-align: end;
+        }
+      }
+    }
+    .checkout__total {
+      display: flex;
+      justify-content: space-between;
+
+      h4 {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+      }
+      .total__bid {
+        text-align: end;
+        margin-bottom: 40px;
+
+        h3 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 18px;
+          line-height: 22px;
+          color: $black;
+
+          img {
+            width: 12px;
+            height: 18.6px;
+          }
+        }
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 160%;
+          color: rgba(0, 0, 0, 0.4);
+        }
+      }
+    }
+    .checkout__checkbox {
+      display: flex;
+      margin-bottom: 30px;
+      .custom__checkbox {
+        label {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 300;
+          font-size: 14px;
+          text-decoration-line: underline;
+          color: $black;
+          cursor: pointer;
+
+          input {
+            @include css-checkbox(16px, $black, $white, 'middle', $black, 4px);
+          }
+        }
+      }
+
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        color: $black;
+        span {
+          text-decoration: underline;
+        }
+      }
+    }
+    .checkout__button {
+      display: flex;
+      justify-content: center;
+
+      .light-border-button {
+        margin-left: 15px;
+      }
+    }
+    .warning__div {
+      display: flex;
+      border: 1px solid #e4b613;
+      box-sizing: border-box;
+      border-radius: 12px;
+      background: #fdfcf9;
+      padding: 20px 20px 20px 24px;
+      margin-bottom: 30px;
+
+      p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: #e4b613;
+        margin-left: 13px;
+      }
+    }
+  }
+  .congratulation__part {
+    padding: 50px 40px;
+
+    h1 {
+      font-family: $sharpGroteskMediumFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      text-align: center;
+      color: $black;
+      margin-bottom: 10px;
+    }
+    p {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 160%;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 30px;
+    }
+    img {
+      width: 295px;
+      height: 295px;
+    }
+  }
 }

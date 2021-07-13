@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WrapperCenter from '../polymorphs/WrapperCenter';
@@ -11,6 +11,7 @@ import RecentActivity from './RecentActivity';
 import marketplaceIcon from '../../assets/images/nft-marketplace.svg';
 import galleryIcon from '../../assets/images/my-nfts.svg';
 import auctionIcon from '../../assets/images/auction-house.svg';
+import btnAddIcon from '../../assets/images/add-icon.svg';
 import './styles/MyProfileContainer.scss';
 
 const rightTopLinks = [
@@ -24,7 +25,29 @@ const rightTopLinks = [
   },
 ];
 
+const colors = [
+  '#FFCCBC',
+  '#FFCDD2',
+  '#F8BBD0',
+  '#E1BEE7',
+  '#D1C4E9',
+  '#C5CAE9',
+  '#BBDEFB',
+  '#B3E5FC',
+  '#B2EBF2',
+  '#B2DFDB',
+  '#C8E6C9',
+  '#DCEDC8',
+  '#F0F4C3',
+  '#FFF9C4',
+  '#FFECB3',
+  '#FFE0B2',
+  '#FFCCBC',
+  '#D7CCC8',
+];
+
 const MyProfileContainer = (props) => {
+  const [color] = useState(colors[parseInt(Math.random() * 18, 10)]);
   const { user } = props;
   const {
     coverPhoto,
@@ -43,7 +66,7 @@ const MyProfileContainer = (props) => {
   console.log(user);
   return (
     <div className="my--profile--container">
-      <CoverPhoto coverPhoto={coverPhoto} />
+      <CoverPhoto coverPhoto={coverPhoto} color={color} />
       <WrapperCenter className="my--profile--wrapper">
         <div className="left--column">
           <UserDataBlock
@@ -53,6 +76,7 @@ const MyProfileContainer = (props) => {
             following={following}
             followers={followers}
             about={about}
+            color={color}
           />
           <MyCommunities communities={communities} />
         </div>
@@ -61,7 +85,14 @@ const MyProfileContainer = (props) => {
             <RightBlockTopLinks links={rightTopLinks} />
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-            <GallerySection gallery={topNfts} className="top--nfts" title="🔥 Top 5 NFTs" />
+            <GallerySection
+              gallery={topNfts}
+              className="top--nfts"
+              title="🔥 Top 5 NFTs"
+              emptyGalleryText="Your hasn’t choose your top NFT’s yet"
+              btnText="Add"
+              btnIcon={btnAddIcon}
+            />
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={400}>
             <GallerySection
@@ -69,6 +100,9 @@ const MyProfileContainer = (props) => {
               className="nfts--on--sale"
               title="🛒 NFTs On Sale"
               actionText="View all NFT listings"
+              emptyGalleryText="Your hasn’t choose your top NFT’s on Sale"
+              btnText="Add"
+              btnIcon={btnAddIcon}
             />
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
@@ -77,6 +111,8 @@ const MyProfileContainer = (props) => {
               className="featured--auctions"
               title="🖲 Featured Auctions"
               actionText="View all active auctions"
+              emptyGalleryText="No auction found"
+              btnText="Set up auction"
             />
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>

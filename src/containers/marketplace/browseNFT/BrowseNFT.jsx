@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import Popup from 'reactjs-popup';
 import SaleType from '../../../components/marketplace/browseNFT/sidebarFiltration/SaleType';
 import Price from '../../../components/marketplace/browseNFT/sidebarFiltration/Price';
 import Collections from '../../../components/marketplace/browseNFT/sidebarFiltration/Collections';
@@ -10,6 +11,7 @@ import SelectedFiltersAndSorting from '../../../components/marketplace/browseNFT
 import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
 import NFTsList from '../../../components/marketplace/browseNFT/NFTsList';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../../utils/fixtures/BrowseNFTsDummyData';
+import CheckOutPopup from '../../../components/popups/CheckOutPopup';
 
 const BrowseNFT = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -56,9 +58,15 @@ const BrowseNFT = () => {
             setSelectedPrice={setSelectedPrice}
           />
           <NFTsList data={PLACEHOLDER_MARKETPLACE_NFTS} />
-          <button type="button" className="light-border-button load--more--nfts">
-            Load More
-          </button>
+          <Popup
+            trigger={
+              <button type="button" className="light-border-button load--more--nfts">
+                Load More
+              </button>
+            }
+          >
+            {(close) => <CheckOutPopup onClose={close} />}
+          </Popup>
         </div>
       </div>
     </div>

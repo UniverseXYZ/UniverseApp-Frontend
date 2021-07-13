@@ -14,24 +14,28 @@
         }
         .welcome__section__container {
             max-width: 1110px;
+            padding: 0;
             // padding-left: 0;
-            padding: 0 60px;
-            @include lg {
-                flex-direction: unset;
-                width: 100%;
-                padding: 0 0 0 60px;
+            // padding: 0 60px;
+            // @include lg {
+            //     flex-direction: unset;
+            //     width: 100%;
+            //     padding: 0 0 0 60px;
+            // }
+            @include xl {
+                padding: 0 60px;
             }
-            @include md {
+            @include lg {
                 padding: 0;
                 flex-direction: column-reverse;
                 min-height: 685px;
                 height: auto;
             }
             .left {
+                // @include lg {
+                //     width: 50%;
+                // }
                 @include lg {
-                    width: 50%;
-                }
-                @include md {
                     width: 100%;
                     // padding: 20px;
                 }
@@ -48,6 +52,7 @@
                         text-transform: uppercase;
                         color: #FFFFFF;
                         opacity: 0.4;
+                        margin-bottom: 20px;
                         @include xl {
                             font-size: 14px;
                         }
@@ -55,10 +60,10 @@
                     @include xl {
                         font-size: 45px;
                     }
+                    // @include lg {
+                    //     text-align: left;
+                    // }
                     @include lg {
-                        text-align: left;
-                    }
-                    @include md {
                         text-align: center;
                     }
                 }
@@ -71,38 +76,37 @@
                     @include xl {
                         font-size: 16px;
                     }
+                    // @include lg {
+                    //     text-align: left;
+                    //     margin: 30px 0 50px;
+                    // }
                     @include lg {
-                        text-align: left;
-                        margin: 30px 0 50px;
-                    }
-                    @include md {
                         text-align: center;
                         margin: 30px auto;
+                        max-width: 100%;
                     }
                 }
                 .links {
+                    @include md {
+                        margin-bottom: 80px;
+                        margin-top: 10px;
+                    }
                     button {
                         @include md {
-                            width: 100%;
+                            width: auto;
                             margin-bottom: 20px;
                         }
                     }
                     @include lg {
-                        justify-content: left;
-                        margin-bottom: 0;
+                        justify-content: center;
+                        // margin-bottom: 20px;
                     }
                 }
             }
             .right {
+                width: 100%;
                 img {
-                    @include lg {
-                        max-width: 140%;
-                        max-height: 140%;
-                    }
-                    @include md {
-                        max-width: 100%;
-                        max-height: 100%;
-                    }
+                    width: 620px;
                 }
             }
             
@@ -120,10 +124,24 @@
                 max-width: 70%;
                 max-height: 70%;
             }
+            @include sm {
+                max-width: 100%;
+                max-height: 100%;
+                width: 100%;
+                min-height: 220px;
+                top: 20px;
+                object-fit: contain;
+            }
         }
         .section--title {
+            position: relative;
+            z-index: 60;
+            margin: 105px auto 60px;
+            @include lg {
+                margin: 100px auto 60px;
+            }
             @include md {
-                margin: 80px 0 20px;
+                margin: 80px 0 60px;
             }
             h3 {
                 @include md {
@@ -191,6 +209,7 @@
                 }
             }
             .title--block {
+                margin: 20px auto 80px;
                 h3 {
                     @include md {
                         font-size: 26px;
@@ -258,7 +277,7 @@
                 padding: 60px;
             }
             @include md {
-                padding: 20px;
+                padding: 20px 20px 100px;
                 > div {
                     width: 100%;
                 }

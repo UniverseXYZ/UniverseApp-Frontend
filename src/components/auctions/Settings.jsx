@@ -52,7 +52,6 @@ const AuctionSettings = () => {
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
 
-  console.log(properties);
   const handleSearch = (value) => {
     setsearchByNameAndAddress(value);
   };
@@ -162,6 +161,7 @@ const AuctionSettings = () => {
           tiers: minBid
             ? prevValue.tiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.tiers,
+          properties,
         }));
       } else {
         setAuction((prevValue) => ({
@@ -170,11 +170,14 @@ const AuctionSettings = () => {
           startingBid: values.startingBid,
           startDate: moment(values.startDate).format(),
           endDate: moment(values.endDate).format(),
+          properties,
           // tiers: minBid
           //   ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
           //   : prevValue.tiers,
         }));
       }
+      console.log(properties);
+      console.log(auction);
       history.push('/setup-auction/reward-tiers', location.pathname);
     }
   };
@@ -189,17 +192,21 @@ const AuctionSettings = () => {
   };
 
   const addProperty = () => {
-    console.log('a');
     const prevProperties = [...properties];
-    const temp = { name: '', value: '' };
+    const temp = { address: '', amount: '' };
     prevProperties.push(temp);
     setProperties(prevProperties);
   };
 
-  const propertyChangesName = (index, val) => {
-    console.log(index);
+  const propertyChangesAddress = (index, val) => {
     const prevProperties = [...properties];
-    prevProperties[index].name = val;
+    prevProperties[index].address = val;
+    setProperties(prevProperties);
+  };
+
+  const propertyChangesAmount = (index, val) => {
+    const prevProperties = [...properties];
+    prevProperties[index].amount = val;
     setProperties(prevProperties);
   };
 
@@ -401,76 +408,6 @@ const AuctionSettings = () => {
               </div>
             </div>
           </div>
-          {/* <div className="down-side"> */}
-          {/* <div className="bid-part">
-              <div className="bid-info">
-                <h1>Minimum bid per tier</h1>
-                <img
-                  src={infoIcon}
-                  alt="Info Icon"
-                  onMouseOver={() => setHideIcon2(true)}
-                  onFocus={() => setHideIcon2(true)}
-                  onMouseLeave={() => setHideIcon2(false)}
-                  onBlur={() => setHideIcon2(false)}
-                />
-                <label className="switch">
-                  <input type="checkbox" checked={minBid} onChange={handeClick} />
-                  <span className="slider round" />
-                </label>
-                {hideIcon2 && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                    <div className="info-text">
-                      <p>
-                        Minimum bid parameter may be used to make sure that NFTs from the tier will
-                        not be sold under the target price value.
-                      </p>
-                    </div>
-                  </Animated>
-                )}
-              </div>
-
-              {minBid === true && (
-                <div className="bid-text">
-                  <ul>
-                    <li>You are able to set the minimum bid for each tier.</li>
-                    <li className="min-li">
-                      You are only able to set the minimum bid for the tier when the tier above has
-                      equal or higher minimum bid.
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div> */}
-          {/* <div className="tiers-inp">
-              {auction.tiers.length > 0 &&
-                minBid === true &&
-                auction.tiers.map((tier, index) => (
-                  <div className="tiers-part">
-                    <div style={{ position: 'relative', marginBottom: '20px' }}>
-                      <span className="bid-type">
-                        {bid.img && <img src={bid.img} alt="icon" />}
-                        <span className="button-name">{bid.name}</span>
-                      </span>
-
-                      <Input
-                        type="number"
-                        name="tierBid"
-                        label={tier.name}
-                        error={
-                          errorArray.includes(index)
-                            ? 'The minimum bid for this tier cannot be lower than for the tier below'
-                            : undefined
-                        }
-                        onChange={(e) => handleBidChange(e, index)}
-                        id={tier.id}
-                        placeholder="0.1"
-                        value={bidValues[tier.id]}
-                      />
-                    </div>
-                  </div>
-                ))}
-            </div> */}
-          {/* </div> */}
         </div>
         <div className="royalty-part">
           <h2 className="royalty-title">Royalty splits</h2>
@@ -483,18 +420,22 @@ const AuctionSettings = () => {
                 <Input
                   id="address"
                   label="Wallet address"
+                  placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                   className="address-inp"
                   value={elm.address}
-                  onChange={(e) => propertyChangesName(i, e.target.value)}
+                  onChange={(e) => propertyChangesAddress(i, e.target.value)}
                 />
               </div>
               <div className="property-value">
                 <Input
                   id="amount"
+                  type="number"
                   label="Percent amount"
+                  placeholder="5%"
+                  pattern="[0-9]"
                   className="amount-inp"
                   value={elm.amount}
-                  onChange={(e) => propertyChangesName(i, e.target.value)}
+                  onChange={(e) => propertyChangesAmount(i, e.target.value)}
                 />
               </div>
               <img
