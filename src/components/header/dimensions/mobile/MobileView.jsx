@@ -15,12 +15,6 @@ import Group2 from '../../../../assets/images/Group2.svg';
 import copyIcon from '../../../../assets/images/copy.svg';
 import accountIcon from '../../../../assets/images/icon1.svg';
 import accountDarkIcon from '../../../../assets/images/account-dark-icon.svg';
-import metamaskLogo from '../../../../assets/images/metamask.png';
-import ledgerLogo from '../../../../assets/images/ledger.png';
-import keystoreLogo from '../../../../assets/images/keystore.png';
-import trezorLogo from '../../../../assets/images/trezor.png';
-import coinbaseLogo from '../../../../assets/images/coinbase.png';
-import walletConnectLogo from '../../../../assets/images/wallet-connect.png';
 import leftArrow from '../../../../assets/images/arrow.svg';
 import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
@@ -39,6 +33,14 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import { CONNECTORS_NAMES } from '../../../../utils/dictionary';
+import {
+  MetamaskLogo,
+  LedgerLogo,
+  PortisLogo,
+  TrezorLogo,
+  CoinbaseLogo,
+  WalletConnectLogo,
+} from '../../../ui-elements/Logos';
 
 const MobileView = (props) => {
   const {
@@ -392,25 +394,41 @@ const MobileView = (props) => {
                         type="button"
                         onClick={() => handleConnectWallet(CONNECTORS_NAMES.MetaMask)}
                       >
-                        <img src={metamaskLogo} alt="Metamask" />
+                        <MetamaskLogo />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('Ledger')}>
-                        <img src={ledgerLogo} alt="Ledger" />
+                      <button
+                        className="disable"
+                        type="button"
+                        onClick={() => handleConnectWallet(CONNECTORS_NAMES.Ledger)}
+                      >
+                        <LedgerLogo />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('Keystore')}>
-                        <img src={keystoreLogo} alt="Keystore" />
+                      <button
+                        className="disable"
+                        type="button"
+                        onClick={() => handleConnectWallet(CONNECTORS_NAMES.Portis)}
+                      >
+                        <PortisLogo />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('Trezor')}>
-                        <img src={trezorLogo} alt="Trezor" />
+                      <button
+                        className="disable"
+                        type="button"
+                        onClick={() => handleConnectWallet(CONNECTORS_NAMES.Trezor)}
+                      >
+                        <TrezorLogo />
                       </button>
-                      <button type="button" onClick={() => handleConnectWallet('Coinbase')}>
-                        <img src={coinbaseLogo} alt="Coinbase" />
+                      <button
+                        className="disable"
+                        type="button"
+                        onClick={() => handleConnectWallet(CONNECTORS_NAMES.Coinbase)}
+                      >
+                        <CoinbaseLogo />
                       </button>
                       <button
                         type="button"
                         onClick={() => handleConnectWallet(CONNECTORS_NAMES.WalletConnect)}
                       >
-                        <img src={walletConnectLogo} alt="WalletConnect" />
+                        <WalletConnectLogo />
                       </button>
                     </div>
                     <p className="info">

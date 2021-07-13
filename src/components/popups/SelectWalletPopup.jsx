@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
-import metamaskLogo from '../../assets/images/metamask.png';
-import ledgerLogo from '../../assets/images/ledger.png';
-import keystoreLogo from '../../assets/images/keystore.png';
-import trezorLogo from '../../assets/images/trezor.png';
-import coinbaseLogo from '../../assets/images/coinbase.png';
-import walletConnectLogo from '../../assets/images/wallet-connect.png';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { CONNECTORS_NAMES } from '../../utils/dictionary';
+import {
+  MetamaskLogo,
+  LedgerLogo,
+  PortisLogo,
+  TrezorLogo,
+  CoinbaseLogo,
+  WalletConnectLogo,
+} from '../ui-elements/Logos';
 
 const SelectWalletPopup = (props) => {
   const {
@@ -35,33 +37,41 @@ const SelectWalletPopup = (props) => {
           <p className="desc">Please pick a wallet to connect to Universe</p>
           <div className="wallets">
             <button type="button" onClick={() => handleConnectWallet(CONNECTORS_NAMES.MetaMask)}>
-              <img src={metamaskLogo} alt="Metamask" />
-            </button>
-            <button className="disable" type="button" onClick={() => handleConnectWallet('Ledger')}>
-              <img src={ledgerLogo} alt="Ledger" />
+              <MetamaskLogo />
             </button>
             <button
               className="disable"
               type="button"
-              onClick={() => handleConnectWallet('Keystore')}
+              onClick={() => handleConnectWallet(CONNECTORS_NAMES.Ledger)}
             >
-              <img src={keystoreLogo} alt="Keystore" />
-            </button>
-            <button className="disable" type="button" onClick={() => handleConnectWallet('Trezor')}>
-              <img src={trezorLogo} alt="Trezor" />
+              <LedgerLogo />
             </button>
             <button
               className="disable"
               type="button"
-              onClick={() => handleConnectWallet('Coinbase')}
+              onClick={() => handleConnectWallet(CONNECTORS_NAMES.Portis)}
             >
-              <img src={coinbaseLogo} alt="Coinbase" />
+              <PortisLogo />
+            </button>
+            <button
+              className="disable"
+              type="button"
+              onClick={() => handleConnectWallet(CONNECTORS_NAMES.Trezor)}
+            >
+              <TrezorLogo />
+            </button>
+            <button
+              className="disable"
+              type="button"
+              onClick={() => handleConnectWallet(CONNECTORS_NAMES.Coinbase)}
+            >
+              <CoinbaseLogo />
             </button>
             <button
               type="button"
               onClick={() => handleConnectWallet(CONNECTORS_NAMES.WalletConnect)}
             >
-              <img src={walletConnectLogo} alt="WalletConnect" />
+              <WalletConnectLogo />
             </button>
           </div>
           <p className="info">
