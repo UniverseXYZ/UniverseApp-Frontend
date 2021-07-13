@@ -12,6 +12,29 @@ const NFTMakeOffer = ({ close }) => {
   const [bidAmount, setBidAmount] = useState(0.25);
   const [loading, setLoading] = useState('');
   const [checkboxValue, setCheckboxValue] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const d = new Date();
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const [offerExpirationDate, setOfferExpirationDate] = useState({
+    month: monthNames[d.getMonth()],
+    day: d.getDate(),
+    year: d.getFullYear(),
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
+  });
 
   const handleClick = () => {
     setLoading('processing');
@@ -59,12 +82,25 @@ const NFTMakeOffer = ({ close }) => {
             <label className="offer--expiration">Offer Expiration</label>
             <div className="input--field diff">
               <div className="selected--date">
-                Mar 14, 2021, <span>12:00 EST</span>
+                {`${offerExpirationDate.month} ${offerExpirationDate.day}, ${offerExpirationDate.year}, `}
+                <span>{`${offerExpirationDate.hours}:${offerExpirationDate.minutes} EST`}</span>
               </div>
-              <div className="calendar--icon">
+              <div
+                className="calendar--icon"
+                aria-hidden="true"
+                onClick={() => setShowCalendar(!showCalendar)}
+              >
                 <img src={calendarIcon} alt="Calendar" />
               </div>
-              <SmallCalendar />
+              {showCalendar && (
+                <SmallCalendar
+                  showCalendar={showCalendar}
+                  setShowCalendar={setShowCalendar}
+                  monthNames={monthNames}
+                  offerExpirationDate={offerExpirationDate}
+                  setOfferExpirationDate={setOfferExpirationDate}
+                />
+              )}
             </div>
             <div className="checkout__checkbox">
               <div className="custom__checkbox">
@@ -125,7 +161,10 @@ const NFTMakeOffer = ({ close }) => {
           </p>
           <p className="desc">
             that ends on
-            <b>&nbsp;Mar 14, 2021, 12:00 EST</b>
+            <b>
+              &nbsp;
+              {`${offerExpirationDate.month} ${offerExpirationDate.day}, ${offerExpirationDate.year}, ${offerExpirationDate.hours}:${offerExpirationDate.minutes} EST`}
+            </b>
           </p>
           <Button className="light-border-button" onClick={close}>
             Close
