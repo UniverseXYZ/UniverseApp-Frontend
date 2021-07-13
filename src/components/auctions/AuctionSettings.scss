@@ -21,8 +21,15 @@
   .royalty-form {
     margin-top: 25px;
     .address-inp{
-      width: 700px;
+      width: 750px;
       margin-right: 12px;
+      @include lg{
+        width: 400px;
+      }
+      @include sm{
+
+      }
+
     }
     .amount-inp{
       width: 120px;
@@ -30,6 +37,7 @@
     .properties{
       margin-bottom: 40px;
       display: flex;
+      width: 100%;
       .remove-img{
         margin-left: 12px;
         align-self: flex-end;

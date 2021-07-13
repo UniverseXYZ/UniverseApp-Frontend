@@ -122,6 +122,12 @@
         width: 40px;
         height: 40px;
 
+        &.selectedDay {
+          background: #5fea73;
+          border-radius: 6px;
+          font-weight: bold;
+        }
+
         &.selectedStartDay {
           background: #5fea73;
           // border-radius: 12px;

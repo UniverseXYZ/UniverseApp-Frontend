@@ -47,6 +47,8 @@ const AuctionReview = () => {
     }
   }, []);
 
+  console.log(auction.properties);
+
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
       let totalNFTs = 0;
@@ -184,6 +186,26 @@ const AuctionReview = () => {
             </div>
           </div>
         )}
+
+        <div className="royalty-settings-head">
+          <h2 className="royalty-settings-title">Royalty splits</h2>
+        </div>
+
+        {auction.properties.length && (
+          <div className="royalty-inf">
+            {auction.properties.map(
+              (item) =>
+                item.address &&
+                item.amount && (
+                  <div className="royalty">
+                    <p>{item.address}</p>
+                    <span>{item.amount}%</span>
+                  </div>
+                )
+            )}
+          </div>
+        )}
+
         <div className="reward-tiers-head">
           <h2 className="reward-tiers-title">Reward tiers</h2>
           <button

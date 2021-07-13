@@ -4,6 +4,8 @@ import './MarketplaceNFT.scss';
 import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import MarketplaceNFTDetails from '../../components/marketplaceNFT/MarketplaceNFTDetails';
+import '../../components/marketplace/browseNFT/NFTsList.scss';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
 const MarketplaceNFT = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -17,7 +19,7 @@ const MarketplaceNFT = () => {
 
   return selectedNFT ? (
     <div className="marketplace--nft--page1">
-      <MarketplaceNFTDetails />
+      <MarketplaceNFTDetails data={PLACEHOLDER_MARKETPLACE_NFTS} />
     </div>
   ) : (
     <NotFound />
