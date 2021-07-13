@@ -191,8 +191,8 @@ const Header = ({ location }) => {
                           <div className="nft--desc">
                             <h5 className="nft--name">{nft.name}</h5>
                             <p className="nft--price">
-                              {nft.price} ETH / {nft.quantity.split('/')[0]} of{' '}
-                              {nft.quantity.split('/')[1]}
+                              {nft.price} ETH / {nft.editions.split('/')[0]} of{' '}
+                              {nft.editions.split('/')[1]}
                             </p>
                           </div>
                         </div>

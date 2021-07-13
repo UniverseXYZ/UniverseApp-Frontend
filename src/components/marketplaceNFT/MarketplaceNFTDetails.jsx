@@ -3,13 +3,8 @@ import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import cover from '../../assets/images/Rectangle 40198.png';
-import heart from '../../assets/images/heart.svg';
+import ReactReadMoreReadLess from 'react-read-more-read-less';
 import share from '../../assets/images/share.svg';
-import avatar from '../../assets/images/avatarrr.svg';
-import avatar1 from '../../assets/images/collection_img (2).svg';
-import avatar2 from '../../assets/images/collection_img.svg';
-import Button from '../button/Button.jsx';
 import Properties from '../marketplaceTabComponents/Properties';
 import Owners from '../marketplaceTabComponents/Owners';
 import Bids from '../marketplaceTabComponents/Bids';
@@ -26,11 +21,32 @@ import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import NFTMakeOffer from '../popups/NFTMakeOffer';
 
-const MarketplaceNFTDetails = ({ data }) => {
+const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
+  const [selectedNFT, setSelectedNFT] = useState(onNFT);
   const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
+
+  const handleSelectedNFTLikeClick = (id) => {
+    setSelectedNFT({
+      ...selectedNFT,
+      likesCount: selectedNFT.liked ? selectedNFT.likesCount - 1 : selectedNFT.likesCount + 1,
+      liked: !selectedNFT.liked,
+    });
+    setNFTs((prevState) =>
+      prevState.map((el) =>
+        el.id === id
+          ? {
+              ...el,
+              likesCount: el.liked ? el.likesCount - 1 : el.likesCount + 1,
+              liked: !el.liked,
+            }
+          : el
+      )
+    );
+  };
+
   const handleLikeClick = (id) => {
     setNFTs((prevState) =>
       prevState.map((el) =>
@@ -49,50 +65,60 @@ const MarketplaceNFTDetails = ({ data }) => {
     <>
       <div className="marketplace--nft--page">
         <div className="Marketplace--img">
-          <img src={cover} alt="cover" />
+          {selectedNFT.media.type !== 'audio/mpeg' && selectedNFT.media.type !== 'video/mp4' && (
+            <img src={selectedNFT.media.url} alt={selectedNFT.name} />
+          )}
+          {selectedNFT.media.type === 'video/mp4' && (
+            <video
+              onMouseOver={(event) => event.target.play()}
+              onFocus={(event) => event.target.play()}
+              onMouseOut={(event) => event.target.pause()}
+              onBlur={(event) => event.target.pause()}
+            >
+              <source src={selectedNFT.media.url} type="video/mp4" />
+              <track kind="captions" />
+              Your browser does not support the video tag.
+            </video>
+          )}
+          {selectedNFT.media.type === 'audio/mpeg' && <img src={mp3Icon} alt={selectedNFT.name} />}
         </div>
         <div className="Marketplace--settings">
           <div className="Marketplace--name">
-            <h1>NFT long name</h1>
+            <h1>{selectedNFT.name}</h1>
             <div className="icon">
               <div className="like--share">
-                {nfts.map(
-                  (nft, index) =>
-                    index < 1 && (
-                      <div className="likes--count">
-                        <div>
-                          <svg
-                            className={nft.liked ? 'fill' : ''}
-                            onClick={() => handleLikeClick(nft.id)}
-                            width="16"
-                            height="14"
-                            viewBox="0 0 16 14"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M7.9998 13.3996C8.15207 13.3996 8.36959 13.302 8.52911 13.2114C12.6113 10.7016 15.1998 7.78044 15.1998 4.8105C15.1998 2.34253 13.4379 0.599609 11.1611 0.599609C9.7974 0.599609 8.7372 1.30007 8.07164 2.38196C8.03914 2.4348 7.96094 2.43454 7.92872 2.38153C7.27515 1.30607 6.20174 0.599609 4.83848 0.599609C2.56174 0.599609 0.799805 2.34253 0.799805 4.8105C0.799805 7.78044 3.38832 10.7016 7.47775 13.2114C7.63002 13.302 7.84754 13.3996 7.9998 13.3996Z"
-                              stroke="black"
-                              strokeOpacity="0.4"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                          <div className="tooltiptext">
-                            <div className="likers--text">{`${nft.likesCount} people liked this`}</div>
-                            <div className="likers--avatars">
-                              <img src={nft.owner.avatar} alt="Liker" />
-                              <img src={nft.owner.avatar} alt="Liker" />
-                              <img src={nft.owner.avatar} alt="Liker" />
-                              <img src={nft.owner.avatar} alt="Liker" />
-                              <img src={nft.owner.avatar} alt="Liker" />
-                              <img src={nft.owner.avatar} alt="Liker" />
-                            </div>
-                          </div>
-                        </div>
-                        <span>{nft.likesCount}</span>
+                <div className="likes--count">
+                  <div>
+                    <svg
+                      className={selectedNFT.liked ? 'fill' : ''}
+                      onClick={() => handleSelectedNFTLikeClick(selectedNFT.id)}
+                      width="16"
+                      height="14"
+                      viewBox="0 0 16 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.9998 13.3996C8.15207 13.3996 8.36959 13.302 8.52911 13.2114C12.6113 10.7016 15.1998 7.78044 15.1998 4.8105C15.1998 2.34253 13.4379 0.599609 11.1611 0.599609C9.7974 0.599609 8.7372 1.30007 8.07164 2.38196C8.03914 2.4348 7.96094 2.43454 7.92872 2.38153C7.27515 1.30607 6.20174 0.599609 4.83848 0.599609C2.56174 0.599609 0.799805 2.34253 0.799805 4.8105C0.799805 7.78044 3.38832 10.7016 7.47775 13.2114C7.63002 13.302 7.84754 13.3996 7.9998 13.3996Z"
+                        stroke="black"
+                        strokeOpacity="0.4"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <div className="tooltiptext">
+                      <div className="likers--text">{`${selectedNFT.likesCount} people liked this`}</div>
+                      <div className="likers--avatars">
+                        <img src={selectedNFT.owner.avatar} alt="Liker" />
+                        <img src={selectedNFT.owner.avatar} alt="Liker" />
+                        <img src={selectedNFT.owner.avatar} alt="Liker" />
+                        <img src={selectedNFT.owner.avatar} alt="Liker" />
+                        <img src={selectedNFT.owner.avatar} alt="Liker" />
+                        <img src={selectedNFT.owner.avatar} alt="Liker" />
                       </div>
-                    )
-                )}
+                    </div>
+                  </div>
+                  <span>{selectedNFT.likesCount}</span>
+                </div>
               </div>
               <Popup trigger={<img src={share} alt="fsk" className="share-open" />}>
                 {(close) => (
@@ -109,36 +135,40 @@ const MarketplaceNFTDetails = ({ data }) => {
             </div>
           </div>
           <div className="Marketplace--number">
-            <p>1/20</p>
+            <p>{selectedNFT.editions}</p>
           </div>
           <div className="Marketplace--collections">
             <div className="Marketplace--creators">
-              <img src={avatar} alt="icon" />
+              <img src={selectedNFT.creator.avatar} alt="icon" />
               <div className="creator--name">
                 <p>Creator</p>
-                <h6>Name</h6>
+                <h6>{selectedNFT.creator.name}</h6>
               </div>
             </div>
             <div className="Marketplace--creators">
-              <img src={avatar1} alt="icon1" />
+              <img src={selectedNFT.collection.avatar} alt="icon1" />
               <div className="creator--name">
                 <p>Collection</p>
-                <h6>Name</h6>
+                <h6>{selectedNFT.collection.name}</h6>
               </div>
             </div>
             <div className="Marketplace--creators">
-              <img src={avatar2} alt="icon2" />
+              <img src={selectedNFT.owner.avatar} alt="icon2" />
               <div className="creator--name">
                 <p>Owner</p>
-                <h6>Name</h6>
+                <h6>{selectedNFT.owner.name}</h6>
               </div>
             </div>
           </div>
           <div className="Marketplace--text">
             <p>
-              Cras vel eget vitae quis scelerisque arcu ut. Tristique velit nec sed sit massa. Odio
-              molestie velit purus at blandit. Lacus, fusce quam dolor imperdiet velit augue neque
-              tincidunt lorem et diam... <span>Read more</span>
+              <ReactReadMoreReadLess
+                charLimit={150}
+                readMoreText="Read more"
+                readLessText="Read less"
+              >
+                {selectedNFT.description}
+              </ReactReadMoreReadLess>
             </p>
           </div>
           <div className="tabs">
@@ -300,7 +330,7 @@ const MarketplaceNFTDetails = ({ data }) => {
                       </div>
                     </div>
                     <div className="quantity--and--offer">
-                      <p>{nft.quantity}</p>
+                      <p>{nft.editions}</p>
                       <div className="price--offer--div">
                         <label>Offer for</label>
                         <img src={priceIcon} alt="Price" />
@@ -324,6 +354,7 @@ const MarketplaceNFTDetails = ({ data }) => {
 
 MarketplaceNFTDetails.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]),
+  onNFT: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 MarketplaceNFTDetails.defaultProps = {

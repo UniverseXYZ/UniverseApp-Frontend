@@ -9,12 +9,13 @@
     padding-top: 60px;
     max-height: 720px;
     border-bottom: 1px solid #e4e4e4;
-    > img {
+    > img, > video {
       height: 600px;
       width: 600px;
       border-radius: 12px;
       margin: auto;
       display: block;
+      object-fit: cover;
       // margin-top: 96px;
     }
   }
@@ -22,7 +23,7 @@
     // padding-left: 50px;
     // padding-right: 40px;
     position: relative;
-    padding-top: 63px;
+    padding-top: 60px;
     overflow-y: auto;
     max-height: 720px;
     border-bottom: 1px solid #e4e4e4;
@@ -170,6 +171,12 @@
       }
       .Marketplace--creators {
         display: flex;
+        align-items: center;
+        img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
         .creator--name {
           padding-left: 10px;
           > p {
@@ -190,7 +197,7 @@
             line-height: 19px;
             letter-spacing: 0em;
             text-align: left;
-            color: #000000;
+            color: $black;
           }
         }
       }
@@ -208,7 +215,7 @@
         line-height: 22px;
         letter-spacing: 0px;
         text-align: left;
-        color: rgba(0, 0, 0, 0.4);
+        color: rgba(0, 0, 0, 0.6);
         padding-bottom: 30px;
         > span {
           font-family: $spaceGroteskFont;
@@ -218,7 +225,7 @@
           line-height: 22px;
           letter-spacing: 0px;
           text-align: left;
-          color: #000000;
+          color: $black;
         }
       }
     }
@@ -354,6 +361,7 @@
   }
 }
 .collection {
+  background: linear-gradient(127.59deg, #F2F3FB -1.33%, #FCF9F4 91.03%);
   .collection--title {
     padding-top: 80px;
     width: 100%;
