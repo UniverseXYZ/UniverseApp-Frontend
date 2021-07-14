@@ -71,8 +71,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 1',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -99,8 +101,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 2',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -127,8 +131,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'audio/mpeg',
     },
     name: 'NFT 3',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -155,8 +161,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 4',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -183,8 +191,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 5',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -211,8 +221,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 6',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -239,8 +251,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 7',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -267,8 +281,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 8',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -295,8 +311,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 9',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -323,8 +341,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'video/mp4',
     },
     name: 'NFT 10',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -351,8 +371,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 11',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -379,8 +401,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 12',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -407,8 +431,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 13',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -435,8 +461,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 14',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -463,8 +491,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'image/png',
     },
     name: 'NFT 15',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
   {
@@ -491,8 +521,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       type: 'video/mp4',
     },
     name: 'NFT 16',
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
     price: 0.5,
-    quantity: '1/10',
+    editions: '1/10',
     offerFor: 0.35,
   },
 ];
@@ -597,6 +629,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 2,
@@ -606,6 +639,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 3,
@@ -615,6 +649,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 4,
@@ -624,6 +659,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 5,
@@ -633,6 +669,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 6,
@@ -642,6 +679,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 7,
@@ -651,6 +689,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 8,
@@ -660,6 +699,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 9,
@@ -669,6 +709,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 10,
@@ -678,6 +719,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 11,
@@ -687,6 +729,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
   {
     id: 12,
@@ -696,6 +739,7 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
+    selected: false,
   },
 ];
 

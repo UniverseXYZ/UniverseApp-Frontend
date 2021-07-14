@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MarketplaceNFT.scss';
 import AppContext from '../../ContextAPI';
@@ -10,8 +10,7 @@ import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDum
 const MarketplaceNFT = () => {
   const { setDarkMode } = useContext(AppContext);
   const location = useLocation();
-  //   const selectedNFT = location.state ? location.state.nft : null;
-  const selectedNFT = true;
+  const selectedNFT = location.state ? location.state.nft : null;
 
   useEffect(() => {
     setDarkMode(false);
@@ -19,7 +18,7 @@ const MarketplaceNFT = () => {
 
   return selectedNFT ? (
     <div className="marketplace--nft--page1">
-      <MarketplaceNFTDetails data={PLACEHOLDER_MARKETPLACE_NFTS} />
+      <MarketplaceNFTDetails data={PLACEHOLDER_MARKETPLACE_NFTS} onNFT={selectedNFT} />
     </div>
   ) : (
     <NotFound />

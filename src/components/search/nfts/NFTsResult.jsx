@@ -129,7 +129,7 @@ const NFTsResult = ({ query, data }) => {
                   </div>
                 </div>
                 <div className="quantity--and--offer">
-                  <p>{nft.quantity}</p>
+                  <p>{nft.editions}</p>
                   <div className="price--offer--div">
                     <label>Offer for</label>
                     <img src={priceIcon} alt="Price" />

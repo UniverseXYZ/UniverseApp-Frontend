@@ -80,7 +80,7 @@ const NFTsList = ({ data }) => {
           <div
             className="nft--box--body"
             aria-hidden="true"
-            onClick={() => history.push(`/marketplace/nft/${nft.id}`)}
+            onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
           >
             {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
               <img className="nft--image" src={nft.media.url} alt={nft.name} />
@@ -120,7 +120,7 @@ const NFTsList = ({ data }) => {
               </div>
             </div>
             <div className="quantity--and--offer">
-              <p>{nft.quantity}</p>
+              <p>{nft.editions}</p>
               <div className="price--offer--div">
                 <label>Offer for</label>
                 <img src={priceIcon} alt="Price" />
