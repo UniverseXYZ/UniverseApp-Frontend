@@ -11,15 +11,15 @@ const FutureCore = () => {
 
   return (
     <div className="future_core_section">
-      <img src={Frame} alt="frame" className="char1" />
-      <img src={Frame} alt="frame" className="char2" />
+      {/* <img src={Frame} alt="frame" className="char1" />
+      <img src={Frame} alt="frame" className="char2" /> */}
       <div className="future_core_head">
         <h1>Future Core Drops</h1>
       </div>
       <div className="img-info">
         <div className="polmorphic-part">
           <div className="vec-div">
-            <img src={PlayVector} alt="polymorphic" />
+            <img src={BookVector} alt="polymorphic" />
           </div>
           <div className="info-text">
             <h1>Polmorphic v2 (Game)</h1>
@@ -31,7 +31,7 @@ const FutureCore = () => {
         </div>
         <div className="comics-part">
           <div className="vec-div">
-            <img src={BookVector} alt="comics" />
+            <img src={PlayVector} alt="comics" />
           </div>
           <div className="info-text">
             <h1>Comics</h1>
