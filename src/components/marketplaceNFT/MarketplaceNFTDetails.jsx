@@ -4,7 +4,6 @@ import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
-import share from '../../assets/images/share.svg';
 import pauseIcon from '../../assets/images/pause.svg';
 import playIcon from '../../assets/images/play.svg';
 import soundOnIcon from '../../assets/images/sound-on.svg';
@@ -28,9 +27,8 @@ import priceIcon from '../../assets/images/marketplace/price.svg';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import dot3 from '../../assets/images/3333dots.svg';
 import NFTMakeOffer from '../popups/NFTMakeOffer';
-import CongratsProfilePopup from '../popups/CongratsProfilePopup';
+import bordergradient from '../../assets/images/border-gradient.svg';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
@@ -43,18 +41,18 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('...');
 
-  // const handleClickOutside = (event) => {
-  //   if (ref.current && !ref.current.contains(event.target)) {
-  //     setIsDropdownOpened(false);
-  //   }
-  // };
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsDropdownOpened(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   document.addEventListener('click', handleClickOutside, true);
-  //   return () => {
-  //     document.removeEventListener('click', handleClickOutside, true);
-  //   };
-  // });
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   const [trackProgress, setTrackProgress] = useState('00:00');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -328,7 +326,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
               <div
-                ref={ref}
+                // ref={ref}
                 className={`share_dropdown ${isDropdownOpened ? 'opened' : ''}`}
                 onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                 aria-hidden="true"
@@ -414,6 +412,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             {selectedTabIndex === 4 && <TradingHistory />}
           </div>
           <div className="theunveiling">
+            <img src={bordergradient} alt="border" />
             <div className="unveiling--box">
               <img src={unveiling} alt="avatar" />
               <div className="unveiling--info">
