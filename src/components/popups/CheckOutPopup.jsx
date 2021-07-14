@@ -20,7 +20,7 @@ const CheckOutPopup = ({ onClose }) => {
           {showWarning && (
             <div className="warning__div">
               <img src={warningIcon} alt="Warning" />
-              <p className="warnig-text">This item been reviewed by Universe</p>
+              <p className="warnig-text">This item has not been reviewed by Universe</p>
             </div>
           )}
           <div className="checkout__header">
@@ -93,6 +93,12 @@ const CheckOutPopup = ({ onClose }) => {
           <h1>Congratulations!</h1>
           <p>You have successfully bought the NFT</p>
           <img src={nft1} alt="NFT" />
+          <div className="buttons">
+            <Button className="light-button">My NFTs</Button>
+            <Button className="light-border-button" onClick={() => onClose()}>
+              Close
+            </Button>
+          </div>
         </div>
       )}
     </div>

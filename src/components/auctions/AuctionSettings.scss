@@ -20,31 +20,70 @@
   }
   .royalty-form {
     margin-top: 25px;
+    
     .address-inp{
-      width: 750px;
+      width: 100%;
       margin-right: 12px;
       @include lg{
-        width: 400px;
+        // max-width: 400px;
       }
       @include sm{
-
+        width: unset;
+        min-width: 50px;
+        margin-bottom: 12px;
+        margin-right: unset;
       }
 
     }
     .amount-inp{
-      width: 120px;
+      width: 120px; 
+      @include sm{
+        min-width: 50px;
+        width: unset;
+        margin-bottom: 12px;
+      }
     }
     .properties{
       margin-bottom: 40px;
       display: flex;
       width: 100%;
+      .property-name{
+        width: 150%;
+        margin-right: 12px;
+      }
+      .property-name , .property-value{
+        .intup-l {
+          display: block;
+        @include sm{
+            display: inline-grid;
+          }
+        }
+        @include sm{
+          display: contents;
+        }
+      }
       .remove-img{
         margin-left: 12px;
         align-self: flex-end;
         width: 50px;
         height: 50px;
         cursor: pointer;
+        @include sm{
+          display: none;
+          }
       }
+      .remove-btn{
+        display: none;
+        img{
+          margin-left: 13px;
+        }
+        @include sm{
+        display: inline;
+        }
+      }
+      @include sm{
+        display: grid;
+        }
     }
     .property-add{
       margin-top: 40px;
@@ -59,6 +98,7 @@
         align-items: center;
         text-align: center;
         color: #000000;
+        text-align-last: right;
       }
       img{
         margin-right: 10px;
@@ -67,7 +107,34 @@
 
   }
   .royalty-part{
+    display: flex;
     margin-top: 60px;
+    .info-icon{
+      margin-left: 12px;
+      margin-right: 15px;
+    }
+    .info{
+      position: relative;
+    .info-text {
+      position: absolute;
+      background: $white;
+      padding: 16px 16px 18px 16px;
+      box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+      border-radius: 12px;
+      width: 184px;
+      bottom: 50px;
+      bottom: 50px;
+      left: -22px;
+      transform: translateX(-50%);
+      font-weight: normal;
+      p {
+        font-family: $spaceGroteskFont;
+        font-size: 12px;
+        line-height: 150%;
+        color: $black;
+      }
+    }
+  }
     .royalty-title{
       font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
@@ -75,6 +142,9 @@
       font-size: 16px;
       line-height: 130%;
       color: #000000;
+      @include sm{
+        font-size: 12px;
+        }
     }
   }
   .up-side {

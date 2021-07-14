@@ -5,11 +5,20 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 import share from '../../assets/images/share.svg';
+import pauseIcon from '../../assets/images/pause.svg';
+import playIcon from '../../assets/images/play.svg';
+import soundOnIcon from '../../assets/images/sound-on.svg';
+import soundOffIcon from '../../assets/images/sound-off.svg';
+import miniplayerIcon from '../../assets/images/miniplayer.svg';
+import fullScreenIcon from '../../assets/images/full-screen.svg';
+import fullScreenOffIcon from '../../assets/images/full-screen-off.svg';
 import Properties from '../marketplaceTabComponents/Properties';
 import Owners from '../marketplaceTabComponents/Owners';
 import Bids from '../marketplaceTabComponents/Bids';
 import TradingHistory from '../marketplaceTabComponents/TradingHistory';
 import SharePopup from '../popups/SharePopup';
+import ReportPopup from '../popups/ReportPopup';
+import LikesPopup from '../popups/LikesPopup';
 import NFTPlaceBid from '../popups/NFTPlaceBid';
 import Offers from '../marketplaceTabComponents/Offers';
 import unveiling from '../../assets/images/unveiling.svg';
@@ -21,6 +30,7 @@ import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import dot3 from '../../assets/images/3333dots.svg';
 import NFTMakeOffer from '../popups/NFTMakeOffer';
+import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
@@ -32,20 +42,91 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('...');
 
-  const handleClickOutside = (event) => {
-    if (!event.target.classList.contains('target')) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setIsDropdownOpened(false);
+  // const handleClickOutside = (event) => {
+  //   if (ref.current && !ref.current.contains(event.target)) {
+  //     setIsDropdownOpened(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.addEventListener('click', handleClickOutside, true);
+  //   return () => {
+  //     document.removeEventListener('click', handleClickOutside, true);
+  //   };
+  // });
+
+  const [trackProgress, setTrackProgress] = useState('00:00');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
+  const [duration, setDuration] = useState('--:--');
+  const [progressWidth, setProgressWidth] = useState(0);
+
+  const intervalRef = useRef();
+  const audioRef =
+    selectedNFT.media.type === 'audio/mpeg' ? useRef(new Audio(selectedNFT.media.url)) : null;
+
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      if (audioRef.current.ended) {
+        console.log('Ended');
+        setProgressWidth(0);
+        setTrackProgress('00:00');
+        setIsPlaying(false);
+        clearInterval(intervalRef.current);
+      } else {
+        const audioCurrentTimeProgress = Math.ceil(audioRef?.current.currentTime);
+        const minutesProgress = `0${Math.floor(audioCurrentTimeProgress / 60)}`;
+        const secondsProgress = `0${Math.floor(audioCurrentTimeProgress - minutesProgress * 60)}`;
+        const durationProgress = `${minutesProgress.substr(-2)}:${secondsProgress.substr(-2)}`;
+        const width = (parseInt(audioCurrentTimeProgress, 10) * 100) / audioRef.current.duration;
+        setProgressWidth(parseInt(width, 10));
+        setTrackProgress(durationProgress);
       }
-    }
+    }, 1000);
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  });
+    if (audioRef) {
+      setTimeout(() => {
+        const audioCurrentTime = audioRef.current.duration;
+        const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
+        const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
+        setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+      }, 500);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (audioRef) {
+      if (isPlaying) {
+        audioRef.current.play();
+        startTimer();
+      } else {
+        clearInterval(intervalRef.current);
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (audioRef) {
+      if (muted) {
+        audioRef.current.muted = true;
+      } else {
+        audioRef.current.muted = false;
+      }
+    }
+  }, [muted]);
+
+  // useEffect(
+  //   () =>
+  //     () => {
+  //       audioRef.current.pause();
+  //       clearInterval(intervalRef.current);
+  //     },
+  //   []
+  // );
 
   const handleSelectedNFTLikeClick = (id) => {
     setSelectedNFT({
@@ -80,32 +161,114 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     );
   };
 
+  const handleLikeDivClick = (e) => {
+    if (e.target.nodeName !== 'svg' && e.target.nodeName !== 'path') {
+      document.getElementById('likes-hidden-btn').click();
+    }
+  };
+
   return (
     <>
       <div className="marketplace--nft--page">
-        <div className="Marketplace--img">
-          {selectedNFT.media.type !== 'audio/mpeg' && selectedNFT.media.type !== 'video/mp4' && (
-            <img src={selectedNFT.media.url} alt={selectedNFT.name} />
-          )}
-          {selectedNFT.media.type === 'video/mp4' && (
-            <video
-              onMouseOver={(event) => event.target.play()}
-              onFocus={(event) => event.target.play()}
-              onMouseOut={(event) => event.target.pause()}
-              onBlur={(event) => event.target.pause()}
-            >
-              <source src={selectedNFT.media.url} type="video/mp4" />
-              <track kind="captions" />
-              Your browser does not support the video tag.
-            </video>
-          )}
-          {selectedNFT.media.type === 'audio/mpeg' && <img src={mp3Icon} alt={selectedNFT.name} />}
+        <Popup
+          trigger={
+            <button
+              type="button"
+              id="likes-hidden-btn"
+              aria-label="hidden"
+              style={{ display: 'none' }}
+            />
+          }
+        >
+          {(close) => <LikesPopup onClose={close} />}
+        </Popup>
+        <div className={`Marketplace--img ${fullScreen ? 'full--screen' : ''}`}>
+          <div>
+            {selectedNFT.media.type !== 'audio/mpeg' && selectedNFT.media.type !== 'video/mp4' && (
+              <img src={selectedNFT.media.url} alt={selectedNFT.name} />
+            )}
+            {selectedNFT.media.type === 'video/mp4' && (
+              <video
+                onMouseOver={(event) => event.target.play()}
+                onFocus={(event) => event.target.play()}
+                onMouseOut={(event) => event.target.pause()}
+                onBlur={(event) => event.target.pause()}
+              >
+                <source src={selectedNFT.media.url} type="video/mp4" />
+                <track kind="captions" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+            {selectedNFT.media.type === 'audio/mpeg' && (
+              <img src={mp3Icon} alt={selectedNFT.name} />
+            )}
+            {selectedNFT.media.type === 'audio/mpeg' && (
+              <div className="custom--player">
+                <div className="controls">
+                  <div className="controls--left">
+                    {isPlaying ? (
+                      <img
+                        src={pauseIcon}
+                        alt="Pause"
+                        aria-hidden="true"
+                        onClick={() => setIsPlaying(false)}
+                      />
+                    ) : (
+                      <img
+                        src={playIcon}
+                        alt="Play"
+                        aria-hidden="true"
+                        onClick={() => setIsPlaying(true)}
+                      />
+                    )}
+                    <span>{`${trackProgress} / ${duration}`}</span>
+                  </div>
+                  <div className="controls--right">
+                    {muted ? (
+                      <img
+                        src={soundOffIcon}
+                        alt="Sound off"
+                        aria-hidden="true"
+                        onClick={() => setMuted(false)}
+                      />
+                    ) : (
+                      <img
+                        src={soundOnIcon}
+                        alt="Sound on"
+                        aria-hidden="true"
+                        onClick={() => setMuted(true)}
+                      />
+                    )}
+                    <img src={miniplayerIcon} alt="Miniplayer" />
+                    {fullScreen ? (
+                      <img
+                        src={fullScreenOffIcon}
+                        alt="Full screen off"
+                        aria-hidden="true"
+                        onClick={() => setFullScreen(false)}
+                      />
+                    ) : (
+                      <img
+                        src={fullScreenIcon}
+                        alt="Full screen"
+                        aria-hidden="true"
+                        onClick={() => setFullScreen(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="progress--bar">
+                  <div className="progress--bar--filled" style={{ width: `${progressWidth}%` }} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <div className="Marketplace--settings">
           <div className="Marketplace--name">
             <h1>{selectedNFT.name}</h1>
             <div className="icon">
-              <div className="like--share">
+              <div className="like--share" aria-hidden="true" onClick={handleLikeDivClick}>
                 <div className="likes--count">
                   <div>
                     <svg
@@ -152,9 +315,15 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <Popup trigger={<li aria-hidden="true">Share</li>}>
                         {(close) => <SharePopup close={close} />}
                       </Popup>
-                      <li aria-hidden="true" className="dropdown__report">
-                        Report
-                      </li>
+                      <Popup
+                        trigger={
+                          <li aria-hidden="true" className="dropdown__report">
+                            Report
+                          </li>
+                        }
+                      >
+                        {(close) => <ReportPopup onClose={close} />}
+                      </Popup>
                     </ul>
                   </div>
                 )}

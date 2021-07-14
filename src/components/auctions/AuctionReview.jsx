@@ -191,7 +191,7 @@ const AuctionReview = () => {
           <h2 className="royalty-settings-title">Royalty splits</h2>
         </div>
 
-        {auction.properties.length && (
+        {auction.properties && auction.properties.length && (
           <div className="royalty-inf">
             {auction.properties.map(
               (item) =>

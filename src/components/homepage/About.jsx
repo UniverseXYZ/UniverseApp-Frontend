@@ -250,7 +250,7 @@ const About = () => {
               <h1 className="title mh">Polymorph Universe</h1>
               <p className="desc">
                 A mutating universe where genes are randomized <br />
-                when minted, morphed, and scrambled.
+                when morphed and scrambled.
               </p>
               <Button className="light-button" onClick={() => history.push('/polymorphs')}>
                 Learn more
