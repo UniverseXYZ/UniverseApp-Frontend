@@ -13,7 +13,7 @@ import SharePopup from '../popups/SharePopup';
 import NFTPlaceBid from '../popups/NFTPlaceBid';
 import Offers from '../marketplaceTabComponents/Offers';
 import unveiling from '../../assets/images/unveiling.svg';
-import pyramid from '../../assets/images/pyramid.svg';
+import pyramid from '../../assets/images/marketplace/eth-icon.svg';
 import '../marketplace/browseNFT/NFTsList.scss';
 import priceIcon from '../../assets/images/marketplace/price.svg';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
@@ -31,6 +31,21 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('...');
+
+  const handleClickOutside = (event) => {
+    if (!event.target.classList.contains('target')) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsDropdownOpened(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   const handleSelectedNFTLikeClick = (id) => {
     setSelectedNFT({
@@ -124,20 +139,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   <span>{selectedNFT.likesCount}</span>
                 </div>
               </div>
-              {/* <Popup trigger={<img src={share} alt="fsk" className="share-open" />}>
-                {(close) => (
-                  <SharePopup
-                    close={close}
-                    handleConnectWallet={handleConnectWallet}
-                    showInstallWalletPopup={showInstallWalletPopup}
-                    setShowInstallWalletPopup={setShowInstallWalletPopup}
-                    selectedWallet={selectedWallet}
-                    setSelectedWallet={setSelectedWallet}
-                  />
-                )}
-              </Popup> */}
-              {/* <img src={dot3} alt="icon" className="share-open" /> */}
-              {/* <div> */}
               <div
                 ref={ref}
                 className={`share_dropdown ${isDropdownOpened ? 'opened' : ''}`}
@@ -145,34 +146,19 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 aria-hidden="true"
               >
                 <span className="selected__item">{selectedItem}</span>
-                {/* <img className="arrow__down" src={audioIcon} alt="Arrow" /> */}
                 {isDropdownOpened && (
                   <div className="sort__share__dropdown">
                     <ul>
-                      <li
-                        onClick={() => {
-                          setSelectedItem('All characters');
-                          setIsDropdownOpened(false);
-                        }}
-                        aria-hidden="true"
-                      >
-                        Share
-                      </li>
-                      <li
-                        onClick={() => {
-                          setSelectedItem('OG characters');
-                          setIsDropdownOpened(false);
-                        }}
-                        aria-hidden="true"
-                        className="dropdown__report"
-                      >
+                      <Popup trigger={<li aria-hidden="true">Share</li>}>
+                        {(close) => <SharePopup close={close} />}
+                      </Popup>
+                      <li aria-hidden="true" className="dropdown__report">
                         Report
                       </li>
                     </ul>
                   </div>
                 )}
               </div>
-              {/* </div> */}
             </div>
           </div>
           <div className="Marketplace--number">
@@ -240,12 +226,16 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <h1>
                   <span>Highest bid by</span> The Unveiling
                 </h1>
-                {/* <img src={pyramid} alt="pyramid" /> */}
-                <p>
-                  <img src={pyramid} alt="pyramid" />
-                  0.5<span className="span--price">$142.39s</span>
-                  <span className="span--procent">(10% of sales will go to creator)</span>
-                </p>
+                <div className="icon--box">
+                  <div className="box--hover">
+                    <img src={pyramid} alt="pyramid" className="weth--icon" />
+                    <span className="weth--hover">WETH</span>
+                  </div>
+                  <p>
+                    0.5<span className="span--price">$142.39s</span>
+                    <span className="span--procent">(10% of sales will go to creator)</span>
+                  </p>
+                </div>
               </div>
             </div>
             <div className="button--box">
