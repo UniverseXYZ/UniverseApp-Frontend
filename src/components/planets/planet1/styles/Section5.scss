@@ -7,11 +7,11 @@
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center;
+    padding: 0 60px;
     @include md {
         background: linear-gradient( $black 0, $black 100%);
     }
     .section5--wrapper {
-        padding: 0 60px;
         @include md {
             padding: 0 20px;
         }
