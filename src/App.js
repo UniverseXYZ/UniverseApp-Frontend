@@ -151,8 +151,8 @@ const App = () => {
     setPolymorphPrice(utils.formatEther(polymPrice));
   };
 
-  const resetConnectionState = async () => {
-    if (providerName === CONNECTORS_NAMES.WalletConnect) {
+  const resetConnectionState = async (walletConnectEvent) => {
+    if (providerName === CONNECTORS_NAMES.WalletConnect && !walletConnectEvent) {
       console.log('disconnect', providerObject);
       await providerObject.disconnect();
     }
@@ -212,7 +212,7 @@ const App = () => {
     // Subscribe to session disconnection
     provider.on('disconnect', (code, reason) => {
       console.log('disconnected');
-      resetConnectionState();
+      resetConnectionState(true);
     });
   };
 
