@@ -5,6 +5,11 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 import share from '../../assets/images/share.svg';
+import playIcon from '../../assets/images/play.svg';
+import soundOnIcon from '../../assets/images/sound-on.svg';
+import soundOffIcon from '../../assets/images/sound-off.svg';
+import miniplayerIcon from '../../assets/images/miniplayer.svg';
+import fullScreenIcon from '../../assets/images/full-screen.svg';
 import Properties from '../marketplaceTabComponents/Properties';
 import Owners from '../marketplaceTabComponents/Owners';
 import Bids from '../marketplaceTabComponents/Bids';
@@ -69,22 +74,44 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     <>
       <div className="marketplace--nft--page">
         <div className="Marketplace--img">
-          {selectedNFT.media.type !== 'audio/mpeg' && selectedNFT.media.type !== 'video/mp4' && (
-            <img src={selectedNFT.media.url} alt={selectedNFT.name} />
-          )}
-          {selectedNFT.media.type === 'video/mp4' && (
-            <video
-              onMouseOver={(event) => event.target.play()}
-              onFocus={(event) => event.target.play()}
-              onMouseOut={(event) => event.target.pause()}
-              onBlur={(event) => event.target.pause()}
-            >
-              <source src={selectedNFT.media.url} type="video/mp4" />
-              <track kind="captions" />
-              Your browser does not support the video tag.
-            </video>
-          )}
-          {selectedNFT.media.type === 'audio/mpeg' && <img src={mp3Icon} alt={selectedNFT.name} />}
+          <div>
+            {selectedNFT.media.type !== 'audio/mpeg' && selectedNFT.media.type !== 'video/mp4' && (
+              <img src={selectedNFT.media.url} alt={selectedNFT.name} />
+            )}
+            {selectedNFT.media.type === 'video/mp4' && (
+              <video
+                onMouseOver={(event) => event.target.play()}
+                onFocus={(event) => event.target.play()}
+                onMouseOut={(event) => event.target.pause()}
+                onBlur={(event) => event.target.pause()}
+              >
+                <source src={selectedNFT.media.url} type="video/mp4" />
+                <track kind="captions" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+            {selectedNFT.media.type === 'audio/mpeg' && (
+              <img src={mp3Icon} alt={selectedNFT.name} />
+            )}
+            {selectedNFT.media.type === 'audio/mpeg' && (
+              <div className="custom--player">
+                <div className="controls">
+                  <div className="controls--left">
+                    <img src={playIcon} alt="Play" />
+                    <span>0:24 / 0:32</span>
+                  </div>
+                  <div className="controls--right">
+                    <img src={soundOnIcon} alt="Sound on" />
+                    <img src={miniplayerIcon} alt="Miniplayer" />
+                    <img src={fullScreenIcon} alt="Full screen" />
+                  </div>
+                </div>
+                <div className="progress--bar">
+                  <div className="progress--bar--filled" />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <div className="Marketplace--settings">
           <div className="Marketplace--name">

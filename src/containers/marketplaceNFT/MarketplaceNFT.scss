@@ -9,14 +9,78 @@
     padding-top: 60px;
     max-height: 720px;
     border-bottom: 1px solid #e4e4e4;
-    > img, > video {
+    > div {
+      position: relative;
       height: 600px;
       width: 600px;
       border-radius: 12px;
       margin: auto;
       display: block;
-      object-fit: cover;
-      // margin-top: 96px;
+      img, video {
+        height: 100%;
+        width: 100%;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+      .custom--player {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-sizing: border-box;
+        backdrop-filter: blur(4px);
+        border-radius: 12px;
+        padding: 0px 22px 12px;
+        width: 560px;
+
+        .controls {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          &--left {
+            display: flex;
+            align-items: center;
+            span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 120%;
+              color: $white;
+            }
+            img {
+              width: 36px;
+              height: 36px;
+              margin-right: 10px;
+              margin-left: -10px;
+              cursor: pointer;
+            }
+          }
+          &--right {
+            display: flex;
+            align-items: center;
+            img {
+              cursor: pointer;
+              &:last-child {
+                margin-right: -10px;
+              }
+            }
+          }
+        }
+
+        .progress--bar {
+          background: rgba(255, 255, 255, 0.2);
+          height: 4px;
+          width: 100%;
+          &--filled {
+            background: $white;
+            width: 80%;
+            height: 100%;
+          }
+        }
+      }
     }
   }
   .Marketplace--settings {
