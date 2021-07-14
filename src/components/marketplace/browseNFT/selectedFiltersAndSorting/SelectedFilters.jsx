@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
+import { defaultColors } from '../../../../utils/helpers';
 import AppContext from '../../../../ContextAPI';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import priceIcon from '../../../../assets/images/marketplace/price.svg';
@@ -43,11 +44,13 @@ const SelectedFilters = ({
   setSaleTypeButtons,
   selectedPrice,
   setSelectedPrice,
+  selectedColl,
+  setSelectedColl,
+  selectedCreators,
+  setSelectedCreators,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
   const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
-
-  console.log(selectedTokenIndex);
 
   const handleClearAll = () => {
     const newSaleTypeButtons = [...saleTypeButtons];
@@ -56,6 +59,8 @@ const SelectedFilters = ({
     });
     setSaleTypeButtons(newSaleTypeButtons);
     setSelectedPrice(null);
+    setSelectedColl([]);
+    setSelectedCreators([]);
   };
 
   const removeSelectedFilter = (idx) => {
@@ -64,14 +69,26 @@ const SelectedFilters = ({
     setSaleTypeButtons(newSaleTypeButtons);
   };
 
+  const removeCollection = (index) => {
+    const newSelectedColl = [...selectedColl];
+    newSelectedColl.splice(index, 1);
+    setSelectedColl(newSelectedColl);
+  };
+
+  const removeCreator = (index) => {
+    const newSelectedCreators = [...selectedCreators];
+    newSelectedCreators.splice(index, 1);
+    setSelectedCreators(newSelectedCreators);
+  };
+
   useEffect(() => {
     const res = saleTypeButtons.filter((i) => i.selected);
-    if (res.length || selectedPrice) {
+    if (res.length || selectedPrice || selectedColl.length || selectedCreators.length) {
       setShowClearALL(true);
     } else {
       setShowClearALL(false);
     }
-  }, [saleTypeButtons, selectedPrice]);
+  }, [saleTypeButtons, selectedPrice, selectedColl, selectedCreators]);
 
   return (
     <div className="selected--filters">
@@ -105,6 +122,43 @@ const SelectedFilters = ({
             />
           </button>
         )}
+        {selectedColl.map((coll, index) => (
+          <button type="button" className="light-border-button" key={uuid()}>
+            {!coll.photo ? (
+              <div
+                className="random--avatar--color"
+                style={{
+                  backgroundColor: defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                }}
+              >
+                {coll.name.charAt(0)}
+              </div>
+            ) : (
+              <img className="collection" src={coll.photo} alt={coll.name} />
+            )}
+            {coll.name}
+            <img
+              className="close"
+              src={closeIcon}
+              alt="Close"
+              aria-hidden="true"
+              onClick={() => removeCollection(index)}
+            />
+          </button>
+        ))}
+        {selectedCreators.map((creator, index) => (
+          <button type="button" className="light-border-button" key={uuid()}>
+            <img className="creator" src={creator.avatar} alt={creator.name} />
+            {creator.name}
+            <img
+              className="close"
+              src={closeIcon}
+              alt="Close"
+              aria-hidden="true"
+              onClick={() => removeCreator(index)}
+            />
+          </button>
+        ))}
         {showClearALL && (
           <div
             className="clear--all--selected--filters"
@@ -124,6 +178,10 @@ SelectedFilters.propTypes = {
   setSaleTypeButtons: PropTypes.func,
   selectedPrice: PropTypes.oneOfType([PropTypes.any]),
   setSelectedPrice: PropTypes.func,
+  selectedColl: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedColl: PropTypes.func,
+  selectedCreators: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedCreators: PropTypes.func,
 };
 
 SelectedFilters.defaultProps = {
@@ -131,6 +189,10 @@ SelectedFilters.defaultProps = {
   setSaleTypeButtons: () => {},
   selectedPrice: null,
   setSelectedPrice: () => {},
+  selectedColl: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedColl: () => {},
+  selectedCreators: [],
+  setSelectedCreators: () => {},
 };
 
 export default SelectedFilters;
