@@ -81,6 +81,7 @@
                 }
                 .title1{
                     margin-left: -30%;
+                    position: relative;
                     @include lg {
                         margin-left: -65%;
                      }
@@ -155,12 +156,27 @@
             }
         }
     }
-
+    .planet1--parent {
+        background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 50%),
+          linear-gradient(90deg, rgba(182, 220, 255, 0.2) -6.7%, rgba(184, 48, 248, 0.2) 72%, $white 72%), #FFFFFF;
+        padding: 0 60px;
+    }
+    .planet2--parent {
+        background: linear-gradient(270deg, rgba(251, 255, 79, 0.1) 0%, rgba(255, 135, 200, 0.1) 80%, #FFFFFF 50%), #FFFFFF;
+        padding: 0 60px;
+    }
+    .planet3--parent {
+        background: linear-gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 50%),
+          linear-gradient(90deg, rgba(138, 255, 157, 0.1) -1.77%, rgba(88, 237, 246, 0.1) 72%, $white 72%), #FFFFFF;
+        padding: 0 60px;
+    }
     .planets__section{
         .planet1, .planet2, .planet3{
-            height: 700px;
+            min-height: 700px;
             width: 100%;
             display: flex;
+            max-width: 1110px;
+            margin: auto;
             @include lg {
                 height: 405px;
              }
@@ -172,7 +188,8 @@
         .img-part{
             position: relative;
             width: 50%;
-            height: 100%;
+            height: auto;
+            // right: 8%;
             @include sm {   
                 width: 100%;
              }
@@ -180,7 +197,7 @@
         .bg1{
                 background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 50%), linear-gradient(110.73deg, rgba(182, 220, 255, 0.2) -6.7%, rgba(184, 48, 248, 0.2) 105.32%), #FFFFFF;
                 .bg-text, .character-img, .bg-img{
-                    left: 50%;
+                    left: 35%;
                     margin-right: -50%;
                     transform: translate(-50%, -50%);
                     position: absolute;
@@ -202,15 +219,16 @@
                     top: 54%;
                     @include lg {
                         top: 58%;
-                        width: 80%;
+                        width: 100%;
                         left: 55%;
                     }
                 }
             }
         .bg2{
                 background: linear-gradient(257deg, rgba(251, 255, 79, 0.1) 0%, rgba(255, 135, 200, 0.1) 100.71%), #FFFFFF;
+                // left: 3%;
                 .bg-text, .character-img, .bg-img{
-                    left: 50%;
+                    left: 55%;
                     margin-right: -50%;
                     transform: translate(-50%, -50%);
                     position: absolute;
@@ -233,7 +251,7 @@
                     top: 59%;
                     @include lg {
                         top: 55%;
-                        width: 77%;
+                        width: 100%;
                         left: 47%;
                     }
                     @include lg {
@@ -244,7 +262,7 @@
         .bg3{
                 background: linear-gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 50%), linear-gradient(111.62deg, rgba(138, 255, 157, 0.1) -1.77%, rgba(88, 237, 246, 0.1) 105.25%), #FFFFFF;
                 .bg-text, .character-img, .bg-img{
-                    left: 50%;
+                    left: 35%;
                     margin-right: -50%;
                     transform: translate(-50%, -50%);
                     position: absolute;
@@ -257,6 +275,7 @@
                     }
                 }
                 .character-img{
+                    width: 95%;
                     top: 29%;
                     @include lg {
                         width: 70%;
@@ -264,22 +283,30 @@
                 }
                 .bg-img{
                     top: 62%;
+                    width: 100%;
                     @include lg{
                         top: 52%;
-                        width: 77%;
+                        width: 100%;
                         left: 51%;
                     }
                 }
             }
 
         .second{
-            padding: 5%!important;
-            padding-top: 8%!important;
+            padding-left: 0 !important;
+            padding-right: 10%;
+            // padding-top: 8%!important;
         }
         .content-part{
             width: 50%;
-            padding: 4%;
-            padding-top: 8%;
+            padding-left: 50px;
+            background-color: $white;
+            // padding: 4%;
+            // padding-top: 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
             @include sm {   
                 width: 100%;
             }
@@ -313,7 +340,7 @@
             font-size: 18px;
             line-height: 150%;
             color: #666666;
-            width: 58%;
+            width: 100%;
             padding-bottom: 40px;
             @include lg{
                 font-size: 14px;
@@ -391,21 +418,23 @@
                 color: #FFFFFF;
                 @include lg {
                     font-size: 26px;
-                    padding-left: 11%;  
-                    text-align: start;
+                    // padding-left: 11%;  
+                    // text-align: start;
                 }
                 @include sm {
                     font-size: 26px;
-                    padding-left: 11%;
-                    text-align: start;
+                    // padding-left: 11%;
+                    // text-align: start;
                 }
             }
         }
     }
     .img-info{
         display: flex;
-        padding-left: 11%;
         width: 100%;
+        max-width: 1110px;
+        margin: auto;
+        justify-content: space-between;
         @include sm {
            display: block;
         }
@@ -414,12 +443,13 @@
         position: relative;
         z-index: 10;
         height: 532px;
-        width: 540px;
+        // width: 540px;
+        width: calc(50% - 15px);
         background:url(../../assets/images/polmorphic.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
         background-size: 100% 100%;
         background-repeat: no-repeat;
         border-radius: 12px;
-        margin-right: 15px;
+        // margin-right: 15px;
         @include lg {
             background:url(../../assets/images/polmorphic-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
             width: 344px;
@@ -441,34 +471,34 @@
             width: 250px;
             height: 335px;
           }
-          @media (max-width: 300px) {
-            width: 210px;
-            height: 270px;
-          } 
-          .vec-div{
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            border-radius: 8px;
-            position: absolute;
-            width: 69px;
-            height: 69px;
-            top: 30px;
-            left: 30px;
-            @include lg{
-                width: 54px;
-                height: 54px;
-            }
-            img{
-                left: 33%;
-                position: absolute;
-                top: 33%;
-                @include lg{
-                    width: 40%;
-                    top: 35%;
-                    left: 31%;
-                }
-            }
+        // @media (max-width: 300px) {
+        //   width: 210px;
+        //   height: 270px;
+        // } 
+        .vec-div{
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(4px);
+          border-radius: 8px;
+          position: absolute;
+          width: 69px;
+          height: 69px;
+          top: 30px;
+          left: 30px;
+          @include lg{
+              width: 54px;
+              height: 54px;
           }
+          img{
+              left: 33%;
+              position: absolute;
+              top: 33%;
+              @include lg{
+                  width: 40%;
+                  top: 35%;
+                  left: 31%;
+              }
+          }
+        }
         .info-text{
             padding: 0px 25px 25px  30px;
             position: absolute;
@@ -525,12 +555,13 @@
         position: relative;
         z-index: 10;
         height: 532px;
-        width: 540px;
+        // width: 540px;
+        width: calc(50% - 15px);
         background:url(../../assets/images/comics.png), conic-gradient(from 203.44deg at 100% -7.8%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(212.34% 218.84% at 206.2% -109.87%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
         background-size: 100% 100%;
         background-repeat: no-repeat;
         border-radius: 12px;
-        margin-left: 15px;
+        // margin-left: 15px;
         @include lg {
             background:url(../../assets/images/comics-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
             width: 344px;
