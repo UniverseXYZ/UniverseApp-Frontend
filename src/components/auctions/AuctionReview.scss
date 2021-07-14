@@ -306,13 +306,19 @@
     @include sm{
       display: grid;
     }
+    .royalty:nth-child(odd) {
+     margin-right: 2%;
+
+  }
     .royalty{
-      width: 50%;
-      margin-right: 0;
+      width: 48.5%;
       padding-top: 14px;
       padding-bottom: 20px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       border-top: 1px solid rgba(0, 0, 0, 0.1);
+      @include sm{
+        width: 100%;
+      }
     p{
       font-family: $spaceGroteskFont;
       font-style: normal;

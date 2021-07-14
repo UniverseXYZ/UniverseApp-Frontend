@@ -9,6 +9,7 @@ import './AuctionSettings.scss';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/inactive.svg';
+import delIcon from '../../assets/images/del-icon.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
@@ -37,11 +38,13 @@ const AuctionSettings = () => {
   ];
   const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
   const [properties, setProperties] = useState([{ address: '', amount: '' }]);
+  const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
   const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
     useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
+  const [royalities, setRoyalities] = useState(true);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
   const [minBid, setMinBId] = useState(false);
@@ -410,51 +413,83 @@ const AuctionSettings = () => {
           </div>
         </div>
         <div className="royalty-part">
-          <h2 className="royalty-title">Royalty splits</h2>
+          <h2
+            onMouseOver={() => setHideIcon(true)}
+            onFocus={() => setHideIcon(true)}
+            onMouseLeave={() => setHideIcon(false)}
+            onBlur={() => setHideIcon(false)}
+            className="royalty-title"
+          >
+            Royalty splits <img src={infoIcon} alt="Info Icon" className="info-icon" />
+          </h2>
+          <span className="info">
+            {hideIcon && (
+              <div className="info-text">
+                <p>Add addresses to share your auction’s profit with.</p>
+              </div>
+            )}
+          </span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={royalities}
+              onChange={(e) => setRoyalities(e.target.checked)}
+            />
+            <span className="slider round" />
+          </label>
         </div>
-        <div className="royalty-form">
-          {properties.map((elm, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div className="properties" key={i}>
-              <div className="property-name">
-                <Input
-                  id="address"
-                  label="Wallet address"
-                  placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
-                  className="address-inp"
-                  value={elm.address}
-                  onChange={(e) => propertyChangesAddress(i, e.target.value)}
+        {royalities && (
+          <div className="royalty-form">
+            {properties.map((elm, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <div className="properties" key={i}>
+                <div className="property-name">
+                  <Input
+                    id="address"
+                    label="Wallet address"
+                    placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                    className="address-inp"
+                    value={elm.address}
+                    onChange={(e) => propertyChangesAddress(i, e.target.value)}
+                  />
+                </div>
+                <div className="property-value">
+                  <Input
+                    id="amount"
+                    type="number"
+                    label="Percent amount"
+                    placeholder="5%"
+                    pattern="[0-9]"
+                    className="amount-inp"
+                    value={elm.amount}
+                    onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                  />
+                </div>
+                <img
+                  src={delateIcon}
+                  alt="Delete"
+                  className="remove-img"
+                  onClick={() => removeProperty(i)}
+                  aria-hidden="true"
                 />
+                <Button
+                  className="light-border-button remove-btn"
+                  onClick={() => removeProperty(i)}
+                >
+                  Remove
+                  <img src={delIcon} alt="Delete" aria-hidden="true" />
+                </Button>
               </div>
-              <div className="property-value">
-                <Input
-                  id="amount"
-                  type="number"
-                  label="Percent amount"
-                  placeholder="5%"
-                  pattern="[0-9]"
-                  className="amount-inp"
-                  value={elm.amount}
-                  onChange={(e) => propertyChangesAmount(i, e.target.value)}
-                />
-              </div>
-              <img
-                src={delateIcon}
-                alt="Delete"
-                className="remove-img"
-                onClick={() => removeProperty(i)}
-                aria-hidden="true"
-              />
-            </div>
-          ))}
+            ))}
 
-          <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
-            <h5>
-              <img src={addIcon} alt="Add" />
-              Add property
-            </h5>
+            <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
+              <h5>
+                <img src={addIcon} alt="Add" />
+                Add property
+              </h5>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {(!isValidFields.startingBid ||
         !isValidFields.startDate ||
