@@ -54,7 +54,6 @@ const TabletView = (props) => {
     usdEthBalance,
     wethBalance,
     usdWethBalance,
-    connectWeb3,
     isAuthenticated,
     address,
     setUserPolymorphs,
@@ -338,10 +337,7 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
-                {/* <Popup trigger={<button type="button">Join newsletter</button>}>
-                  {(close) => <SubscribePopup close={close} />}
-                </Popup> */}
-                {/* <Popup trigger={<button type="button">Sign in</button>}>
+                <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
@@ -352,10 +348,7 @@ const TabletView = (props) => {
                       setSelectedWallet={setSelectedWallet}
                     />
                   )}
-                </Popup> */}
-                <button type="button" onClick={() => connectWeb3()}>
-                  Sign In
-                </button>
+                </Popup>
               </li>
             )}
           </ul>

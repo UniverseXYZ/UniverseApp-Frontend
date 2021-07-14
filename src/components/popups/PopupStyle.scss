@@ -184,6 +184,20 @@
         background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
         border: 1px solid transparent;
       }
+
+      &.disable {
+        filter: grayscale(1);
+        cursor: default;
+        opacity: 0.3;
+      }
+    }
+
+    @include xs {
+      grid-gap: 14px;
+
+      button {
+        padding: 32px 20px;
+      }
     }
   }
   .links {
@@ -192,6 +206,10 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
+  }
+
+  @include xs {
+    padding: 40px 20px;
   }
 }
 .wrong__network__popup {
@@ -1988,6 +2006,78 @@
   padding: 40px;
 
   .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+  }
+  h1 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 140%;
+    color: $black;
+    margin-bottom: 24px;
+    padding: 0 10px;
+
+    @include sm {
+      padding: 0%;
+    }
+  }
+  p {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 160%;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 36px;
+  }
+  .button__div {
+    .light-button {
+      margin-right: 12px;
+      @include sm {
+        margin-right: 0%;
+        margin-bottom: 20px;
+      }
+    }
+    @include sm {
+      display: grid;
+    }
+  }
+  @include sm {
+    width: 90%;
+  }
+}
+.connection__popup {
+  transition: all 0.15s ease-in-out;
+  opacity: 0;
+  z-index: 2;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -46%);
+  background: $white;
+  border: 1px solid #d4d4d4;
+  box-sizing: border-box;
+  border-radius: 12px;
+  width: 520px;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  text-align: center;
+  padding: 40px;
+
+  &.open {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+
+  .close {
+    cursor: pointer;
     position: absolute;
     right: -13px;
     top: -13px;

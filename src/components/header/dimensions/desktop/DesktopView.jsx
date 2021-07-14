@@ -50,13 +50,13 @@ const DesktopView = ({
     usdEthBalance,
     wethBalance,
     usdWethBalance,
-    connectWeb3,
     isAuthenticated,
     address,
     setUserPolymorphs,
     setAddress,
     setYourBalance,
     setUsdEthBalance,
+    resetConnectionState,
   } = useContext(AppContext);
 
   return (
@@ -227,7 +227,7 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected ? (
+        {isWalletConnected && address ? (
           <li>
             <button
               type="button"
@@ -311,13 +311,9 @@ const DesktopView = ({
                 <button
                   type="button"
                   className="signOut"
-                  onClick={() => {
+                  onClick={async () => {
                     setIsAccountDropdownOpened(false);
-                    setIsWalletConnected(!isWalletConnected);
-                    setUserPolymorphs([]);
-                    setAddress(null);
-                    setYourBalance(0);
-                    setUsdEthBalance(0);
+                    resetConnectionState();
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />
@@ -328,16 +324,7 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            {/* <Popup
-              trigger={
-                <button type="button" className="sign__in">
-                  Join newsletter
-                </button>
-              }
-            >
-              {(close) => <SubscribePopup close={close} />}
-            </Popup> */}
-            {/* <Popup
+            <Popup
               trigger={
                 <button type="button" className="sign__in">
                   Sign In
@@ -354,10 +341,7 @@ const DesktopView = ({
                   setSelectedWallet={setSelectedWallet}
                 />
               )}
-            </Popup> */}
-            <button type="button" className="sign__in" onClick={() => connectWeb3()}>
-              Sign In
-            </button>
+            </Popup>
           </li>
         )}
       </ul>

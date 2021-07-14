@@ -1,5 +1,12 @@
 @import '_variables.scss';
 
+// Smallest devices
+@mixin xs {
+	@media (max-width: #{$screen-xs-max}) {
+			@content;
+	}
+}
+
 // Small tablets and large smartphones (landscape view)
 @mixin sm {
     @media (max-width: #{$screen-sm-max}) {

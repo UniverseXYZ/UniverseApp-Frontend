@@ -6,6 +6,7 @@ import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useQuery } from '@apollo/client';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import Contracts from './Contracts.json';
 import AppContext from './ContextAPI';
@@ -36,6 +37,7 @@ import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs, morphedPolymorphs } from './utils/graphql/queries';
 import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/polymorphs';
 import { fetchTokensMetadataJson } from './utils/api/polymorphs';
+import { CONNECTORS_NAMES } from './utils/dictionary';
 
 const App = () => {
   const location = useLocation();
@@ -96,49 +98,11 @@ const App = () => {
   const [myUniverseNFTsperPage, setMyUniverseNFTsPerPage] = useState(12);
   const [myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage] = useState(0);
   const [myUniverseNFTsOffset, setMyUniverseNFTsOffset] = useState(0);
+  const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
+  const [providerObject, setProviderObject] = useState('');
 
   const triggerWrongNetworkPopup = async () => {
     document.getElementById('wrong-network-hidden-btn').click();
-  };
-
-  const connectWeb3 = async () => {
-    const { ethereum } = window;
-
-    await ethereum.request({ method: 'eth_requestAccounts' });
-    const provider = new providers.Web3Provider(ethereum);
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const balance = await provider.getBalance(accounts[0]);
-    const network = await provider.getNetwork();
-    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
-
-    if (network.chainId !== 1) {
-      triggerWrongNetworkPopup();
-    } else {
-      const polymContract =
-        Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
-
-      const polymorphContractInstance = new Contract(
-        polymContract?.address,
-        polymContract?.abi,
-        signerResult
-      );
-
-      const totalMinted = await polymorphContractInstance.lastTokenId();
-      const polymorphBaseURIData = await polymorphContractInstance.baseURI();
-      const polymPrice = await polymorphContractInstance.polymorphPrice();
-
-      setWeb3Provider(provider);
-      setAddress(accounts[0]);
-      setSigner(signerResult);
-      setYourBalance(utils.formatEther(balance));
-      setIsWalletConnected(true);
-      setEthereumNetwork(network);
-
-      setPolymorphContract(polymorphContractInstance);
-      setTotalPolymorphs(totalMinted.toNumber());
-      setPolymorphBaseURI(polymorphBaseURIData);
-      setPolymorphPrice(utils.formatEther(polymPrice));
-    }
   };
 
   const fetchUserPolymorphsTheGraph = async (theGraphData) => {
@@ -156,6 +120,147 @@ const App = () => {
     setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
     setEthPrice(ethUsdPice);
   };
+
+  const web3AuthenticationProccess = async (provider, network, accounts) => {
+    const balance = await provider.getBalance(accounts[0]);
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+
+    const polymContract =
+      Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
+
+    const polymorphContractInstance = new Contract(
+      polymContract?.address,
+      polymContract?.abi,
+      signerResult
+    );
+
+    const totalMinted = await polymorphContractInstance.lastTokenId();
+    const polymorphBaseURIData = await polymorphContractInstance.baseURI();
+    const polymPrice = await polymorphContractInstance.polymorphPrice();
+
+    setWeb3Provider(provider);
+    setAddress(accounts[0]);
+    setSigner(signerResult);
+    setYourBalance(utils.formatEther(balance));
+    setIsWalletConnected(true);
+    setEthereumNetwork(network);
+
+    setPolymorphContract(polymorphContractInstance);
+    setTotalPolymorphs(totalMinted.toNumber());
+    setPolymorphBaseURI(polymorphBaseURIData);
+    setPolymorphPrice(utils.formatEther(polymPrice));
+  };
+
+  const resetConnectionState = async (walletConnectEvent) => {
+    if (providerName === CONNECTORS_NAMES.WalletConnect && !walletConnectEvent) {
+      console.log('disconnect', providerObject);
+      await providerObject.disconnect();
+    }
+    setWeb3Provider(null);
+    setAddress(null);
+    setSigner('');
+    setYourBalance(0);
+    setIsWalletConnected(false);
+    setEthereumNetwork('');
+    setUsdEthBalance(0);
+
+    setUserPolymorphs([]);
+    setPolymorphContract(null);
+    setTotalPolymorphs(0);
+    setPolymorphBaseURI('');
+    setPolymorphPrice(0);
+  };
+
+  const connectWithWalletConnect = async () => {
+    console.log('wallet connect');
+    const provider = new WalletConnectProvider({
+      infuraId: '1745e014e2ed4047acdaa135e869a11b',
+    });
+
+    await provider.enable();
+
+    const web3ProviderWrapper = new providers.Web3Provider(provider);
+    const network = await web3ProviderWrapper.getNetwork();
+    const { accounts: accountsWW } = web3ProviderWrapper.provider;
+
+    if (network.chainId !== 1) {
+      await provider.disconnect();
+      triggerWrongNetworkPopup();
+    } else {
+      web3AuthenticationProccess(web3ProviderWrapper, network, accountsWW);
+    }
+
+    setProviderName(() => {
+      const name = CONNECTORS_NAMES.WalletConnect;
+      localStorage.setItem('providerName', name);
+      return name;
+    });
+    setProviderObject(provider);
+
+    // Subscribe to accounts change
+    provider.on('accountsChanged', async (accounts) => {
+      console.log('Accounts changed', accounts);
+      web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
+    });
+
+    // Subscribe to chainId change
+    provider.on('chainChanged', async (chainId) => {
+      console.log('Chain changed');
+      window.location.reload();
+    });
+
+    // Subscribe to session disconnection
+    provider.on('disconnect', (code, reason) => {
+      console.log('disconnected');
+      resetConnectionState(true);
+    });
+  };
+
+  const connectWithMetaMask = async () => {
+    const { ethereum } = window;
+
+    await ethereum.request({ method: 'eth_requestAccounts' });
+    const provider = new providers.Web3Provider(ethereum);
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const network = await provider.getNetwork();
+
+    if (network.chainId !== 1) {
+      triggerWrongNetworkPopup();
+    } else {
+      web3AuthenticationProccess(provider, network, accounts);
+    }
+
+    setProviderName(() => {
+      const name = CONNECTORS_NAMES.MetaMask;
+      localStorage.setItem('providerName', name);
+      return name;
+    });
+
+    ethereum.on('accountsChanged', async ([account]) => {
+      if (account) {
+        // await connectWithMetaMask();
+        web3AuthenticationProccess(provider, network, [account]);
+      } else {
+        resetConnectionState();
+      }
+    });
+    ethereum.on('chainChanged', async (networkId) => {
+      window.location.reload();
+    });
+    ethereum.on('disconnect', async (error) => {
+      console.log('disconnected');
+      resetConnectionState();
+    });
+  };
+
+  const connectWeb3 = async () => {
+    if (providerName === CONNECTORS_NAMES.MetaMask) connectWithMetaMask();
+    if (providerName === CONNECTORS_NAMES.WalletConnect) connectWithWalletConnect();
+  };
+
+  useEffect(async () => {
+    await fetchUserPolymorphsTheGraph(data);
+  }, [address]);
 
   useEffect(() => {
     if (!darkMode) {
@@ -184,30 +289,11 @@ const App = () => {
     }
   }, [data, yourBalance]);
 
-  useEffect(async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const { ethereum } = window;
-
-      await connectWeb3();
-
-      const provider = new providers.Web3Provider(ethereum);
-
-      if (!provider) {
-        console.log('Please install/connect MetaMask!');
-      }
-      ethereum.on('accountsChanged', async ([account]) => {
-        if (account) {
-          await connectWeb3();
-          await fetchUserPolymorphsTheGraph(data);
-        } else {
-          setIsWalletConnected(false);
-        }
-      });
-      ethereum.on('chainChanged', async (networkId) => {
-        window.location.reload();
-      });
-    } else {
-      console.log('Please install/connect MetaMask!');
+  useEffect(() => {
+    if (
+      !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
+    ) {
+      connectWeb3();
     }
   }, []);
 
@@ -302,6 +388,9 @@ const App = () => {
         setMyUniverseNFTsActiverPage,
         myUniverseNFTsOffset,
         setMyUniverseNFTsOffset,
+        connectWithWalletConnect,
+        connectWithMetaMask,
+        resetConnectionState,
       }}
     >
       <Header />

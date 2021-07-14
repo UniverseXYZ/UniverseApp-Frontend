@@ -8,9 +8,16 @@ import DesktopView from './dimensions/desktop/DesktopView.jsx';
 import TabletView from './dimensions/tablet/TabletView.jsx';
 import MobileView from './dimensions/mobile/MobileView.jsx';
 import AppContext from '../../ContextAPI';
+import { CONNECTORS_NAMES } from '../../utils/dictionary';
 
 const Header = ({ location }) => {
-  const { isWalletConnected, setIsWalletConnected, darkMode, connectWeb3 } = useContext(AppContext);
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    darkMode,
+    connectWithWalletConnect,
+    connectWithMetaMask,
+  } = useContext(AppContext);
   const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
 
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -23,8 +30,13 @@ const Header = ({ location }) => {
     // Here need to check if selected wallet is installed in browser
     setSelectedWallet(wallet);
     if (installed) {
-      if (wallet === 'Metamask' && typeof window.ethereum !== 'undefined') {
-        await connectWeb3();
+      if (wallet === CONNECTORS_NAMES.MetaMask && typeof window.ethereum !== 'undefined') {
+        await connectWithMetaMask();
+        setIsWalletConnected(true);
+        setShowMenu(false);
+        setShowSelectWallet(false);
+      } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
+        await connectWithWalletConnect();
         setIsWalletConnected(true);
         setShowMenu(false);
         setShowSelectWallet(false);
