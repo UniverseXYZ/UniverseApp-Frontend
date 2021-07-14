@@ -5,11 +5,13 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 import share from '../../assets/images/share.svg';
+import pauseIcon from '../../assets/images/pause.svg';
 import playIcon from '../../assets/images/play.svg';
 import soundOnIcon from '../../assets/images/sound-on.svg';
 import soundOffIcon from '../../assets/images/sound-off.svg';
 import miniplayerIcon from '../../assets/images/miniplayer.svg';
 import fullScreenIcon from '../../assets/images/full-screen.svg';
+import fullScreenOffIcon from '../../assets/images/full-screen-off.svg';
 import Properties from '../marketplaceTabComponents/Properties';
 import Owners from '../marketplaceTabComponents/Owners';
 import Bids from '../marketplaceTabComponents/Bids';
@@ -36,6 +38,79 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('...');
+
+  const [trackProgress, setTrackProgress] = useState('00:00');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
+  const [duration, setDuration] = useState('--:--');
+  const [progressWidth, setProgressWidth] = useState(0);
+
+  const intervalRef = useRef();
+  const audioRef =
+    selectedNFT.media.type === 'audio/mpeg' ? useRef(new Audio(selectedNFT.media.url)) : null;
+
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      if (audioRef.current.ended) {
+        console.log('Ended');
+        setProgressWidth(0);
+        setTrackProgress('00:00');
+        setIsPlaying(false);
+        clearInterval(intervalRef.current);
+      } else {
+        const audioCurrentTimeProgress = Math.ceil(audioRef?.current.currentTime);
+        const minutesProgress = `0${Math.floor(audioCurrentTimeProgress / 60)}`;
+        const secondsProgress = `0${Math.floor(audioCurrentTimeProgress - minutesProgress * 60)}`;
+        const durationProgress = `${minutesProgress.substr(-2)}:${secondsProgress.substr(-2)}`;
+        const width = (parseInt(audioCurrentTimeProgress, 10) * 100) / audioRef.current.duration;
+        setProgressWidth(parseInt(width, 10));
+        setTrackProgress(durationProgress);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (audioRef) {
+      setTimeout(() => {
+        const audioCurrentTime = audioRef.current.duration;
+        const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
+        const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
+        setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+      }, 500);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (audioRef) {
+      if (isPlaying) {
+        audioRef.current.play();
+        startTimer();
+      } else {
+        clearInterval(intervalRef.current);
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (audioRef) {
+      if (muted) {
+        audioRef.current.muted = true;
+      } else {
+        audioRef.current.muted = false;
+      }
+    }
+  }, [muted]);
+
+  // useEffect(
+  //   () =>
+  //     () => {
+  //       audioRef.current.pause();
+  //       clearInterval(intervalRef.current);
+  //     },
+  //   []
+  // );
 
   const handleSelectedNFTLikeClick = (id) => {
     setSelectedNFT({
@@ -73,7 +148,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   return (
     <>
       <div className="marketplace--nft--page">
-        <div className="Marketplace--img">
+        <div className={`Marketplace--img ${fullScreen ? 'full--screen' : ''}`}>
           <div>
             {selectedNFT.media.type !== 'audio/mpeg' && selectedNFT.media.type !== 'video/mp4' && (
               <img src={selectedNFT.media.url} alt={selectedNFT.name} />
@@ -97,17 +172,59 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               <div className="custom--player">
                 <div className="controls">
                   <div className="controls--left">
-                    <img src={playIcon} alt="Play" />
-                    <span>0:24 / 0:32</span>
+                    {isPlaying ? (
+                      <img
+                        src={pauseIcon}
+                        alt="Pause"
+                        aria-hidden="true"
+                        onClick={() => setIsPlaying(false)}
+                      />
+                    ) : (
+                      <img
+                        src={playIcon}
+                        alt="Play"
+                        aria-hidden="true"
+                        onClick={() => setIsPlaying(true)}
+                      />
+                    )}
+                    <span>{`${trackProgress} / ${duration}`}</span>
                   </div>
                   <div className="controls--right">
-                    <img src={soundOnIcon} alt="Sound on" />
+                    {muted ? (
+                      <img
+                        src={soundOffIcon}
+                        alt="Sound off"
+                        aria-hidden="true"
+                        onClick={() => setMuted(false)}
+                      />
+                    ) : (
+                      <img
+                        src={soundOnIcon}
+                        alt="Sound on"
+                        aria-hidden="true"
+                        onClick={() => setMuted(true)}
+                      />
+                    )}
                     <img src={miniplayerIcon} alt="Miniplayer" />
-                    <img src={fullScreenIcon} alt="Full screen" />
+                    {fullScreen ? (
+                      <img
+                        src={fullScreenOffIcon}
+                        alt="Full screen off"
+                        aria-hidden="true"
+                        onClick={() => setFullScreen(false)}
+                      />
+                    ) : (
+                      <img
+                        src={fullScreenIcon}
+                        alt="Full screen"
+                        aria-hidden="true"
+                        onClick={() => setFullScreen(true)}
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="progress--bar">
-                  <div className="progress--bar--filled" />
+                  <div className="progress--bar--filled" style={{ width: `${progressWidth}%` }} />
                 </div>
               </div>
             )}
