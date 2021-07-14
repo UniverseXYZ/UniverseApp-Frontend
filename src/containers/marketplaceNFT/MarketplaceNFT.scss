@@ -359,14 +359,9 @@
     width: 100%;
     background: linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%),
       rgba(255, 255, 255, 0.8);
-    // opacity: 0.8;
     backdrop-filter: blur(2px);
     position: sticky;
     bottom: 0px;
-    // background: linear-gradient(#ffffff, #ffffff) padding-box,
-    //   linear-gradient(to right, #2ad0ca 0%, #e1f664 22.92%, #feb0fe 46.88%, #abb3fc 68.23%, #5df7a4 87.5%, #58c4f6 100%)
-    //     border-box;
-    // border-top: 2px solid transparent;
     .unveiling--box {
       display: flex;
       padding-left: 40px;
@@ -393,8 +388,6 @@
           padding-top: 7px;
           > .box--hover {
             padding-right: 7px;
-            // padding-top: 28px;
-            // padding-bottom: 28px;
             position: relative;
             cursor: pointer;
             .weth--hover {
