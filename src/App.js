@@ -290,7 +290,11 @@ const App = () => {
   }, [data, yourBalance]);
 
   useEffect(() => {
-    connectWeb3();
+    if (
+      !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
+    ) {
+      connectWeb3();
+    }
   }, []);
 
   return (
