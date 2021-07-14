@@ -96,6 +96,7 @@
           background: rgba(255, 255, 255, 0.2);
           height: 4px;
           width: 100%;
+          overflow: hidden;
           &--filled {
             background: $white;
             width: 80%;

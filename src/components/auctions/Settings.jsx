@@ -6,6 +6,7 @@ import Popup from 'reactjs-popup';
 import moment from 'moment';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
+import EthereumAddress from 'ethereum-address';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/inactive.svg';
@@ -45,6 +46,7 @@ const AuctionSettings = () => {
     useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royalities, setRoyalities] = useState(true);
+  const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
   const [minBid, setMinBId] = useState(false);
@@ -68,6 +70,7 @@ const AuctionSettings = () => {
     startingBid: true,
     startDate: true,
     endDate: true,
+    royalty: true,
   });
 
   const [bidValues, setBidValues] = useState([]);
@@ -151,7 +154,7 @@ const AuctionSettings = () => {
       bidFieldsValid = true;
     }
 
-    if (auctionFieldsValid && bidFieldsValid) {
+    if (auctionFieldsValid && bidFieldsValid && royaltyValidAddress) {
       if (!auction.id) {
         setAuction((prevValue) => ({
           ...prevValue,
@@ -179,8 +182,6 @@ const AuctionSettings = () => {
           //   : prevValue.tiers,
         }));
       }
-      console.log(properties);
-      console.log(auction);
       history.push('/setup-auction/reward-tiers', location.pathname);
     }
   };
@@ -202,6 +203,7 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAddress = (index, val) => {
+    // token.address.trim().length !== 0 && EthereumAddress.isAddress(token.address),
     const prevProperties = [...properties];
     prevProperties[index].address = val;
     setProperties(prevProperties);
@@ -238,6 +240,17 @@ const AuctionSettings = () => {
       setAuction({ tiers: [] });
     }
   }, []);
+
+  useEffect(() => {
+    const notValidAddress = properties.find(
+      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+    );
+    if (notValidAddress) {
+      setRoyaltyValidAddress(false);
+    } else {
+      setRoyaltyValidAddress(true);
+    }
+  }, [handleAddAuction]);
 
   return (
     <div className="auction-settings container">
@@ -491,13 +504,20 @@ const AuctionSettings = () => {
           </div>
         )}
       </div>
-      {(!isValidFields.startingBid ||
-        !isValidFields.startDate ||
-        !isValidFields.endDate ||
-        errorArray.length > 0) && (
+      {!isValidFields.startingBid ||
+      !isValidFields.startDate ||
+      !isValidFields.endDate ||
+      errorArray.length > 0 ? (
         <div className="last-error">
           Something went wrong. Please, fix the errors in the fields above and try again
         </div>
+      ) : (
+        isValidFields.startingBid &&
+        isValidFields.startDate &&
+        isValidFields.endDate &&
+        !royaltyValidAddress && (
+          <div className="last-error">Something went wrong. Wallet address is not valid.</div>
+        )
       )}
       <div className="btn-div">
         <Button className="light-border-button" onClick={() => history.push('/my-auctions')}>

@@ -91,6 +91,7 @@ const NFTsList = ({ data }) => {
                 onFocus={(event) => event.target.play()}
                 onMouseOut={(event) => event.target.pause()}
                 onBlur={(event) => event.target.pause()}
+                muted
               >
                 <source src={nft.media.url} type="video/mp4" />
                 <track kind="captions" />
