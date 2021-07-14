@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
@@ -7,7 +8,7 @@ import collectionImg from '../../../../assets/images/ntf1.svg';
 import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 import { defaultColors } from '../../../../utils/helpers';
 
-const Collections = () => {
+const Collections = ({ selectedColl, setSelectedColl }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [collections, setCollections] = useState(PLACEHOLDER_MARKETPLACE_COLLECTIONS);
   const [searchByCollections, setSearchByCollections] = useState('');
@@ -15,7 +16,14 @@ const Collections = () => {
   const handleSearch = (value) => {
     setSearchByCollections(value);
   };
-  console.log(collections);
+
+  const handleSelect = (coll) => {
+    const newSelectedColl = [...selectedColl];
+    if (newSelectedColl.filter((item) => item.id === coll.id).length === 0) {
+      newSelectedColl.push(coll);
+    }
+    setSelectedColl(newSelectedColl);
+  };
 
   return (
     <div className="browse--nft--sidebar--filtration--item">
@@ -40,7 +48,12 @@ const Collections = () => {
           {collections
             .filter((item) => item.name.toLowerCase().includes(searchByCollections.toLowerCase()))
             .map((col) => (
-              <div className="collections--list" key={uuid()}>
+              <div
+                className="collections--list"
+                key={uuid()}
+                onClick={() => handleSelect(col)}
+                aria-hidden="true"
+              >
                 {!col.photo ? (
                   <div
                     className="random--avatar--color"
@@ -61,6 +74,16 @@ const Collections = () => {
       </Animated>
     </div>
   );
+};
+
+Collections.propTypes = {
+  selectedColl: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedColl: PropTypes.func,
+};
+
+Collections.defaultProps = {
+  selectedColl: [],
+  setSelectedColl: () => {},
 };
 
 export default Collections;

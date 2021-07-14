@@ -34,6 +34,8 @@ const BrowseNFT = () => {
       selected: false,
     },
   ]);
+  const [selectedColl, setSelectedColl] = useState([]);
+  const [selectedCreators, setSelectedCreators] = useState([]);
 
   useEffect(() => {
     setDarkMode(false);
@@ -46,8 +48,8 @@ const BrowseNFT = () => {
         <div className="browse--nft--sidebar--filtration">
           <SaleType saleTypeButtons={saleTypeButtons} setSaleTypeButtons={setSaleTypeButtons} />
           <Price setSelectedPrice={setSelectedPrice} />
-          <Collections />
-          <Creators />
+          <Collections selectedColl={selectedColl} setSelectedColl={setSelectedColl} />
+          <Creators selectedCreators={selectedCreators} setSelectedCreators={setSelectedCreators} />
           <VerifiedOnly />
         </div>
         <div className="browse--nft--content">
@@ -56,6 +58,10 @@ const BrowseNFT = () => {
             setSaleTypeButtons={setSaleTypeButtons}
             selectedPrice={selectedPrice}
             setSelectedPrice={setSelectedPrice}
+            selectedColl={selectedColl}
+            setSelectedColl={setSelectedColl}
+            selectedCreators={selectedCreators}
+            setSelectedCreators={setSelectedCreators}
           />
           <NFTsList data={PLACEHOLDER_MARKETPLACE_NFTS} />
           <Popup
