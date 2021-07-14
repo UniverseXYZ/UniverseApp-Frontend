@@ -5,10 +5,32 @@
   grid-template-columns: 1fr 560px;
   .Marketplace--img {
     border-right: 1px solid #e4e4e4;
-    // padding-bottom: 570px;
     padding-top: 60px;
     max-height: 720px;
     border-bottom: 1px solid #e4e4e4;
+    &.full--screen {
+      position: fixed;
+      top: 0;
+      padding-top: 0;
+      z-index: 99999;
+      width: 100%;
+      height: 100vh;
+      bottom: 0;
+      max-height: 100%;
+      border: none;
+      background: $black;
+      > div {
+        width: 800px;
+        height: 100%;
+        img {
+          border-radius: 0px;
+        }
+        .custom--player {
+          position: fixed;
+          width: 97%;
+        }
+      }
+    }
     > div {
       position: relative;
       height: 600px;
