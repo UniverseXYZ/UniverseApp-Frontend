@@ -19,7 +19,9 @@ const Section5 = (props) => {
               <p className="planet--number">{planet1.planet}</p>
               <h3 className="planet--title">{planet1.title}</h3>
               <p className="planet--hintText">{planet1.hintText}</p>
-              <Button className="light-button">Show characters</Button>
+              <Button className="light-button" onClick={planet1.btnOnClick}>
+                {planet1.btnText}
+              </Button>
             </div>
           </div>
           <div className="right--planet">
@@ -30,7 +32,9 @@ const Section5 = (props) => {
               <p className="planet--number">{planet2.planet}</p>
               <h3 className="planet--title">{planet2.title}</h3>
               <p className="planet--hintText">{planet2.hintText}</p>
-              <Button className="light-button">Show characters</Button>
+              <Button className="light-button" onClick={planet2.btnOnClick}>
+                {planet2.btnText}
+              </Button>
             </div>
           </div>
         </div>
@@ -46,6 +50,8 @@ Section5.propTypes = {
     title: PropTypes.string,
     planet: PropTypes.string,
     hintText: PropTypes.string,
+    btnText: PropTypes.string,
+    btnOnClick: PropTypes.func,
   }).isRequired,
   planet2: PropTypes.shape({
     className: PropTypes.string,
@@ -53,6 +59,8 @@ Section5.propTypes = {
     title: PropTypes.string,
     planet: PropTypes.string,
     hintText: PropTypes.string,
+    btnText: PropTypes.string,
+    btnOnClick: PropTypes.func,
   }).isRequired,
 };
 

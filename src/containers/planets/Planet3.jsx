@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PlanetContainer from '../../components/planets/PlanetContainer';
 import WelcomeSectionImg from '../../assets/images/planet3-charachters/welcome-section-planet3-img.png';
 import { mythical, fabled, legendary } from '../../utils/fixtures/kuapoMockData';
@@ -8,27 +9,32 @@ import adakaImgSection5 from '../../assets/images/planet1-charachters/adaka-foot
 import prosoponImgSection5 from '../../assets/images/planet2-charachters/prosopon-footer-planet.png';
 import './Planet3.scss';
 
-const section5Planet1 = {
-  planet: 'planet 1',
-  title: 'Adaka',
-  hintText: `The Twilight Zone, situated in the northern hemisphere of Akaka is home to the famous
-    purple glowing cliffs. The cliffs mark the Realm of the Ape Ape Elders and is a meeting place
-    for the planet’s Lore Council.`,
-  image: adakaImgSection5,
-  className: 'adaka--section5',
-};
-const section5Planet2 = {
-  planet: 'planet 2',
-  title: 'Prosopon',
-  hintText: `The second planet is a bunch of different climates and terrain like some with intense
-    factors like meteor showers and rain and cliffs and acid pools like a mystical vibe like
-    dragons and fairy land just crazy weather like elemental vibes`,
-  image: prosoponImgSection5,
-  className: 'prosopon--section5',
-};
-
 const Planet3 = () => {
+  const history = useHistory();
   const [legendaryBgFlag, setLegendaryBgFlag] = useState(LeftTopImg);
+
+  const section5Planet1 = {
+    planet: 'planet 1',
+    title: 'Adaka',
+    hintText: `The Twilight Zone, situated in the northern hemisphere of Akaka is home to the famous
+      purple glowing cliffs. The cliffs mark the Realm of the Ape Ape Elders and is a meeting place
+      for the planet’s Lore Council.`,
+    image: adakaImgSection5,
+    className: 'adaka--section5',
+    btnText: 'Go to Adaka',
+    btnOnClick: () => history.push('/planets/adaka'),
+  };
+  const section5Planet2 = {
+    planet: 'planet 2',
+    title: 'Prosopon',
+    hintText: `The second planet is a bunch of different climates and terrain like some with intense
+      factors like meteor showers and rain and cliffs and acid pools like a mystical vibe like
+      dragons and fairy land just crazy weather like elemental vibes`,
+    image: prosoponImgSection5,
+    className: 'prosopon--section5',
+    btnText: 'Go to Prosopon',
+    btnOnClick: () => history.push('/planets/prosopon'),
+  };
 
   useEffect(() => {
     if (window.innerWidth <= 576) {

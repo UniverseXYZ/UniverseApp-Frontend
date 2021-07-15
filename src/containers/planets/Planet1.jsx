@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import PlanetContainer from '../../components/planets/PlanetContainer';
 import WelcomeSectionImg from '../../assets/images/planet1-welcome-section.png';
 import { mythical, fabled, legendary } from '../../utils/fixtures/adakaMockData';
@@ -8,27 +9,32 @@ import LeftTopImg from '../../assets/images/planet1-section2-left-top.png';
 import LeftTopImgMobile from '../../assets/images/planet1-section2-left-top-mobile.png';
 import './Planet1.scss';
 
-const section5Planet1 = {
-  planet: 'planet 2',
-  title: 'Prosopon',
-  hintText: `The second planet is a bunch of different climates and terrain like some with intense
-    factors like meteor showers and rain and cliffs and acid pools like a mystical vibe like
-    dragons and fairy land just crazy weather like elemental vibes`,
-  image: prosoponImgSection5,
-  className: 'prosopon--section5',
-};
-const section5Planet2 = {
-  planet: 'planet 3',
-  title: 'Kuapo',
-  hintText: `The thrid planet is like a floating space planet like the jetsons or cloud city but
-    bellow there is land and water where mor species live but this planet is more space themed than
-    the others`,
-  image: kuapoImgSection5,
-  className: 'kuapo--section5',
-};
-
 const Planet1 = () => {
+  const history = useHistory();
   const [legendaryBgFlag, setLegendaryBgFlag] = useState(LeftTopImg);
+
+  const section5Planet1 = {
+    planet: 'planet 2',
+    title: 'Prosopon',
+    hintText: `The second planet is a bunch of different climates and terrain like some with intense
+      factors like meteor showers and rain and cliffs and acid pools like a mystical vibe like
+      dragons and fairy land just crazy weather like elemental vibes`,
+    image: prosoponImgSection5,
+    className: 'prosopon--section5',
+    btnText: 'Go to Prosopon',
+    btnOnClick: () => history.push('/planets/prosopon'),
+  };
+  const section5Planet2 = {
+    planet: 'planet 3',
+    title: 'Kuapo',
+    hintText: `The thrid planet is like a floating space planet like the jetsons or cloud city but
+      bellow there is land and water where mor species live but this planet is more space themed than
+      the others`,
+    image: kuapoImgSection5,
+    className: 'kuapo--section5',
+    btnText: 'Go to Kuapo',
+    btnOnClick: () => history.push('/planets/kuapo'),
+  };
 
   useEffect(() => {
     if (window.innerWidth <= 576) {
