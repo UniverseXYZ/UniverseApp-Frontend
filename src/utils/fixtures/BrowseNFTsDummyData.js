@@ -629,7 +629,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 2,
@@ -639,7 +638,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 3,
@@ -649,7 +647,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 4,
@@ -659,7 +656,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 5,
@@ -669,7 +665,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 6,
@@ -679,7 +674,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 7,
@@ -689,7 +683,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 8,
@@ -699,7 +692,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 9,
@@ -709,7 +701,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 10,
@@ -719,7 +710,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 11,
@@ -729,7 +719,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
   {
     id: 12,
@@ -739,7 +728,6 @@ export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
     owner: {
       name: 'Justin 3LAU',
     },
-    selected: false,
   },
 ];
 

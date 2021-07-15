@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'react-uuid';
 import closeIcon from '../../assets/images/close-menu.svg';
 import userPic from '../../assets/images/marketplace/users/user2.png';
 
@@ -37,7 +38,7 @@ const LikesPopup = ({ onClose }) => {
         <h2>Likes:24</h2>
         <div className="liked__users__list">
           {users.map((user, i) => (
-            <div className="liked__user">
+            <div className="liked__user" key={uuid()}>
               <img src={user.photo} alt="User" />
               <h4>{user.name}</h4>
             </div>
