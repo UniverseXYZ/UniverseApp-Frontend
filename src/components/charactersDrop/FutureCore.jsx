@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
-import Frame from '../../assets/images/char-frame.png';
+import Frame from '../../assets/images/char-frame-future-core-drops.png';
+import FrameMobile from '../../assets/images/char-frame-future-core-drops-mobile.png';
 import BookVector from '../../assets/images/play-vector.svg';
 import PlayVector from '../../assets/images/book-vector.svg';
 
 const FutureCore = () => {
   const history = useHistory();
+  const [frame, setFrame] = useState(Frame);
+
+  useEffect(() => {
+    if (window.innerWidth <= 576) {
+      setFrame(FrameMobile);
+    }
+  }, []);
 
   return (
     <div className="future_core_section">
-      {/* <img src={Frame} alt="frame" className="char1" />
-      <img src={Frame} alt="frame" className="char2" /> */}
+      <img src={frame} alt="img" className="bg--flag--future--core--drops" />
       <div className="future_core_head">
         <h1>Future Core Drops</h1>
       </div>

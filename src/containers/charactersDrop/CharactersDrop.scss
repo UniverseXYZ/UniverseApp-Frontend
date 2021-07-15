@@ -109,7 +109,7 @@
             .char-img1{
                 position: absolute;
                 top: 11%;
-                left: -49%;
+                left: -53%;
                 z-index: 99;
                 display: inline;
                 @include lg {
@@ -376,8 +376,28 @@
         background-color: $black;
         padding: 0 60px;
         min-height: 925px;
-        @include sm{
-            padding: unset;
+        @include lg {
+            min-height: 670px;
+        }
+        @include md {
+            padding: 0 20px;
+        }
+        @include sm {
+            padding-bottom: 100px;
+        }
+        .bg--flag--future--core--drops {
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 100%;
+            @include sm {
+                margin: 0;
+                left: 0;
+                top: 15%;
+            }
         }
         // .char1{
         //     position: absolute;
@@ -408,6 +428,13 @@
             padding-bottom: 80px;
             text-align: center;
             width: 100%;
+            @include lg {
+                padding-top: 100px;
+                padding-bottom: 50px;
+            }
+            @include sm {
+                padding-bottom: 40px;
+            }
             h1 {
                 font-family: $sharpGroteskSemiBoldFont;
                 font-style: normal;
@@ -418,13 +445,10 @@
                 color: #FFFFFF;
                 @include lg {
                     font-size: 26px;
-                    // padding-left: 11%;  
-                    // text-align: start;
+                    text-align: left;
                 }
                 @include sm {
-                    font-size: 26px;
-                    // padding-left: 11%;
-                    // text-align: start;
+                    text-align: center;
                 }
             }
         }
@@ -435,20 +459,31 @@
         max-width: 1110px;
         margin: auto;
         justify-content: space-between;
-        // @include sm {
-        //    display: block;
-        // }
+        @include sm {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
     }
     .polmorphic-part{
         position: relative;
         z-index: 10;
-        height: 532px;
-        // width: 540px;
+        min-height: 535px;
         width: calc(50% - 15px);
         background:url(../../assets/images/polmorphic.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
         background-size: 100% 100%;
         background-repeat: no-repeat;
         border-radius: 12px;
+        @include xl {
+            min-height: 45vw;
+        }
+        @include lg {
+            min-height: 50vw;
+        }
+        @include sm {
+            width: 100%;
+            min-height: 100vw;
+        }
         // margin-right: 15px;
         // @include lg {
         //     background:url(../../assets/images/polmorphic-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
@@ -477,7 +512,6 @@
         // } 
         .vec-div{
           background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(4px);
           border-radius: 8px;
           position: absolute;
           width: 69px;
@@ -522,15 +556,11 @@
             order: 0;
             flex-grow: 0;
             margin: 12px 0px;
-        @include lg {
-            font-size: 16px;
+            @include lg {
+                font-size: 16px;
+            }
         }
-        @include sm {
-            font-size: 16px;
-
-        }
-        }
-         p{
+        p {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: normal;
@@ -544,52 +574,58 @@
             @include lg {
                 font-size: 12px;
             }
-            @include sm {
-                font-size: 12px;
-    
-            }
         }
      }
     }
     .comics-part{
         position: relative;
         z-index: 10;
-        height: 532px;
+        min-height: 535px;
         // width: 540px;
         width: calc(50% - 15px);
         background:url(../../assets/images/comics.png), conic-gradient(from 203.44deg at 100% -7.8%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(212.34% 218.84% at 206.2% -109.87%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.88%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
         background-size: 100% 100%;
         background-repeat: no-repeat;
         border-radius: 12px;
-        // margin-left: 15px;
+        @include xl {
+            min-height: 45vw;
+        }
         @include lg {
-            background:url(../../assets/images/comics-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
-            width: 344px;
-            height: 375px;
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
+            min-height: 50vw;
         }
         @include sm {
-            background-size: 100% 100%;
-            background:url(../../assets/images/comics-mobile.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
-            width: 335px;
-            height: 375px;
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            margin-left: unset;
-            margin-top: 15px;
+            width: 100%;
+            min-height: 100vw;
+            margin-top: 30px;
         }
-        @media (max-width: 440px) {
-            width: 250px;
-            height: 335px;
-          }
-          @media (max-width: 300px) {
-            width: 210px;
-            height: 270px;  
-          } 
+        // margin-left: 15px;
+        // @include lg {
+        //     background:url(../../assets/images/comics-tablet.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+        //     width: 344px;
+        //     height: 375px;
+        //     background-size: 100% 100%;
+        //     background-repeat: no-repeat;
+        // }
+        // @include sm {
+        //     background-size: 100% 100%;
+        //     background:url(../../assets/images/comics-mobile.png), conic-gradient(from 209.44deg at 104.91% -5.17%, #000000 -24.66deg, #FFFFFF 0.25deg, #000000 50.63deg, #000000 51.97deg, #FFFFFF 88.12deg, #000000 142.5deg, #FFFFFF 196.87deg, #000000 256.87deg, #FFFFFF 300deg, #000000 335.2deg, #000000 335.34deg, #FFFFFF 360.25deg), radial-gradient(183.7% 188.43% at -71.11% -57.8%, #2AD0CA 0%, #E1F664 22.92%, #FEB0FE 46.87%, #ABB3FC 68.23%, #5DF7A4 87.5%, #58C4F6 100%);
+        //     width: 335px;
+        //     height: 375px;
+        //     background-size: 100% 100%;
+        //     background-repeat: no-repeat;
+        //     margin-left: unset;
+        //     margin-top: 15px;
+        // }
+        // @media (max-width: 440px) {
+        //     width: 250px;
+        //     height: 335px;
+        //   }
+        //   @media (max-width: 300px) {
+        //     width: 210px;
+        //     height: 270px;  
+        //   } 
           .vec-div{
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
             border-radius: 8px;
             position: absolute;
             width: 69px;
@@ -622,46 +658,42 @@
                 font-size: 12px;
                 padding: 0 20px;
             }
-            h1{
-            font-family: $sharpGroteskSemiBoldFont;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 20px;
-            line-height: 130%;
-            display: flex;
-            align-items: center;
-            color: #000000;
-            flex: none;
-            order: 0;
-            flex-grow: 0;
-            margin: 12px 0px;
-            @include lg {
-                font-size: 16px;
+            h1 {
+                font-family: $sharpGroteskSemiBoldFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 130%;
+                display: flex;
+                align-items: center;
+                color: #000000;
+                flex: none;
+                order: 0;
+                flex-grow: 0;
+                margin: 12px 0px;
+                @include lg {
+                    font-size: 16px;
+                }
+                @include sm {
+                    font-size: 16px;
+                
+                }
             }
-            @include sm {
-                font-size: 16px;
-    
+            p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 160%;
+                color: rgba(0, 0, 0, 0.6);
+                flex: none;
+                order: 1;
+                flex-grow: 0;
+                margin: 12px 0px;
+                @include lg {
+                    font-size: 12px;
+                }
             }
-            }
-         p{
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 160%;
-            color: rgba(0, 0, 0, 0.6);
-            flex: none;
-            order: 1;
-            flex-grow: 0;
-            margin: 12px 0px;
-            @include lg {
-                font-size: 12px;
-            }
-            @include sm {
-                font-size: 12px;
-    
-            }
-            }
-         }
+        }
     }
 }

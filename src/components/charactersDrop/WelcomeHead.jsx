@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
-import char1 from '../../assets/images/character1.png';
+import char1 from '../../assets/images/character1-1.png';
 import char2 from '../../assets/images/character2.png';
 import char3 from '../../assets/images/character3.png';
 import vector from '../../assets/images/vector-bottom.svg';
