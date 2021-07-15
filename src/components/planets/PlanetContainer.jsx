@@ -28,6 +28,18 @@ const PlanetContainer = (props) => {
     section5Planet1,
     section5Planet2,
   } = props;
+
+  const scrollSection = () => {
+    const section = document.querySelector('.planet--section3').offsetTop;
+    const header = document.querySelector('header');
+    const headerPosition = header.style.position;
+    if (headerPosition === 'relative') {
+      window.scrollTo(0, section - (header.clientHeight + 1) * 2);
+    } else {
+      window.scrollTo(0, section - header.clientHeight + 1);
+    }
+  };
+
   return (
     <div className={`planet--container ${className}`}>
       <WelcomeWrapper
@@ -37,6 +49,7 @@ const PlanetContainer = (props) => {
             {title}
           </>
         }
+        btnOnClick={scrollSection}
         hintText={hintText}
         btnText="Show characters"
       >

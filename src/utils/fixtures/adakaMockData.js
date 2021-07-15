@@ -5,6 +5,7 @@ import John from '../../assets/images/planet1-charachters/characters-planet-drun
 import Lucy from '../../assets/images/planet1-charachters/characters-planet-demon-duck.png';
 import Vick from '../../assets/images/planet1-charachters/characters-planet-falcon Fiend.png';
 import Chainlinkcat from '../../assets/images/planet1-charachters/chainlink-cat.png';
+import Platybelodon from '../../assets/images/planet1-charachters/platybelodon.png';
 
 // fabled
 import Daryl from '../../assets/images/planet1-charachters/characters-planet-yeti.png';
@@ -51,6 +52,6 @@ export const fabled = [
 ];
 
 export const legendary = [
-  { name: 'Doujan', description: 'Platybelodon', image: Chainlinkcat },
-  { name: 'Tim', description: 'Kangaroo Elk', image: Tim },
+  { name: 'Link', description: 'Chain-link Cat', image: Chainlinkcat },
+  { name: 'Doujan', description: 'Platybelodon', image: Platybelodon },
 ];

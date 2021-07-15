@@ -10,11 +10,9 @@
     padding: 0 60px;
     @include md {
         background: linear-gradient( $black 0, $black 100%);
+        padding: 0 20px;
     }
     .section5--wrapper {
-        @include md {
-            padding: 0 20px;
-        }
         .section--title {
             color:$white;
             text-align: center;
