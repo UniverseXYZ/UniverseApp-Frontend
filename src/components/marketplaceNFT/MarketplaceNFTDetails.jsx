@@ -130,6 +130,24 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   }, [isPlaying]);
 
   useEffect(() => {
+    function onSpaceDown(event) {
+      event.preventDefault();
+      if (mediaRef && mediaRef.current) {
+        if (event.keyCode === 32) {
+          setIsPlaying(!isPlaying);
+        } else if (event.keyCode === 70) {
+          setFullScreen(true);
+        } else if (event.keyCode === 27) {
+          setFullScreen(false);
+        }
+      }
+    }
+    document.addEventListener('keydown', onSpaceDown, false);
+
+    return () => document.removeEventListener('keydown', onSpaceDown, false);
+  });
+
+  useEffect(() => {
     if (mediaRef && mediaRef.current) {
       if (muted) {
         mediaRef.current.muted = true;
