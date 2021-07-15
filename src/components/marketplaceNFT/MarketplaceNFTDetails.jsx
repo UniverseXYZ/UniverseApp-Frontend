@@ -39,11 +39,17 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const history = useHistory();
   const ref = useRef(null);
   const sharePopupRef = useRef(null);
+  const reportPopupRef = useRef(null);
   const customPlayerRef = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target) && !sharePopupRef.current) {
+    if (
+      ref.current &&
+      !ref.current.contains(event.target) &&
+      !sharePopupRef.current &&
+      !reportPopupRef.current
+    ) {
       setIsDropdownOpened(false);
     }
   };
@@ -456,7 +462,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                           </li>
                         }
                       >
-                        {(close) => <ReportPopup onClose={close} />}
+                        {(close) => <ReportPopup onClose={close} ref={reportPopupRef} />}
                       </Popup>
                     </ul>
                   </div>
