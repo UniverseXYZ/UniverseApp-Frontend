@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
@@ -326,7 +326,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
               <div
-                // ref={ref}
+                ref={ref}
                 className={`share_dropdown ${isDropdownOpened ? 'opened' : ''}`}
                 onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                 aria-hidden="true"
