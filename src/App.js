@@ -73,6 +73,7 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+  const [stepsData, setStepsData] = useState({ selectedMethod: null, settings: null });
 
   useEffect(() => {
     if (!darkMode) {
@@ -95,6 +96,8 @@ const App = () => {
   return (
     <AppContext.Provider
       value={{
+        stepsData,
+        setStepsData,
         isWalletConnected,
         setIsWalletConnected,
         loggedInArtist,
@@ -160,7 +163,7 @@ const App = () => {
         <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
         <Route path="/character-page" component={() => <CharacterPage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
-        <Route exact path="/nft-marketplace" component={() => <NFTMarketplace />} />
+        <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
         <Route exact path="/my-profile" component={() => <MyProfile />} />
