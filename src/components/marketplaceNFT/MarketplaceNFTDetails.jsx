@@ -1,9 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
+import '../marketplace/browseNFT/NFTsList.scss';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
+import Properties from '../marketplaceTabComponents/Properties.jsx';
+import Owners from '../marketplaceTabComponents/Owners.jsx';
+import Bids from '../marketplaceTabComponents/Bids.jsx';
+import TradingHistory from '../marketplaceTabComponents/TradingHistory.jsx';
+import SharePopup from '../popups/SharePopup.jsx';
+import ReportPopup from '../popups/ReportPopup.jsx';
+import LikesPopup from '../popups/LikesPopup.jsx';
+import Offers from '../marketplaceTabComponents/Offers.jsx';
 import pauseIcon from '../../assets/images/pause.svg';
 import playIcon from '../../assets/images/play.svg';
 import soundOnIcon from '../../assets/images/sound-on.svg';
@@ -11,24 +20,11 @@ import soundOffIcon from '../../assets/images/sound-off.svg';
 import miniplayerIcon from '../../assets/images/miniplayer.svg';
 import fullScreenIcon from '../../assets/images/full-screen.svg';
 import fullScreenOffIcon from '../../assets/images/full-screen-off.svg';
-import Properties from '../marketplaceTabComponents/Properties';
-import Owners from '../marketplaceTabComponents/Owners';
-import Bids from '../marketplaceTabComponents/Bids';
-import TradingHistory from '../marketplaceTabComponents/TradingHistory';
-import SharePopup from '../popups/SharePopup';
-import ReportPopup from '../popups/ReportPopup';
-import LikesPopup from '../popups/LikesPopup';
-import NFTPlaceBid from '../popups/NFTPlaceBid';
-import Offers from '../marketplaceTabComponents/Offers';
 import unveiling from '../../assets/images/unveiling.svg';
-import pyramid from '../../assets/images/marketplace/eth-icon.svg';
-import '../marketplace/browseNFT/NFTsList.scss';
 import priceIcon from '../../assets/images/marketplace/price.svg';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import NFTMakeOffer from '../popups/NFTMakeOffer';
-import bordergradient from '../../assets/images/border-gradient.svg';
 import closeIcon from '../../assets/images/marketplace/close.svg';
 import BuyNFTSection from '../BuyNFTSection/BuyNFTSection';
 
@@ -117,10 +113,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   useEffect(() => {
     function canPlayEventHandler() {
-      const audioCurrentTime = mediaRef.current.duration;
-      const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
-      const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
-      setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+      if (mediaRef && mediaRef.current) {
+        const audioCurrentTime = mediaRef.current.duration;
+        const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
+        const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
+        setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+      }
     }
     if (mediaRef && mediaRef.current) {
       mediaRef.current.addEventListener('canplay', canPlayEventHandler);
@@ -143,21 +141,28 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   }, [isPlaying]);
 
   useEffect(() => {
-    function onSpaceDown(event) {
-      event.preventDefault();
-      if (mediaRef && mediaRef.current) {
+    function onKeyboardDown(event) {
+      if (
+        document.getElementById('popup-root') &&
+        !document.getElementById('popup-root').hasChildNodes() &&
+        mediaRef &&
+        mediaRef.current
+      ) {
         if (event.keyCode === 32) {
+          event.preventDefault();
           setIsPlaying(!isPlaying);
         } else if (event.keyCode === 70) {
+          event.preventDefault();
           setFullScreen(true);
         } else if (event.keyCode === 27) {
+          event.preventDefault();
           setFullScreen(false);
         }
       }
     }
-    document.addEventListener('keydown', onSpaceDown, false);
+    document.addEventListener('keydown', onKeyboardDown, false);
 
-    return () => document.removeEventListener('keydown', onSpaceDown, false);
+    return () => document.removeEventListener('keydown', onKeyboardDown, false);
   });
 
   useEffect(() => {
@@ -536,10 +541,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             {selectedTabIndex === 4 && <TradingHistory />}
           </div>
           <BuyNFTSection
-            // highestBid={highestBid}
+            highestBid={highestBid}
             firstButtonText="Place a bid"
             secondButtonText="Make offer"
-            // auctionLeftTime="1d: 4h : 20m : 30s"
+            auctionLeftTime="1d: 4h : 20m : 30s"
           />
         </div>
       </div>

@@ -139,6 +139,13 @@
                             border-width: 5px;
                             border-style: solid;
                             border-color: black transparent transparent transparent;
+                            @include sm {
+                                left: unset;
+                                right: 35px;
+                            }
+                        }
+                        @include sm {
+                            right: -32px;
                         }
                     }
                     &:hover {
