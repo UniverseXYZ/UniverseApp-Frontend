@@ -1,13 +1,11 @@
 import React from 'react';
 import './MarketplaceTabComponent.scss';
-import Popup from 'reactjs-popup';
 import icon1 from '../../assets/images/collection_img (4).svg';
 import icon2 from '../../assets/images/collection_img (6).svg';
 import icon3 from '../../assets/images/collection_img (7).svg';
 import icon4 from '../../assets/images/collection_img (8).svg';
 import icon5 from '../../assets/images/collection_img (9).svg';
 import share from '../../assets/images/aaaa.svg';
-import SharePopup from '../popups/SharePopup';
 
 const TradingHistory = () => (
   <div className="trading">

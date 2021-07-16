@@ -5,7 +5,7 @@ import arrowIcon from '../../assets/images/arrow-down.svg';
 import Input from '../input/Input';
 import Button from '../button/Button';
 
-const ReportPopup = ({ onClose }) => {
+const ReportPopup = React.forwardRef(({ onClose }, ref) => {
   const [showReasons, setShowReasons] = useState(false);
   const reasons = ['Copyright infringement', 'Explict and sensitive content', 'Other'];
   const [reason, setReason] = useState('');
@@ -16,7 +16,7 @@ const ReportPopup = ({ onClose }) => {
     setShowReasons(false);
   };
   return (
-    <div className="report__popup">
+    <div className="report__popup" ref={ref}>
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       <h2>Report this item</h2>
       <p>Explain why you think this item should be removed from marketplace</p>
@@ -56,7 +56,7 @@ const ReportPopup = ({ onClose }) => {
       </div>
     </div>
   );
-};
+});
 ReportPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
 };

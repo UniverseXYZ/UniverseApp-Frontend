@@ -10,18 +10,11 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import { shareFriends } from '../../utils/fixtures/ShareWithFriendsDummyData';
 import Button from '../button/Button.jsx';
 
-const SharePopup = (props) => {
-  const {
-    close,
-    // handleConnectWallet,
-    // showInstallWalletPopup,
-    // setShowInstallWalletPopup,
-    // selectedWallet,
-    // setSelectedWallet,
-  } = props;
+const SharePopup = React.forwardRef((props, ref) => {
+  const { close } = props;
 
   return (
-    <div className="share--popup">
+    <div className="share--popup" ref={ref}>
       <img className="close-popup" onClick={close} src={closeIcon} alt="Close" aria-hidden="true" />
       <div className="title">
         <h1>Share this page</h1>
@@ -87,7 +80,7 @@ const SharePopup = (props) => {
       </div>
     </div>
   );
-};
+});
 SharePopup.propTypes = {
   close: PropTypes.func.isRequired,
 };
