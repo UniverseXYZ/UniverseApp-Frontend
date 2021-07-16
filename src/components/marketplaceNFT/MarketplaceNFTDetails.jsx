@@ -12,9 +12,7 @@ import TradingHistory from '../marketplaceTabComponents/TradingHistory.jsx';
 import SharePopup from '../popups/SharePopup.jsx';
 import ReportPopup from '../popups/ReportPopup.jsx';
 import LikesPopup from '../popups/LikesPopup.jsx';
-import NFTPlaceBid from '../popups/NFTPlaceBid.jsx';
 import Offers from '../marketplaceTabComponents/Offers.jsx';
-import NFTMakeOffer from '../popups/NFTMakeOffer.jsx';
 import pauseIcon from '../../assets/images/pause.svg';
 import playIcon from '../../assets/images/play.svg';
 import soundOnIcon from '../../assets/images/sound-on.svg';
@@ -23,13 +21,12 @@ import miniplayerIcon from '../../assets/images/miniplayer.svg';
 import fullScreenIcon from '../../assets/images/full-screen.svg';
 import fullScreenOffIcon from '../../assets/images/full-screen-off.svg';
 import unveiling from '../../assets/images/unveiling.svg';
-import pyramid from '../../assets/images/marketplace/eth-icon.svg';
 import priceIcon from '../../assets/images/marketplace/price.svg';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import bordergradient from '../../assets/images/border-gradient.svg';
 import closeIcon from '../../assets/images/marketplace/close.svg';
+import BuyNFTSection from '../BuyNFTSection/BuyNFTSection';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
@@ -42,6 +39,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const reportPopupRef = useRef(null);
   const customPlayerRef = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+
+  const highestBid = {
+    userAvatar: unveiling,
+    userName: 'Asd',
+    bid: 0.5,
+  };
 
   const handleClickOutside = (event) => {
     if (
@@ -537,47 +540,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             {selectedTabIndex === 3 && <Offers />}
             {selectedTabIndex === 4 && <TradingHistory />}
           </div>
-          <div className="theunveiling">
-            <img className="border--gradient" src={bordergradient} alt="border" />
-            <div className="unveiling--box">
-              <img src={unveiling} alt="avatar" />
-              <div className="unveiling--info">
-                <h1>
-                  <span>Highest bid by</span> The Unveiling
-                </h1>
-                <div className="icon--box">
-                  <div className="box--hover">
-                    <img src={pyramid} alt="pyramid" className="weth--icon" />
-                    <span className="weth--hover">WETH</span>
-                  </div>
-                  <p>
-                    0.5<span className="span--price">$142.39s</span>
-                    <span className="span--procent">(10% of sales will go to creator)</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="button--box">
-              <Popup
-                trigger={
-                  <button type="button" className="light-button">
-                    Place a bid
-                  </button>
-                }
-              >
-                {(close) => <NFTPlaceBid close={close} />}
-              </Popup>
-              <Popup
-                trigger={
-                  <button type="button" className="light-border-button">
-                    Make offer
-                  </button>
-                }
-              >
-                {(close) => <NFTMakeOffer close={close} />}
-              </Popup>
-            </div>
-          </div>
+          <BuyNFTSection
+            highestBid={highestBid}
+            firstButtonText="Place a bid"
+            secondButtonText="Make offer"
+            auctionLeftTime="1d: 4h : 20m : 30s"
+          />
         </div>
       </div>
       <div className="collection">
