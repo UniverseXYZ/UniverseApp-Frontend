@@ -68,7 +68,7 @@
             width: 80px;
             height: 80px;
             cursor: pointer;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
           }
           img.close--miniplayer {
@@ -79,7 +79,7 @@
             cursor: pointer;
             width: 25px;
             height: 25px;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
             padding: 5px;
           }
@@ -405,17 +405,80 @@
     }
   }
   .theunveiling {
+    padding-bottom: 40px;
     width: 100%;
     background: linear-gradient(135deg, rgba(188, 235, 0, 0.03) 15.57%, rgba(0, 234, 234, 0.03) 84.88%),
       rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(2px);
     position: sticky;
     bottom: 0px;
+    .span--percent--seperate {
+      display: block;
+      text-align: center;
+      font-family: $spaceGroteskFont;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 17px;
+      letter-spacing: 0px;
+      color: #e4b613;
+    }
+    .auction-timer-box {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: linear-gradient(
+        95.11% 95.11% at 36.64% 4.89%,
+        #2ad0ca 0%,
+        #e1f664 22.92%,
+        #feb0fe 46.88%,
+        #abb3fc 68.23%,
+        #5df7a4 87.5%,
+        #58c4f6 100%
+      );
+      background: linear-gradient(#ffffff, #ffffff) padding-box,
+        linear-gradient(
+            to right,
+            #2ad0ca 0%,
+            #e1f664 22.92%,
+            #feb0fe 46.88%,
+            #abb3fc 68.23%,
+            #5df7a4 87.5%,
+            #58c4f6 100%
+          )
+          border-box;
+      border: 2px solid transparent;
+      > img {
+        padding-right: 4px;
+      }
+      > p {
+        padding-left: 4px;
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 21px;
+        letter-spacing: 0px;
+        text-align: left;
+      }
+    }
     .unveiling--box {
       display: flex;
       padding-left: 40px;
       padding-top: 40px;
       padding-right: 40px;
+      > img {
+        object-fit: cover;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+      }
       .unveiling--info {
         margin-left: 15px;
         position: relative;
@@ -492,7 +555,7 @@
               color: #00000066;
               padding-left: 6px;
             }
-            .span--procent {
+            .span--percent {
               font-family: $spaceGroteskFont;
               font-size: 14px;
               font-style: normal;
@@ -545,7 +608,7 @@
       }
     }
     .button--box {
-      padding-bottom: 40px;
+      padding-bottom: 12px;
       padding-right: 40px;
       padding-left: 40px;
       padding-top: 24px;
