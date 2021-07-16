@@ -13,11 +13,12 @@ import infoIcon from '../../assets/images/icon.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import sizeDownIcon from '../../assets/images/size-down.svg';
 import sizeUpIcon from '../../assets/images/size-up.svg';
-import delateIcon from '../../assets/images/inactive.svg';
+import deleteIcon from '../../assets/images/inactive.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import addIcon from '../../assets/images/Add.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
+import delIcon from '../../assets/images/del-icon.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
 
 const MintSingleNft = ({ onClick }) => {
@@ -51,6 +52,7 @@ const MintSingleNft = ({ onClick }) => {
   const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
+  const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
   const [selectedCollection, setSelectedCollection] = useState(null);
 
   const handleInputChange = (val) => {
@@ -67,11 +69,36 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(temp);
   };
 
+  const removeRoyaltyAddress = (index) => {
+    const temp = [...properties];
+    temp.splice(index, 1);
+    setRoyaltyAddress(temp);
+  };
+
   const addProperty = () => {
     const newProperties = [...properties];
     const temp = { name: '', value: '' };
     newProperties.push(temp);
     setProperties(newProperties);
+  };
+
+  const addRoyaltyAddress = () => {
+    const newProperties = [...properties];
+    const temp = { address: '', amount: '' };
+    newProperties.push(temp);
+    setRoyaltyAddress(newProperties);
+  };
+
+  const propertyChangesAddress = (index, val) => {
+    const prevProperties = [...royaltyAddress];
+    prevProperties[index].address = val;
+    setRoyaltyAddress(prevProperties);
+  };
+
+  const propertyChangesAmount = (index, val) => {
+    const prevProperties = [...royaltyAddress];
+    prevProperties[index].amount = val;
+    setRoyaltyAddress(prevProperties);
   };
 
   const propertyChangesName = (index, val) => {
@@ -582,13 +609,15 @@ const MintSingleNft = ({ onClick }) => {
                     />
                   </div>
                   <img
-                    src={delateIcon}
+                    src={deleteIcon}
                     alt="Delete"
+                    className="delete-img"
                     onClick={() => removeProperty(i)}
                     aria-hidden="true"
                   />
                   <Button className="light-border-button" onClick={() => removeProperty(i)}>
                     Remove
+                    <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
                   </Button>
                 </div>
               )
@@ -613,7 +642,7 @@ const MintSingleNft = ({ onClick }) => {
                 onMouseLeave={() => setHideRoyalitiesInfo(false)}
                 onBlur={() => setHideRoyalitiesInfo(false)}
               >
-                Royalties <img src={infoIcon} alt="Info Icon" />
+                Royalty splits <img src={infoIcon} alt="Info Icon" />
               </h4>
               {hideRoyalitiesInfo && (
                 <div className="royalities-info-text">
@@ -632,23 +661,48 @@ const MintSingleNft = ({ onClick }) => {
                 <span className="slider round" />
               </label>
             </div>
-            {royalities && (
-              <div className="percent__amount">
-                <div className="inp__container">
-                  <Input
-                    type="text"
-                    label="Percent amount"
-                    inputMode="numeric"
-                    pattern="[0-9]"
-                    placeholder="Enter percent amount"
-                    value={percentAmount}
-                    onChange={(e) => handleInputChange(e.target.value)}
+            {royalities &&
+              royaltyAddress.map((elm, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={i} className="royalty properties">
+                  <div className="property-address">
+                    <h5>Wallet address</h5>
+                    <Input
+                      className="inp"
+                      placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                      value={elm.address}
+                      onChange={(e) => propertyChangesAddress(i, e.target.value)}
+                    />
+                  </div>
+                  <div className="property-amount">
+                    <h5>Percent amount</h5>
+                    <Input
+                      className="inp"
+                      type="number"
+                      placeholder="5%"
+                      value={elm.amount}
+                      onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                    />
+                  </div>
+                  <img
+                    src={deleteIcon}
+                    alt="Delete"
+                    className="delete-img"
+                    onClick={() => removeRoyaltyAddress(i)}
+                    aria-hidden="true"
                   />
-                  <span>%</span>
+                  <Button className="light-border-button" onClick={() => removeRoyaltyAddress(i)}>
+                    Remove
+                    <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
+                  </Button>
                 </div>
-                <span className="suggested">Suggested: 10%, 20%, 30%</span>
-              </div>
-            )}
+              ))}
+            <div className="property-add" onClick={() => addRoyaltyAddress()} aria-hidden="true">
+              <h5>
+                <img src={addIcon} alt="Add" />
+                Add the address
+              </h5>
+            </div>
           </div>
           {/* )} */}
         </div>
