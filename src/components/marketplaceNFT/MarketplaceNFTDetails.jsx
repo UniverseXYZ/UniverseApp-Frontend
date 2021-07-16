@@ -30,7 +30,6 @@ import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import bordergradient from '../../assets/images/border-gradient.svg';
 import closeIcon from '../../assets/images/marketplace/close.svg';
-import ChangeListingPricePopup from '../popups/ChangeListingPricePopup';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
@@ -559,7 +558,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   </button>
                 }
               >
-                {(close) => <ChangeListingPricePopup close={close} />}
+                {(close) => <NFTPlaceBid close={close} />}
               </Popup>
               <Popup
                 trigger={
