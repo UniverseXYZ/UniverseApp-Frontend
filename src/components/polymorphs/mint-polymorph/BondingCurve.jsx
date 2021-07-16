@@ -221,12 +221,20 @@ const BondingCurve = (props) => {
         </div>
       </div>
       {!!mobile && !light && (
-        <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+        <Button
+          className="light-button dark"
+          onClick={() => mintPolymorphs(quantity)}
+          disabled={value >= max}
+        >
           Mint now
         </Button>
       )}
       {!!mobile && light && (
-        <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
+        <Button
+          className="light-button light"
+          onClick={() => mintPolymorphs(quantity)}
+          disabled={value >= max}
+        >
           Mint now
         </Button>
       )}
