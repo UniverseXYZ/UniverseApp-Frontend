@@ -12,9 +12,10 @@ import sizeDownIcon from '../../assets/images/size-down.svg';
 import sizeUpIcon from '../../assets/images/size-up.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
-import delateIcon from '../../assets/images/inactive.svg';
+import deleteIcon from '../../assets/images/inactive.svg';
 import addIcon from '../../assets/images/Add.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import delIcon from '../../assets/images/del-icon.svg';
 import arrow from '../../assets/images/arrow.svg';
 
 const CreateNftCol = (props) => {
@@ -50,6 +51,7 @@ const CreateNftCol = (props) => {
   const [percentAmount, setPercentAmount] = useState('');
   const inputFile = useRef(null);
 
+  const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
 
   const handleInputChange = (val) => {
@@ -63,6 +65,31 @@ const CreateNftCol = (props) => {
     const temp = [...properties];
     temp.splice(index, 1);
     setProperties(temp);
+  };
+
+  const removeRoyaltyAddress = (index) => {
+    const temp = [...properties];
+    temp.splice(index, 1);
+    setRoyaltyAddress(temp);
+  };
+
+  const addRoyaltyAddress = () => {
+    const newProperties = [...properties];
+    const temp = { address: '', amount: '' };
+    newProperties.push(temp);
+    setRoyaltyAddress(newProperties);
+  };
+
+  const propertyChangesAddress = (index, val) => {
+    const prevProperties = [...royaltyAddress];
+    prevProperties[index].address = val;
+    setRoyaltyAddress(prevProperties);
+  };
+
+  const propertyChangesAmount = (index, val) => {
+    const prevProperties = [...royaltyAddress];
+    prevProperties[index].amount = val;
+    setRoyaltyAddress(prevProperties);
   };
 
   const addProperty = () => {
@@ -454,18 +481,19 @@ const CreateNftCol = (props) => {
                     <Input
                       className="inp"
                       placeholder="Enter value"
-                      // value={elm.value}
-                      // onChange={(e) => propertyChangesValue(i, e.target.value)}
+                      value={elm.value}
+                      onChange={(e) => propertyChangesValue(i, e.target.value)}
                     />
                   </div>
                   <img
-                    src={delateIcon}
+                    src={deleteIcon}
                     alt="Delete"
                     onClick={() => removeProperty(i)}
                     aria-hidden="true"
                   />
                   <Button className="light-border-button" onClick={() => removeProperty(i)}>
                     Remove
+                    <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
                   </Button>
                 </div>
               ))}
@@ -484,7 +512,7 @@ const CreateNftCol = (props) => {
                   onMouseLeave={() => setHideRoyalitiesInfo(false)}
                   onBlur={() => setHideRoyalitiesInfo(false)}
                 >
-                  Royalties <img src={infoIcon} alt="Info Icon" />
+                  Royalty splits <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideRoyalitiesInfo && (
                   <div className="royalities-info-text">
@@ -503,25 +531,48 @@ const CreateNftCol = (props) => {
                   <span className="slider round" />
                 </label>
               </div>
-              {royalities && (
-                <Animated animationIn="fadeIn">
-                  <div className="percent__amount">
-                    <div className="inp__container">
+              {royalities &&
+                royaltyAddress.map((elm, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <div key={i} className="royalty properties">
+                    <div className="property-address">
+                      <h5>Wallet address</h5>
                       <Input
-                        type="text"
-                        label="Percent amount"
-                        inputMode="numeric"
-                        pattern="[0-9]"
-                        placeholder="Enter percent amount"
-                        value={percentAmount}
-                        onChange={(e) => handleInputChange(e.target.value)}
+                        className="inp"
+                        placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                        value={elm.address}
+                        onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
-                      <span>%</span>
                     </div>
-                    <span className="suggested">Suggested: 10%, 20%, 30%</span>
+                    <div className="property-amount">
+                      <h5>Percent amount</h5>
+                      <Input
+                        className="inp"
+                        type="number"
+                        placeholder="5%"
+                        value={elm.amount}
+                        onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                      />
+                    </div>
+                    <img
+                      src={deleteIcon}
+                      alt="Delete"
+                      className="delete-img"
+                      onClick={() => removeRoyaltyAddress(i)}
+                      aria-hidden="true"
+                    />
+                    <Button className="light-border-button" onClick={() => removeRoyaltyAddress(i)}>
+                      Remove
+                      <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
+                    </Button>
                   </div>
-                </Animated>
-              )}
+                ))}
+              <div className="property-add" onClick={() => addRoyaltyAddress()} aria-hidden="true">
+                <h5>
+                  <img src={addIcon} alt="Add" />
+                  Add the address
+                </h5>
+              </div>
             </div>
             <div className="nft-coll-buttons">
               {!collectionNFTsID ? (
