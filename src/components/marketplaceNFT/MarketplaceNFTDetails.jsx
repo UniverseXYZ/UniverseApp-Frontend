@@ -110,10 +110,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   useEffect(() => {
     function canPlayEventHandler() {
-      const audioCurrentTime = mediaRef.current.duration;
-      const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
-      const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
-      setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+      if (mediaRef && mediaRef.current) {
+        const audioCurrentTime = mediaRef.current.duration;
+        const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
+        const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
+        setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+      }
     }
     if (mediaRef && mediaRef.current) {
       mediaRef.current.addEventListener('canplay', canPlayEventHandler);
@@ -137,7 +139,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   useEffect(() => {
     function onKeyboardDown(event) {
-      if (!document.getElementById('popup-root').hasChildNodes() && mediaRef && mediaRef.current) {
+      if (
+        document.getElementById('popup-root') &&
+        !document.getElementById('popup-root').hasChildNodes() &&
+        mediaRef &&
+        mediaRef.current
+      ) {
         if (event.keyCode === 32) {
           event.preventDefault();
           setIsPlaying(!isPlaying);
@@ -531,7 +538,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             {selectedTabIndex === 4 && <TradingHistory />}
           </div>
           <div className="theunveiling">
-            <img src={bordergradient} alt="border" />
+            <img className="border--gradient" src={bordergradient} alt="border" />
             <div className="unveiling--box">
               <img src={unveiling} alt="avatar" />
               <div className="unveiling--info">
