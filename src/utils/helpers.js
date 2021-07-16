@@ -9,12 +9,12 @@ export const handleClickOutside = (event, className, ref, cb) => {
 export const handleScroll = (darkMode) => {
   if (window.scrollY > 0) {
     if (document.querySelector('header')) {
-      document.querySelector('header').style.position = 'fixed';
+      // document.querySelector('header').style.position = 'fixed';
       document.querySelector('header').classList.remove('dark');
     }
   } else if (window.scrollY <= 0) {
     if (document.querySelector('header')) {
-      document.querySelector('header').style.position = 'relative';
+      // document.querySelector('header').style.position = 'relative';
       if (darkMode) {
         document.querySelector('header').classList.add('dark');
       } else {
