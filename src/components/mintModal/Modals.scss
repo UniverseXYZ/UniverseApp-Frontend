@@ -1128,7 +1128,7 @@
             display: grid;
           }
         }
-
+        
         .property-add {
           cursor: pointer;
           img {
@@ -1143,6 +1143,129 @@
           }
         }
       }
+      .properties {
+        display: flex;
+        width: 100%;
+        padding: 18px 18px 18px 24px;
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+  
+        h5 {
+          font-family: $spaceGroteskFont;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 22px;
+        }
+        .intup-l {
+          width: 100%;
+        }
+        input {
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          line-height: 20px;
+          &.inp {
+            width: 100%;
+          }
+        }
+        ::placeholder {
+          font-family: $spaceGroteskFont;
+          color: rgba(0, 0, 0, 0.2);
+        }
+  
+        .property-name {
+          width: 44.5%;
+          padding-right: 12px;
+  
+          @include sm {
+            width: 100%;
+            padding-right: 0;
+            padding-bottom: 12px;
+          }
+        }
+  
+        .property-value {
+          width: 44.5%;
+          padding-right: 12px;
+  
+          @include sm {
+            width: 100%;
+            padding-right: 0;
+            padding-bottom: 12px;
+          }
+        }
+        .property-address {
+          width: 80%;
+          padding-right: 12px;
+  
+          @include sm {
+            width: 100%;
+            padding-right: 0;
+            padding-bottom: 12px;
+          }
+        }
+        .property-amount {
+          width: 20%;
+          padding-right: 12px;
+          
+          h5{
+            @include lg {
+              width: 120px;
+            }
+          }
+          @include sm {
+            width: 100%;
+            padding-right: 0;
+            padding-bottom: 12px;
+          }
+        }
+  
+         .delete-img {
+          margin-top: 23px;
+          width: 50px;
+          height: 50px;
+          border-radius: 12px;
+          cursor: pointer;
+  
+          @include sm {
+            display: none;
+          }
+        }
+        img:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+  
+        button {
+          display: none;
+  
+          @include sm {
+            display: flex;
+          }
+          .del-icon{
+            margin-left: 14px;
+          }
+        }
+  
+        @include sm {
+          display: grid;
+        }
+      }
+  
+      .property-add {
+        cursor: pointer;
+        img {
+          padding-right: 10px;
+        }
+        h5 {
+          font-family: $spaceGroteskFont;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: $black;
+        }
+      }
       .royalities {
         margin-top: 40px;
         .title {
@@ -1151,6 +1274,7 @@
           margin-bottom: 10px;
           width: fit-content;
           position: relative;
+          align-items:flex-start;
           h4 {
             font-family: $sharpGroteskSemiBoldFont;
             font-weight: 600;
@@ -1782,8 +1906,33 @@
           padding-bottom: 12px;
         }
       }
+      .property-address {
+        width: 80%;
+        padding-right: 12px;
 
-      img {
+        @include sm {
+          width: 100%;
+          padding-right: 0;
+          padding-bottom: 12px;
+        }
+      }
+      .property-amount {
+        width: 20%;
+        padding-right: 12px;
+        
+        h5{
+          @include lg {
+            width: 120px;
+          }
+        }
+        @include sm {
+          width: 100%;
+          padding-right: 0;
+          padding-bottom: 12px;
+        }
+      }
+
+       .delete-img {
         margin-top: 23px;
         width: 50px;
         height: 50px;
@@ -1802,7 +1951,10 @@
         display: none;
 
         @include sm {
-          display: grid;
+          display: flex;
+        }
+        .del-icon{
+          margin-left: 14px;
         }
       }
 
@@ -1832,6 +1984,7 @@
         margin-bottom: 10px;
         width: fit-content;
         position: relative;
+        align-items:flex-start;
         h4 {
           font-family: $sharpGroteskSemiBoldFont;
           font-weight: 600;
