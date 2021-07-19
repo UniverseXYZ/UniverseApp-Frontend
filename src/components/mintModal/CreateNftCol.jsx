@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
+import EthereumAddress from 'ethereum-address';
 import { defaultColors } from '../../utils/helpers';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
@@ -50,6 +51,7 @@ const CreateNftCol = (props) => {
   const [royalities, setRoyalities] = useState(true);
   const [percentAmount, setPercentAmount] = useState('');
   const inputFile = useRef(null);
+  const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
 
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
@@ -192,7 +194,7 @@ const CreateNftCol = (props) => {
 
   useEffect(() => {
     if (clicked) {
-      if (!errors.name && !errors.edition && !errors.previewImage) {
+      if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         const generatedEditions = [];
 
         for (let i = 0; i < editions; i += 1) {
@@ -289,6 +291,17 @@ const CreateNftCol = (props) => {
       }
     }
   }, [errors]);
+
+  useEffect(() => {
+    const notValidAddress = royaltyAddress.find(
+      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+    );
+    if (notValidAddress) {
+      setRoyaltyValidAddress(false);
+    } else {
+      setRoyaltyValidAddress(true);
+    }
+  }, [propertyChangesAddress]);
 
   return (
     <div className="mintNftCollection-div">
@@ -574,6 +587,11 @@ const CreateNftCol = (props) => {
                 </h5>
               </div>
             </div>
+            {!errors.name && !errors.edition && !errors.previewImage && !royaltyValidAddress && (
+              <div className="single__final__error">
+                <p className="error-message">Something went wrong. Wallet address is not valid.</p>
+              </div>
+            )}
             <div className="nft-coll-buttons">
               {!collectionNFTsID ? (
                 <>
