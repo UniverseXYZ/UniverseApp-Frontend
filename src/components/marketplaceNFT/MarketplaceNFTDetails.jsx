@@ -27,11 +27,13 @@ import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import closeIcon from '../../assets/images/marketplace/close.svg';
 import BuyNFTSection from '../BuyNFTSection/BuyNFTSection';
+import NFTMakeOffer from '../popups/NFTMakeOffer';
+import NFTs from '../marketplaceTabComponents/NFTs';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
   const [selectedNFT, setSelectedNFT] = useState(onNFT);
-  const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History'];
+  const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History', 'NFTs'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
   const ref = useRef(null);
@@ -539,6 +541,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             {selectedTabIndex === 2 && <Bids />}
             {selectedTabIndex === 3 && <Offers />}
             {selectedTabIndex === 4 && <TradingHistory />}
+            {selectedTabIndex === 5 && <NFTs />}
           </div>
           <BuyNFTSection
             highestBid={highestBid}
