@@ -16,6 +16,7 @@ import ReportPopup from '../popups/ReportPopup.jsx';
 import LikesPopup from '../popups/LikesPopup.jsx';
 import Offers from '../marketplaceTabComponents/Offers.jsx';
 import BuyNFTSection from '../BuyNFTSection/BuyNFTSection.jsx';
+import NFTs from '../marketplaceTabComponents/NFTs.jsx';
 import pauseIcon from '../../assets/images/pause.svg';
 import playIcon from '../../assets/images/play.svg';
 import soundOnIcon from '../../assets/images/sound-on.svg';
@@ -36,7 +37,7 @@ import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg'
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
   const [selectedNFT, setSelectedNFT] = useState(onNFT);
-  const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History'];
+  const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History', 'NFTs'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
   const ref = useRef(null);
@@ -840,6 +841,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             {selectedTabIndex === 2 && <Bids />}
             {selectedTabIndex === 3 && <Offers />}
             {selectedTabIndex === 4 && <TradingHistory />}
+            {selectedTabIndex === 5 && <NFTs />}
           </div>
           <BuyNFTSection
             highestBid={highestBid}
