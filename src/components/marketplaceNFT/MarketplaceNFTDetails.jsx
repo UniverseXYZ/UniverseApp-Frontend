@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 import Slider from 'react-slick';
+import Draggable from 'react-draggable';
 import Properties from '../marketplaceTabComponents/Properties.jsx';
 import Owners from '../marketplaceTabComponents/Owners.jsx';
 import Bids from '../marketplaceTabComponents/Bids.jsx';
@@ -37,7 +38,10 @@ import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg'
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
   const [selectedNFT, setSelectedNFT] = useState(onNFT);
-  const tabs = ['Properties', 'Owners', 'Bids', 'Offers', 'History', 'NFTs'];
+  const tabs =
+    selectedNFT.type !== 'bundles'
+      ? ['Properties', 'Owners', 'Bids', 'Offers', 'History']
+      : ['NFTs', 'Bids', 'Offers', 'History'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
   const ref = useRef(null);
@@ -52,13 +56,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [miniPlayer, setMiniPlayer] = useState(false);
   const [duration, setDuration] = useState('--:--');
   const [progressWidth, setProgressWidth] = useState(0);
-  const [selectedNFTIndex, setSelectedNFTIndex] = useState(0);
-  // const mediaRef =
-  //   selectedNFT.media.type === 'video/mp4'
-  //     ? useRef()
-  //     : selectedNFT.media.type === 'audio/mpeg'
-  //     ? useRef(new Audio(selectedNFT.media.url))
-  //     : null;
+  const [selectedNFTIndex, setSelectedNFTIndex] = useState(
+    selectedNFT.type === 'bundles' ? 0 : null
+  );
   const mediaRef =
     selectedNFT.type !== 'bundles'
       ? selectedNFT.media.type === 'video/mp4'
@@ -69,21 +69,52 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       : selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
       ? useRef(new Audio(selectedNFT.allItems[selectedNFTIndex].url))
       : useRef(null);
-  const [sliderSettings, setSliderSettings] = useState({
+  const sliderSettings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
-  });
+  };
   const highestBid = {
     userAvatar: unveiling,
     userName: 'Asd',
     bid: 0.5,
   };
 
+  const canPlayEventHandler = () => {
+    if (mediaRef && mediaRef.current) {
+      const audioCurrentTime = mediaRef.current.duration;
+      const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
+      const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
+      setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
+    }
+  };
+
+  const startTimer = () => {
+    if (mediaRef && mediaRef.current) {
+      if (mediaRef.current.currentTime === mediaRef.current.duration) {
+        setProgressWidth(0);
+        setTrackProgress('00:00');
+        setIsPlaying(false);
+        return;
+      }
+      const audioCurrentTimeProgress = mediaRef.current.currentTime;
+      const minutesProgress = `0${Math.floor(audioCurrentTimeProgress / 60)}`;
+      const secondsProgress = `0${Math.floor(audioCurrentTimeProgress - minutesProgress * 60)}`;
+      const durationProgress = `${minutesProgress.substr(-2)}:${secondsProgress.substr(-2)}`;
+      const width = (parseInt(audioCurrentTimeProgress, 10) * 100) / mediaRef.current.duration;
+      if (durationProgress === duration) {
+        setProgressWidth(100);
+      } else {
+        setProgressWidth(parseInt(width, 10));
+      }
+      setTrackProgress(durationProgress);
+    }
+  };
+
   useEffect(() => {
-    if (mediaRef) {
+    if (mediaRef && selectedNFTIndex) {
       const video = document.querySelector('video');
       if (selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' && video) {
         video.setAttribute('src', selectedNFT.allItems[selectedNFTIndex].url);
@@ -95,16 +126,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           ? video
           : null;
 
-      function canPlayEventHandler() {
-        if (mediaRef && mediaRef.current) {
-          const audioCurrentTime = mediaRef.current.duration;
-          const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
-          const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
-          setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
-        }
-      }
       if (mediaRef && mediaRef.current) {
         mediaRef.current.addEventListener('canplay', canPlayEventHandler);
+        mediaRef.current.addEventListener('timeupdate', startTimer);
       }
     }
   }, [selectedNFTIndex]);
@@ -128,27 +152,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   });
 
   useEffect(() => {
-    function startTimer() {
-      if (mediaRef && mediaRef.current) {
-        if (mediaRef.current.currentTime === mediaRef.current.duration) {
-          setProgressWidth(0);
-          setTrackProgress('00:00');
-          setIsPlaying(false);
-          return;
-        }
-        const audioCurrentTimeProgress = mediaRef.current.currentTime;
-        const minutesProgress = `0${Math.floor(audioCurrentTimeProgress / 60)}`;
-        const secondsProgress = `0${Math.floor(audioCurrentTimeProgress - minutesProgress * 60)}`;
-        const durationProgress = `${minutesProgress.substr(-2)}:${secondsProgress.substr(-2)}`;
-        const width = (parseInt(audioCurrentTimeProgress, 10) * 100) / mediaRef.current.duration;
-        if (durationProgress === duration) {
-          setProgressWidth(100);
-        } else {
-          setProgressWidth(parseInt(width, 10));
-        }
-        setTrackProgress(durationProgress);
-      }
-    }
     if (mediaRef && mediaRef.current) {
       mediaRef.current.addEventListener('timeupdate', startTimer);
     }
@@ -160,14 +163,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   }, []);
 
   useEffect(() => {
-    function canPlayEventHandler() {
-      if (mediaRef && mediaRef.current) {
-        const audioCurrentTime = mediaRef.current.duration;
-        const minutes = `0${Math.floor(audioCurrentTime / 60)}`;
-        const seconds = `0${Math.floor(audioCurrentTime - minutes * 60)}`;
-        setDuration(`${minutes.substr(-2)}:${seconds.substr(-2)}`);
-      }
-    }
     if (mediaRef && mediaRef.current) {
       mediaRef.current.addEventListener('canplay', canPlayEventHandler);
     }
@@ -222,47 +217,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       }
     }
   }, [muted]);
-
-  useEffect(() => {
-    if (document.querySelector('.show--miniplayer')) {
-      function dragElement(elmnt) {
-        let pos1 = 0;
-        let pos2 = 0;
-        let pos3 = 0;
-        let pos4 = 0;
-
-        function closeDragElement() {
-          document.onmouseup = null;
-          document.onmousemove = null;
-        }
-
-        function elementDrag(e) {
-          // eslint-disable-next-line no-param-reassign
-          e = e || window.event;
-          e.preventDefault();
-          pos1 = pos3 - e.clientX;
-          pos2 = pos4 - e.clientY;
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          elmnt.style.top = `${elmnt.offsetTop - pos2}px`;
-          elmnt.style.left = `${elmnt.offsetLeft - pos1}px`;
-        }
-
-        function dragMouseDown(e) {
-          // eslint-disable-next-line no-param-reassign
-          e = e || window.event;
-          e.preventDefault();
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          document.onmouseup = closeDragElement;
-          document.onmousemove = elementDrag;
-        }
-
-        elmnt.onmousedown = dragMouseDown;
-      }
-      dragElement(document.querySelector('.show--miniplayer'));
-    }
-  });
 
   useEffect(
     () => () => {
@@ -542,40 +496,42 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     <img src={selectedNFT.allItems[selectedNFTIndex].url} alt={selectedNFT.name} />
                   )}
                 {selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' && (
-                  <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
-                    <video ref={mediaRef}>
-                      <source src={selectedNFT.allItems[selectedNFTIndex].url} type="video/mp4" />
-                      <track kind="captions" />
-                      Your browser does not support the video tag.
-                    </video>
-                    {isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={pauseIcon}
-                        alt="Pause"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(false)}
-                      />
-                    )}
-                    {!isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={playIcon}
-                        alt="Play"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(true)}
-                      />
-                    )}
-                    {miniPlayer && (
-                      <img
-                        className="close--miniplayer"
-                        src={closeIcon}
-                        alt="Close miniplayer"
-                        aria-hidden="true"
-                        onClick={() => setMiniPlayer(false)}
-                      />
-                    )}
-                  </div>
+                  <Draggable disabled={!miniPlayer}>
+                    <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
+                      <video ref={mediaRef}>
+                        <source src={selectedNFT.allItems[selectedNFTIndex].url} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
+                      {isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={pauseIcon}
+                          alt="Pause"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(false)}
+                        />
+                      )}
+                      {!isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={playIcon}
+                          alt="Play"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(true)}
+                        />
+                      )}
+                      {miniPlayer && (
+                        <img
+                          className="close--miniplayer"
+                          src={closeIcon}
+                          alt="Close miniplayer"
+                          aria-hidden="true"
+                          onClick={() => setMiniPlayer(false)}
+                        />
+                      )}
+                    </div>
+                  </Draggable>
                 )}
                 {selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg' && (
                   <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
@@ -609,10 +565,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     )}
                   </div>
                 )}
-                <div className="nft--count">
-                  <img src={bundlesIcon} alt="Bundles" />
-                  <span>{`${selectedNFTIndex + 1} of ${selectedNFT.allItems.length}`}</span>
-                </div>
+                {!fullScreen && (
+                  <div className="nft--count">
+                    <img src={bundlesIcon} alt="Bundles" />
+                    <span>{`${selectedNFTIndex + 1} of ${selectedNFT.allItems.length}`}</span>
+                  </div>
+                )}
                 {(selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' ||
                   selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg') &&
                   miniPlayer && <div className="empty--black--video" />}
@@ -715,6 +673,29 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   </div>
                 ))}
               </Slider>
+              <div className="slider--with--horizontall--scrolling">
+                {selectedNFT.allItems.map((nft, index) => (
+                  <div
+                    className={`each--nft ${selectedNFTIndex === index ? 'selected' : ''}`}
+                    aria-hidden="true"
+                    onClick={() => setSelectedNFTIndex(index)}
+                  >
+                    {nft.type !== 'audio/mpeg' && nft.type !== 'video/mp4' && (
+                      <img className="nft--media" src={nft.url} alt="NFT" />
+                    )}
+                    {nft.type === 'video/mp4' && (
+                      <video className="nft--media">
+                        <source src={nft.url} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                    {nft.type === 'audio/mpeg' && (
+                      <img className="nft--media" src={mp3Icon} alt="NFT" />
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -836,12 +817,22 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             </ul>
           </div>
           <div>
-            {selectedTabIndex === 0 && <Properties />}
-            {selectedTabIndex === 1 && <Owners />}
-            {selectedTabIndex === 2 && <Bids />}
-            {selectedTabIndex === 3 && <Offers />}
-            {selectedTabIndex === 4 && <TradingHistory />}
-            {selectedTabIndex === 5 && <NFTs />}
+            {selectedNFT.type !== 'bundles' ? (
+              <>
+                {selectedTabIndex === 0 && <Properties />}
+                {selectedTabIndex === 1 && <Owners />}
+                {selectedTabIndex === 2 && <Bids />}
+                {selectedTabIndex === 3 && <Offers />}
+                {selectedTabIndex === 4 && <TradingHistory />}
+              </>
+            ) : (
+              <>
+                {selectedTabIndex === 0 && <NFTs />}
+                {selectedTabIndex === 1 && <Bids />}
+                {selectedTabIndex === 2 && <Offers />}
+                {selectedTabIndex === 3 && <TradingHistory />}
+              </>
+            )}
           </div>
           <BuyNFTSection
             highestBid={highestBid}

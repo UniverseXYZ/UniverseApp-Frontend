@@ -20,8 +20,8 @@
       border: none;
       background: $black;
       .image--wrapper {
-        max-width: 800px;
-        max-height: 100%;
+        max-width: 800px!important;
+        max-height: 100%!important;
         height: 100%;
         img {
           border-radius: 0px;
@@ -32,7 +32,7 @@
         }
       }
       .custom--player {
-        max-width: 100%;
+        max-width: 100%!important;
       }
     }
     .image--wrapper {
@@ -85,6 +85,10 @@
           height: 200px;
           filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
           cursor: move;
+          @include sm {
+            width: 150px;
+            height: 100px;
+          }
           &:hover {
             img.play--pause,
             img.close--miniplayer {
@@ -108,6 +112,10 @@
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
+            @include sm {
+              width: 40px;
+              height: 40px;
+            }
           }
           img.close--miniplayer {
             visibility: hidden;
@@ -120,6 +128,12 @@
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
             padding: 5px;
+            @include sm {
+              width: 20px;
+              height: 20px;
+              top: 5px;
+              right: 5px;
+            }
           }
         }
       }
@@ -209,6 +223,26 @@
     .bundles--slider {
       max-width: 472px;
       margin: 20px auto;
+      .slider--with--horizontall--scrolling {
+        overflow-x: auto;
+        display: none;
+        .each--nft {
+          margin-right: 10px;
+          margin-left: 0px;
+          &:last-child {
+            margin-right: 0px;
+          }
+        }
+        @include md {
+          display: flex;
+        }
+      }
+      .slick-slider {
+        display: block;
+        @include md {
+          display: none;
+        }
+      }
       button.slick-arrow {
         background: $white;
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -234,11 +268,6 @@
           right: -18px;
           z-index: 1;
         }
-
-        // &.slick-disabled {
-        //   background: $white;
-        //   border: 1px solid rgba(0, 0, 0, 0.1);
-        // }
       }
       .each--nft {
         box-sizing: border-box;
@@ -255,8 +284,10 @@
         }
         .nft--media {
           border-radius: 12px;
-          width: 64px;
-          height: 64px;
+          min-width: 64px;
+          min-height: 64px;
+          max-width: 64px;
+          max-height: 64px;
           opacity: 0.2;
           transition: opacity .3s ease-in-out;
           &:hover {
@@ -781,6 +812,9 @@
   }
   @include lg {
     grid-template-columns: 1fr;
+  }
+  @include md {
+    display: block;
   }
 }
 .collection {
