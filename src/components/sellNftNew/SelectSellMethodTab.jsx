@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button';
@@ -10,7 +10,6 @@ import './styles/SelectSellMethodTab.scss';
 
 const SelectSellMethodTab = (props) => {
   const { onSelect, data } = props;
-  const [activeMethod, setActiveMethod] = useState(0);
   const history = useHistory();
   return (
     <div className="select--sell--method--tab">
@@ -26,7 +25,7 @@ const SelectSellMethodTab = (props) => {
             <Button
               className="light-button select--method--btn"
               onClick={() => {
-                onSelect({ ...data, selectedMethod: 'dutch' });
+                onSelect({ ...data, selectedMethod: 'dutch', settings: null });
                 history.push('/nft-marketplace/settings');
               }}
             >
@@ -46,7 +45,7 @@ const SelectSellMethodTab = (props) => {
             <Button
               className="light-button select--method--btn"
               onClick={() => {
-                onSelect({ ...data, selectedMethod: 'endlish' });
+                onSelect({ ...data, selectedMethod: 'english', settings: null });
                 history.push('/nft-marketplace/settings');
               }}
             >
@@ -66,7 +65,7 @@ const SelectSellMethodTab = (props) => {
             <Button
               className="light-button select--method--btn"
               onClick={() => {
-                onSelect({ ...data, selectedMethod: 'bundle' });
+                onSelect({ ...data, selectedMethod: 'bundle', settings: null });
                 history.push('/nft-marketplace/settings');
               }}
             >

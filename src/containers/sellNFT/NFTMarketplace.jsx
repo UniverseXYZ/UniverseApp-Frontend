@@ -10,6 +10,8 @@ import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import SettingIconActive from '../../assets/images/settings-solid.svg';
 import SettingIcon from '../../assets/images/setting-solid-disactive.svg';
 import AppContext from '../../ContextAPI';
+import DutchAuctionSettingsForm from '../../components/sellNftNew/DutchAuctionSettingsForm';
+import EnglishAuctionSettingsForm from '../../components/sellNftNew/EnglishAuctionSettingsForm';
 import './NFTMarketplace.scss';
 
 const verificationSteps = (data) => {
@@ -20,6 +22,12 @@ const verificationSteps = (data) => {
     }
   }
   return keys.length - 1;
+};
+
+const getContent = (type, data, setData) => {
+  if (type === 'dutch') return <DutchAuctionSettingsForm data={data} setData={setData} />;
+  if (type === 'english') return <EnglishAuctionSettingsForm data={data} setData={setData} />;
+  return <h1>other type</h1>;
 };
 
 const NFTMarketplace = () => {
@@ -41,7 +49,7 @@ const NFTMarketplace = () => {
       activeIcon: SettingIconActive,
       link: '/nft-marketplace/settings',
       index: 1,
-      content: <h1>finish</h1>,
+      content: getContent(stepsData.selectedMethod, stepsData, setStepsData),
       home: false,
     },
     {

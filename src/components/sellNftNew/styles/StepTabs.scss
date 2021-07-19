@@ -22,6 +22,9 @@
                 align-items: center;
                 :last-child {
                     margin-right: 0 !important;
+                    @include sm {
+                        margin-right: auto !important;
+                    }
                 }
                 #tabsdiv {
                     margin-right: 3px;

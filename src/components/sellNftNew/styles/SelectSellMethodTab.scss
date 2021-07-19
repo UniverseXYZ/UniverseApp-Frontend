@@ -10,6 +10,10 @@
         line-height: 130%;
         color: $black;
         margin-bottom: 60px;
+        @include sm {
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
     }
     .select--methods--section {
         width: 100%;
@@ -17,6 +21,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @include sm {
+            flex-direction: column;
+        }
         .method--item {
             width: calc(33.3% - 20px);
             padding: 1px;
@@ -30,6 +37,10 @@
             // cursor: pointer;
             user-select: none;
             cursor: pointer;
+            @include sm {
+                width: 100%;
+                margin-bottom: 20px;
+            }
             .child {
                 width: 100%;
                 min-height: 310px;
@@ -61,6 +72,9 @@
                     line-height: 160%;
                     color: rgba(0, 0, 0, 0.4);
                     margin-bottom: 20px;
+                    @include md {
+                        font-size: 12px;
+                    }
                 }
                 .select--method--btn {
                     height: 42px;
@@ -95,6 +109,9 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            @include sm {
+                min-height: 220px;
+            }
             .section--title {
                 font-family: $sharpGroteskSemiBoldFont;
                 font-style: normal;
@@ -104,6 +121,9 @@
                 text-align: center;
                 color: $black;
                 margin-bottom: 28px;
+                @include sm {
+                    font-size: 20px;
+                }
             }
             button {
                 display: flex;

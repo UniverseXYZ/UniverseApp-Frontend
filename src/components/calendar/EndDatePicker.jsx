@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import EndDateCalendar from './EndDateCalendar.jsx';
 import Input from '../input/Input';
@@ -6,7 +7,8 @@ import callendarIcon from '../../assets/images/calendar.svg';
 import './EndDatePicker.scss';
 import './Calendar.scss';
 
-const EndDatePicker = () => {
+const EndDatePicker = (props) => {
+  const { value, onChange, title } = props;
   const monthNames = [
     'Jan',
     'Feb',
@@ -22,7 +24,7 @@ const EndDatePicker = () => {
     'Dec',
   ];
   const d = new Date();
-  const [values, setValues] = useState({ endDate: '', startDate: '' });
+  const [values, setValues] = useState({ endDate: value, startDate: '' });
   const [showEndDate, setShowEndDate] = useState(false);
   const endDateRef = useRef(null);
   const [endDateTemp, setEndDateTemp] = useState({
@@ -72,17 +74,33 @@ const EndDatePicker = () => {
               ref={endDateRef}
               monthNames={monthNames}
               values={values}
-              setValues={setValues}
+              setValues={(e) => {
+                setValues(e);
+                onChange(e().endDate.toString());
+              }}
               endDateTemp={endDateTemp}
               setEndDateTemp={setEndDateTemp}
               setShowEndDate={setShowEndDate}
               onClose={close}
+              title={title}
             />
           )}
         </Popup>
       </div>
     </div>
   );
+};
+
+EndDatePicker.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  title: PropTypes.string,
+};
+
+EndDatePicker.defaultProps = {
+  value: '',
+  onChange: () => {},
+  title: 'End Date',
 };
 
 export default EndDatePicker;
