@@ -19,9 +19,9 @@
       max-height: 100%;
       border: none;
       background: $black;
-      > div {
-        max-width: 800px;
-        max-height: 100%;
+      .image--wrapper {
+        max-width: 800px!important;
+        max-height: 100%!important;
         height: 100%;
         img {
           border-radius: 0px;
@@ -32,10 +32,10 @@
         }
       }
       .custom--player {
-        max-width: 100%;
+        max-width: 100%!important;
       }
     }
-    > div {
+    .image--wrapper {
       position: relative;
       max-height: 600px;
       max-width: 600px;
@@ -43,6 +43,36 @@
       width: 100%;
       border-radius: 12px;
       margin: auto;
+      &.with--bundles {
+        max-height: 512px;
+        max-width: 512px;
+      }
+      .nft--count {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-sizing: border-box;
+        backdrop-filter: blur(4px);
+        border-radius: 8px;
+        padding: 7px 14px;
+        img {
+          width: 12px;
+          height: 12px;
+          margin-right: 6px;
+        }
+        span {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 140%;
+          color: $white;
+        }
+      }
       .media--container {
         height: 100%;
         width: 100%;
@@ -54,6 +84,11 @@
           width: 300px;
           height: 200px;
           filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
+          cursor: move;
+          @include sm {
+            width: 150px;
+            height: 100px;
+          }
           &:hover {
             img.play--pause,
             img.close--miniplayer {
@@ -77,6 +112,10 @@
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
+            @include sm {
+              width: 40px;
+              height: 40px;
+            }
           }
           img.close--miniplayer {
             visibility: hidden;
@@ -89,6 +128,12 @@
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
             padding: 5px;
+            @include sm {
+              width: 20px;
+              height: 20px;
+              top: 5px;
+              right: 5px;
+            }
           }
         }
       }
@@ -171,6 +216,82 @@
           &--filled {
             background: $white;
             height: 100%;
+          }
+        }
+      }
+    }
+    .bundles--slider {
+      max-width: 472px;
+      margin: 20px auto;
+      .slider--with--horizontall--scrolling {
+        overflow-x: auto;
+        display: none;
+        .each--nft {
+          margin-right: 10px;
+          margin-left: 0px;
+          &:last-child {
+            margin-right: 0px;
+          }
+        }
+        @include md {
+          display: flex;
+        }
+      }
+      .slick-slider {
+        display: block;
+        @include md {
+          display: none;
+        }
+      }
+      button.slick-arrow {
+        background: $white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        height: 42px;
+        width: 42px;
+        border-radius: 50%;
+        &:hover {
+          background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+        }
+
+        &::before {
+          display: none;
+        }
+
+        &.slick-prev {
+          position: absolute;
+          left: -18px;
+          z-index: 1;
+        }
+        &.slick-next {
+          position: absolute;
+          right: -18px;
+          z-index: 1;
+        }
+      }
+      .each--nft {
+        box-sizing: border-box;
+        border-radius: 12px;
+        margin: 0 10px;
+        cursor: pointer;
+        &.selected {
+          .nft--media {
+            opacity: 1;
+            background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+            border: 2px solid transparent !important;
+          }
+        }
+        .nft--media {
+          border-radius: 12px;
+          min-width: 64px;
+          min-height: 64px;
+          max-width: 64px;
+          max-height: 64px;
+          opacity: 0.2;
+          transition: opacity .3s ease-in-out;
+          &:hover {
+            opacity: 1;
           }
         }
       }
@@ -691,6 +812,9 @@
   }
   @include lg {
     grid-template-columns: 1fr;
+  }
+  @include md {
+    display: block;
   }
 }
 .collection {

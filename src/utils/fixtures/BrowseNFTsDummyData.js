@@ -49,6 +49,7 @@ import community8 from '../../assets/images/marketplace/communities/community8.p
 export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 1,
+    type: 'single',
     creator: {
       id: 1,
       name: 'Creator1',
@@ -79,6 +80,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 2,
+    type: 'single',
     creator: {
       id: 2,
       name: 'Creator2',
@@ -109,6 +111,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 3,
+    type: 'single',
     creator: {
       id: 3,
       name: 'Creator3',
@@ -139,6 +142,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 4,
+    type: 'bundles',
     creator: {
       id: 4,
       name: 'Creator4',
@@ -160,6 +164,36 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       url: nft4,
       type: 'image/png',
     },
+    allItems: [
+      {
+        url: nft4,
+        type: 'image/png',
+      },
+      {
+        url: nft7,
+        type: 'image/png',
+      },
+      {
+        url: nft3,
+        type: 'audio/mpeg',
+      },
+      {
+        url: nft9,
+        type: 'image/png',
+      },
+      {
+        url: nft10,
+        type: 'video/mp4',
+      },
+      {
+        url: nft11,
+        type: 'image/png',
+      },
+      {
+        url: nft12,
+        type: 'image/png',
+      },
+    ],
     name: 'NFT 4',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
@@ -169,6 +203,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 5,
+    type: 'single',
     creator: {
       id: 5,
       name: 'Creator5',
@@ -199,6 +234,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 6,
+    type: 'single',
     creator: {
       id: 6,
       name: 'Creator6',
@@ -229,6 +265,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 7,
+    type: 'single',
     creator: {
       id: 7,
       name: 'Creator7',
@@ -259,6 +296,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 8,
+    type: 'single',
     creator: {
       id: 8,
       name: 'Creator8',
@@ -289,6 +327,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 9,
+    type: 'single',
     creator: {
       id: 9,
       name: 'Creator9',
@@ -319,6 +358,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 10,
+    type: 'single',
     creator: {
       id: 10,
       name: 'Creator10',
@@ -349,6 +389,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 11,
+    type: 'single',
     creator: {
       id: 11,
       name: 'Creator11',
@@ -379,6 +420,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 12,
+    type: 'single',
     creator: {
       id: 12,
       name: 'Creator12',
@@ -409,6 +451,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 13,
+    type: 'single',
     creator: {
       id: 13,
       name: 'Creator13',
@@ -439,6 +482,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 14,
+    type: 'single',
     creator: {
       id: 14,
       name: 'Creator14',
@@ -469,6 +513,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 15,
+    type: 'single',
     creator: {
       id: 15,
       name: 'Creator15',
@@ -499,6 +544,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   },
   {
     id: 16,
+    type: 'single',
     creator: {
       id: 16,
       name: 'Creator16',

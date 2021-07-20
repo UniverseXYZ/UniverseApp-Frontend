@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
+import EthereumAddress from 'ethereum-address';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
@@ -53,6 +54,8 @@ const MintSingleNft = ({ onClick }) => {
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
+
+  const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState(null);
 
   const handleInputChange = (val) => {
@@ -282,7 +285,7 @@ const MintSingleNft = ({ onClick }) => {
       }
     }
     if (mintNowClick) {
-      if (!errors.name && !errors.edition && !errors.previewImage) {
+      if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         document.getElementById('loading-hidden-btn').click();
         setTimeout(() => {
           document.getElementById('popup-root').remove();
@@ -339,6 +342,17 @@ const MintSingleNft = ({ onClick }) => {
       }
     }
   }, [errors, saveForLateClick, savedNfts]);
+
+  useEffect(() => {
+    const notValidAddress = royaltyAddress.find(
+      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+    );
+    if (notValidAddress) {
+      setRoyaltyValidAddress(false);
+    } else {
+      setRoyaltyValidAddress(true);
+    }
+  }, [propertyChangesAddress]);
 
   return (
     <div className="mintNftCollection-div">
@@ -706,13 +720,22 @@ const MintSingleNft = ({ onClick }) => {
           </div>
           {/* )} */}
         </div>
-        {(errors.name || errors.edition || errors.previewImage) && (
+        {errors.name || errors.edition || errors.previewImage ? (
           <div className="single__final__error">
             <p className="error-message">
               Something went wrong. Please fix the errors in the fields above and try again. The
               buttons will be enabled after the information has been entered.
             </p>
           </div>
+        ) : (
+          !errors.name &&
+          !errors.edition &&
+          !errors.previewImage &&
+          !royaltyValidAddress && (
+            <div className="single__final__error">
+              <p className="error-message">Something went wrong. Wallet address is not valid.</p>
+            </div>
+          )
         )}
         <div className="single-nft-buttons">
           {!savedNFTsID ? (
