@@ -39,7 +39,7 @@ const SortingDropdowns = () => {
 
   return (
     <div className="nft--sorting">
-      <div
+      {/* <div
         className={`dropdown ${showFirstDropdown ? 'open' : ''}`}
         aria-hidden="true"
         onClick={() => setShowFirstDropdown(!showFirstDropdown)}
@@ -63,7 +63,7 @@ const SortingDropdowns = () => {
         ) : (
           <></>
         )}
-      </div>
+      </div> */}
       <div
         className={`dropdown ${showSecondDropdown ? 'open' : ''}`}
         aria-hidden="true"
