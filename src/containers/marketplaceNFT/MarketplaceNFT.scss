@@ -76,6 +76,12 @@
       .media--container {
         height: 100%;
         width: 100%;
+        &.show--controls {
+          img.play--pause,
+          img.close--miniplayer {
+            visibility: visible!important;
+          }
+        }
         &.show--miniplayer {
           position: fixed;
           z-index: 99999;
@@ -92,7 +98,7 @@
           &:hover {
             img.play--pause,
             img.close--miniplayer {
-              visibility: visible;
+              visibility: visible!important;
             }
           }
           video {
@@ -579,6 +585,8 @@
     }
     @include lg {
       padding-top: 0px;
+      max-height: unset;
+      overflow-y: unset;
     }
   }
   .theunveiling {

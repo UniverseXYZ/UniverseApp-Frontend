@@ -306,10 +306,10 @@ const MyNFTs = () => {
 
   return (
     <>
-      {renderPopups()}
       <div className="mynfts__page">
         {existsNFTs() ? renderIfNFTsExist() : renderIfNFTsNotExist()}
       </div>
+      {renderPopups()}
     </>
   );
 };

@@ -152,7 +152,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
 
   const tabs = [
     {
-      name: 'Scramble single trait',
+      name: 'Morph Trait',
       active: singleTraitTabSelected,
       handler: () => {
         setSingleTraitSelected(true);
@@ -252,7 +252,7 @@ const PolymorphScramblePopup = ({ onClose }) => {
                   onClick={onScramble}
                   disabled={!selectedTrait && singleTraitTabSelected}
                 >
-                  Scramble
+                  {singleTraitTabSelected ? 'Morph' : 'Scramble'}
                 </Button>
               </div>
 
