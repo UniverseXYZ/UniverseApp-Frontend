@@ -269,7 +269,8 @@
         width: 42px;
         border-radius: 50%;
         &:hover {
-          background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
           border: 1px solid transparent;
         }
 
@@ -297,7 +298,7 @@
           .nft--media {
             opacity: 1;
             background: linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #bceb00, #00eaea) border-box;
+              linear-gradient(to right, #bceb00, #00eaea) border-box;
             border: 2px solid transparent !important;
           }
         }
@@ -308,7 +309,7 @@
           max-width: 64px;
           max-height: 64px;
           opacity: 0.2;
-          transition: opacity .3s ease-in-out;
+          transition: opacity 0.3s ease-in-out;
           &:hover {
             opacity: 1;
           }
