@@ -18,23 +18,29 @@ const BrowseNFT = () => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [saleTypeButtons, setSaleTypeButtons] = useState([
     {
-      text: 'Buy Now',
+      text: 'Buy now',
+      description: 'Fixed price sale',
       selected: false,
     },
     {
       text: 'On Auction',
+      description: 'You can place bids',
       selected: false,
     },
     {
       text: 'New',
+      description: 'Recently added',
       selected: false,
     },
     {
       text: 'Has Offers',
+      description: 'High is demand',
       selected: false,
     },
   ]);
-  const [selectedColl, setSelectedColl] = useState([]);
+  const [savedCollections, setSavedCollections] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState([]);
+  const [savedCreators, setSavedCreators] = useState([]);
   const [selectedCreators, setSelectedCreators] = useState([]);
 
   useEffect(() => {
@@ -45,21 +51,25 @@ const BrowseNFT = () => {
     <div className="browse--nft--page">
       {/* <Submenu title="NFT Marketplace" subtitles={['Browse NFTs', 'Activity']} /> */}
       <div className="browse--nft--grid">
-        <div className="browse--nft--sidebar--filtration">
+        {/* <div className="browse--nft--sidebar--filtration" hidden>
           <SaleType saleTypeButtons={saleTypeButtons} setSaleTypeButtons={setSaleTypeButtons} />
           <Price setSelectedPrice={setSelectedPrice} />
-          <Collections selectedColl={selectedColl} setSelectedColl={setSelectedColl} />
+          <Collections selectedColl={savedCollections} setSelectedColl={setSavedCollections} />
           <Creators selectedCreators={selectedCreators} setSelectedCreators={setSelectedCreators} />
           <VerifiedOnly />
-        </div>
+        </div> */}
         <div className="browse--nft--content">
           <SelectedFiltersAndSorting
             saleTypeButtons={saleTypeButtons}
             setSaleTypeButtons={setSaleTypeButtons}
             selectedPrice={selectedPrice}
             setSelectedPrice={setSelectedPrice}
-            selectedColl={selectedColl}
-            setSelectedColl={setSelectedColl}
+            savedCollections={savedCollections}
+            setSavedCollections={setSavedCollections}
+            selectedCollections={selectedCollections}
+            setSelectedCollections={setSelectedCollections}
+            savedCreators={savedCreators}
+            setSavedCreators={setSavedCreators}
             selectedCreators={selectedCreators}
             setSelectedCreators={setSelectedCreators}
           />

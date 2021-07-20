@@ -618,6 +618,46 @@ export const PLACEHOLDER_MARKETPLACE_USERS = [
     following: true,
     galleries: [gallery13, gallery14, gallery15, gallery16],
   },
+  {
+    id: 5,
+    name: 'User 5',
+    avatar: user1,
+    description:
+      'Digital Sculptor & Art Director with more than fifteen years bringing 3D stuff to life.',
+    followers: 430,
+    following: false,
+    galleries: [gallery1, gallery2, gallery3, gallery4],
+  },
+  {
+    id: 6,
+    name: 'User 6',
+    avatar: user2,
+    description:
+      'Digital Sculptor & Art Director with more than fifteen years bringing 3D stuff to life.',
+    followers: 430,
+    following: true,
+    galleries: [gallery5, gallery6, gallery7, gallery8],
+  },
+  {
+    id: 7,
+    name: 'User 7',
+    avatar: user3,
+    description:
+      'Digital Sculptor & Art Director with more than fifteen years bringing 3D stuff to life.',
+    followers: 430,
+    following: false,
+    galleries: [gallery9, gallery10, gallery11, gallery12],
+  },
+  {
+    id: 8,
+    name: 'User 8',
+    avatar: user4,
+    description:
+      'Digital Sculptor & Art Director with more than fifteen years bringing 3D stuff to life.',
+    followers: 430,
+    following: true,
+    galleries: [gallery13, gallery14, gallery15, gallery16],
+  },
 ];
 
 export const PLACEHOLDER_MARKETPLACE_COLLECTIONS = [
