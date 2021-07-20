@@ -3059,6 +3059,7 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 32px 22px;
+      justify-items: center;
 
       .liked__user {
         img {
@@ -3077,7 +3078,22 @@
           color: $black;
         }
       }
+      @include xl {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @include lg {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      @include md {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @include sm {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
+  }
+  @include lg {
+    width: 90%;
   }
 }
 .report__popup {
