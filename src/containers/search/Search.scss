@@ -11,6 +11,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 0 20px;
         .search--field {
             display: grid;
             grid-template-columns: auto 1fr auto;
@@ -35,6 +36,9 @@
                 color: $black;
             }
         }
+        @include md {
+            height: 100px;
+        }
     }
     .container {
         margin-top: 0;
@@ -47,6 +51,9 @@
             text-align: center;
             color: $black;
             margin-bottom: 50px;
+            @include md {
+                display: none;
+            }
         } 
         .tabs__wrapper {
             position: relative;
@@ -54,13 +61,16 @@
             .search--results {
                 position: absolute;
                 right: 0;
-                top: 16px;
+                top: 15px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: normal;
                 font-size: 14px;
                 line-height: 160%;
                 color: $black;
+                @include lg {
+                    display: none;
+                }
             }
             .tab__left__arrow {
                 display: none;
@@ -71,11 +81,10 @@
                 justify-content: flex-end;
                 transform: rotate(180deg);
                 pointer-events: none;
-
+                height: 60%;
                 img {
                     pointer-events: all;
                 }
-
             }
             .tab__right__arrow {
                 display: none;
@@ -85,6 +94,7 @@
                 right: 0;
                 justify-content: flex-end;
                 pointer-events: none;
+                height: 60%;
                 img {
                     pointer-events: all;
                 }
@@ -120,12 +130,21 @@
                     }
                 }
             }
+            &.hide {
+                @include md {
+                    display: none;
+                }
+            }
+            @include md {
+                margin-bottom: 20px;
+            }
         }
         .no--search--result {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            margin: 120px 0px 170px;
             h3 {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
