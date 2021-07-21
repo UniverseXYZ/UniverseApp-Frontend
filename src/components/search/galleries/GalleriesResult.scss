@@ -7,7 +7,7 @@
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 30px;
         .gallery--box {
-            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             background: $white;
             border-radius: 12px;
             padding: 16px 16px 23px;
@@ -190,6 +190,12 @@
                     color: $black;
                 }
             }
+        }
+        @include lg {
+            grid-template-columns: 1fr 1fr;
+        }
+        @include sm {
+            grid-template-columns: 1fr;
         }
     }
 }
