@@ -12,11 +12,12 @@ const WelcomeHead = () => {
   const history = useHistory();
 
   const handleScroll = () => {
-    window.scrollTo(0, 1200);
+    const element = document.getElementById('welcome_sec').getBoundingClientRect();
+    window.scrollTo(0, element.height);
   };
 
   return (
-    <div className="welcome__section">
+    <div className="welcome__section" id="welcome_sec">
       <div className="scroll-part">
         <Button onClick={handleScroll}>
           <img src={vector} alt="vector" /> scroll
