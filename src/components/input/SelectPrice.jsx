@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
-import ethereumIcon from '../../assets/images/bid_icon.svg';
+import ethereumIcon from '../../assets/images/bid-icon.svg';
 import daiIcon from '../../assets/images/dai_icon.svg';
 import usdcIcon from '../../assets/images/usdc_icon.svg';
 import bondIcon from '../../assets/images/bond_icon.svg';

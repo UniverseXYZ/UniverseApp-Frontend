@@ -1,52 +1,77 @@
-import React, { useState } from 'react';
-import CollectionName from '../../components/sellNFT/CollectionName';
-import SellNFTContainer from '../../components/sellNFT/SellNFTContainer';
-import NFTMarketplaceTab from '../../components/tabs/NFTMarketplaceTab';
-import collectionImg from '../../assets/images/collection-img.png';
-import SetPrice from '../../components/sellNFT/SetPriceTabContent';
-import HighestBid from '../../components/sellNFT/HighestBidTabContent';
-import Bundle from '../../components/sellNFT/BundleTabContent';
-import Submenu from '../../components/submenu/Submenu';
-import SummaryBlock from '../../components/sellNFT/SummaryBlock';
+import React, { useState, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
+import SellNftSubHeader from '../../components/sellNftNew/SellNftSubHeader';
+import StepTabs from '../../components/sellNftNew/StepTabs';
+import SelectSellMethodTab from '../../components/sellNftNew/SelectSellMethodTab';
+import RewardIconActive from '../../assets/images/ion_layers.svg';
+import RewardIcon from '../../assets/images/ion_layers-disactive.svg';
+import ReviewIcon from '../../assets/images/eye-review.svg';
+import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
+import SettingIconActive from '../../assets/images/settings-solid.svg';
+import SettingIcon from '../../assets/images/setting-solid-disactive.svg';
+import AppContext from '../../ContextAPI';
+import DutchAuctionSettingsForm from '../../components/sellNftNew/DutchAuctionSettingsForm';
+import EnglishAuctionSettingsForm from '../../components/sellNftNew/EnglishAuctionSettingsForm';
+import Summary from '../../components/sellNftNew/Summary';
+import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
 import './NFTMarketplace.scss';
 
-const headerTabLabels = [
-  { className: '', label: 'Set price', hintText: 'Sell at fixed or declining price' },
-  { className: '', label: 'Highest bid', hintText: 'Auction to the highest bidder' },
-  { className: '', label: 'Bundle', hintText: 'Group this item with others to sell' },
-];
+const verificationSteps = (data) => {
+  const keys = Object.keys(data);
+  for (let i = 0; i < keys.length; i += 1) {
+    if (data[keys[i]] === null) {
+      return i;
+    }
+  }
+  return keys.length - 1;
+};
+
+const getContent = (type, data, setData) => {
+  if (type === 'dutch') return <DutchAuctionSettingsForm data={data} setData={setData} />;
+  if (type === 'english') return <EnglishAuctionSettingsForm data={data} setData={setData} />;
+  return <h1>other type</h1>;
+};
 
 const NFTMarketplace = () => {
-  const [startPrice, setStartPrice] = useState('');
-  const [endPrice, setEndPrice] = useState('');
-  const [priceType, setPriceType] = useState('eth');
-  const [formType, setFormType] = useState(null);
-  const contents = [
+  const location = useLocation();
+  const { stepsData, setStepsData } = useContext(AppContext);
+  const headerLabels = [
     {
+      label: 'Select sell method',
+      icon: RewardIcon,
+      activeIcon: RewardIconActive,
+      link: '/nft-marketplace/select-method',
       index: 0,
-      component: (
-        <SetPrice
-          startPrice={startPrice}
-          setStartPrice={setStartPrice}
-          endPrice={endPrice}
-          setEndPrice={setEndPrice}
-          priceType={priceType}
-          setPriceType={setPriceType}
-          setFormType={setFormType}
-        />
-      ),
+      content: <SelectSellMethodTab onSelect={setStepsData} data={stepsData} />,
+      home: true,
     },
-    { index: 1, component: <HighestBid /> },
-    { index: 2, component: <Bundle /> },
+    {
+      label: 'Settings',
+      icon: SettingIcon,
+      activeIcon: SettingIconActive,
+      link: '/nft-marketplace/settings',
+      index: 1,
+      content: getContent(stepsData.selectedMethod, stepsData, setStepsData),
+      home: false,
+    },
+    {
+      label: 'Summary',
+      icon: ReviewIcon,
+      activeIcon: ReviewIconActive,
+      link: '/nft-marketplace/summary',
+      index: 2,
+      content: <Summary nftImage={nftImage} data={stepsData} />,
+      home: false,
+    },
   ];
+
   return (
     <div className="nft--marketplace">
-      <Submenu title="NFT Marketplace" subtitles={['Browse NFTs', 'Activity']} />
-      <CollectionName image={collectionImg} name="NFT name" price="0.5" />
-      <SellNFTContainer title="Select your sell method" contentClassName="content--marketplace">
-        <NFTMarketplaceTab headerLabels={headerTabLabels} contents={contents} />
-        <SummaryBlock startPrice={startPrice} endPrice={endPrice} formType={formType} />
-      </SellNFTContainer>
+      <SellNftSubHeader backPageName="NFT name" title="Sell NFT" />
+      <StepTabs tabData={headerLabels} verificationSteps={verificationSteps(stepsData)} required />
+      {location.pathname === '/nft-marketplace/select-method' && (
+        <div className="before--footer--black--bg--section" />
+      )}
     </div>
   );
 };
