@@ -24,7 +24,8 @@ import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors } from '../../utils/helpers';
 
 const Header = ({ location }) => {
-  const { isWalletConnected, setIsWalletConnected, darkMode } = useContext(AppContext);
+  const { isWalletConnected, setIsWalletConnected, darkMode, windowSize, connectWeb3, website } =
+    useContext(AppContext);
   const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
   const history = useHistory();
   const [selectedWallet, setSelectedWallet] = useState('');
@@ -52,13 +53,16 @@ const Header = ({ location }) => {
     searchRef.current.blur();
   };
 
-  const handleConnectWallet = (wallet) => {
+  const handleConnectWallet = async (wallet) => {
     // Here need to check if selected wallet is installed in browser
     setSelectedWallet(wallet);
     if (installed) {
-      setIsWalletConnected(true);
-      setShowMenu(false);
-      setShowSelectWallet(false);
+      if (wallet === 'Metamask' && typeof window.ethereum !== 'undefined') {
+        await connectWeb3();
+        setIsWalletConnected(true);
+        setShowMenu(false);
+        setShowSelectWallet(false);
+      }
     } else {
       setShowInstallWalletPopup(true);
     }
@@ -309,9 +313,6 @@ const Header = ({ location }) => {
         )}
       </div>
       <DesktopView
-        isWalletConnected={isWalletConnected}
-        setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -319,9 +320,6 @@ const Header = ({ location }) => {
         setSelectedWallet={setSelectedWallet}
       />
       <TabletView
-        isWalletConnected={isWalletConnected}
-        setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -331,9 +329,6 @@ const Header = ({ location }) => {
         setShowMenu={setShowMenu}
       />
       <MobileView
-        isWalletConnected={isWalletConnected}
-        setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
         handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}
         setShowSelectWallet={setShowSelectWallet}

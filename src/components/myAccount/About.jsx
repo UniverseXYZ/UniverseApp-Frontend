@@ -4,9 +4,38 @@ import { Animated } from 'react-animated-css';
 import pencilIcon from '../../assets/images/edit.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
+import { saveProfileInfo } from '../../utils/api/profile';
+import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const About = ({ about, setAbout }) => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const [aboutEditing, setAboutEditing] = useState(true);
+  const [errorModal, showErrorModal] = useState(false);
+
+  const saveAboutChanges = async () => {
+    setAboutEditing(true);
+
+    const artistData = {
+      ...loggedInArtist,
+      about,
+    };
+
+    const result = await saveProfileInfo(artistData);
+
+    if (!result.ok) {
+      showErrorModal(true);
+      return;
+    }
+
+    setLoggedInArtist({
+      ...artistData,
+    });
+  };
+
+  const cancelAboutChanges = () => {
+    setAbout(loggedInArtist.about);
+    setAboutEditing(true);
+  };
 
   return (
     <div className="my-account container">
@@ -48,6 +77,7 @@ const About = ({ about, setAbout }) => {
           {/* )} */}
         </div>
       </div>
+      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
 };
