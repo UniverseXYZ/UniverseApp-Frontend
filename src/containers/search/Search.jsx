@@ -125,7 +125,7 @@ const Search = () => {
       </div>
       <div className="container">
         <h1 className="page--title">{query}</h1>
-        <div className="tabs__wrapper">
+        <div className={`tabs__wrapper ${resultsCount === 0 ? 'hide' : ''}`}>
           <div className="search--results">{`${resultsCount} results`}</div>
           <div className="tab__left__arrow">
             <img

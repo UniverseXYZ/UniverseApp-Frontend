@@ -75,7 +75,7 @@ const Offers = () => (
           <h1>
             <span>from</span> dominixz
           </h1>
-          <p>Expires in 2 hours</p>
+          <p className="red--title">Expired</p>
         </div>
       </div>
       <div className="offers--price">

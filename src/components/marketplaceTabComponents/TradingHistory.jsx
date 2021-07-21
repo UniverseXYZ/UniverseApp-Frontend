@@ -100,7 +100,9 @@ const TradingHistory = () => (
           <h1>
             <span>Put on sale by</span> @Cryptopo...
           </h1>
-          <p>2 days ago</p>
+          <p>
+            2 days ago <span>(expired)</span>
+          </p>
         </div>
       </div>
       <div className="tradinghistory--price">

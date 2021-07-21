@@ -46,11 +46,15 @@
             margin: 0 auto;
             @include lg {
                 text-align: center;
-                margin: 30px auto 50px;
+                margin: 0 0 0 11%;
+                // margin: 30px auto 50px;
             }
             @include sm {
                 font-size: 16px;
                 margin: 16px auto 30px;
+            }
+            @media (min-width: 993px) and (max-width: 1700px){
+                margin: 0px 18% 0 28%;
             }
 
             .left {
@@ -75,7 +79,10 @@
                         font-size: 60px;
                      }
                      @include sm {                       
-                     font-size: 38px;                 
+                     font-size: 42px;                 
+                     }
+                     @media (max-width:365px) {
+                        font-size: 37px;
                      }
                 }
                 .title1{
@@ -103,6 +110,7 @@
                     @include sm {
                         margin-top: 15%;
                         font-size: 16px;
+                        max-width: 272px;
                     }
                 }   
             }
@@ -117,8 +125,13 @@
                     left: -40%;
                  }
                  @include sm {   
-                    max-width: 35%;
-                    left: 0;
+                    max-width: 139px;
+                    left: -30px;
+                    top: 23%;
+                 }
+                 @media (max-width:365px) {
+                    max-width: 40%;
+                    left: -12px;
                     top: 23%;
                  }
             }
@@ -148,8 +161,12 @@
                     left: 75%;
                  }
                  @include sm {   
-                    max-width: 28%;
+                    max-width: 37%;
                     left: 72%;
+                    top: 19%;
+                 }
+                 @media (max-width:370px) {
+                    max-width: 28%;
                     top: 20%;
                  }
             }

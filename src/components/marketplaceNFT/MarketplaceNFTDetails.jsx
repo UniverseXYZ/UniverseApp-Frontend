@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 import Slider from 'react-slick';
 import Draggable from 'react-draggable';
+import { useDoubleTap } from 'use-double-tap';
 import Properties from '../marketplaceTabComponents/Properties.jsx';
 import Owners from '../marketplaceTabComponents/Owners.jsx';
 import Bids from '../marketplaceTabComponents/Bids.jsx';
@@ -54,6 +55,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [muted, setMuted] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
   const [miniPlayer, setMiniPlayer] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const [scalePlayer, setScalePlayer] = useState(false);
   const [duration, setDuration] = useState('--:--');
   const [progressWidth, setProgressWidth] = useState(0);
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(
@@ -81,6 +84,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     userName: 'Asd',
     bid: 0.5,
   };
+  const bind = useDoubleTap(() => {
+    if (window.innerWidth < 576 && miniPlayer) {
+      setScalePlayer(!scalePlayer);
+    }
+  });
 
   const canPlayEventHandler = () => {
     if (mediaRef && mediaRef.current) {
@@ -186,8 +194,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   useEffect(() => {
     function onKeyboardDown(event) {
       if (
-        document.getElementById('popup-root') &&
-        !document.getElementById('popup-root').hasChildNodes() &&
+        (!document.getElementById('popup-root') ||
+          (document.getElementById('popup-root') &&
+            !document.getElementById('popup-root').hasChildNodes())) &&
         mediaRef &&
         mediaRef.current
       ) {
@@ -196,7 +205,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           setIsPlaying(!isPlaying);
         } else if (event.keyCode === 70) {
           event.preventDefault();
-          setFullScreen(true);
+          setFullScreen(!fullScreen);
         } else if (event.keyCode === 27) {
           event.preventDefault();
           setFullScreen(false);
@@ -308,6 +317,42 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     }
   };
 
+  useEffect(() => {
+    if (miniPlayer) {
+      setFullScreen(false);
+    } else {
+      setScalePlayer(false);
+    }
+    if (document.querySelector('.media--container')) {
+      document.querySelector('.media--container').style.transform = 'translate(0px, 0px)';
+    }
+  }, [miniPlayer]);
+
+  useEffect(() => {
+    if (fullScreen) {
+      setMiniPlayer(false);
+      setScalePlayer(false);
+    }
+    if (document.querySelector('.media--container')) {
+      document.querySelector('.media--container').style.transform = 'translate(0px, 0px)';
+    }
+  }, [fullScreen]);
+
+  const handleDragStart = (e) => {
+    if (showControls && e.target.classList.contains('play--pause')) {
+      setIsPlaying(!isPlaying);
+    }
+    if (showControls && e.target.classList.contains('close--miniplayer')) {
+      setMiniPlayer(false);
+    }
+    if (miniPlayer && window.innerWidth < 992) {
+      setShowControls(!showControls);
+      setTimeout(() => {
+        setShowControls(false);
+      }, 4000);
+    }
+  };
+
   return (
     <>
       <div className="marketplace--nft--page">
@@ -347,72 +392,86 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     <img src={selectedNFT.media.url} alt={selectedNFT.name} />
                   )}
                 {selectedNFT.media.type === 'video/mp4' && (
-                  <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
-                    <video ref={mediaRef}>
-                      <source src={selectedNFT.media.url} type="video/mp4" />
-                      <track kind="captions" />
-                      Your browser does not support the video tag.
-                    </video>
-                    {isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={pauseIcon}
-                        alt="Pause"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(false)}
-                      />
-                    )}
-                    {!isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={playIcon}
-                        alt="Play"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(true)}
-                      />
-                    )}
-                    {miniPlayer && (
-                      <img
-                        className="close--miniplayer"
-                        src={closeIcon}
-                        alt="Close miniplayer"
-                        aria-hidden="true"
-                        onClick={() => setMiniPlayer(false)}
-                      />
-                    )}
-                  </div>
+                  <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
+                    <div
+                      {...bind}
+                      className={`media--container ${miniPlayer ? 'show--miniplayer' : ''} ${
+                        showControls ? 'show--controls' : ''
+                      } ${scalePlayer ? 'scale--player' : ''}`}
+                    >
+                      <video ref={mediaRef}>
+                        <source src={selectedNFT.media.url} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
+                      {isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={pauseIcon}
+                          alt="Pause"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(false)}
+                        />
+                      )}
+                      {!isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={playIcon}
+                          alt="Play"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(true)}
+                        />
+                      )}
+                      {miniPlayer && (
+                        <img
+                          className="close--miniplayer"
+                          src={closeIcon}
+                          alt="Close miniplayer"
+                          aria-hidden="true"
+                          onClick={() => setMiniPlayer(false)}
+                        />
+                      )}
+                    </div>
+                  </Draggable>
                 )}
                 {selectedNFT.media.type === 'audio/mpeg' && (
-                  <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
-                    <img src={mp3Icon} alt={selectedNFT.name} />
-                    {isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={pauseIcon}
-                        alt="Pause"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(false)}
-                      />
-                    )}
-                    {!isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={playIcon}
-                        alt="Play"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(true)}
-                      />
-                    )}
-                    {miniPlayer && (
-                      <img
-                        className="close--miniplayer"
-                        src={closeIcon}
-                        alt="Close miniplayer"
-                        aria-hidden="true"
-                        onClick={() => setMiniPlayer(false)}
-                      />
-                    )}
-                  </div>
+                  <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
+                    <div
+                      {...bind}
+                      className={`media--container ${miniPlayer ? 'show--miniplayer' : ''} ${
+                        showControls ? 'show--controls' : ''
+                      } ${scalePlayer ? 'scale--player' : ''}`}
+                    >
+                      <img src={mp3Icon} alt={selectedNFT.name} style={{ pointerEvents: 'none' }} />
+                      {isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={pauseIcon}
+                          alt="Pause"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(false)}
+                        />
+                      )}
+                      {!isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={playIcon}
+                          alt="Play"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(true)}
+                        />
+                      )}
+                      {miniPlayer && (
+                        <img
+                          className="close--miniplayer"
+                          src={closeIcon}
+                          alt="Close miniplayer"
+                          aria-hidden="true"
+                          onClick={() => setMiniPlayer(false)}
+                        />
+                      )}
+                    </div>
+                  </Draggable>
                 )}
                 {(selectedNFT.media.type === 'video/mp4' ||
                   selectedNFT.media.type === 'audio/mpeg') &&
@@ -466,7 +525,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                             src={fullScreenOffIcon}
                             alt="Full screen off"
                             aria-hidden="true"
-                            onClick={() => setFullScreen(false)}
+                            onClick={() => {
+                              setFullScreen(false);
+                            }}
                           />
                         ) : (
                           <img
@@ -496,8 +557,13 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     <img src={selectedNFT.allItems[selectedNFTIndex].url} alt={selectedNFT.name} />
                   )}
                 {selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' && (
-                  <Draggable disabled={!miniPlayer}>
-                    <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
+                  <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
+                    <div
+                      {...bind}
+                      className={`media--container ${miniPlayer ? 'show--miniplayer' : ''} ${
+                        showControls ? 'show--controls' : ''
+                      } ${scalePlayer ? 'scale--player' : ''}`}
+                    >
                       <video ref={mediaRef}>
                         <source src={selectedNFT.allItems[selectedNFTIndex].url} type="video/mp4" />
                         <track kind="captions" />
@@ -534,36 +600,43 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   </Draggable>
                 )}
                 {selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg' && (
-                  <div className={`media--container ${miniPlayer ? 'show--miniplayer' : ''}`}>
-                    <img src={mp3Icon} alt={selectedNFT.name} />
-                    {isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={pauseIcon}
-                        alt="Pause"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(false)}
-                      />
-                    )}
-                    {!isPlaying && miniPlayer && (
-                      <img
-                        className="play--pause"
-                        src={playIcon}
-                        alt="Play"
-                        aria-hidden="true"
-                        onClick={() => setIsPlaying(true)}
-                      />
-                    )}
-                    {miniPlayer && (
-                      <img
-                        className="close--miniplayer"
-                        src={closeIcon}
-                        alt="Close miniplayer"
-                        aria-hidden="true"
-                        onClick={() => setMiniPlayer(false)}
-                      />
-                    )}
-                  </div>
+                  <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
+                    <div
+                      {...bind}
+                      className={`media--container ${miniPlayer ? 'show--miniplayer' : ''} ${
+                        showControls ? 'show--controls' : ''
+                      } ${scalePlayer ? 'scale--player' : ''}`}
+                    >
+                      <img src={mp3Icon} alt={selectedNFT.name} style={{ pointerEvents: 'none' }} />
+                      {isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={pauseIcon}
+                          alt="Pause"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(false)}
+                        />
+                      )}
+                      {!isPlaying && miniPlayer && (
+                        <img
+                          className="play--pause"
+                          src={playIcon}
+                          alt="Play"
+                          aria-hidden="true"
+                          onClick={() => setIsPlaying(true)}
+                        />
+                      )}
+                      {miniPlayer && (
+                        <img
+                          className="close--miniplayer"
+                          src={closeIcon}
+                          alt="Close miniplayer"
+                          aria-hidden="true"
+                          onClick={() => setMiniPlayer(false)}
+                        />
+                      )}
+                    </div>
+                  </Draggable>
                 )}
                 {!fullScreen && (
                   <div className="nft--count">
@@ -656,6 +729,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     className={`each--nft ${selectedNFTIndex === index ? 'selected' : ''}`}
                     aria-hidden="true"
                     onClick={() => setSelectedNFTIndex(index)}
+                    key={uuid()}
                   >
                     {nft.type !== 'audio/mpeg' && nft.type !== 'video/mp4' && (
                       <img className="nft--media" src={nft.url} alt="NFT" />
@@ -679,6 +753,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     className={`each--nft ${selectedNFTIndex === index ? 'selected' : ''}`}
                     aria-hidden="true"
                     onClick={() => setSelectedNFTIndex(index)}
+                    key={uuid()}
                   >
                     {nft.type !== 'audio/mpeg' && nft.type !== 'video/mp4' && (
                       <img className="nft--media" src={nft.url} alt="NFT" />

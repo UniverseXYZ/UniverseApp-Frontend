@@ -44,10 +44,14 @@ const SelectedFilters = ({
   setSaleTypeButtons,
   selectedPrice,
   setSelectedPrice,
-  selectedColl,
-  setSelectedColl,
+  selectedCollections,
+  setSelectedCollections,
+  savedCollections,
+  setSavedCollections,
   selectedCreators,
   setSelectedCreators,
+  savedCreators,
+  setSavedCreators,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
   const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
@@ -59,8 +63,10 @@ const SelectedFilters = ({
     });
     setSaleTypeButtons(newSaleTypeButtons);
     setSelectedPrice(null);
-    setSelectedColl([]);
+    setSelectedCollections([]);
+    setSavedCollections([]);
     setSelectedCreators([]);
+    setSavedCreators([]);
   };
 
   const removeSelectedFilter = (idx) => {
@@ -70,25 +76,27 @@ const SelectedFilters = ({
   };
 
   const removeCollection = (index) => {
-    const newSelectedColl = [...selectedColl];
+    const newSelectedColl = [...savedCollections];
     newSelectedColl.splice(index, 1);
-    setSelectedColl(newSelectedColl);
+    setSavedCollections(newSelectedColl);
+    setSelectedCollections(newSelectedColl);
   };
 
   const removeCreator = (index) => {
-    const newSelectedCreators = [...selectedCreators];
+    const newSelectedCreators = [...savedCreators];
     newSelectedCreators.splice(index, 1);
+    setSavedCreators(newSelectedCreators);
     setSelectedCreators(newSelectedCreators);
   };
 
   useEffect(() => {
     const res = saleTypeButtons.filter((i) => i.selected);
-    if (res.length || selectedPrice || selectedColl.length || selectedCreators.length) {
+    if (res.length || selectedPrice || savedCollections.length || savedCreators.length) {
       setShowClearALL(true);
     } else {
       setShowClearALL(false);
     }
-  }, [saleTypeButtons, selectedPrice, selectedColl, selectedCreators]);
+  }, [saleTypeButtons, selectedPrice, savedCollections, savedCreators]);
 
   return (
     <div className="selected--filters">
@@ -122,7 +130,7 @@ const SelectedFilters = ({
             />
           </button>
         )}
-        {selectedColl.map((coll, index) => (
+        {savedCollections.map((coll, index) => (
           <button type="button" className="light-border-button" key={uuid()}>
             {!coll.photo ? (
               <div
@@ -146,7 +154,7 @@ const SelectedFilters = ({
             />
           </button>
         ))}
-        {selectedCreators.map((creator, index) => (
+        {savedCreators.map((creator, index) => (
           <button type="button" className="light-border-button" key={uuid()}>
             <img className="creator" src={creator.avatar} alt={creator.name} />
             {creator.name}
@@ -178,10 +186,14 @@ SelectedFilters.propTypes = {
   setSaleTypeButtons: PropTypes.func,
   selectedPrice: PropTypes.oneOfType([PropTypes.any]),
   setSelectedPrice: PropTypes.func,
-  selectedColl: PropTypes.oneOfType([PropTypes.array]),
-  setSelectedColl: PropTypes.func,
+  selectedCollections: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedCollections: PropTypes.func,
+  savedCollections: PropTypes.oneOfType([PropTypes.array]),
+  setSavedCollections: PropTypes.func,
   selectedCreators: PropTypes.oneOfType([PropTypes.array]),
   setSelectedCreators: PropTypes.func,
+  savedCreators: PropTypes.oneOfType([PropTypes.array]),
+  setSavedCreators: PropTypes.func,
 };
 
 SelectedFilters.defaultProps = {
@@ -189,10 +201,14 @@ SelectedFilters.defaultProps = {
   setSaleTypeButtons: () => {},
   selectedPrice: null,
   setSelectedPrice: () => {},
-  selectedColl: PropTypes.oneOfType([PropTypes.array]),
-  setSelectedColl: () => {},
+  selectedCollections: [],
+  setSelectedCollections: () => {},
+  savedCollections: [],
+  setSavedCollections: () => {},
   selectedCreators: [],
   setSelectedCreators: () => {},
+  savedCreators: [],
+  setSavedCreators: () => {},
 };
 
 export default SelectedFilters;
