@@ -107,6 +107,7 @@ const SavedNFTs = () => {
           </div>
 
           <div className="saved__nfts__lists">
+            {console.log(savedNfts)}
             {savedNfts.map((nft, index) => (
               <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={nft.id}>
                 <div

@@ -6,6 +6,7 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
 import { defaultColors } from '../../utils/helpers';
+import { generateTokenURIForCollection } from '../../utils/api/mintNFT';
 
 const CreateCollectionPopup = ({ onClose }) => {
   const inputFile = useRef(null);
@@ -112,21 +113,37 @@ const CreateCollectionPopup = ({ onClose }) => {
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (mintNowClick) {
       if (!errors.collectionName && !errors.tokenName && !errors.shorturl) {
-        setDeployedCollections([
-          ...deployedCollections,
-          {
-            id: collectionName,
-            previewImage:
-              coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-            name: collectionName,
-            tokenName,
-            description,
-            shortURL,
-          },
-        ]);
+        document.getElementById('loading-hidden-btn').click();
+
+        const collectionURIResult = await generateTokenURIForCollection({
+          file: coverImage,
+          name: collectionName,
+          symbol: tokenName,
+          description,
+          shortUrl: shortURL,
+        });
+
+        console.log(collectionURIResult);
+
+        if (collectionURIResult?.id) {
+          setDeployedCollections([
+            ...deployedCollections,
+            {
+              id: collectionURIResult.id,
+              previewImage:
+                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+              name: collectionName,
+              tokenName,
+              description,
+              shortURL,
+            },
+          ]);
+        } else {
+          console.error('There was an error');
+        }
       }
     }
   }, [errors]);

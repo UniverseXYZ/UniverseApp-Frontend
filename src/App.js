@@ -44,7 +44,9 @@ import {
 } from './utils/api/etherscan.js';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
-import { getProfileInfo, userAuthenticate, getChallenge } from './utils/api/profile';
+import { getProfileInfo, userAuthenticate, setChallenge } from './utils/api/profile';
+import { getEthPriceCoingecko } from './utils/api/etherscan.js';
+// import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import { getSavedNfts } from './utils/api/mintNFT';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
@@ -114,7 +116,7 @@ const App = () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const balance = await provider.getBalance(accounts[0]);
     const network = await provider.getNetwork();
-    const ethPrice = await getEthPriceEtherscan();
+    const ethPrice = await getEthPriceCoingecko();
     const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
@@ -156,9 +158,9 @@ const App = () => {
     setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
     setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
     setWethBalance(utils.formatEther(wethBalanceResult.result));
-    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalanceResult.result));
+    setUsdWethBalance(ethPrice.ethereum.usd * utils.formatEther(wethBalanceResult.result));
     // setAuctionFactoryContract(auctionFactoryContractResult);
-    setUniverseERC721Contract(universeERC721ContractResult);
+    setUniverseERC721CoreContract(universeERC721CoreContractResult);
     setIsWalletConnected(true);
   };
 
@@ -173,9 +175,14 @@ const App = () => {
       const hasSigned = sameUser && localStorage.getItem('access_token');
 
       if (!hasSigned) {
-        const challenge = await getChallenge();
-        const signedMessage = await signer?.signMessage(challenge);
-        const authInfo = await userAuthenticate({ address, signedMessage });
+        const chanllenge = uuid();
+        const challengeResult = await setChallenge(chanllenge);
+        const signedMessage = await signer?.signMessage(chanllenge);
+        const authInfo = await userAuthenticate({
+          address,
+          signedMessage,
+          uuid: challengeResult?.uuid,
+        });
 
         if (!authInfo.error) {
           setIsAuthenticated(true);
@@ -183,9 +190,9 @@ const App = () => {
             id: authInfo.user.id,
             name: authInfo.user.displayName,
             universePageAddress: authInfo.user.universePageUrl,
-            avatar: authInfo.user.profileImageName,
+            avatar: authInfo.user.profileImageUrl,
             about: authInfo.user.about,
-            personalLogo: authInfo.user.logoImageName,
+            personalLogo: authInfo.user.logoImageUrl,
             instagramLink: authInfo.user.instagramUser,
             twitterLink: authInfo.user.twitterUser,
           });
@@ -207,9 +214,9 @@ const App = () => {
             // id: authInfo.user.id, TODO:: this is not returned in this request, do we need it ?
             name: userInfo.displayName,
             universePageAddress: userInfo.universePageUrl,
-            avatar: userInfo.profileImageName,
+            avatar: userInfo.profileImageUrl,
             about: userInfo.about,
-            personalLogo: userInfo.logoImageName,
+            personalLogo: userInfo.logoImageUrl,
             instagramLink: userInfo.instagramUser,
             twitterLink: userInfo.twitterUser,
           });
@@ -349,8 +356,8 @@ const App = () => {
         setWeb3Provider,
         auctionFactoryContract,
         setAuctionFactoryContract,
-        universeERC721Contract,
-        setUniverseERC721Contract,
+        universeERC721CoreContract,
+        setUniverseERC721CoreContract,
         signer,
         setSigner,
         connectWeb3,

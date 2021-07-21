@@ -31,16 +31,7 @@ const Artist = () => {
       <ArtistPageTabs onArtist={artist} />
       {artist.personalLogo ? (
         <div className="artist__personal__logo">
-          <div>
-            <img
-              src={
-                typeof artist.personalLogo === 'string'
-                  ? artist.personalLogo
-                  : URL.createObjectURL(artist.personalLogo)
-              }
-              alt="Artist personal logo"
-            />
-          </div>
+          <img src={artist.personalLogo} alt="Artist personal logo" />
         </div>
       ) : (
         <></>

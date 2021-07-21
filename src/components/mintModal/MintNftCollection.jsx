@@ -17,6 +17,7 @@ import removeIcon from '../../assets/images/remove.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import { generateTokenURIForCollection } from '../../utils/api/mintNFT';
 
 const MintNftCollection = ({ onClick }) => {
   const {
@@ -233,54 +234,68 @@ const MintNftCollection = ({ onClick }) => {
     }
   }, [collectionNFTs]);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (mintNowClick) {
       if (!errors.collectionName && !errors.tokenName && !errors.shorturl && !errors.collectible) {
         document.getElementById('loading-hidden-btn').click();
-        setTimeout(() => {
+
+        const collectionURIResult = await generateTokenURIForCollection({
+          file: coverImage,
+          name: collectionName,
+          symbol: tokenName,
+          description,
+          shortUrl: shortURL,
+        });
+
+        if (collectionURIResult?.id) {
+          if (collectionNFTs.length) {
+            const newMyNFTs = [...myNFTs];
+
+            collectionNFTs.forEach((nft) => {
+              newMyNFTs.push({
+                id: uuid(),
+                type: 'collection',
+                collectionId: collectionName,
+                collectionName,
+                collectionAvatar:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                tokenName,
+                collectionDescription: description,
+                shortURL,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.editions),
+                generatedEditions: nft.generatedEditions,
+                releasedDate: new Date(),
+                properties: nft.properties,
+              });
+            });
+            setMyNFTs(newMyNFTs);
+          }
+          setDeployedCollections([
+            ...deployedCollections,
+            {
+              id: collectionURIResult.id,
+              previewImage:
+                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+              name: collectionName,
+              tokenName,
+              description,
+              shortURL,
+            },
+          ]);
+
           document.getElementById('popup-root').remove();
           document.getElementById('congrats-hidden-btn').click();
+
           setTimeout(() => {
-            if (collectionNFTs.length) {
-              const newMyNFTs = [...myNFTs];
-              collectionNFTs.forEach((nft) => {
-                newMyNFTs.push({
-                  id: uuid(),
-                  type: 'collection',
-                  collectionId: collectionName,
-                  collectionName,
-                  collectionAvatar:
-                    coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                  tokenName,
-                  collectionDescription: description,
-                  shortURL,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.editions),
-                  generatedEditions: nft.generatedEditions,
-                  releasedDate: new Date(),
-                  properties: nft.properties,
-                });
-              });
-              setMyNFTs(newMyNFTs);
-            }
-            setDeployedCollections([
-              ...deployedCollections,
-              {
-                id: collectionName,
-                previewImage:
-                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                name: collectionName,
-                tokenName,
-                description,
-                shortURL,
-              },
-            ]);
             setShowModal(false);
             document.body.classList.remove('no__scroll');
           }, 2000);
-        }, 3000);
+        } else {
+          console.error('There was an error');
+        }
       }
     }
   }, [errors]);

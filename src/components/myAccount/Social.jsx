@@ -8,8 +8,6 @@ import pencilIcon from '../../assets/images/edit.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
-import ServerErrorPopup from '../popups/ServerErrorPopup.jsx';
-import { saveProfileInfo } from '../../utils/api/profile';
 
 const Social = ({
   showSocial,
@@ -20,54 +18,24 @@ const Social = ({
   setInstagramLink,
   saveChanges,
   cancelChanges,
-}) => {
+}) => (
   // const [showSocial, setShowSocial] = useState(true);
 
-  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
-  const [socialEditing, setSocialEditing] = useState(true);
-  const [errorModal, showErrorModal] = useState(false);
-
-  const saveSocialChanges = async () => {
-    setSocialEditing(true);
-
-    const artistData = {
-      ...loggedInArtist,
-      instagramLink,
-      twitterLink,
-    };
-
-    const result = await saveProfileInfo(artistData);
-
-    if (!result.ok) {
-      showErrorModal(true);
-      return;
-    }
-
-    setLoggedInArtist({
-      ...artistData,
-    });
-  };
-
-  const cancelSocialChanges = () => {
-    setTwitterLink(loggedInArtist.twitterLink);
-    setInstagramLink(loggedInArtist.instagramLink);
-    setSocialEditing(true);
-  };
-
-  return (
-    <div className="account-grid-social">
-      {/* <div className="social">
-            <h5>Social</h5>
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={showSocial}
-                onChange={(e) => setShowSocial(e.target.checked)}
-              />
-              <span className="slider round" />
-            </label>
-          </div> */}
-      {/* {socialEditing ? (
+  <div className="my-account container">
+    <div className="account-grid-container">
+      <div className="account-grid-social">
+        <div className="social">
+          <h5>Social</h5>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={showSocial}
+              onChange={(e) => setShowSocial(e.target.checked)}
+            />
+            <span className="slider round" />
+          </label>
+        </div>
+        {/* {socialEditing ? (
             <div className="account-grid-social-edit">
               <div className="social-sites">
                 {!loggedInArtist.instagramLink ? (
@@ -103,53 +71,50 @@ const Social = ({
               </Button>
             </div>
           ) : ( */}
-      {/* <Animated animationIn="zoomIn"> */}
-      <div className="account-grid-social-editing">
-        <h3>
-          Social media <span>(optional)</span>
-        </h3>
-        <div className="instagram">
-          <h5>Instagram profile</h5>
-          <img alt="" src={instagramLogo} />
-          <Input
-            placeholder="instagram.com/username"
-            className="inp"
-            value={instagramLink}
-            onChange={(e) => setInstagramLink(e.target.value)}
-          />
-        </div>
-        <div className="twitter">
-          <h5>Twitter profile</h5>
-          <img alt="" src={twitterLogo} />
-          <Input
-            placeholder="twitter.com/username"
-            className="inp"
-            value={twitterLink}
-            onChange={(e) => setTwitterLink(e.target.value)}
-          />
-        </div>
-        {/* <div className="display__error">
-          <img alt="Error" src={errorIcon} />
-          <p>
-            Something went wrong. Please fix the errors in the field above and try again. The
-            buttons will be enabled after information has been entered into the fields.
-          </p>
-        </div>
+        {/* <Animated animationIn="zoomIn"> */}
+        <div className="account-grid-social-editing">
+          {showSocial ? (
+            <>
+              <div className="instagram">
+                <h5>Instagram profile</h5>
+                <img alt="" src={instagramLogo} />
+                <Input
+                  placeholder="instagram.com/username"
+                  className="inp"
+                  value={instagramLink}
+                  onChange={(e) => setInstagramLink(e.target.value)}
+                />
+              </div>
+              <div className="twitter">
+                <h5>Twitter profile</h5>
+                <img alt="" src={twitterLogo} />
+                <Input
+                  placeholder="twitter.com/username"
+                  className="inp"
+                  value={twitterLink}
+                  onChange={(e) => setTwitterLink(e.target.value)}
+                />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
 
-        <div className="account-display-buttons">
-          <Button className="light-button" onClick={() => saveChanges()}>
-            Save changes
-          </Button>
-          <Button className="light-border-button" onClick={() => cancelChanges()}>
-            Cancel
-          </Button>
-        </div> */}
+          <div className="account-display-buttons">
+            <Button className="light-button" onClick={() => saveChanges()}>
+              Save changes
+            </Button>
+            <Button className="light-border-button" onClick={() => cancelChanges()}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+        {/* </Animated> */}
+        {/* )} */}
       </div>
-      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
-  );
-};
-
+  </div>
+);
 Social.propTypes = {
   twitterLink: PropTypes.string,
   setTwitterLink: PropTypes.func,
