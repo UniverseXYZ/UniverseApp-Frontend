@@ -192,3 +192,21 @@ export const generateTokenURIForCollection = async (data) => {
   const result = await request.text().then((res) => JSON.parse(res));
   return result;
 };
+
+export const saveCollection = async (collectionId, txHash) => {
+  const requestUrl = GENERATE_COLLECTION_NFT_URI_URL.concat(`/${collectionId}`);
+  const requestData = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+    txHash: JSON.stringify(txHash),
+  };
+  const request = await fetch(requestUrl, requestData);
+
+  if (!request.ok && request.status !== 201) {
+    console.error(`Error while trying to save a new collection: ${request.statusText}`);
+  }
+  console.log(`Collection with id '${collectionId}' was successfully saved!`);
+};

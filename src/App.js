@@ -86,6 +86,7 @@ const App = () => {
   const [usdWethBalance, setUsdWethBalance] = useState(0);
   const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
+  const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [yourBalance, setYourBalance] = useState(0);
@@ -115,6 +116,13 @@ const App = () => {
       contracts.UniverseERC721Core.abi,
       signerResult
     );
+
+    const universeERC721FactoryContractResult = new Contract(
+      contracts.UniverseERC721Factory.address,
+      contracts.UniverseERC721Factory.abi,
+      signerResult
+    );
+
     // const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
     // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
 
@@ -126,6 +134,7 @@ const App = () => {
     setUsdWethBalance(ethPrice.ethereum.usd * utils.formatEther(wethBalanceResult.result));
     // setAuctionFactoryContract(auctionFactoryContractResult);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
+    setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
     setIsWalletConnected(true);
   };
 
@@ -311,6 +320,8 @@ const App = () => {
         setAuctionFactoryContract,
         universeERC721CoreContract,
         setUniverseERC721CoreContract,
+        universeERC721FactoryContract,
+        setUniverseERC721FactoryContract,
         signer,
         setSigner,
         connectWeb3,
