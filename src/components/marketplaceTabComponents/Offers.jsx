@@ -5,22 +5,30 @@ import offers2 from '../../assets/images/offers2.svg';
 import offers3 from '../../assets/images/offers3.svg';
 import offers4 from '../../assets/images/offers4.svg';
 import offers5 from '../../assets/images/offers5.svg';
+import Button from '../button/Button';
 
 const Offers = () => (
   <div className="marketplace--offers">
-    <div className="offers--box">
-      <div className="box-offers-avatar">
-        <img src={offers1} alt="icon1" />
-        <div>
-          <h1>
-            <span>from</span> dominixz
-          </h1>
-          <p>Expires in 2 hours</p>
+    <div className="offers--first--box">
+      <div className="offers--first">
+        <div className="box-offers-avatar">
+          <img src={offers1} alt="icon1" />
+          <div>
+            <h1>
+              <span>from</span> dominixz
+            </h1>
+            <p>Expires in 2 hours</p>
+          </div>
+        </div>
+        <div className="offers--price">
+          <h2>0,3 WETH</h2>
+          <h3>$208.39</h3>
         </div>
       </div>
-      <div className="offers--price">
-        <h2>0,3 WETH</h2>
-        <h3>$208.39</h3>
+      <div className="offers--button--box">
+        <button type="button" className="light-button">
+          Accept
+        </button>
       </div>
     </div>
     <div className="offers--box">
