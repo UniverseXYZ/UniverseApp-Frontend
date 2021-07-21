@@ -225,10 +225,15 @@ const MobileView = (props) => {
                         </button>
                       </div>
                       <div>
-                        <button type="button" className="disable">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowMenu(false);
+                            history.push('/marketplace');
+                          }}
+                        >
                           <img src={marketplaceIcon} alt="NFT Marketplace" />
                           <span>NFT marketplace</span>
-                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
