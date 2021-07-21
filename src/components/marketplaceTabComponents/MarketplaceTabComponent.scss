@@ -445,6 +445,9 @@ input:checked + .slider:before {
           letter-spacing: 0em;
           text-align: left;
           color: #00000066;
+          > span {
+            color: red;
+          }
         }
       }
     }
@@ -536,6 +539,9 @@ input:checked + .slider:before {
       padding-bottom: 20px;
       > div {
         padding-left: 20px;
+        .red--title {
+          color: red;
+        }
         > h1 {
           font-family: $spaceGroteskFont;
           font-size: 14px;
