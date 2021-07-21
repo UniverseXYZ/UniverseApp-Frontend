@@ -85,7 +85,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     bid: 0.5,
   };
   const bind = useDoubleTap(() => {
-    if (window.innerWidth < 576) {
+    if (window.innerWidth < 576 && miniPlayer) {
       setScalePlayer(!scalePlayer);
     }
   });
