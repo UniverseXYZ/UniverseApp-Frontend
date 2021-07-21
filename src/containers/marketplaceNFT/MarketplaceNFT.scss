@@ -252,13 +252,13 @@
             margin-right: 0px;
           }
         }
-        @include md {
+        @include lg {
           display: flex;
         }
       }
       .slick-slider {
         display: block;
-        @include md {
+        @include lg {
           display: none;
         }
       }
