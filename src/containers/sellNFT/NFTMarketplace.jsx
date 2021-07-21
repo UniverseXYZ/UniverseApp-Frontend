@@ -12,6 +12,8 @@ import SettingIcon from '../../assets/images/setting-solid-disactive.svg';
 import AppContext from '../../ContextAPI';
 import DutchAuctionSettingsForm from '../../components/sellNftNew/DutchAuctionSettingsForm';
 import EnglishAuctionSettingsForm from '../../components/sellNftNew/EnglishAuctionSettingsForm';
+import Summary from '../../components/sellNftNew/Summary';
+import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
 import './NFTMarketplace.scss';
 
 const verificationSteps = (data) => {
@@ -58,11 +60,11 @@ const NFTMarketplace = () => {
       activeIcon: ReviewIconActive,
       link: '/nft-marketplace/summary',
       index: 2,
-      content: <SelectSellMethodTab onSelect={setStepsData} data={stepsData} />,
+      content: <Summary nftImage={nftImage} data={stepsData} />,
       home: false,
     },
   ];
-  console.log(stepsData);
+
   return (
     <div className="nft--marketplace">
       <SellNftSubHeader backPageName="NFT name" title="Sell NFT" />

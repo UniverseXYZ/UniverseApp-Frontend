@@ -8,23 +8,60 @@ import Button from '../button/Button';
 import infoIcon from '../../assets/images/icon.svg';
 import './styles/EnglishAuctionSettingsForm.scss';
 
+const validField = (minBid, reservePrice, setErrorMinBid, setErrorReservePrice) => {
+  if (minBid === '' || minBid?.[0] === '.' || !+minBid || +minBid <= 0) {
+    setErrorMinBid('Invalid price');
+    return false;
+  }
+  if (+minBid?.[0] === 0 && minBid?.[1] !== '.') {
+    setErrorMinBid('Invalid price');
+    return false;
+  }
+  setErrorMinBid(false);
+  if (!reservePrice?.length) {
+    setErrorReservePrice('Highest bid listings must have a reserve price.');
+    return false;
+  }
+  if (reservePrice === '' || reservePrice?.[0] === '.' || !+reservePrice || +reservePrice <= 0) {
+    setErrorReservePrice('Invalid price');
+    return false;
+  }
+  if (+reservePrice?.[0] === 0 && reservePrice?.[1] !== '.') {
+    setErrorReservePrice('Invalid price');
+    return false;
+  }
+  if (+reservePrice < 1 || +reservePrice <= +minBid) {
+    setErrorReservePrice(
+      'The reserve price must be greater than the start price. The reserve price must be greater than 1 ETH in value.'
+    );
+    return false;
+  }
+
+  setErrorReservePrice(false);
+  return true;
+};
+
 const EnglishAuctionSettingsForm = (props) => {
   const { data, setData } = props;
   const history = useHistory();
   const [englishData, setEnglishData] = useState({
-    minimumBid: null,
-    reservePrice: null,
-    expirationDate: null,
-    priceType: 'eth',
+    startPrice: window.englishData ? window.englishData.startPrice : null,
+    endPrice: window.englishData ? window.englishData.endPrice : null,
+    date: window.englishData ? window.englishData.date : null,
+    priceType: window.englishData ? window.englishData.priceType : 'eth',
   });
+  const [errorMinBid, setErrorMinBid] = useState(false);
+  const [errorendPrice, setErrorendPrice] = useState(false);
+  useEffect(() => {
+    if (window.englishData) {
+      setEnglishData({ ...window.englishData });
+    }
+  }, []);
 
   useEffect(() => {
-    // if (englishData.minimumBid || englishData.reservePrice || englishData.expirationDate) {
-    //   setData({ ...data, settings: { ...englishData } });
-    // }
-    console.log(englishData);
+    window.englishData = { ...englishData };
   }, [englishData]);
-  console.log(englishData);
+
   return (
     <div className="english--auction--settings--form">
       <h3 className="form--title">English auction settings</h3>
@@ -43,9 +80,17 @@ const EnglishAuctionSettingsForm = (props) => {
               <Input
                 type="number"
                 placeholder="Amount"
-                value={englishData.minimumBid ? englishData.minimumBid : ''}
-                onChange={(e) => setEnglishData({ ...englishData, minimumBid: e.target.value })}
-                // error={validationPrice(dutchData.startPrice)}
+                value={englishData.startPrice ? englishData.startPrice : ''}
+                onChange={(e) => setEnglishData({ ...englishData, startPrice: e.target.value })}
+                onBlur={(e) =>
+                  validField(
+                    englishData.startPrice,
+                    englishData.endPrice,
+                    setErrorMinBid,
+                    setErrorendPrice
+                  )
+                }
+                error={errorMinBid}
               />
               <SelectPrice
                 value={englishData.priceType}
@@ -68,9 +113,17 @@ const EnglishAuctionSettingsForm = (props) => {
               <Input
                 type="number"
                 placeholder="Amount"
-                value={englishData.reservePrice ? englishData.reservePrice : ''}
-                onChange={(e) => setEnglishData({ ...englishData, reservePrice: e.target.value })}
-                // error={validationPrice(dutchData.startPrice)}
+                value={englishData.endPrice ? englishData.endPrice : ''}
+                onChange={(e) => setEnglishData({ ...englishData, endPrice: e.target.value })}
+                onBlur={(e) =>
+                  validField(
+                    englishData.startPrice,
+                    englishData.endPrice,
+                    setErrorMinBid,
+                    setErrorendPrice
+                  )
+                }
+                error={errorendPrice}
               />
               <SelectPrice
                 value={englishData.priceType}
@@ -92,8 +145,8 @@ const EnglishAuctionSettingsForm = (props) => {
             <div className="right--block">
               <EndDatePicker
                 title="Expiration date"
-                value={englishData.expirationDate}
-                onChange={(e) => setEnglishData({ ...englishData, expirationDate: e })}
+                value={englishData.date}
+                onChange={(e) => setEnglishData({ ...englishData, date: e })}
               />
             </div>
           </div>
@@ -103,13 +156,32 @@ const EnglishAuctionSettingsForm = (props) => {
         <Button
           className="light-border-button"
           onClick={() => {
-            // setData({ ...data, settings: { ...dutchData } });
             history.push('/nft-marketplace/select-method');
           }}
         >
           Back
         </Button>
-        <Button className="light-button">Continue</Button>
+        <Button
+          className="light-button"
+          onClick={() => {
+            if (
+              validField(
+                englishData.startPrice,
+                englishData.endPrice,
+                setErrorMinBid,
+                setErrorendPrice
+              ) &&
+              !!englishData.startPrice?.length &&
+              !!englishData.endPrice?.length &&
+              !!englishData.date?.length
+            ) {
+              setData({ ...data, settings: { ...englishData } });
+              history.push('/nft-marketplace/summary');
+            }
+          }}
+        >
+          Continue
+        </Button>
       </div>
     </div>
   );
@@ -118,7 +190,7 @@ const EnglishAuctionSettingsForm = (props) => {
 EnglishAuctionSettingsForm.propTypes = {
   data: PropTypes.shape({
     selectedMethod: PropTypes.string,
-    settings: PropTypes.shape({}),
+    settings: PropTypes.shape({ startPrice: PropTypes.string }),
   }).isRequired,
   setData: PropTypes.func.isRequired,
 };

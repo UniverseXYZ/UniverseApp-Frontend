@@ -73,7 +73,11 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-  const [stepsData, setStepsData] = useState({ selectedMethod: null, settings: null });
+  const [stepsData, setStepsData] = useState({
+    selectedMethod: null,
+    settings: null,
+    summary: null,
+  });
 
   useEffect(() => {
     if (!darkMode) {

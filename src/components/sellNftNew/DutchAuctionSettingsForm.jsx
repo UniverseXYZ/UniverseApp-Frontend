@@ -9,30 +9,83 @@ import EndDatePicker from '../calendar/EndDatePicker';
 import Button from '../button/Button';
 import './styles/DutchAuctionSettingsForm.scss';
 
-const validationPrice = (price) => {
-  if (price !== null) {
-    if (!+price || price[0] === '.') return 'invalid price';
+const validationPrice = (price, setPriceError, type, checkPrice) => {
+  const reg = /^\d+$/;
+  if (price?.[0] === '0' && price?.[1] !== '.') {
+    setPriceError('Invalid price');
+    return false;
   }
-  return false;
+  if (!reg.test(price) && price?.[1] !== '.') {
+    setPriceError('Invalid price');
+    return false;
+  }
+  if (type === 'endingPrice') {
+    if (+price > +checkPrice) {
+      setPriceError('Ending price cannot be greater than starting price.');
+      return false;
+    }
+  }
+  setPriceError(false);
+  return true;
 };
-const checkPriceWithStartPrice = (startPrice, endPrice) => {
-  const checkFormat = validationPrice(endPrice);
-  if (checkFormat) return checkFormat;
-  if (+endPrice > +startPrice) return 'Ending price cannot be greater than starting price.';
-  return false;
+
+const dataStepsVerification = (data) => {
+  const keys = Object.keys(data);
+  let startPrice = false;
+  let endPrice = false;
+  if (data.startPrice) {
+    startPrice = validationPrice(data.startPrice, () => {}, 'startPrice', data.endPrice);
+  }
+  if (data.endPrice) {
+    endPrice = validationPrice(data.endPrice, () => {}, 'endingPrice', data.startPrice);
+  } else endPrice = true;
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    if (!data[key]) return false;
+  }
+  return startPrice && endPrice;
 };
 
 const DutchAuctionSettingsForm = (props) => {
+  const [errorStartPrice, setErrorStartPrice] = useState(false);
+  const [errorEndingPrice, setErrorEndingPrice] = useState(false);
+  const [continueDisabled, setContinueDisabled] = useState(true);
   const history = useHistory();
   const { data, setData } = props;
-  const [dutchData, setDutchData] = useState(
-    data.settings ? { ...data.settings } : { priceType: 'eth', startPrice: null }
+  const [dutchData, setDutchData] = useState({
+    priceType: window.dutchData ? window.dutchData.priceType : 'eth',
+    startPrice: window.dutchData ? window.dutchData.startPrice : null,
+    endPrice: window.dutchData ? window.dutchData.endPrice : null,
+    switch: window.dutchData ? window.dutchData.switch : [],
+    buyerAddres: window.dutchData ? window.dutchData.buyerAddres : null,
+    date: window.dutchData ? window.dutchData.date : '',
+  });
+  const [switchEndingPrice, setSwitchEndingPrice] = useState(
+    dutchData.switch.includes('switchEndingPrice')
   );
-  const [switchEndingPrice, setSwitchEndingPrice] = useState(false);
-  const [switchScheduleFutureTime, setSwitchScheduleFutureTime] = useState(false);
-  const [switchPrivacy, setSwitchPrivacy] = useState(false);
+  const [switchScheduleFutureTime, setSwitchScheduleFutureTime] = useState(
+    dutchData.switch.includes('switchScheduleFutureTime')
+  );
+  const [switchPrivacy, setSwitchPrivacy] = useState(dutchData.switch.includes('switchPrivacy'));
 
-  console.log(dutchData);
+  useEffect(() => {
+    if (window.dutchData) {
+      setDutchData({ ...window.dutchData });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!switchPrivacy) delete dutchData.buyerAddres;
+    else dutchData.buyerAddres = null;
+    if (!switchEndingPrice) delete dutchData.endPrice;
+    else if (!dutchData.endPrice) dutchData.endPrice = null;
+    if (!dutchData.switch.length) delete dutchData.date;
+    else if (!dutchData.switch.includes('switchPrivacy') && !dutchData.date) dutchData.date = '';
+    const verif = dataStepsVerification(dutchData);
+    setContinueDisabled(!verif);
+    window.dutchData = { ...dutchData };
+  }, [dutchData]);
+
   return (
     <div className="dutch--auction--settings--form">
       <h3 className="form--title">Dutch auction settings</h3>
@@ -52,7 +105,16 @@ const DutchAuctionSettingsForm = (props) => {
                 placeholder="Amount"
                 value={dutchData.startPrice ? dutchData.startPrice : ''}
                 onChange={(e) => setDutchData({ ...dutchData, startPrice: e.target.value })}
-                error={validationPrice(dutchData.startPrice)}
+                // error={validationPrice(dutchData.startPrice)}
+                onBlur={() =>
+                  validationPrice(
+                    dutchData.startPrice,
+                    setErrorStartPrice,
+                    'startPrice',
+                    dutchData.endPrice
+                  )
+                }
+                error={errorStartPrice}
               />
               <SelectPrice
                 value={dutchData.priceType}
@@ -74,7 +136,24 @@ const DutchAuctionSettingsForm = (props) => {
               )}
             </div>
             <div className="right--block right--switch">
-              <Switch value={switchEndingPrice} onChange={setSwitchEndingPrice} />
+              <Switch
+                value={switchEndingPrice}
+                onChange={(e) => {
+                  setSwitchEndingPrice(e);
+                  const switchArray = dutchData.switch;
+                  if (e && !switchArray.includes('switchEndingPrice')) {
+                    setSwitchScheduleFutureTime(false);
+                    switchArray.push('switchEndingPrice');
+                    const switchScheduleTimeIndex = switchArray.indexOf('switchScheduleFutureTime');
+                    if (switchScheduleTimeIndex !== -1) {
+                      switchArray.splice(switchScheduleTimeIndex, 1);
+                    }
+                  } else {
+                    switchArray.splice(switchArray.indexOf('switchEndingPrice'), 1);
+                  }
+                  setDutchData({ ...dutchData, switch: switchArray });
+                }}
+              />
             </div>
           </div>
           {switchEndingPrice && (
@@ -94,7 +173,15 @@ const DutchAuctionSettingsForm = (props) => {
                       placeholder="Amount"
                       value={dutchData.endPrice ? dutchData.endPrice : ''}
                       onChange={(e) => setDutchData({ ...dutchData, endPrice: e.target.value })}
-                      error={checkPriceWithStartPrice(dutchData.startPrice, dutchData.endPrice)}
+                      onBlur={() =>
+                        validationPrice(
+                          dutchData.endPrice,
+                          setErrorEndingPrice,
+                          'endingPrice',
+                          dutchData.startPrice
+                        )
+                      }
+                      error={errorEndingPrice}
                     />
                     <SelectPrice
                       value={dutchData.priceType}
@@ -111,8 +198,9 @@ const DutchAuctionSettingsForm = (props) => {
                   </div>
                   <div className="right--block">
                     <EndDatePicker
-                      value={dutchData.expirationDate}
-                      onChange={(e) => setDutchData({ ...dutchData, expirationDate: e })}
+                      value={dutchData.date}
+                      onChange={(e) => setDutchData({ ...dutchData, date: e })}
+                      title="Schedule for a future time"
                     />
                   </div>
                 </div>
@@ -131,7 +219,24 @@ const DutchAuctionSettingsForm = (props) => {
                 </p>
               </div>
               <div className="right--block right--switch">
-                <Switch value={switchScheduleFutureTime} onChange={setSwitchScheduleFutureTime} />
+                <Switch
+                  value={switchScheduleFutureTime}
+                  onChange={(e) => {
+                    setSwitchScheduleFutureTime(e);
+                    const switchArray = dutchData.switch;
+                    if (e && !switchArray.includes('switchScheduleFutureTime')) {
+                      setSwitchEndingPrice(false);
+                      switchArray.push('switchScheduleFutureTime');
+                      const endPriceSwitchIndex = switchArray.indexOf('switchEndingPrice');
+                      if (endPriceSwitchIndex !== -1) {
+                        switchArray.splice(endPriceSwitchIndex, 1);
+                      }
+                    } else {
+                      switchArray.splice(switchArray.indexOf('switchScheduleFutureTime'), 1);
+                    }
+                    setDutchData({ ...dutchData, switch: switchArray });
+                  }}
+                />
               </div>
             </div>
             {switchScheduleFutureTime && (
@@ -146,8 +251,8 @@ const DutchAuctionSettingsForm = (props) => {
                     </div>
                     <div className="right--block">
                       <EndDatePicker
-                        value={dutchData.scheduleTime}
-                        onChange={(e) => setDutchData({ ...dutchData, scheduleTime: e })}
+                        value={dutchData.date}
+                        onChange={(e) => setDutchData({ ...dutchData, date: e })}
                       />
                     </div>
                   </div>
@@ -167,7 +272,19 @@ const DutchAuctionSettingsForm = (props) => {
               </p>
             </div>
             <div className="right--block right--switch">
-              <Switch value={switchPrivacy} onChange={setSwitchPrivacy} />
+              <Switch
+                value={switchPrivacy}
+                onChange={(e) => {
+                  setSwitchPrivacy(e);
+                  const switchArray = dutchData.switch;
+                  if (e && !switchArray.includes('switchPrivacy')) {
+                    switchArray.push('switchPrivacy');
+                  } else {
+                    switchArray.splice(switchArray.indexOf('switchPrivacy'), 1);
+                  }
+                  setDutchData({ ...dutchData, switch: switchArray });
+                }}
+              />
             </div>
           </div>
           {switchPrivacy && (
@@ -188,13 +305,25 @@ const DutchAuctionSettingsForm = (props) => {
         <Button
           className="light-border-button"
           onClick={() => {
-            setData({ ...data, settings: { ...dutchData } });
             history.push('/nft-marketplace/select-method');
           }}
         >
           Back
         </Button>
-        <Button className="light-button">Continue</Button>
+        <Button
+          className="light-button"
+          disabled={continueDisabled}
+          onClick={() => {
+            const verification = dataStepsVerification(window.dutchData);
+            if (verification) {
+              setData({ ...data, settings: { ...window.dutchData } });
+              history.push('/nft-marketplace/summary');
+              window.clickNextDutchToSummary = true;
+            }
+          }}
+        >
+          Continue
+        </Button>
       </div>
     </div>
   );
