@@ -38,14 +38,13 @@ import Search from './containers/search/Search.jsx';
 import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
 import {
-  // getEthPriceCoingecko,
+  getEthPriceCoingecko,
   getWethBalanceEtherscan,
   getEthPriceEtherscan,
 } from './utils/api/etherscan.js';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
 import { getProfileInfo, userAuthenticate, setChallenge } from './utils/api/profile';
-import { getEthPriceCoingecko } from './utils/api/etherscan.js';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import { getSavedNfts } from './utils/api/mintNFT';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
@@ -358,6 +357,8 @@ const App = () => {
         setAuctionFactoryContract,
         universeERC721CoreContract,
         setUniverseERC721CoreContract,
+        universeERC721FactoryContract,
+        setUniverseERC721FactoryContract,
         signer,
         setSigner,
         connectWeb3,
