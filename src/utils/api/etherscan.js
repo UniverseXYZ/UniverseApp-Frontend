@@ -19,3 +19,10 @@ export const getWethBalanceEtherscan = async (address, chainId) => {
   );
   return result;
 };
+
+export const getEthPriceCoingecko = async () => {
+  const result = await fetchJson(
+    `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`
+  );
+  return result;
+};

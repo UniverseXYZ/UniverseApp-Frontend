@@ -21,6 +21,7 @@ import { getMetaForSavedNft } from '../../utils/api/mintNFT';
 
 const MyNFTs = () => {
   const {
+    address,
     savedNfts,
     savedCollections,
     setSavedNfts,
@@ -34,7 +35,7 @@ const MyNFTs = () => {
     deployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
-    universeERC721Contract,
+    universeERC721CoreContract,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -78,63 +79,71 @@ const MyNFTs = () => {
   }, []);
 
   const handleMintSelected = async () => {
+    // TODO:: Find a way to determine which Contract should be used upon Mint Selected is executed
+    // universeERC721CoreContract should be used for minting single NFT
+    // auctionFactoryContract should be usef for minting Collectibles NFTS
     document.getElementById('loading-hidden-btn').click();
-    setTimeout(async () => {
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
-      // setTimeout(() => {
-      const newMyNFTs = [...myNFTs];
-      // TODO:: Get the desired NFT's metaData
-      // Get the selected NFTS for mint
-      const selectedNFTS = savedNfts.filter((nft) => nft.selected);
-      const metaDataPromises = selectedNFTS.map((nft) => getMetaForSavedNft(nft.id));
-      const metaDataResult = await Promise.all(metaDataPromises);
-      console.log(metaDataResult);
-      // Mint the NFTS trough the smart contract
-      // universeERC721Contract.mint()
-      // Update the ui -> Fetch savedNfts and save them
+    const newMyNFTs = [...myNFTs];
+    // Get the selected NFTS for mint
+    const selectedNFTS = savedNfts.filter((nft) => nft.selected);
+    await Promise.all(
+      selectedNFTS.map(async (nft) => {
+        const meta = await getMetaForSavedNft(nft.id);
+        console.log('meta', meta);
+        const basisPoint = nft.royalties * 100;
+        // Mint the NFTS trough the smart contract
+        const mintTransaction = await universeERC721CoreContract.batchMint(address, meta, [
+          [address, basisPoint],
+        ]);
+        const mintReceipt = await mintTransaction.wait();
+        console.log(mintReceipt);
+      })
+    );
 
-      // TODO:: for now the BE is not ready with a field to distinguish if its a single or collection item
+    // Update the ui -> Fetch savedNfts and save them
 
-      // savedNfts.forEach((nft) => {
-      // if (nft.selected) {
-      // if (nft.type === 'single') {
-      //   newMyNFTs.push({
-      //     id: nft.id,
-      //     type: nft.type,
-      //     previewImage: nft.previewImage,
-      //     name: nft.name,
-      //     description: nft.description,
-      //     numberOfEditions: Number(nft.numberOfEditions),
-      //     generatedEditions: nft.generatedEditions,
-      //     properties: nft.properties,
-      //     percentAmount: nft.percentAmount || '',
-      //   });
-      // } else {
-      //   newMyNFTs.push({
-      //     id: nft.id,
-      //     type: nft.type,
-      //     collectionId: nft.collectionName,
-      //     collectionName: nft.collectionName,
-      //     collectionAvatar: nft.collectionAvatar,
-      //     collectionDescription: nft.collectionDescription,
-      //     shortURL: nft.shortURL,
-      //     previewImage: nft.previewImage,
-      //     name: nft.name,
-      //     description: nft.description,
-      //     numberOfEditions: Number(nft.numberOfEditions),
-      //     generatedEditions: nft.generatedEditions,
-      //     properties: nft.properties,
-      //     percentAmount: nft.percentAmount || '',
-      //   });
-      // }
-      // }
-      // });
-      const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-      setMyNFTs(newMyNFTs); // TODO:: No backend for getting my NFTS
-      setSavedNfts(newSavedNFTs);
-      // }, 2000);
-    }, 3000);
+    // TODO:: for now the BE is not ready with a field to distinguish if its a single or collection item
+
+    // savedNfts.forEach((nft) => {
+    // if (nft.selected) {
+    // if (nft.type === 'single') {
+    //   newMyNFTs.push({
+    //     id: nft.id,
+    //     type: nft.type,
+    //     previewImage: nft.previewImage,
+    //     name: nft.name,
+    //     description: nft.description,
+    //     numberOfEditions: Number(nft.numberOfEditions),
+    //     generatedEditions: nft.generatedEditions,
+    //     properties: nft.properties,
+    //     percentAmount: nft.percentAmount || '',
+    //   });
+    // } else {
+    //   newMyNFTs.push({
+    //     id: nft.id,
+    //     type: nft.type,
+    //     collectionId: nft.collectionName,
+    //     collectionName: nft.collectionName,
+    //     collectionAvatar: nft.collectionAvatar,
+    //     collectionDescription: nft.collectionDescription,
+    //     shortURL: nft.shortURL,
+    //     previewImage: nft.previewImage,
+    //     name: nft.name,
+    //     description: nft.description,
+    //     numberOfEditions: Number(nft.numberOfEditions),
+    //     generatedEditions: nft.generatedEditions,
+    //     properties: nft.properties,
+    //     percentAmount: nft.percentAmount || '',
+    //   });
+    // }
+    // }
+    // });
+    const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
+    setMyNFTs(newMyNFTs); // TODO:: No backend for getting my NFTS
+    setSavedNfts(newSavedNFTs);
+
+    document.getElementById('popup-root').remove();
+    document.getElementById('congrats-hidden-btn').click();
   };
 
   useEffect(() => {
