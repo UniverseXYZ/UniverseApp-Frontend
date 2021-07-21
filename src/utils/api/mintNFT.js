@@ -1,5 +1,7 @@
 const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
+const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
+const GENERATE_COLLECTION_NFT_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 
 /**
  * @param {Object} data
@@ -18,10 +20,10 @@ export const saveNftForLater = async (data) => {
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
     royalties: parseFloat(data.percentAmount),
+    collectionId: 10,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {
-    credentials: 'include',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,6 +33,8 @@ export const saveNftForLater = async (data) => {
       ...requestData,
     }),
   });
+
+  console.log(request);
 
   if (!request.ok && request.status !== 201) {
     console.error(`Error while trying to save NFT data: ${request.statusText}`);

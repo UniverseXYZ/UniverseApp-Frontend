@@ -10,8 +10,6 @@ import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
-import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
-import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const Main = ({
   accountName,
@@ -30,7 +28,7 @@ const Main = ({
   saveChanges,
   cancelChanges,
 }) => {
-  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useContext(AppContext);
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);
@@ -72,47 +70,6 @@ const Main = ({
     }
   };
 
-  const saveDisplayChanges = async () => {
-    let page = accountPage.substring(13);
-    if (page === 'your-address') {
-      page = '';
-    }
-
-    const artistData = {
-      ...loggedInArtist,
-      name: accountName,
-      universePageAddress: page,
-    };
-
-    const result = await saveProfileInfo(artistData);
-    if (typeof accountImage === 'object') {
-      const saveImageRequest = await saveUserImage(accountImage);
-      if (saveImageRequest.profileImageUrl) {
-        artistData.avatar = saveImageRequest.profileImageUrl;
-      }
-    }
-    if (!result.ok) {
-      showErrorModal(true);
-      return;
-    }
-
-    setLoggedInArtist({
-      ...artistData,
-    });
-  };
-
-  const cancelDisplayChanges = () => {
-    setAccountName(loggedInArtist.name);
-    if (loggedInArtist.universePageAddress) {
-      setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress}`);
-    } else {
-      setAccountPage('universe.xyz/your-address');
-    }
-
-    setAccountImage(loggedInArtist.avatar);
-    setNameEditing(true);
-  };
-
   useEffect(() => {
     if (loggedInArtist.universePageAddress) {
       setInputName('inp');
@@ -127,7 +84,17 @@ const Main = ({
           <div className="account-grid-name">
             <div className="account-picture">
               <div className="account-image">
-                {accountImage && <img className="account-img" src={accountImage} alt="Avatar" />}
+                {accountImage && (
+                  <img
+                    className="account-img"
+                    src={
+                      typeof accountImage === 'object'
+                        ? URL.createObjectURL(accountImage)
+                        : accountImage
+                    }
+                    alt="Avatar"
+                  />
+                )}
                 {!accountImage && loggedInArtist.avatar && (
                   <img
                     className="account-img"
@@ -348,7 +315,6 @@ const Main = ({
           )}
         </div>
       </div>
-      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
 };

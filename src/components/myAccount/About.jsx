@@ -4,8 +4,6 @@ import { Animated } from 'react-animated-css';
 import pencilIcon from '../../assets/images/edit.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
-// import { saveProfileInfo } from '../../utils/api/profile';
-import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const About = ({ about, setAbout }) => (
   <div className="my-account container">
@@ -46,7 +44,6 @@ const About = ({ about, setAbout }) => (
         {/* </Animated> */}
         {/* )} */}
       </div>
-      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   </div>
 );

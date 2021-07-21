@@ -115,7 +115,7 @@ const App = () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const balance = await provider.getBalance(accounts[0]);
     const network = await provider.getNetwork();
-    const ethPrice = await getEthPriceEtherscan();
+    const ethPrice = await getEthPriceCoingecko();
     const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
@@ -131,18 +131,6 @@ const App = () => {
       contracts.UniverseERC721Core.abi,
       signerResult
     );
-
-    const universeERC721FactoryContractResult = new Contract(
-      contracts.UniverseERC721Factory.address,
-      contracts.UniverseERC721Factory.abi,
-      signerResult
-    );
-
-    const universeERC721ContractResult = new Contract(
-      contracts.UniverseERC721.address,
-      contracts.UniverseERC721.abi,
-      signerResult
-    );
     // const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
     // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
 
@@ -154,17 +142,6 @@ const App = () => {
     setUsdWethBalance(ethPrice.ethereum.usd * utils.formatEther(wethBalanceResult.result));
     // setAuctionFactoryContract(auctionFactoryContractResult);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
-    setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
-    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
-    setWethBalance(utils.formatEther(wethBalanceResult.result));
-    setUsdWethBalance(ethPrice.ethereum.usd * utils.formatEther(wethBalanceResult.result));
-    // setAuctionFactoryContract(auctionFactoryContractResult);
-    setUniverseERC721CoreContract(universeERC721CoreContractResult);
-    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
-    setWethBalance(utils.formatEther(wethBalanceResult.result));
-    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalanceResult.result));
-    // setAuctionFactoryContract(auctionFactoryContractResult);
-    setUniverseERC721Contract(universeERC721ContractResult);
     setIsWalletConnected(true);
   };
 
@@ -179,9 +156,14 @@ const App = () => {
       const hasSigned = sameUser && localStorage.getItem('access_token');
 
       if (!hasSigned) {
-        const challenge = await getChallenge();
-        const signedMessage = await signer?.signMessage(challenge);
-        const authInfo = await userAuthenticate({ address, signedMessage });
+        const chanllenge = uuid();
+        const challengeResult = await setChallenge(chanllenge);
+        const signedMessage = await signer?.signMessage(chanllenge);
+        const authInfo = await userAuthenticate({
+          address,
+          signedMessage,
+          uuid: challengeResult?.uuid,
+        });
 
         if (!authInfo.error) {
           setIsAuthenticated(true);
@@ -189,9 +171,9 @@ const App = () => {
             id: authInfo.user.id,
             name: authInfo.user.displayName,
             universePageAddress: authInfo.user.universePageUrl,
-            avatar: authInfo.user.profileImageName,
+            avatar: authInfo.user.profileImageUrl,
             about: authInfo.user.about,
-            personalLogo: authInfo.user.logoImageName,
+            personalLogo: authInfo.user.logoImageUrl,
             instagramLink: authInfo.user.instagramUser,
             twitterLink: authInfo.user.twitterUser,
           });
@@ -213,9 +195,9 @@ const App = () => {
             // id: authInfo.user.id, TODO:: this is not returned in this request, do we need it ?
             name: userInfo.displayName,
             universePageAddress: userInfo.universePageUrl,
-            avatar: userInfo.profileImageName,
+            avatar: userInfo.profileImageUrl,
             about: userInfo.about,
-            personalLogo: userInfo.logoImageName,
+            personalLogo: userInfo.logoImageUrl,
             instagramLink: userInfo.instagramUser,
             twitterLink: userInfo.twitterUser,
           });
@@ -357,10 +339,6 @@ const App = () => {
         setAuctionFactoryContract,
         universeERC721CoreContract,
         setUniverseERC721CoreContract,
-        universeERC721FactoryContract,
-        setUniverseERC721FactoryContract,
-        universeERC721Contract,
-        setUniverseERC721Contract,
         signer,
         setSigner,
         connectWeb3,

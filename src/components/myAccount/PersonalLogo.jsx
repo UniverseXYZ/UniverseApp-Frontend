@@ -6,30 +6,10 @@ import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import Button from '../button/Button.jsx';
-import { saveUserLogo } from '../../utils/api/profile';
 
 const PersonalLogo = ({ logo, setLogo }) => {
-  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useContext(AppContext);
   const logoInput = useRef(null);
-
-  const saveLogoChanges = async () => {
-    setLogoEditing(true);
-
-    if (typeof logo === 'object') {
-      const saveLogoRequest = await saveUserLogo(logo);
-      if (saveLogoRequest.logoImageUrl) {
-        setLoggedInArtist({
-          ...loggedInArtist,
-          personalLogo: saveLogoRequest.logoImageUrl,
-        });
-      }
-    }
-  };
-
-  const cancelLogoChanges = () => {
-    setLogo(loggedInArtist.personalLogo);
-    setLogoEditing(true);
-  };
 
   return (
     <div className="my-account container">
@@ -67,8 +47,12 @@ const PersonalLogo = ({ logo, setLogo }) => {
               <div className="import-logo-preview">
                 <h6>Preview</h6>
                 <div className="logo-picture">
-                  {logo && typeof logo === 'object' && (
-                    <img className="logo-img" src={URL.createObjectURL(logo)} alt="Cover" />
+                  {logo && (
+                    <img
+                      className="logo-img"
+                      src={typeof logo === 'object' ? URL.createObjectURL(logo) : logo}
+                      alt="Cover"
+                    />
                   )}
                   {!logo && loggedInArtist.personalLogo && (
                     <img

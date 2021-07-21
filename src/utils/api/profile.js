@@ -2,7 +2,7 @@ const SAVE_PROFILE_INFO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/sa
 const UPLOAD_PROFILE_IMAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/upload-profile-image`;
 const UPLOAD_LOGO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/upload-logo-image`;
 const GET_PROFILE_INFO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info`;
-const CHALLENGE_RUL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/getChallenge`;
+const CHALLENGE_RUL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/setChallenge`;
 const LOGIN_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
 
 /**
@@ -118,9 +118,17 @@ export const getProfileInfo = async ({ address }) => {
 /**
  * @returns {string} challenge
  */
-export const getChallenge = async () => {
-  const request = await fetch(CHALLENGE_RUL, { credentials: 'include' });
-  const result = await request.text();
+export const setChallenge = async (challenge) => {
+  const request = await fetch(CHALLENGE_RUL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      challenge,
+    }),
+  });
+  const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };
 
@@ -140,14 +148,17 @@ export const getChallenge = async () => {
  * @returns {string} result.user.twitterUser
  * @returns {string} result.user.universePageUrl
  */
-export const userAuthenticate = async ({ address, signedMessage }) => {
+export const userAuthenticate = async ({ address, signedMessage, uuid }) => {
   const request = await fetch(LOGIN_URL, {
-    credentials: 'include',
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ address: `${address}`, signature: signedMessage }),
+    body: JSON.stringify({
+      address: `${address}`,
+      signature: signedMessage,
+      uuid,
+    }),
   });
   const result = await request.text().then((data) => JSON.parse(data));
   return result;

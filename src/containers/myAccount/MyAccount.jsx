@@ -9,7 +9,6 @@ import Social from '../../components/myAccount/Social.jsx';
 import Head from '../../components/myAccount/Head.jsx';
 import AppContext from '../../ContextAPI';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
-import Artist from '../artist/Artist.jsx';
 import ServerErrorPopup from '../../components/popups/ServerErrorPopup.jsx';
 
 import { saveProfileInfo, saveUserImage, saveUserLogo } from '../../utils/api/profile.js';
@@ -38,12 +37,6 @@ const MyAccount = () => {
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [showSocial, setShowSocial] = useState(loggedInArtist.social);
   const [errorModal, showErrorModal] = useState(false);
-
-  const artist = location.state
-    ? location.state.id === loggedInArtist.id
-      ? loggedInArtist
-      : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
-    : null;
 
   useEffect(() => {
     setDarkMode(false);

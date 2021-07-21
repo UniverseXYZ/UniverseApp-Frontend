@@ -191,7 +191,7 @@ const MintSingleNft = ({ onClick }) => {
       setName(res[0].name);
       setDescription(res[0].description);
       setEditions(res[0].numberOfEditions);
-      setPreviewImage(res[0].previewImage);
+      setPreviewImage(res[0].url);
       setPercentAmount(res[0].royalties);
       setProperties(res[0].properties);
       setArtworkType(res[0].artworkType);
@@ -273,6 +273,9 @@ const MintSingleNft = ({ onClick }) => {
             ]);
             document.getElementById('congrats-hidden-btn').click();
           } else {
+            // Not working yet! We need the UNIVERSE collection ID
+            document.getElementById('loading-hidden-btn').click();
+
             const result = await saveNftForLater({
               name,
               description,
@@ -294,6 +297,8 @@ const MintSingleNft = ({ onClick }) => {
             }
 
             if (!saveImageResult) return;
+
+            console.log(saveImageResult);
 
             // Update the state based on the result
             setSavedNfts([

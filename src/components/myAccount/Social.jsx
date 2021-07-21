@@ -8,8 +8,6 @@ import pencilIcon from '../../assets/images/edit.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
-import ServerErrorPopup from '../popups/ServerErrorPopup.jsx';
-import { saveProfileInfo } from '../../utils/api/profile';
 
 const Social = ({
   showSocial,
@@ -114,7 +112,6 @@ const Social = ({
         {/* </Animated> */}
         {/* )} */}
       </div>
-      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   </div>
 );
