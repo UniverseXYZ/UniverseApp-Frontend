@@ -22,6 +22,7 @@ import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scr
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
 import EmptyTabs from '../tabs/EmptyTabs';
+import { getMetaForSavedNft } from '../../utils/api/mintNFT';
 
 const MyNFTs = () => {
   const {
@@ -40,6 +41,7 @@ const MyNFTs = () => {
     deployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
+    universeERC721Contract,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
@@ -83,52 +85,63 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleMintSelected = () => {
+  const handleMintSelected = async () => {
     document.getElementById('loading-hidden-btn').click();
-    setTimeout(() => {
+    setTimeout(async () => {
       document.getElementById('popup-root').remove();
       document.getElementById('congrats-hidden-btn').click();
-      setTimeout(() => {
-        const newMyNFTs = [...myNFTs];
-        savedNfts.forEach((nft) => {
-          if (nft.selected) {
-            if (nft.type === 'single') {
-              newMyNFTs.push({
-                id: nft.id,
-                type: nft.type,
-                previewImage: nft.previewImage,
-                name: nft.name,
-                description: nft.description,
-                numberOfEditions: Number(nft.numberOfEditions),
-                generatedEditions: nft.generatedEditions,
-                properties: nft.properties,
-                percentAmount: nft.percentAmount || '',
-              });
-            } else {
-              newMyNFTs.push({
-                id: nft.id,
-                type: nft.type,
-                collectionId: nft.collectionName,
-                collectionName: nft.collectionName,
-                collectionAvatar: nft.collectionAvatar,
-                collectionDescription: nft.collectionDescription,
-                shortURL: nft.shortURL,
-                previewImage: nft.previewImage,
-                name: nft.name,
-                description: nft.description,
-                numberOfEditions: Number(nft.numberOfEditions),
-                generatedEditions: nft.generatedEditions,
-                properties: nft.properties,
-                percentAmount: nft.percentAmount || '',
-              });
-            }
-          }
-        });
-        setMyNFTs(newMyNFTs);
-        const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-        setSavedNfts(newSavedNFTs);
-        setSavedNFTsID(null);
-      }, 2000);
+      // setTimeout(() => {
+      const newMyNFTs = [...myNFTs];
+      // TODO:: Get the desired NFT's metaData
+      // Get the selected NFTS for mint
+      const selectedNFTS = savedNfts.filter((nft) => nft.selected);
+      const metaDataPromises = selectedNFTS.map((nft) => getMetaForSavedNft(nft.id));
+      const metaDataResult = await Promise.all(metaDataPromises);
+      console.log(metaDataResult);
+      // Mint the NFTS trough the smart contract
+      // universeERC721Contract.mint()
+      // Update the ui -> Fetch savedNfts and save them
+
+      // TODO:: for now the BE is not ready with a field to distinguish if its a single or collection item
+
+      // savedNfts.forEach((nft) => {
+      // if (nft.selected) {
+      // if (nft.type === 'single') {
+      //   newMyNFTs.push({
+      //     id: nft.id,
+      //     type: nft.type,
+      //     previewImage: nft.previewImage,
+      //     name: nft.name,
+      //     description: nft.description,
+      //     numberOfEditions: Number(nft.numberOfEditions),
+      //     generatedEditions: nft.generatedEditions,
+      //     properties: nft.properties,
+      //     percentAmount: nft.percentAmount || '',
+      //   });
+      // } else {
+      //   newMyNFTs.push({
+      //     id: nft.id,
+      //     type: nft.type,
+      //     collectionId: nft.collectionName,
+      //     collectionName: nft.collectionName,
+      //     collectionAvatar: nft.collectionAvatar,
+      //     collectionDescription: nft.collectionDescription,
+      //     shortURL: nft.shortURL,
+      //     previewImage: nft.previewImage,
+      //     name: nft.name,
+      //     description: nft.description,
+      //     numberOfEditions: Number(nft.numberOfEditions),
+      //     generatedEditions: nft.generatedEditions,
+      //     properties: nft.properties,
+      //     percentAmount: nft.percentAmount || '',
+      //   });
+      // }
+      // }
+      // });
+      const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
+      setMyNFTs(newMyNFTs); // TODO:: No backend for getting my NFTS
+      setSavedNfts(newSavedNFTs);
+      // }, 2000);
     }, 3000);
   };
 

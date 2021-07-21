@@ -108,36 +108,31 @@ const SavedNFTs = () => {
 
           <div className="saved__nfts__lists">
             {savedNfts.map((nft, index) => (
-              <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
+              <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={nft.id}>
                 <div
                   className="saved__nft__box__image"
                   onClick={() => handleSavedNfts(index)}
                   aria-hidden="true"
                 >
-                  {nft.previewImage.type === 'video/mp4' && (
+                  {nft.artworkType === 'mp4' && (
                     <video
                       onMouseOver={(event) => event.target.play()}
                       onFocus={(event) => event.target.play()}
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                      <source src={nft.url} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  {nft.previewImage.type === 'audio/mpeg' && (
+                  {/* {nft.artworkType === 'audio/mpeg' && ( //TODO:: what kind of audio formats are eligible ??
                     <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                  )} */}
+                  {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && (
+                    <img className="preview-image" src={nft.url} alt={nft.name} />
                   )}
-                  {nft.previewImage.type !== 'audio/mpeg' &&
-                    nft.previewImage.type !== 'video/mp4' && (
-                      <img
-                        className="preview-image"
-                        src={URL.createObjectURL(nft.previewImage)}
-                        alt={nft.name}
-                      />
-                    )}
-                  {nft.previewImage.type === 'video/mp4' && (
+                  {nft.artworkType === 'mp4' && (
                     <img className="video__icon" src={videoIcon} alt="Video Icon" />
                   )}
                   {nft.selected && <img className="check__icon" src={checkIcon} alt="Check Icon" />}
@@ -204,7 +199,7 @@ const SavedNFTs = () => {
                       </>
                     )}
                   </div>
-                  {nft.generatedEditions.length > 1 ? (
+                  {nft.generatedEditions && nft.generatedEditions.length > 1 ? (
                     <div className="collection__count">
                       {`x${nft.generatedEditions.length}`}
                       <div
@@ -221,10 +216,12 @@ const SavedNFTs = () => {
                       </div>
                     </div>
                   ) : (
-                    <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
+                    <p className="collection__count">
+                      {nft.generatedEditions ? `#${nft.generatedEditions[0]}` : ''}
+                    </p>
                   )}
                 </div>
-                {nft.generatedEditions.length > 1 && (
+                {nft.generatedEditions && nft.generatedEditions.length > 1 && (
                   <>
                     <div className="saved__nft__box__highlight__one" />
                     <div className="saved__nft__box__highlight__two" />

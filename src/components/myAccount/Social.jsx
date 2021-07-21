@@ -8,6 +8,8 @@ import pencilIcon from '../../assets/images/edit.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
+import ServerErrorPopup from '../popups/ServerErrorPopup.jsx';
+import { saveProfileInfo } from '../../utils/api/profile';
 
 const Social = ({
   showSocial,
@@ -19,8 +21,38 @@ const Social = ({
   saveChanges,
   cancelChanges,
 }) => {
-  const { loggedInArtist } = useContext(AppContext);
   // const [showSocial, setShowSocial] = useState(true);
+
+  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const [socialEditing, setSocialEditing] = useState(true);
+  const [errorModal, showErrorModal] = useState(false);
+
+  const saveSocialChanges = async () => {
+    setSocialEditing(true);
+
+    const artistData = {
+      ...loggedInArtist,
+      instagramLink,
+      twitterLink,
+    };
+
+    const result = await saveProfileInfo(artistData);
+
+    if (!result.ok) {
+      showErrorModal(true);
+      return;
+    }
+
+    setLoggedInArtist({
+      ...artistData,
+    });
+  };
+
+  const cancelSocialChanges = () => {
+    setTwitterLink(loggedInArtist.twitterLink);
+    setInstagramLink(loggedInArtist.instagramLink);
+    setSocialEditing(true);
+  };
 
   return (
     <div className="account-grid-social">
@@ -113,8 +145,7 @@ const Social = ({
           </Button>
         </div> */}
       </div>
-      {/* </Animated> */}
-      {/* )} */}
+      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
 };

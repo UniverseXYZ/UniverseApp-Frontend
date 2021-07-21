@@ -39,20 +39,10 @@ import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
-import searchIcon from '../../../../assets/images/search-icon.svg';
-import img from '../../../../assets/images/search-gray.svg';
-import img2 from '../../../../assets/images/crossclose.svg';
-import Button from '../../../button/Button';
-// import '../../Header.scss';
-import mp3Icon from '../../../../assets/images/mp3-icon.png';
-import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors } from '../../../../utils/helpers';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
 
 const TabletView = (props) => {
   const {
-    isWalletConnected,
-    setIsWalletConnected,
-    ethereumAddress,
     handleConnectWallet,
     showInstallWalletPopup,
     setShowInstallWalletPopup,
@@ -63,7 +53,18 @@ const TabletView = (props) => {
     showSearch,
     setShowSearch,
   } = props;
-  const { handleClickOutside } = useContext(AppContext);
+  const {
+    address,
+    isWalletConnected,
+    setIsWalletConnected,
+    handleClickOutside,
+    yourBalance,
+    usdEthBalance,
+    wethBalance,
+    usdWethBalance,
+    isAuthenticated,
+    connectWeb3,
+  } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -122,226 +123,7 @@ const TabletView = (props) => {
 
   return (
     <div className="tablet__nav">
-      <button
-        className="search--box"
-        type="button"
-        onClick={() => {
-          setShowSearch(!showSearch);
-        }}
-      >
-        <img src={searchIcon} alt="icon" />
-      </button>
-      {showSearch && (
-        <>
-          <div className="search--section">
-            <div className="input--search--box">
-              <div className={`input--box ${searchFocus || searchValue ? 'focus' : ''}`}>
-                <div className="box--shadow--effect--block" />
-                <input
-                  placeholder="Search"
-                  ref={searchRef}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  value={searchValue}
-                  onKeyDown={handleSearchKeyDown}
-                  type="text"
-                  onFocus={() => setSearchFocus(true)}
-                  onBlur={() => setSearchFocus(false)}
-                />
-                <img src={img} alt="search" className="searchicon" />
-                <img
-                  src={img2}
-                  alt="close"
-                  className="closeicon"
-                  onClick={() => {
-                    setShowSearch(false);
-                    setSearchValue('');
-                  }}
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-            <div className="search--results">
-              {searchValue.length > 0 && (
-                <>
-                  <div className="search__results" ref={ref}>
-                    {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-                    ).length ? (
-                      <div className="search__nfts">
-                        {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).length > 0 && <h4>NFTs</h4>}
-                        {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).map((nft) => (
-                          <div className="nft__div">
-                            <div className="nft--image">
-                              {nft.media.type !== 'audio/mpeg' &&
-                                nft.media.type !== 'video/mp4' && (
-                                  <img src={nft.media.url} alt="NFT" />
-                                )}
-                              {nft.media.type === 'video/mp4' && (
-                                <video
-                                  onMouseOver={(event) => event.target.play()}
-                                  onFocus={(event) => event.target.play()}
-                                  onMouseOut={(event) => event.target.pause()}
-                                  onBlur={(event) => event.target.pause()}
-                                >
-                                  <source src={nft.media.url} type="video/mp4" />
-                                  <track kind="captions" />
-                                  Your browser does not support the video tag.
-                                </video>
-                              )}
-                              {nft.media.type === 'audio/mpeg' && (
-                                <img className="nft--image" src={mp3Icon} alt={nft.name} />
-                              )}
-                              {nft.media.type === 'audio/mpeg' && (
-                                <div className="video__icon">
-                                  <img src={audioIcon} alt="Video Icon" />
-                                </div>
-                              )}
-                            </div>
-                            <div className="nft--desc">
-                              <h5 className="nft--name">{nft.name}</h5>
-                              <p className="nft--price">
-                                {nft.price} ETH / {nft.editions.split('/')[0]} of{' '}
-                                {nft.editions.split('/')[1]}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                        {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).length > 0 && <h4>Users</h4>}
-                        {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).map((user) => (
-                          <div className="users__div">
-                            <div className="user--avatar">
-                              <img src={user.avatar} alt="User" />
-                            </div>
-                            <div className="user--desc">
-                              <h5 className="user--name">{user.name}</h5>
-                              <p className="user--followers">{user.followers} Followers</p>
-                            </div>
-                          </div>
-                        ))}
-                        {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).length > 0 && <h4>Auctions</h4>}
-                        {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).map((auction) => (
-                          <div className="auction__div">
-                            <div className="auction--image">
-                              <img src={auction.photo} alt="Auction" />
-                            </div>
-                            <div className="auction--desc">
-                              <h5 className="auction--title">{auction.name}</h5>
-                              <p className="auction--artist">by {auction.creator.name}</p>
-                            </div>
-                          </div>
-                        ))}
-                        {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).length > 0 && <h4>Collections</h4>}
-                        {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).map((collection) => (
-                          <div className="collection__div">
-                            {!collection.photo ? (
-                              <div
-                                className="random--avatar--color"
-                                style={{
-                                  backgroundColor:
-                                    defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                                }}
-                              >
-                                {collection.name.charAt(0)}
-                              </div>
-                            ) : (
-                              <div className="collection--image">
-                                <img src={collection.photo} alt="Coll" />
-                              </div>
-                            )}
-                            <div className="collection--desc">
-                              <h5 className="collection--name">{collection.name}</h5>
-                              <p className="collection--owner">by {collection.owner.name}</p>
-                            </div>
-                          </div>
-                        ))}
-                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).length > 0 && <h4>Communities</h4>}
-                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).map((communities) => (
-                          <div className="communities__div">
-                            <div className="communities--photo">
-                              <img src={communities.photo} alt="Comm" />
-                            </div>
-                            <div className="communities--desc">
-                              <h5 className="communities--name">{communities.name}</h5>
-                              <p className="communities--members">{communities.members} Members</p>
-                            </div>
-                          </div>
-                        ))}
-                        {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-                        ).length > 0 && <h4>Galleries</h4>}
-                        {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                          item.name.toLowerCase().includes(searchValue.toLowerCase())
-                        ).map((galleries) => (
-                          <div className="galleries__div">
-                            <div className="galleries--photo">
-                              <img src={galleries.photos[0]} alt="Gall" />
-                            </div>
-                            <div className="galleries--desc">
-                              <h5 className="galleries--name">{galleries.name}</h5>
-                              <p className="galleries--likes">{galleries.likesCount} Likes</p>
-                            </div>
-                          </div>
-                        ))}
-                        <Button
-                          type="button"
-                          className="light-border-button"
-                          onClick={() => handleAllResults()}
-                        >
-                          All results
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="no__result">
-                        <p>No items found</p>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-              <p>
-                Search by auction, NFT, user,
-                <br /> collection, community or gallery
-              </p>
-            </div>
-          </div>
-        </>
-      )}
-      {isWalletConnected && (
+      {isWalletConnected && isAuthenticated ? (
         <div className="wallet__connected__tablet">
           <img
             className="account__icon hide__on__tablet"
@@ -369,7 +151,7 @@ const TabletView = (props) => {
                 <div className="dropdown__header">
                   <div className="copy-div">
                     <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <div className="ethereum__address">{shortenEthereumAddress(address)}</div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -377,7 +159,7 @@ const TabletView = (props) => {
                           <span />
                         </div>
                         <CopyToClipboard
-                          text={ethereumAddress}
+                          text={address}
                           onCopy={() => {
                             setCopied(true);
                             setTimeout(() => {
@@ -394,13 +176,13 @@ const TabletView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
                   <div className="group2">
                     <img src={Group2} alt="WETH" />
-                    <span className="first-span">6,24 WETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(wethBalance, 2)} WETH</span>
+                    <span className="second-span">${toFixed(usdWethBalance, 2)}</span>
                   </div>
                 </div>
                 <div className="dropdown__body">
@@ -450,7 +232,7 @@ const TabletView = (props) => {
             </Animated>
           )}
         </div>
-      )}
+      ) : null}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
@@ -614,10 +396,13 @@ const TabletView = (props) => {
             </li>
             {!isWalletConnected && (
               <li className="sign__in">
+                <button type="button" onClick={() => connectWeb3()}>
+                  Sign In
+                </button>
                 {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
                 </Popup> */}
-                <Popup trigger={<button type="button">Sign in</button>}>
+                {/* <Popup trigger={<button type="button">Sign in</button>}>
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
@@ -628,7 +413,7 @@ const TabletView = (props) => {
                       setSelectedWallet={setSelectedWallet}
                     />
                   )}
-                </Popup>
+                </Popup> */}
               </li>
             )}
           </ul>
@@ -639,9 +424,6 @@ const TabletView = (props) => {
 };
 
 TabletView.propTypes = {
-  isWalletConnected: PropTypes.bool.isRequired,
-  setIsWalletConnected: PropTypes.func.isRequired,
-  ethereumAddress: PropTypes.string.isRequired,
   handleConnectWallet: PropTypes.func.isRequired,
   showInstallWalletPopup: PropTypes.bool.isRequired,
   setShowInstallWalletPopup: PropTypes.func.isRequired,
