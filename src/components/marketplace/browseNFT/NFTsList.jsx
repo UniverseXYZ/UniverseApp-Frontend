@@ -156,10 +156,6 @@ const NFTsList = ({ data }) => {
             ) : (
               <>
                 <Slider {...sliderSettings}>
-                  {/* <div className="nft--count">
-                    <img src={bundlesIcon} alt="Bundles" />
-                    <span>{`${selectedNFTIndex + 1} of ${selectedNFT.allItems.length}`}</span>
-                  </div> */}
                   {nft.allItems.map((item) => (
                     <div
                       className="slider--box"
