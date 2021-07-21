@@ -21,7 +21,12 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
 import delIcon from '../../assets/images/del-icon.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
-import { saveNftForLater, saveNftImage } from '../../utils/api/mintNFT';
+import {
+  updateSavedForLaterNft,
+  saveNftImage,
+  saveNftForLater,
+  getTokenURI,
+} from '../../utils/api/mintNFT';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const MintSingleNft = ({ onClick }) => {
@@ -33,6 +38,8 @@ const MintSingleNft = ({ onClick }) => {
     myNFTs,
     setMyNFTs,
     deployedCollections,
+    universeERC721CoreContract,
+    auctionFactoryContract,
   } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
@@ -51,6 +58,7 @@ const MintSingleNft = ({ onClick }) => {
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
   const [percentAmount, setPercentAmount] = useState('');
+  const [artWorkType, setArtworkType] = useState('');
   const [royalities, setRoyalities] = useState(true);
   const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
@@ -153,10 +161,13 @@ const MintSingleNft = ({ onClick }) => {
         file.type === 'video/mp4' ||
         file.type === 'image/webp' ||
         file.type === 'image/gif' ||
+        file.type === 'image/jpeg' ||
         file.type === 'image/png') &&
       file.size / 1048576 < 30
     ) {
       setPreviewImage(file);
+      // Reset the currently opened NFT ArtWorkType
+      setArtworkType(file.type);
       setErrors({ ...errors, previewImage: '' });
     } else {
       setPreviewImage(null);
@@ -180,9 +191,10 @@ const MintSingleNft = ({ onClick }) => {
       setName(res[0].name);
       setDescription(res[0].description);
       setEditions(res[0].numberOfEditions);
-      setPreviewImage(res[0].previewImage);
+      setPreviewImage(res[0].url);
       setPercentAmount(res[0].royalties);
       setProperties(res[0].properties);
+      setArtworkType(res[0].artworkType);
       if (res.length && res[0].collectionId) {
         const getCollection = deployedCollections.filter((col) => col.id === res[0].collectionId);
         if (getCollection.length) {
@@ -194,15 +206,49 @@ const MintSingleNft = ({ onClick }) => {
 
   useEffect(async () => {
     if (saveForLateClick) {
+      console.log(1);
       if (!errors.name && !errors.edition && !errors.previewImage) {
+        console.log(2);
         const generatedEditions = [];
 
         for (let i = 0; i < editions; i += 1) {
           generatedEditions.push(uuid().split('-')[0]);
         }
         if (!savedNFTsID) {
+          console.log(3);
           if (selectedCollection) {
+            document.getElementById('loading-hidden-btn').click();
+            console.log(4);
+            console.log('id', selectedCollection);
             // TODO:: As discussed with Alex this functionality is postponed for now.
+
+            const result = await saveNftForLater({
+              name,
+              description,
+              editions,
+              properties,
+              percentAmount,
+              collectionId: selectedCollection.id,
+            });
+
+            let saveImageResult = null;
+
+            console.log(result);
+            if (result.savedNft) {
+              // Update the NFT image
+              saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+              console.log(saveImageResult);
+              if (saveImageResult.error) {
+                // Error with saving the image, show modal
+                showErrorModal(true);
+                return;
+              }
+            }
+
+            if (!saveImageResult) return;
+
+            console.log(previewImage);
+
             setSavedNfts([
               ...savedNfts,
               {
@@ -222,15 +268,21 @@ const MintSingleNft = ({ onClick }) => {
                 properties,
                 percentAmount,
                 selected: false,
+                artworkType: saveImageResult.artworkType,
               },
             ]);
+            document.getElementById('congrats-hidden-btn').click();
           } else {
+            // Not working yet! We need the UNIVERSE collection ID
+            document.getElementById('loading-hidden-btn').click();
+
             const result = await saveNftForLater({
               name,
               description,
               editions,
               properties,
               percentAmount,
+              collectionId: selectedCollection.id,
             });
 
             let saveImageResult = null;
@@ -246,6 +298,8 @@ const MintSingleNft = ({ onClick }) => {
 
             if (!saveImageResult) return;
 
+            console.log(saveImageResult);
+
             // Update the state based on the result
             setSavedNfts([
               ...savedNfts,
@@ -260,50 +314,67 @@ const MintSingleNft = ({ onClick }) => {
                 properties: saveImageResult.properties,
                 percentAmount: saveImageResult.royalties,
                 selected: false,
+                url: saveImageResult.url,
+                artworkType: saveImageResult.artworkType,
               },
             ]);
+            document.getElementById('congrats-hidden-btn').click();
           }
         } else {
           // Editing already existing SAVED FOR LATER NFT
-          // TODO:: it needs another end-point ! On this one creates new NFT
-          const result = await saveNftForLater({
+          document.getElementById('loading-hidden-btn').click();
+
+          const result = await updateSavedForLaterNft({
             name,
             description,
             editions,
             properties,
             percentAmount,
+            id: savedNFTsID,
           });
 
           let saveImageResult = null;
-          const updateNFTImage = result.savedNft && typeof previewImage === 'object';
-          if (updateNFTImage) {
-            saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
-            if (saveImageResult.error) {
-              // Error with saving the image, show modal
-              showErrorModal(true);
-              return;
+          if (!result.message) {
+            // There is no error message
+            const updateNFTImage = result.id && typeof previewImage === 'object';
+            if (updateNFTImage) {
+              saveImageResult = await saveNftImage(previewImage, result.id);
+              if (saveImageResult.error) {
+                // Error with saving the image, show modal
+                showErrorModal(true);
+                return;
+              }
             }
           }
 
-          const data = saveImageResult || result.savedNft;
-          if (!data) return;
+          const data = saveImageResult || result;
+          if (!data) {
+            document.getElementById('congrats-hidden-btn').click();
+            showErrorModal(true);
+            return;
+          }
 
           setSavedNfts(
-            savedNfts.map((item) =>
-              item.id === savedNFTsID
-                ? {
-                    ...item,
-                    previewImage: saveImageResult ? saveImageResult.url : previewImage,
-                    name: data.name,
-                    description: data.description,
-                    numberOfEditions: data.numberOfEditions,
-                    generatedEditions,
-                    properties: data.properties,
-                    percentAmount: data.royalties,
-                  }
-                : item
-            )
+            savedNfts.map((item) => {
+              if (item.id === savedNFTsID) {
+                return {
+                  ...item,
+                  previewImage: saveImageResult ? saveImageResult.url : previewImage,
+                  name: data.name,
+                  description: data.description,
+                  numberOfEditions: data.numberOfEditions,
+                  generatedEditions,
+                  properties: data.properties,
+                  percentAmount: data.royalties,
+                  url: saveImageResult ? saveImageResult.url : previewImage,
+                  artworkType: data.artworkType,
+                };
+              }
+
+              return item;
+            })
           );
+          document.getElementById('congrats-hidden-btn').click();
         }
         setShowModal(false);
         document.body.classList.remove('no__scroll');
@@ -312,60 +383,79 @@ const MintSingleNft = ({ onClick }) => {
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         document.getElementById('loading-hidden-btn').click();
-        setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
-          setTimeout(() => {
-            const mintingGeneratedEditions = [];
 
-            for (let i = 0; i < editions; i += 1) {
-              mintingGeneratedEditions.push(uuid().split('-')[0]);
-            }
-            if (selectedCollection) {
-              // TODO:: As discussed with Alex this functionality is postponed for now.
-              setMyNFTs([
-                ...myNFTs,
-                {
-                  id: uuid(),
-                  type: 'collection',
-                  collectionId: selectedCollection.id,
-                  collectionName: selectedCollection.name,
-                  collectionAvatar: selectedCollection.previewImage,
-                  collectionDescription: selectedCollection.description,
-                  shortURL: selectedCollection.shortURL,
-                  tokenName: selectedCollection.tokenName,
-                  previewImage,
-                  name,
-                  description,
-                  numberOfEditions: Number(editions),
-                  generatedEditions: mintingGeneratedEditions,
-                  properties,
-                  percentAmount,
-                  releasedDate: new Date(),
-                },
-              ]);
-            } else {
-              // TODO:: WE DON'T HAVE AN ENDPOINT FOR DIRECT CREATION OF NFT, FOR NOW WORKS ONLY WITH SAVED NFTS
-              setMyNFTs([
-                ...myNFTs,
-                {
-                  id: uuid(),
-                  type: 'single',
-                  previewImage,
-                  name,
-                  description,
-                  numberOfEditions: Number(editions),
-                  generatedEditions: mintingGeneratedEditions,
-                  properties,
-                  percentAmount,
-                  releasedDate: new Date(),
-                },
-              ]);
-            }
-            setShowModal(false);
-            document.body.classList.remove('no__scroll');
-          }, 2000);
-        }, 3000);
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
+
+        const mintingGeneratedEditions = [];
+
+        for (let i = 0; i < editions; i += 1) {
+          mintingGeneratedEditions.push(uuid().split('-')[0]);
+        }
+
+        if (selectedCollection) {
+          const userAddress = localStorage.getItem('user_address');
+          // universeERC721CoreContract should be used for minting single NFT
+          // auctionFactoryContract should be usef for minting Collectibles NFTS
+          console.log(name, description, editions, properties, percentAmount, selectedCollection);
+          const tokenURIResult = await getTokenURI({
+            file: previewImage,
+            name,
+            description,
+            editions,
+            properties,
+            percentAmount,
+          });
+
+          console.log(tokenURIResult);
+
+          // call contract
+          // auctionFactoryContract.mint(userAddress, tokenURIResult, [
+          //   ['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 1000],
+          // ]);
+
+          // TODO:: As discussed with Alex this functionality is postponed for now.
+          setMyNFTs([
+            ...myNFTs,
+            {
+              id: uuid(),
+              type: 'collection',
+              collectionId: selectedCollection.id,
+              collectionName: selectedCollection.name,
+              collectionAvatar: selectedCollection.previewImage,
+              collectionDescription: selectedCollection.description,
+              shortURL: selectedCollection.shortURL,
+              tokenName: selectedCollection.tokenName,
+              previewImage,
+              name,
+              description,
+              numberOfEditions: Number(editions),
+              generatedEditions: mintingGeneratedEditions,
+              properties,
+              percentAmount,
+              releasedDate: new Date(),
+            },
+          ]);
+        } else {
+          // TODO:: WE DON'T HAVE AN ENDPOINT FOR DIRECT CREATION OF NFT, FOR NOW WORKS ONLY WITH SAVED NFTS
+          setMyNFTs([
+            ...myNFTs,
+            {
+              id: uuid(),
+              type: 'single',
+              previewImage,
+              name,
+              description,
+              numberOfEditions: Number(editions),
+              generatedEditions: mintingGeneratedEditions,
+              properties,
+              percentAmount,
+              releasedDate: new Date(),
+            },
+          ]);
+        }
+        setShowModal(false);
+        document.body.classList.remove('no__scroll');
       }
     }
   }, [errors, saveForLateClick, savedNfts]);
@@ -435,14 +525,22 @@ const MintSingleNft = ({ onClick }) => {
             <div className="single-nft-preview">
               <h5>Preview</h5>
               <div className="single-nft-picture">
-                {previewImage ? (
+                {/* It does matter if we show a preview for currently selected file from the pc, or we are going to display the url string from the BE */}
+                {previewImage || artWorkType ? (
                   <Popup
                     trigger={
                       <div className="preview__image">
                         <img className="size__up" src={sizeUpIcon} alt="Size Up" />
-                        {previewImage.type === 'video/mp4' && (
-                          <video>
-                            <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                        {(previewImage.type === 'video/mp4' || artWorkType === 'mp4') && (
+                          <video key={artWorkType}>
+                            <source
+                              src={
+                                artWorkType === 'mp4'
+                                  ? previewImage
+                                  : URL.createObjectURL(previewImage)
+                              }
+                              type="video/mp4"
+                            />
                             <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
@@ -451,7 +549,8 @@ const MintSingleNft = ({ onClick }) => {
                           <img className="preview-image" src={mp3Icon} alt="Preview" />
                         )}
                         {previewImage.type !== 'audio/mpeg' &&
-                          previewImage.type !== 'video/mp4' && (
+                          previewImage.type !== 'video/mp4' &&
+                          artWorkType !== 'mp4' && (
                             <img
                               className="preview-image"
                               src={
@@ -474,9 +573,16 @@ const MintSingleNft = ({ onClick }) => {
                           alt="Size Down"
                           aria-hidden="true"
                         />
-                        {previewImage.type === 'video/mp4' && (
+                        {(previewImage.type === 'video/mp4' || artWorkType === 'mp4') && (
                           <video controls autoPlay>
-                            <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                            <source
+                              src={
+                                artWorkType === 'mp4'
+                                  ? previewImage
+                                  : URL.createObjectURL(previewImage)
+                              }
+                              type="video/mp4"
+                            />
                             <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
@@ -489,7 +595,8 @@ const MintSingleNft = ({ onClick }) => {
                           </audio>
                         )}
                         {previewImage.type !== 'audio/mpeg' &&
-                          previewImage.type !== 'video/mp4' && (
+                          previewImage.type !== 'video/mp4' &&
+                          artWorkType !== 'mp4' && (
                             <img
                               className="preview-image"
                               src={

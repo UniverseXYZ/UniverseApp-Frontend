@@ -9,6 +9,9 @@ import Social from '../../components/myAccount/Social.jsx';
 import Head from '../../components/myAccount/Head.jsx';
 import AppContext from '../../ContextAPI';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
+import ServerErrorPopup from '../../components/popups/ServerErrorPopup.jsx';
+
+import { saveProfileInfo, saveUserImage, saveUserLogo } from '../../utils/api/profile.js';
 
 const MyAccount = () => {
   const {
@@ -32,6 +35,7 @@ const MyAccount = () => {
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [showSocial, setShowSocial] = useState(loggedInArtist.social);
+  const [errorModal, showErrorModal] = useState(false);
 
   useEffect(() => {
     setDarkMode(false);
@@ -47,14 +51,14 @@ const MyAccount = () => {
     }
   }, [isWalletConnected]);
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     setEditProfileButtonClick(true);
     let page = accountPage.substring(13);
     if (page === 'your-address') {
       page = '';
     }
     setAccountPage(page);
-    setLoggedInArtist({
+    const artistData = {
       ...loggedInArtist,
       name: accountName,
       universePageAddress: page,
@@ -64,12 +68,39 @@ const MyAccount = () => {
       instagramLink,
       twitterLink,
       social: showSocial,
-    });
+    };
+
+    const result = await saveProfileInfo(artistData);
+    if (typeof accountImage === 'object') {
+      const saveImageRequest = await saveUserImage(accountImage);
+      if (saveImageRequest.profileImageUrl) {
+        artistData.avatar = saveImageRequest.profileImageUrl;
+      }
+    }
+
+    if (typeof logo === 'object') {
+      const saveLogoRequest = await saveUserLogo(logo);
+      if (saveLogoRequest.logoImageUrl) {
+        setLoggedInArtist({
+          ...loggedInArtist,
+          personalLogo: saveLogoRequest.logoImageUrl,
+        });
+      }
+    }
+
+    if (!result.ok) {
+      showErrorModal(true);
+      return;
+    }
+
+    setLoggedInArtist({ ...artistData });
+
     if (!showSocial) {
       setShowSocial(false);
     } else {
       setShowSocial(true);
     }
+
     setTimeout(() => {
       if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
         document.getElementById('congrats-hidden-btn').click();
@@ -127,6 +158,7 @@ const MyAccount = () => {
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
       />
+      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
 };

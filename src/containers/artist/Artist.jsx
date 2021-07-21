@@ -29,9 +29,7 @@ const Artist = () => {
       <ArtistPageTabs onArtist={artist} />
       {artist.personalLogo ? (
         <div className="artist__personal__logo">
-          <div>
-            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
-          </div>
+          <img src={artist.personalLogo} alt="Artist personal logo" />
         </div>
       ) : (
         <></>

@@ -68,7 +68,7 @@ const ArtistDetails = ({ onArtist }) => {
           ) : (
             <div className="artist__details__section__container">
               <div className="avatar">
-                <img src={URL.createObjectURL(loggedInArtist.avatar)} alt={loggedInArtist.name} />
+                <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
                 <h2 className="show__on__mobile">{loggedInArtist.name}</h2>
               </div>
               <div className="info">

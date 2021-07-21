@@ -27,3 +27,6 @@ yarn-error.log*
 commit.sh
 merge-develop.sh
 new-branch.sh
+
+.firebaserc
+firebase.json

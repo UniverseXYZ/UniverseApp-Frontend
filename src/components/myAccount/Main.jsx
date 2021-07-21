@@ -8,8 +8,6 @@ import defaultImage from '../../assets/images/default-img.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import AppContext from '../../ContextAPI';
-import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
-import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const Main = ({
   accountName,
@@ -20,10 +18,33 @@ const Main = ({
   setAccountImage,
   editProfileButtonClick,
 }) => {
-  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useContext(AppContext);
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);
+  const [errors, setErrors] = useState({
+    previewImage: '',
+  });
+
+  const validateFile = (file) => {
+    if (!file) {
+      setAccountImage(null);
+      setErrors({
+        previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
+      });
+    } else if (
+      (file.type === 'image/webp' || file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / 1048576 < 30
+    ) {
+      setAccountImage(file);
+      setErrors({ ...errors, previewImage: '' });
+    } else {
+      setAccountImage(null);
+      setErrors({
+        previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
+      });
+    }
+  };
 
   const handleOnFocus = () => {
     if (!loggedInArtist.universePageAddress && accountPage === 'universe.xyz/your-address') {
@@ -37,47 +58,6 @@ const Main = ({
       setAccountPage('universe.xyz/your-address');
       setInputName('inp empty');
     }
-  };
-
-  const saveDisplayChanges = async () => {
-    let page = accountPage.substring(13);
-    if (page === 'your-address') {
-      page = '';
-    }
-
-    const artistData = {
-      ...loggedInArtist,
-      name: accountName,
-      universePageAddress: page,
-    };
-
-    const result = await saveProfileInfo(artistData);
-    if (typeof accountImage === 'object') {
-      const saveImageRequest = await saveUserImage(accountImage);
-      if (saveImageRequest.profileImageUrl) {
-        artistData.avatar = saveImageRequest.profileImageUrl;
-      }
-    }
-    if (!result.ok) {
-      showErrorModal(true);
-      return;
-    }
-
-    setLoggedInArtist({
-      ...artistData,
-    });
-  };
-
-  const cancelDisplayChanges = () => {
-    setAccountName(loggedInArtist.name);
-    if (loggedInArtist.universePageAddress) {
-      setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress}`);
-    } else {
-      setAccountPage('universe.xyz/your-address');
-    }
-
-    setAccountImage(loggedInArtist.avatar);
-    setNameEditing(true);
   };
 
   useEffect(() => {
@@ -95,11 +75,25 @@ const Main = ({
           <div className="account-grid-name">
             <div className="account-picture">
               <div className="account-image">
-                {accountImage && <img className="account-img" src={accountImage} alt="Avatar" />}
+                {accountImage && (
+                  <img
+                    className="account-img"
+                    src={
+                      typeof accountImage === 'object'
+                        ? URL.createObjectURL(accountImage)
+                        : accountImage
+                    }
+                    alt="Avatar"
+                  />
+                )}
                 {!accountImage && loggedInArtist.avatar && (
                   <img
                     className="account-img"
-                    src={URL.createObjectURL(loggedInArtist.avatar)}
+                    src={
+                      typeof loggedInArtist.avatar === 'object'
+                        ? URL.createObjectURL(loggedInArtist.avatar)
+                        : loggedInArtist.avatar
+                    }
                     alt="Avatar"
                   />
                 )}
@@ -134,13 +128,19 @@ const Main = ({
         <div className="account-grid-name1">
           <div className="account-picture">
             <div className="account-image">
-              {accountImage && <img className="account-img" src={accountImage} alt="Avatar" />}
-              {!accountImage && loggedInArtist.avatar && (
+              {accountImage && (
                 <img
                   className="account-img"
-                  src={URL.createObjectURL(loggedInArtist.avatar)}
+                  src={
+                    typeof accountImage === 'object'
+                      ? URL.createObjectURL(accountImage)
+                      : accountImage
+                  }
                   alt="Avatar"
                 />
+              )}
+              {!accountImage && loggedInArtist.avatar && (
+                <img className="account-img" src={loggedInArtist.avatar} alt="Avatar" />
               )}
               {!accountImage && !loggedInArtist.avatar && (
                 <img className="default-img" src={defaultImage} alt="Avatar" />
@@ -148,6 +148,7 @@ const Main = ({
             </div>
             <div className="account-picture-editing">
               <p>We recomend an image of at least 400x400.</p>
+              {errors.previewImage && <p style={{ color: '#ff4949' }}>{errors.previewImage}</p>}
               <Button className="light-border-button" onClick={() => accountInput.current.click()}>
                 Choose file
               </Button>
@@ -155,7 +156,7 @@ const Main = ({
                 type="file"
                 className="inp-disable"
                 ref={accountInput}
-                onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
+                onChange={(e) => validateFile(e.target.files[0])}
               />
               {!accountImage && editProfileButtonClick && (
                 <p className="error__text">&quot;File&quot; is required.</p>
@@ -230,7 +231,6 @@ const Main = ({
         {/* </Animated> */}
         {/* )} */}
       </div>
-      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
 };
