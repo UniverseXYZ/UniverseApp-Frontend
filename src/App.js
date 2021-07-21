@@ -44,7 +44,7 @@ import {
 } from './utils/api/etherscan.js';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
-import { getProfileInfo, userAuthenticate, setChallenge } from './utils/api/profile';
+import { getProfileInfo, userAuthenticate, setChallenge, getChallenge } from './utils/api/profile';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import { getSavedNfts } from './utils/api/mintNFT';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
@@ -115,7 +115,7 @@ const App = () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const balance = await provider.getBalance(accounts[0]);
     const network = await provider.getNetwork();
-    const ethPrice = await getEthPriceCoingecko();
+    const ethPrice = await getEthPriceEtherscan();
     const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
@@ -160,6 +160,11 @@ const App = () => {
     setUsdWethBalance(ethPrice.ethereum.usd * utils.formatEther(wethBalanceResult.result));
     // setAuctionFactoryContract(auctionFactoryContractResult);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
+    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
+    setWethBalance(utils.formatEther(wethBalanceResult.result));
+    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalanceResult.result));
+    // setAuctionFactoryContract(auctionFactoryContractResult);
+    setUniverseERC721Contract(universeERC721ContractResult);
     setIsWalletConnected(true);
   };
 
@@ -174,14 +179,9 @@ const App = () => {
       const hasSigned = sameUser && localStorage.getItem('access_token');
 
       if (!hasSigned) {
-        const chanllenge = uuid();
-        const challengeResult = await setChallenge(chanllenge);
-        const signedMessage = await signer?.signMessage(chanllenge);
-        const authInfo = await userAuthenticate({
-          address,
-          signedMessage,
-          uuid: challengeResult?.uuid,
-        });
+        const challenge = await getChallenge();
+        const signedMessage = await signer?.signMessage(challenge);
+        const authInfo = await userAuthenticate({ address, signedMessage });
 
         if (!authInfo.error) {
           setIsAuthenticated(true);
@@ -189,9 +189,9 @@ const App = () => {
             id: authInfo.user.id,
             name: authInfo.user.displayName,
             universePageAddress: authInfo.user.universePageUrl,
-            avatar: authInfo.user.profileImageUrl,
+            avatar: authInfo.user.profileImageName,
             about: authInfo.user.about,
-            personalLogo: authInfo.user.logoImageUrl,
+            personalLogo: authInfo.user.logoImageName,
             instagramLink: authInfo.user.instagramUser,
             twitterLink: authInfo.user.twitterUser,
           });
@@ -213,9 +213,9 @@ const App = () => {
             // id: authInfo.user.id, TODO:: this is not returned in this request, do we need it ?
             name: userInfo.displayName,
             universePageAddress: userInfo.universePageUrl,
-            avatar: userInfo.profileImageUrl,
+            avatar: userInfo.profileImageName,
             about: userInfo.about,
-            personalLogo: userInfo.logoImageUrl,
+            personalLogo: userInfo.logoImageName,
             instagramLink: userInfo.instagramUser,
             twitterLink: userInfo.twitterUser,
           });
@@ -359,6 +359,8 @@ const App = () => {
         setUniverseERC721CoreContract,
         universeERC721FactoryContract,
         setUniverseERC721FactoryContract,
+        universeERC721Contract,
+        setUniverseERC721Contract,
         signer,
         setSigner,
         connectWeb3,
