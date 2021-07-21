@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import { Contract, providers, utils } from 'ethers';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
@@ -36,10 +37,14 @@ import CharacterPage from './containers/characterPage/CharacterPage.jsx';
 import Search from './containers/search/Search.jsx';
 import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
+import { getEthPriceEtherscan, getWethBalanceEtherscan } from './utils/api/etherscan.js';
+// import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
+import Contracts from './contracts/contracts.json';
+import { getProfileInfo, getChallenge, userAuthenticate } from './utils/api/profile';
+import { getSavedNfts } from './utils/api/mintNFT';
 
 const App = () => {
   const location = useLocation();
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -73,6 +78,148 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+  const [web3Provider, setWeb3Provider] = useState(null);
+  const [address, setAddress] = useState('');
+  const [signer, setSigner] = useState('');
+  const [wethBalance, setWethBalance] = useState(0);
+  const [usdEthBalance, setUsdEthBalance] = useState(0);
+  const [usdWethBalance, setUsdWethBalance] = useState(0);
+  const [auctionFactoryContract, setAuctionFactoryContract] = useState(null);
+  const [universeERC721Contract, setUniverseERC721Contract] = useState(null);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [yourBalance, setYourBalance] = useState(0);
+
+  const connectWeb3 = async () => {
+    const { ethereum } = window;
+
+    await ethereum.enable();
+    const provider = new providers.Web3Provider(ethereum);
+    setWeb3Provider(provider);
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const balance = await provider.getBalance(accounts[0]);
+    const network = await provider.getNetwork();
+    const ethPrice = await getEthPriceEtherscan();
+    const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+
+    const { contracts } = Contracts[network.chainId];
+    // const auctionFactoryContractResult = new Contract(
+    //   contracts.AuctionFactory.address,
+    //   contracts.AuctionFactory.abi,
+    //   signerResult
+    // );
+    const universeERC721ContractResult = new Contract(
+      contracts.UniverseERC721.address,
+      contracts.UniverseERC721.abi,
+      signerResult
+    );
+    // const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
+    // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
+
+    setAddress(accounts[0]);
+    setSigner(signerResult);
+    setYourBalance(utils.formatEther(balance));
+    setUsdEthBalance(ethPrice.result.ethusd * utils.formatEther(balance));
+    setWethBalance(utils.formatEther(wethBalanceResult.result));
+    setUsdWethBalance(ethPrice.result.ethusd * utils.formatEther(wethBalanceResult.result));
+    // setAuctionFactoryContract(auctionFactoryContractResult);
+    setUniverseERC721Contract(universeERC721ContractResult);
+    setIsWalletConnected(true);
+  };
+
+  const clearStorageAuthData = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_address');
+  };
+
+  const signMessage = async () => {
+    if (signer) {
+      const sameUser = address === localStorage.getItem('user_address');
+      const hasSigned = sameUser && localStorage.getItem('access_token');
+
+      if (!hasSigned) {
+        const challenge = await getChallenge();
+        const signedMessage = await signer?.signMessage(challenge);
+        const authInfo = await userAuthenticate({ address, signedMessage });
+
+        if (!authInfo.error) {
+          setIsAuthenticated(true);
+          setLoggedInArtist({
+            id: authInfo.user.id,
+            name: authInfo.user.displayName,
+            universePageAddress: authInfo.user.universePageUrl,
+            avatar: authInfo.user.profileImageName,
+            about: authInfo.user.about,
+            personalLogo: authInfo.user.logoImageName,
+            instagramLink: authInfo.user.instagramUser,
+            twitterLink: authInfo.user.twitterUser,
+          });
+
+          // Save access_token into the local storage for later API requests usage
+          localStorage.setItem('access_token', authInfo.token);
+          localStorage.setItem('user_address', address);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } else {
+        // THE USER ALREADY HAS SIGNED
+        const userInfo = await getProfileInfo({ address });
+
+        if (!userInfo.error) {
+          setIsAuthenticated(true);
+
+          setLoggedInArtist({
+            // id: authInfo.user.id, TODO:: this is not returned in this request, do we need it ?
+            name: userInfo.displayName,
+            universePageAddress: userInfo.universePageUrl,
+            avatar: userInfo.profileImageName,
+            about: userInfo.about,
+            personalLogo: userInfo.logoImageName,
+            instagramLink: userInfo.instagramUser,
+            twitterLink: userInfo.twitterUser,
+          });
+        }
+      }
+
+      // Fetch the saved NFTS for that addres
+      const savedNFTS = await getSavedNfts();
+      setSavedNfts(savedNFTS);
+    }
+  };
+
+  useEffect(async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      const { ethereum } = window;
+
+      await connectWeb3();
+
+      const provider = new providers.Web3Provider(ethereum);
+
+      if (!provider) {
+        console.log('Please install/connect MetaMask!');
+      }
+      ethereum.on('accountsChanged', async ([account]) => {
+        // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+        clearStorageAuthData();
+        if (account) {
+          await connectWeb3();
+        } else {
+          setIsWalletConnected(false);
+        }
+      });
+      ethereum.on('chainChanged', async (networkId) => {
+        clearStorageAuthData();
+        window.location.reload();
+      });
+    } else {
+      console.log('Please install/connect MetaMask!');
+    }
+  }, []);
+
+  useEffect(async () => {
+    if (signer) signMessage();
+  }, [signer]);
 
   useEffect(() => {
     if (!darkMode) {
@@ -144,6 +291,26 @@ const App = () => {
         setEditProfileButtonClick,
         selectedTokenIndex,
         setSelectedTokenIndex,
+        address,
+        setAddress,
+        usdEthBalance,
+        setUsdEthBalance,
+        wethBalance,
+        setWethBalance,
+        usdWethBalance,
+        setUsdWethBalance,
+        web3Provider,
+        setWeb3Provider,
+        auctionFactoryContract,
+        setAuctionFactoryContract,
+        universeERC721Contract,
+        setUniverseERC721Contract,
+        signer,
+        setSigner,
+        connectWeb3,
+        isAuthenticated,
+        setIsAuthenticated,
+        yourBalance,
       }}
     >
       <Header />

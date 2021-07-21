@@ -6,10 +6,30 @@ import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import Button from '../button/Button.jsx';
+import { saveUserLogo } from '../../utils/api/profile';
 
 const PersonalLogo = ({ logo, setLogo }) => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
   const logoInput = useRef(null);
+
+  const saveLogoChanges = async () => {
+    setLogoEditing(true);
+
+    if (typeof logo === 'object') {
+      const saveLogoRequest = await saveUserLogo(logo);
+      if (saveLogoRequest.logoImageUrl) {
+        setLoggedInArtist({
+          ...loggedInArtist,
+          personalLogo: saveLogoRequest.logoImageUrl,
+        });
+      }
+    }
+  };
+
+  const cancelLogoChanges = () => {
+    setLogo(loggedInArtist.personalLogo);
+    setLogoEditing(true);
+  };
 
   return (
     <div className="my-account container">
@@ -19,11 +39,7 @@ const PersonalLogo = ({ logo, setLogo }) => {
           {/* {logoEditing ? (
             <div className="account-grid-logo-edit">
               {loggedInArtist.personalLogo ? (
-                <img
-                  alt=""
-                  className="image-logo"
-                  src={URL.createObjectURL(loggedInArtist.personalLogo)}
-                />
+                <img alt="Personal logo" className="image-logo" src={loggedInArtist.personalLogo} />
               ) : (
                 <img className="default-logo" src={defaultImage} alt="Cover" />
               )}
@@ -51,7 +67,9 @@ const PersonalLogo = ({ logo, setLogo }) => {
               <div className="import-logo-preview">
                 <h6>Preview</h6>
                 <div className="logo-picture">
-                  {logo && <img className="logo-img" src={URL.createObjectURL(logo)} alt="Cover" />}
+                  {logo && typeof logo === 'object' && (
+                    <img className="logo-img" src={URL.createObjectURL(logo)} alt="Cover" />
+                  )}
                   {!logo && loggedInArtist.personalLogo && (
                     <img
                       className="logo-img"

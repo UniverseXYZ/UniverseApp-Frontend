@@ -21,6 +21,8 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
 import delIcon from '../../assets/images/del-icon.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
+import { saveNftForLater, saveNftImage } from '../../utils/api/mintNFT';
+import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const MintSingleNft = ({ onClick }) => {
   const {
@@ -57,6 +59,7 @@ const MintSingleNft = ({ onClick }) => {
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [errorModal, showErrorModal] = useState(false);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -178,7 +181,7 @@ const MintSingleNft = ({ onClick }) => {
       setDescription(res[0].description);
       setEditions(res[0].numberOfEditions);
       setPreviewImage(res[0].previewImage);
-      setPercentAmount(res[0].percentAmount);
+      setPercentAmount(res[0].royalties);
       setProperties(res[0].properties);
       if (res.length && res[0].collectionId) {
         const getCollection = deployedCollections.filter((col) => col.id === res[0].collectionId);
@@ -189,7 +192,7 @@ const MintSingleNft = ({ onClick }) => {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
         const generatedEditions = [];
@@ -199,6 +202,7 @@ const MintSingleNft = ({ onClick }) => {
         }
         if (!savedNFTsID) {
           if (selectedCollection) {
+            // TODO:: As discussed with Alex this functionality is postponed for now.
             setSavedNfts([
               ...savedNfts,
               {
@@ -221,60 +225,81 @@ const MintSingleNft = ({ onClick }) => {
               },
             ]);
           } else {
+            const result = await saveNftForLater({
+              name,
+              description,
+              editions,
+              properties,
+              percentAmount,
+            });
+
+            let saveImageResult = null;
+            if (result.savedNft) {
+              // Update the NFT image
+              saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+              if (saveImageResult.error) {
+                // Error with saving the image, show modal
+                showErrorModal(true);
+                return;
+              }
+            }
+
+            if (!saveImageResult) return;
+
+            // Update the state based on the result
             setSavedNfts([
               ...savedNfts,
               {
-                id: uuid(),
+                id: saveImageResult.id,
                 type: 'single',
-                previewImage,
-                name,
-                description,
-                numberOfEditions: editions,
-                generatedEditions,
-                properties,
-                percentAmount,
+                previewImage: saveImageResult.url,
+                name: saveImageResult.name,
+                description: saveImageResult.description,
+                numberOfEditions: saveImageResult.numberOfEditions,
+                generatedEditions, // TODO:: what the heck is this ???
+                properties: saveImageResult.properties,
+                percentAmount: saveImageResult.royalties,
                 selected: false,
               },
             ]);
           }
-        } else if (selectedCollection) {
+        } else {
+          // Editing already existing SAVED FOR LATER NFT
+          // TODO:: it needs another end-point ! On this one creates new NFT
+          const result = await saveNftForLater({
+            name,
+            description,
+            editions,
+            properties,
+            percentAmount,
+          });
+
+          let saveImageResult = null;
+          const updateNFTImage = result.savedNft && typeof previewImage === 'object';
+          if (updateNFTImage) {
+            saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+            if (saveImageResult.error) {
+              // Error with saving the image, show modal
+              showErrorModal(true);
+              return;
+            }
+          }
+
+          const data = saveImageResult || result.savedNft;
+          if (!data) return;
+
           setSavedNfts(
             savedNfts.map((item) =>
               item.id === savedNFTsID
                 ? {
                     ...item,
-                    type: 'collection',
-                    collectionId: selectedCollection.id,
-                    collectionName: selectedCollection.name,
-                    collectionAvatar: selectedCollection.previewImage,
-                    collectionDescription: selectedCollection.description,
-                    shortURL: selectedCollection.shortURL,
-                    tokenName: selectedCollection.tokenName,
-                    previewImage,
-                    name,
-                    description,
-                    numberOfEditions: editions,
+                    previewImage: saveImageResult ? saveImageResult.url : previewImage,
+                    name: data.name,
+                    description: data.description,
+                    numberOfEditions: data.numberOfEditions,
                     generatedEditions,
-                    properties,
-                    percentAmount,
-                  }
-                : item
-            )
-          );
-        } else {
-          setSavedNfts(
-            savedNfts.map((item) =>
-              item.id === savedNFTsID
-                ? {
-                    id: uuid(),
-                    type: 'single',
-                    previewImage,
-                    name,
-                    description,
-                    numberOfEditions: editions,
-                    generatedEditions,
-                    properties,
-                    percentAmount,
+                    properties: data.properties,
+                    percentAmount: data.royalties,
                   }
                 : item
             )
@@ -297,6 +322,7 @@ const MintSingleNft = ({ onClick }) => {
               mintingGeneratedEditions.push(uuid().split('-')[0]);
             }
             if (selectedCollection) {
+              // TODO:: As discussed with Alex this functionality is postponed for now.
               setMyNFTs([
                 ...myNFTs,
                 {
@@ -319,6 +345,7 @@ const MintSingleNft = ({ onClick }) => {
                 },
               ]);
             } else {
+              // TODO:: WE DON'T HAVE AN ENDPOINT FOR DIRECT CREATION OF NFT, FOR NOW WORKS ONLY WITH SAVED NFTS
               setMyNFTs([
                 ...myNFTs,
                 {
@@ -427,7 +454,11 @@ const MintSingleNft = ({ onClick }) => {
                           previewImage.type !== 'video/mp4' && (
                             <img
                               className="preview-image"
-                              src={URL.createObjectURL(previewImage)}
+                              src={
+                                typeof previewImage === 'object'
+                                  ? URL.createObjectURL(previewImage)
+                                  : previewImage
+                              }
                               alt="Preview"
                             />
                           )}
@@ -461,7 +492,11 @@ const MintSingleNft = ({ onClick }) => {
                           previewImage.type !== 'video/mp4' && (
                             <img
                               className="preview-image"
-                              src={URL.createObjectURL(previewImage)}
+                              src={
+                                typeof previewImage === 'object'
+                                  ? URL.createObjectURL(previewImage)
+                                  : previewImage
+                              }
                               alt="Preview"
                             />
                           )}
@@ -766,6 +801,7 @@ const MintSingleNft = ({ onClick }) => {
           )}
         </div>
       </div>
+      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
 };
