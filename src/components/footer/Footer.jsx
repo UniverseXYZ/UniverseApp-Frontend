@@ -140,12 +140,12 @@ const Footer = () => {
                 <ul>
                   <li>Products</li>
                   <li
-                    className="disable"
-                    // onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
-                    // aria-hidden="true"
+                    onClick={() =>
+                      history.push('/minting-and-auctions/marketplace/active-auctions')
+                    }
+                    aria-hidden="true"
                   >
                     Auction house
-                    <span className="tooltiptext">Coming soon</span>
                   </li>
                   <li onClick={() => history.push('/marketplace')} aria-hidden="true">
                     NFT Marketplace
@@ -159,17 +159,11 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>NFT Drops</li>
-                  <li
-                    // className="disable"
-                    onClick={() => history.push('/polymorphs')}
-                    aria-hidden="true"
-                  >
+                  <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
                     Polymorphs
-                    {/* <span className="tooltiptext">Coming soon</span> */}
                   </li>
-                  <li className="disable">
+                  <li onClick={() => history.push('/core-drops')} aria-hidden="true">
                     Core Drops
-                    <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>
