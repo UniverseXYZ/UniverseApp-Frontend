@@ -4,6 +4,7 @@ import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
+import { removeSavedNft } from '../../utils/api/mintNFT.js';
 
 const RemovePopup = ({
   close,
@@ -15,7 +16,14 @@ const RemovePopup = ({
 }) => {
   const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useContext(AppContext);
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
+    const result = await removeSavedNft(id);
+
+    if (!result.ok || result.status !== 200) {
+      console.log(`Cannot delete NFT with id: ${id}`);
+      return;
+    }
+
     if (removeFrom === 'collection') {
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
       // setSavedNfts(savedNfts.filter((item) => item.id !== id));
@@ -65,5 +73,4 @@ RemovePopup.defaultProps = {
   collectionNFTs: [],
   setCollectionNFTs: () => {},
 };
-
 export default RemovePopup;

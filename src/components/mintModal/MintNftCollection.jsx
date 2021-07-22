@@ -279,9 +279,17 @@ const MintNftCollection = ({ onClick }) => {
               tokenName
             );
 
-            await saveCollection(collectionURIResult.id, unsignedTx.hash);
+            await unsignedTx.wait();
 
-            // const tx = await unsignedTx.wait();
+            const requestData = {
+              file: coverImage,
+              name: collectionName,
+              symbol: tokenName,
+              description,
+              shortUrl: shortURL,
+            };
+            await saveCollection(requestData);
+
             // const nftUrls = newMyNFTs.map((nft) => nft.shortURL);
             // const fee = [{ recipient: tx.from, value: 1 }];
             // const unsignedMintTx = await universeERC721CoreContract.batchMint(tx.to, nftUrls, fee);
