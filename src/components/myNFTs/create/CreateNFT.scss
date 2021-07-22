@@ -2,142 +2,192 @@
 @import '../../../assets/scss/_mixins';
 
 .create--nft--page {
+  position: relative;
+  .create--nft--background {
+    position: absolute;
+    top: 88px;
+    height: 200px;
+    width: 100%;
+    background-image: url('../../../assets/images/create-nft-header-background.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  &--container {
     position: relative;
-    .create--nft--background {
-        position: absolute;
-        top: 88px;
-        height: 200px;
+    max-width: 730px;
+    margin: 40px auto 80px;
+    .back-btn {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      span {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 20px;
+        color: $black;
+        margin-left: 10px;
+      }
+    }
+    .page--title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 32px;
+      line-height: 140%;
+      color: $black;
+      margin-bottom: 40px;
+      @include sm {
+        font-size: 26px;
+      }
+    }
+    .tabs__wrapper {
+      margin-bottom: 60px;
+      .tab_items {
+        display: flex;
         width: 100%;
-        background-image: url('../../../assets/images/create-nft-header-background.png');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-    }
-    &--container {
-        position: relative;
-        max-width: 730px;
-        margin: 40px auto 80px;
-        .back-btn {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            span {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 16px;
-                line-height: 20px;
-                color: $black;
-                margin-left: 10px;
+        #tabsdiv {
+          margin-right: 3px;
+          width: 50%;
+          &.disabled {
+            opacity: 0.2;
+            button {
+              background: rgba(0, 0, 0, 0.03);
             }
+            .last-triangle {
+              border-left: 20px solid rgba(0, 0, 0, 0.03);
+            }
+          }
         }
-        .page--title {
-            font-family: $sharpGroteskSemiBoldFont;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 32px;
-            line-height: 140%;
-            color: $black;
-            margin-bottom: 40px;
+        button {
+          min-width: 100%;
+          min-height: 50px;
+          background: $white;
+          border-radius: 4px;
+          position: relative;
+          font-family: $sharpGroteskSemiBoldFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 1;
+          img {
+            padding: 12px;
             @include sm {
-                font-size: 26px;
+              display: block;
+              text-align: center;
+              margin: -20px auto auto;
             }
+          }
+          @include sm {
+            min-height: 100px;
+            min-width: 100%;
+            padding-left: 20px;
+            white-space: break-spaces;
+          }
         }
-        .tabs__wrapper {
-            margin-bottom: 60px;
-            .tab_items {
-                display: flex;
-                width: 100%;
-                #tabsdiv {
-                    margin-right: 3px;
-                    width: 50%;
-                    &.disabled {
-                        opacity: 0.2;
-                        button {
-                            background: rgba(0, 0, 0, 0.03);
-                        }
-                        .last-triangle {
-                            border-left: 20px solid rgba(0, 0, 0, 0.03);
-                        }
-                    }
-                }
-                button {
-                    min-width: 100%;
-                    min-height: 50px;
-                    background: $white;
-                    border-radius: 4px;
-                    position: relative;
-                    font-family: $sharpGroteskSemiBoldFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 1;
-                    img {
-                        padding: 12px;
-                        @include sm {
-                            display: block;
-                            text-align: center;
-                            margin: -20px auto auto;
-                        }
-                    }
-                    @include sm {
-                        min-height: 100px;
-                        min-width: 100%;
-                        padding-left: 20px;
-                        white-space: break-spaces;
-                    }
-                }
-                .first-triangle {
-                    position: absolute;
-                    border-radius: 4px;
-                    min-height: 50px;
-                    width: 0;
-                    border-top: 25px solid transparent;
-                    border-left: 20px solid #FAFCFD;
-                    z-index: 100;
-                    border-bottom: 25px solid transparent;
-                    @include lg {
-                        border-left: 20px solid #FBFDFD;
-                    }
-                    @include sm {
-                        border-top: 50px solid transparent;
-                        border-left: 20px solid #FCFEFD;
-                        border-bottom: 50px solid transparent;
-                    }
-                }
-                .last-triangle {
-                    position: absolute;
-                    margin-left: -2px;
-                    min-height: 50px;
-                    width: 0;
-                    z-index: 200;
-                    border-top: 25px solid transparent;
-                    border-left: 20px solid #fff;
-                    border-bottom: 25px solid transparent;
-                    @include sm {
-                        border-top: 50px solid transparent;
-                        border-left: 20px solid #fff;
-                        border-bottom: 50px solid transparent;
-                    }
-                }
-                .active {
-                    button {
-                        color: #fff;
-                        background: #000;
-                        border-left: 1px solid #fff;
-                    }
-                    .last-triangle {
-                        border-left: 20px solid #000;
-                    }
-                }
-            }
+        .first-triangle {
+          position: absolute;
+          border-radius: 4px;
+          min-height: 50px;
+          width: 0;
+          border-top: 25px solid transparent;
+          border-left: 20px solid #fafcfd;
+          z-index: 100;
+          border-bottom: 25px solid transparent;
+          @include lg {
+            border-left: 20px solid #fbfdfd;
+          }
+          @include sm {
+            border-top: 50px solid transparent;
+            border-left: 20px solid #fcfefd;
+            border-bottom: 50px solid transparent;
+          }
         }
-        @include lg {
-            padding: 0 60px;
+        .last-triangle {
+          position: absolute;
+          margin-left: -2px;
+          min-height: 50px;
+          width: 0;
+          z-index: 200;
+          border-top: 25px solid transparent;
+          border-left: 20px solid #fff;
+          border-bottom: 25px solid transparent;
+          @include sm {
+            border-top: 50px solid transparent;
+            border-left: 20px solid #fff;
+            border-bottom: 50px solid transparent;
+          }
         }
-        @include sm {
-            padding: 0 20px;
+        .active {
+          button {
+            color: #fff;
+            background: #000;
+            border-left: 1px solid #fff;
+          }
+          .last-triangle {
+            border-left: 20px solid #000;
+          }
         }
+      }
     }
+    @include lg {
+      padding: 0 60px;
+    }
+    @include sm {
+      padding: 0 20px;
+    }
+  }
+  .selecttype--section {
+    .select--title {
+      > h1 {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 26px;
+      }
+    }
+    .nft--box--section {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 30px;
+      .single--box {
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        background-color: $white;
+        padding: 50px 0 53px 0;
+        cursor: pointer;
+        > img {
+          height: 80px;
+          width: 72px;
+        }
+        > h3 {
+          font-family: $spaceGroteskFont;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 29px;
+          margin-top: 27px;
+        }
+        > p {
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px;
+          margin-top: 15px;
+          color: #00000066;
+        }
+      }
+      .single--box:hover {
+        background: linear-gradient(#ffffff, #ffffff) padding-box,
+          linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
+      }
+    }
+  }
 }
