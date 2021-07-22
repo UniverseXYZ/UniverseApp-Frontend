@@ -36,6 +36,7 @@ import CharacterPage from './containers/characterPage/CharacterPage.jsx';
 import Search from './containers/search/Search.jsx';
 import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
+import CreateNFT from './components/myNFTs/create/CreateNFT';
 
 const App = () => {
   const location = useLocation();
@@ -183,6 +184,7 @@ const App = () => {
           component={() => <Marketplace />}
         />
         <Route exact path="/my-nfts" component={() => <MyNFTs />} />
+        <Route exact path="/my-nfts/create" component={() => <CreateNFT />} />
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />

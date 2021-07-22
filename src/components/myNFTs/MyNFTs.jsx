@@ -297,7 +297,7 @@ const MyNFTs = () => {
         <p className="desc">
           Create NFTs or NFT collections with our platform by clicking the button below
         </p>
-        <button type="button" className="mint__btn" onClick={handleOpen}>
+        <button type="button" className="mint__btn" onClick={() => history.push('/my-nfts/create')}>
           Create NFT
         </button>
         {showModal && <MintModal open={showModal} onClose={handleClose} />}
