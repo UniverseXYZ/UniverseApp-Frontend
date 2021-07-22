@@ -1,0 +1,456 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
+
+.sorting--filter:hover {
+  .box--shadow--effect--block {
+    opacity: 0.2;
+  }
+}
+.sorting--filter {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: $white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 11px;
+    margin-right: 10px;
+    min-height: 42px;
+    user-select: none;
+    cursor: pointer;
+    z-index: 100;
+    background-color: $white;
+    .box--shadow--effect--block {
+      position: absolute;
+      width: calc(100% + 8px);
+      min-height: 50px;
+      z-index: -9;
+      left: -4px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      border-radius: 12px;
+      opacity: 0;
+      background-image: linear-gradient(101deg, #bceb00, #00eaea);
+      background-origin: border-box;
+      box-shadow: 4px 1000px 1px #ffffff inset;
+      border: 4px solid transparent;
+      transition: 0.2s;
+    }
+    &.open {
+      background-image: linear-gradient(101deg, #bceb00, #00eaea);
+      background-origin: border-box;
+      box-shadow: 2px 1000px 1px $white inset;
+      border: 1px solid transparent;
+    }
+
+    p.filter--name {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 140%;
+      color: $black;
+
+      img.filter__icon {
+        margin-right: 6px;
+      }
+    }
+    img.arrow {
+      // margin-right: 7.5px;
+      transition: 0.1s ease-in-out;
+      &.rotate {
+        transform: rotate(180deg);
+      }
+    }
+    .price__dropdown {
+      position: absolute;
+      top: 46px;
+      left: 0px;
+      background: $white;
+      box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+      border-radius: 12px;
+      width: 404px;
+      z-index: 9;
+
+      .price__dropdown__body {
+        padding: 30px;
+
+        .price--dropdown {
+          display: flex;
+          align-items: center;
+          background: $white;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-sizing: border-box;
+          border-radius: 12px;
+          padding: 11px 15px;
+          cursor: pointer;
+          position: relative;
+          margin-bottom: 30px;
+          > div:nth-child(1) {
+            margin-right: 12px;
+          }
+          > div:nth-child(2) {
+            flex: 1;
+            h6 {
+              display: flex;
+              align-items: center;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+            }
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 140%;
+              color: rgba(0, 0, 0, 0.4);
+              margin-left: 6px;
+            }
+          }
+          > div:nth-child(3) {
+            img {
+              transition: 0.1s ease-in-out;
+              &.rotate {
+                transform: rotate(180deg);
+              }
+            }
+          }
+          &--items {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 43px;
+            z-index: 10;
+            background: $white;
+            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+            border-radius: 12px;
+            padding: 7px 9px;
+            .price--dropdown--item {
+              display: flex;
+              align-items: center;
+              padding: 11px 10px;
+              > div:nth-child(1) {
+                margin-right: 12px;
+              }
+              > div:nth-child(2) {
+                h6 {
+                  display: flex;
+                  align-items: center;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 140%;
+                  color: $black;
+                }
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 12px;
+                  line-height: 140%;
+                  color: rgba(0, 0, 0, 0.4);
+                  margin-left: 6px;
+                }
+              }
+              &:hover {
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 6px;
+              }
+            }
+          }
+          &.open {
+            background-image: linear-gradient(101deg, #bceb00, #00eaea);
+            background-origin: border-box;
+            box-shadow: 2px 1000px 1px $white inset;
+            border: 1px solid transparent;
+          }
+        }
+      }
+      .price--dropdown--footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 14px 30px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+        .clear--all {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          color: $black;
+          background: $white;
+          text-decoration: underline;
+        }
+      }
+    }
+    .collection--dropdown {
+      position: absolute;
+      top: 46px;
+      left: 0px;
+      background: $white;
+      box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+      border-radius: 12px;
+      z-index: 9;
+      width: 404px;
+
+      .collection--dropdown--body {
+        padding: 30px 30px 0px;
+
+        .collection--dropdown--selected {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          margin-bottom: 12px;
+
+          .light-border-button {
+            display: flex;
+            padding: 6px 11px 6px 6px;
+            box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
+            font-size: 14px;
+            line-height: 140%;
+            margin-right: 8px;
+            margin-bottom: 8px;
+
+            .collection {
+              width: 20px;
+              height: 20px;
+              border-radius: 5px;
+              margin-right: 8px;
+            }
+            .random--avatar--color {
+              width: 20px;
+              height: 20px;
+              border-radius: 5px;
+              margin-right: 8px;
+            }
+            .close {
+              width: 10px;
+              height: 10px;
+              margin-left: 8px;
+            }
+          }
+        }
+
+        .collection--search--field {
+          position: relative;
+          margin-bottom: 8px;
+
+          input {
+            width: 100%;
+            background: $white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 12px;
+            padding: 12px 18px 12px 46px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 18px;
+            color: $black;
+            &::placeholder {
+              color: rgba(0, 0, 0, 0.2);
+            }
+          }
+          img {
+            position: absolute;
+            top: 13px;
+            left: 16px;
+          }
+        }
+        .collections__list {
+          overflow-y: auto;
+          max-height: 226px;
+
+          .collection__item {
+            display: flex;
+            padding: 10px;
+            border-radius: 10px;
+            align-items: center;
+            cursor: pointer;
+
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+            }
+
+            .collection__avatar {
+              width: 30px;
+              height: 30px;
+              border-radius: 5px;
+              margin-right: 12px;
+            }
+            .random--avatar--color {
+              width: 30px;
+              height: 30px;
+              border-radius: 5px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-family: 'Sharp Grotesk Medium', sans-serif;
+              font-style: normal;
+              font-weight: 500;
+              margin-right: 12px;
+              text-transform: uppercase;
+              color: #000000;
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+        }
+      }
+
+      .collection--dropdown--footer {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 14px 30px;
+
+        .clear--all {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          color: $black;
+          background: $white;
+          text-decoration: underline;
+        }
+      }
+    }
+    .artist--dropdown {
+      position: absolute;
+      top: 46px;
+      left: 0px;
+      background: $white;
+      box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+      border-radius: 12px;
+      z-index: 9;
+      width: 404px;
+
+      .artist--dropdown--body {
+        padding: 30px 30px 0;
+
+        .artist--dropdown--selected {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          margin-bottom: 12px;
+
+          .light-border-button {
+            display: flex;
+            padding: 6px 11px 6px 6px;
+            box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
+            font-size: 14px;
+            line-height: 140%;
+            margin-right: 8px;
+            margin-bottom: 8px;
+
+            .artist {
+              width: 20px;
+              height: 20px;
+              border-radius: 200px;
+              margin-right: 8px;
+            }
+            .close {
+              width: 10px;
+              height: 10px;
+              margin-left: 8px;
+            }
+          }
+        }
+
+        .artist--search--field {
+          position: relative;
+          margin-bottom: 8px;
+
+          input {
+            width: 100%;
+            background: $white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 12px;
+            padding: 12px 18px 12px 46px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 18px;
+            color: $black;
+
+            &::placeholder {
+              color: rgba(0, 0, 0, 0.2);
+            }
+          }
+          img {
+            position: absolute;
+            top: 13px;
+            left: 16px;
+          }
+        }
+        .artists__list {
+          overflow-y: auto;
+          max-height: 226px;
+
+          .artists__item {
+            display: flex;
+            padding: 10px;
+            border-radius: 10px;
+            align-items: center;
+            cursor: pointer;
+
+            .artist__avatar {
+              width: 30px;
+              height: 30px;
+              border-radius: 200px;
+              margin-right: 12px;
+            }
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 22px;
+              color: $black;
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+        }
+      }
+      .artists--dropdown--footer {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 14px 30px;
+
+        .clear--all {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          color: $black;
+          background: $white;
+          text-decoration: underline;
+        }
+      }
+    }
+}

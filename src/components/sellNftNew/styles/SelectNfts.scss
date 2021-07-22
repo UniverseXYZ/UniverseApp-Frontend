@@ -1,0 +1,128 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
+
+.select--nfts--container {
+    width: 100%;
+    .section--title--block {
+        width: 100%;
+        margin-bottom: 30px;
+        .section--title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 130%;
+            color: $black;
+            margin-bottom: 10px;
+        }
+        .section--hint--text {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.6);
+            a {
+                margin-left: 5px;
+                text-decoration: underline;
+                color: $black;
+                font-weight: 500;
+            }
+        }
+    }
+    .header--search--block {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        .search--block {
+            width: 65%;
+        }
+        .sort--by--block {
+            width: calc(25% - 12px);
+            // margin-left: 12px;
+        }
+        .filters--count--block {
+            width: calc(10% - 12px);
+            .filters--count--parent {
+                width: 100%;
+                padding: 1px;
+                box-sizing: border-box;
+                background-color: rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                position: relative;
+                .filters--count--child {
+                    min-height: 50px;
+                    background-color: $white;
+                    width: 100%;
+                    border-radius: 10px;
+                    z-index: 100;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0 13px;
+                    .count--block {
+                        width: 18px;
+                        height: 18px;
+                        background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        p {
+                            font-size: 12px;
+                        }
+                    }
+                    img {
+                        width: 15px;
+                    }
+                    p {
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 16px;
+                        line-height: 140%;
+                        font-feature-settings: 'ss02' on, 'ss03' on, 'ss04' on;
+                        color: $black;
+                    }
+                }
+                .box--shadow--effect--block {
+                    width: calc(100% + 8px);
+                    min-height: 58px;
+                    position: absolute;
+                    z-index: -5;
+                    left: -4px;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+                    opacity: 0;
+                    margin: auto;
+                    border-radius: 12px;
+                    transition: 0.2s;
+                }
+            }
+            .filters--count--parent:hover {
+                // background: $white;
+                .box--shadow--effect--block {
+                    opacity: 0.2;
+                }
+            }
+        }
+    }
+    .sorting--filters--row {
+        width: 100%;
+        margin-bottom: 20px;
+        display: flex;
+        // box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        align-items: center;
+        justify-content: flex-start;
+        > div {
+            width: 200px;
+        }
+        .open {
+            .box--shadow--effect--block {
+                opacity: 0.2;
+            }
+        }
+    }
+}

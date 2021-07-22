@@ -12,6 +12,7 @@ import SettingIcon from '../../assets/images/setting-solid-disactive.svg';
 import AppContext from '../../ContextAPI';
 import DutchAuctionSettingsForm from '../../components/sellNftNew/DutchAuctionSettingsForm';
 import EnglishAuctionSettingsForm from '../../components/sellNftNew/EnglishAuctionSettingsForm';
+import BundleSellFormContainer from '../../components/sellNftNew/BundleSellFormContainer';
 import Summary from '../../components/sellNftNew/Summary';
 import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
 import './NFTMarketplace.scss';
@@ -29,12 +30,14 @@ const verificationSteps = (data) => {
 const getContent = (type, data, setData) => {
   if (type === 'dutch') return <DutchAuctionSettingsForm data={data} setData={setData} />;
   if (type === 'english') return <EnglishAuctionSettingsForm data={data} setData={setData} />;
+  if (type === 'bundle') return <BundleSellFormContainer />;
   return <h1>other type</h1>;
 };
 
 const NFTMarketplace = () => {
   const location = useLocation();
   const { stepsData, setStepsData } = useContext(AppContext);
+  console.log(stepsData);
   const headerLabels = [
     {
       label: 'Select sell method',
