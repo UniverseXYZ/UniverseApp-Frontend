@@ -20,7 +20,7 @@ export const saveNftForLater = async (data) => {
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
     royalties: parseFloat(data.percentAmount),
-    collectionId: 10,
+    collectionId: data.collectionId,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {
@@ -193,20 +193,36 @@ export const generateTokenURIForCollection = async (data) => {
   return result;
 };
 
-export const saveCollection = async (collectionId, txHash) => {
-  const requestUrl = GENERATE_COLLECTION_NFT_URI_URL.concat(`/${collectionId}`);
-  const requestData = {
-    method: 'PATCH',
+export const saveCollection = async (data) => {
+  const { file, name, symbol, description, shortUrl } = data;
+
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+  formData.append('name', name);
+  formData.append('symbol', symbol);
+  formData.append('description', description);
+  formData.append('shortUrl', shortUrl);
+
+  const requestUrl = GENERATE_COLLECTION_NFT_URI_URL;
+  const requestOptions = {
+    method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
-    txHash: JSON.stringify(txHash),
+    body: formData,
   };
-  const request = await fetch(requestUrl, requestData);
 
+  const request = await fetch(requestUrl, requestOptions);
   if (!request.ok && request.status !== 201) {
     console.error(`Error while trying to save a new collection: ${request.statusText}`);
   }
-  console.log(`Collection with id '${collectionId}' was successfully saved!`);
+
+  const result = await request.text().then((res) => JSON.parse(res));
+  return result;
 };
+
+export const removeSavedNft = (id) =>
+  fetch(`${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+  });
