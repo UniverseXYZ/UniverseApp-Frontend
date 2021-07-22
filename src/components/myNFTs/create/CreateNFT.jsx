@@ -12,8 +12,15 @@ import NFTCollectionSettings from './NFTCollectionSettings';
 
 const CreateNFT = () => {
   const history = useHistory();
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [selectedNFTType, setSelectedNFTType] = useState('');
+  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
+  const [selectedNFTType, setSelectedNFTType] = useState('collection');
+
+  const handleSelectTypeClick = () => {
+    if (selectedTabIndex !== 0) {
+      setSelectedTabIndex(0);
+      setSelectedNFTType('');
+    }
+  };
 
   return (
     <div className="create--nft--page">
@@ -27,7 +34,12 @@ const CreateNFT = () => {
         <div className="tabs__wrapper">
           <div className="tabs">
             <div className="tab_items">
-              <div id="tabsdiv" className={selectedTabIndex === 0 ? 'active' : ''}>
+              <div
+                id="tabsdiv"
+                className={selectedTabIndex === 0 ? 'active' : ''}
+                onClick={handleSelectTypeClick}
+                aria-hidden="true"
+              >
                 <span className="first-triangle" />
                 <button type="button">
                   <img

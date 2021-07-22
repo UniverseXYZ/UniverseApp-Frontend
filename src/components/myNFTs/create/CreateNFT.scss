@@ -8,10 +8,16 @@
         top: 88px;
         height: 200px;
         width: 100%;
-        background-image: url('../../../assets/images/create-nft-header-background.png');
+        background-image: url('../../../assets/images/create-nft-header-background-desktop.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+        @include lg {
+            background-image: url('../../../assets/images/create-nft-header-background-tablet.png');
+        }
+        @include sm {
+            background-image: url('../../../assets/images/create-nft-header-background-mobile.png');
+        }
     }
     &--container {
         position: relative;
@@ -51,7 +57,8 @@
                 width: 100%;
                 #tabsdiv {
                     margin-right: 3px;
-                    width: 50%;
+                    width: 48%;
+                    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
                     &.disabled {
                         opacity: 0.2;
                         button {
@@ -72,20 +79,15 @@
                     font-style: normal;
                     font-weight: 600;
                     font-size: 12px;
-                    line-height: 1;
                     img {
-                        padding: 12px;
+                        margin-right: 7px;
                         @include sm {
-                            display: block;
-                            text-align: center;
-                            margin: -20px auto auto;
+                            width: 16px;
+                            height: 16px;
                         }
                     }
                     @include sm {
-                        min-height: 100px;
-                        min-width: 100%;
-                        padding-left: 20px;
-                        white-space: break-spaces;
+                        font-size: 10px;
                     }
                 }
                 .first-triangle {
@@ -101,9 +103,7 @@
                         border-left: 20px solid #FBFDFD;
                     }
                     @include sm {
-                        border-top: 50px solid transparent;
                         border-left: 20px solid #FCFEFD;
-                        border-bottom: 50px solid transparent;
                     }
                 }
                 .last-triangle {
@@ -113,23 +113,248 @@
                     width: 0;
                     z-index: 200;
                     border-top: 25px solid transparent;
-                    border-left: 20px solid #fff;
+                    border-left: 20px solid $white;
                     border-bottom: 25px solid transparent;
                     @include sm {
-                        border-top: 50px solid transparent;
-                        border-left: 20px solid #fff;
-                        border-bottom: 50px solid transparent;
+                        border-left: 20px solid $white;
                     }
                 }
                 .active {
                     button {
-                        color: #fff;
-                        background: #000;
-                        border-left: 1px solid #fff;
+                        color: $white;
+                        background: $black;
+                        border-left: 1px solid $white;
                     }
                     .last-triangle {
-                        border-left: 20px solid #000;
+                        border-left: 20px solid $black;
                     }
+                }
+            }
+        }
+        .tab__content {
+            .nft--collection--settings--page {
+                &--title {
+                    font-family: $sharpGroteskSemiBoldFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 20px;
+                    line-height: 130%;
+                    color: $black;
+                }
+                .image--name--token {
+                    display: grid;
+                    grid-template-columns: 228px 1fr;
+                    grid-gap: 50px;
+                    margin: 40px 0;
+                    height: 248px;
+                    .collection--cover--image {
+                        &--circle {
+                            background: rgba(0, 0, 0, 0.02);
+                            border: 3px dashed rgba(0, 0, 0, 0.1);
+                            box-sizing: border-box;
+                            border-radius: 50%;
+                            max-height: 228px;
+                            height: 100%;
+                            width: 100%;
+                            &.border--none {
+                                border: none;
+                            }
+                            .image--not--selected {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-direction: column;
+                                height: 100%;
+                                width: 100%;
+                                cursor: pointer;
+                                input {
+                                    display: none;
+                                }
+                                p {
+                                    max-width: 85px;
+                                    margin: 16px auto 0;
+                                    word-break: break-all;
+                                    text-align: center;
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: 500;
+                                    font-size: 12px;
+                                    line-height: 160%;
+                                    color: rgba(0, 0, 0, 0.4);
+                                }
+                            }
+                            .image--selected {
+                                position: relative;
+                                img.cover {
+                                    height: 100%;
+                                    width: 100%;
+                                    border-radius: 50%;
+                                    object-fit: cover;
+                                }
+                                .remove--selected--image {
+                                    position: absolute;
+                                    top: 0;
+                                    right: 0;
+                                    width: 26px;
+                                    height: 26px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    background-color: $white;
+                                    border-radius: 50%;
+                                    filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
+                                    cursor: pointer;
+                                    img {
+                                        width: 12px;
+                                        height: 12px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .collection--name--and--token {
+                        .collection--name {
+                            margin-bottom: 40px;
+                            .intup-l {
+                                width: 100%;
+                                input {
+                                    width: 100%;
+                                }
+                            }
+                        }
+                        .collection--token {
+                            .intup-l {
+                                width: 100%;
+                                input {
+                                    width: 100%;
+                                }
+                            }
+                            p.warning {
+                                margin-top: 6px;
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: normal;
+                                font-size: 12px;
+                                line-height: 150%;
+                                color: #E4B613;
+                            }
+                        }
+                    }
+                }
+                .collection--description {
+                    margin-bottom: 40px;
+                    label {
+                        display: block;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 14px;
+                        line-height: 22px;
+                        color: $black;
+                        span {
+                            color: #999999;
+                        }
+                    }
+                    textarea {
+                        margin-top: 5px;
+                        padding: 15px;
+                        width: 100%;
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        border-radius: 12px;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 16px;
+                        line-height: 20px;
+                        color: $black;
+                        min-height: 86px;
+                        &::placeholder {
+                            color: rgba(0, 0, 0, 0.2);
+                        }
+                    }
+                }
+                .collection--short--url {
+                    .intup-l {
+                        width: 100%;
+                        input {
+                            width: 100%;
+                            &.empty {
+                                background: linear-gradient(to right, #000000 133px, rgba(0, 0, 0, 0.2) 10%);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                            }
+                            &.empty__error {
+                                border: 1px solid #ff4949;
+                                background: linear-gradient(to right, #000000 133px, rgba(0, 0, 0, 0.2) 10%);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                            }
+                        }
+                    }
+                }
+                .collection--nfts {
+                    margin-top: 60px;
+                    margin-bottom: 60px;
+                    &--title {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 40px;
+                        h1 {
+                            font-family: $sharpGroteskSemiBoldFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 20px;
+                            line-height: 130%;
+                            color: $black;
+                        }
+                        button {
+                            display: flex;
+                            align-items: center;
+                            img {
+                                margin-left: 12px;
+                            }
+                        }
+                    }
+                    .create--nft--special--btn {
+                        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+                        border: 1px solid transparent;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        width: 228px;
+                        height: 337px;
+                        padding: 20px;
+                    }
+                    .collection--final--error {
+                        display: flex;
+                        align-items: flex-start;
+                        width: 100%;
+                        margin-top: 40px;
+                        background: rgba(255, 73, 73, 0.04);
+                        border: 1px solid #FF4949;
+                        box-sizing: border-box;
+                        border-radius: 12px;
+                        padding: 24px;
+                        img {
+                            margin-right: 13px;
+                        }
+                        p {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 160%;
+                            color: #FF4949;
+                        }
+                    }
+                }
+                .create--collection--btn {
+                    display: flex;
+                    justify-content: flex-end;
                 }
             }
         }

@@ -20,6 +20,14 @@
 
   input {
     width: 445px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
   }
 }
 span.inp-label,
@@ -36,9 +44,6 @@ span.inp-label,
   border: 1px solid red !important;
   border-radius: 12px;
   padding: 15px;
-  &::placeholder {
-    color: red!important;
-  }
 }
 .error-message {
   font-family: $spaceGroteskFont;
@@ -47,6 +52,7 @@ span.inp-label,
   font-size: 12px;
   line-height: 18px;
   color: #ff4949;
+  margin-top: 6px;
 }
 .inp-disable {
   display: none;
