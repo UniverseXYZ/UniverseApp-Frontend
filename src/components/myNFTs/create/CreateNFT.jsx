@@ -59,7 +59,12 @@ const CreateNFT = () => {
           </div>
         </div>
         <div className="tab__content">
-          {selectedTabIndex === 0 && <SelectType />}
+          {selectedTabIndex === 0 && (
+            <SelectType
+              setSelectedTabIndex={setSelectedTabIndex}
+              setSelectedNFTType={setSelectedNFTType}
+            />
+          )}
           {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTSettings />}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && <NFTCollectionSettings />}
         </div>
