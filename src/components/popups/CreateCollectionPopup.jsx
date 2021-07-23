@@ -198,7 +198,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       />
       <div className="button__div">
         <Button className="light-button" onClick={() => handleMinting()}>
-          Create now
+          Create collection
         </Button>
       </div>
     </div>
