@@ -13,12 +13,20 @@ const ActiveAuctionsTab = () => {
 
   return (
     <div className="active__auctions__tab">
-      {activeAuctions.length ? (
+      {PLACEHOLDER_ACTIVE_AUCTIONS.length ? (
         <>
           <ActiveAuctionsFilters />
-          <ActiveAuctionsList data={activeAuctions} perPage={perPage} offset={offset} />
+          <ActiveAuctionsList
+            data={PLACEHOLDER_ACTIVE_AUCTIONS}
+            perPage={perPage}
+            offset={offset}
+          />
           <div className="pagination__container">
-            <Pagination data={activeAuctions} perPage={perPage} setOffset={setOffset} />
+            <Pagination
+              data={PLACEHOLDER_ACTIVE_AUCTIONS}
+              perPage={perPage}
+              setOffset={setOffset}
+            />
             <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
           </div>
         </>
