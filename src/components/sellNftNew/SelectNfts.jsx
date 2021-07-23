@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
+import { defaultColors } from '../../utils/helpers';
 import SaleTypeFilter from '../ui-elements/SaleTypeFilter';
 import PriceRangeFilter from '../ui-elements/PriceRangeFilter';
 import CollectionFilter from '../ui-elements/CollectionFilter';
 import ArtistFilter from '../ui-elements/ArtistsFilter';
 import SearchField from '../input/SearchField';
 import SortBySelect from '../input/SortBySelect';
+import NftGalleryItemCard from '../ui-elements/NftGalleryItemCard';
 import filtersIcon from '../../assets/images/filters-icon-black.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
-import { defaultColors } from '../../utils/helpers';
 import './styles/SelectNfts.scss';
 
 const clearCheck = (filtersSale, collections, artist) => {
@@ -28,7 +30,8 @@ const SelectNfts = (props) => {
   const [elemSaleRemove, setElemSaleRemove] = useState(null);
   const [clearCollectionSelectedItem, setClearCollectionSelectedItem] = useState(null);
   const [clearAll, setClearAll] = useState(false);
-
+  const [data] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
+  console.log(data);
   useEffect(() => {
     if (clearAll) setClearAll(false);
     if (elemSaleRemove) setElemSaleRemove(null);
@@ -178,6 +181,11 @@ const SelectNfts = (props) => {
             Clear all
           </div>
         )}
+      </div>
+      <div className="nfts--gallery">
+        {data.map((elem, index) => (
+          <NftGalleryItemCard key={index.toString()} nft={elem} />
+        ))}
       </div>
     </div>
   );

@@ -216,4 +216,14 @@
             cursor: pointer;
         }
     }
+    .nfts--gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        > div {
+            width: calc(25% - 22.5px);
+        }
+    }
 }
