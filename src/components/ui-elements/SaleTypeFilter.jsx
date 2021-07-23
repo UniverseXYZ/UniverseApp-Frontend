@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SortingFilter from '../input/SortingFilter';
 import salesIcon from '../../assets/images/marketplace/sale-type.svg';
 import './styles/SaleTypeFilter.scss';
 
 const SaleTypeFilter = (props) => {
+  const { getSelectedFilters, onClear, removeElemInSelected } = props;
+  const [onClose, setOnClose] = useState(false);
   const [saleTypeButtons, setSaleTypeButtons] = useState([
     {
       text: 'Buy now',
@@ -33,6 +35,16 @@ const SaleTypeFilter = (props) => {
     setSaleTypeButtons(newSaleTypeButtons);
   };
 
+  const save = () => {
+    const copySelectedSaleType = saleTypeButtons.filter((elem) => elem.selected);
+    getSelectedFilters(copySelectedSaleType);
+    setOnClose(true);
+  };
+
+  useEffect(() => {
+    setOnClose(false);
+  }, [onClose]);
+
   const handleClearSale = () => {
     const newSaleTypeButtons = [...saleTypeButtons];
     newSaleTypeButtons.forEach((item) => {
@@ -41,12 +53,32 @@ const SaleTypeFilter = (props) => {
     setSaleTypeButtons(newSaleTypeButtons);
   };
 
+  useEffect(() => {
+    if (onClear) {
+      const arr = [];
+      saleTypeButtons.forEach((elem) => {
+        elem.selected = false;
+        arr.push(elem);
+      });
+      getSelectedFilters(arr.filter((elem) => elem.selected));
+      setSaleTypeButtons(arr);
+    }
+    if (removeElemInSelected) {
+      const copySelected = [...saleTypeButtons];
+      copySelected[copySelected.indexOf(removeElemInSelected)].selected = false;
+      setSaleTypeButtons(copySelected);
+      getSelectedFilters(copySelected.filter((elem) => elem.selected));
+    }
+  }, [onClear, removeElemInSelected]);
+
   return (
     <SortingFilter
       className="sale--type--filter"
       title="Sale type"
       countFilter={saleTypeButtons.filter((elem) => elem.selected).length}
       icon={salesIcon}
+      // onClose={}
+      onClose={onClose}
     >
       <div
         className="sale--dropdown"
@@ -79,13 +111,25 @@ const SaleTypeFilter = (props) => {
           <button type="button" className="clear--all" onClick={() => handleClearSale()}>
             Clear
           </button>
-          <button type="button" className="light-button" onClick={() => handleSaveSale()}>
+          <button type="button" className="light-button" onClick={() => save()}>
             Save
           </button>
         </div>
       </div>
     </SortingFilter>
   );
+};
+
+SaleTypeFilter.propTypes = {
+  getSelectedFilters: PropTypes.func,
+  onClear: PropTypes.bool,
+  removeElemInSelected: PropTypes.shape({}),
+};
+
+SaleTypeFilter.defaultProps = {
+  getSelectedFilters: () => {},
+  onClear: false,
+  removeElemInSelected: null,
 };
 
 export default SaleTypeFilter;

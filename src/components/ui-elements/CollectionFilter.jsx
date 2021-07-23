@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import SortingFilter from '../input/SortingFilter';
 import collectionIcon from '../../assets/images/marketplace/collections.svg';
 import SearchField from '../input/SearchField';
-import {
-  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
-  PLACEHOLDER_MARKETPLACE_USERS,
-} from '../../utils/fixtures/BrowseNFTsDummyData';
+import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../utils/fixtures/BrowseNFTsDummyData';
 import { defaultColors } from '../../utils/helpers';
 import closeIcon from '../../assets/images/close-menu.svg';
 import './styles/CollectionFilter.scss';
 
 const CollectionFilter = (props) => {
+  const { getSelectedFilters, onClear, removeElemInSelected } = props;
   const [collections, setCollections] = useState([...PLACEHOLDER_MARKETPLACE_COLLECTIONS]);
   const [selectedCollections, setSellectedCollections] = useState([]);
+  const [onClose, setOnClose] = useState(false);
+
   const handleSelectCollection = (el) => {
     if (!selectedCollections.includes(el)) {
       const copySelectedCollections = [...selectedCollections];
@@ -22,11 +22,37 @@ const CollectionFilter = (props) => {
       setSellectedCollections(copySelectedCollections);
     }
   };
+
   const removeCollection = (index) => {
     const copySelectedCollections = [...selectedCollections];
     copySelectedCollections.splice(index, 1);
     setSellectedCollections(copySelectedCollections);
   };
+
+  const save = () => {
+    getSelectedFilters(selectedCollections);
+    setOnClose(true);
+  };
+
+  useEffect(() => {
+    if (onClose) setOnClose(false);
+    if (onClear) {
+      setSellectedCollections([]);
+      getSelectedFilters([]);
+    }
+  }, [onClose, onClear]);
+
+  useEffect(() => {
+    if (removeElemInSelected !== null) {
+      const elIndex = selectedCollections.indexOf(removeElemInSelected);
+      const copyArr = [...selectedCollections];
+      if (elIndex !== -1) {
+        copyArr.splice(elIndex, 1);
+        setSellectedCollections(copyArr);
+        getSelectedFilters(copyArr);
+      }
+    }
+  }, [removeElemInSelected]);
 
   return (
     <SortingFilter
@@ -34,6 +60,7 @@ const CollectionFilter = (props) => {
       title="Collections"
       countFilter={selectedCollections.length}
       icon={collectionIcon}
+      onClose={onClose}
     >
       <div className="collection--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
         <div className="collection--dropdown--body">
@@ -79,7 +106,6 @@ const CollectionFilter = (props) => {
                 onClick={() => handleSelectCollection(col)}
                 aria-hidden="true"
               >
-                {console.log(col)}
                 {!col.photo ? (
                   <div
                     className="random--avatar--color"
@@ -102,17 +128,25 @@ const CollectionFilter = (props) => {
           <button type="button" className="clear--all" onClick={() => setSellectedCollections([])}>
             Clear
           </button>
-          <button
-            type="button"
-            className="light-button"
-            // onClick={() => handleSaveCollections()}
-          >
+          <button type="button" className="light-button" onClick={save}>
             Save
           </button>
         </div>
       </div>
     </SortingFilter>
   );
+};
+
+CollectionFilter.propTypes = {
+  getSelectedFilters: PropTypes.func,
+  onClear: PropTypes.bool,
+  removeElemInSelected: PropTypes.shape({}),
+};
+
+CollectionFilter.defaultProps = {
+  getSelectedFilters: () => {},
+  onClear: false,
+  removeElemInSelected: null,
 };
 
 export default CollectionFilter;

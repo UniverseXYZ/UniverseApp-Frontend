@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import SearchField from '../input/SearchField';
@@ -9,9 +9,11 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import './styles/ArtistsFilter.scss';
 
 const ArtistFilter = (props) => {
+  const { getSelectedFilters, onClear, removeElemInSelected } = props;
   const [creators, setCreators] = useState([...PLACEHOLDER_MARKETPLACE_USERS]);
   const [selectedCreators, setSelectedCreators] = useState([]);
-  console.log(props);
+  const [onClose, setOnClose] = useState(false);
+
   const handleSelectCreators = (creator) => {
     if (!selectedCreators.includes(creator)) {
       const copySelectedCreators = [...selectedCreators];
@@ -26,12 +28,37 @@ const ArtistFilter = (props) => {
     setSelectedCreators(copySelectedCreators);
   };
 
+  useEffect(() => {
+    if (onClose) setOnClose(false);
+    if (onClear) {
+      setSelectedCreators([]);
+      getSelectedFilters([]);
+    }
+  }, [onClose, onClear]);
+
+  const save = () => {
+    getSelectedFilters(selectedCreators);
+    setOnClose(true);
+  };
+  useEffect(() => {
+    if (removeElemInSelected !== null) {
+      const elIndex = selectedCreators.indexOf(removeElemInSelected);
+      const copyArr = [...selectedCreators];
+      if (elIndex !== -1) {
+        copyArr.splice(elIndex, 1);
+        setSelectedCreators(copyArr);
+        getSelectedFilters(copyArr);
+      }
+    }
+  }, [removeElemInSelected]);
+
   return (
     <SortingFilter
       className="artists--filter"
       title="Artists"
       countFilter={selectedCreators.length}
       icon={artistIcon}
+      onClose={onClose}
     >
       <div className="artist--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
         <div className="artist--dropdown--body">
@@ -75,13 +102,25 @@ const ArtistFilter = (props) => {
           <button type="button" className="clear--all" onClick={() => setSelectedCreators([])}>
             Clear
           </button>
-          <button type="button" className="light-button">
+          <button type="button" className="light-button" onClick={save}>
             Save
           </button>
         </div>
       </div>
     </SortingFilter>
   );
+};
+
+ArtistFilter.propTypes = {
+  getSelectedFilters: PropTypes.func,
+  onClear: PropTypes.bool,
+  removeElemInSelected: PropTypes.shape({}),
+};
+
+ArtistFilter.defaultProps = {
+  getSelectedFilters: () => {},
+  onClear: false,
+  removeElemInSelected: null,
 };
 
 export default ArtistFilter;

@@ -69,7 +69,7 @@ const PriceRangeFilter = (props) => {
     setDisabledMax(false);
     // setShowPriceDropdown(false);
   };
-  console.log(props);
+
   return (
     <SortingFilter
       className="price--range--filter"

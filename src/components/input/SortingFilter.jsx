@@ -4,17 +4,20 @@ import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 import './SortingFilter.scss';
 
 const SortingFilter = (props) => {
-  const { title, countFilter, icon, children, className } = props;
+  const { title, countFilter, icon, children, className, onClose } = props;
   const [open, setOpen] = useState(false);
   const ref1 = useRef(null);
-
   useLayoutEffect(() => {
+    if (onClose) {
+      setOpen(false);
+    }
     document.addEventListener('click', (event) => {
       if (ref1.current && !ref1.current.contains(event.target)) {
         setOpen(false);
       }
     });
   });
+
   return (
     <div
       className={`sorting--filter ${open ? 'open' : ''} ${className}`}
@@ -40,6 +43,7 @@ SortingFilter.propTypes = {
   icon: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
+  onClose: PropTypes.bool,
 };
 
 SortingFilter.defaultProps = {
@@ -48,6 +52,7 @@ SortingFilter.defaultProps = {
   icon: null,
   children: null,
   className: '',
+  onClose: false,
 };
 
 export default SortingFilter;
