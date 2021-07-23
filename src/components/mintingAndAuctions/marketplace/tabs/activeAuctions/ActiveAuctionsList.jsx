@@ -28,7 +28,8 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
               <div className="title">
                 <h1>{auction.name}</h1>
                 <div className="artist__details">
-                  <img src={URL.createObjectURL(auction.artist.avatar)} alt={auction.artist.name} />
+                  {/* <img src={URL.createObjectURL(auction.artist.avatar)} alt={auction.artist.name} /> */}
+                  <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
                   <button
                     type="button"
@@ -54,15 +55,17 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                   View auction
                 </Button>
               </div>
-              <div className={`auction__img ${auction.promoImage ? '' : 'show__avatar'}`}>
+              <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
                 <img
                   className="original"
-                  src={URL.createObjectURL(auction.promoImage)}
+                  // src={URL.createObjectURL(auction.promoImage)}
+                  src={auction.image}
                   alt={auction.name}
                 />
                 <img
                   className="artist__image"
-                  src={URL.createObjectURL(auction.artist.avatar)}
+                  // src={URL.createObjectURL(auction.artist.avatar)}
+                  src={auction.artist.avatar}
                   alt={auction.name}
                 />
               </div>
