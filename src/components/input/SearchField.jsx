@@ -28,6 +28,9 @@ const SearchField = (props) => {
     const filterData = data.filter((item) =>
       item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
     );
+    if (!searchValue.length) {
+      setFindData(data);
+    }
     setFindData(filterData);
   }, [searchValue]);
 

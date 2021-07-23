@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SortingFilter from '../input/SortingFilter';
+import salesIcon from '../../assets/images/marketplace/sale-type.svg';
 import './styles/SaleTypeFilter.scss';
 
 const SaleTypeFilter = (props) => {
@@ -45,6 +46,7 @@ const SaleTypeFilter = (props) => {
       className="sale--type--filter"
       title="Sale type"
       countFilter={saleTypeButtons.filter((elem) => elem.selected).length}
+      icon={salesIcon}
     >
       <div
         className="sale--dropdown"

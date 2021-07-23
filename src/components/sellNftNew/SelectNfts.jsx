@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import SaleTypeFilter from '../ui-elements/SaleTypeFilter';
+import PriceRangeFilter from '../ui-elements/PriceRangeFilter';
+import CollectionFilter from '../ui-elements/CollectionFilter';
+import ArtistFilter from '../ui-elements/ArtistsFilter';
 import SearchField from '../input/SearchField';
 import SortBySelect from '../input/SortBySelect';
 import filtersIcon from '../../assets/images/filters-icon-black.svg';
@@ -25,7 +28,7 @@ const SelectNfts = (props) => {
             data={[]}
             CardElement={<h1>ok</h1>}
             placeholder="Search items"
-            // dropdown={false}
+            dropdown={false}
           />
         </div>
         <div className="sort--by--block">
@@ -43,12 +46,15 @@ const SelectNfts = (props) => {
               )}
               <p>Filters</p>
             </div>
-            <div className="box--shadow--effect--block" />
+            {/* <div className="box--shadow--effect--block" /> */}
           </div>
         </div>
       </div>
       <div className="sorting--filters--row">
         <SaleTypeFilter />
+        <PriceRangeFilter />
+        <CollectionFilter />
+        <ArtistFilter />
       </div>
     </div>
   );
