@@ -221,6 +221,18 @@ export const saveCollection = async (data) => {
   return result;
 };
 
+export const attachTxHashToCollection = (txHash, collectionId) => {
+  const requestOptions = {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+    txHash,
+  };
+
+  return fetch(`${GENERATE_COLLECTION_NFT_URI_URL}/${collectionId}`, requestOptions);
+};
+
 export const removeSavedNft = (id) =>
   fetch(`${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${id}`, {
     method: 'DELETE',

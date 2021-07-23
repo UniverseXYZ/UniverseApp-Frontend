@@ -17,7 +17,11 @@ import removeIcon from '../../assets/images/remove.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import { generateTokenURIForCollection, saveCollection } from '../../utils/api/mintNFT';
+import {
+  generateTokenURIForCollection,
+  saveCollection,
+  attachTxHashToCollection,
+} from '../../utils/api/mintNFT';
 
 const MintNftCollection = ({ onClick }) => {
   const {
@@ -274,13 +278,6 @@ const MintNftCollection = ({ onClick }) => {
               });
             });
 
-            const unsignedTx = await universeERC721FactoryContract.deployUniverseERC721(
-              collectionName,
-              tokenName
-            );
-
-            await unsignedTx.wait();
-
             const requestData = {
               file: coverImage,
               name: collectionName,
@@ -288,13 +285,27 @@ const MintNftCollection = ({ onClick }) => {
               description,
               shortUrl: shortURL,
             };
-            await saveCollection(requestData);
+            const { id } = await saveCollection(requestData);
+
+            const unsignedMintTx = await universeERC721FactoryContract.deployUniverseERC721(
+              collectionName,
+              tokenName
+            );
+
+            const { transactionHash } = await unsignedMintTx.wait();
+
+            const response = await attachTxHashToCollection(transactionHash, id);
+            if (!response.ok && response.status !== 201) {
+              console.error(`Error while trying to save a new collection: ${response.statusText}`);
+              return;
+            }
 
             // const nftUrls = newMyNFTs.map((nft) => nft.shortURL);
             // const fee = [{ recipient: tx.from, value: 1 }];
             // const unsignedMintTx = await universeERC721CoreContract.batchMint(tx.to, nftUrls, fee);
             // const mintTx = await unsignedMintTx.wait();
             // console.log(mintTx);
+
             setMyNFTs(newMyNFTs);
           }
 
