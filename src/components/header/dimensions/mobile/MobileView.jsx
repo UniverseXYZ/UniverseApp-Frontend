@@ -8,6 +8,7 @@ import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
 import Button from '../../../button/Button.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
+import SearchIcon from '../../../../assets/images/marketplace-search.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
 import Group2 from '../../../../assets/images/Group2.svg';
@@ -37,6 +38,14 @@ import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import {
+  PLACEHOLDER_MARKETPLACE_AUCTIONS,
+  PLACEHOLDER_MARKETPLACE_NFTS,
+  PLACEHOLDER_MARKETPLACE_USERS,
+  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
+  PLACEHOLDER_MARKETPLACE_COMMUNITIES,
+  PLACEHOLDER_MARKETPLACE_GALLERIES,
+} from '../../../../utils/fixtures/BrowseNFTsDummyData';
 
 const MobileView = (props) => {
   const {
@@ -49,6 +58,7 @@ const MobileView = (props) => {
     setSelectedWallet,
     setShowInstallWalletPopup,
     selectedWallet,
+    showMarketplaceSearch,
   } = props;
   const {
     address,
@@ -89,10 +99,14 @@ const MobileView = (props) => {
       );
     };
   });
-
   return (
     <div className="mobile__nav">
-      {isWalletConnected && isAuthenticated ? (
+      {showMarketplaceSearch && (
+        <button type="button" className="search">
+          <img src={SearchIcon} alt="search" />
+        </button>
+      )}
+      {isWalletConnected && isAuthenticated && (
         <div className="wallet__connected__tablet">
           <img
             className="account__icon hide__on__tablet"
@@ -201,7 +215,7 @@ const MobileView = (props) => {
             </Animated>
           )}
         </div>
-      ) : null}
+      )}
       <button type="button" className="hamburger" onClick={() => setShowMenu(!showMenu)}>
         {!showMenu ? (
           <img src={hamburgerIcon} alt="Hamburger" />
@@ -222,15 +236,13 @@ const MobileView = (props) => {
                       <div>
                         <button
                           type="button"
-                          className="disable"
                           onClick={() => {
                             setShowMenu(false);
-                            // history.push('/minting-and-auctions/marketplace/active-auctions');
+                            history.push('/minting-and-auctions/marketplace/active-auctions');
                           }}
                         >
                           <img src={auctionHouseIcon} alt="Auction House" />
                           <span>Auction house</span>
-                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                       <div>
@@ -439,6 +451,7 @@ MobileView.propTypes = {
   setShowMenu: PropTypes.func.isRequired,
   showSelectWallet: PropTypes.bool.isRequired,
   setShowSelectWallet: PropTypes.func.isRequired,
+  showMarketplaceSearch: PropTypes.bool.isRequired,
 };
 
 export default MobileView;

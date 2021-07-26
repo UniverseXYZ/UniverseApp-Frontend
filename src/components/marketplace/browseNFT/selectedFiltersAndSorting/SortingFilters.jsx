@@ -413,7 +413,7 @@ const SortingFilters = ({
                         {coll.name.charAt(0)}
                       </div>
                     ) : (
-                      <img className="collection" src={coll.photo} alt={coll.name} />
+                      <img className="sell__collection" src={coll.photo} alt={coll.name} />
                     )}
                     {coll.name}
                     <img

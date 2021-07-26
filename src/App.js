@@ -42,6 +42,7 @@ import { getEthPriceCoingecko, getWethBalanceEtherscan } from './utils/api/ether
 import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 import { getSavedNfts } from './utils/api/mintNFT';
+import CreateNFT from './components/myNFTs/create/CreateNFT';
 
 const App = () => {
   const location = useLocation();
@@ -356,6 +357,7 @@ const App = () => {
           component={() => <Marketplace />}
         />
         <Route exact path="/my-nfts" component={() => <MyNFTs />} />
+        <Route exact path="/my-nfts/create" component={() => <CreateNFT />} />
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
