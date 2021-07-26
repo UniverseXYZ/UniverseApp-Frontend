@@ -75,7 +75,7 @@ const SingleNFTSettings = () => {
   };
 
   const removeRoyaltyAddress = (index) => {
-    const temp = [...properties];
+    const temp = [...royaltyAddress];
     temp.splice(index, 1);
     setRoyaltyAddress(temp);
   };
@@ -88,7 +88,7 @@ const SingleNFTSettings = () => {
   };
 
   const addRoyaltyAddress = () => {
-    const newProperties = [...properties];
+    const newProperties = [...royaltyAddress];
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
@@ -387,7 +387,7 @@ const SingleNFTSettings = () => {
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div> */}
-        <h2 className="single-nft-title">{!savedNFTsID ? 'Create single NFT' : 'Edit NFT'}</h2>
+        <h2 className="single-nft-title">{!savedNFTsID ? 'Single NFT settings' : 'Edit NFT'}</h2>
         <div className="single-nft-content">
           <div className="single-nft-upload">
             <h5>Upload file</h5>
@@ -587,6 +587,7 @@ const SingleNFTSettings = () => {
               ))}
             </div>
           </div>
+          <div className="hr-div" />
           <div className="single-nft-properties">
             <div className="single-nft-properties-header">
               <h4
@@ -620,7 +621,7 @@ const SingleNFTSettings = () => {
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="properties">
                     <div className="property-name">
-                      <h5>Property name</h5>
+                      <h5>Colour</h5>
                       <Input
                         className="inp"
                         placeholder="Enter NFT property"
@@ -632,7 +633,7 @@ const SingleNFTSettings = () => {
                       <h5>Value</h5>
                       <Input
                         className="inp"
-                        placeholder="Enter value"
+                        placeholder="Red"
                         value={elm.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
                       />
@@ -676,8 +677,8 @@ const SingleNFTSettings = () => {
                 {hideRoyalitiesInfo && (
                   <div className="royalities-info-text">
                     <p>
-                      Royalties determines the percentage you, as a creator, will get from sales of
-                      this NFT on the secondary markets.
+                      Add addresses you want resale royalties to go to. Each address receives the
+                      percent you choose. Suggested percent amount: 2.5%.
                     </p>
                   </div>
                 )}
@@ -752,6 +753,7 @@ const SingleNFTSettings = () => {
             !errors.previewImage &&
             !royaltyValidAddress && (
               <div className="single__final__error">
+                <img src={redIcon} alt="icon" />
                 <p className="error-message">Something went wrong. Wallet address is not valid.</p>
               </div>
             )
