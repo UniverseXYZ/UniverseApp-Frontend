@@ -10,7 +10,7 @@ import Button from '../button/Button.jsx';
 
 const EndDateCalendar = React.forwardRef(
   (
-    { monthNames, values, setValues, endDateTemp, setEndDateTemp, setShowEndDate, onClose },
+    { monthNames, values, setValues, endDateTemp, setEndDateTemp, setShowEndDate, onClose, title },
     ref
   ) => {
     const d = new Date();
@@ -237,7 +237,7 @@ const EndDateCalendar = React.forwardRef(
         <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
         <div className="calendar__wrapper">
           <div className="calendar-first">
-            <h1>End date</h1>
+            <h1>{title}</h1>
             <div className="calendar__header">
               <button className="left-btn" type="button" onClick={() => changeMonth('prev')}>
                 <img className="left" src={arrow} alt="Left arrow" />
@@ -396,6 +396,11 @@ EndDateCalendar.propTypes = {
   setEndDateTemp: PropTypes.func.isRequired,
   setShowEndDate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  title: PropTypes.string,
+};
+
+EndDateCalendar.defaultProps = {
+  title: 'End date',
 };
 
 export default EndDateCalendar;

@@ -29,6 +29,7 @@ const UsersResult = ({ query, data }) => {
               <div>
                 <h2>{user.name}</h2>
                 <p className="desc">{user.description}</p>
+                <p className="show--on--mobile--only">{`${user.followers} Followers`}</p>
                 <div className="follow">
                   {user.following ? (
                     <Button className="light-border-button" onClick={() => handleFollow(i)}>
@@ -47,8 +48,12 @@ const UsersResult = ({ query, data }) => {
               </div>
             </div>
             <div className="galleries">
-              {user.galleries.map(
-                (gallery, index) => index < 4 && <img src={gallery} alt="Gallery" key={uuid()} />
+              {user.galleries.map((gallery, index) =>
+                window.innerWidth > 1230 && index < 4 ? (
+                  <img src={gallery} alt="Gallery" key={uuid()} />
+                ) : (
+                  index < 2 && <img src={gallery} alt="Gallery" key={uuid()} />
+                )
               )}
             </div>
           </div>

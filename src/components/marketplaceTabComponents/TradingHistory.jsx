@@ -1,11 +1,11 @@
 import React from 'react';
 import './MarketplaceTabComponent.scss';
-import icon1 from '../../assets/images/collection_img (4).svg';
-import icon2 from '../../assets/images/collection_img (6).svg';
-import icon3 from '../../assets/images/collection_img (7).svg';
-import icon4 from '../../assets/images/collection_img (8).svg';
-import icon5 from '../../assets/images/collection_img (9).svg';
-import share from '../../assets/images/aaaa.svg';
+import icon1 from '../../assets/images/Sales.svg';
+import icon2 from '../../assets/images/Bid.svg';
+import icon3 from '../../assets/images/Mint.svg';
+import icon4 from '../../assets/images/Sales2.svg';
+import icon5 from '../../assets/images/Listing.svg';
+import share from '../../assets/images/etherscanicon.svg';
 
 const TradingHistory = () => (
   <div className="trading">
@@ -100,7 +100,9 @@ const TradingHistory = () => (
           <h1>
             <span>Put on sale by</span> @Cryptopo...
           </h1>
-          <p>2 days ago</p>
+          <p>
+            2 days ago <span>(expired)</span>
+          </p>
         </div>
       </div>
       <div className="tradinghistory--price">

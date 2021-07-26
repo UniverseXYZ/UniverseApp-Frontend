@@ -2,15 +2,40 @@
 @import '../../assets/scss/mixins';
 
 .nft--marketplace {
-    .content--marketplace {
-        display: flex;
-        justify-content: space-between;
-        // align-items: center;
-        .marketplace--tab {
-            width: 65%;
+    .sell--nft--page--header {
+        @include md {
+            padding: 0 20px;
         }
-        .summary--block--parent {
-            width: 35%;
+    }
+    .step--tabs--container--parent {
+        @include md {
+            padding: 0 20px;
+        }
+        .tabs__wrapper {
+            #tabsdiv {
+                button {
+                    @include md {
+                        font-size: 10px;
+                    }
+                    img {
+                        @include md {
+                            padding: 10px;
+                        }
+                    }
+                }
+            }
+        }
+        .step--tabs--container {
+            // position: relative;
+            margin-top: -15px;
+        }
+    }
+    .before--footer--black--bg--section {
+        width: 100%;
+        min-height: 200px;
+        background-color: $black;
+        @include sm {
+            min-height: 140px;
         }
     }
 }

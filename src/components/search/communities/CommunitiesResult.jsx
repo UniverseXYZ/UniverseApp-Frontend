@@ -28,12 +28,15 @@ const CommunitiesResult = ({ query, data }) => {
                     <p>{`${community.members} members`}</p>
                   </div>
                 </div>
-                <div>
+                <div className="show--on--desktop--only">
                   <Button className="light-button">Join</Button>
                 </div>
               </div>
               <div className="community--box--body">
                 <p className="desc">{community.description}</p>
+              </div>
+              <div className="hide--on--desktop--only">
+                <Button className="light-button">Join</Button>
               </div>
             </div>
           ))}

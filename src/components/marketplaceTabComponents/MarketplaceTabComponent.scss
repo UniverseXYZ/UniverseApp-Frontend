@@ -445,6 +445,9 @@ input:checked + .slider:before {
           letter-spacing: 0em;
           text-align: left;
           color: #00000066;
+          > span {
+            color: red;
+          }
         }
       }
     }
@@ -521,6 +524,85 @@ input:checked + .slider:before {
   margin-top: 40px;
   padding-left: 40px;
   padding-right: 40px;
+  .offers--first--box {
+    width: 100%;
+    background-color: white;
+    margin-bottom: 12px;
+    box-shadow: 0px 10px 36px 0px #8878ac24;
+    border-radius: 12px;
+    .offers--button--box {
+      padding-left: 18px;
+      padding-right: 18px;
+      padding-bottom: 20px;
+      > button {
+        width: 100%;
+      }
+    }
+    .offers--first {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background-color: white;
+      .box-offers-avatar {
+        display: flex;
+        padding-left: 25px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        > div {
+          padding-left: 20px;
+          .red--title {
+            color: red;
+          }
+          > h1 {
+            font-family: $spaceGroteskFont;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 22px;
+            letter-spacing: 0em;
+            text-align: left;
+            > span {
+              color: #00000066;
+            }
+          }
+          > p {
+            font-family: $spaceGroteskFont;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #00000066;
+          }
+        }
+      }
+      .offers--price {
+        padding-right: 25px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        > h3 {
+          text-align: end;
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0em;
+          color: #00000066;
+        }
+        > h2 {
+          font-family: $spaceGroteskFont;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: right;
+        }
+      }
+    }
+  }
   > .offers--box {
     display: flex;
     justify-content: space-between;
@@ -536,6 +618,9 @@ input:checked + .slider:before {
       padding-bottom: 20px;
       > div {
         padding-left: 20px;
+        .red--title {
+          color: red;
+        }
         > h1 {
           font-family: $spaceGroteskFont;
           font-size: 14px;

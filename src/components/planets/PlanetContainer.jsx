@@ -33,11 +33,19 @@ const PlanetContainer = (props) => {
     const section = document.querySelector('.planet--section3').offsetTop;
     const header = document.querySelector('header');
     const headerPosition = header.style.position;
-    if (headerPosition === 'relative') {
-      window.scrollTo(0, section - (header.clientHeight + 1) * 2);
-    } else {
-      window.scrollTo(0, section - header.clientHeight + 1);
-    }
+    const legendaryDiv = document
+      .getElementsByClassName('welcome--section')[0]
+      .getBoundingClientRect();
+    console.log(legendaryDiv);
+    window.scrollTo(0, legendaryDiv.height);
+
+    // const element = document.getElementById('welcome_sec').getBoundingClientRect();
+
+    // if (headerPosition === 'relative') {
+    //   window.scrollTo(0, section - (header.clientHeight + 1) * 2);
+    // } else {
+    //   window.scrollTo(0, section - header.clientHeight + 1);
+    // }
   };
 
   return (
@@ -55,7 +63,7 @@ const PlanetContainer = (props) => {
       >
         {!!welcomeSectionImg.length && <img alt="img" src={welcomeSectionImg} />}
       </WelcomeWrapper>
-      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
+      <AnimatedOnScroll animationIn="fadeIn" className="legendary" animationInDelay={300}>
         <Section2
           title={section2Title}
           legendary={legendary}

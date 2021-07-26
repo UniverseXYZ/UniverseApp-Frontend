@@ -147,9 +147,8 @@ const Footer = () => {
                     Auction house
                     <span className="tooltiptext">Coming soon</span>
                   </li>
-                  <li className="disable">
+                  <li onClick={() => history.push('/marketplace')} aria-hidden="true">
                     NFT Marketplace
-                    <span className="tooltiptext">Coming soon</span>
                   </li>
                   <li className="disable">
                     Social Media
