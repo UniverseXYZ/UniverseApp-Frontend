@@ -27,6 +27,7 @@ import {
   saveNftForLater,
   getTokenURI,
 } from '../../utils/api/mintNFT';
+import { parseRoyalties } from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const MintSingleNft = ({ onClick }) => {
@@ -403,9 +404,7 @@ const MintSingleNft = ({ onClick }) => {
             percentAmount,
           });
 
-          const royaltiesParsed = royalities
-            ? royaltyAddress.map((royalty) => [royalty.address, parseInt(royalty.amount, 10) * 100])
-            : [];
+          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
 
           console.log('sending request to contract...');
 
