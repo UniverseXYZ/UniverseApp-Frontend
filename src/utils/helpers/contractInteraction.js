@@ -12,3 +12,6 @@ export function chunkifyArray(nftsArr, chunkSize) {
 
   return chunkifiedArray;
 }
+
+export const parseRoyalties = (royaltyAddress) =>
+  royaltyAddress.map((royalty) => [royalty.address, parseInt(royalty.amount, 10) * 100]);

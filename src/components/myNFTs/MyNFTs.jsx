@@ -97,13 +97,15 @@ const MyNFTs = () => {
       selectedNFTS.map(async (nft) => {
         const meta = await getMetaForSavedNft(nft.id);
         console.log('meta', meta);
+        console.log('nft', nft);
         const basisPoint = nft.royalties * 100;
+        // const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
         // Mint the NFTS trough the smart contract
-        const mintTransaction = await universeERC721CoreContract.batchMint(address, meta, [
-          [address, basisPoint],
-        ]);
-        const mintReceipt = await mintTransaction.wait();
-        console.log(mintReceipt);
+        // const mintTransaction = await universeERC721CoreContract.batchMint(address, meta, [
+        //   [address, basisPoint],
+        // ]);
+        // const mintReceipt = await mintTransaction.wait();
+        // console.log(mintReceipt);
       })
     );
 
