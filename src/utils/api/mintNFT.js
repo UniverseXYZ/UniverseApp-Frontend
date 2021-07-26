@@ -2,6 +2,7 @@ const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const GENERATE_COLLECTION_NFT_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
+const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
 
 /**
  * @param {Object} data
@@ -227,7 +228,9 @@ export const attachTxHashToCollection = (txHash, collectionId) => {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
-    txHash,
+    body: JSON.stringify({
+      txHash,
+    }),
   };
 
   return fetch(`${GENERATE_COLLECTION_NFT_URI_URL}/${collectionId}`, requestOptions);
@@ -238,3 +241,14 @@ export const removeSavedNft = (id) =>
     method: 'DELETE',
     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
   });
+
+export const getMyCollections = () => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  };
+
+  return fetch(GET_MY_COLLECTIONS, requestOptions);
+};

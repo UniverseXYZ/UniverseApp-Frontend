@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useContext, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
@@ -21,6 +22,7 @@ import {
   generateTokenURIForCollection,
   saveCollection,
   attachTxHashToCollection,
+  getMyCollections,
 } from '../../utils/api/mintNFT';
 
 const MintNftCollection = ({ onClick }) => {
@@ -295,6 +297,7 @@ const MintNftCollection = ({ onClick }) => {
             const { transactionHash } = await unsignedMintTx.wait();
 
             const response = await attachTxHashToCollection(transactionHash, id);
+            console.log('res', response);
             if (!response.ok && response.status !== 201) {
               console.error(`Error while trying to save a new collection: ${response.statusText}`);
               return;
@@ -335,6 +338,14 @@ const MintNftCollection = ({ onClick }) => {
       }
     }
   }, [errors]);
+
+  useEffect(async () => {
+    const collectionsReturn = await getMyCollections();
+    const reader = collectionsReturn.body.getReader();
+    reader.read().then(({ done, value }) => {
+      console.log('val', value, done);
+    });
+  }, []);
 
   return !showCollectible ? (
     <div className="mintNftCollection-div">
