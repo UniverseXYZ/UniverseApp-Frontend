@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import InputRange from 'react-input-range';
@@ -57,18 +57,26 @@ const validateMaxValue = (e, sliderValue, setSliderValue, setDisabledMax) => {
 };
 
 const PriceRangeFilter = (props) => {
+  const { getPrice, remove, onClear } = props;
   const [showPriceItems, setShowPriceItems] = useState(false);
   const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
   const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
   const [disabledMin, setDisabledMin] = useState(false);
   const [disabledMax, setDisabledMax] = useState(false);
-
   const handleClearPrice = () => {
     setSliderValue({ min: 0, max: 4 });
     setDisabledMin(false);
     setDisabledMax(false);
     // setShowPriceDropdown(false);
   };
+
+  useEffect(() => {
+    if (remove || onClear) {
+      setSelectedTokenIndex(0);
+      setSliderValue({ min: 0, max: 4 });
+      getPrice(null);
+    }
+  }, [remove, onClear]);
 
   return (
     <SortingFilter
@@ -171,13 +179,29 @@ const PriceRangeFilter = (props) => {
           <button type="button" className="clear--all" onClick={() => handleClearPrice()}>
             Clear
           </button>
-          <button type="button" className="light-button">
+          <button
+            type="button"
+            className="light-button"
+            onClick={() => getPrice({ ...bidTokens[selectedTokenIndex], ...sliderValue })}
+          >
             Save
           </button>
         </div>
       </div>
     </SortingFilter>
   );
+};
+
+PriceRangeFilter.propTypes = {
+  getPrice: PropTypes.func,
+  remove: PropTypes.bool,
+  onClear: PropTypes.bool,
+};
+
+PriceRangeFilter.defaultProps = {
+  getPrice: () => {},
+  remove: false,
+  onClear: false,
 };
 
 export default PriceRangeFilter;

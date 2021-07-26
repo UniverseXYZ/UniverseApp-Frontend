@@ -136,7 +136,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 3',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 1,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -197,7 +197,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 4',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 1.2,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -228,7 +228,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 5',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.2,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -259,7 +259,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 6',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 3,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -268,7 +268,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     type: 'single',
     creator: {
       id: 7,
-      name: 'Creator7',
+      name: 'user 7',
       avatar: user1,
     },
     collection: {
@@ -321,7 +321,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 8',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 4,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -352,7 +352,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 9',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 2.2,
     editions: '1/10',
     offerFor: 0.35,
   },

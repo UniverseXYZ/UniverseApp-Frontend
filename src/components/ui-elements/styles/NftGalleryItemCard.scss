@@ -185,6 +185,141 @@
             }
           }
         }
+        .nft--box--body {
+          position: relative;
+          margin: 16px 0;
+          width: 100%;
+          height: 235px;
+          cursor: pointer;
+          .slick-slider {
+            .slider--box {
+              position: relative;
+              height: 303px;
+            }
+            ul.slick-dots {
+              bottom: 5px;
+              li {
+                margin: 0;
+                &.slick-active {
+                  button::before {
+                    background: linear-gradient(135deg, #bceb00, #00eaea);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                  }
+                }
+                button::before {
+                  font-size: 8px;
+                  color: $white;
+                }
+              }
+            }
+            button.slick-arrow {
+              background: linear-gradient($white, $white) padding-box,
+                linear-gradient(to right, #bceb00, #00eaea) border-box;
+              border: 1px solid transparent;
+              height: 30px;
+              width: 30px;
+              border-radius: 50%;
+              background: $white;
+              &::before {
+                display: none;
+              }
+    
+              &.slick-prev {
+                position: absolute;
+                left: 10px;
+                z-index: 11;
+                opacity: 0.4;
+              }
+              &.slick-next {
+                position: absolute;
+                right: 10px;
+                z-index: 11;
+                opacity: 0.4;
+              }
+    
+              &.slick-disabled {
+                background: transparent;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+              }
+            }
+          }
+          > div {
+            width: 100%;
+            height: 100%;
+          }
+          img.nft--image,
+          video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+          }
+          .video__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+        .nft--box--footer {
+          .name--and--price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            h4 {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 160%;
+              color: $black;
+            }
+          }
+          .quantity--and--offer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 10px;
+              line-height: 150%;
+              color: rgba(0, 0, 0, 0.4);
+            }
+            .price--offer--div {
+              label {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 10px;
+                line-height: 150%;
+                color: rgba(0, 0, 0, 0.4);
+              }
+              span {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 10px;
+                line-height: 150%;
+                color: $black;
+              }
+              img {
+                margin: 0 3px 0 6px;
+                width: 13px;
+                height: 13px;
+              }
+            }
+          }
+        }
     }
 }
 .nft--gallery--item--card--parent--avtive {
