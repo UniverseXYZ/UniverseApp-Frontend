@@ -581,6 +581,14 @@
                     @include sm {
                         padding: 34px 20px;
                     }
+                    .single-nft-title{
+                      font-family: $sharpGroteskMediumFont;
+                      font-style: normal;
+                      font-weight: 600;
+                      font-size: 20px;
+                      line-height: 130%;
+                      color: #000000;
+                    }
                 }
                 .single-nft-content {
                     margin-top: 40px;
@@ -599,8 +607,9 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-                            border: 1px dashed rgba(0, 0, 0, 0.1);
-                            background-color: rgba(0, 0, 0, 0.02);
+                            background: rgba(0, 0, 0, 0.02);
+                            border: 3px dashed rgba(0, 0, 0, 0.1);
+                            box-sizing: border-box;
                             border-radius: 12px;
                             padding: 40px 16px 40px 16px;
 
@@ -609,10 +618,14 @@
                                 text-align: center;
 
                                 h5 {
-                                    color: rgba(0, 0, 0, 0.4);
-                                    @include sm {
-                                        font-size: 10px;
-                                    }
+                                  font-family: $spaceGroteskFont;
+                                  font-style: normal;
+                                  font-weight: 500;
+                                  font-size: 14px;
+                                  line-height: 180%;
+                                  text-align: center;
+                                  color: rgba(0, 0, 0, 0.4);
+                                  
                                 }
 
                                 img {
@@ -625,12 +638,14 @@
                                 }
 
                                 p {
-                                    padding-bottom: 16px;
-                                    font-family: $spaceGroteskFont;
-                                    font-weight: normal;
-                                    font-size: 14px;
-                                    line-height: 25px;
-                                    color: rgba(0, 0, 0, 0.4);
+                                  padding-bottom: 16px;
+                                  font-family: $spaceGroteskFont;
+                                  font-style: normal;
+                                  font-weight: 500;
+                                  font-size: 14px;
+                                  line-height: 180%;
+                                  text-align: center;
+                                  color: rgba(0, 0, 0, 0.4);
 
                                     @include lg {
                                         display: grid;
@@ -661,6 +676,7 @@
                             border: 1px dashed #ff4949;
                         }
                         .single-nft-preview {
+                            position: relative;
                             padding: 30px 160px;
                             background: rgba(0, 0, 0, 0.02);
                             border: 3px dashed rgba(0, 0, 0, 0.1);
@@ -669,7 +685,7 @@
                             .close {
                                 position: absolute;
                                 right: 2%;
-                                top: 18.8%;
+                                top: 2px;
                             }
 
                             h5 {
@@ -681,8 +697,8 @@
                             }
 
                             .single-nft-picture {
-                                width: 405px;
-                                height: 405px;
+                                width: 100%;
+                                height: 100%;
                                 background: $white;
                                 border: 1px solid #d4d4d4;
                                 box-sizing: border-box;
@@ -705,20 +721,18 @@
                                 }
 
                                 .preview-image {
-                                    width: 100%;
-                                    height: 100%;
+                                    width: 405px;
+                                    height: 405px;
                                     border-radius: 12px;
                                     object-fit: fill;
                                     image-rendering: pixelated;
 
-                                    // @include md {
-                                    //   width: 137px;
-                                    //   height: 137px;
-                                    // }
-                                    // @include sm {
-                                    //   width: 110px;
-                                    //   height: 110px;
-                                    // }
+                                    @include md {
+                                      height: 350px;
+                                    }
+                                    @include sm {
+                                      height: 250px;
+                                    }
                                 }
 
                                 // @include md {
@@ -730,6 +744,9 @@
                                 //   height: 110px;
                                 // }
                             }
+                            @include lg{
+                              padding: 30px 50px;
+                          }
                             @include sm {
                                 margin: 0px;
                             }
@@ -737,7 +754,7 @@
                     }
 
                     .single-nft-name {
-                        margin-top: 20px;
+                        margin-top: 40px;
                         width: 100%;
 
                         .intup-l {
@@ -761,7 +778,7 @@
                     }
 
                     .single-nft-description {
-                        margin-top: 20px;
+                        margin-top: 40px;
                         width: 100%;
 
                         textarea {
@@ -780,7 +797,7 @@
                     }
 
                     .single-nft-editions {
-                        margin-top: 20px;
+                        margin-top: 40px;
                         width: 100%;
 
                         .single-nft-edition-header {
@@ -798,7 +815,7 @@
                                 height: 106px;
                                 padding: 16px;
                                 bottom: 25px;
-                                left: 100%;
+                                left: 85%;
                                 transform: translateX(-50%);
 
                                 p {
@@ -903,20 +920,17 @@
                                 //   width: 100%;
                                 // }
                             }
-                            .universe {
-                                justify-content: center;
-                                border: 1px solid transparent;
-                                background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                                background-origin: border-box;
-                                box-shadow: 2px 1000px 1px #fff inset;
-                            }
                             .create > img {
                                 background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
                                 border-radius: 50%;
                             }
                         }
                     }
-
+                    .hr-div{
+                      border: 1px solid rgba(0, 0, 0, 0.1);
+                      margin-top: 60px;
+                      margin-bottom: 20px;
+                    }
                     .single-nft-properties {
                         margin-top: 40px;
 
@@ -924,6 +938,7 @@
                             position: relative;
                             display: flex;
                             width: fit-content;
+                            width: 100%;
 
                             h4 {
                                 font-family: $sharpGroteskSemiBoldFont;
@@ -933,6 +948,9 @@
                                 letter-spacing: 0.2px;
                                 color: $black;
                                 margin-bottom: 10px;
+                                img{
+                                  margin-left: 3px;
+                                }
                             }
 
                             .properties-info-text {
@@ -942,8 +960,8 @@
                                 box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
                                 border-radius: 12px;
                                 width: 226px;
-                                bottom: 50px;
-                                left: 85%;
+                                bottom: 33px;
+                                left: 130px;
                                 transform: translateX(-50%);
 
                                 p {
@@ -955,11 +973,11 @@
                             }
 
                             .switch {
-                                position: relative;
+                                position: absolute;
                                 display: inline-block;
                                 width: 40px;
                                 height: 24px;
-                                margin-left: 15px;
+                                right: 0;
                             }
 
                             .switch input {
@@ -1015,12 +1033,11 @@
                         .properties {
                             display: flex;
                             width: 100%;
-                            padding: 18px 18px 18px 24px;
-                            background: rgba(0, 0, 0, 0.02);
-                            border: 1px solid rgba(0, 0, 0, 0.1);
+                            padding: 20px 30px 30px 30px;
+                            background: #FFFFFF;
+                            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
                             border-radius: 10px;
-                            box-sizing: border-box;
-                            margin-bottom: 20px;
+                            margin-bottom: 30px;
 
                             h5 {
                                 font-family: $spaceGroteskFont;
@@ -1046,7 +1063,7 @@
 
                             .property-name {
                                 width: 44.5%;
-                                padding-right: 12px;
+                                padding-right: 16px;
 
                                 @include sm {
                                     width: 100%;
@@ -1057,7 +1074,7 @@
 
                             .property-value {
                                 width: 44.5%;
-                                padding-right: 12px;
+                                padding-right: 16px;
 
                                 @include sm {
                                     width: 100%;
@@ -1144,10 +1161,11 @@
                             .title {
                                 display: flex;
                                 align-items: center;
-                                margin-bottom: 10px;
+                                margin-bottom: 22px;
                                 width: fit-content;
                                 position: relative;
                                 align-items: flex-start;
+                                width: 100%;
                                 h4 {
                                     font-family: $sharpGroteskSemiBoldFont;
                                     font-weight: 600;
@@ -1162,9 +1180,9 @@
                                     padding: 16px 16px 18px 16px;
                                     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
                                     border-radius: 12px;
-                                    width: 226px;
+                                    width: 229px;
                                     bottom: 20px;
-                                    left: 100%;
+                                    left: 165px;
                                     transform: translateX(-50%);
 
                                     p {
@@ -1175,14 +1193,14 @@
                                     }
                                 }
                                 img {
-                                    margin-left: 6px;
-                                    margin-right: 15px;
+                                    margin-left: 3px;
                                 }
                                 .switch {
-                                    position: relative;
+                                    position: absolute;
                                     display: inline-block;
                                     width: 40px;
                                     height: 24px;
+                                    right: 0;
                                 }
 
                                 .switch input {
