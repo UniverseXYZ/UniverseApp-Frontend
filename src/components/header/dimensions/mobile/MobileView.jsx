@@ -8,6 +8,7 @@ import './MobileView.scss';
 import AppContext from '../../../../ContextAPI';
 import Button from '../../../button/Button.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
+import SearchIcon from '../../../../assets/images/marketplace-search.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
 import Group2 from '../../../../assets/images/Group2.svg';
@@ -36,6 +37,14 @@ import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
+import {
+  PLACEHOLDER_MARKETPLACE_AUCTIONS,
+  PLACEHOLDER_MARKETPLACE_NFTS,
+  PLACEHOLDER_MARKETPLACE_USERS,
+  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
+  PLACEHOLDER_MARKETPLACE_COMMUNITIES,
+  PLACEHOLDER_MARKETPLACE_GALLERIES,
+} from '../../../../utils/fixtures/BrowseNFTsDummyData';
 
 const MobileView = (props) => {
   const {
@@ -51,6 +60,7 @@ const MobileView = (props) => {
     setSelectedWallet,
     setShowInstallWalletPopup,
     selectedWallet,
+    showMarketplaceSearch,
   } = props;
   const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -80,9 +90,13 @@ const MobileView = (props) => {
       );
     };
   });
-
   return (
     <div className="mobile__nav">
+      {showMarketplaceSearch && (
+        <button type="button" className="search">
+          <img src={SearchIcon} alt="search" />
+        </button>
+      )}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
           <img
@@ -434,6 +448,7 @@ MobileView.propTypes = {
   setShowMenu: PropTypes.func.isRequired,
   showSelectWallet: PropTypes.bool.isRequired,
   setShowSelectWallet: PropTypes.func.isRequired,
+  showMarketplaceSearch: PropTypes.bool.isRequired,
 };
 
 export default MobileView;
