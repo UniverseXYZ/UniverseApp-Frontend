@@ -384,9 +384,6 @@ const MintSingleNft = ({ onClick }) => {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         document.getElementById('loading-hidden-btn').click();
 
-        document.getElementById('popup-root').remove();
-        document.getElementById('congrats-hidden-btn').click();
-
         const mintingGeneratedEditions = [];
 
         for (let i = 0; i < editions; i += 1) {
@@ -397,7 +394,6 @@ const MintSingleNft = ({ onClick }) => {
           const userAddress = localStorage.getItem('user_address');
           // universeERC721CoreContract should be used for minting single NFT
           // auctionFactoryContract should be usef for minting Collectibles NFTS
-          console.log(name, description, editions, properties, percentAmount, selectedCollection);
           const tokenURIResult = await getTokenURI({
             file: previewImage,
             name,
@@ -407,12 +403,22 @@ const MintSingleNft = ({ onClick }) => {
             percentAmount,
           });
 
-          console.log(tokenURIResult);
+          const royaltiesParsed = royalities
+            ? royaltyAddress.map((royalty) => [royalty.address, parseInt(royalty.amount, 10) * 100])
+            : [];
+
+          console.log('sending request to contract...');
 
           // call contract
-          // auctionFactoryContract.mint(userAddress, tokenURIResult, [
-          //   ['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 1000],
-          // ]);
+          const mintTx = await universeERC721CoreContract.mint(
+            userAddress,
+            tokenURIResult[0],
+            royaltiesParsed
+          );
+
+          const receipt = await mintTx.wait();
+
+          console.log('printing receipt...', receipt);
 
           // TODO:: As discussed with Alex this functionality is postponed for now.
           setMyNFTs([
@@ -436,6 +442,9 @@ const MintSingleNft = ({ onClick }) => {
               releasedDate: new Date(),
             },
           ]);
+
+          document.getElementById('popup-root').remove();
+          document.getElementById('congrats-hidden-btn').click();
         } else {
           // TODO:: WE DON'T HAVE AN ENDPOINT FOR DIRECT CREATION OF NFT, FOR NOW WORKS ONLY WITH SAVED NFTS
           setMyNFTs([
