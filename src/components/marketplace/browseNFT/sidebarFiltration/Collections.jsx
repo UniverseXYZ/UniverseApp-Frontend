@@ -4,11 +4,11 @@ import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
-import collectionImg from '../../../../assets/images/ntf1.svg';
+import collectionIcon from '../../../../assets/images/marketplace/collections.svg';
 import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 import { defaultColors } from '../../../../utils/helpers';
 
-const Collections = ({ selectedColl, setSelectedColl }) => {
+const Collections = ({ savedCollections, setSavedCollections }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [collections, setCollections] = useState(PLACEHOLDER_MARKETPLACE_COLLECTIONS);
   const [searchByCollections, setSearchByCollections] = useState('');
@@ -18,11 +18,11 @@ const Collections = ({ selectedColl, setSelectedColl }) => {
   };
 
   const handleSelect = (coll) => {
-    const newSelectedColl = [...selectedColl];
+    const newSelectedColl = [...savedCollections];
     if (newSelectedColl.filter((item) => item.id === coll.id).length === 0) {
       newSelectedColl.push(coll);
     }
-    setSelectedColl(newSelectedColl);
+    setSavedCollections(newSelectedColl);
   };
 
   return (
@@ -32,7 +32,9 @@ const Collections = ({ selectedColl, setSelectedColl }) => {
         aria-hidden="true"
         onClick={() => setShowFilters(!showFilters)}
       >
-        <h3>Collections</h3>
+        <h3>
+          <img src={collectionIcon} alt="Collection" /> Collections
+        </h3>
       </div>
       <Animated animationIn="fadeIn">
         <div className="browse--nft--sidebar--filtration--item--content">
@@ -77,13 +79,13 @@ const Collections = ({ selectedColl, setSelectedColl }) => {
 };
 
 Collections.propTypes = {
-  selectedColl: PropTypes.oneOfType([PropTypes.array]),
-  setSelectedColl: PropTypes.func,
+  savedCollections: PropTypes.oneOfType([PropTypes.array]),
+  setSavedCollections: PropTypes.func,
 };
 
 Collections.defaultProps = {
-  selectedColl: [],
-  setSelectedColl: () => {},
+  savedCollections: [],
+  setSavedCollections: () => {},
 };
 
 export default Collections;

@@ -49,13 +49,16 @@ const BrowseNFT = () => {
     <div className="browse--nft--page">
       {/* <Submenu title="NFT Marketplace" subtitles={['Browse NFTs', 'Activity']} /> */}
       <div className="browse--nft--grid">
-        {/* <div className="browse--nft--sidebar--filtration" hidden>
+        <div className="browse--nft--sidebar--filtration" hidden>
           <SaleType saleTypeButtons={saleTypeButtons} setSaleTypeButtons={setSaleTypeButtons} />
           <Price setSelectedPrice={setSelectedPrice} />
-          <Collections selectedColl={savedCollections} setSelectedColl={setSavedCollections} />
-          <Creators selectedCreators={selectedCreators} setSelectedCreators={setSelectedCreators} />
+          <Collections
+            savedCollections={savedCollections}
+            setSavedCollections={setSavedCollections}
+          />
+          <Creators savedCreators={savedCreators} setSavedCreators={setSavedCreators} />
           <VerifiedOnly />
-        </div> */}
+        </div>
         <div className="browse--nft--content">
           <SelectedFiltersAndSorting
             saleTypeButtons={saleTypeButtons}
