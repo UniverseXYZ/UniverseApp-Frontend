@@ -199,7 +199,7 @@ const MyNFTs = () => {
           </div>
 
           <div className="mynfts__page__header" style={{ marginTop: '20px' }}>
-            <h1 className="title">Select NFTssss</h1>
+            <h1 className="title">Select NFTs</h1>
             <div className="create__mint__btns">
               {myNFTsSelectedTabIndex === 2 && (
                 <button
@@ -211,7 +211,11 @@ const MyNFTs = () => {
                   Mint selected
                 </button>
               )}
-              <button type="button" className="mint__btn" onClick={handleOpen}>
+              <button
+                type="button"
+                className="mint__btn"
+                onClick={() => history.push('/my-nfts/create')}
+              >
                 Create NFT
               </button>
             </div>
@@ -233,7 +237,11 @@ const MyNFTs = () => {
                   Mint selected
                 </button>
               )}
-              <button type="button" className="mint__btn" onClick={handleOpen}>
+              <button
+                type="button"
+                className="mint__btn"
+                onClick={() => history.push('/my-nfts/create')}
+              >
                 Create NFT
               </button>
             </div>
