@@ -92,11 +92,6 @@ const Header = ({ location }) => {
     } else {
       document.querySelector('header').classList.remove('dark');
     }
-    if (location.pathname === '/marketplace') {
-      setShowSearch(true);
-    } else {
-      setShowSearch(false);
-    }
   }, [location.pathname]);
 
   useEffect(() => {

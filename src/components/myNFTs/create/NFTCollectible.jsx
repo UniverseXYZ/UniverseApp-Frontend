@@ -354,7 +354,11 @@ const NFTCollectible = (props) => {
     <div className="create--nft--for--collection--page">
       <div className="upload--file--section">
         <h3>Upload file</h3>
-        <div className="dropzone" onDrop={(e) => onDrop(e)} onDragOver={(e) => onDragOver(e)}>
+        <div
+          className={`dropzone ${errors.previewImage ? 'error' : ''}`}
+          onDrop={(e) => onDrop(e)}
+          onDragOver={(e) => onDragOver(e)}
+        >
           {!previewImage ? (
             <div className="image--not--selected">
               <img src={uploadIcon} alt="Upload" />

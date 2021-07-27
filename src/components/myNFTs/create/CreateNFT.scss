@@ -601,6 +601,9 @@
                         border: 3px dashed rgba(0, 0, 0, 0.1);
                         box-sizing: border-box;
                         border-radius: 12px;
+                        &.error {
+                            border: 3px dashed #FF4949;
+                        }
                         .image--not--selected {
                             padding: 50px;
                             display: flex;
