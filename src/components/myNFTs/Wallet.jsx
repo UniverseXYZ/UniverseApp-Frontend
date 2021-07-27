@@ -180,7 +180,7 @@ const Wallet = ({
       newCollections.push({
         id: uuid(),
         name: collection.collectionName,
-        avatar: collection.collectionAvatar,
+        avatar: false ? collection.collectionAvatar : collection.previewImageMock,
         selected: false,
       });
     });
@@ -303,7 +303,7 @@ const Wallet = ({
                           {collection.name.charAt(0)}
                         </div>
                       ) : (
-                        <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                        <img src={collection.avatar} alt={collection.name} />
                       )}
                       <span>{collection.name}</span>
                     </button>
@@ -376,7 +376,7 @@ const Wallet = ({
                           {collection.name.charAt(0)}
                         </div>
                       ) : (
-                        <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                        <img src={collection.avatar} alt={collection.name} />
                       )}
                       <span>{collection.name}</span>
                     </button>
@@ -403,7 +403,7 @@ const Wallet = ({
                         {collection.name.charAt(0)}
                       </div>
                     ) : (
-                      <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                      <img src={collection.avatar} alt={collection.name} />
                     )}
                     <span>{collection.name}</span>
                     <button type="button" title="Remove" onClick={() => handleCollections(index)}>
