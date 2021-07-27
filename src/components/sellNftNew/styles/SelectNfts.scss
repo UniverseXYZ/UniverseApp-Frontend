@@ -4,6 +4,15 @@
 .select--nfts--container {
     width: 100%;
     margin-bottom: 15px;
+    .search--and--filters--section--sticky {
+        // position: sticky;
+        top: 0;
+        z-index: 999;
+        width: 100%;
+        background: $white;
+        padding: 10px 0;
+        // border: 1px solid;
+    }
     .section--title--block {
         width: 100%;
         margin-bottom: 30px;

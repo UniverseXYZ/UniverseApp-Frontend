@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 import { defaultColors } from '../../utils/helpers';
 import SaleTypeFilter from '../ui-elements/SaleTypeFilter';
@@ -43,8 +43,13 @@ const SelectNfts = (props) => {
   const [selectedGalleryItem, setSelectedGalleryItem] = useState([]);
   const [removeGalleryItemId, setRemoveGalleryItemId] = useState(null);
   const [galleryRowItem, setGalleryRowItem] = useState(4);
+  const [stickySearchBlock, setStickySearchBlock] = useState(false);
   const history = useHistory();
+  const location = useLocation();
   useLayoutEffect(() => {
+    const searchBlock = document.querySelector('.search--and--filters--section--sticky');
+    searchBlock.style.position = 'sticky';
+    console.log(searchBlock.style, 'ssssssssssssssss');
     if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
     if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
   });
@@ -117,6 +122,13 @@ const SelectNfts = (props) => {
     }
   }, [removeGalleryItemId]);
 
+  // useEffect(() => {
+  //   const header = document.querySelector('header');
+  //   if (stepData.selectedMethod === 'bundle' && location.pathname === '/nft-marketplace/settings') {
+  //     header.style.position = 'absolute';
+  //   }
+  // }, []);
+
   const clickContinue = () => {
     let dataBundleSale = window.bundleData;
     dataBundleSale = { ...dataBundleSale, selectedNft: selectedGalleryItem };
@@ -133,55 +145,57 @@ const SelectNfts = (props) => {
           <Link to="/nft-marketplace/settings">Minting</Link>.
         </p>
       </div>
-      <div className="header--search--block">
-        <div className="search--block">
-          <SearchField
-            data={PLACEHOLDER_MARKETPLACE_NFTS}
-            CardElement={<h1>ok</h1>}
-            placeholder="Search items"
-            dropdown={false}
-            getData={(find) => setData([...find])}
-          />
-        </div>
-        <div className="sort--by--block">
-          <SortBySelect />
-        </div>
-        <div className="filters--count--block">
-          <div className="filters--count--parent">
-            <div className="filters--count--child">
-              {!filtersCount ? (
-                <img src={filtersIcon} alt="img" />
-              ) : (
-                <div className="count--block">
-                  <p>{filtersCount}</p>
-                </div>
-              )}
-              <p>Filters</p>
+      <div className="search--and--filters--section--sticky">
+        <div className="header--search--block">
+          <div className="search--block">
+            <SearchField
+              data={PLACEHOLDER_MARKETPLACE_NFTS}
+              CardElement={<h1>ok</h1>}
+              placeholder="Search items"
+              dropdown={false}
+              getData={(find) => setData([...find])}
+            />
+          </div>
+          <div className="sort--by--block">
+            <SortBySelect />
+          </div>
+          <div className="filters--count--block">
+            <div className="filters--count--parent">
+              <div className="filters--count--child">
+                {!filtersCount ? (
+                  <img src={filtersIcon} alt="img" />
+                ) : (
+                  <div className="count--block">
+                    <p>{filtersCount}</p>
+                  </div>
+                )}
+                <p>Filters</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="sorting--filters--row">
-        <SaleTypeFilter
-          getSelectedFilters={setSaleTypeFilters}
-          onClear={clearAll}
-          removeElemInSelected={elemSaleRemove}
-        />
-        <PriceRangeFilter
-          getPrice={(price) => setFilterRangePrice(price)}
-          remove={removePrice}
-          onClear={clearAll}
-        />
-        <CollectionFilter
-          getSelectedFilters={setCollectionSelected}
-          onClear={clearAll}
-          removeElemInSelected={clearCollectionSelectedItem}
-        />
-        <ArtistFilter
-          getSelectedFilters={setArtistsSelected}
-          onClear={clearAll}
-          removeElemInSelected={clearCollectionSelectedItem}
-        />
+        <div className="sorting--filters--row">
+          <SaleTypeFilter
+            getSelectedFilters={setSaleTypeFilters}
+            onClear={clearAll}
+            removeElemInSelected={elemSaleRemove}
+          />
+          <PriceRangeFilter
+            getPrice={(price) => setFilterRangePrice(price)}
+            remove={removePrice}
+            onClear={clearAll}
+          />
+          <CollectionFilter
+            getSelectedFilters={setCollectionSelected}
+            onClear={clearAll}
+            removeElemInSelected={clearCollectionSelectedItem}
+          />
+          <ArtistFilter
+            getSelectedFilters={setArtistsSelected}
+            onClear={clearAll}
+            removeElemInSelected={clearCollectionSelectedItem}
+          />
+        </div>
       </div>
       <div className="filters--row--data">
         <div className="nfts--data--count">
@@ -347,7 +361,9 @@ const SelectNfts = (props) => {
 
 SelectNfts.propTypes = {
   continueBtnDisabled: PropTypes.bool,
-  stepData: PropTypes.shape({}),
+  stepData: PropTypes.shape({
+    selectedMethod: PropTypes.string,
+  }),
   setStepData: PropTypes.func,
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import SellNftSubHeader from '../../components/sellNftNew/SellNftSubHeader';
 import StepTabs from '../../components/sellNftNew/StepTabs';
@@ -37,6 +37,7 @@ const getContent = (type, data, setData) => {
 const NFTMarketplace = () => {
   const location = useLocation();
   const { stepsData, setStepsData } = useContext(AppContext);
+
   const headerLabels = [
     {
       label: 'Select sell method',
