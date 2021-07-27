@@ -44,9 +44,9 @@ import {
 } from './utils/api/etherscan.js';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
-import { getProfileInfo, userAuthenticate, setChallenge, getChallenge } from './utils/api/profile';
+import { getProfileInfo, userAuthenticate, setChallenge } from './utils/api/profile';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
-import { getSavedNfts } from './utils/api/mintNFT';
+import { getSavedNfts, getMyNfts } from './utils/api/mintNFT';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
@@ -207,6 +207,10 @@ const App = () => {
       // Fetch the saved NFTS for that addres
       const savedNFTS = await getSavedNfts();
       setSavedNfts(savedNFTS);
+
+      // Fetch the minted NFTS for that addres
+      const mintedNfts = await getMyNfts();
+      setMyNFTs(mintedNfts);
     }
   };
 

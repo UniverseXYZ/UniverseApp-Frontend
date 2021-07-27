@@ -148,8 +148,10 @@ const MyNFTs = () => {
     // }
     // });
     const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-    setMyNFTs(newMyNFTs); // TODO:: No backend for getting my NFTS
     setSavedNfts(newSavedNFTs);
+
+    const mintedNfts = await getMyNfts();
+    setMyNFTs(mintedNfts);
 
     document.getElementById('popup-root').remove();
     document.getElementById('congrats-hidden-btn').click();

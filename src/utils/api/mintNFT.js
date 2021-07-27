@@ -1,5 +1,6 @@
 const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
+const GET_MY_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const GENERATE_COLLECTION_NFT_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
@@ -85,6 +86,25 @@ export const getSavedNfts = async () => {
   }
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
+};
+
+/**
+ * @returns {array} with my NFTs
+ */
+export const getMyNfts = async () => {
+  const request = await fetch(GET_MY_NFTS_URL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  });
+
+  if (!request.ok && request.status !== 201) {
+    console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
+  }
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result.nfts;
 };
 
 /**
