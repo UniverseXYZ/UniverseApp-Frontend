@@ -5,6 +5,7 @@ import moment from 'moment';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
+import bubleIcon from '../../assets/images/text-bubble.svg';
 import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
 import PastAuctions from './PastAuctions.jsx';
@@ -165,6 +166,8 @@ const MyAuction = () => {
         )}
         {selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length ? (
           <div className="empty__auction">
+            <img src={bubleIcon} alt="Buble" />
+            <h3>No active auctions found</h3>
             {!loggedInArtist.name || !loggedInArtist.avatar ? (
               <div className="warning__div">
                 <img src={Exclamation} alt="Warning" />
@@ -177,10 +180,8 @@ const MyAuction = () => {
                 </p>
               </div>
             ) : (
-              <></>
+              <p className="desc">Create your first auction by clicking the button below</p>
             )}
-            <h3>No active auctions found</h3>
-            <p className="desc">Create your first auction by clicking the button below</p>
             <button
               type="button"
               className="light-button set_up"
@@ -210,6 +211,8 @@ const MyAuction = () => {
         !myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
           .length ? (
           <div className="empty__auction">
+            <img src={bubleIcon} alt="Buble" />
+            <h3>No scheduled auctions found</h3>
             {!loggedInArtist.name || !loggedInArtist.avatar ? (
               <div className="warning__div">
                 <img src={Exclamation} alt="Warning" />
@@ -222,10 +225,8 @@ const MyAuction = () => {
                 </p>
               </div>
             ) : (
-              <></>
+              <p className="desc">Create your first auction by clicking the button below</p>
             )}
-            <h3>No scheduled auctions found</h3>
-            <p className="desc">Create your first auction by clicking the button below</p>
             <button
               type="button"
               className="light-button set_up"
@@ -250,6 +251,8 @@ const MyAuction = () => {
         {selectedTabIndex === 2 &&
         !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length ? (
           <div className="empty__auction">
+            <img src={bubleIcon} alt="Buble" />
+            <h3>No past auctions found</h3>
             {!loggedInArtist.name || !loggedInArtist.avatar ? (
               <div className="warning__div">
                 <img src={Exclamation} alt="Warning" />
@@ -262,10 +265,8 @@ const MyAuction = () => {
                 </p>
               </div>
             ) : (
-              <></>
+              <p className="desc">Create your first auction by clicking the button below</p>
             )}
-            <h3>No past auctions found</h3>
-            <p className="desc">Create your first auction by clicking the button below</p>
             <button
               type="button"
               className="light-button set_up"

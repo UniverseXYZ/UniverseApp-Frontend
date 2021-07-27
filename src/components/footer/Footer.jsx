@@ -163,7 +163,7 @@ const Footer = () => {
                     Polymorphs
                   </li>
                   <li onClick={() => history.push('/core-drops')} aria-hidden="true">
-                    Core Drops
+                    OG planet drop
                   </li>
                 </ul>
               </div>
@@ -204,6 +204,8 @@ const Footer = () => {
                   >
                     Yield farming
                   </li>
+                  <li>Forum</li>
+                  <li>Signal</li>
                 </ul>
               </div>
             </div>
