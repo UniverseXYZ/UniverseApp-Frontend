@@ -4,6 +4,7 @@ const GET_MY_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const GENERATE_COLLECTION_NFT_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
+const GET_MY_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
 
 /**
  * @param {Object} data
@@ -272,4 +273,13 @@ export const getMyCollections = () => {
   };
 
   return fetch(GET_MY_COLLECTIONS, requestOptions);
+};
+
+export const getMyNFTs = () => {
+  const requestOptions = {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+  };
+
+  return fetch(GET_MY_NFTS, requestOptions);
 };

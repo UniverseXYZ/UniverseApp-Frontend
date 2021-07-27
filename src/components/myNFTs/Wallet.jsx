@@ -39,6 +39,19 @@ const Wallet = ({
   const [previewNFTs, setPreviewNFTs] = useState([]);
   const history = useHistory();
 
+  // let myNFTs = [];
+  // (async () => {
+
+  //   const nfts = await getMyNFTs();
+  //   const reader = nfts.body.pipeThrough(new TextDecoderStream()).getReader();
+  //   const readMyCollectionsStream = async () => {
+  //     const { done, value } = await reader.read();
+  //     myNFTs = [...myNFTs, ...value.collections];
+  //     console.log(myNFTs);
+  //     if (!done) readMyCollectionsStream();
+  //   };
+  // });
+
   const saveIndexes = (index) => {
     const temp = [...indexes];
     temp.push(index);
@@ -52,6 +65,7 @@ const Wallet = ({
   const isCreatingAction = location.pathname === '/create-tiers';
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction.tiers.find((element) => element.id === location.state);
+
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
