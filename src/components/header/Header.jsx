@@ -34,6 +34,7 @@ const Header = ({ location }) => {
   const [showInstallWalletPopup, setShowInstallWalletPopup] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const searchRef = useRef();
   const ref = useRef();
 
@@ -329,6 +330,8 @@ const Header = ({ location }) => {
         setSelectedWallet={setSelectedWallet}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
+        setShowSearch={setShowSearch}
+        showSearch={showSearch}
       />
       <MobileView
         isWalletConnected={isWalletConnected}
@@ -343,6 +346,8 @@ const Header = ({ location }) => {
         setSelectedWallet={setSelectedWallet}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
         selectedWallet={selectedWallet}
+        setShowMobileSearch={setShowMobileSearch}
+        showMobileSearch={showMobileSearch}
       />
     </header>
   );
