@@ -2,6 +2,7 @@
 @import '../../../assets/scss/mixins';
 
 .sale--type--filter {
+  z-index: 2 !important;
     .sale--dropdown {
         position: absolute;
         top: 46px;
@@ -10,7 +11,9 @@
         box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
         border-radius: 12px;
         z-index: 9;
-
+        @include sm {
+          width: calc(200% + 10px);
+        }
         .sale--dropdown--body {
           padding: 30px 30px 0px;
           .sale--dropdown--header {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
@@ -26,7 +26,7 @@ const clearCheck = (filtersSale, collections, artist, priceRange) => {
   return false;
 };
 
-const SelectNfts = (props) => {
+const SelectNfts = () => {
   const [filtersCount, setFiltersCount] = useState(0);
   const [saleTypeFilters, setSaleTypeFilters] = useState([]);
   const [collectionsSelected, setCollectionSelected] = useState([]);
@@ -38,13 +38,13 @@ const SelectNfts = (props) => {
   const [clearAll, setClearAll] = useState(false);
   const [data, setData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
   const [selectedGalleryItem, setSelectedGalleryItem] = useState([]);
-  // const [galleryRowItem, setGalleryRowItem] = useState(4);
+  const [removeGalleryItemId, setRemoveGalleryItemId] = useState(null);
+  const [galleryRowItem, setGalleryRowItem] = useState(4);
   const history = useHistory();
-  // useEffect(() => {
-  //   if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
-  //   if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
-  //   if (window.innerWidth <= 576) setGalleryRowItem(0);
-  // }, [window.innerWidth]);
+  useLayoutEffect(() => {
+    if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
+    if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
+  });
   useEffect(() => {
     if (clearAll) setClearAll(false);
     if (elemSaleRemove) setElemSaleRemove(null);
@@ -104,6 +104,16 @@ const SelectNfts = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (removeGalleryItemId) {
+      const elIndx = selectedGalleryItem.findIndex((elem) => elem.id === removeGalleryItemId);
+      const copyArr = [...selectedGalleryItem];
+      copyArr.splice(elIndx, 1);
+      setSelectedGalleryItem(copyArr);
+      setRemoveGalleryItemId(null);
+    }
+  }, [removeGalleryItemId]);
+
   return (
     <div className="select--nfts--container">
       <div className="section--title--block">
@@ -138,7 +148,6 @@ const SelectNfts = (props) => {
               )}
               <p>Filters</p>
             </div>
-            {/* <div className="box--shadow--effect--block" /> */}
           </div>
         </div>
       </div>
@@ -265,14 +274,14 @@ const SelectNfts = (props) => {
       </div>
       <div className="nfts--gallery">
         {data.map((elem, index) => {
-          // const rowLastElem = (index + 1) % galleryRowItem;
-          console.log('1');
+          const rowLastElem = (index + 1) % galleryRowItem;
           return (
             <NftGalleryItemCard
               key={index.toString()}
               nft={elem}
               onClick={(e, selected) => clickGalleryItem(e, selected)}
-              // style={rowLastElem === 0 ? { marginRight: 0 } : {}}
+              unSelected={elem.id === removeGalleryItemId}
+              style={rowLastElem === 0 ? { marginRight: 0 } : {}}
             />
           );
         })}
@@ -296,7 +305,11 @@ const SelectNfts = (props) => {
                   Your browser does not support the video tag.
                 </video>
               )}
-              <div className="close--icon">
+              <div
+                className="close--icon"
+                aria-hidden="true"
+                onClick={() => setRemoveGalleryItemId(elem.id)}
+              >
                 <img src={closeIconWhite} alt="img" />
               </div>
             </div>
