@@ -354,7 +354,7 @@ export const getMockNfts = () => {
       previewImageMock:
         'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
       collectionAvatarMock:
-        'https://universeapp-assets-dev.s3.amazonaws.com/3eeaa8a78c4fb8b514a41b75a6796ebea31c92f0de8ea8c6.jpeg',
+        'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
     },
   ];
 
@@ -385,7 +385,7 @@ export const getMockCollections = () => {
       description: 'description of collection 2',
       shortURL: 'universe.xyz/c/collectionmock2',
       previewImageMock:
-        'https://universeapp-assets-dev.s3.amazonaws.com/3eeaa8a78c4fb8b514a41b75a6796ebea31c92f0de8ea8c6.jpeg',
+        'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
     },
   ];
 
