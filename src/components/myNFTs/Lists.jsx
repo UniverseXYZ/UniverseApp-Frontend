@@ -219,7 +219,11 @@ const Lists = ({
                     trigger={
                       <img
                         className="preview-image"
-                        src={URL.createObjectURL(nft.previewImage)}
+                        src={
+                          nft.previewImage
+                            ? URL.createObjectURL(nft.previewImage)
+                            : nft.previewImageMock
+                        }
                         alt={nft.name}
                       />
                     }
@@ -232,7 +236,11 @@ const Lists = ({
                 isCreatingAction && (
                   <img
                     className="preview-image"
-                    src={URL.createObjectURL(nft.previewImage)}
+                    src={
+                      nft.previewImage
+                        ? URL.createObjectURL(nft.previewImage)
+                        : nft.previewImageMock
+                    }
                     alt={nft.name}
                   />
                 )}
@@ -341,7 +349,11 @@ const Lists = ({
                       </div>
                     ) : (
                       <img
-                        src={URL.createObjectURL(nft.collectionAvatar)}
+                        src={
+                          nft.previewImage
+                            ? URL.createObjectURL(nft.collectionAvatar)
+                            : nft.collectionAvatarMock
+                        }
                         alt={nft.collectionName}
                       />
                     )}
