@@ -156,18 +156,34 @@ const Price = ({ setSelectedPrice }) => {
               maxValue={4}
               minValue={0}
               value={sliderValue}
-              onChange={(value) =>
+              onChange={(value) => {
                 setSliderValue({
                   min: Number(value.min.toFixed(1)),
                   max: Number(value.max.toFixed(1)),
-                })
-              }
+                });
+                setDisabledMin(true);
+                setDisabledMax(true);
+              }}
             />
           </div>
           <div className="min--max--fields">
-            <input type="number" placeholder="Min" min="0" max="4" onChange={validateMinValue} />
+            <input
+              type="number"
+              placeholder="Min"
+              min="0"
+              max="4"
+              onChange={validateMinValue}
+              value={disabledMin && sliderValue.min}
+            />
             <span className="to">to</span>
-            <input type="number" placeholder="Max" min="0" max="4" onChange={validateMaxValue} />
+            <input
+              type="number"
+              placeholder="Max"
+              min="0"
+              max="4"
+              onChange={validateMaxValue}
+              value={disabledMax && sliderValue.max}
+            />
           </div>
           {disabledMax && disabledMin ? (
             <Button
