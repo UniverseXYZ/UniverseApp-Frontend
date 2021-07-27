@@ -11,6 +11,7 @@ import daiIcon from '../../../../assets/images/dai_icon.svg';
 import usdcIcon from '../../../../assets/images/usdc_icon.svg';
 import bondIcon from '../../../../assets/images/bond_icon.svg';
 import snxIcon from '../../../../assets/images/snx.svg';
+import priceIcon from '../../../../assets/images/marketplace/price-range.svg';
 import rightArrow from '../../../../assets/images/arrow.svg';
 import 'react-input-range/lib/css/index.css';
 
@@ -96,7 +97,9 @@ const Price = ({ setSelectedPrice }) => {
         aria-hidden="true"
         onClick={() => setShowFilters(!showFilters)}
       >
-        <h3>Price</h3>
+        <h3>
+          <img src={priceIcon} alt="Price" /> Price
+        </h3>
       </div>
       <Animated animationIn="fadeIn">
         <div className="browse--nft--sidebar--filtration--item--content">
@@ -129,7 +132,7 @@ const Price = ({ setSelectedPrice }) => {
                     key={uuid()}
                     aria-hidden="true"
                     onClick={() => setSelectedTokenIndex(index)}
-                    style={{ display: selectedTokenIndex === index ? 'none' : 'flex' }}
+                    // style={{ display: selectedTokenIndex === index ? 'none' : 'flex' }}
                   >
                     <div>
                       <img src={token.icon} alt={token.title} />
@@ -147,10 +150,40 @@ const Price = ({ setSelectedPrice }) => {
               <></>
             )}
           </div>
+          <div className="range--slider">
+            <InputRange
+              step={0.1}
+              maxValue={4}
+              minValue={0}
+              value={sliderValue}
+              onChange={(value) => {
+                setSliderValue({
+                  min: Number(value.min.toFixed(1)),
+                  max: Number(value.max.toFixed(1)),
+                });
+                setDisabledMin(true);
+                setDisabledMax(true);
+              }}
+            />
+          </div>
           <div className="min--max--fields">
-            <input type="number" placeholder="Min" min="0" max="4" onChange={validateMinValue} />
+            <input
+              type="number"
+              placeholder="Min"
+              min="0"
+              max="4"
+              onChange={validateMinValue}
+              value={disabledMin && sliderValue.min}
+            />
             <span className="to">to</span>
-            <input type="number" placeholder="Max" min="0" max="4" onChange={validateMaxValue} />
+            <input
+              type="number"
+              placeholder="Max"
+              min="0"
+              max="4"
+              onChange={validateMaxValue}
+              value={disabledMax && sliderValue.max}
+            />
           </div>
           {disabledMax && disabledMin ? (
             <Button
@@ -164,20 +197,6 @@ const Price = ({ setSelectedPrice }) => {
               Apply
             </Button>
           )}
-          {/* <div className="range--slider">
-            <InputRange
-              step={0.1}
-              maxValue={4}
-              minValue={0}
-              value={sliderValue}
-              onChange={(value) =>
-                setSliderValue({
-                  min: Number(value.min.toFixed(1)),
-                  max: Number(value.max.toFixed(1)),
-                })
-              }
-            />
-          </div> */}
         </div>
       </Animated>
     </div>

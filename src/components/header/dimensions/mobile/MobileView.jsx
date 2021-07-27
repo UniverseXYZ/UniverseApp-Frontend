@@ -16,6 +16,7 @@ import {
 import AppContext from '../../../../ContextAPI';
 import Button from '../../../button/Button.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
+import SearchIcon from '../../../../assets/images/marketplace-search.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
 import Group2 from '../../../../assets/images/Group2.svg';
@@ -122,7 +123,6 @@ const MobileView = (props) => {
       );
     };
   });
-
   return (
     <div className="mobile__nav">
       <button

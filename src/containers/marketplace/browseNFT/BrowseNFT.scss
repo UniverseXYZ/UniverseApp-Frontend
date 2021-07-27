@@ -386,7 +386,7 @@
         }
       }
     }
-    &--items {
+    &--item {
       position: absolute;
       left: 0;
       right: 0;
@@ -624,202 +624,235 @@
 }
 
 .browse--nft--content {
-  background: linear-gradient(127.59deg, #f2f3fb -1.33%, #fcf9f4 91.03%);
+  // background: linear-gradient(127.59deg, #f2f3fb -1.33%, #fcf9f4 91.03%);
+  background: $white;
   padding: 40px 40px 60px;
   .selected--filters--and--sorting {
-    .sorting__filters {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+    .sorting__filters__desktop {
+      @include lg {
+        display: none;
+      }
+    }
+    .sorting__filters__tablet {
+      display: none;
 
-      .sorting--filters--list {
+      .head--part {
         display: flex;
+        justify-content: space-between;
 
-        .sorting--filter {
-          position: relative;
+        .sorting__filter__button {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          width: 200px;
           background: $white;
           border: 1px solid rgba(0, 0, 0, 0.1);
           box-sizing: border-box;
           border-radius: 12px;
-          padding: 11px;
-          margin-right: 12px;
-          &.open {
-            background-image: linear-gradient(101deg, #bceb00, #00eaea);
-            background-origin: border-box;
-            box-shadow: 2px 1000px 1px $white inset;
-            border: 1px solid transparent;
-          }
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          padding: 11px 16px;
+          color: $black;
 
-          p.filter--name {
+          img {
+            margin-right: 10px;
+          }
+          .tablet--selected--filters {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            border-radius: 50%;
+            border: 1px solid $white;
+            margin-right: 10px;
             font-family: $spaceGroteskFont;
             font-style: normal;
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 140%;
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 100%;
             color: $black;
-
-            img.filter__icon {
-              margin-right: 6px;
-            }
           }
-          img.arrow {
-            margin-right: 7.5px;
-            transition: 0.1s ease-in-out;
-            &.rotate {
-              transform: rotate(180deg);
-            }
+        }
+      }
+      @include lg {
+        display: block;
+      }
+      @include md {
+        display: none;
+      }
+    }
+    .sorting__filters__mobile {
+      display: none;
+
+      @include md {
+        display: block;
+
+        .selected--filters--numbers {
+          position: fixed;
+          bottom: 70px;
+          right: 14px;
+          width: 20px;
+          height: 20px;
+          border: 1px solid black;
+          background: black;
+          color: white;
+          border-radius: 20px;
+          text-align: center;
+          box-sizing: border-box;
+          z-index: 9;
+          font-family: $spaceGroteskFont;
+          font-weight: normal;
+          font-style: normal;
+          font-size: 12px;
+          line-height: 150%;
+        }
+        button {
+          position: fixed;
+          bottom: 30px;
+          right: 20px;
+          z-index: 9;
+          padding: 15px;
+        }
+      }
+    }
+    .sorting__filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .sorting--filters--list {
+      display: flex;
+      width: 70%;
+
+      .sorting--filter {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 200px;
+        min-width: 150px;
+        background: $white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 12px;
+        padding: 11px;
+        margin-right: 12px;
+        cursor: pointer;
+
+        &:hover {
+          background-image: linear-gradient(101deg, #bceb00, #00eaea);
+          background-origin: border-box;
+          box-shadow: 2px 1000px 1px $white inset;
+          border: 1px solid transparent;
+        }
+        &.open {
+          background-image: linear-gradient(101deg, #bceb00, #00eaea);
+          background-origin: border-box;
+          box-shadow: 2px 1000px 1px $white inset;
+          border: 1px solid transparent;
+        }
+
+        p.filter--name {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          color: $black;
+
+          img.filter__icon {
+            margin-right: 6px;
           }
-          .sale--dropdown {
-            position: absolute;
-            top: 46px;
-            left: 0px;
-            background: $white;
-            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-            border-radius: 12px;
-            z-index: 9;
+        }
+        img.arrow {
+          margin-right: 7.5px;
+          transition: 0.1s ease-in-out;
+          &.rotate {
+            transform: rotate(180deg);
+          }
+        }
+        .sale--dropdown {
+          position: absolute;
+          top: 46px;
+          left: 0px;
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          z-index: 9;
 
-            .sale--dropdown--body {
-              padding: 30px 30px 0px;
-              .sale--dropdown--header {
-                display: flex;
-                background: rgba(0, 0, 0, 0.06);
-                border-radius: 12px;
-                padding: 4px;
-
-                div {
-                  padding: 6px;
-                  width: 168px;
-                  text-align: center;
-                  border-radius: 8px;
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: 500;
-                  font-size: 14px;
-                  line-height: 140%;
-                  color: $black;
-
-                  &.active {
-                    background: $white;
-                  }
-                }
-              }
-              .sale--types {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px 12px;
-                padding: 30px 0px;
-
-                .sale--type--div {
-                  display: flex;
-                  align-items: center;
-
-                  .sale--type--checkboxes {
-                    -webkit-appearance: none;
-                    position: relative;
-                    background: $white;
-                    border: 1px solid rgba(0, 0, 0, 0.1);
-                    box-sizing: border-box;
-                    border-radius: 6px;
-                    width: 24px;
-                    height: 24px;
-                    margin-right: 12px;
-                    &:hover {
-                      background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                      background-origin: border-box;
-                      box-shadow: 2px 1000px 1px $white inset;
-                      border: 1px solid transparent;
-                    }
-
-                    &:checked {
-                      background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
-                      border-color: transparent;
-
-                      &::after {
-                        content: '\2518';
-                        color: #000000;
-                        font-size: 16px;
-                        position: absolute;
-                        top: 4px;
-                        left: 4px;
-                        transform: rotate(45deg);
-                      }
-                    }
-                  }
-                  .sale--type--name {
-                    h4 {
-                      font-family: $spaceGroteskFont;
-                      font-style: normal;
-                      font-weight: 500;
-                      font-size: 14px;
-                      line-height: 140%;
-                      color: $black;
-                    }
-                    p {
-                      font-family: $spaceGroteskFont;
-                      font-style: normal;
-                      font-weight: normal;
-                      font-size: 12px;
-                      line-height: 150%;
-                      color: rgba(0, 0, 0, 0.4);
-                    }
-                  }
-                }
-              }
-            }
-            .sale--dropdown--footer {
+          .sale--dropdown--body {
+            padding: 30px 30px 0px;
+            .sale--dropdown--header {
               display: flex;
-              justify-content: space-between;
-              padding: 14px 30px;
-              border-top: 1px solid rgba(0, 0, 0, 0.1);
+              background: rgba(0, 0, 0, 0.06);
+              border-radius: 12px;
+              padding: 4px;
 
-              .clear--all {
+              div {
+                padding: 6px;
+                width: 168px;
+                text-align: center;
+                border-radius: 8px;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: 500;
                 font-size: 14px;
                 line-height: 140%;
                 color: $black;
-                background: $white;
-                text-decoration: underline;
+
+                &.active {
+                  background: $white;
+                }
               }
             }
-          }
-          .price__dropdown {
-            position: absolute;
-            top: 46px;
-            left: 0px;
-            background: $white;
-            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-            border-radius: 12px;
-            width: 404px;
-            z-index: 9;
+            .sale--types {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px 12px;
+              padding: 30px 0px;
 
-            .price__dropdown__body {
-              padding: 30px;
-
-              .price--dropdown {
+              .sale--type--div {
                 display: flex;
                 align-items: center;
-                background: $white;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                box-sizing: border-box;
-                border-radius: 12px;
-                padding: 11px 15px;
-                cursor: pointer;
-                position: relative;
-                margin-bottom: 30px;
-                > div:nth-child(1) {
+
+                .sale--type--checkboxes {
+                  -webkit-appearance: none;
+                  position: relative;
+                  background: $white;
+                  border: 1px solid rgba(0, 0, 0, 0.1);
+                  box-sizing: border-box;
+                  border-radius: 6px;
+                  width: 24px;
+                  height: 24px;
                   margin-right: 12px;
+                  &:hover {
+                    background-image: linear-gradient(101deg, #bceb00, #00eaea);
+                    background-origin: border-box;
+                    box-shadow: 2px 1000px 1px $white inset;
+                    border: 1px solid transparent;
+                  }
+
+                  &:checked {
+                    background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+                    border-color: transparent;
+
+                    &::after {
+                      content: '\2518';
+                      color: #000000;
+                      font-size: 16px;
+                      position: absolute;
+                      top: 4px;
+                      left: 4px;
+                      transform: rotate(45deg);
+                    }
+                  }
                 }
-                > div:nth-child(2) {
-                  flex: 1;
-                  h6 {
-                    display: flex;
-                    align-items: center;
+                .sale--type--name {
+                  h4 {
                     font-family: $spaceGroteskFont;
                     font-style: normal;
                     font-weight: 500;
@@ -832,351 +865,445 @@
                     font-style: normal;
                     font-weight: normal;
                     font-size: 12px;
-                    line-height: 140%;
+                    line-height: 150%;
                     color: rgba(0, 0, 0, 0.4);
-                    margin-left: 6px;
                   }
                 }
-                > div:nth-child(3) {
-                  img {
-                    transition: 0.1s ease-in-out;
-                    &.rotate {
-                      transform: rotate(180deg);
-                    }
-                  }
-                }
-                &--items {
-                  position: absolute;
-                  left: 0;
-                  right: 0;
-                  top: 43px;
-                  z-index: 10;
-                  background: $white;
-                  box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-                  border-radius: 12px;
-                  padding: 7px 9px;
-                  .price--dropdown--item {
-                    display: flex;
-                    align-items: center;
-                    padding: 11px 10px;
-                    > div:nth-child(1) {
-                      margin-right: 12px;
-                    }
-                    > div:nth-child(2) {
-                      h6 {
-                        display: flex;
-                        align-items: center;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: 500;
-                        font-size: 14px;
-                        line-height: 140%;
-                        color: $black;
-                      }
-                      p {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 12px;
-                        line-height: 140%;
-                        color: rgba(0, 0, 0, 0.4);
-                        margin-left: 6px;
-                      }
-                    }
-                    &:hover {
-                      background: rgba(0, 0, 0, 0.05);
-                      border-radius: 6px;
-                    }
-                  }
-                }
-                &.open {
-                  background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                  background-origin: border-box;
-                  box-shadow: 2px 1000px 1px $white inset;
-                  border: 1px solid transparent;
-                }
-              }
-            }
-            .price--dropdown--footer {
-              display: flex;
-              justify-content: space-between;
-              padding: 14px 30px;
-              border-top: 1px solid rgba(0, 0, 0, 0.1);
-
-              .clear--all {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 14px;
-                line-height: 140%;
-                color: $black;
-                background: $white;
-                text-decoration: underline;
               }
             }
           }
-          .collection--dropdown {
-            position: absolute;
-            top: 46px;
-            left: 0px;
-            background: $white;
-            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-            border-radius: 12px;
-            z-index: 9;
-            width: 404px;
+          .sale--dropdown--footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
 
-            .collection--dropdown--body {
-              padding: 30px 30px 0px;
-
-              .collection--dropdown--selected {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                margin-bottom: 12px;
-
-                .light-border-button {
-                  display: flex;
-                  padding: 6px 11px 6px 6px;
-                  box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
-                  font-size: 14px;
-                  line-height: 140%;
-                  margin-right: 8px;
-                  margin-bottom: 8px;
-
-                  .collection {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 5px;
-                    margin-right: 8px;
-                  }
-                  .random--avatar--color {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 5px;
-                    margin-right: 8px;
-                  }
-                  .close {
-                    width: 10px;
-                    height: 10px;
-                    margin-left: 8px;
-                  }
-                }
-              }
-
-              .collection--search--field {
-                position: relative;
-                margin-bottom: 8px;
-
-                input {
-                  width: 100%;
-                  background: $white;
-                  border: 1px solid rgba(0, 0, 0, 0.1);
-                  box-sizing: border-box;
-                  border-radius: 12px;
-                  padding: 12px 18px 12px 46px;
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: 500;
-                  font-size: 14px;
-                  line-height: 18px;
-                  color: $black;
-                  &::placeholder {
-                    color: rgba(0, 0, 0, 0.2);
-                  }
-                }
-                img {
-                  position: absolute;
-                  top: 13px;
-                  left: 16px;
-                }
-              }
-              .collections__list {
-                overflow-y: auto;
-                max-height: 226px;
-
-                .collection__item {
-                  display: flex;
-                  padding: 10px;
-                  border-radius: 10px;
-                  align-items: center;
-                  cursor: pointer;
-
-                  p {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 14px;
-                    line-height: 140%;
-                    color: $black;
-                  }
-
-                  .collection__avatar {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 5px;
-                    margin-right: 12px;
-                  }
-                  .random--avatar--color {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 5px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-family: 'Sharp Grotesk Medium', sans-serif;
-                    font-style: normal;
-                    font-weight: 500;
-                    margin-right: 12px;
-                    text-transform: uppercase;
-                    color: #000000;
-                  }
-                  &:hover {
-                    background: rgba(0, 0, 0, 0.05);
-                  }
-                }
-              }
-            }
-
-            .collection--dropdown--footer {
-              display: flex;
-              justify-content: space-between;
-              border-top: 1px solid rgba(0, 0, 0, 0.1);
-              padding: 14px 30px;
-
-              .clear--all {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 14px;
-                line-height: 140%;
-                color: $black;
-                background: $white;
-                text-decoration: underline;
-              }
-            }
-          }
-          .artist--dropdown {
-            position: absolute;
-            top: 46px;
-            left: 0px;
-            background: $white;
-            box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-            border-radius: 12px;
-            z-index: 9;
-            width: 404px;
-
-            .artist--dropdown--body {
-              padding: 30px 30px 0;
-
-              .artist--dropdown--selected {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                margin-bottom: 12px;
-
-                .light-border-button {
-                  display: flex;
-                  padding: 6px 11px 6px 6px;
-                  box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
-                  font-size: 14px;
-                  line-height: 140%;
-                  margin-right: 8px;
-                  margin-bottom: 8px;
-
-                  .artist {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 200px;
-                    margin-right: 8px;
-                  }
-                  .close {
-                    width: 10px;
-                    height: 10px;
-                    margin-left: 8px;
-                  }
-                }
-              }
-
-              .artist--search--field {
-                position: relative;
-                margin-bottom: 8px;
-
-                input {
-                  width: 100%;
-                  background: $white;
-                  border: 1px solid rgba(0, 0, 0, 0.1);
-                  box-sizing: border-box;
-                  border-radius: 12px;
-                  padding: 12px 18px 12px 46px;
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: 500;
-                  font-size: 14px;
-                  line-height: 18px;
-                  color: $black;
-
-                  &::placeholder {
-                    color: rgba(0, 0, 0, 0.2);
-                  }
-                }
-                img {
-                  position: absolute;
-                  top: 13px;
-                  left: 16px;
-                }
-              }
-              .artists__list {
-                overflow-y: auto;
-                max-height: 226px;
-
-                .artists__item {
-                  display: flex;
-                  padding: 10px;
-                  border-radius: 10px;
-                  align-items: center;
-                  cursor: pointer;
-
-                  .artist__avatar {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 200px;
-                    margin-right: 12px;
-                  }
-                  p {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 14px;
-                    line-height: 22px;
-                    color: $black;
-                  }
-                  &:hover {
-                    background: rgba(0, 0, 0, 0.05);
-                  }
-                }
-              }
-            }
-            .artists--dropdown--footer {
-              display: flex;
-              justify-content: space-between;
-              border-top: 1px solid rgba(0, 0, 0, 0.1);
-              padding: 14px 30px;
-
-              .clear--all {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 14px;
-                line-height: 140%;
-                color: $black;
-                background: $white;
-                text-decoration: underline;
-              }
+            .clear--all {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              background: $white;
+              text-decoration: underline;
             }
           }
         }
+        .price__dropdown {
+          position: absolute;
+          top: 46px;
+          left: 0px;
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          width: 404px;
+          z-index: 9;
+
+          .price__dropdown__body {
+            padding: 30px;
+
+            .price--dropdown {
+              display: flex;
+              align-items: center;
+              background: $white;
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              box-sizing: border-box;
+              border-radius: 12px;
+              padding: 11px 15px;
+              cursor: pointer;
+              position: relative;
+              margin-bottom: 30px;
+              > div:nth-child(1) {
+                margin-right: 12px;
+              }
+              > div:nth-child(2) {
+                flex: 1;
+                h6 {
+                  display: flex;
+                  align-items: center;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 140%;
+                  color: $black;
+                }
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 12px;
+                  line-height: 140%;
+                  color: rgba(0, 0, 0, 0.4);
+                  margin-left: 6px;
+                }
+              }
+              > div:nth-child(3) {
+                img {
+                  transition: 0.1s ease-in-out;
+                  &.rotate {
+                    transform: rotate(180deg);
+                  }
+                }
+              }
+              &--items {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 43px;
+                z-index: 10;
+                background: $white;
+                box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+                border-radius: 12px;
+                padding: 7px 9px;
+                .price--dropdown--item {
+                  display: flex;
+                  align-items: center;
+                  padding: 11px 10px;
+                  > div:nth-child(1) {
+                    margin-right: 12px;
+                  }
+                  > div:nth-child(2) {
+                    h6 {
+                      display: flex;
+                      align-items: center;
+                      font-family: $spaceGroteskFont;
+                      font-style: normal;
+                      font-weight: 500;
+                      font-size: 14px;
+                      line-height: 140%;
+                      color: $black;
+                    }
+                    p {
+                      font-family: $spaceGroteskFont;
+                      font-style: normal;
+                      font-weight: normal;
+                      font-size: 12px;
+                      line-height: 140%;
+                      color: rgba(0, 0, 0, 0.4);
+                      margin-left: 6px;
+                    }
+                  }
+                  &:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                    border-radius: 6px;
+                  }
+                }
+              }
+              &.open {
+                background-image: linear-gradient(101deg, #bceb00, #00eaea);
+                background-origin: border-box;
+                box-shadow: 2px 1000px 1px $white inset;
+                border: 1px solid transparent;
+              }
+            }
+          }
+          .price--dropdown--footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+            .clear--all {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              background: $white;
+              text-decoration: underline;
+            }
+          }
+        }
+        .collection--dropdown {
+          position: absolute;
+          top: 46px;
+          left: 0px;
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          z-index: 9;
+          width: 404px;
+
+          .collection--dropdown--body {
+            padding: 30px 30px 0px;
+
+            .collection--dropdown--selected {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 12px;
+
+              .light-border-button {
+                display: flex;
+                padding: 6px 11px 6px 6px;
+                box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
+                font-size: 14px;
+                line-height: 140%;
+                margin-right: 8px;
+                margin-bottom: 8px;
+
+                .sell__collection {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 5px;
+                  margin-right: 8px;
+                }
+                .random--avatar--color {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 5px;
+                  margin-right: 8px;
+                }
+                .close {
+                  width: 10px;
+                  height: 10px;
+                  margin-left: 8px;
+                }
+              }
+            }
+
+            .collection--search--field {
+              position: relative;
+              margin-bottom: 8px;
+
+              input {
+                width: 100%;
+                background: $white;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 12px;
+                padding: 12px 18px 12px 46px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 18px;
+                color: $black;
+                &::placeholder {
+                  color: rgba(0, 0, 0, 0.2);
+                }
+                &:focus {
+                  background-image: linear-gradient(101deg, #bceb00, #00eaea);
+                  background-origin: border-box;
+                  box-shadow: 2px 1000px 1px $white inset;
+                  border: 2px solid transparent;
+                }
+              }
+              img {
+                position: absolute;
+                top: 13px;
+                left: 16px;
+              }
+            }
+            .collections__list {
+              overflow-y: auto;
+              max-height: 226px;
+
+              .collection__item {
+                display: flex;
+                padding: 10px;
+                border-radius: 10px;
+                align-items: center;
+                cursor: pointer;
+
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 140%;
+                  color: $black;
+                }
+
+                .collection__avatar {
+                  width: 30px;
+                  height: 30px;
+                  border-radius: 5px;
+                  margin-right: 12px;
+                }
+                .random--avatar--color {
+                  width: 30px;
+                  height: 30px;
+                  border-radius: 5px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  font-family: 'Sharp Grotesk Medium', sans-serif;
+                  font-style: normal;
+                  font-weight: 500;
+                  margin-right: 12px;
+                  text-transform: uppercase;
+                  color: #000000;
+                }
+                &:hover {
+                  background: rgba(0, 0, 0, 0.05);
+                }
+              }
+            }
+          }
+
+          .collection--dropdown--footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 14px 30px;
+
+            .clear--all {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              background: $white;
+              text-decoration: underline;
+            }
+          }
+          @include lg {
+            right: 0px;
+            left: unset;
+          }
+        }
+        .artist--dropdown {
+          position: absolute;
+          top: 46px;
+          left: 0px;
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          z-index: 9;
+          width: 404px;
+
+          .artist--dropdown--body {
+            padding: 30px 30px 0;
+
+            .artist--dropdown--selected {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 12px;
+
+              .light-border-button {
+                display: flex;
+                padding: 6px 11px 6px 6px;
+                box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
+                font-size: 14px;
+                line-height: 140%;
+                margin-right: 8px;
+                margin-bottom: 8px;
+
+                .artist {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 200px;
+                  margin-right: 8px;
+                }
+                .close {
+                  width: 10px;
+                  height: 10px;
+                  margin-left: 8px;
+                }
+              }
+            }
+
+            .artist--search--field {
+              position: relative;
+              margin-bottom: 8px;
+
+              input {
+                width: 100%;
+                background: $white;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 12px;
+                padding: 12px 18px 12px 46px;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 18px;
+                color: $black;
+
+                &:focus {
+                  background-image: linear-gradient(101deg, #bceb00, #00eaea);
+                  background-origin: border-box;
+                  box-shadow: 2px 1000px 1px $white inset;
+                  border: 2px solid transparent;
+                }
+
+                &::placeholder {
+                  color: rgba(0, 0, 0, 0.2);
+                }
+              }
+              img {
+                position: absolute;
+                top: 13px;
+                left: 16px;
+              }
+            }
+            .artists__list {
+              overflow-y: auto;
+              max-height: 226px;
+
+              .artists__item {
+                display: flex;
+                padding: 10px;
+                border-radius: 10px;
+                align-items: center;
+                cursor: pointer;
+
+                .artist__avatar {
+                  width: 30px;
+                  height: 30px;
+                  border-radius: 200px;
+                  margin-right: 12px;
+                }
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 22px;
+                  color: $black;
+                }
+                &:hover {
+                  background: rgba(0, 0, 0, 0.05);
+                }
+              }
+            }
+          }
+          .artists--dropdown--footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 14px 30px;
+
+            .clear--all {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              background: $white;
+              text-decoration: underline;
+            }
+          }
+          @include lg {
+            right: 0%;
+            left: unset;
+          }
+        }
+      }
+      @include lg {
+        width: 100%;
+        margin-top: 20px;
       }
     }
+
     .selected--filters {
       display: flex;
       align-items: center;
@@ -1208,7 +1335,7 @@
           img.price {
             margin-right: 8px;
           }
-          img.collection {
+          img.sell__collection {
             width: 20px;
             height: 20px;
             border-radius: 5px;
@@ -1243,6 +1370,9 @@
           margin-bottom: 10px;
         }
       }
+      @include md {
+        display: none;
+      }
     }
     .nft--sorting {
       display: grid;
@@ -1275,8 +1405,8 @@
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: 500;
-          font-size: 16px;
-          line-height: 20px;
+          font-size: 14px;
+          line-height: 140%;
           color: $black;
         }
         img {
@@ -1309,6 +1439,12 @@
             }
           }
         }
+        @include md {
+          width: 100%;
+        }
+      }
+      @include md {
+        grid-template-columns: none;
       }
     }
   }
@@ -1316,5 +1452,8 @@
     margin-top: 40px;
     width: 100%;
     box-shadow: 2px 1000px 1px #fcf9f5 inset;
+  }
+  @include sm {
+    padding: 20px;
   }
 }
