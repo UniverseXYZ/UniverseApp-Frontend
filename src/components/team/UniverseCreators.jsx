@@ -29,6 +29,10 @@ import IvanMykolaiv from '../../assets/images/team/Ivan-Mykolaiv.png';
 import VictoriaDutka from '../../assets/images/team/Victoria-Dutka.png';
 import SergePiven from '../../assets/images/team/Serge-Piven.png';
 import PavloBabenko from '../../assets/images/team/Pavlo-Babenko.png';
+import AsenAngelov from '../../assets/images/team/Asen-Angelov.png';
+import SteriosTaskudis from '../../assets/images/team/Sterios-Taskudis.png';
+import MilenaAtanasova from '../../assets/images/team/Milena-Atanasova.png';
+import ViktorTodorov from '../../assets/images/team/Viktor-Todorov.png';
 
 const UniverseCreators = () => {
   const [creators, setCreators] = useState([
@@ -198,6 +202,30 @@ const UniverseCreators = () => {
       id: 28,
       name: 'Pavlo Babenko',
       avatar: PavloBabenko,
+      loaded: false,
+    },
+    {
+      id: 29,
+      name: 'Asen Angelov',
+      avatar: AsenAngelov,
+      loaded: false,
+    },
+    {
+      id: 30,
+      name: 'Sterios Taskudis',
+      avatar: SteriosTaskudis,
+      loaded: false,
+    },
+    {
+      id: 31,
+      name: 'Milena Atanasova',
+      avatar: MilenaAtanasova,
+      loaded: false,
+    },
+    {
+      id: 32,
+      name: 'Viktor Todorov',
+      avatar: ViktorTodorov,
       loaded: false,
     },
   ]);
