@@ -84,7 +84,6 @@ const App = () => {
     if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
     }
-
     handleScroll(darkMode);
 
     window.addEventListener('scroll', () => handleScroll(darkMode));
@@ -96,6 +95,14 @@ const App = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (
+      location.pathname === '/nft-marketplace/settings' &&
+      stepsData.selectedMethod === 'bundle'
+    ) {
+      document.querySelector('header').style.position = 'absolute';
+    } else {
+      document.querySelector('header').style.position = 'fixed';
+    }
   }, [location]);
 
   return (

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 import { defaultColors } from '../../utils/helpers';
 import SaleTypeFilter from '../ui-elements/SaleTypeFilter';
@@ -26,7 +26,10 @@ const clearCheck = (filtersSale, collections, artist, priceRange) => {
   return false;
 };
 
+const checkContinueBtnDisabled = (parentControl) => parentControl;
+
 const SelectNfts = (props) => {
+  const { continueBtnDisabled, stepData, setStepData } = props;
   const [filtersCount, setFiltersCount] = useState(0);
   const [saleTypeFilters, setSaleTypeFilters] = useState([]);
   const [collectionsSelected, setCollectionSelected] = useState([]);
@@ -38,13 +41,18 @@ const SelectNfts = (props) => {
   const [clearAll, setClearAll] = useState(false);
   const [data, setData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
   const [selectedGalleryItem, setSelectedGalleryItem] = useState([]);
-  // const [galleryRowItem, setGalleryRowItem] = useState(4);
+  const [removeGalleryItemId, setRemoveGalleryItemId] = useState(null);
+  const [galleryRowItem, setGalleryRowItem] = useState(4);
+  const [stickySearchBlock, setStickySearchBlock] = useState(false);
   const history = useHistory();
-  // useEffect(() => {
-  //   if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
-  //   if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
-  //   if (window.innerWidth <= 576) setGalleryRowItem(0);
-  // }, [window.innerWidth]);
+  const location = useLocation();
+  useLayoutEffect(() => {
+    const searchBlock = document.querySelector('.search--and--filters--section--sticky');
+    searchBlock.style.position = 'sticky';
+    console.log(searchBlock.style, 'ssssssssssssssss');
+    if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
+    if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
+  });
   useEffect(() => {
     if (clearAll) setClearAll(false);
     if (elemSaleRemove) setElemSaleRemove(null);
@@ -104,6 +112,30 @@ const SelectNfts = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (removeGalleryItemId) {
+      const elIndx = selectedGalleryItem.findIndex((elem) => elem.id === removeGalleryItemId);
+      const copyArr = [...selectedGalleryItem];
+      copyArr.splice(elIndx, 1);
+      setSelectedGalleryItem(copyArr);
+      setRemoveGalleryItemId(null);
+    }
+  }, [removeGalleryItemId]);
+
+  // useEffect(() => {
+  //   const header = document.querySelector('header');
+  //   if (stepData.selectedMethod === 'bundle' && location.pathname === '/nft-marketplace/settings') {
+  //     header.style.position = 'absolute';
+  //   }
+  // }, []);
+
+  const clickContinue = () => {
+    let dataBundleSale = window.bundleData;
+    dataBundleSale = { ...dataBundleSale, selectedNft: selectedGalleryItem };
+    setStepData({ ...stepData, settings: { ...dataBundleSale } });
+    history.push('/nft-marketplace/summary');
+  };
+
   return (
     <div className="select--nfts--container">
       <div className="section--title--block">
@@ -113,56 +145,57 @@ const SelectNfts = (props) => {
           <Link to="/nft-marketplace/settings">Minting</Link>.
         </p>
       </div>
-      <div className="header--search--block">
-        <div className="search--block">
-          <SearchField
-            data={PLACEHOLDER_MARKETPLACE_NFTS}
-            CardElement={<h1>ok</h1>}
-            placeholder="Search items"
-            dropdown={false}
-            getData={(find) => setData([...find])}
-          />
-        </div>
-        <div className="sort--by--block">
-          <SortBySelect />
-        </div>
-        <div className="filters--count--block">
-          <div className="filters--count--parent">
-            <div className="filters--count--child">
-              {!filtersCount ? (
-                <img src={filtersIcon} alt="img" />
-              ) : (
-                <div className="count--block">
-                  <p>{filtersCount}</p>
-                </div>
-              )}
-              <p>Filters</p>
+      <div className="search--and--filters--section--sticky">
+        <div className="header--search--block">
+          <div className="search--block">
+            <SearchField
+              data={PLACEHOLDER_MARKETPLACE_NFTS}
+              CardElement={<h1>ok</h1>}
+              placeholder="Search items"
+              dropdown={false}
+              getData={(find) => setData([...find])}
+            />
+          </div>
+          <div className="sort--by--block">
+            <SortBySelect />
+          </div>
+          <div className="filters--count--block">
+            <div className="filters--count--parent">
+              <div className="filters--count--child">
+                {!filtersCount ? (
+                  <img src={filtersIcon} alt="img" />
+                ) : (
+                  <div className="count--block">
+                    <p>{filtersCount}</p>
+                  </div>
+                )}
+                <p>Filters</p>
+              </div>
             </div>
-            {/* <div className="box--shadow--effect--block" /> */}
           </div>
         </div>
-      </div>
-      <div className="sorting--filters--row">
-        <SaleTypeFilter
-          getSelectedFilters={setSaleTypeFilters}
-          onClear={clearAll}
-          removeElemInSelected={elemSaleRemove}
-        />
-        <PriceRangeFilter
-          getPrice={(price) => setFilterRangePrice(price)}
-          remove={removePrice}
-          onClear={clearAll}
-        />
-        <CollectionFilter
-          getSelectedFilters={setCollectionSelected}
-          onClear={clearAll}
-          removeElemInSelected={clearCollectionSelectedItem}
-        />
-        <ArtistFilter
-          getSelectedFilters={setArtistsSelected}
-          onClear={clearAll}
-          removeElemInSelected={clearCollectionSelectedItem}
-        />
+        <div className="sorting--filters--row">
+          <SaleTypeFilter
+            getSelectedFilters={setSaleTypeFilters}
+            onClear={clearAll}
+            removeElemInSelected={elemSaleRemove}
+          />
+          <PriceRangeFilter
+            getPrice={(price) => setFilterRangePrice(price)}
+            remove={removePrice}
+            onClear={clearAll}
+          />
+          <CollectionFilter
+            getSelectedFilters={setCollectionSelected}
+            onClear={clearAll}
+            removeElemInSelected={clearCollectionSelectedItem}
+          />
+          <ArtistFilter
+            getSelectedFilters={setArtistsSelected}
+            onClear={clearAll}
+            removeElemInSelected={clearCollectionSelectedItem}
+          />
+        </div>
       </div>
       <div className="filters--row--data">
         <div className="nfts--data--count">
@@ -265,14 +298,14 @@ const SelectNfts = (props) => {
       </div>
       <div className="nfts--gallery">
         {data.map((elem, index) => {
-          // const rowLastElem = (index + 1) % galleryRowItem;
-          console.log('1');
+          const rowLastElem = (index + 1) % galleryRowItem;
           return (
             <NftGalleryItemCard
               key={index.toString()}
               nft={elem}
               onClick={(e, selected) => clickGalleryItem(e, selected)}
-              // style={rowLastElem === 0 ? { marginRight: 0 } : {}}
+              unSelected={elem.id === removeGalleryItemId}
+              style={rowLastElem === 0 ? { marginRight: 0 } : {}}
             />
           );
         })}
@@ -296,7 +329,11 @@ const SelectNfts = (props) => {
                   Your browser does not support the video tag.
                 </video>
               )}
-              <div className="close--icon">
+              <div
+                className="close--icon"
+                aria-hidden="true"
+                onClick={() => setRemoveGalleryItemId(elem.id)}
+              >
                 <img src={closeIconWhite} alt="img" />
               </div>
             </div>
@@ -309,11 +346,31 @@ const SelectNfts = (props) => {
           >
             Back
           </Button>
-          <Button className="light-button">Continue</Button>
+          <Button
+            className="light-button"
+            disabled={checkContinueBtnDisabled(continueBtnDisabled)}
+            onClick={clickContinue}
+          >
+            Continue
+          </Button>
         </div>
       </div>
     </div>
   );
+};
+
+SelectNfts.propTypes = {
+  continueBtnDisabled: PropTypes.bool,
+  stepData: PropTypes.shape({
+    selectedMethod: PropTypes.string,
+  }),
+  setStepData: PropTypes.func,
+};
+
+SelectNfts.defaultProps = {
+  continueBtnDisabled: true,
+  stepData: {},
+  setStepData: () => {},
 };
 
 export default SelectNfts;

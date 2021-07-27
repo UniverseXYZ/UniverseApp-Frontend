@@ -4,6 +4,15 @@
 .select--nfts--container {
     width: 100%;
     margin-bottom: 15px;
+    .search--and--filters--section--sticky {
+        // position: sticky;
+        top: 0;
+        z-index: 999;
+        width: 100%;
+        background: $white;
+        padding: 10px 0;
+        // border: 1px solid;
+    }
     .section--title--block {
         width: 100%;
         margin-bottom: 30px;
@@ -137,6 +146,8 @@
         width: 100%;
         margin-bottom: 30px;
         display: flex;
+        position: relative;
+        z-index: 5;
         // box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
         align-items: center;
         justify-content: flex-start;
@@ -144,7 +155,7 @@
             justify-content: space-between;
             flex-wrap: wrap;
         }
-        > div {
+        .sorting--filter {
             width: 200px;
             position: relative;
             z-index: 1;
@@ -163,10 +174,11 @@
     .filters--row--data {
         width: 100%;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: flex-start;
         margin-bottom: 30px;
         .nfts--data--count {
+            width: 100px;
             p {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
@@ -182,6 +194,7 @@
             display: flex;
             align-items: center;
             flex-wrap: wrap;
+            width: calc(100% - 165px);
             .filter--item--parent {
                 min-height: 32px;
                 padding: 1px;
@@ -242,35 +255,39 @@
             }
         }
         .clear--all {
+            text-align: right;
             text-decoration: underline;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: normal;
             font-size: 14px;
             line-height: 150%;
-            margin-left: 12px;
             cursor: pointer;
+            display: flex;
+            width: 65px !important;
+            justify-content: flex-end;
         }
     }
     .nfts--gallery {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
         > div {
             width: calc(25% - 22.5px);
-            // margin-right: 30px;
+            margin-right: 30px;
             @include lg {
                 width: calc(33.3% - 16.6px);
-                // margin-right: 25px;
+                margin-right: 25px;
             }
             @include md {
                 width: calc(50% - 6px);
-                // margin-right: 12px;
+                margin-right: 12px;
             }
             @include sm {
                 width: 100%;
+                margin-right: 0;
             }
         }
     }
