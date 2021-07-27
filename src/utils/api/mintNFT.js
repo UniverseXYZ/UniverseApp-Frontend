@@ -21,7 +21,8 @@ export const saveNftForLater = async (data) => {
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
     royalties: parseFloat(data.percentAmount),
-    collectionId: 10,
+    collectionId: data.collectionId,
+    // royalties: data.royaltiesParsed,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {

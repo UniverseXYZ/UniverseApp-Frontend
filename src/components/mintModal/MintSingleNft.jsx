@@ -26,6 +26,7 @@ import {
   saveNftImage,
   saveNftForLater,
   getTokenURI,
+  getSavedNfts,
 } from '../../utils/api/mintNFT';
 import { parseRoyalties } from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
@@ -207,21 +208,18 @@ const MintSingleNft = ({ onClick }) => {
 
   useEffect(async () => {
     if (saveForLateClick) {
-      console.log(1);
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        console.log(2);
         const generatedEditions = [];
 
         for (let i = 0; i < editions; i += 1) {
           generatedEditions.push(uuid().split('-')[0]);
         }
         if (!savedNFTsID) {
-          console.log(3);
           if (selectedCollection) {
             document.getElementById('loading-hidden-btn').click();
-            console.log(4);
-            console.log('id', selectedCollection);
             // TODO:: As discussed with Alex this functionality is postponed for now.
+
+            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
 
             const result = await saveNftForLater({
               name,
@@ -229,16 +227,15 @@ const MintSingleNft = ({ onClick }) => {
               editions,
               properties,
               percentAmount,
+              royaltiesParsed,
               collectionId: selectedCollection.id,
             });
 
             let saveImageResult = null;
 
-            console.log(result);
             if (result.savedNft) {
               // Update the NFT image
               saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
-              console.log(saveImageResult);
               if (saveImageResult.error) {
                 // Error with saving the image, show modal
                 showErrorModal(true);
@@ -248,33 +245,11 @@ const MintSingleNft = ({ onClick }) => {
 
             if (!saveImageResult) return;
 
-            console.log(previewImage);
+            const savedNFTS = await getSavedNfts();
+            setSavedNfts(savedNFTS);
 
-            setSavedNfts([
-              ...savedNfts,
-              {
-                id: uuid(),
-                type: 'collection',
-                collectionId: selectedCollection.id,
-                collectionName: selectedCollection.name,
-                collectionAvatar: selectedCollection.previewImage,
-                collectionDescription: selectedCollection.description,
-                shortURL: selectedCollection.shortURL,
-                tokenName: selectedCollection.tokenName,
-                previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                generatedEditions,
-                properties,
-                percentAmount,
-                selected: false,
-                artworkType: saveImageResult.artworkType,
-              },
-            ]);
             document.getElementById('congrats-hidden-btn').click();
           } else {
-            // Not working yet! We need the UNIVERSE collection ID
             document.getElementById('loading-hidden-btn').click();
 
             const result = await saveNftForLater({
@@ -283,6 +258,8 @@ const MintSingleNft = ({ onClick }) => {
               editions,
               properties,
               percentAmount,
+              royalities,
+              royaltyAddress,
               collectionId: selectedCollection.id,
             });
 
@@ -298,8 +275,6 @@ const MintSingleNft = ({ onClick }) => {
             }
 
             if (!saveImageResult) return;
-
-            console.log(saveImageResult);
 
             // Update the state based on the result
             setSavedNfts([
