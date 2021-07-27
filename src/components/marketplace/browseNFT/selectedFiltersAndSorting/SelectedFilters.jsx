@@ -44,6 +44,7 @@ const SelectedFilters = ({
   setSaleTypeButtons,
   selectedPrice,
   setSelectedPrice,
+  setSliderValue,
   selectedCollections,
   setSelectedCollections,
   savedCollections,
@@ -63,6 +64,7 @@ const SelectedFilters = ({
     });
     setSaleTypeButtons(newSaleTypeButtons);
     setSelectedPrice(null);
+    setSliderValue({ min: 0, max: 4 });
     setSelectedCollections([]);
     setSavedCollections([]);
     setSelectedCreators([]);
@@ -126,7 +128,10 @@ const SelectedFilters = ({
               src={closeIcon}
               alt="Close"
               aria-hidden="true"
-              onClick={() => setSelectedPrice(null)}
+              onClick={() => {
+                setSelectedPrice(null);
+                setSliderValue({ min: 0, max: 4 });
+              }}
             />
           </button>
         )}
@@ -186,6 +191,7 @@ SelectedFilters.propTypes = {
   setSaleTypeButtons: PropTypes.func,
   selectedPrice: PropTypes.oneOfType([PropTypes.any]),
   setSelectedPrice: PropTypes.func,
+  setSliderValue: PropTypes.func,
   selectedCollections: PropTypes.oneOfType([PropTypes.array]),
   setSelectedCollections: PropTypes.func,
   savedCollections: PropTypes.oneOfType([PropTypes.array]),
@@ -201,6 +207,7 @@ SelectedFilters.defaultProps = {
   setSaleTypeButtons: () => {},
   selectedPrice: null,
   setSelectedPrice: () => {},
+  setSliderValue: () => {},
   selectedCollections: [],
   setSelectedCollections: () => {},
   savedCollections: [],
