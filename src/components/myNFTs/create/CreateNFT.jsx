@@ -12,8 +12,8 @@ import NFTCollectionSettings from './NFTCollectionSettings';
 
 const CreateNFT = () => {
   const history = useHistory();
-  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
-  const [selectedNFTType, setSelectedNFTType] = useState('collection');
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
 
   const handleSelectTypeClick = () => {

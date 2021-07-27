@@ -1710,6 +1710,15 @@
 .popup-arrow {
   display: none;
 }
+.congrats-popup {
+  .congrats--icon {
+    width: 186px;
+    margin: 0px auto 30px;
+    img {
+      width: 100%;
+    }
+  }
+}
 .congrats {
   font-style: normal;
   font-weight: 600;
@@ -1735,6 +1744,10 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
+  .loading--div {
+    position: relative;
+    height: 100px;
+  }
 
   @include lg {
     width: 70%;
