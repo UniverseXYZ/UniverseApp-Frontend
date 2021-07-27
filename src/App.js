@@ -40,7 +40,7 @@ import CreateNFT from './components/myNFTs/create/CreateNFT';
 
 const App = () => {
   const location = useLocation();
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [isWalletConnected, setIsWalletConnected] = useState(true);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
