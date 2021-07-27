@@ -30,14 +30,13 @@ const verificationSteps = (data) => {
 const getContent = (type, data, setData) => {
   if (type === 'dutch') return <DutchAuctionSettingsForm data={data} setData={setData} />;
   if (type === 'english') return <EnglishAuctionSettingsForm data={data} setData={setData} />;
-  if (type === 'bundle') return <BundleSellFormContainer />;
+  if (type === 'bundle') return <BundleSellFormContainer data={data} setData={setData} />;
   return <h1>other type</h1>;
 };
 
 const NFTMarketplace = () => {
   const location = useLocation();
   const { stepsData, setStepsData } = useContext(AppContext);
-  console.log(stepsData);
   const headerLabels = [
     {
       label: 'Select sell method',

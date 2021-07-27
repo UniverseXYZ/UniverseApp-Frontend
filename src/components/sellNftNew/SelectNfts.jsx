@@ -26,7 +26,10 @@ const clearCheck = (filtersSale, collections, artist, priceRange) => {
   return false;
 };
 
-const SelectNfts = () => {
+const checkContinueBtnDisabled = (parentControl) => parentControl;
+
+const SelectNfts = (props) => {
+  const { continueBtnDisabled, stepData, setStepData } = props;
   const [filtersCount, setFiltersCount] = useState(0);
   const [saleTypeFilters, setSaleTypeFilters] = useState([]);
   const [collectionsSelected, setCollectionSelected] = useState([]);
@@ -113,6 +116,13 @@ const SelectNfts = () => {
       setRemoveGalleryItemId(null);
     }
   }, [removeGalleryItemId]);
+
+  const clickContinue = () => {
+    let dataBundleSale = window.bundleData;
+    dataBundleSale = { ...dataBundleSale, selectedNft: selectedGalleryItem };
+    setStepData({ ...stepData, settings: { ...dataBundleSale } });
+    history.push('/nft-marketplace/summary');
+  };
 
   return (
     <div className="select--nfts--container">
@@ -322,11 +332,29 @@ const SelectNfts = () => {
           >
             Back
           </Button>
-          <Button className="light-button">Continue</Button>
+          <Button
+            className="light-button"
+            disabled={checkContinueBtnDisabled(continueBtnDisabled)}
+            onClick={clickContinue}
+          >
+            Continue
+          </Button>
         </div>
       </div>
     </div>
   );
+};
+
+SelectNfts.propTypes = {
+  continueBtnDisabled: PropTypes.bool,
+  stepData: PropTypes.shape({}),
+  setStepData: PropTypes.func,
+};
+
+SelectNfts.defaultProps = {
+  continueBtnDisabled: true,
+  stepData: {},
+  setStepData: () => {},
 };
 
 export default SelectNfts;
