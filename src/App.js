@@ -41,7 +41,7 @@ import { getEthPriceCoingecko, getWethBalanceEtherscan } from './utils/api/ether
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
-import { getSavedNfts, getMyNfts } from './utils/api/mintNFT';
+import { getSavedNfts, getMyNfts, getMockNfts, getMockCollections } from './utils/api/mintNFT';
 
 const App = () => {
   const location = useLocation();
@@ -205,8 +205,12 @@ const App = () => {
       setSavedNfts(savedNFTS);
 
       // Fetch the minted NFTS for that addres
-      const mintedNfts = await getMyNfts();
+      const mintedNfts = await getMockNfts();
       setMyNFTs(mintedNfts);
+
+      // Fetch the minted NFTS for that addres
+      const mintedCollections = await getMockCollections();
+      setDeployedCollections(mintedCollections);
     }
   };
 

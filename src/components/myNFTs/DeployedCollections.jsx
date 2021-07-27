@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
@@ -35,7 +35,11 @@ const DeployedCollections = () => {
                 ) : (
                   <img
                     className="blur"
-                    src={URL.createObjectURL(collection.previewImage)}
+                    src={
+                      collection.previewImage
+                        ? URL.createObjectURL(collection.previewImage)
+                        : collection.previewImageMock
+                    }
                     alt={collection.name}
                   />
                 )}
@@ -52,7 +56,11 @@ const DeployedCollections = () => {
                 ) : (
                   <img
                     className="collection__avatar"
-                    src={URL.createObjectURL(collection.previewImage)}
+                    src={
+                      collection.previewImage
+                        ? URL.createObjectURL(collection.previewImage)
+                        : collection.previewImageMock
+                    }
                     alt={collection.name}
                   />
                 )}
