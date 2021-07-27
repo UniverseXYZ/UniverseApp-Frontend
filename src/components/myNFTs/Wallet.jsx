@@ -13,6 +13,7 @@ import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import { getMyNfts } from '../../utils/api/mintNFT';
 
 const Wallet = ({
   filteredNFTs,
@@ -24,7 +25,7 @@ const Wallet = ({
   nftsPerWinner,
   minBidValue,
 }) => {
-  const { myNFTs, auction, setAuction } = useContext(AppContext);
+  const { myNFTs, setMyNFTs, auction, setAuction } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
@@ -169,7 +170,7 @@ const Wallet = ({
     history.push('/setup-auction/reward-tiers');
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     const getCollections = myNFTs.filter((nft) => nft.collectionName);
     const uniqueCollections = getCollections.filter(
       (v, i, a) => a.findIndex((t) => t.collectionName === v.collectionName) === i
@@ -183,6 +184,7 @@ const Wallet = ({
         selected: false,
       });
     });
+
     setCollections(newCollections);
   }, []);
 

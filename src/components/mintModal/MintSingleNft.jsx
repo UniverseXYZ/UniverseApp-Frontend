@@ -395,27 +395,30 @@ const MintSingleNft = ({ onClick }) => {
           console.log('printing receipt...', receipt);
 
           // TODO:: As discussed with Alex this functionality is postponed for now.
-          setMyNFTs([
-            ...myNFTs,
-            {
-              id: uuid(),
-              type: 'collection',
-              collectionId: selectedCollection.id,
-              collectionName: selectedCollection.name,
-              collectionAvatar: selectedCollection.previewImage,
-              collectionDescription: selectedCollection.description,
-              shortURL: selectedCollection.shortURL,
-              tokenName: selectedCollection.tokenName,
-              previewImage,
-              name,
-              description,
-              numberOfEditions: Number(editions),
-              generatedEditions: mintingGeneratedEditions,
-              properties,
-              percentAmount,
-              releasedDate: new Date(),
-            },
-          ]);
+          // setMyNFTs([
+          //   ...myNFTs,
+          //   {
+          //     id: uuid(),
+          //     type: 'collection',
+          //     collectionId: selectedCollection.id,
+          //     collectionName: selectedCollection.name,
+          //     collectionAvatar: selectedCollection.previewImage,
+          //     collectionDescription: selectedCollection.description,
+          //     shortURL: selectedCollection.shortURL,
+          //     tokenName: selectedCollection.tokenName,
+          //     previewImage,
+          //     name,
+          //     description,
+          //     numberOfEditions: Number(editions),
+          //     generatedEditions: mintingGeneratedEditions,
+          //     properties,
+          //     percentAmount,
+          //     releasedDate: new Date(),
+          //   },
+          // ]);
+
+          const mintedNfts = await getMyNfts();
+          setMyNFTs(mintedNfts);
 
           document.getElementById('popup-root').remove();
           document.getElementById('congrats-hidden-btn').click();
