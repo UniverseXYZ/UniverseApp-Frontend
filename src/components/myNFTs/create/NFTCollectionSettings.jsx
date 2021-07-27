@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
+import PropTypes from 'prop-types';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
 import uploadIcon from '../../../assets/images/ion_cloud.svg';
@@ -6,8 +7,21 @@ import closeIcon from '../../../assets/images/close-menu.svg';
 import plusIcon from '../../../assets/images/plus.svg';
 import bigPlusGradientIcon from '../../../assets/images/Union.svg';
 import errorIcon from '../../../assets/images/error-icon.svg';
+import AppContext from '../../../ContextAPI.js';
+import NFTCollectible from './NFTCollectible.jsx';
 
-const NFTCollectionSettings = () => {
+const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
+  const {
+    setShowModal,
+    savedCollections,
+    savedNfts,
+    savedCollectionID,
+    myNFTs,
+    setMyNFTs,
+    deployedCollections,
+    setDeployedCollections,
+  } = useContext(AppContext);
+
   const inputFile = useRef(null);
 
   const [coverImage, setCoverImage] = useState(null);
@@ -19,6 +33,7 @@ const NFTCollectionSettings = () => {
   const [collectionNFTs, setCollectionNFTs] = useState([]);
 
   const [errors, setErrors] = useState({
+    coverImage: '',
     collectionName: '',
     tokenName: '',
     collectible: '',
@@ -26,6 +41,29 @@ const NFTCollectionSettings = () => {
   });
 
   const [mintNowClick, setMintNowClick] = useState(false);
+
+  const validateFile = (file) => {
+    setMintNowClick(false);
+    if (!file) {
+      setCoverImage(null);
+      setErrors({
+        ...errors,
+        coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
+      });
+    } else if (
+      (file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png') &&
+      file.size / 1048576 < 1
+    ) {
+      setCoverImage(file);
+      setErrors({ ...errors, coverImage: '' });
+    } else {
+      setCoverImage(null);
+      setErrors({
+        ...errors,
+        coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
+      });
+    }
+  };
 
   const handleCollectionName = (value) => {
     setMintNowClick(false);
@@ -77,7 +115,50 @@ const NFTCollectionSettings = () => {
     }
   };
 
-  return (
+  const handleShowCollectible = () => {
+    setMintNowClick(false);
+    if (
+      !collectionName ||
+      !tokenName ||
+      shortURL.length <= 15 ||
+      shortURL === 'universe.xyz/c/shorturl'
+    ) {
+      setErrors({
+        collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
+        tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
+        collectible: '',
+        shorturl:
+          shortURL.length <= 15 || shortURL === 'universe.xyz/c/shorturl'
+            ? '“Short URL” is not allowed to be empty'
+            : '',
+      });
+      if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+        setInputClass('empty__error');
+      } else {
+        setInputClass('inp');
+      }
+    } else {
+      const collectionNameExists = deployedCollections.filter(
+        (collection) => collection.name.toLowerCase() === collectionName.toLowerCase()
+      );
+      if (collectionNameExists.length && !savedCollectionID) {
+        setErrors({
+          ...errors,
+          collectionName: '“Collection name” already exists',
+        });
+      } else {
+        setErrors({
+          collectionName: '',
+          tokenName: '',
+          collectible: '',
+          shorturl: '',
+        });
+        setShowCollectible(true);
+      }
+    }
+  };
+
+  return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <h1 className="nft--collection--settings--page--title">NFT collection settings</h1>
       <div className="image--name--token">
@@ -94,7 +175,7 @@ const NFTCollectionSettings = () => {
                 <input
                   type="file"
                   ref={inputFile}
-                  onChange={(e) => setCoverImage(e.target.files[0])}
+                  onChange={(e) => validateFile(e.target.files[0])}
                 />
               </div>
             ) : (
@@ -114,6 +195,7 @@ const NFTCollectionSettings = () => {
               </div>
             )}
           </div>
+          {errors.coverImage && <p className="error-message">{errors.coverImage}</p>}
         </div>
         <div className="collection--name--and--token">
           <div className="collection--name">
@@ -164,19 +246,31 @@ const NFTCollectionSettings = () => {
       <div className="collection--nfts">
         <div className="collection--nfts--title">
           <h1>NFTs</h1>
-          <Button className="light-border-button">
-            Create NFT
-            <img src={plusIcon} alt="Plus" />
-          </Button>
+          {collectionNFTs.length ? (
+            <Button className="light-border-button">
+              Create NFT
+              <img src={plusIcon} alt="Plus" />
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
-        <div className="create--nft--special--btn">
-          <div className="plus-icon">
-            <img src={bigPlusGradientIcon} alt="Big gradient plus" />
+        {!collectionNFTs.length ? (
+          <div
+            className="create--nft--special--btn"
+            onClick={handleShowCollectible}
+            aria-hidden="true"
+          >
+            <div className="plus-icon">
+              <img src={bigPlusGradientIcon} alt="Big gradient plus" />
+            </div>
+            <div className="collection-t">
+              <p>Create NFT</p>
+            </div>
           </div>
-          <div className="collection-t">
-            <p>Create NFT</p>
-          </div>
-        </div>
+        ) : (
+          <></>
+        )}
         {errors.collectible && <p className="error-message">{errors.collectible}</p>}
         {(errors.collectionName || errors.tokenName || errors.tokenName || errors.shorturl) && (
           <div className="collection--final--error">
@@ -197,7 +291,14 @@ const NFTCollectionSettings = () => {
         </Button>
       </div>
     </div>
+  ) : (
+    <NFTCollectible />
   );
+};
+
+NFTCollectionSettings.propTypes = {
+  showCollectible: PropTypes.bool.isRequired,
+  setShowCollectible: PropTypes.func.isRequired,
 };
 
 export default NFTCollectionSettings;

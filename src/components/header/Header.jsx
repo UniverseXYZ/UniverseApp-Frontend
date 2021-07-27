@@ -343,6 +343,7 @@ const Header = ({ location }) => {
         setSelectedWallet={setSelectedWallet}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
         selectedWallet={selectedWallet}
+        showMarketplaceSearch={showSearch}
       />
     </header>
   );

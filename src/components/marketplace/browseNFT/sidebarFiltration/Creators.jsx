@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
+import artistIcon from '../../../../assets/images/marketplace/artist.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import creatorImg from '../../../../assets/images/Justin-3LAU.png';
 import { PLACEHOLDER_MARKETPLACE_USERS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 
-const Creators = ({ selectedCreators, setSelectedCreators }) => {
+const Creators = ({ savedCreators, setSavedCreators }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
   const [searchByCreators, setSearchByCreators] = useState('');
@@ -17,11 +18,11 @@ const Creators = ({ selectedCreators, setSelectedCreators }) => {
   };
 
   const handleSelect = (creator) => {
-    const newSelectedCreators = [...selectedCreators];
+    const newSelectedCreators = [...savedCreators];
     if (newSelectedCreators.filter((item) => item.id === creator.id).length === 0) {
       newSelectedCreators.push(creator);
     }
-    setSelectedCreators(newSelectedCreators);
+    setSavedCreators(newSelectedCreators);
   };
 
   return (
@@ -31,7 +32,9 @@ const Creators = ({ selectedCreators, setSelectedCreators }) => {
         aria-hidden="true"
         onClick={() => setShowFilters(!showFilters)}
       >
-        <h3>Creators</h3>
+        <h3>
+          <img src={artistIcon} alt="Artist" /> Creators
+        </h3>
       </div>
       <Animated animationIn="fadeIn">
         <div className="browse--nft--sidebar--filtration--item--content">
@@ -64,13 +67,13 @@ const Creators = ({ selectedCreators, setSelectedCreators }) => {
 };
 
 Creators.propTypes = {
-  selectedCreators: PropTypes.oneOfType([PropTypes.array]),
-  setSelectedCreators: PropTypes.func,
+  savedCreators: PropTypes.oneOfType([PropTypes.array]),
+  setSavedCreators: PropTypes.func,
 };
 
 Creators.defaultProps = {
-  selectedCreators: [],
-  setSelectedCreators: () => {},
+  savedCreators: [],
+  setSavedCreators: () => {},
 };
 
 export default Creators;

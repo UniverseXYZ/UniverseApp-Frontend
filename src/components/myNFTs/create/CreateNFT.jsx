@@ -14,6 +14,7 @@ const CreateNFT = () => {
   const history = useHistory();
   const [selectedTabIndex, setSelectedTabIndex] = useState(1);
   const [selectedNFTType, setSelectedNFTType] = useState('collection');
+  const [showCollectible, setShowCollectible] = useState(false);
 
   const handleSelectTypeClick = () => {
     if (selectedTabIndex !== 0) {
@@ -26,50 +27,59 @@ const CreateNFT = () => {
     <div className="create--nft--page">
       <div className="create--nft--background" />
       <div className="create--nft--page--container">
-        <div className="back-btn" onClick={() => history.push('/my-nfts')} aria-hidden="true">
-          <img src={arrow} alt="back" />
-          <span>My NFTs</span>
-        </div>
+        {!showCollectible ? (
+          <div className="back-btn" onClick={() => history.push('/my-nfts')} aria-hidden="true">
+            <img src={arrow} alt="back" />
+            <span>My NFTs</span>
+          </div>
+        ) : (
+          <div className="back-btn" onClick={() => setShowCollectible(false)} aria-hidden="true">
+            <img src={arrow} alt="back" />
+            <span>NFT collection settings</span>
+          </div>
+        )}
         <h1 className="page--title">Create NFT</h1>
-        <div className="tabs__wrapper">
-          <div className="tabs">
-            <div className="tab_items">
-              <div
-                id="tabsdiv"
-                className={selectedTabIndex === 0 ? 'active' : ''}
-                onClick={handleSelectTypeClick}
-                aria-hidden="true"
-              >
-                <span className="first-triangle" />
-                <button type="button">
-                  <img
-                    src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
-                    alt="setting-icon"
-                  />
-                  Select type
-                </button>
-                <span className="last-triangle" />
-              </div>
-              <div
-                id="tabsdiv"
-                className={`
-                  ${selectedTabIndex === 1 ? 'active' : ''}
-                  ${selectedTabIndex === 0 ? 'disabled' : ''}
-                `}
-              >
-                <span className="first-triangle" />
-                <button type="button">
-                  <img
-                    src={selectedTabIndex === 1 ? settingIconActive : settingIcon}
-                    alt="setting-icon"
-                  />
-                  Settings
-                </button>
-                <span className="last-triangle" />
+        {!showCollectible && (
+          <div className="tabs__wrapper">
+            <div className="tabs">
+              <div className="tab_items">
+                <div
+                  id="tabsdiv"
+                  className={selectedTabIndex === 0 ? 'active' : ''}
+                  onClick={handleSelectTypeClick}
+                  aria-hidden="true"
+                >
+                  <span className="first-triangle" />
+                  <button type="button">
+                    <img
+                      src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
+                      alt="setting-icon"
+                    />
+                    Select type
+                  </button>
+                  <span className="last-triangle" />
+                </div>
+                <div
+                  id="tabsdiv"
+                  className={`
+                    ${selectedTabIndex === 1 ? 'active' : ''}
+                    ${selectedTabIndex === 0 ? 'disabled' : ''}
+                  `}
+                >
+                  <span className="first-triangle" />
+                  <button type="button">
+                    <img
+                      src={selectedTabIndex === 1 ? settingIconActive : settingIcon}
+                      alt="setting-icon"
+                    />
+                    Settings
+                  </button>
+                  <span className="last-triangle" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
         <div className="tab__content">
           {selectedTabIndex === 0 && (
             <SelectType
@@ -78,7 +88,12 @@ const CreateNFT = () => {
             />
           )}
           {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTSettings />}
-          {selectedTabIndex === 1 && selectedNFTType === 'collection' && <NFTCollectionSettings />}
+          {selectedTabIndex === 1 && selectedNFTType === 'collection' && (
+            <NFTCollectionSettings
+              showCollectible={showCollectible}
+              setShowCollectible={setShowCollectible}
+            />
+          )}
         </div>
       </div>
     </div>
