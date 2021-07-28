@@ -219,7 +219,7 @@ const MintSingleNft = ({ onClick }) => {
             document.getElementById('loading-hidden-btn').click();
             // TODO:: As discussed with Alex this functionality is postponed for now.
 
-            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress, false) : [];
 
             const result = await saveNftForLater({
               name,

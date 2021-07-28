@@ -17,14 +17,14 @@ const GET_MY_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
  */
 export const saveNftForLater = async (data) => {
   // Construct it in order to match the expected object keys at the BE
+  console.log(data.collectionId, data.royaltiesParsed);
   const requestData = {
     name: data.name,
     description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
-    royalties: parseFloat(data.percentAmount),
+    royalties: data.royaltiesParsed,
     collectionId: data.collectionId,
-    // royalties: data.royaltiesParsed,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {
