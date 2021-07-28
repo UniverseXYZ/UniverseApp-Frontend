@@ -10,7 +10,7 @@
     opacity: 0.2 !important;
   }
 }
-.search--field {
+.search--field--component {
   position: relative;
   display: flex;
   align-items: center;
@@ -226,7 +226,7 @@
     }
   }
 }
-.search--field:hover {
+.search--field--component:hover {
   padding: 1px;
   .focus--field--box--shadow {
     opacity: 0.2 !important;
