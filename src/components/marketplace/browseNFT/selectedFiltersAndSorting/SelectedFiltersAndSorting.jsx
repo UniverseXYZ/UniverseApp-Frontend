@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import SelectedFilters from './SelectedFilters';
@@ -23,8 +23,26 @@ const SelectedFiltersAndSorting = ({
 }) => {
   const [showTabletFilters, setShowTabletFilters] = useState(false);
   const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
+  const [stickyBlockOffsetTop, setStickyBlockOffsetTop] = useState(128);
+  const [classNameStickyBlock, setClassNameStickyBlock] = useState('');
+  useEffect(() => {
+    const stickyBlock = document.querySelector('.selected--filters--and--sorting');
+    setStickyBlockOffsetTop(stickyBlock.offsetTop);
+  }, []);
+
+  useLayoutEffect(() => {
+    function scrollMyFunc() {
+      const stickyBlock = document.querySelector('.selected--filters--and--sorting');
+      if (+stickyBlock.offsetTop !== +stickyBlockOffsetTop) {
+        setClassNameStickyBlock('selected--filters--and--sorting--sticky');
+      } else {
+        setClassNameStickyBlock('');
+      }
+    }
+    window.addEventListener('scroll', scrollMyFunc);
+  });
   return (
-    <div className="selected--filters--and--sorting">
+    <div className={`selected--filters--and--sorting ${classNameStickyBlock}`}>
       <div className="sorting__filters__desktop">
         <div className="sorting__filters">
           <SortingFilters

@@ -32,9 +32,7 @@ const SelectType = ({ setSelectedNFTType, setSelectedTabIndex }) => {
               <br /> non-fungible token
             </p>
           </div>
-          <div className="singlebox--shadow">
-            <p>1</p>
-          </div>
+          <div className="singlebox--shadow" />
         </div>
         <div className="section">
           <div
@@ -55,9 +53,7 @@ const SelectType = ({ setSelectedNFTType, setSelectedTabIndex }) => {
               <br /> built-in ERC-721 tokens inside
             </p>
           </div>
-          <div className="singlebox--shadow">
-            <p>1</p>
-          </div>
+          <div className="singlebox--shadow" />
         </div>
       </div>
     </div>
