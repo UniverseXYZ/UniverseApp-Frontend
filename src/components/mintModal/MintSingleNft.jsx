@@ -85,12 +85,6 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(temp);
   };
 
-  const removeRoyaltyAddress = (index) => {
-    const temp = [...properties];
-    temp.splice(index, 1);
-    setRoyaltyAddress(temp);
-  };
-
   const addProperty = () => {
     const newProperties = [...properties];
     const temp = { name: '', value: '' };
@@ -98,8 +92,14 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(newProperties);
   };
 
+  const removeRoyaltyAddress = (index) => {
+    const temp = [...royaltyAddress];
+    temp.splice(index, 1);
+    setRoyaltyAddress(temp);
+  };
+
   const addRoyaltyAddress = () => {
-    const newProperties = [...properties];
+    const newProperties = [...royaltyAddress];
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
@@ -219,7 +219,7 @@ const MintSingleNft = ({ onClick }) => {
             document.getElementById('loading-hidden-btn').click();
             // TODO:: As discussed with Alex this functionality is postponed for now.
 
-            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress, false) : [];
+            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
 
             const result = await saveNftForLater({
               name,
@@ -446,8 +446,9 @@ const MintSingleNft = ({ onClick }) => {
   }, [errors, saveForLateClick, savedNfts]);
 
   useEffect(() => {
+    console.log(royaltyAddress);
     const notValidAddress = royaltyAddress.find(
-      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+      (el) => el.address?.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
     );
     if (notValidAddress) {
       setRoyaltyValidAddress(false);
