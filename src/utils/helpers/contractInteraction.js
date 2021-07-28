@@ -31,3 +31,6 @@ export const readCollectionsStream = (mintedCollections) => {
 
   return listOfCollections;
 };
+
+export const formatRoyaltiesForMinting = (royalties) =>
+  royalties.map((royalty) => [royalty.address, royalty.amount * 100]);
