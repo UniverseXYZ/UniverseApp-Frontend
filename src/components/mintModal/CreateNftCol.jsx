@@ -70,13 +70,13 @@ const CreateNftCol = (props) => {
   };
 
   const removeRoyaltyAddress = (index) => {
-    const temp = [...properties];
+    const temp = [...royaltyAddress];
     temp.splice(index, 1);
     setRoyaltyAddress(temp);
   };
 
   const addRoyaltyAddress = () => {
-    const newProperties = [...properties];
+    const newProperties = [...royaltyAddress];
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
