@@ -48,7 +48,7 @@ const CreateNftCol = (props) => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
-  const [royalities, setRoyalities] = useState(true);
+  const [royalties, setRoyalties] = useState([{ address: '', amount: '' }]);
   const [percentAmount, setPercentAmount] = useState('');
   const inputFile = useRef(null);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
@@ -178,6 +178,7 @@ const CreateNftCol = (props) => {
         setEditions(getCollectionNFT[0].numberOfEditions);
         setPreviewImage(getCollectionNFT[0].previewImage);
         setProperties(getCollectionNFT[0].properties);
+        setRoyalties(getCollectionNFT[0].royalties);
         setPercentAmount(getCollectionNFT[0].percentAmount);
       }
       const getSavedNFT = savedNfts.filter((item) => item.id === collectionNFTsID);
@@ -187,6 +188,7 @@ const CreateNftCol = (props) => {
         setEditions(getSavedNFT[0].numberOfEditions);
         setPreviewImage(getSavedNFT[0].previewImage);
         setProperties(getSavedNFT[0].properties);
+        setRoyalties(getSavedNFT[0].royalties);
         setPercentAmount(getSavedNFT[0].percentAmount);
       }
     }
@@ -538,13 +540,13 @@ const CreateNftCol = (props) => {
                 <label className="switch">
                   <input
                     type="checkbox"
-                    checked={royalities}
-                    onChange={(e) => setRoyalities(e.target.checked)}
+                    checked={royalties}
+                    onChange={(e) => setRoyalties(e.target.checked)}
                   />
                   <span className="slider round" />
                 </label>
               </div>
-              {royalities &&
+              {royalties &&
                 royaltyAddress.map((elm, i) => (
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="royalty properties">

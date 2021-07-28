@@ -194,7 +194,7 @@ const MintSingleNft = ({ onClick }) => {
       setDescription(res[0].description);
       setEditions(res[0].numberOfEditions);
       setPreviewImage(res[0].url);
-      setPercentAmount(res[0].royalties);
+      setRoyaltyAddress(res[0].royalties);
       setProperties(res[0].properties);
       setArtworkType(res[0].artworkType);
       if (res.length && res[0].collectionId) {
@@ -257,8 +257,7 @@ const MintSingleNft = ({ onClick }) => {
               editions,
               properties,
               percentAmount,
-              royalities,
-              royaltyAddress,
+              royaltiesParsed,
               collectionId: selectedCollection.id,
             });
 
@@ -342,7 +341,7 @@ const MintSingleNft = ({ onClick }) => {
                   numberOfEditions: data.numberOfEditions,
                   generatedEditions,
                   properties: data.properties,
-                  percentAmount: data.royalties,
+                  royalties: royaltiesParsed,
                   url: saveImageResult ? saveImageResult.url : previewImage,
                   artworkType: data.artworkType,
                 };
