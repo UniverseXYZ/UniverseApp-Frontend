@@ -291,6 +291,7 @@ const MintSingleNft = ({ onClick }) => {
                 percentAmount: saveImageResult.royalties,
                 selected: false,
                 url: saveImageResult.url,
+                royaltiesParsed,
                 artworkType: saveImageResult.artworkType,
               },
             ]);
@@ -300,12 +301,14 @@ const MintSingleNft = ({ onClick }) => {
           // Editing already existing SAVED FOR LATER NFT
           document.getElementById('loading-hidden-btn').click();
 
+          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
           const result = await updateSavedForLaterNft({
             name,
             description,
             editions,
             properties,
             percentAmount,
+            royaltiesParsed,
             id: savedNFTsID,
           });
 
@@ -691,7 +694,14 @@ const MintSingleNft = ({ onClick }) => {
                   </div>
                 ) : (
                   <div>
-                    <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                    <img
+                      src={
+                        col.previewImage
+                          ? URL.createObjectURL(col.previewImage)
+                          : col.previewImageMock
+                      }
+                      alt={col.name}
+                    />
                   </div>
                 )}
                 <h5>{col.name}</h5>

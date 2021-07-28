@@ -41,7 +41,14 @@ import { getEthPriceCoingecko, getWethBalanceEtherscan } from './utils/api/ether
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
-import { getSavedNfts, getMyNfts } from './utils/api/mintNFT';
+import {
+  getSavedNfts,
+  getMyNfts,
+  getMockNfts,
+  getMockCollections,
+  getMyCollections,
+} from './utils/api/mintNFT';
+import { readCollectionsStream } from './utils/helpers/contractInteraction';
 
 const App = () => {
   const location = useLocation();
@@ -206,7 +213,15 @@ const App = () => {
 
       // Fetch the minted NFTS for that addres
       const mintedNfts = await getMyNfts();
-      setMyNFTs(mintedNfts);
+      const mockedNfts = await getMockNfts();
+      setMyNFTs([...mockedNfts, ...mintedNfts]);
+
+      // Fetch the minted NFTS for that addres
+      const mockedCollections = await getMockCollections();
+      const mintedCollectionsStream = await getMyCollections();
+      const mintedCollections = await readCollectionsStream(mintedCollectionsStream);
+
+      setDeployedCollections([...mockedCollections, ...mintedCollections]);
     }
   };
 

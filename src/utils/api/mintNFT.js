@@ -17,14 +17,14 @@ const GET_MY_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
  */
 export const saveNftForLater = async (data) => {
   // Construct it in order to match the expected object keys at the BE
+  console.log(data.collectionId, data.royaltiesParsed);
   const requestData = {
     name: data.name,
     description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
-    royalties: parseFloat(data.percentAmount),
+    royalties: data.royaltiesParsed,
     collectionId: data.collectionId,
-    // royalties: data.royaltiesParsed,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {
@@ -149,7 +149,7 @@ export const updateSavedForLaterNft = async (data) => {
     description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
-    royalties: parseFloat(data.percentAmount),
+    royalties: data.royaltiesParsed,
   };
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
@@ -282,4 +282,121 @@ export const getMyNFTs = () => {
   };
 
   return fetch(GET_MY_NFTS, requestOptions);
+};
+
+// Mock GET requests
+
+/**
+ * @returns {array} with mock NFTs
+ * use the mock property previewImageMock to get the image
+ * use the mock property royaltiesMock to get the royalties
+ * use the mock property collectionAvatarMock to get the collectionAvatar
+ */
+export const getMockNfts = () => {
+  const data = [
+    {
+      id: 0,
+      type: 'collection',
+      collectionId: 156,
+      collectionName: 'collection mock 1',
+      collectionAvatar: {},
+      collectionDescription: 'description of collection',
+      shortURL: 'universe.xyz/c/mock1',
+      tokenName: 'MCK',
+      previewImage: false,
+      name: 'Nft Mock',
+      description: 'nft description',
+      numberOfEditions: 1,
+      generatedEditions: ['acbbf15'],
+      properties: [{ name: 'property 1', value: '10' }],
+      percentAmount: '',
+      releasedDate: '2021-07-27T12:09:04.540Z',
+      royaltiesMock: [['0x87d709e3b1a2508D371fdFAA2Ae91FFC82061979', 1000]],
+      previewImageMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/3eeaa8a78c4fb8b514a41b75a6796ebea31c92f0de8ea8c6.jpeg',
+      collectionAvatarMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/3eeaa8a78c4fb8b514a41b75a6796ebea31c92f0de8ea8c6.jpeg',
+    },
+    {
+      id: 1,
+      type: 'collection',
+      collectionId: 156,
+      collectionName: 'collection mock 1',
+      collectionAvatar: {},
+      collectionDescription: 'description of collection',
+      shortURL: 'universe.xyz/c/mock2',
+      tokenName: 'MCK2',
+      previewImage: false,
+      name: 'Nft Mock 2',
+      description: 'nft description 2',
+      numberOfEditions: 1,
+      generatedEditions: ['acbbf15'],
+      properties: [],
+      percentAmount: '',
+      releasedDate: '2021-07-27T12:09:04.540Z',
+      previewImageMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
+      collectionAvatarMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/3eeaa8a78c4fb8b514a41b75a6796ebea31c92f0de8ea8c6.jpeg',
+    },
+    {
+      id: 2,
+      type: 'collection',
+      collectionId: 157,
+      collectionName: 'collection mock 2',
+      collectionAvatar: {},
+      collectionDescription: 'description of collection 2',
+      shortURL: 'universe.xyz/c/mock3',
+      tokenName: 'MCK3',
+      previewImage: false,
+      name: 'Nft Mock 3',
+      description: 'nft description 3',
+      numberOfEditions: 1,
+      generatedEditions: ['acbbf15'],
+      properties: [],
+      percentAmount: '',
+      releasedDate: '2021-07-27T12:09:04.540Z',
+      royaltiesMock: [
+        ['0x87d709e3b1a2508D371fdFAA2Ae91FFC82061979', 1000],
+        ['0xb4B8512972E4d4A76bDBf7F3eFC65aEfF6DdF313', 2000],
+      ],
+      previewImageMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
+      collectionAvatarMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
+    },
+  ];
+
+  return data;
+};
+
+/**
+ * @returns {array} with mock collections
+ * use the mock property previewImageMock to get the image
+ */
+export const getMockCollections = () => {
+  const data = [
+    {
+      id: 156,
+      previewImage: false,
+      name: 'collection mock 1',
+      tokenName: 'ART',
+      description: 'description of collection',
+      shortURL: 'universe.xyz/c/collectionmock',
+      previewImageMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/3eeaa8a78c4fb8b514a41b75a6796ebea31c92f0de8ea8c6.jpeg',
+    },
+    {
+      id: 157,
+      previewImage: false,
+      name: 'collection mock 2',
+      tokenName: 'ART2',
+      description: 'description of collection 2',
+      shortURL: 'universe.xyz/c/collectionmock2',
+      previewImageMock:
+        'https://universeapp-assets-dev.s3.amazonaws.com/fba87735a4ef3959bc096b092d95dd36386aa3755c8d268f.png',
+    },
+  ];
+
+  return data;
 };
