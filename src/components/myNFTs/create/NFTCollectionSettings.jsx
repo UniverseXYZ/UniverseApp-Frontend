@@ -471,17 +471,20 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           )}
         </div>
         {!collectionNFTs.length ? (
-          <div
-            className="create--nft--special--btn"
-            onClick={handleShowCollectible}
-            aria-hidden="true"
-          >
-            <div className="plus-icon">
-              <img src={bigPlusGradientIcon} alt="Big gradient plus" />
+          <div className="create--nft--special--btn--box">
+            <div
+              className="create--nft--special--btn"
+              onClick={handleShowCollectible}
+              aria-hidden="true"
+            >
+              <div className="plus-icon">
+                <img src={bigPlusGradientIcon} alt="Big gradient plus" />
+              </div>
+              <div className="collection-t">
+                <p>Create NFT</p>
+              </div>
             </div>
-            <div className="collection-t">
-              <p>Create NFT</p>
-            </div>
+            <div className="gradient--shadow" />
           </div>
         ) : (
           <></>

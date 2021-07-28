@@ -3,6 +3,7 @@
 
 .create--nft--page {
     position: relative;
+    background-color: $white;
     .create--nft--background {
         position: absolute;
         top: 88px;
@@ -51,83 +52,91 @@
                 font-size: 26px;
             }
         }
-        .tabs__wrapper {
+        #tabs--wrapper {
+            position: relative;
+            width: 100%;
+            height: 50px;
             margin-bottom: 60px;
-            .tab_items {
-                display: flex;
-                width: 100%;
-                #tabsdiv {
-                    margin-right: 3px;
-                    width: 48%;
-                    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-                    &.disabled {
-                        opacity: 0.2;
-                        button {
-                            background: rgba(0, 0, 0, 0.03);
-                        }
-                        .last-triangle {
-                            border-left: 20px solid rgba(0, 0, 0, 0.03);
-                        }
-                    }
-                }
-                button {
-                    min-width: 100%;
-                    min-height: 50px;
-                    background: $white;
-                    border-radius: 4px;
+            .tabs {
+                list-style: none;
+                li {
                     position: relative;
+                    height: 50px;
+                    display: inline-block;
+                    padding: 10px 10px 10px 30px;
+                    text-align: center;
                     font-family: $sharpGroteskSemiBoldFont;
                     font-style: normal;
                     font-weight: 600;
                     font-size: 12px;
+                    line-height: 30px;
+                    color: $black;
+                    background-color: $white;
+                    width: 48%;
                     img {
                         margin-right: 7px;
-                        @include sm {
-                            width: 16px;
-                            height: 16px;
+                        &.setting--icon {
+                            opacity: 0.2;
+                        }
+                    }
+                    &.active {
+                        background-color: $black;
+                        color: $white;
+                        &::after {
+                            border-left: 10px solid $black;
+                        }
+                        &::before {
+                            border-left: 10px solid #f7f6fb;
+                        }
+                        img {
+                            &.setting--icon {
+                                opacity: 1;
+                            }
+                        }
+                    }
+                    &.disabled {
+                        background-color: rgba(0, 0, 0, 0.03);
+                        color: rgba(0, 0, 0, 0.2);
+                        &::after {
+                            border-left: 10px solid rgba(0, 0, 0, 0.03);
+                        }
+                    }
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        right: -10px;
+                        top: 0;
+                        width: 0;
+                        height: 0;
+                        border-top: 25px solid transparent;
+                        border-left: 10px solid $white;
+                        border-bottom: 25px solid transparent;
+                    }
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        left: 0;
+                        top: 0;
+                        border-top: 25px solid transparent;
+                        border-left: 10px solid #f7f7fa;
+                        border-bottom: 25px solid transparent;
+                    }
+                    &:nth-child(1) {
+                        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+                        cursor: pointer;
+                        z-index: 2;
+                    }
+                    &:nth-child(2) {
+                        z-index: 1;
+                        margin-left: 4px;
+                        &.disabled {
+                            cursor: not-allowed;
                         }
                     }
                     @include sm {
-                        font-size: 10px;
-                    }
-                }
-                .first-triangle {
-                    position: absolute;
-                    border-radius: 4px;
-                    min-height: 50px;
-                    width: 0;
-                    border-top: 25px solid transparent;
-                    border-left: 20px solid #fafcfd;
-                    z-index: 100;
-                    border-bottom: 25px solid transparent;
-                    @include lg {
-                        border-left: 20px solid #fbfdfd;
-                    }
-                    @include sm {
-                        border-left: 20px solid #fcfefd;
-                    }
-                }
-                .last-triangle {
-                    position: absolute;
-                    margin-left: -2px;
-                    min-height: 50px;
-                    width: 0;
-                    z-index: 200;
-                    border-top: 25px solid transparent;
-                    border-left: 20px solid $white;
-                    border-bottom: 25px solid transparent;
-                    @include sm {
-                        border-left: 20px solid $white;
-                    }
-                }
-                .active {
-                    button {
-                        color: $white;
-                        background: $black;
-                        border-left: 1px solid $white;
-                    }
-                    .last-triangle {
-                        border-left: 20px solid $black;
+                        padding: 10px 10px 10px 15px;
                     }
                 }
             }
@@ -178,7 +187,7 @@
                         }
                     }
                     .single--box:hover {
-                        background: linear-gradient(#ffffff, #ffffff) padding-box,
+                        background: linear-gradient($white, $white) padding-box,
                             linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
                     }
                 }
@@ -200,13 +209,18 @@
                     height: 248px;
                     .collection--cover--image {
                         &--circle {
-                            background: rgba(0, 0, 0, 0.02);
-                            border: 3px dashed rgba(0, 0, 0, 0.1);
                             box-sizing: border-box;
                             border-radius: 50%;
                             max-height: 228px;
                             height: 100%;
                             width: 100%;
+                            background: rgba(0, 0, 0, 0.05);
+                            border: 3px dashed rgba(0, 0, 0, 0.2);
+                            opacity: 0.4;
+                            transition: opacity .3s;
+                            &:hover {
+                                opacity: 1;
+                            }
                             &.border--none {
                                 border: none;
                             }
@@ -231,7 +245,7 @@
                                     font-weight: 500;
                                     font-size: 12px;
                                     line-height: 160%;
-                                    color: rgba(0, 0, 0, 0.4);
+                                    color: $black;
                                     @include sm {
                                         display: none;
                                     }
@@ -424,22 +438,45 @@
                             }
                         }
                     }
-                    .create--nft--special--btn {
-                        background: linear-gradient($white, $white) padding-box,
-                            linear-gradient(to right, #bceb00, #00eaea) border-box;
-                        border: 1px solid transparent;
-                        border-radius: 12px;
-                        cursor: pointer;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        width: 228px;
-                        height: 337px;
-                        padding: 20px;
-                        @include sm {
-                            width: 100%;
-                            height: 200px;
+                    .create--nft--special--btn--box {
+                        position: relative;
+                        width: fit-content;
+                        transition: opacity .3s;
+                        &:hover {
+                            .gradient--shadow {
+                                opacity: 1;
+                            }
+                        }
+                        .create--nft--special--btn {
+                            position: relative;
+                            z-index: 1;
+                            background: linear-gradient($white, $white) padding-box,
+                                linear-gradient(to right, #bceb00, #00eaea) border-box;
+                            border: 1px solid transparent;
+                            border-radius: 12px;
+                            cursor: pointer;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            width: 228px;
+                            height: 337px;
+                            padding: 20px;
+                            transition: all 0.2s;
+                            @include sm {
+                                width: 100%;
+                                height: 200px;
+                            }
+                        }
+                        .gradient--shadow {
+                            opacity: 0;
+                            background: linear-gradient(to right, #bceb00, #00eaea) border-box;
+                            position: absolute;
+                            top: 0;
+                            height: 100%;
+                            width: 228px;
+                            border-radius: 12px;
+                            filter: blur(3px);
                         }
                     }
                     .collection--final--error {
