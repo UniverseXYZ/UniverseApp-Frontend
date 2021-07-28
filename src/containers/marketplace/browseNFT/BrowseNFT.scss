@@ -651,6 +651,7 @@
     width: calc(100% + 80px);
     margin-left: -40px;
     background: $white;
+    z-index: 5;
     @include md {
       z-index: 999;
     }
