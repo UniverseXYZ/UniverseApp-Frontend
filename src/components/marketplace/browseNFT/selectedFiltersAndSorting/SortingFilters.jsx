@@ -235,6 +235,7 @@ const SortingFilters = ({
             `(${selectedButtons.filter((item) => item.selected === true).length})`}
         </p>
         <img className={`arrow ${showSaleDropdown ? 'rotate' : ''}`} src={arrowDown} alt="Arrow" />
+        <div className="box--shadow--effect--block" />
         {showSaleDropdown && (
           <div className="sale--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="sale--dropdown--body">
@@ -293,6 +294,7 @@ const SortingFilters = ({
           Price range
         </p>
         <img className={`arrow ${showPriceDropdown ? 'rotate' : ''}`} src={arrowDown} alt="Arrow" />
+        <div className="box--shadow--effect--block" />
         {showPriceDropdown && (
           <div className="price__dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="price__dropdown__body">
@@ -411,6 +413,7 @@ const SortingFilters = ({
           src={arrowDown}
           alt="Arrow"
         />
+        <div className="box--shadow--effect--block" />
         {showCollectionsDropdown && (
           <div
             className="collection--dropdown"
@@ -514,6 +517,7 @@ const SortingFilters = ({
           src={arrowDown}
           alt="Arrow"
         />
+        <div className="box--shadow--effect--block" />
         {showArtistsDropdown && (
           <div className="artist--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="artist--dropdown--body">
