@@ -39,7 +39,7 @@ const SearchField = (props) => {
   }, [findData]);
 
   return (
-    <div className={`search--field ${focusField}`}>
+    <div className={`search--field--component ${focusField}`}>
       <img className="search" src={searchIcon} alt="Search" />
       <input
         type="text"
