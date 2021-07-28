@@ -357,6 +357,7 @@ const MintSingleNft = ({ onClick }) => {
       }
     }
     if (mintNowClick) {
+      console.log('MINTING..........');
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         document.getElementById('loading-hidden-btn').click();
 
@@ -368,6 +369,8 @@ const MintSingleNft = ({ onClick }) => {
 
         if (selectedCollection) {
           const userAddress = localStorage.getItem('user_address');
+          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+
           // universeERC721CoreContract should be used for minting single NFT
           // auctionFactoryContract should be usef for minting Collectibles NFTS
           const tokenURIResult = await getTokenURI({
@@ -376,10 +379,8 @@ const MintSingleNft = ({ onClick }) => {
             description,
             editions,
             properties,
-            percentAmount,
+            royaltiesParsed,
           });
-
-          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
 
           console.log('sending request to contract...');
 
