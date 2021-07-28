@@ -43,6 +43,8 @@ import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
+import forumIcon from '../../../../assets/images/forum.svg';
+import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import searchIcon from '../../../../assets/images/search-icon.svg';
@@ -525,7 +527,7 @@ const MobileView = (props) => {
                           // className="disable"
                         >
                           <img src={coreDropsIcon} alt="Core drops" />
-                          <span>Core drops</span>
+                          <span>OG planet drops</span>
                           {/* <span className="tooltiptext">Coming soon</span> */}
                         </button>
                       </div>
@@ -596,6 +598,24 @@ const MobileView = (props) => {
                         >
                           <img src={yieldFarmingIcon} alt="Yield Farming" />
                           <span>Yield farming</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          // onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                        >
+                          <img src={forumIcon} alt="Forum" />
+                          <span>Forum</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          // onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                        >
+                          <img src={signalIcon} alt="Signal" />
+                          <span>Signal</span>
                         </button>
                       </div>
                     </div>

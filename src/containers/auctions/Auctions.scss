@@ -18,7 +18,6 @@
     }
 
     button.set_up {
-
       @include sm {
         margin-left: 0px;
         margin-top: 30px;
@@ -61,14 +60,15 @@
   }
 
   .empty__auction {
-    margin-top: 11%;
+    margin-top: 100px;
+    text-align: center;
 
     .warning__div {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      margin: 0 auto 24px;
+      margin: 30px auto;
       padding: 20px 20px 23px 24px;
       background: #fdfcf9;
       border: 1px solid #e4b613;
@@ -86,8 +86,12 @@
       }
 
       img {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
+
+        @include md {
+          margin-bottom: 6px;
+        }
       }
 
       p {
@@ -114,34 +118,40 @@
     h3 {
       font-family: $spaceGroteskFont;
       font-style: normal;
-      font-weight: bold;
-      font-size: 22px;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 22px;
       text-align: center;
-      color: $black;
-      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.4);
+      margin-top: 30px;
+      // margin-bottom: 16px;
     }
     p.desc {
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: normal;
-      font-size: 18px;
+      font-size: 14px;
+      line-height: 160%;
       text-align: center;
-      color: rgba(0, 0, 0, 0.6);
-      margin: 0 auto 40px;
+      color: rgba(0, 0, 0, 0.4);
+      margin: 6px auto 30px;
 
       &:disabled {
         cursor: not-allowed;
         background: #e6e6e6;
         box-shadow: none;
       }
+      @include sm {
+        max-width: 243px;
+      }
     }
     button.set_up {
       display: block;
       margin: 0 auto;
 
-      @include sm {
-        width: 100%;
-      }
+      // @include sm {
+      //   width: 100%;
+      // }
     }
   }
 

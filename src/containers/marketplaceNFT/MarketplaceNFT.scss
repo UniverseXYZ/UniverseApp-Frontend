@@ -20,11 +20,11 @@
       border: none;
       background: $black;
       .media--container {
-        transform: translate(0px, 0px)!important;
+        transform: translate(0px, 0px) !important;
       }
       .image--wrapper {
-        max-width: 800px!important;
-        max-height: 100%!important;
+        max-width: 800px !important;
+        max-height: 100% !important;
         height: 100%;
         img {
           border-radius: 0px;
@@ -35,7 +35,7 @@
         }
       }
       .custom--player {
-        max-width: 100%!important;
+        max-width: 100% !important;
       }
     }
     .image--wrapper {
@@ -82,17 +82,17 @@
         &.show--controls {
           img.play--pause,
           img.close--miniplayer {
-            visibility: visible!important;
+            visibility: visible !important;
           }
         }
         &.scale--player {
-          width: 100%!important;
-          height: 250px!important;
-          bottom: 0px!important;
-          right: 0px!important;
-          img, 
+          width: 100% !important;
+          height: 250px !important;
+          bottom: 0px !important;
+          right: 0px !important;
+          img,
           video {
-            border-radius: 0px!important;
+            border-radius: 0px !important;
           }
         }
         &.show--miniplayer {
@@ -111,10 +111,11 @@
           &:hover {
             img.play--pause,
             img.close--miniplayer {
-              visibility: visible!important;
+              visibility: visible !important;
             }
           }
-          video, img {
+          video,
+          img {
             width: 100%;
             height: 100%;
             object-fit: cover;

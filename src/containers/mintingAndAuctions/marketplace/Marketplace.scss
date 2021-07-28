@@ -461,7 +461,7 @@
                 .selected__item {
                   font-family: $spaceGroteskFont;
                   font-style: normal;
-                  font-weight: 600;
+                  font-weight: normal;
                   font-size: 16px;
                   line-height: 20px;
                   color: $black;
@@ -472,26 +472,34 @@
                 }
                 .sorting__dropdown {
                   position: absolute;
-                  top: 55px;
+                  top: 52px;
                   left: 0;
                   width: 100%;
                   z-index: 1;
+                  background: $white;
+                  box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+                  border-radius: 12px;
+                  padding: 8px;
                   ul {
                     background: $white;
-                    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                    border-radius: 12px;
+                    // box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                    // border-radius: 6px;
 
                     li {
-                      padding: 20px;
+                      padding: 15px;
                       font-family: $spaceGroteskFont;
                       font-style: normal;
-                      font-weight: 600;
+                      font-weight: 500;
                       font-size: 16px;
                       line-height: 20px;
                       color: $black;
-                      &:first-child {
-                        border-bottom: 2px solid #e5e5e5;
-                      }
+                      border-radius: 6px;
+                      // &:first-child {
+                      //   border-bottom: 2px solid #e5e5e5;
+                      // }
+                    }
+                    :hover {
+                      background: rgba(0, 0, 0, 0.05);
                     }
                   }
                 }
@@ -538,9 +546,11 @@
             grid-gap: 30px;
             .future__auction__item {
               background: $white;
-              box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              // box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+              box-sizing: border-box;
               border-radius: 12px;
-              padding: 18px 24px;
+              padding: 12px;
 
               .title {
                 h1 {
@@ -549,24 +559,24 @@
                   font-weight: 600;
                   font-size: 16px;
                   line-height: 130%;
-                  letter-spacing: 0.2px;
+                  // letter-spacing: 0.2px;
                   color: $black;
-                  margin-bottom: 10px;
+                  margin-bottom: 6px;
                 }
                 .artist__details {
                   display: flex;
                   align-items: center;
 
                   img {
-                    width: 22px;
-                    height: 22px;
-                    margin-right: 10px;
+                    width: 30px;
+                    height: 30px;
+                    margin-right: 12px;
                     border-radius: 50%;
                   }
                   span {
                     font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: normal;
+                    font-weight: bold;
                     font-size: 12px;
                     line-height: 150%;
                     color: rgba(0, 0, 0, 0.4);
@@ -575,20 +585,21 @@
                   button {
                     font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: normal;
+                    font-weight: bold;
                     font-size: 12px;
                     line-height: 150%;
                     background-color: $white;
-                    text-decoration: underline;
-                    color: #4d66eb;
+                    // text-decoration: underline;
+                    color: $black;
                   }
                 }
               }
               .auction__img {
-                width: 290px;
-                height: 290px;
-                margin-bottom: 16px;
-                border-radius: 10px;
+                // width: 290px;
+                // height: 290px;
+                position: relative;
+                margin-bottom: 18px;
+                border-radius: 6px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -602,6 +613,34 @@
                   }
                   img.artist__image {
                     display: block;
+                  }
+                }
+                .start__date {
+                  position: absolute;
+                  bottom: 12px;
+                  padding: 6px 24px;
+                  background: rgba(0, 0, 0, 0.6);
+                  backdrop-filter: blur(4px);
+                  border-radius: 100px;
+                  text-align: center;
+
+                  label {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 8px;
+                    line-height: 100%;
+                    text-transform: uppercase;
+                    color: $white;
+                    opacity: 0.5;
+                  }
+                  p {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 12px;
+                    line-height: 160%;
+                    color: $white;
                   }
                 }
 
@@ -620,37 +659,50 @@
                   border-radius: 50%;
                   border: 4px solid $white;
                 }
+
                 @include lg {
                   width: 100%;
                 }
               }
               .auction__details {
                 display: flex;
-                margin-top: 16px;
-                border-top: 1px solid rgba(0, 0, 0, 0.1);
+                justify-content: space-between;
+                background: #f7f7f7;
+                border: 1px solid #f0f0f0;
+                box-sizing: border-box;
+                border-radius: 6px;
+                margin-top: 18px;
+                padding: 14px 27px 14px 16px;
 
                 &__box {
                   padding: 8px 0;
                   &:not(:last-child) {
                     margin-right: 30px;
                   }
-                  p {
+                  label {
+                    display: block;
                     font-family: $spaceGroteskFont;
                     font-style: normal;
-                    font-weight: 600;
+                    font-weight: 500;
                     font-size: 12px;
-                    line-height: 22px;
+                    line-height: 150%;
                     color: rgba(0, 0, 0, 0.4);
                   }
-                  h3 {
+                  p {
                     font-family: $spaceGroteskFont;
                     font-style: normal;
                     font-weight: bold;
                     font-size: 14px;
-                    line-height: 160%;
+                    line-height: 150%;
                     color: $black;
+                    span {
+                      color: rgba(0, 0, 0, 0.4);
+                    }
                   }
                 }
+              }
+              &:hover {
+                box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
               }
             }
             @include lg {
