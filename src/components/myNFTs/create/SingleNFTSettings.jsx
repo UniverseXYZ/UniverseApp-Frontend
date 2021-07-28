@@ -12,8 +12,6 @@ import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import arrow from '../../../assets/images/arrow.svg';
 import infoIcon from '../../../assets/images/icon.svg';
 import defaultImage from '../../../assets/images/default-img.svg';
-import sizeDownIcon from '../../../assets/images/size-down.svg';
-import sizeUpIcon from '../../../assets/images/size-up.svg';
 import deleteIcon from '../../../assets/images/delred-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
@@ -401,65 +399,25 @@ const SingleNFTSettings = () => {
                   aria-hidden="true"
                 />
                 <div className="single-nft-picture">
-                  <Popup
-                    trigger={
-                      <div className="preview__image">
-                        <img className="size__up" src={sizeUpIcon} alt="Size Up" />
-                        {previewImage.type === 'video/mp4' && (
-                          <video>
-                            <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                            <track kind="captions" />
-                            Your browser does not support the video tag.
-                          </video>
-                        )}
-                        {previewImage.type === 'audio/mpeg' && (
-                          <img className="preview-image" src={mp3Icon} alt="Preview" />
-                        )}
-                        {previewImage.type !== 'audio/mpeg' &&
-                          previewImage.type !== 'video/mp4' && (
-                            <img
-                              className="preview-image"
-                              src={URL.createObjectURL(previewImage)}
-                              alt="Preview"
-                            />
-                          )}
-                      </div>
-                    }
-                  >
-                    {(close) => (
-                      <div className="preview__image__popup">
-                        <img
-                          className="size__down"
-                          src={sizeDownIcon}
-                          onClick={close}
-                          alt="Size Down"
-                          aria-hidden="true"
-                        />
-                        {previewImage.type === 'video/mp4' && (
-                          <video controls autoPlay>
-                            <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
-                            <track kind="captions" />
-                            Your browser does not support the video tag.
-                          </video>
-                        )}
-                        {previewImage.type === 'audio/mpeg' && (
-                          <audio controls autoPlay>
-                            <source src={URL.createObjectURL(previewImage)} type="audio/mpeg" />
-                            <track kind="captions" />
-                            Your browser does not support the audio element.
-                          </audio>
-                        )}
-                        {previewImage.type !== 'audio/mpeg' &&
-                          previewImage.type !== 'video/mp4' && (
-                            <img
-                              className="preview-image"
-                              src={URL.createObjectURL(previewImage)}
-                              alt="Preview"
-                            />
-                          )}
-                      </div>
+                  <div className="preview__image">
+                    {previewImage.type === 'video/mp4' && (
+                      <video>
+                        <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
                     )}
-                  </Popup>
+                    {previewImage.type === 'audio/mpeg' && (
+                      <img className="preview-image" src={mp3Icon} alt="Preview" />
+                    )}
+                    {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
+                      <img
+                        className="preview-image"
+                        src={URL.createObjectURL(previewImage)}
+                        alt="Preview"
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             ) : (
@@ -730,14 +688,19 @@ const SingleNFTSettings = () => {
                     </Button>
                   </div>
                 ))}
-              <div className="property-add" onClick={() => addRoyaltyAddress()} aria-hidden="true">
-                <h5>
-                  <img src={addIcon} alt="Add" />
-                  Add the address
-                </h5>
-              </div>
+              {royalities && (
+                <div
+                  className="property-add"
+                  onClick={() => addRoyaltyAddress()}
+                  aria-hidden="true"
+                >
+                  <h5>
+                    <img src={addIcon} alt="Add" />
+                    Add the address
+                  </h5>
+                </div>
+              )}
             </div>
-            {/* )} */}
           </div>
           {errors.name || errors.edition || errors.previewImage ? (
             <div className="single__final__error">
