@@ -83,6 +83,7 @@ const MobileView = (props) => {
         history.push(`/search`, { query: searchValue });
         setSearchValue('');
         searchRef.current.blur();
+        setShowMobileSearch(false);
       }
     }
   };
@@ -91,6 +92,7 @@ const MobileView = (props) => {
     history.push(`/search`, { query: searchValue });
     setSearchValue('');
     searchRef.current.blur();
+    setShowMobileSearch(false);
   };
 
   useEffect(() => {

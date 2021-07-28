@@ -75,6 +75,7 @@ const TabletView = (props) => {
         history.push(`/search`, { query: searchValue });
         setSearchValue('');
         searchRef.current.blur();
+        setShowSearch(false);
       }
     }
   };
@@ -82,6 +83,7 @@ const TabletView = (props) => {
     history.push(`/search`, { query: searchValue });
     setSearchValue('');
     searchRef.current.blur();
+    setShowSearch(false);
   };
 
   useEffect(() => {

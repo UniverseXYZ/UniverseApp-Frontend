@@ -98,8 +98,8 @@ header {
         font-size: 16px;
         line-height: 20px;
         color: $black;
-        padding: 15px 16px 15px 48px;
-        width: 440px;
+        padding: 15px 16px 15px 60px;
+        max-width: 440px;
         border: 1px solid transparent;
         &::placeholder {
           color: rgba(0, 0, 0, 0.2);
@@ -267,11 +267,18 @@ header {
           }
         }
       }
+      @include lg {
+        display: none;
+      }
     }
     .dark {
       display: block;
+      img {
+        min-width: 153px;
+      }
     }
     .light {
+      min-width: 153px;
       display: none;
     }
   }
