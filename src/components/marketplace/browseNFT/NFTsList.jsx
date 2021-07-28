@@ -163,6 +163,7 @@ const NFTsList = ({ data, nftNumber }) => {
                           className="slider--box"
                           onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
                           aria-hidden="true"
+                          key={uuid()}
                         >
                           {item.type !== 'audio/mpeg' && item.type !== 'video/mp4' && (
                             <img className="nft--image" src={item.url} alt={nft.name} />

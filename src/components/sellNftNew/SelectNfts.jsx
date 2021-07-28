@@ -44,14 +44,16 @@ const SelectNfts = (props) => {
   const [removeGalleryItemId, setRemoveGalleryItemId] = useState(null);
   const [galleryRowItem, setGalleryRowItem] = useState(4);
   const [stickySearchBlock, setStickySearchBlock] = useState(false);
+  const [browserWidth, setBrowserWidth] = useState(1500);
+  const [stickyParent, setStickyParent] = useState(1110);
   const history = useHistory();
   const location = useLocation();
   useLayoutEffect(() => {
-    const searchBlock = document.querySelector('.search--and--filters--section--sticky');
-    searchBlock.style.position = 'sticky';
-    console.log(searchBlock.style, 'ssssssssssssssss');
     if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
     if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
+    setBrowserWidth(window.innerWidth);
+    const stickyBlock = document.querySelector('.search--and--filters--section--sticky');
+    setStickyParent(stickyBlock.clientWidth);
   });
   useEffect(() => {
     if (clearAll) setClearAll(false);
@@ -146,6 +148,13 @@ const SelectNfts = (props) => {
         </p>
       </div>
       <div className="search--and--filters--section--sticky">
+        <div
+          className="box--shadow--block--effect"
+          style={{
+            width: `${browserWidth}px`,
+            transform: `translatex(-${(browserWidth - stickyParent) / 2}px)`,
+          }}
+        />
         <div className="header--search--block">
           <div className="search--block">
             <SearchField
