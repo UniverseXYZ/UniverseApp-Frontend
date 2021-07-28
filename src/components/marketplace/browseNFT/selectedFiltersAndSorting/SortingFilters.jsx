@@ -226,6 +226,7 @@ const SortingFilters = ({
         className={`sorting--filter ${showSaleDropdown ? 'open' : ''}`}
         aria-hidden="true"
         ref={ref1}
+        onClick={() => setShowSaleDropdown(!showSaleDropdown)}
       >
         <p className="filter--name">
           <img className="filter__icon" src={salesIcon} alt="Sale" />
@@ -233,15 +234,9 @@ const SortingFilters = ({
           {selectedButtons.filter((item) => item.selected === true).length > 0 &&
             `(${selectedButtons.filter((item) => item.selected === true).length})`}
         </p>
-        <img
-          className={`arrow ${showSaleDropdown ? 'rotate' : ''}`}
-          src={arrowDown}
-          alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowSaleDropdown(!showSaleDropdown)}
-        />
+        <img className={`arrow ${showSaleDropdown ? 'rotate' : ''}`} src={arrowDown} alt="Arrow" />
         {showSaleDropdown && (
-          <div className="sale--dropdown">
+          <div className="sale--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="sale--dropdown--body">
               <div className="sale--dropdown--header">
                 <div
@@ -287,20 +282,19 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div className={`sorting--filter ${showPriceDropdown ? 'open' : ''}`} ref={ref2}>
+      <div
+        className={`sorting--filter ${showPriceDropdown ? 'open' : ''}`}
+        ref={ref2}
+        aria-hidden="true"
+        onClick={() => setShowPriceDropdown(!showPriceDropdown)}
+      >
         <p className="filter--name">
           <img className="filter__icon" src={priceIcon} alt="Price" />
           Price range
         </p>
-        <img
-          className={`arrow ${showPriceDropdown ? 'rotate' : ''}`}
-          src={arrowDown}
-          alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-        />
+        <img className={`arrow ${showPriceDropdown ? 'rotate' : ''}`} src={arrowDown} alt="Arrow" />
         {showPriceDropdown && (
-          <div className="price__dropdown">
+          <div className="price__dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="price__dropdown__body">
               <div
                 className={`price--dropdown ${showPriceItems ? 'open' : ''}`}
@@ -402,7 +396,12 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div className={`sorting--filter ${showCollectionsDropdown ? 'open' : ''}`} ref={ref3}>
+      <div
+        className={`sorting--filter ${showCollectionsDropdown ? 'open' : ''}`}
+        ref={ref3}
+        aria-hidden="true"
+        onClick={() => setShowCollectionsDropdown(!showCollectionsDropdown)}
+      >
         <p className="filter--name">
           <img className="filter__icon" src={collectionIcon} alt="Collection" />
           Collections {selectedCollections.length > 0 && `(${selectedCollections.length})`}
@@ -411,11 +410,13 @@ const SortingFilters = ({
           className={`arrow ${showCollectionsDropdown ? 'rotate' : ''}`}
           src={arrowDown}
           alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowCollectionsDropdown(!showCollectionsDropdown)}
         />
         {showCollectionsDropdown && (
-          <div className="collection--dropdown">
+          <div
+            className="collection--dropdown"
+            aria-hidden="true"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="collection--dropdown--body">
               <div className="collection--dropdown--selected">
                 {selectedCollections.map((coll, index) => (
@@ -498,7 +499,12 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div className={`sorting--filter ${showArtistsDropdown ? 'open' : ''}`} ref={ref4}>
+      <div
+        className={`sorting--filter ${showArtistsDropdown ? 'open' : ''}`}
+        ref={ref4}
+        aria-hidden="true"
+        onClick={() => setShowArtistsDropdown(!showArtistsDropdown)}
+      >
         <p className="filter--name">
           <img className="filter__icon" src={artistIcon} alt="Artist" />
           Artists {selectedCreators.length > 0 && `(${selectedCreators.length})`}
@@ -507,11 +513,9 @@ const SortingFilters = ({
           className={`arrow ${showArtistsDropdown ? 'rotate' : ''}`}
           src={arrowDown}
           alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowArtistsDropdown(!showArtistsDropdown)}
         />
         {showArtistsDropdown && (
-          <div className="artist--dropdown">
+          <div className="artist--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="artist--dropdown--body">
               <div className="artist--dropdown--selected">
                 {selectedCreators.map((artist, index) => (

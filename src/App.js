@@ -96,8 +96,9 @@ const App = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (
-      location.pathname === '/nft-marketplace/settings' &&
-      stepsData.selectedMethod === 'bundle'
+      (location.pathname === '/nft-marketplace/settings' &&
+        stepsData.selectedMethod === 'bundle') ||
+      location.pathname === '/marketplace'
     ) {
       document.querySelector('header').style.position = 'absolute';
     } else {

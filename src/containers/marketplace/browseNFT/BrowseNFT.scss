@@ -627,6 +627,15 @@
   // background: linear-gradient(127.59deg, #f2f3fb -1.33%, #fcf9f4 91.03%);
   background: $white;
   padding: 40px 40px 60px;
+  .browse--nft--list {
+    .nft--box {
+      box-shadow: none;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .nft--box:hover {
+      box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2) !important;
+    }
+  }
   .selected--filters--and--sorting {
     .sorting__filters__desktop {
       @include lg {
