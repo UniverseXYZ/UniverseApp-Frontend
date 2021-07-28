@@ -1083,7 +1083,7 @@
                         padding: 34px 20px;
                     }
                     .single-nft-title{
-                      font-family: $sharpGroteskMediumFont;
+                      font-family: $sharpGroteskSemiBoldFont;
                       font-style: normal;
                       font-weight: 600;
                       font-size: 20px;
@@ -1131,7 +1131,6 @@
 
                                 img {
                                     padding-bottom: 16px;
-                                    opacity: 0.5;
 
                                     @include sm {
                                         padding-bottom: 10px;
@@ -1223,28 +1222,20 @@
                                 }
 
                                 .preview-image {
-                                    width: 405px;
-                                    height: 405px;
+                                    width: inherit;
+                                    max-height: 405px;  
                                     border-radius: 12px;
                                     object-fit: fill;
                                     image-rendering: pixelated;
 
-                                    @include md {
-                                      height: 350px;
-                                    }
-                                    @include sm {
-                                      height: 250px;
-                                    }
+                                    // @include md {
+                                    //   max-height: 350px;
+                                    // }
+                                    // @include sm {
+                                    //   max-height: 250px;
+                                    // }
                                 }
 
-                                // @include md {
-                                //   width: 137px;
-                                //   height: 137px;
-                                // }
-                                // @include sm {
-                                //   width: 110px;
-                                //   height: 110px;
-                                // }
                             }
                             @include lg{
                               padding: 30px 50px;
@@ -1349,12 +1340,13 @@
                     .single-nft-choose-collection {
                         margin-top: 40px;
                         h4 {
-                            font-family: $sharpGroteskSemiBoldFont;
-                            font-weight: 600;
-                            font-size: 16px;
-                            line-height: 130%;
+                            font-family: $sharpGroteskMediumFont;
+                            // font-family: $sharpGroteskSemiBoldFont;
+                            font-weight: bold;
+                            font-size: 14px;
+                            line-height: 22px;
                             color: $black;
-                            margin-bottom: 16px;
+                            margin-bottom: 19px;
                         }
 
                         .choose__collection {
@@ -1423,13 +1415,19 @@
                                 // }
                             }
                             .create > img {
-                                background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+                                // background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+                                background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
                                 border-radius: 50%;
                             }
                         }
+                        .create:hover {
+                                background: linear-gradient($white, $white) padding-box,
+                                    linear-gradient(to right, #bceb00, #00eaea) border-box;
+                                border: 1px solid transparent;
+                        }
                     }
                     .hr-div{
-                      border: 1px solid rgba(0, 0, 0, 0.1);
+                      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
                       margin-top: 60px;
                       margin-bottom: 20px;
                     }
@@ -1597,7 +1595,6 @@
                             .property-amount {
                                 width: 20%;
                                 padding-right: 16px;
-
                                 h5 {
                                     @include lg {
                                         width: 120px;
@@ -1647,15 +1644,19 @@
 
                         .property-add {
                             cursor: pointer;
-                            img {
-                                padding-right: 10px;
-                            }
                             h5 {
                                 font-family: $spaceGroteskFont;
                                 font-weight: 600;
                                 font-size: 16px;
                                 line-height: 20px;
                                 color: $black;
+                                img {
+                                    padding-left: 4px;
+                                    padding-right: 10px;
+                                &:hover{
+                                    transform: scale(1.1);
+                                }
+                            } 
                             }
                         }
                         .royalities {

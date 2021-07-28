@@ -15,7 +15,7 @@ import defaultImage from '../../../assets/images/default-img.svg';
 import deleteIcon from '../../../assets/images/delred-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
-import cloudIcon from '../../../assets/images/ion_cloud.svg';
+import cloudIcon from '../../../assets/images/gray_cloud.svg';
 import createIcon from '../../../assets/images/create.svg';
 import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
@@ -99,9 +99,12 @@ const SingleNFTSettings = () => {
   };
 
   const propertyChangesAmount = (index, val) => {
-    const prevProperties = [...royaltyAddress];
-    prevProperties[index].amount = val;
-    setRoyaltyAddress(prevProperties);
+    const value = val.replace(/[^\d]/, '');
+    if ((value >= 0 && value <= 100) || !value) {
+      const prevProperties = [...royaltyAddress];
+      prevProperties[index].amount = val;
+      setRoyaltyAddress(prevProperties);
+    }
   };
 
   const propertyChangesName = (index, val) => {
@@ -579,10 +582,10 @@ const SingleNFTSettings = () => {
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="properties">
                     <div className="property-name">
-                      <h5>Colour</h5>
+                      <h5>Property name</h5>
                       <Input
                         className="inp"
-                        placeholder="Enter NFT property"
+                        placeholder="Colour"
                         value={elm.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
                       />
@@ -665,7 +668,7 @@ const SingleNFTSettings = () => {
                     <div className="property-amount">
                       <h5>Percent amount</h5>
                       <Input
-                        className="inp"
+                        className="percent-inp"
                         type="number"
                         placeholder="5%"
                         value={elm.amount}
