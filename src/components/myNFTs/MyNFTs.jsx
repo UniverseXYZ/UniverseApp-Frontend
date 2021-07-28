@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-await-in-loop */
 import React, { useContext, useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useLocation, useHistory } from 'react-router-dom';
@@ -21,7 +23,9 @@ import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
-import { getMetaForSavedNft } from '../../utils/api/mintNFT';
+import { getMetaForSavedNft, getMyNfts } from '../../utils/api/mintNFT';
+import { chunkifyArray } from '../../utils/helpers/contractInteraction';
+import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {
   const {
@@ -68,7 +72,7 @@ const MyNFTs = () => {
     return !res.length;
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     function handleResize() {
       if (document.querySelector('.tab__right__arrow')) {
         if (window.innerWidth < 530) {
@@ -93,21 +97,36 @@ const MyNFTs = () => {
     const newMyNFTs = [...myNFTs];
     // Get the selected NFTS for mint
     const selectedNFTS = savedNfts.filter((nft) => nft.selected);
-    await Promise.all(
-      selectedNFTS.map(async (nft) => {
-        console.log('nft', nft);
-        const meta = await getMetaForSavedNft(nft.id);
-        console.log('meta', meta, address);
-        // Mint the NFTS trough the smart contract
-        // const mintTransaction = await universeERC721CoreContract.batchMint(
-        //   address,
-        //   meta,
-        //   nft.royalties
-        // );
-        // const mintReceipt = await mintTransaction.wait();
-        // console.log(mintReceipt);
-      })
-    );
+    const batchMintMetaArray = [];
+    const batchMintFeesArray = [];
+
+    console.log('generating meta data');
+
+    for (let i = 0; i < selectedNFTS.length; i += 1) {
+      const meta = await getMetaForSavedNft(selectedNFTS[i].id);
+
+      batchMintMetaArray.push(meta[0]);
+      batchMintFeesArray.push(selectedNFTS[i].royalties || []);
+    }
+
+    // get matrix of nft chunks [ [nft, nft], [nft, nft] ]
+    const chunksOfMetaData = chunkifyArray(batchMintMetaArray, 40);
+    const chunksOfFeeData = chunkifyArray(batchMintFeesArray, 40);
+
+    // iterate chunks and deposit each one
+    for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
+      console.log(`minting chunk ${chunk + 1} / ${chunksOfMetaData.length} to the contract...`);
+
+      const mintTransaction = await universeERC721CoreContract.batchMint(
+        address,
+        chunksOfMetaData[chunk],
+        chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : []
+      );
+
+      const mintReceipt = await mintTransaction.wait();
+
+      console.log('printing receipt...', mintReceipt);
+    }
 
     // Update the ui -> Fetch savedNfts and save them
 

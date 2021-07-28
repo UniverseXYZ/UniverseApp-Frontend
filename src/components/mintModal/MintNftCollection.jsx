@@ -339,18 +339,10 @@ const MintNftCollection = ({ onClick }) => {
   }, [errors]);
 
   useEffect(async () => {
-    // replace with state const
-    let listOfCollections = [];
-    const collectionsReturn = await getMyCollections();
-    const reader = collectionsReturn.body.pipeThrough(new TextDecoderStream()).getReader();
-    const readMyCollectionsStream = async () => {
-      const { done, value } = await reader.read();
-      listOfCollections = [...listOfCollections, ...value.collections];
+    const collectionsStream = await getMyCollections();
+    const mintedCollections = await readCollectionsStream(collectionsStream);
 
-      if (!done) readMyCollectionsStream();
-    };
-
-    console.log('collections:', listOfCollections);
+    setDeployedCollections(mintedCollections);
   }, []);
 
   return !showCollectible ? (
