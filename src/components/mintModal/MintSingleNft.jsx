@@ -226,7 +226,6 @@ const MintSingleNft = ({ onClick }) => {
               description,
               editions,
               properties,
-              percentAmount,
               royaltiesParsed,
               collectionId: selectedCollection.id,
             });
@@ -305,7 +304,7 @@ const MintSingleNft = ({ onClick }) => {
             description,
             editions,
             properties,
-            percentAmount,
+            royalties,
             id: savedNFTsID,
           });
 

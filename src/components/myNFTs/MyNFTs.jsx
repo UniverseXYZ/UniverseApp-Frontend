@@ -20,7 +20,7 @@ import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import Tabs from '../tabs/Tabs';
 import { getMetaForSavedNft, getMyNfts } from '../../utils/api/mintNFT';
-import { chunkifyArray } from '../../utils/helpers/contractInteraction';
+import { chunkifyArray, formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {
@@ -93,14 +93,18 @@ const MyNFTs = () => {
     const batchMintMetaArray = [];
     const batchMintFeesArray = [];
 
-    console.log('generating meta data');
+    console.log('generating meta data', selectedNFTS);
 
     for (let i = 0; i < selectedNFTS.length; i += 1) {
       const meta = await getMetaForSavedNft(selectedNFTS[i].id);
 
       batchMintMetaArray.push(meta[0]);
-      batchMintFeesArray.push(selectedNFTS[i].royalties || []);
+      batchMintFeesArray.push(
+        selectedNFTS[i].royalties.length ? formatRoyaltiesForMinting(selectedNFTS[i].royalties) : []
+      );
     }
+
+    console.log(batchMintFeesArray);
 
     // get matrix of nft chunks [ [nft, nft], [nft, nft] ]
     const chunksOfMetaData = chunkifyArray(batchMintMetaArray, 40);
@@ -109,11 +113,12 @@ const MyNFTs = () => {
     // iterate chunks and deposit each one
     for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
       console.log(`minting chunk ${chunk + 1} / ${chunksOfMetaData.length} to the contract...`);
+      console.log(chunksOfFeeData[chunk]);
 
-      const mintTransaction = await universeERC721CoreContract.batchMint(
+      const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
         address,
         chunksOfMetaData[chunk],
-        chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : []
+        chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : [[]]
       );
 
       const mintReceipt = await mintTransaction.wait();
