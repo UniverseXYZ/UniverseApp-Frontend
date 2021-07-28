@@ -13,8 +13,11 @@ export function chunkifyArray(nftsArr, chunkSize) {
   return chunkifiedArray;
 }
 
-export const parseRoyalties = (royaltyAddress) =>
-  royaltyAddress.map((royalty) => [royalty.address, parseInt(royalty.amount, 10) * 100]);
+export const parseRoyalties = (royaltyAddress, optimizeAmount) =>
+  royaltyAddress.map((royalty) => ({
+    address: royalty.address,
+    amount: parseInt(royalty.amount, 10) * (optimizeAmount ? 100 : 1),
+  }));
 
 export const readCollectionsStream = (mintedCollections) => {
   let listOfCollections = [];
