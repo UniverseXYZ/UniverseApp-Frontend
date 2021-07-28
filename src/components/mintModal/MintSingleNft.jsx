@@ -85,12 +85,6 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(temp);
   };
 
-  const removeRoyaltyAddress = (index) => {
-    const temp = [...properties];
-    temp.splice(index, 1);
-    setRoyaltyAddress(temp);
-  };
-
   const addProperty = () => {
     const newProperties = [...properties];
     const temp = { name: '', value: '' };
@@ -98,8 +92,14 @@ const MintSingleNft = ({ onClick }) => {
     setProperties(newProperties);
   };
 
+  const removeRoyaltyAddress = (index) => {
+    const temp = [...royaltyAddress];
+    temp.splice(index, 1);
+    setRoyaltyAddress(temp);
+  };
+
   const addRoyaltyAddress = () => {
-    const newProperties = [...properties];
+    const newProperties = [...royaltyAddress];
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
@@ -226,7 +226,6 @@ const MintSingleNft = ({ onClick }) => {
               description,
               editions,
               properties,
-              percentAmount,
               royaltiesParsed,
               collectionId: selectedCollection.id,
             });
@@ -307,7 +306,6 @@ const MintSingleNft = ({ onClick }) => {
             description,
             editions,
             properties,
-            percentAmount,
             royaltiesParsed,
             id: savedNFTsID,
           });
@@ -450,8 +448,9 @@ const MintSingleNft = ({ onClick }) => {
   }, [errors, saveForLateClick, savedNfts]);
 
   useEffect(() => {
+    console.log(royaltyAddress);
     const notValidAddress = royaltyAddress.find(
-      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+      (el) => el.address?.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
     );
     if (notValidAddress) {
       setRoyaltyValidAddress(false);
