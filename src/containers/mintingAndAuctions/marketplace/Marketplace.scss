@@ -701,6 +701,9 @@
                   }
                 }
               }
+              &:hover {
+                box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+              }
             }
             @include lg {
               grid-template-columns: 1fr 1fr;
