@@ -20,10 +20,12 @@ export const parseRoyalties = (royaltyAddress) =>
   }));
 
 export const readCollectionsStream = (mintedCollections) => {
+  console.log(mintedCollections);
   let listOfCollections = [];
   const reader = mintedCollections.body.pipeThrough(new TextDecoderStream()).getReader();
   const readMyCollectionsStream = async () => {
     const { done, value } = await reader.read();
+    console.log(value);
     listOfCollections = [...listOfCollections, ...value.collections];
 
     if (!done) readMyCollectionsStream();
