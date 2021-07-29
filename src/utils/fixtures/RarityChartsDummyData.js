@@ -3,7 +3,7 @@ import rarityChartImage2 from '../../assets/images/rarity-chart2.png';
 import rarityChartImage3 from '../../assets/images/rarity-chart3.png';
 import rarityChartImage4 from '../../assets/images/rarity-chart4.png';
 
-export const RarityCharts = [
+export const PolymorphRarityCharts = [
   {
     id: 1,
     price: 0.5,
@@ -133,6 +133,50 @@ export const RarityCharts = [
       url: rarityChartImage4,
     },
     scrambled: 'single',
+    name: 'Long Username',
+    serialNumber: 4352,
+  },
+  {
+    id: 13,
+    price: 0.5,
+    previewImage: {
+      type: 'image/png',
+      url: rarityChartImage2,
+    },
+    scrambled: 'single',
+    name: 'Long Username',
+    serialNumber: 4352,
+  },
+  {
+    id: 14,
+    price: 0.5,
+    previewImage: {
+      type: 'image/png',
+      url: rarityChartImage3,
+    },
+    scrambled: 'never',
+    name: 'Long Username',
+    serialNumber: 4352,
+  },
+  {
+    id: 15,
+    price: 0.5,
+    previewImage: {
+      type: 'image/png',
+      url: rarityChartImage2,
+    },
+    scrambled: 'single',
+    name: 'Long Username',
+    serialNumber: 4352,
+  },
+  {
+    id: 16,
+    price: 0.5,
+    previewImage: {
+      type: 'image/png',
+      url: rarityChartImage3,
+    },
+    scrambled: 'never',
     name: 'Long Username',
     serialNumber: 4352,
   },
