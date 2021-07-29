@@ -43,7 +43,7 @@ const Wallet = ({
   // let myNFTs = [];
   // (async () => {
 
-  //   const nfts = await getMyNFTs();
+  //   const nfts = await getMyNfts();
   //   const reader = nfts.body.pipeThrough(new TextDecoderStream()).getReader();
   //   const readMyCollectionsStream = async () => {
   //     const { done, value } = await reader.read();

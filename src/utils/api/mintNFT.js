@@ -2,9 +2,8 @@ const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_MY_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
-const GENERATE_COLLECTION_NFT_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
+const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
-const GET_MY_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
 
 /**
  * @param {Object} data
@@ -93,6 +92,7 @@ export const getSavedNfts = async () => {
  * @returns {array} with my NFTs
  */
 export const getMyNfts = async () => {
+  console.log('get nfts req');
   const request = await fetch(GET_MY_NFTS_URL, {
     method: 'GET',
     headers: {
@@ -105,6 +105,7 @@ export const getMyNfts = async () => {
     console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
   }
   const result = await request.text().then((data) => JSON.parse(data));
+  console.log(result.nfts);
   return result.nfts;
 };
 
@@ -196,27 +197,6 @@ export const getTokenURI = async (data) => {
   return result;
 };
 
-export const generateTokenURIForCollection = async (data) => {
-  // UniverseERC721Factory
-  const formData = new FormData();
-
-  formData.append('file', data.file, data.file.name);
-  formData.append('name', data.name);
-  formData.append('symbol', data.symbol);
-  formData.append('description', data.description);
-  formData.append('shortUrl', data.shortUrl);
-
-  const request = await fetch(GENERATE_COLLECTION_NFT_URI_URL, {
-    method: 'post',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-    },
-    body: formData,
-  });
-  const result = await request.text().then((res) => JSON.parse(res));
-  return result;
-};
-
 export const saveCollection = async (data) => {
   const { file, name, symbol, description, shortUrl } = data;
 
@@ -227,7 +207,7 @@ export const saveCollection = async (data) => {
   formData.append('description', description);
   formData.append('shortUrl', shortUrl);
 
-  const requestUrl = GENERATE_COLLECTION_NFT_URI_URL;
+  const requestUrl = CREATE_COLLECTION_URL;
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -256,7 +236,7 @@ export const attachTxHashToCollection = (txHash, collectionId) => {
     }),
   };
 
-  return fetch(`${GENERATE_COLLECTION_NFT_URI_URL}/${collectionId}`, requestOptions);
+  return fetch(`${CREATE_COLLECTION_URL}/${collectionId}`, requestOptions);
 };
 
 export const removeSavedNft = (id) =>
@@ -274,15 +254,6 @@ export const getMyCollections = () => {
   };
 
   return fetch(GET_MY_COLLECTIONS, requestOptions);
-};
-
-export const getMyNFTs = () => {
-  const requestOptions = {
-    method: 'GET',
-    headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-  };
-
-  return fetch(GET_MY_NFTS, requestOptions);
 };
 
 // Mock GET requests

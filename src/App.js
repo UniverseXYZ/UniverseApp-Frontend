@@ -221,6 +221,8 @@ const App = () => {
       const mintedCollectionsStream = await getMyCollections();
       const mintedCollections = await readCollectionsStream(mintedCollectionsStream);
 
+      console.log('show collections', mintedCollections);
+
       setDeployedCollections([...mockedCollections, ...mintedCollections]);
     }
   };
