@@ -1,4 +1,6 @@
 import React, { useEffect, useContext } from 'react';
+import Popup from 'reactjs-popup';
+import RarityRankPopup from '../../components/popups/RarityRankPopup';
 import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
@@ -17,6 +19,15 @@ const RarityCharts = () => {
         <Filters />
         <List />
       </div>
+      <Popup
+        trigger={
+          <button type="button" className="light-button">
+            Rarity rank
+          </button>
+        }
+      >
+        {(close) => <RarityRankPopup onClose={close} />}
+      </Popup>
     </div>
   );
 };
