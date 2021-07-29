@@ -590,7 +590,7 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      // onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                      onClick={() => window.open('https://forum.universe.xyz/')}
                     >
                       <img src={forumIcon} alt="Forum" />
                       <span>Forum</span>
@@ -599,7 +599,7 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      // onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                      onClick={() => window.open('https://signal.universe.xyz/#/')}
                     >
                       <img src={signalIcon} alt="Signal" />
                       <span>Signal</span>
