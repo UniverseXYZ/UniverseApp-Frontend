@@ -37,6 +37,7 @@ import Search from './containers/search/Search.jsx';
 import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
+import RarityCharts from './containers/rarityCharts/RarityCharts';
 
 const App = () => {
   const location = useLocation();
@@ -179,6 +180,7 @@ const App = () => {
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
+        <Route exact path="/rarity-charts" component={() => <RarityCharts />} />
         <Route exact path="/my-profile" component={() => <MyProfile />} />
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
