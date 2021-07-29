@@ -49,16 +49,17 @@ const CreateNFT = () => {
           <div id="tabs--wrapper">
             <ul className="tabs">
               <li
-                className={selectedTabIndex === 0 ? 'active' : ''}
+                className={selectedTabIndex === 0 ? 'active' : 'box--shadow--effect'}
                 onClick={handleSelectTypeClick}
                 aria-hidden="true"
               >
-                {selectedTabIndex === 1 && <div className="box--shadow--effect--block" />}
-                <img
-                  src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
-                  alt="Select type"
-                />
-                Select type
+                <div>
+                  <img
+                    src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
+                    alt="Select type"
+                  />
+                  Select type
+                </div>
               </li>
               <li
                 className={`
