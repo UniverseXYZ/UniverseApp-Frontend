@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Popup from 'reactjs-popup';
+import RarityRankPopup from '../../popups/RarityRankPopup.jsx';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
@@ -14,7 +16,11 @@ const PolymorphCard = ({ item }) => (
       </div>
     </div>
     <div className="card--body">
-      <img className="rarity--chart" src={item.previewImage.url} alt={item.name} />
+      <Popup
+        trigger={<img className="rarity--chart" src={item.previewImage.url} alt={item.name} />}
+      >
+        {(close) => <RarityRankPopup onClose={close} />}
+      </Popup>
       {item.scrambled === 'single' ? (
         <div className="card--scrambled">
           <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
