@@ -4,17 +4,9 @@
 .rarity--charts--search--and--filters--row {
     width: 100%;
     max-width: 1110px;
-    padding: 50px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 152px;
-    @include xl {
-        padding: 50px 60px;
-    }
-    @include md {
-        padding: 50px 20px;
-    }
     @include sm {
         flex-direction: column;
     }
