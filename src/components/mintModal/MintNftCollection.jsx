@@ -388,24 +388,20 @@ const MintNftCollection = ({ onClick }) => {
             setMyNFTs(newMyNFTs);
           }
 
-          const mintedCollectionsStream = await getMyCollections();
-          const mintedCollections = await readCollectionsStream(mintedCollectionsStream);
+          getMyCollections(deployedCollections, setDeployedCollections);
 
-          console.log('show collections', mintedCollections);
-          console.log(mintedCollections);
-
-          setDeployedCollections([
-            ...deployedCollections,
-            {
-              id: collectionCreationResult.id,
-              previewImage:
-                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-              name: collectionName,
-              tokenName,
-              description,
-              shortURL,
-            },
-          ]);
+          // setDeployedCollections([
+          //   ...deployedCollections,
+          //   {
+          //     id: collectionCreationResult.id,
+          //     previewImage:
+          //       coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+          //     name: collectionName,
+          //     tokenName,
+          //     description,
+          //     shortURL,
+          //   },
+          // ]);
 
           document.getElementById('popup-root').remove();
           document.getElementById('congrats-hidden-btn').click();

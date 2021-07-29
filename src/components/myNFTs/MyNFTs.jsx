@@ -118,7 +118,7 @@ const MyNFTs = () => {
       const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
         address,
         chunksOfMetaData[chunk],
-        chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : [[]]
+        chunksOfFeeData[chunk][0][0].length ? chunksOfFeeData[chunk] : [[]]
       );
 
       const mintReceipt = await mintTransaction.wait();
