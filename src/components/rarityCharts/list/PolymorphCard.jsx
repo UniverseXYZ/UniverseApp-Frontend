@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import priceIcon from '../../../assets/images/eth-icon-new.svg';
+import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
+import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 
 const PolymorphCard = ({ item }) => (
   <div className="card">
