@@ -3,9 +3,9 @@ import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
 import AppContext from '../../ContextAPI';
+import './RarityCharts.scss';
 
 const RarityCharts = () => {
-  console.log('Rarity Charts page');
   const { setDarkMode } = useContext(AppContext);
   useEffect(() => {
     setDarkMode(true);
@@ -13,8 +13,10 @@ const RarityCharts = () => {
   return (
     <div className="rarity--charts--page">
       <Welcome />
-      <Filters />
-      <List />
+      <div className="rarity--charts--page--container">
+        <Filters />
+        <List />
+      </div>
     </div>
   );
 };

@@ -1,0 +1,9 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
+
+.rarity--charts--page {
+    &--container {
+        max-width: 1110px;
+        margin: 0 auto;
+    }
+}
