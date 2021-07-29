@@ -210,9 +210,13 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val) => {
-    const prevProperties = [...properties];
-    prevProperties[index].amount = val;
-    setProperties(prevProperties);
+    const value = val.replace(/[^\d]/, '');
+
+    if ((value >= 0 && value <= 100) || !value) {
+      const prevProperties = [...properties];
+      prevProperties[index].amount = val;
+      setProperties(prevProperties);
+    }
   };
 
   const removeProperty = (index) => {
