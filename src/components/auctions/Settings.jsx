@@ -210,11 +210,15 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val) => {
-    const value = val.replace(/[^\d]/, '');
-
-    if ((value >= 0 && value <= 100) || !value) {
+    if (
+      (val.toString().match(/^\d+\.?\d?\d?\d?\d?%?$/) &&
+        parseFloat(val) <= 100 &&
+        parseFloat(val) >= 0) ||
+      val === '0' ||
+      val === '%'
+    ) {
       const prevProperties = [...properties];
-      prevProperties[index].amount = val;
+      prevProperties[index].amount = `${val.replace('%', '')}%`;
       setProperties(prevProperties);
     }
   };
@@ -473,7 +477,7 @@ const AuctionSettings = () => {
                 <div className="property-value">
                   <Input
                     id="amount"
-                    type="number"
+                    type="text"
                     label="Percent amount"
                     placeholder="5%"
                     pattern="[0-9]"

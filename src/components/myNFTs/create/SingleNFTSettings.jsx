@@ -100,10 +100,15 @@ const SingleNFTSettings = () => {
   };
 
   const propertyChangesAmount = (index, val) => {
-    const value = val.replace(/[^\d]/, '');
-    if ((value >= 0 && value <= 100) || !value) {
+    if (
+      (val.toString().match(/^\d+\.?\d?\d?\d?\d?%?$/) &&
+        parseFloat(val) <= 100 &&
+        parseFloat(val) >= 0) ||
+      val === '0' ||
+      val === '%'
+    ) {
       const prevProperties = [...royaltyAddress];
-      prevProperties[index].amount = val;
+      prevProperties[index].amount = `${val.replace('%', '')}%`;
       setRoyaltyAddress(prevProperties);
     }
   };
@@ -670,7 +675,7 @@ const SingleNFTSettings = () => {
                       <h5>Percent amount</h5>
                       <Input
                         className="percent-inp"
-                        type="number"
+                        type="text"
                         placeholder="5%"
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value)}
