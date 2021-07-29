@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
+import './CreateSingleNft.scss';
 import EthereumAddress from 'ethereum-address';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
