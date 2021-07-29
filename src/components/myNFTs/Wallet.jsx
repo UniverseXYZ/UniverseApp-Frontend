@@ -66,7 +66,6 @@ const Wallet = ({
   const isCreatingAction = location.pathname === '/create-tiers';
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction.tiers.find((element) => element.id === location.state);
-
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);

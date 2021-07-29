@@ -20,10 +20,11 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import {
   generateTokenURIForCollection,
+  getTokenURI,
   saveCollection,
   attachTxHashToCollection,
-  getMyCollections,
 } from '../../utils/api/mintNFT';
+import { chunkifyArray } from '../../utils/helpers/contractInteraction';
 
 const MintNftCollection = ({ onClick }) => {
   const {
@@ -273,9 +274,10 @@ const MintNftCollection = ({ onClick }) => {
                 previewImage: nft.previewImage,
                 name: nft.name,
                 description: nft.description,
-                numberOfEditions: Number(nft.editions),
+                numberOfEditions: Number(nft.numberOfEditions),
                 generatedEditions: nft.generatedEditions,
                 releasedDate: new Date(),
+                royalities: nft.royalities,
                 properties: nft.properties,
               });
             });
@@ -287,14 +289,11 @@ const MintNftCollection = ({ onClick }) => {
               description,
               shortUrl: shortURL,
             };
+
             const { id } = await saveCollection(requestData);
-
-            const unsignedMintTx = await universeERC721FactoryContract.deployUniverseERC721(
-              collectionName,
-              tokenName
-            );
-
-            const { transactionHash } = await unsignedMintTx.wait();
+            const unsignedMintCollectionTx =
+              await universeERC721FactoryContract.deployUniverseERC721(collectionName, tokenName);
+            const { transactionHash, from } = await unsignedMintCollectionTx.wait();
 
             const response = await attachTxHashToCollection(transactionHash, id);
             console.log('res', transactionHash, response);
@@ -303,9 +302,81 @@ const MintNftCollection = ({ onClick }) => {
               return;
             }
 
-            // const nftUrls = newMyNFTs.map((nft) => nft.shortURL);
-            // const fee = [{ recipient: tx.from, value: 1 }];
-            // const unsignedMintTx = await universeERC721CoreContract.batchMint(tx.to, nftUrls, fee);
+            console.log(collectionNFTs);
+            const mintFees = [];
+            const nftUrls = [shortURL];
+
+            /* eslint-disable no-await-in-loop */
+            for (let i = 0; i < collectionNFTs.length; i += 1) {
+              mintFees.push(
+                collectionNFTs[i].royalities.length ? collectionNFTs[i].royalities : []
+              );
+            }
+            console.log(mintFees);
+
+            const chunksOfMetaData = chunkifyArray(nftUrls, 2);
+            const chunksOfFeeData = chunkifyArray(mintFees, 2);
+
+            for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
+              const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
+                from,
+                chunksOfMetaData[chunk],
+                chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : [[]]
+              );
+
+              const mintReceipt = await mintTransaction.wait();
+
+              console.log('printing receipt...', mintReceipt);
+            }
+            /* eslint-enable no-await-in-loop */
+
+            // const mintFees = [];
+            // let currentFee;
+
+            // for (let i = 0; i < newMyNFTs.length; i += 1) {
+            //   currentFee = newMyNFTs[i].royalties.length ? formatRoyaltiesForMinting(newMyNFTs[i].royalties) : [];
+            //   mintFees.push(currentFee);
+            // }
+
+            // console.log(mintFees);
+            // // ........................
+            // // [ [nft, nft], [nft, nft] ]
+            // const chunksOfFeeData = chunkifyArray(batchMintFeesArray, 40);
+
+            // // iterate chunks and deposit each one
+            // for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
+            //   console.log(`minting chunk ${chunk + 1} / ${chunksOfMetaData.length} to the contract...`);
+            //   console.log(chunksOfFeeData[chunk]);
+
+            //   const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
+            //     address,
+            //     chunksOfMetaData[chunk],
+            //     chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : [[]]
+            //   );
+
+            //   const mintReceipt = await mintTransaction.wait();
+
+            //   console.log('printing receipt...', mintReceipt);
+            // }
+
+            // const fees = [[from, 1]];
+            // const nftUrls = newMyNFTs.map((n) => n.shortURL);
+
+            // if (nftUrls.length >= 40) {
+            //   return;
+            // }
+
+            // const unsignedMintTx = await universeERC721CoreContract.batchMintWithDifferentFees(
+            //   from,
+            //   nftUrls,
+            //   fees
+            // );
+
+            // const mintTx = await unsignedMintTx.wait();
+            // console.log(mintTx);
+
+            // const unsignedMintTx = await universeERC721CoreContract.batchMintWithDifferentFees(tx.to, nftUrls, fee);
+            // const fees = [ recipient: tx.from, value: 1 }];
             // const mintTx = await unsignedMintTx.wait();
             // console.log(mintTx);
 
