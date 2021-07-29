@@ -24,7 +24,11 @@ const Filters = (props) => {
       </div>
       <div className="sort--by--label--and--select--block">
         <label htmlFor="sort--select">Sort By:</label>
-        <SortBySelect id="sort--select" defaultValue="Rarity" />
+        <SortBySelect
+          id="sort--select"
+          defaultValue="Rarity Scope"
+          sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
+        />
       </div>
     </div>
   );
