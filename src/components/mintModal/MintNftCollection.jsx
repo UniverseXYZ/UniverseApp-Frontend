@@ -18,8 +18,17 @@ import removeIcon from '../../assets/images/remove.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import { getTokenURI, saveCollection, attachTxHashToCollection } from '../../utils/api/mintNFT';
-import { chunkifyArray, readCollectionsStream } from '../../utils/helpers/contractInteraction';
+import {
+  getTokenURI,
+  saveCollection,
+  attachTxHashToCollection,
+  getMyCollections,
+} from '../../utils/api/mintNFT';
+import {
+  chunkifyArray,
+  readCollectionsStream,
+  formatRoyaltiesForMinting,
+} from '../../utils/helpers/contractInteraction';
 
 const MintNftCollection = ({ onClick }) => {
   const {
@@ -297,26 +306,27 @@ const MintNftCollection = ({ onClick }) => {
               return;
             }
 
-            console.log(collectionNFTs);
             const mintFees = [];
             const nftUrls = [shortURL];
 
             /* eslint-disable no-await-in-loop */
             for (let i = 0; i < collectionNFTs.length; i += 1) {
               mintFees.push(
-                collectionNFTs[i].royalities.length ? collectionNFTs[i].royalities : []
+                collectionNFTs[i].royalities.length
+                  ? formatRoyaltiesForMinting(collectionNFTs[i].royalities)
+                  : []
               );
             }
-            console.log(mintFees);
 
             const chunksOfMetaData = chunkifyArray(nftUrls, 2);
             const chunksOfFeeData = chunkifyArray(mintFees, 2);
 
             for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
+              console.log(chunksOfFeeData[chunk]);
               const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
                 from,
                 chunksOfMetaData[chunk],
-                chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : [[]]
+                chunksOfFeeData[chunk][0][0].length ? chunksOfFeeData[chunk] : [[]]
               );
 
               const mintReceipt = await mintTransaction.wait();
