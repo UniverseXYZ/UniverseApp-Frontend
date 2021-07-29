@@ -218,6 +218,7 @@ const CreateNftCol = (props) => {
               numberOfEditions: Number(editions),
               generatedEditions,
               properties,
+              royalities: royaltyAddress,
               selected: false,
             },
           ]);
@@ -234,6 +235,7 @@ const CreateNftCol = (props) => {
                       description,
                       numberOfEditions: Number(editions),
                       generatedEditions,
+                      royalities: royaltyAddress,
                       properties,
                     }
                   : item
@@ -255,6 +257,7 @@ const CreateNftCol = (props) => {
                   numberOfEditions: Number(editions),
                   generatedEditions,
                   properties,
+                  royalities: royaltyAddress,
                   selected: false,
                 });
               } else {
@@ -270,6 +273,7 @@ const CreateNftCol = (props) => {
                   numberOfEditions: Number(nft.editions),
                   generatedEditions: nft.generatedEditions,
                   properties,
+                  royalities: royaltyAddress,
                   selected: false,
                 });
               }

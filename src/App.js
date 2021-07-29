@@ -215,12 +215,12 @@ const App = () => {
       const savedNFTS = await getSavedNfts();
       setSavedNfts(savedNFTS);
 
-      // Fetch the minted NFTS for that addres
+      // Fetch the minted NFTS for that address
       const mintedNfts = await getMyNfts();
       const mockedNfts = await getMockNfts();
       setMyNFTs([...mockedNfts, ...mintedNfts]);
 
-      // Fetch the minted NFTS for that addres
+      // Fetch the minted NFTS for that address
       const mockedCollections = await getMockCollections();
       const mintedCollectionsStream = await getMyCollections();
       const mintedCollections = await readCollectionsStream(mintedCollectionsStream);
