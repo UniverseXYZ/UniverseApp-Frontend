@@ -23,20 +23,17 @@ const marquee = () => (
   </p>
 );
 
-const Welcome = () => {
-  console.log('Welcome');
-  return (
-    <div className="welcome--section--rarity--charts">
-      <WelcomeWrapper
-        title="Polymorph Rarity Chart"
-        hintText="10,000 Total Polymorphs"
-        ellipsesLeft={false}
-        ellipsesRight={false}
-        marquee={marquee()}
-        bgTextRight
-      />
-    </div>
-  );
-};
+const Welcome = () => (
+  <div className="welcome--section--rarity--charts">
+    <WelcomeWrapper
+      title="Polymorph Rarity Chart"
+      hintText="10,000 Total Polymorphs"
+      ellipsesLeft={false}
+      ellipsesRight={false}
+      marquee={marquee()}
+      bgTextRight
+    />
+  </div>
+);
 
 export default Welcome;
