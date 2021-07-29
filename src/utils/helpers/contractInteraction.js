@@ -19,21 +19,6 @@ export const parseRoyalties = (royaltyAddress) =>
     amount: parseInt(royalty.amount, 10),
   }));
 
-export const readCollectionsStream = (mintedCollections) => {
-  console.log(mintedCollections);
-  let listOfCollections = [];
-  const reader = mintedCollections.body.pipeThrough(new TextDecoderStream()).getReader();
-  const readMyCollectionsStream = async () => {
-    const { done, value } = await reader.read();
-    console.log(value);
-    listOfCollections = [...listOfCollections, ...value.collections];
-
-    if (!done) readMyCollectionsStream();
-  };
-
-  return listOfCollections;
-};
-
 export const formatRoyaltiesForMinting = (royalties) =>
   royalties.map((royalty) =>
     royalty.address && royalty.amount ? [royalty.address, royalty.amount * 100] : []
