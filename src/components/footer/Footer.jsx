@@ -211,6 +211,15 @@ const Footer = () => {
                   >
                     Yield farming
                   </li>
+                  <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
+                    Forum
+                  </li>
+                  <li
+                    aria-hidden="true"
+                    onClick={() => window.open('https://signal.universe.xyz/#/')}
+                  >
+                    Signal
+                  </li>
                 </ul>
               </div>
             </div>

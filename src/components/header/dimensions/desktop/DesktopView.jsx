@@ -224,6 +224,26 @@ const DesktopView = ({
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://forum.universe.xyz/');
+                }}
+              >
+                <img src={forumIcon} alt="Forum" />
+                <span>Forum</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://signal.universe.xyz/#/');
+                }}
+              >
+                <img src={signalIcon} alt="Signal" />
+                <span>Signal</span>
+              </button>
             </div>
           </div>
         </li>
