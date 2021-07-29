@@ -180,7 +180,8 @@ export const getTokenURI = async (data) => {
   formData.append('description', data.description);
   formData.append('numberOfEditions', parseInt(data.editions, 10));
   if (noProperties) formData.append('properties', JSON.stringify(data.properties));
-  if (data.royaltiesParsed) formData.append('royalties', JSON.stringify(data.royaltiesParsed));
+  if (data.royaltiesParsed.length)
+    formData.append('royalties', JSON.stringify(data.royaltiesParsed));
 
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',

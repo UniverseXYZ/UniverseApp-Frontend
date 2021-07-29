@@ -28,7 +28,7 @@ import {
   getTokenURI,
   getSavedNfts,
 } from '../../utils/api/mintNFT';
-import { parseRoyalties } from '../../utils/helpers/contractInteraction';
+import { parseRoyalties, formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const MintSingleNft = ({ onClick }) => {
@@ -369,10 +369,12 @@ const MintSingleNft = ({ onClick }) => {
 
         if (selectedCollection) {
           const userAddress = localStorage.getItem('user_address');
-          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-
           // universeERC721CoreContract should be used for minting single NFT
           // auctionFactoryContract should be usef for minting Collectibles NFTS
+
+          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+          const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
+
           const tokenURIResult = await getTokenURI({
             file: previewImage,
             name,
@@ -388,7 +390,7 @@ const MintSingleNft = ({ onClick }) => {
           const mintTx = await universeERC721CoreContract.mint(
             userAddress,
             tokenURIResult[0],
-            royaltiesParsed
+            royaltiesFormated
           );
 
           const receipt = await mintTx.wait();
@@ -448,7 +450,6 @@ const MintSingleNft = ({ onClick }) => {
   }, [errors, saveForLateClick, savedNfts]);
 
   useEffect(() => {
-    console.log(royaltyAddress);
     const notValidAddress = royaltyAddress.find(
       (el) => el.address?.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
     );

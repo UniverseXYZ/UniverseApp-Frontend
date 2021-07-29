@@ -297,7 +297,7 @@ const MintNftCollection = ({ onClick }) => {
             const { transactionHash } = await unsignedMintTx.wait();
 
             const response = await attachTxHashToCollection(transactionHash, id);
-            console.log('res', response);
+            console.log('res', transactionHash, response);
             if (!response.ok && response.status !== 201) {
               console.error(`Error while trying to save a new collection: ${response.statusText}`);
               return;
@@ -338,13 +338,6 @@ const MintNftCollection = ({ onClick }) => {
       }
     }
   }, [errors]);
-
-  useEffect(async () => {
-    const collectionsStream = await getMyCollections();
-    const mintedCollections = await readCollectionsStream(collectionsStream);
-
-    setDeployedCollections(mintedCollections);
-  }, []);
 
   return !showCollectible ? (
     <div className="mintNftCollection-div">
