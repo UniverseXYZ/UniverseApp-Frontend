@@ -72,6 +72,7 @@ const SortingDropdowns = () => {
       >
         <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span>
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
+        <div className="box--shadow--effect--block" />
         {showSecondDropdown ? (
           <div className="dropdown--items">
             {secondDropdownItems.map((item, index) => (
