@@ -60,6 +60,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy-web-app": "bash deploy-firebase.sh",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "precommit": "lint-staged",

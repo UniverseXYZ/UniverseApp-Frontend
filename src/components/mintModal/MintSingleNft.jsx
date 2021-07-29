@@ -27,6 +27,7 @@ import {
   saveNftForLater,
   getTokenURI,
   getSavedNfts,
+  getMyNfts,
 } from '../../utils/api/mintNFT';
 import { parseRoyalties, formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
@@ -382,7 +383,7 @@ const MintSingleNft = ({ onClick }) => {
             royaltiesParsed,
           });
 
-          console.log('sending request to contract...');
+          console.log('sending request to contract...', tokenURIResult);
 
           // call contract
           const mintTx = await universeERC721CoreContract.mint(

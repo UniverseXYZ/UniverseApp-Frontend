@@ -6,7 +6,7 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
 import { defaultColors } from '../../utils/helpers';
-import { generateTokenURIForCollection } from '../../utils/api/mintNFT';
+import { saveCollection } from '../../utils/api/mintNFT';
 
 const CreateCollectionPopup = ({ onClose }) => {
   const inputFile = useRef(null);
@@ -118,7 +118,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       if (!errors.collectionName && !errors.tokenName && !errors.shorturl) {
         document.getElementById('loading-hidden-btn').click();
 
-        const collectionURIResult = await generateTokenURIForCollection({
+        const collectionURIResult = await saveCollection({
           file: coverImage,
           name: collectionName,
           symbol: tokenName,

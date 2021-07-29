@@ -18,13 +18,8 @@ import removeIcon from '../../assets/images/remove.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import {
-  generateTokenURIForCollection,
-  getTokenURI,
-  saveCollection,
-  attachTxHashToCollection,
-} from '../../utils/api/mintNFT';
-import { chunkifyArray } from '../../utils/helpers/contractInteraction';
+import { getTokenURI, saveCollection, attachTxHashToCollection } from '../../utils/api/mintNFT';
+import { chunkifyArray, readCollectionsStream } from '../../utils/helpers/contractInteraction';
 
 const MintNftCollection = ({ onClick }) => {
   const {
@@ -248,7 +243,7 @@ const MintNftCollection = ({ onClick }) => {
       if (!errors.collectionName && !errors.tokenName && !errors.shorturl && !errors.collectible) {
         document.getElementById('loading-hidden-btn').click();
 
-        const collectionURIResult = await generateTokenURIForCollection({
+        const collectionCreationResult = await saveCollection({
           file: coverImage,
           name: collectionName,
           symbol: tokenName,
@@ -256,7 +251,7 @@ const MintNftCollection = ({ onClick }) => {
           shortUrl: shortURL,
         });
 
-        if (collectionURIResult?.id) {
+        if (collectionCreationResult?.id) {
           if (collectionNFTs.length) {
             const newMyNFTs = [...myNFTs];
 
@@ -382,10 +377,17 @@ const MintNftCollection = ({ onClick }) => {
 
             setMyNFTs(newMyNFTs);
           }
+
+          const mintedCollectionsStream = await getMyCollections();
+          const mintedCollections = await readCollectionsStream(mintedCollectionsStream);
+
+          console.log('show collections', mintedCollections);
+          console.log(mintedCollections);
+
           setDeployedCollections([
             ...deployedCollections,
             {
-              id: collectionURIResult.id,
+              id: collectionCreationResult.id,
               previewImage:
                 coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
               name: collectionName,
