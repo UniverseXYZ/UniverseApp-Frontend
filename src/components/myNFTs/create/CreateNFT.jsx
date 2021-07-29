@@ -53,6 +53,7 @@ const CreateNFT = () => {
                 onClick={handleSelectTypeClick}
                 aria-hidden="true"
               >
+                {selectedTabIndex === 1 && <div className="box--shadow--effect--block" />}
                 <img
                   src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
                   alt="Select type"

@@ -12,7 +12,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage1,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Long Username1',
     serialNumber: 4352,
   },
   {
@@ -23,7 +23,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage2,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long Username2',
     serialNumber: 4352,
   },
   {
@@ -34,7 +34,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage3,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Long Username23',
     serialNumber: 4352,
   },
   {
@@ -45,7 +45,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage4,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long Username111',
     serialNumber: 4352,
   },
   {
@@ -56,7 +56,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage1,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Long Username555',
     serialNumber: 4352,
   },
   {
@@ -67,7 +67,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage2,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long Username45',
     serialNumber: 4352,
   },
   {
@@ -78,7 +78,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage3,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Long Username89',
     serialNumber: 4352,
   },
   {
@@ -89,7 +89,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage4,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long Username7',
     serialNumber: 4352,
   },
   {
@@ -100,7 +100,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage1,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Long Username3',
     serialNumber: 4352,
   },
   {
@@ -111,7 +111,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage2,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long Username9',
     serialNumber: 4352,
   },
   {
@@ -122,7 +122,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage3,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Long Username6',
     serialNumber: 4352,
   },
   {
@@ -133,7 +133,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage4,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long',
     serialNumber: 4352,
   },
   {
@@ -144,7 +144,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage2,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Username',
     serialNumber: 4352,
   },
   {
@@ -155,7 +155,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage3,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'User',
     serialNumber: 4352,
   },
   {
@@ -166,7 +166,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage2,
     },
     scrambled: 'single',
-    name: 'Long Username',
+    name: 'Long 25',
     serialNumber: 4352,
   },
   {
@@ -177,7 +177,7 @@ export const PolymorphRarityCharts = [
       url: rarityChartImage3,
     },
     scrambled: 'never',
-    name: 'Long Username',
+    name: 'Username6',
     serialNumber: 4352,
   },
 ];
