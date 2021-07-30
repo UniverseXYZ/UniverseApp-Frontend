@@ -290,12 +290,14 @@ const MintNftCollection = ({ onClick }) => {
               shortUrl: shortURL,
             };
 
-            const { id } = await saveCollection(requestData);
             const unsignedMintCollectionTx =
               await universeERC721FactoryContract.deployUniverseERC721(collectionName, tokenName);
             const { transactionHash, from } = await unsignedMintCollectionTx.wait();
 
-            const response = await attachTxHashToCollection(transactionHash, id);
+            const response = await attachTxHashToCollection(
+              transactionHash,
+              collectionCreationResult.id
+            );
             console.log('res', transactionHash, response);
             if (!response.ok && response.status !== 201) {
               console.error(`Error while trying to save a new collection: ${response.statusText}`);

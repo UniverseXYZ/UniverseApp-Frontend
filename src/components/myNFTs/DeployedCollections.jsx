@@ -37,11 +37,7 @@ const DeployedCollections = () => {
                 ) : (
                   <img
                     className="blur"
-                    src={
-                      collection.previewImage
-                        ? URL.createObjectURL(collection.previewImage)
-                        : collection.previewImageMock
-                    }
+                    src={URL.createObjectURL(collection.previewImage)}
                     alt={collection.name}
                   />
                 )}
@@ -58,11 +54,7 @@ const DeployedCollections = () => {
                 ) : (
                   <img
                     className="collection__avatar"
-                    src={
-                      collection.previewImage
-                        ? URL.createObjectURL(collection.previewImage)
-                        : collection.previewImageMock
-                    }
+                    src={URL.createObjectURL(collection.previewImage)}
                     alt={collection.name}
                   />
                 )}
