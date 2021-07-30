@@ -252,6 +252,7 @@ const MintSingleNft = ({ onClick }) => {
           } else {
             document.getElementById('loading-hidden-btn').click();
 
+            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
             const result = await saveNftForLater({
               name,
               description,
@@ -259,7 +260,7 @@ const MintSingleNft = ({ onClick }) => {
               properties,
               percentAmount,
               royaltiesParsed,
-              collectionId: selectedCollection.id,
+              collectionId: selectedCollection?.id || 10,
             });
 
             let saveImageResult = null;
