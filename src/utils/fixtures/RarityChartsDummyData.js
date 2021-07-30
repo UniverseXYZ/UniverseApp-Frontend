@@ -6,7 +6,8 @@ import rarityChartImage4 from '../../assets/images/rarity-chart4.png';
 export const PolymorphRarityCharts = [
   {
     id: 1,
-    price: 0.5,
+    price: null,
+    rarityScore: 28.4,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage1,
