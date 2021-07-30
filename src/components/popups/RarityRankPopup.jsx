@@ -1,32 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/close-menu.svg';
-import rarityImage from '../../assets/images/rarity-rank-image.png';
-import neverScrumbledIcon from '../../assets/images/never-scrumbled.svg';
+import neverScrumbledIcon from '../../assets/images/never-scrambled-badge.svg';
 import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
 import bluePuzzle from '../../assets/images/blue-puzzle.svg';
 import pinkPuzzle from '../../assets/images/pink-puzzle.svg';
 
-const RarityRankPopup = ({ onClose }) => {
+const RarityRankPopup = ({ onClose, item }) => {
   const variable = '';
   return (
     <div className="rarity--rank--popup">
       <img src={closeIcon} alt="Close" className="close" onClick={onClose} aria-hidden="true" />
       <div className="rarity--rank">
         <div className="rarity--rank--image">
-          <div className="never--scrumbled">
-            <img src={neverScrumbledIcon} alt="Never scrambled badge" />
-            <span className="tooltiptext">Never scrambled</span>
-          </div>
-          <img src={rarityImage} alt="Rarity" />
+          {item.scrambled === 'single' ? (
+            <div className="never--scrumbled">
+              <img src={scrumbledIcon} alt="Single trait scrambled badge" />
+              <span className="tooltiptext">Single trait scrambled</span>
+            </div>
+          ) : (
+            <div className="never--scrumbled">
+              <img src={neverScrumbledIcon} alt="Never scrambled badge" />
+              <span className="tooltiptext">Never scrambled</span>
+            </div>
+          )}
+          <img src={item.previewImage.url} alt={item.name} />
         </div>
         <div className="rarity--rank--body">
           <div className="rarity--rank--header">
             <div>
-              <h1>Rarity Rank #1</h1>
-              <h2>Long username</h2>
+              <h1>{`Rarity Rank #${item.id}`}</h1>
+              <h2>{item.name}</h2>
             </div>
-            <p className="number">#4352</p>
+            <p className="number">{`#${item.serialNumber}`}</p>
           </div>
           <div className="rarity--rank--descriptions">
             <div className="rarity--description">
@@ -102,5 +108,6 @@ const RarityRankPopup = ({ onClose }) => {
 };
 RarityRankPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
+  item: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 export default RarityRankPopup;
