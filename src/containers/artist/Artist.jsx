@@ -9,7 +9,7 @@ import NotFound from '../../components/notFound/NotFound.jsx';
 
 const Artist = () => {
   const location = useLocation();
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist, setDarkMode } = useContext(AppContext);
   const artist = location.state
     ? location.state.id === loggedInArtist.id
       ? loggedInArtist
@@ -17,6 +17,7 @@ const Artist = () => {
     : null;
 
   useEffect(() => {
+    setDarkMode(false);
     document.title = `Universe Minting - Artist - ${artist?.name}`;
     return () => {
       document.title = 'Universe Minting';
@@ -30,7 +31,14 @@ const Artist = () => {
       {artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
-            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+            <img
+              src={
+                typeof artist.personalLogo === 'string'
+                  ? artist.personalLogo
+                  : URL.createObjectURL(artist.personalLogo)
+              }
+              alt="Artist personal logo"
+            />
           </div>
         </div>
       ) : (

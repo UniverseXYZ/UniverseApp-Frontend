@@ -35,7 +35,14 @@ const NFTPopup = ({ onClose, onNFT }) => {
           {onNFT.previewImage.type === 'video/mp4' && (
             <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
               <video controls>
-                <source src={URL.createObjectURL(onNFT.previewImage)} type="video/mp4" />
+                <source
+                  src={
+                    onNFT.previewImage.url
+                      ? onNFT.previewImage.url
+                      : URL.createObjectURL(onNFT.previewImage)
+                  }
+                  type="video/mp4"
+                />
                 <track kind="captions" />
                 Your browser does not support the video tag.
               </video>
@@ -46,7 +53,14 @@ const NFTPopup = ({ onClose, onNFT }) => {
           )}
           {onNFT.previewImage.type !== 'audio/mpeg' && onNFT.previewImage.type !== 'video/mp4' && (
             <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
-              <img src={URL.createObjectURL(onNFT.previewImage)} alt={onNFT.previewImage} />
+              <img
+                src={
+                  onNFT.previewImage.url
+                    ? onNFT.previewImage.url
+                    : URL.createObjectURL(onNFT.previewImage)
+                }
+                alt={onNFT.name}
+              />
             </Animated>
           )}
         </div>
@@ -100,7 +114,11 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   </b>
                 ) : (
                   <img
-                    src={URL.createObjectURL(onNFT.collectionAvatar)}
+                    src={
+                      typeof onNFT.collectionAvatar === 'string'
+                        ? onNFT.collectionAvatar
+                        : URL.createObjectURL(onNFT.collectionAvatar)
+                    }
                     alt={onNFT.collectionName}
                   />
                 )}
@@ -129,7 +147,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
         <div className="tab__content">
           <Animated animationIn="fadeIn" key={uuid()}>
             {selectedTabIndex === 0 ? (
-              onNFT.properties[0].name ? (
+              onNFT.properties && onNFT.properties[0].name ? (
                 <div className="property__container">
                   {onNFT.properties.map((property) => (
                     <div className="property__box" key={uuid()}>
