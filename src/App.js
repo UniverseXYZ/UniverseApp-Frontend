@@ -42,7 +42,6 @@ import { getEthPriceCoingecko, getWethBalanceEtherscan } from './utils/api/ether
 import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
-import { readCollectionsStream } from './utils/helpers/contractInteraction';
 
 const App = () => {
   const location = useLocation();
