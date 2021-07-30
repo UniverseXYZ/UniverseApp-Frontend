@@ -3907,14 +3907,13 @@
         margin: auto;
       }
       @include md {
-        height: 300px;
+        height: 220px;
       }
     }
     .rarity--rank--body {
       .rarity--rank--header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         width: 100%;
         margin-bottom: 28px;
 
@@ -3927,8 +3926,12 @@
           color: $black;
           margin-bottom: 3px;
           margin-left: 25px;
+          margin-right: 20px;
           @include xl {
-            margin-left: 0%;
+            margin-left: 0;
+          }
+          @include sm {
+            font-size: 18px;
           }
         }
         h2 {
@@ -4079,6 +4082,9 @@
     @include xl {
       display: grid;
       padding: 20px;
+    }
+    @include sm {
+      max-height: 550px;
     }
   }
   // @include xl {
