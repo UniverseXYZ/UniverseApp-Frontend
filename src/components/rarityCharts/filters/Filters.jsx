@@ -26,8 +26,8 @@ const Filters = (props) => {
         <label htmlFor="sort--select">Sort By:</label>
         <SortBySelect
           id="sort--select"
-          defaultValue="Rarity Scope"
-          sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
+          defaultValue="Rarity Score"
+          sortData={['Rarity Score', 'Rank', 'Polymorph ID']}
         />
       </div>
     </div>

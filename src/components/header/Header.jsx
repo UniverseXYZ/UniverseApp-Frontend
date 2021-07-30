@@ -65,7 +65,12 @@ const Header = ({ location }) => {
     }
   };
   const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
+    if (
+      ref.current &&
+      !ref.current.contains(event.target) &&
+      searchRef.current &&
+      !searchRef.current.contains(event.target)
+    ) {
       setSearchValue('');
     }
   };
@@ -118,7 +123,7 @@ const Header = ({ location }) => {
             className="inp"
             placeholder="Search"
             ref={searchRef}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={(e) => e.target.value.length < 16 && setSearchValue(e.target.value)}
             value={searchValue}
             onKeyDown={handleSearchKeyDown}
           />

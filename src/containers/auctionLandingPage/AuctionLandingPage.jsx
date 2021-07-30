@@ -9,11 +9,16 @@ import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwne
 import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
 import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
+import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 
 const AuctionLandingPage = () => {
   const { setDarkMode } = useContext(AppContext);
   const location = useLocation();
-  const selectedAuction = location.state ? location.state.auction : null;
+  const selectedAuction = location.state
+    ? location.state.auction
+      ? location.state.auction
+      : PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === location.state.id)[0]
+    : null;
   const artist = selectedAuction?.artist;
 
   const [bidders, setBidders] = useState([]);

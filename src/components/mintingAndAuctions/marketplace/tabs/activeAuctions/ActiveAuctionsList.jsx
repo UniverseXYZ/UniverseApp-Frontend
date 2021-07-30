@@ -39,7 +39,16 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                 <div className="creator">
                   <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
-                  <a>{auction.artist.name}</a>
+                  <a
+                    aria-hidden="true"
+                    onClick={() =>
+                      history.push(`/${auction.artist.name.split(' ')[0]}`, {
+                        id: auction.artist.id,
+                      })
+                    }
+                  >
+                    {auction.artist.name}
+                  </a>
                 </div>
                 <div className="statistics">
                   <div>
@@ -64,7 +73,16 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                   </div>
                 </div>
                 {auction.timeLeft && (
-                  <Button className="light-button w-100 view--auction--btn">View Auction</Button>
+                  <Button
+                    className="light-button w-100 view--auction--btn"
+                    onClick={() =>
+                      history.push(`/${auction.artist.name.split(' ')[0]}/${auction.title}`, {
+                        id: auction.id,
+                      })
+                    }
+                  >
+                    View Auction
+                  </Button>
                 )}
               </div>
               {/* <div className="title">

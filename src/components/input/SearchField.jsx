@@ -44,7 +44,6 @@ const SearchField = (props) => {
       <input
         type="text"
         className="inp"
-        // placeholder="Search"
         ref={searchRef}
         onChange={(e) => setSearchValue(e.target.value)}
         value={searchValue}
