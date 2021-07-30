@@ -3974,12 +3974,16 @@
               position: absolute;
               top: -15px;
               right: -15px;
+              @include sm {
+                top: 4px;
+                right: 4px;
+              }
             }
             .tooltiptext {
               visibility: hidden;
               font-family: $spaceGroteskFont;
               font-style: normal;
-              font-weight: bold;
+              font-weight: 400;
               font-size: 12px;
               background-color: $black;
               color: $white;

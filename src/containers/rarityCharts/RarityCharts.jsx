@@ -24,10 +24,14 @@ const RarityCharts = () => {
       <div className="rarity--charts--page--container">
         <Filters data={PolymorphRarityCharts} getData={(find) => setPolymorphRarityChart(find)} />
         <List data={polymorphRarityData} perPage={perPage} offset={offset} />
-        <div className="pagination__container">
-          <Pagination data={polymorphRarityData} perPage={perPage} setOffset={setOffset} />
-          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-        </div>
+        {polymorphRarityData.length ? (
+          <div className="pagination__container">
+            <Pagination data={polymorphRarityData} perPage={perPage} setOffset={setOffset} />
+            <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
