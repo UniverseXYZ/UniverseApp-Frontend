@@ -17,7 +17,10 @@
 }
 .intup-l {
   display: inline-grid;
-
+  position: relative;
+  .box--shadow--effect--block {
+    width: calc(100% + 4px);
+  }
   input {
     width: 445px;
     font-family: $spaceGroteskFont;

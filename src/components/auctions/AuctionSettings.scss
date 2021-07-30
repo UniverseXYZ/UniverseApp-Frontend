@@ -253,6 +253,13 @@
         display: block;
       }
     }
+    .infoDiv {
+      .date__input {
+        div , input{
+          cursor: pointer;
+        }
+      }
+    }
     .infoDiv > :first-child {
       margin-right: 30px;
       @include lg {
