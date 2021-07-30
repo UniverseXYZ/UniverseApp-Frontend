@@ -60,6 +60,7 @@ export const saveNftImage = async (file, id) => {
   const request = await fetch(UPLOAG_NFT_IMAGE_URL, {
     method: 'post',
     headers: {
+      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: formData,
@@ -187,6 +188,7 @@ export const getTokenURI = async (data) => {
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
     headers: {
+      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: formData,
@@ -211,6 +213,7 @@ export const saveCollection = async (data) => {
   const requestOptions = {
     method: 'POST',
     headers: {
+      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: formData,
@@ -229,6 +232,7 @@ export const attachTxHashToCollection = (txHash, collectionId) => {
   const requestOptions = {
     method: 'PATCH',
     headers: {
+      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: JSON.stringify({
@@ -242,7 +246,10 @@ export const attachTxHashToCollection = (txHash, collectionId) => {
 export const removeSavedNft = (id) =>
   fetch(`${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${id}`, {
     method: 'DELETE',
-    headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
   });
 
 export const getMyCollections = async (deployedCollections, setDeployedCollections) => {
