@@ -218,7 +218,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://dao.universe.xyz/yield-farming');
+                  // window.open('https://dao.universe.xyz/yield-farming');
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
@@ -228,7 +228,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://forum.universe.xyz/');
+                  // window.open('https://dao.universe.xyz/yield-farming');
                 }}
               >
                 <img src={forumIcon} alt="Forum" />
