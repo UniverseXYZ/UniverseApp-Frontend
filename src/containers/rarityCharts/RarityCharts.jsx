@@ -1,8 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
-import Popup from 'reactjs-popup';
 import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown';
 import Pagination from '../../components/pagination/Pagionation';
-import RarityRankPopup from '../../components/popups/RarityRankPopup';
 import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
@@ -35,15 +33,6 @@ const RarityCharts = () => {
           <></>
         )}
       </div>
-      <Popup
-        trigger={
-          <button type="button" className="light-button">
-            Rarity rank
-          </button>
-        }
-      >
-        {(close) => <RarityRankPopup onClose={close} />}
-      </Popup>
     </div>
   );
 };

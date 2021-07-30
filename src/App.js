@@ -424,53 +424,9 @@ const App = () => {
         <Route exact path="/my-nfts">
           <MyNFTs />
         </Route>
-        <Route exact path="/rarity-charts" component={() => <RarityCharts />} />
-
-        {/* <Route path="/setup-auction" component={() => <SetupAuction />} />
-        <Route exact path="/polymorphs" component={() => <Polymorphs />} />
-        <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
-        <Route exact path="/planets/adaka" component={() => <Planet1 />} />
-        <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
-        <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
-        <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
-        <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
-        <Route path="/character-page" component={() => <CharacterPage />} />
-        <Route exact path="/marketplace" component={() => <BrowseNFT />} />
-        <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
-        <Route exact path="/search" component={() => <Search />} />
-        <Route exact path="/core-drops" component={() => <CharectersDrop />} />
-        <Route exact path="/my-profile" component={() => <MyProfile />} />
-        <Route path="/setup-auction" component={() => <SetupAuction />} />
-        <Route
-          exact
-          path="/minting-and-auctions/marketplace/active-auctions"
-          component={() => <Marketplace />}
-        />
-        <Route
-          exact
-          path="/minting-and-auctions/marketplace/future-auctions"
-          component={() => <Marketplace />}
-        />
-        <Route exact path="/my-account" component={() => <MyAccount />} />
-        <Route exact path="/my-auctions" component={() => <Auctions />} />
-        <Route exact path="/create-tiers" component={() => <CreateTiers />} />
-        <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
-        <Route
-          exact
-          path="/customize-auction-landing-page"
-          component={() => <CustomizeAuction />}
-        />
-        <Route exact path="/auction-review" component={() => <AuctionReview />} />
-        <Route exact path="/:artist">
-          <Artist />
+        <Route exact path="/rarity-charts">
+          <RarityCharts />
         </Route>
-        <Route exact path="/c/:collectionId">
-          <Collection />
-        </Route>
-        <Route exact path="/:artist/:auction">
-          <AuctionLandingPage />
-        </Route> */}
-
         <Route path="*" component={() => <NotFound />} />
       </Switch>
       <Footer />
