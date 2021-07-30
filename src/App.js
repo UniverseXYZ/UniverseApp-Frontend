@@ -29,15 +29,27 @@ import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
-import Polymorphs from './containers/polymorphs/Polymorphs';
-import MintPolymorph from './containers/polymorphs/MintPolymorph';
-import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage';
-import { getEthPriceCoingecko } from './utils/api/etherscan';
+import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
+import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
+import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
+// import MarketplaceNFT from './containers/marketplaceNFT/MarketplaceNFT';
+// import Planet1 from './containers/planets/Planet1.jsx';
+// import Planet2 from './containers/planets/Planet2.jsx';
+// import Planet3 from './containers/planets/Planet3.jsx';
+// import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
+// import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
+// import CharacterPage from './containers/characterPage/CharacterPage.jsx';
+// import Search from './containers/search/Search.jsx';
+// import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
+// import MyProfile from './containers/myProfile/MyProfile';
+// import CreateNFT from './components/myNFTs/create/CreateNFT';
+import RarityCharts from './containers/rarityCharts/RarityCharts';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
-import { transferPolymorphs, morphedPolymorphs } from './utils/graphql/queries';
-import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/polymorphs';
-import { fetchTokensMetadataJson } from './utils/api/polymorphs';
+import { transferPolymorphs } from './utils/graphql/queries';
+import { convertPolymorphObjects } from './utils/helpers/polymorphs';
 import { CONNECTORS_NAMES } from './utils/dictionary';
+import { fetchTokensMetadataJson } from './utils/api/polymorphs';
+import { getEthPriceCoingecko } from './utils/api/etherscan';
 
 const App = () => {
   const location = useLocation();
@@ -412,8 +424,23 @@ const App = () => {
         <Route exact path="/my-nfts">
           <MyNFTs />
         </Route>
+        <Route exact path="/rarity-charts" component={() => <RarityCharts />} />
 
         {/* <Route path="/setup-auction" component={() => <SetupAuction />} />
+        <Route exact path="/polymorphs" component={() => <Polymorphs />} />
+        <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
+        <Route exact path="/planets/adaka" component={() => <Planet1 />} />
+        <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
+        <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
+        <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
+        <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
+        <Route path="/character-page" component={() => <CharacterPage />} />
+        <Route exact path="/marketplace" component={() => <BrowseNFT />} />
+        <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
+        <Route exact path="/search" component={() => <Search />} />
+        <Route exact path="/core-drops" component={() => <CharectersDrop />} />
+        <Route exact path="/my-profile" component={() => <MyProfile />} />
+        <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route
           exact
           path="/minting-and-auctions/marketplace/active-auctions"
