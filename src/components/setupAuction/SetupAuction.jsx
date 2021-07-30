@@ -13,7 +13,35 @@ import RewardIconActive from '../../assets/images/ion_layers.svg';
 import RewardIcon from '../../assets/images/ion_layers-disactive.svg';
 import ReviewIcon from '../../assets/images/eye-review.svg';
 import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
+import NewTabs from '../tabs/NewTabs';
 import AppContext from '../../ContextAPI';
+
+const newTabData = [
+  {
+    labelText: 'Auction settings',
+    icon: SettingIcon,
+    iconActive: SettingIconActive,
+    route: '/setup-auction/auction-settings',
+    home: true,
+    content: <AuctionSettings />,
+  },
+  {
+    labelText: 'Reward tiers',
+    icon: RewardIcon,
+    iconActive: RewardIconActive,
+    route: '/setup-auction/reward-tiers',
+    home: false,
+    content: <RewardTiers />,
+  },
+  {
+    labelText: 'Review auction',
+    icon: ReviewIcon,
+    iconActive: ReviewIconActive,
+    route: '/setup-auction/review-auction',
+    home: false,
+    content: <RewardTiers />,
+  },
+];
 
 const SetupAuction = () => {
   const { auction } = useContext(AppContext);
@@ -33,20 +61,25 @@ const SetupAuction = () => {
 
   return (
     <div className="auction-setup">
-      <div className="setup container">
-        <div
-          className="back-rew"
-          aria-hidden="true"
-          onClick={() => {
-            history.push('/my-auctions');
-          }}
-        >
-          <img src={arrow} alt="back" />
-          <span>My auctions</span>
+      <div className="setup--auction--welcome--section">
+        <div className="setup">
+          <div
+            className="back-rew"
+            aria-hidden="true"
+            onClick={() => {
+              history.push('/my-auctions');
+            }}
+          >
+            <img src={arrow} alt="back" />
+            <span>My auctions</span>
+          </div>
+          <h1 className="set-text">Set up auction</h1>
         </div>
-        <h1 className="set-text">Set up auction</h1>
       </div>
-      <div className="tabs__section">
+      <div className="setup--auction--content">
+        <NewTabs tabData={newTabData} />
+      </div>
+      {/* <div className="tabs__section">
         <div className="tabs container">
           <div className="tabs__wrapper">
             <div className="tabs">
@@ -154,7 +187,7 @@ const SetupAuction = () => {
             </Switch>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
