@@ -39,6 +39,7 @@
     height: 26px;
     padding: 5px;
     border-radius: 50%;
+    cursor: pointer;
   }
 
   h3 {
@@ -184,20 +185,6 @@
         background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
         border: 1px solid transparent;
       }
-
-      &.disable {
-        filter: grayscale(1);
-        cursor: default;
-        opacity: 0.3;
-      }
-    }
-
-    @include xs {
-      grid-gap: 14px;
-
-      button {
-        padding: 32px 20px;
-      }
     }
   }
   .links {
@@ -206,10 +193,6 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-  }
-
-  @include xs {
-    padding: 40px 20px;
   }
 }
 .wrong__network__popup {
@@ -432,6 +415,315 @@
   @include sm {
     width: 90%;
     padding: 20px 10px 20px 20px;
+  }
+}
+.nft--place--bid--popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  border-radius: 12px;
+  padding: 40px 30px;
+  width: 90%;
+  max-width: 480px;
+  .close--popup {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: $white;
+    padding: 5px;
+    border-radius: 50%;
+    box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+    cursor: pointer;
+  }
+  .step1 {
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
+      color: $black;
+      margin-bottom: 30px;
+    }
+    .form {
+      label.price {
+        display: block;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+        margin-bottom: 10px;
+      }
+      label.offer--expiration {
+        display: block;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 160%;
+        color: $black;
+        margin-bottom: 10px;
+        margin-top: 30px;
+      }
+      .input--field {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-gap: 7px;
+        align-items: center;
+        background: $white;
+        border: 1px solid #d4d4d4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        margin-bottom: 6px;
+        &.diff {
+          grid-template-columns: 1fr auto;
+        }
+        &.error {
+          border: 1px solid #ff4949;
+        }
+        .currency--dropdown {
+          cursor: pointer;
+          padding: 8px;
+          > div {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 6px;
+            padding: 7px 10px;
+            span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 140%;
+              color: $black;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
+          }
+        }
+        input.input--field--item {
+          width: 100%;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 18px;
+          color: $black;
+          padding: 15px 0px;
+        }
+        .convert--to--dollar {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 140%;
+          color: rgba(0, 0, 0, 0.4);
+          padding: 15px 20px;
+          background: rgba(0, 0, 0, 0.02);
+          border-left: 1px solid #d4d4d4;
+          box-sizing: border-box;
+          border-radius: 0px 12px 12px 0px;
+        }
+        .selected--date {
+          padding: 15px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 20px;
+          color: #1a1a1a;
+          span {
+            font-weight: normal;
+          }
+        }
+        .calendar--icon {
+          cursor: pointer;
+          width: 50px;
+          padding: 15px;
+          background: rgba(0, 0, 0, 0.02);
+          border-left: 1px solid #d4d4d4;
+          box-sizing: border-box;
+          border-radius: 0px 12px 12px 0px;
+        }
+        .calendar__wrapper {
+          position: absolute;
+          top: 52px;
+          right: 0;
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          .calendar__header {
+            padding: 12px 15px;
+            h2 {
+              font-size: 14px;
+            }
+            .left-btn:disabled {
+              cursor: not-allowed;
+              img {
+                opacity: 0.3;
+              }
+            }
+          }
+          .calendar__body {
+            padding: 19px 23px 0;
+            border-bottom: none;
+            .week__days {
+              div {
+                font-size: 12px;
+                width: 28px;
+                height: 28px;
+              }
+            }
+            .week__days__numbers {
+              button {
+                font-size: 12px;
+                width: 28px;
+                height: 28px;
+              }
+            }
+          }
+          .calendar__footer {
+            padding: 16px;
+            .time {
+              input {
+                width: 87px;
+                font-size: 16px;
+                padding: 11px;
+              }
+            }
+          }
+        }
+      }
+      p.error {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 150%;
+        color: #ff4949;
+      }
+      .checkout__checkbox {
+        display: flex;
+        align-items: center;
+        margin-top: 40px;
+        .custom__checkbox {
+          label {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 14px;
+            text-decoration-line: underline;
+            color: $black;
+            cursor: pointer;
+
+            input {
+              @include css-checkbox(16px, $black, $white, 'middle', $black, 4px);
+            }
+          }
+        }
+
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 150%;
+          color: $black;
+          span {
+            text-decoration: underline;
+          }
+        }
+      }
+      .actions {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .light-button {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+  .step2 {
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
+      text-align: center;
+      color: $black;
+      margin-bottom: 20px;
+    }
+    p.desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 160%;
+      text-align: center;
+      color: $black;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+    .loading--div {
+      position: relative;
+      height: 200px;
+    }
+  }
+  .step3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .check--icon {
+      width: 220px;
+    }
+    .title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      color: $black;
+      margin-top: 50px;
+      margin-bottom: 24px;
+    }
+    .desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 160%;
+      color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      b {
+        display: flex;
+        align-items: center;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        color: $black;
+        img {
+          margin: 0px 2px 0px 5px;
+        }
+      }
+    }
+    button.light-border-button {
+      margin-top: 40px;
+    }
   }
 }
 .place__bid__popup {
@@ -1418,6 +1710,15 @@
 .popup-arrow {
   display: none;
 }
+.congrats-popup {
+  .congrats--icon {
+    width: 186px;
+    margin: 0px auto 30px;
+    img {
+      width: 100%;
+    }
+  }
+}
 .congrats {
   font-style: normal;
   font-weight: 600;
@@ -1443,6 +1744,10 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
+  .loading--div {
+    position: relative;
+    height: 100px;
+  }
 
   @include lg {
     width: 70%;
@@ -1532,6 +1837,7 @@
     height: 26px;
     padding: 5px;
     border-radius: 50%;
+    cursor: pointer;
   }
 
   h3 {
@@ -1629,6 +1935,7 @@
     background: white;
     border-radius: 50%;
     padding: 5px;
+    cursor: pointer;
   }
 
   h1 {
@@ -1810,6 +2117,7 @@
     height: 26px;
     padding: 5px;
     border-radius: 50%;
+    cursor: pointer;
   }
   .option-list {
     h1 {
@@ -1946,6 +2254,7 @@
     height: 26px;
     padding: 5px;
     border-radius: 50%;
+    cursor: pointer;
   }
   .submitted {
     width: 186px;
@@ -2009,89 +2318,18 @@
     position: absolute;
     right: -13px;
     top: -13px;
-    background: white;
+    background: $white;
     width: 26px;
     height: 26px;
     padding: 5px;
     border-radius: 50%;
-  }
-  h1 {
-    font-family: $sharpGroteskSemiBoldFont;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 26px;
-    line-height: 140%;
-    color: $black;
-    margin-bottom: 24px;
-    padding: 0 10px;
-
-    @include sm {
-      padding: 0%;
-    }
-  }
-  p {
-    font-family: $spaceGroteskFont;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 160%;
-    color: rgba(0, 0, 0, 0.6);
-    margin-bottom: 36px;
-  }
-  .button__div {
-    .light-button {
-      margin-right: 12px;
-      @include sm {
-        margin-right: 0%;
-        margin-bottom: 20px;
-      }
-    }
-    @include sm {
-      display: grid;
-    }
-  }
-  @include sm {
-    width: 90%;
-  }
-}
-.connection__popup {
-  transition: all 0.15s ease-in-out;
-  opacity: 0;
-  z-index: 2;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -46%);
-  background: $white;
-  border: 1px solid #d4d4d4;
-  box-sizing: border-box;
-  border-radius: 12px;
-  width: 520px;
-  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-  text-align: center;
-  padding: 40px;
-
-  &.open {
-    transform: translate(-50%, -50%);
-    opacity: 1;
-  }
-
-  .close {
     cursor: pointer;
-    position: absolute;
-    right: -13px;
-    top: -13px;
-    background: white;
-    width: 26px;
-    height: 26px;
-    padding: 5px;
-    border-radius: 50%;
   }
   h1 {
     font-family: $sharpGroteskSemiBoldFont;
     font-style: normal;
     font-weight: 600;
-    font-size: 26px;
+    font-size: 20px;
     line-height: 140%;
     color: $black;
     margin-bottom: 24px;
@@ -2189,100 +2427,6 @@
   .polymorph_confirmation_image {
     .loading {
       position: relative;
-    }
-    .lds-roller {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: inline-block;
-      width: 80px;
-      height: 80px;
-    }
-    .lds-roller div {
-      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      transform-origin: 40px 40px;
-    }
-    .lds-roller div:after {
-      content: ' ';
-      display: block;
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin: -4px 0 0 -4px;
-    }
-    .lds-roller div:nth-child(1) {
-      animation-delay: -0.036s;
-    }
-    .lds-roller div:nth-child(1):after {
-      background: #adea12;
-      top: 63px;
-      left: 63px;
-    }
-    .lds-roller div:nth-child(2) {
-      animation-delay: -0.072s;
-    }
-    .lds-roller div:nth-child(2):after {
-      background: #90ea35;
-      top: 68px;
-      left: 56px;
-    }
-    .lds-roller div:nth-child(3) {
-      animation-delay: -0.108s;
-    }
-    .lds-roller div:nth-child(3):after {
-      background: #72ea5b;
-      top: 71px;
-      left: 48px;
-    }
-    .lds-roller div:nth-child(4) {
-      animation-delay: -0.144s;
-    }
-    .lds-roller div:nth-child(4):after {
-      background: #33eaaa;
-      top: 72px;
-      left: 40px;
-    }
-    .lds-roller div:nth-child(5) {
-      animation-delay: -0.18s;
-    }
-    .lds-roller div:nth-child(5):after {
-      background: #31eaae;
-      top: 71px;
-      left: 32px;
-    }
-    .lds-roller div:nth-child(6) {
-      animation-delay: -0.216s;
-    }
-    .lds-roller div:nth-child(6):after {
-      background: #00eaea;
-      top: 68px;
-      left: 24px;
-    }
-    .lds-roller div:nth-child(7) {
-      animation-delay: -0.252s;
-    }
-    .lds-roller div:nth-child(7):after {
-      background: #00eaea;
-      top: 63px;
-      left: 17px;
-    }
-    .lds-roller div:nth-child(8) {
-      animation-delay: -0.288s;
-    }
-    .lds-roller div:nth-child(8):after {
-      background: #00eaea;
-      top: 56px;
-      left: 12px;
-    }
-    @keyframes lds-roller {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
     }
     img {
       height: 295px;
@@ -3674,9 +3818,8 @@
   background: $white;
   box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
   border-radius: 12px;
-  padding: 75px 60px;
+  // padding: 75px 60px;
   width: fit-content;
-  // overflow-y: auto;
 
   .close {
     position: absolute;
@@ -3692,12 +3835,23 @@
   .rarity--rank {
     display: flex;
     justify-content: space-between;
+    padding: 75px 60px;
+    max-height: 700px;
+    overflow-y: auto;
 
     .rarity--rank--image {
       position: relative;
       border-radius: 12px;
       box-sizing: border-box;
       margin-right: 40px;
+      width: 373px;
+      height: 373px;
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
 
       .never--scrumbled {
         .tooltiptext {
@@ -3714,8 +3868,8 @@
           padding: 5px 0;
           position: absolute;
           z-index: 1;
-          top: -14px;
-          right: -37px;
+          top: -19px;
+          right: -51px;
           &::after {
             content: '';
             position: absolute;
@@ -3725,11 +3879,11 @@
             border-width: 5px;
             border-style: solid;
             border-color: black transparent transparent transparent;
-            @include md {
-              left: 73%;
+            @include xl {
+              left: 82%;
             }
           }
-          @include md {
+          @include xl {
             right: 0px;
           }
         }
@@ -3739,22 +3893,27 @@
           }
         }
         img {
+          width: 38px;
+          height: 38px;
           position: absolute;
-          top: 20px;
-          right: 22px;
+          top: 10px;
+          right: 10px;
         }
       }
       @include xl {
-        width: fit-content;
+        width: 100%;
+        height: 490px;
         text-align: center;
         margin: auto;
+      }
+      @include md {
+        height: 220px;
       }
     }
     .rarity--rank--body {
       .rarity--rank--header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         width: 100%;
         margin-bottom: 28px;
 
@@ -3767,8 +3926,12 @@
           color: $black;
           margin-bottom: 3px;
           margin-left: 25px;
+          margin-right: 20px;
           @include xl {
-            margin-left: 0%;
+            margin-left: 0;
+          }
+          @include sm {
+            font-size: 18px;
           }
         }
         h2 {
@@ -3814,12 +3977,16 @@
               position: absolute;
               top: -15px;
               right: -15px;
+              @include sm {
+                top: 4px;
+                right: 4px;
+              }
             }
             .tooltiptext {
               visibility: hidden;
               font-family: $spaceGroteskFont;
               font-style: normal;
-              font-weight: bold;
+              font-weight: 400;
               font-size: 12px;
               background-color: $black;
               color: $white;
@@ -3839,12 +4006,16 @@
                 border-width: 5px;
                 border-style: solid;
                 border-color: black transparent transparent transparent;
-                @include md {
+                @include xl {
                   left: 84%;
                 }
               }
-              @include md {
+              @include xl {
                 right: -15px;
+              }
+              @include sm {
+                right: 2px;
+                top: -29px;
               }
             }
             &:hover {
@@ -3907,22 +4078,27 @@
         box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.8) inset !important;
         background-image: linear-gradient(101deg, #bceb00, #00eaea) !important;
         background-origin: border-box;
-        // background: linear-gradient(135deg, rgba(188, 235, 0, 0.2) 15.57%, rgba(0, 234, 234, 0.2) 84.88%),
-        //   linear-gradient(0deg, #ffffff, #ffffff), rgba(0, 0, 0, 0.02);
+      }
+      @include xl {
+        padding-bottom: 20px;
       }
     }
     @include xl {
       display: grid;
+      padding: 30px 20px 20px;
+    }
+    @include sm {
+      max-height: 550px;
     }
   }
-  @include xl {
-    padding: 20px;
-  }
-  @include md {
-    padding: 15px;
-    height: 100%;
-    overflow-y: auto;
-  }
+  // @include xl {
+  //   padding: 20px;
+  // }
+  // @include md {
+  //   padding: 15px;
+  //   height: 100%;
+  //   overflow-y: auto;
+  // }
   @include sm {
     max-width: 90%;
   }
