@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-return */
 const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_MY_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
@@ -262,17 +263,19 @@ export const getMyCollections = async (deployedCollections, setDeployedCollectio
   };
 
   const myCollectionsStream = await fetch(GET_MY_COLLECTIONS, requestOptions);
-  const reader = myCollectionsStream.body.pipeThrough(new TextDecoderStream()).getReader();
+  const reader = myCollectionsStream.body.getReader();
 
-  const readMyCollectionsStream = async () => {
+  const read = async () => {
     const { done, value } = await reader.read();
-    const collectionsResult = value && (await JSON.parse(value));
 
-    if (collectionsResult)
-      setDeployedCollections([...deployedCollections, ...collectionsResult.collections]);
-
-    if (!done) readMyCollectionsStream();
+    if (!done) {
+      const decoder = new TextDecoder();
+      const collectionsResult = value && (await JSON.parse(decoder.decode(value)));
+      if (collectionsResult)
+        setDeployedCollections([...deployedCollections, ...collectionsResult.collections]);
+      read();
+    }
   };
 
-  readMyCollectionsStream();
+  read();
 };

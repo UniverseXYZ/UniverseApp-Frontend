@@ -60,7 +60,6 @@ const SavedNFTs = () => {
   };
 
   useEffect(() => {
-    console.log(savedNfts);
     const res = savedNfts.filter((nft) => !nft.selected);
     if (res.length) {
       setSelectAllIsChecked(false);

@@ -697,11 +697,7 @@ const MintSingleNft = ({ onClick }) => {
                 ) : (
                   <div>
                     <img
-                      src={
-                        col.previewImage
-                          ? URL.createObjectURL(col.previewImage)
-                          : col.previewImageMock
-                      }
+                      src={col.previewImage && URL.createObjectURL(col.previewImage)}
                       alt={col.name}
                     />
                   </div>
