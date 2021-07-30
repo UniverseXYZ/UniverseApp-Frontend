@@ -19,7 +19,7 @@ const PolymorphCard = ({ item }) => (
       <Popup
         trigger={<img className="rarity--chart" src={item.previewImage.url} alt={item.name} />}
       >
-        {(close) => <RarityRankPopup onClose={close} />}
+        {(close) => <RarityRankPopup onClose={close} item={item} />}
       </Popup>
       {item.scrambled === 'single' ? (
         <div className="card--scrambled">
