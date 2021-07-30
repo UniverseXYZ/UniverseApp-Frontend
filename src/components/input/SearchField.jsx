@@ -44,9 +44,8 @@ const SearchField = (props) => {
       <input
         type="text"
         className="inp"
-        // placeholder="Search"
         ref={searchRef}
-        onChange={(e) => e.target.value.length < 16 && setSearchValue(e.target.value)}
+        onChange={(e) => setSearchValue(e.target.value)}
         value={searchValue}
         onKeyDown={handleSearchKeyDown}
         onFocus={() => setFocusField('focus--field')}
