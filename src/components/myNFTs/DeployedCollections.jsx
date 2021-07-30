@@ -26,33 +26,32 @@ const DeployedCollections = () => {
               <div className="saved__collection__box__header">
                 {collection.bgImage ? (
                   <img src={URL.createObjectURL(collection.bgImage)} alt={collection.name} />
-                ) : typeof collection.previewImage === 'string' &&
-                  collection.previewImage.startsWith('#') ? (
+                ) : typeof collection.coverUrl === 'string' &&
+                  collection.coverUrl.startsWith('#') ? (
                   <div
                     className="random__bg__color"
-                    style={{ backgroundColor: collection.previewImage }}
+                    style={{ backgroundColor: collection.coverUrl }}
                   />
                 ) : (
                   <img
                     className="blur"
-                    src={URL.createObjectURL(collection.previewImage)}
+                    src={collection.coverUrl && URL.createObjectURL(collection.coverUrl)}
                     alt={collection.name}
                   />
                 )}
               </div>
               <div className="saved__collection__box__body">
-                {typeof collection.previewImage === 'string' &&
-                collection.previewImage.startsWith('#') ? (
+                {typeof collection.coverUrl === 'string' && collection.coverUrl.startsWith('#') ? (
                   <div
                     className="random__avatar__color"
-                    style={{ backgroundColor: collection.previewImage }}
+                    style={{ backgroundColor: collection.coverUrl }}
                   >
                     {collection.name.charAt(0)}
                   </div>
                 ) : (
                   <img
                     className="collection__avatar"
-                    src={URL.createObjectURL(collection.previewImage)}
+                    src={collection.coverUrl && URL.createObjectURL(collection.coverUrl)}
                     alt={collection.name}
                   />
                 )}
