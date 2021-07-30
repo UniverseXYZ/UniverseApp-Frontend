@@ -26,6 +26,8 @@ import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
+import forumIcon from '../../../../assets/images/forum.svg';
+import signalIcon from '../../../../assets/images/signal.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 
 const DesktopView = ({
@@ -218,7 +220,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  // window.open('https://dao.universe.xyz/yield-farming');
+                  window.open('https://dao.universe.xyz/yield-farming');
                 }}
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
@@ -238,7 +240,7 @@ const DesktopView = ({
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
-                  window.open('https://signal.universe.xyz/#/');
+                  // window.open('https://signal.universe.xyz/#/');
                 }}
               >
                 <img src={signalIcon} alt="Signal" />
