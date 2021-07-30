@@ -1,2 +1,93 @@
 @import '../../../assets/scss/variables';
 @import '../../../assets/scss/_mixins';
+
+.rarity--charts--search--and--filters--row {
+    width: 100%;
+    max-width: 1110px;
+    padding: 50px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 152px;
+    @include xl {
+        padding: 50px 60px;
+    }
+    @include md {
+        padding: 50px 20px;
+    }
+    @include sm {
+        flex-direction: column;
+    }
+    .search--field--component {
+        width: 22.5%;
+        @include lg {
+            width: calc(50% - 75px);
+        }
+        @include sm {
+            width: 100%;
+            margin-bottom: 20px;            
+        }
+        .inp {
+            padding: 0 16px 0 48px;
+        }
+    }
+    .floor--price--block {
+        @include lg {
+            width: 125px;
+        }
+        @include sm {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .floor--price--paragraph {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 160%;
+            text-align: center;
+            color: $black;
+            text-transform: uppercase;
+            span {
+              color: rgba(0, 0, 0, 0.6);
+              text-transform: capitalize;
+            }
+        }
+    }
+    .sort--by--label--and--select--block {
+        width: 30%;
+        display: flex;
+        align-items: center;
+        @include lg {
+            width: calc(50% - 75px);
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+        }
+        @include sm {
+            width: 100%;
+        }
+        label {
+            width: 87px;
+            user-select: none;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 160%;
+            color: #B3B3B3;
+            @include lg {
+                position: absolute;
+                top: -25px;
+                font-size: 14px;
+            }
+        }
+        .sort--by--select--parent {
+            width: calc(100% - 87px);
+            @include lg {
+                width: 100%;
+            }
+        }
+    }
+}
