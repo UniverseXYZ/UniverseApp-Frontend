@@ -24,11 +24,7 @@ import {
   attachTxHashToCollection,
   getMyCollections,
 } from '../../utils/api/mintNFT';
-import {
-  chunkifyArray,
-  readCollectionsStream,
-  formatRoyaltiesForMinting,
-} from '../../utils/helpers/contractInteraction';
+import { chunkifyArray, formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
 
 const MintNftCollection = ({ onClick }) => {
   const {
@@ -307,10 +303,24 @@ const MintNftCollection = ({ onClick }) => {
             }
 
             const mintFees = [];
-            const nftUrls = [shortURL];
-
+            const tokenUriList = [];
+            let tokenURIResult;
+            let currentNft;
             /* eslint-disable no-await-in-loop */
             for (let i = 0; i < collectionNFTs.length; i += 1) {
+              currentNft = collectionNFTs[i];
+
+              tokenURIResult = await getTokenURI({
+                file: currentNft.previewImage,
+                name: currentNft.name,
+                description: currentNft.description,
+                editions: currentNft.numberOfEditions,
+                properties: currentNft.properties,
+                royaltiesParsed: currentNft.royalities,
+              });
+
+              tokenUriList.push(tokenURIResult[0]);
+
               mintFees.push(
                 collectionNFTs[i].royalities.length
                   ? formatRoyaltiesForMinting(collectionNFTs[i].royalities)
@@ -318,8 +328,8 @@ const MintNftCollection = ({ onClick }) => {
               );
             }
 
-            const chunksOfMetaData = chunkifyArray(nftUrls, 2);
-            const chunksOfFeeData = chunkifyArray(mintFees, 2);
+            const chunksOfMetaData = chunkifyArray(tokenUriList, 40);
+            const chunksOfFeeData = chunkifyArray(mintFees, 40);
 
             for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
               console.log(chunksOfFeeData[chunk]);
@@ -334,56 +344,6 @@ const MintNftCollection = ({ onClick }) => {
               console.log('printing receipt...', mintReceipt);
             }
             /* eslint-enable no-await-in-loop */
-
-            // const mintFees = [];
-            // let currentFee;
-
-            // for (let i = 0; i < newMyNFTs.length; i += 1) {
-            //   currentFee = newMyNFTs[i].royalties.length ? formatRoyaltiesForMinting(newMyNFTs[i].royalties) : [];
-            //   mintFees.push(currentFee);
-            // }
-
-            // console.log(mintFees);
-            // // ........................
-            // // [ [nft, nft], [nft, nft] ]
-            // const chunksOfFeeData = chunkifyArray(batchMintFeesArray, 40);
-
-            // // iterate chunks and deposit each one
-            // for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
-            //   console.log(`minting chunk ${chunk + 1} / ${chunksOfMetaData.length} to the contract...`);
-            //   console.log(chunksOfFeeData[chunk]);
-
-            //   const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
-            //     address,
-            //     chunksOfMetaData[chunk],
-            //     chunksOfFeeData[chunk][0].length ? chunksOfFeeData[chunk] : [[]]
-            //   );
-
-            //   const mintReceipt = await mintTransaction.wait();
-
-            //   console.log('printing receipt...', mintReceipt);
-            // }
-
-            // const fees = [[from, 1]];
-            // const nftUrls = newMyNFTs.map((n) => n.shortURL);
-
-            // if (nftUrls.length >= 40) {
-            //   return;
-            // }
-
-            // const unsignedMintTx = await universeERC721CoreContract.batchMintWithDifferentFees(
-            //   from,
-            //   nftUrls,
-            //   fees
-            // );
-
-            // const mintTx = await unsignedMintTx.wait();
-            // console.log(mintTx);
-
-            // const unsignedMintTx = await universeERC721CoreContract.batchMintWithDifferentFees(tx.to, nftUrls, fee);
-            // const fees = [ recipient: tx.from, value: 1 }];
-            // const mintTx = await unsignedMintTx.wait();
-            // console.log(mintTx);
 
             setMyNFTs(newMyNFTs);
           }

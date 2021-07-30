@@ -49,7 +49,6 @@ import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/prof
 import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
-import { readCollectionsStream } from './utils/helpers/contractInteraction';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 
 const App = () => {
