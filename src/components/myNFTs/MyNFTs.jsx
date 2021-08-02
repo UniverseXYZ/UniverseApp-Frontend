@@ -96,7 +96,6 @@ const MyNFTs = () => {
     const selectedNFTS = savedNfts.filter((nft) => nft.selected);
     const batchMintMetaArray = [];
     const batchMintFeesArray = [];
-    let noFees = true;
 
     console.log('generating meta data', selectedNFTS);
 
@@ -104,12 +103,9 @@ const MyNFTs = () => {
       const meta = await getMetaForSavedNft(selectedNFTS[i].id);
 
       batchMintMetaArray.push(meta[0]);
-      if (selectedNFTS[i].royalities) {
-        noFees = false;
-        batchMintFeesArray.push(formatRoyaltiesForMinting(selectedNFTS[i].royalities));
-      } else {
-        batchMintFeesArray.push([]);
-      }
+      batchMintFeesArray.push(
+        selectedNFTS[i].royalities ? formatRoyaltiesForMinting(selectedNFTS[i].royalities) : []
+      );
     }
 
     console.log(batchMintFeesArray);
@@ -122,7 +118,6 @@ const MyNFTs = () => {
     const chunksOfSelectedNfts = chunkifyArray(selectedNFTS, CHUNK_SIZE);
 
     console.log(chunksOfFeeData);
-    console.log(noFees);
 
     // iterate chunks and deposit each one
     for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
