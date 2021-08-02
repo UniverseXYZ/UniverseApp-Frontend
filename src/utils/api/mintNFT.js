@@ -187,7 +187,6 @@ export const getTokenURI = async (data) => {
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
     headers: {
-      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: formData,
@@ -212,7 +211,6 @@ export const saveCollection = async (data) => {
   const requestOptions = {
     method: 'POST',
     headers: {
-      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: formData,
