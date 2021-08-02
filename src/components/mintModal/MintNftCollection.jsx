@@ -330,15 +330,21 @@ const MintNftCollection = ({ onClick }) => {
               );
             }
 
+            console.log(mintFees);
+
             const chunksOfMetaData = chunkifyArray(tokenUriList, 40);
             const chunksOfFeeData = chunkifyArray(mintFees, 40);
 
+            console.log(chunksOfFeeData);
+
             for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
-              console.log(chunksOfFeeData[chunk]);
+              console.log(
+                chunksOfFeeData[chunk][0][0] ? chunksOfFeeData[chunk] : `${[[]]} ${chunksOfFeeData}`
+              );
               const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
                 from,
                 chunksOfMetaData[chunk],
-                chunksOfFeeData[chunk][0][0] ? chunksOfFeeData[chunk] : [[]]
+                chunksOfFeeData[chunk]
               );
 
               const mintReceipt = await mintTransaction.wait();

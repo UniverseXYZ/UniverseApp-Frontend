@@ -104,7 +104,7 @@ const MyNFTs = () => {
 
       batchMintMetaArray.push(meta[0]);
       batchMintFeesArray.push(
-        selectedNFTS[i].royalties ? formatRoyaltiesForMinting(selectedNFTS[i].royalties) : []
+        selectedNFTS[i].royalities ? formatRoyaltiesForMinting(selectedNFTS[i].royalities) : []
       );
     }
 
@@ -117,6 +117,8 @@ const MyNFTs = () => {
     const chunksOfFeeData = chunkifyArray(batchMintFeesArray, CHUNK_SIZE);
     const chunksOfSelectedNfts = chunkifyArray(selectedNFTS, CHUNK_SIZE);
 
+    console.log(chunksOfFeeData);
+
     // iterate chunks and deposit each one
     for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
       console.log(`minting chunk ${chunk + 1} / ${chunksOfMetaData.length} to the contract...`);
@@ -124,7 +126,7 @@ const MyNFTs = () => {
       const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
         address,
         chunksOfMetaData[chunk],
-        chunksOfFeeData[chunk][0][0] ? chunksOfFeeData[chunk] : [[]]
+        chunksOfFeeData[chunk]
       );
 
       const mintReceipt = await mintTransaction.wait();

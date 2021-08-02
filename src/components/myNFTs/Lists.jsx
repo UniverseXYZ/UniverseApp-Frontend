@@ -86,7 +86,6 @@ const Lists = ({
     <div className="nfts__lists">
       {sliceData.map((nft, index) => (
         <div style={{ position: 'relative' }} key={nft.id}>
-          {console.log(nft)}
           {tierById && winners > getEditionsCount ? (
             <>
               <img
