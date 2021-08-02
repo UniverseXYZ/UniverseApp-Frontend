@@ -350,7 +350,8 @@ const MintNftCollection = ({ onClick }) => {
             setMyNFTs(newMyNFTs);
           }
 
-          getMyCollections(deployedCollections, setDeployedCollections);
+          const collectionsReturned = await getMyCollections();
+          setDeployedCollections(collectionsReturned);
 
           // setDeployedCollections([
           //   ...deployedCollections,

@@ -475,7 +475,7 @@ const Wallet = ({
               <div className="img-div">
                 {previewNFTs.map((nft, index) => (
                   <div key={nft.id} className="imgs">
-                    {nft.previewImage.type === 'video/mp4' && (
+                    {nft.artworkType === 'video/mp4' && (
                       <video
                         className="smallView-image"
                         onMouseOver={(event) => event.target.play()}
@@ -488,17 +488,16 @@ const Wallet = ({
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    {nft.previewImage.type === 'audio/mpeg' && (
+                    {nft.artworkType === 'audio/mpeg' && (
                       <img className="smallView-image" src={mp3Icon} alt={nft.name} />
                     )}
-                    {nft.previewImage.type !== 'audio/mpeg' &&
-                      nft.previewImage.type !== 'video/mp4' && (
-                        <img
-                          className="smallView-image"
-                          src={URL.createObjectURL(nft.previewImage)}
-                          alt={nft.name}
-                        />
-                      )}
+                    {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'video/mp4' && (
+                      <img
+                        className="smallView-image"
+                        src={URL.createObjectURL(nft.previewImage)}
+                        alt={nft.name}
+                      />
+                    )}
                     <img
                       className="del-img"
                       src={crossSmall}

@@ -12,7 +12,7 @@ const NFTs = ({ filteredNFTs }) => (
       filteredNFTs.map((nft) => (
         <div className="saved__nft__box" key={uuid()}>
           <div className="saved__nft__box__image" aria-hidden="true">
-            {nft.previewImage.type === 'video/mp4' && (
+            {nft.artworkType === 'video/mp4' && (
               <Popup
                 trigger={
                   <video
@@ -30,12 +30,12 @@ const NFTs = ({ filteredNFTs }) => (
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
             )}
-            {nft.previewImage.type === 'audio/mpeg' && (
+            {nft.artworkType === 'audio/mpeg' && (
               <Popup trigger={<img className="preview-image" src={mp3Icon} alt={nft.name} />}>
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
             )}
-            {nft.previewImage.type !== 'audio/mpeg' && nft.previewImage.type !== 'video/mp4' && (
+            {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'video/mp4' && (
               <Popup
                 trigger={
                   <img
@@ -48,7 +48,7 @@ const NFTs = ({ filteredNFTs }) => (
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
             )}
-            {nft.previewImage.type === 'video/mp4' && (
+            {nft.artworkType === 'video/mp4' && (
               <img className="video__icon" src={videoIcon} alt="Video Icon" />
             )}
           </div>

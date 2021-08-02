@@ -14,10 +14,12 @@ export function chunkifyArray(nftsArr, chunkSize) {
 }
 
 export const parseRoyalties = (royaltyAddress) =>
-  royaltyAddress.map((royalty) => ({
-    address: royalty.address,
-    amount: parseInt(royalty.amount, 10),
-  }));
+  royaltyAddress
+    ? royaltyAddress.map((royalty) => ({
+        address: royalty.address,
+        amount: parseInt(royalty.amount, 10),
+      }))
+    : null;
 
 export const formatRoyaltiesForMinting = (royalties) =>
   royalties.map((royalty) =>
