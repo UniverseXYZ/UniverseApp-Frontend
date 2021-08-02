@@ -112,7 +112,7 @@ const UniverseNFTs = () => {
           {UNIVERSE_NFTS.slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
-              elm.previewImage.type === 'image/png' ? (
+              elm.artworkType === 'jpeg' ? (
                 <div
                   key={uuid()}
                   className="nft__box"
@@ -123,7 +123,7 @@ const UniverseNFTs = () => {
                   }}
                 >
                   <div className="nft__box__image">
-                    <img className="preview-image" alt={elm.name} src={elm.previewImage.url} />
+                    <img className="preview-image" alt={elm.name} src={elm.thumbnail_url} />
                     {elm.scrambled && elm.scrambled === 'never' ? (
                       <div className="never-scrambled">
                         <img alt="Never scrambled badge" src={neverScrambledIcon} />
@@ -145,7 +145,7 @@ const UniverseNFTs = () => {
                     <p>{elm.name}</p>
                   </div>
                   <div className="nft_box_footer">
-                    <img alt="fjffd" src={elm.collectionAvatar} />
+                    <img alt="fjffd" src={elm.collection.coverUrl} />
                     <p>{elm.collectionName}</p>
                   </div>
                 </div>
@@ -161,7 +161,7 @@ const UniverseNFTs = () => {
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={elm.previewImage.url} type="video/mp4" />
+                      <source src={elm.thumbnail_url} type="video/mp4" />
                       <track kind="captions" />
                     </video>
                   </div>
