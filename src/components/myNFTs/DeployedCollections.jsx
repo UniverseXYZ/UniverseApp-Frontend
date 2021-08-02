@@ -35,11 +35,7 @@ const DeployedCollections = () => {
                     style={{ backgroundColor: collection.coverUrl }}
                   />
                 ) : (
-                  <img
-                    className="blur"
-                    src={collection.coverUrl && URL.createObjectURL(collection.coverUrl)}
-                    alt={collection.name}
-                  />
+                  <img className="blur" src={collection.coverUrl} alt={collection.name} />
                 )}
               </div>
               <div className="saved__collection__box__body">
@@ -53,7 +49,7 @@ const DeployedCollections = () => {
                 ) : (
                   <img
                     className="collection__avatar"
-                    src={collection.coverUrl && URL.createObjectURL(collection.coverUrl)}
+                    src={collection.coverUrl}
                     alt={collection.name}
                   />
                 )}
