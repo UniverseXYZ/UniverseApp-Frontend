@@ -61,7 +61,7 @@ const Collection = () => {
       if (
         selectedCollection.id === col.id &&
         selectedCollection.description === col.description &&
-        selectedCollection.previewImage.name === col.previewImage.name
+        selectedCollection.name === col.name
       ) {
         check = true;
       }

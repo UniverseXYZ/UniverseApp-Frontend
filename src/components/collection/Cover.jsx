@@ -32,18 +32,14 @@ const Cover = ({ selectedCollection }) => {
       </div>
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
-      ) : typeof selectedCollection.previewImage === 'string' &&
-        selectedCollection.previewImage.startsWith('#') ? (
+      ) : typeof selectedCollection.coverUrl === 'string' &&
+        selectedCollection.coverUrl.startsWith('#') ? (
         <div
           className="random__bg__color"
-          style={{ backgroundColor: selectedCollection.previewImage }}
+          style={{ backgroundColor: selectedCollection.coverUrl }}
         />
       ) : (
-        <img
-          className="bg blur"
-          src={URL.createObjectURL(selectedCollection.previewImage)}
-          alt={selectedCollection.name}
-        />
+        <img className="bg blur" src={selectedCollection.coverUrl} alt={selectedCollection.name} />
       )}
     </div>
   );

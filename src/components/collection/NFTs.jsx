@@ -21,7 +21,7 @@ const NFTs = ({ filteredNFTs }) => (
                     onMouseOut={(event) => event.target.pause()}
                     onBlur={(event) => event.target.pause()}
                   >
-                    <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                    <source src={nft.thumbnail_url} type="video/mp4" />
                     <track kind="captions" />
                     Your browser does not support the video tag.
                   </video>
@@ -37,13 +37,7 @@ const NFTs = ({ filteredNFTs }) => (
             )}
             {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'video/mp4' && (
               <Popup
-                trigger={
-                  <img
-                    className="preview-image"
-                    src={URL.createObjectURL(nft.previewImage)}
-                    alt={nft.name}
-                  />
-                }
+                trigger={<img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />}
               >
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
