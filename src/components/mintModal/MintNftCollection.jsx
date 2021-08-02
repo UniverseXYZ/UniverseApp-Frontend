@@ -324,7 +324,7 @@ const MintNftCollection = ({ onClick }) => {
               tokenUriList.push(tokenURIResult[0]);
 
               mintFees.push(
-                collectionNFTs[i].royalities.length
+                collectionNFTs[i].royalities
                   ? formatRoyaltiesForMinting(collectionNFTs[i].royalities)
                   : []
               );
@@ -338,7 +338,7 @@ const MintNftCollection = ({ onClick }) => {
               const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
                 from,
                 chunksOfMetaData[chunk],
-                chunksOfFeeData[chunk][0][0].length ? chunksOfFeeData[chunk] : [[]]
+                chunksOfFeeData[chunk][0][0] ? chunksOfFeeData[chunk] : [[]]
               );
 
               const mintReceipt = await mintTransaction.wait();

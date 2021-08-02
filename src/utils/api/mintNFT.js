@@ -17,20 +17,19 @@ const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/colle
  */
 export const saveNftForLater = async (data) => {
   // Construct it in order to match the expected object keys at the BE
-  console.log(data.collectionId, data.royaltiesParsed);
   const requestData = {
     name: data.name,
     description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.properties,
-    royalties: data.royaltiesParsed,
+    royalties: data.royaltiesParsed.length ? data.royaltiesParsed : null,
     collectionId: data.collectionId,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: JSON.stringify({
@@ -61,7 +60,6 @@ export const saveNftImage = async (file, id) => {
   const request = await fetch(UPLOAG_NFT_IMAGE_URL, {
     method: 'post',
     headers: {
-      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
     body: formData,
