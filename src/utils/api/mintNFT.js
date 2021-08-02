@@ -181,7 +181,7 @@ export const getTokenURI = async (data) => {
   formData.append('description', data.description);
   formData.append('numberOfEditions', parseInt(data.editions, 10));
   if (noProperties) formData.append('properties', JSON.stringify(data.properties));
-  if (data.royaltiesParsed.length)
+  if (data?.royaltiesParsed?.length)
     formData.append('royalties', JSON.stringify(data.royaltiesParsed));
 
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
@@ -249,7 +249,43 @@ export const removeSavedNft = (id) =>
     },
   });
 
-export const getMyCollections = async (deployedCollections, setDeployedCollections) => {
+export const updateSavedNft = async ({
+  name,
+  description,
+  editions,
+  properties,
+  royaltiesParsed,
+  txHash,
+  collectionId,
+  id,
+}) => {
+  const requestData = {
+    name,
+    description,
+    numberOfEditions: editions,
+    properties,
+    royalties: royaltiesParsed,
+    txHash,
+    collectionId,
+  };
+
+  const request = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+    body: JSON.stringify({
+      ...requestData,
+    }),
+  });
+
+  if (!request.ok && request.status !== 201) {
+    console.error(`Error while trying to save NFT data: ${request.statusText}`);
+  }
+};
+
+export const getMyCollections = async () => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -261,17 +297,21 @@ export const getMyCollections = async (deployedCollections, setDeployedCollectio
   const myCollectionsStream = await fetch(GET_MY_COLLECTIONS, requestOptions);
   const reader = myCollectionsStream.body.getReader();
 
+  const collectionsArray = [];
+
   const read = async () => {
     const { done, value } = await reader.read();
 
     if (!done) {
       const decoder = new TextDecoder();
       const collectionsResult = value && (await JSON.parse(decoder.decode(value)));
-      if (collectionsResult)
-        setDeployedCollections([...deployedCollections, ...collectionsResult.collections]);
-      read();
+      if (collectionsResult) collectionsArray.push(...collectionsResult.collections);
+
+      await read();
     }
   };
 
-  read();
+  await read();
+
+  return collectionsArray;
 };

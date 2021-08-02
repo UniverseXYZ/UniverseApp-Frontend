@@ -23,8 +23,12 @@ import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
-import { getMetaForSavedNft, getMyNfts } from '../../utils/api/mintNFT';
-import { chunkifyArray, formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
+import { getMetaForSavedNft, getMyNfts, updateSavedNft } from '../../utils/api/mintNFT';
+import {
+  chunkifyArray,
+  formatRoyaltiesForMinting,
+  parseRoyalties,
+} from '../../utils/helpers/contractInteraction';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {
@@ -113,9 +117,12 @@ const MyNFTs = () => {
 
     console.log(batchMintFeesArray);
 
+    const CHUNK_SIZE = 40;
+
     // get matrix of nft chunks [ [nft, nft], [nft, nft] ]
-    const chunksOfMetaData = chunkifyArray(batchMintMetaArray, 40);
-    const chunksOfFeeData = chunkifyArray(batchMintFeesArray, 40);
+    const chunksOfMetaData = chunkifyArray(batchMintMetaArray, CHUNK_SIZE);
+    const chunksOfFeeData = chunkifyArray(batchMintFeesArray, CHUNK_SIZE);
+    const chunksOfSelectedNfts = chunkifyArray(selectedNFTS, CHUNK_SIZE);
 
     // iterate chunks and deposit each one
     for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
@@ -130,6 +137,23 @@ const MyNFTs = () => {
       const mintReceipt = await mintTransaction.wait();
 
       console.log('printing receipt...', mintReceipt);
+
+      for (let i = 0; i < chunksOfSelectedNfts[chunk].length; i += 1) {
+        const patchData = {
+          name: chunksOfSelectedNfts[chunk][i].name,
+          description: chunksOfSelectedNfts[chunk][i].description,
+          editions: chunksOfSelectedNfts[chunk][i].numberOfEditions,
+          properties: chunksOfSelectedNfts[chunk][i].properties,
+          royaltiesParsed: parseRoyalties(chunksOfSelectedNfts[chunk][i].royalties),
+          txHash: mintReceipt.transactionHash,
+          collectionId: chunksOfSelectedNfts[chunk][i].collectionId,
+          id: chunksOfSelectedNfts[chunk][i].id,
+        };
+
+        console.log(patchData);
+
+        await updateSavedNft(patchData);
+      }
     }
 
     // Update the ui -> Fetch savedNfts and save them
