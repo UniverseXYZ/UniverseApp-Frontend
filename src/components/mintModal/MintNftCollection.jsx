@@ -308,7 +308,6 @@ const MintNftCollection = ({ onClick }) => {
             const tokenUriList = [];
             let tokenURIResult;
             let currentNft;
-            let noFees = true;
             /* eslint-disable no-await-in-loop */
             for (let i = 0; i < collectionNFTs.length; i += 1) {
               currentNft = collectionNFTs[i];
@@ -324,12 +323,11 @@ const MintNftCollection = ({ onClick }) => {
 
               tokenUriList.push(tokenURIResult[0]);
 
-              if (collectionNFTs[i].royalities) {
-                noFees = false;
-                mintFees.push(formatRoyaltiesForMinting(collectionNFTs[i].royalities));
-              } else {
-                mintFees.push([]);
-              }
+              mintFees.push(
+                collectionNFTs[i].royalities
+                  ? formatRoyaltiesForMinting(collectionNFTs[i].royalities)
+                  : []
+              );
             }
 
             console.log(mintFees);
@@ -338,7 +336,6 @@ const MintNftCollection = ({ onClick }) => {
             const chunksOfFeeData = chunkifyArray(mintFees, 40);
 
             console.log(chunksOfFeeData);
-            console.log(noFees);
 
             for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
               console.log(
