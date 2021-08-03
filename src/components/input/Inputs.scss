@@ -15,21 +15,64 @@
   background: linear-gradient($white, $white) padding-box,
     linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
 }
+.input--focus--field.intup-l {
+  > div{
+    padding: 1px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+    .box--shadow--effect--block {
+      opacity: 0.2 !important;
+    }
+  }
+}
 .intup-l {
   display: inline-grid;
   position: relative;
-  .box--shadow--effect--block {
-    width: calc(100% + 4px);
-  }
-  input {
-    width: 445px;
-    font-family: $spaceGroteskFont;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 20px;
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.2);
+
+  > div {
+    position: relative;
+
+    .box--shadow--effect--block {
+      position: absolute;
+      width: calc(100% + 8px);
+      min-height: 58px;
+      background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      left: -4px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      border-radius: 12px;
+      opacity: 0;
+    }
+    input {
+      width: 445px;
+      min-height: 50px;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 20px;
+      position: relative;
+      box-sizing: border-box;
+      z-index: 100;
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.2);
+      }
+      &:focus {
+        border: none;
+        border-radius: 10px;
+      }
+    }
+    &:hover {
+      padding: 1px;
+      .box--shadow--effect--block {
+        opacity: 0.2 !important;
+      }
+      input {
+        border: none;
+        border-radius: 10px !important;
+      }
     }
   }
 }
