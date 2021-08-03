@@ -13,6 +13,7 @@ const RarityCharts = () => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
   const [polymorphRarityData, setPolymorphRarityChart] = useState([...PolymorphRarityCharts]);
+  const [desc, setDesc] = useState(false);
 
   useEffect(() => {
     setDarkMode(true);
@@ -22,7 +23,12 @@ const RarityCharts = () => {
     <div className="rarity--charts--page">
       <Welcome />
       <div className="rarity--charts--page--container">
-        <Filters data={PolymorphRarityCharts} getData={(find) => setPolymorphRarityChart(find)} />
+        <Filters
+          data={PolymorphRarityCharts}
+          getData={(find) => setPolymorphRarityChart(find)}
+          getDesc={(value) => setDesc(value)}
+          desc={desc}
+        />
         <List data={polymorphRarityData} perPage={perPage} offset={offset} />
         {polymorphRarityData.length ? (
           <div className="pagination__container">

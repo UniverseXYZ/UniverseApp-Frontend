@@ -56,6 +56,11 @@ const AuctionSettings = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
+  const [auctionNameFocusField, setAuctionNameFocusField] = useState('');
+  const [startingBidFocusField, setStartingBidFocusField] = useState('');
+  const [walletAddressFocusField, setWalletAddressFocusField] = useState('');
+  const [percentAmountFocusField, setPercentAmountFocusField] = useState('');
+  const [focusField, setFocusField] = useState('');
 
   const handleSearch = (value) => {
     setsearchByNameAndAddress(value);
@@ -277,15 +282,18 @@ const AuctionSettings = () => {
         <div className="setting-form">
           <div className="up-side">
             <div className="infoDiv">
-              <Input
-                id="name"
-                onChange={handleOnChange}
-                label="Auction name"
-                value={values.name}
-                error={
-                  isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
-                }
-              />
+              <div className="auction-name">
+                <Input
+                  id="name"
+                  onChange={handleOnChange}
+                  label="Auction name"
+                  value={values.name}
+                  hoverBoxShadowGradient
+                  error={
+                    isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
+                  }
+                />
+              </div>
               <div className="starting-bid">
                 <Input
                   id="startingBid"
@@ -293,6 +301,7 @@ const AuctionSettings = () => {
                   onChange={handleOnChange}
                   label="Starting bid"
                   value={values.startingBid}
+                  hoverBoxShadowGradient
                   error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
                 />
 
@@ -321,33 +330,36 @@ const AuctionSettings = () => {
             <div className="infoDiv">
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
-                  <Input
-                    type="text"
-                    readOnly
-                    id="startDate"
-                    label="Start date"
-                    autoComplete="off"
-                    value={
-                      values.startDate
-                        ? `${values.startDate.toString().split(' ')[1]} ${
-                            values.startDate.toString().split(' ')[2]
-                          }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
-                            .toString()
-                            .split(' ')[4]
-                            .substring(0, 5)} ${startDateTemp.timezone}`
-                        : ''
-                    }
-                    error={isValidFields.startDate ? undefined : 'Start date is required!'}
-                  />
                   <Popup
                     trigger={
-                      <img
-                        aria-hidden="true"
-                        className="callendar__image"
-                        src={callendarIcon}
-                        alt="Callendar"
-                        // onClick={() => setShowStartDate(true)}
-                      />
+                      <div>
+                        <Input
+                          type="text"
+                          readOnly
+                          id="startDate"
+                          label="Start date"
+                          autoComplete="off"
+                          hoverBoxShadowGradient
+                          value={
+                            values.startDate
+                              ? `${values.startDate.toString().split(' ')[1]} ${
+                                  values.startDate.toString().split(' ')[2]
+                                }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
+                                  .toString()
+                                  .split(' ')[4]
+                                  .substring(0, 5)} ${startDateTemp.timezone}`
+                              : ''
+                          }
+                          error={isValidFields.startDate ? undefined : 'Start date is required!'}
+                        />
+                        <img
+                          aria-hidden="true"
+                          className="callendar__image"
+                          src={callendarIcon}
+                          alt="Callendar"
+                          // onClick={() => setShowStartDate(true)}
+                        />
+                      </div>
                     }
                   >
                     {(close) => (
@@ -366,34 +378,37 @@ const AuctionSettings = () => {
               </div>
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
-                  <Input
-                    type="text"
-                    readOnly
-                    onClick={() => setShowEndDate(true)}
-                    id="endDate"
-                    label="End date"
-                    autoComplete="off"
-                    value={
-                      values.endDate
-                        ? `${values.endDate.toString().split(' ')[1]} ${
-                            values.endDate.toString().split(' ')[2]
-                          }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
-                            .toString()
-                            .split(' ')[4]
-                            .substring(0, 5)} ${endDateTemp.timezone}`
-                        : ''
-                    }
-                    error={isValidFields.endDate ? undefined : 'End date is required!'}
-                  />
                   <Popup
                     trigger={
-                      <img
-                        aria-hidden="true"
-                        className="callendar__image"
-                        src={callendarIcon}
-                        alt="Callendar"
-                        // onClick={() => setShowStartDate(true)}
-                      />
+                      <div>
+                        <Input
+                          type="text"
+                          readOnly
+                          onClick={() => setShowEndDate(true)}
+                          id="endDate"
+                          label="End date"
+                          autoComplete="off"
+                          hoverBoxShadowGradient
+                          value={
+                            values.endDate
+                              ? `${values.endDate.toString().split(' ')[1]} ${
+                                  values.endDate.toString().split(' ')[2]
+                                }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
+                                  .toString()
+                                  .split(' ')[4]
+                                  .substring(0, 5)} ${endDateTemp.timezone}`
+                              : ''
+                          }
+                          error={isValidFields.endDate ? undefined : 'End date is required!'}
+                        />
+                        <img
+                          aria-hidden="true"
+                          className="callendar__image"
+                          src={callendarIcon}
+                          alt="Callendar"
+                          // onClick={() => setShowStartDate(true)}
+                        />
+                      </div>
                     }
                   >
                     {(close) => (
@@ -471,6 +486,7 @@ const AuctionSettings = () => {
                     placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                     className="address-inp"
                     value={elm.address}
+                    hoverBoxShadowGradient
                     onChange={(e) => propertyChangesAddress(i, e.target.value)}
                   />
                 </div>
@@ -483,6 +499,7 @@ const AuctionSettings = () => {
                     pattern="[0-9]"
                     className="amount-inp"
                     value={elm.amount}
+                    hoverBoxShadowGradient
                     onChange={(e) => propertyChangesAmount(i, e.target.value)}
                   />
                 </div>
