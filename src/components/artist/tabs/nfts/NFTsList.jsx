@@ -6,6 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
 import videoIcon from '../../../../assets/images/video-icon.svg';
 import NFTPopup from '../../../popups/NFTPopup';
+import { getEditionsCount } from '../../../../utils/helpers/backendData';
 
 const NFTsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
@@ -61,14 +62,14 @@ const NFTsList = ({ data, perPage, offset }) => {
               <div className="nft__box__name">
                 <h3>{nft.name}</h3>
                 {nft.type === 'single' ? (
-                  nft.generatedEditions.length > 1 ? (
+                  getEditionsCount(nft) > 1 ? (
                     <div className="collection__count">
-                      {`x${nft.generatedEditions.length}`}
+                      {`x${getEditionsCount(nft)}`}
                       <div
                         className="generatedEditions"
                         style={{
                           gridTemplateColumns: `repeat(${Math.ceil(
-                            nft.generatedEditions.length / 10
+                            getEditionsCount(nft) / 10
                           )}, auto)`,
                         }}
                       >
@@ -104,14 +105,14 @@ const NFTsList = ({ data, perPage, offset }) => {
                   )}
                 </div>
                 {nft.type === 'collection' ? (
-                  nft.generatedEditions.length > 1 ? (
+                  getEditionsCount(nft) > 1 ? (
                     <div className="collection__count">
-                      {`x${nft.generatedEditions.length}`}
+                      {`x${getEditionsCount(nft)}`}
                       <div
                         className="generatedEditions"
                         style={{
                           gridTemplateColumns: `repeat(${Math.ceil(
-                            nft.generatedEditions.length / 10
+                            getEditionsCount(nft) / 10
                           )}, auto)`,
                         }}
                       >
@@ -127,7 +128,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                   <></>
                 )}
               </div>
-              {nft.generatedEditions.length > 1 && (
+              {getEditionsCount(nft) > 1 && (
                 <>
                   <div className="nft__box__highlight__one" />
                   <div className="nft__box__highlight__two" />

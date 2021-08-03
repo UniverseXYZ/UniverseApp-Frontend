@@ -10,6 +10,7 @@ import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
 import NFTPopup from '../popups/NFTPopup';
+import { getEditionsCount } from '../../utils/helpers/backendData';
 
 const Lists = ({
   data,
@@ -56,9 +57,6 @@ const Lists = ({
       }
     }
   };
-
-  const getEditionsCount = (nft) =>
-    nft?.generatedEditions?.length ? nft.generatedEditions.length : 1;
 
   useEffect(() => {
     if (editMode) {
