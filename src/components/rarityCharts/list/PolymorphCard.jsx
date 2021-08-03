@@ -6,42 +6,43 @@ import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 
-const PolymorphCard = ({ item }) => (
+const PolymorphCard = ({ item, index }) => (
   <div className="card">
     <div className="card--header">
-      <div className="card--number">{`#${item.id}`}</div>
+      <div className="card--number">{`#${item.rank}`}</div>
       <div className="card--price">
         <img src={priceIcon} alt="Price" />
-        {item.price}
+        {item.rarityscore}
       </div>
     </div>
     <div className="card--body">
-      <Popup
-        trigger={<img className="rarity--chart" src={item.previewImage.url} alt={item.name} />}
-      >
+      <Popup trigger={<img className="rarity--chart" src={item.imageurl} alt={item.name} />}>
         {(close) => <RarityRankPopup onClose={close} item={item} />}
       </Popup>
-      {item.scrambled === 'single' ? (
+      {item.scrambles === 0 && item.morphs > 0 ? (
         <div className="card--scrambled">
           <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
           <span className="tooltiptext">Single trait scrambled</span>
         </div>
-      ) : (
+      ) : item.isvirgin ? (
         <div className="card--scrambled">
           <img alt="Never scrambled badge" src={neverScrambledIcon} />
           <span className="tooltiptext">Never scrambled</span>
         </div>
+      ) : (
+        <></>
       )}
     </div>
     <div className="card--footer">
-      <h2>{item.name}</h2>
-      <p>{`#${item.serialNumber}`}</p>
+      <h2>{item.character}</h2>
+      <p>{`#${item.tokenid}`}</p>
     </div>
   </div>
 );
 
 PolymorphCard.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  index: PropTypes.oneOfType([PropTypes.number]).isRequired,
 };
 
 export default PolymorphCard;

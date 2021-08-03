@@ -6,37 +6,37 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import './SearchField.scss';
 
 const SearchField = (props) => {
-  const [searchValue, setSearchValue] = useState('');
+  const { data, CardElement, dropdown, searchText, setSearchText, enterKeyEvent, ...resProps } =
+    props;
   const [focusField, setFocusField] = useState('');
-  const [findData, setFindData] = useState([]);
+  const [findData, setFindData] = useState('');
   const history = useHistory();
   const ref = useRef();
   const searchRef = useRef();
-  const { data, CardElement, dropdown, getData, enterKeyEvent, ...resProps } = props;
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13 && enterKeyEvent) {
-      if (searchValue) {
-        history.push(`/search`, { query: searchValue });
-        setSearchValue('');
+      if (searchText) {
+        history.push(`/search`, { query: searchText });
+        setSearchText('');
         searchRef.current.blur();
       }
     }
   };
 
-  useEffect(() => {
-    const filterData = data.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-    );
-    if (!searchValue.length) {
-      setFindData(data);
-    }
-    setFindData(filterData);
-  }, [searchValue]);
+  // useEffect(() => {
+  //   const filterData = data.filter((item) =>
+  //     item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+  //   );
+  //   if (!searchValue.length) {
+  //     setFindData(data);
+  //   }
+  //   setFindData(filterData);
+  // }, [searchValue]);
 
-  useEffect(() => {
-    getData(findData);
-  }, [findData]);
+  // useEffect(() => {
+  //   getData(findData);
+  // }, [findData]);
 
   return (
     <div className={`search--field--component ${focusField}`}>
@@ -46,21 +46,25 @@ const SearchField = (props) => {
         className="inp"
         // placeholder="Search"
         ref={searchRef}
-        onChange={(e) => e.target.value.length < 16 && setSearchValue(e.target.value)}
-        value={searchValue}
+        onChange={(e) => {
+          if (e.target.value.length < 16) {
+            setSearchText(e.target.value);
+          }
+        }}
+        value={searchText}
         onKeyDown={handleSearchKeyDown}
         onFocus={() => setFocusField('focus--field')}
         onBlur={() => setFocusField('')}
         {...resProps}
       />
       <div className="focus--field--box--shadow" />
-      {searchValue.length > 0 && (
+      {searchText.length > 0 && (
         <>
           <img
             className="close"
             src={closeIcon}
             alt="Close"
-            onClick={() => setSearchValue('')}
+            onClick={() => setSearchText('')}
             aria-hidden="true"
           />
           {dropdown && (
@@ -88,14 +92,16 @@ SearchField.propTypes = {
   ).isRequired,
   CardElement: PropTypes.node.isRequired,
   dropdown: PropTypes.bool,
-  getData: PropTypes.func,
+  searchText: PropTypes.string,
   enterKeyEvent: PropTypes.bool,
+  setSearchText: PropTypes.func,
 };
 
 SearchField.defaultProps = {
   dropdown: true,
-  getData: () => {},
   enterKeyEvent: true,
+  searchText: '',
+  setSearchText: () => {},
 };
 
 export default SearchField;

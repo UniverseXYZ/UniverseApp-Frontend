@@ -5,15 +5,32 @@ import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
-  const { sortData, className, onChange, defaultValue } = props;
+  const { sortData, className, onChange, defaultValue, setSortField } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const ref = useRef(null);
   const ref2 = useRef(null);
 
+  const handleOptionChange = (item) => {
+    setSortValue(item);
+    switch (item) {
+      case 'Rarity Score':
+        setSortField('rarityscore');
+        break;
+      case 'Polymorph ID':
+        setSortField('tokenid');
+        break;
+      case 'Rank':
+        setSortField('rank');
+        break;
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
-    onChange(sortValue);
-  }, [sortValue]);
+    handleOptionChange(defaultValue);
+  }, []);
 
   return (
     <div
@@ -38,7 +55,7 @@ const SortBySelect = (props) => {
                 className="dropdown--item"
                 key={uuid()}
                 aria-hidden="true"
-                onClick={() => setSortValue(item)}
+                onClick={() => handleOptionChange(item)}
               >
                 {item}
               </div>
@@ -56,6 +73,7 @@ SortBySelect.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func,
   defaultValue: PropTypes.string,
+  setSortField: PropTypes.func.isRequired,
 };
 
 SortBySelect.defaultProps = {

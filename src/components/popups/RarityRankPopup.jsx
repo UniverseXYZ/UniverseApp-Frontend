@@ -1,105 +1,143 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/close-menu.svg';
 import neverScrumbledIcon from '../../assets/images/never-scrambled-badge.svg';
 import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
-import bluePuzzle from '../../assets/images/blue-puzzle.svg';
-import pinkPuzzle from '../../assets/images/pink-puzzle.svg';
+import GeneParser from '../../utils/helpers/GeneParser.js';
+import RarityRankPopupProperty from './RarityRankPopupProperty';
 
 const RarityRankPopup = ({ onClose, item }) => {
-  const variable = '';
+  // const attributes = [
+  //   { trait: 'Character', value: item.character },
+  //   { trait: 'Background', value: item.background },
+  //   { trait: 'Headwear', value: item.headwear },
+  //   { trait: 'Eyewear', value: item.eyewear },
+  //   { trait: 'Torso', value: item.torso },
+  //   { trait: 'Pants', value: item.pants },
+  //   { trait: 'Footwear', value: item.footwear },
+  //   { trait: 'Left Hand', value: item.lefthand },
+  //   { trait: 'Right Hand', value: item.righthand },
+  // ];
+  const initChances = {
+    character: 0,
+    background: 0,
+    headwear: 0,
+    eyewear: 0,
+    torso: 0,
+    pants: 0,
+    footwear: 0,
+    lefthand: 0,
+    righthand: 0,
+  };
+  const [traitsMap, setTraitsMap] = useState([]);
+
+  useEffect(() => {
+    const genesMap = GeneParser.parse(item.currentgene);
+    setTraitsMap(genesMap);
+  }, []);
+
   return (
     <div className="rarity--rank--popup">
       <img src={closeIcon} alt="Close" className="close" onClick={onClose} aria-hidden="true" />
       <div className="rarity--rank">
         <div className="rarity--rank--image">
-          {item.scrambled === 'single' ? (
+          {item.scrambles === 0 && item.morphs > 0 ? (
             <div className="never--scrumbled">
               <img src={scrumbledIcon} alt="Single trait scrambled badge" />
               <span className="tooltiptext">Single trait scrambled</span>
             </div>
-          ) : (
+          ) : item.isvirgin ? (
             <div className="never--scrumbled">
               <img src={neverScrumbledIcon} alt="Never scrambled badge" />
               <span className="tooltiptext">Never scrambled</span>
             </div>
+          ) : (
+            <></>
           )}
-          <img src={item.previewImage.url} alt={item.name} />
+          <img src={item.imageurl} alt={item.name} />
         </div>
         <div className="rarity--rank--body">
           <div className="rarity--rank--header">
             <div>
-              <h1>{`Rarity Rank #${item.id}`}</h1>
-              <h2>{item.name}</h2>
+              <h1>{`Rarity Rank #${item.rank}`}</h1>
+              <h2>{item.character}</h2>
             </div>
-            <p className="number">{`#${item.serialNumber}`}</p>
+            <p className="number">{`#${item.tokenid}`}</p>
           </div>
           <div className="rarity--rank--descriptions">
-            <div className="rarity--description">
-              <h4>Base Character</h4>
-              <h3>Marigunana</h3>
-              <p className="description">28% have this trait</p>
-            </div>
-            <div className="rarity--description selected">
-              <div className="matching">
-                <img src={bluePuzzle} alt="Blue" />
-                <span className="tooltiptext">Matching trait</span>
-              </div>
-              <h4>Headwear</h4>
-              <h3>Marine Helemt</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description">
-              <h4>Eyewear</h4>
-              <h3>Bar Shades</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description selected">
-              <div className="matching">
-                <img src={pinkPuzzle} alt="Pink" />
-                <span className="tooltiptext">Matching trait</span>
-              </div>
-              <h4>Footwear</h4>
-              <h3>Brown Spartan Sandals</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description selected">
-              <div className="matching">
-                <img src={bluePuzzle} alt="Blue" />
-                <span className="tooltiptext">Matching trait</span>
-              </div>
-              <h4>Torso</h4>
-              <h3>Golden Jacket</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description selected">
-              <div className="matching">
-                <img src={pinkPuzzle} alt="Pink" />
-                <span className="tooltiptext">Matching trait</span>
-              </div>
-              <h4>Pants</h4>
-              <h3>Classic Plaid Pants</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description">
-              <h4>Left-hand accessory</h4>
-              <h3>No Left-Hand Accessory</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description selected">
-              <div className="matching">
-                <img src={pinkPuzzle} alt="Pink" />
-                <span className="tooltiptext">Matching trait</span>
-              </div>
-              <h4>Right-hand accessory</h4>
-              <h3>Blue Degen Sword</h3>
-              <p className="description">58% have this trait</p>
-            </div>
-            <div className="rarity--description">
-              <h4>Background</h4>
-              <h3>Happy Fisher</h3>
-              <p className="description">58% have this trait</p>
-            </div>
+            <RarityRankPopupProperty
+              propertyName="Character"
+              value={item.character}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Footwear"
+              value={item.footwear}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Pants"
+              value={item.pants}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Torso"
+              value={item.torso}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Eyewear"
+              value={item.eyewear}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Headwear"
+              value={item.headwear}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+
+            <RarityRankPopupProperty
+              propertyName="Left Hand"
+              value={item.lefthand}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Right Hand"
+              value={item.righthand}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
+            <RarityRankPopupProperty
+              propertyName="Background"
+              value={item.background}
+              mainMatchingAttributes={item.mainmatchingtraits}
+              secMatchingAttributes={item.secmatchingtraits}
+              genesMap={traitsMap}
+              matchingHands={item.matchinghands}
+            />
           </div>
         </div>
       </div>
