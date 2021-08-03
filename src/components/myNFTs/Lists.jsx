@@ -9,6 +9,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import NFTPopup from '../popups/NFTPopup';
+import { getEditionsCount } from '../../utils/helpers/backendData';
 
 const Lists = ({
   data,
@@ -53,9 +54,6 @@ const Lists = ({
       }
     }
   };
-
-  const getEditionsCount = (nft) =>
-    nft?.generatedEditions?.length ? nft.generatedEditions.length : 1;
 
   useEffect(() => {
     if (editMode) {
