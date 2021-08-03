@@ -56,6 +56,11 @@ const AuctionSettings = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
+  const [auctionNameFocusField, setAuctionNameFocusField] = useState('');
+  const [startingBidFocusField, setStartingBidFocusField] = useState('');
+  const [walletAddressFocusField, setWalletAddressFocusField] = useState('');
+  const [percentAmountFocusField, setPercentAmountFocusField] = useState('');
+  const [focusField, setFocusField] = useState('');
 
   const handleSearch = (value) => {
     setsearchByNameAndAddress(value);
@@ -277,16 +282,18 @@ const AuctionSettings = () => {
         <div className="setting-form">
           <div className="up-side">
             <div className="infoDiv">
-              <Input
-                id="name"
-                onChange={handleOnChange}
-                label="Auction name"
-                value={values.name}
-                hoverBoxShadowGradient
-                error={
-                  isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
-                }
-              />
+              <div className="auction-name">
+                <Input
+                  id="name"
+                  onChange={handleOnChange}
+                  label="Auction name"
+                  value={values.name}
+                  hoverBoxShadowGradient
+                  error={
+                    isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
+                  }
+                />
+              </div>
               <div className="starting-bid">
                 <Input
                   id="startingBid"
@@ -332,6 +339,7 @@ const AuctionSettings = () => {
                           id="startDate"
                           label="Start date"
                           autoComplete="off"
+                          hoverBoxShadowGradient
                           value={
                             values.startDate
                               ? `${values.startDate.toString().split(' ')[1]} ${
@@ -380,6 +388,7 @@ const AuctionSettings = () => {
                           id="endDate"
                           label="End date"
                           autoComplete="off"
+                          hoverBoxShadowGradient
                           value={
                             values.endDate
                               ? `${values.endDate.toString().split(' ')[1]} ${
@@ -477,6 +486,7 @@ const AuctionSettings = () => {
                     placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                     className="address-inp"
                     value={elm.address}
+                    hoverBoxShadowGradient
                     onChange={(e) => propertyChangesAddress(i, e.target.value)}
                   />
                 </div>
@@ -489,6 +499,7 @@ const AuctionSettings = () => {
                     pattern="[0-9]"
                     className="amount-inp"
                     value={elm.amount}
+                    hoverBoxShadowGradient
                     onChange={(e) => propertyChangesAmount(i, e.target.value)}
                   />
                 </div>

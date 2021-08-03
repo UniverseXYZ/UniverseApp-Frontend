@@ -19,7 +19,7 @@
     }
   }
   .royalty-form {
-    margin-top: 25px;
+    margin-top: 26px;
     
     .address-inp{
       width: 100%;
@@ -134,6 +134,9 @@
         color: $black;
       }
     }
+    .switch{
+      margin-bottom: 0;
+    }
   }
     .royalty-title{
       font-family: $sharpGroteskSemiBoldFont;
@@ -167,7 +170,7 @@
         line-height: 20px;
         color: #1a1a1a;
       }
-      .starting-bid {
+      .auction-name, .starting-bid {
         position: relative;
         width: 100%;
       }
@@ -181,6 +184,7 @@
           right: 0px;
           top: 23px;
           height: 52px;
+          z-index: 101;
         }
       }
       .intup-l {
@@ -233,6 +237,7 @@
         right: 8px;
         top: 32px;
         border-radius: 6px;
+        z-index: 101;
         button {
           display: flex;
           align-items: center;
