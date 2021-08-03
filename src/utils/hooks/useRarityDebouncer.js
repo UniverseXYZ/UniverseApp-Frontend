@@ -34,8 +34,8 @@ export const useSearchPolymorphs = () => {
   const perPage = 500;
   const [inputText, setInputText] = useState('');
   const [page, setPage] = useState(1);
-  const [sortField, setSortField] = useState('');
-  const [sortDir, setSortDir] = useState('');
+  const [sortField, setSortField] = useState('rarityscore');
+  const [sortDir, setSortDir] = useState('desc');
   const [filter, setFilter] = useState('');
   const [results, setResults] = useState([]);
   const [isLastPage, setIsLastPage] = useState(false);

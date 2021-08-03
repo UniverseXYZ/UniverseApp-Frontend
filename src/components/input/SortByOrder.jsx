@@ -1,43 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import SortDownIcon from '../../assets/images/rarity-charts/sortDownIcon.svg';
 import SortUpIcon from '../../assets/images/rarity-charts/sortUpIcon.svg';
+import AppContext from '../../ContextAPI';
 import './SortByOrder.scss';
 
-const SortByOrder = (props) => {
-  const { data, getData, getDesc } = props;
-  const [desc, setDesc] = useState(false);
+const SortByOrder = ({ setSortDir, sortDir, setApiPage }) => {
+  const [direction, setDirection] = useState(sortDir);
+  const { setMyUniverseNFTsActiverPage } = useContext(AppContext);
 
-  useEffect(() => {
-    // const sortedData = desc ? data.sort((a, b) => b.id - a.id) : data.sort((a, b) => a.id - b.id);
-    // getData([...sortedData]);
-    getDesc(desc);
-  }, [desc]);
-
+  const handleChange = () => {
+    let newDir = '';
+    if (direction === 'asc') {
+      newDir = 'desc';
+    } else {
+      newDir = 'asc';
+    }
+    setDirection(newDir);
+    setSortDir(newDir);
+    setApiPage(1);
+    setMyUniverseNFTsActiverPage(0);
+  };
   return (
-    <div className="sort--by--order" aria-hidden="true" onClick={() => setDesc(!desc)}>
+    <div className="sort--by--order" aria-hidden="true" onClick={handleChange}>
       <div className="sort--by--order--icon">
-        <img src={desc ? SortDownIcon : SortUpIcon} alt={desc ? 'Arrow Down' : 'Arrow Up'} />
+        <img
+          src={direction === 'desc' ? SortDownIcon : SortUpIcon}
+          alt={direction === 'desc' ? 'Arrow Down' : 'Arrow Up'}
+        />
       </div>
       <div className="box--shadow--effect--block" />
     </div>
   );
 };
-
 SortByOrder.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-    })
-  ),
-  getData: PropTypes.func,
-  getDesc: PropTypes.func,
+  setSortDir: PropTypes.func.isRequired,
+  sortDir: PropTypes.bool.isRequired,
+  setApiPage: PropTypes.func.isRequired,
 };
-
-SortByOrder.defaultProps = {
-  data: [],
-  getData: () => {},
-  getDesc: () => {},
-};
-
 export default SortByOrder;

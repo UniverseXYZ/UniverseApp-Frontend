@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import searchIcon from '../../assets/images/search-gray.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
+import AppContext from '../../ContextAPI';
 import './SearchField.scss';
 
 const SearchField = (props) => {
-  const { dropdown, searchText, setSearchText, enterKeyEvent, ...resProps } = props;
+  const { dropdown, searchText, setSearchText, enterKeyEvent, setApiPage, ...resProps } = props;
+  const { setMyUniverseNFTsActiverPage } = useContext(AppContext);
   const [focusField, setFocusField] = useState('');
   const [findData, setFindData] = useState('');
   const history = useHistory();
@@ -23,6 +25,14 @@ const SearchField = (props) => {
     }
   };
 
+  const handleInputChange = (e) => {
+    if (e.target.value.length < 16) {
+      setSearchText(e.target.value);
+      setApiPage(1);
+      setMyUniverseNFTsActiverPage(0);
+    }
+  };
+
   return (
     <div className={`search--field--component ${focusField}`}>
       <img className="search" src={searchIcon} alt="Search" />
@@ -31,11 +41,7 @@ const SearchField = (props) => {
         className="inp"
         // placeholder="Search"
         ref={searchRef}
-        onChange={(e) => {
-          if (e.target.value.length < 16) {
-            setSearchText(e.target.value);
-          }
-        }}
+        onChange={handleInputChange}
         value={searchText}
         onKeyDown={handleSearchKeyDown}
         onFocus={() => setFocusField('focus--field')}
@@ -72,6 +78,7 @@ SearchField.propTypes = {
   searchText: PropTypes.string,
   enterKeyEvent: PropTypes.bool,
   setSearchText: PropTypes.func,
+  setApiPage: PropTypes.func.isRequired,
 };
 
 SearchField.defaultProps = {

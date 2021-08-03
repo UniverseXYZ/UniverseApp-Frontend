@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import './List.scss';
 import uuid from 'react-uuid';
 import PolymorphCard from './PolymorphCard';
-import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 import '../../../containers/rarityCharts/RarityCharsLoader.scss';
 import '../../../containers/rarityCharts/RarityCharts.scss';
+import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders';
 
-const List = ({ data, perPage, offset, isLastPage, renderLoaders }) => {
+const List = ({ data, perPage, offset, isLastPage }) => {
   const sliceData = data.slice(offset, offset + perPage) || [];
   const emptySlots = perPage - sliceData.length || 4;
 
@@ -28,7 +28,6 @@ List.propTypes = {
   perPage: PropTypes.number.isRequired,
   offset: PropTypes.number.isRequired,
   isLastPage: PropTypes.bool.isRequired,
-  renderLoaders: PropTypes.func.isRequired,
 };
 
 export default List;

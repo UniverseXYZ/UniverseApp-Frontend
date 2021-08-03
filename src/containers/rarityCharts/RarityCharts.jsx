@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState, useMemo, useRef } from 'react';
-import uuid from 'react-uuid';
 import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown';
 import Pagination from '../../components/pagination/Pagionation';
 import Filters from '../../components/rarityCharts/filters/Filters';
@@ -8,7 +7,6 @@ import Welcome from '../../components/rarityCharts/welcome/Welcome';
 import AppContext from '../../ContextAPI';
 import { PolymorphRarityCharts } from '../../utils/fixtures/RarityChartsDummyData';
 import './RarityCharts.scss';
-import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import RarityChartsLoader from './RarityChartsLoader';
 
@@ -16,7 +14,6 @@ const RarityCharts = () => {
   const { setDarkMode } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
-  const [desc, setDesc] = useState(false);
 
   const {
     inputText,
@@ -36,49 +33,26 @@ const RarityCharts = () => {
   } = useSearchPolymorphs();
 
   useEffect(() => {
-    console.log('Rerender');
     setDarkMode(true);
   }, []);
-  const renderLoaders = (number) =>
-    [...Array(number)].map(() => (
-      <div className="loading" key={uuid()}>
-        <img src={loadingBg} alt="polymorph" key={uuid()} />
-        <div className="lds-roller">
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-        </div>
-      </div>
-    ));
 
   return (
     <div className="rarity--charts--page">
       <Welcome />
       <div className="rarity--charts--page--container">
         <Filters
-          data={results}
           setSortField={setSortField}
           searchText={inputText}
           setSearchText={setInputText}
-          getDesc={(value) => setDesc(value)}
-          desc={desc}
+          setSortDir={setSortDir}
+          sortDir={sortDir}
+          setApiPage={setPage}
         />
         {search.loading && !isLastPage ? (
-          <RarityChartsLoader renderLoaders={renderLoaders} number={16} />
+          <RarityChartsLoader number={12} />
         ) : results.length ? (
           <>
-            <List
-              data={results}
-              renderLoaders={renderLoaders}
-              isLastPage={isLastPage}
-              perPage={perPage}
-              offset={offset}
-            />
+            <List data={results} isLastPage={isLastPage} perPage={perPage} offset={offset} />
             <div className="pagination__container">
               <Pagination
                 setApiPage={setPage}
