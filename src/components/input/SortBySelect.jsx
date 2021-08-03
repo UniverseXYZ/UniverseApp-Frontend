@@ -5,7 +5,7 @@ import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
-  const { sortData, className, onChange, defaultValue } = props;
+  const { data, sortData, className, onChange, defaultValue, getData, getDesc, desc } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const ref = useRef(null);
@@ -13,6 +13,8 @@ const SortBySelect = (props) => {
 
   useEffect(() => {
     onChange(sortValue);
+    const sortedData = desc ? data.sort((a, b) => b.id - a.id) : data.sort((a, b) => a.id - b.id);
+    getData([...sortedData]);
   }, [sortValue]);
 
   return (
@@ -52,10 +54,18 @@ const SortBySelect = (props) => {
 };
 
 SortBySelect.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+    })
+  ).isRequired,
   sortData: PropTypes.arrayOf(PropTypes.string),
   className: PropTypes.string,
   onChange: PropTypes.func,
   defaultValue: PropTypes.string,
+  getData: PropTypes.func,
+  getDesc: PropTypes.func,
+  desc: PropTypes.bool,
 };
 
 SortBySelect.defaultProps = {
@@ -71,6 +81,9 @@ SortBySelect.defaultProps = {
   className: '',
   onChange: () => {},
   defaultValue: 'Sort by',
+  getData: () => {},
+  getDesc: () => {},
+  desc: false,
 };
 
 export default SortBySelect;
