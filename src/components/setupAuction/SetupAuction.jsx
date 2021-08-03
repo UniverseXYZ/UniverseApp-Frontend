@@ -39,7 +39,7 @@ const newTabData = [
     iconActive: ReviewIconActive,
     route: '/setup-auction/review-auction',
     home: false,
-    content: <RewardTiers />,
+    content: <ReviewAuction />,
   },
 ];
 

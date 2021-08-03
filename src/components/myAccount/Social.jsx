@@ -5,6 +5,7 @@ import AppContext from '../../ContextAPI';
 import instagramLogo from '../../assets/images/instagram-outlined.svg';
 import twitterLogo from '../../assets/images/icons_twitter.svg';
 import pencilIcon from '../../assets/images/edit.svg';
+import errorIcon from '../../assets/images/red-msg.svg';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 
@@ -22,10 +23,8 @@ const Social = ({
   // const [showSocial, setShowSocial] = useState(true);
 
   return (
-    <div className="my-account container">
-      <div className="account-grid-container">
-        <div className="account-grid-social">
-          <div className="social">
+    <div className="account-grid-social">
+      {/* <div className="social">
             <h5>Social</h5>
             <label className="switch">
               <input
@@ -35,8 +34,8 @@ const Social = ({
               />
               <span className="slider round" />
             </label>
-          </div>
-          {/* {socialEditing ? (
+          </div> */}
+      {/* {socialEditing ? (
             <div className="account-grid-social-edit">
               <div className="social-sites">
                 {!loggedInArtist.instagramLink ? (
@@ -72,48 +71,50 @@ const Social = ({
               </Button>
             </div>
           ) : ( */}
-          {/* <Animated animationIn="zoomIn"> */}
-          <div className="account-grid-social-editing">
-            {showSocial ? (
-              <>
-                <div className="instagram">
-                  <h5>Instagram profile</h5>
-                  <img alt="" src={instagramLogo} />
-                  <Input
-                    placeholder="instagram.com/username"
-                    className="inp"
-                    value={instagramLink}
-                    onChange={(e) => setInstagramLink(e.target.value)}
-                  />
-                </div>
-                <div className="twitter">
-                  <h5>Twitter profile</h5>
-                  <img alt="" src={twitterLogo} />
-                  <Input
-                    placeholder="twitter.com/username"
-                    className="inp"
-                    value={twitterLink}
-                    onChange={(e) => setTwitterLink(e.target.value)}
-                  />
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-
-            <div className="account-display-buttons">
-              <Button className="light-button" onClick={() => saveChanges()}>
-                Save changes
-              </Button>
-              <Button className="light-border-button" onClick={() => cancelChanges()}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-          {/* </Animated> */}
-          {/* )} */}
+      {/* <Animated animationIn="zoomIn"> */}
+      <div className="account-grid-social-editing">
+        <h3>
+          Social media <span>(optional)</span>
+        </h3>
+        <div className="instagram">
+          <h5>Instagram profile</h5>
+          <img alt="" src={instagramLogo} />
+          <Input
+            placeholder="instagram.com/username"
+            className="inp"
+            value={instagramLink}
+            onChange={(e) => setInstagramLink(e.target.value)}
+          />
         </div>
+        <div className="twitter">
+          <h5>Twitter profile</h5>
+          <img alt="" src={twitterLogo} />
+          <Input
+            placeholder="twitter.com/username"
+            className="inp"
+            value={twitterLink}
+            onChange={(e) => setTwitterLink(e.target.value)}
+          />
+        </div>
+        {/* <div className="display__error">
+          <img alt="Error" src={errorIcon} />
+          <p>
+            Something went wrong. Please fix the errors in the field above and try again. The
+            buttons will be enabled after information has been entered into the fields.
+          </p>
+        </div>
+
+        <div className="account-display-buttons">
+          <Button className="light-button" onClick={() => saveChanges()}>
+            Save changes
+          </Button>
+          <Button className="light-border-button" onClick={() => cancelChanges()}>
+            Cancel
+          </Button>
+        </div> */}
       </div>
+      {/* </Animated> */}
+      {/* )} */}
     </div>
   );
 };

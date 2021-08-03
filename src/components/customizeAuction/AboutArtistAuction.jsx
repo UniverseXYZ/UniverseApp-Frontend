@@ -68,17 +68,28 @@ const AboutArtistAuction = () => {
           </p>
         </div>
       </div>
-      <Main
-        accountName={accountName}
-        setAccountName={setAccountName}
-        accountPage={accountPage}
-        setAccountPage={setAccountPage}
-        accountImage={accountImage}
-        setAccountImage={setAccountImage}
-      />
-      <About about={about} setAbout={setAbout} />
-      <PersonalLogo logo={logo} setLogo={setLogo} />
-      <Social
+      <div className="my-account">
+        <Main
+          accountName={accountName}
+          setAccountName={setAccountName}
+          accountPage={accountPage}
+          setAccountPage={setAccountPage}
+          accountImage={accountImage}
+          setAccountImage={setAccountImage}
+          about={about}
+          setAbout={setAbout}
+          twitterLink={twitterLink}
+          setTwitterLink={setTwitterLink}
+          instagramLink={instagramLink}
+          setInstagramLink={setInstagramLink}
+          saveChanges={saveChanges}
+          cancelChanges={cancelChanges}
+          // editProfileButtonClick={editProfileButtonClick}
+        />
+      </div>
+      {/* <About about={about} setAbout={setAbout} /> */}
+      {/* <PersonalLogo logo={logo} setLogo={setLogo} /> */}
+      {/* <Social
         twitterLink={twitterLink}
         setTwitterLink={setTwitterLink}
         instagramLink={instagramLink}
@@ -87,14 +98,14 @@ const AboutArtistAuction = () => {
         setShowSocial={setShowSocial}
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
-      />
-      <div className="landing__page__warning">
+      /> */}
+      {/* <div className="landing__page__warning">
         <img src={warningIcon} alt="Warning" />
         <p>
           Your landing page will be automatically published after you successfully complete all
           transactions on the Finalize Auction step.
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

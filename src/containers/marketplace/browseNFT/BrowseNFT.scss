@@ -537,6 +537,7 @@
     .input-range__track {
       background: rgba(0, 0, 0, 0.1);
       height: 6px;
+      margin: 0px 18px 0px 10px;
     }
     .input-range__track--active {
       background: $black;
@@ -641,7 +642,6 @@
     box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
     .selected--filters {
       display: none !important;
-      
     }
   }
   .selected--filters--and--sorting {
@@ -1529,7 +1529,7 @@
   .load--more--nfts {
     margin-top: 40px;
     width: 100%;
-    box-shadow: 2px 1000px 1px #fcf9f5 inset;
+    box-shadow: 2px 1000px 1px $white inset;
   }
   @include sm {
     padding: 20px;
