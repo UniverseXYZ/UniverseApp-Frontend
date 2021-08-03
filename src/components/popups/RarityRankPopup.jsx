@@ -5,32 +5,10 @@ import neverScrumbledIcon from '../../assets/images/never-scrambled-badge.svg';
 import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
 import GeneParser from '../../utils/helpers/GeneParser.js';
 import RarityRankPopupProperty from './RarityRankPopupProperty';
+import linkIcon from '../../assets/images/rarity-charts/linkIcon.svg';
 
 const RarityRankPopup = ({ onClose, item }) => {
-  // const attributes = [
-  //   { trait: 'Character', value: item.character },
-  //   { trait: 'Background', value: item.background },
-  //   { trait: 'Headwear', value: item.headwear },
-  //   { trait: 'Eyewear', value: item.eyewear },
-  //   { trait: 'Torso', value: item.torso },
-  //   { trait: 'Pants', value: item.pants },
-  //   { trait: 'Footwear', value: item.footwear },
-  //   { trait: 'Left Hand', value: item.lefthand },
-  //   { trait: 'Right Hand', value: item.righthand },
-  // ];
-  const initChances = {
-    character: 0,
-    background: 0,
-    headwear: 0,
-    eyewear: 0,
-    torso: 0,
-    pants: 0,
-    footwear: 0,
-    lefthand: 0,
-    righthand: 0,
-  };
   const [traitsMap, setTraitsMap] = useState([]);
-
   useEffect(() => {
     const genesMap = GeneParser.parse(item.currentgene);
     setTraitsMap(genesMap);
@@ -60,7 +38,11 @@ const RarityRankPopup = ({ onClose, item }) => {
           <div className="rarity--rank--header">
             <div>
               <h1>{`Rarity Rank #${item.rank}`}</h1>
-              <h2>{item.character}</h2>
+              <a
+                href={`https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${item.id}`}
+              >
+                View on Opensea <img src={linkIcon} alt="Link Icon" />
+              </a>{' '}
             </div>
             <p className="number">{`#${item.tokenid}`}</p>
           </div>

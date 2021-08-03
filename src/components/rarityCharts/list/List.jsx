@@ -11,7 +11,7 @@ const List = ({ data, perPage, offset, isLastPage }) => {
   const sliceData = data.slice(offset, offset + perPage) || [];
   const emptySlots = perPage - sliceData.length || 4;
 
-  return (
+  return sliceData.length ? (
     <div className="rarity-charts--list">
       <div className="grid">
         {sliceData.map((item, i) => (
@@ -19,6 +19,10 @@ const List = ({ data, perPage, offset, isLastPage }) => {
         ))}
         {isLastPage ? renderLoaders(emptySlots) : <></>}
       </div>
+    </div>
+  ) : (
+    <div className="rarity--charts--empty">
+      <p>No Polymorph could be found :’(</p>
     </div>
   );
 };
