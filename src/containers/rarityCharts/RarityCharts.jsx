@@ -16,6 +16,8 @@ const RarityCharts = () => {
   const { setDarkMode } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
+  const [desc, setDesc] = useState(false);
+
   const {
     inputText,
     setInputText,
@@ -59,10 +61,12 @@ const RarityCharts = () => {
       <Welcome />
       <div className="rarity--charts--page--container">
         <Filters
-          data={PolymorphRarityCharts}
+          data={results}
           setSortField={setSortField}
           searchText={inputText}
           setSearchText={setInputText}
+          getDesc={(value) => setDesc(value)}
+          desc={desc}
         />
         {search.loading && !isLastPage ? (
           <RarityChartsLoader renderLoaders={renderLoaders} number={16} />

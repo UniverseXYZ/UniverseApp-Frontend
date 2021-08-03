@@ -2,17 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchField from '../../input/SearchField';
 import SortBySelect from '../../input/SortBySelect';
+import SortByOrder from '../../input/SortByOrder';
 import './Filters.scss';
 
 const Filters = (props) => {
-  const { floorPrice, data, searchText, setSearchText, setSortField } = props;
+  const { floorPrice, data, searchText, setSearchText, setSortField, getDesc, desc, getData } =
+    props;
   return (
     <div className="rarity--charts--search--and--filters--row">
       <SearchField
-        data={data}
         placeholder="Search"
         dropdown={false}
-        CardElement={<></>}
         enterKeyEvent={false}
         searchText={searchText}
         setSearchText={setSearchText}
@@ -28,8 +28,17 @@ const Filters = (props) => {
         <SortBySelect
           setSortField={setSortField}
           id="sort--select"
-          defaultValue="Rarity Score"
-          sortData={['Rarity Score', 'Rank', 'Polymorph ID']}
+          data={data}
+          defaultValue="Rarity Scope"
+          sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
+          getData={(find) => getData(find)}
+          getDesc={(value) => getDesc(value)}
+          desc={desc}
+        />
+        <SortByOrder
+          data={data}
+          getData={(find) => getData(find)}
+          getDesc={(value) => getDesc(value)}
         />
       </div>
     </div>
@@ -42,6 +51,9 @@ Filters.propTypes = {
   searchText: PropTypes.string,
   setSearchText: PropTypes.func,
   setSortField: PropTypes.func.isRequired,
+  getData: PropTypes.func,
+  getDesc: PropTypes.func,
+  desc: PropTypes.bool,
 };
 
 Filters.defaultProps = {
@@ -49,6 +61,9 @@ Filters.defaultProps = {
   data: [],
   searchText: '',
   setSearchText: () => {},
+  getData: () => {},
+  getDesc: () => {},
+  desc: false,
 };
 
 export default Filters;

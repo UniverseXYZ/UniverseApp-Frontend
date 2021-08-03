@@ -6,8 +6,7 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import './SearchField.scss';
 
 const SearchField = (props) => {
-  const { data, CardElement, dropdown, searchText, setSearchText, enterKeyEvent, ...resProps } =
-    props;
+  const { dropdown, searchText, setSearchText, enterKeyEvent, ...resProps } = props;
   const [focusField, setFocusField] = useState('');
   const [findData, setFindData] = useState('');
   const history = useHistory();
@@ -23,20 +22,6 @@ const SearchField = (props) => {
       }
     }
   };
-
-  // useEffect(() => {
-  //   const filterData = data.filter((item) =>
-  //     item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-  //   );
-  //   if (!searchValue.length) {
-  //     setFindData(data);
-  //   }
-  //   setFindData(filterData);
-  // }, [searchValue]);
-
-  // useEffect(() => {
-  //   getData(findData);
-  // }, [findData]);
 
   return (
     <div className={`search--field--component ${focusField}`}>
@@ -74,8 +59,6 @@ const SearchField = (props) => {
                   <p>No items found</p>
                 </div>
               )}
-              {!!findData.length &&
-                findData.map((elem, index) => <CardElement {...elem} key={index.toString()} />)}
             </div>
           )}
         </>
@@ -85,12 +68,6 @@ const SearchField = (props) => {
 };
 
 SearchField.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    })
-  ).isRequired,
-  CardElement: PropTypes.node.isRequired,
   dropdown: PropTypes.bool,
   searchText: PropTypes.string,
   enterKeyEvent: PropTypes.bool,

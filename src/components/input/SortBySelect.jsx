@@ -5,7 +5,17 @@ import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
-  const { sortData, className, onChange, defaultValue, setSortField } = props;
+  const {
+    sortData,
+    className,
+    onChange,
+    defaultValue,
+    setSortField,
+    getData,
+    getDesc,
+    desc,
+    data,
+  } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const ref = useRef(null);
@@ -17,7 +27,7 @@ const SortBySelect = (props) => {
       case 'Rarity Score':
         setSortField('rarityscore');
         break;
-      case 'Polymorph ID':
+      case 'Polymorph Id':
         setSortField('tokenid');
         break;
       case 'Rank':
@@ -69,11 +79,19 @@ const SortBySelect = (props) => {
 };
 
 SortBySelect.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+    })
+  ).isRequired,
   sortData: PropTypes.arrayOf(PropTypes.string),
   className: PropTypes.string,
   onChange: PropTypes.func,
   defaultValue: PropTypes.string,
   setSortField: PropTypes.func.isRequired,
+  getData: PropTypes.func,
+  getDesc: PropTypes.func,
+  desc: PropTypes.bool,
 };
 
 SortBySelect.defaultProps = {
@@ -89,6 +107,9 @@ SortBySelect.defaultProps = {
   className: '',
   onChange: () => {},
   defaultValue: 'Sort by',
+  getData: () => {},
+  getDesc: () => {},
+  desc: false,
 };
 
 export default SortBySelect;
