@@ -6,7 +6,7 @@ import rarityChartImage4 from '../../assets/images/rarity-chart4.png';
 export const PolymorphRarityCharts = [
   {
     id: 1,
-    price: 0.5,
+    rarityScore: 28.4,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage1,
@@ -17,7 +17,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 2,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage2,
@@ -28,7 +28,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 3,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage3,
@@ -39,7 +39,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 4,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage4,
@@ -50,7 +50,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 5,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage1,
@@ -61,7 +61,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 6,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage2,
@@ -72,7 +72,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 7,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage3,
@@ -83,7 +83,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 8,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage4,
@@ -94,7 +94,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 9,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage1,
@@ -105,7 +105,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 10,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage2,
@@ -116,7 +116,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 11,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage3,
@@ -127,7 +127,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 12,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage4,
@@ -138,7 +138,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 13,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage2,
@@ -149,7 +149,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 14,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage3,
@@ -160,7 +160,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 15,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage2,
@@ -171,7 +171,7 @@ export const PolymorphRarityCharts = [
   },
   {
     id: 16,
-    price: 0.5,
+    rarityScore: 0.5,
     previewImage: {
       type: 'image/png',
       url: rarityChartImage3,

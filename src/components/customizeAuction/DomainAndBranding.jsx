@@ -8,6 +8,7 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
+import closeIcon from '../../assets/images/close-menu.svg';
 import AppContext from '../../ContextAPI.js';
 
 const DomainAndBranding = ({ values, onChange }) => {
@@ -23,7 +24,7 @@ const DomainAndBranding = ({ values, onChange }) => {
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
   const [validLink, setValidLink] = useState(false);
-  const [validHeadline, setValidHeadline] = useState(false);
+  const [validHeadline, setValidHeadline] = useState(true);
   const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [inputStyle, setInputStyle] = useState('inp empty');
@@ -82,7 +83,7 @@ const DomainAndBranding = ({ values, onChange }) => {
 
             <Input
               type="text"
-              placeholder="Enter the auction name"
+              placeholder="Enter the auction headline"
               value={values.headline}
               onChange={handleHeadline}
             />
@@ -130,11 +131,22 @@ const DomainAndBranding = ({ values, onChange }) => {
                 <h6>Preview</h6>
                 <div className="preview-div">
                   {values.promoImage ? (
-                    <img
-                      className="preview__image"
-                      src={URL.createObjectURL(values.promoImage)}
-                      alt="Promo"
-                    />
+                    <>
+                      <img
+                        className="preview__image"
+                        src={URL.createObjectURL(values.promoImage)}
+                        alt="Promo"
+                      />
+                      <img
+                        className="close"
+                        src={closeIcon}
+                        alt="Close"
+                        aria-hidden="true"
+                        onClick={() =>
+                          onChange((prevValues) => ({ ...prevValues, promoImage: null }))
+                        }
+                      />
+                    </>
                   ) : (
                     <img className="default__promo__image" src={defaultImage} alt="Default" />
                   )}
@@ -146,9 +158,7 @@ const DomainAndBranding = ({ values, onChange }) => {
 
         <div className="auction__link">
           <div className="auction__link__input">
-            <h5>
-              Auction link <img src={infoIcon} alt="Info" />
-            </h5>
+            <h5>Auction link</h5>
             {/* Auction link */}
             <Input
               type="text"
@@ -244,12 +254,29 @@ const DomainAndBranding = ({ values, onChange }) => {
               <div className="background__preview">
                 <h6>Preview</h6>
                 <div className="preview-div">
+                  {values.hasBlur && <div className="blur" />}
                   {values.backgroundImage && (
-                    <img
-                      className="background__image"
-                      src={URL.createObjectURL(values.backgroundImage)}
-                      alt="background"
-                    />
+                    <>
+                      <img
+                        className="background__image"
+                        src={URL.createObjectURL(values.backgroundImage)}
+                        alt="background"
+                      />
+                      <img
+                        className="background__default__image"
+                        src={backgroundTransparent}
+                        alt="background"
+                      />
+                      <img
+                        className="close"
+                        src={closeIcon}
+                        alt="Close"
+                        aria-hidden="true"
+                        onClick={() =>
+                          onChange((prevValues) => ({ ...prevValues, backgroundImage: null }))
+                        }
+                      />
+                    </>
                   )}
                   <img
                     className="background__default__image"

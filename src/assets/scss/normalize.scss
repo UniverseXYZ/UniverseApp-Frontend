@@ -183,6 +183,12 @@ select {
   border: 0;
 }
 
+input[type=text] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;   
+}
+
 img {
   max-width: 100%;
   max-height: 100%;

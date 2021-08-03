@@ -3,6 +3,7 @@
 @import '../../assets/scss/_mixins';
 
 .auction__page {
+  background-color: $white;
   &__header {
     display: flex;
     justify-content: space-between;

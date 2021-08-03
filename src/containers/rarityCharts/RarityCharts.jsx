@@ -30,10 +30,14 @@ const RarityCharts = () => {
           desc={desc}
         />
         <List data={polymorphRarityData} perPage={perPage} offset={offset} />
-        <div className="pagination__container">
-          <Pagination data={polymorphRarityData} perPage={perPage} setOffset={setOffset} />
-          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-        </div>
+        {polymorphRarityData.length ? (
+          <div className="pagination__container">
+            <Pagination data={polymorphRarityData} perPage={perPage} setOffset={setOffset} />
+            <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

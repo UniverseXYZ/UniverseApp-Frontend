@@ -22,7 +22,10 @@ const RewardTiers = ({ auction }) => (
                   (nft, index) =>
                     index < 3 && (
                       <div className="nft__image" key={nft.id}>
-                        <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                        <img
+                          src={nft.previewImage ? URL.createObjectURL(nft.previewImage) : nft.image}
+                          alt={nft.name}
+                        />
                         {tier.nfts.length > 3 && (
                           <span className="show__more">{`+${tier.nfts.length - 3} more`}</span>
                         )}
@@ -33,10 +36,10 @@ const RewardTiers = ({ auction }) => (
             </div>
             <div className="tier__details">
               <div className="tier__title">
-                <h2>{tier.name}</h2>
+                <h2>{tier.name || 'Platinum'}</h2>
                 <span
                   style={{
-                    backgroundColor: tier.color.hex,
+                    backgroundColor: tier.color ? tier.color.hex : '#80CCDF',
                   }}
                 />
               </div>

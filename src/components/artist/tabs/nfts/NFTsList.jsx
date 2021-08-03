@@ -36,7 +36,10 @@ const NFTsList = ({ data, perPage, offset }) => {
                         onMouseOut={(event) => event.target.pause()}
                         onBlur={(event) => event.target.pause()}
                       >
-                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                        <source
+                          src={nft.previewImage.url || URL.createObjectURL(nft.previewImage)}
+                          type="video/mp4"
+                        />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
@@ -51,7 +54,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                       trigger={
                         <img
                           className="preview-image"
-                          src={URL.createObjectURL(nft.previewImage)}
+                          src={nft.previewImage.url || URL.createObjectURL(nft.previewImage)}
                           alt={nft.name}
                         />
                       }
@@ -103,7 +106,11 @@ const NFTsList = ({ data, perPage, offset }) => {
                         </div>
                       ) : (
                         <img
-                          src={URL.createObjectURL(nft.collectionAvatar)}
+                          src={
+                            typeof nft.collectionAvatar === 'string'
+                              ? nft.collectionAvatar
+                              : URL.createObjectURL(nft.collectionAvatar)
+                          }
                           alt={nft.collectionName}
                         />
                       )}

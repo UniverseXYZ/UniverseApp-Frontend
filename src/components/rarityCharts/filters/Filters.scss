@@ -18,10 +18,10 @@
         }
         @include sm {
             width: 100%;
-            margin-bottom: 20px;            
+            margin-bottom: 30px;            
         }
         .inp {
-            padding: 0 16px 0 48px;
+            padding: 0 45px 0 48px;
         }
     }
     .floor--price--block {
@@ -30,7 +30,7 @@
         }
         @include sm {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 50px;
         }
         .floor--price--paragraph {
             font-family: $spaceGroteskFont;
@@ -42,8 +42,8 @@
             color: $black;
             text-transform: uppercase;
             span {
-              color: rgba(0, 0, 0, 0.6);
-              text-transform: capitalize;
+                color: rgba(0, 0, 0, 0.6);
+                text-transform: capitalize;
             }
         }
     }

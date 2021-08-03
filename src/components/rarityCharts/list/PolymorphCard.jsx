@@ -10,10 +10,7 @@ const PolymorphCard = ({ item }) => (
   <div className="card">
     <div className="card--header">
       <div className="card--number">{`#${item.id}`}</div>
-      <div className="card--price">
-        <img src={priceIcon} alt="Price" />
-        {item.price}
-      </div>
+      <div className="card--price">{`Rarity Score: ${item.rarityScore}`}</div>
     </div>
     <div className="card--body">
       <Popup

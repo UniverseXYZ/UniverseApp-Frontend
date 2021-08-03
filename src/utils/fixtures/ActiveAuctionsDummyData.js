@@ -33,7 +33,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -158,7 +158,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -283,7 +283,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -408,7 +408,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -533,7 +533,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -658,7 +658,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -783,7 +783,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -908,7 +908,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1033,7 +1033,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1158,7 +1158,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1283,7 +1283,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1408,7 +1408,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1533,7 +1533,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1658,7 +1658,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1783,7 +1783,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1908,7 +1908,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2033,7 +2033,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2158,7 +2158,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2283,7 +2283,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2408,7 +2408,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
