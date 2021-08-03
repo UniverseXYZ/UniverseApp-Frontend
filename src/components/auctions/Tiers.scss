@@ -198,7 +198,7 @@
         display: flex;
         margin-bottom: 16px;
         align-items: center;
-        width: 100%;
+        width: 100%;  
 
         h1 {
           font-style: normal;
@@ -242,8 +242,8 @@
         padding: 16px;
         font-size: 12px;
         font-family: $spaceGroteskFont;
-        bottom: 26px;
-        left: 180px;
+        bottom: 37px;
+        left: 200px;
         transform: translateX(-50%);
         font-weight: normal;
       }
@@ -296,6 +296,7 @@
       width: 40px;
       min-width: 40px;
       height: 24px;
+      top: 10px;
     }
 
     .switch input {
@@ -329,8 +330,7 @@
     }
 
     input:checked + .slider {
-      background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-        linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+        background:  linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);;
     }
 
     input:checked + .slider:before {

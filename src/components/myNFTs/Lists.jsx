@@ -6,8 +6,9 @@ import Popup from 'reactjs-popup';
 import AppContext from '../../ContextAPI';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import checkIcon from '../../assets/images/check.svg';
+import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
+import vector from '../../assets/images/vector2.svg';
 import NFTPopup from '../popups/NFTPopup';
 
 const Lists = ({
@@ -30,6 +31,8 @@ const Lists = ({
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [selectedNft, SetSelectedNft] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedEditions, setSelectedEditions] = useState({});
 
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction.tiers.find((element) => element.id === location.state);
@@ -75,6 +78,39 @@ const Lists = ({
     if (tierById) {
       if (selectedNFTIds.includes(nft.id) && winners <= nft.generatedEditions.length) {
         setOpenEditions(openEditions ? null : nft.id);
+      }
+    }
+  };
+  const handleSelectAll = (event, nftId) => {
+    if (event.target.className === 'edition-container') {
+      if (selectAll === false) {
+        const changedNFT = sliceData.find((nft) => nft.id === nftId);
+
+        setSelectedEditions({ ...selectedEditions, [nftId]: [...changedNFT.generatedEditions] });
+        setSelectAll(true);
+      } else {
+        setSelectedEditions({ ...selectedEditions, [nftId]: [] });
+        setSelectAll(false);
+      }
+    }
+  };
+  const handleSelectEdition = (event, nftId, edition) => {
+    if (event.target.className === 'edition-container') {
+      if (!selectedEditions[nftId]?.includes(edition)) {
+        const selectedEditionsByNftId = selectedEditions[nftId] ? selectedEditions[nftId] : [];
+
+        setSelectedEditions({
+          ...selectedEditions,
+          [nftId]: [...selectedEditionsByNftId, edition],
+        });
+      } else {
+        setSelectAll(false);
+        setSelectedEditions({
+          ...selectedEditions,
+          [nftId]: selectedEditions[nftId]?.filter(
+            (selectedEdition) => selectedEdition !== edition
+          ),
+        });
       }
     }
   };
@@ -129,12 +165,12 @@ const Lists = ({
                   {selectedNFTIds.includes(nft.id) &&
                     tierById &&
                     winners <= nft.generatedEditions.length && (
-                      <>
-                        <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
+                      <span className="selected-div">
                         <span className="selected-number">
-                          {winners}/{nft.generatedEditions.length}
+                          {selectedEditions[nft.id].length}/{nft.generatedEditions.length}
                         </span>{' '}
-                      </>
+                        <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
+                      </span>
                     )}
                 </>
               )}
@@ -213,18 +249,47 @@ const Lists = ({
                       <>
                         <button
                           type="button"
-                          className="editions-btn button"
+                          className={
+                            openEditions !== nft.id
+                              ? 'editions-btn button'
+                              : 'editions-btn selected button'
+                          }
                           onClick={() => handleShow(nft)}
                         >
-                          Edition #
+                          Edition #{' '}
+                          <img
+                            src={vector}
+                            className={openEditions === nft.id && 'icon-up'}
+                            alt="icon"
+                          />
                         </button>
                         <ul className="editions-list" hidden={openEditions !== nft.id}>
                           <li disabled>Choose edition number</li>
+                          <li>
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+                            <label
+                              className="edition-container"
+                              onClick={(event) => handleSelectAll(event, nft.id)}
+                            >
+                              Select All
+                              <input type="checkbox" checked={selectAll} />
+                              <span className="checkmark" />
+                            </label>
+                          </li>
                           {nft.generatedEditions.map((edition) => (
                             <li key={edition}>
-                              <label htmlFor={edition} className="edition-container">
+                              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+                              <label
+                                htmlFor={edition}
+                                className="edition-container"
+                                onClick={(event) => handleSelectEdition(event, nft.id, edition)}
+                              >
                                 {`#${edition}`}
-                                <input type="checkbox" id={edition} />
+                                <input
+                                  type="checkbox"
+                                  checked={selectedEditions[nft.id]?.includes(edition)}
+                                  id={edition}
+                                />
                                 <span className="checkmark" />
                               </label>
                             </li>
