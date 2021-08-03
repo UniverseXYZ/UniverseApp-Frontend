@@ -141,6 +141,7 @@ const Create = () => {
               error={isValidFields.name ? undefined : 'Tier name is required!'}
               label="Tier name"
               className="inp"
+              hoverBoxShadowGradient
               value={values.name}
               onChange={handleChange}
             />
@@ -166,6 +167,7 @@ const Create = () => {
             <Input
               id="winners"
               type="text"
+              hoverBoxShadowGradient
               error={isValidFields.winners ? undefined : 'Number of winners is required!'}
               className="inp"
               value={values.winners}
@@ -193,6 +195,7 @@ const Create = () => {
             <Input
               id="nftsPerWinner"
               type="text"
+              hoverBoxShadowGradient
               error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'}
               className="inp"
               value={values.nftsPerWinner}
