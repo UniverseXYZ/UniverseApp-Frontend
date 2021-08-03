@@ -2,6 +2,7 @@
 @import '../../../assets/scss/mixins';
 
 .price--range--filter {
+  z-index: 2 !important;
     .price__dropdown {
         position: absolute;
         top: 46px;
@@ -11,7 +12,14 @@
         border-radius: 12px;
         width: 404px;
         z-index: 9;
-
+        @include md {
+          left: auto;
+          right: 0;
+        }
+        @include sm {
+          width: calc(200% + 10px);
+          
+        }
         .price__dropdown__body {
           padding: 30px;
           .range--slider {

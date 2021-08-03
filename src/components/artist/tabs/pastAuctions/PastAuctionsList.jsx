@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const PastAuctionsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     // Here need to get all past auctions for artist
@@ -27,7 +29,16 @@ const PastAuctionsList = ({ data, perPage, offset }) => {
                 <div className="artist__details">
                   <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
-                  <button type="button">{auction.artist.name}</button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      history.push(`/${auction.artist.name.split(' ')[0]}`, {
+                        id: auction.artist.id,
+                      })
+                    }
+                  >
+                    {auction.artist.name}
+                  </button>
                 </div>
               </div>
               <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>

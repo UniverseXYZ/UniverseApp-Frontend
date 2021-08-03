@@ -43,6 +43,7 @@ import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 import { getSavedNfts } from './utils/api/mintNFT';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
+import RarityCharts from './containers/rarityCharts/RarityCharts';
 
 const App = () => {
   const location = useLocation();
@@ -237,7 +238,6 @@ const App = () => {
     if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
     }
-
     handleScroll(darkMode);
 
     window.addEventListener('scroll', () => handleScroll(darkMode));
@@ -249,6 +249,15 @@ const App = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (
+      (location.pathname === '/nft-marketplace/settings' &&
+        stepsData.selectedMethod === 'bundle') ||
+      location.pathname === '/marketplace'
+    ) {
+      document.querySelector('header').style.position = 'absolute';
+    } else {
+      document.querySelector('header').style.position = 'fixed';
+    }
   }, [location]);
 
   return (
@@ -344,6 +353,7 @@ const App = () => {
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
+        <Route exact path="/rarity-chart" component={() => <RarityCharts />} />
         <Route exact path="/my-profile" component={() => <MyProfile />} />
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route

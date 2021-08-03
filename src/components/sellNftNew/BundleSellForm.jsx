@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Input from '../input/Input';
@@ -8,19 +8,69 @@ import EndDatePicker from '../calendar/EndDatePicker';
 import Button from '../button/Button';
 import './styles/BundleSellForm.scss';
 
+const validationPrice = (price, setPriceError, type, checkPrice) => {
+  const reg = /^\d+$/;
+  if (price?.[0] === '0' && price?.[1] !== '.') {
+    setPriceError('Invalid price');
+    return false;
+  }
+  if (!reg.test(price) && price?.[1] !== '.') {
+    setPriceError('Invalid price');
+    return false;
+  }
+  if (type === 'endingPrice') {
+    if (+price > +checkPrice) {
+      setPriceError('Ending price cannot be greater than starting price.');
+      return false;
+    }
+  }
+  setPriceError(false);
+  return true;
+};
+
+const continueValidationData = (data, setErrorStartPrice, setErrorEndPrice) => {
+  const keys = Object.keys(data);
+  const checkStartPrice = validationPrice(
+    data.startPrice,
+    setErrorStartPrice,
+    'startPrice',
+    data.endPrice
+  );
+  let checkEndPrice = true;
+  if (data.switch.includes('switchEndingPrice')) {
+    checkEndPrice = validationPrice(
+      data.endPrice,
+      setErrorEndPrice,
+      'endingPrice',
+      data.startPrice
+    );
+  }
+  if (!(checkEndPrice && checkStartPrice)) {
+    return false;
+  }
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    if (data[key] === null || data[key] === '' || data[key] === undefined || !data[key]) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const BundleSellForm = (props) => {
+  const { getData } = props;
   const [errorStartPrice, setErrorStartPrice] = useState(false);
   const [errorEndingPrice, setErrorEndingPrice] = useState(false);
   const [continueDisabled, setContinueDisabled] = useState(true);
   const [bundleData, setBundleData] = useState({
-    startPrice: null,
-    endPrice: null,
-    date: '',
-    priceType: 'eth',
-    bundleName: null,
-    bundleDescription: null,
-    switch: [],
-    buyerAddress: null,
+    startPrice: window.bundleData ? window.bundleData.startPrice : null,
+    endPrice: window.bundleData ? window.bundleData.endPrice : null,
+    date: window.bundleData ? window.bundleData.date : '',
+    priceType: window.bundleData ? window.bundleData.priceType : 'eth',
+    bundleName: window.bundleData ? window.bundleData.bundleName : null,
+    bundleDescription: window.bundleData ? window.bundleData.bundleDescription : null,
+    switch: window.bundleData ? window.bundleData.switch : [],
+    buyerAddress: window.bundleData ? window.bundleData.buyerAddres : null,
   });
   const [switchEndingPrice, setSwitchEndingPrice] = useState(
     bundleData.switch.includes('switchEndingPrice')
@@ -29,6 +79,28 @@ const BundleSellForm = (props) => {
     bundleData.switch.includes('switchScheduleFutureTime')
   );
   const [switchPrivacy, setSwitchPrivacy] = useState(bundleData.switch.includes('switchPrivacy'));
+
+  useEffect(() => {
+    const copyData = { ...bundleData };
+    if (!bundleData.switch.includes('switchEndingPrice')) {
+      delete copyData.endPrice;
+    }
+    if (!bundleData.switch.includes('switchPrivacy')) {
+      delete copyData.buyerAddress;
+    }
+    if (
+      !bundleData.switch.includes('switchEndingPrice') &&
+      !bundleData.switch.includes('switchScheduleFutureTime')
+    ) {
+      delete copyData.date;
+    }
+    const valid = continueValidationData(copyData, setErrorStartPrice, setErrorEndingPrice);
+    if (valid) {
+      getData(copyData);
+    } else getData(null);
+    window.bundleData = copyData;
+  }, [bundleData]);
+
   return (
     <div className="bundle--sell--form--container">
       <h3 className="form--title">Bundle settings</h3>
@@ -43,16 +115,6 @@ const BundleSellForm = (props) => {
                 placeholder="Enter name"
                 value={bundleData.bundleName ? bundleData.bundleName : ''}
                 onChange={(e) => setBundleData({ ...bundleData, bundleName: e.target.value })}
-                // error={validationPrice(bundleData.startPrice)}
-                // onBlur={() =>
-                //   validationPrice(
-                //     bundleData.startPrice,
-                //     setErrorStartPrice,
-                //     'startPrice',
-                //     bundleData.endPrice
-                //   )
-                // }
-                // error={errorStartPrice}
               />
             </div>
           </div>
@@ -72,16 +134,6 @@ const BundleSellForm = (props) => {
                 onChange={(e) =>
                   setBundleData({ ...bundleData, bundleDescription: e.target.value })
                 }
-                // error={validationPrice(bundleData.startPrice)}
-                // onBlur={() =>
-                //   validationPrice(
-                //     bundleData.startPrice,
-                //     setErrorStartPrice,
-                //     'startPrice',
-                //     bundleData.endPrice
-                //   )
-                // }
-                // error={errorStartPrice}
               />
             </div>
           </div>
@@ -101,16 +153,15 @@ const BundleSellForm = (props) => {
                 placeholder="Amount"
                 value={bundleData.startPrice ? bundleData.startPrice : ''}
                 onChange={(e) => setBundleData({ ...bundleData, startPrice: e.target.value })}
-                // error={validationPrice(bundleData.startPrice)}
-                // onBlur={() =>
-                //   validationPrice(
-                //     bundleData.startPrice,
-                //     setErrorStartPrice,
-                //     'startPrice',
-                //     bundleData.endPrice
-                //   )
-                // }
-                // error={errorStartPrice}
+                onBlur={() =>
+                  validationPrice(
+                    bundleData.startPrice,
+                    setErrorStartPrice,
+                    'startPrice',
+                    bundleData.endPrice
+                  )
+                }
+                error={errorStartPrice}
               />
               <SelectPrice
                 value={bundleData.priceType}
@@ -169,14 +220,14 @@ const BundleSellForm = (props) => {
                       placeholder="Amount"
                       value={bundleData.endPrice ? bundleData.endPrice : ''}
                       onChange={(e) => setBundleData({ ...bundleData, endPrice: e.target.value })}
-                      //   onBlur={() =>
-                      //     validationPrice(
-                      //       bundleData.endPrice,
-                      //       setErrorEndingPrice,
-                      //       'endingPrice',
-                      //       bundleData.startPrice
-                      //     )
-                      //   }
+                      onBlur={() =>
+                        validationPrice(
+                          bundleData.endPrice,
+                          setErrorEndingPrice,
+                          'endingPrice',
+                          bundleData.startPrice
+                        )
+                      }
                       error={errorEndingPrice}
                     />
                     <SelectPrice
@@ -196,7 +247,7 @@ const BundleSellForm = (props) => {
                     <EndDatePicker
                       value={bundleData.date}
                       onChange={(e) => setBundleData({ ...bundleData, date: e })}
-                      title="Schedule for a future time"
+                      title="Expiration date"
                     />
                   </div>
                 </div>
@@ -249,6 +300,7 @@ const BundleSellForm = (props) => {
                       <EndDatePicker
                         value={bundleData.date}
                         onChange={(e) => setBundleData({ ...bundleData, date: e })}
+                        title="Schedule future time"
                       />
                     </div>
                   </div>
@@ -299,6 +351,14 @@ const BundleSellForm = (props) => {
       </div>
     </div>
   );
+};
+
+BundleSellForm.propTypes = {
+  getData: PropTypes.func,
+};
+
+BundleSellForm.defaultProps = {
+  getData: () => {},
 };
 
 export default BundleSellForm;

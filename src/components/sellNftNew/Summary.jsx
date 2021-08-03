@@ -49,7 +49,7 @@ const getListedText = (data) => {
   const { selectedMethod, settings } = data;
   const switchArray = settings.switch;
   const { priceType, startPrice } = settings;
-  if (selectedMethod === 'dutch') {
+  if (selectedMethod === 'dutch' || selectedMethod === 'bundle') {
     if (!switchArray?.length) {
       return (
         <p className="listed--paragraph">

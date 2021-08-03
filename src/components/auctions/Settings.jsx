@@ -210,9 +210,17 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val) => {
-    const prevProperties = [...properties];
-    prevProperties[index].amount = val;
-    setProperties(prevProperties);
+    if (
+      (val.toString().match(/^\d+\.?\d?\d?\d?\d?%?$/) &&
+        parseFloat(val) <= 100 &&
+        parseFloat(val) >= 0) ||
+      val === '0' ||
+      val === '%'
+    ) {
+      const prevProperties = [...properties];
+      prevProperties[index].amount = `${val.replace('%', '')}%`;
+      setProperties(prevProperties);
+    }
   };
 
   const removeProperty = (index) => {
@@ -274,6 +282,7 @@ const AuctionSettings = () => {
                 onChange={handleOnChange}
                 label="Auction name"
                 value={values.name}
+                hoverBoxShadowGradient
                 error={
                   isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
                 }
@@ -285,6 +294,7 @@ const AuctionSettings = () => {
                   onChange={handleOnChange}
                   label="Starting bid"
                   value={values.startingBid}
+                  hoverBoxShadowGradient
                   error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
                 />
 
@@ -313,33 +323,35 @@ const AuctionSettings = () => {
             <div className="infoDiv">
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
-                  <Input
-                    type="text"
-                    readOnly
-                    id="startDate"
-                    label="Start date"
-                    autoComplete="off"
-                    value={
-                      values.startDate
-                        ? `${values.startDate.toString().split(' ')[1]} ${
-                            values.startDate.toString().split(' ')[2]
-                          }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
-                            .toString()
-                            .split(' ')[4]
-                            .substring(0, 5)} ${startDateTemp.timezone}`
-                        : ''
-                    }
-                    error={isValidFields.startDate ? undefined : 'Start date is required!'}
-                  />
                   <Popup
                     trigger={
-                      <img
-                        aria-hidden="true"
-                        className="callendar__image"
-                        src={callendarIcon}
-                        alt="Callendar"
-                        // onClick={() => setShowStartDate(true)}
-                      />
+                      <div>
+                        <Input
+                          type="text"
+                          readOnly
+                          id="startDate"
+                          label="Start date"
+                          autoComplete="off"
+                          value={
+                            values.startDate
+                              ? `${values.startDate.toString().split(' ')[1]} ${
+                                  values.startDate.toString().split(' ')[2]
+                                }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
+                                  .toString()
+                                  .split(' ')[4]
+                                  .substring(0, 5)} ${startDateTemp.timezone}`
+                              : ''
+                          }
+                          error={isValidFields.startDate ? undefined : 'Start date is required!'}
+                        />
+                        <img
+                          aria-hidden="true"
+                          className="callendar__image"
+                          src={callendarIcon}
+                          alt="Callendar"
+                          // onClick={() => setShowStartDate(true)}
+                        />
+                      </div>
                     }
                   >
                     {(close) => (
@@ -358,34 +370,36 @@ const AuctionSettings = () => {
               </div>
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
-                  <Input
-                    type="text"
-                    readOnly
-                    onClick={() => setShowEndDate(true)}
-                    id="endDate"
-                    label="End date"
-                    autoComplete="off"
-                    value={
-                      values.endDate
-                        ? `${values.endDate.toString().split(' ')[1]} ${
-                            values.endDate.toString().split(' ')[2]
-                          }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
-                            .toString()
-                            .split(' ')[4]
-                            .substring(0, 5)} ${endDateTemp.timezone}`
-                        : ''
-                    }
-                    error={isValidFields.endDate ? undefined : 'End date is required!'}
-                  />
                   <Popup
                     trigger={
-                      <img
-                        aria-hidden="true"
-                        className="callendar__image"
-                        src={callendarIcon}
-                        alt="Callendar"
-                        // onClick={() => setShowStartDate(true)}
-                      />
+                      <div>
+                        <Input
+                          type="text"
+                          readOnly
+                          onClick={() => setShowEndDate(true)}
+                          id="endDate"
+                          label="End date"
+                          autoComplete="off"
+                          value={
+                            values.endDate
+                              ? `${values.endDate.toString().split(' ')[1]} ${
+                                  values.endDate.toString().split(' ')[2]
+                                }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
+                                  .toString()
+                                  .split(' ')[4]
+                                  .substring(0, 5)} ${endDateTemp.timezone}`
+                              : ''
+                          }
+                          error={isValidFields.endDate ? undefined : 'End date is required!'}
+                        />
+                        <img
+                          aria-hidden="true"
+                          className="callendar__image"
+                          src={callendarIcon}
+                          alt="Callendar"
+                          // onClick={() => setShowStartDate(true)}
+                        />
+                      </div>
                     }
                   >
                     {(close) => (
@@ -469,7 +483,7 @@ const AuctionSettings = () => {
                 <div className="property-value">
                   <Input
                     id="amount"
-                    type="number"
+                    type="text"
                     label="Percent amount"
                     placeholder="5%"
                     pattern="[0-9]"

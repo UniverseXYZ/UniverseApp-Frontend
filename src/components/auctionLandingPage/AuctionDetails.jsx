@@ -204,16 +204,26 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 ) : (
                   <img
                     className="artist__image"
-                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                    src={
+                      typeof selectedAuction.artist.avatar === 'string'
+                        ? selectedAuction.artist.avatar
+                        : URL.createObjectURL(selectedAuction.artist.avatar)
+                    }
                     alt={selectedAuction.name}
                   />
                 )}
               </div>
               <div className="auction__details__box__info">
-                <h1 className="title">{selectedAuction.name}</h1>
+                <h1 className="title">
+                  {selectedAuction.name ? selectedAuction.name : selectedAuction.title}
+                </h1>
                 <div className="artist__details">
                   <img
-                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                    src={
+                      typeof selectedAuction.artist.avatar === 'string'
+                        ? selectedAuction.artist.avatar
+                        : URL.createObjectURL(selectedAuction.artist.avatar)
+                    }
                     alt={selectedAuction.artist.name}
                   />
                   <span>by</span>

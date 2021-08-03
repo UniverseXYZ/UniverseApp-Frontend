@@ -28,6 +28,7 @@
         .collection--details,
         .owner--details {
           position: relative;
+          cursor: pointer;
           .tooltiptext {
             visibility: hidden;
             font-family: $spaceGroteskFont;

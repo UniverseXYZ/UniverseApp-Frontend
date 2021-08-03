@@ -31,6 +31,7 @@ const CustomizeAuction = () => {
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
+  console.log(myAuctions);
 
   useEffect(() => {
     if (auction) {
@@ -194,7 +195,7 @@ const CustomizeAuction = () => {
         </div>
         <div className="customize__auction_title">
           <h2>Customize auction landing page</h2>
-          <Button className="light-border-button" onClick={handlePreview}>
+          <Button className="light-button" onClick={handlePreview}>
             Preview
           </Button>
         </div>

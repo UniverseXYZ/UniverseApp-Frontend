@@ -1,9 +1,9 @@
 import uuid from 'react-uuid';
 import artistAvatar from '../../assets/images/artist-avatar.svg';
-import auctionImg from '../../assets/images/auction-test.png';
-import auctionImg2 from '../../assets/images/auctions-accordion2.png';
-import auctionImg3 from '../../assets/images/auctions-accordion3.png';
-import auctionImg4 from '../../assets/images/auctions-accordion4.png';
+import auctionImg from '../../assets/images/marketplace/auctions/auction1.png';
+import auctionImg2 from '../../assets/images/marketplace/auctions/auction2.png';
+import auctionImg3 from '../../assets/images/marketplace/auctions/auction3.png';
+import auctionImg4 from '../../assets/images/marketplace/auctions/auction4.png';
 import nft1 from '../../assets/images/ntf1.svg';
 import nft2 from '../../assets/images/ntf2.svg';
 import nft3 from '../../assets/images/ntf3.svg';
@@ -18,7 +18,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 1,
     title: 'Auction1',
-    image: null,
+    image: auctionImg,
     background: null,
     artist: {
       id: 1,
@@ -27,13 +27,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -152,13 +152,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 11:26:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -277,13 +277,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -402,13 +402,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -527,13 +527,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -652,13 +652,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -768,7 +768,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 7,
     title: 'Auction7',
-    image: auctionImg,
+    image: auctionImg3,
     background: null,
     artist: {
       id: 1,
@@ -777,13 +777,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -893,7 +893,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 8,
     title: 'Auction8',
-    image: auctionImg,
+    image: auctionImg2,
     background: null,
     artist: {
       id: 1,
@@ -902,13 +902,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1018,7 +1018,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 9,
     title: 'Auction9',
-    image: auctionImg,
+    image: auctionImg4,
     background: null,
     artist: {
       id: 1,
@@ -1027,13 +1027,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1152,13 +1152,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1268,7 +1268,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 11,
     title: 'Auction11',
-    image: auctionImg,
+    image: auctionImg4,
     background: null,
     artist: {
       id: 1,
@@ -1277,13 +1277,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1393,7 +1393,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 12,
     title: 'Auction12',
-    image: auctionImg,
+    image: auctionImg2,
     background: null,
     artist: {
       id: 1,
@@ -1402,13 +1402,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1518,7 +1518,7 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
   {
     id: 13,
     title: 'Auction13',
-    image: auctionImg,
+    image: auctionImg3,
     background: null,
     artist: {
       id: 1,
@@ -1527,13 +1527,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1652,13 +1652,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1777,13 +1777,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -1902,13 +1902,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2027,13 +2027,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2152,13 +2152,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2277,13 +2277,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',
@@ -2402,13 +2402,13 @@ export const PLACEHOLDER_ACTIVE_AUCTIONS = [
     },
     launchDate: '2021-03-01 19:00:00',
     endDate: '2021-05-18 19:00:00',
-    timeLeft: '2d : 5h : 20m : 30s',
+    timeLeft: '2d 5h 20m 30s',
     winners: 35,
     nftsPerWinner: '10-7',
     highestWinningBid: 40,
     lowestWinningBid: 14,
     totalNFTs: 9,
-    rewardTiers: [
+    tiers: [
       {
         id: uuid(),
         type: 'platinum',

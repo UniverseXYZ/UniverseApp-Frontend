@@ -1710,6 +1710,15 @@
 .popup-arrow {
   display: none;
 }
+.congrats-popup {
+  .congrats--icon {
+    width: 186px;
+    margin: 0px auto 30px;
+    img {
+      width: 100%;
+    }
+  }
+}
 .congrats {
   font-style: normal;
   font-weight: 600;
@@ -1735,6 +1744,10 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
+  .loading--div {
+    position: relative;
+    height: 100px;
+  }
 
   @include lg {
     width: 70%;
@@ -3795,5 +3808,298 @@
     button {
       width: 100%;
     }
+  }
+}
+.rarity--rank--popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: $white;
+  box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+  border-radius: 12px;
+  // padding: 75px 60px;
+  width: fit-content;
+
+  .close {
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .rarity--rank {
+    display: flex;
+    justify-content: space-between;
+    padding: 75px 60px;
+    max-height: 700px;
+    overflow-y: auto;
+
+    .rarity--rank--image {
+      position: relative;
+      border-radius: 12px;
+      box-sizing: border-box;
+      margin-right: 40px;
+      width: 373px;
+      height: 373px;
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+
+      .never--scrumbled {
+        .tooltiptext {
+          visibility: hidden;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          width: 160px;
+          background-color: $black;
+          color: $white;
+          text-align: center;
+          border-radius: 100px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          top: -19px;
+          right: -51px;
+          &::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+            @include xl {
+              left: 82%;
+            }
+          }
+          @include xl {
+            right: 0px;
+          }
+        }
+        &:hover {
+          .tooltiptext {
+            visibility: visible;
+          }
+        }
+        img {
+          width: 38px;
+          height: 38px;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+        }
+      }
+      @include xl {
+        width: 100%;
+        height: 490px;
+        text-align: center;
+        margin: auto;
+      }
+      @include md {
+        height: 220px;
+      }
+    }
+    .rarity--rank--body {
+      .rarity--rank--header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 28px;
+
+        h1 {
+          font-family: $sharpGroteskSemiBoldFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 130%;
+          color: $black;
+          margin-bottom: 3px;
+          margin-left: 25px;
+          margin-right: 20px;
+          @include xl {
+            margin-left: 0;
+          }
+          @include sm {
+            font-size: 18px;
+          }
+        }
+        h2 {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 18px;
+          line-height: 160%;
+          color: $black;
+          margin-left: 25px;
+          @include xl {
+            margin-left: 0%;
+          }
+        }
+        .number {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 160%;
+          color: #b3b3b3;
+        }
+        @include xl {
+          margin-top: 32px;
+          margin-bottom: 22px;
+        }
+      }
+      .rarity--rank--descriptions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 17px;
+        .rarity--description {
+          position: relative;
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          box-sizing: border-box;
+          border-radius: 12px;
+          padding: 13px;
+          text-align: center;
+
+          .matching {
+            img {
+              position: absolute;
+              top: -15px;
+              right: -15px;
+              @include sm {
+                top: 4px;
+                right: 4px;
+              }
+            }
+            .tooltiptext {
+              visibility: hidden;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              background-color: $black;
+              color: $white;
+              text-align: center;
+              border-radius: 100px;
+              padding: 4px 12px;
+              position: absolute;
+              z-index: 1;
+              top: -48px;
+              right: -54px;
+              &::after {
+                content: '';
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+                @include xl {
+                  left: 84%;
+                }
+              }
+              @include xl {
+                right: -15px;
+              }
+              @include sm {
+                right: 2px;
+                top: -29px;
+              }
+            }
+            &:hover {
+              .tooltiptext {
+                visibility: visible;
+              }
+            }
+          }
+
+          h4 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 160%;
+            text-transform: uppercase;
+            color: $black;
+            margin-bottom: 3px;
+
+            @include xl {
+              font-weight: normal;
+            }
+          }
+          h3 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 130%;
+            color: $black;
+            margin-bottom: 3px;
+
+            @include xl {
+              font-size: 12px;
+            }
+            @include md {
+              font-size: 14px;
+            }
+          }
+          .description {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 160%;
+            color: rgba(0, 0, 0, 0.4);
+          }
+          @include xl {
+            padding: 13px 5px;
+          }
+        }
+        @include xl {
+          gap: 14px;
+        }
+        @include md {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .selected {
+        box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.8) inset !important;
+        background-image: linear-gradient(101deg, #bceb00, #00eaea) !important;
+        background-origin: border-box;
+      }
+      @include xl {
+        padding-bottom: 20px;
+      }
+    }
+    @include xl {
+      display: grid;
+      padding: 30px 20px 20px;
+    }
+    @include sm {
+      max-height: 550px;
+    }
+  }
+  // @include xl {
+  //   padding: 20px;
+  // }
+  // @include md {
+  //   padding: 15px;
+  //   height: 100%;
+  //   overflow-y: auto;
+  // }
+  @include sm {
+    max-width: 90%;
   }
 }

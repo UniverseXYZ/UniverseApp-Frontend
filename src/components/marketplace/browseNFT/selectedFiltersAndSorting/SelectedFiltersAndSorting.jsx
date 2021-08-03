@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import SelectedFilters from './SelectedFilters';
@@ -22,8 +22,27 @@ const SelectedFiltersAndSorting = ({
   setSavedCreators,
 }) => {
   const [showTabletFilters, setShowTabletFilters] = useState(false);
+  const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
+  const [stickyBlockOffsetTop, setStickyBlockOffsetTop] = useState(128);
+  const [classNameStickyBlock, setClassNameStickyBlock] = useState('');
+  useEffect(() => {
+    const stickyBlock = document.querySelector('.selected--filters--and--sorting');
+    setStickyBlockOffsetTop(stickyBlock.offsetTop);
+  }, []);
+
+  useLayoutEffect(() => {
+    function scrollMyFunc() {
+      const stickyBlock = document.querySelector('.selected--filters--and--sorting');
+      if (+stickyBlock.offsetTop !== +stickyBlockOffsetTop) {
+        setClassNameStickyBlock('selected--filters--and--sorting--sticky');
+      } else {
+        setClassNameStickyBlock('');
+      }
+    }
+    window.addEventListener('scroll', scrollMyFunc);
+  });
   return (
-    <div className="selected--filters--and--sorting">
+    <div className={`selected--filters--and--sorting ${classNameStickyBlock}`}>
       <div className="sorting__filters__desktop">
         <div className="sorting__filters">
           <SortingFilters
@@ -31,6 +50,8 @@ const SelectedFiltersAndSorting = ({
             setSaleTypeButtons={setSaleTypeButtons}
             selectedPrice={selectedPrice}
             setSelectedPrice={setSelectedPrice}
+            sliderValue={sliderValue}
+            setSliderValue={setSliderValue}
             selectedCollections={selectedCollections}
             setSelectedCollections={setSelectedCollections}
             savedCollections={savedCollections}
@@ -73,6 +94,8 @@ const SelectedFiltersAndSorting = ({
             setSaleTypeButtons={setSaleTypeButtons}
             selectedPrice={selectedPrice}
             setSelectedPrice={setSelectedPrice}
+            sliderValue={sliderValue}
+            setSliderValue={setSliderValue}
             selectedCollections={selectedCollections}
             setSelectedCollections={setSelectedCollections}
             savedCollections={savedCollections}
@@ -99,6 +122,8 @@ const SelectedFiltersAndSorting = ({
               saleTypeButtons={saleTypeButtons}
               setSaleTypeButtons={setSaleTypeButtons}
               setSelectedPrice={setSelectedPrice}
+              // sliderValue={sliderValue}
+              // setSliderValue={setSliderValue}
               selectedCollections={selectedCollections}
               setSelectedCollections={setSelectedCollections}
               savedCollections={savedCollections}
@@ -127,6 +152,7 @@ const SelectedFiltersAndSorting = ({
         setSaleTypeButtons={setSaleTypeButtons}
         selectedPrice={selectedPrice}
         setSelectedPrice={setSelectedPrice}
+        setSliderValue={setSliderValue}
         selectedCollections={selectedCollections}
         setSelectedCollections={setSelectedCollections}
         savedCollections={savedCollections}

@@ -12,10 +12,10 @@ const SearchField = (props) => {
   const history = useHistory();
   const ref = useRef();
   const searchRef = useRef();
-  const { data, CardElement, dropdown, getData, ...resProps } = props;
+  const { data, CardElement, dropdown, getData, enterKeyEvent, ...resProps } = props;
 
   const handleSearchKeyDown = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && enterKeyEvent) {
       if (searchValue) {
         history.push(`/search`, { query: searchValue });
         setSearchValue('');
@@ -39,12 +39,11 @@ const SearchField = (props) => {
   }, [findData]);
 
   return (
-    <div className={`search--field ${focusField}`}>
+    <div className={`search--field--component ${focusField}`}>
       <img className="search" src={searchIcon} alt="Search" />
       <input
         type="text"
         className="inp"
-        // placeholder="Search"
         ref={searchRef}
         onChange={(e) => setSearchValue(e.target.value)}
         value={searchValue}
@@ -89,11 +88,13 @@ SearchField.propTypes = {
   CardElement: PropTypes.node.isRequired,
   dropdown: PropTypes.bool,
   getData: PropTypes.func,
+  enterKeyEvent: PropTypes.bool,
 };
 
 SearchField.defaultProps = {
   dropdown: true,
   getData: () => {},
+  enterKeyEvent: true,
 };
 
 export default SearchField;

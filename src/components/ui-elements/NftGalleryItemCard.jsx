@@ -10,7 +10,7 @@ import priceIcon from '../../assets/images/marketplace/price.svg';
 import './styles/NftGalleryItemCard.scss';
 
 const NftGalleryItemCard = (props) => {
-  const { nft, onClick, ...restProps } = props;
+  const { nft, onClick, unSelected, ...restProps } = props;
   const [active, setActive] = useState(false);
   const [nftCopy, setNFTCopy] = useState(nft);
   const history = useHistory();
@@ -26,6 +26,10 @@ const NftGalleryItemCard = (props) => {
   useEffect(() => {
     setNFTCopy({ ...nft });
   }, [nft]);
+
+  useEffect(() => {
+    if (unSelected) setActive(false);
+  }, [unSelected]);
 
   return (
     <div
@@ -190,6 +194,11 @@ NftGalleryItemCard.propTypes = {
     }),
   }).isRequired,
   onClick: PropTypes.func.isRequired,
+  unSelected: PropTypes.bool,
+};
+
+NftGalleryItemCard.defaultProps = {
+  unSelected: null,
 };
 
 export default NftGalleryItemCard;

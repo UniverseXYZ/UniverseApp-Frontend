@@ -30,6 +30,48 @@ header {
       .light {
         display: block;
       }
+      .search--field {
+        border-left: 1px solid rgba(255, 255, 255, 0.4);
+        input {
+          color: $white;
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+          }
+          &:focus {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+          }
+          &:active {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+          }
+        }
+        .close {
+          filter: invert(1);
+        }
+      }
+    }
+    .tablet__nav {
+      .search--box {
+        background-color: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        img {
+          filter: invert(1);
+        }
+      }
+      .wallet__connected__tablet img.account__icon.show__on__tablet {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    } 
+    .mobile__nav {
+      .mobile--search--box {
+        background-color: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        img {
+          filter: invert(1);
+        }
+      }
+      .wallet__connected__tablet img.account__icon.show__on__tablet {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
     }
 
     .desktop__nav ul li .menu-li {
@@ -41,7 +83,7 @@ header {
     }
 
     .desktop__nav ul li .myAccount {
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .desktop__nav ul li .sign__in {
@@ -56,7 +98,7 @@ header {
 
     .tablet__nav button.hamburger {
       background-color: $black;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
 
       img {
         filter: invert(1);
@@ -65,7 +107,7 @@ header {
 
     .mobile__nav button.hamburger {
       background-color: $black;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
 
       img {
         filter: invert(1);
@@ -91,15 +133,15 @@ header {
         height: 20px;
       }
       input {
-        // margin-left: 20px;
+        background-color: transparent;
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
         font-size: 16px;
         line-height: 20px;
         color: $black;
-        padding: 15px 16px 15px 48px;
-        width: 440px;
+        padding: 15px 16px 15px 50px;
+        max-width: 440px;
         border: 1px solid transparent;
         &::placeholder {
           color: rgba(0, 0, 0, 0.2);
@@ -267,11 +309,18 @@ header {
           }
         }
       }
+      @include lg {
+        display: none;
+      }
     }
     .dark {
       display: block;
+      img {
+        min-width: 153px;
+      }
     }
     .light {
+      min-width: 153px;
       display: none;
     }
   }

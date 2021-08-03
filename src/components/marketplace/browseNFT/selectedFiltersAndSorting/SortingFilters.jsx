@@ -27,6 +27,8 @@ const SortingFilters = ({
   setSaleTypeButtons,
   selectedPrice,
   setSelectedPrice,
+  sliderValue,
+  setSliderValue,
   selectedCollections,
   setSelectedCollections,
   savedCollections,
@@ -38,8 +40,8 @@ const SortingFilters = ({
 }) => {
   const [showSaleDropdown, setShowSaleDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
+  const [singleItems, setSingleItems] = useState(true);
   const [showPriceItems, setShowPriceItems] = useState(false);
-  const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
   const [disabledMin, setDisabledMin] = useState(false);
   const [disabledMax, setDisabledMax] = useState(false);
   const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
@@ -74,7 +76,6 @@ const SortingFilters = ({
     },
   ];
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
-
   const [searchByCollections, setSearchByCollections] = useState('');
   const [collections, setCollections] = useState(PLACEHOLDER_MARKETPLACE_COLLECTIONS);
 
@@ -130,13 +131,16 @@ const SortingFilters = ({
     setSliderValue({ min: 0, max: 4 });
     setDisabledMin(false);
     setDisabledMax(false);
+    // setSelectedPrice(null);
     setShowPriceDropdown(false);
   };
 
   const handleSavePrice = () => {
-    if ((disabledMax && disabledMin) || sliderValue.max === 0) {
-      setSelectedPrice(sliderValue);
-      setShowPriceDropdown(false);
+    if ((disabledMax && disabledMin) || (sliderValue.min > 0 && sliderValue.max < 4)) {
+      if (sliderValue.max > sliderValue.min) {
+        setSelectedPrice(sliderValue);
+        setShowPriceDropdown(false);
+      }
     }
   };
 
@@ -222,6 +226,7 @@ const SortingFilters = ({
         className={`sorting--filter ${showSaleDropdown ? 'open' : ''}`}
         aria-hidden="true"
         ref={ref1}
+        onClick={() => setShowSaleDropdown(!showSaleDropdown)}
       >
         <p className="filter--name">
           <img className="filter__icon" src={salesIcon} alt="Sale" />
@@ -229,19 +234,26 @@ const SortingFilters = ({
           {selectedButtons.filter((item) => item.selected === true).length > 0 &&
             `(${selectedButtons.filter((item) => item.selected === true).length})`}
         </p>
-        <img
-          className={`arrow ${showSaleDropdown ? 'rotate' : ''}`}
-          src={arrowDown}
-          alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowSaleDropdown(!showSaleDropdown)}
-        />
+        <img className={`arrow ${showSaleDropdown ? 'rotate' : ''}`} src={arrowDown} alt="Arrow" />
+        <div className="box--shadow--effect--block" />
         {showSaleDropdown && (
-          <div className="sale--dropdown">
+          <div className="sale--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="sale--dropdown--body">
               <div className="sale--dropdown--header">
-                <div className="active">Single items</div>
-                <div>Bundles</div>
+                <div
+                  className={singleItems ? 'active' : ''}
+                  onClick={() => setSingleItems(true)}
+                  aria-hidden="true"
+                >
+                  Single items
+                </div>
+                <div
+                  className={singleItems ? '' : 'active'}
+                  onClick={() => setSingleItems(false)}
+                  aria-hidden="true"
+                >
+                  Bundles
+                </div>
               </div>
               <div className="sale--types">
                 {selectedButtons.map((item, index) => (
@@ -271,20 +283,20 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div className={`sorting--filter ${showPriceDropdown ? 'open' : ''}`} ref={ref2}>
+      <div
+        className={`sorting--filter ${showPriceDropdown ? 'open' : ''}`}
+        ref={ref2}
+        aria-hidden="true"
+        onClick={() => setShowPriceDropdown(!showPriceDropdown)}
+      >
         <p className="filter--name">
           <img className="filter__icon" src={priceIcon} alt="Price" />
           Price range
         </p>
-        <img
-          className={`arrow ${showPriceDropdown ? 'rotate' : ''}`}
-          src={arrowDown}
-          alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-        />
+        <img className={`arrow ${showPriceDropdown ? 'rotate' : ''}`} src={arrowDown} alt="Arrow" />
+        <div className="box--shadow--effect--block" />
         {showPriceDropdown && (
-          <div className="price__dropdown">
+          <div className="price__dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="price__dropdown__body">
               <div
                 className={`price--dropdown ${showPriceItems ? 'open' : ''}`}
@@ -342,12 +354,14 @@ const SortingFilters = ({
                   maxValue={4}
                   minValue={0}
                   value={sliderValue}
-                  onChange={(value) =>
+                  onChange={(value) => {
                     setSliderValue({
                       min: Number(value.min.toFixed(1)),
                       max: Number(value.max.toFixed(1)),
-                    })
-                  }
+                    });
+                    setDisabledMin(true);
+                    setDisabledMax(true);
+                  }}
                 />
               </div>
               <div className="min--max--fields">
@@ -358,7 +372,7 @@ const SortingFilters = ({
                     min="0"
                     max="4"
                     onChange={validateMinValue}
-                    value={disabledMin && selectedPrice && sliderValue.min}
+                    value={(selectedPrice || disabledMin) && sliderValue.min}
                   />
                 </div>
                 <div className="value--div">
@@ -368,7 +382,7 @@ const SortingFilters = ({
                     min="0"
                     max="4"
                     onChange={validateMaxValue}
-                    value={disabledMax && selectedPrice && sliderValue.max}
+                    value={(selectedPrice || disabledMax) && sliderValue.max}
                   />
                 </div>
               </div>
@@ -384,7 +398,12 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div className={`sorting--filter ${showCollectionsDropdown ? 'open' : ''}`} ref={ref3}>
+      <div
+        className={`sorting--filter ${showCollectionsDropdown ? 'open' : ''}`}
+        ref={ref3}
+        aria-hidden="true"
+        onClick={() => setShowCollectionsDropdown(!showCollectionsDropdown)}
+      >
         <p className="filter--name">
           <img className="filter__icon" src={collectionIcon} alt="Collection" />
           Collections {selectedCollections.length > 0 && `(${selectedCollections.length})`}
@@ -393,11 +412,14 @@ const SortingFilters = ({
           className={`arrow ${showCollectionsDropdown ? 'rotate' : ''}`}
           src={arrowDown}
           alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowCollectionsDropdown(!showCollectionsDropdown)}
         />
+        <div className="box--shadow--effect--block" />
         {showCollectionsDropdown && (
-          <div className="collection--dropdown">
+          <div
+            className="collection--dropdown"
+            aria-hidden="true"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="collection--dropdown--body">
               <div className="collection--dropdown--selected">
                 {selectedCollections.map((coll, index) => (
@@ -480,7 +502,12 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div className={`sorting--filter ${showArtistsDropdown ? 'open' : ''}`} ref={ref4}>
+      <div
+        className={`sorting--filter ${showArtistsDropdown ? 'open' : ''}`}
+        ref={ref4}
+        aria-hidden="true"
+        onClick={() => setShowArtistsDropdown(!showArtistsDropdown)}
+      >
         <p className="filter--name">
           <img className="filter__icon" src={artistIcon} alt="Artist" />
           Artists {selectedCreators.length > 0 && `(${selectedCreators.length})`}
@@ -489,11 +516,10 @@ const SortingFilters = ({
           className={`arrow ${showArtistsDropdown ? 'rotate' : ''}`}
           src={arrowDown}
           alt="Arrow"
-          aria-hidden="true"
-          onClick={() => setShowArtistsDropdown(!showArtistsDropdown)}
         />
+        <div className="box--shadow--effect--block" />
         {showArtistsDropdown && (
-          <div className="artist--dropdown">
+          <div className="artist--dropdown" aria-hidden="true" onClick={(e) => e.stopPropagation()}>
             <div className="artist--dropdown--body">
               <div className="artist--dropdown--selected">
                 {selectedCreators.map((artist, index) => (
@@ -555,8 +581,10 @@ const SortingFilters = ({
 SortingFilters.propTypes = {
   saleTypeButtons: PropTypes.oneOfType([PropTypes.array]),
   setSaleTypeButtons: PropTypes.func,
-  selectedPrice: PropTypes.oneOfType([PropTypes.array]),
+  selectedPrice: PropTypes.oneOfType([PropTypes.any]),
   setSelectedPrice: PropTypes.func,
+  sliderValue: PropTypes.oneOfType([PropTypes.any]),
+  setSliderValue: PropTypes.func,
   selectedCollections: PropTypes.oneOfType([PropTypes.array]),
   setSelectedCollections: PropTypes.func,
   savedCollections: PropTypes.oneOfType([PropTypes.array]),
@@ -570,8 +598,10 @@ SortingFilters.propTypes = {
 SortingFilters.defaultProps = {
   saleTypeButtons: [],
   setSaleTypeButtons: () => {},
-  selectedPrice: [],
+  selectedPrice: null,
   setSelectedPrice: () => {},
+  sliderValue: null,
+  setSliderValue: () => {},
   selectedCollections: [],
   setSelectedCollections: () => {},
   savedCollections: [],

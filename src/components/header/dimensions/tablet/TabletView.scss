@@ -4,11 +4,243 @@
 .tablet__nav {
   display: none;
   align-items: center;
+  .search--box {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+    background-color: $white;
+  }
+  .search--section {
+    height: 100vh;
+    right: 0;
+    left: 0;
+    background-color: $white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    .input--search--box {
+      padding: 15px 20px 15px 20px;
+      .input--box {
+        position: relative;
+        input {
+          background: $white;
+          border: 1px solid #d4d4d4;
+          box-sizing: border-box;
+          border-radius: 12px;
+          width: 100%;
+          padding: 15px;
+          text-indent: 30px;
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+          text-align: left;
+          &::placeholder {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            color: #cacaca;
+            background-repeat: no-repeat;
+            text-indent: 25px;
+          }
+          &:focus {
+            background: linear-gradient(#ffffff, #ffffff) padding-box,
+              linear-gradient(to right, #bceb00, #00eaea) border-box;
+            border: 1px solid transparent;
+          }
+        }
+        .searchicon {
+          position: absolute;
+          left: 20px;
+          top: 18px;
+        }
+        .closeicon {
+          position: absolute;
+          right: 20px;
+          top: 18px;
+        }
+      }
+    }
+    .search--results {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      height: calc(100% - 82px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .search__results {
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 82px);
+        background: white;
+        top: 83px;
+        box-shadow: 0 10px 36px rgba(136, 120, 172, 0.14);
+        padding: 24px 8px;
+        overflow-y: auto;
+        .search__nfts {
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 130%;
+            color: $black;
+            margin-left: 12px;
+            margin-bottom: 8px;
+          }
+          .nft__div,
+          .auction__div,
+          .collection__div {
+            display: flex;
+            padding: 10px 12px;
+            border-radius: 6px;
+
+            .nft--image,
+            .auction--image,
+            .collection--image {
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 5px;
+
+              img {
+                border-radius: 5px;
+              }
+              video {
+                width: 36px;
+                height: 36px;
+                object-fit: cover;
+                border-radius: 5px;
+              }
+            }
+            .random--avatar--color {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 5px;
+            }
+            .nft--desc,
+            .auction--desc,
+            .collection--desc {
+              .nft--name,
+              .auction--title,
+              .collection--name {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 160%;
+                color: $black;
+              }
+              .nft--price,
+              .auction--artist,
+              .collection--owner {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+          .users__div,
+          .communities__div,
+          .galleries__div {
+            display: flex;
+            padding: 10px 12px;
+            border-radius: 6px;
+
+            .user--avatar,
+            .communities--photo,
+            .galleries--photo {
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 50%;
+
+              img {
+                border-radius: 50%;
+              }
+            }
+            .user--desc,
+            .communities--desc,
+            .galleries--desc {
+              .user--name,
+              .communities--name,
+              .galleries--name {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 160%;
+                color: $black;
+              }
+              .user--followers,
+              .communities--members,
+              .galleries--likes {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+          button {
+            margin-top: 25px;
+            width: 100%;
+          }
+        }
+        .no__result {
+          padding: 12px;
+          height: 783px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          p {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 150%;
+            color: $black;
+          }
+        }
+      }
+      > p {
+        font-family: $spaceGroteskFont;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        letter-spacing: 0px;
+        text-align: center;
+      }
+    }
+  }
   button.hamburger {
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     border-radius: 12px;
-    padding: 10px;
+    padding: 9px;
     background-color: $white;
   }
   .overlay {
@@ -26,7 +258,6 @@
     top: 80px;
     width: 100%;
     height: 0;
-    // max-height: calc(100vh - 88px);
     max-height: 378px;
     padding: 0px 60px;
     background-color: $white;

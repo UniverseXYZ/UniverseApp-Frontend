@@ -10,13 +10,13 @@ const SortingDropdowns = () => {
   const firstDropdownItems = ['All Items', 'Single Items', 'Bundles'];
   const secondDropdownItems = [
     'Sort by',
-    'Ending Soon',
-    'Lowest Price First',
-    'Highest Price First',
-    'Recently Listed',
-    'Recently Created',
-    'Recently Sold',
-    'Most Liked',
+    'Ending soon',
+    'Lowest price first',
+    'Highest price first',
+    'Recently listed',
+    'Recently created',
+    'Recently sold',
+    'Most liked',
   ];
   const ref = useRef(null);
   const ref2 = useRef(null);
@@ -72,6 +72,7 @@ const SortingDropdowns = () => {
       >
         <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span>
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
+        <div className="box--shadow--effect--block" />
         {showSecondDropdown ? (
           <div className="dropdown--items">
             {secondDropdownItems.map((item, index) => (

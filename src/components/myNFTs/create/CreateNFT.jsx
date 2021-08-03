@@ -12,8 +12,8 @@ import NFTCollectionSettings from './NFTCollectionSettings';
 
 const CreateNFT = () => {
   const history = useHistory();
-  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
-  const [selectedNFTType, setSelectedNFTType] = useState('collection');
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
 
   const handleSelectTypeClick = () => {
@@ -38,46 +38,43 @@ const CreateNFT = () => {
             <span>NFT collection settings</span>
           </div>
         )}
-        <h1 className="page--title">Create NFT</h1>
+        <h1 className="page--title">
+          {selectedTabIndex === 0 ||
+          (selectedTabIndex === 1 && selectedNFTType === 'single') ||
+          (selectedTabIndex === 1 && selectedNFTType === 'collection' && showCollectible)
+            ? 'Create NFT'
+            : 'Create NFT collection'}
+        </h1>
         {!showCollectible && (
-          <div className="tabs__wrapper">
-            <div className="tabs">
-              <div className="tab_items">
-                <div
-                  id="tabsdiv"
-                  className={selectedTabIndex === 0 ? 'active' : ''}
-                  onClick={handleSelectTypeClick}
-                  aria-hidden="true"
-                >
-                  <span className="first-triangle" />
-                  <button type="button">
-                    <img
-                      src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
-                      alt="setting-icon"
-                    />
-                    Select type
-                  </button>
-                  <span className="last-triangle" />
+          <div id="tabs--wrapper">
+            <ul className="tabs">
+              <li
+                className={selectedTabIndex === 0 ? 'active' : 'box--shadow--effect'}
+                onClick={handleSelectTypeClick}
+                aria-hidden="true"
+              >
+                <div>
+                  <img
+                    src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
+                    alt="Select type"
+                  />
+                  Select type
                 </div>
-                <div
-                  id="tabsdiv"
-                  className={`
+              </li>
+              <li
+                className={`
                     ${selectedTabIndex === 1 ? 'active' : ''}
                     ${selectedTabIndex === 0 ? 'disabled' : ''}
                   `}
-                >
-                  <span className="first-triangle" />
-                  <button type="button">
-                    <img
-                      src={selectedTabIndex === 1 ? settingIconActive : settingIcon}
-                      alt="setting-icon"
-                    />
-                    Settings
-                  </button>
-                  <span className="last-triangle" />
-                </div>
-              </div>
-            </div>
+              >
+                <img
+                  src={selectedTabIndex === 1 ? settingIconActive : settingIcon}
+                  alt="Setting"
+                  className="setting--icon"
+                />
+                Settings
+              </li>
+            </ul>
           </div>
         )}
         <div className="tab__content">

@@ -163,7 +163,7 @@ const Footer = () => {
                     Polymorphs
                   </li>
                   <li onClick={() => history.push('/core-drops')} aria-hidden="true">
-                    Core Drops
+                    OG planet drop
                   </li>
                 </ul>
               </div>
@@ -203,6 +203,15 @@ const Footer = () => {
                     onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                   >
                     Yield farming
+                  </li>
+                  <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
+                    Forum
+                  </li>
+                  <li
+                    aria-hidden="true"
+                    onClick={() => window.open('https://signal.universe.xyz/#/')}
+                  >
+                    Signal
                   </li>
                 </ul>
               </div>
