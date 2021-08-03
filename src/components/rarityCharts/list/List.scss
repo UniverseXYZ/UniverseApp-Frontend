@@ -134,3 +134,18 @@
         }
     }
 }
+
+.rarity--charts--empty {
+    width: 100%;
+    p {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.4);
+        margin-top: 176px;
+        margin-bottom: 66px;
+    }
+}

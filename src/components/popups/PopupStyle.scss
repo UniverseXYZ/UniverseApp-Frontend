@@ -3924,7 +3924,7 @@
           font-size: 20px;
           line-height: 130%;
           color: $black;
-          margin-bottom: 3px;
+          margin-bottom: 15px;
           margin-left: 25px;
           margin-right: 20px;
           @include xl {
@@ -3942,6 +3942,21 @@
           line-height: 160%;
           color: $black;
           margin-left: 25px;
+          @include xl {
+            margin-left: 0%;
+          }
+        }
+        a {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 140%;
+          margin-left: 25px;
+          color: $black;
+          img {
+            margin-left: 13px;
+          }
           @include xl {
             margin-left: 0%;
           }
@@ -4078,6 +4093,18 @@
         box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.8) inset !important;
         background-image: linear-gradient(101deg, #bceb00, #00eaea) !important;
         background-origin: border-box;
+      }
+      .selected--blue {
+        background: rgba(30, 136, 229, 0.05) !important;
+        border: 1px solid #1E88E5 !important;
+      }
+      .selected--pink {
+        background: rgba(200, 87, 202, 0.1) !important;
+        border: 1px solid #C857CA !important;
+      }
+      .selected--orange {
+        background: rgba(251, 140, 0, 0.05) !important;
+        border: 1px solid #FB8C00 !important;
       }
       @include xl {
         padding-bottom: 20px;

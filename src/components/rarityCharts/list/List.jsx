@@ -7,13 +7,17 @@ import PolymorphCard from './PolymorphCard';
 const List = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
 
-  return (
+  return sliceData.length ? (
     <div className="rarity-charts--list">
       <div className="grid">
         {sliceData.map((item) => (
           <PolymorphCard key={uuid()} item={item} />
         ))}
       </div>
+    </div>
+  ) : (
+    <div className="rarity--charts--empty">
+      <p>No Polymorph could be found :’(</p>
     </div>
   );
 };
