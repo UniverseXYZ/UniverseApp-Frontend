@@ -25,10 +25,70 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
         !loading ? (
           <Animated animationIn="fadeIn" key={auction.id}>
             <div className="active__auction__item">
-              <div className="title">
+              <div className="active__auction__image timeLeft">
+                <img src={auction.image} alt={auction.name} />
+                <div className="date">
+                  <label>Time left</label>
+                  <span>{auction.timeLeft}</span>
+                </div>
+              </div>
+              <div className="active__auction__details">
+                <div className="title">
+                  <h2>{auction.title}</h2>
+                </div>
+                <div className="creator">
+                  <img src={auction.artist.avatar} alt={auction.artist.name} />
+                  <span>by</span>
+                  <a
+                    aria-hidden="true"
+                    onClick={() =>
+                      history.push(`/${auction.artist.name.split(' ')[0]}`, {
+                        id: auction.artist.id,
+                      })
+                    }
+                  >
+                    {auction.artist.name}
+                  </a>
+                </div>
+                <div className="statistics">
+                  <div>
+                    <label>Winners</label>
+                    <p>{auction.winners}</p>
+                  </div>
+                  <div>
+                    <label>Highest Winning Bid:</label>
+                    <p>
+                      {`${auction.highestWinningBid} ETH`} <span>~$120,594</span>
+                    </p>
+                  </div>
+                  <div>
+                    <label>NFTs Per Winner:</label>
+                    <p>{auction.nftsPerWinner}</p>
+                  </div>
+                  <div>
+                    <label>Lowest Winning Bid:</label>
+                    <p>
+                      {`${auction.lowestWinningBid} ETH`} <span>~$41,594</span>
+                    </p>
+                  </div>
+                </div>
+                {auction.timeLeft && (
+                  <Button
+                    className="light-button w-100 view--auction--btn"
+                    onClick={() =>
+                      history.push(`/${auction.artist.name.split(' ')[0]}/${auction.title}`, {
+                        id: auction.id,
+                      })
+                    }
+                  >
+                    View Auction
+                  </Button>
+                )}
+              </div>
+              {/* <div className="title">
                 <h1>{auction.name}</h1>
                 <div className="artist__details">
-                  <img src={URL.createObjectURL(auction.artist.avatar)} alt={auction.artist.name} />
+                  <img src={auction.artist.avatar} alt={auction.artist.name} />
                   <span>by</span>
                   <button
                     type="button"
@@ -41,8 +101,8 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                     {auction.artist.name}
                   </button>
                 </div>
-              </div>
-              <div className="view__auction">
+              </div> */}
+              {/* <div className="view__auction">
                 <Button
                   className="light-button"
                   onClick={() =>
@@ -53,20 +113,22 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                 >
                   View auction
                 </Button>
-              </div>
-              <div className={`auction__img ${auction.promoImage ? '' : 'show__avatar'}`}>
+              </div> */}
+              {/* <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
                 <img
                   className="original"
-                  src={URL.createObjectURL(auction.promoImage)}
+                  // src={URL.createObjectURL(auction.promoImage)}
+                  src={auction.image}
                   alt={auction.name}
                 />
                 <img
                   className="artist__image"
-                  src={URL.createObjectURL(auction.artist.avatar)}
+                  // src={URL.createObjectURL(auction.artist.avatar)}
+                  src={auction.artist.avatar}
                   alt={auction.name}
                 />
-              </div>
-              <div className="auction__details">
+              </div> */}
+              {/* <div className="auction__details">
                 <div>
                   <div className="auction__details__box">
                     <p>Time Left:</p>
@@ -97,7 +159,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
                     </h3>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Animated>
         ) : (

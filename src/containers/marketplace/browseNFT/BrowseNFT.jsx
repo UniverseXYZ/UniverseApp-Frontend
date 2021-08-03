@@ -21,7 +21,7 @@ const BrowseNFT = () => {
       selected: false,
     },
     {
-      text: 'On Auction',
+      text: 'On auction',
       description: 'You can place bids',
       selected: false,
     },
@@ -31,7 +31,7 @@ const BrowseNFT = () => {
       selected: false,
     },
     {
-      text: 'Has Offers',
+      text: 'Has offers',
       description: 'High is demand',
       selected: false,
     },
@@ -40,6 +40,7 @@ const BrowseNFT = () => {
   const [selectedCollections, setSelectedCollections] = useState([]);
   const [savedCreators, setSavedCreators] = useState([]);
   const [selectedCreators, setSelectedCreators] = useState([]);
+  const [nftNumber, setNftNumber] = useState(7);
 
   useEffect(() => {
     setDarkMode(false);
@@ -52,8 +53,11 @@ const BrowseNFT = () => {
         {/* <div className="browse--nft--sidebar--filtration" hidden>
           <SaleType saleTypeButtons={saleTypeButtons} setSaleTypeButtons={setSaleTypeButtons} />
           <Price setSelectedPrice={setSelectedPrice} />
-          <Collections selectedColl={savedCollections} setSelectedColl={setSavedCollections} />
-          <Creators selectedCreators={selectedCreators} setSelectedCreators={setSelectedCreators} />
+          <Collections
+            savedCollections={savedCollections}
+            setSavedCollections={setSavedCollections}
+          />
+          <Creators savedCreators={savedCreators} setSavedCreators={setSavedCreators} />
           <VerifiedOnly />
         </div> */}
         <div className="browse--nft--content">
@@ -71,10 +75,16 @@ const BrowseNFT = () => {
             selectedCreators={selectedCreators}
             setSelectedCreators={setSelectedCreators}
           />
-          <NFTsList data={PLACEHOLDER_MARKETPLACE_NFTS} />
-          <button type="button" className="light-border-button load--more--nfts">
-            Load More
-          </button>
+          <NFTsList data={PLACEHOLDER_MARKETPLACE_NFTS} nftNumber={nftNumber} />
+          {nftNumber <= PLACEHOLDER_MARKETPLACE_NFTS.length && (
+            <button
+              type="button"
+              className="light-border-button load--more--nfts"
+              onClick={() => setNftNumber(nftNumber + 8)}
+            >
+              Load More
+            </button>
+          )}
         </div>
       </div>
     </div>

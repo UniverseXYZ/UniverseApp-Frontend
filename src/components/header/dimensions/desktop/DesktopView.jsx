@@ -23,6 +23,8 @@ import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
 import governanceIcon from '../../../../assets/images/governance.svg';
 import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
+import forumIcon from '../../../../assets/images/forum.svg';
+import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
@@ -71,15 +73,13 @@ const DesktopView = ({
             <div className="dropdown__body">
               <button
                 type="button"
-                className="disable"
                 onClick={() => {
-                  // history.push('/minting-and-auctions/marketplace/active-auctions');
+                  history.push('/minting-and-auctions/marketplace/active-auctions');
                   setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
-                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
@@ -135,7 +135,7 @@ const DesktopView = ({
                 }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
-                <span>Core drops</span>
+                <span>OG planet drops</span>
                 {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
             </div>
@@ -226,6 +226,26 @@ const DesktopView = ({
               >
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://forum.universe.xyz/');
+                }}
+              >
+                <img src={forumIcon} alt="Forum" />
+                <span>Forum</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://signal.universe.xyz/#/');
+                }}
+              >
+                <img src={signalIcon} alt="Signal" />
+                <span>Signal</span>
               </button>
             </div>
           </div>

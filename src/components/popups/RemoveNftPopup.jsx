@@ -26,7 +26,7 @@ const RemovePopup = ({
 
     if (removeFrom === 'collection') {
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
-      setSavedNfts(savedNfts.filter((item) => item.id !== id));
+      // setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'saved') {
       setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'savedCollection') {

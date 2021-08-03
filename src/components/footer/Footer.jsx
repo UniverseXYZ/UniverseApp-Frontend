@@ -140,12 +140,12 @@ const Footer = () => {
                 <ul>
                   <li>Products</li>
                   <li
-                    className="disable"
-                    // onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
-                    // aria-hidden="true"
+                    onClick={() =>
+                      history.push('/minting-and-auctions/marketplace/active-auctions')
+                    }
+                    aria-hidden="true"
                   >
                     Auction house
-                    <span className="tooltiptext">Coming soon</span>
                   </li>
                   <li onClick={() => history.push('/marketplace')} aria-hidden="true">
                     NFT Marketplace
@@ -159,17 +159,11 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>NFT Drops</li>
-                  <li
-                    // className="disable"
-                    onClick={() => history.push('/polymorphs')}
-                    aria-hidden="true"
-                  >
+                  <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
                     Polymorphs
-                    {/* <span className="tooltiptext">Coming soon</span> */}
                   </li>
-                  <li className="disable">
-                    Core Drops
-                    <span className="tooltiptext">Coming soon</span>
+                  <li onClick={() => history.push('/core-drops')} aria-hidden="true">
+                    OG planet drop
                   </li>
                 </ul>
               </div>
@@ -209,6 +203,15 @@ const Footer = () => {
                     onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
                   >
                     Yield farming
+                  </li>
+                  <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
+                    Forum
+                  </li>
+                  <li
+                    aria-hidden="true"
+                    onClick={() => window.open('https://signal.universe.xyz/#/')}
+                  >
+                    Signal
                   </li>
                 </ul>
               </div>

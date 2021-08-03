@@ -100,7 +100,11 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   </b>
                 ) : (
                   <img
-                    src={URL.createObjectURL(onNFT.collectionAvatar)}
+                    src={
+                      typeof onNFT.collectionAvatar === 'string'
+                        ? onNFT.collectionAvatar
+                        : URL.createObjectURL(onNFT.collectionAvatar)
+                    }
                     alt={onNFT.collectionName}
                   />
                 )}
@@ -128,8 +132,8 @@ const NFTPopup = ({ onClose, onNFT }) => {
         </div>
         <div className="tab__content">
           <Animated animationIn="fadeIn" key={uuid()}>
-            {selectedTabIndex === 0 && onNFT.properties ? (
-              onNFT.properties[0].name ? (
+            {selectedTabIndex === 0 ? (
+              onNFT.properties && onNFT.properties[0].name ? (
                 <div className="property__container">
                   {onNFT.properties.map((property) => (
                     <div className="property__box" key={uuid()}>

@@ -27,6 +27,10 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
               <div className={`auction__img ${auction.image ? '' : 'show__avatar'}`}>
                 <img className="original" src={auction.image} alt={auction.title} />
                 <img className="artist__image" src={auction.artist.avatar} alt={auction.title} />
+                <div className="start__date">
+                  <label>STARTS IN</label>
+                  <p>{auction.startsIn}</p>
+                </div>
               </div>
               <div className="title">
                 <h1>{auction.title}</h1>
@@ -46,17 +50,19 @@ const FutureAuctionsList = ({ data, perPage, offset }) => {
                 </div>
               </div>
               <div className="auction__details">
-                <div className="auction__details__box">
+                {/* <div className="auction__details__box">
                   <p>Starts in:</p>
                   <h3>{auction.startsIn}</h3>
+                </div> */}
+                <div className="auction__details__box">
+                  <label>Winners</label>
+                  <p>{auction.winners}</p>
                 </div>
                 <div className="auction__details__box">
-                  <p>Winners</p>
-                  <h3>{auction.winners}</h3>
-                </div>
-                <div className="auction__details__box">
-                  <p>NFTs Per Winner:</p>
-                  <h3>{auction.nftsPerWinner}</h3>
+                  <label>Highest Winning Bid:</label>
+                  <p>
+                    {`${auction.highestWinningBid} ETH`} <span>~$120,594</span>
+                  </p>
                 </div>
               </div>
             </div>

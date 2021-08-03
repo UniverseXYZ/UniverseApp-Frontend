@@ -6,11 +6,17 @@ import closeIcon from '../../assets/images/cross.svg';
 
 const LoadingPopup = ({ onClose }) => (
   <div className="loading-div popup-div">
-    <div className="loading-ring">
-      <div />
-      <div />
-      <div />
-      <div />
+    <div className="loading--div">
+      <div className="lds-roller">
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
     </div>
     <button type="button" className="popup-close" onClick={onClose}>
       <img src={closeIcon} alt="" />
