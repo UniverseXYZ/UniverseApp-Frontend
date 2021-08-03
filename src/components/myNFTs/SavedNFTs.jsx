@@ -129,7 +129,7 @@ const SavedNFTs = () => {
                   {/* {nft.artworkType === 'audio/mpeg' && ( //TODO:: what kind of audio formats are eligible ??
                     <img className="preview-image" src={mp3Icon} alt={nft.name} />
                   )} */}
-                  {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && (
+                  {nft.artworkType !== 'mp3' && nft.artworkType !== 'mp4' && (
                     <img className="preview-image" src={nft.url} alt={nft.name} />
                   )}
                   {nft.artworkType === 'mp4' && (

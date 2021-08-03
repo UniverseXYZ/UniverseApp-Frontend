@@ -27,7 +27,7 @@ const NFTsList = ({ data, perPage, offset }) => {
           <Animated animationIn="fadeIn" key={uuid()}>
             <div className="nft__box">
               <div className="nft__box__image">
-                {nft.artworkType === 'video/mp4' && (
+                {nft.artworkType === 'mp4' && (
                   <Popup
                     trigger={
                       <video
@@ -36,10 +36,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                         onMouseOut={(event) => event.target.pause()}
                         onBlur={(event) => event.target.pause()}
                       >
-                        <source
-                          src={nft.previewImage.url || URL.createObjectURL(nft.previewImage)}
-                          type="video/mp4"
-                        />
+                        <source src={nft.thumbnail_url} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
@@ -48,20 +45,16 @@ const NFTsList = ({ data, perPage, offset }) => {
                     {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                   </Popup>
                 )}
-                {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'video/mp4' && (
+                {nft.artworkType !== 'mp3' && nft.artworkType !== 'mp4' && (
                   <Popup
                     trigger={
-                      <img
-                        className="preview-image"
-                        src={URL.createObjectURL(nft.previewImage)}
-                        alt={nft.name}
-                      />
+                      <img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />
                     }
                   >
                     {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                   </Popup>
                 )}
-                {nft.artworkType === 'video/mp4' && (
+                {nft.artworkType === 'mp4' && (
                   <img className="video__icon" src={videoIcon} alt="Video Icon" />
                 )}
               </div>
@@ -104,14 +97,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                           {nft.collectionName.charAt(0)}
                         </div>
                       ) : (
-                        <img
-                          src={
-                            typeof nft.collectionAvatar === 'string'
-                              ? nft.collectionAvatar
-                              : URL.createObjectURL(nft.collectionAvatar)
-                          }
-                          alt={nft.collectionName}
-                        />
+                        <img src={nft.collection.coverUrl} alt={nft.collectionName} />
                       )}
                       <span>{nft.collectionName}</span>
                     </>
