@@ -16,20 +16,40 @@ import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
+import PolymorphScrambleHistory from './PolymorphScrambleHistory';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
   const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
+  // const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
+  // const [metadataTabSelected, setMetadataTabSelected] = useState(false);
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
-
+  const [historyTabSelected, setHistoryTabSelected] = useState(false);
   const tabs = [
+    // {
+    //   name: 'Properties',
+    //   active: propertiesTabSelected,
+    //   handler: () => {
+    //     setPropertiesTabSelected(true);
+    //     setMetadataTabSelected(false);
+    //   },
+    // },
+    // {
+    //   name: 'Metadata',
+    //   active: metadataTabSelected,
+    //   handler: () => {
+    //     setPropertiesTabSelected(false);
+    //     setMetadataTabSelected(true);
+    //   },
+    // },
     {
       name: 'Properties',
       active: propertiesTabSelected,
       handler: () => {
         setPropertiesTabSelected(true);
         setMetadataTabSelected(false);
+        setHistoryTabSelected(false);
       },
     },
     {
@@ -38,6 +58,16 @@ const PolymorphScramblePage = () => {
       handler: () => {
         setPropertiesTabSelected(false);
         setMetadataTabSelected(true);
+        setHistoryTabSelected(false);
+      },
+    },
+    {
+      name: 'History',
+      active: historyTabSelected,
+      handler: () => {
+        setPropertiesTabSelected(false);
+        setMetadataTabSelected(false);
+        setHistoryTabSelected(true);
       },
     },
   ];
@@ -227,7 +257,7 @@ const PolymorphScramblePage = () => {
           </div>
 
           <Tabs items={tabs} />
-          {propertiesTabSelected ? (
+          {/* {propertiesTabSelected ? (
             <>
               <div className="scramble--properties">
                 {properties.map((props) => (
@@ -243,6 +273,30 @@ const PolymorphScramblePage = () => {
                 {'...'}
                 {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(38)}
               </div>
+            </div>
+          )} */}
+          {propertiesTabSelected && (
+            <>
+              <div className="scramble--properties">
+                {properties.map((props) => (
+                  <PolymorphScrambleProp key={uuid()} data={props} />
+                ))}
+              </div>
+            </>
+          )}
+          {metadataTabSelected && (
+            <div className="metadata">
+              <div className="genome--string--name">Genome string</div>
+              <div className="genome--string--value">
+                {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(0, 14)}
+                {'...'}
+                {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(38)}
+              </div>
+            </div>
+          )}
+          {historyTabSelected && (
+            <div>
+              <PolymorphScrambleHistory />
             </div>
           )}
 
