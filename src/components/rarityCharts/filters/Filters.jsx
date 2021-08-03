@@ -10,18 +10,20 @@ const Filters = (props) => {
     props;
   return (
     <div className="rarity--charts--search--and--filters--row">
-      <SearchField
-        placeholder="Search"
-        dropdown={false}
-        enterKeyEvent={false}
-        searchText={searchText}
-        setSearchText={setSearchText}
-      />
-      <div className="floor--price--block">
-        <p className="floor--price--paragraph">
-          <span>Floor Price: </span>
-          {`${floorPrice.price} ${floorPrice.priceType}`}
-        </p>
+      <div className="rarity--charts--search--and--floor--price">
+        <SearchField
+          placeholder="Search"
+          dropdown={false}
+          enterKeyEvent={false}
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
+        <div className="floor--price--block">
+          <p className="floor--price--paragraph">
+            <span>Floor Price: </span>
+            {`${floorPrice.price} ${floorPrice.priceType}`}
+          </p>
+        </div>
       </div>
       <div className="sort--by--label--and--select--block">
         <label htmlFor="sort--select">Sort By:</label>
