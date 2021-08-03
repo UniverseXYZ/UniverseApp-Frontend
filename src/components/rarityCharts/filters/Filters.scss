@@ -11,14 +11,28 @@
     @include sm {
         flex-direction: column;
     }
-    .search--field--component {
-        width: 22.5%;
+    .rarity--charts--search--and--floor--price{
+        width: 56%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         @include lg {
-            width: calc(50% - 75px);
+            width: 50%;
+            flex-direction: column;
+            align-items: flex-start;
         }
         @include sm {
             width: 100%;
-            margin-bottom: 30px;            
+        }
+    }
+    .search--field--component {
+        width: 40.5%;
+        @include lg {
+            width: calc(100% - 75px);
+        }
+        @include sm {
+            width: 100%;
+            margin-bottom: 24px;
         }
         .inp {
             padding: 0 45px 0 48px;
@@ -26,11 +40,12 @@
     }
     .floor--price--block {
         @include lg {
-            width: 125px;
+            margin-top: 26px;
         }
         @include sm {
             width: 100%;
-            margin-bottom: 50px;
+            margin-bottom: 96px;
+            margin-top: 0;
         }
         .floor--price--paragraph {
             font-family: $spaceGroteskFont;
@@ -53,10 +68,10 @@
         align-items: center;
         @include lg {
             width: calc(50% - 75px);
-            flex-direction: column;
             align-items: flex-start;
-            justify-content: center;
+            justify-content: flex-start;
             position: relative;
+            margin-top: -50px;
         }
         @include sm {
             width: 100%;
@@ -79,7 +94,7 @@
         .sort--by--select--parent {
             width: calc(100% - 148px);
             @include lg {
-                width: 100%;
+                width: calc(100% - 54px);
             }
         }
     }
