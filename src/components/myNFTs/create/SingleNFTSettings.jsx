@@ -23,7 +23,11 @@ import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
-import SuccessPopup from '../../popups/SuccessPopup.jsx';
+import { getTokenURI, getMyNfts } from '../../../utils/api/mintNFT';
+import {
+  parseRoyalties,
+  formatRoyaltiesForMinting,
+} from '../../../utils/helpers/contractInteraction';
 
 const SingleNFTSettings = () => {
   const {
@@ -35,6 +39,7 @@ const SingleNFTSettings = () => {
     myNFTs,
     setMyNFTs,
     deployedCollections,
+    universeERC721CoreContract,
   } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
@@ -192,6 +197,139 @@ const SingleNFTSettings = () => {
     }
   };
 
+  const onMintNft = async () => {
+    document.getElementById('loading-hidden-btn').click();
+    document.body.classList.add('no__scroll');
+    console.log('MINTING..........');
+    const userAddress = localStorage.getItem('user_address');
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
+
+    const tokenURIResult = await getTokenURI({
+      file: previewImage,
+      name,
+      description,
+      editions,
+      properties,
+      royaltiesParsed,
+    });
+
+    console.log('sending request to contract...', tokenURIResult);
+
+    // call contract
+    const mintTx = await universeERC721CoreContract.mint(
+      userAddress,
+      tokenURIResult[0],
+      royaltiesFormated
+    );
+
+    const receipt = await mintTx.wait();
+
+    console.log('printing receipt...', receipt);
+
+    const mintedNfts = await getMyNfts();
+    setMyNFTs(mintedNfts);
+
+    document.getElementById('popup-root').remove();
+    document.getElementById('congrats-hidden-btn').click();
+
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
+  const onSaveNftForLaterMinting = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+
+    const result = await saveNftForLater({
+      name,
+      description,
+      editions,
+      properties,
+      royaltiesParsed,
+      collectionId: selectedCollection ? selectedCollection.id : 1,
+    });
+
+    let saveImageResult = null;
+
+    if (result.savedNft) {
+      // Update the NFT image
+      saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+      if (saveImageResult.error) {
+        // Error with saving the image, show modal
+        showErrorModal(true);
+        return;
+      }
+    }
+
+    if (!saveImageResult) return;
+
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS);
+
+    document.getElementById('congrats-hidden-btn').click();
+  };
+
+  // TODO please check this one
+  const editSavedNft = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const result = await updateSavedForLaterNft({
+      name,
+      description,
+      editions,
+      properties,
+      royaltiesParsed,
+      id: savedNFTsID,
+    });
+
+    let saveImageResult = null;
+    if (!result.message) {
+      // There is no error message
+      const updateNFTImage = result.id && typeof previewImage === 'object';
+      if (updateNFTImage) {
+        saveImageResult = await saveNftImage(previewImage, result.id);
+        if (saveImageResult.error) {
+          // Error with saving the image, show modal
+          showErrorModal(true);
+          return;
+        }
+      }
+    }
+
+    const data = saveImageResult || result;
+    if (!data) {
+      document.getElementById('congrats-hidden-btn').click();
+      showErrorModal(true);
+      return;
+    }
+
+    setSavedNfts(
+      savedNfts.map((item) => {
+        if (item.id === savedNFTsID) {
+          return {
+            ...item,
+            previewImage: saveImageResult ? saveImageResult.url : previewImage,
+            name: data.name,
+            description: data.description,
+            numberOfEditions: data.numberOfEditions,
+            editions,
+            properties: data.properties,
+            royalties: royaltiesParsed,
+            url: saveImageResult ? saveImageResult.url : previewImage,
+            artworkType: data.artworkType,
+          };
+        }
+
+        return item;
+      })
+    );
+    document.getElementById('congrats-hidden-btn').click();
+  };
+
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
     if (parseInt(value, 10) !== 0) {
@@ -275,161 +413,24 @@ const SingleNFTSettings = () => {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        document.getElementById('success-hidden-btn').click();
+        if (!savedNFTsID) {
+          onSaveNftForLaterMinting();
+        } else {
+          editSavedNft();
+        }
+        setShowModal(false);
+        document.body.classList.remove('no__scroll');
       }
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
-        document.getElementById('loading-hidden-btn').click();
-        if (location.pathname === '/create-tiers/my-nfts/create') {
-          setShowModal(false);
-          document.body.classList.remove('no__scroll');
-        } else {
-          setTimeout(() => {
-            document.getElementById('popup-root').remove();
-            document.getElementById('congrats-hidden-btn').click();
-            setTimeout(() => {
-              closeCongratsPopupEvent();
-            }, 2000);
-          }, 3000);
-        }
+        onMintNft();
       }
     }
   }, [errors, saveForLateClick, savedNfts]);
-
-  useEffect(() => {
-    const notValidAddress = royaltyAddress.find(
-      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
-    );
-    if (notValidAddress) {
-      setRoyaltyValidAddress(false);
-    } else {
-      setRoyaltyValidAddress(true);
-    }
-  }, [propertyChangesAddress]);
-
-  const handleCloseLoadingPopup = (close) => {
-    if (location.pathname === '/create-tiers/my-nfts/create') {
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
-      setShowCongratsPopup(true);
-    } else {
-      close();
-    }
-  };
-
-  const handleCloseCongratsPopup = (close) => {
-    if (location.pathname === '/create-tiers/my-nfts/create') {
-      closeCongratsPopupEvent();
-    } else {
-      close();
-    }
-  };
-
-  const handleCloseSuccessPopup = (close) => {
-    const generatedEditions = [];
-
-    for (let i = 0; i < editions; i += 1) {
-      generatedEditions.push(uuid().split('-')[0]);
-    }
-    if (!savedNFTsID) {
-      if (selectedCollection) {
-        setSavedNfts([
-          ...savedNfts,
-          {
-            id: uuid(),
-            type: 'collection',
-            collectionId: selectedCollection.id,
-            collectionName: selectedCollection.name,
-            collectionAvatar: selectedCollection.previewImage,
-            collectionDescription: selectedCollection.description,
-            shortURL: selectedCollection.shortURL,
-            tokenName: selectedCollection.tokenName,
-            previewImage,
-            name,
-            description,
-            numberOfEditions: Number(editions),
-            generatedEditions,
-            properties,
-            percentAmount,
-            selected: false,
-          },
-        ]);
-      } else {
-        setSavedNfts([
-          ...savedNfts,
-          {
-            id: uuid(),
-            type: 'single',
-            previewImage,
-            name,
-            description,
-            numberOfEditions: editions,
-            generatedEditions,
-            properties,
-            percentAmount,
-            selected: false,
-          },
-        ]);
-      }
-    } else if (selectedCollection) {
-      setSavedNfts(
-        savedNfts.map((item) =>
-          item.id === savedNFTsID
-            ? {
-                ...item,
-                type: 'collection',
-                collectionId: selectedCollection.id,
-                collectionName: selectedCollection.name,
-                collectionAvatar: selectedCollection.previewImage,
-                collectionDescription: selectedCollection.description,
-                shortURL: selectedCollection.shortURL,
-                tokenName: selectedCollection.tokenName,
-                previewImage,
-                name,
-                description,
-                numberOfEditions: editions,
-                generatedEditions,
-                properties,
-                percentAmount,
-              }
-            : item
-        )
-      );
-    } else {
-      setSavedNfts(
-        savedNfts.map((item) =>
-          item.id === savedNFTsID
-            ? {
-                id: uuid(),
-                type: 'single',
-                previewImage,
-                name,
-                description,
-                numberOfEditions: editions,
-                generatedEditions,
-                properties,
-                percentAmount,
-              }
-            : item
-        )
-      );
-    }
-    setSavedNFTsID(null);
-    setShowModal(false);
-    document.body.classList.remove('no__scroll');
-  };
-
-  const onDrop = (e) => {
-    e.preventDefault();
-    const {
-      dataTransfer: { files },
-    } = e;
-    validateFile(files[0]);
-  };
 
   const onDragOver = (e) => {
     e.preventDefault();
