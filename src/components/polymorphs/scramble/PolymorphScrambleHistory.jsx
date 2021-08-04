@@ -11,7 +11,7 @@ import closeicon from '../../../assets/images/closehistory.svg';
 
 const PolymorphScrambleHistory = () => {
   const morphsFilter = () => {
-    const element = document.querySelector('.morphs--filter');
+    const element = document.querySelector('.morphs--filter--box');
     const close = document.querySelector('.closeIconClick');
     if (element.classList.contains('background--button')) {
       element.classList.remove('background--button');
@@ -24,7 +24,7 @@ const PolymorphScrambleHistory = () => {
     }
   };
   const scramblesFilter = () => {
-    const element = document.querySelector('.scrambles--filter');
+    const element = document.querySelector('.scrambles--filter--box');
     const close = document.querySelector('.scramblescloseIconClick');
     if (element.classList.contains('background--button')) {
       element.classList.remove('background--button');
@@ -49,16 +49,34 @@ const PolymorphScrambleHistory = () => {
       </div>
       <div className="filter-box">
         <h1>Filter by</h1>
-        <button type="button" onClick={() => morphsFilter()} className="morphs--filter">
-          <img src={chessIcon} alt="icon" className="chessIcon" />
-          Morphs
-          <img src={closeicon} alt="icon" className="closeIcon closeIconClick" />
-        </button>
-        <button type="button" onClick={() => scramblesFilter()} className="scrambles--filter">
-          <img src={chessIcon} alt="icon" className="scrambleschessIcon" />
-          Scrambles
-          <img src={closeicon} alt="icon" className="scramblescloseIcon scramblescloseIconClick" />
-        </button>
+        <div
+          className="filter--box--button morphs--filter--box"
+          aria-hidden="true"
+          onClick={() => morphsFilter()}
+        >
+          <button type="button" className="morphs--filter">
+            <img src={chessIcon} alt="icon" className="chessIcon" />
+            Morphs
+            <img src={closeicon} alt="icon" className="closeIcon closeIconClick" />
+          </button>
+          <div className="box--shadow--effect--block" />
+        </div>
+        <div
+          className="filter--box--button scrambles--filter--box"
+          aria-hidden="true"
+          onClick={() => scramblesFilter()}
+        >
+          <button type="button" className="scrambles--filter">
+            <img src={chessIcon} alt="icon" className="scrambleschessIcon" />
+            Scrambles
+            <img
+              src={closeicon}
+              alt="icon"
+              className="scramblescloseIcon scramblescloseIconClick"
+            />
+          </button>
+          <div className="box--shadow--effect--block" />
+        </div>
       </div>
       <div className="character--section">
         {History.map((elm) => (

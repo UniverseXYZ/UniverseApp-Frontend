@@ -48,10 +48,6 @@
     margin-top: 40px;
     display: flex;
     align-items: center;
-    .background--button {
-      background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box;
-      border: 1px solid transparent;
-    }
     h1 {
       font-family: $spaceGroteskFont;
       font-size: 16px;
@@ -59,41 +55,66 @@
       font-weight: 500;
       line-height: 26px;
     }
-    > button {
-      margin-left: 18px;
-      padding: 8px;
-      font-family: $spaceGroteskFont;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 20px;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.02);
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      .chessIcon {
-        padding-right: 8px;
+    .filter--box--button {
+      position: relative;
+      .box--shadow--effect--block {
+        position: absolute;
+        width: calc(100% - 18px);
+        min-height: 44px;
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+        left: 18px;
+        right: 0;
+        top: 0;
+        margin: auto;
+        border-radius: 12px;
+        opacity: 0;
+        cursor: pointer;
       }
-      .closeIcon {
-        padding-left: 8px;
-        visibility: hidden;
+      > button {
+        margin-left: 18px;
+        padding: 8px;
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        .chessIcon {
+          padding-right: 8px;
+        }
+        .closeIcon {
+          padding-left: 8px;
+          visibility: hidden;
+        }
+        .closebutton {
+          padding-left: 8px;
+          visibility: visible;
+        }
+        .scrambleschessIcon {
+          padding-right: 8px;
+        }
+        .scramblescloseIcon {
+          padding-left: 8px;
+          visibility: hidden;
+        }
+        .scramblesclosebutton {
+          padding-left: 8px;
+          visibility: visible;
+        }
       }
-      .closebutton {
-        padding-left: 8px;
-        visibility: visible;
+    }
+    .filter--box--button.background--button {
+      > button {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent;
       }
-      .scrambleschessIcon {
-        padding-right: 8px;
-      }
-      .scramblescloseIcon {
-        padding-left: 8px;
-        visibility: hidden;
-      }
-      .scramblesclosebutton {
-        padding-left: 8px;
-        visibility: visible;
+      .box--shadow--effect--block {
+        opacity: 0.2;
       }
     }
   }
