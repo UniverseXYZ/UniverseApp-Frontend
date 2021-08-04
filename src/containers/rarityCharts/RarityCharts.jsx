@@ -71,7 +71,7 @@ const RarityCharts = () => {
             </div>
           </>
         ) : (
-          <div>No results</div>
+          <div className="rarity-charts--list no--results--found">No results found</div>
         )}
       </div>
     </div>
