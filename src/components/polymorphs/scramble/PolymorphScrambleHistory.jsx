@@ -93,7 +93,7 @@ const PolymorphScrambleHistory = () => {
                       <img src={icon} alt="icon" className="eth-icon" />
                       <p>{elm.price}</p>
                       <div className="hover--icon">
-                        <img src={icon2} alt="share" />
+                        <img src={icon2} alt="share" className="share--hover--icon" />
                         <span className="tooltiptext">View on Etherscan</span>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ const PolymorphScrambleHistory = () => {
                       <img src={icon} alt="icon" className="eth-icon" />
                       <p>{elm.price}</p>
                       <div className="hover--icon">
-                        <img src={icon2} alt="share" />
+                        <img src={icon2} alt="share" className="share--hover--icon" />
                         <span className="tooltiptext">View on Etherscan</span>
                       </div>
                     </div>
