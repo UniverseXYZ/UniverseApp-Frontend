@@ -4085,7 +4085,11 @@
         @include xl {
           gap: 14px;
         }
+
         @include md {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @include sm {
           grid-template-columns: repeat(1, 1fr);
         }
       }
