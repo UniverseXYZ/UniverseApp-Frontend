@@ -11,7 +11,8 @@ import NFTCollectible from './NFTCollectible.jsx';
 import uploadIcon from '../../../assets/images/ion_cloud.svg';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import plusIcon from '../../../assets/images/plus.svg';
-import bigPlusGradientIcon from '../../../assets/images/Union.svg';
+import bigPlusGradientIcon1 from '../../../assets/images/Union.svg';
+import bigPlusGradientIcon from '../../../assets/images/cross-plus.svg';
 import errorIcon from '../../../assets/images/error-icon.svg';
 import editIcon from '../../../assets/images/edit.svg';
 import removeIcon from '../../../assets/images/remove.svg';
@@ -376,7 +377,10 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 aria-hidden="true"
               >
                 <img src={uploadIcon} alt="Upload" />
-                <p>Cover image(min 200x200px,PNG/JPEG/GIF,max 1mb)</p>
+                <p>Cover image</p>
+                <p className="second-p"> (min 200x200px,</p>
+                <p className="third-p">PNG/JPEG/GIF,</p>
+                <p className="fourth-p">max 1mb)</p>
                 <input
                   type="file"
                   ref={inputFile}

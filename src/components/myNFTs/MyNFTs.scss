@@ -67,6 +67,43 @@
     }
   }
 
+  .tabs-empty{
+    margin-top: 20px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    h3{
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 22px;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.4);
+      margin-top: 30px;
+      margin-bottom: 6px;
+    }
+    p{
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 160%;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.4);
+      width: 37%;
+      margin-left: 32%;
+      margin-bottom: 30px;
+      @include lg{
+        width: 50%;
+        margin-left: 25%;
+      }
+      @include sm{
+        width: 73%;
+        margin-left: 14%;
+      }
+    }
+  }
   &__gradient {
     position: relative;
   }
@@ -137,8 +174,10 @@
 
         &:disabled {
           cursor: not-allowed;
-          background: #e6e6e6;
           box-shadow: none;
+          background: rgba(0, 0, 0, 0.05);
+          color: rgba(0, 0, 0, 0.2);
+
         }
 
         @include sm {

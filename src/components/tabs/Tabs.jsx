@@ -1,6 +1,6 @@
 import uuid from 'react-uuid';
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import './Tabs.scss';
@@ -30,7 +30,9 @@ const Tabs = ({ items }) => (
                 <span>{tab.label}</span>
               </div>
             ) : (
-              tab.name
+              <>
+                {tab.name} {tab.length && `(${tab.length})`}
+              </>
             )}
           </li>
         ))}

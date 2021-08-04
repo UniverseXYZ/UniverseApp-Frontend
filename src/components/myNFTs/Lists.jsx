@@ -164,10 +164,10 @@ const Lists = ({
                 <>
                   {selectedNFTIds.includes(nft.id) &&
                     tierById &&
-                    winners <= nft.generatedEditions.length && (
+                    winners <= nft.generatedEditions?.length && (
                       <span className="selected-div">
                         <span className="selected-number">
-                          {selectedEditions[nft.id].length}/{nft.generatedEditions.length}
+                          {selectedEditions[nft.id]?.length}/{nft.generatedEditions.length}
                         </span>{' '}
                         <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
                       </span>

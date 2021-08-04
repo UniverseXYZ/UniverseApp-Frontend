@@ -295,7 +295,7 @@
                                     display: none;
                                 }
                                 p {
-                                    max-width: 85px;
+                                    max-width: 100px;
                                     margin: 16px auto 0;
                                     word-break: break-all;
                                     text-align: center;
@@ -308,6 +308,14 @@
                                     @include sm {
                                         display: none;
                                     }
+                                }
+                                .second-p,.third-p{
+                                    margin-top: unset;
+                                    margin-bottom: unset;
+                                }
+                                .fourth-p{
+                                    margin-top: unset;
+                                    // margin-bottom: unset;
                                 }
                                 @include sm {
                                     height: 140px;
@@ -525,6 +533,16 @@
                             @include sm {
                                 width: 100%;
                                 height: 200px;
+                            }
+                            .collection-t{
+                                p{
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: 500;
+                                    font-size: 16px;
+                                    line-height: 20px;
+                                    text-align: center;
+                                }
                             }
                         }
                         .gradient--shadow {
