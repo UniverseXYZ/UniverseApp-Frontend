@@ -29,7 +29,12 @@ import {
   getSavedNfts,
   getMyNfts,
 } from '../../utils/api/mintNFT';
-import { parseRoyalties, formatRoyaltiesForMinting } from '../../utils/helpers/contractInteraction';
+import {
+  parseRoyalties,
+  formatRoyaltiesForMinting,
+  parseProperties,
+  parsePropertiesForFrontEnd,
+} from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
 
 const MintSingleNft = ({ onClick }) => {
@@ -94,26 +99,26 @@ const MintSingleNft = ({ onClick }) => {
   };
 
   const removeRoyaltyAddress = (index) => {
-    const temp = [...royaltyAddress];
+    const temp = royaltyAddress ? [...royaltyAddress] : [];
     temp.splice(index, 1);
     setRoyaltyAddress(temp);
   };
 
   const addRoyaltyAddress = () => {
-    const newProperties = [...royaltyAddress];
+    const newProperties = royaltyAddress ? [...royaltyAddress] : [];
     const temp = { address: '', amount: '' };
     newProperties.push(temp);
     setRoyaltyAddress(newProperties);
   };
 
   const propertyChangesAddress = (index, val) => {
-    const prevProperties = [...royaltyAddress];
+    const prevProperties = [...properties];
     prevProperties[index].address = val;
     setRoyaltyAddress(prevProperties);
   };
 
   const propertyChangesAmount = (index, val) => {
-    const prevProperties = [...royaltyAddress];
+    const prevProperties = [...properties];
     prevProperties[index].amount = val;
     setRoyaltyAddress(prevProperties);
   };
@@ -188,15 +193,66 @@ const MintSingleNft = ({ onClick }) => {
     }
   };
 
+  const closeLoadingModal = () => {
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
+  const onEditSavedNft = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+
+    const result = await updateSavedForLaterNft({
+      name,
+      description,
+      editions,
+      propertiesParsed,
+      royaltiesParsed,
+      id: savedNFTsID,
+    });
+
+    let saveImageResult = null;
+    if (!result.message) {
+      // There is no error message
+      const updateNFTImage = result.id && typeof previewImage === 'object';
+      if (updateNFTImage) {
+        saveImageResult = await saveNftImage(previewImage, result.id);
+        if (saveImageResult.error) {
+          // Error with saving the image, show modal
+          showErrorModal(true);
+          return;
+        }
+      }
+    }
+
+    const data = saveImageResult || result;
+    if (!data) {
+      document.getElementById('congrats-hidden-btn').click();
+      showErrorModal(true);
+      return;
+    }
+
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS);
+
+    document.getElementById('congrats-hidden-btn').click();
+    closeLoadingModal();
+  };
+
   useEffect(() => {
     if (savedNFTsID) {
       const res = savedNfts.filter((item) => item.id === savedNFTsID);
+      const parsedProperties = res[0].properties
+        ? parsePropertiesForFrontEnd(res[0].properties)
+        : [{ name: '', value: '' }];
       setName(res[0].name);
       setDescription(res[0].description);
       setEditions(res[0].numberOfEditions);
       setPreviewImage(res[0].url);
       setRoyaltyAddress(res[0].royalties);
-      setProperties(res[0].properties);
+      setProperties(parsedProperties);
       setArtworkType(res[0].artworkType);
       if (res.length && res[0].collectionId) {
         const getCollection = deployedCollections.filter((col) => col.id === res[0].collectionId);
@@ -243,61 +299,7 @@ const MintSingleNft = ({ onClick }) => {
 
           document.getElementById('congrats-hidden-btn').click();
         } else {
-          // Editing already existing SAVED FOR LATER NFT
-          document.getElementById('loading-hidden-btn').click();
-
-          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-          const result = await updateSavedForLaterNft({
-            name,
-            description,
-            editions,
-            properties,
-            royaltiesParsed,
-            id: savedNFTsID,
-          });
-
-          let saveImageResult = null;
-          if (!result.message) {
-            // There is no error message
-            const updateNFTImage = result.id && typeof previewImage === 'object';
-            if (updateNFTImage) {
-              saveImageResult = await saveNftImage(previewImage, result.id);
-              if (saveImageResult.error) {
-                // Error with saving the image, show modal
-                showErrorModal(true);
-                return;
-              }
-            }
-          }
-
-          const data = saveImageResult || result;
-          if (!data) {
-            document.getElementById('congrats-hidden-btn').click();
-            showErrorModal(true);
-            return;
-          }
-
-          setSavedNfts(
-            savedNfts.map((item) => {
-              if (item.id === savedNFTsID) {
-                return {
-                  ...item,
-                  previewImage: saveImageResult ? saveImageResult.url : previewImage,
-                  name: data.name,
-                  description: data.description,
-                  numberOfEditions: data.numberOfEditions,
-                  editions,
-                  properties: data.properties,
-                  royalties: royaltiesParsed,
-                  url: saveImageResult ? saveImageResult.url : previewImage,
-                  artworkType: data.artworkType,
-                };
-              }
-
-              return item;
-            })
-          );
-          document.getElementById('congrats-hidden-btn').click();
+          onEditSavedNft();
         }
         setShowModal(false);
         document.body.classList.remove('no__scroll');
@@ -346,9 +348,11 @@ const MintSingleNft = ({ onClick }) => {
   }, [errors, saveForLateClick, savedNfts]);
 
   useEffect(() => {
-    const notValidAddress = royaltyAddress.find(
-      (el) => el.address?.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
-    );
+    const notValidAddress =
+      royaltyAddress?.length &&
+      royaltyAddress.find(
+        (el) => el.address?.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
+      );
     if (notValidAddress) {
       setRoyaltyValidAddress(false);
     } else {
@@ -702,7 +706,7 @@ const MintSingleNft = ({ onClick }) => {
                 <span className="slider round" />
               </label>
             </div>
-            {royalities &&
+            {royaltyAddress?.length &&
               royaltyAddress.map((elm, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <div key={i} className="royalty properties">
