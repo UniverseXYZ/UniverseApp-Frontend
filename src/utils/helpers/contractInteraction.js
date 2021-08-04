@@ -13,15 +13,38 @@ export function chunkifyArray(nftsArr, chunkSize) {
   return chunkifiedArray;
 }
 
-export const parseRoyalties = (royaltyAddress) =>
-  royaltyAddress
-    ? royaltyAddress.map((royalty) => ({
+export const parseRoyalties = (royalties) => {
+  const parsedRoyalties = [];
+
+  royalties?.forEach((royalty) => {
+    if (royalty.address && royalty.amount)
+      parsedRoyalties.push({
         address: royalty.address,
         amount: parseInt(royalty.amount, 10),
-      }))
-    : null;
+      });
+  });
+  return parsedRoyalties;
+};
 
 export const formatRoyaltiesForMinting = (royalties) =>
   royalties.map((royalty) =>
     royalty.address && royalty.amount ? [royalty.address, royalty.amount * 100] : []
   );
+
+export const parseProperties = (properties) => {
+  const parsedProperties = [];
+  properties.forEach((property) => {
+    if (property.name && property.value) parsedProperties.push({ [property.name]: property.value });
+  });
+  return parsedProperties;
+};
+
+export const parsePropertiesForFrontEnd = (properties) => {
+  const parsedProperties = [];
+
+  properties?.forEach((property) => {
+    const key = Object.keys(property)[0];
+    parsedProperties.push({ name: key, value: property[key] });
+  });
+  return parsedProperties;
+};

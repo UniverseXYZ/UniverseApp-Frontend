@@ -21,7 +21,7 @@ export const saveNftForLater = async (data) => {
     name: data.name,
     description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
-    properties: data.properties,
+    properties: data.propertiesParsed.length ? data.propertiesParsed : null,
     royalties: data.royaltiesParsed.length ? data.royaltiesParsed : null,
     collectionId: data.collectionId,
   };
@@ -134,7 +134,7 @@ export const getMetaForSavedNft = async (id) => {
  * @param {string} data.name
  * @param {string} data.description
  * @param {string} data.editions
- * @param {array} data.properties
+ * @param {array} data.propertiesParsed
  * @param {string} data.percentAmount
  * @param {string} data.id
  * @returns
@@ -147,8 +147,8 @@ export const updateSavedForLaterNft = async (data) => {
     name: data.name,
     description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
-    properties: data.properties,
-    royalties: parseFloat(data.percentAmount),
+    properties: data.propertiesParsed?.length ? data.propertiesParsed : null,
+    royalties: data.royaltiesParsed?.length ? data.royaltiesParsed : null,
   };
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
@@ -170,17 +170,34 @@ export const updateSavedForLaterNft = async (data) => {
   return result;
 };
 
-export const getTokenURI = async (data) => {
+/**
+ * @param {Object} data
+ * @param {file} data.file
+ * @param {string} data.name
+ * @param {string} data.description
+ * @param {string} data.editions
+ * @param {array} data.propertiesParsed
+ * @param {array} data.royaltiesParsed
+ * @returns
+ */
+export const getTokenURI = async ({
+  file,
+  name,
+  description,
+  editions,
+  propertiesParsed,
+  royaltiesParsed,
+}) => {
   const formData = new FormData();
-  const noProperties = !data.properties[0]?.name && !data.properties[0]?.name;
+  const noProperties = propertiesParsed?.length;
+  const noRoyalties = royaltiesParsed?.length;
 
-  formData.append('file', data.file, data.file.name);
-  formData.append('name', data.name);
-  formData.append('description', data.description);
-  formData.append('numberOfEditions', parseInt(data.editions, 10));
-  if (noProperties) formData.append('properties', JSON.stringify(data.properties));
-  if (data?.royaltiesParsed?.length)
-    formData.append('royalties', JSON.stringify(data.royaltiesParsed));
+  formData.append('file', file, file.name);
+  formData.append('name', name);
+  formData.append('description', description);
+  formData.append('numberOfEditions', parseInt(editions, 10));
+  if (noProperties) formData.append('properties', JSON.stringify(propertiesParsed));
+  if (noRoyalties) formData.append('royalties', JSON.stringify(royaltiesParsed));
 
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',

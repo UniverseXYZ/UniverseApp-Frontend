@@ -23,10 +23,19 @@ import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
-import { getTokenURI, getMyNfts } from '../../../utils/api/mintNFT';
+import {
+  getTokenURI,
+  getMyNfts,
+  saveNftForLater,
+  saveNftImage,
+  updateSavedForLaterNft,
+  getSavedNfts,
+} from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
   formatRoyaltiesForMinting,
+  parseProperties,
+  parsePropertiesForFrontEnd,
 } from '../../../utils/helpers/contractInteraction';
 
 const SingleNFTSettings = () => {
@@ -197,6 +206,11 @@ const SingleNFTSettings = () => {
     }
   };
 
+  const closeLoadingModal = () => {
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
   const onMintNft = async () => {
     document.getElementById('loading-hidden-btn').click();
     document.body.classList.add('no__scroll');
@@ -206,12 +220,14 @@ const SingleNFTSettings = () => {
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
 
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+
     const tokenURIResult = await getTokenURI({
       file: previewImage,
       name,
       description,
       editions,
-      properties,
+      propertiesParsed,
       royaltiesParsed,
     });
 
@@ -235,20 +251,20 @@ const SingleNFTSettings = () => {
     document.getElementById('popup-root').remove();
     document.getElementById('congrats-hidden-btn').click();
 
-    setShowModal(false);
-    document.body.classList.remove('no__scroll');
+    closeLoadingModal();
   };
 
   const onSaveNftForLaterMinting = async () => {
     document.getElementById('loading-hidden-btn').click();
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
     const result = await saveNftForLater({
       name,
       description,
       editions,
-      properties,
+      propertiesParsed,
       royaltiesParsed,
       collectionId: selectedCollection ? selectedCollection.id : 1,
     });
@@ -271,10 +287,10 @@ const SingleNFTSettings = () => {
     setSavedNfts(savedNFTS);
 
     document.getElementById('congrats-hidden-btn').click();
+    closeLoadingModal();
   };
 
-  // TODO please check this one
-  const editSavedNft = async () => {
+  const onEditSavedNft = async () => {
     document.getElementById('loading-hidden-btn').click();
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
@@ -308,27 +324,11 @@ const SingleNFTSettings = () => {
       return;
     }
 
-    setSavedNfts(
-      savedNfts.map((item) => {
-        if (item.id === savedNFTsID) {
-          return {
-            ...item,
-            previewImage: saveImageResult ? saveImageResult.url : previewImage,
-            name: data.name,
-            description: data.description,
-            numberOfEditions: data.numberOfEditions,
-            editions,
-            properties: data.properties,
-            royalties: royaltiesParsed,
-            url: saveImageResult ? saveImageResult.url : previewImage,
-            artworkType: data.artworkType,
-          };
-        }
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS);
 
-        return item;
-      })
-    );
     document.getElementById('congrats-hidden-btn').click();
+    closeLoadingModal();
   };
 
   const validateEdition = (e) => {
@@ -399,12 +399,15 @@ const SingleNFTSettings = () => {
   useEffect(() => {
     if (savedNFTsID) {
       const res = savedNfts.filter((item) => item.id === savedNFTsID);
-      setName(res[0]?.name);
-      setDescription(res[0]?.description);
-      setEditions(res[0]?.numberOfEditions);
-      setPreviewImage(res[0]?.previewImage);
-      setPercentAmount(res[0]?.percentAmount);
-      setProperties(res[0]?.properties);
+      const parsedProperties = res[0].properties
+        ? parsePropertiesForFrontEnd(res[0].properties)
+        : [{ name: '', value: '' }];
+      setName(res[0].name);
+      setDescription(res[0].description);
+      setEditions(res[0].numberOfEditions);
+      setPreviewImage(res[0].previewImage);
+      setPercentAmount(res[0].percentAmount);
+      setProperties(parsedProperties);
       if (res.length && res[0].collectionId) {
         const getCollection = deployedCollections.filter((col) => col.id === res[0]?.collectionId);
         if (getCollection.length) {
@@ -420,10 +423,8 @@ const SingleNFTSettings = () => {
         if (!savedNFTsID) {
           onSaveNftForLaterMinting();
         } else {
-          editSavedNft();
+          onEditSavedNft();
         }
-        setShowModal(false);
-        document.body.classList.remove('no__scroll');
       }
     }
     if (mintNowClick) {
