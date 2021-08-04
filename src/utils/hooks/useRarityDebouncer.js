@@ -3,7 +3,10 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 
-const RARITY_BACKEND_BASE_URI = 'http://34.147.109.201:8000/morphs';
+const RARITY_BACKEND_BASE_URI =
+  'https://us-central1-polymorphmetadata.cloudfunctions.net/rarity-mainnet';
+
+// const RARITY_BACKEND_BASE_URI = 'http://localhost:8000/morphs';
 
 const buildRarityUrl = (
   page = 1,
@@ -31,7 +34,7 @@ const buildRarityUrl = (
 };
 
 export const useSearchPolymorphs = () => {
-  const perPage = 500;
+  const perPage = 100;
   const [inputText, setInputText] = useState('');
   const [apiPage, setApiPage] = useState(1);
   const [sortField, setSortField] = useState('rarityscore');

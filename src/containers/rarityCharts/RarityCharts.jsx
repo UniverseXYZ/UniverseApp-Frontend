@@ -71,7 +71,9 @@ const RarityCharts = () => {
             </div>
           </>
         ) : (
-          <div className="rarity-charts--list no--results--found">No results found</div>
+          <div className="rarity--charts--empty">
+            <p>No Polymorph could be found :’(</p>
+          </div>
         )}
       </div>
     </div>

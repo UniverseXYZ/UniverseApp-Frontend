@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import { traitRarity } from '../../utils/graphql/queries';
 import bluePuzzle from '../../assets/images/blue-puzzle.svg';
 import pinkPuzzle from '../../assets/images/pink-puzzle.svg';
+import orangePuzzle from '../../assets/images/orange-puzzle.svg';
 
 function RarityRankPopupProperty({
   mainMatchingAttributes,

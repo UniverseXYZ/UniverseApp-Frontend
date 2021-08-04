@@ -8,6 +8,7 @@ import RarityRankPopupProperty from './RarityRankPopupProperty';
 import linkIcon from '../../assets/images/rarity-charts/linkIcon.svg';
 
 const RarityRankPopup = ({ onClose, item }) => {
+  const contractAddress = '0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f';
   const [traitsMap, setTraitsMap] = useState([]);
   useEffect(() => {
     const genesMap = GeneParser.parse(item.currentgene);
@@ -39,7 +40,9 @@ const RarityRankPopup = ({ onClose, item }) => {
             <div>
               <h1>{`Rarity Rank #${item.rank}`}</h1>
               <a
-                href={`https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${item.id}`}
+                target="_blank"
+                href={`https://opensea.io/assets/${contractAddress}/${item.tokenid}`}
+                rel="noreferrer"
               >
                 View on Opensea <img src={linkIcon} alt="Link Icon" />
               </a>{' '}
