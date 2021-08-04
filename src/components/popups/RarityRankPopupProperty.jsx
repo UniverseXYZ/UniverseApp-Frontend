@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/client';
 import { traitRarity } from '../../utils/graphql/queries';
-import bluePuzzle from '../../assets/images/blue-puzzle.svg';
-import pinkPuzzle from '../../assets/images/pink-puzzle.svg';
-import orangePuzzle from '../../assets/images/orange-puzzle.svg';
+import RarityRankOrangeProperty from './RarityRankOrangeProperty';
+import RarityRankBlueProperty from './RarityRankBlueProperty';
+import RarityRankPinkProperty from './RarityRankPinkProperty';
+import RarityRankNoColorProperty from './RarityRankNoColorProperty';
 
 function RarityRankPopupProperty({
   mainMatchingAttributes,
@@ -21,47 +22,60 @@ function RarityRankPopupProperty({
     chance = `${Math.round(data.traits[0]?.rarity, 10)}% have this trait`;
   }
   const renderTrait = () => {
+    // Checks if hands are matching different set than the main and secondary sets
     if (
-      mainMatchingAttributes.includes(propertyName) ||
-      (propertyName === 'Left Hand' &&
-        !mainMatchingAttributes.includes('Left Hand') &&
-        matchingHands === 2) ||
-      (propertyName === 'Right Hand' &&
-        !mainMatchingAttributes.includes('Right Hand') &&
-        matchingHands === 2)
+      (propertyName === 'Left Hand' || propertyName === 'Right Hand') &&
+      matchingHands === 2 &&
+      !mainMatchingAttributes.includes(propertyName) &&
+      !secMatchingAttributes.includes(propertyName)
     ) {
       return (
-        <div className="rarity--description selected">
-          <div className="matching">
-            <img src={bluePuzzle} alt="Blue" />
-            <span className="tooltiptext">Main set trait</span>
-          </div>
-          <h4>{propertyName}</h4>
-          <h3>{value}</h3>
-          <p className="description">{chance}</p>
-        </div>
+        <RarityRankPinkProperty
+          tooltipText="Hands set trait"
+          propertyName={propertyName}
+          trait={value}
+          chance={chance}
+        />
       );
     }
+
+    // TODO: This should be changed to green puzzle piece when it's designed
+    if (
+      mainMatchingAttributes.includes(propertyName) &&
+      secMatchingAttributes.includes(propertyName)
+    ) {
+      return (
+        <RarityRankPinkProperty
+          tooltipText="Main &amp; Secondary set trait"
+          propertyName={propertyName}
+          trait={value}
+          chance={chance}
+        />
+      );
+    }
+
+    if (mainMatchingAttributes.includes(propertyName)) {
+      return (
+        <RarityRankOrangeProperty
+          tooltipText="Main set trait"
+          propertyName={propertyName}
+          trait={value}
+          chance={chance}
+        />
+      );
+    }
+
     if (secMatchingAttributes.includes(propertyName)) {
       return (
-        <div className="rarity--description selected">
-          <div className="matching">
-            <img src={pinkPuzzle} alt="Pink" />
-            <span className="tooltiptext">Secondary set trait</span>
-          </div>
-          <h4>{propertyName}</h4>
-          <h3>{value}</h3>
-          <p className="description">{chance}</p>
-        </div>
+        <RarityRankBlueProperty
+          tooltipText="Secondary set trait"
+          propertyName={propertyName}
+          trait={value}
+          chance={chance}
+        />
       );
     }
-    return (
-      <div className="rarity--description">
-        <h4>{propertyName}</h4>
-        <h3>{value}</h3>
-        <p className="description">{chance}</p>
-      </div>
-    );
+    return <RarityRankNoColorProperty propertyName={propertyName} trait={value} chance={chance} />;
   };
 
   return renderTrait();
