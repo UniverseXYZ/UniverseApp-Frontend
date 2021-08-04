@@ -3836,7 +3836,7 @@
     display: flex;
     justify-content: space-between;
     padding: 75px 60px;
-    max-height: 700px;
+    max-height: 962px;
     overflow-y: auto;
 
     .rarity--rank--image {
@@ -3905,9 +3905,6 @@
         height: 490px;
         text-align: center;
         margin: auto;
-      }
-      @include md {
-        height: 220px;
       }
     }
     .rarity--rank--body {
@@ -4100,15 +4097,15 @@
       }
       .selected--blue {
         background: rgba(30, 136, 229, 0.05) !important;
-        border: 1px solid #1E88E5 !important;
+        border: 1px solid #1e88e5 !important;
       }
       .selected--pink {
         background: rgba(200, 87, 202, 0.1) !important;
-        border: 1px solid #C857CA !important;
+        border: 1px solid #c857ca !important;
       }
       .selected--orange {
         background: rgba(251, 140, 0, 0.05) !important;
-        border: 1px solid #FB8C00 !important;
+        border: 1px solid #fb8c00 !important;
       }
       @include xl {
         padding-bottom: 20px;
@@ -4117,12 +4114,6 @@
     @include xl {
       display: grid;
       padding: 30px 20px 20px;
-    }
-    @include sm {
-      max-height: 550px;
-    }
-    @include sm {
-      max-height: 550px;
     }
   }
   // @include xl {
