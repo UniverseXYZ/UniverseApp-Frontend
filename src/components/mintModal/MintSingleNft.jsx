@@ -211,6 +211,7 @@ const MintSingleNft = ({ onClick }) => {
       propertiesParsed,
       royaltiesParsed,
       id: savedNFTsID,
+      collectionId: selectedCollection.id,
     });
 
     let saveImageResult = null;
@@ -311,7 +312,11 @@ const MintSingleNft = ({ onClick }) => {
         const userAddress = localStorage.getItem('user_address');
 
         const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-        const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
+        const royaltiesFormated = royaltiesParsed.length
+          ? formatRoyaltiesForMinting(royaltiesParsed)
+          : [];
+
+        console.log(selectedCollection.id);
 
         const tokenURIResult = await getTokenURI({
           file: previewImage,
@@ -320,6 +325,7 @@ const MintSingleNft = ({ onClick }) => {
           editions,
           properties,
           royaltiesParsed,
+          selectedCollection: selectedCollection.id,
         });
 
         console.log('sending request to contract...', tokenURIResult);

@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
@@ -25,6 +26,13 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
+import { saveCollection, getTokenURI, attachTxHashToCollection } from '../../../utils/api/mintNFT';
+import {
+  formatRoyaltiesForMinting,
+  chunkifyArray,
+  parseRoyalties,
+  parseProperties,
+} from '../../../utils/helpers/contractInteraction';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -34,6 +42,10 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     setMyNFTs,
     deployedCollections,
     setDeployedCollections,
+    universeERC721FactoryContract,
+    universeERC721CoreContract,
+    setShowModal,
+    savedCollections,
   } = useContext(AppContext);
 
   const [offset, setOffset] = useState(0);
@@ -254,6 +266,100 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     }
   };
 
+  const onMintCollection = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const collectionCreationResult = await saveCollection({
+      file: coverImage,
+      name: collectionName,
+      symbol: tokenName,
+      description,
+      shortUrl: shortURL,
+    });
+
+    console.log('collectionCreationResult', collectionCreationResult);
+
+    if (collectionCreationResult?.id) {
+      if (collectionNFTs.length) {
+        const unsignedMintCollectionTx = await universeERC721FactoryContract.deployUniverseERC721(
+          collectionName,
+          tokenName
+        );
+        const { transactionHash, from } = await unsignedMintCollectionTx.wait();
+
+        const response = await attachTxHashToCollection(
+          transactionHash,
+          collectionCreationResult.id
+        );
+        console.log('res', transactionHash, response);
+        if (!response.ok && response.status !== 201) {
+          console.error(`Error while trying to save a new collection: ${response.statusText}`);
+          return;
+        }
+
+        const mintFees = [];
+        const tokenUriList = [];
+        let tokenURIResult;
+        let currentNft;
+        for (let i = 0; i < collectionNFTs.length; i += 1) {
+          currentNft = collectionNFTs[i];
+
+          console.log(currentNft);
+
+          const royaltiesParsed = currentNft.royaltySplits.length
+            ? parseRoyalties(currentNft.royaltySplits)
+            : [];
+          const royaltiesFormated = royaltiesParsed.length
+            ? formatRoyaltiesForMinting(royaltiesParsed)
+            : [];
+
+          const propertiesParsed = currentNft.properties
+            ? parseProperties(currentNft.properties)
+            : [];
+
+          tokenURIResult = await getTokenURI({
+            file: currentNft.previewImage,
+            name: currentNft.name,
+            description: currentNft.description,
+            editions: currentNft.numberOfEditions,
+            propertiesParsed,
+            royaltiesParsed,
+          });
+
+          tokenUriList.push(tokenURIResult[0]);
+
+          mintFees.push(royaltiesFormated);
+        }
+
+        const chunksOfMetaData = chunkifyArray(tokenUriList, 40);
+        const chunksOfFeeData = chunkifyArray(mintFees, 40);
+
+        console.log('chunksOfMetaData', chunksOfMetaData);
+        console.log('chunksOfFeeData', chunksOfFeeData);
+
+        for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
+          const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
+            from,
+            chunksOfMetaData[chunk],
+            chunksOfFeeData[chunk]
+          );
+
+          const mintReceipt = await mintTransaction.wait();
+
+          console.log('printing receipt...', mintReceipt);
+        }
+      }
+
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-hidden-btn').click();
+
+      setShowModal(false);
+      document.body.classList.remove('no__scroll');
+    } else {
+      console.error('There was an error');
+    }
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
     return () => {
@@ -287,51 +393,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   useEffect(() => {
     if (mintNowClick) {
-      if (!errors.collectionName && !errors.tokenName) {
-        document.getElementById('loading-hidden-btn').click();
-        setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
-          setTimeout(() => {
-            if (collectionNFTs.length) {
-              const newMyNFTs = [...myNFTs];
-              collectionNFTs.forEach((nft) => {
-                newMyNFTs.push({
-                  id: uuid(),
-                  type: 'collection',
-                  collectionId: collectionName,
-                  collectionName,
-                  collectionAvatar:
-                    coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                  tokenName,
-                  collectionDescription: description,
-                  shortURL,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.editions),
-                  generatedEditions: nft.generatedEditions,
-                  releasedDate: new Date(),
-                  properties: nft.properties,
-                  royaltySplits: nft.royaltySplits,
-                });
-              });
-              setMyNFTs(newMyNFTs);
-            }
-            setDeployedCollections([
-              ...deployedCollections,
-              {
-                id: collectionName,
-                previewImage:
-                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                name: collectionName,
-                tokenName,
-                description,
-                shortURL,
-              },
-            ]);
-          }, 2000);
-        }, 3000);
+      if (!errors.collectionName && !errors.tokenName && !errors.shorturl && !errors.collectible) {
+        onMintCollection();
       }
     }
   }, [errors]);

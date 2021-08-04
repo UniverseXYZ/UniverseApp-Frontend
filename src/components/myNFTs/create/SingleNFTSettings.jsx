@@ -218,7 +218,9 @@ const SingleNFTSettings = () => {
     const userAddress = localStorage.getItem('user_address');
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-    const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
+    const royaltiesFormated = royaltiesParsed.length
+      ? formatRoyaltiesForMinting(royaltiesParsed)
+      : [];
 
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
@@ -229,6 +231,7 @@ const SingleNFTSettings = () => {
       editions,
       propertiesParsed,
       royaltiesParsed,
+      collectionId: selectedCollection.id,
     });
 
     console.log('sending request to contract...', tokenURIResult);
