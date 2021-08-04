@@ -3,20 +3,16 @@ import PropTypes from 'prop-types';
 import AddToken from './AddTokenPopup.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
-import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
+import SearchField from '../input/SearchField';
 
 const SelectTokenPopup = ({ onClose }) => {
   const { options, setBidtype } = useContext(AppContext);
-  const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
   const [showAddTokenPopup, setShowAddTokenPopup] = useState(false);
+  const [optionsClone, setOptionsClone] = useState([...options]);
 
   const handleChange = (key) => {
     setBidtype(key);
-  };
-
-  const handleSearch = (value) => {
-    setsearchByNameAndAddress(value);
   };
 
   useEffect(() => {
@@ -33,35 +29,31 @@ const SelectTokenPopup = ({ onClose }) => {
           <li className="searchDiv">
             <div>
               <h1>Select bid token (ERC-20)</h1>
-              <Input
-                onChange={(e) => handleSearch(e.target.value)}
-                value={searchByNameAndAddress}
+              <SearchField
+                data={options}
                 placeholder="Search name or paste address"
-                className="searchInp"
+                dropdown={false}
+                CardElement={<></>}
+                enterKeyEvent={false}
+                getData={(find) => setOptionsClone(find)}
               />
             </div>
           </li>
-          {options
-            .filter(
-              (item) =>
-                item.name.toLowerCase().includes(searchByNameAndAddress.toLowerCase()) ||
-                item.address.toLowerCase().includes(searchByNameAndAddress.toLowerCase())
-            )
-            .map((item) => (
-              <li
-                key={item.value ? item.value : item.name}
-                aria-hidden="true"
-                onClick={() => handleChange(item.value)}
-                onKeyPress={() => handleChange(item.value)}
-                onKeyDown={() => handleChange(item.value)}
-              >
-                <div className="img-name">
-                  {item.img ? <img src={item.img} alt="icon" /> : <span className="imgDefSpan" />}
-                  <span className="dai-name">{item.name}</span>
-                </div>
-                {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
-              </li>
-            ))}
+          {optionsClone.map((item) => (
+            <li
+              key={item.value ? item.value : item.name}
+              aria-hidden="true"
+              onClick={() => handleChange(item.value)}
+              onKeyPress={() => handleChange(item.value)}
+              onKeyDown={() => handleChange(item.value)}
+            >
+              <div className="img-name">
+                {item.img ? <img src={item.img} alt="icon" /> : <span className="imgDefSpan" />}
+                <span className="dai-name">{item.name}</span>
+              </div>
+              {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
+            </li>
+          ))}
           <div className="token-div">
             <button
               type="button"
