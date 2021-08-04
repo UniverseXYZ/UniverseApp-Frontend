@@ -10,7 +10,7 @@ import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
 import NFTPopup from '../popups/NFTPopup';
-import { getEditionsCount } from '../../utils/helpers/backendData';
+import { getEditionsCount, isVideo, isAudio, isImage } from '../../utils/helpers/nftData';
 
 const Lists = ({
   data,
@@ -173,7 +173,7 @@ const Lists = ({
                   )}
                 </>
               )}
-              {nft?.artworkType === 'mp4' && !isCreatingAction && (
+              {isVideo(nft) && !isCreatingAction && (
                 <Popup
                   trigger={
                     <video
@@ -191,7 +191,7 @@ const Lists = ({
                   {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                 </Popup>
               )}
-              {nft?.artworkType === 'mp4' && isCreatingAction && (
+              {isVideo(nft) && isCreatingAction && (
                 <video
                   onMouseOver={(event) => event.target.play()}
                   onFocus={(event) => event.target.play()}
@@ -203,27 +203,25 @@ const Lists = ({
                   Your browser does not support the video tag.
                 </video>
               )}
-              {nft?.artworkType === 'mp3' && !isCreatingAction && (
+              {isAudio(nft) && !isCreatingAction && (
                 <Popup trigger={<img className="preview-image" src={mp3Icon} alt={nft.name} />}>
                   {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                 </Popup>
               )}
-              {nft?.artworkType === 'mp3' && isCreatingAction && (
+              {isAudio(nft) && isCreatingAction && (
                 <img className="preview-image" src={mp3Icon} alt={nft.name} />
               )}
-              {nft?.artworkType !== 'mp3' && nft?.artworkType !== 'mp4' && !isCreatingAction && (
+              {isImage(nft) && !isCreatingAction && (
                 <Popup
                   trigger={<img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />}
                 >
                   {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                 </Popup>
               )}
-              {nft?.artworkType !== 'mp3' && nft?.artworkType !== 'mp4' && isCreatingAction && (
+              {isImage(nft) && isCreatingAction && (
                 <img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />
               )}
-              {nft?.artworkType === 'mp4' && (
-                <img className="video__icon" src={videoIcon} alt="Video Icon" />
-              )}
+              {isVideo(nft) && <img className="video__icon" src={videoIcon} alt="Video Icon" />}
             </div>
             <div className={`nft__box__name ${isCreatingAction ? 'no__hover' : ''}`}>
               <h3 title={nft.name}>{nft.name}</h3>

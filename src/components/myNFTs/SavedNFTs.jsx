@@ -11,6 +11,7 @@ import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
+import { isImage, isVideo } from '../../utils/helpers/nftData';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
@@ -114,7 +115,7 @@ const SavedNFTs = () => {
                   onClick={() => handleSavedNfts(index)}
                   aria-hidden="true"
                 >
-                  {nft.artworkType === 'mp4' && (
+                  {isVideo(nft) && (
                     <video
                       onMouseOver={(event) => event.target.play()}
                       onFocus={(event) => event.target.play()}
@@ -129,12 +130,8 @@ const SavedNFTs = () => {
                   {/* {nft.artworkType === 'audio/mpeg' && ( //TODO:: what kind of audio formats are eligible ??
                     <img className="preview-image" src={mp3Icon} alt={nft.name} />
                   )} */}
-                  {nft.artworkType !== 'mp3' && nft.artworkType !== 'mp4' && (
-                    <img className="preview-image" src={nft.url} alt={nft.name} />
-                  )}
-                  {nft.artworkType === 'mp4' && (
-                    <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                  )}
+                  {isImage(nft) && <img className="preview-image" src={nft.url} alt={nft.name} />}
+                  {isVideo(nft) && <img className="video__icon" src={videoIcon} alt="Video Icon" />}
                   {nft.selected && <img className="check__icon" src={checkIcon} alt="Check Icon" />}
                 </div>
                 <div className="saved__nft__box__name">

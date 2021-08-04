@@ -21,6 +21,7 @@ import RarityChartsLoader from '../../containers/rarityCharts/RarityChartsLoader
 import UniverseNFTsList from './universeNFTsList/UniverseNFTsList.jsx';
 import RarityChartFiltersPopup from '../popups/RarityChartFiltersPopup.jsx';
 import filterIcon from '../../assets/images/filters-icon-black.svg';
+import { isImage } from '../../utils/helpers/nftData';
 
 const UniverseNFTs = () => {
   const { setSelectedNftForScramble } = useContext(AppContext);
@@ -1269,7 +1270,7 @@ const UniverseNFTs = () => {
             .slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
-              elm.artworkType === 'jpeg' ? (
+              isImage(elm) ? (
                 <div
                   key={uuid()}
                   className="nft__box"

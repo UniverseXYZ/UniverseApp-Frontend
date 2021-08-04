@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
 import videoIcon from '../../../../assets/images/video-icon.svg';
 import NFTPopup from '../../../popups/NFTPopup';
-import { getEditionsCount } from '../../../../utils/helpers/backendData';
+import { getEditionsCount, isVideo, isImage } from '../../../../utils/helpers/nftData';
 
 const NFTsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
@@ -28,7 +28,7 @@ const NFTsList = ({ data, perPage, offset }) => {
           <Animated animationIn="fadeIn" key={uuid()}>
             <div className="nft__box">
               <div className="nft__box__image">
-                {nft.artworkType === 'mp4' && (
+                {isVideo(nft) && (
                   <Popup
                     trigger={
                       <video
@@ -46,7 +46,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                     {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                   </Popup>
                 )}
-                {nft.artworkType !== 'mp3' && nft.artworkType !== 'mp4' && (
+                {isImage(nft) && (
                   <Popup
                     trigger={
                       <img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />
@@ -55,9 +55,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                     {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                   </Popup>
                 )}
-                {nft.artworkType === 'mp4' && (
-                  <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                )}
+                {isVideo(nft) && <img className="video__icon" src={videoIcon} alt="Video Icon" />}
               </div>
               <div className="nft__box__name">
                 <h3>{nft.name}</h3>
