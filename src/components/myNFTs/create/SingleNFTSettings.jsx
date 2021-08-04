@@ -228,8 +228,9 @@ const SingleNFTSettings = () => {
 
     console.log('printing receipt...', receipt);
 
-    const mintedNfts = await getMyNfts();
-    setMyNFTs(mintedNfts);
+    // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
+    // const mintedNfts = await getMyNfts();
+    // setMyNFTs(mintedNfts);
 
     document.getElementById('popup-root').remove();
     document.getElementById('congrats-hidden-btn').click();

@@ -216,7 +216,7 @@ const App = () => {
       const collectionsReturn = await getMyCollections();
       setDeployedCollections(collectionsReturn);
 
-      // console.log(mintedNfts);
+      console.log(mintedNfts);
     }
   };
 
