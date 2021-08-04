@@ -5,21 +5,20 @@ import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
 import AppContext from '../../ContextAPI';
-import { PolymorphRarityCharts } from '../../utils/fixtures/RarityChartsDummyData';
 import './RarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import RarityChartsLoader from './RarityChartsLoader';
 
 const RarityCharts = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode, setMyUniverseNFTsActiverPage } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(12);
 
   const {
     inputText,
     setInputText,
-    page,
-    setPage,
+    apiPage,
+    setApiPage,
     sortField,
     setSortField,
     sortDir,
@@ -36,6 +35,11 @@ const RarityCharts = () => {
     setDarkMode(true);
   }, []);
 
+  const resetPagination = () => {
+    setMyUniverseNFTsActiverPage(0);
+    setOffset(0);
+  };
+
   return (
     <div className="rarity--charts--page">
       <Welcome />
@@ -46,7 +50,8 @@ const RarityCharts = () => {
           setSearchText={setInputText}
           setSortDir={setSortDir}
           sortDir={sortDir}
-          setApiPage={setPage}
+          setApiPage={setApiPage}
+          resetPagination={resetPagination}
         />
         {search.loading && !isLastPage ? (
           <RarityChartsLoader number={12} />
@@ -55,8 +60,8 @@ const RarityCharts = () => {
             <List data={results} isLastPage={isLastPage} perPage={perPage} offset={offset} />
             <div className="pagination__container">
               <Pagination
-                setApiPage={setPage}
-                apiPage={page}
+                setApiPage={setApiPage}
+                apiPage={apiPage}
                 data={results}
                 perPage={perPage}
                 setOffset={setOffset}

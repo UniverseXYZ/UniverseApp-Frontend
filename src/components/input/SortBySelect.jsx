@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
-import AppContext from '../../ContextAPI';
 
 import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
-  const { sortData, className, defaultValue, setSortField, setApiPage } = props;
-  const { setMyUniverseNFTsActiverPage } = useContext(AppContext);
+  const { sortData, className, defaultValue, setSortField, setApiPage, resetPagination } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const ref2 = useRef(null);
@@ -16,7 +14,7 @@ const SortBySelect = (props) => {
   const handleOptionChange = (item) => {
     setSortValue(item);
     setApiPage(1);
-    setMyUniverseNFTsActiverPage(0);
+    resetPagination();
     switch (item) {
       case 'Rarity Score':
         setSortField('rarityscore');
@@ -78,6 +76,7 @@ SortBySelect.propTypes = {
   defaultValue: PropTypes.string,
   setSortField: PropTypes.func.isRequired,
   setApiPage: PropTypes.func.isRequired,
+  resetPagination: PropTypes.func.isRequired,
 };
 
 SortBySelect.defaultProps = {

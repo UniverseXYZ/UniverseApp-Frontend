@@ -5,9 +5,8 @@ import SortUpIcon from '../../assets/images/rarity-charts/sortUpIcon.svg';
 import AppContext from '../../ContextAPI';
 import './SortByOrder.scss';
 
-const SortByOrder = ({ setSortDir, sortDir, setApiPage }) => {
+const SortByOrder = ({ setSortDir, sortDir, setApiPage, resetPagination }) => {
   const [direction, setDirection] = useState(sortDir);
-  const { setMyUniverseNFTsActiverPage } = useContext(AppContext);
 
   const handleChange = () => {
     let newDir = '';
@@ -19,7 +18,7 @@ const SortByOrder = ({ setSortDir, sortDir, setApiPage }) => {
     setDirection(newDir);
     setSortDir(newDir);
     setApiPage(1);
-    setMyUniverseNFTsActiverPage(0);
+    resetPagination();
   };
   return (
     <div className="sort--by--order" aria-hidden="true" onClick={handleChange}>
@@ -35,7 +34,8 @@ const SortByOrder = ({ setSortDir, sortDir, setApiPage }) => {
 };
 SortByOrder.propTypes = {
   setSortDir: PropTypes.func.isRequired,
-  sortDir: PropTypes.bool.isRequired,
+  sortDir: PropTypes.string.isRequired,
   setApiPage: PropTypes.func.isRequired,
+  resetPagination: PropTypes.func.isRequired,
 };
 export default SortByOrder;

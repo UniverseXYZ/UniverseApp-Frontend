@@ -3,7 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 
-const RARITY_BACKEND_BASE_URI = 'http://localhost:8000/morphs';
+const RARITY_BACKEND_BASE_URI = 'http://34.147.109.201:8000/morphs';
 
 const buildRarityUrl = (
   page = 1,
@@ -33,7 +33,7 @@ const buildRarityUrl = (
 export const useSearchPolymorphs = () => {
   const perPage = 500;
   const [inputText, setInputText] = useState('');
-  const [page, setPage] = useState(1);
+  const [apiPage, setApiPage] = useState(1);
   const [sortField, setSortField] = useState('rarityscore');
   const [sortDir, setSortDir] = useState('desc');
   const [filter, setFilter] = useState('');
@@ -83,22 +83,22 @@ export const useSearchPolymorphs = () => {
       //   return [];
       // }
       // Else we use the debounced api
-      const endpoint = buildRarityUrl(page, perPage, text, sortField, sortDir, filter);
-      if (page === 1) {
+      const endpoint = buildRarityUrl(apiPage, perPage, text, sortField, sortDir, filter);
+      if (apiPage === 1) {
         return debouncedSearchPolymorphsRarity(endpoint, abortSignal);
       }
       return debouncedLoadMorePolymorphs(endpoint, abortSignal);
     },
     // Ensure a new request is made everytime the text changes (even if it's debounced)
-    [inputText, page, sortField, sortDir]
+    [inputText, apiPage, sortField, sortDir]
   );
 
   // Return everything needed for the hook consumer
   return {
     inputText,
     setInputText,
-    page,
-    setPage,
+    apiPage,
+    setApiPage,
     sortField,
     setSortField,
     sortDir,

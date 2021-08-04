@@ -6,18 +6,25 @@ import SortByOrder from '../../input/SortByOrder';
 import './Filters.scss';
 
 const Filters = (props) => {
-  const { floorPrice, searchText, setSearchText, setSortField, setSortDir, sortDir, setApiPage } =
-    props;
+  const {
+    floorPrice,
+    searchText,
+    setSearchText,
+    setSortField,
+    setSortDir,
+    sortDir,
+    setApiPage,
+    resetPagination,
+  } = props;
   return (
     <div className="rarity--charts--search--and--filters--row">
       <div className="rarity--charts--search--and--floor--price">
         <SearchField
           placeholder="Search"
-          dropdown={false}
-          enterKeyEvent={false}
           searchText={searchText}
           setSearchText={setSearchText}
           setApiPage={setApiPage}
+          resetPagination={resetPagination}
         />
         <div className="floor--price--block">
           <p className="floor--price--paragraph">
@@ -34,8 +41,14 @@ const Filters = (props) => {
           sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
           setSortField={setSortField}
           setApiPage={setApiPage}
+          resetPagination={resetPagination}
         />
-        <SortByOrder setSortDir={setSortDir} sortDir={sortDir} setApiPage={setApiPage} />
+        <SortByOrder
+          setSortDir={setSortDir}
+          sortDir={sortDir}
+          setApiPage={setApiPage}
+          resetPagination={resetPagination}
+        />
       </div>
     </div>
   );
@@ -47,8 +60,9 @@ Filters.propTypes = {
   setSearchText: PropTypes.func.isRequired,
   setSortField: PropTypes.func.isRequired,
   setSortDir: PropTypes.func.isRequired,
-  sortDir: PropTypes.bool.isRequired,
+  sortDir: PropTypes.string.isRequired,
   setApiPage: PropTypes.func.isRequired,
+  resetPagination: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {
