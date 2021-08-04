@@ -5,6 +5,8 @@ import neverScrumbledIcon from '../../assets/images/never-scrambled-badge.svg';
 import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
 import bluePuzzle from '../../assets/images/blue-puzzle.svg';
 import pinkPuzzle from '../../assets/images/pink-puzzle.svg';
+import orangePuzzle from '../../assets/images/orange-puzzle.svg';
+import linkIcon from '../../assets/images/rarity-charts/linkIcon.svg';
 
 const RarityRankPopup = ({ onClose, item }) => {
   const variable = '';
@@ -30,7 +32,12 @@ const RarityRankPopup = ({ onClose, item }) => {
           <div className="rarity--rank--header">
             <div>
               <h1>{`Rarity Rank #${item.id}`}</h1>
-              <h2>{item.name}</h2>
+              {/* <h2>{item.name}</h2> */}
+              <a
+                href={`https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${item.id}`}
+              >
+                View on Opensea <img src={linkIcon} alt="Link Icon" />
+              </a>
             </div>
             <p className="number">{`#${item.serialNumber}`}</p>
           </div>
@@ -40,7 +47,7 @@ const RarityRankPopup = ({ onClose, item }) => {
               <h3>Marigunana</h3>
               <p className="description">28% have this trait</p>
             </div>
-            <div className="rarity--description selected">
+            <div className="rarity--description selected--blue">
               <div className="matching">
                 <img src={bluePuzzle} alt="Blue" />
                 <span className="tooltiptext">Matching trait</span>
@@ -49,12 +56,16 @@ const RarityRankPopup = ({ onClose, item }) => {
               <h3>Marine Helemt</h3>
               <p className="description">58% have this trait</p>
             </div>
-            <div className="rarity--description">
+            <div className="rarity--description selected--orange">
+              <div className="matching">
+                <img src={orangePuzzle} alt="Orange" />
+                <span className="tooltiptext">Matching trait</span>
+              </div>
               <h4>Eyewear</h4>
               <h3>Bar Shades</h3>
               <p className="description">58% have this trait</p>
             </div>
-            <div className="rarity--description selected">
+            <div className="rarity--description selected--pink">
               <div className="matching">
                 <img src={pinkPuzzle} alt="Pink" />
                 <span className="tooltiptext">Matching trait</span>
@@ -63,7 +74,7 @@ const RarityRankPopup = ({ onClose, item }) => {
               <h3>Brown Spartan Sandals</h3>
               <p className="description">58% have this trait</p>
             </div>
-            <div className="rarity--description selected">
+            <div className="rarity--description selected--blue">
               <div className="matching">
                 <img src={bluePuzzle} alt="Blue" />
                 <span className="tooltiptext">Matching trait</span>
@@ -72,9 +83,9 @@ const RarityRankPopup = ({ onClose, item }) => {
               <h3>Golden Jacket</h3>
               <p className="description">58% have this trait</p>
             </div>
-            <div className="rarity--description selected">
+            <div className="rarity--description selected--orange">
               <div className="matching">
-                <img src={pinkPuzzle} alt="Pink" />
+                <img src={orangePuzzle} alt="Pink" />
                 <span className="tooltiptext">Matching trait</span>
               </div>
               <h4>Pants</h4>
@@ -86,7 +97,7 @@ const RarityRankPopup = ({ onClose, item }) => {
               <h3>No Left-Hand Accessory</h3>
               <p className="description">58% have this trait</p>
             </div>
-            <div className="rarity--description selected">
+            <div className="rarity--description selected--pink">
               <div className="matching">
                 <img src={pinkPuzzle} alt="Pink" />
                 <span className="tooltiptext">Matching trait</span>

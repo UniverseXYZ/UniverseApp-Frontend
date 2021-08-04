@@ -61,8 +61,6 @@
   }
 
   .headline__link {
-    display: flex;
-
     h5 {
       font-family: $spaceGroteskFont;
       font-style: normal;
@@ -97,12 +95,14 @@
       color: #ff4949;
     }
 
-    .auction__headline {
-      margin-right: 30px;
+    .auction__headline__link {
       width: 100%;
+      display: flex;
 
       .auction__headline__input {
+        width: 100%;
         margin-bottom: 42px;
+        margin-right: 30px;
 
         .auction__headline__title {
           display: flex;
@@ -117,9 +117,35 @@
             color: rgba(0, 0, 0, 0.4);
           }
         }
+        @include md {
+          margin-bottom: 20px;
+        }
       }
+      .auction__link__input {
+        width: 100%;
+        margin-bottom: 42px;
+
+        input {
+          font-weight: bold;
+        }
+        .empty {
+          background: linear-gradient(to right, #000000 31%, rgba(0, 0, 0, 0.2) 10%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+      @include sm {
+        display: grid;
+      }
+    }
+
+    .auction__uploads {
+      display: flex;
+      width: 100%;
 
       .upload__promo {
+        margin-right: 30px;
+        width: 100%;
         .upload__promo__title {
           position: relative;
           display: flex;
@@ -245,7 +271,10 @@
                 width: 167px;
               }
               @include sm {
-                width: 255px;
+                display: flex;
+                align-items: center;
+                margin: auto;
+                width: 100%;
                 height: 255px;
               }
             }
@@ -254,26 +283,14 @@
             }
           }
         }
-      }
-    }
-
-    .auction__link {
-      width: 100%;
-
-      .auction__link__input {
-        margin-bottom: 42px;
-
-        input {
-          font-weight: bold;
-        }
-        .empty {
-          background: linear-gradient(to right, #000000 31%, rgba(0, 0, 0, 0.2) 10%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+        @include md {
+          margin-right: 0%;
+          margin-bottom: 40px;
         }
       }
 
       .upload__background {
+        width: 100%;
         .upload__background__title {
           display: flex;
           justify-content: space-between;
@@ -441,8 +458,8 @@
           }
         }
       }
-      @include sm {
-        margin-top: 30px;
+      @include md {
+        display: grid;
       }
     }
 
@@ -611,6 +628,14 @@
             line-height: 150%;
             color: #ff4949;
           }
+          .warning-text {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 150%;
+            color: #e4b613;
+          }
 
           @include lg {
             margin-bottom: 30px;
@@ -729,6 +754,9 @@
   }
   .about__artist {
     margin-top: 64px;
+    .my-account {
+      background-image: none;
+    }
 
     .landing__page__warning {
       display: flex;

@@ -40,8 +40,7 @@
 }
 
 input:checked + .slider {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-        linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+    background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%)
 }
 
 input:checked + .slider:before {

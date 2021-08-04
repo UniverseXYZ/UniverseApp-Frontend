@@ -25,18 +25,18 @@ const Head = () => {
   };
 
   return (
-    <div className="my-account container">
-      <div className="my-account-title">
-        <h1>My Profile</h1>
-        <Button className="light-button" onClick={handlePreviewClick} disabled={universePage}>
-          Preview my Universe page
-        </Button>
-        <p>
-          You can set your preffered display name, create a branded profile URL and manage other
-          personal settings.
-        </p>
-      </div>
+    // <div className="my-account">
+    <div className="my-account-title container">
+      <h1>Edit my profile</h1>
+      <Button className="light-button" onClick={handlePreviewClick} disabled={universePage}>
+        Preview my Universe page
+      </Button>
+      <p>
+        You can set your preffered display name, create a branded profile URL and manage other
+        personal settings.
+      </p>
     </div>
+    // </div>
   );
 };
 

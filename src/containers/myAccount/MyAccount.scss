@@ -2,6 +2,10 @@
 @import '../../assets/scss/_mixins';
 
 .my-account {
+  background-image: url('../../assets/images/my-profile-bg.png');
+  background-size: 100% 200px;
+  background-repeat: no-repeat;
+  background-position-y: 88px;
   .my-account-title {
     display: grid;
     grid-template-columns: 1fr 253px;
@@ -63,149 +67,149 @@
   }
 
   .account-grid-container {
-    .account-grid-name {
-      display: flex;
-      width: 100%;
-      padding: 40px 0;
+    // .account-grid-name {
+    //   display: flex;
+    //   width: 100%;
+    //   padding: 40px 0;
 
-      .account-picture {
-        min-width: 285px;
+    //   .account-picture {
+    //     min-width: 285px;
 
-        .account-image {
-          width: 190px;
-          height: 190px;
-          border-radius: 50%;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+    //     .account-image {
+    //       width: 190px;
+    //       height: 190px;
+    //       border-radius: 50%;
+    //       border: 1px solid rgba(0, 0, 0, 0.1);
 
-          .default-img {
-            width: 60px;
-            height: 60px;
-            margin: 64px;
+    //       .default-img {
+    //         width: 60px;
+    //         height: 60px;
+    //         margin: 64px;
 
-            @include lg {
-              width: 41px;
-              height: 41px;
-              margin: 46px;
-            }
-            @include sm {
-              width: 31px;
-              height: 31px;
-              margin: 32px;
-            }
-          }
-          .account-img {
-            width: 190px;
-            height: 190px;
-            border-radius: 50%;
-            object-fit: cover;
-          }
-          @include lg {
-            width: 132px;
-            height: 132px;
-          }
-          @include sm {
-            width: 96px;
-            height: 96px;
-          }
-        }
+    //         @include lg {
+    //           width: 41px;
+    //           height: 41px;
+    //           margin: 46px;
+    //         }
+    //         @include sm {
+    //           width: 31px;
+    //           height: 31px;
+    //           margin: 32px;
+    //         }
+    //       }
+    //       .account-img {
+    //         width: 190px;
+    //         height: 190px;
+    //         border-radius: 50%;
+    //         object-fit: cover;
+    //       }
 
-        .account-picture-editing {
-          margin-top: 12px;
-          width: 190px;
-          text-align: center;
+    //       @include lg {
+    //         width: 132px;
+    //         height: 132px;
+    //       }
+    //       @include sm {
+    //         width: 96px;
+    //         height: 96px;
+    //       }
+    //     }
 
-          p {
-            font-family: $spaceGroteskFont;
-            font-size: 14px;
-            line-height: 160%;
-            color: rgba(0, 0, 0, 0.6);
-            padding-bottom: 12px;
-          }
-          button {
-            margin: auto;
-          }
+    //     .account-picture-editing {
+    //       margin-top: 12px;
+    //       width: 190px;
+    //       text-align: center;
 
-          @include lg {
-            width: 160px;
-            margin-top: 19px;
-            text-align: left;
-          }
-        }
+    //       p {
+    //         font-family: $spaceGroteskFont;
+    //         font-size: 14px;
+    //         line-height: 160%;
+    //         color: rgba(0, 0, 0, 0.6);
+    //         padding-bottom: 12px;
+    //       }
+    //       button {
+    //         margin: auto;
+    //       }
 
-        @include lg {
-          min-width: 185px;
-        }
-        @include sm {
-          margin-top: 5px;
-          min-width: 119px;
-        }
-      }
+    //       @include lg {
+    //         width: 160px;
+    //         margin-top: 19px;
+    //         text-align: left;
+    //       }
+    //     }
 
-      .account-grid-name-edit {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        margin-top: 50px;
+    //     @include lg {
+    //       min-width: 185px;
+    //     }
+    //     @include sm {
+    //       margin-top: 5px;
+    //       min-width: 119px;
+    //     }
+    //   }
 
-        .account-name {
-          h2 {
-            font-family: $sharpGroteskMediumFont;
-            font-weight: 600;
-            font-size: 26px;
-            line-height: 140%;
-            letter-spacing: 0.2px;
-            color: $black;
-            padding-bottom: 10px;
+    //   .account-grid-name-edit {
+    //     display: flex;
+    //     width: 100%;
+    //     justify-content: space-between;
+    //     margin-top: 50px;
 
-            @include sm {
-              font-size: 20px;
-              line-height: 130%;
-              letter-spacing: 0px;
-              padding-bottom: 3px;
-            }
-          }
-          .account-link {
-            display: flex;
-            flex-wrap: wrap;
-            font-family: $spaceGroteskFont;
-            font-size: 18px;
-            line-height: 23px;
-            .link {
-              color: $black;
-            }
-            .default-address {
-              color: rgba(0, 0, 0, 0.4);
-            }
-          }
-        }
-        @include lg {
-          margin-top: 30px;
-        }
-        @include md {
-          display: grid;
-          margin-top: 0px;
-        }
+    //     .account-name {
+    //       h2 {
+    //         font-family: $sharpGroteskMediumFont;
+    //         font-weight: 600;
+    //         font-size: 26px;
+    //         line-height: 140%;
+    //         letter-spacing: 0.2px;
+    //         color: $black;
+    //         padding-bottom: 10px;
 
-        button {
-          @include md {
-            width: fit-content;
-            margin-top: 10px;
-          }
-        }
-      }
+    //         @include sm {
+    //           font-size: 20px;
+    //           line-height: 130%;
+    //           letter-spacing: 0px;
+    //           padding-bottom: 3px;
+    //         }
+    //       }
+    //       .account-link {
+    //         display: flex;
+    //         flex-wrap: wrap;
+    //         font-family: $spaceGroteskFont;
+    //         font-size: 18px;
+    //         line-height: 23px;
+    //         .link {
+    //           color: $black;
+    //         }
+    //         .default-address {
+    //           color: rgba(0, 0, 0, 0.4);
+    //         }
+    //       }
+    //     }
+    //     @include lg {
+    //       margin-top: 30px;
+    //     }
+    //     @include md {
+    //       display: grid;
+    //       margin-top: 0px;
+    //     }
 
-      @include lg {
-        padding: 50px 0;
-      }
-      @include sm {
-        padding: 40px 0 20px;
-      }
-    }
+    //     button {
+    //       @include md {
+    //         width: fit-content;
+    //         margin-top: 10px;
+    //       }
+    //     }
+    //   }
+
+    //   @include lg {
+    //     padding: 50px 0;
+    //   }
+    //   @include sm {
+    //     padding: 40px 0 20px;
+    //   }
+    // }
 
     .account-grid-name1 {
       display: flex;
       width: 100%;
-      padding: 40px 0;
 
       .account-picture {
         min-width: 285px;
@@ -249,6 +253,9 @@
             width: 96px;
             height: 96px;
           }
+        }
+        .error-img {
+          border: 1px solid #ff4949 !important;
         }
 
         .account-picture-editing {
@@ -299,17 +306,28 @@
 
       .account-grid-name-editing {
         position: relative;
-        margin-top: 10px;
+        width: 100%;
+        h3 {
+          font-family: $sharpGroteskMediumFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 130%;
+          color: $black;
+        }
         h5 {
           display: flex;
           align-items: center;
           font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
           font-size: 14px;
           line-height: 22px;
           margin-top: 20px;
         }
 
         .intup-l {
+          width: 100%;
           @include lg {
             width: 100%;
             max-width: 540px;
@@ -317,7 +335,8 @@
         }
 
         input {
-          width: 540px;
+          max-width: 730px;
+          width: 100%;
           height: 50px;
           font-family: $spaceGroteskFont;
           font-size: 16px;
@@ -376,9 +395,28 @@
             }
           }
         }
+        .account-grid-about-editing {
+          width: 100%;
+          textarea {
+            max-width: 730px;
+            width: 100%;
+            height: 150px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 20px;
+            padding: 15px 16px;
+            // margin-bottom: 20px;
+          }
+          ::placeholder {
+            color: rgba(0, 0, 0, 0.2);
+          }
+        }
         .display-warning {
           position: relative;
           display: flex;
+          max-width: 730px;
           width: 100%;
           padding: 24px;
           background: #fdfcf9;
@@ -395,6 +433,32 @@
             font-size: 16px;
             line-height: 160%;
             color: #e4b613;
+          }
+          img {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+          }
+        }
+        .display__error {
+          position: relative;
+          display: flex;
+          max-width: 730px;
+          width: 100%;
+          padding: 24px;
+          background: rgba(255, 73, 73, 0.04);
+          border: 1px solid #ff4949;
+          box-sizing: border-box;
+          border-radius: 12px;
+          margin-bottom: 40px;
+
+          p {
+            padding-left: 31px;
+            font-family: $spaceGroteskFont;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 160%;
+            color: #ff4949;
           }
           img {
             position: absolute;
@@ -656,7 +720,7 @@
     .account-grid-social {
       display: flex;
       width: 100%;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      // border-top: 1px solid rgba(0, 0, 0, 0.1);
       padding: 30px 0;
       .animated.zoomIn {
         width: 100%;
@@ -784,7 +848,12 @@
 
       .account-grid-social-editing {
         width: 100%;
-        max-width: 540px;
+        max-width: 730px;
+        h3 {
+          span {
+            color: rgba(0, 0, 0, 0.2);
+          }
+        }
         h5 {
           font-family: $spaceGroteskFont;
           font-weight: bold;
@@ -800,7 +869,7 @@
         .twitter {
           position: relative;
           width: 100%;
-          max-width: 540px;
+          max-width: 730px;
 
           img {
             position: absolute;
@@ -808,6 +877,7 @@
             height: 24px;
             left: 13px;
             top: 36px;
+            z-index: 9;
           }
 
           input {
@@ -837,7 +907,7 @@
         }
         .instagram {
           position: relative;
-          max-width: 540px;
+          max-width: 730px;
           width: 100%;
 
           img {
@@ -846,6 +916,7 @@
             height: 24px;
             left: 13px;
             top: 36px;
+            z-index: 9;
           }
 
           input {
@@ -854,7 +925,7 @@
             font-family: $spaceGroteskFont;
             font-size: 16px;
             line-height: 20px;
-            margin-bottom: 20px;
+            // margin-bottom: 20px;
 
             &::placeholder {
               color: rgba(0, 0, 0, 0.2);
