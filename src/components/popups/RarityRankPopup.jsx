@@ -85,7 +85,7 @@ const RarityRankPopup = ({ onClose, item }) => {
             </div>
             <div className="rarity--description selected--orange">
               <div className="matching">
-                <img src={pinkPuzzle} alt="Pink" />
+                <img src={orangePuzzle} alt="Pink" />
                 <span className="tooltiptext">Matching trait</span>
               </div>
               <h4>Pants</h4>
