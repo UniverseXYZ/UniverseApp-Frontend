@@ -16,7 +16,7 @@
     linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
 }
 .input--focus--field.intup-l {
-  > div{
+  > div {
     padding: 1px;
     border-radius: 11px;
     background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
@@ -55,7 +55,7 @@
       line-height: 20px;
       position: relative;
       box-sizing: border-box;
-      z-index: 100;
+      z-index: 9;
       &::placeholder {
         color: rgba(0, 0, 0, 0.2);
       }
@@ -65,12 +65,12 @@
       }
     }
     &:hover {
-      padding: 1px;
+      // padding: 1px;
       .box--shadow--effect--block {
         opacity: 0.2 !important;
       }
       input {
-        border: none;
+        // border: none;
         border-radius: 10px !important;
       }
     }

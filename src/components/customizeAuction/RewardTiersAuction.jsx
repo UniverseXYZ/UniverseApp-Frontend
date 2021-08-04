@@ -8,7 +8,7 @@ import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import AppContext from '../../ContextAPI';
 
-const RewardTiersAuction = ({ values, onChange }) => {
+const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   const { auction, bidtype } = useContext(AppContext);
   const arrLength = auction.tiers.length;
   const [elRefs, setElRefs] = useState([]);
@@ -78,7 +78,6 @@ const RewardTiersAuction = ({ values, onChange }) => {
           const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
           const image = checkTier ? checkTier.tierImg : null;
           const description = checkTier ? checkTier.description : null;
-          console.log(description);
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -128,13 +127,15 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     </p>
                   </div>
                   <textarea
-                    className={description ? 'inp' : 'inp error-inp'}
+                    className={editButtonClick && !description ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
                     value={description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
-                  {!description && <p className="error__text">Fill out the description</p>}
+                  {editButtonClick && !description && (
+                    <p className="error__text">Fill out the description</p>
+                  )}
                   {values[i].description?.length >= 600 && (
                     <p className="warning-text">You have reached the max amount of symbols</p>
                   )}
@@ -193,10 +194,12 @@ RewardTiersAuction.propTypes = {
     tierImg: PropTypes.oneOfType([PropTypes.any]),
   }),
   onChange: PropTypes.func.isRequired,
+  editButtonClick: PropTypes.bool,
 };
 
 RewardTiersAuction.defaultProps = {
   values: [],
+  editButtonClick: false,
 };
 
 export default RewardTiersAuction;
