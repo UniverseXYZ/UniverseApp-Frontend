@@ -208,9 +208,7 @@ const MintSingleNft = ({ onClick }) => {
   }, []);
 
   useEffect(async () => {
-    console.log(mintNowClick, saveForLateClick);
     if (saveForLateClick) {
-      console.log(1);
       if (!errors.name && !errors.edition && !errors.previewImage) {
         if (!savedNFTsID) {
           document.getElementById('loading-hidden-btn').click();

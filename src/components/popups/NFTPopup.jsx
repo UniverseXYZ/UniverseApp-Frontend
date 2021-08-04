@@ -73,7 +73,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   })
                 }
               >
-                <img src={URL.createObjectURL(loggedInArtist.avatar)} alt={loggedInArtist.name} />
+                <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
                 {loggedInArtist.name}
               </p>
             </div>
