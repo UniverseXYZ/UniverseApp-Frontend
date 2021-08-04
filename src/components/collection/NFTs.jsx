@@ -5,6 +5,7 @@ import Popup from 'reactjs-popup';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import NFTPopup from '../popups/NFTPopup.jsx';
+import { isImage, isVideo, isAudio } from '../../utils/helpers/nftData';
 
 const NFTs = ({ filteredNFTs }) => (
   <div className="saved__nfts__lists">
@@ -12,7 +13,7 @@ const NFTs = ({ filteredNFTs }) => (
       filteredNFTs.map((nft) => (
         <div className="saved__nft__box" key={uuid()}>
           <div className="saved__nft__box__image" aria-hidden="true">
-            {nft.artworkType === 'mp4' && (
+            {isVideo(nft) && (
               <Popup
                 trigger={
                   <video
@@ -30,21 +31,19 @@ const NFTs = ({ filteredNFTs }) => (
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
             )}
-            {nft.artworkType === 'mp3' && (
+            {isAudio(nft) && (
               <Popup trigger={<img className="preview-image" src={mp3Icon} alt={nft.name} />}>
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
             )}
-            {nft.artworkType !== 'mp3' && nft.artworkType !== 'mp4' && (
+            {isImage(nft) && (
               <Popup
                 trigger={<img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />}
               >
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>
             )}
-            {nft.artworkType === 'mp4' && (
-              <img className="video__icon" src={videoIcon} alt="Video Icon" />
-            )}
+            {isVideo(nft) && <img className="video__icon" src={videoIcon} alt="Video Icon" />}
           </div>
           <div className="saved__nft__box__name">
             <h3>{nft.name}</h3>

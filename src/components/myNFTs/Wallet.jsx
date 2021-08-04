@@ -15,6 +15,7 @@ import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import { getMyNfts } from '../../utils/api/mintNFT';
+import { isImage, isAudio, isVideo } from '../../utils/helpers/nftData';
 
 const Wallet = ({
   filteredNFTs,
@@ -475,7 +476,7 @@ const Wallet = ({
               <div className="img-div">
                 {previewNFTs.map((nft, index) => (
                   <div key={nft.id} className="imgs">
-                    {nft.artworkType === 'mp4' && (
+                    {isVideo(nft) && (
                       <video
                         className="smallView-image"
                         onMouseOver={(event) => event.target.play()}
@@ -488,10 +489,10 @@ const Wallet = ({
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    {nft.artworkType === 'mp3' && (
+                    {isAudio(nft) && (
                       <img className="smallView-image" src={mp3Icon} alt={nft.name} />
                     )}
-                    {nft.artworkType !== 'mp3' && nft.artworkType !== 'mp4' && (
+                    {isImage(nft) && (
                       <img className="smallView-image" src={nft.thumbnail_url} alt={nft.name} />
                     )}
                     <img
