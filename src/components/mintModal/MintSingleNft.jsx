@@ -208,95 +208,42 @@ const MintSingleNft = ({ onClick }) => {
   }, []);
 
   useEffect(async () => {
+    console.log(mintNowClick, saveForLateClick);
     if (saveForLateClick) {
+      console.log(1);
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        const generatedEditions = [];
-
-        for (let i = 0; i < editions; i += 1) {
-          generatedEditions.push(uuid().split('-')[0]);
-        }
         if (!savedNFTsID) {
-          if (selectedCollection) {
-            document.getElementById('loading-hidden-btn').click();
-            // TODO:: As discussed with Alex this functionality is postponed for now.
+          document.getElementById('loading-hidden-btn').click();
 
-            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
 
-            const result = await saveNftForLater({
-              name,
-              description,
-              editions,
-              properties,
-              royaltiesParsed,
-              collectionId: selectedCollection.id,
-            });
+          const result = await saveNftForLater({
+            name,
+            description,
+            editions,
+            properties,
+            royaltiesParsed,
+            collectionId: selectedCollection ? selectedCollection.id : 1,
+          });
 
-            let saveImageResult = null;
+          let saveImageResult = null;
 
-            if (result.savedNft) {
-              // Update the NFT image
-              saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
-              if (saveImageResult.error) {
-                // Error with saving the image, show modal
-                showErrorModal(true);
-                return;
-              }
+          if (result.savedNft) {
+            // Update the NFT image
+            saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+            if (saveImageResult.error) {
+              // Error with saving the image, show modal
+              showErrorModal(true);
+              return;
             }
-
-            if (!saveImageResult) return;
-
-            const savedNFTS = await getSavedNfts();
-            setSavedNfts(savedNFTS);
-
-            document.getElementById('congrats-hidden-btn').click();
-          } else {
-            document.getElementById('loading-hidden-btn').click();
-
-            const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-            const result = await saveNftForLater({
-              name,
-              description,
-              editions,
-              properties,
-              percentAmount,
-              royaltiesParsed,
-              collectionId: selectedCollection?.id || 10,
-            });
-
-            let saveImageResult = null;
-            if (result.savedNft) {
-              // Update the NFT image
-              saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
-              if (saveImageResult.error) {
-                // Error with saving the image, show modal
-                showErrorModal(true);
-                return;
-              }
-            }
-
-            if (!saveImageResult) return;
-
-            // Update the state based on the result
-            setSavedNfts([
-              ...savedNfts,
-              {
-                id: saveImageResult.id,
-                type: 'single',
-                previewImage: saveImageResult.url,
-                name: saveImageResult.name,
-                description: saveImageResult.description,
-                numberOfEditions: saveImageResult.numberOfEditions,
-                generatedEditions, // TODO:: what the heck is this ???
-                properties: saveImageResult.properties,
-                percentAmount: saveImageResult.royalties,
-                selected: false,
-                url: saveImageResult.url,
-                royaltiesParsed,
-                artworkType: saveImageResult.artworkType,
-              },
-            ]);
-            document.getElementById('congrats-hidden-btn').click();
           }
+
+          if (!saveImageResult) return;
+
+          const savedNFTS = await getSavedNfts();
+          setSavedNfts(savedNFTS);
+
+          document.getElementById('congrats-hidden-btn').click();
         } else {
           // Editing already existing SAVED FOR LATER NFT
           document.getElementById('loading-hidden-btn').click();
@@ -341,7 +288,7 @@ const MintSingleNft = ({ onClick }) => {
                   name: data.name,
                   description: data.description,
                   numberOfEditions: data.numberOfEditions,
-                  generatedEditions,
+                  editions,
                   properties: data.properties,
                   royalties: royaltiesParsed,
                   url: saveImageResult ? saveImageResult.url : previewImage,
@@ -361,90 +308,39 @@ const MintSingleNft = ({ onClick }) => {
     if (mintNowClick) {
       console.log('MINTING..........');
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
-        document.getElementById('loading-hidden-btn').click();
+        const userAddress = localStorage.getItem('user_address');
 
-        const mintingGeneratedEditions = [];
+        const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+        const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
 
-        for (let i = 0; i < editions; i += 1) {
-          mintingGeneratedEditions.push(uuid().split('-')[0]);
-        }
+        const tokenURIResult = await getTokenURI({
+          file: previewImage,
+          name,
+          description,
+          editions,
+          properties,
+          royaltiesParsed,
+        });
 
-        if (selectedCollection) {
-          const userAddress = localStorage.getItem('user_address');
-          // universeERC721CoreContract should be used for minting single NFT
-          // auctionFactoryContract should be usef for minting Collectibles NFTS
+        console.log('sending request to contract...', tokenURIResult);
 
-          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-          const royaltiesFormated = formatRoyaltiesForMinting(royaltiesParsed);
+        // call contract
+        const mintTx = await universeERC721CoreContract.mint(
+          userAddress,
+          tokenURIResult[0],
+          royaltiesFormated
+        );
 
-          const tokenURIResult = await getTokenURI({
-            file: previewImage,
-            name,
-            description,
-            editions,
-            properties,
-            royaltiesParsed,
-          });
+        const receipt = await mintTx.wait();
 
-          console.log('sending request to contract...', tokenURIResult);
+        console.log('printing receipt...', receipt);
 
-          // call contract
-          const mintTx = await universeERC721CoreContract.mint(
-            userAddress,
-            tokenURIResult[0],
-            royaltiesFormated
-          );
+        const mintedNfts = await getMyNfts();
+        setMyNFTs(mintedNfts);
 
-          const receipt = await mintTx.wait();
+        document.getElementById('popup-root').remove();
+        document.getElementById('congrats-hidden-btn').click();
 
-          console.log('printing receipt...', receipt);
-
-          // TODO:: As discussed with Alex this functionality is postponed for now.
-          // setMyNFTs([
-          //   ...myNFTs,
-          //   {
-          //     id: uuid(),
-          //     type: 'collection',
-          //     collectionId: selectedCollection.id,
-          //     collectionName: selectedCollection.name,
-          //     collectionAvatar: selectedCollection.previewImage,
-          //     collectionDescription: selectedCollection.description,
-          //     shortURL: selectedCollection.shortURL,
-          //     tokenName: selectedCollection.tokenName,
-          //     previewImage,
-          //     name,
-          //     description,
-          //     numberOfEditions: Number(editions),
-          //     generatedEditions: mintingGeneratedEditions,
-          //     properties,
-          //     percentAmount,
-          //     releasedDate: new Date(),
-          //   },
-          // ]);
-
-          const mintedNfts = await getMyNfts();
-          setMyNFTs(mintedNfts);
-
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
-        } else {
-          // TODO:: WE DON'T HAVE AN ENDPOINT FOR DIRECT CREATION OF NFT, FOR NOW WORKS ONLY WITH SAVED NFTS
-          setMyNFTs([
-            ...myNFTs,
-            {
-              id: uuid(),
-              type: 'single',
-              previewImage,
-              name,
-              description,
-              numberOfEditions: Number(editions),
-              generatedEditions: mintingGeneratedEditions,
-              properties,
-              percentAmount,
-              releasedDate: new Date(),
-            },
-          ]);
-        }
         setShowModal(false);
         document.body.classList.remove('no__scroll');
       }

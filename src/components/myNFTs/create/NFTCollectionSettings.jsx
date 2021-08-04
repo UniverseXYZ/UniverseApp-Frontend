@@ -496,9 +496,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 <div className="three--images">
                   <div className="creator--details">
                     <img
-                      src={
-                        nft.creator.avatar ? URL.createObjectURL(nft.creator.avatar) : testUserImage
-                      }
+                      src={nft.creator.avatar ? nft.creator.avatar : testUserImage}
                       alt={nft.creator.name ? nft.creator.name : 'Test'}
                     />
                     <span className="tooltiptext">{`Creator: ${
@@ -524,7 +522,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                   </div>
                   <div className="owner--details">
                     <img
-                      src={nft.owner.avatar ? URL.createObjectURL(nft.owner.avatar) : testUserImage}
+                      src={nft.owner.avatar ? nft.owner.avatar : testUserImage}
                       alt={nft.owner.name ? nft.owner.name : 'Test'}
                     />
                     <span className="tooltiptext">{`Owner: ${
