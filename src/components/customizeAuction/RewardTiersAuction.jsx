@@ -78,6 +78,7 @@ const RewardTiersAuction = ({ values, onChange }) => {
           const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
           const image = checkTier ? checkTier.tierImg : null;
           const description = checkTier ? checkTier.description : null;
+          console.log(description);
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -127,13 +128,16 @@ const RewardTiersAuction = ({ values, onChange }) => {
                     </p>
                   </div>
                   <textarea
-                    className="inp"
+                    className={description ? 'inp' : 'inp error-inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
                     value={description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
                   {!description && <p className="error__text">Fill out the description</p>}
+                  {values[i].description?.length >= 600 && (
+                    <p className="warning-text">You have reached the max amount of symbols</p>
+                  )}
                 </div>
                 <div className="upload__image">
                   <h4>Upload tier image (optional)</h4>

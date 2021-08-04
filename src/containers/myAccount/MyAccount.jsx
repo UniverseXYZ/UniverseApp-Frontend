@@ -92,7 +92,7 @@ const MyAccount = () => {
   };
 
   return (
-    <div>
+    <div className="my-account">
       <Popup
         trigger={
           <button
@@ -113,11 +113,19 @@ const MyAccount = () => {
         setAccountPage={setAccountPage}
         accountImage={accountImage}
         setAccountImage={setAccountImage}
+        about={about}
+        setAbout={setAbout}
+        twitterLink={twitterLink}
+        setTwitterLink={setTwitterLink}
+        instagramLink={instagramLink}
+        setInstagramLink={setInstagramLink}
+        saveChanges={saveChanges}
+        cancelChanges={cancelChanges}
         editProfileButtonClick={editProfileButtonClick}
       />
-      <About about={about} setAbout={setAbout} />
-      <PersonalLogo logo={logo} setLogo={setLogo} />
-      <Social
+      {/* <About about={about} setAbout={setAbout} /> */}
+      {/* <PersonalLogo logo={logo} setLogo={setLogo} /> */}
+      {/* <Social
         twitterLink={twitterLink}
         setTwitterLink={setTwitterLink}
         instagramLink={instagramLink}
@@ -126,7 +134,7 @@ const MyAccount = () => {
         setShowSocial={setShowSocial}
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
-      />
+      /> */}
     </div>
   );
 };

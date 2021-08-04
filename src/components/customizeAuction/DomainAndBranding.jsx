@@ -18,7 +18,7 @@ const DomainAndBranding = ({ values, onChange }) => {
   const [blur, setBlur] = useState(false);
   const [auctionHeadline, setAuctionHeadline] = useState('');
   const [auctionLink, setAuctionLink] = useState(
-    `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auction1`
+    `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auctionname`
   );
 
   const inputPromo = useRef(null);
@@ -29,15 +29,18 @@ const DomainAndBranding = ({ values, onChange }) => {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [inputStyle, setInputStyle] = useState('inp empty');
 
+  console.log(values.status);
+
   const handleLink = (e) => {
     onChange((prevValues) => ({ ...prevValues, link: e.target.value, status: 'filled' }));
     setValidLink(e.target.value.trim().length !== 0);
+    console.log(e.target.value.trim().length !== 0);
   };
 
   const handleFocus = () => {
     if (
       values.link.toLowerCase() ===
-      `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`
+      `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`
     ) {
       onChange((prevValues) => ({
         ...prevValues,
@@ -54,7 +57,7 @@ const DomainAndBranding = ({ values, onChange }) => {
     ) {
       onChange((prevValues) => ({
         ...prevValues,
-        link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
+        link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`,
         status: 'empty',
       }));
       setInputStyle('inp empty');
@@ -74,7 +77,7 @@ const DomainAndBranding = ({ values, onChange }) => {
         <h3>Domain & Branding</h3>
       </div>
       <div className="headline__link">
-        <div className="auction__headline">
+        <div className="auction__headline__link">
           <div className="auction__headline__input">
             <div className="auction__headline__title">
               <h5>Auction headline</h5>
@@ -84,6 +87,7 @@ const DomainAndBranding = ({ values, onChange }) => {
             <Input
               type="text"
               placeholder="Enter the auction headline"
+              className={!validHeadline && values.headline.length === 0 ? 'inp error-inp' : 'inp'}
               value={values.headline}
               onChange={handleHeadline}
             />
@@ -91,6 +95,33 @@ const DomainAndBranding = ({ values, onChange }) => {
               <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
             )}
           </div>
+          <div className="auction__link__input">
+            <h5>Auction link</h5>
+            {/* Auction link */}
+            <Input
+              type="text"
+              className={validLink && values.status === 'empty' ? 'inp error-inp' : 'inp'}
+              value={values.link}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              onChange={(e) =>
+                e.target.value
+                  .toLowerCase()
+                  .startsWith(`universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`) &&
+                handleLink(e)
+              }
+              placeholder="Enter the auction link"
+            />
+            {!validLink ||
+              ((!values.link || values.status === 'empty') && (
+                <p className="error__text">
+                  &quot;Auction website link&quot; is not allowed to be empty
+                </p>
+              ))}
+          </div>
+        </div>
+
+        <div className="auction__uploads">
           <div className="upload__promo">
             <div className="upload__promo__title">
               <h4>
@@ -154,33 +185,7 @@ const DomainAndBranding = ({ values, onChange }) => {
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="auction__link">
-          <div className="auction__link__input">
-            <h5>Auction link</h5>
-            {/* Auction link */}
-            <Input
-              type="text"
-              className="inp"
-              value={values.link}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChange={(e) =>
-                e.target.value
-                  .toLowerCase()
-                  .startsWith(`universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`) &&
-                handleLink(e)
-              }
-              placeholder="Enter the auction link"
-            />
-            {(!validLink && !values.link) ||
-              (values.status === 'empty' && (
-                <p className="error__text">
-                  &quot;Auction website link&quot; is not allowed to be empty
-                </p>
-              ))}
-          </div>
           <div className="upload__background">
             <div className="upload__background__title">
               <h4>Upload background image (optional)</h4>

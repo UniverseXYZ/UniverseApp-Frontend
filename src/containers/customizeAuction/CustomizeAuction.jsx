@@ -23,7 +23,7 @@ const CustomizeAuction = () => {
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
-    link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
+    link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`,
     promoImage: null,
     backgroundImage: null,
     hasBlur: '',
@@ -31,22 +31,21 @@ const CustomizeAuction = () => {
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
-  console.log(myAuctions);
 
   useEffect(() => {
     if (auction) {
       setDomainAndBranding({
-        headline: auction.headline || '',
+        headline: domainAndBranding.headline || '',
         link:
-          auction.link ||
-          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`,
-        promoImage: auction.promoImage || null,
-        backgroundImage: auction.backgroundImage || null,
-        hasBlur: auction.hasBlur || '',
+          domainAndBranding.link ||
+          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`,
+        promoImage: domainAndBranding.promoImage || null,
+        backgroundImage: domainAndBranding.backgroundImage || null,
+        hasBlur: domainAndBranding.hasBlur || '',
         status:
-          auction.link &&
-          auction.link.toLowerCase() !==
-            `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auction1`
+          domainAndBranding.link &&
+          domainAndBranding.link.toLowerCase() !==
+            `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`
             ? 'filled'
             : 'empty',
       });
