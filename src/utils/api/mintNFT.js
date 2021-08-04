@@ -92,7 +92,6 @@ export const getSavedNfts = async () => {
  * @returns {array} with my NFTs
  */
 export const getMyNfts = async () => {
-  console.log('get nfts req');
   const request = await fetch(GET_MY_NFTS_URL, {
     method: 'GET',
     headers: {
@@ -105,7 +104,6 @@ export const getMyNfts = async () => {
     console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
   }
   const result = await request.text().then((data) => JSON.parse(data));
-  console.log(result.nfts);
   return result.nfts;
 };
 

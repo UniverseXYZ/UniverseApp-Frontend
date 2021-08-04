@@ -215,6 +215,8 @@ const App = () => {
       // Fetch the minted NFTS for that address
       const collectionsReturn = await getMyCollections();
       setDeployedCollections(collectionsReturn);
+
+      // console.log(mintedNfts);
     }
   };
 
