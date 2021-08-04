@@ -3904,10 +3904,15 @@
         }
       }
       @include xl {
-        width: 100%;
-        height: 490px;
         text-align: center;
+      }
+      @include lg {
+        width: 100%;
         margin: auto;
+        height: unset;
+      }
+      @include sm {
+        height: 373px !important;
       }
     }
     .rarity--rank--body {
@@ -3969,8 +3974,10 @@
           line-height: 160%;
           color: #b3b3b3;
         }
-        @include xl {
+        @include lg {
           margin-top: 32px;
+        }
+        @include xl {
           margin-bottom: 22px;
         }
       }
@@ -4110,11 +4117,15 @@
         background: rgba(251, 140, 0, 0.05) !important;
         border: 1px solid #FB8C00 !important;
       }
-      @include xl {
+      @include lg {
         padding-bottom: 20px;
       }
     }
     @include xl {
+      align-items: center;
+    }
+
+    @include lg {
       display: grid;
       padding: 30px 20px 20px;
     }
@@ -4129,5 +4140,12 @@
   // }
   @include sm {
     max-width: 90%;
+  }
+  @include lg {
+    width: fit-content !important;
+  }
+
+  @media (max-width: 1068px) and (min-width: #{$screen-lg-max}){
+    width: 90%;
   }
 }
