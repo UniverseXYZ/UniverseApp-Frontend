@@ -149,6 +149,7 @@ export const updateSavedForLaterNft = async (data) => {
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.propertiesParsed?.length ? data.propertiesParsed : null,
     royalties: data.royaltiesParsed?.length ? data.royaltiesParsed : null,
+    collectionId: data.collectionId,
   };
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
@@ -187,10 +188,12 @@ export const getTokenURI = async ({
   editions,
   propertiesParsed,
   royaltiesParsed,
+  collectionId,
 }) => {
   const formData = new FormData();
   const noProperties = propertiesParsed?.length;
   const noRoyalties = royaltiesParsed?.length;
+  console.log(propertiesParsed, royaltiesParsed);
 
   formData.append('file', file, file.name);
   formData.append('name', name);
@@ -198,6 +201,7 @@ export const getTokenURI = async ({
   formData.append('numberOfEditions', parseInt(editions, 10));
   if (noProperties) formData.append('properties', JSON.stringify(propertiesParsed));
   if (noRoyalties) formData.append('royalties', JSON.stringify(royaltiesParsed));
+  if (collectionId) formData.append('collectionId', collectionId);
 
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
