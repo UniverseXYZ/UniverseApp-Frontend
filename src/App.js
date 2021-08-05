@@ -46,7 +46,7 @@ import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScr
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs } from './utils/graphql/queries';
-import { convertPolymorphObjects } from './utils/helpers/polymorphs';
+import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/polymorphs';
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
