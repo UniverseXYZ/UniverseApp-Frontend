@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
+import successImg from '../../assets/images/coloredSuccess.svg';
 import AppContext from '../../ContextAPI.js';
 
 const CongratsProfilePopup = ({ onClose }) => {
@@ -13,6 +14,9 @@ const CongratsProfilePopup = ({ onClose }) => {
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />
       </button>
+      <div className="congrats--icon">
+        <img src={successImg} alt="Success" />
+      </div>
       <div className="popup-title">
         <h4>Congratulations!</h4>
       </div>
