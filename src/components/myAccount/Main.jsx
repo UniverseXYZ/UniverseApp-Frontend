@@ -141,7 +141,14 @@ const Main = ({
           </div>
         </div>
         <div className="account-grid-name-editing">
-          <h3>Account info</h3>
+          <div className="about__artist__warning">
+            <img src={warningIcon} alt="Warning" />
+            <p>
+              This information is unified across all Universe.xyz. Any edits made below will be
+              visible in other Universe products and sections, e.g. My Account
+            </p>
+          </div>
+          <h3 className="account-info">Account info</h3>
           <h5>Display name</h5>
           <Input
             placeholder="Enter your display name"
@@ -166,7 +173,6 @@ const Main = ({
               )}
             </div>
           </h5>
-
           <Input
             placeholder="Enter your universe page address"
             className={
@@ -200,19 +206,19 @@ const Main = ({
               <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
             )}
           </div>
-          {accountName !== loggedInArtist.name ||
+          {/* {accountName !== loggedInArtist.name ||
           accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||
           (accountImage &&
             loggedInArtist.avatar &&
-            accountImage.name !== loggedInArtist.avatar.name) ? (
-            <div className="display-warning">
-              <img alt="" src={warningIcon} />
-              <p>
-                Your edits will be visible on the My Universe landing page but will not be displayed
-                on the current running auctions landing pages.
-              </p>
-            </div>
-          ) : null}
+            accountImage.name !== loggedInArtist.avatar.name) ? ( */}
+          <div className="display-warning">
+            <img alt="" src={warningIcon} />
+            <p>
+              Your edits will be visible on the My Universe landing page but will not be displayed
+              on the current running auctions landing pages.
+            </p>
+          </div>
+          {/* // ) : null} */}
           <Social
             twitterLink={twitterLink}
             setTwitterLink={setTwitterLink}
@@ -235,7 +241,6 @@ const Main = ({
                 </p>
               </div>
             )}
-
           {editProfileButtonClick &&
           (!accountImage ||
             !accountName ||

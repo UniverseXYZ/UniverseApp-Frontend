@@ -6,6 +6,8 @@ import Button from '../../components/button/Button.jsx';
 import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding.jsx';
 import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuction.jsx';
 import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction.jsx';
+import warningIcon from '../../assets/images/Exclamation.svg';
+import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
 
 const CustomizeAuction = () => {
@@ -31,6 +33,7 @@ const CustomizeAuction = () => {
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
+  const [editButtonClick, setEditButtonClick] = useState(false);
 
   useEffect(() => {
     if (auction) {
@@ -53,6 +56,7 @@ const CustomizeAuction = () => {
   }, []);
 
   const handleSaveClose = () => {
+    setEditButtonClick(true);
     if (
       domainAndBranding.headline &&
       domainAndBranding.link &&
@@ -89,46 +93,53 @@ const CustomizeAuction = () => {
   };
 
   const handleSavePreview = () => {
+    setEditButtonClick(true);
     let descriptionCount = 0;
     let desc = false;
-    if (rewardTiersAuction) {
-      for (let i = 0; i < rewardTiersAuction.length; i += 1) {
-        if (rewardTiersAuction[i].description !== '') {
-          descriptionCount += 1;
-        }
-      }
-      if (descriptionCount === rewardTiersAuction.length) desc = true;
-    }
-    if (desc) {
-      const newAuction = { ...auction };
-      newAuction.headline = domainAndBranding.headline;
-      newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
-      newAuction.copied = false;
-      newAuction.promoImage = domainAndBranding.promoImage;
-      newAuction.backgroundImage = domainAndBranding.backgroundImage;
-      newAuction.hasBlur = domainAndBranding.hasBlur;
-      newAuction.tiers = auction.tiers.map((tier) => {
-        const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-        return { ...tier, ...rewardTier };
-      });
-      if (loggedInArtist.name && loggedInArtist.avatar) {
-        newAuction.artist = loggedInArtist;
-        setSaveAndPreview(true);
-        setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
-        setTimeout(() => {
-          if (
-            new Date() < new Date(newAuction.endDate) &&
-            new Date() >= new Date(newAuction.startDate)
-          ) {
-            setActiveAuctions([...activeAuctions, newAuction]);
-          } else if (new Date() < new Date(newAuction.startDate)) {
-            setFutureAuctions([...futureAuctions, newAuction]);
+    if (
+      domainAndBranding.headline &&
+      domainAndBranding.link &&
+      domainAndBranding.status === 'filled'
+    ) {
+      if (rewardTiersAuction) {
+        for (let i = 0; i < rewardTiersAuction.length; i += 1) {
+          if (rewardTiersAuction[i].description !== '') {
+            descriptionCount += 1;
           }
-          setAuction({ tiers: [] });
-          history.push(newAuction.link.replace('universe.xyz', ''), {
-            auction: newAuction,
-          });
-        }, 500);
+        }
+        if (descriptionCount === rewardTiersAuction.length) desc = true;
+      }
+      if (desc) {
+        const newAuction = { ...auction };
+        newAuction.headline = domainAndBranding.headline;
+        newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+        newAuction.copied = false;
+        newAuction.promoImage = domainAndBranding.promoImage;
+        newAuction.backgroundImage = domainAndBranding.backgroundImage;
+        newAuction.hasBlur = domainAndBranding.hasBlur;
+        newAuction.tiers = auction.tiers.map((tier) => {
+          const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
+          return { ...tier, ...rewardTier };
+        });
+        if (loggedInArtist.name && loggedInArtist.avatar) {
+          newAuction.artist = loggedInArtist;
+          setSaveAndPreview(true);
+          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
+          setTimeout(() => {
+            if (
+              new Date() < new Date(newAuction.endDate) &&
+              new Date() >= new Date(newAuction.startDate)
+            ) {
+              setActiveAuctions([...activeAuctions, newAuction]);
+            } else if (new Date() < new Date(newAuction.startDate)) {
+              setFutureAuctions([...futureAuctions, newAuction]);
+            }
+            setAuction({ tiers: [] });
+            history.push(newAuction.link.replace('universe.xyz', ''), {
+              auction: newAuction,
+            });
+          }, 500);
+        }
       }
     }
   };
@@ -198,9 +209,38 @@ const CustomizeAuction = () => {
             Preview
           </Button>
         </div>
-        <DomainAndBranding values={domainAndBranding} onChange={setDomainAndBranding} />
-        <RewardTiersAuction values={rewardTiersAuction} onChange={setRewardTiersAuction} />
+        <DomainAndBranding
+          values={domainAndBranding}
+          onChange={setDomainAndBranding}
+          editButtonClick={editButtonClick}
+          setEditButtonClick={setEditButtonClick}
+        />
+        <RewardTiersAuction
+          values={rewardTiersAuction}
+          onChange={setRewardTiersAuction}
+          editButtonClick={editButtonClick}
+          setEditButtonClick={setEditButtonClick}
+        />
         <AboutArtistAuction />
+        <div className="customize__auction__warning">
+          <img src={warningIcon} alt="Warning" />
+          <p>
+            Your landing page will be automatically published after you successfully complete all
+            transactions on the Finalize auction step.
+          </p>
+        </div>
+        {editButtonClick &&
+          (!domainAndBranding.headline ||
+            !domainAndBranding.link ||
+            domainAndBranding.status === 'empty') && (
+            <div className="customize__auction__error">
+              <img alt="Error" src={errorIcon} />
+              <p>
+                Something went wrong. Please fix the errors in the field above and try again. The
+                buttons will be enabled after information has been entered into the fields.
+              </p>
+            </div>
+          )}
         <div className="customize-buttons">
           <Button className="light-button" onClick={handleSaveClose}>
             Save and close

@@ -11,7 +11,7 @@ import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import AppContext from '../../ContextAPI.js';
 
-const DomainAndBranding = ({ values, onChange }) => {
+const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonClick }) => {
   const { auction, loggedInArtist } = useContext(AppContext);
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
@@ -28,8 +28,6 @@ const DomainAndBranding = ({ values, onChange }) => {
   const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [inputStyle, setInputStyle] = useState('inp empty');
-
-  console.log(values.status);
 
   const handleLink = (e) => {
     onChange((prevValues) => ({ ...prevValues, link: e.target.value, status: 'filled' }));
@@ -87,11 +85,15 @@ const DomainAndBranding = ({ values, onChange }) => {
             <Input
               type="text"
               placeholder="Enter the auction headline"
-              className={!validHeadline && values.headline.length === 0 ? 'inp error-inp' : 'inp'}
+              className={
+                (editButtonClick || !validHeadline) && values.headline.length === 0
+                  ? 'inp error-inp'
+                  : 'inp'
+              }
               value={values.headline}
               onChange={handleHeadline}
             />
-            {!validHeadline && !values.headline && (
+            {(editButtonClick || !validHeadline) && !values.headline && (
               <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>
             )}
           </div>
@@ -100,7 +102,11 @@ const DomainAndBranding = ({ values, onChange }) => {
             {/* Auction link */}
             <Input
               type="text"
-              className={validLink && values.status === 'empty' ? 'inp error-inp' : 'inp'}
+              className={
+                (editButtonClick || validLink) && values.status === 'empty'
+                  ? 'inp error-inp'
+                  : 'inp'
+              }
               value={values.link}
               onFocus={handleFocus}
               onBlur={handleBlur}
@@ -112,12 +118,11 @@ const DomainAndBranding = ({ values, onChange }) => {
               }
               placeholder="Enter the auction link"
             />
-            {!validLink ||
-              ((!values.link || values.status === 'empty') && (
-                <p className="error__text">
-                  &quot;Auction website link&quot; is not allowed to be empty
-                </p>
-              ))}
+            {(editButtonClick || validLink) && (!values.link || values.status === 'empty') && (
+              <p className="error__text">
+                &quot;Auction website link&quot; is not allowed to be empty
+              </p>
+            )}
           </div>
         </div>
 
@@ -301,6 +306,8 @@ const DomainAndBranding = ({ values, onChange }) => {
 DomainAndBranding.propTypes = {
   values: PropTypes.oneOfType([PropTypes.object]),
   onChange: PropTypes.func.isRequired,
+  editButtonClick: PropTypes.bool,
+  setEditButtonClick: PropTypes.func,
 };
 
 DomainAndBranding.defaultProps = {
@@ -309,5 +316,7 @@ DomainAndBranding.defaultProps = {
     backgroundImage: '',
     hasBlur: false,
   },
+  editButtonClick: false,
+  setEditButtonClick: () => {},
 };
 export default DomainAndBranding;
