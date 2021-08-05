@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import arrowDown from '../../../../../assets/images/arrow-down.svg';
 import searchIcon from '../../../../../assets/images/search.svg';
+import Input from '../../../../input/Input';
 import AppContext from '../../../../../ContextAPI';
 
 const ActiveAuctionsFilters = () => {
@@ -37,9 +38,11 @@ const ActiveAuctionsFilters = () => {
           className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
           onClick={() => setIsDropdownOpened(!isDropdownOpened)}
           aria-hidden="true"
+          hoverBoxShadowGradient
         >
           <span className="selected__item">{selectedItem}</span>
           <img className="chevron__down" src={arrowDown} alt="Arrow" />
+          <div className="box--shadow--effect--block" />
           {isDropdownOpened && (
             <div className="sorting__dropdown">
               <ul>
