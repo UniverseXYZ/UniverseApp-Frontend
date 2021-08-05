@@ -202,29 +202,18 @@
 }
 
 .tab__wallet {
-  .empty__filter__nfts {
-    h3 {
-      font-family: $spaceGroteskFont;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 22px;
-      text-align: center;
-      color: $black;
-    }
-  }
+  // .empty__filter__nfts {
+  //   h3 {
+  //     font-family: $spaceGroteskFont;
+  //     font-style: normal;
+  //     font-weight: bold;
+  //     font-size: 22px;
+  //     text-align: center;
+  //     color: $black;
+  //   }
+  // }
 
   .empty__nfts {
-    margin-top: 100px;
-
-    h3 {
-      font-family: $spaceGroteskFont;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 22px;
-      text-align: center;
-      color: $black;
-      margin-bottom: 23px;
-    }
 
     p.desc {
       font-family: $spaceGroteskFont;

@@ -168,8 +168,8 @@ const Lists = ({
                       <span className="selected-div">
                         <span className="selected-number">
                           {selectedEditions[nft.id]?.length}/{nft.generatedEditions.length}
-                        </span>{' '}
-                        <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
+                        </span>
+                        <img className="check__icon" src={checkIcon} alt="Check Icon" />
                       </span>
                     )}
                 </>
