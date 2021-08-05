@@ -82,7 +82,7 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: DEPLOYMENT STARTED
         color: warning
 
@@ -99,7 +99,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3
-      run: ls -l && aws s3 sync . s3://dev-universexyz-origin --delete
+      run: ls -l && aws s3 sync . s3://dev-devuniversexyz-origin --delete
 
     - name: Invalidate CloudFront cache
       run: |
@@ -121,7 +121,7 @@ jobs:
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: DEPLOYMENT SUCCESSFUL
         color: good
 
