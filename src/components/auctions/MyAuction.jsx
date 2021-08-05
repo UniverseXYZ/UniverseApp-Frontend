@@ -13,7 +13,7 @@ import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scr
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, auction, setAuction, loggedInArtist } = useContext(AppContext);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
   const [showButton, setShowButton] = useState(true);
   const history = useHistory();
@@ -39,7 +39,6 @@ const MyAuction = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   useEffect(() => {
     // if (auction.tiers.length) {
     //   setMyAuctions((prevValues) => {

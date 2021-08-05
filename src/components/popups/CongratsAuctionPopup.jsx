@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
+import congratsicon from '../../assets/images/congrats.png';
 
 const CongratsAuctionPopup = ({ onClose }) => {
   const history = useHistory();
@@ -12,8 +13,11 @@ const CongratsAuctionPopup = ({ onClose }) => {
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />
       </button>
+      <div className="checked--box">
+        <img src={congratsicon} alt="congrats" />
+      </div>
       <div className="popup-title">
-        <h4>Congratulations</h4>
+        <h4>Congratulations!</h4>
       </div>
       <div className="popup-text">
         <p>
@@ -23,7 +27,7 @@ const CongratsAuctionPopup = ({ onClose }) => {
       </div>
       <div className="popup-btns">
         <Button
-          className="light-border-button"
+          className="light-button"
           onClick={() => {
             history.push('/my-auctions');
           }}
