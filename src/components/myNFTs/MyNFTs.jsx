@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import { useLocation, useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './MyNFTs.scss';
+import { number } from 'prop-types';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
 import UniverseNFTs from './UniverseNFTs.jsx';
@@ -16,6 +17,7 @@ import union from '../../assets/images/Union.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
+import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
 
 const MyNFTs = () => {
@@ -144,6 +146,17 @@ const MyNFTs = () => {
         name: tab,
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
+        length:
+          index === 0 && myNFTs.length > 0
+            ? myNFTs.length
+            : index === 1 && deployedCollections.length > 0
+            ? deployedCollections.length
+            : index === 2 && savedNfts.length > 0
+            ? savedNfts.length
+            : // printing dummyData length
+            index === 3 && UNIVERSE_NFTS.length > 0
+            ? UNIVERSE_NFTS.length
+            : null,
         label:
           index === 2 && savedNfts.length > 0
             ? savedNfts.length

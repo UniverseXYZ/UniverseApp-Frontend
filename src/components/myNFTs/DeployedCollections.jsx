@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
+import bubbleIcon from '../../assets/images/text-bubble.svg';
+import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 
 const DeployedCollections = () => {
@@ -63,7 +65,16 @@ const DeployedCollections = () => {
         </div>
       ) : (
         <div className="empty__nfts">
-          <h3>No Collection found</h3>
+          <div className="tabs-empty">
+            <div className="image-bubble">
+              <img src={bubbleIcon} alt="bubble-icon" />
+            </div>
+            <h3>No collections found</h3>
+            <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
+            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
+              Create NFT
+            </Button>
+          </div>
         </div>
       )}
     </div>

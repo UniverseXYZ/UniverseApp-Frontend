@@ -78,12 +78,21 @@
         line-height: 20px;
         font-weight: normal;
         color: $black;
-      }
-      ::placeholder {
-        font-family: $spaceGroteskFont;
-        font-size: 16px;
-        line-height: 20px;
-        color: #cacaca;
+
+        &::placeholder {
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          line-height: 20px;
+          color: #cacaca;
+        }
+        &:focus {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+        }
+        &:focus::placeholder {
+          color: transparent;
+        }
       }
     }
 
@@ -142,6 +151,8 @@
     .auction__uploads {
       display: flex;
       width: 100%;
+      position: relative;
+      z-index: 9;
 
       .upload__promo {
         margin-right: 30px;
@@ -169,6 +180,7 @@
             bottom: 25px;
             left: 100%;
             transform: translateX(-50%);
+            z-index: 10;
 
             @include sm {
               left: 50%;
@@ -756,6 +768,46 @@
     margin-top: 64px;
     .my-account {
       background-image: none;
+
+      .account-grid-container {
+        margin-bottom: 20px;
+      }
+    }
+    .account-info {
+      display: none;
+    }
+    .display-warning {
+      display: none !important;
+    }
+    .account-display-buttons {
+      display: none;
+    }
+    .about__artist__warning {
+      position: relative;
+      display: flex !important;
+      max-width: 730px;
+      width: 100%;
+      padding: 24px;
+      background: #fdfcf9;
+      border: 1px solid #e4b613;
+      box-sizing: border-box;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      // margin-top: 20px;
+
+      p {
+        padding-left: 31px;
+        font-family: $spaceGroteskFont;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 160%;
+        color: #e4b613;
+      }
+      img {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+      }
     }
 
     .landing__page__warning {
@@ -852,7 +904,59 @@
       padding: 0;
     }
   }
+  .customize__auction__warning {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 24px;
+    background: #fdfcf9;
+    border: 1px solid #e4b613;
+    box-sizing: border-box;
+    border-radius: 12px;
+    margin-bottom: 40px;
+
+    p {
+      padding-left: 31px;
+      font-family: $spaceGroteskFont;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 160%;
+      color: #e4b613;
+    }
+    img {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+    }
+  }
+  .customize__auction__error {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 24px;
+    background: rgba(255, 73, 73, 0.04);
+    border: 1px solid #ff4949;
+    box-sizing: border-box;
+    border-radius: 12px;
+    margin-bottom: 40px;
+
+    p {
+      padding-left: 31px;
+      font-family: $spaceGroteskFont;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 160%;
+      color: #ff4949;
+    }
+    img {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+    }
+  }
   .customize-buttons {
+    display: flex;
+    justify-content: flex-end;
     .light-button {
       margin-right: 20px;
       @include sm {
