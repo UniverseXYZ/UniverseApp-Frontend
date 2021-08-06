@@ -30,7 +30,7 @@ const CreateNFT = () => {
         {!showCollectible ? (
           <div className="back-btn" onClick={() => history.push('/my-nfts')} aria-hidden="true">
             <img src={arrow} alt="back" />
-            <span>My NFTs</span>
+            <span>Create reward tier</span>
           </div>
         ) : (
           <div className="back-btn" onClick={() => setShowCollectible(false)} aria-hidden="true">

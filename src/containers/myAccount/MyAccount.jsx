@@ -65,13 +65,14 @@ const MyAccount = () => {
       twitterLink,
       social: showSocial,
     });
-    if (!showSocial) {
-      setShowSocial(false);
-    } else {
-      setShowSocial(true);
-    }
+    // if (!showSocial) {
+    //   setShowSocial(false);
+    // } else {
+    //   setShowSocial(true);
+    // }
     setTimeout(() => {
       if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
+        setEditProfileButtonClick(false);
         document.getElementById('congrats-hidden-btn').click();
       }
     }, 500);

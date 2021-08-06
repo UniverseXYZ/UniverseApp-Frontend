@@ -4,11 +4,13 @@ import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
+import Button from '../button/Button.jsx';
 import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import neverScrambledIcon from '../../assets/images/never-scrambled-badge.svg';
+import bubbleIcon from '../../assets/images/text-bubble.svg';
 import singleTraitScrambledIcon from '../../assets/images/single-trait-scrambled-badge.svg';
 
 const UniverseNFTs = () => {
@@ -193,7 +195,16 @@ const UniverseNFTs = () => {
           </div>
         ) : (
           <div className="empty__filter__nfts">
-            <h3>No NFTs found</h3>
+            <div className="tabs-empty">
+              <div className="image-bubble">
+                <img src={bubbleIcon} alt="bubble-icon" />
+              </div>
+              <h3>No NFTs found</h3>
+              <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
+              <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
+                Create NFT
+              </Button>
+            </div>
           </div>
         )}
       </div>

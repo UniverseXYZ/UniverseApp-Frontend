@@ -3933,7 +3933,6 @@
           line-height: 130%;
           color: $black;
           margin-bottom: 15px;
-          margin-left: 25px;
           margin-right: 20px;
           @include xl {
             margin-left: 0;
@@ -3960,7 +3959,6 @@
           font-weight: normal;
           font-size: 14px;
           line-height: 140%;
-          margin-left: 25px;
           color: $black;
           img {
             margin-left: 13px;
@@ -3988,6 +3986,25 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 17px;
+        .rarity--description--gradient {
+          position: relative;
+          .rarity--description{
+            z-index: 100;
+          }
+          .rarity--rank--border{
+            position: absolute;
+            width: calc(100% + 2px);
+            min-height: 58px;
+            background: linear-gradient(90deg, #C857CA 50%, #FB8C00 50%);
+            left: -1px;
+            right: 0px;
+            top: -1px;
+            bottom: -1px;
+            margin: auto;
+            border-radius: 12px;
+            opacity: 0.8;
+          }
+        }
         .rarity--description {
           position: relative;
           background: rgba(0, 0, 0, 0.02);
@@ -4119,6 +4136,9 @@
       .selected--orange {
         background: rgba(251, 140, 0, 0.05) !important;
         border: 1px solid #fb8c00 !important;
+      }
+      .selected--pink--orange {
+        background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
       }
       @include lg {
         padding-bottom: 20px;

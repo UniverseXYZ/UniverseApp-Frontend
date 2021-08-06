@@ -1,13 +1,12 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import arrowDown from '../../../../../assets/images/arrow-down.svg';
-import searchIcon from '../../../../../assets/images/search.svg';
 import AppContext from '../../../../../ContextAPI';
+import SearchField from '../../../../input/SearchField';
 
 const FutureAuctionsFilters = () => {
   const { handleClickOutside } = useContext(AppContext);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Newest');
-  const [search, setSearch] = useState('');
   const ref = useRef(null);
 
   useEffect(() => {
@@ -32,47 +31,50 @@ const FutureAuctionsFilters = () => {
         <button type="button">Clear all</button>
       </div>
       <div className="future__auctions__filters__fields">
-        <div
-          ref={ref}
-          className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
-          onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-          aria-hidden="true"
-        >
-          <span className="selected__item">{selectedItem}</span>
-          <img className="chevron__down" src={arrowDown} alt="Arrow" />
-          {isDropdownOpened && (
-            <div className="sorting__dropdown">
-              <ul>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Newest');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Newest
-                </li>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Highest bid');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Highest bid
-                </li>
-              </ul>
-            </div>
-          )}
+        <div>
+          <div
+            ref={ref}
+            className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
+            onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+            aria-hidden="true"
+          >
+            <span className="selected__item">{selectedItem}</span>
+            <img className="chevron__down" src={arrowDown} alt="Arrow" />
+            {isDropdownOpened && (
+              <div className="sorting__dropdown">
+                <ul>
+                  <li
+                    onClick={() => {
+                      setSelectedItem('Newest');
+                      setIsDropdownOpened(false);
+                    }}
+                    aria-hidden="true"
+                  >
+                    Newest
+                  </li>
+                  <li
+                    onClick={() => {
+                      setSelectedItem('Highest bid');
+                      setIsDropdownOpened(false);
+                    }}
+                    aria-hidden="true"
+                  >
+                    Highest bid
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="box--shadow--effect--block" />
         </div>
         <div className="search">
-          <input
-            type="text"
+          <SearchField
+            data={[]}
             placeholder="Search auctions by name or artist"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            dropdown={false}
+            CardElement={<></>}
+            enterKeyEvent={false}
           />
-          <img src={searchIcon} alt="Search" />
         </div>
       </div>
     </div>

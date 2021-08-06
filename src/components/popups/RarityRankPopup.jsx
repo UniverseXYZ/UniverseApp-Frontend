@@ -6,6 +6,7 @@ import scrumbledIcon from '../../assets/images/single-trait-scrambled-badge.svg'
 import bluePuzzle from '../../assets/images/blue-puzzle.svg';
 import pinkPuzzle from '../../assets/images/pink-puzzle.svg';
 import orangePuzzle from '../../assets/images/orange-puzzle.svg';
+import pinkOrangePuzzle from '../../assets/images/pink-orange-puzzle.svg';
 import linkIcon from '../../assets/images/rarity-charts/linkIcon.svg';
 
 const RarityRankPopup = ({ onClose, item }) => {
@@ -42,10 +43,17 @@ const RarityRankPopup = ({ onClose, item }) => {
             <p className="number">{`#${item.serialNumber}`}</p>
           </div>
           <div className="rarity--rank--descriptions">
-            <div className="rarity--description">
-              <h4>Base Character</h4>
-              <h3>Marigunana</h3>
-              <p className="description">28% have this trait</p>
+            <div className="rarity--description--gradient">
+              <div className="rarity--description selected--pink--orange">
+                <div className="matching">
+                  <img src={pinkOrangePuzzle} alt="Pink orage" />
+                  <span className="tooltiptext">Matching trait</span>
+                </div>
+                <h4>Base Character</h4>
+                <h3>Marigunana</h3>
+                <p className="description">28% have this trait</p>
+              </div>
+              <div className="rarity--rank--border" />
             </div>
             <div className="rarity--description selected--blue">
               <div className="matching">

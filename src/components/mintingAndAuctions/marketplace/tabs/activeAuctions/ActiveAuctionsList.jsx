@@ -28,6 +28,7 @@ const ActiveAuctionsList = ({ data, perPage, offset }) => {
               <div className="active__auction__image timeLeft">
                 <img src={auction.image} alt={auction.name} />
                 <div className="date">
+                  <div className="date__border__div" />
                   <label>Time left</label>
                   <span>{auction.timeLeft}</span>
                 </div>
