@@ -4,8 +4,9 @@ import { useQuery } from '@apollo/client';
 import { traitRarity } from '../../utils/graphql/queries';
 import RarityRankOrangeProperty from './RarityRankOrangeProperty';
 import RarityRankBlueProperty from './RarityRankBlueProperty';
-import RarityRankPinkProperty from './RarityRankPinkProperty';
+import RarityRankPinkOrangeProperty from './RarityRankPinkOrangeProperty';
 import RarityRankNoColorProperty from './RarityRankNoColorProperty';
+import RarityRankPinkProperty from './RarityRankPinkProperty';
 
 function RarityRankPopupProperty({
   mainMatchingAttributes,
@@ -30,7 +31,7 @@ function RarityRankPopupProperty({
       !secMatchingAttributes.includes(propertyName)
     ) {
       return (
-        <RarityRankPinkProperty
+        <RarityRankBlueProperty
           tooltipText="Hands set trait"
           propertyName={propertyName}
           trait={value}
@@ -39,13 +40,12 @@ function RarityRankPopupProperty({
       );
     }
 
-    // TODO: This should be changed to green puzzle piece when it's designed
     if (
       mainMatchingAttributes.includes(propertyName) &&
       secMatchingAttributes.includes(propertyName)
     ) {
       return (
-        <RarityRankPinkProperty
+        <RarityRankPinkOrangeProperty
           tooltipText="Main &amp; Secondary set trait"
           propertyName={propertyName}
           trait={value}
@@ -67,7 +67,7 @@ function RarityRankPopupProperty({
 
     if (secMatchingAttributes.includes(propertyName)) {
       return (
-        <RarityRankBlueProperty
+        <RarityRankPinkProperty
           tooltipText="Secondary set trait"
           propertyName={propertyName}
           trait={value}
