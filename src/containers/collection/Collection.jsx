@@ -10,6 +10,7 @@ import Description from '../../components/collection/Description.jsx';
 import Filters from '../../components/collection/Filters.jsx';
 import MintModal from '../../components/mintModal/MintModal.jsx';
 import NFTs from '../../components/collection/NFTs.jsx';
+import { getCollectionId } from '../../utils/helpers/pureFunctions/nfts';
 
 const Collection = () => {
   const { myNFTs, savedNfts, setDarkMode, showModal, setShowModal, deployedCollections } =
@@ -38,6 +39,7 @@ const Collection = () => {
 
   useEffect(() => {
     setDarkMode(false);
+
     const newNFTs = [];
     if (location.state) {
       savedNfts.forEach((nft) => {
@@ -46,7 +48,7 @@ const Collection = () => {
         }
       });
       myNFTs.forEach((nft) => {
-        if (nft.collectionId === selectedCollection.id) {
+        if (getCollectionId(nft) === selectedCollection.id) {
           newNFTs.push(nft);
         }
       });

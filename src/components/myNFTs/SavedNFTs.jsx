@@ -8,7 +8,7 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
-import { isImage, isVideo } from '../../utils/helpers/nftData';
+import { isImage, isVideo } from '../../utils/helpers/pureFunctions/nfts';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =

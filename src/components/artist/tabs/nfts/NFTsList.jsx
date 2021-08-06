@@ -6,7 +6,12 @@ import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
 import videoIcon from '../../../../assets/images/video-icon.svg';
 import NFTPopup from '../../../popups/NFTPopup';
-import { getEditionsCount, isVideo, isImage } from '../../../../utils/helpers/nftData';
+import {
+  getEditionsCount,
+  isVideo,
+  isImage,
+  getNftImage,
+} from '../../../../utils/helpers/pureFunctions/nfts';
 
 const NFTsList = ({ data, perPage, offset }) => {
   const sliceData = data.slice(offset, offset + perPage);
@@ -37,7 +42,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                         onMouseOut={(event) => event.target.pause()}
                         onBlur={(event) => event.target.pause()}
                       >
-                        <source src={nft.thumbnail_url} type="video/mp4" />
+                        <source src={getNftImage(nft)} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
@@ -49,7 +54,7 @@ const NFTsList = ({ data, perPage, offset }) => {
                 {isImage(nft) && (
                   <Popup
                     trigger={
-                      <img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />
+                      <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
                     }
                   >
                     {(close) => <NFTPopup onClose={close} onNFT={nft} />}

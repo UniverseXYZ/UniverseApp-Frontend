@@ -9,7 +9,13 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import NFTPopup from '../popups/NFTPopup';
-import { getEditionsCount, isVideo, isAudio, isImage } from '../../utils/helpers/nftData';
+import {
+  getEditionsCount,
+  isVideo,
+  isAudio,
+  isImage,
+  getNftImage,
+} from '../../utils/helpers/pureFunctions/nfts';
 
 const Lists = ({
   data,
@@ -146,7 +152,7 @@ const Lists = ({
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={nft.thumbnail_url} type="video/mp4" />
+                      <source src={getNftImage(nft)} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
@@ -162,7 +168,7 @@ const Lists = ({
                   onMouseOut={(event) => event.target.pause()}
                   onBlur={(event) => event.target.pause()}
                 >
-                  <source src={nft.thumbnail_url} type="video/mp4" />
+                  <source src={getNftImage(nft)} type="video/mp4" />
                   <track kind="captions" />
                   Your browser does not support the video tag.
                 </video>
@@ -177,13 +183,13 @@ const Lists = ({
               )}
               {isImage(nft) && !isCreatingAction && (
                 <Popup
-                  trigger={<img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />}
+                  trigger={<img className="preview-image" src={getNftImage(nft)} alt={nft.name} />}
                 >
                   {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                 </Popup>
               )}
               {isImage(nft) && isCreatingAction && (
-                <img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />
+                <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
               )}
               {isVideo(nft) && <img className="video__icon" src={videoIcon} alt="Video Icon" />}
             </div>

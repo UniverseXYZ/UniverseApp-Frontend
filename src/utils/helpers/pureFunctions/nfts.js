@@ -1,3 +1,6 @@
+export const getCollectionId = (nft) => nft.collection.id;
+export const getNftImage = (nft) => nft.thumbnailUrl || nft.thumbnail_url;
+
 export const ARTWORK_TYPES = {
   image: 'image',
   audio: 'audio',
