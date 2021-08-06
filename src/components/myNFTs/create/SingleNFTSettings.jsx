@@ -213,7 +213,6 @@ const SingleNFTSettings = () => {
       editions,
       propertiesParsed,
       royaltiesParsed,
-      collectionId: selectedCollection.id,
     });
 
     console.log('sending request to contract...', tokenURIResult);
@@ -260,7 +259,7 @@ const SingleNFTSettings = () => {
       editions,
       propertiesParsed,
       royaltiesParsed,
-      collectionId: selectedCollection ? selectedCollection.id : 1,
+      collectionId: selectedCollection?.id,
     });
 
     let saveImageResult = null;
