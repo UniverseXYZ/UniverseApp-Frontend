@@ -52,6 +52,23 @@
         margin-right: 12px;
       }
       .property-name , .property-value{
+        position: relative;
+        .percent-sign{
+          display: none;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 20px;
+          position: absolute;
+          box-sizing: border-box;
+          z-index: 10;
+          bottom: 23%;
+          right: 10%;
+          @include sm{
+            bottom: unset;
+            right: 45%;
+          }
+        }
         .intup-l {
           display: block;
         @include sm{

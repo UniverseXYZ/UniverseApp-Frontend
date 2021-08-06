@@ -67,7 +67,7 @@
     }
   }
 
-  .tabs-empty{
+  .tabs-empty, .empty-universe{
     margin-top: 20px;
     text-align: center;
     position: relative;
@@ -75,11 +75,11 @@
     h3{
       font-family: $spaceGroteskFont;
       font-style: normal;
-      font-weight: 500;
-      font-size: 18px;
+      font-weight: 500!important;
+      font-size: 18px!important;
       line-height: 22px;
       text-align: center;
-      color: rgba(0, 0, 0, 0.4);
+      color: rgba(0, 0, 0, 0.4)!important;
       margin-top: 30px;
       margin-bottom: 6px;
     }
@@ -202,18 +202,29 @@
 }
 
 .tab__wallet {
-  // .empty__filter__nfts {
-  //   h3 {
-  //     font-family: $spaceGroteskFont;
-  //     font-style: normal;
-  //     font-weight: bold;
-  //     font-size: 22px;
-  //     text-align: center;
-  //     color: $black;
-  //   }
-  // }
+  .empty__filter__nfts {
+    h3 {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 22px;
+      text-align: center;
+      color: $black;
+    }
+  }
 
   .empty__nfts {
+    margin-top: 100px;
+
+    h3 {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 22px;
+      text-align: center;
+      color: $black;
+      margin-bottom: 23px;
+    }
 
     p.desc {
       font-family: $spaceGroteskFont;
