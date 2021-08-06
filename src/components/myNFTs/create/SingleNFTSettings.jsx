@@ -58,6 +58,7 @@ const SingleNFTSettings = () => {
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [amountSum, setAmountSum] = useState(0);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -100,16 +101,22 @@ const SingleNFTSettings = () => {
   };
 
   const propertyChangesAmount = (index, val) => {
-    if (
-      (val.toString().match(/^\d+\.?\d?\d?\d?\d?%?$/) &&
-        parseFloat(val) <= 100 &&
-        parseFloat(val) >= 0) ||
-      val === '0' ||
-      val === '%'
-    ) {
-      const prevProperties = [...royaltyAddress];
-      prevProperties[index].amount = `${val.replace('%', '')}%`;
-      setRoyaltyAddress(prevProperties);
+    const result = royaltyAddress.reduce(
+      (accumulator, current) => accumulator + Number(current.amount),
+      0
+    );
+    if (result + Number(val) <= 100 && val >= 0) {
+      const newProperties = royaltyAddress.map((property, propertyIndex) => {
+        if (propertyIndex === index) {
+          return {
+            ...property,
+            amount: val,
+          };
+        }
+
+        return property;
+      });
+      setRoyaltyAddress(newProperties);
     }
   };
 
@@ -179,6 +186,15 @@ const SingleNFTSettings = () => {
       setEditions(value);
     }
   };
+
+  // useEffect(() => {
+  //   console.log([...royaltyAddress]);
+  //   const result = [...royaltyAddress].reduce(
+  //     (accumulator, current) => accumulator + Number(current.amount),
+  //     0
+  //   );
+  //   setAmountSum(result);
+  // }, [propertyChangesAmount]);
 
   useEffect(() => {
     if (savedNFTsID) {
@@ -681,10 +697,11 @@ const SingleNFTSettings = () => {
                       />
                     </div>
                     <div className="property-amount">
+                      <span className="percent-sign">%</span>
                       <h5>Percent amount</h5>
                       <Input
                         className="percent-inp"
-                        type="text"
+                        type="number"
                         placeholder="5%"
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value)}
