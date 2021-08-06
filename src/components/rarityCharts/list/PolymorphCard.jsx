@@ -10,7 +10,7 @@ import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders.js
 
 const PolymorphCard = ({ item, index }) => {
   const [loading, setLoading] = useState(false);
-
+  const [showPopup, setShowPopup] = useState(false);
   const fetchMetadata = async () => {
     setLoading(true);
     const data = await getPolymorphMeta(item.tokenid);
@@ -21,24 +21,19 @@ const PolymorphCard = ({ item, index }) => {
   return loading ? (
     renderLoaders(1)
   ) : (
-    <div className="card">
+    <a className="card" onClick={() => setShowPopup(true)} aria-hidden="true">
       <div className="card--header">
         <div className="card--number">{`#${item.rank}`}</div>
         <div className="card--price">{`Rarity Score: ${item.rarityscore}`}</div>
       </div>
       <div className="card--body">
-        <Popup
-          trigger={
-            <img
-              onError={fetchMetadata}
-              className="rarity--chart"
-              src={item.imageurl}
-              alt={item.name}
-            />
-          }
-        >
-          {(close) => <RarityRankPopup onClose={close} item={item} />}
-        </Popup>
+        <img
+          onError={fetchMetadata}
+          className="rarity--chart"
+          src={item.imageurl}
+          alt={item.name}
+        />
+
         {item.scrambles === 0 && item.morphs > 0 ? (
           <div className="card--scrambled">
             <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
@@ -57,7 +52,10 @@ const PolymorphCard = ({ item, index }) => {
         <h2>{item.character}</h2>
         <p>{`#${item.tokenid}`}</p>
       </div>
-    </div>
+      <Popup open={showPopup}>
+        <RarityRankPopup onClose={() => setShowPopup(false)} item={item} />
+      </Popup>
+    </a>
   );
 };
 
