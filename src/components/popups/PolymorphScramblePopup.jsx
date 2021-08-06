@@ -34,7 +34,16 @@ const WEAR_TO_GENE_POSITION_MAP = {
   'Left Hand': GENE_POSITIONS_MAP.LEFT_WEAPON,
 };
 
-const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolymorphGene }) => {
+const PolymorphScramblePopup = ({
+  onClose,
+  polymorph,
+  id,
+  setPolymorph,
+  setPolymorphGene,
+  setShowCongratulations,
+  setShowLoading,
+  setShowMetadataLoading,
+}) => {
   const { convertPolymorphObjects, polymorphContract, userPolymorphs, setUserPolymorphs } =
     useContext(AppContext);
   const [singleTraitTabSelected, setSingleTraitSelected] = useState(true);
@@ -88,20 +97,7 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
 
   const onScramble = async () => {
     onClose();
-    let loadingPopup = document.getElementById('loading-popup-div');
-    let overlay = document.getElementsByClassName('popup-overlay ');
-
-    if (loadingPopup) {
-      loadingPopup.style.display = 'block';
-      if (overlay[0]) {
-        overlay[0].style.display = 'block';
-      }
-    } else {
-      const showLoadingButton = document.getElementById('loading-hidden-btn');
-      if (showLoadingButton) {
-        showLoadingButton.click();
-      }
-    }
+    setShowLoading(true);
 
     try {
       if (singleTraitTabSelected) {
@@ -126,7 +122,9 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
         await randomizeT.wait();
       }
       // Update the view //
+      setShowLoading(false);
 
+      setShowMetadataLoading(true);
       // Get the new Meta
       const data = await getPolymorphMeta(id);
       setPolymorph(data);
@@ -144,21 +142,12 @@ const PolymorphScramblePopup = ({ onClose, polymorph, id, setPolymorph, setPolym
         return existingPolymorph;
       });
 
-      // Close the modal
-      loadingPopup = document.getElementById('loading-popup-div');
-      overlay = document.getElementsByClassName('popup-overlay ');
-
-      if (loadingPopup) {
-        loadingPopup.style.display = 'none';
-        if (overlay[0]) {
-          overlay[0].style.display = 'none';
-        }
-      }
-      const showCongratsButton = document.getElementById('scramble-hidden-btn');
-      if (showCongratsButton) {
-        showCongratsButton.click(); // show congrats
-      }
+      setShowMetadataLoading(false);
+      setShowCongratulations(true);
     } catch (err) {
+      setShowLoading(false);
+      setShowMetadataLoading(false);
+      setShowCongratulations(false);
       alert(err.message || err);
     }
   };
@@ -249,6 +238,9 @@ PolymorphScramblePopup.propTypes = {
   setPolymorphGene: PropTypes.func.isRequired,
   polymorph: PropTypes.oneOfType([PropTypes.object]).isRequired,
   id: PropTypes.string.isRequired,
+  setShowCongratulations: PropTypes.bool.isRequired,
+  setShowLoading: PropTypes.bool.isRequired,
+  setShowMetadataLoading: PropTypes.bool.isRequired,
 };
 
 export default PolymorphScramblePopup;
