@@ -59,7 +59,7 @@ const Collection = () => {
     let check = false;
     deployedCollections.forEach((col) => {
       if (
-        selectedCollection.id === col.id &&
+        selectedCollection?.id === col.id &&
         selectedCollection.description === col.description &&
         selectedCollection.name === col.name
       ) {

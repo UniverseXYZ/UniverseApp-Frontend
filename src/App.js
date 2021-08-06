@@ -77,6 +77,7 @@ const App = () => {
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
   const [deployedCollections, setDeployedCollections] = useState([]);
+  const [collectionsIdAddressMapping, setCollectionsIdAddressMapping] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -105,6 +106,7 @@ const App = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [yourBalance, setYourBalance] = useState(0);
+  const [contracts, setContracts] = useState(false);
 
   const connectWeb3 = async () => {
     const { ethereum } = window;
@@ -119,16 +121,21 @@ const App = () => {
     const wethBalanceResult = await getWethBalanceEtherscan(accounts[0], network.chainId);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
-    const { contracts } = Contracts[network.chainId];
+    const { contracts: contractsResult } = Contracts[network.chainId];
     // const auctionFactoryContractResult = new Contract(
-    //   contracts.AuctionFactory.address,
-    //   contracts.AuctionFactory.abi,
+    //   contractsResult.AuctionFactory.address,
+    //   contractsResult.AuctionFactory.abi,
     //   signerResult
     // );
 
     const universeERC721CoreContractResult = new Contract(
-      contracts.UniverseERC721Core.address,
-      contracts.UniverseERC721Core.abi,
+      contractsResult.UniverseERC721Core.address,
+      contractsResult.UniverseERC721Core.abi,
+      signerResult
+    );
+    const universeERC721FactoryContractResult = new Contract(
+      contractsResult.UniverseERC721Factory.address,
+      contractsResult.UniverseERC721Factory.abi,
       signerResult
     );
     // const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
@@ -143,6 +150,7 @@ const App = () => {
     // setAuctionFactoryContract(auctionFactoryContractResult);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
     setIsWalletConnected(true);
+    setContracts(contractsResult);
   };
 
   const clearStorageAuthData = () => {
@@ -220,6 +228,14 @@ const App = () => {
       console.log(mintedNfts);
     }
   };
+
+  useEffect(() => {
+    const mapping = {};
+    deployedCollections.forEach((collection) => {
+      mapping[collection.id] = collection.address;
+    });
+    setCollectionsIdAddressMapping(mapping);
+  }, [deployedCollections]);
 
   useEffect(async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -356,6 +372,8 @@ const App = () => {
         isAuthenticated,
         setIsAuthenticated,
         yourBalance,
+        collectionsIdAddressMapping,
+        contracts,
       }}
     >
       <Header />
