@@ -1655,6 +1655,9 @@
   top: 0;
   right: 0;
 }
+.checked--box {
+  padding: 0 95px 32px 95px;
+}
 .popup-title {
   text-align: center;
   padding-bottom: 24px;
@@ -2156,7 +2159,7 @@
       height: fit-content;
       border-top: none;
       border-radius: 12px;
-      h1{
+      h1 {
         margin-bottom: 8px;
       }
       &:hover {
@@ -4124,15 +4127,15 @@
       }
       .selected--blue {
         background: rgba(30, 136, 229, 0.05) !important;
-        border: 1px solid #1E88E5 !important;
+        border: 1px solid #1e88e5 !important;
       }
       .selected--pink {
         background: rgba(200, 87, 202, 0.1) !important;
-        border: 1px solid #C857CA !important;
+        border: 1px solid #c857ca !important;
       }
       .selected--orange {
         background: rgba(251, 140, 0, 0.05) !important;
-        border: 1px solid #FB8C00 !important;
+        border: 1px solid #fb8c00 !important;
       }
       .selected--pink--orange {
         background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
@@ -4165,7 +4168,7 @@
     width: fit-content !important;
   }
 
-  @media (max-width: 1068px) and (min-width: #{$screen-lg-max}){
+  @media (max-width: 1068px) and (min-width: #{$screen-lg-max}) {
     width: 90%;
   }
 }

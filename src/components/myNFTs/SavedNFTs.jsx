@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import checkIcon from '../../assets/images/check.svg';
@@ -6,8 +7,9 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import bubbleIcon from '../../assets/images/text-bubble.svg';
+import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
-import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
 
 const SavedNFTs = () => {
@@ -17,6 +19,7 @@ const SavedNFTs = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);
+  const history = useHistory();
 
   const handleSavedNfts = (index) => {
     const newSavedNfts = [...savedNfts];
@@ -232,7 +235,16 @@ const SavedNFTs = () => {
         </>
       ) : (
         <div className="empty__nfts">
-          <h3>No Saved NFTs found</h3>
+          <div className="tabs-empty">
+            <div className="image-bubble">
+              <img src={bubbleIcon} alt="bubble-icon" />
+            </div>
+            <h3>No saved NFTs found</h3>
+            <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
+            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
+              Create NFT
+            </Button>
+          </div>
         </div>
       )}
     </div>
