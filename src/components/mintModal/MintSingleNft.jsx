@@ -325,7 +325,6 @@ const MintSingleNft = ({ onClick }) => {
           editions,
           properties,
           royaltiesParsed,
-          selectedCollection: selectedCollection?.id,
         });
 
         console.log('sending request to contract...', tokenURIResult);

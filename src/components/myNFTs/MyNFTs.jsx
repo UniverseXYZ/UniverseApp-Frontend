@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-await-in-loop */
 import React, { useContext, useEffect, useState } from 'react';
@@ -6,7 +7,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './MyNFTs.scss';
 import { number } from 'prop-types';
-import { Contract } from 'ethers';
 import Wallet from './Wallet.jsx';
 import SavedNFTs from './SavedNFTs.jsx';
 import UniverseNFTs from './UniverseNFTs.jsx';
@@ -24,14 +24,24 @@ import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
-import { getMetaForSavedNft, getMyNfts, updateSavedNft } from '../../utils/api/mintNFT';
+import { getMyNfts, updateSavedNft } from '../../utils/api/mintNFT';
+import {
+  getCollectionsAdddresses,
+  createContractInstancesFromAddresses,
+  extractRequiredDataForMinting,
+  generateTokenURIs,
+  returnTokenURIsAndRoyalties,
+  formatRoyalties,
+  getBatchMintingData,
+  mintChunkToContract,
+} from '../../utils/helpers/pureFunctions/batchMinting';
 import {
   chunkifyArray,
   formatRoyaltiesForMinting,
   parseRoyalties,
 } from '../../utils/helpers/contractInteraction';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
-import { asyncPipe, pipe } from '../../utils/pipe';
+import { asyncPipe, pipe } from '../../utils/helpers/pureFunctions/pipe';
 
 const MyNFTs = () => {
   const {
@@ -98,132 +108,60 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const filterSelectedNfts = (data) => data.filter((nft) => nft.selected);
-
-  const getCollectionsAdddresses = (data) => {
-    const object = {};
-    data.forEach((nft) => {
-      object[nft.collectionId] = collectionsIdAddressMapping[nft.collectionId] || 0;
-    });
-    return object;
-  };
-
-  const createContractInstances = (data) => {
-    const object = {};
-    Object.keys(data).forEach((collectionId) => {
-      object[data[collectionId] ? collectionId : 0] = data[collectionId]
-        ? new Contract(data[collectionId], contracts.UniverseERC721Core.abi, signer)
-        : universeERC721CoreContract;
-    });
-    return object;
-  };
-
-  const extractRequiredData = (data) =>
-    data.map((nft) => ({
-      collectionId: nft.collectionId,
-      royalties: nft.royalties,
-      id: nft.id,
-    }));
-
-  const appendTokenURIs = async (data) => {
-    console.log('requesting meta data');
-    for (let i = 0; i < data.length; i += 1) {
-      data[i].tokenUri = await getMetaForSavedNft(data[i].id);
-      data[i] = {
-        ...data[i],
-        tokenUri: data[i].tokenUri,
-      };
-    }
-
-    return data;
-  };
-
-  const returnTokenURIsAndRoyalties = (data) => {
-    const tokenURIsAndRoyaltiesObject = {};
-
-    data.forEach((nft) => {
-      if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
-        tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
-
-      nft.tokenUri.forEach((token) => {
-        tokenURIsAndRoyaltiesObject[nft.collectionId].push({
-          token,
-          royalties: nft.royalties,
-        });
-      });
-    });
-
-    return tokenURIsAndRoyaltiesObject;
-  };
-
-  const formatTokenURIsAndRoyaltiesObject = (data) => {
-    const royaltiesArray = [];
-    const tokensArray = [];
-
-    data.forEach((entry) => {
-      royaltiesArray.push(entry.royalties);
-      tokensArray.push(entry.token);
-    });
-
-    return {
-      royaltiesArray,
-      tokensArray,
-    };
-  };
-
-  const formatRoyalties = (data) =>
-    data.map((nft) => ({
-      ...nft,
-      royalties: formatRoyaltiesForMinting(nft.royalties),
-    }));
-
   const handleMintSelected = async () => {
-    const CHUNK_SIZE = 40;
+    document.getElementById('loading-hidden-btn').click();
+    const selectedNfts = savedNfts.filter((nft) => nft.selected);
 
-    const composedContracts = pipe(
-      filterSelectedNfts,
+    const { data: requiredContracts } = pipe(
       getCollectionsAdddresses,
-      createContractInstances
-    )(savedNfts);
+      createContractInstancesFromAddresses
+    )({
+      data: selectedNfts,
+      context: { collectionsIdAddressMapping, universeERC721CoreContract, contracts, signer },
+    });
 
     const tokenURIsAndRoyaltiesObject = await asyncPipe(
-      filterSelectedNfts,
-      extractRequiredData,
-      appendTokenURIs,
+      extractRequiredDataForMinting,
+      generateTokenURIs,
       formatRoyalties,
       returnTokenURIsAndRoyalties
-    )(savedNfts);
+    )(selectedNfts);
 
-    const collectionsIdsArray = Object.keys(composedContracts);
+    const collectionsIdsArray = Object.keys(requiredContracts);
+
+    console.log(`calling ${collectionsIdsArray.length} contracts`);
 
     for (let index = 0; index < collectionsIdsArray.length; index += 1) {
       const collectionId = collectionsIdsArray[index];
 
-      const { royaltiesArray, tokensArray } = formatTokenURIsAndRoyaltiesObject(
+      const { tokensChunks, royaltiesChunks, chunksCount } = getBatchMintingData(
         tokenURIsAndRoyaltiesObject[collectionId]
       );
 
-      const tokensChunks = chunkifyArray(tokensArray, CHUNK_SIZE);
-      const royaltiesChunks = chunkifyArray(royaltiesArray, CHUNK_SIZE);
-
-      for (let chunk = 0; chunk < royaltiesChunks.length; chunk += 1) {
+      for (let chunk = 0; chunk < chunksCount; chunk += 1) {
         console.log(
-          `minting chunk ${chunk + 1} / ${royaltiesChunks.length} to contract ${
-            composedContracts[collectionId].address
-          }`
+          `minting chunk ${chunk + 1} / ${royaltiesChunks.length} to contract number ${
+            index + 1
+          }: ${requiredContracts[collectionId].address}`
         );
 
-        const mintTransaction = await composedContracts[collectionId].batchMintWithDifferentFees(
+        await mintChunkToContract({
           address,
-          tokensChunks[chunk],
-          royaltiesChunks[chunk]
-        );
-
-        const mintReceipt = await mintTransaction.wait();
-
-        console.log('printing receipt...', mintReceipt);
+          tokens: tokensChunks[chunk],
+          royalties: royaltiesChunks[chunk],
+          contract: requiredContracts[collectionId],
+        });
       }
     }
+
+    console.log('minting completed!');
+
+    // TODO temporarily use this
+    const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
+    setSavedNfts(newSavedNFTs);
+
+    document.getElementById('popup-root').remove();
+    document.getElementById('congrats-hidden-btn').click();
   };
 
   useEffect(() => {
