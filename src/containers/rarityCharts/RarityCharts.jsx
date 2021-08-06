@@ -7,7 +7,6 @@ import Welcome from '../../components/rarityCharts/welcome/Welcome';
 import AppContext from '../../ContextAPI';
 import { PolymorphRarityCharts } from '../../utils/fixtures/RarityChartsDummyData';
 import './RarityCharts.scss';
-import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import RarityChartsLoader from './RarityChartsLoader';
 
 const RarityCharts = () => {
@@ -16,12 +15,19 @@ const RarityCharts = () => {
   const [perPage, setPerPage] = useState(12);
   const [polymorphRarityData, setPolymorphRarityChart] = useState([...PolymorphRarityCharts]);
   const [desc, setDesc] = useState(false);
-
-  const { search, results, isLastPage } = useSearchPolymorphs();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setDarkMode(true);
   }, []);
+
+  useEffect(() => {
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    }
+  }, [loading]);
 
   return (
     <div className="rarity--charts--page">
@@ -33,16 +39,11 @@ const RarityCharts = () => {
           getDesc={(value) => setDesc(value)}
           desc={desc}
         />
-        {search.loading && !isLastPage ? (
+        {loading ? (
           <RarityChartsLoader number={12} />
         ) : (
           <>
-            <List
-              data={polymorphRarityData}
-              perPage={perPage}
-              offset={offset}
-              isLastPage={isLastPage}
-            />
+            <List data={polymorphRarityData} perPage={perPage} offset={offset} />
           </>
         )}
         {polymorphRarityData.length ? (
