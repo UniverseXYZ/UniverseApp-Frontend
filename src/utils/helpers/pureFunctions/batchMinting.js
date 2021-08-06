@@ -102,7 +102,7 @@ export const formatRoyalties = (data) => {
 };
 
 export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
-  const CHUNK_SIZE = 3 || process.env.REACT_APP_BATCH_MINTING_CHUNK_SIZE;
+  const CHUNK_SIZE = process.env.REACT_APP_BATCH_MINTING_CHUNK_SIZE;
 
   const { royaltiesArray, tokensArray } = formatTokenURIsAndRoyaltiesObject(
     tokenURIsAndRoyaltiesEntry
