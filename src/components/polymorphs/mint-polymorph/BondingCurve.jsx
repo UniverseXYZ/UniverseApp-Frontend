@@ -116,7 +116,8 @@ const BondingCurve = (props) => {
       }
 
       const metadataURIs = mintedIds.map(
-        (id) => `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=${id}`
+        (id) =>
+          `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=${id}`
       );
       const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
 

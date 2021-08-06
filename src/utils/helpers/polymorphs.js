@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import cover from '../../assets/images/cover.png';
 
 export const POLYMORPH_BASE_URI =
-  'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=';
+  'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=';
 
 export const getScrambleStatus = (scrambleEvents) => {
   // Check if there is only one event - this means the badge is Virgin

@@ -32,17 +32,6 @@ import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
 import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
-// import MarketplaceNFT from './containers/marketplaceNFT/MarketplaceNFT';
-// import Planet1 from './containers/planets/Planet1.jsx';
-// import Planet2 from './containers/planets/Planet2.jsx';
-// import Planet3 from './containers/planets/Planet3.jsx';
-// import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
-// import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
-// import CharacterPage from './containers/characterPage/CharacterPage.jsx';
-// import Search from './containers/search/Search.jsx';
-// import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
-// import MyProfile from './containers/myProfile/MyProfile';
-// import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs } from './utils/graphql/queries';
@@ -195,7 +184,7 @@ const App = () => {
     const network = await web3ProviderWrapper.getNetwork();
     const { accounts: accountsWW } = web3ProviderWrapper.provider;
 
-    if (network.chainId !== 1) {
+    if (network.chainId !== 3) {
       await provider.disconnect();
       triggerWrongNetworkPopup();
     } else {
@@ -236,7 +225,7 @@ const App = () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const network = await provider.getNetwork();
 
-    if (network.chainId !== 1) {
+    if (network.chainId !== 3) {
       triggerWrongNetworkPopup();
     } else {
       web3AuthenticationProccess(provider, network, accounts);

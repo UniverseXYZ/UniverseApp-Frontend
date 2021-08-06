@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const GET_META_URL = `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=`;
+const GET_META_URL = `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=`;
 
 /**
  * @param {string} id NFT id
