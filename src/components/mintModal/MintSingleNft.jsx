@@ -211,7 +211,7 @@ const MintSingleNft = ({ onClick }) => {
       propertiesParsed,
       royaltiesParsed,
       id: savedNFTsID,
-      collectionId: selectedCollection.id,
+      collectionId: selectedCollection?.id,
     });
 
     let saveImageResult = null;
@@ -316,7 +316,7 @@ const MintSingleNft = ({ onClick }) => {
           ? formatRoyaltiesForMinting(royaltiesParsed)
           : [];
 
-        console.log(selectedCollection.id);
+        console.log(selectedCollection?.id);
 
         const tokenURIResult = await getTokenURI({
           file: previewImage,
@@ -325,7 +325,7 @@ const MintSingleNft = ({ onClick }) => {
           editions,
           properties,
           royaltiesParsed,
-          selectedCollection: selectedCollection.id,
+          selectedCollection: selectedCollection?.id,
         });
 
         console.log('sending request to contract...', tokenURIResult);
@@ -585,11 +585,11 @@ const MintSingleNft = ({ onClick }) => {
               <div
                 key={uuid()}
                 className={`universe${
-                  selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                  selectedCollection && selectedCollection?.id === col.id ? ' selected' : ''
                 }`}
                 aria-hidden="true"
                 onClick={() =>
-                  selectedCollection && selectedCollection.id === col.id
+                  selectedCollection && selectedCollection?.id === col.id
                     ? setSelectedCollection(null)
                     : setSelectedCollection(col)
                 }

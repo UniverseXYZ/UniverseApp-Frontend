@@ -5,6 +5,7 @@ const GET_MY_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
+const BASE_CONTRACT_ID = parseInt(process.env.REACT_APP_API_BASE_CONTRACT_ID, 10);
 
 /**
  * @param {Object} data
@@ -23,7 +24,7 @@ export const saveNftForLater = async (data) => {
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.propertiesParsed.length ? data.propertiesParsed : null,
     royalties: data.royaltiesParsed.length ? data.royaltiesParsed : null,
-    collectionId: data.collectionId,
+    collectionId: data.collectionId ? data.collectionId : BASE_CONTRACT_ID,
   };
 
   const request = await fetch(SAVE_FOR_LATER_MINT_URL, {
@@ -142,6 +143,8 @@ export const getMetaForSavedNft = async (id) => {
 export const updateSavedForLaterNft = async (data) => {
   const UPDATE_SAVED_FOR_LATER_NFT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${data.id}`;
 
+  console.log(data.collectionId || BASE_CONTRACT_ID);
+
   // Construct it in order to match the expected object keys at the BE
   const requestData = {
     name: data.name,
@@ -149,7 +152,7 @@ export const updateSavedForLaterNft = async (data) => {
     numberOfEditions: parseInt(data.editions, 10),
     properties: data.propertiesParsed?.length ? data.propertiesParsed : null,
     royalties: data.royaltiesParsed?.length ? data.royaltiesParsed : null,
-    collectionId: data.collectionId,
+    collectionId: data.collectionId || BASE_CONTRACT_ID,
   };
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
@@ -201,7 +204,7 @@ export const getTokenURI = async ({
   formData.append('numberOfEditions', parseInt(editions, 10));
   if (noProperties) formData.append('properties', JSON.stringify(propertiesParsed));
   if (noRoyalties) formData.append('royalties', JSON.stringify(royaltiesParsed));
-  if (collectionId) formData.append('collectionId', collectionId);
+  if (collectionId) formData.append('collectionId', collectionId || BASE_CONTRACT_ID);
 
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
@@ -285,7 +288,7 @@ export const updateSavedNft = async ({
     properties,
     royalties: royaltiesParsed,
     txHash,
-    collectionId,
+    collectionId: collectionId || BASE_CONTRACT_ID,
   };
 
   const request = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${id}`, {

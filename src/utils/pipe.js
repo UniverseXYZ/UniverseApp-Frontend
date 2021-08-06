@@ -19,3 +19,8 @@ export const pipe =
   (...fns) =>
   (x) =>
     fns.reduce((v, f) => f(v), x);
+
+export const asyncPipe =
+  (...fns) =>
+  (x) =>
+    fns.reduce(async (v, f) => f(await v), x);

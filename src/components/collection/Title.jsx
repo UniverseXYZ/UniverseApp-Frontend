@@ -19,7 +19,10 @@ const Title = ({ selectedCollection, saved }) => {
       </div>
       {saved && (
         <div className="collection__edit">
-          <Button className="light-border-button" onClick={() => handleEdit(selectedCollection.id)}>
+          <Button
+            className="light-border-button"
+            onClick={() => handleEdit(selectedCollection?.id)}
+          >
             <span className="hide__on__mobile">Edit</span>
             <img src={pencilIcon} alt="Edit Icon" />
           </Button>

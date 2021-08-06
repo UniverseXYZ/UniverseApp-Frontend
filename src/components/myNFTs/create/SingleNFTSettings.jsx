@@ -219,11 +219,20 @@ const SingleNFTSettings = () => {
     console.log('sending request to contract...', tokenURIResult);
 
     // call contract
-    const mintTx = await universeERC721CoreContract.mint(
-      userAddress,
-      tokenURIResult[0],
-      royaltiesFormated
-    );
+    let mintTx;
+    if (tokenURIResult.length > 1) {
+      mintTx = await universeERC721CoreContract.batchMint(
+        userAddress,
+        tokenURIResult,
+        royaltiesFormated
+      );
+    } else {
+      mintTx = await universeERC721CoreContract.mint(
+        userAddress,
+        tokenURIResult[0],
+        royaltiesFormated
+      );
+    }
 
     const receipt = await mintTx.wait();
 
@@ -536,11 +545,11 @@ const SingleNFTSettings = () => {
                 <div
                   key={uuid()}
                   className={`universe${
-                    selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                    selectedCollection && selectedCollection?.id === col.id ? ' selected' : ''
                   }`}
                   aria-hidden="true"
                   onClick={() =>
-                    selectedCollection && selectedCollection.id === col.id
+                    selectedCollection && selectedCollection?.id === col.id
                       ? setSelectedCollection(null)
                       : setSelectedCollection(col)
                   }
