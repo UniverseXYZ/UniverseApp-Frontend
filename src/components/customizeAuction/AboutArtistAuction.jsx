@@ -1,70 +1,74 @@
-import React, { useState, useContext } from 'react';
-import Button from '../button/Button.jsx';
-import About from '../myAccount/About.jsx';
+import React, { useState, useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Main from '../myAccount/Main.jsx';
-import PersonalLogo from '../myAccount/PersonalLogo.jsx';
-import Social from '../myAccount/Social.jsx';
 import AppContext from '../../ContextAPI.js';
 
-const AboutArtistAuction = () => {
-  const { loggedInArtist, setLoggedInArtist } = useContext(AppContext);
-  const [about, setAbout] = useState(loggedInArtist.about);
-  const [logo, setLogo] = useState(loggedInArtist.personalLogo);
-  const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
-  const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
+const AboutArtistAuction = ({
+  accountName,
+  setAccountName,
+  accountPage,
+  setAccountPage,
+  accountImage,
+  setAccountImage,
+  about,
+  setAbout,
+  twitterLink,
+  setTwitterLink,
+  instagramLink,
+  setInstagramLink,
+}) => {
+  const { editProfileButtonClick } = useContext(AppContext);
+  // const [about, setAbout] = useState(loggedInArtist.about);
+  // const [logo, setLogo] = useState(loggedInArtist.personalLogo);
+  // const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
+  // const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
 
-  const placeholderText = 'your-address';
-  const [accountName, setAccountName] = useState(loggedInArtist.name);
-  const [accountPage, setAccountPage] = useState(
-    `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
-  );
-  const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
-  const [showSocial, setShowSocial] = useState(loggedInArtist.social);
+  // const placeholderText = 'your-address';
+  // const [accountName, setAccountName] = useState(loggedInArtist.name);
+  // const [accountPage, setAccountPage] = useState(
+  //   `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
+  // );
+  // const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
+  // const [showSocial, setShowSocial] = useState(loggedInArtist.social);
 
-  const saveChanges = () => {
-    let page = accountPage.substring(13);
-    if (page === 'your-address') {
-      page = '';
-    }
-    setAccountPage(page);
-    setLoggedInArtist({
-      ...loggedInArtist,
-      name: accountName,
-      universePageAddress: page,
-      avatar: accountImage,
-      about,
-      personalLogo: logo,
-      instagramLink,
-      twitterLink,
-      social: showSocial,
-    });
-  };
+  // const saveChanges = () => {
+  //   setEditProfileButtonClick(true);
+  //   let page = accountPage.substring(13);
+  //   if (page === 'your-address') {
+  //     page = '';
+  //   }
+  //   setAccountPage(page);
+  //   setLoggedInArtist({
+  //     ...loggedInArtist,
+  //     name: accountName,
+  //     universePageAddress: page,
+  //     avatar: accountImage,
+  //     about,
+  //     personalLogo: logo,
+  //     instagramLink,
+  //     twitterLink,
+  //     social: showSocial,
+  //   });
+  // };
 
-  const cancelChanges = () => {
-    setAccountName(loggedInArtist.name);
-    if (loggedInArtist.universePageAddress) {
-      setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress}`);
-    } else {
-      setAccountPage(`universe.xyz/your-address`);
-    }
-    setAccountImage(loggedInArtist.avatar);
-    setAbout(loggedInArtist.about);
-    setLogo(loggedInArtist.personalLogo);
-    setTwitterLink(loggedInArtist.twitterLink);
-    setInstagramLink(loggedInArtist.instagramLink);
-  };
+  // const cancelChanges = () => {
+  //   setAccountName(loggedInArtist.name);
+  //   if (loggedInArtist.universePageAddress) {
+  //     setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress}`);
+  //   } else {
+  //     setAccountPage(`universe.xyz/your-address`);
+  //   }
+  //   setAccountImage(loggedInArtist.avatar);
+  //   setAbout(loggedInArtist.about);
+  //   // setLogo(loggedInArtist.personalLogo);
+  //   setTwitterLink(loggedInArtist.twitterLink);
+  //   setInstagramLink(loggedInArtist.instagramLink);
+  // };
 
   return (
     <div className="about__artist">
       <div className="about__artist__header">
         <h3>About Artist</h3>
-        {/* <div className="about__artist__warning">
-          <img src={warningIcon} alt="Warning" />
-          <p>
-            This information is unified across all Universe.xyz. Any edits made below will be
-            visible in other Universe products and sections, e.g. My Account
-          </p>
-        </div> */}
       </div>
       <div className="my-account">
         <Main
@@ -80,9 +84,7 @@ const AboutArtistAuction = () => {
           setTwitterLink={setTwitterLink}
           instagramLink={instagramLink}
           setInstagramLink={setInstagramLink}
-          saveChanges={saveChanges}
-          cancelChanges={cancelChanges}
-          // editProfileButtonClick={editProfileButtonClick}
+          editProfileButtonClick={editProfileButtonClick}
         />
       </div>
       {/* <About about={about} setAbout={setAbout} /> */}
@@ -97,14 +99,36 @@ const AboutArtistAuction = () => {
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
       /> */}
-      {/* <div className="landing__page__warning">
-        <img src={warningIcon} alt="Warning" />
-        <p>
-          Your landing page will be automatically published after you successfully complete all
-          transactions on the Finalize Auction step.
-        </p>
-      </div> */}
     </div>
   );
+};
+
+AboutArtistAuction.propTypes = {
+  accountName: PropTypes.string,
+  setAccountName: PropTypes.func,
+  accountPage: PropTypes.string,
+  setAccountPage: PropTypes.func,
+  accountImage: PropTypes.oneOfType([PropTypes.any]),
+  setAccountImage: PropTypes.func,
+  about: PropTypes.string,
+  setAbout: PropTypes.func,
+  twitterLink: PropTypes.string,
+  setTwitterLink: PropTypes.func,
+  instagramLink: PropTypes.string,
+  setInstagramLink: PropTypes.func,
+};
+AboutArtistAuction.defaultProps = {
+  accountName: '',
+  setAccountName: () => {},
+  accountPage: '',
+  setAccountPage: () => {},
+  accountImage: null,
+  setAccountImage: () => {},
+  about: '',
+  setAbout: () => {},
+  twitterLink: '',
+  setTwitterLink: () => {},
+  instagramLink: '',
+  setInstagramLink: () => {},
 };
 export default AboutArtistAuction;

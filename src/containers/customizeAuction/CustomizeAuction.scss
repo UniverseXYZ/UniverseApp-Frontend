@@ -779,9 +779,12 @@
     .display-warning {
       display: none !important;
     }
-    // .account-display-buttons {
-    //   display: none;
-    // }
+    .display__error {
+      display: none !important;
+    }
+    .account-display-buttons {
+      display: none;
+    }
     .about__artist__warning {
       position: relative;
       display: flex !important;
@@ -957,7 +960,7 @@
   .customize-buttons {
     display: flex;
     justify-content: flex-end;
-    .light-button {
+    .light-border-button {
       margin-right: 20px;
       @include sm {
         margin-right: 0px;
