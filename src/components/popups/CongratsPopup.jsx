@@ -5,7 +5,7 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import checkIcon from '../../assets/images/bid-submitted.png';
 
-const CongratsPopup = ({ onClose }) => {
+const CongratsPopup = ({ onClose, backButtonText }) => {
   const history = useHistory();
   return (
     <div className="popup-div congrats-popup">
@@ -25,7 +25,7 @@ const CongratsPopup = ({ onClose }) => {
       </div>
       <div className="popup-btns">
         <Button className="light-button" onClick={() => history.push('/my-nfts')}>
-          Go to my NFTs
+          {backButtonText}
         </Button>
         <Button className="light-border-button" onClick={() => history.push('/my-nfts/create')}>
           Create more
@@ -37,6 +37,11 @@ const CongratsPopup = ({ onClose }) => {
 
 CongratsPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
+  backButtonText: PropTypes.string,
+};
+
+CongratsPopup.defaultProps = {
+  backButtonText: 'Go to reward tier settings',
 };
 
 export default CongratsPopup;

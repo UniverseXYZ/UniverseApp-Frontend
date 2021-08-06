@@ -442,7 +442,7 @@ const Wallet = ({
             type="button"
             className="set_up"
             onClick={() => {
-              history.push('/my-nfts');
+              history.push('/my-nfts/create');
             }}
           >
             Go to Minting
