@@ -780,9 +780,10 @@
                   }
                 }
                 .start__date {
+                  height: 39px;
                   position: absolute;
                   bottom: 12px;
-                  padding: 6px 24px;
+                  padding: 0 24px;
                   background: rgba(0, 0, 0, 0.6);
                   backdrop-filter: blur(4px);
                   border-radius: 100px;
@@ -836,7 +837,7 @@
                 box-sizing: border-box;
                 border-radius: 6px;
                 margin-top: 18px;
-                padding: 14px 27px 14px 16px;
+                padding: 5px 27px 5px 16px;
 
                 &__box {
                   padding: 8px 0;
