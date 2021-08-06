@@ -8,7 +8,7 @@ import AppContext from '../../ContextAPI';
 import buyerImage from '../../assets/images/nft-buyer.png';
 import hrefIcon from '../../assets/images/href.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import { isVideo, isAudio, isImage } from '../../utils/helpers/nftData';
+import { isVideo, isAudio, isImage, getNftImage } from '../../utils/helpers/pureFunctions/nfts';
 
 const NFTPopup = ({ onClose, onNFT }) => {
   const { loggedInArtist, deployedCollections } = useContext(AppContext);
@@ -36,7 +36,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
           {isVideo(onNFT) && (
             <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
               <video controls>
-                <source src={onNFT.thumbnail_url} type="video/mp4" />
+                <source src={getNftImage(onNFT)} type="video/mp4" />
                 <track kind="captions" />
                 Your browser does not support the video tag.
               </video>
@@ -45,7 +45,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
           {isAudio(onNFT) && <img className="preview-image" src={mp3Icon} alt={onNFT.name} />}
           {isImage(onNFT) && (
             <Animated animationIn="zoomIn" key={onNFT.id} style={{ height: '100%' }}>
-              <img src={onNFT.thumbnail_url} alt={onNFT.previewImage} />
+              <img src={getNftImage(onNFT)} alt={onNFT.previewImage} />
             </Animated>
           )}
         </div>

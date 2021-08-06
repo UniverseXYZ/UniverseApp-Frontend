@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import NFTPopup from '../popups/NFTPopup.jsx';
-import { isImage, isVideo, isAudio } from '../../utils/helpers/nftData';
+import { isImage, isVideo, isAudio, getNftImage } from '../../utils/helpers/pureFunctions/nfts';
 
 const NFTs = ({ filteredNFTs }) => (
   <div className="saved__nfts__lists">
@@ -22,7 +22,7 @@ const NFTs = ({ filteredNFTs }) => (
                     onMouseOut={(event) => event.target.pause()}
                     onBlur={(event) => event.target.pause()}
                   >
-                    <source src={nft.thumbnail_url} type="video/mp4" />
+                    <source src={getNftImage(nft)} type="video/mp4" />
                     <track kind="captions" />
                     Your browser does not support the video tag.
                   </video>
@@ -38,7 +38,7 @@ const NFTs = ({ filteredNFTs }) => (
             )}
             {isImage(nft) && (
               <Popup
-                trigger={<img className="preview-image" src={nft.thumbnail_url} alt={nft.name} />}
+                trigger={<img className="preview-image" src={getNftImage(nft)} alt={nft.name} />}
               >
                 {(close) => <NFTPopup onClose={close} onNFT={nft} />}
               </Popup>

@@ -11,7 +11,7 @@ import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
-import { isImage, isVideo } from '../../utils/helpers/nftData';
+import { isImage, isVideo } from '../../utils/helpers/pureFunctions/nfts';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =

@@ -21,7 +21,7 @@ import RarityChartsLoader from '../../containers/rarityCharts/RarityChartsLoader
 import UniverseNFTsList from './universeNFTsList/UniverseNFTsList.jsx';
 import RarityChartFiltersPopup from '../popups/RarityChartFiltersPopup.jsx';
 import filterIcon from '../../assets/images/filters-icon-black.svg';
-import { isImage } from '../../utils/helpers/nftData';
+import { isImage, getNftImage } from '../../utils/helpers/pureFunctions/nfts';
 
 const UniverseNFTs = () => {
   const { setSelectedNftForScramble } = useContext(AppContext);
@@ -1281,7 +1281,7 @@ const UniverseNFTs = () => {
                   }}
                 >
                   <div className="nft__box__image">
-                    <img className="preview-image" alt={elm.name} src={elm.thumbnail_url} />
+                    <img className="preview-image" alt={elm.name} src={getNftImage(elm)} />
                     {elm.scrambled && elm.scrambled === 'never' ? (
                       <div className="never-scrambled">
                         <img alt="Never scrambled badge" src={neverScrambledIcon} />
@@ -1319,7 +1319,7 @@ const UniverseNFTs = () => {
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={elm.thumbnail_url} type="video/mp4" />
+                      <source src={getNftImage(elm)} type="video/mp4" />
                       <track kind="captions" />
                     </video>
                   </div>

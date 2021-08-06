@@ -17,7 +17,6 @@ const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/colle
  */
 export const saveNftForLater = async (data) => {
   // Construct it in order to match the expected object keys at the BE
-  console.log(data, BASE_CONTRACT_ID);
   const requestData = {
     name: data.name,
     description: data.description,
@@ -287,7 +286,7 @@ export const updateSavedNft = async ({
     properties,
     royalties: royaltiesParsed,
     txHash,
-    collectionId: collectionId || BASE_CONTRACT_ID,
+    collectionId: collectionId || null,
   };
 
   const request = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${id}`, {
