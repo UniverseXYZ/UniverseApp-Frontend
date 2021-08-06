@@ -7,8 +7,9 @@ import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders.js';
+import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 
-const PolymorphCard = ({ item, index }) => {
+const PolymorphCard = ({ item }) => {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const fetchMetadata = async () => {
@@ -61,7 +62,6 @@ const PolymorphCard = ({ item, index }) => {
 
 PolymorphCard.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  index: PropTypes.oneOfType([PropTypes.number]).isRequired,
 };
 
 export default PolymorphCard;

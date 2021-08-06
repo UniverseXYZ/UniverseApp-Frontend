@@ -4,17 +4,27 @@ import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 
 export const renderLoaders = (number) =>
   [...Array(number)].map(() => (
-    <div className="loading" key={uuid()}>
-      <img src={loadingBg} alt="polymorph" key={uuid()} />
-      <div className="lds-roller">
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
-        <div />
+    <div className="card" style={{ cursor: 'default' }}>
+      <div className="card--header">
+        <div className="card--number">#???</div>
+        <div className="card--price">Rarity Score: ???</div>
+      </div>
+      <div className="card--body">
+        <img className="rarity--chart" src={loadingBg} alt="loader" />
+        <div className="card-lds-roller">
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+        </div>
+      </div>
+      <div className="card--footer">
+        <h2>?????</h2>
+        <p>#?????</p>
       </div>
     </div>
   ));
