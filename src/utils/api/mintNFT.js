@@ -38,8 +38,6 @@ export const saveNftForLater = async (data) => {
     }),
   });
 
-  console.log(request);
-
   if (!request.ok && request.status !== 201) {
     console.error(`Error while trying to save NFT data: ${request.statusText}`);
   }
@@ -143,8 +141,6 @@ export const getMetaForSavedNft = async (id) => {
 export const updateSavedForLaterNft = async (data) => {
   const UPDATE_SAVED_FOR_LATER_NFT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts/${data.id}`;
 
-  console.log(data.collectionId);
-
   // Construct it in order to match the expected object keys at the BE
   const requestData = {
     name: data.name,
@@ -195,7 +191,6 @@ export const getTokenURI = async ({
   const formData = new FormData();
   const noProperties = propertiesParsed?.length;
   const noRoyalties = royaltiesParsed?.length;
-  console.log(propertiesParsed, royaltiesParsed);
 
   formData.append('file', file, file.name);
   formData.append('name', name);
