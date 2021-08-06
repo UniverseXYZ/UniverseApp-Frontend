@@ -21,7 +21,7 @@ const PolymorphCard = ({ item, index }) => {
   return loading ? (
     renderLoaders(1)
   ) : (
-    <a className="card" onClick={() => setShowPopup(true)} aria-hidden="true">
+    <div className="card" onClick={() => setShowPopup(true)} aria-hidden="true">
       <div className="card--header">
         <div className="card--number">{`#${item.rank}`}</div>
         <div className="card--price">{`Rarity Score: ${item.rarityscore}`}</div>
@@ -55,7 +55,7 @@ const PolymorphCard = ({ item, index }) => {
       <Popup open={showPopup}>
         <RarityRankPopup onClose={() => setShowPopup(false)} item={item} />
       </Popup>
-    </a>
+    </div>
   );
 };
 
