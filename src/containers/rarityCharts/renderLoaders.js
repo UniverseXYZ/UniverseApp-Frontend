@@ -10,7 +10,7 @@ export const renderLoaders = (number) =>
         <div className="card--price">Rarity Score: ???</div>
       </div>
       <div className="card--body">
-        <img className="rarity--chart" src={loadingBg} alt="loader" />
+        <img className="rarity--chart" style={{ cursor: 'default' }} src={loadingBg} alt="loader" />
         <div className="card-lds-roller">
           <div />
           <div />
