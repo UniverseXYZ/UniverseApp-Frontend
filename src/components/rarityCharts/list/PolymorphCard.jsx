@@ -6,7 +6,7 @@ import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
-import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders.js';
+import { renderLoaderWithData } from '../../../containers/rarityCharts/renderLoaders.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 
 const PolymorphCard = ({ item }) => {
@@ -20,7 +20,7 @@ const PolymorphCard = ({ item }) => {
   };
 
   return loading ? (
-    renderLoaders(1)
+    renderLoaderWithData(item)
   ) : (
     <div className="card" onClick={() => setShowPopup(true)} aria-hidden="true">
       <div className="card--header">
