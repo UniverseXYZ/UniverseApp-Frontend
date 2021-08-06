@@ -131,13 +131,13 @@ const NFTPopup = ({ onClose, onNFT }) => {
         </div>
         <div className="tab__content">
           <Animated animationIn="fadeIn" key={uuid()}>
-            {selectedTabIndex === 0 && onNFT.properties ? (
-              onNFT.properties[0].name ? (
+            {selectedTabIndex === 0 ? (
+              onNFT.properties?.length ? (
                 <div className="property__container">
                   {onNFT.properties.map((property) => (
                     <div className="property__box" key={uuid()}>
-                      <div className="property__name">{property.name}</div>
-                      <div className="property__value">{property.value}</div>
+                      <div className="property__name">{Object.keys(property)[0]}</div>
+                      <div className="property__value">{Object.values(property)[0]}</div>
                       <div className="property__percent">58% have this trait</div>
                     </div>
                   ))}
