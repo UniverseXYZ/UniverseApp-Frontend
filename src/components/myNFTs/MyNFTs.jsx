@@ -1,3 +1,4 @@
+/* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-shadow */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-await-in-loop */
@@ -26,22 +27,10 @@ import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
 import { getMyNfts, updateSavedNft } from '../../utils/api/mintNFT';
 import {
-  getCollectionsAdddresses,
-  createContractInstancesFromAddresses,
-  extractRequiredDataForMinting,
-  generateTokenURIs,
-  returnTokenURIsAndRoyalties,
-  formatRoyalties,
-  getBatchMintingData,
-  mintChunkToContract,
-} from '../../utils/helpers/pureFunctions/batchMinting';
-import {
-  chunkifyArray,
-  formatRoyaltiesForMinting,
-  parseRoyalties,
-} from '../../utils/helpers/contractInteraction';
+  SavedNFTsMintingFlowFactory,
+  SingleNftMintingFlowFactory,
+} from '../../utils/helpers/factory/mintingFlow';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
-import { asyncPipe, pipe } from '../../utils/helpers/pureFunctions/pipe';
 
 const MyNFTs = () => {
   const {
@@ -108,50 +97,52 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const batchMint = async (nfts) => {
+    const mintingFlowContext = {
+      collectionsIdAddressMapping,
+      universeERC721CoreContract,
+      contracts,
+      signer,
+      address,
+    };
+
+    const savedNftsMintingFlow = SavedNFTsMintingFlowFactory(nfts, mintingFlowContext);
+
+    savedNftsMintingFlow.generateRequiredContracts();
+    await savedNftsMintingFlow.generateTokenURIsAndRoyaltiesObject();
+
+    await savedNftsMintingFlow.sendBatchMintRequest();
+  };
+
+  const mintSingleNft = async (nftArray) => {
+    const mintingFlowContext = {
+      collectionsIdAddressMapping,
+      universeERC721CoreContract,
+      contracts,
+      signer,
+      address,
+    };
+
+    const savedNftsMintingFlow = SingleNftMintingFlowFactory(nftArray, mintingFlowContext);
+
+    savedNftsMintingFlow.generateRequiredContracts();
+    await savedNftsMintingFlow.generateTokenURIsAndRoyaltiesObject();
+
+    await savedNftsMintingFlow.sendMintRequest();
+  };
+
   const handleMintSelected = async () => {
     document.getElementById('loading-hidden-btn').click();
+
     const selectedNfts = savedNfts.filter((nft) => nft.selected);
+    const isSingleNft =
+      selectedNfts.length === selectedNfts[0].numberOfEditions &&
+      selectedNfts[0].numberOfEditions === 1;
 
-    const { data: requiredContracts } = pipe(
-      getCollectionsAdddresses,
-      createContractInstancesFromAddresses
-    )({
-      data: selectedNfts,
-      context: { collectionsIdAddressMapping, universeERC721CoreContract, contracts, signer },
-    });
-
-    const tokenURIsAndRoyaltiesObject = await asyncPipe(
-      extractRequiredDataForMinting,
-      generateTokenURIs,
-      formatRoyalties,
-      returnTokenURIsAndRoyalties
-    )(selectedNfts);
-
-    const collectionsIdsArray = Object.keys(requiredContracts);
-
-    console.log(`calling ${collectionsIdsArray.length} contracts`);
-
-    for (let index = 0; index < collectionsIdsArray.length; index += 1) {
-      const collectionId = collectionsIdsArray[index];
-
-      const { tokensChunks, royaltiesChunks, chunksCount } = getBatchMintingData(
-        tokenURIsAndRoyaltiesObject[collectionId]
-      );
-
-      for (let chunk = 0; chunk < chunksCount; chunk += 1) {
-        console.log(
-          `minting chunk ${chunk + 1} / ${royaltiesChunks.length} to contract number ${
-            index + 1
-          }: ${requiredContracts[collectionId].address}`
-        );
-
-        await mintChunkToContract({
-          address,
-          tokens: tokensChunks[chunk],
-          royalties: royaltiesChunks[chunk],
-          contract: requiredContracts[collectionId],
-        });
-      }
+    if (isSingleNft) {
+      await mintSingleNft(selectedNfts);
+    } else {
+      await batchMint(selectedNfts);
     }
 
     console.log('minting completed!');
