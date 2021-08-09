@@ -3909,7 +3909,7 @@
       @include xl {
         text-align: center;
       }
-      @include lg {
+      @media (max-width: 834px) {
         width: 100%;
         margin: auto;
         height: unset;
@@ -3972,7 +3972,7 @@
           line-height: 160%;
           color: #b3b3b3;
         }
-        @include lg {
+        @media (max-width: 834px) {
           margin-top: 32px;
         }
         @include xl {
@@ -4137,7 +4137,7 @@
       .selected--pink--orange {
         background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
       }
-      @include lg {
+      @media (max-width: 834px) {
         padding-bottom: 20px;
       }
     }
@@ -4147,7 +4147,7 @@
     @include xl {
       align-items: center;
     }
-    @include lg {
+    @media (max-width: 834px) {
       display: grid;
       padding: 30px 20px 20px;
     }
@@ -4163,7 +4163,7 @@
   @include sm {
     max-width: 90%;
   }
-  @include lg {
+  @media (max-width: 834px) {
     width: fit-content !important;
   }
 
