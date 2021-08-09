@@ -3838,7 +3838,7 @@
     display: flex;
     justify-content: space-between;
     padding: 75px 60px;
-    max-height: 600px;
+    max-height: 962px;
     overflow-y: auto;
 
     .rarity--rank--image {
@@ -4134,7 +4134,13 @@
         padding-bottom: 20px;
       }
     }
+    @include sm {
+      max-height: 600px;
+    }
     @include xl {
+      align-items: center;
+    }
+    @include lg {
       display: grid;
       padding: 30px 20px 20px;
     }
