@@ -21,7 +21,8 @@ import squareFour from '../../assets/images/square4.png';
 import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
-import topmorphs from '../../assets/images/topmorph.png';
+import topmorphs from '../../assets/images/topmorphs3.png';
+import topbackground from '../../assets/images/topbackground.png';
 
 const About = () => {
   const history = useHistory();
@@ -243,12 +244,15 @@ const About = () => {
         <div className="polymorphs__universe__section__container">
           <div className="blocks">
             {/* Block 3 */}
-            <AnimatedOnScroll animationIn="fadeIn">
-              {/* <img src={blockThree} alt="Block" /> */}
-              <img src={topmorphs} alt="top" />
+            <AnimatedOnScroll animationIn="fadeIn" className="image--block">
+              <div className="top--morph">
+                <img src={topmorphs} alt="top" />
+              </div>
+              <div className="top--background">
+                <img src={topbackground} alt="background" />
+              </div>
             </AnimatedOnScroll>
-            <AnimatedOnScroll animationIn="fadeIn">
-              {/* <span className="new">COMING SOON</span> */}
+            <AnimatedOnScroll animationIn="fadeIn" className="info--block">
               <div className="soon">
                 <h1>COMING SOON</h1>
               </div>
