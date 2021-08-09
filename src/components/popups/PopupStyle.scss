@@ -3838,7 +3838,7 @@
     display: flex;
     justify-content: space-between;
     padding: 75px 60px;
-    max-height: 962px;
+    max-height: 600px;
     overflow-y: auto;
 
     .rarity--rank--image {
@@ -3907,6 +3907,7 @@
         height: 490px;
         text-align: center;
         margin: auto;
+        height: unset;
       }
     }
     .rarity--rank--body {
@@ -3977,14 +3978,14 @@
         grid-gap: 17px;
         .rarity--description--gradient {
           position: relative;
-          .rarity--description{
+          .rarity--description {
             z-index: 100;
           }
-          .rarity--rank--border{
+          .rarity--rank--border {
             position: absolute;
             width: calc(100% + 2px);
             min-height: 58px;
-            background: linear-gradient(90deg, #C857CA 50%, #FB8C00 50%);
+            background: linear-gradient(90deg, #c857ca 50%, #fb8c00 50%);
             left: -1px;
             right: 0px;
             top: -1px;
