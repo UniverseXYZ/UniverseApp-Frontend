@@ -59,6 +59,7 @@ const SingleNFTSettings = () => {
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [amountSum, setAmountSum] = useState(0);
+  const [showCongratsPopup, setShowCongratsPopup] = useState(false);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -332,6 +333,7 @@ const SingleNFTSettings = () => {
   const handleCloseLoadingPopup = () => {
     document.getElementById('popup-root').remove();
     document.getElementById('congrats-hidden-btn').click();
+    setShowCongratsPopup(true);
   };
 
   const handleCloseCongratsPopup = () => {
@@ -396,7 +398,7 @@ const SingleNFTSettings = () => {
             />
           }
         >
-          {(close) => <LoadingPopup onClose={handleCloseLoadingPopup} />}
+          {() => (showCongratsPopup ? '' : <LoadingPopup onClose={handleCloseLoadingPopup} />)}
         </Popup>
         <Popup
           trigger={
@@ -408,7 +410,7 @@ const SingleNFTSettings = () => {
             />
           }
         >
-          {(close) => (
+          {() => (
             <CongratsPopup
               onClose={handleCloseCongratsPopup}
               backButtonText="Go to reward tier settings"
