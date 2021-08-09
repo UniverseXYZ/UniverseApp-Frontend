@@ -36,6 +36,7 @@ import {
   parseProperties,
   parsePropertiesForFrontEnd,
 } from '../../../utils/helpers/contractInteraction';
+import { SingleNftMintingFlowFactory } from '../../../utils/helpers/factory/mintingFlow';
 
 const SingleNFTSettings = () => {
   const {
@@ -47,6 +48,10 @@ const SingleNFTSettings = () => {
     setMyNFTs,
     deployedCollections,
     universeERC721CoreContract,
+    address,
+    collectionsIdAddressMapping,
+    contracts,
+    signer,
   } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
@@ -194,10 +199,46 @@ const SingleNFTSettings = () => {
   };
 
   const onMintNft = async () => {
-    document.getElementById('loading-hidden-btn').click();
-    document.body.classList.add('no__scroll');
+    // document.getElementById('loading-hidden-btn').click();
+    // document.body.classList.add('no__scroll');
+    const mintingFlowContext = {
+      collectionsIdAddressMapping,
+      universeERC721CoreContract,
+      contracts,
+      signer,
+      address,
+    };
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+
+    const nftData = {
+      collectionId: selectedCollection?.id || 0,
+      royalties: royaltiesParsed,
+      editions,
+      file: previewImage,
+      name,
+      description,
+      propertiesParsed,
+    };
+
+    const singleNftMintingFlow = SingleNftMintingFlowFactory(mintingFlowContext);
+
+    singleNftMintingFlow.generateNftData(nftData);
+    singleNftMintingFlow.generateRequiredContracts();
+    const tokensCount = await singleNftMintingFlow.generateTokenURIsAndRoyaltiesObject();
+
+    if (tokensCount > 1) {
+      await singleNftMintingFlow.sendBatchMintRequest();
+    } else {
+      await singleNftMintingFlow.sendMintRequest();
+    }
+  };
+
+  const onMintNft2 = async () => {
+    // document.getElementById('loading-hidden-btn').click();
+    // document.body.classList.add('no__scroll');
     console.log('MINTING..........');
-    const userAddress = localStorage.getItem('user_address');
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const royaltiesFormated = royaltiesParsed.length
@@ -221,16 +262,12 @@ const SingleNFTSettings = () => {
     let mintTx;
     if (tokenURIResult.length > 1) {
       mintTx = await universeERC721CoreContract.batchMint(
-        userAddress,
+        address,
         tokenURIResult,
         royaltiesFormated
       );
     } else {
-      mintTx = await universeERC721CoreContract.mint(
-        userAddress,
-        tokenURIResult[0],
-        royaltiesFormated
-      );
+      mintTx = await universeERC721CoreContract.mint(address, tokenURIResult[0], royaltiesFormated);
     }
 
     const receipt = await mintTx.wait();

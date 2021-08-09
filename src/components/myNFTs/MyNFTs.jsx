@@ -22,10 +22,7 @@ import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import Tabs from '../tabs/Tabs';
 import { getMyNfts, updateSavedNft } from '../../utils/api/mintNFT';
-import {
-  SavedNFTsMintingFlowFactory,
-  SingleNftMintingFlowFactory,
-} from '../../utils/helpers/factory/mintingFlow';
+import { SavedNFTsMintingFlowFactory } from '../../utils/helpers/factory/mintingFlow';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {
@@ -90,7 +87,7 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const batchMint = async (nfts) => {
+  const mintSelectedNfts = async (nfts, isSingle) => {
     const mintingFlowContext = {
       collectionsIdAddressMapping,
       universeERC721CoreContract,
@@ -102,26 +99,13 @@ const MyNFTs = () => {
     const savedNftsMintingFlow = SavedNFTsMintingFlowFactory(nfts, mintingFlowContext);
 
     savedNftsMintingFlow.generateRequiredContracts();
-    await savedNftsMintingFlow.generateTokenURIsAndRoyaltiesObject();
+    await savedNftsMintingFlow.generateTokenURIsAndRoyaltiesObjectForSavedNfts();
 
-    await savedNftsMintingFlow.sendBatchMintRequest();
-  };
-
-  const mintSingleNft = async (nftArray) => {
-    const mintingFlowContext = {
-      collectionsIdAddressMapping,
-      universeERC721CoreContract,
-      contracts,
-      signer,
-      address,
-    };
-
-    const savedNftsMintingFlow = SingleNftMintingFlowFactory(nftArray, mintingFlowContext);
-
-    savedNftsMintingFlow.generateRequiredContracts();
-    await savedNftsMintingFlow.generateTokenURIsAndRoyaltiesObject();
-
-    await savedNftsMintingFlow.sendMintRequest();
+    if (isSingle) {
+      await savedNftsMintingFlow.sendMintRequest();
+    } else {
+      await savedNftsMintingFlow.sendBatchMintRequest();
+    }
   };
 
   const handleMintSelected = async () => {
@@ -132,11 +116,7 @@ const MyNFTs = () => {
       selectedNfts.length === selectedNfts[0].numberOfEditions &&
       selectedNfts[0].numberOfEditions === 1;
 
-    if (isSingleNft) {
-      await mintSingleNft(selectedNfts);
-    } else {
-      await batchMint(selectedNfts);
-    }
+    await mintSelectedNfts(selectedNfts, isSingleNft);
 
     console.log('minting completed!');
 
