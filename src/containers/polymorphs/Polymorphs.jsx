@@ -58,8 +58,8 @@ const Polymorphs = () => {
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
         popupBtnText="My polymorphs"
-        btnText="Mint a morph"
-        btnOnClick={() => history.push('/mint-polymorph')}
+        // btnText="Mint a morph"
+        // btnOnClick={() => history.push('/mint-polymorph')}
         btnAnotherOnClick={() => history.push('/my-nfts')}
         ellipsesLeft={false}
         ellipsesRight={false}
@@ -70,7 +70,7 @@ const Polymorphs = () => {
       <div className="content">
         <About />
       </div>
-      <Characters />
+      {/* <Characters /> */}
       <Section4 />
       <PolymorphsActivity mobile={mobile} />
       <Section6 />
