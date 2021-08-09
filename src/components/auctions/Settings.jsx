@@ -214,7 +214,12 @@ const AuctionSettings = () => {
     setProperties(prevProperties);
   };
 
-  const propertyChangesAmount = (index, val) => {
+  const propertyChangesAmount = (index, val, inp) => {
+    if (val) {
+      inp.classList.add('withsign');
+    } else {
+      inp.classList.remove('withsign');
+    }
     const result = properties.reduce(
       (accumulator, current) => accumulator + Number(current.amount),
       0
@@ -507,7 +512,7 @@ const AuctionSettings = () => {
                     className="amount-inp"
                     value={elm.amount}
                     hoverBoxShadowGradient
-                    onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                    onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                   />
                 </div>
                 <img
