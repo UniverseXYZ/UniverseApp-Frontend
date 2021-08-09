@@ -4,6 +4,7 @@ import {
   getCollectionsAdddresses,
   createContractInstancesFromAddresses,
   extractRequiredDataForMinting,
+  generateTokenURIsForSavedNfts,
   generateTokenURIs,
   returnTokenURIsAndRoyalties,
   formatRoyalties,
@@ -13,6 +14,23 @@ import {
 
 function MintingFlowFactory() {
   return {
+    generateNftData(data) {
+      const formated = [
+        {
+          collectionId: data.collectionId,
+          royalties: data.royalties,
+          numberOfEditions: data.editions,
+          file: data.file,
+          name: data.name,
+          description: data.description,
+          propertiesParsed: data.propertiesParsed,
+          royaltiesParsed: data.royaltiesParsed,
+        },
+      ];
+
+      this.nfts = formated;
+    },
+
     generateRequiredContracts() {
       const { data: res } = pipe(
         getCollectionsAdddresses,
@@ -25,10 +43,10 @@ function MintingFlowFactory() {
       this.requiredContracts = res;
     },
 
-    async generateTokenURIsAndRoyaltiesObject() {
+    async generateTokenURIsAndRoyaltiesObjectForSavedNfts() {
       const res = await asyncPipe(
         extractRequiredDataForMinting,
-        generateTokenURIs,
+        generateTokenURIsForSavedNfts,
         formatRoyalties,
         returnTokenURIsAndRoyalties
       )(this.nfts);
@@ -36,10 +54,22 @@ function MintingFlowFactory() {
       this.tokenURIsAndRoyaltiesObject = res;
     },
 
+    async generateTokenURIsAndRoyaltiesObject() {
+      const res = await asyncPipe(
+        generateTokenURIs,
+        formatRoyalties,
+        returnTokenURIsAndRoyalties
+      )(this.nfts);
+
+      this.tokenURIsAndRoyaltiesObject = res;
+
+      return Object.values(res)[0].length;
+    },
+
     async sendMintRequest() {
       if (!this.requiredContracts || !this.tokenURIsAndRoyaltiesObject) {
         console.log(
-          'You need to call generateRequiredContracts and generateTokenURIsAndRoyaltiesObject before using this method'
+          'You need to call generateRequiredContracts and generateTokenURIsAndRoyaltiesObject/ForSavedNfts before using this method'
         );
       }
       const contract = Object.values(this.requiredContracts)[0];
@@ -56,7 +86,7 @@ function MintingFlowFactory() {
     async sendBatchMintRequest() {
       if (!this.requiredContracts || !this.tokenURIsAndRoyaltiesObject) {
         console.log(
-          'You need to call generateRequiredContracts and generateTokenURIsAndRoyaltiesObject before using this method'
+          'You need to call generateRequiredContracts and generateTokenURIsAndRoyaltiesObject/ForSavedNfts before using this method'
         );
       }
 
@@ -101,21 +131,25 @@ export function SavedNFTsMintingFlowFactory(nfts, context) {
     requiredContracts: null,
     tokenURIsAndRoyaltiesObject: null,
     generateRequiredContracts: methods.generateRequiredContracts,
-    generateTokenURIsAndRoyaltiesObject: methods.generateTokenURIsAndRoyaltiesObject,
+    generateTokenURIsAndRoyaltiesObjectForSavedNfts:
+      methods.generateTokenURIsAndRoyaltiesObjectForSavedNfts,
     sendBatchMintRequest: methods.sendBatchMintRequest,
+    sendMintRequest: methods.sendMintRequest,
   };
 }
 
-export function SingleNftMintingFlowFactory(nfts, context) {
+export function SingleNftMintingFlowFactory(context) {
   const methods = MintingFlowFactory();
 
   return {
-    nfts,
+    nfts: null,
     context,
     requiredContracts: null,
     tokenURIsAndRoyaltiesObject: null,
+    generateNftData: methods.generateNftData,
     generateRequiredContracts: methods.generateRequiredContracts,
     generateTokenURIsAndRoyaltiesObject: methods.generateTokenURIsAndRoyaltiesObject,
     sendMintRequest: methods.sendMintRequest,
+    sendBatchMintRequest: methods.sendBatchMintRequest,
   };
 }

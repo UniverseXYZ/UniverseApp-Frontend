@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { Contract } from 'ethers';
-import { getMetaForSavedNft } from '../../api/mintNFT';
+import { getMetaForSavedNft, getTokenURI } from '../../api/mintNFT';
 import { chunkifyArray, formatRoyaltiesForMinting } from '../contractInteraction';
 
 export const getCollectionsAdddresses = (obj) => {
@@ -46,14 +46,26 @@ export const extractRequiredDataForMinting = (data) => {
   return returnData;
 };
 
-export const generateTokenURIs = async (data) => {
+export const generateTokenURIsForSavedNfts = async (data) => {
   console.log('requesting meta data');
   for (let i = 0; i < data.length; i += 1) {
     data[i].tokenUri = await getMetaForSavedNft(data[i].id);
-    data[i] = {
-      ...data[i],
-      tokenUri: data[i].tokenUri,
-    };
+  }
+
+  return data;
+};
+
+export const generateTokenURIs = async (data) => {
+  console.log('requesting meta data');
+  for (let i = 0; i < data.length; i += 1) {
+    data[i].tokenUri = await getTokenURI({
+      file: data[i].file,
+      name: data[i].name,
+      description: data[i].description,
+      editions: data[i].numberOfEditions,
+      propertiesParsed: data[i].propertiesParsed,
+      royaltiesParsed: data[i].royalties,
+    });
   }
 
   return data;
