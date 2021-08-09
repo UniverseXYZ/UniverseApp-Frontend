@@ -199,7 +199,7 @@ const AuctionReview = () => {
                 item.amount && (
                   <div className="royalty">
                     <p>{item.address}</p>
-                    <span>{item.amount}</span>
+                    <span>{item.amount}%</span>
                   </div>
                 )
             )}

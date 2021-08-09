@@ -16,12 +16,15 @@ const CustomizeAuction = () => {
     auction,
     setAuction,
     loggedInArtist,
+    setLoggedInArtist,
     myAuctions,
     setMyAuctions,
     activeAuctions,
     setActiveAuctions,
     futureAuctions,
     setFutureAuctions,
+    editProfileButtonClick,
+    setEditProfileButtonClick,
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
@@ -34,6 +37,17 @@ const CustomizeAuction = () => {
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
   const [editButtonClick, setEditButtonClick] = useState(false);
+
+  const [about, setAbout] = useState(loggedInArtist.about);
+  const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
+  const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
+
+  const placeholderText = 'your-address';
+  const [accountName, setAccountName] = useState(loggedInArtist.name);
+  const [accountPage, setAccountPage] = useState(
+    `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
+  );
+  const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
 
   useEffect(() => {
     if (auction) {
@@ -57,10 +71,15 @@ const CustomizeAuction = () => {
 
   const handleSaveClose = () => {
     setEditButtonClick(true);
+    setEditProfileButtonClick(true);
     if (
       domainAndBranding.headline &&
       domainAndBranding.link &&
-      domainAndBranding.status === 'filled'
+      domainAndBranding.status === 'filled' &&
+      accountImage &&
+      accountName &&
+      (accountPage !== 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+      about
     ) {
       const newAuction = { ...auction };
       newAuction.headline = domainAndBranding.headline;
@@ -72,6 +91,20 @@ const CustomizeAuction = () => {
       newAuction.tiers = auction.tiers.map((tier) => {
         const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
         return { ...tier, ...rewardTier };
+      });
+      let page = accountPage.substring(13);
+      if (page === 'your-address') {
+        page = '';
+      }
+      setAccountPage(page);
+      setLoggedInArtist({
+        ...loggedInArtist,
+        name: accountName,
+        universePageAddress: page,
+        avatar: accountImage,
+        about,
+        instagramLink,
+        twitterLink,
       });
       if (loggedInArtist.name && loggedInArtist.avatar) {
         newAuction.artist = loggedInArtist;
@@ -221,7 +254,20 @@ const CustomizeAuction = () => {
           editButtonClick={editButtonClick}
           setEditButtonClick={setEditButtonClick}
         />
-        <AboutArtistAuction />
+        <AboutArtistAuction
+          accountName={accountName}
+          setAccountName={setAccountName}
+          accountPage={accountPage}
+          setAccountPage={setAccountPage}
+          accountImage={accountImage}
+          setAccountImage={setAccountImage}
+          about={about}
+          setAbout={setAbout}
+          twitterLink={twitterLink}
+          setTwitterLink={setTwitterLink}
+          instagramLink={instagramLink}
+          setInstagramLink={setInstagramLink}
+        />
         <div className="customize__auction__warning">
           <img src={warningIcon} alt="Warning" />
           <p>
@@ -232,7 +278,12 @@ const CustomizeAuction = () => {
         {editButtonClick &&
           (!domainAndBranding.headline ||
             !domainAndBranding.link ||
-            domainAndBranding.status === 'empty') && (
+            domainAndBranding.status === 'empty' ||
+            !accountImage ||
+            !accountName ||
+            accountPage === 'universe.xyz/' ||
+            accountPage === 'universe.xyz/your-address' ||
+            !about) && (
             <div className="customize__auction__error">
               <img alt="Error" src={errorIcon} />
               <p>
@@ -241,18 +292,41 @@ const CustomizeAuction = () => {
               </p>
             </div>
           )}
-        <div className="customize-buttons">
-          <Button className="light-button" onClick={handleSaveClose}>
-            Save and close
-          </Button>
-          <Button
-            className="light-border-button"
-            onClick={handleSavePreview}
-            disabled={saveAndPreview}
-          >
-            Save and preview
-          </Button>
-        </div>
+        {editButtonClick &&
+        (!domainAndBranding.headline ||
+          !domainAndBranding.link ||
+          domainAndBranding.status === 'empty' ||
+          !accountImage ||
+          !accountName ||
+          accountPage === 'universe.xyz/' ||
+          accountPage === 'universe.xyz/your-address' ||
+          !about) ? (
+          <div className="customize-buttons">
+            <Button
+              className="light-border-button"
+              onClick={handleSavePreview}
+              disabled={saveAndPreview}
+            >
+              Save and preview
+            </Button>
+            <Button className="light-button" disabled onClick={handleSaveClose}>
+              Save and close
+            </Button>
+          </div>
+        ) : (
+          <div className="customize-buttons">
+            <Button
+              className="light-border-button"
+              onClick={handleSavePreview}
+              disabled={saveAndPreview}
+            >
+              Save and preview
+            </Button>
+            <Button className="light-button" onClick={handleSaveClose}>
+              Save and close
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
