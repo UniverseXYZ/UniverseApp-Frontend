@@ -1128,7 +1128,7 @@
             display: grid;
           }
         }
-        
+
         .property-add {
           cursor: pointer;
           img {
@@ -1152,7 +1152,7 @@
         border-radius: 10px;
         box-sizing: border-box;
         margin-bottom: 20px;
-  
+
         h5 {
           font-family: $spaceGroteskFont;
           font-weight: bold;
@@ -1174,22 +1174,22 @@
           font-family: $spaceGroteskFont;
           color: rgba(0, 0, 0, 0.2);
         }
-  
+
         .property-name {
           width: 44.5%;
           padding-right: 12px;
-  
+
           @include sm {
             width: 100%;
             padding-right: 0;
             padding-bottom: 12px;
           }
         }
-  
+
         .property-value {
           width: 44.5%;
           padding-right: 12px;
-  
+
           @include sm {
             width: 100%;
             padding-right: 0;
@@ -1199,7 +1199,7 @@
         .property-address {
           width: 80%;
           padding-right: 12px;
-  
+
           @include sm {
             width: 100%;
             padding-right: 0;
@@ -1209,8 +1209,8 @@
         .property-amount {
           width: 20%;
           padding-right: 12px;
-          
-          h5{
+
+          h5 {
             @include lg {
               width: 120px;
             }
@@ -1221,14 +1221,14 @@
             padding-bottom: 12px;
           }
         }
-  
-         .delete-img {
+
+        .delete-img {
           margin-top: 23px;
           width: 50px;
           height: 50px;
           border-radius: 12px;
           cursor: pointer;
-  
+
           @include sm {
             display: none;
           }
@@ -1236,23 +1236,23 @@
         img:hover {
           background-color: rgba(0, 0, 0, 0.05);
         }
-  
+
         button {
           display: none;
-  
+
           @include sm {
             display: flex;
           }
-          .del-icon{
+          .del-icon {
             margin-left: 14px;
           }
         }
-  
+
         @include sm {
           display: grid;
         }
       }
-  
+
       .property-add {
         cursor: pointer;
         img {
@@ -1274,7 +1274,7 @@
           margin-bottom: 10px;
           width: fit-content;
           position: relative;
-          align-items:flex-start;
+          align-items: flex-start;
           h4 {
             font-family: $sharpGroteskSemiBoldFont;
             font-weight: 600;
@@ -1710,7 +1710,6 @@
         margin-top: 10px;
         padding: 10px;
         cursor: pointer;
-
         div {
           img {
             width: 40px;
@@ -1919,8 +1918,8 @@
       .property-amount {
         width: 20%;
         padding-right: 12px;
-        
-        h5{
+
+        h5 {
           @include lg {
             width: 120px;
           }
@@ -1932,7 +1931,7 @@
         }
       }
 
-       .delete-img {
+      .delete-img {
         margin-top: 23px;
         width: 50px;
         height: 50px;
@@ -1953,7 +1952,7 @@
         @include sm {
           display: flex;
         }
-        .del-icon{
+        .del-icon {
           margin-left: 14px;
         }
       }
@@ -1984,7 +1983,7 @@
         margin-bottom: 10px;
         width: fit-content;
         position: relative;
-        align-items:flex-start;
+        align-items: flex-start;
         h4 {
           font-family: $sharpGroteskSemiBoldFont;
           font-weight: 600;

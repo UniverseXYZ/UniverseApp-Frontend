@@ -298,6 +298,11 @@
           margin-top: 10px;
           padding: 10px;
           cursor: pointer;
+          &:hover {
+            background: linear-gradient($white, $white) padding-box,
+              linear-gradient(to right, #bceb00, #00eaea) border-box;
+            border: 1px solid transparent;
+          }
 
           div {
             img {
@@ -523,7 +528,7 @@
           width: 20%;
           padding-right: 16px;
           position: relative;
-          .percent-sign{
+          .percent-sign {
             display: none;
             font-style: normal;
             font-weight: normal;
@@ -538,7 +543,7 @@
               right: 25%;
             }
             @include sm {
-            bottom: 32%;
+              bottom: 32%;
               right: 2%;
             }
           }
