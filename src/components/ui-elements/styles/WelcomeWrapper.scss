@@ -137,15 +137,17 @@
             background-origin: border-box;
             box-shadow: 2px 1000px 1px #000 inset;
             color: $white;
-            margin-left: 15px;
             &:hover {
               box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
             }
           }
+          .light-button {
+            margin-right: 15px;
+          }
           button {
             @include sm {
               width: 100%;
-              margin-left: 0 !important;
+              margin-right: 0 !important;
               margin-bottom: 20px;
             }
           }
