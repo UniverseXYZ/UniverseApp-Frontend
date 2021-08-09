@@ -23,6 +23,7 @@ import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
 import topmorphs from '../../assets/images/topmorphs3.png';
 import topbackground from '../../assets/images/topbackground.png';
+import Section4 from '../polymorphs/Section4.jsx';
 
 const About = () => {
   const history = useHistory();
@@ -242,30 +243,7 @@ const About = () => {
       </div>
       <div className="polymorphs__universe__section">
         <div className="polymorphs__universe__section__container">
-          <div className="blocks">
-            {/* Block 3 */}
-            <AnimatedOnScroll animationIn="fadeIn" className="image--block">
-              <div className="top--morph">
-                <img src={topmorphs} alt="top" />
-              </div>
-              <div className="top--background">
-                <img src={topbackground} alt="background" />
-              </div>
-            </AnimatedOnScroll>
-            <AnimatedOnScroll animationIn="fadeIn" className="info--block">
-              <div className="soon">
-                <h1>COMING SOON</h1>
-              </div>
-              <h1 className="title--section">Polymorph Rarity Chart</h1>
-              <p className="text--section">
-                Mirror, mirror on the wall, who has the rarest
-                <br /> Polymorph of them all?
-              </p>
-              <Button className="light-button" onClick={() => history.push('/polymorphs')}>
-                Rarity chart
-              </Button>
-            </AnimatedOnScroll>
-          </div>
+          <Section4 />
         </div>
       </div>
       <div className="about__section">
