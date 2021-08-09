@@ -3903,6 +3903,9 @@
         }
       }
       @include xl {
+        text-align: center;
+      }
+      @media (max-width: 834px) {
         width: 100%;
         height: 490px;
         text-align: center;
@@ -3966,6 +3969,9 @@
           font-size: 16px;
           line-height: 160%;
           color: #b3b3b3;
+        }
+        @media (max-width: 834px) {
+          margin-top: 32px;
         }
         @include xl {
           margin-top: 32px;
@@ -4130,7 +4136,7 @@
       .selected--pink--orange {
         background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
       }
-      @include lg {
+      @media (max-width: 834px) {
         padding-bottom: 20px;
       }
     }
@@ -4140,7 +4146,7 @@
     @include xl {
       align-items: center;
     }
-    @include lg {
+    @media (max-width: 834px) {
       display: grid;
       padding: 30px 20px 20px;
     }
@@ -4155,5 +4161,12 @@
   // }
   @include sm {
     max-width: 90%;
+  }
+  @media (max-width: 834px) {
+    width: fit-content !important;
+  }
+
+  @media (max-width: 1068px) and (min-width: #{$screen-lg-max}) {
+    width: 90%;
   }
 }
