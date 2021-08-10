@@ -17,7 +17,7 @@ const AuctionLandingPage = () => {
   const selectedAuction = location.state
     ? location.state.auction
       ? location.state.auction
-      : PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === location.state.id)[0]
+      : PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === 1)[0]
     : null;
   const artist = selectedAuction?.artist;
 
@@ -26,6 +26,10 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     setDarkMode(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
+    console.log(
+      'selectedAuction PLACEHOLDER_ACTIVE_AUCTIONS',
+      PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === 1)[0].tiers
+    );
     if (selectedAuction) {
       // Fake data for testing
       setBidders([
@@ -120,7 +124,7 @@ const AuctionLandingPage = () => {
     <div className="auction__landing__page">
       <AuctionDetails onAuction={selectedAuction} bidders={bidders} setBidders={setBidders} />
       <UniverseAuctionDetails />
-      <RewardTiers auction={selectedAuction} />
+      <RewardTiers auction={PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === 1)[0]} />
       <AuctionOwnerDetails artist={artist} />
       <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
       {artist && artist.personalLogo ? (
