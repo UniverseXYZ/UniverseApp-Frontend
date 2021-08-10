@@ -57,10 +57,10 @@ const Polymorphs = () => {
       <WelcomeWrapper
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
-        popupBtnText="My polymorphs"
-        // btnText="Mint a morph"
-        // btnOnClick={() => history.push('/mint-polymorph')}
-        btnAnotherOnClick={() => history.push('/my-nfts')}
+        // popupBtnText="My polymorphs"
+        btnText="My polymorphs"
+        btnOnClick={() => history.push('/my-nfts')}
+        // btnAnotherOnClick={() => history.push('/my-nfts')}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}

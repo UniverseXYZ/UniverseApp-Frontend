@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import characterImg from '../../assets/images/character.png';
 import Button from '../../components/button/Button';
 import Pagination from '../../components/pagination/Pagionation';
@@ -7,24 +8,27 @@ import {
   PLACEHOLDER__GLOBAL__DATA,
   PLACEHOLDER__ACTIVE__DATA,
 } from '../../utils/fixtures/CharacterPageDummyData';
+import NotFound from '../../components/notFound/NotFound';
 
 const CharacterPage = () => {
+  const location = useLocation();
+  const character = location.state ? location.state.character : null;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const tabs = ['Global activity', '1/1 activity'];
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
   const [value, setValue] = useState(0);
 
-  return (
+  return character ? (
     <div className="character__page">
       <div className="character__page__head">
         <div className="head container">
           <div className="character__picture">
-            <img src={characterImg} alt="Character" />
+            <img src={character.image} alt="Character" />
           </div>
           <div className="character__description">
-            <h1>Zhamere</h1>
-            <h3 className="character__name">Beard Wendigo</h3>
+            <h1>{character.name}</h1>
+            <h3 className="character__name">{character.description}</h3>
             <p className="name__description">
               Scelerisque sit facillisi elit ultrices. Purus dui velit, porttitor cursus eu. Aliquet
               lacus enim porta mi in ipsum massa. Sed iaculis nisi neque enim egestas.
@@ -148,7 +152,9 @@ const CharacterPage = () => {
           <h1 className="character__planet__header">More from this planet</h1>
           <div className="planet__items__list">
             <div className="planet__item">
-              <img src={characterImg} alt="Character" />
+              <div className="planet__item__image">
+                <img src={characterImg} alt="Character" />
+              </div>
               <h3 className="planet__item__title">Bones</h3>
               <p className="planet__item__name">Skeleton Dude</p>
               <div className="buttons">
@@ -179,6 +185,8 @@ const CharacterPage = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <NotFound />
   );
 };
 export default CharacterPage;

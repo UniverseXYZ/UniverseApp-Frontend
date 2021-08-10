@@ -20,7 +20,7 @@ const Section2Card = (props) => {
         <Button
           className="light-button mint--reprint--btn"
           type="button"
-          onClick={() => history.push('/character-page')}
+          onClick={() => history.push('/character-page', { character: props })}
         >
           Mint reprint
         </Button>

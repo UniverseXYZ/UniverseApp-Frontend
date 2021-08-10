@@ -53,6 +53,7 @@
         position: relative;
         .percent-sign{
           // display: none;
+          font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: normal;
           font-size: 16px;
@@ -60,9 +61,7 @@
           position: absolute;
           box-sizing: border-box;
           z-index: 5;
-          bottom: 23.5%;
           bottom: 23%;
-          // right: 10%;
           @include sm{
             bottom: unset;
             right: 3%;

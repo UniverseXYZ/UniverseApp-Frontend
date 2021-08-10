@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
-import successImg from '../../assets/images/coloredSuccess.svg';
+import successImg from '../../assets/images/bid-submitted.png';
 import AppContext from '../../ContextAPI.js';
 
 const CongratsProfilePopup = ({ onClose }) => {
