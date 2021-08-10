@@ -400,7 +400,7 @@ const SingleNFTSettings = () => {
     if (location.pathname === '/create-tiers/my-nfts/create') {
       document.getElementById('popup-root').remove();
       document.getElementById('congrats-hidden-btn').click();
-      setShowCongratsPopup(!showCongratsPopup);
+      setShowCongratsPopup(true);
     } else {
       close();
     }
