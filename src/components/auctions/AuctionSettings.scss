@@ -39,7 +39,6 @@
       width: 120px; 
       @include sm{
         width: 100%;
-        margin-bottom: 12px;
       }
     }
     .properties{
@@ -63,7 +62,6 @@
           box-sizing: border-box;
           z-index: 5;
           bottom: 23%;
-          right: 10%;
           @include sm{
             bottom: unset;
             right: 3%;
@@ -72,7 +70,12 @@
         }
         .intup-l {
           display: block;
-        @include sm{
+          > div{
+            @include sm{
+              margin-bottom: 12px;
+            }
+          }
+          @include sm{
             display: inline-grid;
           }
         }
