@@ -140,12 +140,6 @@ const NFTCollectible = (props) => {
       });
       setRoyaltySplits(newRoyaltySplits);
     }
-    // const re = /^(100(\.0{0,2})?|(\d|[1-9]\d)(\.\d{0,2})?)$/;
-    // if (re.test(val)) {
-    //   const newRoyaltySplits = [...royaltySplits];
-    //   newRoyaltySplits[index].amount = val;
-    //   setRoyaltySplits(newRoyaltySplits);
-    // }
   };
 
   const addRoyaltySplit = () => {
@@ -578,10 +572,10 @@ const NFTCollectible = (props) => {
                     />
                   </div>
                   <div className="royalty--split--amount">
-                    <span className="percent-sign">%</span>
+                    <span className="percent--sign">%</span>
                     <h5>Percent amount</h5>
                     <Input
-                      className="percent-inp"
+                      className="percent--inp"
                       type="number"
                       placeholder="5%"
                       value={elm.amount}
