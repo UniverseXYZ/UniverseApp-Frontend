@@ -62,6 +62,15 @@
         opacity: 0.1;
       }
     }
+    .overlay{
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+    }
     &__container {
       max-width: 1110px;
       margin: 0 auto;
@@ -186,7 +195,6 @@
       .auction__details__box {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-column-gap: 75px;
         grid-row-gap: 16px;
         padding-top: 80px;
 
@@ -245,6 +253,7 @@
           }
         }
         &__info {
+          max-width: 540px;
           grid-column: 2/3;
           grid-row: 1/2;
           h1.title {
@@ -340,8 +349,7 @@
             }
             .copy-div {
               position: relative;
-              margin-left: 10px;
-              padding: 7px 8px;
+              padding: 7px 7px;
 
               .copy > span {
                 font-family: $spaceGroteskFont;
@@ -420,6 +428,7 @@
           }
         }
         &__top__bidders {
+          max-width: 540px;
           grid-column: 2/3;
           grid-row: 2/3;
           background: $white;
@@ -846,11 +855,12 @@
               width: 100%;
               .nft__image {
                 position: relative;
-                max-height: 200px;
-                max-width: 200px;
+                max-height: 208px;
+                max-width: 195px;
                 border-radius: 12px;
                 border: 6px solid $white;
                 box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                overflow: hidden;
                 &:nth-child(2) {
                   margin-left: -20%;
                 }
@@ -995,6 +1005,7 @@
         align-items: center;
         margin-right: 100px;
         img {
+          width: 285px;
           min-width: 280px;
           min-height: 280px;
           object-fit: cover;
