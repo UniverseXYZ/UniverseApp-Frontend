@@ -17,7 +17,7 @@
             left: 85%;
             cursor: pointer;
             opacity: 0.5;
-            @include sm {
+            @include md {
                 left: unset;
             }
             img{
@@ -46,10 +46,9 @@
             margin: 0 auto;
             @include lg {
                 text-align: center;
-                margin: 0 0 0 11%;
-                // margin: 30px auto 50px;
+                margin: 0 0 0 31%;
             }
-            @include sm {
+            @include md {
                 font-size: 16px;
                 margin: 16px auto 30px;
             }
@@ -63,10 +62,10 @@
                 margin-left: 12%;
                 @include lg {
                     margin-left: unset;
-                 }
-                 @include sm {                       
-                    margin-left: 20px;               
-                 }
+                }
+                // @include md {                       
+                //     margin-left: 20px;               
+                // }
                 h1 {
                     font-family: $sharpGroteskSemiBoldFont;
                     font-style: normal;
@@ -77,23 +76,39 @@
                     color: #FFFFFF;
                     @include lg {
                         font-size: 60px;
-                     }
-                     @include sm {                       
-                     font-size: 42px;                 
-                     }
-                     @media (max-width:365px) {
+                    }
+                    @include md {                       
+                        font-size: 42px;                 
+                    }
+                    @media (max-width:365px) {
                         font-size: 37px;
-                     }
+                    }
                 }
                 .title1{
-                    margin-left: -30%;
+                    margin-left: -50%;
                     position: relative;
                     @include lg {
-                        margin-left: -65%;
-                     }
-                     @include sm     {
-                        margin-left: -2%;
-                     }
+                        margin-left: -95%;
+                    }
+                    @include md {
+                        margin-left: unset;
+                    }
+                }
+                .title2 {
+                    @include lg {
+                        margin-left: -27%;
+                    }
+                    @include md {
+                        margin-left: unset;
+                    }
+                }
+                .title3 {
+                    @include lg {
+                        margin-left: -43%;
+                    }
+                    @include md {
+                        margin-left: unset;
+                    }
                 }
                 p.desc {
                     margin: 30px 0 50px;
@@ -105,10 +120,10 @@
                     color: rgba(255, 255, 255, 0.6);
                     max-width: 436px;
                     b{
-                        color: #FFFFFF;
+                        color: $white;
                     }
-                    @include sm {
-                        margin-top: 15%;
+                    @include md {
+                        margin-top: 52px;
                         font-size: 16px;
                         max-width: 272px;
                     }
@@ -117,59 +132,63 @@
             .char-img1{
                 position: absolute;
                 top: 11%;
-                left: -53%;
+                left: -81%;
                 z-index: 99;
                 display: inline;
                 @include lg {
-                    max-width: 50%;
-                    left: -40%;
-                 }
-                 @include sm {   
+                    left: -55%;
+                    top: 7%;
+                }
+                @include md {   
                     max-width: 139px;
-                    left: -30px;
+                    left: -45px;
                     top: 23%;
-                 }
-                 @media (max-width:365px) {
+                }
+                @media (max-width:365px) {
                     max-width: 40%;
                     left: -12px;
                     top: 23%;
-                 }
+                }
             }
             .char-img2{
                 position: absolute;
                 top: -30%;
-                left: 22%;
+                left: 28%;
                 display: inline;
                 @include lg {
-                    max-width: 32%;
-                    left: 40%;
-                    top: -26%;
-                 }
-                 @include sm {   
+                    left: 15%;
+                    top: -40%;
+                }
+                @include md {   
                     max-width: 28%;
-                    left: 70%;
-                    top: -20%;
-                 }
+                    left: 76%;
+                    top: -17%;
+                }
             }
             .char-img3{
                 position: absolute;
-                top: 26%;
+                top: 22%;
                 display: inline;
-                left: 60%;
+                left: 75%;
                 @include lg {
-                    max-width: 35%;
-                    left: 75%;
-                 }
-                 @include sm {   
+                    max-width: 50%;
+                    left: 60%;
+                    top: 18%;
+                }
+                @include md {   
                     max-width: 37%;
-                    left: 72%;
-                    top: 19%;
-                 }
-                 @media (max-width:370px) {
+                    left: 79%;
+                    top: 18%;
+                }
+                @media (max-width:370px) {
                     max-width: 28%;
                     top: 20%;
-                 }
+                }
             }
+        }
+        @include md {
+            padding: 0 20px;
+            min-height: 676px;
         }
     }
 //     .planet1--parent {

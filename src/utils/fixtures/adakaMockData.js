@@ -1,9 +1,12 @@
+// mythical
 import Carter from '../../assets/images/planet1-charachters/characters-planet-reinrabbit.png';
 import Tim from '../../assets/images/planet1-charachters/characters-planet-kangeroo-elk.png';
 import Addy from '../../assets/images/planet1-charachters/characters-planet-speed-sloth.png';
 import John from '../../assets/images/planet1-charachters/characters-planet-drunk-cheetah.png';
 import Lucy from '../../assets/images/planet1-charachters/characters-planet-demon-duck.png';
 import Vick from '../../assets/images/planet1-charachters/characters-planet-falcon Fiend.png';
+
+// legendary
 import Chainlinkcat from '../../assets/images/planet1-charachters/chainlink-cat.png';
 import Platybelodon from '../../assets/images/planet1-charachters/platybelodon.png';
 
@@ -25,33 +28,33 @@ import Balverine from '../../assets/images/planet1-charachters/howler-ape.png';
 import Kerchak from '../../assets/images/planet1-charachters/gorilla.png';
 
 export const mythical = [
-  { name: 'Carter', description: 'Rainrabit', image: Carter },
-  { name: 'Tim', description: 'Kangaroo Elk', image: Tim },
-  { name: 'Addy', description: 'Speed Sloth', image: Addy },
-  { name: 'John John', description: 'Drunk Cheetah', image: John },
-  { name: 'Lucy', description: 'Deamon Duck', image: Lucy },
-  { name: 'Vick', description: 'Falcon Friend', image: Vick },
+  { id: 1, name: 'Carter', description: 'Rainrabit', image: Carter },
+  { id: 2, name: 'Tim', description: 'Kangaroo Elk', image: Tim },
+  { id: 3, name: 'Addy', description: 'Speed Sloth', image: Addy },
+  { id: 4, name: 'John John', description: 'Drunk Cheetah', image: John },
+  { id: 5, name: 'Lucy', description: 'Deamon Duck', image: Lucy },
+  { id: 6, name: 'Vick', description: 'Falcon Friend', image: Vick },
 ];
 
 export const fabled = [
-  { name: 'Daryl', description: 'Yeti', image: Daryl },
-  { name: 'Simon', description: 'Blizzard Bigfoot', image: Simon },
-  { name: 'Viacheslav', description: 'Avalanche Cyclops', image: Viacheslav },
-  { name: 'Apechemy', description: 'Magic Ape', image: Apechemy },
-  { name: 'Wizard Wukong', description: 'Wizard Ape', image: WizardWukong },
-  { name: 'Grandmaster Aperton', description: 'Grandmaster Ape', image: GrandmasterAperton },
-  { name: 'Santana', description: 'Banana Plaque Medic', image: Santana },
-  { name: 'Becky', description: 'Banana Plaque Nurse', image: Becky },
-  { name: 'Peel', description: 'Banana Plaque Doctor', image: Peel },
-  { name: 'Cymbal', description: 'Zombie Ape', image: Cymbal },
-  { name: 'Marty', description: 'Zombie Orangutang', image: Marty },
-  { name: 'Cosmo', description: 'Zombie Gorilla', image: Cosmo },
-  { name: 'Dillon', description: 'Ape Ape', image: Dillon },
-  { name: 'Balverine', description: 'Howler Ape', image: Balverine },
-  { name: 'Kerchak', description: 'Gorilla Ape', image: Kerchak },
+  { id: 1, name: 'Daryl', description: 'Yeti', image: Daryl },
+  { id: 2, name: 'Simon', description: 'Blizzard Bigfoot', image: Simon },
+  { id: 3, name: 'Viacheslav', description: 'Avalanche Cyclops', image: Viacheslav },
+  { id: 4, name: 'Apechemy', description: 'Magic Ape', image: Apechemy },
+  { id: 5, name: 'Wizard Wukong', description: 'Wizard Ape', image: WizardWukong },
+  { id: 6, name: 'Grandmaster Aperton', description: 'Grandmaster Ape', image: GrandmasterAperton },
+  { id: 7, name: 'Santana', description: 'Banana Plaque Medic', image: Santana },
+  { id: 8, name: 'Becky', description: 'Banana Plaque Nurse', image: Becky },
+  { id: 9, name: 'Peel', description: 'Banana Plaque Doctor', image: Peel },
+  { id: 10, name: 'Cymbal', description: 'Zombie Ape', image: Cymbal },
+  { id: 11, name: 'Marty', description: 'Zombie Orangutang', image: Marty },
+  { id: 12, name: 'Cosmo', description: 'Zombie Gorilla', image: Cosmo },
+  { id: 13, name: 'Dillon', description: 'Ape Ape', image: Dillon },
+  { id: 14, name: 'Balverine', description: 'Howler Ape', image: Balverine },
+  { id: 15, name: 'Kerchak', description: 'Gorilla Ape', image: Kerchak },
 ];
 
 export const legendary = [
-  { name: 'Link', description: 'Chain-link Cat', image: Chainlinkcat },
-  { name: 'Doujan', description: 'Platybelodon', image: Platybelodon },
+  { id: 1, name: 'Link', description: 'Chain-link Cat', image: Chainlinkcat },
+  { id: 2, name: 'Doujan', description: 'Platybelodon', image: Platybelodon },
 ];
