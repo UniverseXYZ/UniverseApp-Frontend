@@ -437,7 +437,7 @@ const Wallet = ({
         </>
       ) : (
         <div className="empty__nfts">
-          <div className="tabs-empty">
+          {/* <div className="tabs-empty">
             <div className="image-bubble">
               <img src={bubbleIcon} alt="bubble-icon" />
             </div>
@@ -446,7 +446,20 @@ const Wallet = ({
             <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
               Create NFT
             </Button>
-          </div>
+          </div> */}
+          <h3>No NFTs found in your wallet</h3>
+          <p className="desc">Mint some NFTs by clicking the button below</p>
+          <button
+            type="button"
+            className="set_up"
+            onClick={() => {
+              history.push(
+                location.pathname === '/create-tiers' ? '/create-tiers/my-nfts/create' : '/my-nfts'
+              );
+            }}
+          >
+            Go to Minting
+          </button>
         </div>
       )}
       {isCreatingAction && (

@@ -45,18 +45,15 @@
         padding: 0 40px;
         @include sm {
             padding: 0;
-        }       
+        }
         h2 {
             @include lg {
-                font-size: 26px;
+                font-size: 18px;
             }
-            @include sm {
-                font-size: 26px;
-            }
-            font-family: Sharp Grotesk;
+            font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
             font-weight: 600;
-            font-size: 36px;
+            font-size: 26px;
             line-height: 140%;
         }
         p {
@@ -67,7 +64,7 @@
                 font-size: 14px;
             }
             margin-top: 1.1vw;
-            font-family: Space Grotesk;
+            font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: normal;
             font-size: 16px;

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
+import { useLocation } from 'react-router-dom';
 import './CreateSingleNft.scss';
 import EthereumAddress from 'ethereum-address';
 import Button from '../../button/Button.jsx';
@@ -38,6 +39,7 @@ const SingleNFTSettings = () => {
     edition: '',
     previewImage: '',
   });
+  const location = useLocation();
 
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
@@ -58,6 +60,8 @@ const SingleNFTSettings = () => {
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [amountSum, setAmountSum] = useState(0);
+  const [showCongratsPopup, setShowCongratsPopup] = useState(false);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -99,17 +103,28 @@ const SingleNFTSettings = () => {
     setRoyaltyAddress(prevProperties);
   };
 
-  const propertyChangesAmount = (index, val) => {
-    if (
-      (val.toString().match(/^\d+\.?\d?\d?\d?\d?%?$/) &&
-        parseFloat(val) <= 100 &&
-        parseFloat(val) >= 0) ||
-      val === '0' ||
-      val === '%'
-    ) {
-      const prevProperties = [...royaltyAddress];
-      prevProperties[index].amount = `${val.replace('%', '')}%`;
-      setRoyaltyAddress(prevProperties);
+  const propertyChangesAmount = (index, val, inp) => {
+    if (val) {
+      inp.classList.add('withsign');
+    } else {
+      inp.classList.remove('withsign');
+    }
+    const result = royaltyAddress.reduce(
+      (accumulator, current) => accumulator + Number(current.amount),
+      0
+    );
+    if (result + Number(val) <= 100 && val >= 0) {
+      const newProperties = royaltyAddress.map((property, propertyIndex) => {
+        if (propertyIndex === index) {
+          return {
+            ...property,
+            amount: val,
+          };
+        }
+
+        return property;
+      });
+      setRoyaltyAddress(newProperties);
     }
   };
 
@@ -178,6 +193,64 @@ const SingleNFTSettings = () => {
     if (parseInt(value, 10) !== 0) {
       setEditions(value);
     }
+  };
+
+  // useEffect(() => {
+  //   console.log([...royaltyAddress]);
+  //   const result = [...royaltyAddress].reduce(
+  //     (accumulator, current) => accumulator + Number(current.amount),
+  //     0
+  //   );
+  //   setAmountSum(result);
+  // }, [propertyChangesAmount]);
+
+  const closeCongratsPopupEvent = () => {
+    const mintingGeneratedEditions = [];
+
+    for (let i = 0; i < editions; i += 1) {
+      mintingGeneratedEditions.push(uuid().split('-')[0]);
+    }
+    if (selectedCollection) {
+      setMyNFTs([
+        ...myNFTs,
+        {
+          id: uuid(),
+          type: 'collection',
+          collectionId: selectedCollection.id,
+          collectionName: selectedCollection.name,
+          collectionAvatar: selectedCollection.previewImage,
+          collectionDescription: selectedCollection.description,
+          shortURL: selectedCollection.shortURL,
+          tokenName: selectedCollection.tokenName,
+          previewImage,
+          name,
+          description,
+          numberOfEditions: Number(editions),
+          generatedEditions: mintingGeneratedEditions,
+          properties,
+          percentAmount,
+          releasedDate: new Date(),
+        },
+      ]);
+    } else {
+      setMyNFTs([
+        ...myNFTs,
+        {
+          id: uuid(),
+          type: 'single',
+          previewImage,
+          name,
+          description,
+          numberOfEditions: Number(editions),
+          generatedEditions: mintingGeneratedEditions,
+          properties,
+          percentAmount,
+          releasedDate: new Date(),
+        },
+      ]);
+    }
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
   };
 
   useEffect(() => {
@@ -296,58 +369,18 @@ const SingleNFTSettings = () => {
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         document.getElementById('loading-hidden-btn').click();
-        setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
+        if (location.pathname === '/create-tiers/my-nfts/create') {
+          setShowModal(false);
+          document.body.classList.remove('no__scroll');
+        } else {
           setTimeout(() => {
-            const mintingGeneratedEditions = [];
-
-            for (let i = 0; i < editions; i += 1) {
-              mintingGeneratedEditions.push(uuid().split('-')[0]);
-            }
-            if (selectedCollection) {
-              setMyNFTs([
-                ...myNFTs,
-                {
-                  id: uuid(),
-                  type: 'collection',
-                  collectionId: selectedCollection.id,
-                  collectionName: selectedCollection.name,
-                  collectionAvatar: selectedCollection.previewImage,
-                  collectionDescription: selectedCollection.description,
-                  shortURL: selectedCollection.shortURL,
-                  tokenName: selectedCollection.tokenName,
-                  previewImage,
-                  name,
-                  description,
-                  numberOfEditions: Number(editions),
-                  generatedEditions: mintingGeneratedEditions,
-                  properties,
-                  percentAmount,
-                  releasedDate: new Date(),
-                },
-              ]);
-            } else {
-              setMyNFTs([
-                ...myNFTs,
-                {
-                  id: uuid(),
-                  type: 'single',
-                  previewImage,
-                  name,
-                  description,
-                  numberOfEditions: Number(editions),
-                  generatedEditions: mintingGeneratedEditions,
-                  properties,
-                  percentAmount,
-                  releasedDate: new Date(),
-                },
-              ]);
-            }
-            setShowModal(false);
-            document.body.classList.remove('no__scroll');
-          }, 2000);
-        }, 3000);
+            document.getElementById('popup-root').remove();
+            document.getElementById('congrats-hidden-btn').click();
+            setTimeout(() => {
+              closeCongratsPopupEvent();
+            }, 2000);
+          }, 3000);
+        }
       }
     }
   }, [errors, saveForLateClick, savedNfts]);
@@ -363,6 +396,24 @@ const SingleNFTSettings = () => {
     }
   }, [propertyChangesAddress]);
 
+  const handleCloseLoadingPopup = (close) => {
+    if (location.pathname === '/create-tiers/my-nfts/create') {
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-hidden-btn').click();
+      setShowCongratsPopup(!showCongratsPopup);
+    } else {
+      close();
+    }
+  };
+
+  const handleCloseCongratsPopup = (close) => {
+    if (location.pathname === '/create-tiers/my-nfts/create') {
+      closeCongratsPopupEvent();
+    } else {
+      close();
+    }
+  };
+
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
@@ -376,7 +427,9 @@ const SingleNFTSettings = () => {
             />
           }
         >
-          {(close) => <LoadingPopup onClose={close} />}
+          {(close) =>
+            showCongratsPopup ? '' : <LoadingPopup onClose={() => handleCloseLoadingPopup(close)} />
+          }
         </Popup>
         <Popup
           trigger={
@@ -388,7 +441,16 @@ const SingleNFTSettings = () => {
             />
           }
         >
-          {(close) => <CongratsPopup onClose={close} />}
+          {(close) => (
+            <CongratsPopup
+              onClose={() => handleCloseCongratsPopup(close)}
+              backButtonText={
+                location.pathname === '/create-tiers/my-nfts/create'
+                  ? 'Go to reward tier settings'
+                  : 'Go to my NFTs'
+              }
+            />
+          )}
         </Popup>
         {/* <div className="back-nft" onClick={() => onClick(null)} aria-hidden="true">
         <img src={arrow} alt="back" />
@@ -672,13 +734,14 @@ const SingleNFTSettings = () => {
                       />
                     </div>
                     <div className="property-amount">
+                      <span className="percent-sign">%</span>
                       <h5>Percent amount</h5>
                       <Input
                         className="percent-inp"
-                        type="text"
+                        type="number"
                         placeholder="5%"
                         value={elm.amount}
-                        onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                        onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
                     </div>
                     <img

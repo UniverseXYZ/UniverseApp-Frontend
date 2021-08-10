@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CreateNFT.scss';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import arrow from '../../../assets/images/arrow.svg';
 import settingIconActive from '../../../assets/images/settings-solid.svg';
 import settingIcon from '../../../assets/images/setting-solid-disactive.svg';
@@ -12,6 +12,7 @@ import NFTCollectionSettings from './NFTCollectionSettings';
 
 const CreateNFT = () => {
   const history = useHistory();
+  const location = useLocation();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
@@ -30,7 +31,11 @@ const CreateNFT = () => {
         {!showCollectible ? (
           <div className="back-btn" onClick={() => history.push('/my-nfts')} aria-hidden="true">
             <img src={arrow} alt="back" />
-            <span>My NFTs</span>
+            <span>
+              {location.pathname === '/create-tiers/my-nfts/create'
+                ? 'Create reward tier'
+                : 'My NFTs'}
+            </span>
           </div>
         ) : (
           <div className="back-btn" onClick={() => setShowCollectible(false)} aria-hidden="true">

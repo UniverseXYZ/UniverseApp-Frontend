@@ -29,7 +29,7 @@
       }
       @include sm{
         width: unset;
-        min-width: 50px;
+        width: 100%;
         margin-bottom: 12px;
         margin-right: unset;
       }
@@ -38,8 +38,7 @@
     .amount-inp{
       width: 120px; 
       @include sm{
-        min-width: 50px;
-        width: unset;
+        width: 100%;
         margin-bottom: 12px;
       }
     }
@@ -52,6 +51,24 @@
         margin-right: 12px;
       }
       .property-name , .property-value{
+        position: relative;
+        .percent-sign{
+          // display: none;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 20px;
+          position: absolute;
+          box-sizing: border-box;
+          z-index: 5;
+          bottom: 23.5%;
+          right: 3%;
+          @include sm{
+            bottom: unset;
+            right: 3%;
+            bottom: 30%;
+          }
+        }
         .intup-l {
           display: block;
         @include sm{
@@ -61,6 +78,12 @@
         @include sm{
           display: contents;
         }
+        .inp.withsign{
+          z-index: 4;
+        }
+      }
+      .property-value{
+        display: grid;
       }
       .remove-img{
         margin-left: 12px;

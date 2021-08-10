@@ -29,13 +29,11 @@ const rightBlock = () => {
   return (
     <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
       <div className="section4--right--block">
-        <h2>Mint a Polymorphic NFT</h2>
-        <p>
-          Mint a Polymoprh with a unique genetic code. You can scramble your morph as many times as
-          you want to achieve the perfect Polymorph!
-        </p>
-        <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
-          Mint a morph
+        <div className="coming--soon">COMING SOON</div>
+        <h2>Polymorph Rarity Chart</h2>
+        <p>Mirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
+        <Button className="light-button" onClick={() => history.push('/rarity-chart')}>
+          Rarity chart
         </Button>
       </div>
     </AnimatedOnScroll>

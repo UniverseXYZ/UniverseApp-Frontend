@@ -21,6 +21,9 @@ import squareFour from '../../assets/images/square4.png';
 import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
+import topmorphs from '../../assets/images/topmorphs3.png';
+import topbackground from '../../assets/images/topbackground.png';
+import Section4 from '../polymorphs/Section4.jsx';
 
 const About = () => {
   const history = useHistory();
@@ -240,23 +243,7 @@ const About = () => {
       </div>
       <div className="polymorphs__universe__section">
         <div className="polymorphs__universe__section__container">
-          <div className="blocks">
-            {/* Block 3 */}
-            <AnimatedOnScroll animationIn="fadeIn">
-              <img src={blockThree} alt="Block" />
-            </AnimatedOnScroll>
-            <AnimatedOnScroll animationIn="fadeIn">
-              <span className="new">New</span>
-              <h1 className="title mh">Polymorph Universe</h1>
-              <p className="desc">
-                A mutating universe where genes are randomized <br />
-                when morphed and scrambled.
-              </p>
-              <Button className="light-button" onClick={() => history.push('/polymorphs')}>
-                Learn more
-              </Button>
-            </AnimatedOnScroll>
-          </div>
+          <Section4 />
         </div>
       </div>
       <div className="about__section">

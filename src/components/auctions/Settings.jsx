@@ -214,17 +214,28 @@ const AuctionSettings = () => {
     setProperties(prevProperties);
   };
 
-  const propertyChangesAmount = (index, val) => {
-    if (
-      (val.toString().match(/^\d+\.?\d?\d?\d?\d?%?$/) &&
-        parseFloat(val) <= 100 &&
-        parseFloat(val) >= 0) ||
-      val === '0' ||
-      val === '%'
-    ) {
-      const prevProperties = [...properties];
-      prevProperties[index].amount = `${val.replace('%', '')}%`;
-      setProperties(prevProperties);
+  const propertyChangesAmount = (index, val, inp) => {
+    if (val) {
+      inp.classList.add('withsign');
+    } else {
+      inp.classList.remove('withsign');
+    }
+    const result = properties.reduce(
+      (accumulator, current) => accumulator + Number(current.amount),
+      0
+    );
+    if (result + Number(val) <= 100 && val >= 0) {
+      const newProperties = properties.map((property, propertyIndex) => {
+        if (propertyIndex === index) {
+          return {
+            ...property,
+            amount: val,
+          };
+        }
+
+        return property;
+      });
+      setProperties(newProperties);
     }
   };
 
@@ -491,16 +502,17 @@ const AuctionSettings = () => {
                   />
                 </div>
                 <div className="property-value">
+                  <span className="percent-sign">%</span>
                   <Input
                     id="amount"
-                    type="text"
+                    type="number"
                     label="Percent amount"
                     placeholder="5%"
                     pattern="[0-9]"
                     className="amount-inp"
                     value={elm.amount}
                     hoverBoxShadowGradient
-                    onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                    onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                   />
                 </div>
                 <img
