@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
+import { useLocation } from 'react-router-dom';
 import './CreateSingleNft.scss';
 import EthereumAddress from 'ethereum-address';
 import Button from '../../button/Button.jsx';
@@ -38,6 +39,7 @@ const SingleNFTSettings = () => {
     edition: '',
     previewImage: '',
   });
+  const location = useLocation();
 
   const [saveForLateClick, setSaveForLateClick] = useState(false);
   const [mintNowClick, setMintNowClick] = useState(false);
@@ -202,6 +204,55 @@ const SingleNFTSettings = () => {
   //   setAmountSum(result);
   // }, [propertyChangesAmount]);
 
+  const closeCongratsPopupEvent = () => {
+    const mintingGeneratedEditions = [];
+
+    for (let i = 0; i < editions; i += 1) {
+      mintingGeneratedEditions.push(uuid().split('-')[0]);
+    }
+    if (selectedCollection) {
+      setMyNFTs([
+        ...myNFTs,
+        {
+          id: uuid(),
+          type: 'collection',
+          collectionId: selectedCollection.id,
+          collectionName: selectedCollection.name,
+          collectionAvatar: selectedCollection.previewImage,
+          collectionDescription: selectedCollection.description,
+          shortURL: selectedCollection.shortURL,
+          tokenName: selectedCollection.tokenName,
+          previewImage,
+          name,
+          description,
+          numberOfEditions: Number(editions),
+          generatedEditions: mintingGeneratedEditions,
+          properties,
+          percentAmount,
+          releasedDate: new Date(),
+        },
+      ]);
+    } else {
+      setMyNFTs([
+        ...myNFTs,
+        {
+          id: uuid(),
+          type: 'single',
+          previewImage,
+          name,
+          description,
+          numberOfEditions: Number(editions),
+          generatedEditions: mintingGeneratedEditions,
+          properties,
+          percentAmount,
+          releasedDate: new Date(),
+        },
+      ]);
+    }
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
   useEffect(() => {
     if (savedNFTsID) {
       const res = savedNfts.filter((item) => item.id === savedNFTsID);
@@ -318,8 +369,18 @@ const SingleNFTSettings = () => {
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         document.getElementById('loading-hidden-btn').click();
-        setShowModal(false);
-        document.body.classList.remove('no__scroll');
+        if (location.pathname === '/create-tiers/my-nfts/create') {
+          setShowModal(false);
+          document.body.classList.remove('no__scroll');
+        } else {
+          setTimeout(() => {
+            document.getElementById('popup-root').remove();
+            document.getElementById('congrats-hidden-btn').click();
+            setTimeout(() => {
+              closeCongratsPopupEvent();
+            }, 2000);
+          }, 3000);
+        }
       }
     }
   }, [errors, saveForLateClick, savedNfts]);
@@ -335,59 +396,22 @@ const SingleNFTSettings = () => {
     }
   }, [propertyChangesAddress]);
 
-  const handleCloseLoadingPopup = () => {
-    document.getElementById('popup-root').remove();
-    document.getElementById('congrats-hidden-btn').click();
-    setShowCongratsPopup(true);
+  const handleCloseLoadingPopup = (close) => {
+    if (location.pathname === '/create-tiers/my-nfts/create') {
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-hidden-btn').click();
+      setShowCongratsPopup(!showCongratsPopup);
+    } else {
+      close();
+    }
   };
 
-  const handleCloseCongratsPopup = () => {
-    const mintingGeneratedEditions = [];
-
-    for (let i = 0; i < editions; i += 1) {
-      mintingGeneratedEditions.push(uuid().split('-')[0]);
-    }
-    if (selectedCollection) {
-      setMyNFTs([
-        ...myNFTs,
-        {
-          id: uuid(),
-          type: 'collection',
-          collectionId: selectedCollection.id,
-          collectionName: selectedCollection.name,
-          collectionAvatar: selectedCollection.previewImage,
-          collectionDescription: selectedCollection.description,
-          shortURL: selectedCollection.shortURL,
-          tokenName: selectedCollection.tokenName,
-          previewImage,
-          name,
-          description,
-          numberOfEditions: Number(editions),
-          generatedEditions: mintingGeneratedEditions,
-          properties,
-          percentAmount,
-          releasedDate: new Date(),
-        },
-      ]);
+  const handleCloseCongratsPopup = (close) => {
+    if (location.pathname === '/create-tiers/my-nfts/create') {
+      closeCongratsPopupEvent();
     } else {
-      setMyNFTs([
-        ...myNFTs,
-        {
-          id: uuid(),
-          type: 'single',
-          previewImage,
-          name,
-          description,
-          numberOfEditions: Number(editions),
-          generatedEditions: mintingGeneratedEditions,
-          properties,
-          percentAmount,
-          releasedDate: new Date(),
-        },
-      ]);
+      close();
     }
-    setShowModal(false);
-    document.body.classList.remove('no__scroll');
   };
 
   return (
@@ -403,7 +427,9 @@ const SingleNFTSettings = () => {
             />
           }
         >
-          {() => (showCongratsPopup ? '' : <LoadingPopup onClose={handleCloseLoadingPopup} />)}
+          {(close) =>
+            showCongratsPopup ? '' : <LoadingPopup onClose={() => handleCloseLoadingPopup(close)} />
+          }
         </Popup>
         <Popup
           trigger={
@@ -415,10 +441,14 @@ const SingleNFTSettings = () => {
             />
           }
         >
-          {() => (
+          {(close) => (
             <CongratsPopup
-              onClose={handleCloseCongratsPopup}
-              backButtonText="Go to reward tier settings"
+              onClose={() => handleCloseCongratsPopup(close)}
+              backButtonText={
+                location.pathname === '/create-tiers/my-nfts/create'
+                  ? 'Go to reward tier settings'
+                  : 'Go to my NFTs'
+              }
             />
           )}
         </Popup>

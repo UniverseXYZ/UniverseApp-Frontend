@@ -41,7 +41,7 @@ CongratsPopup.propTypes = {
 };
 
 CongratsPopup.defaultProps = {
-  backButtonText: 'Go to reward tier settings',
+  backButtonText: 'Go to my NFTs',
 };
 
 export default CongratsPopup;
