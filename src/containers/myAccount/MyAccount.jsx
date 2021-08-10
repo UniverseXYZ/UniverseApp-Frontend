@@ -72,7 +72,7 @@ const MyAccount = () => {
     // }
     setTimeout(() => {
       if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
-        setEditProfileButtonClick(false);
+        // setEditProfileButtonClick(false);
         document.getElementById('congrats-hidden-btn').click();
       }
     }, 500);

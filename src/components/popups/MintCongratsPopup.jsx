@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/cross.svg';
-import coloredSuccess from '../../assets/images/coloredSuccess.svg';
+import coloredSuccess from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 

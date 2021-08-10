@@ -13,7 +13,7 @@ const CongratsAuctionPopup = ({ onClose }) => {
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />
       </button>
-      <div className="checked--box">
+      <div className="congrats--icon">
         <img src={congratsicon} alt="congrats" />
       </div>
       <div className="popup-title">
