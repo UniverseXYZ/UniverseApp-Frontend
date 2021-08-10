@@ -198,6 +198,7 @@ const App = () => {
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
+        <Route exact path="/create-tiers/my-nfts/create" component={() => <CreateNFT />} />
         <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
         <Route
           exact
