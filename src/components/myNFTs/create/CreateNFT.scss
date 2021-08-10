@@ -1068,6 +1068,26 @@
                                 }
 
                                 .royalty--split--amount {
+                                    position: relative;
+                                    .inp.withsign {
+                                        z-index: 4;
+                                    }
+                                    .percent--sign {
+                                        font-family: $spaceGroteskFont;
+                                        font-style: normal;
+                                        font-weight: normal;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                        position: absolute;
+                                        box-sizing: border-box;
+                                        z-index: 5;
+                                        bottom: 23%;
+                                        right: 15%;
+                                        @include sm {
+                                            bottom: 22%;
+                                            right: 5%;
+                                        }
+                                    }
                                     .intup-l {
                                         width: 100%;
                                         input {

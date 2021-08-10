@@ -117,11 +117,27 @@ const NFTCollectible = (props) => {
     setRoyaltySplits(newRoyaltySplits);
   };
 
-  const handleAmountChange = (index, val) => {
-    const re = /^(100(\.0{0,2})?|(\d|[1-9]\d)(\.\d{0,2})?)$/;
-    if (re.test(val)) {
-      const newRoyaltySplits = [...royaltySplits];
-      newRoyaltySplits[index].amount = val;
+  const handleAmountChange = (index, val, inp) => {
+    if (val) {
+      inp.classList.add('withsign');
+    } else {
+      inp.classList.remove('withsign');
+    }
+    const result = royaltySplits.reduce(
+      (accumulator, current) => accumulator + Number(current.amount),
+      0
+    );
+    if (result + Number(val) <= 100 && val >= 0) {
+      const newRoyaltySplits = royaltySplits.map((royalty, royaltyIndex) => {
+        if (royaltyIndex === index) {
+          return {
+            ...royalty,
+            amount: val,
+          };
+        }
+
+        return royalty;
+      });
       setRoyaltySplits(newRoyaltySplits);
     }
   };
@@ -556,12 +572,14 @@ const NFTCollectible = (props) => {
                     />
                   </div>
                   <div className="royalty--split--amount">
+                    <span className="percent--sign">%</span>
                     <h5>Percent amount</h5>
                     <Input
-                      type="text"
+                      className="percent--inp"
+                      type="number"
                       placeholder="5%"
                       value={elm.amount}
-                      onChange={(e) => handleAmountChange(i, e.target.value)}
+                      onChange={(e) => handleAmountChange(i, e.target.value, e.target)}
                     />
                   </div>
                   <img
