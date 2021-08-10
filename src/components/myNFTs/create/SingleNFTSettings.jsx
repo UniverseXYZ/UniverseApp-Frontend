@@ -413,6 +413,17 @@ const SingleNFTSettings = () => {
       close();
     }
   };
+  const onDrop = (e) => {
+    e.preventDefault();
+    const {
+      dataTransfer: { files },
+    } = e;
+    validateFile(files[0]);
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="single__nft">
@@ -460,7 +471,68 @@ const SingleNFTSettings = () => {
         <div className="single-nft-content">
           <div className="single-nft-upload">
             <h5>Upload file</h5>
-            {previewImage ? (
+            <div
+              className={`dropzone ${errors.previewImage ? 'error' : ''}`}
+              onDrop={(e) => onDrop(e)}
+              onDragOver={(e) => onDragOver(e)}
+            >
+              {previewImage ? (
+                <div className="single-nft-preview">
+                  <img
+                    className="close"
+                    src={closeIcon}
+                    alt="Close"
+                    onClick={() => setPreviewImage(null)}
+                    aria-hidden="true"
+                  />
+                  <div className="single-nft-picture">
+                    <div className="preview__image">
+                      {previewImage.type === 'video/mp4' && (
+                        <video>
+                          <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                          <track kind="captions" />
+                          Your browser does not support the video tag.
+                        </video>
+                      )}
+                      {previewImage.type === 'audio/mpeg' && (
+                        <img className="preview-image" src={mp3Icon} alt="Preview" />
+                      )}
+                      {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
+                        <img
+                          className="preview-image"
+                          src={URL.createObjectURL(previewImage)}
+                          alt="Preview"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={
+                    errors.previewImage ? 'single-nft-upload-file error' : 'single-nft-upload-file'
+                  }
+                >
+                  <div className="single-nft-drop-file">
+                    <img src={cloudIcon} alt="Cloud" />
+                    <h5>Drop your file here</h5>
+                    <p>
+                      <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
+                    </p>
+                    <Button className="light-button" onClick={() => inputFile.current.click()}>
+                      Choose file
+                    </Button>
+                    <input
+                      type="file"
+                      className="inp-disable"
+                      ref={inputFile}
+                      onChange={(e) => validateFile(e.target.files[0])}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* {previewImage ? (
               <div className="single-nft-preview">
                 <img
                   className="close"
@@ -514,7 +586,7 @@ const SingleNFTSettings = () => {
                   />
                 </div>
               </div>
-            )}
+            )} */}
           </div>
           {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
           <div className="single-nft-name">
