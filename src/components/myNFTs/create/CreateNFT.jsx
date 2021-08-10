@@ -29,7 +29,15 @@ const CreateNFT = () => {
       <div className="create--nft--background" />
       <div className="create--nft--page--container">
         {!showCollectible ? (
-          <div className="back-btn" onClick={() => history.push('/my-nfts')} aria-hidden="true">
+          <div
+            className="back-btn"
+            onClick={() =>
+              history.push(
+                location.pathname === '/create-tiers/my-nfts/create' ? '/create-tiers' : '/my-nfts'
+              )
+            }
+            aria-hidden="true"
+          >
             <img src={arrow} alt="back" />
             <span>
               {location.pathname === '/create-tiers/my-nfts/create'
