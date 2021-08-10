@@ -101,7 +101,12 @@ const SingleNFTSettings = () => {
     setRoyaltyAddress(prevProperties);
   };
 
-  const propertyChangesAmount = (index, val) => {
+  const propertyChangesAmount = (index, val, inp) => {
+    if (val) {
+      inp.classList.add('withsign');
+    } else {
+      inp.classList.remove('withsign');
+    }
     const result = royaltyAddress.reduce(
       (accumulator, current) => accumulator + Number(current.amount),
       0
@@ -706,7 +711,7 @@ const SingleNFTSettings = () => {
                         type="number"
                         placeholder="5%"
                         value={elm.amount}
-                        onChange={(e) => propertyChangesAmount(i, e.target.value)}
+                        onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
                     </div>
                     <img
