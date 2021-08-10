@@ -269,28 +269,26 @@
                     .collection--cover--image {
                         &--circle {
                             box-sizing: border-box;
-                            border-radius: 50%;
                             max-height: 228px;
+                            border-radius: 50%;
                             height: 100%;
                             width: 100%;
                             background: rgba(0, 0, 0, 0.05);
-                            border: 3px dashed rgba(0, 0, 0, 0.2);
-                            opacity: 0.4;
-                            transition: opacity .3s;
-                            &:hover {
-                                opacity: 1;
-                            }
                             &.border--none {
                                 border: none;
                             }
                             .image--not--selected {
                                 display: flex;
+                                border-radius: 50%;
+                                border: 3px dashed rgba(0, 0, 0, 0.2);
                                 align-items: center;
                                 justify-content: center;
                                 flex-direction: column;
                                 height: 100%;
                                 width: 100%;
                                 cursor: pointer;
+                                opacity: 0.4;
+                                transition: opacity .3s;
                                 input {
                                     display: none;
                                 }
@@ -319,6 +317,9 @@
                                 }
                                 @include sm {
                                     height: 140px;
+                                }
+                                &:hover {
+                                    opacity: 1;
                                 }
                             }
                             .image--selected {
