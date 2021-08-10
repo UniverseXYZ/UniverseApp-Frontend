@@ -502,7 +502,12 @@ const AuctionSettings = () => {
                   />
                 </div>
                 <div className="property-value">
-                  <span className="percent-sign">%</span>
+                  <span
+                    className="percent-sign"
+                    style={{ left: elm.amount.length === 1 ? '30px' : '40px' }}
+                  >
+                    %
+                  </span>
                   <Input
                     id="amount"
                     type="number"
