@@ -31,7 +31,6 @@ import SergePiven from '../../assets/images/team/Serge-Piven.png';
 import PavloBabenko from '../../assets/images/team/Pavlo-Babenko.png';
 import AsenAngelov from '../../assets/images/team/Asen-Angelov.png';
 import SteriosTaskudis from '../../assets/images/team/Sterios-Taskudis.png';
-import MilenaAtanasova from '../../assets/images/team/Milena-Atanasova.png';
 import ViktorTodorov from '../../assets/images/team/Viktor-Todorov.png';
 
 const UniverseCreators = () => {
@@ -218,12 +217,6 @@ const UniverseCreators = () => {
     },
     {
       id: 31,
-      name: 'Milena Atanasova',
-      avatar: MilenaAtanasova,
-      loaded: false,
-    },
-    {
-      id: 32,
       name: 'Viktor Todorov',
       avatar: ViktorTodorov,
       loaded: false,
