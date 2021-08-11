@@ -6,6 +6,7 @@ import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import './styles/Section4.scss';
 import Section4Image from '../../assets/images/Section4-Illustration-min.png';
 import Button from '../button/Button.jsx';
+import mobilebackground from '../../assets/images/mobilebackground.png';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -19,7 +20,8 @@ const leftBlock = (windows) => (
       className="section4--left--block"
       style={windows === 'mobile' ? { height: window.innerWidth } : {}}
     >
-      <img alt="img" src={Section4Image} />
+      <img alt="img" src={Section4Image} className="hide--on--mobile" />
+      <img alt="mobile" src={mobilebackground} className="show--on--mobile" />
     </div>
   </AnimatedOnScroll>
 );
