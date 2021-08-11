@@ -62,6 +62,7 @@
           box-sizing: border-box;
           z-index: 5;
           bottom: 23%;
+          right: 10%;
           @include sm{
             bottom: unset;
             right: 3%;

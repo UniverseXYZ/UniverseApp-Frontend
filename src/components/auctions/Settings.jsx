@@ -215,7 +215,8 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val, inp) => {
-    if (val && inp.validity.valid) {
+    console.log('val ', inp.validity.valid);
+    if (val && !Number.isNaN(Number(val))) {
       inp.classList.add('withsign');
     } else {
       inp.classList.remove('withsign');
@@ -502,26 +503,12 @@ const AuctionSettings = () => {
                   />
                 </div>
                 <div className="property-value">
-                  <span
-                    className="percent-sign"
-                    style={{
-                      left:
-                        elm.amount.length === 1
-                          ? '30px'
-                          : elm.amount.length === 2
-                          ? '40px'
-                          : '48px',
-                    }}
-                  >
-                    %
-                  </span>
+                  <span className="percent-sign">%</span>
                   <Input
                     id="amount"
                     type="text"
                     label="Percent amount"
                     placeholder="5%"
-                    pattern="^[0-9]*$"
-                    maxLength={3}
                     className="amount-inp"
                     value={elm.amount}
                     hoverBoxShadowGradient
