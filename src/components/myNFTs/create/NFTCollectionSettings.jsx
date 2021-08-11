@@ -443,7 +443,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           Description <span>(optional)</span>
         </label>
         <textarea
-          placeholder="Spread some words about your collection"
+          placeholder="Spread the word about your collection"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />

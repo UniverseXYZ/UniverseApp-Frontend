@@ -39,7 +39,6 @@
       width: 120px; 
       @include sm{
         width: 100%;
-        margin-bottom: 12px;
       }
     }
     .properties{
@@ -54,6 +53,7 @@
         position: relative;
         .percent-sign{
           // display: none;
+          font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: normal;
           font-size: 16px;
@@ -61,8 +61,7 @@
           position: absolute;
           box-sizing: border-box;
           z-index: 5;
-          bottom: 23.5%;
-          right: 3%;
+          bottom: 23%;
           @include sm{
             bottom: unset;
             right: 3%;
@@ -71,7 +70,12 @@
         }
         .intup-l {
           display: block;
-        @include sm{
+          > div{
+            @include sm{
+              margin-bottom: 12px;
+            }
+          }
+          @include sm{
             display: inline-grid;
           }
         }

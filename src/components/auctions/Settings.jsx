@@ -215,26 +215,26 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val, inp) => {
-    if (val) {
+    if (val && inp.validity.valid) {
       inp.classList.add('withsign');
     } else {
       inp.classList.remove('withsign');
     }
-    const result = properties.reduce(
+    const newProperties = properties.map((property, propertyIndex) => {
+      if (propertyIndex === index) {
+        return {
+          ...property,
+          amount: val,
+        };
+      }
+      return property;
+    });
+    const result = newProperties.reduce(
       (accumulator, current) => accumulator + Number(current.amount),
       0
     );
-    if (result + Number(val) <= 100 && val >= 0) {
-      const newProperties = properties.map((property, propertyIndex) => {
-        if (propertyIndex === index) {
-          return {
-            ...property,
-            amount: val,
-          };
-        }
-
-        return property;
-      });
+    console.log(result, result + Number(val), newProperties);
+    if (result <= 100 && val >= 0) {
       setProperties(newProperties);
     }
   };
@@ -502,13 +502,26 @@ const AuctionSettings = () => {
                   />
                 </div>
                 <div className="property-value">
-                  <span className="percent-sign">%</span>
+                  <span
+                    className="percent-sign"
+                    style={{
+                      left:
+                        elm.amount.length === 1
+                          ? '30px'
+                          : elm.amount.length === 2
+                          ? '40px'
+                          : '48px',
+                    }}
+                  >
+                    %
+                  </span>
                   <Input
                     id="amount"
-                    type="number"
+                    type="text"
                     label="Percent amount"
                     placeholder="5%"
-                    pattern="[0-9]"
+                    pattern="^[0-9]*$"
+                    maxLength={3}
                     className="amount-inp"
                     value={elm.amount}
                     hoverBoxShadowGradient

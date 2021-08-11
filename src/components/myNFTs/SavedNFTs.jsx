@@ -86,6 +86,7 @@ const SavedNFTs = () => {
     setSavedNFTsID(id);
     setActiveView('single');
     setShowModal(true);
+    // history.push('/my-nfts/create');
   };
 
   return (

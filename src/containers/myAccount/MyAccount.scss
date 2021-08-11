@@ -476,6 +476,9 @@
             top: 24px;
             left: 24px;
           }
+          @include lg {
+            max-width: 100%;
+          }
         }
         @include lg {
           width: 100%;
