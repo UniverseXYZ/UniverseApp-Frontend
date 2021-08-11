@@ -2,16 +2,20 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
+import { useHistory } from 'react-router';
 import Skeleton from 'react-loading-skeleton';
 import twitterIcon from '../../assets/images/icons_twitter.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
+import pencilIcon from '../../assets/images/edit.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
+import Button from '../button/Button';
 
 const ArtistDetails = ({ onArtist }) => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist, setEditProfileButtonClick } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     // Here need to get artist details
@@ -34,6 +38,9 @@ const ArtistDetails = ({ onArtist }) => {
                 <h1 className="title">{onArtist.name}</h1>
                 <p className="desc">{onArtist.about}</p>
                 <div className="social__links">
+                  <Button className="light-border-button">
+                    Edit <img src={pencilIcon} alt="Pencil" />
+                  </Button>
                   <a href={onArtist.instagramUrl} target="_blank" rel="noreferrer">
                     <img src={instagramIcon} alt="Instagram" />
                   </a>
@@ -75,6 +82,15 @@ const ArtistDetails = ({ onArtist }) => {
                 <h1 className="title">{loggedInArtist.name}</h1>
                 <p className="desc">{loggedInArtist.about}</p>
                 <div className="social__links">
+                  <Button
+                    className="light-border-button"
+                    onClick={() => {
+                      history.push('/my-account');
+                      setEditProfileButtonClick(false);
+                    }}
+                  >
+                    Edit <img src={pencilIcon} alt="Pencil" />
+                  </Button>
                   {loggedInArtist.instagramLink ? (
                     <a
                       href={`https://www.instagram.com/${loggedInArtist.instagramLink}`}

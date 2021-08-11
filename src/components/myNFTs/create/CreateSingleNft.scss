@@ -528,10 +528,10 @@
           width: 20%;
           padding-right: 16px;
           position: relative;
-          .inp.withsign{
+          .inp.withsign {
             z-index: 4;
           }
-          .percent-sign{
+          .percent-sign {
             font-style: normal;
             font-weight: normal;
             font-size: 16px;
@@ -791,10 +791,12 @@
     }
 
     .single-nft-buttons {
+      display: flex;
+      justify-content: flex-end;
       margin-top: 40px;
       margin-bottom: 40px;
       button {
-        &.light-button {
+        &.light-border-button {
           margin-right: 12px;
           @include sm {
             margin-right: 0;
