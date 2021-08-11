@@ -215,7 +215,7 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val, inp) => {
-    if (val) {
+    if (val && inp.validity.valid) {
       inp.classList.add('withsign');
     } else {
       inp.classList.remove('withsign');
@@ -510,10 +510,11 @@ const AuctionSettings = () => {
                   </span>
                   <Input
                     id="amount"
-                    type="number"
+                    type="text"
                     label="Percent amount"
                     placeholder="5%"
-                    pattern="[0-9]"
+                    pattern="\b([0-9]|[1-9][0-9])\b"
+                    maxLength={2}
                     className="amount-inp"
                     value={elm.amount}
                     hoverBoxShadowGradient
