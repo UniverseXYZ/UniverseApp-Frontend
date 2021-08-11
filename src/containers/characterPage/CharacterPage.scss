@@ -20,7 +20,14 @@
     }
 
     .character__picture {
+      max-width: 513px;
+      max-height: 513px;
       margin-right: 130px;
+      img {
+        border-radius: 12px;
+        width: 100%;
+        height: 100%;
+      }
 
       @include xl {
         margin-right: 40px;
@@ -243,6 +250,7 @@
         margin-bottom: 30px;
       }
       li {
+        cursor: pointer;
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: 500;
@@ -356,6 +364,15 @@
           box-shadow: 0 10px 36px rgba(136, 120, 172, 0.14);
           border-radius: 12px;
           padding: 18px;
+          .planet__item__image {
+            width: 100%;
+            height: 314px;
+            img {
+              object-fit: cover;
+              width: 100%;
+              height: 100%;
+            }
+          }
 
           .planet__item__title {
             font-family: $sharpGroteskSemiBoldFont;
@@ -376,7 +393,8 @@
             margin-bottom: 20px;
           }
           .buttons {
-            white-space: nowrap;
+            display: flex;
+            align-items: center;
             .light-button {
               margin-right: 18px;
             }

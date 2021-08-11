@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import checkIcon from '../../assets/images/bid-submitted.png';
 
 const CongratsPopup = ({ onClose, backButtonText }) => {
   const history = useHistory();
+  const location = useLocation();
   return (
     <div className="popup-div congrats-popup">
       <button type="button" className="popup-close" onClick={onClose}>
@@ -24,10 +25,27 @@ const CongratsPopup = ({ onClose, backButtonText }) => {
         </p>
       </div>
       <div className="popup-btns">
-        <Button className="light-button" onClick={() => history.push('/my-nfts')}>
+        <Button
+          className="light-button"
+          onClick={() => {
+            onClose();
+            history.push(
+              location.pathname === '/create-tiers/my-nfts/create' ? '/create-tiers' : '/my-nfts'
+            );
+          }}
+        >
           {backButtonText}
         </Button>
-        <Button className="light-border-button" onClick={() => history.push('/my-nfts/create')}>
+        <Button
+          className="light-border-button"
+          onClick={() =>
+            history.push(
+              location.pathname === '/create-tiers/my-nfts/create'
+                ? '/create-tiers/my-nfts/create'
+                : '/my-nfts/create'
+            )
+          }
+        >
           Create more
         </Button>
       </div>

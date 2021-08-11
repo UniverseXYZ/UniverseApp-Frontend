@@ -29,10 +29,10 @@ const WelcomeHead = () => {
           <img src={char2} alt="characters_group" className="char-img2" />
           <img src={char3} alt="characters_group" className="char-img3" />
           <h1 className="title1">Original</h1>
-          <h1 className="title2">Characters</h1>
-          <h1 className="title3">Drop</h1>
+          <h1 className="title2">planet</h1>
+          <h1 className="title3">drop</h1>
           <p className="desc">
-            <b>3 Planets</b> with <b>69 Original Characters</b> to the Universe. Each Planet is its
+            <b>3 Planets</b> with <b>69 Original Characters</b> to the Universe. Each planet is its
             own Collection.
           </p>
         </div>

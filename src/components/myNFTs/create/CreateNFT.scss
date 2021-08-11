@@ -518,8 +518,7 @@
                         .create--nft--special--btn {
                             position: relative;
                             z-index: 1;
-                            background: linear-gradient($white, $white) padding-box,
-                                linear-gradient(to right, #bceb00, #00eaea) border-box;
+                            background: linear-gradient($white, $white) padding-box, linear-gradient(135deg, rgb(188, 235, 0) 15.57%, rgb(0, 234, 234) 84.88%) border-box;
                             border: 1px solid transparent;
                             border-radius: 12px;
                             cursor: pointer;
@@ -548,7 +547,7 @@
                         }
                         .gradient--shadow {
                             opacity: 0;
-                            background: linear-gradient(to right, #bceb00, #00eaea) border-box;
+                            background: linear-gradient(135deg, rgb(188, 235, 0) 15.57%, rgb(0, 234, 234) 84.88%) border-box;
                             position: absolute;
                             top: 0;
                             height: 100%;
@@ -1068,6 +1067,26 @@
                                 }
 
                                 .royalty--split--amount {
+                                    position: relative;
+                                    .inp.withsign {
+                                        z-index: 4;
+                                    }
+                                    .percent--sign {
+                                        font-family: $spaceGroteskFont;
+                                        font-style: normal;
+                                        font-weight: normal;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                        position: absolute;
+                                        box-sizing: border-box;
+                                        z-index: 5;
+                                        bottom: 23%;
+                                        right: 15%;
+                                        @include sm {
+                                            bottom: 22%;
+                                            right: 5%;
+                                        }
+                                    }
                                     .intup-l {
                                         width: 100%;
                                         input {
