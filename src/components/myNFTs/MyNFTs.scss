@@ -1211,6 +1211,21 @@
         }
       }
 
+      &::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        border-radius: 12px;
+        background-clip: padding-box;
+      }
+
+      &::-webkit-scrollbar {
+        width: 9px;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-top-right-radius: 12px;
+        border-bottom-right-radius: 12px;
+      }
+
       li {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
         padding-left: 20px;

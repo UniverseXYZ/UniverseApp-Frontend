@@ -82,7 +82,7 @@ const Lists = ({
     }
   };
   const handleSelectAll = (event, nftId) => {
-    if (event.target.className === 'edition-container') {
+    if (event.target.className === 'edition-container' || event.target.className === 'checkmark') {
       if (selectAll === false) {
         const changedNFT = sliceData.find((nft) => nft.id === nftId);
 
@@ -95,7 +95,7 @@ const Lists = ({
     }
   };
   const handleSelectEdition = (event, nftId, edition) => {
-    if (event.target.className === 'edition-container') {
+    if (event.target.className === 'edition-container' || event.target.className === 'checkmark') {
       if (!selectedEditions[nftId]?.includes(edition)) {
         const selectedEditionsByNftId = selectedEditions[nftId] ? selectedEditions[nftId] : [];
 
