@@ -162,8 +162,9 @@ const Footer = () => {
                   <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
                     Polymorphs
                   </li>
-                  <li onClick={() => history.push('/core-drops')} aria-hidden="true">
+                  <li className="disable" aria-hidden="true">
                     OG planet drop
+                    <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>
@@ -204,7 +205,7 @@ const Footer = () => {
                   >
                     Yield farming
                   </li>
-                  <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
+                  {/* <li aria-hidden="true" onClick={() => window.open('https://forum.universe.xyz/')}>
                     Forum
                   </li>
                   <li
@@ -212,7 +213,7 @@ const Footer = () => {
                     onClick={() => window.open('https://signal.universe.xyz/#/')}
                   >
                     Signal
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>

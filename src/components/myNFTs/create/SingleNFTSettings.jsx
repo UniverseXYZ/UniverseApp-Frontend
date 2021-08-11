@@ -217,8 +217,8 @@ const SingleNFTSettings = () => {
   };
 
   const onMintNft = async () => {
-    // document.getElementById('loading-hidden-btn').click();
-    // document.body.classList.add('no__scroll');
+    document.getElementById('loading-hidden-btn').click();
+    document.body.classList.add('no__scroll');
     const mintingFlowContext = {
       collectionsIdAddressMapping,
       universeERC721CoreContract,
@@ -251,46 +251,6 @@ const SingleNFTSettings = () => {
     } else {
       await singleNftMintingFlow.sendMintRequest();
     }
-  };
-
-  const onMintNft2 = async () => {
-    // document.getElementById('loading-hidden-btn').click();
-    // document.body.classList.add('no__scroll');
-    console.log('MINTING..........');
-
-    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-    const royaltiesFormated = royaltiesParsed.length
-      ? formatRoyaltiesForMinting(royaltiesParsed)
-      : [];
-
-    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
-
-    const tokenURIResult = await getTokenURI({
-      file: previewImage,
-      name,
-      description,
-      editions,
-      propertiesParsed,
-      royaltiesParsed,
-    });
-
-    console.log('sending request to contract...', tokenURIResult);
-
-    // call contract
-    let mintTx;
-    if (tokenURIResult.length > 1) {
-      mintTx = await universeERC721CoreContract.batchMint(
-        address,
-        tokenURIResult,
-        royaltiesFormated
-      );
-    } else {
-      mintTx = await universeERC721CoreContract.mint(address, tokenURIResult[0], royaltiesFormated);
-    }
-
-    const receipt = await mintTx.wait();
-
-    console.log('printing receipt...', receipt);
 
     // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
     // const mintedNfts = await getMyNfts();

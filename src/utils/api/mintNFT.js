@@ -216,7 +216,7 @@ export const saveCollection = async (data) => {
   const { file, name, symbol, description, shortUrl } = data;
 
   const formData = new FormData();
-  formData.append('file', file, file.name);
+  if (file) formData.append('file', file, file.name);
   formData.append('name', name);
   formData.append('symbol', symbol);
   formData.append('description', description);

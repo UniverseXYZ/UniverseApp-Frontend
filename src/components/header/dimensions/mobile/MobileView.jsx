@@ -309,14 +309,14 @@ const MobileView = (props) => {
                       <div>
                         <button
                           type="button"
-                          onClick={() => {
-                            history.push('/core-drops');
-                          }}
-                          // className="disable"
+                          // onClick={() => {
+                          //   history.push('/core-drops');
+                          // }}
+                          className="disable"
                         >
                           <img src={coreDropsIcon} alt="Core drops" />
                           <span>OG planet drops</span>
-                          {/* <span className="tooltiptext">Coming soon</span> */}
+                          <span className="tooltiptext">Coming soon</span>
                         </button>
                       </div>
                     </div>
@@ -388,7 +388,7 @@ const MobileView = (props) => {
                           <span>Yield farming</span>
                         </button>
                       </div>
-                      <div>
+                      {/* <div>
                         <button
                           type="button"
                           onClick={() => window.open('https://forum.universe.xyz/')}
@@ -396,8 +396,8 @@ const MobileView = (props) => {
                           <img src={forumIcon} alt="Forum" />
                           <span>Forum</span>
                         </button>
-                      </div>
-                      <div>
+                      </div> */}
+                      {/* <div>
                         <button
                           type="button"
                           onClick={() => window.open('https://signal.universe.xyz/#/')}
@@ -405,7 +405,7 @@ const MobileView = (props) => {
                           <img src={signalIcon} alt="Signal" />
                           <span>Signal</span>
                         </button>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </li>
