@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import './CreateNFT.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import arrow from '../../../assets/images/arrow.svg';
@@ -9,10 +9,12 @@ import selectTypeIcon from '../../../assets/images/select-type-icon.svg';
 import SelectType from './SelectType';
 import SingleNFTSettings from './SingleNFTSettings';
 import NFTCollectionSettings from './NFTCollectionSettings';
+import AppContext from '../../../ContextAPI';
 
 const CreateNFT = () => {
   const history = useHistory();
   const location = useLocation();
+  const { savedNFTsID } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
@@ -23,6 +25,13 @@ const CreateNFT = () => {
       setSelectedNFTType('');
     }
   };
+
+  useEffect(() => {
+    if (savedNFTsID) {
+      setSelectedTabIndex(1);
+      setSelectedNFTType('single');
+    }
+  }, []);
 
   return (
     <div className="create--nft--page">

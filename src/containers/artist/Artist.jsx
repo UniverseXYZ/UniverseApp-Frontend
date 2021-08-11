@@ -23,6 +23,7 @@ const Artist = () => {
       document.title = 'Universe Minting';
     };
   }, []);
+  console.log(artist);
 
   return artist ? (
     <div className="artist__page">

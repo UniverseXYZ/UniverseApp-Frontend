@@ -28,9 +28,9 @@ const Head = () => {
     // <div className="my-account">
     <div className="my-account-title container">
       <h1>Edit my profile</h1>
-      <Button className="light-button" onClick={handlePreviewClick} disabled={universePage}>
+      {/* <Button className="light-button" onClick={handlePreviewClick} disabled={universePage}>
         Preview my Universe page
-      </Button>
+      </Button> */}
       <p>
         You can set your preffered display name, create a branded profile URL and manage other
         personal settings.

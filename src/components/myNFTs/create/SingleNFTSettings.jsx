@@ -30,6 +30,7 @@ const SingleNFTSettings = () => {
     setSavedNfts,
     setShowModal,
     savedNFTsID,
+    setSavedNFTsID,
     myNFTs,
     setMyNFTs,
     deployedCollections,
@@ -256,14 +257,14 @@ const SingleNFTSettings = () => {
   useEffect(() => {
     if (savedNFTsID) {
       const res = savedNfts.filter((item) => item.id === savedNFTsID);
-      setName(res[0].name);
-      setDescription(res[0].description);
-      setEditions(res[0].numberOfEditions);
-      setPreviewImage(res[0].previewImage);
-      setPercentAmount(res[0].percentAmount);
-      setProperties(res[0].properties);
+      setName(res[0]?.name);
+      setDescription(res[0]?.description);
+      setEditions(res[0]?.numberOfEditions);
+      setPreviewImage(res[0]?.previewImage);
+      setPercentAmount(res[0]?.percentAmount);
+      setProperties(res[0]?.properties);
       if (res.length && res[0].collectionId) {
-        const getCollection = deployedCollections.filter((col) => col.id === res[0].collectionId);
+        const getCollection = deployedCollections.filter((col) => col.id === res[0]?.collectionId);
         if (getCollection.length) {
           setSelectedCollection(getCollection[0]);
         }
@@ -362,6 +363,7 @@ const SingleNFTSettings = () => {
             )
           );
         }
+        setSavedNFTsID(null);
         setShowModal(false);
         document.body.classList.remove('no__scroll');
       }
@@ -716,7 +718,7 @@ const SingleNFTSettings = () => {
                 <span className="slider round" />
               </label>
             </div>
-            {properties.map(
+            {properties?.map(
               (elm, i) =>
                 propertyCheck && (
                   // eslint-disable-next-line react/no-array-index-key
@@ -869,28 +871,37 @@ const SingleNFTSettings = () => {
             {!savedNFTsID ? (
               <>
                 <Button
-                  className="light-button"
-                  onClick={handleMinting}
-                  disabled={errors.name || errors.edition || errors.previewImage}
-                >
-                  Mint now
-                </Button>
-                <Button
                   className="light-border-button"
                   onClick={handleSaveForLater}
                   disabled={errors.name || errors.edition || errors.previewImage}
                 >
                   Save for later
                 </Button>
+                <Button
+                  className="light-button"
+                  onClick={handleMinting}
+                  disabled={errors.name || errors.edition || errors.previewImage}
+                >
+                  Mint now
+                </Button>
               </>
             ) : (
-              <Button
-                className="light-button"
-                onClick={handleSaveForLater}
-                disabled={errors.name || errors.edition || errors.previewImage}
-              >
-                Save changes
-              </Button>
+              <>
+                <Button
+                  className="light-border-button"
+                  onClick={handleSaveForLater}
+                  disabled={errors.name || errors.edition || errors.previewImage}
+                >
+                  Save
+                </Button>
+                <Button
+                  className="light-button"
+                  onClick={handleMinting}
+                  disabled={errors.name || errors.edition || errors.previewImage}
+                >
+                  Mint now
+                </Button>
+              </>
             )}
           </div>
         </div>
