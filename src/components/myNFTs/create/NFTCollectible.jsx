@@ -43,7 +43,7 @@ const NFTCollectible = (props) => {
   const [toggleProperties, setToggleProperties] = useState(true);
   const [properties, setProperties] = useState([{ name: '', value: '' }]);
   const [showRoyaltySplitsInfoBox, setShowRoyaltySplitsInfoBox] = useState(false);
-  const [royaltySplits, setRoyaltySplits] = useState([{ address: '', amount: '' }]);
+  const [royalties, setRoyaltySplits] = useState([{ address: '', amount: '' }]);
   const [toggleRoyaltySplits, setToggleRoyaltySplits] = useState(true);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
 
@@ -112,7 +112,7 @@ const NFTCollectible = (props) => {
   };
 
   const handleAddressChange = (index, val) => {
-    const newRoyaltySplits = [...royaltySplits];
+    const newRoyaltySplits = [...royalties];
     newRoyaltySplits[index].address = val;
     setRoyaltySplits(newRoyaltySplits);
   };
@@ -120,21 +120,21 @@ const NFTCollectible = (props) => {
   const handleAmountChange = (index, val) => {
     const re = /^(100(\.0{0,2})?|(\d|[1-9]\d)(\.\d{0,2})?)$/;
     if (re.test(val)) {
-      const newRoyaltySplits = [...royaltySplits];
+      const newRoyaltySplits = [...royalties];
       newRoyaltySplits[index].amount = val;
       setRoyaltySplits(newRoyaltySplits);
     }
   };
 
   const addRoyaltySplit = () => {
-    const newRoyaltySplits = [...royaltySplits];
+    const newRoyaltySplits = [...royalties];
     const temp = { address: '', amount: '' };
     newRoyaltySplits.push(temp);
     setRoyaltySplits(newRoyaltySplits);
   };
 
   const removeRoyaltySplit = (index) => {
-    const newRoyaltySplits = [...royaltySplits];
+    const newRoyaltySplits = [...royalties];
     newRoyaltySplits.splice(index, 1);
     setRoyaltySplits(newRoyaltySplits);
   };
@@ -170,7 +170,7 @@ const NFTCollectible = (props) => {
         setEditions(getCollectionNFT[0].numberOfEditions);
         setPreviewImage(getCollectionNFT[0].previewImage);
         setProperties(getCollectionNFT[0].properties);
-        setRoyaltySplits(getCollectionNFT[0].royaltySplits);
+        setRoyaltySplits(getCollectionNFT[0].royalties);
       }
       const getSavedNFT = savedNfts.filter((item) => item.id === collectionNFTsID);
       if (getSavedNFT.length) {
@@ -179,7 +179,7 @@ const NFTCollectible = (props) => {
         setEditions(getSavedNFT[0].numberOfEditions);
         setPreviewImage(getSavedNFT[0].previewImage);
         setProperties(getSavedNFT[0].properties);
-        setRoyaltySplits(getCollectionNFT[0].royaltySplits);
+        setRoyaltySplits(getCollectionNFT[0].royalties);
       }
     }
   }, []);
@@ -223,7 +223,7 @@ const NFTCollectible = (props) => {
               numberOfEditions: Number(editions),
               generatedEditions,
               properties,
-              royaltySplits,
+              royalties,
               selected: false,
             },
           ]);
@@ -242,7 +242,7 @@ const NFTCollectible = (props) => {
                       numberOfEditions: Number(editions),
                       generatedEditions,
                       properties,
-                      royaltySplits,
+                      royalties,
                     }
                   : item
               )
@@ -260,7 +260,7 @@ const NFTCollectible = (props) => {
                       numberOfEditions: Number(editions),
                       generatedEditions,
                       properties,
-                      royaltySplits,
+                      royalties,
                     }
                   : item
               )
@@ -281,7 +281,7 @@ const NFTCollectible = (props) => {
             //       numberOfEditions: Number(editions),
             //       generatedEditions,
             //       properties,
-            //       royaltySplits,
+            //       royalties,
             //       selected: false,
             //     });
             //   } else {
@@ -298,7 +298,7 @@ const NFTCollectible = (props) => {
             //       numberOfEditions: Number(nft.editions),
             //       generatedEditions: nft.generatedEditions,
             //       properties,
-            //       royaltySplits,
+            //       royalties,
             //       selected: false,
             //     });
             //   }
@@ -324,7 +324,7 @@ const NFTCollectible = (props) => {
   }, [errors]);
 
   useEffect(() => {
-    const notValidAddress = royaltySplits.find(
+    const notValidAddress = royalties.find(
       (el) => el.address.trim().length !== 0 && !EthereumAddress.isAddress(el.address)
     );
     if (notValidAddress) {
@@ -544,7 +544,7 @@ const NFTCollectible = (props) => {
             </label>
           </div>
           {toggleRoyaltySplits &&
-            royaltySplits.map((elm, i) => (
+            royalties.map((elm, i) => (
               <div key={i} className="royalty--splits">
                 <div className="royalty--splits--item">
                   <div className="royalty--split--address">

@@ -129,14 +129,14 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                // className="disable"
-                onClick={() => {
-                  history.push('/core-drops');
-                }}
+                className="disable"
+                // onClick={() => {
+                //   history.push('/core-drops');
+                // }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
                 <span>OG planet drops</span>
-                {/* <span className="tooltiptext">Coming soon</span> */}
+                <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
           </div>
@@ -227,7 +227,7 @@ const DesktopView = ({
                 <img src={yieldFarmingIcon} alt="Yield Farming" />
                 <span>Yield farming</span>
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => {
                   setIsDAODropdownOpened(false);
@@ -246,7 +246,7 @@ const DesktopView = ({
               >
                 <img src={signalIcon} alt="Signal" />
                 <span>Signal</span>
-              </button>
+              </button> */}
             </div>
           </div>
         </li>

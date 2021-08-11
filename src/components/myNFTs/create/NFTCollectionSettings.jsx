@@ -32,6 +32,7 @@ import {
   parseRoyalties,
   parseProperties,
 } from '../../../utils/helpers/contractInteraction';
+import { CollectionMintingFlow } from '../../../utils/helpers/factory/mintingFlow';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -45,6 +46,9 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     universeERC721CoreContract,
     setShowModal,
     savedCollections,
+    contracts,
+    signer,
+    address,
   } = useContext(AppContext);
 
   const [offset, setOffset] = useState(0);
@@ -266,97 +270,44 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   };
 
   const onMintCollection = async () => {
-    document.getElementById('loading-hidden-btn').click();
+    const mintingFlowContext = {
+      universeERC721CoreContract,
+      universeERC721FactoryContract,
+      contracts,
+      signer,
+      address,
+    };
 
-    const collectionCreationResult = await saveCollection({
+    const collectionData = {
       file: coverImage,
       name: collectionName,
       symbol: tokenName,
       description,
       shortUrl: shortURL,
-    });
+      tokenName,
+    };
 
-    console.log('collectionCreationResult', collectionCreationResult);
+    const collectionMintingFlow = CollectionMintingFlow(
+      collectionData,
+      collectionNFTs,
+      mintingFlowContext
+    );
 
-    if (collectionCreationResult?.id) {
-      if (collectionNFTs.length) {
-        const unsignedMintCollectionTx = await universeERC721FactoryContract.deployUniverseERC721(
-          collectionName,
-          tokenName
-        );
-        const { transactionHash, from } = await unsignedMintCollectionTx.wait();
+    // const isSingle = collectionNFTs.length === 1 && collectionNFTs[0].numberOfEditions === 1;
 
-        const response = await attachTxHashToCollection(
-          transactionHash,
-          collectionCreationResult.id
-        );
-        console.log('res', transactionHash, response);
-        if (!response.ok && response.status !== 201) {
-          console.error(`Error while trying to save a new collection: ${response.statusText}`);
-          return;
-        }
+    // console.log(collectionMintingFlow);
+    // await collectionMintingFlow.mintCollection();
+    // console.log(collectionMintingFlow);
+    // await collectionMintingFlow.generateSingleContract();
+    // console.log(collectionMintingFlow);
+    // await collectionMintingFlow.generateTokenURIsAndRoyaltiesObjectCollectibles();
+    // console.log(collectionMintingFlow);
 
-        const mintFees = [];
-        const tokenUriList = [];
-        let tokenURIResult;
-        let currentNft;
-        for (let i = 0; i < collectionNFTs.length; i += 1) {
-          currentNft = collectionNFTs[i];
-
-          console.log(currentNft);
-
-          const royaltiesParsed = currentNft.royaltySplits.length
-            ? parseRoyalties(currentNft.royaltySplits)
-            : [];
-          const royaltiesFormated = royaltiesParsed.length
-            ? formatRoyaltiesForMinting(royaltiesParsed)
-            : [];
-
-          const propertiesParsed = currentNft.properties
-            ? parseProperties(currentNft.properties)
-            : [];
-
-          tokenURIResult = await getTokenURI({
-            file: currentNft.previewImage,
-            name: currentNft.name,
-            description: currentNft.description,
-            editions: currentNft.numberOfEditions,
-            propertiesParsed,
-            royaltiesParsed,
-          });
-
-          tokenUriList.push(tokenURIResult[0]);
-
-          mintFees.push(royaltiesFormated);
-        }
-
-        const chunksOfMetaData = chunkifyArray(tokenUriList, 40);
-        const chunksOfFeeData = chunkifyArray(mintFees, 40);
-
-        console.log('chunksOfMetaData', chunksOfMetaData);
-        console.log('chunksOfFeeData', chunksOfFeeData);
-
-        for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
-          const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
-            from,
-            chunksOfMetaData[chunk],
-            chunksOfFeeData[chunk]
-          );
-
-          const mintReceipt = await mintTransaction.wait();
-
-          console.log('printing receipt...', mintReceipt);
-        }
-      }
-
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
-
-      setShowModal(false);
-      document.body.classList.remove('no__scroll');
-    } else {
-      console.error('There was an error');
-    }
+    // if (isSingle) {
+    //   await collectionMintingFlow.sendMintRequest();
+    // } else {
+    //   await collectionMintingFlow.sendBatchMintRequest();
+    // }
   };
 
   useEffect(() => {
@@ -397,10 +348,6 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       }
     }
   }, [errors]);
-
-  useEffect(() => {
-    console.log('collectionNFTs', collectionNFTs);
-  }, [collectionNFTs]);
 
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
