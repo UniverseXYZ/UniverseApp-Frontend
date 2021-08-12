@@ -324,6 +324,10 @@
                             }
                             .image--selected {
                                 position: relative;
+                                height: 228px;
+                                @include sm {
+                                    height: 140px;
+                                }
                                 img.cover {
                                     height: 100%;
                                     width: 100%;

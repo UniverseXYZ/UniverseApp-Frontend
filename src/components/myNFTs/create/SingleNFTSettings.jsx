@@ -427,6 +427,8 @@ const SingleNFTSettings = () => {
     e.preventDefault();
   };
 
+  console.log(errors.name || errors.edition || errors.previewImage);
+
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
@@ -648,10 +650,13 @@ const SingleNFTSettings = () => {
               {!savedNFTsID && (
                 <Popup
                   trigger={
-                    <div className="create">
-                      <img aria-hidden="true" src={createIcon} alt="Create Icon" />
-                      <h5>Create</h5>
-                      <p>ERC-721</p>
+                    <div className="collection-box">
+                      <div className="create">
+                        <img aria-hidden="true" src={createIcon} alt="Create Icon" />
+                        <h5>Create</h5>
+                        <p>ERC-721</p>
+                      </div>
+                      <div className="box--shadow--effect--block" />
                     </div>
                   }
                 >
@@ -660,32 +665,34 @@ const SingleNFTSettings = () => {
               )}
 
               {deployedCollections.map((col) => (
-                <div
-                  key={uuid()}
-                  className={`universe${
-                    selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
-                  }`}
-                  aria-hidden="true"
-                  onClick={() =>
-                    selectedCollection && selectedCollection.id === col.id
-                      ? setSelectedCollection(null)
-                      : setSelectedCollection(col)
-                  }
-                >
-                  {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
-                    <div
-                      className="random__bg__color"
-                      style={{ backgroundColor: col.previewImage }}
-                    >
-                      {col.name.charAt(0)}
-                    </div>
-                  ) : (
-                    <div>
-                      <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
-                    </div>
-                  )}
-                  <h5>{col.name}</h5>
-                  <p>{col.tokenName}</p>
+                <div className="collection-box" key={uuid()}>
+                  <div
+                    className={`universe${
+                      selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                    }`}
+                    aria-hidden="true"
+                    onClick={() =>
+                      selectedCollection && selectedCollection.id === col.id
+                        ? setSelectedCollection(null)
+                        : setSelectedCollection(col)
+                    }
+                  >
+                    {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                      <div
+                        className="random__bg__color"
+                        style={{ backgroundColor: col.previewImage }}
+                      >
+                        {col.name.charAt(0)}
+                      </div>
+                    ) : (
+                      <div>
+                        <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                      </div>
+                    )}
+                    <h5>{col.name}</h5>
+                    <p>{col.tokenName}</p>
+                  </div>
+                  <div className="box--shadow--effect--block" />
                 </div>
               ))}
             </div>
@@ -880,7 +887,7 @@ const SingleNFTSettings = () => {
                 <Button
                   className="light-button"
                   onClick={handleMinting}
-                  disabled={errors.name || errors.edition || errors.previewImage}
+                  disabled={!name || !editions || !previewImage}
                 >
                   Mint now
                 </Button>
@@ -897,7 +904,7 @@ const SingleNFTSettings = () => {
                 <Button
                   className="light-button"
                   onClick={handleMinting}
-                  disabled={errors.name || errors.edition || errors.previewImage}
+                  disabled={!name || !editions || !previewImage}
                 >
                   Mint now
                 </Button>
