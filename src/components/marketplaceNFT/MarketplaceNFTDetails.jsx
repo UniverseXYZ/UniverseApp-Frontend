@@ -27,7 +27,7 @@ import miniplayerIcon from '../../assets/images/miniplayer.svg';
 import fullScreenIcon from '../../assets/images/full-screen.svg';
 import fullScreenOffIcon from '../../assets/images/full-screen-off.svg';
 import unveiling from '../../assets/images/unveiling.svg';
-import priceIcon from '../../assets/images/marketplace/price.svg';
+import priceIcon from '../../assets/images/ETHiconupd.png';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';

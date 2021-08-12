@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
 import './NFTsList.scss';
 import Slider from 'react-slick';
-import priceIcon from '../../../assets/images/marketplace/price.svg';
+import priceIcon from '../../../assets/images/ETHiconupd.png';
 import videoIcon from '../../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';

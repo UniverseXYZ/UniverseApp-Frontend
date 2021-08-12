@@ -246,13 +246,13 @@
       }
     }
     .polymorphs__universe__section {
-      padding: 0px 60px;
+      padding: 90px 60px;
       background-color: $black;
       &__container {
         max-width: 1110px;
         margin: 0 auto;
       }
-      @include sm {
+      @include lg {
         padding: 0px 20px;
       }
     }
