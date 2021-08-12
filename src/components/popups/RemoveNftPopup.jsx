@@ -20,7 +20,7 @@ const RemovePopup = ({
     const result = await removeSavedNft(id);
 
     if (!result.ok || result.status !== 200) {
-      console.log(`Cannot delete NFT with id: ${id}`);
+      console.error(`Cannot delete NFT with id: ${id}`);
       return;
     }
 
@@ -28,9 +28,9 @@ const RemovePopup = ({
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
       // setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'saved') {
-      setSavedNfts(savedNfts.filter((item) => item.id !== id));
+      setSavedNfts(savedNfts.filter((item) => item.id !== id) || []);
     } else if (removeFrom === 'savedCollection') {
-      setSavedNfts(savedNfts.filter((item) => item.collectionId !== id));
+      setSavedNfts(savedNfts.filter((item) => item.collectionId !== id) || []);
       setSavedCollections(savedCollections.filter((item) => item.id !== id));
     }
   };

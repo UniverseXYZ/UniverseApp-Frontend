@@ -245,7 +245,7 @@ const NFTCollectible = (props) => {
                       royalties,
                     }
                   : item
-              )
+              ) || []
             );
           } else {
             setCollectionNFTs(

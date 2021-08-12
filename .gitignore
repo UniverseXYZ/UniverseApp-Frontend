@@ -30,3 +30,4 @@ new-branch.sh
 
 .firebaserc
 firebase.json
+.firebase

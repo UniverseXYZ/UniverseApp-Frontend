@@ -26,13 +26,6 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
-import { saveCollection, getTokenURI, attachTxHashToCollection } from '../../../utils/api/mintNFT';
-import {
-  formatRoyaltiesForMinting,
-  chunkifyArray,
-  parseRoyalties,
-  parseProperties,
-} from '../../../utils/helpers/contractInteraction';
 import { CollectionMintingFlow } from '../../../utils/helpers/factory/mintingFlow';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
@@ -288,27 +281,14 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       tokenName,
     };
 
-    const collectionMintingFlow = CollectionMintingFlow(
-      collectionData,
-      collectionNFTs,
-      mintingFlowContext
-    );
+    const isSingle = collectionNFTs.length === 1 && collectionNFTs[0].numberOfEditions === 1;
 
-    // const isSingle = collectionNFTs.length === 1 && collectionNFTs[0].numberOfEditions === 1;
-
-    // console.log(collectionMintingFlow);
-    // await collectionMintingFlow.mintCollection();
-    // console.log(collectionMintingFlow);
-    // await collectionMintingFlow.generateSingleContract();
-    // console.log(collectionMintingFlow);
-    // await collectionMintingFlow.generateTokenURIsAndRoyaltiesObjectCollectibles();
-    // console.log(collectionMintingFlow);
-
-    // if (isSingle) {
-    //   await collectionMintingFlow.sendMintRequest();
-    // } else {
-    //   await collectionMintingFlow.sendBatchMintRequest();
-    // }
+    // const result = await new CollectionMintingFlow(
+    //   collectionData,
+    //   collectionNFTs,
+    //   mintingFlowContext,
+    //   isSingle
+    // );
   };
 
   useEffect(() => {

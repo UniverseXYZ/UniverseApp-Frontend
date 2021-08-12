@@ -37,7 +37,7 @@ import {
   parseProperties,
   parsePropertiesForFrontEnd,
 } from '../../../utils/helpers/contractInteraction';
-import { SingleNftMintingFlowFactory } from '../../../utils/helpers/factory/mintingFlow';
+import { SingleNftMintingFlow } from '../../../utils/helpers/factory/mintingFlow';
 
 const SingleNFTSettings = () => {
   const {
@@ -240,21 +240,11 @@ const SingleNFTSettings = () => {
       propertiesParsed,
     };
 
-    const singleNftMintingFlow = SingleNftMintingFlowFactory(mintingFlowContext);
-
-    singleNftMintingFlow.generateNftData(nftData);
-    singleNftMintingFlow.generateRequiredContracts();
-    const tokensCount = await singleNftMintingFlow.generateTokenURIsAndRoyaltiesObject();
-
-    if (tokensCount > 1) {
-      await singleNftMintingFlow.sendBatchMintRequest();
-    } else {
-      await singleNftMintingFlow.sendMintRequest();
-    }
+    const result = await new SingleNftMintingFlow(mintingFlowContext, nftData);
 
     // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
     // const mintedNfts = await getMyNfts();
-    // setMyNFTs(mintedNfts);
+    // setMyNFTs(mintedNfts || []);
 
     document.getElementById('popup-root').remove();
     document.getElementById('congrats-hidden-btn').click();
@@ -292,7 +282,7 @@ const SingleNFTSettings = () => {
     if (!saveImageResult) return;
 
     const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS);
+    setSavedNfts(savedNFTS || []);
 
     document.getElementById('congrats-hidden-btn').click();
     closeLoadingModal();
@@ -333,7 +323,7 @@ const SingleNFTSettings = () => {
     }
 
     const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS);
+    setSavedNfts(savedNFTS || []);
 
     document.getElementById('congrats-hidden-btn').click();
     closeLoadingModal();

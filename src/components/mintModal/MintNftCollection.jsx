@@ -298,7 +298,6 @@ const MintNftCollection = ({ onClick }) => {
               transactionHash,
               collectionCreationResult.id
             );
-            console.log('res', transactionHash, response);
             if (!response.ok && response.status !== 201) {
               console.error(`Error while trying to save a new collection: ${response.statusText}`);
               return;
@@ -330,17 +329,10 @@ const MintNftCollection = ({ onClick }) => {
               );
             }
 
-            console.log(mintFees);
-
             const chunksOfMetaData = chunkifyArray(tokenUriList, 40);
             const chunksOfFeeData = chunkifyArray(mintFees, 40);
 
-            console.log(chunksOfFeeData);
-
             for (let chunk = 0; chunk < chunksOfMetaData.length; chunk += 1) {
-              console.log(
-                chunksOfFeeData[chunk][0][0] ? chunksOfFeeData[chunk] : `${[[]]} ${chunksOfFeeData}`
-              );
               const mintTransaction = await universeERC721CoreContract.batchMintWithDifferentFees(
                 from,
                 chunksOfMetaData[chunk],
@@ -348,16 +340,14 @@ const MintNftCollection = ({ onClick }) => {
               );
 
               const mintReceipt = await mintTransaction.wait();
-
-              console.log('printing receipt...', mintReceipt);
             }
             /* eslint-enable no-await-in-loop */
 
-            setMyNFTs(newMyNFTs);
+            setMyNFTs(newMyNFTs || []);
           }
 
           const collectionsReturned = await getMyCollections();
-          setDeployedCollections(collectionsReturned);
+          setDeployedCollections(collectionsReturned || []);
 
           // setDeployedCollections([
           //   ...deployedCollections,

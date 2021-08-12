@@ -236,7 +236,7 @@ const MintSingleNft = ({ onClick }) => {
     }
 
     const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS);
+    setSavedNfts(savedNFTS || []);
 
     document.getElementById('congrats-hidden-btn').click();
     closeLoadingModal();
@@ -296,7 +296,7 @@ const MintSingleNft = ({ onClick }) => {
           if (!saveImageResult) return;
 
           const savedNFTS = await getSavedNfts();
-          setSavedNfts(savedNFTS);
+          setSavedNfts(savedNFTS || []);
 
           document.getElementById('congrats-hidden-btn').click();
         } else {
@@ -307,7 +307,6 @@ const MintSingleNft = ({ onClick }) => {
       }
     }
     if (mintNowClick) {
-      console.log('MINTING..........');
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         const userAddress = localStorage.getItem('user_address');
 
@@ -315,8 +314,6 @@ const MintSingleNft = ({ onClick }) => {
         const royaltiesFormated = royaltiesParsed.length
           ? formatRoyaltiesForMinting(royaltiesParsed)
           : [];
-
-        console.log(selectedCollection?.id);
 
         const tokenURIResult = await getTokenURI({
           file: previewImage,
@@ -327,8 +324,6 @@ const MintSingleNft = ({ onClick }) => {
           royaltiesParsed,
         });
 
-        console.log('sending request to contract...', tokenURIResult);
-
         // call contract
         const mintTx = await universeERC721CoreContract.mint(
           userAddress,
@@ -338,10 +333,8 @@ const MintSingleNft = ({ onClick }) => {
 
         const receipt = await mintTx.wait();
 
-        console.log('printing receipt...', receipt);
-
         const mintedNfts = await getMyNfts();
-        setMyNFTs(mintedNfts);
+        setMyNFTs(mintedNfts || []);
 
         document.getElementById('popup-root').remove();
         document.getElementById('congrats-hidden-btn').click();

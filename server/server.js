@@ -37,7 +37,7 @@ app.get('^/*', (req, res, next) => {
   const helmet = Helmet.renderStatic();
   fs.readFile(path.resolve('./build/index.html'), 'utf-8', (err, data) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       return res.status(500).send('Some error happened');
     }
     const newData =

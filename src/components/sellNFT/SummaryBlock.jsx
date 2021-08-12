@@ -29,7 +29,6 @@ const SummaryBlock = (props) => {
           <h5>Summary</h5>
           <div className="listing--block">
             <h5>Listing </h5>
-            {console.log(startPrice)}
             {startPrice !== '' && (
               <p>
                 {getText(formType)}

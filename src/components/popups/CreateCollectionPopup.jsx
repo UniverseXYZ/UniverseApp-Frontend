@@ -126,21 +126,21 @@ const CreateCollectionPopup = ({ onClose }) => {
           shortUrl: shortURL,
         });
 
-        console.log(collectionURIResult);
-
         if (collectionURIResult?.id) {
-          setDeployedCollections([
-            ...deployedCollections,
-            {
-              id: collectionURIResult.id,
-              previewImage:
-                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-              name: collectionName,
-              tokenName,
-              description,
-              shortURL,
-            },
-          ]);
+          setDeployedCollections(
+            [
+              ...deployedCollections,
+              {
+                id: collectionURIResult.id,
+                previewImage:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                name: collectionName,
+                tokenName,
+                description,
+                shortURL,
+              },
+            ] || []
+          );
         } else {
           console.error('There was an error');
         }
