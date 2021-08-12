@@ -70,10 +70,35 @@
         font-size: 14px;
         line-height: 140%;
         color: $black;
-        text-transform: capitalize;
-        &:hover {
-          background: rgba(0, 0, 0, 0.05);
-          border-radius: 6px;
+      }
+      img {
+        transition: 0.1s ease-in-out;
+        &.rotate {
+          transform: rotate(180deg);
+        }
+      }
+      &--items {
+        position: absolute;
+        top: 52px;
+        left: 0px;
+        right: 0px;
+        z-index: 1;
+        background: $white;
+        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        border-radius: 12px;
+        padding: 8px;
+        .dropdown--item {
+          padding: 15px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 140%;
+          color: $black;
+          &:hover {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+          }
         }
       }
     }

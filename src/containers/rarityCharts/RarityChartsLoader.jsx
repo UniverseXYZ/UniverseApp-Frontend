@@ -5,8 +5,11 @@ import './RarityCharts.scss';
 import { renderLoaders } from './renderLoaders';
 
 const RarityChartsLoader = React.memo(({ number }) => (
-  <div className="rarity-charts--list">
-    <div className="grid">{renderLoaders(number)}</div>
+  <div className="rarity--charts--list">
+    <div className="categories--filters" />
+    <div className="list--with--selected--filters">
+      <div className="grid">{renderLoaders(number)}</div>
+    </div>
   </div>
 ));
 

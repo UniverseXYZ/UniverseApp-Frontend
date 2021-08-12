@@ -1,6 +1,4 @@
 import React, { useEffect, useContext, useState, useMemo, useRef } from 'react';
-import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown';
-import Pagination from '../../components/pagination/Pagionation';
 import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
@@ -12,7 +10,7 @@ import RarityChartsLoader from './RarityChartsLoader';
 const RarityCharts = () => {
   const { setDarkMode, setMyUniverseNFTsActiverPage } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(9);
 
   const {
     inputText,
@@ -54,21 +52,19 @@ const RarityCharts = () => {
           resetPagination={resetPagination}
         />
         {search.loading && !isLastPage ? (
-          <RarityChartsLoader number={12} />
+          <RarityChartsLoader number={9} />
         ) : results.length ? (
           <>
-            <List data={results} isLastPage={isLastPage} perPage={perPage} offset={offset} />
-            <div className="pagination__container">
-              <Pagination
-                setApiPage={setApiPage}
-                apiPage={apiPage}
-                data={results}
-                perPage={perPage}
-                setOffset={setOffset}
-                setIsLastPage={setIsLastPage}
-              />
-              <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-            </div>
+            <List
+              data={results}
+              isLastPage={isLastPage}
+              perPage={perPage}
+              offset={offset}
+              setOffset={setOffset}
+              setPerPage={setPerPage}
+              setApiPage={setApiPage}
+              setIsLastPage={setIsLastPage}
+            />
           </>
         ) : (
           <div className="rarity--charts--empty">
