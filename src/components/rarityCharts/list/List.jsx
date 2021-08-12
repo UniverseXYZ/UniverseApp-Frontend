@@ -28,7 +28,7 @@ const List = ({ data, perPage, setPerPage, offset, setOffset }) => {
         },
         {
           id: uuid(),
-          name: 'Astronnaut Helmet',
+          name: 'Astronaut Helmet',
           checked: false,
         },
         {
