@@ -110,21 +110,20 @@ const SingleNFTSettings = () => {
     } else {
       inp.classList.remove('withsign');
     }
-    const result = royaltyAddress.reduce(
+    const newProperties = royaltyAddress.map((royalty, royaltyIndex) => {
+      if (royaltyIndex === index) {
+        return {
+          ...royalty,
+          amount: val,
+        };
+      }
+      return royalty;
+    });
+    const result = newProperties.reduce(
       (accumulator, current) => accumulator + Number(current.amount),
       0
     );
-    if (result + Number(val) <= 100 && val >= 0) {
-      const newProperties = royaltyAddress.map((property, propertyIndex) => {
-        if (propertyIndex === index) {
-          return {
-            ...property,
-            amount: val,
-          };
-        }
-
-        return property;
-      });
+    if (result <= 100 && val >= 0) {
       setRoyaltyAddress(newProperties);
     }
   };
