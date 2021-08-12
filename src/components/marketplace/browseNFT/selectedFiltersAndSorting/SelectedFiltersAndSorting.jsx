@@ -22,7 +22,7 @@ const SelectedFiltersAndSorting = ({
   setSavedCreators,
 }) => {
   const [showTabletFilters, setShowTabletFilters] = useState(false);
-  const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
+  const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
   const [stickyBlockOffsetTop, setStickyBlockOffsetTop] = useState(128);
   const [classNameStickyBlock, setClassNameStickyBlock] = useState('');
   useEffect(() => {

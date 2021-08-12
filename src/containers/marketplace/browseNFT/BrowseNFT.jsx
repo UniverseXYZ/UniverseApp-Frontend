@@ -32,7 +32,7 @@ const BrowseNFT = () => {
     },
     {
       text: 'Has offers',
-      description: 'High is demand',
+      description: 'High in demand',
       selected: false,
     },
   ]);

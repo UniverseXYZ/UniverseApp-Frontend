@@ -642,22 +642,23 @@ const SingleNFTSettings = () => {
             />
           </div>
           <div className="single-nft-choose-collection">
-            {deployedCollections.length ? <h4>Choose collection</h4> : <></>}
-            {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>}
+            <h4>Choose collection</h4>
+            {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
+            {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
             <div className="choose__collection">
-              {!savedNFTsID && (
-                <Popup
-                  trigger={
-                    <div className="create">
-                      <img aria-hidden="true" src={createIcon} alt="Create Icon" />
-                      <h5>Create</h5>
-                      <p>ERC-721</p>
-                    </div>
-                  }
-                >
-                  {(close) => <CreateCollectionPopup onClose={close} />}
-                </Popup>
-              )}
+              {/* {!savedNFTsID && ( */}
+              <Popup
+                trigger={
+                  <div className="create">
+                    <img aria-hidden="true" src={createIcon} alt="Create Icon" />
+                    <h5>Create</h5>
+                    <p>ERC-721</p>
+                  </div>
+                }
+              >
+                {(close) => <CreateCollectionPopup onClose={close} />}
+              </Popup>
+              {/* )} */}
 
               {deployedCollections.map((col) => (
                 <div
