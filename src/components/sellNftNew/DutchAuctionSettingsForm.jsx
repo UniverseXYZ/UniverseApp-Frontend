@@ -76,7 +76,7 @@ const DutchAuctionSettingsForm = (props) => {
 
   useEffect(() => {
     if (!switchPrivacy) delete dutchData.buyerAddres;
-    else dutchData.buyerAddres = null;
+    else if (!dutchData.buyerAddres) dutchData.buyerAddres = null;
     if (!switchEndingPrice) delete dutchData.endPrice;
     else if (!dutchData.endPrice) dutchData.endPrice = null;
     if (!dutchData.switch.length) delete dutchData.date;

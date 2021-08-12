@@ -16,18 +16,13 @@
     linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
 }
 .input--focus--field.intup-l {
-  > div {
+  > div:not(.error-div-inp) {
     padding: 1px;
     border-radius: 11px;
     background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
     .box--shadow--effect--block {
       opacity: 0.2 !important;
     }
-  }
-  > .error-div-inp {
-    padding: unset;
-    border-radius: unset;
-    background: unset;
   }
 }
 .intup-l {
@@ -64,19 +59,23 @@
       &::placeholder {
         color: rgba(0, 0, 0, 0.2);
       }
-      &:focus {
-        // border: none;
-        border-radius: 10px;
-      }
     }
-    &:hover {
-      // padding: 1px;
-      .box--shadow--effect--block {
-        opacity: 0.2 !important;
-      }
+
+    &:not(.error-div-inp) {
       input {
-        // border: none;
-        border-radius: 10px !important;
+        &:focus {
+          border-radius: 10px;
+        }
+      }
+      &:hover {
+        // padding: 1px;
+        .box--shadow--effect--block {
+          opacity: 0.2 !important;
+        }
+        input {
+          // border: none;
+          border-radius: 10px !important;
+        }
       }
     }
   }
@@ -90,9 +89,6 @@ span.inp-label,
   font-size: 14px;
   color: $black;
   margin-bottom: 6px;
-}
-.error-div-inp{
-  background: unset;
 }
 .error-inp {
   border: 1px solid red !important;
