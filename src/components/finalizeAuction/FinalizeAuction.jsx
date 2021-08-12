@@ -77,7 +77,7 @@ const FinalizeAuction = () => {
   const handleLastDeposit = () => {
     setApprovals(approvals + 1);
     setTimeout(() => {
-      setDeployedCollections(approvedCollections);
+      setDeployedCollections(approvedCollections || []);
       setMyAuctions(
         myAuctions.map((item) => (item.id === auction.id ? { ...item, launch: true } : item))
       );

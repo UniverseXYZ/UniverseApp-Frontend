@@ -38,7 +38,6 @@ import Search from './containers/search/Search.jsx';
 import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
 import { getEthPriceCoingecko, getWethBalanceEtherscan } from './utils/api/etherscan.js';
-// import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
@@ -70,7 +69,7 @@ const App = () => {
   const [savedCollections, setSavedCollections] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
   const [deployedCollections, setDeployedCollections] = useState([]);
-  const [collectionsIdAddressMapping, setCollectionsIdAddressMapping] = useState([]);
+  const [collectionsIdAddressMapping, setCollectionsIdAddressMapping] = useState({});
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -130,8 +129,6 @@ const App = () => {
       contractsResult.UniverseERC721Factory.abi,
       signerResult
     );
-    // const userNftIds = await fetchUserNftIds(universeERC721Contract, accounts[0]);
-    // const userNfsMetadata = await getUserNftsMetadata(universeERC721Contract, accounts[0]);
 
     setAddress(accounts[0]);
     setSigner(signerResult);
@@ -204,23 +201,33 @@ const App = () => {
           });
         }
       }
-
-      // Fetch the saved NFTS for that addres
-      const savedNFTS = await getSavedNfts();
-      setSavedNfts(savedNFTS);
-
-      // Fetch the minted NFTS for that address
-      const mintedNfts = await getMyNfts();
-      setMyNFTs(mintedNfts);
-
-      // Fetch the minted NFTS for that address
-      const collectionsReturn = await getMyCollections();
-      setDeployedCollections(collectionsReturn);
-
-      console.log(collectionsReturn);
-      console.log(mintedNfts);
     }
   };
+
+  const fetchNfts = async () => {
+    // Fetch the saved NFTS for that addres
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS || []);
+
+    // Fetch the minted NFTS for that address
+    const mintedNfts = await getMyNfts();
+    setMyNFTs(mintedNfts || []);
+
+    // Fetch the minted NFTS for that address
+    const collectionsReturn = await getMyCollections();
+    setDeployedCollections(collectionsReturn || collectionsReturn);
+  };
+
+  useEffect(() => {
+    const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
+    if (canRequestData) {
+      fetchNfts();
+    } else {
+      setSavedNfts([]);
+      setMyNFTs([]);
+      setDeployedCollections([]);
+    }
+  }, [loggedInArtist, isWalletConnected]);
 
   useEffect(() => {
     const mapping = {};
@@ -239,7 +246,7 @@ const App = () => {
       const provider = new providers.Web3Provider(ethereum);
 
       if (!provider) {
-        console.log('Please install/connect MetaMask!');
+        console.error('Please install/connect MetaMask!');
       }
       ethereum.on('accountsChanged', async ([account]) => {
         // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
@@ -255,7 +262,7 @@ const App = () => {
         window.location.reload();
       });
     } else {
-      console.log('Please install/connect MetaMask!');
+      console.error('Please install/connect MetaMask!');
     }
   }, []);
 

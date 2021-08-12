@@ -21,8 +21,7 @@ import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import Tabs from '../tabs/Tabs';
-import { getMyNfts, updateSavedNft } from '../../utils/api/mintNFT';
-import { SavedNFTsMintingFlowFactory } from '../../utils/helpers/factory/mintingFlow';
+import { SavedNFTsMintingFlow } from '../../utils/helpers/factory/mintingFlow';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {
@@ -96,16 +95,7 @@ const MyNFTs = () => {
       address,
     };
 
-    const savedNftsMintingFlow = SavedNFTsMintingFlowFactory(nfts, mintingFlowContext);
-
-    savedNftsMintingFlow.generateRequiredContracts();
-    await savedNftsMintingFlow.generateTokenURIsAndRoyaltiesObjectForSavedNfts();
-
-    if (isSingle) {
-      await savedNftsMintingFlow.sendMintRequest();
-    } else {
-      await savedNftsMintingFlow.sendBatchMintRequest();
-    }
+    const result = await new SavedNFTsMintingFlow(nfts, mintingFlowContext, isSingle);
   };
 
   const handleMintSelected = async () => {
@@ -117,8 +107,6 @@ const MyNFTs = () => {
       selectedNfts[0].numberOfEditions === 1;
 
     await mintSelectedNfts(selectedNfts, isSingleNft);
-
-    console.log('minting completed!');
 
     // TODO temporarily use this
     const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
@@ -141,7 +129,7 @@ const MyNFTs = () => {
   }, []);
 
   const existsNFTs = () =>
-    myNFTs.length || deployedCollections.length || savedNfts.length || savedCollections.length;
+    myNFTs?.length || deployedCollections.length || savedNfts.length || savedCollections.length;
 
   const renderTabsWrapper = () => (
     <Tabs

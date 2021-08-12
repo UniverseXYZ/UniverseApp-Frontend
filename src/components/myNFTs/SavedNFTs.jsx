@@ -22,7 +22,7 @@ const SavedNFTs = () => {
     const newSavedNfts = [...savedNfts];
     newSavedNfts[index].selected = !newSavedNfts[index].selected;
 
-    setSavedNfts(newSavedNfts);
+    setSavedNfts(newSavedNfts || []);
   };
 
   const toggleSelection = () => {
@@ -43,7 +43,7 @@ const SavedNFTs = () => {
         nft.selected = false;
       });
     }
-    setSavedNfts(newSavedNfts);
+    setSavedNfts(newSavedNfts || []);
   };
 
   const handleClickOutside = (event) => {

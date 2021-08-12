@@ -29,4 +29,5 @@ merge-develop.sh
 new-branch.sh
 
 .firebaserc
+.firebase
 firebase.json

@@ -63,7 +63,6 @@ const MyProfileContainer = (props) => {
     auctions,
     transactions,
   } = user;
-  console.log(user);
   return (
     <div className="my--profile--container">
       <CoverPhoto coverPhoto={coverPhoto} color={color} />

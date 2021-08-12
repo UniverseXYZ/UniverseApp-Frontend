@@ -19,7 +19,7 @@ const Cover = ({ selectedCollection }) => {
                 bgImage: e.target.files[0],
               }
             : item
-        )
+        ) || []
       );
     }
   };

@@ -278,7 +278,7 @@ const CreateNftCol = (props) => {
                 });
               }
             });
-            setSavedNfts(newSavedNFTs);
+            setSavedNfts(newSavedNFTs || []);
           }
           setCollectionNFTsID(null);
         }

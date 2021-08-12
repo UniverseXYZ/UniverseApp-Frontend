@@ -14,7 +14,6 @@ const NewTabs = (props) => {
     const routes = tabData.map((elem) => elem.route);
     setRoutesArray(routes.splice(0, routes.indexOf(pathname) + 1));
   }, [pathname]);
-  console.log(routesArray);
   return (
     <div className="new--tab--parent--block">
       <div className="new--tab--container">

@@ -47,8 +47,6 @@ const AuctionReview = () => {
     }
   }, []);
 
-  console.log(auction.properties);
-
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
       let totalNFTs = 0;

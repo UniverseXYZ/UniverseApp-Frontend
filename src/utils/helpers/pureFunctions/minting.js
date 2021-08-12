@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-debugger */
 /* eslint-disable no-await-in-loop */
 import { Contract } from 'ethers';
@@ -29,7 +30,6 @@ export const getSingleCollectionAddress = async (data) => {
   let status = true;
 
   while (!collection && status) {
-    console.log('attempting to get contract address...');
     const fetchedCollections = await getMyCollections();
 
     if (!fetchedCollections) {
@@ -39,7 +39,6 @@ export const getSingleCollectionAddress = async (data) => {
     const searchResult = fetchedCollections.find(
       (col) => col.name === data.collection.name && col.symbol === data.collection.symbol
     );
-    console.log(searchResult);
     collection = searchResult;
   }
 
@@ -50,7 +49,6 @@ export const getSingleCollectionAddress = async (data) => {
 };
 
 export const createSingleContract = (data) => {
-  console.log(data);
   const { collection, context } = data;
   const contract = {};
 
@@ -94,7 +92,6 @@ export const extractRequiredDataForMinting = (data) => {
 };
 
 export const generateTokenURIsForSavedNfts = async (data) => {
-  console.log('requesting meta data');
   for (let i = 0; i < data.length; i += 1) {
     data[i].tokenUri = await getMetaForSavedNft(data[i].id);
   }
@@ -103,8 +100,6 @@ export const generateTokenURIsForSavedNfts = async (data) => {
 };
 
 export const generateTokenURIs = async (data) => {
-  console.log('requesting meta data');
-  console.log(data);
   for (let i = 0; i < data.length; i += 1) {
     data[i].tokenUri = await getTokenURI({
       file: data[i].previewImage || data[i].file,
@@ -183,7 +178,7 @@ export const mintChunkToContract = async ({ address, tokens, royalties, contract
 
   const mintReceipt = await mintTransaction.wait();
 
-  console.log('printing receipt...', mintReceipt);
+  if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
 };
 
 export const sendSaveCollectionRequest = async (data) => {
@@ -203,7 +198,6 @@ export const sendSaveCollectionRequest = async (data) => {
 
 export const deployCollection = async (data) => {
   if (data.collection.id) {
-    console.log('deploying collection...');
     const unsignedMintCollectionTx =
       await data.context.universeERC721FactoryContract.deployUniverseERC721(
         data.collection.name,
@@ -212,8 +206,10 @@ export const deployCollection = async (data) => {
 
     const res = await unsignedMintCollectionTx.wait();
 
-    console.log(unsignedMintCollectionTx);
-    console.log(res);
+    if (!res.status) {
+      console.error('satus code:', res.status);
+      return;
+    }
 
     data.collection.transactionHash = res.transactionHash;
     data.collection.from = res.from;

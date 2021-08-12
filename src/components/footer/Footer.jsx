@@ -36,7 +36,7 @@ const Footer = () => {
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     } else {
       alert('Email address is invalid.');

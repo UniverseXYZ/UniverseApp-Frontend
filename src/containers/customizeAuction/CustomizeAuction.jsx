@@ -31,7 +31,6 @@ const CustomizeAuction = () => {
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
-  console.log(myAuctions);
 
   useEffect(() => {
     if (auction) {
