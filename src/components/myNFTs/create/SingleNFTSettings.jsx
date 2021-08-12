@@ -270,74 +270,12 @@ const SingleNFTSettings = () => {
     closeLoadingModal();
   };
 
-  const onEditSavedNft = async () => {
-    document.getElementById('loading-hidden-btn').click();
-
-    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-    const result = await updateSavedForLaterNft({
-      name,
-      description,
-      editions,
-      properties,
-      royaltiesParsed,
-      id: savedNFTsID,
-    });
-
-    let saveImageResult = null;
-    if (!result.message) {
-      // There is no error message
-      const updateNFTImage = result.id && typeof previewImage === 'object';
-      if (updateNFTImage) {
-        saveImageResult = await saveNftImage(previewImage, result.id);
-        if (saveImageResult.error) {
-          // Error with saving the image, show modal
-          showErrorModal(true);
-          return;
-        }
-      }
-    }
-
-    const data = saveImageResult || result;
-    if (!data) {
-      document.getElementById('congrats-hidden-btn').click();
-      showErrorModal(true);
-      return;
-    }
-
-    const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS || []);
-
-    document.getElementById('congrats-hidden-btn').click();
-    closeLoadingModal();
-  };
-
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
     if (parseInt(value, 10) !== 0) {
       setEditions(value);
     }
   };
-
-  useEffect(() => {
-    if (savedNFTsID) {
-      const res = savedNfts.filter((item) => item.id === savedNFTsID);
-      const parsedProperties = res[0].properties
-        ? parsePropertiesForFrontEnd(res[0].properties)
-        : [{ name: '', value: '' }];
-      setName(res[0].name);
-      setDescription(res[0].description);
-      setEditions(res[0].numberOfEditions);
-      setPreviewImage(res[0].previewImage);
-      setPercentAmount(res[0].percentAmount);
-      setProperties(parsedProperties);
-      if (res.length && res[0].collectionId) {
-        const getCollection = deployedCollections.filter((col) => col.id === res[0].collectionId);
-        if (getCollection.length) {
-          setSelectedCollection(getCollection[0]);
-        }
-      }
-    }
-  }, []);
 
   useEffect(async () => {
     if (saveForLateClick) {

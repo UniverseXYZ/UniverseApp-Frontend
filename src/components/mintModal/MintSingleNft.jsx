@@ -267,78 +267,9 @@ const MintSingleNft = ({ onClick }) => {
   useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        if (!savedNFTsID) {
-          document.getElementById('loading-hidden-btn').click();
-
-          const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-
-          const result = await saveNftForLater({
-            name,
-            description,
-            editions,
-            properties,
-            royaltiesParsed,
-            collectionId: selectedCollection ? selectedCollection.id : 1,
-          });
-
-          let saveImageResult = null;
-
-          if (result.savedNft) {
-            // Update the NFT image
-            saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
-            if (saveImageResult.error) {
-              // Error with saving the image, show modal
-              showErrorModal(true);
-              return;
-            }
-          }
-
-          if (!saveImageResult) return;
-
-          const savedNFTS = await getSavedNfts();
-          setSavedNfts(savedNFTS || []);
-
-          document.getElementById('congrats-hidden-btn').click();
-        } else {
+        if (savedNFTsID) {
           onEditSavedNft();
         }
-        setShowModal(false);
-        document.body.classList.remove('no__scroll');
-      }
-    }
-    if (mintNowClick) {
-      if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
-        const userAddress = localStorage.getItem('user_address');
-
-        const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-        const royaltiesFormated = royaltiesParsed.length
-          ? formatRoyaltiesForMinting(royaltiesParsed)
-          : [];
-
-        const tokenURIResult = await getTokenURI({
-          file: previewImage,
-          name,
-          description,
-          editions,
-          properties,
-          royaltiesParsed,
-        });
-
-        // call contract
-        const mintTx = await universeERC721CoreContract.mint(
-          userAddress,
-          tokenURIResult[0],
-          royaltiesFormated
-        );
-
-        const receipt = await mintTx.wait();
-
-        const mintedNfts = await getMyNfts();
-        setMyNFTs(mintedNfts || []);
-
-        document.getElementById('popup-root').remove();
-        document.getElementById('congrats-hidden-btn').click();
-
         setShowModal(false);
         document.body.classList.remove('no__scroll');
       }
