@@ -1,45 +1,37 @@
 @import '../../../assets/scss/variables';
 @import '../../../assets/scss/_mixins';
 
-.rarity--charts--search--and--filters--row {
-    width: 100%;
-    max-width: 1110px;
+.rarity--charts--search--and--filters--container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 52px;
-    @include sm {
-        flex-direction: column;
-    }
-    .rarity--charts--search--and--floor--price{
-        width: 56%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        @include lg {
-            width: 50%;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        @include sm {
-            width: 100%;
-        }
-    }
-    .search--field--component {
-        width: 40.5%;
-        @include lg {
-            width: calc(100% - 75px);
-        }
-        @include sm {
-            width: 100%;
-            margin-bottom: 24px;
-        }
-        .inp {
-            padding: 0 45px 0 48px;
-        }
-    }
+    flex-direction: column;
+    margin-bottom: 50px;
     .floor--price--block {
-        @include lg {
+        .floor--price--paragraph {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 160%;
+            color: $black;
+            text-transform: uppercase;
+            span {
+                font-weight: normal;
+                color: rgba(0, 0, 0, 0.4);
+                text-transform: capitalize;
+            }
+            div {
+                display: flex;
+                align-items: center;
+                margin-left: 5px;
+                img {
+                    margin-right: 5px;
+                }
+            }
+        }
+        @include sm {
             margin-top: 26px;
         }
         @include sm {
@@ -47,55 +39,74 @@
             margin-bottom: 96px;
             margin-top: 0;
         }
-        .floor--price--paragraph {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 18px;
-            line-height: 160%;
-            text-align: center;
-            color: $black;
-            text-transform: uppercase;
-            span {
-                color: rgba(0, 0, 0, 0.6);
-                text-transform: capitalize;
+    }
+    .rarity--charts--search--and--filters--row {
+        width: 100%;
+        max-width: 1110px;
+        display: grid;
+        grid-template-columns: 1fr 222px 54px;
+        grid-gap: 12px;
+        align-items: center;
+        min-height: 52px;
+        .sort--by--order {
+            margin-left: 0px;
+        }
+        .rarity--charts--search--and--floor--price{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include sm {
+                width: 100%;
+            }
+        }
+        .search--field--component {
+            @include lg {
+                width: 252px;
+            }
+            @include sm {
+                width: 100%;
+                margin-bottom: 24px;
+            }
+            .inp {
+                padding: 0 45px 0 48px;
+            }
+        }
+        .sort--by--label--and--select--block {
+            display: flex;
+            align-items: center;
+            @include lg {
+                width: calc(50% - 75px);
+                align-items: flex-start;
+                justify-content: flex-start;
+                position: relative;
+                margin-top: -50px;
+            }
+            @include sm {
+                width: 100%;
+            }
+            label {
+                width: 87px;
+                user-select: none;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 160%;
+                color: #B3B3B3;
+                @include lg {
+                    position: absolute;
+                    top: -25px;
+                    font-size: 14px;
+                }
+            }
+            .sort--by--select--parent {
+                @include lg {
+                    width: calc(100% - 54px);
+                }
             }
         }
     }
-    .sort--by--label--and--select--block {
-        width: 30%;
-        display: flex;
-        align-items: center;
-        @include lg {
-            width: calc(50% - 75px);
-            align-items: flex-start;
-            justify-content: flex-start;
-            position: relative;
-            margin-top: -50px;
-        }
-        @include sm {
-            width: 100%;
-        }
-        label {
-            width: 87px;
-            user-select: none;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 18px;
-            line-height: 160%;
-            color: #B3B3B3;
-            @include lg {
-                position: absolute;
-                top: -25px;
-                font-size: 14px;
-            }
-        }
-        .sort--by--select--parent {
-            width: calc(100% - 148px);
-            @include lg {
-                width: calc(100% - 54px);
-            }
-        }
+    @include sm {
+        flex-direction: column-reverse;
     }
 }

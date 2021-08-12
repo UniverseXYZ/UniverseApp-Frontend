@@ -5,7 +5,17 @@ import arrowDown from '../../assets/images/browse-nft-arrow-down.svg';
 import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
-  const { data, sortData, className, onChange, defaultValue, getData, getDesc, desc } = props;
+  const {
+    data,
+    sortData,
+    className,
+    onChange,
+    defaultValue,
+    getData,
+    getDesc,
+    desc,
+    hideFirstOption,
+  } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const ref = useRef(null);
@@ -35,12 +45,13 @@ const SortBySelect = (props) => {
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
         {showSecondDropdown && (
           <div className="dropdown--items">
-            {sortData.map((item) => (
+            {sortData.map((item, index) => (
               <div
                 className="dropdown--item"
                 key={uuid()}
                 aria-hidden="true"
                 onClick={() => setSortValue(item)}
+                style={{ display: hideFirstOption && index === 0 ? 'none' : 'block' }}
               >
                 {item}
               </div>
@@ -66,6 +77,7 @@ SortBySelect.propTypes = {
   getData: PropTypes.func,
   getDesc: PropTypes.func,
   desc: PropTypes.bool,
+  hideFirstOption: PropTypes.bool,
 };
 
 SortBySelect.defaultProps = {
@@ -84,6 +96,7 @@ SortBySelect.defaultProps = {
   getData: () => {},
   getDesc: () => {},
   desc: false,
+  hideFirstOption: false,
 };
 
 export default SortBySelect;
