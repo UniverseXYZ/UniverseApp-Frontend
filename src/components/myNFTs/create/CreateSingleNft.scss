@@ -282,8 +282,33 @@
         display: flex;
         flex-wrap: wrap;
 
+        .collection-box {
+          width: 140px;
+          height: 140px;
+          margin-top: 10px;
+          margin-right: 20px;
+
+          &:hover {
+            .box--shadow--effect--block {
+                opacity: 1;
+            }
+          }
+        }
+
+        .box--shadow--effect--block{
+          background: linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border-radius: 12px;
+          position: absolute;
+          filter: blur(3px);
+          opacity: 0;
+          width: 140px;
+          height: 140px;
+          margin-top: -140px;
+        }
+
         .create,
         .universe {
+          position: relative;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -294,10 +319,9 @@
           border: 1px solid rgba(0, 0, 0, 0.1);
           box-sizing: border-box;
           border-radius: 12px;
-          margin-right: 20px;
-          margin-top: 10px;
           padding: 10px;
           cursor: pointer;
+          z-index: 10;
           &:hover {
             background: linear-gradient($white, $white) padding-box,
               linear-gradient(to right, #bceb00, #00eaea) border-box;
@@ -794,8 +818,9 @@
     .single-nft-buttons {
       margin-top: 40px;
       margin-bottom: 40px;
+      text-align: right;
       button {
-        &.light-button {
+        &.light-border-button {
           margin-right: 12px;
           @include sm {
             margin-right: 0;
