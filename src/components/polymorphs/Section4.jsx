@@ -34,9 +34,9 @@ const rightBlock = () => {
         <div className="coming--soon">COMING SOON</div>
         <h2>Polymorph Rarity Chart</h2>
         <p>Mirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
-        <Button className="light-button" onClick={() => history.push('/rarity-chart')}>
+        {/* <Button className="light-button" onClick={() => history.push('/rarity-chart')}>
           Rarity chart
-        </Button>
+        </Button> */}
       </div>
     </AnimatedOnScroll>
   );
