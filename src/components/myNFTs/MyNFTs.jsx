@@ -21,7 +21,7 @@ import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import Tabs from '../tabs/Tabs';
-import { SavedNFTsMintingFlow } from '../../utils/helpers/factory/mintingFlow';
+import { SavedNFTsMintingFlow } from '../../utils/helpers/factory/mintingFlows';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {

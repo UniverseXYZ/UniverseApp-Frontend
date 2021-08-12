@@ -25,7 +25,7 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
-import { CollectionMintingFlow } from '../../../utils/helpers/factory/mintingFlow';
+import { CollectionMintingFlow } from '../../../utils/helpers/factory/mintingFlows';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
