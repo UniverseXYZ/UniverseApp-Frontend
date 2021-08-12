@@ -12,7 +12,7 @@ import RarityChartsLoader from './RarityChartsLoader';
 const RarityCharts = () => {
   const { setDarkMode } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(9);
   const [polymorphRarityData, setPolymorphRarityChart] = useState([...PolymorphRarityCharts]);
   const [desc, setDesc] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -40,20 +40,26 @@ const RarityCharts = () => {
           desc={desc}
         />
         {loading ? (
-          <RarityChartsLoader number={12} />
+          <RarityChartsLoader number={9} />
         ) : (
           <>
-            <List data={polymorphRarityData} perPage={perPage} offset={offset} />
+            <List
+              data={polymorphRarityData}
+              perPage={perPage}
+              setPerPage={setPerPage}
+              offset={offset}
+              setOffset={setOffset}
+            />
           </>
         )}
-        {polymorphRarityData.length ? (
+        {/* {polymorphRarityData.length ? (
           <div className="pagination__container">
             <Pagination data={polymorphRarityData} perPage={perPage} setOffset={setOffset} />
             <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
           </div>
         ) : (
           <></>
-        )}
+        )} */}
       </div>
     </div>
   );

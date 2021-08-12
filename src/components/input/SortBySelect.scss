@@ -44,7 +44,6 @@
         font-size: 16px;
         line-height: 20px;
         color: $black;
-        text-transform: capitalize;
       }
       img {
         transition: 0.1s ease-in-out;
@@ -70,7 +69,6 @@
           font-size: 14px;
           line-height: 140%;
           color: $black;
-          text-transform: capitalize;
           &:hover {
             background: rgba(0, 0, 0, 0.05);
             border-radius: 6px;
