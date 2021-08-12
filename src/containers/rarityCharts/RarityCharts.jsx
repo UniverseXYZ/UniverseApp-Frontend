@@ -1,6 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown';
-import Pagination from '../../components/pagination/Pagionation';
 import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
@@ -52,14 +50,6 @@ const RarityCharts = () => {
             />
           </>
         )}
-        {/* {polymorphRarityData.length ? (
-          <div className="pagination__container">
-            <Pagination data={polymorphRarityData} perPage={perPage} setOffset={setOffset} />
-            <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-          </div>
-        ) : (
-          <></>
-        )} */}
       </div>
     </div>
   );

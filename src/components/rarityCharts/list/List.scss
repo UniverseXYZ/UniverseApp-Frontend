@@ -130,6 +130,9 @@
                 }
             }
         }
+        @include lg {
+            display: none;
+        }
     }
     .list--with--selected--filters {
         .selected--filters {
@@ -174,6 +177,9 @@
                 color: $black;
                 background: none;
                 margin-bottom: 8px;
+            }
+            @include lg {
+                min-height: auto;
             }
         }
         .grid {
@@ -297,15 +303,15 @@
                 }
             }
             @include xl {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            @include lg {
                 grid-template-columns: repeat(2, 1fr);
             }
             @include sm {
                 grid-template-columns: 1fr;
             }
         }
+    }
+    @include lg {
+        grid-template-columns: 1fr;
     }
 }
 

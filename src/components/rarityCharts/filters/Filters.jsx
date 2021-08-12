@@ -4,7 +4,9 @@ import SearchField from '../../input/SearchField';
 import SortBySelect from '../../input/SortBySelect';
 import SortByOrder from '../../input/SortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
+import filterIcon from '../../../assets/images/filters-icon-black.svg';
 import './Filters.scss';
+import Button from '../../button/Button';
 
 const Filters = (props) => {
   const { floorPrice, data, getData, getDesc, desc } = props;
@@ -30,6 +32,18 @@ const Filters = (props) => {
             enterKeyEvent={false}
             getData={(find) => getData(find)}
           />
+          <div className="tablet--filters">
+            <Button className="light-border-button">
+              <img src={filterIcon} alt="Filter" /> Filters
+            </Button>
+            <div className="count">2</div>
+          </div>
+          <div className="mobile--filters">
+            <Button className="light-button">
+              <img src={filterIcon} alt="Filter" />
+            </Button>
+            <div className="count">2</div>
+          </div>
         </div>
         {/* <div className="sort--by--label--and--select--block"> */}
         {/* <label htmlFor="sort--select">Sort By:</label> */}
