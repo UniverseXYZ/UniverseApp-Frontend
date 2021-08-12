@@ -215,8 +215,7 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAmount = (index, val, inp) => {
-    console.log('val ', inp.validity.valid);
-    if (val && !Number.isNaN(Number(val))) {
+    if (val) {
       inp.classList.add('withsign');
     } else {
       inp.classList.remove('withsign');
@@ -234,7 +233,6 @@ const AuctionSettings = () => {
       (accumulator, current) => accumulator + Number(current.amount),
       0
     );
-    console.log(result, result + Number(val), newProperties);
     if (result <= 100 && val >= 0) {
       setProperties(newProperties);
     }
@@ -506,8 +504,9 @@ const AuctionSettings = () => {
                   <span className="percent-sign">%</span>
                   <Input
                     id="amount"
-                    type="text"
+                    type="number"
                     label="Percent amount"
+                    pattern="\d*"
                     placeholder="5%"
                     className="amount-inp"
                     value={elm.amount}
