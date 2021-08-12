@@ -122,7 +122,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
       next.appendChild(nextIcon);
     }
   }, []);
-  console.log('background ', URL.createObjectURL(selectedAuction.backgroundImage));
+
   return (
     <div className="auction__details__section">
       <div

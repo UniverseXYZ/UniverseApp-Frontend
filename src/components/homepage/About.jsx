@@ -21,8 +21,6 @@ import squareFour from '../../assets/images/square4.png';
 import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
-import topmorphs from '../../assets/images/topmorphs3.png';
-import topbackground from '../../assets/images/topbackground.png';
 import Section4 from '../polymorphs/Section4.jsx';
 
 const About = () => {

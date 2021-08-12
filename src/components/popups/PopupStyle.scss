@@ -63,6 +63,7 @@
     width: 100%;
   }
   input {
+    width: 100%!important;
     font-family: $spaceGroteskFont;
     font-weight: normal;
     font-style: normal;
@@ -2160,7 +2161,7 @@
       border-top: none;
       border-radius: 12px;
       h1 {
-        margin-bottom: 8px;
+        margin-bottom: 20px;
       }
       &:hover {
         background: $white;
