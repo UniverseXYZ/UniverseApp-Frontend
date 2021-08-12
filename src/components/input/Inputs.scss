@@ -24,6 +24,11 @@
       opacity: 0.2 !important;
     }
   }
+  > .error-div-inp {
+    padding: unset;
+    border-radius: unset;
+    background: unset;
+  }
 }
 .intup-l {
   display: inline-grid;
@@ -85,6 +90,9 @@ span.inp-label,
   font-size: 14px;
   color: $black;
   margin-bottom: 6px;
+}
+.error-div-inp{
+  background: unset;
 }
 .error-inp {
   border: 1px solid red !important;
