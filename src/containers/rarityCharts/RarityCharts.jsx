@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';

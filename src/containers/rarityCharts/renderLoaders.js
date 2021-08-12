@@ -4,7 +4,7 @@ import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 
 export const renderLoaders = (number) =>
   [...Array(number)].map(() => (
-    <div className="card" style={{ cursor: 'default' }}>
+    <div key={uuid()} className="card" style={{ cursor: 'default' }}>
       <div className="card--header">
         <div className="card--number">#???</div>
         <div className="card--price">Rarity Score: ???</div>
