@@ -25,6 +25,8 @@ const MyNFTs = () => {
     savedNfts,
     savedCollections,
     setSavedNfts,
+    savedNFTsID,
+    setSavedNFTsID,
     showModal,
     setShowModal,
     setActiveView,
@@ -121,6 +123,7 @@ const MyNFTs = () => {
         setMyNFTs(newMyNFTs);
         const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
         setSavedNfts(newSavedNFTs);
+        setSavedNFTsID(null);
       }, 2000);
     }, 3000);
   };
@@ -227,7 +230,10 @@ const MyNFTs = () => {
               <button
                 type="button"
                 className="mint__btn"
-                onClick={() => history.push('/my-nfts/create')}
+                onClick={() => {
+                  setSavedNFTsID(null);
+                  history.push('/my-nfts/create');
+                }}
               >
                 Create NFT
               </button>
@@ -253,7 +259,10 @@ const MyNFTs = () => {
               <button
                 type="button"
                 className="mint__btn"
-                onClick={() => history.push('/my-nfts/create')}
+                onClick={() => {
+                  setSavedNFTsID(null);
+                  history.push('/my-nfts/create');
+                }}
               >
                 Create NFT
               </button>

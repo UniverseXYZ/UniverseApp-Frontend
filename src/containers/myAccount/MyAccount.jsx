@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Main from '../../components/myAccount/Main.jsx';
 import './MyAccount.scss';
 import About from '../../components/myAccount/About.jsx';
@@ -9,6 +9,7 @@ import Social from '../../components/myAccount/Social.jsx';
 import Head from '../../components/myAccount/Head.jsx';
 import AppContext from '../../ContextAPI';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
+import Artist from '../artist/Artist.jsx';
 
 const MyAccount = () => {
   const {
@@ -20,6 +21,7 @@ const MyAccount = () => {
     setEditProfileButtonClick,
   } = useContext(AppContext);
   const history = useHistory();
+  const location = useLocation();
   const [about, setAbout] = useState(loggedInArtist.about);
   const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
@@ -32,6 +34,13 @@ const MyAccount = () => {
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [showSocial, setShowSocial] = useState(loggedInArtist.social);
+
+  const artist = location.state
+    ? location.state.id === loggedInArtist.id
+      ? loggedInArtist
+      : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
+    : null;
+  console.log(artist);
 
   useEffect(() => {
     setDarkMode(false);
@@ -70,12 +79,12 @@ const MyAccount = () => {
     // } else {
     //   setShowSocial(true);
     // }
-    setTimeout(() => {
-      if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
-        // setEditProfileButtonClick(false);
-        document.getElementById('congrats-hidden-btn').click();
-      }
-    }, 500);
+    // setTimeout(() => {
+    //   if (accountName && accountImage && accountPage !== 'universe.xyz/your-address' && about) {
+    //     // setEditProfileButtonClick(false);
+    //     document.getElementById('congrats-hidden-btn').click();
+    //   }
+    // }, 500);
   };
 
   const cancelChanges = () => {
@@ -92,7 +101,10 @@ const MyAccount = () => {
     setInstagramLink(loggedInArtist.instagramLink);
   };
 
-  return (
+  return loggedInArtist.name && editProfileButtonClick ? (
+    // <Artist />
+    <>{history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id })}</>
+  ) : (
     <div className="my-account">
       <Popup
         trigger={

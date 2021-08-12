@@ -82,11 +82,11 @@ const SavedNFTs = () => {
   });
 
   const handleEdit = (id) => {
-    document.body.classList.add('no__scroll');
+    // document.body.classList.add('no__scroll');
     setSavedNFTsID(id);
     setActiveView('single');
-    setShowModal(true);
-    // history.push('/my-nfts/create');
+    // setShowModal(true);
+    history.push('/my-nfts/create');
   };
 
   return (
