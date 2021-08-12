@@ -25,7 +25,7 @@ import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
-import { SavedNFTsMintingFlow } from '../../utils/helpers/factory/mintingFlow';
+import { SavedNFTsMintingFlow } from '../../utils/helpers/factory/mintingFlows';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 
 const MyNFTs = () => {

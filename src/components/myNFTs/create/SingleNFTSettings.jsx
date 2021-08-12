@@ -37,7 +37,10 @@ import {
   parseProperties,
   parsePropertiesForFrontEnd,
 } from '../../../utils/helpers/contractInteraction';
-import { SingleNftMintingFlow } from '../../../utils/helpers/factory/mintingFlow';
+import {
+  SingleNftMintingFlow,
+  SaveNftForLaterFlow,
+} from '../../../utils/helpers/factory/mintingFlows';
 
 const SingleNFTSettings = () => {
   const {
@@ -258,28 +261,26 @@ const SingleNFTSettings = () => {
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
-    const result = await saveNftForLater({
+    const flowContext = {
+      previewImage,
+    };
+
+    const nftData = {
       name,
       description,
       editions,
       propertiesParsed,
       royaltiesParsed,
       collectionId: selectedCollection?.id,
-    });
+    };
 
-    let saveImageResult = null;
+    const result = await new SaveNftForLaterFlow(flowContext, nftData);
 
-    if (result.savedNft) {
-      // Update the NFT image
-      saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
-      if (saveImageResult.error) {
-        // Error with saving the image, show modal
-        showErrorModal(true);
-        return;
-      }
+    if (result.saveImageResult.error) {
+      showErrorModal(true);
+      return;
     }
-
-    if (!saveImageResult) return;
+    if (!result.saveImageResult) return;
 
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);

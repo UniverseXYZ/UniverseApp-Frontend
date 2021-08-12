@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
@@ -36,6 +37,7 @@ import {
   parsePropertiesForFrontEnd,
 } from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
+import { UpdateNftFlow } from '../../utils/helpers/factory/mintingFlows';
 
 const MintSingleNft = ({ onClick }) => {
   const {
@@ -204,7 +206,7 @@ const MintSingleNft = ({ onClick }) => {
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
-    const result = await updateSavedForLaterNft({
+    const nftData = {
       name,
       description,
       editions,
@@ -212,23 +214,22 @@ const MintSingleNft = ({ onClick }) => {
       royaltiesParsed,
       id: savedNFTsID,
       collectionId: selectedCollection?.id,
-    });
+    };
 
-    let saveImageResult = null;
-    if (!result.message) {
-      // There is no error message
-      const updateNFTImage = result.id && typeof previewImage === 'object';
-      if (updateNFTImage) {
-        saveImageResult = await saveNftImage(previewImage, result.id);
-        if (saveImageResult.error) {
-          // Error with saving the image, show modal
-          showErrorModal(true);
-          return;
-        }
-      }
+    const flowContext = {
+      previewImage,
+    };
+
+    const result = await new UpdateNftFlow(flowContext, nftData);
+
+    debugger;
+
+    if (result.saveImageResult?.error) {
+      showErrorModal(true);
+      return;
     }
 
-    const data = saveImageResult || result;
+    const data = result.saveImageResult || result.updateResult;
     if (!data) {
       document.getElementById('congrats-hidden-btn').click();
       showErrorModal(true);

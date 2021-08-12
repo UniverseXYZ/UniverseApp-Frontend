@@ -17,6 +17,7 @@ import {
   createSingleContract,
   attachCollectionIdToNfts,
 } from '../pureFunctions/minting';
+import { saveNftForLater, saveNftImage, updateSavedForLaterNft } from '../../api/mintNFT';
 
 export default class Minting {
   constructor(context) {
@@ -158,5 +159,26 @@ export default class Minting {
     )({ collection: this.collection, context: this.context });
 
     this.collection = result;
+  }
+
+  async saveNftAndImage() {
+    const result = await saveNftForLater(this.nft);
+
+    if (result.savedNft)
+      this.saveImageResult = await saveNftImage(this.context.previewImage, result.savedNft.id);
+  }
+
+  async editNftAndImage() {
+    const result = await updateSavedForLaterNft(this.nft);
+
+    if (!result.message) {
+      const updateNFTImage = result.id && typeof this.context.previewImage === 'object';
+      if (updateNFTImage) {
+        const saveImageRes = await saveNftImage(this.context.previewImage, result.id);
+        this.saveImageResult = saveImageRes;
+      }
+    }
+
+    this.updateResult = result;
   }
 }
