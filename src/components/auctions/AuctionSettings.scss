@@ -19,7 +19,7 @@
     }
   }
   .royalty-form {
-    margin-top: 26px;
+    margin-top: 5px;
     
     .address-inp{
       width: 100%;
@@ -254,9 +254,13 @@
         font-size: 12px;
         font-family: $spaceGroteskFont;
         bottom: 25px;
-        left: 100%;
+        left: 80%;
         transform: translateX(-100%);
+        z-index: 110;
         font-weight: normal;
+        @include lg {      
+         left: 100%;
+        }
       }
       .drop-down {
         position: absolute;
@@ -291,6 +295,9 @@
         div , input{
           cursor: pointer;
         }
+      }
+      .box--shadow--effect--block{
+        display: none;
       }
     }
     .infoDiv > :first-child {

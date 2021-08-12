@@ -12,7 +12,7 @@ const Input = ({ label, error, className, hoverBoxShadowGradient, ...restProps }
           {label}
         </label>
       )}
-      <div>
+      <div className={error && 'error-div-inp'}>
         <input
           id={uuid()}
           className={`${className}
