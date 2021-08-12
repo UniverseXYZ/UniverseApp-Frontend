@@ -75,16 +75,20 @@ const SortingDropdowns = () => {
         <div className="box--shadow--effect--block" />
         {showSecondDropdown ? (
           <div className="dropdown--items">
-            {secondDropdownItems.map((item, index) => (
-              <div
-                className="dropdown--item"
-                key={uuid()}
-                aria-hidden="true"
-                onClick={() => setSelectedSecondDropdownIndex(index)}
-              >
-                {item}
-              </div>
-            ))}
+            {secondDropdownItems.map(
+              (item, index) =>
+                index !== selectedSecondDropdownIndex &&
+                index !== 0 && (
+                  <div
+                    className="dropdown--item"
+                    key={uuid()}
+                    aria-hidden="true"
+                    onClick={() => setSelectedSecondDropdownIndex(index)}
+                  >
+                    {item}
+                  </div>
+                )
+            )}
           </div>
         ) : (
           <></>

@@ -64,7 +64,7 @@ const SelectedFilters = ({
     });
     setSaleTypeButtons(newSaleTypeButtons);
     setSelectedPrice(null);
-    setSliderValue({ min: 0, max: 4 });
+    setSliderValue({ min: 0.01, max: 100 });
     setSelectedCollections([]);
     setSavedCollections([]);
     setSelectedCreators([]);
@@ -130,7 +130,7 @@ const SelectedFilters = ({
               aria-hidden="true"
               onClick={() => {
                 setSelectedPrice(null);
-                setSliderValue({ min: 0, max: 4 });
+                setSliderValue({ min: 0.01, max: 100 });
               }}
             />
           </button>

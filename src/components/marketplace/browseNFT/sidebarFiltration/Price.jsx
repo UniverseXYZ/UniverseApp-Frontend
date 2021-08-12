@@ -18,7 +18,7 @@ import 'react-input-range/lib/css/index.css';
 const Price = ({ setSelectedPrice }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
+  const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
   const [disabledMin, setDisabledMin] = useState(false);
   const [disabledMax, setDisabledMax] = useState(false);
 
@@ -153,8 +153,8 @@ const Price = ({ setSelectedPrice }) => {
           <div className="range--slider">
             <InputRange
               step={0.1}
-              maxValue={4}
-              minValue={0}
+              maxValue={100}
+              minValue={0.01}
               value={sliderValue}
               onChange={(value) => {
                 setSliderValue({
@@ -170,8 +170,8 @@ const Price = ({ setSelectedPrice }) => {
             <input
               type="number"
               placeholder="Min"
-              min="0"
-              max="4"
+              min="0.01"
+              max="100"
               onChange={validateMinValue}
               value={disabledMin && sliderValue.min}
             />
@@ -179,8 +179,8 @@ const Price = ({ setSelectedPrice }) => {
             <input
               type="number"
               placeholder="Max"
-              min="0"
-              max="4"
+              min="0.01"
+              max="100"
               onChange={validateMaxValue}
               value={disabledMax && sliderValue.max}
             />

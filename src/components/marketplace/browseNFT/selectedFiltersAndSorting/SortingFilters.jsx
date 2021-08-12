@@ -128,7 +128,7 @@ const SortingFilters = ({
   };
 
   const handleClearPrice = () => {
-    setSliderValue({ min: 0, max: 4 });
+    setSliderValue({ min: 0.01, max: 100 });
     setDisabledMin(false);
     setDisabledMax(false);
     // setSelectedPrice(null);
@@ -136,7 +136,7 @@ const SortingFilters = ({
   };
 
   const handleSavePrice = () => {
-    if ((disabledMax && disabledMin) || (sliderValue.min > 0 && sliderValue.max < 4)) {
+    if ((disabledMax && disabledMin) || (sliderValue.min > 0.01 && sliderValue.max < 100)) {
       if (sliderValue.max > sliderValue.min) {
         setSelectedPrice(sliderValue);
         setShowPriceDropdown(false);
@@ -351,8 +351,8 @@ const SortingFilters = ({
               <div className="range--slider">
                 <InputRange
                   step={0.1}
-                  maxValue={4}
-                  minValue={0}
+                  maxValue={100}
+                  minValue={0.01}
                   value={sliderValue}
                   onChange={(value) => {
                     setSliderValue({
@@ -369,8 +369,8 @@ const SortingFilters = ({
                   <p className="value--text">Min price</p>
                   <input
                     type="number"
-                    min="0"
-                    max="4"
+                    min="0.01"
+                    max="100"
                     onChange={validateMinValue}
                     value={(selectedPrice || disabledMin) && sliderValue.min}
                   />
@@ -379,8 +379,8 @@ const SortingFilters = ({
                   <p className="value--text">Max price</p>
                   <input
                     type="number"
-                    min="0"
-                    max="4"
+                    min="0.01"
+                    max="100"
                     onChange={validateMaxValue}
                     value={(selectedPrice || disabledMax) && sliderValue.max}
                   />
