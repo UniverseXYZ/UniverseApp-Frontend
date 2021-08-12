@@ -23,8 +23,10 @@ const SortBySelect = (props) => {
 
   useEffect(() => {
     onChange(sortValue);
-    const sortedData = desc ? data.sort((a, b) => b.id - a.id) : data.sort((a, b) => a.id - b.id);
-    getData([...sortedData]);
+    if (data?.length) {
+      const sortedData = desc ? data.sort((a, b) => b.id - a.id) : data.sort((a, b) => a.id - b.id);
+      getData([...sortedData]);
+    }
   }, [sortValue]);
 
   return (
