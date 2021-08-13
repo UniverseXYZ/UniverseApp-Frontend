@@ -28,7 +28,7 @@ const CustomizeAuction = () => {
   } = useContext(AppContext);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
-    link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`,
+    link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
     promoImage: null,
     backgroundImage: null,
     hasBlur: '',
@@ -55,14 +55,13 @@ const CustomizeAuction = () => {
         headline: domainAndBranding.headline || '',
         link:
           domainAndBranding.link ||
-          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`,
+          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
         promoImage: domainAndBranding.promoImage || null,
         backgroundImage: domainAndBranding.backgroundImage || null,
         hasBlur: domainAndBranding.hasBlur || '',
         status:
-          domainAndBranding.link &&
           domainAndBranding.link.toLowerCase() !==
-            `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`
+          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
             ? 'filled'
             : 'empty',
       });

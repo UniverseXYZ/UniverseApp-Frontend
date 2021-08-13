@@ -30,17 +30,17 @@ const SelectedFiltersAndSorting = ({
     setStickyBlockOffsetTop(stickyBlock.offsetTop);
   }, []);
 
-  useLayoutEffect(() => {
-    function scrollMyFunc() {
-      const stickyBlock = document.querySelector('.selected--filters--and--sorting');
-      if (+stickyBlock.offsetTop !== +stickyBlockOffsetTop) {
-        setClassNameStickyBlock('selected--filters--and--sorting--sticky');
-      } else {
-        setClassNameStickyBlock('');
-      }
-    }
-    window.addEventListener('scroll', scrollMyFunc);
-  });
+  // useLayoutEffect(() => {
+  //   function scrollMyFunc() {
+  //     const stickyBlock = document.querySelector('.selected--filters--and--sorting');
+  //     if (+stickyBlock?.offsetTop !== +stickyBlockOffsetTop) {
+  //       setClassNameStickyBlock('selected--filters--and--sorting--sticky');
+  //     } else {
+  //       setClassNameStickyBlock('');
+  //     }
+  //   }
+  //   window.addEventListener('scroll', scrollMyFunc);
+  // });
   return (
     <div className={`selected--filters--and--sorting ${classNameStickyBlock}`}>
       <div className="sorting__filters__desktop">

@@ -293,6 +293,9 @@
             color: $black;
             margin-left: 4px;
           }
+          img {
+            height: 15px;
+          }
         }
       }
       .quantity--and--offer {
@@ -326,7 +329,7 @@
           }
           img {
             margin: 0 3px 0 6px;
-            width: 5px;
+            // width: 5px;
             height: 10px;
           }
         }
