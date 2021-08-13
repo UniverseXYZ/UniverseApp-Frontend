@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import arrowIcon from '../../../assets/images/browse-nft-arrow-down.svg';
 
-const CategoriesFilter = ({ categories, setCategories }) => {
-  const [categoriesIndexes, setCategoriesIndexes] = useState([]);
-
+const CategoriesFilter = ({
+  categories,
+  setCategories,
+  categoriesIndexes,
+  setCategoriesIndexes,
+}) => {
   const handleClick = useCallback(
     (idx) => {
       if (categoriesIndexes.includes(idx)) {
@@ -63,6 +66,8 @@ const CategoriesFilter = ({ categories, setCategories }) => {
 CategoriesFilter.propTypes = {
   categories: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategories: PropTypes.func.isRequired,
+  categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setCategoriesIndexes: PropTypes.func.isRequired,
 };
 
 export default CategoriesFilter;

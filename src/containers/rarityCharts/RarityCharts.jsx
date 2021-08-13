@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
+import uuid from 'react-uuid';
 import Filters from '../../components/rarityCharts/filters/Filters';
 import List from '../../components/rarityCharts/list/List';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
@@ -6,6 +7,7 @@ import AppContext from '../../ContextAPI';
 import './RarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import RarityChartsLoader from './RarityChartsLoader';
+import { categoriesArray } from './categories';
 
 const RarityCharts = () => {
   const { setDarkMode, setMyUniverseNFTsActiverPage } = useContext(AppContext);
@@ -28,6 +30,8 @@ const RarityCharts = () => {
     isLastPage,
     setIsLastPage,
   } = useSearchPolymorphs();
+  const [categories, setCategories] = useState(categoriesArray);
+  const [categoriesIndexes, setCategoriesIndexes] = useState([]);
 
   useEffect(() => {
     setDarkMode(true);
@@ -50,6 +54,10 @@ const RarityCharts = () => {
           sortDir={sortDir}
           setApiPage={setApiPage}
           resetPagination={resetPagination}
+          categories={categories}
+          setCategories={setCategories}
+          categoriesIndexes={categoriesIndexes}
+          setCategoriesIndexes={setCategoriesIndexes}
         />
         {search.loading && !isLastPage ? (
           <RarityChartsLoader number={9} />
@@ -64,6 +72,10 @@ const RarityCharts = () => {
               setPerPage={setPerPage}
               setApiPage={setApiPage}
               setIsLastPage={setIsLastPage}
+              categories={categories}
+              setCategories={setCategories}
+              categoriesIndexes={categoriesIndexes}
+              setCategoriesIndexes={setCategoriesIndexes}
             />
           </>
         ) : (
