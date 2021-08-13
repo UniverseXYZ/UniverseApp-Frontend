@@ -29,18 +29,16 @@ import { sendMintRequest, sendBatchMintRequest } from './api/ContractInteraction
  * @param data.nfts[].royaltiesParsed
  */
 export async function MintSingleNftFlow({ nfts, helpers }) {
-  const nftsInput = [...nfts];
-
   const requiredContracts = pipe(
     getCollectionsAdddresses,
     createContractInstancesFromAddresses
-  )({ nfts: nftsInput, helpers });
+  )({ nfts, helpers });
 
   const { tokenURIsAndRoyaltiesObject, isSingle } = await asyncPipe(
     generateTokenURIs,
     formatRoyalties,
     returnTokenURIsAndRoyalties
-  )({ nfts: nftsInput });
+  )({ nfts });
 
   isSingle
     ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers)
