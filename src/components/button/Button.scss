@@ -17,7 +17,7 @@
   transition: 50ms ease-in;
   &:hover {
     background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-      linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%)!important;
+      linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) !important;
   }
   &:disabled {
     background: rgba(0, 0, 0, 0.05);
@@ -25,7 +25,7 @@
     box-shadow: none;
     cursor: not-allowed;
     &:hover {
-      background: rgba(0, 0, 0, 0.05)!important;
+      background: rgba(0, 0, 0, 0.05) !important;
     }
   }
 }
@@ -37,7 +37,7 @@
   justify-content: center;
   border: 1px solid transparent;
   border-radius: 12px;
-  background-image: linear-gradient(101deg, #bceb00, #00eaea);
+  background-image: linear-gradient(175deg, #bceb00, #00eaea);
   background-origin: border-box;
   box-shadow: 2px 1000px 1px #fff inset;
   font-family: $spaceGroteskFont;
@@ -54,7 +54,7 @@
     background: $white;
     cursor: not-allowed;
     &:hover {
-      background: $white!important;
+      background: $white !important;
     }
   }
   &:hover {

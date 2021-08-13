@@ -35,15 +35,12 @@
       }
     }
     .section4--left--block {
-      height: 500px;
-      background-image: url('../../../assets/images/Section4-Background-min.png');
+      height: 400px;
+      background-image: url('../../../assets/images/topmorph.png');
       background-repeat: no-repeat;
-      background-size: contain;
-      background-position-x: 170px;
-      background-position-y: 15px;
+      background-size: cover;
       display: flex;
       align-items: center;
-      margin-right: 50px;
       @include lg {
         height: 430px;
         background-image: none;
@@ -52,12 +49,8 @@
       @include md {
         margin-right: 0px;
       }
-      .hide--on--mobile {
+      .hide--on--tablet {
         @include lg {
-          position: relative;
-          bottom: 40px;
-        }
-        @include sm {
           display: none;
         }
       }
@@ -65,6 +58,15 @@
         display: none;
         @include sm {
           display: block;
+        }
+      }
+      .show--on--tablet {
+        display: none;
+        @include lg {
+          display: block;
+        }
+        @include sm {
+          display: none;
         }
       }
     }
