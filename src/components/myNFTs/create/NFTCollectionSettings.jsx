@@ -26,7 +26,7 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
-import { CollectionMintingFlow } from '../../../utils/helpers/factory/mintingFlows';
+import { MintCollectionWithCollectiblesFlow } from '../../../userFlows/MintCollectionWithCollectiblesFlow';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -281,14 +281,11 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       tokenName,
     };
 
-    const isSingle = collectionNFTs.length === 1 && collectionNFTs[0].numberOfEditions === 1;
-
-    // const result = await new CollectionMintingFlow(
-    //   collectionData,
-    //   collectionNFTs,
-    //   mintingFlowContext,
-    //   isSingle
-    // );
+    await MintCollectionWithCollectiblesFlow({
+      collectionInput: collectionData,
+      helpersInput: mintingFlowContext,
+      nfts: collectionNFTs,
+    });
   };
 
   useEffect(() => {

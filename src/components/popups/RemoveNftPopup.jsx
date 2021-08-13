@@ -4,7 +4,7 @@ import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
-import { RemoveNftFlow } from '../../utils/helpers/factory/mintingFlows';
+import { removeSavedNft } from '../../utils/api/mintNFT';
 
 const RemovePopup = ({
   close,
@@ -17,7 +17,7 @@ const RemovePopup = ({
   const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useContext(AppContext);
 
   const handleRemove = async (id) => {
-    const result = await new RemoveNftFlow(id);
+    const result = await removeSavedNft(id);
 
     if (!result.ok || result.status !== 200) {
       console.error(`Cannot delete NFT with id: ${id}`);

@@ -2,122 +2,80 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-await-in-loop */
 import { Contract } from 'ethers';
-import {
-  getMetaForSavedNft,
-  getTokenURI,
-  saveCollection,
-  attachTxHashToCollection,
-  getMyCollections,
-} from '../../api/mintNFT';
 import { chunkifyArray, formatRoyaltiesForMinting } from '../contractInteraction';
 
-export const getCollectionsAdddresses = (obj) => {
-  const { data, context } = obj;
-  const dataObject = {};
-
-  data.forEach((nft) => {
-    dataObject[nft.collectionId] = context.collectionsIdAddressMapping[nft.collectionId] || 0;
-  });
+/**
+ * @param {Object} data
+ * @param {Object} data.helpers
+ * @param data.helpers.collectionsIdAddressMapping
+ * @param {Object[]} data.nfts
+ * @param data.nfts[].collectionId
+ */
+export const getCollectionsAdddresses = ({ nfts, helpers }) => {
+  const nftsAttachedAddress = nfts.map((nft) => ({
+    ...nft,
+    contractAddress: helpers.collectionsIdAddressMapping[nft.collectionId] || 0,
+  }));
 
   return {
-    ...obj,
-    data: dataObject,
+    nfts: nftsAttachedAddress,
+    helpers,
   };
 };
 
-export const getSingleCollectionAddress = async (data) => {
-  let collection = false;
-  let status = true;
-
-  while (!collection && status) {
-    const fetchedCollections = await getMyCollections();
-
-    if (!fetchedCollections) {
-      status = false;
-    }
-
-    const searchResult = fetchedCollections.find(
-      (col) => col.name === data.collection.name && col.symbol === data.collection.symbol
-    );
-    collection = searchResult;
-  }
-
-  data.collection.address = collection.address;
-  data.collection.id = collection.id;
-
-  return data;
-};
-
-export const createSingleContract = (data) => {
-  const { collection, context } = data;
+export const createSingleContract = ({ collection, helpers }) => {
   const contract = {};
 
   contract[collection.id] = new Contract(
     collection.address,
-    context.contracts.UniverseERC721Core.abi,
-    context.signer
+    helpers.contracts.UniverseERC721Core.abi,
+    helpers.signer
   );
 
   return {
     contract,
-    collection: data.collection,
+    collection,
   };
 };
 
-export const createContractInstancesFromAddresses = (obj) => {
-  const { data, context } = obj;
+/**
+ * @param {Object} data
+ * @param {Object} data.helpers
+ * @param data.helpers.universeERC721CoreContract
+ * @param data.helpers.contracts
+ * @param data.helpers.signer
+ * @param {Object[]} data.nfts
+ * @param data.nfts[].collectionId
+ * @param data.nfts[].contractAddress
+ * @return {Object} requiredContracts {[collectionId]: Contract}
+ */
+export const createContractInstancesFromAddresses = ({ nfts, helpers }) => {
   const dataObject = {};
 
   // if there is no address we need to use the Universe Contract
-  Object.keys(data).forEach((collectionId) => {
-    dataObject[data[collectionId] ? collectionId : 0] = data[collectionId]
-      ? new Contract(data[collectionId], context.contracts.UniverseERC721Core.abi, context.signer)
-      : context.universeERC721CoreContract;
+  nfts.forEach((nft) => {
+    dataObject[nft.collectionId || 0] = nft.contractAddress
+      ? new Contract(nft.contractAddress, helpers.contracts.UniverseERC721Core.abi, helpers.signer)
+      : helpers.universeERC721CoreContract;
   });
 
-  return {
-    ...obj,
-    data: dataObject,
-  };
+  return dataObject;
 };
 
-export const extractRequiredDataForMinting = (data) => {
-  const returnData = data.map((nft) => ({
+export const extractRequiredDataForMinting = ({ nfts }) => {
+  const nftsStripped = nfts.map((nft) => ({
     collectionId: nft.collectionId ? nft.collectionId : 0,
     royalties: nft.royalties,
     id: nft.id,
   }));
 
-  return returnData;
+  return { nfts: nftsStripped };
 };
 
-export const generateTokenURIsForSavedNfts = async (data) => {
-  for (let i = 0; i < data.length; i += 1) {
-    data[i].tokenUri = await getMetaForSavedNft(data[i].id);
-  }
-
-  return data;
-};
-
-export const generateTokenURIs = async (data) => {
-  for (let i = 0; i < data.length; i += 1) {
-    data[i].tokenUri = await getTokenURI({
-      file: data[i].previewImage || data[i].file,
-      name: data[i].name,
-      description: data[i].description,
-      editions: data[i].numberOfEditions,
-      propertiesParsed: data[i].properties,
-      royaltiesParsed: data[i].royalties,
-    });
-  }
-
-  return data;
-};
-
-export const returnTokenURIsAndRoyalties = (data) => {
+export const returnTokenURIsAndRoyalties = ({ nfts }) => {
   const tokenURIsAndRoyaltiesObject = {};
 
-  data.forEach((nft) => {
+  nfts.forEach((nft) => {
     if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
       tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
 
@@ -129,10 +87,13 @@ export const returnTokenURIsAndRoyalties = (data) => {
     });
   });
 
-  return tokenURIsAndRoyaltiesObject;
+  return {
+    tokenURIsAndRoyaltiesObject,
+    isSingle: nfts.length === 1 && nfts[0].tokenUri.length === 1,
+  };
 };
 
-export const formatTokenURIsAndRoyaltiesObject = (data) => {
+const formatTokenURIsAndRoyaltiesObject = (data) => {
   const royaltiesArray = [];
   const tokensArray = [];
 
@@ -147,13 +108,13 @@ export const formatTokenURIsAndRoyaltiesObject = (data) => {
   };
 };
 
-export const formatRoyalties = (data) => {
-  const returnData = data.map((nft) => ({
+export const formatRoyalties = ({ nfts }) => {
+  const formattedNfts = nfts.map((nft) => ({
     ...nft,
     royalties: nft.royalties ? formatRoyaltiesForMinting(nft.royalties) : [],
   }));
 
-  return returnData;
+  return { nfts: formattedNfts };
 };
 
 export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
@@ -173,67 +134,21 @@ export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
   };
 };
 
-export const mintChunkToContract = async ({ address, tokens, royalties, contract }) => {
-  const mintTransaction = await contract.batchMintWithDifferentFees(address, tokens, royalties);
-
-  const mintReceipt = await mintTransaction.wait();
-
-  if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
-};
-
-export const sendSaveCollectionRequest = async (data) => {
-  const { file, name, symbol, description, shortUrl } = data.collection;
-  const collectionCreationResult = await saveCollection({
-    file,
-    name,
-    symbol,
-    description,
-    shortUrl,
-  });
-
-  data.collection.id = collectionCreationResult?.id;
-
-  return data;
-};
-
-export const deployCollection = async (data) => {
-  if (data.collection.id) {
-    const unsignedMintCollectionTx =
-      await data.context.universeERC721FactoryContract.deployUniverseERC721(
-        data.collection.name,
-        data.collection.tokenName
-      );
-
-    const res = await unsignedMintCollectionTx.wait();
-
-    if (!res.status) {
-      console.error('satus code:', res.status);
-      return;
-    }
-
-    data.collection.transactionHash = res.transactionHash;
-    data.collection.from = res.from;
-  } else {
-    console.error('There was an error');
-  }
-
-  return data;
-};
-
-export const updateCollectionTxHash = async ({ collection }) => {
-  const response = await attachTxHashToCollection(collection.transactionHash, collection.id);
-
-  if (!response.ok && response.status !== 201) {
-    console.error(`Error while trying to save a new collection: ${response.statusText}`);
-  }
-
-  return collection;
-};
-
 export const attachCollectionIdToNfts = ({ collection, nfts }) => {
   nfts.map((nft) => {
     nft.collectionId = collection?.id || 0;
     return nft;
   });
-  return nfts;
+  return { nfts };
+};
+
+export const resolveAllPromises = async (promises) => {
+  let res;
+  try {
+    res = await Promise.all(promises);
+  } catch (e) {
+    res = [];
+    console.error('error');
+  }
+  return res;
 };
