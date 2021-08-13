@@ -179,7 +179,7 @@
                 margin-bottom: 8px;
             }
             @include lg {
-                min-height: auto;
+                display: none;
             }
         }
         .grid {
