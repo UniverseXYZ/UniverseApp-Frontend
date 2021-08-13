@@ -6,7 +6,6 @@ import uuid from 'react-uuid';
 import PolymorphCard from './PolymorphCard';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
 import Pagination from '../../pagination/Pagionation';
-import { categoriesArray } from './categories';
 import '../../../containers/rarityCharts/RarityCharsLoader.scss';
 import '../../../containers/rarityCharts/RarityCharts.scss';
 import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders';
@@ -21,10 +20,13 @@ const List = ({
   setOffset,
   setApiPage,
   setIsLastPage,
+  categories,
+  setCategories,
+  categoriesIndexes,
+  setCategoriesIndexes,
 }) => {
   const sliceData = data.slice(offset, offset + perPage) || [];
   const emptySlots = perPage - sliceData.length || 4;
-  const [categories, setCategories] = useState(categoriesArray);
   const [showClearALL, setShowClearALL] = useState(false);
 
   const handleClearAll = () => {
@@ -60,7 +62,12 @@ const List = ({
 
   return (
     <div className="rarity--charts--list">
-      <CategoriesFilter categories={categories} setCategories={setCategories} />
+      <CategoriesFilter
+        categories={categories}
+        setCategories={setCategories}
+        categoriesIndexes={categoriesIndexes}
+        setCategoriesIndexes={setCategoriesIndexes}
+      />
       <div className="list--with--selected--filters">
         <div className="selected--filters">
           {showClearALL && <div className="result">898 results</div>}
@@ -113,6 +120,10 @@ List.propTypes = {
   setApiPage: PropTypes.func.isRequired,
   setIsLastPage: PropTypes.func.isRequired,
   setPerPage: PropTypes.func.isRequired,
+  categories: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setCategories: PropTypes.func.isRequired,
+  categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setCategoriesIndexes: PropTypes.func.isRequired,
 };
 
 export default List;

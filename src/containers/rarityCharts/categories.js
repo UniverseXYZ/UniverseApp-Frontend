@@ -17,7 +17,7 @@ export const categoriesArray = [
       },
       {
         id: uuid(),
-        name: 'Astronnaut Helmet',
+        name: 'Astronaut Helmet',
         checked: false,
       },
       {
