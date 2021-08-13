@@ -12,8 +12,15 @@ import PastAuctions from './PastAuctions.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 
 const MyAuction = () => {
-  const { myAuctions, setMyAuctions, auction, setAuction, loggedInArtist } = useContext(AppContext);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
+  const {
+    myAuctions,
+    setMyAuctions,
+    auction,
+    setAuction,
+    loggedInArtist,
+    selectedTabIndex,
+    setSelectedTabIndex,
+  } = useContext(AppContext);
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
   const [showButton, setShowButton] = useState(true);
   const history = useHistory();

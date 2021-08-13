@@ -23,7 +23,15 @@ import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
 
 const AuctionReview = () => {
-  const { auction, setAuction, bidtype, myAuctions, setMyAuctions } = useContext(AppContext);
+  const {
+    auction,
+    setAuction,
+    bidtype,
+    myAuctions,
+    setMyAuctions,
+    selectedTabIndex,
+    setSelectedTabIndex,
+  } = useContext(AppContext);
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);
@@ -47,19 +55,18 @@ const AuctionReview = () => {
     }
   }, []);
 
-  console.log(auction.properties);
-
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
       let totalNFTs = 0;
       auction.tiers.forEach((tier) => {
         totalNFTs += tier.winners * tier.nftsPerWinner;
       });
-      document.getElementById('loading-hidden-btn').click();
+      // document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
         document.getElementById('popup-root').remove();
         document.getElementById('congrats-hidden-btn').click();
       }, 2000);
+      setSelectedTabIndex(1);
       setTimeout(() => {
         const newAuction = { ...auction };
         newAuction.totalNFTs = totalNFTs;
@@ -77,6 +84,7 @@ const AuctionReview = () => {
         totalNFTs += tier.winners * tier.nftsPerWinner;
       });
       document.getElementById('loading-hidden-btn').click();
+      setSelectedTabIndex(1);
       setTimeout(() => {
         document.getElementById('popup-root').remove();
         const newAuction = { ...auction };
@@ -187,9 +195,15 @@ const AuctionReview = () => {
           </div>
         )}
 
-        <div className="royalty-settings-head">
-          <h2 className="royalty-settings-title">Royalty splits</h2>
-        </div>
+        {auction.properties &&
+          auction.properties.length &&
+          auction.properties
+            .map((item) => item.address !== '' && item.amount !== '')
+            .find((element) => element) && (
+            <div className="royalty-settings-head">
+              <h2 className="royalty-settings-title">Royalty splits</h2>
+            </div>
+          )}
 
         {auction.properties && auction.properties.length && (
           <div className="royalty-inf">
