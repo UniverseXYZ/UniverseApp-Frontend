@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
-import currencyIcon from '../../assets/images/marketplace/price.svg';
+import currencyIcon from '../../assets/images/eth-icon-new.svg';
 import calendarIcon from '../../assets/images/calendar-small.svg';
 import congratsIcon from '../../assets/images/bid-submitted.png';
 import SmallCalendar from '../calendar/SmallCalendar.jsx';
