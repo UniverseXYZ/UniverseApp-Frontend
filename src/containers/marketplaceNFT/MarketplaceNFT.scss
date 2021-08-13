@@ -612,6 +612,7 @@
     bottom: 0px;
     .border--gradient {
       width: 100%;
+      margin-top: -22px;
     }
     .span--percent--seperate {
       display: block;
@@ -626,7 +627,7 @@
     }
     .auction-timer-box {
       position: absolute;
-      top: -10px;
+      top: -21px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;

@@ -5,7 +5,7 @@ import icon2 from '../../assets/images/Bid.svg';
 import icon3 from '../../assets/images/Mint.svg';
 import icon4 from '../../assets/images/Sales2.svg';
 import icon5 from '../../assets/images/Listing.svg';
-import share from '../../assets/images/etherscanicon.svg';
+import share from '../../assets/images/historyicon.svg';
 
 const TradingHistory = () => (
   <div className="trading">
