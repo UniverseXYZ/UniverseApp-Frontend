@@ -46,7 +46,8 @@ const SortingFilters = ({
   const [disabledMax, setDisabledMax] = useState(false);
   const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
   const [showArtistsDropdown, setShowArtistsDropdown] = useState(false);
-  const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
+  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+  console.log(selectedTokenIndex);
 
   const bidTokens = [
     {
@@ -301,18 +302,21 @@ const SortingFilters = ({
               <div
                 className={`price--dropdown ${showPriceItems ? 'open' : ''}`}
                 aria-hidden="true"
-                onClick={() => setShowPriceItems(!showPriceItems)}
+                onClick={(e) => {
+                  setShowPriceItems(!showPriceItems);
+                  e.stopPropagation();
+                }}
               >
                 <div>
                   <img
-                    src={bidTokens[selectedTokenIndex].icon}
-                    alt={bidTokens[selectedTokenIndex].title}
+                    src={bidTokens[selectedTokenIndex]?.icon}
+                    alt={bidTokens[selectedTokenIndex]?.title}
                   />
                 </div>
                 <div>
                   <h6>
-                    {bidTokens[selectedTokenIndex].title}
-                    <p>({bidTokens[selectedTokenIndex].subtitle})</p>
+                    {bidTokens[selectedTokenIndex]?.title}
+                    <p>({bidTokens[selectedTokenIndex]?.subtitle})</p>
                   </h6>
                 </div>
                 <div>

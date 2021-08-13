@@ -17,20 +17,26 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   const [blurInfo, setBlurInfo] = useState(false);
   const [blur, setBlur] = useState(false);
   const [auctionHeadline, setAuctionHeadline] = useState('');
-  const [auctionLink, setAuctionLink] = useState(
-    `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auctionname`
-  );
+  // const [auctionLink, setAuctionLink] = useState(
+  //   `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auctionname`
+  // );
+  const [auctionLink, setAuctionLink] = useState('');
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
-  const [validLink, setValidLink] = useState(false);
+  const [validLink, setValidLink] = useState(true);
   const [validHeadline, setValidHeadline] = useState(true);
   const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
-  const [inputStyle, setInputStyle] = useState('inp empty');
+  const [inputStyle, setInputStyle] = useState('');
 
   const handleLink = (e) => {
-    onChange((prevValues) => ({ ...prevValues, link: e.target.value, status: 'filled' }));
+    setAuctionLink(e.target.value);
+    onChange((prevValues) => ({
+      ...prevValues,
+      link: prevValues.link + e.target.value,
+      status: e.target.value.length > 0 ? 'filled' : 'empty',
+    }));
     setValidLink(e.target.value.trim().length !== 0);
     console.log(e.target.value.trim().length !== 0);
   };
@@ -90,6 +96,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                   ? 'inp error-inp'
                   : 'inp'
               }
+              onFocus
               value={values.headline}
               onChange={handleHeadline}
             />
@@ -100,7 +107,8 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
           <div className="auction__link__input">
             <h5>Auction link</h5>
             {/* Auction link */}
-            <Input
+
+            {/* <Input
               type="text"
               className={
                 (editButtonClick || validLink) && values.status === 'empty'
@@ -122,7 +130,35 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
               <p className="error__text">
                 &quot;Auction website link&quot; is not allowed to be empty
               </p>
-            )}
+            )} */}
+            <div
+              className={
+                (editButtonClick || !validLink) &&
+                (values.link ===
+                  `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/` ||
+                  auctionLink.length === 0)
+                  ? 'auction--link--div error-inp'
+                  : `auction--link--div ${inputStyle}`
+              }
+            >
+              <span>universe.xyz/{loggedInArtist.name.split(' ')[0].toLowerCase()}/</span>
+              <input
+                type="text"
+                placeholder="auctionname"
+                value={auctionLink}
+                onFocus={() => setInputStyle('active')}
+                onBlur={() => setInputStyle('')}
+                onChange={(e) => handleLink(e)}
+              />
+            </div>
+            {/* {(editButtonClick || validLink) && (!values.link || values.status === 'empty') && ( */}
+            {(editButtonClick || !validLink) &&
+              (values.link === `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/` ||
+                auctionLink.length === 0) && (
+                <p className="error__text">
+                  &quot;Auction website link&quot; is not allowed to be empty
+                </p>
+              )}
           </div>
         </div>
 
