@@ -22,24 +22,9 @@ import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
-import {
-  getTokenURI,
-  getMyNfts,
-  saveNftForLater,
-  saveNftImage,
-  updateSavedForLaterNft,
-  getSavedNfts,
-} from '../../../utils/api/mintNFT';
-import {
-  parseRoyalties,
-  formatRoyaltiesForMinting,
-  parseProperties,
-  parsePropertiesForFrontEnd,
-} from '../../../utils/helpers/contractInteraction';
-import {
-  SingleNftMintingFlow,
-  SaveNftForLaterFlow,
-} from '../../../utils/helpers/factory/mintingFlows';
+import { saveNftForLater, saveNftImage, getSavedNfts } from '../../../utils/api/mintNFT';
+import { parseRoyalties, parseProperties } from '../../../utils/helpers/contractInteraction';
+import { MintSingleNftFlow } from '../../../userFlows/MintSingleNftFlow';
 
 const SingleNFTSettings = () => {
   const {
@@ -215,17 +200,20 @@ const SingleNFTSettings = () => {
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
-    const nftData = {
-      collectionId: selectedCollection?.id || 0,
-      royalties: royaltiesParsed,
-      editions,
-      file: previewImage,
-      name,
-      description,
-      propertiesParsed,
-    };
+    const nftData = [
+      {
+        collectionId: selectedCollection?.id || 0,
+        royalties: royaltiesParsed,
+        numberOfEditions: editions,
+        file: previewImage,
+        name,
+        description,
+        propertiesParsed,
+        royaltiesParsed,
+      },
+    ];
 
-    const result = await new SingleNftMintingFlow(mintingFlowContext, nftData);
+    await MintSingleNftFlow({ nfts: nftData, helpers: mintingFlowContext });
 
     // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
     // const mintedNfts = await getMyNfts();
@@ -243,10 +231,6 @@ const SingleNFTSettings = () => {
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
-    const flowContext = {
-      previewImage,
-    };
-
     const nftData = {
       name,
       description,
@@ -256,13 +240,16 @@ const SingleNFTSettings = () => {
       collectionId: selectedCollection?.id,
     };
 
-    const result = await new SaveNftForLaterFlow(flowContext, nftData);
+    const result = await saveNftForLater(nftData);
+    let saveImageResult;
 
-    if (result.saveImageResult.error) {
+    if (result.savedNft) saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+
+    if (saveImageResult.error) {
       showErrorModal(true);
       return;
     }
-    if (!result.saveImageResult) return;
+    if (!saveImageResult) return;
 
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);

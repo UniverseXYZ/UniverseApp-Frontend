@@ -21,8 +21,8 @@ import tabArrow from '../../assets/images/tab-arrow.svg';
 import DeployedCollections from './DeployedCollections.jsx';
 import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scrollingHandlers';
 import Tabs from '../tabs/Tabs';
-import { SavedNFTsMintingFlow } from '../../utils/helpers/factory/mintingFlows';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
+import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
 
 const MyNFTs = () => {
   const {
@@ -86,7 +86,10 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const mintSelectedNfts = async (nfts, isSingle) => {
+  const handleMintSelected = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const selectedNfts = savedNfts.filter((nft) => nft.selected);
     const mintingFlowContext = {
       collectionsIdAddressMapping,
       universeERC721CoreContract,
@@ -95,18 +98,10 @@ const MyNFTs = () => {
       address,
     };
 
-    const result = await new SavedNFTsMintingFlow(nfts, mintingFlowContext, isSingle);
-  };
-
-  const handleMintSelected = async () => {
-    document.getElementById('loading-hidden-btn').click();
-
-    const selectedNfts = savedNfts.filter((nft) => nft.selected);
-    const isSingleNft =
-      selectedNfts.length === selectedNfts[0].numberOfEditions &&
-      selectedNfts[0].numberOfEditions === 1;
-
-    await mintSelectedNfts(selectedNfts, isSingleNft);
+    await MintSavedNftsFlow({
+      nfts: selectedNfts,
+      helpers: mintingFlowContext,
+    });
 
     // TODO temporarily use this
     const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);

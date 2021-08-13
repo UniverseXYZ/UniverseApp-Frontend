@@ -27,7 +27,6 @@ export const saveProfileInfo = async (loggedInArtist) => {
   };
 
   const result = await fetch(SAVE_PROFILE_INFO_URL, {
-    credentials: 'include',
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -53,7 +52,6 @@ export const saveUserImage = async (file) => {
   formData.append('file', file, file.name);
 
   const request = await fetch(UPLOAD_PROFILE_IMAGE_URL, {
-    credentials: 'include',
     method: 'post',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -73,7 +71,6 @@ export const saveUserLogo = async (file) => {
   formData.append('file', file, file.name);
 
   const request = await fetch(UPLOAD_LOGO_URL, {
-    credentials: 'include',
     method: 'post',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -100,7 +97,6 @@ export const saveUserLogo = async (file) => {
  */
 export const getProfileInfo = async ({ address }) => {
   const request = await fetch(`${GET_PROFILE_INFO_URL}/${address}`, {
-    credentials: 'include',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -22,22 +22,13 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
 import delIcon from '../../assets/images/del-icon.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
-import {
-  updateSavedForLaterNft,
-  saveNftImage,
-  saveNftForLater,
-  getTokenURI,
-  getSavedNfts,
-  getMyNfts,
-} from '../../utils/api/mintNFT';
+import { updateSavedForLaterNft, saveNftImage, getSavedNfts } from '../../utils/api/mintNFT';
 import {
   parseRoyalties,
-  formatRoyaltiesForMinting,
   parseProperties,
   parsePropertiesForFrontEnd,
 } from '../../utils/helpers/contractInteraction';
 import ServerErrorPopup from '../popups/ServerErrorPopup';
-import { UpdateNftFlow } from '../../utils/helpers/factory/mintingFlows';
 
 const MintSingleNft = ({ onClick }) => {
   const {
@@ -220,18 +211,17 @@ const MintSingleNft = ({ onClick }) => {
       previewImage,
     };
 
-    const result = await new UpdateNftFlow(flowContext, nftData);
+    let result = await updateSavedForLaterNft(nftData);
 
-    debugger;
-
-    if (result.saveImageResult?.error) {
-      showErrorModal(true);
-      return;
+    if (!result.message) {
+      const updateNFTImage = result.id && typeof previewImage === 'object';
+      if (updateNFTImage) {
+        const saveImageRes = await saveNftImage(previewImage, result.id);
+        result = saveImageRes;
+      }
     }
 
-    const data = result.saveImageResult || result.updateResult;
-    if (!data) {
-      document.getElementById('congrats-hidden-btn').click();
+    if (result?.error) {
       showErrorModal(true);
       return;
     }
