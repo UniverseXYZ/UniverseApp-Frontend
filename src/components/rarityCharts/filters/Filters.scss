@@ -89,7 +89,9 @@
                     border-radius: 50%;
                 }
                 @include lg {
-                    display: block;
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
                 }
                 @include md {
                     display: none;
@@ -132,7 +134,7 @@
         }
         .search--field--component {
             @include lg {
-                width: 252px;
+                min-width: 252px;
             }
             @include md {
                 width: 100%;

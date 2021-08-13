@@ -28,7 +28,7 @@ const CategoriesFilter = ({
 
   return (
     <div className="categories--filters">
-      <h2>Categories</h2>
+      <h2>Filters</h2>
       {categories.map((item, index) => (
         <div className="each--category" key={uuid()}>
           <div
