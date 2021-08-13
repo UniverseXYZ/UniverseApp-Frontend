@@ -103,7 +103,13 @@ const List = ({
           {isLastPage ? renderLoaders(emptySlots) : <></>}
         </div>
         <div className="pagination__container">
-          <Pagination data={data} perPage={perPage} setOffset={setOffset} setApiPage={setApiPage} />
+          <Pagination
+            data={data}
+            perPage={perPage}
+            setOffset={setOffset}
+            setApiPage={setApiPage}
+            setIsLastPage={setIsLastPage}
+          />
           <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
         </div>
       </div>
