@@ -83,22 +83,22 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                // className="disable"
-                onClick={() => {
-                  setIsMintingDropdownOpened(false);
-                  history.push('/marketplace');
-                }}
+                className="disable"
+                // onClick={() => {
+                //   setIsMintingDropdownOpened(false);
+                //   history.push('/marketplace');
+                // }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
                 <span>NFT marketplace</span>
-                {/* <span className="tooltiptext">Coming soon</span> */}
+                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
                 className="disable"
-                onClick={() => {
-                  setIsMintingDropdownOpened(false);
-                }}
+                // onClick={() => {
+                //   setIsMintingDropdownOpened(false);
+                // }}
               >
                 <img src={socialMediaIcon} alt="Social Media" />
                 <span>Social media</span>
