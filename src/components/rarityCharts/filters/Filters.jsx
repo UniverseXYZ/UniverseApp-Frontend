@@ -52,6 +52,9 @@ const Filters = (props) => {
               trigger={
                 <button type="button" className="light-border-button">
                   <img src={filterIcon} alt="Filter" /> Filters
+                  {selectedFiltersLength !== 0 && (
+                    <div className="count">{selectedFiltersLength}</div>
+                  )}
                 </button>
               }
             >
@@ -67,7 +70,6 @@ const Filters = (props) => {
                 />
               )}
             </Popup>
-            {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>}
           </div>
           <div className="mobile--filters">
             <Popup
