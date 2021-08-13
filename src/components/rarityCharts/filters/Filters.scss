@@ -98,7 +98,8 @@
             .mobile--filters {
                 position: fixed;
                 right: 20px;
-                z-index: 99999;
+                bottom: 20px;
+                z-index: 111;
                 display: none;
                 button {
                     padding: 15px 18px;
