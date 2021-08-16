@@ -15,6 +15,7 @@ const RarityChartFiltersPopup = ({
   setSelectedFiltersLength,
   resultsCount,
   handleCategoryFilterChange,
+  setFilter,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
 
@@ -86,12 +87,7 @@ const RarityChartFiltersPopup = ({
       </div>
       <div className="rarity--chart--filters--popup--body">
         <div className="selected--filters">
-          {showClearALL && (
-            <div className="result">
-              {' '}
-              {resultsCount ? `Show ${resultsCount} results` : 'Loading results...'}
-            </div>
-          )}
+          {showClearALL && <div className="result"> Show results</div>}
           {categories.map((item, index) => (
             <>
               {item.traits.map(
@@ -153,7 +149,7 @@ const RarityChartFiltersPopup = ({
       </div>
       <div className="rarity--chart--filters--popup--footer">
         <Button className="light-button" onClick={close}>
-          {resultsCount ? `Show ${resultsCount} results` : 'Loading results...'}
+          Show results
         </Button>
       </div>
     </div>
@@ -169,6 +165,7 @@ RarityChartFiltersPopup.propTypes = {
   selectedFiltersLength: PropTypes.number.isRequired,
   resultsCount: PropTypes.number.isRequired,
   setSelectedFiltersLength: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
   handleCategoryFilterChange: PropTypes.func.isRequired,
 };
 

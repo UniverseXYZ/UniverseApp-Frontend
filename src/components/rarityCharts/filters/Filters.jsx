@@ -25,12 +25,13 @@ const Filters = (props) => {
     setCategoriesIndexes,
     resultsCount,
     handleCategoryFilterChange,
+    setFilter,
   } = props;
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
 
   return (
     <div className="rarity--charts--search--and--filters--container">
-      <div className="floor--price--block">
+      {/* <div className="floor--price--block">
         <p className="floor--price--paragraph">
           <span>Floor Price: </span>
           <div>
@@ -38,7 +39,7 @@ const Filters = (props) => {
             {`${floorPrice.price}`}
           </div>
         </p>
-      </div>
+      </div> */}
       <div className="rarity--charts--search--and--filters--row">
         <div className="rarity--charts--search--and--floor--price">
           <SearchField
@@ -47,7 +48,6 @@ const Filters = (props) => {
             setSearchText={setSearchText}
             setApiPage={setApiPage}
             resetPagination={resetPagination}
-            handleCategoryFilterChange
           />
           <div className="tablet--filters">
             <Popup
@@ -71,6 +71,7 @@ const Filters = (props) => {
                   setSelectedFiltersLength={setSelectedFiltersLength}
                   resultsCount={resultsCount}
                   handleCategoryFilterChange={handleCategoryFilterChange}
+                  setFilter={setFilter}
                 />
               )}
             </Popup>
@@ -94,6 +95,7 @@ const Filters = (props) => {
                   setSelectedFiltersLength={setSelectedFiltersLength}
                   resultsCount={resultsCount}
                   handleCategoryFilterChange={handleCategoryFilterChange}
+                  setFilter={setFilter}
                 />
               )}
             </Popup>
@@ -134,6 +136,7 @@ Filters.propTypes = {
   setCategoriesIndexes: PropTypes.func.isRequired,
   resultsCount: PropTypes.number.isRequired,
   handleCategoryFilterChange: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {

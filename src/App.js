@@ -424,7 +424,7 @@ const App = () => {
         <Route exact path="/my-nfts">
           <MyNFTs />
         </Route>
-        <Route exact path="/rarity-charts">
+        <Route exact path="/polymorph-rarity">
           <RarityCharts />
         </Route>
         <Route path="*" component={() => <NotFound />} />
