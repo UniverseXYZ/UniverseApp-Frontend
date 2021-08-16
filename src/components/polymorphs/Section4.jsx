@@ -4,8 +4,9 @@ import { useHistory } from 'react-router-dom';
 import WrapperCenter from './WrapperCenter';
 import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import './styles/Section4.scss';
-import Section4Image from '../../assets/images/Section4-Illustration-min.png';
-import Button from '../button/Button.jsx';
+import mobilebackground from '../../assets/images/mobilebackground.png';
+import tabletbackground from '../../assets/images/topmorph.png';
+import Button from '../button/Button';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -19,7 +20,8 @@ const leftBlock = (windows) => (
       className="section4--left--block"
       style={windows === 'mobile' ? { height: window.innerWidth } : {}}
     >
-      <img alt="img" src={Section4Image} />
+      <img alt="mobile" src={mobilebackground} className="show--on--mobile" />
+      <img alt="tablet" src={tabletbackground} className="show--on--tablet" />
     </div>
   </AnimatedOnScroll>
 );
@@ -29,13 +31,11 @@ const rightBlock = () => {
   return (
     <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
       <div className="section4--right--block">
-        <h2>Mint a Polymorphic NFT</h2>
-        <p>
-          Mint a Polymoprh with a unique genetic code. You can scramble your morph as many times as
-          you want to achieve the perfect Polymorph!
-        </p>
-        <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
-          Mint a morph
+        <div className="coming--soon">COMING SOON</div>
+        <h2>Polymorph Rarity Chart</h2>
+        <p>Mirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
+        <Button className="light-button" onClick={() => history.push('/polymorph-rarity')}>
+          Rarity chart
         </Button>
       </div>
     </AnimatedOnScroll>

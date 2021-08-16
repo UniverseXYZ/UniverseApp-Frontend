@@ -16,6 +16,7 @@ const RarityChartFiltersPopup = ({
   resultsCount,
   handleCategoryFilterChange,
   setFilter,
+  filter,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
 
@@ -167,6 +168,7 @@ RarityChartFiltersPopup.propTypes = {
   setSelectedFiltersLength: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
   handleCategoryFilterChange: PropTypes.func.isRequired,
+  filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default RarityChartFiltersPopup;
