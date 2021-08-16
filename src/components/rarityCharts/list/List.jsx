@@ -134,18 +134,19 @@ const List = ({
             <p>No Polymorph could be found :’(</p>
           </div>
         )}
-
-        <div className="pagination__container">
-          <Pagination
-            data={data}
-            perPage={perPage}
-            setOffset={setOffset}
-            setApiPage={setApiPage}
-            apiPage={apiPage}
-            setIsLastPage={setIsLastPage}
-          />
-          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-        </div>
+        {data.length >= perPage ? (
+          <div className="pagination__container">
+            <Pagination
+              data={data}
+              perPage={perPage}
+              setOffset={setOffset}
+              setApiPage={setApiPage}
+              apiPage={apiPage}
+              setIsLastPage={setIsLastPage}
+            />
+            <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
