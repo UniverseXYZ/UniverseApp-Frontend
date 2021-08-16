@@ -8,9 +8,10 @@ header {
   width: 100%;
   z-index: 999;
   padding: 11.5px 40px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   align-items: center;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: $white;
   transition: background-color 0.3s, color 0.3s, opacity 0.3s ease-in;
@@ -120,197 +121,227 @@ header {
     align-items: center;
     .search--field {
       position: relative;
-      display: flex;
-      align-items: center;
-      margin-left: 30px;
+      // margin-left: 30px;
       padding-left: 30px;
-      border-left: 1px solid rgba(0, 0, 0, 0.1);
-      // display: none;
-      .search {
-        position: absolute;
-        left: 48px;
-        width: 20px;
-        height: 20px;
-      }
-      input {
-        background-color: transparent;
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 16px;
-        line-height: 20px;
-        color: $black;
-        padding: 15px 16px 15px 50px;
-        max-width: 440px;
-        border: 1px solid transparent;
-        &::placeholder {
-          color: rgba(0, 0, 0, 0.2);
+      // border-left: 1px solid rgba(0, 0, 0, 0.1);
+      width: 100%;
+      &--wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        .box--shadow--effect--block {
+          position: absolute;
+          width: calc(100% + 8px);
+          min-height: 50px;
+          z-index: -9;
+          left: -4px;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          border-radius: 12px;
+          opacity: 0;
+          background-image: linear-gradient(101deg, #bceb00, #00eaea);
+          background-origin: border-box;
+          box-shadow: 4px 1000px 1px $white inset;
+          border: 4px solid transparent;
+          transition: 0.2s;
         }
-        &:focus {
-          border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        &:active {
-          border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-      }
-      .close {
-        position: absolute;
-        right: 20px;
-        width: 12px;
-        height: 12px;
-        cursor: pointer;
-      }
-      .search__results {
-        position: absolute;
-        width: 440px;
-        max-height: 522px;
-        height: fit-content;
-        background: white;
-        border-radius: 12px;
-        top: 52px;
-        box-shadow: 0 10px 36px rgba(136, 120, 172, 0.14);
-        padding: 24px 8px;
-        overflow-y: auto;
-
-        .search__nfts {
-          h4 {
-            font-family: $sharpGroteskSemiBoldFont;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 12px;
-            line-height: 130%;
-            color: $black;
-            margin-left: 12px;
-            margin-bottom: 8px;
+        &.focus {
+          border-left: none;
+          .box--shadow--effect--block {
+            opacity: 0.2;
           }
-          .nft__div,
-          .auction__div,
-          .collection__div {
-            display: flex;
-            padding: 10px 12px;
-            border-radius: 6px;
+          input {
+            padding: 16px;
+          }
+          img.search {
+            filter: invert(1);
+          }
+        }
+        .search {
+          position: absolute;
+          left: 18px;
+          width: 20px;
+          height: 20px;
+        }
+        input {
+          text-indent: 30px;
+          background-color: transparent;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          line-height: 20px;
+          color: $black;
+          padding: 0 16px;
+          width: 100%;
+          border: 1px solid transparent;
+          &::placeholder {
+            color: rgba(0, 0, 0, 0.2);
+          }
+        }
+        .close {
+          position: absolute;
+          right: 20px;
+          width: 12px;
+          height: 12px;
+          cursor: pointer;
+        }
+        .search__results {
+          position: absolute;
+          min-width: 300px;
+          width: 100%;
+          max-height: 522px;
+          height: fit-content;
+          background: white;
+          border-radius: 12px;
+          top: 57px;
+          box-shadow: 0 10px 36px rgba(136, 120, 172, 0.14);
+          padding: 24px 8px;
+          overflow-y: auto;
 
-            .nft--image,
-            .auction--image,
-            .collection--image {
-              width: 36px;
-              height: 36px;
-              margin-right: 15px;
-              border-radius: 5px;
+          .search__nfts {
+            h4 {
+              font-family: $sharpGroteskSemiBoldFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 12px;
+              line-height: 130%;
+              color: $black;
+              margin-left: 12px;
+              margin-bottom: 8px;
+            }
+            .nft__div,
+            .auction__div,
+            .collection__div {
+              display: flex;
+              padding: 10px 12px;
+              border-radius: 6px;
 
-              img {
-                border-radius: 5px;
-              }
-              video {
+              .nft--image,
+              .auction--image,
+              .collection--image {
                 width: 36px;
                 height: 36px;
-                object-fit: cover;
+                margin-right: 15px;
+                border-radius: 5px;
+
+                img {
+                  border-radius: 5px;
+                }
+                video {
+                  width: 36px;
+                  height: 36px;
+                  object-fit: cover;
+                  border-radius: 5px;
+                }
+              }
+              .random--avatar--color {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 36px;
+                height: 36px;
+                margin-right: 15px;
                 border-radius: 5px;
               }
+              .nft--desc,
+              .auction--desc,
+              .collection--desc {
+                .nft--name,
+                .auction--title,
+                .collection--name {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 14px;
+                  line-height: 160%;
+                  color: $black;
+                }
+                .nft--price,
+                .auction--artist,
+                .collection--owner {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 12px;
+                  line-height: 22px;
+                  color: rgba(0, 0, 0, 0.4);
+                }
+              }
+              &:hover {
+                background: rgba(0, 0, 0, 0.05);
+              }
             }
-            .random--avatar--color {
+            .users__div,
+            .communities__div,
+            .galleries__div {
               display: flex;
-              justify-content: center;
-              align-items: center;
-              width: 36px;
-              height: 36px;
-              margin-right: 15px;
-              border-radius: 5px;
-            }
-            .nft--desc,
-            .auction--desc,
-            .collection--desc {
-              .nft--name,
-              .auction--title,
-              .collection--name {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 14px;
-                line-height: 160%;
-                color: $black;
-              }
-              .nft--price,
-              .auction--artist,
-              .collection--owner {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 12px;
-                line-height: 22px;
-                color: rgba(0, 0, 0, 0.4);
-              }
-            }
-            &:hover {
-              background: rgba(0, 0, 0, 0.05);
-            }
-          }
-          .users__div,
-          .communities__div,
-          .galleries__div {
-            display: flex;
-            padding: 10px 12px;
-            border-radius: 6px;
+              padding: 10px 12px;
+              border-radius: 6px;
 
-            .user--avatar,
-            .communities--photo,
-            .galleries--photo {
-              width: 36px;
-              height: 36px;
-              margin-right: 15px;
-              border-radius: 50%;
-
-              img {
+              .user--avatar,
+              .communities--photo,
+              .galleries--photo {
+                width: 36px;
+                height: 36px;
+                margin-right: 15px;
                 border-radius: 50%;
+
+                img {
+                  border-radius: 50%;
+                }
+              }
+              .user--desc,
+              .communities--desc,
+              .galleries--desc {
+                .user--name,
+                .communities--name,
+                .galleries--name {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 14px;
+                  line-height: 160%;
+                  color: $black;
+                }
+                .user--followers,
+                .communities--members,
+                .galleries--likes {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 12px;
+                  line-height: 22px;
+                  color: rgba(0, 0, 0, 0.4);
+                }
+              }
+              &:hover {
+                background: rgba(0, 0, 0, 0.05);
               }
             }
-            .user--desc,
-            .communities--desc,
-            .galleries--desc {
-              .user--name,
-              .communities--name,
-              .galleries--name {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 14px;
-                line-height: 160%;
-                color: $black;
-              }
-              .user--followers,
-              .communities--members,
-              .galleries--likes {
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 12px;
-                line-height: 22px;
-                color: rgba(0, 0, 0, 0.4);
-              }
-            }
-            &:hover {
-              background: rgba(0, 0, 0, 0.05);
+            button {
+              margin-top: 25px;
+              width: 100%;
             }
           }
-          button {
-            margin-top: 25px;
-            width: 100%;
+          .no__result {
+            padding: 12px;
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 18px;
+              line-height: 150%;
+              color: $black;
+            }
           }
         }
-        .no__result {
-          padding: 12px;
-          p {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 18px;
-            line-height: 150%;
-            color: $black;
-          }
+        @include lg {
+          display: none;
         }
-      }
-      @include lg {
-        display: none;
       }
     }
     .dark {

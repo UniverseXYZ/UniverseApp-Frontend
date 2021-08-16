@@ -148,11 +148,11 @@
             h3 {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
-                font-weight: bold;
+                font-weight: 500;
                 font-size: 22px;
                 line-height: 22px;
                 text-align: center;
-                color: $black;
+                color: rgba(0,0,0,0.4);
                 margin-top: 30px;
                 margin-bottom: 20px;
             }
@@ -160,10 +160,10 @@
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 18px;
+                font-size: 14px;
                 line-height: 150%;
                 text-align: center;
-                color: rgba(0, 0, 0, 0.6);
+                color: rgba(0, 0, 0, 0.4);
                 margin-bottom: 20px;
             }
         }

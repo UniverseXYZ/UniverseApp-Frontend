@@ -66,6 +66,7 @@ const TabletView = (props) => {
   const { handleClickOutside } = useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [searchFocus, setSearchFocus] = useState(false);
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const ref = useRef(null);
@@ -134,14 +135,17 @@ const TabletView = (props) => {
         <>
           <div className="search--section">
             <div className="input--search--box">
-              <div className="input--box">
+              <div className={`input--box ${searchFocus || searchValue ? 'focus' : ''}`}>
+                <div className="box--shadow--effect--block" />
                 <input
-                  placeholder=""
+                  placeholder="Search"
                   ref={searchRef}
                   onChange={(e) => setSearchValue(e.target.value)}
                   value={searchValue}
                   onKeyDown={handleSearchKeyDown}
                   type="text"
+                  onFocus={() => setSearchFocus(true)}
+                  onBlur={() => setSearchFocus(false)}
                 />
                 <img src={img} alt="search" className="searchicon" />
                 <img
