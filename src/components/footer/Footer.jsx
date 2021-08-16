@@ -211,6 +211,8 @@ const Footer = () => {
                   >
                     Yield farming
                   </li>
+                  <li>Forum</li>
+                  <li>Signal</li>
                 </ul>
               </div>
             </div>

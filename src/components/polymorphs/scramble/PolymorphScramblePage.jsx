@@ -25,6 +25,7 @@ import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
 import { polymorphOwner } from '../../../utils/graphql/queries';
 import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
 import GeneParser from '../../../utils/helpers/GeneParser.js';
+import PolymorphMetadataLoading from '../../popups/PolymorphMetadataLoading';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -44,6 +45,11 @@ const PolymorphScramblePage = () => {
   const [scrambled, setScrambled] = useState('none');
   const { data } = useQuery(polymorphOwner(useParams().id));
   const [traitsMap, setTraitsMap] = useState({});
+  const [showLoading, setShowLoading] = useState(false);
+  const [showMetadataLoading, setShowMetadataLoading] = useState(false);
+  const [showScramblePopup, setShowScramblePopup] = useState(false);
+  const [showCongratulations, setShowCongratulations] = useState(false);
+
   useEffect(() => {
     if (!data) return;
     const ownerOf = data?.transferEntities[0]?.to;
@@ -109,9 +115,8 @@ const PolymorphScramblePage = () => {
     },
   ];
 
-  const onOpenOptionsPopUp = () => {
-    const scramblePopupButton = document.getElementById('popup-hidden-btn');
-    scramblePopupButton.click();
+  const showScrambleOptions = () => {
+    setShowScramblePopup(true);
   };
 
   const getAttributesMapping = (attributes = []) =>
@@ -125,59 +130,39 @@ const PolymorphScramblePage = () => {
 
   return (
     <div className="container scramble--wrapper">
-      <Popup
-        closeOnDocumentClick={false}
-        trigger={
-          <button
-            type="button"
-            id="popup-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => (
-          <PolymorphScramblePopup
-            onClose={close}
-            polymorph={polymorphData}
-            id={polymorphId}
-            setPolymorph={setPolymorphData}
-            setPolymorphGene={setPolymorphGene}
-          />
-        )}
+      <Popup closeOnDocumentClick={false} open={showScramblePopup}>
+        <PolymorphScramblePopup
+          onClose={() => setShowScramblePopup(false)}
+          polymorph={polymorphData}
+          id={polymorphId}
+          setPolymorph={setPolymorphData}
+          setPolymorphGene={setPolymorphGene}
+          setShowCongratulations={setShowCongratulations}
+          setShowLoading={setShowLoading}
+          setShowMetadataLoading={setShowMetadataLoading}
+        />
       </Popup>
-      <Popup
-        closeOnDocumentClick={false}
-        trigger={
-          <button
-            type="button"
-            id="loading-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <LoadingPopup onClose={close} />}
+
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup onClose={() => setShowLoading(false)} />
       </Popup>
-      <Popup
-        closeOnDocumentClick={false}
-        trigger={
-          <button
-            type="button"
-            id="scramble-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => (
-          <PolymorphScrambleCongratulationPopup
-            onClose={close}
-            onOpenOptionsPopUp={onOpenOptionsPopUp}
-            polymorph={polymorphData}
-          />
-        )}
+
+      <Popup closeOnDocumentClick={false} open={showMetadataLoading}>
+        <PolymorphMetadataLoading
+          onClose={() => setShowMetadataLoading(false)}
+          onOpenOptionsPopUp={showScrambleOptions}
+          polymorph={polymorphData}
+        />
       </Popup>
+
+      <Popup closeOnDocumentClick={false} open={showCongratulations}>
+        <PolymorphScrambleCongratulationPopup
+          onClose={() => setShowCongratulations(false)}
+          onOpenOptionsPopUp={showScrambleOptions}
+          polymorph={polymorphData}
+        />
+      </Popup>
+
       <div
         className="go--back--wrapper"
         aria-hidden="true"
@@ -288,7 +273,7 @@ const PolymorphScramblePage = () => {
             </div>
           )}
           {isOwner ? (
-            <Button className="light-button" onClick={onOpenOptionsPopUp}>
+            <Button className="light-button" onClick={showScrambleOptions}>
               Scramble options
             </Button>
           ) : null}

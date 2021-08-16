@@ -2,320 +2,549 @@
 @import '../../../../assets/scss/_mixins';
 
 .tablet__nav {
-    display: none;
+  display: none;
+  align-items: center;
+  .search--box {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    button.hamburger {
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-sizing: border-box;
-        border-radius: 12px;
-        padding: 10px;
-        background-color: $white;
-    }
-    .overlay {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 999;
-    }
-    ul.nav__menu {
-        position: absolute;
-        right: 0;
-        top: 80px;
-        width: 100%;
-        height: 0;
-        // max-height: calc(100vh - 88px);
-        max-height: 378px;
-        padding: 0px 60px;
-        background-color: $white;
-        z-index: 999;
-        animation: tabletMenuSlideIn .3s ease-in-out forwards;
-        overflow-y: auto;
-        li {
-            .grid__menu {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                padding: 40px 0;
-                p.title {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 22px;
-                    text-transform: uppercase;
-                    color: rgba(0, 0, 0, 0.4);
-                    margin-bottom: 30px;
-                }
-                button {
-                    display: flex;
-                    align-items: center;
-                    width: 100%;
-                    padding: 10px 10px 10px 0;
-                    background-color: $white;
-                    text-align: left;
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 14px;
-                    line-height: 140%;
-                    border-radius: 10px;
-                    &.disable {
-                        position: relative;
-                        cursor: default;
-                        img,
-                        span:not(.tooltiptext) {
-                            opacity: 0.2;
-                        }
-                        .tooltiptext {
-                            visibility: hidden;
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: normal;
-                            font-size: 12px;
-                            width: 120px;
-                            background-color: $black;
-                            color: $white;
-                            text-align: center;
-                            border-radius: 100px;
-                            padding: 5px 0;
-                            position: absolute;
-                            z-index: 1;
-                            top: -25px;
-                            left: 25%;
-                            transform: translateX(-50%);
-                            &::after {
-                                content: "";
-                                position: absolute;
-                                top: 100%;
-                                left: 50%;
-                                margin-left: -5px;
-                                border-width: 5px;
-                                border-style: solid;
-                                border-color: black transparent transparent transparent;
-                            }
-                        }
-                        &:hover {
-                            .tooltiptext {
-                                visibility: visible;
-                            }
-                        }
-                    }
-                    img {
-                        margin-right: 8px;
-                    }
-                }
-                @include md {
-                    grid-template-columns: repeat(3, 1fr);
-                }
-            }
-            &.sign__in {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px 0;
-                border-top: 1px solid rgba(0, 0, 0, 0.1);
-                button {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 16px;
-                    line-height: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: $black;
-                    padding: 15px;
-                    background: 
-                        linear-gradient($white, $white) padding-box,
-                        linear-gradient(to right, #BCEB00, #00EAEA) border-box;
-                    border: 1px solid transparent;
-                    border-radius: 12px;
-                }
-            }
-        }
-    }
-    .wallet__connected__tablet {
+    margin-right: 12px;
+    background-color: $white;
+  }
+  .search--section {
+    height: 100vh;
+    right: 0;
+    left: 0;
+    background-color: $white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    .input--search--box {
+      padding: 15px 20px 15px 20px;
+      .input--box {
         position: relative;
-        img.account__icon {
-            width: 40px;
-            height: 40px;
-            margin-right: 12px;
-            &.hide__on__tablet {
-                display: block;
-                @include lg {
-                    display: none;
-                }
-            }
-            &.show__on__tablet {
-                display: none;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                box-sizing: border-box;
-                border-radius: 50%;
-                @include lg {
-                    display: block;
-                }
-            }
+        input {
+          background: $white;
+          border: 1px solid #d4d4d4;
+          box-sizing: border-box;
+          border-radius: 12px;
+          width: 100%;
+          padding: 15px;
+          text-indent: 30px;
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+          text-align: left;
+          &::placeholder {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            color: #cacaca;
+            background-repeat: no-repeat;
+            text-indent: 25px;
+          }
+          &:focus {
+            background: linear-gradient(#ffffff, #ffffff) padding-box,
+              linear-gradient(to right, #bceb00, #00eaea) border-box;
+            border: 1px solid transparent;
+          }
         }
-        .dropdown {
-            position: absolute;
-            right: 0;
-            top: 60px;
-            background: $white;
-            border-radius: 10px;
-            width: 280px;
-            z-index: 2;
-            filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
+        .searchicon {
+          position: absolute;
+          left: 20px;
+          top: 18px;
+        }
+        .closeicon {
+          position: absolute;
+          right: 20px;
+          top: 18px;
+        }
+      }
+    }
+    .search--results {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      height: calc(100% - 82px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .search__results {
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 82px);
+        background: white;
+        top: 83px;
+        box-shadow: 0 10px 36px rgba(136, 120, 172, 0.14);
+        padding: 24px 8px;
+        overflow-y: auto;
+        .search__nfts {
+          h4 {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 130%;
+            color: $black;
+            margin-left: 12px;
+            margin-bottom: 8px;
+          }
+          .nft__div,
+          .auction__div,
+          .collection__div {
+            display: flex;
+            padding: 10px 12px;
+            border-radius: 6px;
 
-            &__header {
+            .nft--image,
+            .auction--image,
+            .collection--image {
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 5px;
 
-                .copy-div{
-                    position: relative;
-                    padding: 15px 20px;
-                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    .copy__div{
-                            padding-top: 2px;
-                            padding-right: 8px;
-
-                            .copy>span{
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 12px;
-                                line-height: 18px;
-                                color: #000000;
-                                opacity: 0.4;
-                            }
-                            .copyImg{
-                                margin-right: 5px; 
-                                margin-left: 11px; 
-                            }
-                            .copy>span{
-                                opacity: 0.6;
-                            }
-                            .copied-div{
-                                position: absolute;
-                                width: fit-content;
-                                height: 27px;
-                                background: #000;
-                                border-radius: 100px;
-                                font-family: $spaceGroteskFont;
-                                font-style: normal;
-                                font-weight: normal;
-                                font-size: 12px;
-                                line-height: 150%;
-                                text-align: center;
-                                color: #FFFFFF;
-                                margin-top: -12%;
-                                left: 68%;
-                                padding: 4px 12px;
-                            
-                                span{
-                                    position: absolute;
-                                    width: 7.6px;
-                                    height: 7.6px;
-                                    left: 48%;
-                                    top: 23px;
-                                    background: #000;
-                                    transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
-                                }
-                            }
-                        }
-                }   
-                
-                .first-span{
+              img {
+                border-radius: 5px;
+              }
+              video {
+                width: 36px;
+                height: 36px;
+                object-fit: cover;
+                border-radius: 5px;
+              }
+            }
+            .random--avatar--color {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 5px;
+            }
+            .nft--desc,
+            .auction--desc,
+            .collection--desc {
+              .nft--name,
+              .auction--title,
+              .collection--name {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: bold;
                 font-size: 14px;
-                line-height: 22px;
-                align-items: center;
-                color: #000000;
-                }
-                .second-span{
+                line-height: 160%;
+                color: $black;
+              }
+              .nft--price,
+              .auction--artist,
+              .collection--owner {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
-                font-weight: normal;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.4);
+              }
+            }
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+          .users__div,
+          .communities__div,
+          .galleries__div {
+            display: flex;
+            padding: 10px 12px;
+            border-radius: 6px;
+
+            .user--avatar,
+            .communities--photo,
+            .galleries--photo {
+              width: 36px;
+              height: 36px;
+              margin-right: 15px;
+              border-radius: 50%;
+
+              img {
+                border-radius: 50%;
+              }
+            }
+            .user--desc,
+            .communities--desc,
+            .galleries--desc {
+              .user--name,
+              .communities--name,
+              .galleries--name {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: bold;
                 font-size: 14px;
                 line-height: 160%;
-                align-items: center;
+                color: $black;
+              }
+              .user--followers,
+              .communities--members,
+              .galleries--likes {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 22px;
                 color: rgba(0, 0, 0, 0.4);
-                margin: 0px 12px;     
-                }
-
-                .group1 > img, .group2 > img{
-                    margin: 0px 12px 0 0;
-                }
-
-                .group1 ,.group2{
-                    margin-top: 15px;
-                    padding: 0 20px;
-                }
-                
-                .group2 {
-                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                    padding-bottom: 20px;   
-                }
-
-                .diamond {
-                    border: 1px solid #E6E6E6;
-                    border-radius: 50%;
-                    padding: 5px 6px;
-                }
-                .ethereum__address {
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: bold;
-                    font-size: 16px;
-                    color: $black;
-                    margin: 0 12px;
-                }
-                .copy {
-                    cursor: pointer;
-                }
-
+              }
             }
-
-            &__body {
-                padding: 6px;
-                button {
-                    display: flex;
-                    align-items: center;
-                    width: 100%;
-                    padding: 20px;
-                    background-color: $white;
-                    text-align: left;
-                    font-family: $spaceGroteskFont;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 16px;
-                    line-height: 20px;
-                    border-radius: 10px;
-                    &:hover {
-                        background: rgba(0, 0, 0, 0.05);
-                    }
-                    &.signOut {
-                        color: #FF4949;
-                        &:hover {
-                            background: rgba(255, 73, 73, 0.05)!important;
-                        }
-                    }
-                    img {
-                        margin-right: 8px;
-                    }
-                }
-                
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
             }
+          }
+          button {
+            margin-top: 25px;
+            width: 100%;
+          }
         }
+        .no__result {
+          padding: 12px;
+          height: 783px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          p {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 150%;
+            color: $black;
+          }
+        }
+      }
+      > p {
+        font-family: $spaceGroteskFont;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        letter-spacing: 0px;
+        text-align: center;
+      }
     }
-    @include lg {
+  }
+  button.hamburger {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 9px;
+    background-color: $white;
+  }
+  .overlay {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+  }
+  ul.nav__menu {
+    position: absolute;
+    right: 0;
+    top: 80px;
+    width: 100%;
+    height: 0;
+    max-height: 378px;
+    padding: 0px 60px;
+    background-color: $white;
+    z-index: 999;
+    animation: tabletMenuSlideIn 0.3s ease-in-out forwards;
+    overflow-y: auto;
+    li {
+      .grid__menu {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 40px 0;
+        p.title {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 22px;
+          text-transform: uppercase;
+          color: rgba(0, 0, 0, 0.4);
+          margin-bottom: 30px;
+        }
+        button {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 10px 10px 10px 0;
+          background-color: $white;
+          text-align: left;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 140%;
+          border-radius: 10px;
+          &.disable {
+            position: relative;
+            cursor: default;
+            img,
+            span:not(.tooltiptext) {
+              opacity: 0.2;
+            }
+            .tooltiptext {
+              visibility: hidden;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              width: 120px;
+              background-color: $black;
+              color: $white;
+              text-align: center;
+              border-radius: 100px;
+              padding: 5px 0;
+              position: absolute;
+              z-index: 1;
+              top: -25px;
+              left: 25%;
+              transform: translateX(-50%);
+              &::after {
+                content: '';
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+              }
+            }
+            &:hover {
+              .tooltiptext {
+                visibility: visible;
+              }
+            }
+          }
+          img {
+            margin-right: 8px;
+          }
+        }
+        @include md {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      &.sign__in {
         display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        button {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $black;
+          padding: 15px;
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+          border-radius: 12px;
+        }
+      }
     }
-    @include sm {
+  }
+  .wallet__connected__tablet {
+    position: relative;
+    img.account__icon {
+      width: 40px;
+      height: 40px;
+      margin-right: 12px;
+      &.hide__on__tablet {
+        display: block;
+        @include lg {
+          display: none;
+        }
+      }
+      &.show__on__tablet {
         display: none;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 50%;
+        @include lg {
+          display: block;
+        }
+      }
     }
+    .dropdown {
+      position: absolute;
+      right: 0;
+      top: 60px;
+      background: $white;
+      border-radius: 10px;
+      width: 280px;
+      z-index: 2;
+      filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
+
+      &__header {
+        .copy-div {
+          position: relative;
+          padding: 15px 20px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .copy__div {
+            padding-top: 2px;
+            padding-right: 8px;
+
+            .copy > span {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 18px;
+              color: #000000;
+              opacity: 0.4;
+            }
+            .copyImg {
+              margin-right: 5px;
+              margin-left: 11px;
+            }
+            .copy > span {
+              opacity: 0.6;
+            }
+            .copied-div {
+              position: absolute;
+              width: fit-content;
+              height: 27px;
+              background: #000;
+              border-radius: 100px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 150%;
+              text-align: center;
+              color: #ffffff;
+              margin-top: -12%;
+              left: 68%;
+              padding: 4px 12px;
+
+              span {
+                position: absolute;
+                width: 7.6px;
+                height: 7.6px;
+                left: 48%;
+                top: 23px;
+                background: #000;
+                transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+              }
+            }
+          }
+        }
+
+        .first-span {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 22px;
+          align-items: center;
+          color: #000000;
+        }
+        .second-span {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 160%;
+          align-items: center;
+          color: rgba(0, 0, 0, 0.4);
+          margin: 0px 12px;
+        }
+
+        .group1 > img,
+        .group2 > img {
+          margin: 0px 12px 0 0;
+        }
+
+        .group1,
+        .group2 {
+          margin-top: 15px;
+          padding: 0 20px;
+        }
+
+        .group2 {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          padding-bottom: 20px;
+        }
+
+        .diamond {
+          border: 1px solid #e6e6e6;
+          border-radius: 50%;
+          padding: 5px 6px;
+        }
+        .ethereum__address {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 16px;
+          color: $black;
+          margin: 0 12px;
+        }
+        .copy {
+          cursor: pointer;
+        }
+      }
+
+      &__body {
+        padding: 6px;
+        button {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 20px;
+          background-color: $white;
+          text-align: left;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 20px;
+          border-radius: 10px;
+          &:hover {
+            background: rgba(0, 0, 0, 0.05);
+          }
+          &.signOut {
+            color: #ff4949;
+            &:hover {
+              background: rgba(255, 73, 73, 0.05) !important;
+            }
+          }
+          img {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+  @include lg {
+    display: flex;
+  }
+  @include sm {
+    display: none;
+  }
 }

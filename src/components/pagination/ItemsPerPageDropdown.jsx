@@ -8,7 +8,7 @@ import arrowDownIcon from '../../assets/images/arrow-down.svg';
 const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
   const { handleClickOutside } = useContext(AppContext);
   const [showDropdown, setShowDropdown] = useState(false);
-  const itemsPerPage = [12, 24, 48];
+  const itemsPerPage = [9, 18, 36];
   const ref = useRef(null);
 
   useEffect(() => {

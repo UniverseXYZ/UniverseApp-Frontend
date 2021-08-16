@@ -114,7 +114,6 @@
         // background-repeat: no-repeat;
         // background-size: 100%;
         // mix-blend-mode: normal;
-
       }
 
       .scrambled {
@@ -265,20 +264,20 @@
         // flex-wrap: wrap;
         // justify-content: center;
         margin-bottom: 40px;
-        
+
         // @media (min-width: $screen-md-max) {
-          //   justify-content: space-between
+        //   justify-content: space-between
         // }
-        @include xl { 
+        @include xl {
           grid-template-columns: repeat(2, 1fr);
         }
-        @include lg { 
+        @include lg {
           grid-template-columns: repeat(4, 1fr);
         }
-        @include md { 
+        @include md {
           grid-template-columns: repeat(3, 1fr);
         }
-        @include sm { 
+        @include sm {
           grid-template-columns: repeat(2, 1fr);
         }
       }
@@ -305,11 +304,11 @@
         .mp--string--value {
           font-weight: 500;
           font-size: 16px;
-          color: #4D66EB;
+          color: #4d66eb;
           padding: 15px 0;
           a {
             text-decoration: none;
-            color: #4D66EB;
+            color: #4d66eb;
           }
         }
 
@@ -322,12 +321,12 @@
         .owner--string--value {
           font-weight: 500;
           font-size: 16px;
-          color: #4D66EB;
+          color: #4d66eb;
           padding: 15px 0;
           cursor: pointer;
           a {
             text-decoration: none;
-            color: #4D66EB;
+            color: #4d66eb;
           }
         }
 
@@ -340,7 +339,7 @@
         .genome--string--value {
           font-weight: 500;
           font-size: 16px;
-          color: #4D66EB;
+          color: #4d66eb;
           cursor: copy;
         }
         .copy-div {
@@ -352,7 +351,7 @@
           .copy__div {
             // padding-top: 2px;
             // padding-right: 8px;
-        
+
             .copy > span {
               font-family: $spaceGroteskFont;
               font-style: normal;
@@ -385,7 +384,7 @@
               margin-top: -20%;
               left: 50%;
               padding: 4px 12px;
-        
+
               span {
                 position: absolute;
                 width: 7.6px;
@@ -412,9 +411,7 @@
         //   margin: unset!important;
         //   width: unset;
         // }
-
       }
-
     }
     @include xl {
       grid-gap: 40px;
@@ -431,8 +428,7 @@
     align-items: center;
     height: 500px;
     flex-basis: 500px;
-  
-  
+
     .lds-roller {
       position: absolute;
       top: 50%;
@@ -447,7 +443,7 @@
       transform-origin: 40px 40px;
     }
     .lds-roller div:after {
-      content: " ";
+      content: ' ';
       display: block;
       position: absolute;
       width: 7px;
@@ -459,7 +455,7 @@
       animation-delay: -0.036s;
     }
     .lds-roller div:nth-child(1):after {
-      background: #ADEA12;
+      background: #adea12;
       top: 63px;
       left: 63px;
     }
@@ -467,7 +463,7 @@
       animation-delay: -0.072s;
     }
     .lds-roller div:nth-child(2):after {
-      background: #90EA35;
+      background: #90ea35;
       top: 68px;
       left: 56px;
     }
@@ -475,7 +471,7 @@
       animation-delay: -0.108s;
     }
     .lds-roller div:nth-child(3):after {
-      background: #72EA5B;
+      background: #72ea5b;
       top: 71px;
       left: 48px;
     }
@@ -483,7 +479,7 @@
       animation-delay: -0.144s;
     }
     .lds-roller div:nth-child(4):after {
-      background: #33EAAA;
+      background: #33eaaa;
       top: 72px;
       left: 40px;
     }
@@ -491,7 +487,7 @@
       animation-delay: -0.18s;
     }
     .lds-roller div:nth-child(5):after {
-      background: #31EAAE;
+      background: #31eaae;
       top: 71px;
       left: 32px;
     }
@@ -499,7 +495,7 @@
       animation-delay: -0.216s;
     }
     .lds-roller div:nth-child(6):after {
-      background: #00EAEA;
+      background: #00eaea;
       top: 68px;
       left: 24px;
     }
@@ -507,7 +503,7 @@
       animation-delay: -0.252s;
     }
     .lds-roller div:nth-child(7):after {
-      background: #00EAEA;
+      background: #00eaea;
       top: 63px;
       left: 17px;
     }
@@ -515,7 +511,7 @@
       animation-delay: -0.288s;
     }
     .lds-roller div:nth-child(8):after {
-      background: #00EAEA;
+      background: #00eaea;
       top: 56px;
       left: 12px;
     }
