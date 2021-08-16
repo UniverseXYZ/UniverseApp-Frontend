@@ -91,11 +91,7 @@ const List = ({
       />
       <div className="list--with--selected--filters">
         <div className="selected--filters">
-          {showClearALL && (
-            <div className="result">
-              {results.length ? `${results.length} results` : 'Loading results...'}
-            </div>
-          )}
+          {showClearALL && <div className="result">{results.length} results</div>}
           {categories.map((item, index) => (
             <>
               {item.traits.map(
