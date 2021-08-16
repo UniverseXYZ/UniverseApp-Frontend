@@ -6,6 +6,7 @@ import WrapperCenterTwoColumns from './WrapperCenterTwoColumns';
 import './styles/Section4.scss';
 import mobilebackground from '../../assets/images/mobilebackground.png';
 import tabletbackground from '../../assets/images/topmorph.png';
+import Button from '../button/Button';
 
 const getWindow = (width, changeStateFunc) => {
   if (+width > 834) changeStateFunc('browser');
@@ -33,9 +34,9 @@ const rightBlock = () => {
         <div className="coming--soon">COMING SOON</div>
         <h2>Polymorph Rarity Chart</h2>
         <p>Mirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
-        {/* <Button className="light-button" onClick={() => history.push('/rarity-chart')}>
+        <Button className="light-button" onClick={() => history.push('/polymorph-rarity')}>
           Rarity chart
-        </Button> */}
+        </Button>
       </div>
     </AnimatedOnScroll>
   );
