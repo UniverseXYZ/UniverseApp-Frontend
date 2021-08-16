@@ -13,6 +13,8 @@ const RarityChartFiltersPopup = ({
   setCategoriesIndexes,
   selectedFiltersLength,
   setSelectedFiltersLength,
+  resultsCount,
+  handleCategoryFilterChange,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
 
@@ -24,12 +26,22 @@ const RarityChartFiltersPopup = ({
       });
     });
     setCategories(newCategories);
+    setFilter([]);
   };
 
-  const removeSelectedFilter = (index, idx) => {
+  const removeSelectedFilter = (idx, traitIdx) => {
     const newCategories = [...categories];
-    newCategories[index].traits[idx].checked = false;
+    const attribute = newCategories[idx];
+    const trait = attribute.traits[traitIdx];
+    attribute.traits[traitIdx].checked = false;
+    let newFilter = [];
+    if (attribute.value === 'righthand' || attribute.value === 'lefthand') {
+      newFilter = filter.filter((f) => !(f[0] === attribute.value && f[1] === trait.name));
+    } else {
+      newFilter = filter.filter((f) => f[1] !== trait.name);
+    }
     setCategories(newCategories);
+    setFilter(newFilter);
   };
 
   useEffect(() => {
@@ -61,12 +73,6 @@ const RarityChartFiltersPopup = ({
     [categoriesIndexes]
   );
 
-  const handleChange = (idx, traitIdx) => {
-    const newCategories = [...categories];
-    newCategories[idx].traits[traitIdx].checked = !newCategories[idx].traits[traitIdx].checked;
-    setCategories(newCategories);
-  };
-
   return (
     <div className="rarity--chart--filters--popup">
       <div className="rarity--chart--filters--popup--header">
@@ -80,7 +86,12 @@ const RarityChartFiltersPopup = ({
       </div>
       <div className="rarity--chart--filters--popup--body">
         <div className="selected--filters">
-          {showClearALL && <div className="result">231 results</div>}
+          {showClearALL && (
+            <div className="result">
+              {' '}
+              {resultsCount ? `Show ${resultsCount} results` : 'Loading results...'}
+            </div>
+          )}
           {categories.map((item, index) => (
             <>
               {item.traits.map(
@@ -127,7 +138,7 @@ const RarityChartFiltersPopup = ({
                         id={trait.name.toLowerCase().replaceAll(' ', '--')}
                         type="checkbox"
                         checked={trait.checked}
-                        onChange={() => handleChange(index, traitIndex)}
+                        onChange={() => handleCategoryFilterChange(index, traitIndex)}
                       />
                       <label htmlFor={trait.name.toLowerCase().replaceAll(' ', '--')}>
                         {trait.name}
@@ -142,7 +153,7 @@ const RarityChartFiltersPopup = ({
       </div>
       <div className="rarity--chart--filters--popup--footer">
         <Button className="light-button" onClick={close}>
-          Show 231 results
+          {resultsCount ? `Show ${resultsCount} results` : 'Loading results...'}
         </Button>
       </div>
     </div>
@@ -156,7 +167,9 @@ RarityChartFiltersPopup.propTypes = {
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
   selectedFiltersLength: PropTypes.number.isRequired,
+  resultsCount: PropTypes.number.isRequired,
   setSelectedFiltersLength: PropTypes.func.isRequired,
+  handleCategoryFilterChange: PropTypes.func.isRequired,
 };
 
 export default RarityChartFiltersPopup;

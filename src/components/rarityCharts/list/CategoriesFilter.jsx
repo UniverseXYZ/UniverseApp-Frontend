@@ -8,6 +8,9 @@ const CategoriesFilter = ({
   setCategories,
   categoriesIndexes,
   setCategoriesIndexes,
+  setFilter,
+  filter,
+  handleCategoryFilterChange,
 }) => {
   const handleClick = useCallback(
     (idx) => {
@@ -19,12 +22,6 @@ const CategoriesFilter = ({
     },
     [categoriesIndexes]
   );
-
-  const handleChange = (idx, traitIdx) => {
-    const newCategories = [...categories];
-    newCategories[idx].traits[traitIdx].checked = !newCategories[idx].traits[traitIdx].checked;
-    setCategories(newCategories);
-  };
 
   return (
     <div className="categories--filters">
@@ -48,7 +45,7 @@ const CategoriesFilter = ({
                     id={trait.name.toLowerCase().replaceAll(' ', '--')}
                     type="checkbox"
                     checked={trait.checked}
-                    onChange={() => handleChange(index, traitIndex)}
+                    onChange={() => handleCategoryFilterChange(index, traitIndex)}
                   />
                   <label htmlFor={trait.name.toLowerCase().replaceAll(' ', '--')}>
                     {trait.name}
@@ -68,6 +65,9 @@ CategoriesFilter.propTypes = {
   setCategories: PropTypes.func.isRequired,
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  handleCategoryFilterChange: PropTypes.func.isRequired,
+  filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default CategoriesFilter;

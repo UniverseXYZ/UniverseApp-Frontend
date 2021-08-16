@@ -6,6 +6,8 @@ import { useAsyncAbortable } from 'react-async-hook';
 const RARITY_BACKEND_BASE_URI =
   'https://us-central1-polymorphmetadata.cloudfunctions.net/rarity-mainnet';
 
+// const RARITY_BACKEND_BASE_URI = 'http://localhost:8001';
+
 // const RARITY_BACKEND_BASE_URI = 'http://localhost:8000/morphs';
 
 const buildRarityUrl = (
@@ -16,6 +18,38 @@ const buildRarityUrl = (
   sortDir = '',
   filter = ''
 ) => {
+  let filterQuery = '';
+  // eslint-disable-next-line prefer-const
+  let bundledFilters = {};
+  filter.forEach((f) => {
+    const attr = f[0];
+    let trait = f[1];
+
+    // TODO: Fix these ugly ass workaround in the backend or front end
+    if (trait === 'Astronaut Helmet') {
+      trait = 'Astronnaut Helmet';
+    } else if (trait === 'Bow & Arrow') {
+      trait = 'Bow and Arrow';
+    }
+    // const existingTraits = bundledFilters[attr] ? [...bundledFilters[attr]]
+    bundledFilters[attr] = bundledFilters[attr] ? [...bundledFilters[attr], trait] : [trait];
+  });
+
+  Object.keys(bundledFilters).forEach((attr) => {
+    const traits = bundledFilters[attr];
+    let attrQuery = '';
+    if (traits.length === 1) {
+      attrQuery = `${attr}_eq_${traits[0]}.`;
+    } else if (traits.length > 1) {
+      attrQuery = `${attr}_eq`;
+      traits.forEach((trait) => {
+        attrQuery += `_${trait}`;
+      });
+      attrQuery += `.`;
+    }
+    filterQuery += attrQuery;
+  });
+
   let endpoint = `${RARITY_BACKEND_BASE_URI}?page=${page}&take=${perPagee}`;
   if (text) {
     endpoint = `${endpoint}&search=${text}`;
@@ -27,7 +61,7 @@ const buildRarityUrl = (
     endpoint = `${endpoint}&sortDir=${sortDir}`;
   }
   if (filter) {
-    endpoint = `${endpoint}&filter=${filter}`;
+    endpoint = `${endpoint}&filter=${filterQuery}`;
   }
 
   return endpoint;
@@ -39,7 +73,7 @@ export const useSearchPolymorphs = () => {
   const [apiPage, setApiPage] = useState(1);
   const [sortField, setSortField] = useState('rarityscore');
   const [sortDir, setSortDir] = useState('desc');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState([]);
   const [results, setResults] = useState([]);
   const [isLastPage, setIsLastPage] = useState(false);
 
@@ -93,7 +127,7 @@ export const useSearchPolymorphs = () => {
       return debouncedLoadMorePolymorphs(endpoint, abortSignal);
     },
     // Ensure a new request is made everytime the text changes (even if it's debounced)
-    [inputText, apiPage, sortField, sortDir]
+    [inputText, apiPage, sortField, sortDir, filter]
   );
 
   // Return everything needed for the hook consumer

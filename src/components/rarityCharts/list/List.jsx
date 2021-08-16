@@ -25,6 +25,12 @@ const List = ({
   setCategories,
   categoriesIndexes,
   setCategoriesIndexes,
+  setFilter,
+  filter,
+  loading,
+  results,
+  apiPage,
+  handleCategoryFilterChange,
 }) => {
   const sliceData = data.slice(offset, offset + perPage) || [];
   const emptySlots = perPage - sliceData.length || 4;
@@ -38,12 +44,22 @@ const List = ({
       });
     });
     setCategories(newCategories);
+    setFilter([]);
   };
 
-  const removeSelectedFilter = (index, idx) => {
+  const removeSelectedFilter = (idx, traitIdx) => {
     const newCategories = [...categories];
-    newCategories[index].traits[idx].checked = false;
+    const attribute = newCategories[idx];
+    const trait = attribute.traits[traitIdx];
+    attribute.traits[traitIdx].checked = false;
+    let newFilter = [];
+    if (attribute.value === 'righthand' || attribute.value === 'lefthand') {
+      newFilter = filter.filter((f) => !(f[0] === attribute.value && f[1] === trait.name));
+    } else {
+      newFilter = filter.filter((f) => f[1] !== trait.name);
+    }
     setCategories(newCategories);
+    setFilter(newFilter);
   };
 
   useEffect(() => {
@@ -68,10 +84,17 @@ const List = ({
         setCategories={setCategories}
         categoriesIndexes={categoriesIndexes}
         setCategoriesIndexes={setCategoriesIndexes}
+        setFilter={setFilter}
+        filter={filter}
+        handleCategoryFilterChange={handleCategoryFilterChange}
       />
       <div className="list--with--selected--filters">
         <div className="selected--filters">
-          {showClearALL && <div className="result">898 results</div>}
+          {showClearALL && (
+            <div className="result">
+              {results.length ? `${results.length} results` : 'Loading results...'}
+            </div>
+          )}
           {categories.map((item, index) => (
             <>
               {item.traits.map(
@@ -97,18 +120,28 @@ const List = ({
             </button>
           )}
         </div>
-        <div className="grid">
-          {sliceData.map((item, i) => (
-            <PolymorphCard key={uuid()} item={item} index={offset + i + 1} />
-          ))}
-          {isLastPage ? renderLoaders(emptySlots) : <></>}
-        </div>
+        {loading && !isLastPage ? (
+          <div className="grid">{renderLoaders(9)}</div>
+        ) : results.length ? (
+          <div className="grid">
+            {sliceData.map((item, i) => (
+              <PolymorphCard key={uuid()} item={item} index={offset + i + 1} />
+            ))}
+            {isLastPage ? renderLoaders(emptySlots) : <></>}
+          </div>
+        ) : (
+          <div className="rarity--charts--empty">
+            <p>No Polymorph could be found :’(</p>
+          </div>
+        )}
+
         <div className="pagination__container">
           <Pagination
             data={data}
             perPage={perPage}
             setOffset={setOffset}
             setApiPage={setApiPage}
+            apiPage={apiPage}
             setIsLastPage={setIsLastPage}
           />
           <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
@@ -121,6 +154,7 @@ const List = ({
 List.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
   perPage: PropTypes.number.isRequired,
+  apiPage: PropTypes.number.isRequired,
   offset: PropTypes.number.isRequired,
   isLastPage: PropTypes.bool.isRequired,
   setOffset: PropTypes.func.isRequired,
@@ -131,6 +165,11 @@ List.propTypes = {
   setCategories: PropTypes.func.isRequired,
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  results: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  loading: PropTypes.bool.isRequired,
+  handleCategoryFilterChange: PropTypes.func.isRequired,
 };
 
 export default List;

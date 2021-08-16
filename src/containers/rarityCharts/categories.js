@@ -4,6 +4,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Headwear',
+    value: 'headwear',
     traits: [
       {
         id: uuid(),
@@ -165,6 +166,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Eyewear',
+    value: 'eyewear',
     traits: [
       {
         id: uuid(),
@@ -236,6 +238,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Torso',
+    value: 'torso',
     traits: [
       {
         id: uuid(),
@@ -412,6 +415,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Pants',
+    value: 'pants',
     traits: [
       {
         id: uuid(),
@@ -583,6 +587,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Footwear',
+    value: 'footwear',
     traits: [
       {
         id: uuid(),
@@ -714,6 +719,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Left-Hand Accessories',
+    value: 'lefthand',
     traits: [
       {
         id: uuid(),
@@ -880,6 +886,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Right-Hand Accessories',
+    value: 'righthand',
     traits: [
       {
         id: uuid(),
@@ -1046,6 +1053,7 @@ export const categoriesArray = [
   {
     id: uuid(),
     title: 'Backgrounds',
+    value: 'background',
     traits: [
       {
         id: uuid(),
@@ -1110,6 +1118,68 @@ export const categoriesArray = [
       {
         id: uuid(),
         name: 'Winter Solstice',
+        checked: false,
+      },
+    ],
+  },
+  {
+    id: uuid(),
+    title: 'Characters',
+    value: 'character',
+    traits: [
+      {
+        id: uuid(),
+        name: 'Charles',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Diamond Paws',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Escrow',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Frankie',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Glenn',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Goldtooth',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Mariguana',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Ragnar',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Troll God',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'Vitalik',
+        checked: false,
+      },
+      {
+        id: uuid(),
+        name: 'X-YZ',
         checked: false,
       },
     ],

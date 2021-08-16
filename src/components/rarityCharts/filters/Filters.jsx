@@ -7,7 +7,6 @@ import SortByOrder from '../../input/SortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import filterIcon from '../../../assets/images/filters-icon-black.svg';
 import './Filters.scss';
-import Button from '../../button/Button';
 import RarityChartFiltersPopup from '../../popups/RarityChartFiltersPopup';
 
 const Filters = (props) => {
@@ -24,6 +23,8 @@ const Filters = (props) => {
     setCategories,
     categoriesIndexes,
     setCategoriesIndexes,
+    resultsCount,
+    handleCategoryFilterChange,
   } = props;
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
 
@@ -46,15 +47,16 @@ const Filters = (props) => {
             setSearchText={setSearchText}
             setApiPage={setApiPage}
             resetPagination={resetPagination}
+            handleCategoryFilterChange
           />
           <div className="tablet--filters">
             <Popup
               trigger={
                 <button type="button" className="light-border-button">
                   <img src={filterIcon} alt="Filter" /> Filters
-                  {selectedFiltersLength !== 0 && (
+                  {/* {selectedFiltersLength !== 0 && (
                     <div className="count">{selectedFiltersLength}</div>
-                  )}
+                  )} */}
                 </button>
               }
             >
@@ -67,6 +69,8 @@ const Filters = (props) => {
                   setCategoriesIndexes={setCategoriesIndexes}
                   selectedFiltersLength={selectedFiltersLength}
                   setSelectedFiltersLength={setSelectedFiltersLength}
+                  resultsCount={resultsCount}
+                  handleCategoryFilterChange={handleCategoryFilterChange}
                 />
               )}
             </Popup>
@@ -88,14 +92,14 @@ const Filters = (props) => {
                   setCategoriesIndexes={setCategoriesIndexes}
                   selectedFiltersLength={selectedFiltersLength}
                   setSelectedFiltersLength={setSelectedFiltersLength}
+                  resultsCount={resultsCount}
+                  handleCategoryFilterChange={handleCategoryFilterChange}
                 />
               )}
             </Popup>
             {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>}
           </div>
         </div>
-        {/* <div className="sort--by--label--and--select--block"> */}
-        {/* <label htmlFor="sort--select">Sort By:</label> */}
         <SortBySelect
           id="sort--select"
           defaultValue="Rarity Score"
@@ -110,7 +114,6 @@ const Filters = (props) => {
           setApiPage={setApiPage}
           resetPagination={resetPagination}
         />
-        {/* </div> */}
       </div>
     </div>
   );
@@ -129,6 +132,8 @@ Filters.propTypes = {
   setCategories: PropTypes.func.isRequired,
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
+  resultsCount: PropTypes.number.isRequired,
+  handleCategoryFilterChange: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {
