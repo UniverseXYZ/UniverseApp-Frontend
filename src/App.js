@@ -56,6 +56,7 @@ const App = () => {
   const [myBalance, setMyBalance] = useState(48.24);
   const [showModal, setShowModal] = useState(false);
   const [myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [activeView, setActiveView] = useState(null);
   const [savedNFTsID, setSavedNFTsID] = useState(null);
   const [savedCollectionID, setSavedCollectionID] = useState(null);
@@ -127,6 +128,8 @@ const App = () => {
         setShowModal,
         myNFTsSelectedTabIndex,
         setMyNFTsSelectedTabIndex,
+        selectedTabIndex,
+        setSelectedTabIndex,
         savedCollections,
         setSavedCollections,
         activeView,
