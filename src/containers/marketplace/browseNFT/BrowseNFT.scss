@@ -450,6 +450,11 @@
         }
       }
     }
+    img.go--to--top {
+      position: fixed;
+      top: 800px;
+      right: 40px;
+    }
   }
   .min--max--fields {
     display: flex;

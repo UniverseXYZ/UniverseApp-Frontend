@@ -9,6 +9,7 @@ import './BrowseNFT.scss';
 import SelectedFiltersAndSorting from '../../../components/marketplace/browseNFT/selectedFiltersAndSorting/SelectedFiltersAndSorting';
 import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
 import NFTsList from '../../../components/marketplace/browseNFT/NFTsList';
+import goToTopIcon from '../../../assets/images/go-to-top.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../../utils/fixtures/BrowseNFTsDummyData';
 
 const BrowseNFT = () => {
@@ -41,10 +42,21 @@ const BrowseNFT = () => {
   const [savedCreators, setSavedCreators] = useState([]);
   const [selectedCreators, setSelectedCreators] = useState([]);
   const [nftNumber, setNftNumber] = useState(7);
+  const [showGoToTop, setShowGoToTop] = useState(false);
 
   useEffect(() => {
     setDarkMode(false);
   }, []);
+
+  useEffect(() => {
+    window.onscroll = function () {
+      if (window.scrollY > 100) {
+        setShowGoToTop(true);
+      } else {
+        setShowGoToTop(false);
+      }
+    };
+  });
 
   return (
     <div className="browse--nft--page">
@@ -86,6 +98,15 @@ const BrowseNFT = () => {
             </button>
           )}
         </div>
+        {showGoToTop && (
+          <img
+            className="go--to--top"
+            src={goToTopIcon}
+            alt="Top"
+            aria-hidden="true"
+            onClick={() => window.scrollTo(0, 0)}
+          />
+        )}
       </div>
     </div>
   );

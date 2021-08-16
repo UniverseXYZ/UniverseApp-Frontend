@@ -16,6 +16,8 @@ const BrowseFilterPopup = ({
   setSaleTypeButtons,
   selectedPrice,
   setSelectedPrice,
+  selectedTokenIndex,
+  setSelectedTokenIndex,
   savedCollections,
   setSavedCollections,
   selectedCollections,
@@ -80,7 +82,11 @@ const BrowseFilterPopup = ({
             ))}
           </div>
         </div>
-        <Price setSelectedPrice={setSelectedPrice} />
+        <Price
+          setSelectedPrice={setSelectedPrice}
+          selectedTokenIndex={selectedTokenIndex}
+          setSelectedTokenIndex={setSelectedTokenIndex}
+        />
         <Collections
           savedCollections={savedCollections}
           setSavedCollections={setSavedCollections}
@@ -103,6 +109,8 @@ BrowseFilterPopup.propTypes = {
   setSaleTypeButtons: PropTypes.func,
   selectedPrice: PropTypes.oneOfType([PropTypes.any]),
   setSelectedPrice: PropTypes.func,
+  selectedTokenIndex: PropTypes.number,
+  setSelectedTokenIndex: PropTypes.func,
   selectedCollections: PropTypes.oneOfType([PropTypes.array]),
   setSelectedCollections: PropTypes.func,
   savedCollections: PropTypes.oneOfType([PropTypes.array]),
@@ -118,6 +126,8 @@ BrowseFilterPopup.defaultProps = {
   setSaleTypeButtons: () => {},
   selectedPrice: null,
   setSelectedPrice: () => {},
+  selectedTokenIndex: 0,
+  setSelectedTokenIndex: () => {},
   selectedCollections: [],
   setSelectedCollections: () => {},
   savedCollections: [],

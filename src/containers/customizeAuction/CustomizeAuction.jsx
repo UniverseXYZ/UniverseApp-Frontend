@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory } from 'react-router-dom';
+import Popup from 'reactjs-popup';
 import arrow from '../../assets/images/arrow.svg';
 import Button from '../../components/button/Button.jsx';
 import DomainAndBranding from '../../components/customizeAuction/DomainAndBranding.jsx';
@@ -9,6 +10,7 @@ import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuc
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
+import CongratsLandingPagePopup from '../../components/popups/CongratsLandingPagePopup';
 
 const CustomizeAuction = () => {
   const history = useHistory();
@@ -107,7 +109,7 @@ const CustomizeAuction = () => {
       });
       if (loggedInArtist.name && loggedInArtist.avatar) {
         newAuction.artist = loggedInArtist;
-        history.push('/my-auctions');
+        // history.push('/my-auctions');
         setTimeout(() => {
           if (
             new Date() < new Date(newAuction.endDate) &&
@@ -119,7 +121,12 @@ const CustomizeAuction = () => {
           }
           setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setAuction({ tiers: [] });
+          document.getElementById('popup-root')?.remove();
+          document.getElementById('congrats-hidden-btn').click();
         }, 1000);
+        setTimeout(() => {
+          history.push('/my-auctions');
+        }, 6000);
       }
     }
   };
@@ -224,6 +231,19 @@ const CustomizeAuction = () => {
 
   return (
     <div className="customize__auction">
+      <Popup
+        trigger={
+          <button
+            type="button"
+            id="congrats-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <CongratsLandingPagePopup onClose={close} />}
+      </Popup>
+
       <div className="container ">
         <div
           className="back-rew"
