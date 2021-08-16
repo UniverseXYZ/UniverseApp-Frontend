@@ -11,7 +11,7 @@ const SearchField = (props) => {
   const searchRef = useRef();
 
   const handleInputChange = (e) => {
-    if (e.target.value.length < 16) {
+    if (e.target.value.length < 50) {
       setSearchText(e.target.value);
       setApiPage(1);
       resetPagination();

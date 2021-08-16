@@ -11,6 +11,7 @@ import '../../../containers/rarityCharts/RarityCharts.scss';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders';
 import CategoriesFilter from './CategoriesFilter';
+import RarityChartsLoader from '../../../containers/rarityCharts/RarityChartsLoader';
 
 const List = ({
   data,
@@ -96,11 +97,11 @@ const List = ({
             </div>
           )}
           {categories.map((item, index) => (
-            <div key={uuid()}>
+            <>
               {item.traits.map(
                 (trait, idx) =>
                   trait.checked && (
-                    <button key={uuid()} type="button" className="light-border-button">
+                    <button type="button" className="light-border-button">
                       {trait.name}
                       <img
                         className="close"
@@ -112,7 +113,7 @@ const List = ({
                     </button>
                   )
               )}
-            </div>
+            </>
           ))}
           {showClearALL && (
             <button type="button" className="clear--all" onClick={() => handleClearAll()}>
@@ -121,13 +122,15 @@ const List = ({
           )}
         </div>
         {loading && !isLastPage ? (
-          <div className="grid">{renderLoaders(9)}</div>
+          <div className="grid">
+            <RarityChartsLoader number={9} />
+          </div>
         ) : results.length ? (
           <div className="grid">
             {sliceData.map((item, i) => (
               <PolymorphCard key={uuid()} item={item} index={offset + i + 1} />
             ))}
-            {isLastPage ? renderLoaders(emptySlots) : <></>}
+            {isLastPage ? <RarityChartsLoader number={emptySlots} /> : <></>}
           </div>
         ) : (
           <div className="rarity--charts--empty">
