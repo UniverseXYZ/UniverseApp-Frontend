@@ -4,6 +4,7 @@ on:
     branches:
     - main
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -113,6 +114,7 @@ jobs:
           echo "CF_DIST_ID=${CF_DIST_ID} CF_INVALIDATION_ID=${CF_INVALIDATION_ID}: Waiting for CloudFront cache invalidation to complete..."
           sleep 5
         done
+
 
     - name: Notify Slack success
       if: success()
