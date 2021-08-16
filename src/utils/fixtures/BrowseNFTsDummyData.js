@@ -166,30 +166,37 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     },
     allItems: [
       {
+        id: 4,
         url: nft4,
         type: 'image/png',
       },
       {
+        id: 7,
         url: nft7,
         type: 'image/png',
       },
       {
+        id: 3,
         url: nft3,
         type: 'audio/mpeg',
       },
       {
+        id: 9,
         url: nft9,
         type: 'image/png',
       },
       {
+        id: 10,
         url: nft10,
         type: 'video/mp4',
       },
       {
+        id: 11,
         url: nft11,
         type: 'image/png',
       },
       {
+        id: 12,
         url: nft12,
         type: 'image/png',
       },
