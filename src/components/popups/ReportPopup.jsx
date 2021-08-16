@@ -49,7 +49,7 @@ const ReportPopup = React.forwardRef(({ onClose }, ref) => {
                   <ul>
                     <li
                       onClick={() => {
-                        setSelectedItem('All characters');
+                        setSelectedItem('Copyright infringement');
                         setIsDropdownOpened(false);
                       }}
                       aria-hidden="true"
@@ -58,7 +58,7 @@ const ReportPopup = React.forwardRef(({ onClose }, ref) => {
                     </li>
                     <li
                       onClick={() => {
-                        setSelectedItem('OG characters');
+                        setSelectedItem('Explict and sensitive content');
                         setIsDropdownOpened(false);
                       }}
                       aria-hidden="true"
@@ -67,7 +67,7 @@ const ReportPopup = React.forwardRef(({ onClose }, ref) => {
                     </li>
                     <li
                       onClick={() => {
-                        setSelectedItem('My polymorphs');
+                        setSelectedItem('Other');
                         setIsDropdownOpened(false);
                       }}
                       aria-hidden="true"
