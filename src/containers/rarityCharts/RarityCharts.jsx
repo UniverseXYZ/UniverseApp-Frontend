@@ -6,7 +6,6 @@ import Welcome from '../../components/rarityCharts/welcome/Welcome';
 import AppContext from '../../ContextAPI';
 import './RarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
-import RarityChartsLoader from './RarityChartsLoader';
 import { categoriesArray } from './categories';
 
 const RarityCharts = () => {
@@ -42,6 +41,24 @@ const RarityCharts = () => {
     setOffset(0);
   };
 
+  const handleCategoryFilterChange = (idx, traitIdx) => {
+    const newCategories = [...categories];
+    const attribute = newCategories[idx];
+    const trait = attribute.traits[traitIdx];
+    trait.checked = !trait.checked;
+    setCategories(newCategories);
+    let newFilter = [];
+    if (trait.checked) {
+      newFilter = [...filter, [attribute.value, trait.name]];
+    } else if (attribute.value === 'righthand' || attribute.value === 'lefthand') {
+      newFilter = filter.filter((f) => !(f[0] === attribute.value && f[1] === trait.name));
+    } else {
+      newFilter = filter.filter((f) => f[1] !== trait.name);
+    }
+    console.log(newFilter);
+    setFilter(newFilter);
+  };
+
   return (
     <div className="rarity--charts--page">
       <Welcome />
@@ -58,31 +75,29 @@ const RarityCharts = () => {
           setCategories={setCategories}
           categoriesIndexes={categoriesIndexes}
           setCategoriesIndexes={setCategoriesIndexes}
+          resultsCount={results.length}
+          handleCategoryFilterChange={handleCategoryFilterChange}
         />
-        {search.loading && !isLastPage ? (
-          <RarityChartsLoader number={9} />
-        ) : results.length ? (
-          <>
-            <List
-              data={results}
-              isLastPage={isLastPage}
-              perPage={perPage}
-              offset={offset}
-              setOffset={setOffset}
-              setPerPage={setPerPage}
-              setApiPage={setApiPage}
-              setIsLastPage={setIsLastPage}
-              categories={categories}
-              setCategories={setCategories}
-              categoriesIndexes={categoriesIndexes}
-              setCategoriesIndexes={setCategoriesIndexes}
-            />
-          </>
-        ) : (
-          <div className="rarity--charts--empty">
-            <p>No Polymorph could be found :’(</p>
-          </div>
-        )}
+        <List
+          data={results}
+          isLastPage={isLastPage}
+          perPage={perPage}
+          offset={offset}
+          setOffset={setOffset}
+          setPerPage={setPerPage}
+          setApiPage={setApiPage}
+          setIsLastPage={setIsLastPage}
+          categories={categories}
+          setCategories={setCategories}
+          categoriesIndexes={categoriesIndexes}
+          setCategoriesIndexes={setCategoriesIndexes}
+          setFilter={setFilter}
+          filter={filter}
+          loading={search.loading}
+          results={results}
+          apiPage={apiPage}
+          handleCategoryFilterChange={handleCategoryFilterChange}
+        />
       </div>
     </div>
   );
