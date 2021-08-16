@@ -581,7 +581,7 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
     name: 'Active auction 1',
     photo: auction1,
     startDate: '2021-07-17 09:00:00',
-    endDate: '2021-07-30 09:00:00',
+    endDate: '2021-09-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -596,7 +596,7 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
     name: 'Active auction 2',
     photo: auction1,
     startDate: '2021-07-17 09:00:00',
-    endDate: '2021-07-30 09:00:00',
+    endDate: '2021-09-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -611,7 +611,7 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
     name: 'Active auction 3',
     photo: auction1,
     startDate: '2021-07-17 09:00:00',
-    endDate: '2021-07-30 09:00:00',
+    endDate: '2021-09-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -625,8 +625,8 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
     id: 4,
     name: 'Future auction 1',
     photo: auction2,
-    startDate: '2021-07-25 12:00:00',
-    endDate: '2021-07-30 09:00:00',
+    startDate: '2021-09-25 12:00:00',
+    endDate: '2021-11-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -640,8 +640,8 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
     id: 5,
     name: 'Future auction 2',
     photo: auction2,
-    startDate: '2021-07-25 12:00:00',
-    endDate: '2021-07-30 09:00:00',
+    startDate: '2021-09-25 12:00:00',
+    endDate: '2021-11-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
@@ -655,8 +655,8 @@ export const PLACEHOLDER_MARKETPLACE_AUCTIONS = [
     id: 6,
     name: 'Future auction 3',
     photo: auction2,
-    startDate: '2021-07-25 12:00:00',
-    endDate: '2021-07-30 09:00:00',
+    startDate: '2021-09-25 12:00:00',
+    endDate: '2021-11-30 09:00:00',
     creator: {
       name: 'Justin 3LAU',
       avatar: user1,
