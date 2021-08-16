@@ -1,3 +1,5 @@
+/* eslint-disable import/named */
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-expressions */
 import { asyncPipe } from '../utils/helpers/pureFunctions/pipe';
 import {
@@ -15,32 +17,32 @@ import {
 import { sendMintRequest, sendBatchMintRequest, deployCollection } from './api/ContractInteraction';
 
 export async function MintCollectionWithCollectiblesFlow({ collectionInput, nfts, helpersInput }) {
-  const helpers = helpersInput;
-  let collection = collectionInput;
-  let requiredContract = null;
+  // const helpers = helpersInput;
+  // let collection = collectionInput;
+  // let requiredContract = null;
 
-  collection = await asyncPipe(
-    sendSaveCollectionRequest,
-    deployCollection,
-    updateCollectionTxHash
-  )({ collection, helpers });
+  // collection = await asyncPipe(
+  //   sendSaveCollectionRequest,
+  //   deployCollection,
+  //   updateCollectionTxHash
+  // )({ collection, helpers });
 
-  const contractCreationResponse = await asyncPipe(
-    getSingleCollectionAddress,
-    createSingleContract
-  )({ collection, helpers });
+  // const contractCreationResponse = await asyncPipe(
+  //   getSingleCollectionAddress,
+  //   createSingleContract
+  // )({ collection, helpers });
 
-  collection = contractCreationResponse.collection;
-  requiredContract = contractCreationResponse.contract;
+  // collection = contractCreationResponse.collection;
+  // requiredContract = contractCreationResponse.contract;
 
-  const { tokenURIsAndRoyaltiesObject, isSingle } = await asyncPipe(
-    attachCollectionIdToNfts,
-    generateTokenURIs,
-    formatRoyalties,
-    returnTokenURIsAndRoyalties
-  )({ nfts, collection });
+  // const { tokenURIsAndRoyaltiesObject, isSingle } = await asyncPipe(
+  //   attachCollectionIdToNfts,
+  //   generateTokenURIs,
+  //   formatRoyalties,
+  //   returnTokenURIsAndRoyalties
+  // )({ nfts, collection });
 
-  isSingle
-    ? await sendMintRequest(requiredContract, tokenURIsAndRoyaltiesObject)
-    : await sendBatchMintRequest(requiredContract, tokenURIsAndRoyaltiesObject);
+  // isSingle
+  //   ? await sendMintRequest(requiredContract, tokenURIsAndRoyaltiesObject)
+  //   : await sendBatchMintRequest(requiredContract, tokenURIsAndRoyaltiesObject);
 }

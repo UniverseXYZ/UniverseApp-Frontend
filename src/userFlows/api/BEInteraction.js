@@ -4,12 +4,23 @@
 import { getMetaForSavedNft, getTokenURI } from '../../utils/api/mintNFT';
 import { resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
 
+/**
+ * @param {Object} nfts
+ * @param {Array} res
+ * @returns {Object[]} nfts: { tokenUri }
+ */
 const attachTokenURIs = (nfts, res) =>
   nfts.map((nft, i) => ({
     ...nft,
     tokenUri: res[i],
   }));
 
+/**
+ * @param {Object} data
+ * @param {Object[]} nfts
+ * @param data.nfts.id
+ * @returns {Object[]} nfts: { tokenUri }
+ */
 export const getTokenURIsForSavedNfts = async ({ nfts }) => {
   const promises = [];
 
@@ -27,6 +38,17 @@ export const getTokenURIsForSavedNfts = async ({ nfts }) => {
   return { nfts: nftsAttachedTokenUri };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object[]} data.nfts
+ * @param data.nfts.previewImage || data.nfts.file
+ * @param data.nfts.name
+ * @param data.nfts.description
+ * @param data.nfts.numberOfEditions
+ * @param data.nfts.properties
+ * @param data.nfts.royalties
+ * @returns {Object[]} nfts: { tokenUri }
+ */
 export const generateTokenURIs = async ({ nfts }) => {
   const promises = [];
 
@@ -55,6 +77,18 @@ export const generateTokenURIs = async ({ nfts }) => {
   return { nfts: nftsAttachedTokenUri };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object} data.helpers
+ * @param {Object} data.collection
+ * @param data.collection.file
+ * @param data.collection.name
+ * @param data.collection.symbol
+ * @param data.collection.description
+ * @param data.collection.shortUrl
+ * @param data.collection.id
+ * @returns {Object} nfts: { collection: { id }, helpers }
+ */
 export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
   const { file, name, symbol, description, shortUrl } = collection;
   const collectionCreationResult = await saveCollection({
@@ -73,6 +107,13 @@ export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
   };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object} data.collection
+ * @param data.collection.transactionHash
+ * @param data.collection.id
+ * @returns {Object} collection
+ */
 export const updateCollectionTxHash = async ({ collection }) => {
   const response = await attachTxHashToCollection(collection.transactionHash, collection.id);
 
