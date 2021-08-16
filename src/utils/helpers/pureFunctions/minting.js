@@ -10,6 +10,7 @@ import { chunkifyArray, formatRoyaltiesForMinting } from '../contractInteraction
  * @param data.helpers.collectionsIdAddressMapping
  * @param {Object[]} data.nfts
  * @param data.nfts[].collectionId
+ * @returns {Object} { contract: { nfts: [] }, helpers }
  */
 export const getCollectionsAdddresses = ({ nfts, helpers }) => {
   const nftsAttachedAddress = nfts.map((nft) => ({
@@ -23,6 +24,15 @@ export const getCollectionsAdddresses = ({ nfts, helpers }) => {
   };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object} data.helpers
+ * @param data.helpers.contracts
+ * @param data.helpers.signer
+ * @param {Object} data.collection
+ * @param data.collection.id
+ * @returns {Object} { contract: { collectionId: ContractInstance }, collection }
+ */
 export const createSingleContract = ({ collection, helpers }) => {
   const contract = {};
 
@@ -47,7 +57,7 @@ export const createSingleContract = ({ collection, helpers }) => {
  * @param {Object[]} data.nfts
  * @param data.nfts[].collectionId
  * @param data.nfts[].contractAddress
- * @return {Object} requiredContracts {[collectionId]: Contract}
+ * @return {Object} requiredContracts { collectionId: ContractInstance }
  */
 export const createContractInstancesFromAddresses = ({ nfts, helpers }) => {
   const dataObject = {};
@@ -62,6 +72,14 @@ export const createContractInstancesFromAddresses = ({ nfts, helpers }) => {
   return dataObject;
 };
 
+/**
+ * @param {Object} data
+ * @param {Object} data.nfts
+ * @param data.nfts.collectionId
+ * @param data.nfts.royalties
+ * @param data.nfts.id
+ * @returns {Object} { nfts: [] }
+ */
 export const extractRequiredDataForMinting = ({ nfts }) => {
   const nftsStripped = nfts.map((nft) => ({
     collectionId: nft.collectionId ? nft.collectionId : 0,
@@ -72,6 +90,14 @@ export const extractRequiredDataForMinting = ({ nfts }) => {
   return { nfts: nftsStripped };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object} data.nfts
+ * @param data.nfts.collectionId
+ * @param data.nfts.royalties
+ * @param data.nfts.tokenUri
+ * @returns {Object} { tokenURIsAndRoyaltiesObject: { collectionId: { token: [], royalties: [] } }, isSingle (bool) }
+ */
 export const returnTokenURIsAndRoyalties = ({ nfts }) => {
   if (!nfts) return {};
   const tokenURIsAndRoyaltiesObject = {};
@@ -94,11 +120,17 @@ export const returnTokenURIsAndRoyalties = ({ nfts }) => {
   };
 };
 
-const formatTokenURIsAndRoyaltiesObject = (data) => {
+/**
+ * @param {Object[]} nfts
+ * @param nfts.royalties
+ * @param nfts.token
+ * @returns {Object} { royaltiesArray: [], tokensArray: [] }
+ */
+const formatTokenURIsAndRoyaltiesObject = (nfts) => {
   const royaltiesArray = [];
   const tokensArray = [];
 
-  data.forEach((entry) => {
+  nfts.forEach((entry) => {
     royaltiesArray.push(entry.royalties);
     tokensArray.push(entry.token);
   });
@@ -109,6 +141,12 @@ const formatTokenURIsAndRoyaltiesObject = (data) => {
   };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object[]} data.nfts
+ * @param data.nfts.royalties
+ * @returns {Object[]} { royalties }
+ */
 export const formatRoyalties = ({ nfts }) => {
   if (!nfts) return { nfts: false };
   const formattedNfts = nfts.map((nft) => ({
@@ -119,6 +157,10 @@ export const formatRoyalties = ({ nfts }) => {
   return { nfts: formattedNfts };
 };
 
+/**
+ * @param {Object} tokenURIsAndRoyaltiesEntry
+ * @returns {Object} { tokensChunks[], royaltiesChunks[], chunksCount (int) }
+ */
 export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
   const CHUNK_SIZE = process.env.REACT_APP_BATCH_MINTING_CHUNK_SIZE;
 
@@ -136,6 +178,14 @@ export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
   };
 };
 
+/**
+ * @param {Object} data
+ * @param {Object[]} data.nfts
+ * @param data.nfts.collectionId
+ * @param {Object} data.collection
+ * @param data.collection.id
+ * @returns {Object[]} { nfts }
+ */
 export const attachCollectionIdToNfts = ({ collection, nfts }) => {
   nfts.map((nft) => {
     nft.collectionId = collection?.id || 0;
@@ -144,6 +194,10 @@ export const attachCollectionIdToNfts = ({ collection, nfts }) => {
   return { nfts };
 };
 
+/**
+ * @param {Promise[]} promises
+ * @returns {Array} result
+ */
 export const resolveAllPromises = async (promises) => {
   let res;
   try {

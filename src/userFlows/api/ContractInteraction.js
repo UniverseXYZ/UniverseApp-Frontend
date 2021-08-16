@@ -2,6 +2,13 @@
 /* eslint-disable consistent-return */
 import { getBatchMintingData, resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
 
+/**
+ * @param {Object} data
+ * @param {Array} data.tokens
+ * @param {Array} data.royalties
+ * @param data.address
+ * @param data.contract
+ */
 const mintChunkToContract = async ({ address, tokens, royalties, contract }) => {
   const mintTransaction = await contract.batchMintWithDifferentFees(address, tokens, royalties);
 
@@ -10,6 +17,16 @@ const mintChunkToContract = async ({ address, tokens, royalties, contract }) => 
   if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
 };
 
+/**
+ * @param {Object} requiredContracts
+ * @param {Contract} requiredContracts.collectionId
+ * @param {Object} tokenURIsAndRoyaltiesObject
+ * @param {Object[]} tokenURIsAndRoyaltiesObject.collectionId
+ * @param {Array} tokenURIsAndRoyaltiesObject.collectionId.royalties
+ * @param {String} tokenURIsAndRoyaltiesObject.collectionId.token
+ * @param {Object} helpers
+ * @param helpers.address
+ */
 export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers) {
   const dataIsNotComplete = !requiredContracts || !tokenURIsAndRoyaltiesObject;
   if (dataIsNotComplete) {
@@ -17,16 +34,32 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
     return;
   }
 
-  const contract = Object.values(requiredContracts)[0];
-  const data = Object.values(tokenURIsAndRoyaltiesObject)[0][0];
+  const coreContractId = 0;
+  const firstChunk = 0;
+  const contract = Object.values(requiredContracts)[coreContractId];
+  const mintingData = Object.values(tokenURIsAndRoyaltiesObject)[coreContractId][firstChunk];
 
-  const mintTransaction = await contract.mint(helpers.address, data.token, data.royalties);
+  const mintTransaction = await contract.mint(
+    helpers.address,
+    mintingData.token,
+    mintingData.royalties
+  );
 
   const mintReceipt = await mintTransaction.wait();
 
   if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
 }
 
+/**
+ * @param {Object} requiredContracts
+ * @param {Contract} requiredContracts.collectionId
+ * @param {Object} tokenURIsAndRoyaltiesObject
+ * @param {Object[]} tokenURIsAndRoyaltiesObject.collectionId
+ * @param {Array} tokenURIsAndRoyaltiesObject.collectionId.royalties
+ * @param {String} tokenURIsAndRoyaltiesObject.collectionId.token
+ * @param {Object} helpers
+ * @param helpers.address
+ */
 export async function sendBatchMintRequest(
   requiredContracts,
   tokenURIsAndRoyaltiesObject,
@@ -61,29 +94,29 @@ export async function sendBatchMintRequest(
   await resolveAllPromises(promises);
 }
 
-export const deployCollection = async ({ collection, helpers }) => {
-  if (collection.id) {
-    const unsignedMintCollectionTx =
-      await helpers.universeERC721FactoryContract.deployUniverseERC721(
-        collection.name,
-        collection.tokenName
-      );
+// export const deployCollection = async ({ collection, helpers }) => {
+//   if (collection.id) {
+//     const unsignedMintCollectionTx =
+//       await helpers.universeERC721FactoryContract.deployUniverseERC721(
+//         collection.name,
+//         collection.tokenName
+//       );
 
-    const res = await unsignedMintCollectionTx.wait();
+//     const res = await unsignedMintCollectionTx.wait();
 
-    if (!res.status) {
-      console.error('satus code:', res.status);
-      return;
-    }
+//     if (!res.status) {
+//       console.error('satus code:', res.status);
+//       return;
+//     }
 
-    collection.transactionHash = res.transactionHash;
-    collection.from = res.from;
-  } else {
-    console.error('There was an error');
-  }
+//     collection.transactionHash = res.transactionHash;
+//     collection.from = res.from;
+//   } else {
+//     console.error('There was an error');
+//   }
 
-  return {
-    collection,
-    helpers,
-  };
-};
+//   return {
+//     collection,
+//     helpers,
+//   };
+// };
