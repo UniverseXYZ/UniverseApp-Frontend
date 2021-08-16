@@ -8,6 +8,7 @@ import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
 import Pagination from '../../pagination/Pagionation';
 import '../../../containers/rarityCharts/RarityCharsLoader.scss';
 import '../../../containers/rarityCharts/RarityCharts.scss';
+import closeIcon from '../../../assets/images/close-menu.svg';
 import { renderLoaders } from '../../../containers/rarityCharts/renderLoaders';
 import CategoriesFilter from './CategoriesFilter';
 

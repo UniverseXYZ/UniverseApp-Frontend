@@ -179,7 +179,7 @@
         margin-bottom: 8px;
       }
       @include lg {
-        min-height: auto;
+        display: none;
       }
     }
     .grid {
@@ -187,6 +187,7 @@
       grid-template-columns: repeat(3, 1fr);
       grid-gap: 30px;
       .card {
+        cursor: pointer;
         background: $white;
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
@@ -210,48 +211,14 @@
           .card--price {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            min-height: 46px;
-            .result {
-              font-family: $spaceGroteskFont;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 14px;
-              line-height: 160%;
-              color: $black;
-              margin-right: 12px;
-              margin-bottom: 8px;
-            }
-            button.light-border-button {
-              display: flex;
-              align-items: center;
-              padding: 6px 14px;
-              box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset !important;
-              font-size: 14px;
-              line-height: 140%;
-              margin-right: 12px;
-              margin-bottom: 8px;
-              cursor: default;
-              img.close {
-                cursor: pointer;
-                width: 10px;
-                height: 10px;
-                margin-left: 8px;
-              }
-            }
-            .clear--all {
-              font-family: $spaceGroteskFont;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 14px;
-              line-height: 150%;
-              text-decoration-line: underline;
-              color: $black;
-              background: none;
-              margin-bottom: 8px;
-            }
-            @include lg {
-              display: none;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 120%;
+            color: $black;
+            img {
+              margin-right: 5px;
             }
           }
         }
