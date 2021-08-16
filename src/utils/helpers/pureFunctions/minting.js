@@ -73,6 +73,7 @@ export const extractRequiredDataForMinting = ({ nfts }) => {
 };
 
 export const returnTokenURIsAndRoyalties = ({ nfts }) => {
+  if (!nfts) return {};
   const tokenURIsAndRoyaltiesObject = {};
 
   nfts.forEach((nft) => {
@@ -109,6 +110,7 @@ const formatTokenURIsAndRoyaltiesObject = (data) => {
 };
 
 export const formatRoyalties = ({ nfts }) => {
+  if (!nfts) return { nfts: false };
   const formattedNfts = nfts.map((nft) => ({
     ...nft,
     royalties: nft.royalties ? formatRoyaltiesForMinting(nft.royalties) : [],

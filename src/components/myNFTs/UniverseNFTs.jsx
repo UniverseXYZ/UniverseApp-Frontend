@@ -110,7 +110,7 @@ const UniverseNFTs = () => {
           </div>
         </div>
         <div className="nfts__lists">
-          {UNIVERSE_NFTS.slice(offset, offset + perPage)
+          {/* {UNIVERSE_NFTS.slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
               isImage(elm) ? (
@@ -175,9 +175,9 @@ const UniverseNFTs = () => {
                   </div>
                 </div>
               )
-            )}
+            )} */}
         </div>
-        {UNIVERSE_NFTS.length &&
+        {!UNIVERSE_NFTS.length &&
         UNIVERSE_NFTS.filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
           .length ? (
           <div>

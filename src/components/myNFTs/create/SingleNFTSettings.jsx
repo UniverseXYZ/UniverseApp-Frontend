@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
@@ -165,6 +166,7 @@ const SingleNFTSettings = () => {
     } else if (
       (file.type === 'audio/mpeg' ||
         file.type === 'video/mp4' ||
+        file.type === 'image/jpeg' ||
         file.type === 'image/webp' ||
         file.type === 'image/gif' ||
         file.type === 'image/png') &&
@@ -213,14 +215,19 @@ const SingleNFTSettings = () => {
       },
     ];
 
-    await MintSingleNftFlow({ nfts: nftData, helpers: mintingFlowContext });
-
-    // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
-    // const mintedNfts = await getMyNfts();
-    // setMyNFTs(mintedNfts || []);
+    const res = await MintSingleNftFlow({ nfts: nftData, helpers: mintingFlowContext });
 
     document.getElementById('popup-root').remove();
-    document.getElementById('congrats-hidden-btn').click();
+
+    if (res) {
+      // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
+      // const mintedNfts = await getMyNfts();
+      // setMyNFTs(mintedNfts || []);
+
+      document.getElementById('congrats-hidden-btn').click();
+    } else {
+      // error
+    }
 
     closeLoadingModal();
   };
@@ -245,11 +252,11 @@ const SingleNFTSettings = () => {
 
     if (result.savedNft) saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
 
-    if (saveImageResult.error) {
-      showErrorModal(true);
-      return;
+    // failed to upload image, but saved nft
+    if (!saveImageResult) {
+      console.error('server error. cant get meta data');
+      // showErrorModal(true);
     }
-    if (!saveImageResult) return;
 
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);

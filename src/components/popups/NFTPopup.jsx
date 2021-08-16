@@ -52,12 +52,12 @@ const NFTPopup = ({ onClose, onNFT }) => {
       </div>
       <div className="details">
         <h1 className="nft__title">{onNFT.name}</h1>
-        <div className="genesis__link">
+        {/* <div className="genesis__link">
           <span>Genesis link: </span>
           <a href="https://niftygateway.com/3LAU" target="_blank" rel="noreferrer">
             niftygateway.com/3LAU
           </a>
-        </div>
+        </div> */}
         <p className="description">{onNFT.description}</p>
 
         <div className="nft__creator">
@@ -147,7 +147,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
               )
             ) : (
               <div className="history__container">
-                <div className="boughtBy__box">
+                {/* <div className="boughtBy__box">
                   <div>
                     <img className="buyerImage" src={buyerImage} alt="Buyer" />
                   </div>
@@ -160,8 +160,8 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   <div>
                     <img src={hrefIcon} alt="href" />
                   </div>
-                </div>
-                <div className="boughtBy__box">
+                </div> */}
+                {/* <div className="boughtBy__box">
                   <div>
                     <img
                       className="buyerImage"
@@ -172,7 +172,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   </div>
                   <div className="info">
                     <div className="buyer__name">
-                      {/* Put on sale by <b>{loggedInArtist.name}</b> */}
+                      Put on sale by <b>{loggedInArtist.name}</b>
                       Put on sale by <b>{PLACEHOLDER_NFT_BUYER}</b>
                     </div>
                     <div className="time">2 weeks ago</div>
@@ -180,19 +180,19 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   <div>
                     <img src={hrefIcon} alt="href" />
                   </div>
-                </div>
-                <div className="boughtBy__box">
+                </div> */}
+                {/* <div className="boughtBy__box">
                   <div>
                     <img
                       className="buyerImage"
-                      // src={URL.createObjectURL(loggedInArtist.avatar)}
+                      src={URL.createObjectURL(loggedInArtist.avatar)}
                       src={buyerImage}
                       alt="seller"
                     />
                   </div>
                   <div className="info">
                     <div className="buyer__name">
-                      {/* Minted by <b>{loggedInArtist.name}</b> */}
+                      Minted by <b>{loggedInArtist.name}</b>
                       Minted by <b>{PLACEHOLDER_NFT_BUYER}</b>
                     </div>
                     <div className="time">2 weeks ago</div>
@@ -200,7 +200,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
                   <div>
                     <img src={hrefIcon} alt="href" />
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </Animated>

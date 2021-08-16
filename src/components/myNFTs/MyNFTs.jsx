@@ -98,17 +98,21 @@ const MyNFTs = () => {
       address,
     };
 
-    await MintSavedNftsFlow({
+    const res = await MintSavedNftsFlow({
       nfts: selectedNfts,
       helpers: mintingFlowContext,
     });
 
-    // TODO temporarily use this
-    const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-    setSavedNfts(newSavedNFTs);
+    if (res) {
+      // TODO temporarily use this
+      const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
+      setSavedNfts(newSavedNFTs);
 
-    document.getElementById('popup-root').remove();
-    document.getElementById('congrats-hidden-btn').click();
+      document.getElementById('popup-root').remove();
+      document.getElementById('congrats-hidden-btn').click();
+    } else {
+      document.getElementById('popup-root').remove();
+    }
   };
 
   useEffect(() => {
@@ -203,6 +207,7 @@ const MyNFTs = () => {
                 type="button"
                 className="mint__btn"
                 onClick={() => history.push('/my-nfts/create')}
+                disabled={!checkSelectedSavedNfts()}
               >
                 Create NFT
               </button>
@@ -229,6 +234,7 @@ const MyNFTs = () => {
                 type="button"
                 className="mint__btn"
                 onClick={() => history.push('/my-nfts/create')}
+                disabled={!checkSelectedSavedNfts()}
               >
                 Create NFT
               </button>

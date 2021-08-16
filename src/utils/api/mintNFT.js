@@ -64,6 +64,8 @@ export const saveNftImage = async (file, id) => {
     body: formData,
   });
 
+  if (!request.ok) return false;
+
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };
