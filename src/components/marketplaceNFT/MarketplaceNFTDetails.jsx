@@ -902,7 +902,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </>
             ) : (
               <>
-                {selectedTabIndex === 0 && <NFTs />}
+                {selectedTabIndex === 0 && <NFTs data={selectedNFT.allItems} />}
                 {selectedTabIndex === 1 && <Bids />}
                 {selectedTabIndex === 2 && <Offers />}
                 {selectedTabIndex === 3 && <TradingHistory />}

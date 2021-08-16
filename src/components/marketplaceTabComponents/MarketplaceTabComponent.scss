@@ -722,7 +722,7 @@ input:checked + .slider:before {
     cursor: pointer;
     .image--box {
       display: flex;
-      > img {
+      > img, video {
         height: 70px;
         width: 70px;
       }
