@@ -86,7 +86,6 @@ export const useSearchPolymorphs = () => {
       throw new Error(`bad status = ${result.status}`);
     }
     const json = await result.json();
-    console.log(json);
     setResults([...json]);
     return json;
   };

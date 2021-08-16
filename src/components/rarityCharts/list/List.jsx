@@ -96,11 +96,11 @@ const List = ({
             </div>
           )}
           {categories.map((item, index) => (
-            <>
+            <div key={uuid()}>
               {item.traits.map(
                 (trait, idx) =>
                   trait.checked && (
-                    <button type="button" className="light-border-button">
+                    <button key={uuid()} type="button" className="light-border-button">
                       {trait.name}
                       <img
                         className="close"
@@ -112,7 +112,7 @@ const List = ({
                     </button>
                   )
               )}
-            </>
+            </div>
           ))}
           {showClearALL && (
             <button type="button" className="clear--all" onClick={() => handleClearAll()}>
