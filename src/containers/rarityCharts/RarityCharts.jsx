@@ -55,7 +55,6 @@ const RarityCharts = () => {
     } else {
       newFilter = filter.filter((f) => f[1] !== trait.name);
     }
-    console.log(newFilter);
     setFilter(newFilter);
   };
 
