@@ -28,8 +28,6 @@ export async function MintSavedNftsFlow({ nfts, helpers }) {
     createContractInstancesFromAddresses
   )({ nfts, helpers });
 
-  console.log(requiredContracts);
-
   const { tokenURIsAndRoyaltiesObject, isSingle } = await asyncPipe(
     extractRequiredDataForMinting,
     getTokenURIsForSavedNfts,
@@ -37,7 +35,11 @@ export async function MintSavedNftsFlow({ nfts, helpers }) {
     returnTokenURIsAndRoyalties
   )({ nfts });
 
+  if (!tokenURIsAndRoyaltiesObject) return false;
+
   isSingle
     ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers)
     : await sendBatchMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers);
+
+  return true;
 }

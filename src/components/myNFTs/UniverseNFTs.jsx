@@ -1265,9 +1265,8 @@ const UniverseNFTs = () => {
             {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>}
           </div>
         </div>
-        {/* <div className="nfts__lists">
-          {polymorphData
-            .slice(offset, offset + perPage)
+        <div className="nfts__lists">
+          {/* {UNIVERSE_NFTS.slice(offset, offset + perPage)
             .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
             .map((elm) =>
               isImage(elm) ? (
@@ -1332,10 +1331,10 @@ const UniverseNFTs = () => {
                   </div>
                 </div>
               )
-            )}
-        </div> */}
-        {/* {polymorphData.length &&
-        polymorphData.filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+            )} */}
+        </div>
+        {!UNIVERSE_NFTS.length &&
+        UNIVERSE_NFTS.filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
           .length ? (
           <div>
             <div className="pagination__container">
@@ -1365,7 +1364,7 @@ const UniverseNFTs = () => {
               </Button>
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

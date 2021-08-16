@@ -17,18 +17,16 @@ const RemovePopup = ({
   const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useContext(AppContext);
 
   const handleRemove = async (id) => {
-    const result = await removeSavedNft(id);
-
-    if (!result.ok || result.status !== 200) {
-      console.error(`Cannot delete NFT with id: ${id}`);
-      return;
-    }
-
     if (removeFrom === 'collection') {
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
       // setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'saved') {
       setSavedNfts(savedNfts.filter((item) => item.id !== id) || []);
+      const result = await removeSavedNft(id);
+
+      if (!result.ok || result.status !== 200) {
+        console.error(`Cannot delete NFT with id: ${id}`);
+      }
     } else if (removeFrom === 'savedCollection') {
       setSavedNfts(savedNfts.filter((item) => item.collectionId !== id) || []);
       setSavedCollections(savedCollections.filter((item) => item.id !== id));

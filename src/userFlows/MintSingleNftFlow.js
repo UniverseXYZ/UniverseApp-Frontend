@@ -40,7 +40,11 @@ export async function MintSingleNftFlow({ nfts, helpers }) {
     returnTokenURIsAndRoyalties
   )({ nfts });
 
+  if (!tokenURIsAndRoyaltiesObject) return false;
+
   isSingle
     ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers)
     : await sendBatchMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers);
+
+  return true;
 }

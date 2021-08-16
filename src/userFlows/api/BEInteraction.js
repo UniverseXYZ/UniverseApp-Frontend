@@ -16,6 +16,12 @@ export const getTokenURIsForSavedNfts = async ({ nfts }) => {
   nfts.forEach((nft) => promises.push(getMetaForSavedNft(nft.id)));
 
   const res = await resolveAllPromises(promises);
+
+  if (!res.length) {
+    console.error('server error. cannot get meta data');
+    return {};
+  }
+
   const nftsAttachedTokenUri = attachTokenURIs(nfts, res);
 
   return { nfts: nftsAttachedTokenUri };
@@ -38,6 +44,12 @@ export const generateTokenURIs = async ({ nfts }) => {
   );
 
   const res = await resolveAllPromises(promises);
+
+  if (!res.length) {
+    console.error('server error. cannot get token uri');
+    return {};
+  }
+
   const nftsAttachedTokenUri = attachTokenURIs(nfts, res);
 
   return { nfts: nftsAttachedTokenUri };
