@@ -30,6 +30,12 @@ const buildRarityUrl = (
       trait = 'Astronnaut Helmet';
     } else if (trait === 'Bow & Arrow') {
       trait = 'Bow and Arrow';
+    } else if (trait === 'Bow Tie & Suit') {
+      trait = 'Bow Tie and Suit';
+    } else if (trait === 'Suit & Tie') {
+      trait = 'Suit and Tie';
+    } else if (trait === 'Tennis Socks & Shoes') {
+      trait = 'Tennis Socks and Shoes';
     }
     // const existingTraits = bundledFilters[attr] ? [...bundledFilters[attr]]
     bundledFilters[attr] = bundledFilters[attr] ? [...bundledFilters[attr], trait] : [trait];

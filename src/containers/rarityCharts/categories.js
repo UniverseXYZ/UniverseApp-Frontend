@@ -711,7 +711,7 @@ export const categoriesArray = [
       },
       {
         id: uuid(),
-        name: 'White/Yellow Football Cleats',
+        name: 'White-Yellow Football Cleats',
         checked: false,
       },
     ],
