@@ -81,6 +81,8 @@
         display: grid;
         grid-template-columns: 1fr;
         grid-gap: 12px;
+        max-height: 285px;
+        overflow: scroll;
         .trait {
           display: flex;
           align-items: center;
