@@ -171,11 +171,10 @@ const SingleNFTSettings = () => {
       setPreviewImage(null);
       setErrors({
         ...errors,
-        previewImage: 'File format must be PNG, GIF, WEBP, MP4 or MP3 (Max Size: 30mb)',
+        previewImage: 'File format must be PNG, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     } else if (
-      (file.type === 'audio/mpeg' ||
-        file.type === 'video/mp4' ||
+      (file.type === 'video/mp4' ||
         file.type === 'image/webp' ||
         file.type === 'image/gif' ||
         file.type === 'image/png') &&
@@ -187,7 +186,7 @@ const SingleNFTSettings = () => {
       setPreviewImage(null);
       setErrors({
         ...errors,
-        previewImage: 'File format must be PNG, GIF, WEBP, MP4 or MP3 (Max Size: 30mb)',
+        previewImage: 'File format must be PNG, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     }
   };
@@ -494,8 +493,14 @@ const SingleNFTSettings = () => {
                   />
                   <div className="single-nft-picture">
                     <div className="preview__image">
+                      {console.log('video ', previewImage)}
                       {previewImage.type === 'video/mp4' && (
-                        <video>
+                        <video
+                          onMouseOver={(event) => event.target.play()}
+                          onFocus={(event) => event.target.play()}
+                          onMouseOut={(event) => event.target.pause()}
+                          onBlur={(event) => event.target.pause()}
+                        >
                           <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
                           <track kind="captions" />
                           Your browser does not support the video tag.
