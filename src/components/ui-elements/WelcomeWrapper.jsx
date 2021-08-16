@@ -59,10 +59,10 @@ const WelcomeWrapper = (props) => {
             <div className="links">
               {!!btnText.length && (
                 <Button className="light-button" onClick={btnOnClick}>
-                  {btnText}
+                  {popupBtnText}
                 </Button>
               )}
-              {!!popupBtnText.length && !btnAnotherOnClick && (
+              {/* {!!popupBtnText.length && !btnAnotherOnClick && (
                 <Popup
                   trigger={
                     <button type="button" className="light-border-button">
@@ -72,12 +72,12 @@ const WelcomeWrapper = (props) => {
                 >
                   {(close) => <SubscribePopup close={close} />}
                 </Popup>
-              )}
-              {!!popupBtnText.length && btnAnotherOnClick && (
+              )} */}
+              {/* {!!popupBtnText.length && btnAnotherOnClick && (
                 <button type="button" className="light-border-button" onClick={btnAnotherOnClick}>
                   {popupBtnText}
                 </button>
-              )}
+              )} */}
             </div>
           </AnimatedOnScroll>
         </div>

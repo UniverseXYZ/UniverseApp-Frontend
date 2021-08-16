@@ -77,6 +77,7 @@ const RarityCharts = () => {
           resultsCount={results.length}
           handleCategoryFilterChange={handleCategoryFilterChange}
           setFilter={setFilter}
+          filter={filter}
         />
         <List
           data={results}

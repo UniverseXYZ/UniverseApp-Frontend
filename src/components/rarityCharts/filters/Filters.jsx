@@ -26,6 +26,7 @@ const Filters = (props) => {
     resultsCount,
     handleCategoryFilterChange,
     setFilter,
+    filter,
   } = props;
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
 
@@ -72,6 +73,7 @@ const Filters = (props) => {
                   resultsCount={resultsCount}
                   handleCategoryFilterChange={handleCategoryFilterChange}
                   setFilter={setFilter}
+                  filter={filter}
                 />
               )}
             </Popup>
@@ -96,6 +98,7 @@ const Filters = (props) => {
                   resultsCount={resultsCount}
                   handleCategoryFilterChange={handleCategoryFilterChange}
                   setFilter={setFilter}
+                  filter={filter}
                 />
               )}
             </Popup>
@@ -133,6 +136,7 @@ Filters.propTypes = {
   categories: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategories: PropTypes.func.isRequired,
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
   resultsCount: PropTypes.number.isRequired,
   handleCategoryFilterChange: PropTypes.func.isRequired,
