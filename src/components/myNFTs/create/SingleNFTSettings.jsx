@@ -56,7 +56,9 @@ const SingleNFTSettings = () => {
   const [royalities, setRoyalities] = useState(true);
   const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
-  const [properties, setProperties] = useState([{ name: '', value: '' }]);
+  const [properties, setProperties] = useState([
+    { name: '', value: '', errors: { name: '', value: '' } },
+  ]);
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
@@ -86,7 +88,7 @@ const SingleNFTSettings = () => {
 
   const addProperty = () => {
     const newProperties = [...properties];
-    const temp = { name: '', value: '' };
+    const temp = { name: '', value: '', errors: { name: '', value: '' } };
     newProperties.push(temp);
     setProperties(newProperties);
   };
@@ -131,12 +133,14 @@ const SingleNFTSettings = () => {
   const propertyChangesName = (index, val) => {
     const newProperties = [...properties];
     newProperties[index].name = val;
+    newProperties[index].errors.name = !val ? '“Property name” is not allowed to be empty' : '';
     setProperties(newProperties);
   };
 
   const propertyChangesValue = (index, value) => {
     const newProperties = [...properties];
     newProperties[index].value = value;
+    newProperties[index].errors.value = !value ? '“Property value” is not allowed to be empty' : '';
     setProperties(newProperties);
   };
 
@@ -733,6 +737,7 @@ const SingleNFTSettings = () => {
                       <h5>Property name</h5>
                       <Input
                         className="inp"
+                        error={elm.errors.name}
                         placeholder="Colour"
                         value={elm.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
@@ -742,6 +747,7 @@ const SingleNFTSettings = () => {
                       <h5>Value</h5>
                       <Input
                         className="inp"
+                        error={elm.errors.value}
                         placeholder="Red"
                         value={elm.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
@@ -886,7 +892,13 @@ const SingleNFTSettings = () => {
                 <Button
                   className="light-button"
                   onClick={handleMinting}
-                  disabled={!name || !editions || !previewImage}
+                  disabled={
+                    !name ||
+                    !editions ||
+                    !previewImage ||
+                    (propertyCheck &&
+                      properties.find((property) => property.name === '' || property.value === ''))
+                  }
                 >
                   Mint now
                 </Button>
@@ -903,7 +915,13 @@ const SingleNFTSettings = () => {
                 <Button
                   className="light-button"
                   onClick={handleMinting}
-                  disabled={!name || !editions || !previewImage}
+                  disabled={
+                    !name ||
+                    !editions ||
+                    !previewImage ||
+                    (propertyCheck &&
+                      properties.find((property) => property.name === '' || property.value === ''))
+                  }
                 >
                   Mint now
                 </Button>
