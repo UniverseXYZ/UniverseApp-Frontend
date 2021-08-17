@@ -34,14 +34,6 @@ const Section6 = () => {
           <WrapperCenterTwoColumns leftBlock={leftBlock()} rightBlock={rightBlock()} />
         </WrapperCenter>
       </div>
-      <div className="section6--end--block--parent">
-        <div className="section6--end--block">
-          <h2>It&apos;s now time to mint your own unique polymorph</h2>
-          <Button className="light-button" onClick={() => history.push('/mint-polymorph')}>
-            Mint a morph
-          </Button>
-        </div>
-      </div>
     </>
   );
 };
