@@ -130,6 +130,8 @@ const App = () => {
         setShowModal,
         myNFTsSelectedTabIndex,
         setMyNFTsSelectedTabIndex,
+        selectedTabIndex,
+        setSelectedTabIndex,
         savedCollections,
         setSavedCollections,
         activeView,
@@ -183,7 +185,7 @@ const App = () => {
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
-        <Route exact path="/rarity-chart" component={() => <RarityCharts />} />
+        <Route exact path="/polymorph-rarity" component={() => <RarityCharts />} />
         <Route exact path="/my-profile" component={() => <MyProfile />} />
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route

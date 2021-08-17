@@ -78,6 +78,7 @@ const MobileView = (props) => {
   const history = useHistory();
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
+  const [searchFocus, setSearchFocus] = useState(false);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -142,7 +143,8 @@ const MobileView = (props) => {
         <>
           <div className="mobile--search--section">
             <div className="input--search--box">
-              <div className="input--box">
+              <div className={`input--box ${searchFocus || searchValue ? 'focus' : ''}`}>
+                <div className="box--shadow--effect--block" />
                 <input
                   placeholder=""
                   ref={searchRef}
@@ -150,6 +152,8 @@ const MobileView = (props) => {
                   value={searchValue}
                   onKeyDown={handleSearchKeyDown}
                   type="text"
+                  onFocus={() => setSearchFocus(true)}
+                  onBlur={() => setSearchFocus(false)}
                 />
                 <img src={img} alt="search" className="searchicon" />
                 <img

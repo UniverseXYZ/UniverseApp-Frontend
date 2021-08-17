@@ -54,7 +54,6 @@ import AndréNabais from '../../assets/images/team/André-Nabais.png';
 import LukeLombe from '../../assets/images/team/Luke-Lombe.png';
 import HarrisonHines from '../../assets/images/team/Harrison-Hines.png';
 import ScottPlowman from '../../assets/images/team/Scott-Plowman.png';
-import BeanieEth from '../../assets/images/team/Beanie-ETH.png';
 
 const UniverseContributors = () => {
   const [contributors, setContributors] = useState([
@@ -374,12 +373,6 @@ const UniverseContributors = () => {
       id: 53,
       name: 'Scott Plowman',
       avatar: ScottPlowman,
-      loaded: false,
-    },
-    {
-      id: 54,
-      name: 'Beanie.ETH',
-      avatar: BeanieEth,
       loaded: false,
     },
   ]);

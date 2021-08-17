@@ -35,6 +35,7 @@ const Header = ({ location }) => {
   const [searchValue, setSearchValue] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [searchFocus, setSearchFocus] = useState(false);
   const searchRef = useRef();
   const ref = useRef();
 
@@ -117,194 +118,199 @@ const Header = ({ location }) => {
           <img src={appLightLogo} alt="App Logo" />
         </Link>
         <div className="search--field">
-          <img className="search" src={searchIcon} alt="Search" />
-          <input
-            type="text"
-            className="inp"
-            placeholder="Search"
-            ref={searchRef}
-            onChange={(e) => e.target.value.length < 16 && setSearchValue(e.target.value)}
-            value={searchValue}
-            onKeyDown={handleSearchKeyDown}
-          />
-          {searchValue.length > 0 && (
-            <>
-              <img
-                className="close"
-                src={closeIcon}
-                alt="Close"
-                onClick={() => setSearchValue('')}
-                aria-hidden="true"
-              />
-              <div className="search__results" ref={ref}>
-                {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-                  item.name.toLowerCase().includes(searchValue.toLowerCase())
-                ).length > 0 ||
-                PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-                  item.name.toLowerCase().includes(searchValue.toLowerCase())
-                ).length > 0 ||
-                PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                  item.name.toLowerCase().includes(searchValue.toLowerCase())
-                ).length > 0 ||
-                PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-                  item.name.toLowerCase().includes(searchValue.toLowerCase())
-                ).length > 0 ||
-                PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                  item.name.toLowerCase().includes(searchValue.toLowerCase())
-                ).length > 0 ||
-                PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                  item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-                ).length ? (
-                  <div className="search__nfts">
-                    {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 && <h4>NFTs</h4>}
-                    {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).map((nft) => (
-                      <div className="nft__div">
-                        <div className="nft--image">
-                          {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                            <img src={nft.media.url} alt="NFT" />
-                          )}
-                          {nft.media.type === 'video/mp4' && (
-                            <video
-                              onMouseOver={(event) => event.target.play()}
-                              onFocus={(event) => event.target.play()}
-                              onMouseOut={(event) => event.target.pause()}
-                              onBlur={(event) => event.target.pause()}
+          <div className={`search--field--wrapper ${searchFocus || searchValue ? 'focus' : ''}`}>
+            <div className="box--shadow--effect--block" />
+            <img className="search" src={searchIcon} alt="Search" />
+            <input
+              type="text"
+              className="inp"
+              placeholder="Search"
+              ref={searchRef}
+              onChange={(e) => e.target.value.length < 16 && setSearchValue(e.target.value)}
+              value={searchValue}
+              onKeyDown={handleSearchKeyDown}
+              onFocus={() => setSearchFocus(true)}
+              onBlur={() => setSearchFocus(false)}
+            />
+            {searchValue.length > 0 && (
+              <>
+                <img
+                  className="close"
+                  src={closeIcon}
+                  alt="Close"
+                  onClick={() => setSearchValue('')}
+                  aria-hidden="true"
+                />
+                <div className="search__results" ref={ref}>
+                  {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLowerCase())
+                  ).length > 0 ||
+                  PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                    item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+                  ).length ? (
+                    <div className="search__nfts">
+                      {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>NFTs</h4>}
+                      {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((nft) => (
+                        <div className="nft__div">
+                          <div className="nft--image">
+                            {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
+                              <img src={nft.media.url} alt="NFT" />
+                            )}
+                            {nft.media.type === 'video/mp4' && (
+                              <video
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                              >
+                                <source src={nft.media.url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
+                            )}
+                            {nft.media.type === 'audio/mpeg' && (
+                              <img className="nft--image" src={mp3Icon} alt={nft.name} />
+                            )}
+                            {nft.media.type === 'audio/mpeg' && (
+                              <div className="video__icon">
+                                <img src={audioIcon} alt="Video Icon" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="nft--desc">
+                            <h5 className="nft--name">{nft.name}</h5>
+                            <p className="nft--price">
+                              {nft.price} ETH / {nft.editions.split('/')[0]} of{' '}
+                              {nft.editions.split('/')[1]}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Users</h4>}
+                      {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((user) => (
+                        <div className="users__div">
+                          <div className="user--avatar">
+                            <img src={user.avatar} alt="User" />
+                          </div>
+                          <div className="user--desc">
+                            <h5 className="user--name">{user.name}</h5>
+                            <p className="user--followers">{user.followers} Followers</p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Auctions</h4>}
+                      {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((auction) => (
+                        <div className="auction__div">
+                          <div className="auction--image">
+                            <img src={auction.photo} alt="Auction" />
+                          </div>
+                          <div className="auction--desc">
+                            <h5 className="auction--title">{auction.name}</h5>
+                            <p className="auction--artist">by {auction.creator.name}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Collections</h4>}
+                      {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((collection) => (
+                        <div className="collection__div">
+                          {!collection.photo ? (
+                            <div
+                              className="random--avatar--color"
+                              style={{
+                                backgroundColor:
+                                  defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                              }}
                             >
-                              <source src={nft.media.url} type="video/mp4" />
-                              <track kind="captions" />
-                              Your browser does not support the video tag.
-                            </video>
-                          )}
-                          {nft.media.type === 'audio/mpeg' && (
-                            <img className="nft--image" src={mp3Icon} alt={nft.name} />
-                          )}
-                          {nft.media.type === 'audio/mpeg' && (
-                            <div className="video__icon">
-                              <img src={audioIcon} alt="Video Icon" />
+                              {collection.name.charAt(0)}
+                            </div>
+                          ) : (
+                            <div className="collection--image">
+                              <img src={collection.photo} alt="Coll" />
                             </div>
                           )}
-                        </div>
-                        <div className="nft--desc">
-                          <h5 className="nft--name">{nft.name}</h5>
-                          <p className="nft--price">
-                            {nft.price} ETH / {nft.editions.split('/')[0]} of{' '}
-                            {nft.editions.split('/')[1]}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                    {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 && <h4>Users</h4>}
-                    {PLACEHOLDER_MARKETPLACE_USERS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).map((user) => (
-                      <div className="users__div">
-                        <div className="user--avatar">
-                          <img src={user.avatar} alt="User" />
-                        </div>
-                        <div className="user--desc">
-                          <h5 className="user--name">{user.name}</h5>
-                          <p className="user--followers">{user.followers} Followers</p>
-                        </div>
-                      </div>
-                    ))}
-                    {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 && <h4>Auctions</h4>}
-                    {PLACEHOLDER_MARKETPLACE_AUCTIONS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).map((auction) => (
-                      <div className="auction__div">
-                        <div className="auction--image">
-                          <img src={auction.photo} alt="Auction" />
-                        </div>
-                        <div className="auction--desc">
-                          <h5 className="auction--title">{auction.name}</h5>
-                          <p className="auction--artist">by {auction.creator.name}</p>
-                        </div>
-                      </div>
-                    ))}
-                    {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 && <h4>Collections</h4>}
-                    {PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).map((collection) => (
-                      <div className="collection__div">
-                        {!collection.photo ? (
-                          <div
-                            className="random--avatar--color"
-                            style={{
-                              backgroundColor:
-                                defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                            }}
-                          >
-                            {collection.name.charAt(0)}
+                          <div className="collection--desc">
+                            <h5 className="collection--name">{collection.name}</h5>
+                            <p className="collection--owner">by {collection.owner.name}</p>
                           </div>
-                        ) : (
-                          <div className="collection--image">
-                            <img src={collection.photo} alt="Coll" />
+                        </div>
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).length > 0 && <h4>Communities</h4>}
+                      {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((communities) => (
+                        <div className="communities__div">
+                          <div className="communities--photo">
+                            <img src={communities.photo} alt="Comm" />
                           </div>
-                        )}
-                        <div className="collection--desc">
-                          <h5 className="collection--name">{collection.name}</h5>
-                          <p className="collection--owner">by {collection.owner.name}</p>
+                          <div className="communities--desc">
+                            <h5 className="communities--name">{communities.name}</h5>
+                            <p className="communities--members">{communities.members} Members</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                    {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 && <h4>Communities</h4>}
-                    {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).map((communities) => (
-                      <div className="communities__div">
-                        <div className="communities--photo">
-                          <img src={communities.photo} alt="Comm" />
+                      ))}
+                      {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+                      ).length > 0 && <h4>Galleries</h4>}
+                      {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                        item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      ).map((galleries) => (
+                        <div className="galleries__div">
+                          <div className="galleries--photo">
+                            <img src={galleries.photos[0]} alt="Gall" />
+                          </div>
+                          <div className="galleries--desc">
+                            <h5 className="galleries--name">{galleries.name}</h5>
+                            <p className="galleries--likes">{galleries.likesCount} Likes</p>
+                          </div>
                         </div>
-                        <div className="communities--desc">
-                          <h5 className="communities--name">{communities.name}</h5>
-                          <p className="communities--members">{communities.members} Members</p>
-                        </div>
-                      </div>
-                    ))}
-                    {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-                    ).length > 0 && <h4>Galleries</h4>}
-                    {PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).map((galleries) => (
-                      <div className="galleries__div">
-                        <div className="galleries--photo">
-                          <img src={galleries.photos[0]} alt="Gall" />
-                        </div>
-                        <div className="galleries--desc">
-                          <h5 className="galleries--name">{galleries.name}</h5>
-                          <p className="galleries--likes">{galleries.likesCount} Likes</p>
-                        </div>
-                      </div>
-                    ))}
-                    <Button
-                      type="button"
-                      className="light-border-button"
-                      onClick={() => handleAllResults()}
-                    >
-                      All results
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="no__result">
-                    <p>No items found</p>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+                      ))}
+                      <Button
+                        type="button"
+                        className="light-border-button"
+                        onClick={() => handleAllResults()}
+                      >
+                        All results
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="no__result">
+                      <p>No items found</p>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
       <DesktopView
