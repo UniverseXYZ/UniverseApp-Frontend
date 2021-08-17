@@ -2,246 +2,185 @@
 @import '../../../assets/scss/_mixins';
 
 .rarity--charts--search--and--filters--container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 50px;
-  .floor--price--block {
-    .floor--price--paragraph {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      font-family: $spaceGroteskFont;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 18px;
-      line-height: 160%;
-      color: $black;
-      text-transform: uppercase;
-      span {
-        font-weight: normal;
-        color: rgba(0, 0, 0, 0.4);
-        text-transform: capitalize;
-      }
-      div {
-        display: flex;
-        align-items: center;
-        margin-left: 5px;
-        img {
-          margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+    .floor--price--block {
+        .floor--price--paragraph {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 160%;
+            color: $black;
+            text-transform: uppercase;
+            span {
+                font-weight: normal;
+                color: rgba(0, 0, 0, 0.4);
+                text-transform: capitalize;
+            }
+            div {
+                display: flex;
+                align-items: center;
+                margin-left: 5px;
+                img {
+                    margin-right: 5px;
+                }
+            }
+            @include md {
+                justify-content: center;
+            }
         }
-      }
-      @include md {
-        justify-content: center;
-      }
+        @include sm {
+            margin-top: 26px;
+        }
+        @include sm {
+            width: 100%;
+            margin-top: 0;
+        }
     }
-    @include sm {
-      margin-top: 26px;
-    }
-    @include sm {
-      width: 100%;
-      margin-top: 0;
-    }
-  }
-  .rarity--charts--search--and--filters--row {
-    width: 100%;
-    max-width: 1110px;
-    display: grid;
-    grid-template-columns: 1fr 222px 54px;
-    grid-gap: 12px;
-    align-items: center;
-    min-height: 52px;
-    .sort--by--order {
-      margin-left: 0px;
-    }
-    .rarity--charts--search--and--floor--price {
-      display: flex;
-      align-items: center;
-      @include sm {
+    .rarity--charts--search--and--filters--row {
         width: 100%;
-      }
-      .tablet--filters {
-        position: relative;
-        display: none;
-        margin-left: 30px;
-        margin-right: 18px;
-        button {
-          display: flex;
-          img {
-            margin-right: 10px;
-          }
+        max-width: 1110px;
+        display: grid;
+        grid-template-columns: 1fr 54px 222px;
+        grid-gap: 12px;
+        align-items: center;
+        min-height: 52px;
+        .sort--by--order {
+            margin-left: 0px;
         }
         .rarity--charts--search--and--floor--price {
-          display: flex;
-          align-items: center;
-          @include sm {
-            width: 100%;
-          }
-          .tablet--filters {
-            position: relative;
-            display: none;
-            margin-left: 30px;
-            margin-right: 18px;
-            button {
-              position: relative;
-              display: flex;
-              img {
-                margin-right: 10px;
-              }
+            display: flex;
+            align-items: center;
+            @include sm {
+                width: 100%;
             }
-            .count {
-              position: absolute;
-              top: -10px;
-              right: -10px;
-              font-family: $spaceGroteskFont;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 12px;
-              line-height: 150%;
-              color: $white;
-              min-width: 20px;
-              min-height: 20px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: $black;
-              border-radius: 50%;
+            .tablet--filters {
+                position: relative;
+                display: none;
+                margin-left: 30px;
+                margin-right: 18px;
+                button {
+                    position: relative;
+                    display: flex;
+                    img {
+                        margin-right: 10px;
+                    }
+                    .count {
+                        position: absolute;
+                        top: -10px;
+                        right: -10px;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 12px;
+                        line-height: 150%;
+                        color: $white;
+                        min-width: 20px;
+                        min-height: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: $black;
+                        border-radius: 50%;
+                    }
+                }
+                @include lg {
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                }
+                @include md {
+                    display: none;
+                }
             }
+            .mobile--filters {
+                position: fixed;
+                right: 20px;
+                bottom: 20px;
+                z-index: 111;
+                display: none;
+                button {
+                    padding: 15px 18px;
+                }
+                .count {
+                    position: absolute;
+                    top: -10px;
+                    right: -10px;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px;
+                    line-height: 150%;
+                    color: $white;
+                    min-width: 20px;
+                    min-height: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: $black;
+                    border-radius: 50%;
+                }
+                @include md {
+                    display: block;
+                }
+            }
+            @include md {
+                grid-column: 1/3;
+            }
+        }
+        .search--field--component {
             @include lg {
-              display: flex;
-              justify-content: center;
-              width: 100%;
+                min-width: 252px;
             }
             @include md {
-              display: none;
+                width: 100%;
+                margin-bottom: 24px;
             }
-          }
-          .mobile--filters {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 111;
-            display: none;
-            button {
-              padding: 15px 18px;
+            .inp {
+                padding: 0 45px 0 48px;
             }
-            .count {
-              position: absolute;
-              top: -10px;
-              right: -10px;
-              font-family: $spaceGroteskFont;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 12px;
-              line-height: 150%;
-              color: $white;
-              min-width: 20px;
-              min-height: 20px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: $black;
-              border-radius: 50%;
-            }
-            @include md {
-              display: block;
-            }
-          }
-          @include md {
-            grid-column: 1/3;
-          }
         }
-        @include lg {
-          display: flex;
-          justify-content: center;
-          width: 100%;
+        .sort--by--label--and--select--block {
+            display: flex;
+            align-items: center;
+            @include lg {
+                width: calc(50% - 75px);
+                align-items: flex-start;
+                justify-content: flex-start;
+                position: relative;
+                margin-top: -50px;
+            }
+            @include sm {
+                width: 100%;
+            }
+            label {
+                width: 87px;
+                user-select: none;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 160%;
+                color: #B3B3B3;
+                @include lg {
+                    position: absolute;
+                    top: -25px;
+                    font-size: 14px;
+                }
+            }
+            .sort--by--select--parent {
+                @include lg {
+                    width: calc(100% - 54px);
+                }
+            }
         }
         @include md {
-          display: none;
+            grid-template-columns: auto 1fr;
         }
-      }
-      .mobile--filters {
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-        z-index: 111;
-        display: none;
-        button {
-          padding: 15px 18px;
-        }
-        .count {
-          position: absolute;
-          top: -10px;
-          right: -10px;
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 12px;
-          line-height: 150%;
-          color: $white;
-          min-width: 20px;
-          min-height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: $black;
-          border-radius: 50%;
-        }
-        @include md {
-          display: block;
-        }
-      }
-      @include md {
-        grid-column: 1/3;
-      }
     }
-    .search--field--component {
-      @include lg {
-        min-width: 252px;
-      }
-      @include md {
-        width: 100%;
-        margin-bottom: 24px;
-      }
-      .inp {
-        padding: 0 45px 0 48px;
-      }
-    }
-    .sort--by--label--and--select--block {
-      display: flex;
-      align-items: center;
-      @include lg {
-        width: calc(50% - 75px);
-        align-items: flex-start;
-        justify-content: flex-start;
-        position: relative;
-        margin-top: -50px;
-      }
-      @include sm {
-        width: 100%;
-      }
-      label {
-        width: 87px;
-        user-select: none;
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 18px;
-        line-height: 160%;
-        color: #b3b3b3;
-        @include lg {
-          position: absolute;
-          top: -25px;
-          font-size: 14px;
-        }
-      }
-      .sort--by--select--parent {
-        @include lg {
-          width: calc(100% - 54px);
-        }
-      }
-    }
-    @include md {
-      grid-template-columns: 1fr auto;
-    }
-  }
 }

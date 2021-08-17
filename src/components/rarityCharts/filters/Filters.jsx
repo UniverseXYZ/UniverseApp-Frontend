@@ -105,17 +105,17 @@ const Filters = (props) => {
             {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>}
           </div>
         </div>
+        <SortByOrder
+          setSortDir={setSortDir}
+          sortDir={sortDir}
+          setApiPage={setApiPage}
+          resetPagination={resetPagination}
+        />
         <SortBySelect
           id="sort--select"
           defaultValue="Rarity Score"
           sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
           setSortField={setSortField}
-          setApiPage={setApiPage}
-          resetPagination={resetPagination}
-        />
-        <SortByOrder
-          setSortDir={setSortDir}
-          sortDir={sortDir}
           setApiPage={setApiPage}
           resetPagination={resetPagination}
         />
