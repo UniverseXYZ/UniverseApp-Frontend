@@ -52,7 +52,7 @@ const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionL
       </Popup>
       <Popup
         trigger={
-          <button type="button" className="light-border-button">
+          <button type="button" className="light-border-button light-border-button-shadow">
             {secondButtonText}
           </button>
         }
