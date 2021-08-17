@@ -2,6 +2,8 @@
 @import '../../../../assets/scss/_mixins';
 
 .desktop__nav {
+  display: flex;
+  justify-content: flex-end;
   margin-right: 2%;
   ul {
     display: flex;

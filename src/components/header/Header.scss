@@ -32,7 +32,9 @@ header {
         display: block;
       }
       .search--field {
-        border-left: 1px solid rgba(255, 255, 255, 0.4);
+        &--wrapper {
+          border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
         input {
           color: $white;
           &::placeholder {
@@ -47,6 +49,9 @@ header {
         }
         .close {
           filter: invert(1);
+        }
+        img.search {
+          filter: invert(0)!important;
         }
       }
     }
@@ -130,6 +135,7 @@ header {
         display: flex;
         align-items: center;
         border-left: 1px solid rgba(0, 0, 0, 0.1);
+        max-width: 440px;
         .box--shadow--effect--block {
           position: absolute;
           width: calc(100% + 8px);

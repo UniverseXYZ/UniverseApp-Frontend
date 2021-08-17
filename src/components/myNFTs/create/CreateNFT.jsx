@@ -31,6 +31,10 @@ const CreateNFT = () => {
       setSelectedTabIndex(1);
       setSelectedNFTType('single');
     }
+    if (location.state) {
+      setSelectedTabIndex(location.state.tabIndex);
+      setSelectedNFTType(location.state.nftType);
+    }
   }, []);
 
   return (
@@ -67,7 +71,7 @@ const CreateNFT = () => {
             ? 'Create NFT'
             : 'Create NFT collection'}
         </h1>
-        {!showCollectible && (
+        {/* {!showCollectible && (
           <div id="tabs--wrapper">
             <ul className="tabs">
               <li
@@ -98,7 +102,7 @@ const CreateNFT = () => {
               </li>
             </ul>
           </div>
-        )}
+        )} */}
         <div className="tab__content">
           {selectedTabIndex === 0 && (
             <SelectType
