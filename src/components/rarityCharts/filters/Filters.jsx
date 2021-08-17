@@ -95,6 +95,11 @@ const Filters = (props) => {
         </div>
         {/* <div className="sort--by--label--and--select--block"> */}
         {/* <label htmlFor="sort--select">Sort By:</label> */}
+        <SortByOrder
+          data={data}
+          getData={(find) => getData(find)}
+          getDesc={(value) => getDesc(value)}
+        />
         <SortBySelect
           id="sort--select"
           data={data}
@@ -104,11 +109,6 @@ const Filters = (props) => {
           getDesc={(value) => getDesc(value)}
           desc={desc}
           hideFirstOption
-        />
-        <SortByOrder
-          data={data}
-          getData={(find) => getData(find)}
-          getDesc={(value) => getDesc(value)}
         />
         {/* </div> */}
       </div>
