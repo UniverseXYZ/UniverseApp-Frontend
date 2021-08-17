@@ -65,7 +65,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner1',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 20,
     liked: false,
     media: {
       url: nft1,
@@ -77,6 +77,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.5,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-07-04 09:00:00',
+    endDate: '2021-07-15 09:00:00',
+    listedDate: '2021-07-29 15:46:42',
+    soldDate: '2021-07-15 09:00:00',
   },
   {
     id: 2,
@@ -96,7 +100,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner2',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 28,
     liked: false,
     media: {
       url: nft2,
@@ -108,6 +112,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.5,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-08-10 12:00:00',
+    endDate: '2021-08-20 12:00:00',
+    listedDate: '2021-08-17 17:32:25',
+    soldDate: '2021-08-15 09:00:00',
   },
   {
     id: 3,
@@ -139,6 +147,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 1,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-04-24 11:20:00',
+    endDate: '2021-05-05 11:20:00',
+    listedDate: '2021-07-27 15:46:49',
+    soldDate: '2021-05-04 19:00:00',
   },
   {
     id: 4,
@@ -207,6 +219,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 1.2,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-03-01 08:00:00',
+    endDate: '2021-03-09 08:00:00',
+    listedDate: '2021-08-10 14:00:41',
+    soldDate: '2021-03-08 09:00:00',
   },
   {
     id: 5,
@@ -226,7 +242,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner5',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 39,
     liked: false,
     media: {
       url: nft5,
@@ -238,6 +254,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.2,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-07-04 09:00:00',
+    endDate: '2021-07-05 09:00:00',
+    listedDate: '2021-08-17 11:36:42',
+    soldDate: '2021-07-15 09:00:00',
   },
   {
     id: 6,
@@ -257,7 +277,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner6',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 29,
     liked: false,
     media: {
       url: nft6,
@@ -269,6 +289,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 3,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-08-15 19:00:00',
+    endDate: '2021-09-05 19:00:00',
+    listedDate: '2021-08-17 15:46:42',
+    soldDate: '2021-07-15 09:00:00',
   },
   {
     id: 7,
@@ -288,7 +312,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner7',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 14,
     liked: false,
     media: {
       url: nft7,
@@ -300,6 +324,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.5,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-02-14 16:30:00',
+    endDate: '2021-02-19 16:30:00',
+    listedDate: '2021-07-29 15:46:42',
+    soldDate: '2021-02-17 19:00:00',
   },
   {
     id: 8,
@@ -319,7 +347,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner8',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 44,
     liked: false,
     media: {
       url: nft8,
@@ -331,6 +359,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 4,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-06-01 15:00:00',
+    endDate: '2021-06-15 15:00:00',
+    listedDate: '2021-07-29 15:46:42',
+    soldDate: '2021-07-15 09:00:00',
   },
   {
     id: 9,
@@ -350,7 +382,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner9',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 42,
     liked: false,
     media: {
       url: nft9,
@@ -362,6 +394,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 2.2,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-08-14 09:00:00',
+    endDate: '2021-09-01 09:00:00',
+    listedDate: '2021-08-17 15:46:42',
+    soldDate: '-',
   },
   {
     id: 10,
@@ -381,7 +417,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner10',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 54,
     liked: false,
     media: {
       url: nft10,
@@ -393,6 +429,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.5,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-08-01 19:30:00',
+    endDate: '2021-08-29 18:30:00',
+    listedDate: '2021-08-15 15:46:42',
+    soldDate: '-',
   },
   {
     id: 11,
@@ -424,6 +464,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.5,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-02-14 10:00:00',
+    endDate: '2021-02-28 10:00:00',
+    listedDate: '2021-06-29 15:46:42',
+    soldDate: '2021-02-25 09:00:00',
   },
   {
     id: 12,
@@ -443,7 +487,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner12',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 30,
     liked: false,
     media: {
       url: nft12,
@@ -455,6 +499,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.5,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-05-13 02:00:00',
+    endDate: '2021-06-05 09:00:00',
+    listedDate: '2021-07-21 15:46:42',
+    soldDate: '2021-06-05 08:00:00',
   },
   {
     id: 13,
@@ -474,7 +522,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner13',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 33,
     liked: false,
     media: {
       url: nft13,
@@ -486,6 +534,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.65,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-04-04 09:00:00',
+    endDate: '2021-04-15 09:00:00',
+    listedDate: '2021-08-09 15:46:42',
+    soldDate: '2021-04-14 09:00:00',
   },
   {
     id: 14,
@@ -505,7 +557,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner14',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 20,
     liked: false,
     media: {
       url: nft14,
@@ -517,6 +569,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.7,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-01-04 09:00:00',
+    endDate: '2021-01-09 09:00:00',
+    listedDate: '2021-05-29 15:46:42',
+    soldDate: '2021-01-08 09:00:00',
   },
   {
     id: 15,
@@ -536,7 +592,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner15',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 22,
     liked: false,
     media: {
       url: nft15,
@@ -548,6 +604,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.15,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-08-14 09:00:00',
+    endDate: '2021-09-05 09:00:00',
+    listedDate: '2021-08-17 15:46:42',
+    soldDate: '-',
   },
   {
     id: 16,
@@ -567,7 +627,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
       name: 'Owner16',
       avatar: user2,
     },
-    likesCount: 24,
+    likesCount: 11,
     liked: false,
     media: {
       url: nft16,
@@ -579,6 +639,10 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 0.55,
     editions: '1/10',
     offerFor: 0.35,
+    startDate: '2021-03-20 13:00:00',
+    endDate: '2021-03-30 13:00:00',
+    listedDate: '2021-06-15 17:26:42',
+    soldDate: '2021-03-29 09:00:00',
   },
 ];
 
