@@ -287,7 +287,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   useEffect(() => {
     if (mintNowClick) {
-      if (!errors.collectionName && !errors.tokenName && !errors.shorturl && !errors.collectible) {
+      if (!errors.collectionName && !errors.tokenName) {
         document.getElementById('loading-hidden-btn').click();
         setTimeout(() => {
           document.getElementById('popup-root').remove();
@@ -330,15 +330,11 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 shortURL,
               },
             ]);
-          }, 2000);
+          }, 7000);
         }, 3000);
       }
     }
   }, [errors]);
-
-  useEffect(() => {
-    console.log('collectionNFTs', collectionNFTs);
-  }, [collectionNFTs]);
 
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
@@ -366,7 +362,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       >
         {(close) => <CongratsPopup onClose={close} />}
       </Popup>
-      <h1 className="nft--collection--settings--page--title">NFT collection settings</h1>
+      {/* <h1 className="nft--collection--settings--page--title">NFT collection settings</h1> */}
       <div className="image--name--token">
         <div className="collection--cover--image">
           <div className={`collection--cover--image--circle ${coverImage ? 'border--none' : ''}`}>
@@ -448,7 +444,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <div className="collection--short--url">
+      {/* <div className="collection--short--url">
         <Input
           label="Short URL"
           className={inputClass}
@@ -461,8 +457,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           onFocus={() => handleOnFocus()}
           onBlur={() => handleOnBlur()}
         />
-      </div>
-      <div className="collection--nfts">
+      </div> */}
+      {/* <div className="collection--nfts">
         <div className="collection--nfts--title">
           <h1>NFTs</h1>
           {collectionNFTs.length ? (
@@ -669,12 +665,12 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             </p>
           </div>
         )}
-      </div>
+      </div> */}
       <div className="create--collection--btn">
         <Button
           className="light-button"
           onClick={handleMinting}
-          disabled={!collectionName || !tokenName || !shortURL || !collectionNFTs.length}
+          disabled={!collectionName || !tokenName}
         >
           Create collection
         </Button>

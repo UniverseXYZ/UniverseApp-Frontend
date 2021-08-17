@@ -71,8 +71,13 @@ const DeployedCollections = () => {
             </div>
             <h3>No collections found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
-              Create NFT
+            <Button
+              className="light-button"
+              onClick={() =>
+                history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
+              }
+            >
+              Create Collection
             </Button>
           </div>
         </div>

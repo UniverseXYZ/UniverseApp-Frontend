@@ -160,12 +160,12 @@ const MyNFTs = () => {
             index === 3 && UNIVERSE_NFTS.length > 0
             ? UNIVERSE_NFTS.length
             : null,
-        label:
-          index === 2 && savedNfts.length > 0
-            ? savedNfts.length
-            : index === 3 && savedCollections.length > 0
-            ? savedCollections.length
-            : null,
+        // label:
+        //   index === 2 && savedNfts.length > 0
+        //     ? savedNfts.length
+        //     : index === 3 && savedCollections.length > 0
+        //     ? savedCollections.length
+        //     : null,
       }))}
     />
   );
@@ -227,16 +227,29 @@ const MyNFTs = () => {
                   Mint selected
                 </button>
               )}
-              <button
-                type="button"
-                className="mint__btn"
-                onClick={() => {
-                  setSavedNFTsID(null);
-                  history.push('/my-nfts/create');
-                }}
-              >
-                Create NFT
-              </button>
+              {myNFTsSelectedTabIndex === 1 ? (
+                <button
+                  type="button"
+                  className="mint__btn"
+                  onClick={() => {
+                    setSavedNFTsID(null);
+                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
+                  }}
+                >
+                  Create Collection
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="mint__btn"
+                  onClick={() => {
+                    setSavedNFTsID(null);
+                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
+                  }}
+                >
+                  Create NFT
+                </button>
+              )}
             </div>
             {showModal && <MintModal open={showModal} onClose={handleClose} />}
           </div>
@@ -256,16 +269,29 @@ const MyNFTs = () => {
                   Mint selected
                 </button>
               )}
-              <button
-                type="button"
-                className="mint__btn"
-                onClick={() => {
-                  setSavedNFTsID(null);
-                  history.push('/my-nfts/create');
-                }}
-              >
-                Create NFT
-              </button>
+              {myNFTsSelectedTabIndex === 1 ? (
+                <button
+                  type="button"
+                  className="mint__btn"
+                  onClick={() => {
+                    setSavedNFTsID(null);
+                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
+                  }}
+                >
+                  Create Collection
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="mint__btn"
+                  onClick={() => {
+                    setSavedNFTsID(null);
+                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
+                  }}
+                >
+                  Create NFT
+                </button>
+              )}
             </div>
             {showModal && <MintModal open={showModal} onClose={handleClose} />}
           </div>
@@ -327,7 +353,11 @@ const MyNFTs = () => {
         <p className="desc">
           Create NFTs or NFT collections with our platform by clicking the button below
         </p>
-        <button type="button" className="mint__btn" onClick={() => history.push('/my-nfts/create')}>
+        <button
+          type="button"
+          className="mint__btn"
+          onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+        >
           Create NFT
         </button>
         {showModal && <MintModal open={showModal} onClose={handleClose} />}

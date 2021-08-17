@@ -382,7 +382,7 @@ const SingleNFTSettings = () => {
             document.getElementById('congrats-hidden-btn').click();
             setTimeout(() => {
               closeCongratsPopupEvent();
-            }, 2000);
+            }, 7000);
           }, 3000);
         }
       }
@@ -473,7 +473,7 @@ const SingleNFTSettings = () => {
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div> */}
-        <h2 className="single-nft-title">{!savedNFTsID ? 'Single NFT settings' : 'Edit NFT'}</h2>
+        {/* <h2 className="single-nft-title">{!savedNFTsID ? 'Single NFT settings' : 'Edit NFT'}</h2> */}
         <div className="single-nft-content">
           <div className="single-nft-upload">
             <h5>Upload file</h5>
@@ -651,60 +651,64 @@ const SingleNFTSettings = () => {
               value={editions}
             />
           </div>
-          <div className="single-nft-choose-collection">
-            <h4>Choose collection</h4>
-            {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
-            {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
-            <div className="choose__collection">
-              {/* {!savedNFTsID && ( */}
-              <Popup
-                trigger={
-                  <div className="collection-box">
-                    <div className="create">
-                      <img aria-hidden="true" src={createIcon} alt="Create Icon" />
-                      <h5>Create</h5>
-                      <p>ERC-721</p>
+          {deployedCollections.length ? (
+            <div className="single-nft-choose-collection">
+              <h4>Choose collection</h4>
+              {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
+              {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
+              <div className="choose__collection">
+                {/* {!savedNFTsID && ( */}
+                {/* <Popup
+                  trigger={
+                    <div className="collection-box">
+                      <div className="create">
+                        <img aria-hidden="true" src={createIcon} alt="Create Icon" />
+                        <h5>Create</h5>
+                        <p>ERC-721</p>
+                      </div>
+                      <div className="box--shadow--effect--block" />
+                    </div>
+                  }
+                >
+                  {(close) => <CreateCollectionPopup onClose={close} />}
+                </Popup> */}
+                {/* )} */}
+                {deployedCollections.map((col) => (
+                  <div className="collection-box" key={uuid()}>
+                    <div
+                      className={`universe${
+                        selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                      }`}
+                      aria-hidden="true"
+                      onClick={() =>
+                        selectedCollection && selectedCollection.id === col.id
+                          ? setSelectedCollection(null)
+                          : setSelectedCollection(col)
+                      }
+                    >
+                      {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                        <div
+                          className="random__bg__color"
+                          style={{ backgroundColor: col.previewImage }}
+                        >
+                          {col.name.charAt(0)}
+                        </div>
+                      ) : (
+                        <div>
+                          <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                        </div>
+                      )}
+                      <h5>{col.name}</h5>
+                      <p>{col.tokenName}</p>
                     </div>
                     <div className="box--shadow--effect--block" />
                   </div>
-                }
-              >
-                {(close) => <CreateCollectionPopup onClose={close} />}
-              </Popup>
-              {/* )} */}
-              {deployedCollections.map((col) => (
-                <div className="collection-box" key={uuid()}>
-                  <div
-                    className={`universe${
-                      selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
-                    }`}
-                    aria-hidden="true"
-                    onClick={() =>
-                      selectedCollection && selectedCollection.id === col.id
-                        ? setSelectedCollection(null)
-                        : setSelectedCollection(col)
-                    }
-                  >
-                    {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
-                      <div
-                        className="random__bg__color"
-                        style={{ backgroundColor: col.previewImage }}
-                      >
-                        {col.name.charAt(0)}
-                      </div>
-                    ) : (
-                      <div>
-                        <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
-                      </div>
-                    )}
-                    <h5>{col.name}</h5>
-                    <p>{col.tokenName}</p>
-                  </div>
-                  <div className="box--shadow--effect--block" />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="hr-div" />
           <div className="single-nft-properties">
             <div className="single-nft-properties-header">

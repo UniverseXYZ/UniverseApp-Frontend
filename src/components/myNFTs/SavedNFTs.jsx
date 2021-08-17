@@ -86,7 +86,7 @@ const SavedNFTs = () => {
     setSavedNFTsID(id);
     setActiveView('single');
     // setShowModal(true);
-    history.push('/my-nfts/create');
+    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
   };
 
   return (
@@ -242,7 +242,10 @@ const SavedNFTs = () => {
             </div>
             <h3>No saved NFTs found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
+            <Button
+              className="light-button"
+              onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+            >
               Create NFT
             </Button>
           </div>
