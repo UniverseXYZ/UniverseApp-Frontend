@@ -122,6 +122,8 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
+        selectedTabIndex,
+        setSelectedTabIndex,
         universeNFTs,
         setUniverseNFTs,
         showModal,

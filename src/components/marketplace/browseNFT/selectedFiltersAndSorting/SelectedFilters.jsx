@@ -45,6 +45,8 @@ const SelectedFilters = ({
   selectedPrice,
   setSelectedPrice,
   setSliderValue,
+  selectedTokenIndex,
+  setSelectedTokenIndex,
   selectedCollections,
   setSelectedCollections,
   savedCollections,
@@ -55,7 +57,7 @@ const SelectedFilters = ({
   setSavedCreators,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
-  const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
+  // const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
 
   const handleClearAll = () => {
     const newSaleTypeButtons = [...saleTypeButtons];
@@ -192,6 +194,8 @@ SelectedFilters.propTypes = {
   selectedPrice: PropTypes.oneOfType([PropTypes.any]),
   setSelectedPrice: PropTypes.func,
   setSliderValue: PropTypes.func,
+  selectedTokenIndex: PropTypes.number,
+  setSelectedTokenIndex: PropTypes.func,
   selectedCollections: PropTypes.oneOfType([PropTypes.array]),
   setSelectedCollections: PropTypes.func,
   savedCollections: PropTypes.oneOfType([PropTypes.array]),
@@ -208,6 +212,8 @@ SelectedFilters.defaultProps = {
   selectedPrice: null,
   setSelectedPrice: () => {},
   setSliderValue: () => {},
+  selectedTokenIndex: 0,
+  setSelectedTokenIndex: () => {},
   selectedCollections: [],
   setSelectedCollections: () => {},
   savedCollections: [],

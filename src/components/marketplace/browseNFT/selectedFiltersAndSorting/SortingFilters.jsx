@@ -29,6 +29,8 @@ const SortingFilters = ({
   setSelectedPrice,
   sliderValue,
   setSliderValue,
+  selectedTokenIndex,
+  setSelectedTokenIndex,
   selectedCollections,
   setSelectedCollections,
   savedCollections,
@@ -46,8 +48,7 @@ const SortingFilters = ({
   const [disabledMax, setDisabledMax] = useState(false);
   const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
   const [showArtistsDropdown, setShowArtistsDropdown] = useState(false);
-  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-  console.log(selectedTokenIndex);
+  // const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
 
   const bidTokens = [
     {
@@ -589,6 +590,8 @@ SortingFilters.propTypes = {
   setSelectedPrice: PropTypes.func,
   sliderValue: PropTypes.oneOfType([PropTypes.any]),
   setSliderValue: PropTypes.func,
+  selectedTokenIndex: PropTypes.number,
+  setSelectedTokenIndex: PropTypes.func,
   selectedCollections: PropTypes.oneOfType([PropTypes.array]),
   setSelectedCollections: PropTypes.func,
   savedCollections: PropTypes.oneOfType([PropTypes.array]),
@@ -606,6 +609,8 @@ SortingFilters.defaultProps = {
   setSelectedPrice: () => {},
   sliderValue: null,
   setSliderValue: () => {},
+  selectedTokenIndex: 0,
+  setSelectedTokenIndex: () => {},
   selectedCollections: [],
   setSelectedCollections: () => {},
   savedCollections: [],

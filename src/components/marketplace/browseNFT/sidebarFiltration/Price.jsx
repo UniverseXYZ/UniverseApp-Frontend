@@ -15,14 +15,14 @@ import priceIcon from '../../../../assets/images/marketplace/price-range.svg';
 import rightArrow from '../../../../assets/images/arrow.svg';
 import 'react-input-range/lib/css/index.css';
 
-const Price = ({ setSelectedPrice }) => {
+const Price = ({ setSelectedPrice, selectedTokenIndex, setSelectedTokenIndex }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
   const [disabledMin, setDisabledMin] = useState(false);
   const [disabledMax, setDisabledMax] = useState(false);
 
-  const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
+  // const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
 
   const ref = useRef(null);
 
@@ -205,10 +205,14 @@ const Price = ({ setSelectedPrice }) => {
 
 Price.propTypes = {
   setSelectedPrice: PropTypes.func,
+  selectedTokenIndex: PropTypes.number,
+  setSelectedTokenIndex: PropTypes.func,
 };
 
 Price.defaultProps = {
   setSelectedPrice: () => {},
+  selectedTokenIndex: 0,
+  setSelectedTokenIndex: () => {},
 };
 
 export default Price;

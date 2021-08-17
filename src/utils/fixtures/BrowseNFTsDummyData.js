@@ -483,7 +483,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 13',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.65,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -514,7 +514,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 14',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.7,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -545,7 +545,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 15',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.15,
     editions: '1/10',
     offerFor: 0.35,
   },
@@ -576,7 +576,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 16',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.55,
     editions: '1/10',
     offerFor: 0.35,
   },
