@@ -382,7 +382,7 @@
               padding: 9px 12px;
               position: absolute;
               z-index: 1;
-              top: -93px;
+              top: 37px;
               right: -83px;
               .likers--text {
                 font-family: $spaceGroteskFont;
@@ -409,12 +409,13 @@
               &::after {
                 content: '';
                 position: absolute;
-                top: 100%;
+                top: -10px;
                 left: 50%;
                 margin-left: -5px;
                 border-width: 5px;
                 border-style: solid;
                 border-color: black transparent transparent transparent;
+                transform: rotate(180deg);
               }
             }
             &:hover {
