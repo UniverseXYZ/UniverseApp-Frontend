@@ -23,6 +23,7 @@ import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
+import SuccessPopup from '../../popups/SuccessPopup.jsx';
 
 const SingleNFTSettings = () => {
   const {
@@ -277,97 +278,7 @@ const SingleNFTSettings = () => {
   useEffect(() => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        const generatedEditions = [];
-
-        for (let i = 0; i < editions; i += 1) {
-          generatedEditions.push(uuid().split('-')[0]);
-        }
-        if (!savedNFTsID) {
-          if (selectedCollection) {
-            setSavedNfts([
-              ...savedNfts,
-              {
-                id: uuid(),
-                type: 'collection',
-                collectionId: selectedCollection.id,
-                collectionName: selectedCollection.name,
-                collectionAvatar: selectedCollection.previewImage,
-                collectionDescription: selectedCollection.description,
-                shortURL: selectedCollection.shortURL,
-                tokenName: selectedCollection.tokenName,
-                previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                generatedEditions,
-                properties,
-                percentAmount,
-                selected: false,
-              },
-            ]);
-          } else {
-            setSavedNfts([
-              ...savedNfts,
-              {
-                id: uuid(),
-                type: 'single',
-                previewImage,
-                name,
-                description,
-                numberOfEditions: editions,
-                generatedEditions,
-                properties,
-                percentAmount,
-                selected: false,
-              },
-            ]);
-          }
-        } else if (selectedCollection) {
-          setSavedNfts(
-            savedNfts.map((item) =>
-              item.id === savedNFTsID
-                ? {
-                    ...item,
-                    type: 'collection',
-                    collectionId: selectedCollection.id,
-                    collectionName: selectedCollection.name,
-                    collectionAvatar: selectedCollection.previewImage,
-                    collectionDescription: selectedCollection.description,
-                    shortURL: selectedCollection.shortURL,
-                    tokenName: selectedCollection.tokenName,
-                    previewImage,
-                    name,
-                    description,
-                    numberOfEditions: editions,
-                    generatedEditions,
-                    properties,
-                    percentAmount,
-                  }
-                : item
-            )
-          );
-        } else {
-          setSavedNfts(
-            savedNfts.map((item) =>
-              item.id === savedNFTsID
-                ? {
-                    id: uuid(),
-                    type: 'single',
-                    previewImage,
-                    name,
-                    description,
-                    numberOfEditions: editions,
-                    generatedEditions,
-                    properties,
-                    percentAmount,
-                  }
-                : item
-            )
-          );
-        }
-        setSavedNFTsID(null);
-        setShowModal(false);
-        document.body.classList.remove('no__scroll');
+        document.getElementById('success-hidden-btn').click();
       }
     }
     if (mintNowClick) {
@@ -417,6 +328,101 @@ const SingleNFTSettings = () => {
       close();
     }
   };
+
+  const handleCloseSuccessPopup = (close) => {
+    const generatedEditions = [];
+
+    for (let i = 0; i < editions; i += 1) {
+      generatedEditions.push(uuid().split('-')[0]);
+    }
+    if (!savedNFTsID) {
+      if (selectedCollection) {
+        setSavedNfts([
+          ...savedNfts,
+          {
+            id: uuid(),
+            type: 'collection',
+            collectionId: selectedCollection.id,
+            collectionName: selectedCollection.name,
+            collectionAvatar: selectedCollection.previewImage,
+            collectionDescription: selectedCollection.description,
+            shortURL: selectedCollection.shortURL,
+            tokenName: selectedCollection.tokenName,
+            previewImage,
+            name,
+            description,
+            numberOfEditions: Number(editions),
+            generatedEditions,
+            properties,
+            percentAmount,
+            selected: false,
+          },
+        ]);
+      } else {
+        setSavedNfts([
+          ...savedNfts,
+          {
+            id: uuid(),
+            type: 'single',
+            previewImage,
+            name,
+            description,
+            numberOfEditions: editions,
+            generatedEditions,
+            properties,
+            percentAmount,
+            selected: false,
+          },
+        ]);
+      }
+    } else if (selectedCollection) {
+      setSavedNfts(
+        savedNfts.map((item) =>
+          item.id === savedNFTsID
+            ? {
+                ...item,
+                type: 'collection',
+                collectionId: selectedCollection.id,
+                collectionName: selectedCollection.name,
+                collectionAvatar: selectedCollection.previewImage,
+                collectionDescription: selectedCollection.description,
+                shortURL: selectedCollection.shortURL,
+                tokenName: selectedCollection.tokenName,
+                previewImage,
+                name,
+                description,
+                numberOfEditions: editions,
+                generatedEditions,
+                properties,
+                percentAmount,
+              }
+            : item
+        )
+      );
+    } else {
+      setSavedNfts(
+        savedNfts.map((item) =>
+          item.id === savedNFTsID
+            ? {
+                id: uuid(),
+                type: 'single',
+                previewImage,
+                name,
+                description,
+                numberOfEditions: editions,
+                generatedEditions,
+                properties,
+                percentAmount,
+              }
+            : item
+        )
+      );
+    }
+    setSavedNFTsID(null);
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
   const onDrop = (e) => {
     e.preventDefault();
     const {
@@ -466,6 +472,24 @@ const SingleNFTSettings = () => {
                   ? 'Go to reward tier settings'
                   : 'Go to my NFTs'
               }
+            />
+          )}
+        </Popup>
+        <Popup
+          trigger={
+            <button
+              type="button"
+              id="success-hidden-btn"
+              aria-label="hidden"
+              style={{ display: 'none' }}
+            />
+          }
+        >
+          {(close) => (
+            <CongratsPopup
+              onClose={() => handleCloseSuccessPopup(close)}
+              title="Success!"
+              message="NFT was successfully saved for later"
             />
           )}
         </Popup>

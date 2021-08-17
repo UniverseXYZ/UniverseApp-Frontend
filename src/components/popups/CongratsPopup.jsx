@@ -5,7 +5,7 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import checkIcon from '../../assets/images/bid-submitted.png';
 
-const CongratsPopup = ({ onClose, backButtonText }) => {
+const CongratsPopup = ({ onClose, backButtonText, title, message }) => {
   const history = useHistory();
   const location = useLocation();
   return (
@@ -17,12 +17,10 @@ const CongratsPopup = ({ onClose, backButtonText }) => {
         <div className="congrats--icon">
           <img src={checkIcon} alt="Congrats" />
         </div>
-        <h4>Congratulations!</h4>
+        <h4>{title}</h4>
       </div>
       <div className="popup-text">
-        <p>
-          NFT collection was successfully created and should be displayed in your wallet shortly
-        </p>
+        <p>{message}</p>
       </div>
       <div className="popup-btns">
         <Button
@@ -56,10 +54,14 @@ const CongratsPopup = ({ onClose, backButtonText }) => {
 CongratsPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   backButtonText: PropTypes.string,
+  title: PropTypes.string,
+  message: PropTypes.string,
 };
 
 CongratsPopup.defaultProps = {
   backButtonText: 'Go to my NFTs',
+  title: 'Congratulations!',
+  message: 'NFT collection was successfully created and should be displayed in your wallet shortly',
 };
 
 export default CongratsPopup;
