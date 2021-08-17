@@ -46,7 +46,7 @@
         width: 100%;
         max-width: 1110px;
         display: grid;
-        grid-template-columns: 1fr 222px 54px;
+        grid-template-columns: 1fr 54px 222px;
         grid-gap: 12px;
         align-items: center;
         min-height: 52px;
@@ -180,7 +180,7 @@
             }
         }
         @include md {
-            grid-template-columns: 1fr auto;
+            grid-template-columns: auto 1fr;
         }
     }
 }
