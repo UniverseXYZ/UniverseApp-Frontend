@@ -27,7 +27,7 @@ const Filters = (props) => {
 
   return (
     <div className="rarity--charts--search--and--filters--container">
-      <div className="floor--price--block">
+      {/* <div className="floor--price--block">
         <p className="floor--price--paragraph">
           <span>Floor Price: </span>
           <div>
@@ -35,7 +35,7 @@ const Filters = (props) => {
             {`${floorPrice.price}`}
           </div>
         </p>
-      </div>
+      </div> */}
       <div className="rarity--charts--search--and--filters--row">
         <div className="rarity--charts--search--and--floor--price">
           <SearchField
