@@ -293,7 +293,7 @@ const SingleNFTSettings = () => {
             document.getElementById('congrats-hidden-btn').click();
             setTimeout(() => {
               closeCongratsPopupEvent();
-            }, 7000);
+            }, 2000);
           }, 3000);
         }
       }

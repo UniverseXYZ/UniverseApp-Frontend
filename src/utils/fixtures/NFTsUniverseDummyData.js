@@ -1,12 +1,11 @@
 import testImage from '../../assets/images/soldier.png';
 import cover from '../../assets/images/cover.png';
-import testVideo from '../../assets/images/testvideo2.mp4';
-import videoIcon from '../../assets/images/video-icon.svg';
 
 export const UNIVERSE_NFTS = [
   {
     id: 1,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -15,10 +14,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 2,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -27,10 +28,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 3,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -39,10 +42,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
     scrambled: 'single',
+    polymorphID: 4352,
   },
   {
     id: 4,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -50,10 +55,12 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #4',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    polymorphID: 4352,
   },
   {
     id: 5,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -61,10 +68,12 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #5',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    polymorphID: 4352,
   },
   {
     id: 6,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -73,10 +82,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 7,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -85,10 +96,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 8,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -97,10 +110,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
     scrambled: 'single',
+    polymorphID: 4352,
   },
   {
     id: 9,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -109,10 +124,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
     scrambled: 'single',
+    polymorphID: 4352,
   },
   {
     id: 10,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -121,10 +138,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 11,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -132,10 +151,12 @@ export const UNIVERSE_NFTS = [
     name: 'Polymorph #11',
     collectionAvatar: cover,
     collectionName: 'Polymorphs',
+    polymorphID: 4352,
   },
   {
     id: 12,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -144,10 +165,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
     scrambled: 'single',
+    polymorphID: 4352,
   },
   {
     id: 13,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -156,10 +179,12 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 14,
     type: 'collection',
+    rarityScore: 3120,
     previewImage: {
       type: 'image/png',
       url: testImage,
@@ -168,17 +193,19 @@ export const UNIVERSE_NFTS = [
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
     scrambled: 'never',
+    polymorphID: 4352,
   },
   {
     id: 15,
     type: 'collection',
-    videoavatar: videoIcon,
+    rarityScore: 3120,
     previewImage: {
-      type: 'video/mp4',
-      url: testVideo,
+      type: 'image/png',
+      url: testImage,
     },
     name: 'Polymorph #15',
     collectionAvatar: cover,
     collectionName: 'Universe Polymorphs',
+    polymorphID: 4352,
   },
 ];

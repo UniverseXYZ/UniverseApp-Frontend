@@ -330,7 +330,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 shortURL,
               },
             ]);
-          }, 7000);
+          }, 2000);
         }, 3000);
       }
     }

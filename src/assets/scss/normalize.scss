@@ -232,8 +232,10 @@ html {
 
 .container {
   width: 100%;
-  padding: 0 20px;
   margin: 60px auto;
+  @include xl {
+    padding: 0 20px;
+  }
 }
 
 .w-100 {

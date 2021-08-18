@@ -5,7 +5,7 @@ import moment from 'moment';
 import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
-import bubleIcon from '../../assets/images/text-bubble.svg';
+import bubleIcon from '../../assets/images/text-bubble.png';
 import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
 import PastAuctions from './PastAuctions.jsx';

@@ -225,8 +225,31 @@
         }
       }
 
+      .tags {
+        display: flex;
+        align-items: center;
+        margin: 20px 0 8px;
+        > div {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 12px;
+          margin-right: 12px;
+          margin-bottom: 12px;
+          padding: 6px 16px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 150%;
+          color: $black;
+          span {
+            font-weight: bold;
+          }
+        }
+        @include sm {
+          flex-wrap: wrap;
+        }
+      }
       .description {
-        margin-top: 16px;
         margin-bottom: 40px;
         font-weight: normal;
         font-size: 16px;
