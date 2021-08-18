@@ -2587,6 +2587,13 @@
         border-radius: 50%;
         display: flex;
         padding: 0 20px;
+        cursor: pointer;
+        &:hover {
+          box-shadow: 2px 1000px 1px #fff inset;
+          border: 1px solid transparent;
+          background-origin: border-box;
+          background-image: linear-gradient(101deg, #bceb00, #00eaea);
+        }
         > img {
           text-align: center;
           margin: auto;
@@ -3134,12 +3141,12 @@
     .universe_filter_label {
       margin-bottom: 15px;
       span {
-        font-family: $sharpGroteskSemiBoldFont;
+        font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
         letter-spacing: 0.2px;
-        color: #000000;
+        color: $black;
         margin-right: 15px;
       }
     }
@@ -3167,10 +3174,9 @@
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: 400;
-        font-size: 17px;
+        font-size: 16px;
         line-height: 20px;
-        color: $black;
-        opacity: 0.4;
+        color: #CACACA;
       }
       .arrow__down {
         width: 14px;
