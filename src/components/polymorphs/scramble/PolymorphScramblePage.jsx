@@ -233,6 +233,17 @@ const PolymorphScramblePage = () => {
 
         <div className="scramble--options">
           <div className="name">{selectedNftForScramble.name}</div>
+          <div className="tags">
+            <div>
+              Rarity rank: <span>{`#${selectedNftForScramble.id}`}</span>
+            </div>
+            <div>
+              Rarity score: <span>{`${selectedNftForScramble.rarityScore}`}</span>
+            </div>
+            <div>
+              ID: <span>{`#${selectedNftForScramble.polymorphID}`}</span>
+            </div>
+          </div>
           <div className="description">
             Charles the Clown is a citizen of the Polymorph Universe. Charles has a unique genetic
             code that can be scrambled at anytime.

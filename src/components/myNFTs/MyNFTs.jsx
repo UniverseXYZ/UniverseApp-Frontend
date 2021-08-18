@@ -227,6 +227,15 @@ const MyNFTs = () => {
                   Mint selected
                 </button>
               )}
+              {myNFTsSelectedTabIndex === 3 && (
+                <button
+                  type="button"
+                  className="light-border-button"
+                  onClick={() => history.push('/polymorph-rarity')}
+                >
+                  Polymorph rarity chart
+                </button>
+              )}
               {myNFTsSelectedTabIndex === 1 ? (
                 <button
                   type="button"
@@ -267,6 +276,15 @@ const MyNFTs = () => {
                   disabled={checkSelectedSavedNfts()}
                 >
                   Mint selected
+                </button>
+              )}
+              {myNFTsSelectedTabIndex === 3 && (
+                <button
+                  type="button"
+                  className="light-border-button"
+                  onClick={() => history.push('/polymorph-rarity')}
+                >
+                  Polymorph rarity chart
                 </button>
               )}
               {myNFTsSelectedTabIndex === 1 ? (

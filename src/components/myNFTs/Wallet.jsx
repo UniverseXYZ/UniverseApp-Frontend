@@ -9,7 +9,7 @@ import Pagination from '../pagination/Pagionation.jsx';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import '../pagination/Pagination.scss';
-import bubbleIcon from '../../assets/images/text-bubble.svg';
+import bubbleIcon from '../../assets/images/text-bubble.png';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';

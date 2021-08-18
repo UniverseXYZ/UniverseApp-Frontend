@@ -7,7 +7,7 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import bubbleIcon from '../../assets/images/text-bubble.svg';
+import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
