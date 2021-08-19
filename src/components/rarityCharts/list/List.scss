@@ -284,6 +284,7 @@
                 }
                 &--footer {
                     display: flex;
+                    align-items: center;
                     h2 {
                         font-family: $spaceGroteskFont;
                         font-style: normal;
