@@ -580,13 +580,14 @@
       margin-top: 40px;
       padding-left: 40px;
       padding-right: 40px;
-      border-bottom: 1px solid #e4e4e4;
       ul.tab_items {
+        width: 100%;
         display: flex;
         justify-content: flex-start;
         align-items: center;
         min-width: 460px;
         white-space: nowrap;
+        border-bottom: 2px solid #e4e4e4;
         li {
           margin-right: 40px;
           font-family: $spaceGroteskFont;
@@ -596,6 +597,7 @@
           line-height: 20px;
           color: rgba(0, 0, 0, 0.4);
           padding-bottom: 9px;
+          margin-bottom: -1px;
           cursor: default;
           &:last-child {
             margin-right: 0;
@@ -603,7 +605,7 @@
           &.active {
             cursor: pointer;
             color: $black;
-            border-bottom: 1px solid $black;
+            border-bottom: 2px solid $black;
           }
         }
       }
