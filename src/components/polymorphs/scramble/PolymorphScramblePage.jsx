@@ -16,7 +16,12 @@ import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
+import linkIcon from '../../../assets/images/rarity-charts/linkIcon.svg';
 import PolymorphScrambleHistory from './PolymorphScrambleHistory';
+import bluePuzzle from '../../../assets/images/blue-puzzle.svg';
+import pinkPuzzle from '../../../assets/images/pink-puzzle.svg';
+import orangePuzzle from '../../../assets/images/orange-puzzle.svg';
+import pinkOrangePuzzle from '../../../assets/images/pink-orange-puzzle.svg';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
@@ -59,46 +64,62 @@ const PolymorphScramblePage = () => {
       trait: 'Base character',
       name: 'Charles',
       chance: '28% have this trait',
+      type: 'pink-orange',
+      icon: pinkOrangePuzzle,
     },
     {
       trait: 'Eyewear',
       name: 'Orange Sunglasses',
       chance: '58% have this trait',
+      type: 'blue',
+      icon: bluePuzzle,
     },
     {
       trait: 'Headwear',
       name: 'Marine Helmet',
       chance: '58% have this trait',
+      type: 'orange',
+      icon: orangePuzzle,
     },
     {
       trait: 'Footwear',
       name: 'Basketball Shoes',
       chance: '58% have this trait',
+      type: 'pink',
+      icon: pinkPuzzle,
     },
     {
       trait: 'Torso',
       name: 'Clown Jacket',
       chance: '58% have this trait',
+      type: 'blue',
+      icon: bluePuzzle,
     },
     {
       trait: 'Pants',
       name: 'Marine Pants',
       chance: '58% have this trait',
+      type: 'orange',
+      icon: orangePuzzle,
     },
     {
       trait: 'Left-hand accessory',
       name: 'Golden Spartan Sword',
       chance: '58% have this trait',
+      type: null,
     },
     {
       trait: 'Right-hand accessory',
       name: 'Double Degen Sword Red',
       chance: '58% have this trait',
+      type: 'pink',
+      icon: pinkPuzzle,
     },
     {
       trait: 'Background',
       name: 'Strong Bliss',
       chance: '58% have this trait',
+      type: null,
     },
   ];
 
@@ -257,9 +278,22 @@ const PolymorphScramblePage = () => {
                   <PolymorphScrambleProp key={uuid()} data={props} />
                 ))}
               </div>
-              <Button className="light-button" onClick={onOpenOptionsPopUp}>
-                Scramble options
-              </Button>
+              <div className="btn-actions">
+                <Button className="light-button" onClick={onOpenOptionsPopUp}>
+                  Scramble options
+                </Button>
+                <Button
+                  className="light-border-button"
+                  onClick={() =>
+                    window.open(
+                      `https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${selectedNftForScramble.id}`
+                    )
+                  }
+                >
+                  View on Opensea
+                  <img src={linkIcon} alt="link" />
+                </Button>
+              </div>
             </>
           )}
           {metadataTabSelected && (
@@ -272,9 +306,22 @@ const PolymorphScramblePage = () => {
                   {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(38)}
                 </div>
               </div>
-              <Button className="light-button" onClick={onOpenOptionsPopUp}>
-                Scramble options
-              </Button>
+              <div className="btn-actions">
+                <Button className="light-button" onClick={onOpenOptionsPopUp}>
+                  Scramble options
+                </Button>
+                <Button
+                  className="light-border-button"
+                  onClick={() =>
+                    window.open(
+                      `https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${selectedNftForScramble.id}`
+                    )
+                  }
+                >
+                  View on Opensea
+                  <img src={linkIcon} alt="link" />
+                </Button>
+              </div>
             </div>
           )}
           {historyTabSelected && (
