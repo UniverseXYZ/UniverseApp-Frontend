@@ -51,7 +51,7 @@ const PolymorphCard = ({ item }) => {
       </div>
       <div className="card--footer">
         <h2>{item.character}</h2>
-        <p>{`#${item.tokenid}`}</p>
+        <p>{`ID: #${item.tokenid}`}</p>
       </div>
       <Popup open={showPopup}>
         <RarityRankPopup onClose={() => setShowPopup(false)} item={item} />

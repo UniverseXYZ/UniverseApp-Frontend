@@ -59,45 +59,6 @@
             @include sm {
                 width: 100%;
             }
-            .tablet--filters {
-                position: relative;
-                display: none;
-                margin-left: 30px;
-                margin-right: 18px;
-                button {
-                    position: relative;
-                    display: flex;
-                    img {
-                        margin-right: 10px;
-                    }
-                    .count {
-                        position: absolute;
-                        top: -10px;
-                        right: -10px;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 12px;
-                        line-height: 150%;
-                        color: $white;
-                        min-width: 20px;
-                        min-height: 20px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background: $black;
-                        border-radius: 50%;
-                    }
-                }
-                @include lg {
-                    display: flex;
-                    justify-content: center;
-                    width: 100%;
-                }
-                @include md {
-                    display: none;
-                }
-            }
             .mobile--filters {
                 position: fixed;
                 right: 20px;
@@ -125,7 +86,7 @@
                     background: $black;
                     border-radius: 50%;
                 }
-                @include md {
+                @include lg {
                     display: block;
                 }
             }
