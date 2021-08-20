@@ -50,34 +50,6 @@ const Filters = (props) => {
             setApiPage={setApiPage}
             resetPagination={resetPagination}
           />
-          <div className="tablet--filters">
-            <Popup
-              trigger={
-                <button type="button" className="light-border-button">
-                  <img src={filterIcon} alt="Filter" /> Filters
-                  {/* {selectedFiltersLength !== 0 && (
-                    <div className="count">{selectedFiltersLength}</div>
-                  )} */}
-                </button>
-              }
-            >
-              {(close) => (
-                <RarityChartFiltersPopup
-                  close={close}
-                  categories={categories}
-                  setCategories={setCategories}
-                  categoriesIndexes={categoriesIndexes}
-                  setCategoriesIndexes={setCategoriesIndexes}
-                  selectedFiltersLength={selectedFiltersLength}
-                  setSelectedFiltersLength={setSelectedFiltersLength}
-                  resultsCount={resultsCount}
-                  handleCategoryFilterChange={handleCategoryFilterChange}
-                  setFilter={setFilter}
-                  filter={filter}
-                />
-              )}
-            </Popup>
-          </div>
           <div className="mobile--filters">
             <Popup
               trigger={
