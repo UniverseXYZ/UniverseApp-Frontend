@@ -435,8 +435,6 @@ const SingleNFTSettings = () => {
     e.preventDefault();
   };
 
-  console.log(errors.name || errors.edition || errors.previewImage);
-
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
@@ -517,7 +515,6 @@ const SingleNFTSettings = () => {
                   />
                   <div className="single-nft-picture">
                     <div className="preview__image">
-                      {console.log('video ', previewImage)}
                       {previewImage.type === 'video/mp4' && (
                         <video
                           onMouseOver={(event) => event.target.play()}
