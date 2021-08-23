@@ -1333,7 +1333,7 @@ const UniverseNFTs = () => {
               )
             )} */}
         </div>
-        {!UNIVERSE_NFTS.length &&
+        {UNIVERSE_NFTS.length &&
         UNIVERSE_NFTS.filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
           .length ? (
           <div>

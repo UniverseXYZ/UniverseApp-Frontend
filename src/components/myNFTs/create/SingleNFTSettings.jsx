@@ -139,6 +139,14 @@ const SingleNFTSettings = () => {
     }
   };
 
+  const handleCloseCongratsPopup = (close) => {
+    if (location.pathname === '/create-tiers/my-nfts/create') {
+      closeCongratsPopupEvent();
+    } else {
+      close();
+    }
+  };
+
   const propertyChangesName = (index, val) => {
     const newProperties = [...properties];
     newProperties[index].name = val;

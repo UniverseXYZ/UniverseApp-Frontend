@@ -21,7 +21,7 @@ const PolymorphCard = ({ item }) => {
       <div className="card--body">
         <img
           className="rarity--chart"
-          src={item.previewImage.url}
+          src={item?.thumbnail_url}
           alt={item.name}
           aria-hidden="true"
           onClick={() => {
@@ -30,7 +30,7 @@ const PolymorphCard = ({ item }) => {
           }}
         />
         {/* <Popup
-          trigger={<img className="rarity--chart" src={item.previewImage.url} alt={item.name} />}
+          trigger={<img className="rarity--chart" src={item.thumbnail_url} alt={item.name} />}
         >
           {(close) => <RarityRankPopup onClose={close} item={item} />}
         </Popup> */}
@@ -52,8 +52,10 @@ const PolymorphCard = ({ item }) => {
           <p>{`ID: #${item.polymorphID}`}</p>
         </div>
         <div className="polymorph--collection">
-          <img alt={item.collectionName} src={item.collectionAvatar} />
-          <p>{item.collectionName}</p>
+          {item.collection.coverUrl && (
+            <img alt={item.collection.name} src={item.collection.coverUrl} />
+          )}
+          <p>{item.collection.name}</p>
         </div>
       </div>
     </div>
