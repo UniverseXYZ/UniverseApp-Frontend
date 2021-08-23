@@ -85,7 +85,7 @@ const NewTabs = (props) => {
                   <div
                     className={`tab--item--parent--element ${
                       className === 'verification--step--tab' ? 'verif--tab--parent' : ``
-                    }`}
+                    }${className === 'active' ? 'active--tab--parent' : ``}`}
                     aria-hidden="true"
                     onClick={() => {
                       if (className !== 'disabled') {
