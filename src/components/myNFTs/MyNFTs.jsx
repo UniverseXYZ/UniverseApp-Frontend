@@ -27,6 +27,7 @@ import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
 import CongratsProfilePopup from '../popups/CongratsProfilePopup';
 import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
+import EmptyTabs from '../tabs/EmptyTabs';
 
 const MyNFTs = () => {
   const {
