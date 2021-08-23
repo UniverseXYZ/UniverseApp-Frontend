@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import searchIcon from '../../assets/images/search.svg';
 import AppContext from '../../ContextAPI';
+import SortBySelect from '../input/SortBySelect';
 
-const Filters = ({ search, setSearch }) => {
+const Filters = ({ search, setSearch, filteredNFTs }) => {
   const { handleClickOutside } = useContext(AppContext);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Sort by');
   const ref = useRef(null);
+  const [desc, setDesc] = useState(false);
+  const [nftData, setNftData] = useState([...filteredNFTs]);
 
   useEffect(() => {
     document.addEventListener(
@@ -39,8 +42,19 @@ const Filters = ({ search, setSearch }) => {
             onChange={(e) => setSearch(e.target.value)}
           />
           <img src={searchIcon} alt="Search" />
+          <div className="focus--field--box--shadow" />
         </div>
-        <div
+        <SortBySelect
+          id="sort--select"
+          data={filteredNFTs}
+          defaultValue="Sort by"
+          sortData={['Sort by', 'Recently created', 'Recently sold', 'Most viewed', 'Oldest']}
+          getData={(find) => setNftData(find)}
+          getDesc={(value) => setDesc(value)}
+          desc={desc}
+          hideFirstOption
+        />
+        {/* <div
           ref={ref}
           className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
           onClick={() => setIsDropdownOpened(!isDropdownOpened)}
@@ -99,7 +113,7 @@ const Filters = ({ search, setSearch }) => {
               </ul>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -108,6 +122,7 @@ const Filters = ({ search, setSearch }) => {
 Filters.propTypes = {
   search: PropTypes.string.isRequired,
   setSearch: PropTypes.func.isRequired,
+  filteredNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default Filters;

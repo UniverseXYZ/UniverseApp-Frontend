@@ -14,7 +14,7 @@ import AppContext from '../../../ContextAPI';
 const CreateNFT = () => {
   const history = useHistory();
   const location = useLocation();
-  const { savedNFTsID } = useContext(AppContext);
+  const { savedNFTsID, savedCollectionID, deployedCollections } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
@@ -41,36 +41,57 @@ const CreateNFT = () => {
     <div className="create--nft--page">
       <div className="create--nft--background" />
       <div className="create--nft--page--container">
-        {!showCollectible ? (
-          <div
-            className="back-btn"
-            onClick={() =>
-              history.push(
-                location.pathname === '/create-tiers/my-nfts/create' ? '/create-tiers' : '/my-nfts'
-              )
-            }
-            aria-hidden="true"
-          >
+        {!savedCollectionID && (
+          <>
+            {!showCollectible ? (
+              <div
+                className="back-btn"
+                onClick={() =>
+                  history.push(
+                    location.pathname === '/create-tiers/my-nfts/create'
+                      ? '/create-tiers'
+                      : '/my-nfts'
+                  )
+                }
+                aria-hidden="true"
+              >
+                <img src={arrow} alt="back" />
+                <span>
+                  {location.pathname === '/create-tiers/my-nfts/create'
+                    ? 'Create reward tier'
+                    : 'My NFTs'}
+                </span>
+              </div>
+            ) : (
+              <div
+                className="back-btn"
+                onClick={() => setShowCollectible(false)}
+                aria-hidden="true"
+              >
+                <img src={arrow} alt="back" />
+                <span>NFT collection settings</span>
+              </div>
+            )}
+          </>
+        )}
+        {savedCollectionID && (
+          <div className="back-btn" onClick={() => history.goBack()} aria-hidden="true">
             <img src={arrow} alt="back" />
             <span>
-              {location.pathname === '/create-tiers/my-nfts/create'
-                ? 'Create reward tier'
-                : 'My NFTs'}
+              {deployedCollections.filter((item) => item.id === savedCollectionID)[0].name}
             </span>
           </div>
-        ) : (
-          <div className="back-btn" onClick={() => setShowCollectible(false)} aria-hidden="true">
-            <img src={arrow} alt="back" />
-            <span>NFT collection settings</span>
-          </div>
         )}
-        <h1 className="page--title">
-          {selectedTabIndex === 0 ||
-          (selectedTabIndex === 1 && selectedNFTType === 'single') ||
-          (selectedTabIndex === 1 && selectedNFTType === 'collection' && showCollectible)
-            ? 'Create NFT'
-            : 'Create NFT collection'}
-        </h1>
+        {!savedCollectionID && (
+          <h1 className="page--title">
+            {selectedTabIndex === 0 ||
+            (selectedTabIndex === 1 && selectedNFTType === 'single') ||
+            (selectedTabIndex === 1 && selectedNFTType === 'collection' && showCollectible)
+              ? 'Create NFT'
+              : 'Create NFT collection'}
+          </h1>
+        )}
+        {savedCollectionID && <h1 className="page--title">Edit collection</h1>}
         {/* {!showCollectible && (
           <div id="tabs--wrapper">
             <ul className="tabs">
