@@ -25,6 +25,8 @@ const WelcomeWrapper = (props) => {
     marquee,
     bgTextLeft,
     bgTextRight,
+    backgroundLeftImage,
+    backgroundRightImage,
   } = props;
 
   return (
@@ -35,7 +37,7 @@ const WelcomeWrapper = (props) => {
         {bgTextLeft && (
           <div className="text-l">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundTextLeft} className="elipses-bg" alt="Ellipses" />
+              <img src={backgroundLeftImage} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-l" />
           </div>
@@ -43,7 +45,7 @@ const WelcomeWrapper = (props) => {
         {bgTextRight && (
           <div className="text-r">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundTextRight} className="elipses-bg" alt="Ellipses" />
+              <img src={backgroundRightImage} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-r" />
           </div>
@@ -108,6 +110,8 @@ WelcomeWrapper.propTypes = {
   marquee: PropTypes.node,
   bgTextLeft: PropTypes.bool,
   bgTextRight: PropTypes.bool,
+  backgroundLeftImage: PropTypes.node,
+  backgroundRightImage: PropTypes.node,
 };
 
 WelcomeWrapper.defaultProps = {
@@ -122,6 +126,8 @@ WelcomeWrapper.defaultProps = {
   popupBtnText: '',
   bgTextLeft: false,
   bgTextRight: false,
+  backgroundLeftImage: backgroundTextLeft,
+  backgroundRightImage: backgroundTextRight,
 };
 
 export default WelcomeWrapper;
