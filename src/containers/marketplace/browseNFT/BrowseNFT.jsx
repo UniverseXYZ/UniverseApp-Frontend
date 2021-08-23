@@ -49,7 +49,7 @@ const BrowseNFT = () => {
   }, []);
 
   useEffect(() => {
-    window.onscroll = function () {
+    window.onscroll = () => {
       if (window.scrollY > 100) {
         setShowGoToTop(true);
       } else {

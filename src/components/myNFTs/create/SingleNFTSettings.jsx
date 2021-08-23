@@ -584,16 +584,16 @@ const SingleNFTSettings = () => {
                           : setSelectedCollection(col)
                       }
                     >
-                      {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                      {typeof col.coverUrl === 'string' && col?.coverUrl?.startsWith('#') ? (
                         <div
                           className="random__bg__color"
-                          style={{ backgroundColor: col.previewImage }}
+                          style={{ backgroundColor: col.coverUrl }}
                         >
                           {col.name.charAt(0)}
                         </div>
                       ) : (
                         <div>
-                          <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                          <img src={col.coverUrl} alt={col.name} />
                         </div>
                       )}
                       <h5>{col.name}</h5>

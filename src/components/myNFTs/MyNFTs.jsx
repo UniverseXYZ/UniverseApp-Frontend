@@ -59,7 +59,6 @@ const MyNFTs = () => {
   const location = useLocation();
   const isCreatingAction = location.pathname === '/select-nfts';
   const history = useHistory();
-  console.log(myNFTsSelectedTabIndex);
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
     setShowModal(false);
