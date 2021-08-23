@@ -826,12 +826,16 @@
           margin-right: 12px;
           @include sm {
             margin-right: 0;
-            margin-bottom: 20px;
+            margin-top: 20px;
           }
         }
       }
       @include sm {
-        display: grid;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        button {
+          width: 100%;
+        }
       }
     }
   }

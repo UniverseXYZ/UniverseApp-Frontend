@@ -123,71 +123,71 @@
                     grid-template-columns: 1fr 255px;
                     grid-gap: 30px;
 
-                    .dropdown {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        position: relative;
-                        background: $white;
-                        border: 1px solid #d4d4d4;
-                        box-sizing: border-box;
-                        border-radius: 12px;
-                        padding: 15px 16px;
-                        cursor: pointer;
-                        &.opened {
-                            background: linear-gradient($white, $white) padding-box,
-                                linear-gradient(to right, #bceb00, #00eaea) border-box;
-                            border: 1px solid transparent;
-                            .chevron__down {
-                                transform: rotate(180deg);
-                            }
-                        }
-                        .selected__item {
-                            font-family: $spaceGroteskFont;
-                            font-style: normal;
-                            font-weight: 600;
-                            font-size: 16px;
-                            line-height: 20px;
-                            color: $black;
-                        }
-                        .chevron__down {
-                            width: 14px;
-                            transition: 0.5s ease;
-                        }
-                        .sorting__dropdown {
-                            position: absolute;
-                            top: 55px;
-                            left: 0;
-                            width: 100%;
-                            z-index: 1;
-                            ul {
-                                background: $white;
-                                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                                border-radius: 12px;
-                                padding: 8px;
+                    // .dropdown {
+                    //     display: flex;
+                    //     align-items: center;
+                    //     justify-content: space-between;
+                    //     position: relative;
+                    //     background: $white;
+                    //     border: 1px solid #d4d4d4;
+                    //     box-sizing: border-box;
+                    //     border-radius: 12px;
+                    //     padding: 15px 16px;
+                    //     cursor: pointer;
+                    //     &.opened {
+                    //         background: linear-gradient($white, $white) padding-box,
+                    //             linear-gradient(to right, #bceb00, #00eaea) border-box;
+                    //         border: 1px solid transparent;
+                    //         .chevron__down {
+                    //             transform: rotate(180deg);
+                    //         }
+                    //     }
+                    //     .selected__item {
+                    //         font-family: $spaceGroteskFont;
+                    //         font-style: normal;
+                    //         font-weight: 600;
+                    //         font-size: 16px;
+                    //         line-height: 20px;
+                    //         color: $black;
+                    //     }
+                    //     .chevron__down {
+                    //         width: 14px;
+                    //         transition: 0.5s ease;
+                    //     }
+                    //     .sorting__dropdown {
+                    //         position: absolute;
+                    //         top: 55px;
+                    //         left: 0;
+                    //         width: 100%;
+                    //         z-index: 1;
+                    //         ul {
+                    //             background: $white;
+                    //             box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                    //             border-radius: 12px;
+                    //             padding: 8px;
 
-                                li {
-                                    padding: 20px;
-                                    font-family: $spaceGroteskFont;
-                                    font-style: normal;
-                                    font-weight: 600;
-                                    font-size: 16px;
-                                    line-height: 20px;
-                                    color: $black;
-                                    border-radius: 6px;
-                                    &:hover {
-                                        background: rgba(0, 0, 0, 0.05);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    //             li {
+                    //                 padding: 20px;
+                    //                 font-family: $spaceGroteskFont;
+                    //                 font-style: normal;
+                    //                 font-weight: 600;
+                    //                 font-size: 16px;
+                    //                 line-height: 20px;
+                    //                 color: $black;
+                    //                 border-radius: 6px;
+                    //                 &:hover {
+                    //                     background: rgba(0, 0, 0, 0.05);
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
                     .search {
                         position: relative;
                         input {
                             width: 100%;
                             background: $white;
-                            border: 1px solid #d4d4d4;
+                            border: 1px solid rgba(0,0,0,0.1);
                             box-sizing: border-box;
                             border-radius: 12px;
                             padding: 15px 20px 15px 45px;
@@ -210,6 +210,28 @@
                             position: absolute;
                             left: 20px;
                             top: 17px;
+                        }
+                        .focus--field--box--shadow {
+                            position: absolute;
+                            width: calc(100% + 8px);
+                            min-height: 58px;
+                            background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+                            left: -4px;
+                            right: 0;
+                            top: 0;
+                            bottom: 0;
+                            margin: auto;
+                            z-index: -5;
+                            border-radius: 12px;
+                            opacity: 0;
+                        }
+                        &:hover {
+                            .focus--field--box--shadow {
+                                opacity: 0.2;
+                            }
+                            input {
+                                border: 1px solid transparent;
+                            }
                         }
                     }
                     @include md {

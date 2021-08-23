@@ -32,6 +32,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
     savedNfts,
     savedCollectionID,
+    setSavedCollectionID,
     myNFTs,
     setMyNFTs,
     deployedCollections,
@@ -53,6 +54,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const history = useHistory();
 
   const [coverImage, setCoverImage] = useState(null);
+  const [bgImage, setBgImage] = useState(null);
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
@@ -295,6 +297,13 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     };
   });
 
+  useEffect(
+    () => () => {
+      setSavedCollectionID(null);
+    },
+    []
+  );
+
   useEffect(() => {
     // Prev Icon
     const prev = document.querySelectorAll('.slick-prev');
@@ -326,6 +335,21 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       }
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (savedCollectionID) {
+      const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
+      setCollectionName(res.name);
+      setCoverImage(
+        typeof res.previewImage === 'string' && res.previewImage.startsWith('#')
+          ? null
+          : res.previewImage
+      );
+      setTokenName(res.tokenName);
+      setDescription(res.description);
+      setBgImage(res.bgImage || null);
+    }
+  }, [collectionNFTs]);
 
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
@@ -656,13 +680,28 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         )}
       </div> */}
       <div className="create--collection--btn">
-        <Button
-          className="light-button"
-          onClick={handleMinting}
-          disabled={!collectionName || !tokenName}
-        >
-          Create collection
-        </Button>
+        {!savedCollectionID ? (
+          <Button
+            className="light-button"
+            onClick={handleMinting}
+            disabled={!collectionName || !tokenName}
+          >
+            Create collection
+          </Button>
+        ) : (
+          <>
+            <Button className="light-border-button" onClick={() => history.goBack()}>
+              Cancel
+            </Button>
+            <Button
+              className="light-button"
+              onClick={handleMinting}
+              disabled={!collectionName || !tokenName}
+            >
+              Submit changes
+            </Button>
+          </>
+        )}
       </div>
     </div>
   ) : (

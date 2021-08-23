@@ -84,7 +84,7 @@ const Collection = () => {
           <Description selectedCollection={selectedCollection} />
           {collectionNFTs.length ? (
             <>
-              <Filters search={search} setSearch={setSearch} />
+              <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
               <NFTs filteredNFTs={filteredNFTs} />
             </>
           ) : (
