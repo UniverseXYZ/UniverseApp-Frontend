@@ -178,7 +178,7 @@ const App = () => {
         <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
-        <Route path="/character-page" component={() => <CharacterPage />} />
+        <Route exact path="/character-page" component={() => <CharacterPage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
