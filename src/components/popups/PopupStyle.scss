@@ -3925,7 +3925,7 @@
     display: flex;
     justify-content: space-between;
     padding: 75px 60px;
-    max-height: 962px;
+    max-height: 800px;
     overflow-y: auto;
 
     .rarity--rank--image {
@@ -3992,7 +3992,7 @@
       @include xl {
         text-align: center;
       }
-      @media (max-width: 834px) {
+      @include lg {
         width: 100%;
         margin: auto;
         height: unset;
@@ -4055,8 +4055,9 @@
           line-height: 29px;
           color: #B3B3B3;
         }
-        @media (max-width: 834px) {
+        @include lg {
           margin-top: 32px;
+          
         }
         @include xl {
           margin-bottom: 22px;
@@ -4193,10 +4194,10 @@
           gap: 14px;
         }
 
+        // @include md {
+        //   grid-template-columns: repeat(3, 1fr);
+        // }
         @include md {
-          grid-template-columns: repeat(3, 1fr);
-        }
-        @include sm {
           grid-template-columns: repeat(1, 1fr);
         }
       }
@@ -4220,17 +4221,17 @@
       .selected--pink--orange {
         background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
       }
-      @media (max-width: 834px) {
+      @include lg {
         padding-bottom: 20px;
       }
     }
-    @include sm {
+    @include md {
       max-height: 600px;
     }
     @include xl {
       align-items: center;
     }
-    @media (max-width: 834px) {
+    @include lg {
       display: grid;
       padding: 30px 20px 20px;
     }
@@ -4243,11 +4244,11 @@
   //   height: 100%;
   //   overflow-y: auto;
   // }
-  @include sm {
-    max-width: 90%;
-  }
-  @media (max-width: 834px) {
+  @include lg {
     width: fit-content !important;
+  }
+  @include md {
+    max-width: 90%;
   }
 
   @media (max-width: 1068px) and (min-width: #{$screen-lg-max}) {
