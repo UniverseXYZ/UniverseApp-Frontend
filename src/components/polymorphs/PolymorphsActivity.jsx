@@ -23,13 +23,13 @@ const getRows = (dataObject, dataKeys) =>
   });
 
 const PolymorphsActivity = (props) => {
-  const { mobile } = props;
+  const { mobile, title } = props;
   const [offset, setOffset] = useState(0);
   const dataKeys = Object.keys(mockData);
 
   return (
     <WrapperCenter className="polymorphs--activity--wrapper--center">
-      <h2>Recent Polymorphs activity</h2>
+      <h2>{title}</h2>
       {!mobile && (
         <PolymorphsActivityTable
           className="table--polymorphs--activity"
@@ -54,10 +54,12 @@ const PolymorphsActivity = (props) => {
 
 PolymorphsActivity.propTypes = {
   mobile: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 PolymorphsActivity.defaultProps = {
   mobile: false,
+  title: 'Recent Polymorphs activity',
 };
 
 export default PolymorphsActivity;
