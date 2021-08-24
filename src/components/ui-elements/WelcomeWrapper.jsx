@@ -83,7 +83,7 @@ const WelcomeWrapper = (props) => {
             </div>
           </AnimatedOnScroll>
         </div>
-        <AnimatedOnScroll animationIn="fadeIn">
+        <AnimatedOnScroll animationIn="fadeIn" className="right--cont">
           <div className="right">{children && <div>{children}</div>}</div>
         </AnimatedOnScroll>
       </div>
