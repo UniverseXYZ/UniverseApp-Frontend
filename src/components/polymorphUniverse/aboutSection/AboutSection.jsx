@@ -4,11 +4,9 @@ import { useHistory } from 'react-router-dom';
 import WrapperCenter from '../../polymorphs/WrapperCenter';
 import WrapperCenterTwoColumns from '../../polymorphs/WrapperCenterTwoColumns';
 import ImgRow1 from '../../../assets/images/Section1-Illustration-min.png';
-import ImgRow2Chart from '../../../assets/images/chart-min1.svg';
-import ImgRow2Background from '../../../assets/images/curve-bg.jpg';
 import './AboutSection.scss';
 import Button from '../../button/Button';
-import imgRow2Chart from '../../../assets/images/toppolymorphs.png';
+import imgRow2Chart from '../../../assets/images/universelandscape.png';
 
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
