@@ -28,7 +28,7 @@ const HeroSection = () => {
       <div className="general--section">
         <h1>Polymorph Universe</h1>
         <h2>
-          The Polymorphs are a collection of morphing NFTs,with 11 base skins and 200+ traits.
+          The Polymorphs are a collection of morphing NFTs, with 11 base skins and 200+ traits.
         </h2>
         <Marquee gradient={false} className="welcome--marquee">
           <div className="border--top" />
