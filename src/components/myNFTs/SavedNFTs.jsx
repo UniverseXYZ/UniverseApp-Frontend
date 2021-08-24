@@ -7,7 +7,7 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import bubbleIcon from '../../assets/images/text-bubble.svg';
+import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
@@ -86,7 +86,7 @@ const SavedNFTs = () => {
     setSavedNFTsID(id);
     setActiveView('single');
     // setShowModal(true);
-    history.push('/my-nfts/create');
+    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
   };
 
   return (
@@ -242,7 +242,10 @@ const SavedNFTs = () => {
             </div>
             <h3>No saved NFTs found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
+            <Button
+              className="light-button"
+              onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+            >
               Create NFT
             </Button>
           </div>

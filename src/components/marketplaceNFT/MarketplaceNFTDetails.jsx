@@ -62,6 +62,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(
     selectedNFT.type === 'bundles' ? 0 : null
   );
+  const [tablet, setTablet] = useState(false);
+  const [count, setCount] = useState(4);
   const mediaRef =
     selectedNFT.type !== 'bundles'
       ? selectedNFT.media.type === 'video/mp4'
@@ -253,6 +255,16 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       nextIcon.src = rightArrow;
       next.innerHTML = '';
       next.appendChild(nextIcon);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Number(window.innerWidth) <= 1230) {
+      setTablet(true);
+      setCount(3);
+    } else {
+      setTablet(false);
+      setCount(4);
     }
   }, []);
 
@@ -924,7 +936,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
         <div className="browse--nft--list">
           {nfts.map(
             (nft, index) =>
-              index < 4 && (
+              index < count && (
                 <div className="nft--box" key={uuid()}>
                   <div className="nft--box--header">
                     <div className="three--images">

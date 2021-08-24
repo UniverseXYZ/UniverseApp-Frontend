@@ -1,0 +1,30 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
+
+.general--section {
+  min-height: 725px;
+  background-image: url('../../../assets//images/landscapeuniverse.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  padding-top: 236px;
+  h1 {
+    font-family: $sharpGroteskSemiBoldFont;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 77px;
+    color: $white;
+  }
+  h2 {
+    font-family: $spaceGroteskFont;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 30px;
+    color: $white;
+    margin-top: 28px;
+    padding: 0 475px;
+  }
+}

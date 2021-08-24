@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
-import bubbleIcon from '../../assets/images/text-bubble.svg';
+import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 
@@ -58,7 +58,12 @@ const DeployedCollections = () => {
                     alt={collection.name}
                   />
                 )}
-                <h3 className="collection__name">{collection.name}</h3>
+                {/* <h3 className="collection__name">{collection.name}</h3> */}
+                <h3 title={collection.name} className="collection__name">
+                  {collection.name.length > 13
+                    ? `${collection.name.substring(0, 13)}...`
+                    : collection.name}
+                </h3>
               </div>
             </div>
           ))}
@@ -71,8 +76,13 @@ const DeployedCollections = () => {
             </div>
             <h3>No collections found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
-              Create NFT
+            <Button
+              className="light-button"
+              onClick={() =>
+                history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
+              }
+            >
+              Create Collection
             </Button>
           </div>
         </div>

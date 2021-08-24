@@ -27,7 +27,7 @@ const Filters = (props) => {
 
   return (
     <div className="rarity--charts--search--and--filters--container">
-      <div className="floor--price--block">
+      {/* <div className="floor--price--block">
         <p className="floor--price--paragraph">
           <span>Floor Price: </span>
           <div>
@@ -35,7 +35,7 @@ const Filters = (props) => {
             {`${floorPrice.price}`}
           </div>
         </p>
-      </div>
+      </div> */}
       <div className="rarity--charts--search--and--filters--row">
         <div className="rarity--charts--search--and--floor--price">
           <SearchField
@@ -46,30 +46,6 @@ const Filters = (props) => {
             enterKeyEvent={false}
             getData={(find) => getData(find)}
           />
-          <div className="tablet--filters">
-            <Popup
-              trigger={
-                <button type="button" className="light-border-button">
-                  <img src={filterIcon} alt="Filter" /> Filters
-                  {selectedFiltersLength !== 0 && (
-                    <div className="count">{selectedFiltersLength}</div>
-                  )}
-                </button>
-              }
-            >
-              {(close) => (
-                <RarityChartFiltersPopup
-                  close={close}
-                  categories={categories}
-                  setCategories={setCategories}
-                  categoriesIndexes={categoriesIndexes}
-                  setCategoriesIndexes={setCategoriesIndexes}
-                  selectedFiltersLength={selectedFiltersLength}
-                  setSelectedFiltersLength={setSelectedFiltersLength}
-                />
-              )}
-            </Popup>
-          </div>
           <div className="mobile--filters">
             <Popup
               trigger={

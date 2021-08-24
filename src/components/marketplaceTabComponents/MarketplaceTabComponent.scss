@@ -709,66 +709,70 @@ input:checked + .slider:before {
 
 .marketplace--nft {
   padding: 30px 40px 12px 40px;
-  .marketplace--nft--box {
-    display: flex;
-    padding: 11px 20px 11px 11px;
-    justify-content: space-between;
-    background: $white;
-    margin-bottom: 12px;
+  .marketplace--nft--box--cont {
     border-radius: 12px;
-    box-shadow: 2px 1000px 1px #fff inset;
-    border: 1px solid transparent;
-    background-origin: border-box;
-    cursor: pointer;
-    .image--box {
+    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+    .marketplace--nft--box {
       display: flex;
-      > img, video {
-        height: 70px;
-        width: 70px;
-      }
-      .info--box {
-        padding-left: 16px;
-        padding-top: 14px;
-        > div {
-          display: flex;
-          padding-top: 5px;
-          > p {
+      padding: 11px 20px 11px 11px;
+      justify-content: space-between;
+      background: $white;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      box-shadow: 2px 1000px 1px #ffffff inset;
+      border: 1px solid transparent;
+      background-origin: border-box;
+      cursor: pointer;
+      .image--box {
+        display: flex;
+        > img, video {
+          height: 70px;
+          width: 70px;
+        }
+        .info--box {
+          padding-left: 16px;
+          padding-top: 14px;
+          > div {
+            display: flex;
+            padding-top: 5px;
+            > p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: 700;
+              line-height: 14px;
+              color: #00000066;
+              padding-left: 4px;
+            }
+            > img {
+              height: 16px;
+              width: 16px;
+            }
+          }
+          > h1 {
             font-family: $spaceGroteskFont;
-            font-size: 12px;
+            font-size: 14px;
             font-style: normal;
             font-weight: 700;
-            line-height: 14px;
-            color: #00000066;
-            padding-left: 4px;
-          }
-          > img {
-            height: 16px;
-            width: 16px;
+            line-height: 22px;
           }
         }
-        > h1 {
+      }
+      .count {
+        display: flex;
+        align-items: center;
+        > h2 {
           font-family: $spaceGroteskFont;
           font-size: 14px;
           font-style: normal;
           font-weight: 700;
           line-height: 22px;
+          color: #00000066;
         }
       }
-    }
-    .count {
-      display: flex;
-      align-items: center;
-      > h2 {
-        font-family: $spaceGroteskFont;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 22px;
-        color: #00000066;
+      &:hover{
+        background-image: linear-gradient(101deg, #bceb00, #00eaea);
       }
-    }
-    &:hover{
-      background-image: linear-gradient(101deg, #bceb00, #00eaea);
     }
   }
   @include sm {

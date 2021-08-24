@@ -32,7 +32,7 @@ const PolymorphCard = ({ item }) => (
     </div>
     <div className="card--footer">
       <h2>{item.name}</h2>
-      <p>{`#${item.serialNumber}`}</p>
+      <p>{`ID: #${item.serialNumber}`}</p>
     </div>
   </div>
 );

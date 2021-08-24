@@ -266,6 +266,17 @@
         width: 20px;
         height: 20px;
       }
+      img {
+        @include lg {
+          position: absolute;
+        }
+      }
+      @include lg {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 100%;
+        height: unset;
+      }
     }
     &--footer {
       .name--and--price {

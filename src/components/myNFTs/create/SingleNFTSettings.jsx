@@ -23,6 +23,7 @@ import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
+import SuccessPopup from '../../popups/SuccessPopup.jsx';
 
 const SingleNFTSettings = () => {
   const {
@@ -277,97 +278,7 @@ const SingleNFTSettings = () => {
   useEffect(() => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        const generatedEditions = [];
-
-        for (let i = 0; i < editions; i += 1) {
-          generatedEditions.push(uuid().split('-')[0]);
-        }
-        if (!savedNFTsID) {
-          if (selectedCollection) {
-            setSavedNfts([
-              ...savedNfts,
-              {
-                id: uuid(),
-                type: 'collection',
-                collectionId: selectedCollection.id,
-                collectionName: selectedCollection.name,
-                collectionAvatar: selectedCollection.previewImage,
-                collectionDescription: selectedCollection.description,
-                shortURL: selectedCollection.shortURL,
-                tokenName: selectedCollection.tokenName,
-                previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                generatedEditions,
-                properties,
-                percentAmount,
-                selected: false,
-              },
-            ]);
-          } else {
-            setSavedNfts([
-              ...savedNfts,
-              {
-                id: uuid(),
-                type: 'single',
-                previewImage,
-                name,
-                description,
-                numberOfEditions: editions,
-                generatedEditions,
-                properties,
-                percentAmount,
-                selected: false,
-              },
-            ]);
-          }
-        } else if (selectedCollection) {
-          setSavedNfts(
-            savedNfts.map((item) =>
-              item.id === savedNFTsID
-                ? {
-                    ...item,
-                    type: 'collection',
-                    collectionId: selectedCollection.id,
-                    collectionName: selectedCollection.name,
-                    collectionAvatar: selectedCollection.previewImage,
-                    collectionDescription: selectedCollection.description,
-                    shortURL: selectedCollection.shortURL,
-                    tokenName: selectedCollection.tokenName,
-                    previewImage,
-                    name,
-                    description,
-                    numberOfEditions: editions,
-                    generatedEditions,
-                    properties,
-                    percentAmount,
-                  }
-                : item
-            )
-          );
-        } else {
-          setSavedNfts(
-            savedNfts.map((item) =>
-              item.id === savedNFTsID
-                ? {
-                    id: uuid(),
-                    type: 'single',
-                    previewImage,
-                    name,
-                    description,
-                    numberOfEditions: editions,
-                    generatedEditions,
-                    properties,
-                    percentAmount,
-                  }
-                : item
-            )
-          );
-        }
-        setSavedNFTsID(null);
-        setShowModal(false);
-        document.body.classList.remove('no__scroll');
+        document.getElementById('success-hidden-btn').click();
       }
     }
     if (mintNowClick) {
@@ -417,6 +328,101 @@ const SingleNFTSettings = () => {
       close();
     }
   };
+
+  const handleCloseSuccessPopup = (close) => {
+    const generatedEditions = [];
+
+    for (let i = 0; i < editions; i += 1) {
+      generatedEditions.push(uuid().split('-')[0]);
+    }
+    if (!savedNFTsID) {
+      if (selectedCollection) {
+        setSavedNfts([
+          ...savedNfts,
+          {
+            id: uuid(),
+            type: 'collection',
+            collectionId: selectedCollection.id,
+            collectionName: selectedCollection.name,
+            collectionAvatar: selectedCollection.previewImage,
+            collectionDescription: selectedCollection.description,
+            shortURL: selectedCollection.shortURL,
+            tokenName: selectedCollection.tokenName,
+            previewImage,
+            name,
+            description,
+            numberOfEditions: Number(editions),
+            generatedEditions,
+            properties,
+            percentAmount,
+            selected: false,
+          },
+        ]);
+      } else {
+        setSavedNfts([
+          ...savedNfts,
+          {
+            id: uuid(),
+            type: 'single',
+            previewImage,
+            name,
+            description,
+            numberOfEditions: editions,
+            generatedEditions,
+            properties,
+            percentAmount,
+            selected: false,
+          },
+        ]);
+      }
+    } else if (selectedCollection) {
+      setSavedNfts(
+        savedNfts.map((item) =>
+          item.id === savedNFTsID
+            ? {
+                ...item,
+                type: 'collection',
+                collectionId: selectedCollection.id,
+                collectionName: selectedCollection.name,
+                collectionAvatar: selectedCollection.previewImage,
+                collectionDescription: selectedCollection.description,
+                shortURL: selectedCollection.shortURL,
+                tokenName: selectedCollection.tokenName,
+                previewImage,
+                name,
+                description,
+                numberOfEditions: editions,
+                generatedEditions,
+                properties,
+                percentAmount,
+              }
+            : item
+        )
+      );
+    } else {
+      setSavedNfts(
+        savedNfts.map((item) =>
+          item.id === savedNFTsID
+            ? {
+                id: uuid(),
+                type: 'single',
+                previewImage,
+                name,
+                description,
+                numberOfEditions: editions,
+                generatedEditions,
+                properties,
+                percentAmount,
+              }
+            : item
+        )
+      );
+    }
+    setSavedNFTsID(null);
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
   const onDrop = (e) => {
     e.preventDefault();
     const {
@@ -428,8 +434,6 @@ const SingleNFTSettings = () => {
   const onDragOver = (e) => {
     e.preventDefault();
   };
-
-  console.log(errors.name || errors.edition || errors.previewImage);
 
   return (
     <div className="single__nft">
@@ -469,11 +473,29 @@ const SingleNFTSettings = () => {
             />
           )}
         </Popup>
+        <Popup
+          trigger={
+            <button
+              type="button"
+              id="success-hidden-btn"
+              aria-label="hidden"
+              style={{ display: 'none' }}
+            />
+          }
+        >
+          {(close) => (
+            <CongratsPopup
+              onClose={() => handleCloseSuccessPopup(close)}
+              title="Success!"
+              message="NFT was successfully saved for later"
+            />
+          )}
+        </Popup>
         {/* <div className="back-nft" onClick={() => onClick(null)} aria-hidden="true">
         <img src={arrow} alt="back" />
         <span>Create NFT</span>
       </div> */}
-        <h2 className="single-nft-title">{!savedNFTsID ? 'Single NFT settings' : 'Edit NFT'}</h2>
+        {/* <h2 className="single-nft-title">{!savedNFTsID ? 'Single NFT settings' : 'Edit NFT'}</h2> */}
         <div className="single-nft-content">
           <div className="single-nft-upload">
             <h5>Upload file</h5>
@@ -493,7 +515,6 @@ const SingleNFTSettings = () => {
                   />
                   <div className="single-nft-picture">
                     <div className="preview__image">
-                      {console.log('video ', previewImage)}
                       {previewImage.type === 'video/mp4' && (
                         <video
                           onMouseOver={(event) => event.target.play()}
@@ -651,60 +672,64 @@ const SingleNFTSettings = () => {
               value={editions}
             />
           </div>
-          <div className="single-nft-choose-collection">
-            <h4>Choose collection</h4>
-            {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
-            {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
-            <div className="choose__collection">
-              {/* {!savedNFTsID && ( */}
-              <Popup
-                trigger={
-                  <div className="collection-box">
-                    <div className="create">
-                      <img aria-hidden="true" src={createIcon} alt="Create Icon" />
-                      <h5>Create</h5>
-                      <p>ERC-721</p>
+          {deployedCollections.length ? (
+            <div className="single-nft-choose-collection">
+              <h4>Choose collection</h4>
+              {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
+              {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
+              <div className="choose__collection">
+                {/* {!savedNFTsID && ( */}
+                {/* <Popup
+                  trigger={
+                    <div className="collection-box">
+                      <div className="create">
+                        <img aria-hidden="true" src={createIcon} alt="Create Icon" />
+                        <h5>Create</h5>
+                        <p>ERC-721</p>
+                      </div>
+                      <div className="box--shadow--effect--block" />
+                    </div>
+                  }
+                >
+                  {(close) => <CreateCollectionPopup onClose={close} />}
+                </Popup> */}
+                {/* )} */}
+                {deployedCollections.map((col) => (
+                  <div className="collection-box" key={uuid()}>
+                    <div
+                      className={`universe${
+                        selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
+                      }`}
+                      aria-hidden="true"
+                      onClick={() =>
+                        selectedCollection && selectedCollection.id === col.id
+                          ? setSelectedCollection(null)
+                          : setSelectedCollection(col)
+                      }
+                    >
+                      {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                        <div
+                          className="random__bg__color"
+                          style={{ backgroundColor: col.previewImage }}
+                        >
+                          {col.name.charAt(0)}
+                        </div>
+                      ) : (
+                        <div>
+                          <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                        </div>
+                      )}
+                      <h5>{col.name}</h5>
+                      <p>{col.tokenName}</p>
                     </div>
                     <div className="box--shadow--effect--block" />
                   </div>
-                }
-              >
-                {(close) => <CreateCollectionPopup onClose={close} />}
-              </Popup>
-              {/* )} */}
-              {deployedCollections.map((col) => (
-                <div className="collection-box" key={uuid()}>
-                  <div
-                    className={`universe${
-                      selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
-                    }`}
-                    aria-hidden="true"
-                    onClick={() =>
-                      selectedCollection && selectedCollection.id === col.id
-                        ? setSelectedCollection(null)
-                        : setSelectedCollection(col)
-                    }
-                  >
-                    {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
-                      <div
-                        className="random__bg__color"
-                        style={{ backgroundColor: col.previewImage }}
-                      >
-                        {col.name.charAt(0)}
-                      </div>
-                    ) : (
-                      <div>
-                        <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
-                      </div>
-                    )}
-                    <h5>{col.name}</h5>
-                    <p>{col.tokenName}</p>
-                  </div>
-                  <div className="box--shadow--effect--block" />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="hr-div" />
           <div className="single-nft-properties">
             <div className="single-nft-properties-header">
