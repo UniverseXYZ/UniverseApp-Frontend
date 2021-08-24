@@ -71,6 +71,11 @@
                 }
             }
         }
+        .right--cont {
+            @include md {
+                mix-blend-mode: screen;
+            }
+        }
         .right {
             position: absolute;
             top: 0;
