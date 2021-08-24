@@ -1,9 +1,9 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
 
 .general--section {
   min-height: 725px;
-  background-image: url('../../assets//images/landscapeuniverse.png');
+  background-image: url('../../../assets//images/landscapeuniverse.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
