@@ -40,7 +40,6 @@ const MyAccount = () => {
       ? loggedInArtist
       : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
     : null;
-  console.log(artist);
 
   useEffect(() => {
     setDarkMode(false);

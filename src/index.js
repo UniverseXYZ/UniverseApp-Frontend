@@ -4,7 +4,11 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter
+    getUserConfirmation={() => {
+      /* Empty callback to block the default browser prompt */
+    }}
+  >
     <App />
   </BrowserRouter>,
   document.getElementById('root')

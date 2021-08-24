@@ -25,6 +25,7 @@ import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
 import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
+import BurnToMint from './containers/polymorphs/BurnToMint.jsx';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
 import MarketplaceNFT from './containers/marketplaceNFT/MarketplaceNFT';
 import Planet1 from './containers/planets/Planet1.jsx';
@@ -173,14 +174,15 @@ const App = () => {
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
-        <Route exact path="/polymorphuniverse" component={() => <PolymorphUniverse />} />
+        <Route exact path="/polymorph-universe" component={() => <PolymorphUniverse />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
+        <Route exact path="/burn-to-mint" component={() => <BurnToMint />} />
         <Route exact path="/planets/adaka" component={() => <Planet1 />} />
         <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
         <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
-        <Route path="/character-page" component={() => <CharacterPage />} />
+        <Route exact path="/character-page" component={() => <CharacterPage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />

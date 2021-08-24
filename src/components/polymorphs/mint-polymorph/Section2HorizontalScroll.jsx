@@ -2,7 +2,6 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import './styles/Section2HorizontalScroll.scss';
-import charactersData from '../../../utils/fixtures/horizontalScrollCharactersData';
 
 const child = (data) =>
   data.map((elem, index) => (
@@ -14,7 +13,7 @@ const child = (data) =>
 
 const Section2HorizontalScroll = (props) => {
   const location = useLocation();
-  const { width, height } = props;
+  const { width, height, title, desktopHeightValue, mobileHeightValue, data } = props;
   // const [scrollWidth, setScrollWidth] = useState(width);
   const [transparentBlockHeight, setTransparentBlockHeight] = useState(width);
   const [scrollSticky, setScrollSicky] = useState(0);
@@ -29,7 +28,7 @@ const Section2HorizontalScroll = (props) => {
       const parent = document.querySelector('.section2--horizontal--scroll--parent');
       const horizontalScroll = document.querySelector('.horizontall--slider');
       const scrolItem = document.querySelector('.child--scroll');
-      const horizontalScrollWidth = charactersData.length * scrolItem?.clientWidth;
+      const horizontalScrollWidth = data.length * scrolItem?.clientWidth;
       const transitionEndLimit = horizontalScrollWidth - window.innerWidth;
       setScrollSicky(parent?.offsetTop - window.scrollY);
       // setTransparentBlockHeight(transitionEndLimit);
@@ -58,21 +57,35 @@ const Section2HorizontalScroll = (props) => {
     <div
       className="block--horizontall--scroll--transparent"
       style={{
-        height: `${width > 576 ? transparentBlockHeight + 1100 : transparentBlockHeight + 1600}px`,
+        height: `${
+          width > 576
+            ? transparentBlockHeight + desktopHeightValue
+            : transparentBlockHeight + mobileHeightValue
+        }px`,
       }}
     >
       <div className="section2--horizontal--scroll--parent">
-        <h3>Possible base characters</h3>
+        <h3>{title}</h3>
         <p className="row2--unique--skins">11 unique skins</p>
-        <div className="horizontall--slider">{child(charactersData)}</div>
+        <div className="horizontall--slider">{child(data)}</div>
       </div>
     </div>
   );
 };
 
 Section2HorizontalScroll.propTypes = {
+  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
+  title: PropTypes.string,
+  desktopHeightValue: PropTypes.number,
+  mobileHeightValue: PropTypes.number,
+};
+
+Section2HorizontalScroll.defaultProps = {
+  title: 'Possible base characters',
+  desktopHeightValue: 1100,
+  mobileHeightValue: 1600,
 };
 
 export default Section2HorizontalScroll;

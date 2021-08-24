@@ -36,14 +36,14 @@
     }
     .section4--left--block {
       height: 400px;
-      background-image: url('../../../assets/images/topmorph.png');
+      background-image: url('../../../assets/images/Section4GroupImage.png');
       background-repeat: no-repeat;
       background-size: cover;
       display: flex;
       align-items: center;
       @include lg {
         height: 430px;
-        background-image: none;
+        background-image: none !important;
         margin-right: 25px;
       }
       @include md {

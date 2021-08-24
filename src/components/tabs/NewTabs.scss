@@ -19,6 +19,7 @@
                 margin-bottom: 60px;
                 z-index: 1;
                 .tabs {
+                    height: 50px;
                     list-style: none;
                     display: flex;
                     .tab--item--parent--element {
@@ -26,11 +27,19 @@
                         @include md {
                             left: 0 !important;
                         }
-                    } 
+                    }
+                    img.arrow--tab {
+                        max-width: unset;
+                        max-height: unset;
+                        position: absolute;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                    }
                     li {
                         border-radius: 4px;
                         position: relative;
-                        height: 50px;
+                        height: 100%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -41,13 +50,12 @@
                         font-size: 12px;
                         line-height: 30px;
                         color: $black;
-                        background-color: $white;
                         width: 100%;
-                        clip-path: polygon(97% 0%, 100% 50%, 97% 100%, 0% 100%, 3% 50%, 0% 0%);
+                        // clip-path: polygon(97% 0%, 100% 50%, 97% 100%, 0% 100%, 3% 50%, 0% 0%);
                         cursor: pointer;
                         z-index: 5;
                         @include md {
-                          clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
+                        //   clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
                           font-size: 10px;
                           height: 70px;
                         }
@@ -74,14 +82,12 @@
                             }
                         }
                         &.active {
-                            background-color: $black;
                             color: $white;
                             img {
                                 opacity: 1;
                             }
                         }
                         &.disabled {
-                            background: #f4f4f4a8;
                             color: rgba(0, 0, 0, 0.2);
                             user-select: none;
                             &:hover {
@@ -92,26 +98,23 @@
                             }
                         }
                     }
+                    .active--tab--parent {
+                        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+                    }
                     .verification--step--tab {
                         height: 56px;
                         // padding: 0 3px;
-                        background: rgba(177, 176, 176, 0.041);
-                        clip-path: polygon(96% 0%, 100% 50%, 96% 100%, 0% 100%, 4% 50%, 0% 0%);
+                        // clip-path: polygon(96% 0%, 100% 50%, 96% 100%, 0% 100%, 4% 50%, 0% 0%);
                         @include md {
                             height: 70px;
                         }
-                        &:hover {
-                          background: linear-gradient(to right, #bceb004f, #00eaea4f) border-box;
-                          padding: 0 3px;
-                        }
                         > div {
-                            height: 50px;
-                            width: 100%;
+                            width: 80%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             background: $white;
-                            clip-path: polygon(96.3% 0%, 100% 50%, 96.3% 100%, 0.5% 100%, 4.2% 50%, 0.5% 0%);
+                            // clip-path: polygon(96.3% 0%, 100% 50%, 96.3% 100%, 0.5% 100%, 4.2% 50%, 0.5% 0%);
                             @include md {
                                 height: 70px;
                             }
@@ -125,12 +128,20 @@
                             background-color: rgba(220, 220, 221, 0.14);
                             top: -3px;
                             position: relative;
+                            img.arrow--tab {
+                                top: 3px !important;
+                            }
                             @include md {
                                 top: 0;
                             }
                         }
-                        
                     }
+                    @include md {
+                        height: unset;
+                    }
+                }
+                @include md {
+                    height: unset;
                 }
             }
         }

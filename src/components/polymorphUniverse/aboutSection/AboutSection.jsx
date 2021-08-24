@@ -1,5 +1,6 @@
 import React from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
+import { useHistory } from 'react-router-dom';
 import WrapperCenter from '../../polymorphs/WrapperCenter';
 import WrapperCenterTwoColumns from '../../polymorphs/WrapperCenterTwoColumns';
 import ImgRow1 from '../../../assets/images/Section1-Illustration-min.png';
@@ -7,6 +8,7 @@ import ImgRow2Chart from '../../../assets/images/chart-min1.svg';
 import ImgRow2Background from '../../../assets/images/curve-bg.jpg';
 import './AboutSection.scss';
 import Button from '../../button/Button';
+import imgRow2Chart from '../../../assets/images/toppolymorphs.png';
 
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
@@ -20,13 +22,20 @@ const row1RightBlock = () => (
   </AnimatedOnScroll>
 );
 
-const row2LeftBlock = () => (
-  <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
-    <h2>Polymorph Rarity Chart</h2>
-    <p>MIirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
-    <Button className="light-button">Rarity chart</Button>
-  </AnimatedOnScroll>
-);
+const row2LeftBlock = () => {
+  const history = useHistory();
+  return (
+    <>
+      <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
+        <h2>Polymorph Rarity Chart</h2>
+        <p>MIirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
+        <Button className="light-button" onClick={() => history.push('/polymorph-rarity')}>
+          Rarity chart
+        </Button>
+      </AnimatedOnScroll>
+    </>
+  );
+};
 
 const AboutSection = () => (
   <>
@@ -47,8 +56,7 @@ const AboutSection = () => (
         rightBlock={
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
             <div className="images--charts--parent">
-              <img alt="img" src={ImgRow2Chart} className="dominant--image" />
-              <img alt="img" src={ImgRow2Background} className="row2--background" />
+              <img src={imgRow2Chart} alt="img" />
             </div>
           </AnimatedOnScroll>
         }

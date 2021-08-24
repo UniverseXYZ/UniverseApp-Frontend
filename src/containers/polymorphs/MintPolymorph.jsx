@@ -6,6 +6,7 @@ import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurv
 import Section3Randomise from '../../components/polymorphs/mint-polymorph/Section3Randomise';
 import './MintPolymorph.scss';
 import AppContext from '../../ContextAPI';
+import data from '../../utils/fixtures/horizontalScrollCharactersData';
 
 const MintPolymorph = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -48,7 +49,7 @@ const MintPolymorph = () => {
           light={false}
         />
       </WelcomeWrapper>
-      <Section2HorizontalScroll width={windowSize.width} height={windowSize.height} />
+      <Section2HorizontalScroll width={windowSize.width} height={windowSize.height} data={data} />
       <Section3Randomise mobile={mobile} />
       <div className="section4">
         <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>

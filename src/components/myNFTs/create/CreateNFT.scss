@@ -696,7 +696,16 @@
                 .create--collection--btn {
                     display: flex;
                     justify-content: flex-end;
+                    .light-border-button {
+                        margin-right: 12px;
+                    }
                     @include sm {
+                        flex-wrap: wrap;
+                        flex-direction: column-reverse;
+                        .light-border-button {
+                            margin-right: 0px;
+                            margin-top: 12px;
+                        }
                         button {
                             width: 100%;
                         }
