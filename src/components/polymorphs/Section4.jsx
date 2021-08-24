@@ -10,12 +10,12 @@ import Button from '../button/Button';
 import Section4LeftBackground from '../../assets/images/topmorph.png';
 
 const getWindow = (width, changeStateFunc) => {
-  if (+width > 834) changeStateFunc('browser');
-  else if (+width <= 834 && +width > 575) changeStateFunc('table');
+  if (+width > 992) changeStateFunc('browser');
+  else if (+width <= 992 && +width > 575) changeStateFunc('table');
   else if (+width <= 575) changeStateFunc('mobile');
 };
 
-const leftBlock = (windows, leftBackground, leftBackgroundMobile) => (
+const leftBlock = (windows, leftBackground, leftBackgroundMobile, backgroundImage) => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
     <div
       className="section4--left--block"
@@ -24,7 +24,7 @@ const leftBlock = (windows, leftBackground, leftBackgroundMobile) => (
           ? { height: window.innerWidth }
           : windows === 'tablet'
           ? {}
-          : { backgroundImage: `url(${leftBackground})`, height: '542px' }
+          : { backgroundImage: `url(${leftBackground})`, height: backgroundImage ? '542px' : '' }
       }
     >
       <img alt="mobile" src={leftBackgroundMobile} className="show--on--mobile" />
@@ -81,7 +81,7 @@ const Section4 = (props) => {
     >
       <WrapperCenter className="polymorph--wrapper--center--section4">
         <WrapperCenterTwoColumns
-          leftBlock={leftBlock(windows, leftBackground, leftBackgroundMobile)}
+          leftBlock={leftBlock(windows, leftBackground, leftBackgroundMobile, backgroundImage)}
           rightBlock={rightBlock(title, hintText, buttonText, backgroundImage)}
         />
       </WrapperCenter>
