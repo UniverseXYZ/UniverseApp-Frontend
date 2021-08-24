@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
+import AppContext from '../../../../ContextAPI';
 
 const SortingDropdowns = () => {
   const [showFirstDropdown, setShowFirstDropdown] = useState(false);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const [selectedFirstDropdownIndex, setSelectedFirstDropdownIndex] = useState(0);
   const [selectedSecondDropdownIndex, setSelectedSecondDropdownIndex] = useState(0);
+  const { sortName, setSortName } = useContext(AppContext);
   const firstDropdownItems = ['All Items', 'Single Items', 'Bundles'];
   const secondDropdownItems = [
     'Sort by',
@@ -70,7 +72,8 @@ const SortingDropdowns = () => {
         onClick={() => setShowSecondDropdown(!showSecondDropdown)}
         ref={ref2}
       >
-        <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span>
+        {/* <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span> */}
+        <span>{sortName}</span>
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
         <div className="box--shadow--effect--block" />
         {showSecondDropdown ? (
@@ -83,7 +86,10 @@ const SortingDropdowns = () => {
                     className="dropdown--item"
                     key={uuid()}
                     aria-hidden="true"
-                    onClick={() => setSelectedSecondDropdownIndex(index)}
+                    onClick={() => {
+                      setSelectedSecondDropdownIndex(index);
+                      setSortName(secondDropdownItems[index]);
+                    }}
                   >
                     {item}
                   </div>

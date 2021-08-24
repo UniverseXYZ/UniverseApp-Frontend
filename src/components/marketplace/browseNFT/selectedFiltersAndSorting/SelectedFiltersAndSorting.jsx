@@ -88,7 +88,7 @@ const SelectedFiltersAndSorting = ({
             ) : (
               <img src={filtersIcon} alt="Filter" />
             )}
-            Filter
+            Filters
           </div>
         </div>
         {showTabletFilters && (

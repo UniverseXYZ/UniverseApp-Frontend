@@ -9,7 +9,7 @@ import './BrowseNFT.scss';
 import SelectedFiltersAndSorting from '../../../components/marketplace/browseNFT/selectedFiltersAndSorting/SelectedFiltersAndSorting';
 import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltration/VerifiedOnly';
 import NFTsList from '../../../components/marketplace/browseNFT/NFTsList';
-import goToTopIcon from '../../../assets/images/go-to-top.svg';
+import goToTopIcon from '../../../assets/images/marketplace/back-to-top.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../../utils/fixtures/BrowseNFTsDummyData';
 
 const BrowseNFT = () => {
@@ -49,7 +49,7 @@ const BrowseNFT = () => {
   }, []);
 
   useEffect(() => {
-    window.onscroll = function () {
+    window.onscroll = () => {
       if (window.scrollY > 100) {
         setShowGoToTop(true);
       } else {

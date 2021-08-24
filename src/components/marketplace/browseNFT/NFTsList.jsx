@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
@@ -11,10 +11,13 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import leftArrow from '../../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../../assets/images/marketplace/bundles-right-arrow.svg';
 import count from '../../../assets/images/slidecounts.svg';
+import Button from '../../button/Button';
+import AppContext from '../../../ContextAPI';
 
 const NFTsList = ({ data, nftNumber }) => {
   const [nfts, setNFTs] = useState(data);
   const history = useHistory();
+  const { sortName, setSortName } = useContext(AppContext);
 
   const handleLikeClick = (id) => {
     setNFTs((prevState) =>
@@ -29,6 +32,7 @@ const NFTsList = ({ data, nftNumber }) => {
       )
     );
   };
+  console.log(sortName);
 
   useEffect(() => {
     // Prev Icon
@@ -57,6 +61,33 @@ const NFTsList = ({ data, nftNumber }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   });
+
+  useEffect(() => {
+    setNFTs(data);
+    if (sortName === 'Ending soon') {
+      setNFTs(
+        nfts
+          .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))
+          .filter((item) => new Date(item.endDate) > new Date())
+      );
+    } else if (sortName === 'Lowest price first') {
+      nfts.sort((a, b) => a.price - b.price);
+    } else if (sortName === 'Highest price first') {
+      nfts.sort((a, b) => b.price - a.price);
+    } else if (sortName === 'Recently listed') {
+      nfts.sort((a, b) => new Date(b.listedDate) - new Date(a.listedDate));
+    } else if (sortName === 'Recently created') {
+      nfts.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    } else if (sortName === 'Recently sold') {
+      setNFTs(
+        nfts
+          .sort((a, b) => new Date(b.soldDate) - new Date(a.soldDate))
+          .filter((item) => item.soldDate !== '-')
+      );
+    } else if (sortName === 'Most liked') {
+      nfts.sort((a, b) => b.likesCount - a.likesCount);
+    }
+  }, []);
 
   return (
     <div className="browse--nft--list">
@@ -217,6 +248,10 @@ const NFTsList = ({ data, nftNumber }) => {
                   </div>
                 </div>
               </div>
+              {/* <p>Start date {nft.startDate}</p>
+                <p>End date {nft.endDate}</p>
+                <p>Listed Date {nft.listedDate}</p>
+                <p>Sold Date {nft.soldDate}</p> */}
             </div>
           )
       )}
