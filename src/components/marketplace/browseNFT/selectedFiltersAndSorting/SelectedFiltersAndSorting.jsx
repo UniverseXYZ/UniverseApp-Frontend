@@ -20,8 +20,6 @@ const SelectedFiltersAndSorting = ({
   setSelectedCreators,
   savedCreators,
   setSavedCreators,
-  sortName,
-  setSortName,
 }) => {
   const [showTabletFilters, setShowTabletFilters] = useState(false);
   const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
@@ -66,12 +64,12 @@ const SelectedFiltersAndSorting = ({
             savedCreators={savedCreators}
             setSavedCreators={setSavedCreators}
           />
-          <SortingDropdowns sortName={sortName} setSortName={setSortName} />
+          <SortingDropdowns />
         </div>
       </div>
       <div className="sorting__filters__tablet">
         <div className="head--part">
-          <SortingDropdowns sortName={sortName} setSortName={setSortName} />
+          <SortingDropdowns />
           <div
             className="sorting__filter__button"
             onClick={() => setShowTabletFilters(!showTabletFilters)}
@@ -115,7 +113,7 @@ const SelectedFiltersAndSorting = ({
         )}
       </div>
       <div className="sorting__filters__mobile">
-        <SortingDropdowns sortName={sortName} setSortName={setSortName} />
+        <SortingDropdowns />
         <Popup
           trigger={
             <button type="button" className="light-button">
@@ -190,8 +188,6 @@ SelectedFiltersAndSorting.propTypes = {
   setSelectedCreators: PropTypes.func,
   savedCreators: PropTypes.oneOfType([PropTypes.array]),
   setSavedCreators: PropTypes.func,
-  sortName: PropTypes.string,
-  setSortName: PropTypes.func,
 };
 
 SelectedFiltersAndSorting.defaultProps = {
@@ -207,8 +203,6 @@ SelectedFiltersAndSorting.defaultProps = {
   setSelectedCreators: () => {},
   savedCreators: [],
   setSavedCreators: () => {},
-  sortName: '',
-  setSortName: () => {},
 };
 
 export default SelectedFiltersAndSorting;

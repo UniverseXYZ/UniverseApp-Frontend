@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import AppContext from '../../../../ContextAPI';
@@ -73,8 +72,8 @@ const SortingDropdowns = () => {
         onClick={() => setShowSecondDropdown(!showSecondDropdown)}
         ref={ref2}
       >
-        <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span>
-        {/* <span>{sortName}</span> */}
+        {/* <span>{secondDropdownItems[selectedSecondDropdownIndex]}</span> */}
+        <span>{sortName}</span>
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
         <div className="box--shadow--effect--block" />
         {showSecondDropdown ? (
@@ -89,7 +88,7 @@ const SortingDropdowns = () => {
                     aria-hidden="true"
                     onClick={() => {
                       setSelectedSecondDropdownIndex(index);
-                      setSortName(secondDropdownItems[selectedSecondDropdownIndex]);
+                      setSortName(secondDropdownItems[index]);
                     }}
                   >
                     {item}
@@ -104,15 +103,5 @@ const SortingDropdowns = () => {
     </div>
   );
 };
-
-// SortingDropdowns.propTypes = {
-//   sortName: PropTypes.string,
-//   setSortName: PropTypes.func,
-// };
-
-// SortingDropdowns.defaultProps = {
-//   sortName: '',
-//   setSortName: () => {},
-// };
 
 export default SortingDropdowns;

@@ -43,7 +43,6 @@ const BrowseNFT = () => {
   const [selectedCreators, setSelectedCreators] = useState([]);
   const [nftNumber, setNftNumber] = useState(7);
   const [showGoToTop, setShowGoToTop] = useState(false);
-  const [sortName, setSortName] = useState('Sort by');
 
   useEffect(() => {
     setDarkMode(false);
@@ -87,15 +86,8 @@ const BrowseNFT = () => {
             setSavedCreators={setSavedCreators}
             selectedCreators={selectedCreators}
             setSelectedCreators={setSelectedCreators}
-            sortName={sortName}
-            setSortName={setSortName}
           />
-          <NFTsList
-            data={PLACEHOLDER_MARKETPLACE_NFTS}
-            nftNumber={nftNumber}
-            sortName={sortName}
-            setSortName={setSortName}
-          />
+          <NFTsList data={PLACEHOLDER_MARKETPLACE_NFTS} nftNumber={nftNumber} />
           {nftNumber <= PLACEHOLDER_MARKETPLACE_NFTS.length && (
             <button
               type="button"

@@ -361,7 +361,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     offerFor: 0.35,
     startDate: '2021-06-01 15:00:00',
     endDate: '2021-06-15 15:00:00',
-    listedDate: '2021-07-29 15:46:42',
+    listedDate: '2021-07-30 15:46:42',
     soldDate: '2021-07-15 09:00:00',
   },
   {
@@ -396,7 +396,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     offerFor: 0.35,
     startDate: '2021-08-14 09:30:00',
     endDate: '2021-09-01 09:00:00',
-    listedDate: '2021-08-17 15:46:42',
+    listedDate: '2021-08-17 16:40:42',
     soldDate: '-',
   },
   {
