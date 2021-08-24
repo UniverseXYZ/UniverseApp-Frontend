@@ -131,6 +131,8 @@ const App = () => {
         setShowModal,
         myNFTsSelectedTabIndex,
         setMyNFTsSelectedTabIndex,
+        selectedTabIndex,
+        setSelectedTabIndex,
         savedCollections,
         setSavedCollections,
         activeView,
