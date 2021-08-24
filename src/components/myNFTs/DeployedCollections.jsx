@@ -58,7 +58,12 @@ const DeployedCollections = () => {
                     alt={collection.name}
                   />
                 )}
-                <h3 className="collection__name">{collection.name}</h3>
+                {/* <h3 className="collection__name">{collection.name}</h3> */}
+                <h3 title={collection.name} className="collection__name">
+                  {collection.name.length > 13
+                    ? `${collection.name.substring(0, 13)}...`
+                    : collection.name}
+                </h3>
               </div>
             </div>
           ))}
