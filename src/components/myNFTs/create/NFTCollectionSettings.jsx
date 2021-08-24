@@ -485,7 +485,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           Description <span>(optional)</span>
         </label>
         <textarea
-          placeholder="Spread the word about your collection"
+          placeholder="Spread some words about your collection"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -504,8 +504,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           onBlur={() => handleOnBlur()}
         />
       </div> */}
-      {/* <div className="collection--nfts">
-        <div className="collection--nfts--title">
+      <div className="collection--nfts">
+        {/* <div className="collection--nfts--title">
           <h1>NFTs</h1>
           {collectionNFTs.length ? (
             <Button className="light-border-button" onClick={handleShowCollectible}>
@@ -701,8 +701,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         ) : (
           <></>
         )}
-        {errors.collectible && <p className="error-message">{errors.collectible}</p>}
-        {(errors.collectionName || errors.tokenName || errors.tokenName || errors.shorturl) && (
+        {errors.collectible && <p className="error-message">{errors.collectible}</p>} */}
+        {(errors.collectionName || errors.tokenName) && (
           <div className="collection--final--error">
             <img src={errorIcon} alt="error" />
             <p>
@@ -711,7 +711,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             </p>
           </div>
         )}
-      </div> */}
+      </div>
       <div className="create--collection--btn">
         {!savedCollectionID ? (
           <Button
