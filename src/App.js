@@ -76,6 +76,7 @@ const App = () => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [darkMode, setDarkMode] = useState(true);
+  const [sortName, setSortName] = useState('Sort by');
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [stepsData, setStepsData] = useState({
@@ -124,8 +125,6 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
-        selectedTabIndex,
-        setSelectedTabIndex,
         universeNFTs,
         setUniverseNFTs,
         showModal,
@@ -164,6 +163,8 @@ const App = () => {
         setDarkMode,
         editProfileButtonClick,
         setEditProfileButtonClick,
+        sortName,
+        setSortName,
         selectedTokenIndex,
         setSelectedTokenIndex,
       }}
