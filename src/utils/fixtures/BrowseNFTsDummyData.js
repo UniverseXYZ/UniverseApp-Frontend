@@ -74,7 +74,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 1',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.67,
     editions: '1/10',
     offerFor: 0.35,
     startDate: '2021-07-04 09:00:00',
@@ -321,7 +321,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 7',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 2.1,
     editions: '1/10',
     offerFor: 0.35,
     startDate: '2021-02-14 16:30:00',
@@ -394,7 +394,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     price: 2.2,
     editions: '1/10',
     offerFor: 0.35,
-    startDate: '2021-08-14 09:00:00',
+    startDate: '2021-08-14 09:30:00',
     endDate: '2021-09-01 09:00:00',
     listedDate: '2021-08-17 15:46:42',
     soldDate: '-',
@@ -426,7 +426,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 10',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 1.5,
     editions: '1/10',
     offerFor: 0.35,
     startDate: '2021-08-01 19:30:00',
@@ -461,7 +461,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 11',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.4,
     editions: '1/10',
     offerFor: 0.35,
     startDate: '2021-02-14 10:00:00',
@@ -496,7 +496,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     name: 'NFT 12',
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    price: 0.5,
+    price: 0.22,
     editions: '1/10',
     offerFor: 0.35,
     startDate: '2021-05-13 02:00:00',
