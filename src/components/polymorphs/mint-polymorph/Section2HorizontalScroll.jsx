@@ -41,6 +41,8 @@ const Section2HorizontalScroll = (props) => {
           bool = true;
           sc = window.scrollY;
         }
+        horizontalScroll.style.willChange = 'transform';
+        horizontalScroll.style.transformStyle = 'preserve-3d';
         if (window.scrollY <= transitionEndLimit + 200) {
           horizontalScroll.style.transform = `translate3d(-${
             window.scrollY - sc
