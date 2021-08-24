@@ -75,9 +75,8 @@
   //   }
   // }
 
-  .tabs-empty,
-  .empty-universe {
-    margin-top: 20px;
+  .tabs-empty, .empty-universe{
+    margin: 90px 0 120px;
     text-align: center;
     position: relative;
     width: 100%;
@@ -141,7 +140,7 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0 20px;
+    padding: 60px 20px 0 0;
     flex-wrap: wrap;
 
     h1.title {
