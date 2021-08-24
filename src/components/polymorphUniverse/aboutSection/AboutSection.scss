@@ -50,11 +50,14 @@
       @include lg {
         font-size: 18px;
       }
+      margin-top: 30px;
       font-family: $sharpGroteskSemiBoldFont;
+      font-size: 32px;
       font-style: normal;
       font-weight: 600;
-      font-size: 26px;
-      line-height: 140%;
+      line-height: 45px;
+      text-align: left;
+      max-width: 350px;
     }
     p {
       @include lg {
@@ -63,13 +66,16 @@
       @include sm {
         font-size: 14px;
       }
-      margin-top: 1.1vw;
+      max-width: 445px;
+      margin-top: 30px;
       font-family: $spaceGroteskFont;
+      font-size: 14px;
       font-style: normal;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 160%;
-      color: #666666;
+      font-weight: 400;
+      line-height: 22px;
+      letter-spacing: 0px;
+      text-align: left;
+      color: #0f0e0e;
     }
   }
 }
@@ -109,11 +115,13 @@
       @include sm {
         font-size: 26px;
       }
-      font-family: Sharp Grotesk;
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 32px;
       font-style: normal;
       font-weight: 600;
-      font-size: 36px;
-      line-height: 140%;
+      line-height: 45px;
+      text-align: left;
+      max-width: 350px;
     }
     p {
       @include lg {
@@ -124,14 +132,17 @@
         font-size: 14px;
         padding: 0;
       }
-      margin-top: 1.1vw;
-      font-family: Space Grotesk;
+      max-width: 363px;
+      margin-top: 30px;
+      font-family: $spaceGroteskFont;
+      font-size: 18px;
       font-style: normal;
-      font-weight: normal;
-      font-size: 16px;
-      line-height: 160%;
+      font-weight: 400;
+      line-height: 27px;
       color: #666666;
-      // padding-right: 60px;
+    }
+    button {
+      margin-top: 40px;
     }
   }
   .relased--right--block {
