@@ -38,6 +38,7 @@ import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
+import PolymorphUniverse from './containers/polymorphUniverse/PolymorphUniverse';
 
 const App = () => {
   const location = useLocation();
@@ -172,6 +173,7 @@ const App = () => {
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
+        <Route exact path="/polymorphuniverse" component={() => <PolymorphUniverse />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/planets/adaka" component={() => <Planet1 />} />
         <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
