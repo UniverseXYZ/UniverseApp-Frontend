@@ -1462,7 +1462,7 @@
       cursor: pointer;
 
       input {
-        @include css-checkbox(16px, $black, $white, 'middle', $white, 8px);
+        @include css-checkbox(16px, $black, $white, 'middle', $white, 6px);
       }
     }
   }
@@ -1896,6 +1896,7 @@
       }
       &:hover {
         box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid white;
       }
     }
 
