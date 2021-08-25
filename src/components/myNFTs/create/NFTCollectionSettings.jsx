@@ -375,7 +375,12 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           />
         }
       >
-        {(close) => <CongratsPopup onClose={close} />}
+        {(close) => (
+          <CongratsPopup
+            onClose={close}
+            message="NFT collection was successfully created and should be displayed in your wallet shortly"
+          />
+        )}
       </Popup>
       {/* <h1 className="nft--collection--settings--page--title">NFT collection settings</h1> */}
       <div className="image--name--token">

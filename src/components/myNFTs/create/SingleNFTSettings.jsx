@@ -12,6 +12,7 @@ import Input from '../../input/Input.jsx';
 import AppContext from '../../../ContextAPI';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
+import AreYouSurePopup from '../../popups/AreYouSurePopup';
 import arrow from '../../../assets/images/arrow.svg';
 import infoIcon from '../../../assets/images/icon.svg';
 import defaultImage from '../../../assets/images/default-img.svg';
@@ -405,7 +406,7 @@ const SingleNFTSettings = () => {
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
-        <RouterPrompt when={showPrompt} onOK={() => true} />
+        {/* <RouterPrompt when={showPrompt} onOK={() => true} /> */}
         <Popup
           trigger={
             <button
@@ -438,6 +439,7 @@ const SingleNFTSettings = () => {
                   ? 'Go to reward tier settings'
                   : 'Go to my NFTs'
               }
+              message="NFT was successfully created and should be displayed in your wallet shortly"
             />
           )}
         </Popup>
