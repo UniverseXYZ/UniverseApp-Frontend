@@ -17,25 +17,47 @@ const Tabs = ({ items }) => (
     </div>
     <div className="tabs">
       <ul className="tab_items">
-        {items.map((tab, index) => (
-          <li
-            key={uuid()}
-            className={tab.active ? 'active' : ''}
-            aria-hidden="true"
-            onClick={() => tab.handler && tab.handler(index, tab.name)}
-          >
-            {tab.label ? (
-              <div className="notification">
-                {tab.name}
-                <span>{tab.label}</span>
-              </div>
-            ) : (
-              <>
-                {tab.name} {tab.length && `(${tab.length})`}
-              </>
-            )}
-          </li>
-        ))}
+        {items.map((tab, index) =>
+          tab.name !== 'Hidden' ? (
+            <li
+              key={uuid()}
+              className={tab.active ? 'active' : ''}
+              aria-hidden="true"
+              onClick={() => tab.handler && tab.handler(index, tab.name)}
+            >
+              {tab.label ? (
+                <div className="notification">
+                  {tab.name}
+                  <span>{tab.label}</span>
+                </div>
+              ) : (
+                <>
+                  {tab.name} {tab.length && `(${tab.length})`}
+                </>
+              )}
+            </li>
+          ) : tab.length ? (
+            <li
+              key={uuid()}
+              className={tab.active ? 'active' : ''}
+              aria-hidden="true"
+              onClick={() => tab.handler && tab.handler(index, tab.name)}
+            >
+              {tab.label ? (
+                <div className="notification">
+                  {tab.name}
+                  <span>{tab.label}</span>
+                </div>
+              ) : (
+                <>
+                  {tab.name} {tab.length && `(${tab.length})`}
+                </>
+              )}
+            </li>
+          ) : (
+            <></>
+          )
+        )}
       </ul>
     </div>
     <div className="tab__right__arrow">

@@ -262,6 +262,12 @@
                     border-radius: 12px;
                     padding: 12px;
                     position: relative;
+                    transition: 0.3s ease-in-out;
+
+                    &:hover {
+                        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+                        border: 1px solid $white;
+                    }
 
                     &__image {
                         position: relative;
@@ -291,165 +297,163 @@
                         }
                     }
 
-                &__name {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 10px;
-
-                    h3 {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: bold;
-                        font-size: 14px;
-                        color: $black;
-                        word-break: break-word;
-                    }
-                    .three__dots {
-                        position: relative;
+                    &__name {
                         display: flex;
                         align-items: center;
-                        height: 15px;
-                        width: 20px;
-                        background-color: $white;
-                        span {
-                            height: 4px;
-                            width: 4px;
-                            background-color: $black;
-                            border-radius: 50%;
-                            margin-left: 3px;
-                        }
+                        justify-content: space-between;
+                        margin-bottom: 10px;
 
-                        .edit__remove {
-                            position: absolute;
-                            right: 0;
-                            top: 15px;
-                            background: #e6e6e6;
-                            box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                            width: 160px;
-                            border-radius: 12px;
-                            z-index: 10;
-
-                            li {
-                                padding: 20px;
-                                background-color: $white;
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-
-                                &:first-child {
-                                    margin-bottom: 2px;
-                                    border-top-left-radius: 12px;
-                                    border-top-right-radius: 12px;
-                                }
-                                &:last-child {
-                                    border-bottom-left-radius: 12px;
-                                    border-bottom-right-radius: 12px;
-                                }
-
-                                p {
-                                    font-family: $spaceGroteskFont;
-                                    font-style: normal;
-                                    font-weight: 600;
-                                    font-size: 16px;
-                                    line-height: 20px;
-                                }
-
-                                &.edit p {
-                                    color: $black;
-                                }
-                                &.remove p {
-                                    color: #ff4949;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                &__footer {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    .collection__details {
-                        display: flex;
-                        align-items: center;
-                        .random__bg__color {
-                            height: 20px;
-                            width: 20px;
-                            border-radius: 50%;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            font-family: $sharpGroteskMediumFont;
-                            font-style: normal;
-                            font-weight: 500;
-                            font-size: 12px;
-                            text-transform: uppercase;
-                            color: $black;
-                        }
-                        img {
-                            height: 20px;
-                            width: 20px;
-                            object-fit: cover;
-                            border-radius: 50%;
-                        }
-                        span {
+                        h3 {
                             font-family: $spaceGroteskFont;
                             font-style: normal;
-                            font-weight: 300;
-                            font-size: 12px;
+                            font-weight: bold;
+                            font-size: 14px;
                             color: $black;
-                            margin-left: 6px;
+                            word-break: break-word;
                         }
-                    }
-                    div.collection__count {
-                        position: relative;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: bold;
-                        font-size: 14px;
-                        color: $black;
-                        cursor: default;
+                        .three__dots {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            height: 15px;
+                            width: 20px;
+                            background-color: $white;
+                            span {
+                                height: 4px;
+                                width: 4px;
+                                background-color: $black;
+                                border-radius: 50%;
+                                margin-left: 3px;
+                            }
 
-                        &:hover {
-                            .generatedEditions {
-                                display: grid;
-                                grid-column-gap: 10px;
-                                grid-row-gap: 5px;
-                                z-index: 1;
+                            .edit__remove {
+                                position: absolute;
+                                right: 0;
+                                top: 15px;
+                                background: $white;
+                                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+                                width: 160px;
+                                border-radius: 12px;
+                                z-index: 10;
+                                padding: 8px;
+
+                                li {
+                                    display: flex;
+                                    align-items: center;
+                                    border-radius: 6px;
+                                    padding: 15px;
+
+                                    &:hover {
+                                        background: rgba(0, 0, 0, 0.05);
+                                    }
+                                    
+                                    img {
+                                        margin-right: 6px;
+                                    }
+
+                                    p {
+                                        font-family: $spaceGroteskFont;
+                                        font-style: normal;
+                                        font-weight: 600;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                    }
+
+                                    &.edit p {
+                                        color: $black;
+                                    }
+                                    &.remove p {
+                                        color: #ff4949;
+                                    }
+                                }
                             }
                         }
+                    }
 
-                        .generatedEditions {
-                            display: none;
-                            position: absolute;
-                            bottom: 25px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            background: $white;
-                            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                            border-radius: 12px;
-                            padding: 16px;
+                    &__footer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
 
-                            > div {
-                                font-family: $spaceGroteskFont;
+                        .collection__details {
+                            display: flex;
+                            align-items: center;
+                            .random__bg__color {
+                                height: 20px;
+                                width: 20px;
+                                border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: $sharpGroteskMediumFont;
                                 font-style: normal;
-                                font-weight: normal;
+                                font-weight: 500;
                                 font-size: 12px;
-                                line-height: 150%;
+                                text-transform: uppercase;
                                 color: $black;
                             }
+                            img {
+                                height: 20px;
+                                width: 20px;
+                                object-fit: cover;
+                                border-radius: 50%;
+                            }
+                            span {
+                                font-family: $spaceGroteskFont;
+                                font-style: normal;
+                                font-weight: 300;
+                                font-size: 12px;
+                                color: $black;
+                                margin-left: 6px;
+                            }
+                        }
+                        div.collection__count {
+                            position: relative;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: bold;
+                            font-size: 14px;
+                            color: $black;
+                            cursor: default;
+
+                            &:hover {
+                                .generatedEditions {
+                                    display: grid;
+                                    grid-column-gap: 10px;
+                                    grid-row-gap: 5px;
+                                    z-index: 1;
+                                }
+                            }
+
+                            .generatedEditions {
+                                display: none;
+                                position: absolute;
+                                bottom: 25px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: $white;
+                                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+                                border-radius: 12px;
+                                padding: 16px;
+
+                                > div {
+                                    font-family: $spaceGroteskFont;
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    font-size: 12px;
+                                    line-height: 150%;
+                                    color: $black;
+                                }
+                            }
+                        }
+                        p.collection__count {
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 12px;
+                            color: rgba(0, 0, 0, 0.4);
                         }
                     }
-                    p.collection__count {
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 12px;
-                        color: rgba(0, 0, 0, 0.4);
-                    }
-                }
 
                     &__highlight__one {
                         position: absolute;

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
@@ -9,6 +9,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
+import hideNFTIcon from '../../assets/images/hide.svg';
 import NFTPopup from '../popups/NFTPopup';
 
 const Lists = ({
@@ -21,11 +22,13 @@ const Lists = ({
   nftsPerWinner,
 }) => {
   const sliceData = data.slice(offset, offset + perPage);
-
   const location = useLocation();
   const isCreatingAction = location.pathname === '/create-tiers';
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [dropdownID, setDropdownID] = useState(0);
+  const ref = useRef();
 
-  const { auction } = useContext(AppContext);
+  const { auction, myNFTs, setMyNFTs } = useContext(AppContext);
 
   const [openEditions, setOpenEditions] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
@@ -36,6 +39,25 @@ const Lists = ({
 
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction.tiers.find((element) => element.id === location.state);
+
+  const hideNFT = (id) => {
+    setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: true } : item)));
+  };
+
+  const handleClickOutside = (event) => {
+    if (!event.target.classList.contains('three__dots')) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   const activateInfo = (index) => {
     setHideIcon(true);
@@ -117,132 +139,154 @@ const Lists = ({
 
   return (
     <div className="nfts__lists">
-      {sliceData.map((nft, index) => (
-        <div style={{ position: 'relative' }} key={nft.id}>
-          {tierById && winners > nft.generatedEditions.length ? (
-            <>
-              <img
-                className="nonicon__icon"
-                src={nonSelecting}
-                alt="Check Icon"
-                onMouseOver={() => activateInfo(index)}
-                onFocus={() => activateInfo(index)}
-                onMouseLeave={() => setHideIcon(false)}
-                onBlur={() => setHideIcon(false)}
-              />
-              {hideIcon && index === activeIndex && (
-                <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                  <div className="warning-text">
-                    <p>
-                      This NFT doesn&apos;t have enough editions to be entered into this tier. You
-                      must have the equal amount of winners as NFTs available.
-                    </p>
-                  </div>
-                </Animated>
-              )}
-            </>
-          ) : (
-            <></>
-          )}
-          <div
-            className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${
-              (tierById && winners > nft.generatedEditions.length) ||
-              (tierById &&
-                nftsPerWinner === selectedNFTIds.length &&
-                !selectedNFTIds.includes(nft.id))
-                ? 'disabled'
-                : ''
-            }`}
-            key={nft.id}
-          >
+      {sliceData
+        .filter((nft) => !nft.hidden)
+        .map((nft, index) => (
+          <div style={{ position: 'relative' }} key={nft.id}>
+            {tierById && winners > nft.generatedEditions.length ? (
+              <>
+                <img
+                  className="nonicon__icon"
+                  src={nonSelecting}
+                  alt="Check Icon"
+                  onMouseOver={() => activateInfo(index)}
+                  onFocus={() => activateInfo(index)}
+                  onMouseLeave={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon(false)}
+                />
+                {hideIcon && index === activeIndex && (
+                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                    <div className="warning-text">
+                      <p>
+                        This NFT doesn&apos;t have enough editions to be entered into this tier. You
+                        must have the equal amount of winners as NFTs available.
+                      </p>
+                    </div>
+                  </Animated>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
             <div
-              className="nft__box__image"
-              onClick={() => handleSavedNfts(nft)}
-              aria-hidden="true"
+              className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${
+                (tierById && winners > nft.generatedEditions.length) ||
+                (tierById &&
+                  nftsPerWinner === selectedNFTIds.length &&
+                  !selectedNFTIds.includes(nft.id))
+                  ? 'disabled'
+                  : ''
+              }`}
+              key={nft.id}
             >
-              {isCreatingAction && (
-                <>
-                  {selectedNFTIds.includes(nft.id) &&
-                    tierById &&
-                    winners <= nft.generatedEditions?.length && (
-                      <span className="selected-div">
-                        <span className="selected-number">
-                          {selectedEditions[nft.id]?.length}/{nft.generatedEditions.length}
+              <div
+                className="nft__box__image"
+                onClick={() => handleSavedNfts(nft)}
+                aria-hidden="true"
+              >
+                {isCreatingAction && (
+                  <>
+                    {selectedNFTIds.includes(nft.id) &&
+                      tierById &&
+                      winners <= nft.generatedEditions?.length && (
+                        <span className="selected-div">
+                          <span className="selected-number">
+                            {selectedEditions[nft.id]?.length}/{nft.generatedEditions.length}
+                          </span>
+                          <img className="check__icon" src={checkIcon} alt="Check Icon" />
                         </span>
-                        <img className="check__icon" src={checkIcon} alt="Check Icon" />
-                      </span>
-                    )}
-                </>
-              )}
-              {nft.previewImage.type === 'video/mp4' && !isCreatingAction && (
-                <Popup
-                  trigger={
-                    <video
-                      onMouseOver={(event) => event.target.play()}
-                      onFocus={(event) => event.target.play()}
-                      onMouseOut={(event) => event.target.pause()}
-                      onBlur={(event) => event.target.pause()}
-                    >
-                      <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                      <track kind="captions" />
-                      Your browser does not support the video tag.
-                    </video>
-                  }
-                >
-                  {(close) => <NFTPopup onClose={close} onNFT={nft} />}
-                </Popup>
-              )}
-              {nft.previewImage.type === 'video/mp4' && isCreatingAction && (
-                <video
-                  onMouseOver={(event) => event.target.play()}
-                  onFocus={(event) => event.target.play()}
-                  onMouseOut={(event) => event.target.pause()}
-                  onBlur={(event) => event.target.pause()}
-                >
-                  <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
-                  <track kind="captions" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-              {nft.previewImage.type === 'audio/mpeg' && !isCreatingAction && (
-                <Popup trigger={<img className="preview-image" src={mp3Icon} alt={nft.name} />}>
-                  {(close) => <NFTPopup onClose={close} onNFT={nft} />}
-                </Popup>
-              )}
-              {nft.previewImage.type === 'audio/mpeg' && isCreatingAction && (
-                <img className="preview-image" src={mp3Icon} alt={nft.name} />
-              )}
-              {nft.previewImage.type !== 'audio/mpeg' &&
-                nft.previewImage.type !== 'video/mp4' &&
-                !isCreatingAction && (
+                      )}
+                  </>
+                )}
+                {nft.previewImage.type === 'video/mp4' && !isCreatingAction && (
                   <Popup
                     trigger={
-                      <img
-                        className="preview-image"
-                        src={URL.createObjectURL(nft.previewImage)}
-                        alt={nft.name}
-                      />
+                      <video
+                        onMouseOver={(event) => event.target.play()}
+                        onFocus={(event) => event.target.play()}
+                        onMouseOut={(event) => event.target.pause()}
+                        onBlur={(event) => event.target.pause()}
+                      >
+                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
                     }
                   >
                     {(close) => <NFTPopup onClose={close} onNFT={nft} />}
                   </Popup>
                 )}
-              {nft.previewImage.type !== 'audio/mpeg' &&
-                nft.previewImage.type !== 'video/mp4' &&
-                isCreatingAction && (
-                  <img
-                    className="preview-image"
-                    src={URL.createObjectURL(nft.previewImage)}
-                    alt={nft.name}
-                  />
+                {nft.previewImage.type === 'video/mp4' && isCreatingAction && (
+                  <video
+                    onMouseOver={(event) => event.target.play()}
+                    onFocus={(event) => event.target.play()}
+                    onMouseOut={(event) => event.target.pause()}
+                    onBlur={(event) => event.target.pause()}
+                  >
+                    <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                    <track kind="captions" />
+                    Your browser does not support the video tag.
+                  </video>
                 )}
-              {nft.previewImage.type === 'video/mp4' && (
-                <img className="video__icon" src={videoIcon} alt="Video Icon" />
-              )}
-            </div>
-            <div className={`nft__box__name ${isCreatingAction ? 'no__hover' : ''}`}>
-              <h3 title={nft.name}>{nft.name}</h3>
-              {nft.type === 'single' || (nft.type === 'collection' && isCreatingAction) ? (
+                {nft.previewImage.type === 'audio/mpeg' && !isCreatingAction && (
+                  <Popup trigger={<img className="preview-image" src={mp3Icon} alt={nft.name} />}>
+                    {(close) => <NFTPopup onClose={close} onNFT={nft} />}
+                  </Popup>
+                )}
+                {nft.previewImage.type === 'audio/mpeg' && isCreatingAction && (
+                  <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                )}
+                {nft.previewImage.type !== 'audio/mpeg' &&
+                  nft.previewImage.type !== 'video/mp4' &&
+                  !isCreatingAction && (
+                    <Popup
+                      trigger={
+                        <img
+                          className="preview-image"
+                          src={URL.createObjectURL(nft.previewImage)}
+                          alt={nft.name}
+                        />
+                      }
+                    >
+                      {(close) => <NFTPopup onClose={close} onNFT={nft} />}
+                    </Popup>
+                  )}
+                {nft.previewImage.type !== 'audio/mpeg' &&
+                  nft.previewImage.type !== 'video/mp4' &&
+                  isCreatingAction && (
+                    <img
+                      className="preview-image"
+                      src={URL.createObjectURL(nft.previewImage)}
+                      alt={nft.name}
+                    />
+                  )}
+                {nft.previewImage.type === 'video/mp4' && (
+                  <img className="video__icon" src={videoIcon} alt="Video Icon" />
+                )}
+              </div>
+              <div className={`nft__box__name ${isCreatingAction ? 'no__hover' : ''}`}>
+                <h3 title={nft.name}>{nft.name}</h3>
+                <button
+                  type="button"
+                  className="three__dots"
+                  onClick={() => {
+                    setShowDropdown(!showDropdown);
+                    setDropdownID(nft.id);
+                  }}
+                >
+                  <span />
+                  <span />
+                  <span />
+                  {dropdownID === nft.id && showDropdown && (
+                    <ul ref={ref} className="edit__remove">
+                      <li className="edit" aria-hidden="true" onClick={() => hideNFT(nft.id)}>
+                        <img src={hideNFTIcon} alt="Hide" />
+                        <p>Hide</p>
+                      </li>
+                    </ul>
+                  )}
+                </button>
+                {/* {nft.type === 'single' || (nft.type === 'collection' && isCreatingAction) ? (
                 nft.generatedEditions.length > 1 ? (
                   <div className="collection__count">
                     {isCreatingAction && (
@@ -266,9 +310,9 @@ const Lists = ({
                         <ul className="editions-list" hidden={openEditions !== nft.id}>
                           <li disabled>Choose edition number</li>
                           <li>
-                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
                             <label
                               className="edition-container"
+                              aria-hidden="true"
                               onClick={(event) => handleSelectAll(event, nft.id)}
                             >
                               Select All
@@ -278,10 +322,10 @@ const Lists = ({
                           </li>
                           {nft.generatedEditions.map((edition) => (
                             <li key={edition}>
-                              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
                               <label
                                 htmlFor={edition}
                                 className="edition-container"
+                                aria-hidden="true"
                                 onClick={(event) => handleSelectEdition(event, nft.id, edition)}
                               >
                                 {`#${edition}`}
@@ -297,9 +341,6 @@ const Lists = ({
                         </ul>
                       </>
                     )}
-                    {/* {nft.type === 'single' && (
-                      <div className="ed-num">{`x${nft.generatedEditions.length}`}</div>
-                    )} */}
                     {!(
                       selectedNFTIds.includes(nft.id) &&
                       tierById &&
@@ -325,66 +366,66 @@ const Lists = ({
                 )
               ) : (
                 <></>
-              )}
-            </div>
-            <div className="nft__box__footer">
-              <div className="collection__details">
-                {nft.type === 'collection' && (
-                  <>
-                    {typeof nft.collectionAvatar === 'string' &&
-                    nft.collectionAvatar.startsWith('#') ? (
-                      <div
-                        className="random__bg__color"
-                        style={{ backgroundColor: nft.collectionAvatar }}
-                      >
-                        {nft.collectionName.charAt(0)}
-                      </div>
-                    ) : (
-                      <img
-                        src={URL.createObjectURL(nft.collectionAvatar)}
-                        alt={nft.collectionName}
-                      />
-                    )}
-                    <span>{nft.collectionName}</span>
-                  </>
-                )}
+              )} */}
               </div>
-              {nft.generatedEditions.length > 1 ? (
-                <div className="collection__count">
-                  {selectedNFTIds && selectedNFTIds.includes(nft.id)
-                    ? `x${nft.generatedEditions.length - winners}`
-                    : `x${nft.generatedEditions.length}`}
-                  {!isCreatingAction ? (
-                    <div
-                      className="generatedEditions"
-                      style={{
-                        gridTemplateColumns: `repeat(${Math.ceil(
-                          nft.generatedEditions.length / 10
-                        )}, auto)`,
-                      }}
-                    >
-                      {nft.generatedEditions.map((edition) => (
-                        <div key={edition}>{`#${edition}`}</div>
-                      ))}
-                    </div>
-                  ) : (
-                    <></>
+              <div className="nft__box__footer">
+                <div className="collection__details">
+                  {nft.type === 'collection' && (
+                    <>
+                      {typeof nft.collectionAvatar === 'string' &&
+                      nft.collectionAvatar.startsWith('#') ? (
+                        <div
+                          className="random__bg__color"
+                          style={{ backgroundColor: nft.collectionAvatar }}
+                        >
+                          {nft.collectionName.charAt(0)}
+                        </div>
+                      ) : (
+                        <img
+                          src={URL.createObjectURL(nft.collectionAvatar)}
+                          alt={nft.collectionName}
+                        />
+                      )}
+                      <span>{nft.collectionName}</span>
+                    </>
                   )}
                 </div>
-              ) : (
-                <></>
-                // <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
+                {nft.generatedEditions.length > 1 ? (
+                  <div className="collection__count">
+                    {selectedNFTIds && selectedNFTIds.includes(nft.id)
+                      ? `x${nft.generatedEditions.length - winners}`
+                      : `x${nft.generatedEditions.length}`}
+                    {!isCreatingAction ? (
+                      <div
+                        className="generatedEditions"
+                        style={{
+                          gridTemplateColumns: `repeat(${Math.ceil(
+                            nft.generatedEditions.length / 10
+                          )}, auto)`,
+                        }}
+                      >
+                        {nft.generatedEditions.map((edition) => (
+                          <div key={edition}>{`#${edition}`}</div>
+                        ))}
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ) : (
+                  <></>
+                  // <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
+                )}
+              </div>
+              {nft.generatedEditions.length > 1 && (
+                <>
+                  <div className="nft__box__highlight__one" />
+                  <div className="nft__box__highlight__two" />
+                </>
               )}
             </div>
-            {nft.generatedEditions.length > 1 && (
-              <>
-                <div className="nft__box__highlight__one" />
-                <div className="nft__box__highlight__two" />
-              </>
-            )}
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 };

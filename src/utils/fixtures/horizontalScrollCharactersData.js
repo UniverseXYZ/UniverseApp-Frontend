@@ -9,6 +9,7 @@ import OgreImg from '../../assets/images/Ogre-min.png';
 import VikingImg from '../../assets/images/Viking-min.png';
 import XYZbotImg from '../../assets/images/XYZbot-min.png';
 import FrankieImg from '../../assets/images/frankie.png';
+import blank from '../../assets/images/blank.png';
 
 export default [
   { img: PaulImg, name: 'Vitalik' },
@@ -22,10 +23,10 @@ export default [
   { img: XYZbotImg, name: 'X-YZ' },
   { img: VikingImg, name: 'Ragnar' },
   { img: FrankieImg, name: 'Frankie' },
-  { img: FrankieImg, name: 'Frankie' },
-  { img: FrankieImg, name: 'Frankie' },
-  { img: FrankieImg, name: 'Frankie' },
-  { img: FrankieImg, name: 'Frankie' },
-  { img: FrankieImg, name: 'Frankie' },
-  { img: FrankieImg, name: 'Frankie' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
 ];

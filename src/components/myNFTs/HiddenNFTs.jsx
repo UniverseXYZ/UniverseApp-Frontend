@@ -1,21 +1,19 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import Popup from 'reactjs-popup';
+import NFTPopup from '../popups/NFTPopup';
+import AppContext from '../../ContextAPI';
+import unhideNFTIcon from '../../assets/images/unhide.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
-import NFTPopup from '../popups/NFTPopup.jsx';
-import hideIcon from '../../assets/images/hide.svg';
-import AppContext from '../../ContextAPI';
 
-const NFTs = ({ filteredNFTs }) => {
-  const { myNFTs, setMyNFTs } = useContext(AppContext);
+const HiddenNFTs = () => {
+  const { myNFTs, setMyNFTs, setMyNFTsSelectedTabIndex } = useContext(AppContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);
 
-  const hideNFT = (id) => {
-    setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: true } : item)));
+  const unhideNFT = (id) => {
+    setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
 
   const handleClickOutside = (event) => {
@@ -33,14 +31,20 @@ const NFTs = ({ filteredNFTs }) => {
     };
   });
 
+  useEffect(() => {
+    if (!myNFTs.filter((nft) => nft.hidden).length) {
+      setMyNFTsSelectedTabIndex(0);
+    }
+  }, [myNFTs]);
+
   return (
-    <div className="saved__nfts__lists">
-      {filteredNFTs.length ? (
-        filteredNFTs
-          .filter((nft) => !nft.hidden)
-          .map((nft) => (
-            <div className="saved__nft__box" key={uuid()}>
-              <div className="saved__nft__box__image" aria-hidden="true">
+    <div className="tab__wallet">
+      <div className="nfts__lists">
+        {myNFTs
+          .filter((nft) => nft.hidden)
+          .map((nft, index) => (
+            <div className="nft__box" key={nft.id}>
+              <div className="nft__box__image" aria-hidden="true">
                 {nft.previewImage.type === 'video/mp4' && (
                   <Popup
                     trigger={
@@ -82,8 +86,8 @@ const NFTs = ({ filteredNFTs }) => {
                   <img className="video__icon" src={videoIcon} alt="Video Icon" />
                 )}
               </div>
-              <div className="saved__nft__box__name">
-                <h3>{nft.name}</h3>
+              <div className="nft__box__name">
+                <h3 title={nft.name}>{nft.name}</h3>
                 <button
                   type="button"
                   className="three__dots"
@@ -97,15 +101,15 @@ const NFTs = ({ filteredNFTs }) => {
                   <span />
                   {dropdownID === nft.id && showDropdown && (
                     <ul ref={ref} className="edit__remove">
-                      <li className="edit" aria-hidden="true" onClick={() => hideNFT(nft.id)}>
-                        <img src={hideIcon} alt="Hide" />
-                        <p>Hide</p>
+                      <li className="edit" aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
+                        <img src={unhideNFTIcon} alt="Hide" />
+                        <p>Unhide</p>
                       </li>
                     </ul>
                   )}
                 </button>
               </div>
-              <div className="saved__nft__box__footer">
+              <div className="nft__box__footer">
                 <div className="collection__details">
                   {nft.type === 'collection' && (
                     <>
@@ -127,18 +131,37 @@ const NFTs = ({ filteredNFTs }) => {
                     </>
                   )}
                 </div>
+                {nft.generatedEditions.length > 1 ? (
+                  <div className="collection__count">
+                    <div
+                      className="generatedEditions"
+                      style={{
+                        gridTemplateColumns: `repeat(${Math.ceil(
+                          nft.generatedEditions.length / 10
+                        )}, auto)`,
+                      }}
+                    >
+                      {nft.generatedEditions.map((edition) => (
+                        <div key={edition}>{`#${edition}`}</div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                  // <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
+                )}
               </div>
+              {nft.generatedEditions.length > 1 && (
+                <>
+                  <div className="nft__box__highlight__one" />
+                  <div className="nft__box__highlight__two" />
+                </>
+              )}
             </div>
-          ))
-      ) : (
-        <div className="no__result">No Result</div>
-      )}
+          ))}
+      </div>
     </div>
   );
 };
 
-NFTs.propTypes = {
-  filteredNFTs: PropTypes.oneOfType([PropTypes.array]).isRequired,
-};
-
-export default NFTs;
+export default HiddenNFTs;

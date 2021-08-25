@@ -42,12 +42,22 @@ const Section2HorizontalScroll = (props) => {
         }
         horizontalScroll.style.willChange = 'transform';
         horizontalScroll.style.transformStyle = 'preserve-3d';
+        horizontalScroll.style.webkitTransformStyle = 'preserve-3d';
+        horizontalScroll.style.msTransformStyle = 'preserve-3d';
         if (window.scrollY <= transitionEndLimit + 200) {
           horizontalScroll.style.transform = `translate3d(-${
             window.scrollY - sc
           }px, 0px, 0px) scale3d(1, 1, 1)`;
+          horizontalScroll.style.webkitTransform = `translate3d(-${
+            window.scrollY - sc
+          }px, 0px, 0px) scale3d(1, 1, 1)`;
+          horizontalScroll.style.msTransform = `translate3d(-${
+            window.scrollY - sc
+          }px, 0px, 0px) scale3d(1, 1, 1)`;
         } else if (window.scrollY >= transitionEndLimit + 200) {
           horizontalScroll.style.transform = `translate3d(-${transitionEndLimit}px, 0px, 0px) scale3d(1, 1, 1)`;
+          horizontalScroll.style.webkitTransform = `translate3d(-${transitionEndLimit}px, 0px, 0px) scale3d(1, 1, 1)`;
+          horizontalScroll.style.msTransform = `translate3d(-${transitionEndLimit}px, 0px, 0px) scale3d(1, 1, 1)`;
         }
       }
     }
@@ -87,7 +97,7 @@ Section2HorizontalScroll.propTypes = {
 Section2HorizontalScroll.defaultProps = {
   title: 'Possible base characters',
   desktopHeightValue: 1100,
-  mobileHeightValue: 1600,
+  mobileHeightValue: 1500,
 };
 
 export default Section2HorizontalScroll;
