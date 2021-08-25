@@ -53,7 +53,7 @@ const Collection = () => {
     }
     setCollectionNFTs(newNFTs);
     setFilteredNFTs(newNFTs);
-  }, [savedNfts]);
+  }, [savedNfts, myNFTs]);
 
   useEffect(() => {
     let check = false;

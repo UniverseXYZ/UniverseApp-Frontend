@@ -22,6 +22,7 @@ import { handleTabRightScrolling, handleTabLeftScrolling } from '../../utils/scr
 import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
 import EmptyTabs from '../tabs/EmptyTabs';
+import HiddenNFTs from './HiddenNFTs';
 
 const MyNFTs = () => {
   const {
@@ -42,7 +43,7 @@ const MyNFTs = () => {
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs'];
+  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs', 'Hidden'];
   const emptyTabs = ['Wallet', 'Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
@@ -354,6 +355,7 @@ const MyNFTs = () => {
         {myNFTsSelectedTabIndex === 1 && <DeployedCollections />}
         {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
         {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
+        {myNFTsSelectedTabIndex === 4 && <HiddenNFTs />}
       </div>
     </>
   );

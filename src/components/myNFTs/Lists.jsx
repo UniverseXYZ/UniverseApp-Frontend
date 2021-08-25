@@ -242,7 +242,7 @@ const Lists = ({
             </div>
             <div className={`nft__box__name ${isCreatingAction ? 'no__hover' : ''}`}>
               <h3 title={nft.name}>{nft.name}</h3>
-              {nft.type === 'single' || (nft.type === 'collection' && isCreatingAction) ? (
+              {/* {nft.type === 'single' || (nft.type === 'collection' && isCreatingAction) ? (
                 nft.generatedEditions.length > 1 ? (
                   <div className="collection__count">
                     {isCreatingAction && (
@@ -266,9 +266,9 @@ const Lists = ({
                         <ul className="editions-list" hidden={openEditions !== nft.id}>
                           <li disabled>Choose edition number</li>
                           <li>
-                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
                             <label
                               className="edition-container"
+                              aria-hidden="true"
                               onClick={(event) => handleSelectAll(event, nft.id)}
                             >
                               Select All
@@ -278,10 +278,10 @@ const Lists = ({
                           </li>
                           {nft.generatedEditions.map((edition) => (
                             <li key={edition}>
-                              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
                               <label
                                 htmlFor={edition}
                                 className="edition-container"
+                                aria-hidden="true"
                                 onClick={(event) => handleSelectEdition(event, nft.id, edition)}
                               >
                                 {`#${edition}`}
@@ -297,9 +297,6 @@ const Lists = ({
                         </ul>
                       </>
                     )}
-                    {/* {nft.type === 'single' && (
-                      <div className="ed-num">{`x${nft.generatedEditions.length}`}</div>
-                    )} */}
                     {!(
                       selectedNFTIds.includes(nft.id) &&
                       tierById &&
@@ -325,7 +322,7 @@ const Lists = ({
                 )
               ) : (
                 <></>
-              )}
+              )} */}
             </div>
             <div className="nft__box__footer">
               <div className="collection__details">
