@@ -61,7 +61,7 @@ CongratsPopup.propTypes = {
 CongratsPopup.defaultProps = {
   backButtonText: 'Go to my NFTs',
   title: 'Congratulations!',
-  message: 'NFT collection was successfully created and should be displayed in your wallet shortly',
+  message: 'NFT was successfully created and should be displayed in your wallet shortly',
 };
 
 export default CongratsPopup;
