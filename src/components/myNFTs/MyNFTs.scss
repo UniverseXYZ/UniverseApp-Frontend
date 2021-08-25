@@ -76,22 +76,22 @@
   // }
 
   .tabs-empty, .empty-universe{
-    margin-top: 20px;
+    margin: 90px 0 120px;
     text-align: center;
     position: relative;
     width: 100%;
-    h3{
+    h3 {
       font-family: $spaceGroteskFont;
       font-style: normal;
-      font-weight: 500!important;
-      font-size: 18px!important;
+      font-weight: 500 !important;
+      font-size: 18px !important;
       line-height: 22px;
       text-align: center;
-      color: rgba(0, 0, 0, 0.4)!important;
+      color: rgba(0, 0, 0, 0.4) !important;
       margin-top: 30px;
       margin-bottom: 6px;
     }
-    p{
+    p {
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: normal;
@@ -102,11 +102,11 @@
       width: 37%;
       margin-left: 32%;
       margin-bottom: 30px;
-      @include lg{
+      @include lg {
         width: 50%;
         margin-left: 25%;
       }
-      @include sm{
+      @include sm {
         width: 73%;
         margin-left: 14%;
       }
@@ -114,6 +114,11 @@
   }
   &__gradient {
     position: relative;
+    .tabs__wrapper {
+      @include sm {
+        margin-top: 10px;
+      }
+    }
   }
 
   &__gradient:before {
@@ -135,9 +140,8 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0 20px;
+    padding: 60px 20px 0 0;
     flex-wrap: wrap;
-    
 
     h1.title {
       font-family: $sharpGroteskSemiBoldFont;
@@ -188,7 +192,6 @@
           box-shadow: none;
           background: rgba(0, 0, 0, 0.05);
           color: rgba(0, 0, 0, 0.2);
-
         }
 
         @include sm {
@@ -208,6 +211,7 @@
 
     @include sm {
       flex-wrap: wrap;
+      margin-bottom: 0px;
     }
   }
 }
@@ -954,30 +958,30 @@
           right: 7px;
         }
       }
-      
-      .selected-div{
+
+      .selected-div {
         position: absolute;
         min-width: 50px;
         height: 25px;
         right: -25px;
         top: -25px;
-        background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
         border-radius: 100px;
         display: flex;
-      .check__icon {
-        width: 12px;
-        margin-right: 6px;
-      }
-      .selected-number {
-        font-style: normal;
-        font-weight: 600;
-        font-size: 10px;
-        line-height: 150%;
-        display: flex;
-        align-items: center;
-        font-family: $spaceGroteskFont;
-        padding: 3px 4px 3px 10px;
-       }
+        .check__icon {
+          width: 12px;
+          margin-right: 6px;
+        }
+        .selected-number {
+          font-style: normal;
+          font-weight: 600;
+          font-size: 10px;
+          line-height: 150%;
+          display: flex;
+          align-items: center;
+          font-family: $spaceGroteskFont;
+          padding: 3px 4px 3px 10px;
+        }
       }
       &__name {
         display: flex;
@@ -1013,17 +1017,16 @@
           flex-grow: 0;
           padding: 2px 8px 2px 10px;
           // margin: 0px 2px 6px;
-          .icon-up{
+          .icon-up {
             transform: rotate(-180deg);
             margin-bottom: 3px;
           }
-          &.selected{
-          background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                  background-origin: border-box;
-                  box-shadow: 2px 1000px 1px #fff inset;
-          border: 1px solid transparent;
-          border-radius: 12px;
-
+          &.selected {
+            background-image: linear-gradient(101deg, #bceb00, #00eaea);
+            background-origin: border-box;
+            box-shadow: 2px 1000px 1px #fff inset;
+            border: 1px solid transparent;
+            border-radius: 12px;
           }
         }
 
@@ -1240,7 +1243,7 @@
       li {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
         padding-left: 20px;
-        display: grid ;
+        display: grid;
 
         &:hover {
           background: #f6faf3;
@@ -1281,7 +1284,7 @@
         left: 0;
         height: 20px;
         width: 20px;
-        background: #FFFFFF;
+        background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         border-radius: 6px;
@@ -1785,7 +1788,6 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color: $white;
         position: relative;
         z-index: 2;
         padding: 0 15px 15px;
@@ -1817,10 +1819,11 @@
         }
 
         .collection__name {
-          font-family: $sharpGroteskMediumFont;
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
           font-style: normal;
           font-weight: 500;
-          font-size: 12px;
+          line-height: 20px;
           text-align: center;
           color: $black;
           margin-top: 20px;

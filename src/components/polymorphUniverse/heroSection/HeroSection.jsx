@@ -1,8 +1,18 @@
 import React from 'react';
 import Marquee from 'react-fast-marquee';
+import Lottie from 'react-lottie';
+import animationData from '../../../utils/animations/polymorph_universe_hero_section_animation.json';
 import './HeroSection.scss';
 
 const HeroSection = () => {
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
   const marquee = () => (
     <p>
       <span className="marquee--text--polymorph">POLYMORPH</span>
@@ -26,6 +36,10 @@ const HeroSection = () => {
   return (
     <>
       <div className="general--section">
+        <div className="lottie--animation">
+          <Lottie options={defaultOptions} />
+        </div>
+        <div className="bg--overlay" />
         <h1>Polymorph Universe</h1>
         <h2>
           The Polymorphs are a collection of morphing NFTs, with 11 base skins and 200+ traits.
@@ -33,6 +47,7 @@ const HeroSection = () => {
         <Marquee gradient={false} className="welcome--marquee">
           <div className="border--top" />
           {marquee()}
+          <div className="border--bottom" />
         </Marquee>
       </div>
     </>
