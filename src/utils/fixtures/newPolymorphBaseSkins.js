@@ -20,4 +20,6 @@ export default [
   { img: Frankie, name: 'Frankie' },
   { img: Frankie, name: 'Frankie' },
   { img: Frankie, name: 'Frankie' },
+  { img: Frankie, name: 'Frankie' },
+  { img: Frankie, name: 'Frankie' },
 ];
