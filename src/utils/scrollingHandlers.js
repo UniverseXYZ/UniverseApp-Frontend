@@ -6,7 +6,7 @@ export const handleTabRightScrolling = () => {
     if (scrollAmount >= 100) {
       window.clearInterval(slideTimer);
       document.querySelector('.tab__left__arrow').style.display = 'flex';
-      if (document.querySelector('.tabs').scrollLeft > 100) {
+      if (document.querySelector('.tabs').scrollLeft > 200) {
         document.querySelector('.tab__right__arrow').style.display = 'none';
       }
     }
