@@ -36,6 +36,8 @@ import {
   parsePropertiesForFrontEnd,
 } from '../../../utils/helpers/contractInteraction';
 import { MintSingleNftFlow } from '../../../userFlows/MintSingleNftFlow';
+import SuccessPopup from '../../popups/SuccessPopup.jsx';
+import { RouterPrompt } from '../../../utils/routerPrompt';
 
 const SingleNFTSettings = () => {
   const {
@@ -83,6 +85,7 @@ const SingleNFTSettings = () => {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -395,9 +398,14 @@ const SingleNFTSettings = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
+
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
+        <RouterPrompt when={showPrompt} onOK={() => true} />
         <Popup
           trigger={
             <button
@@ -617,10 +625,7 @@ const SingleNFTSettings = () => {
               </h5>
               {hideIcon && (
                 <div className="info-text">
-                  <p>
-                    NFTs are minted to our auction contract by default. Turn the toggle on if you
-                    want them to be minted to your wallet instead.
-                  </p>
+                  <p>The number of copies that can be minted.</p>
                 </div>
               )}
             </div>
