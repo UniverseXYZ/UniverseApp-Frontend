@@ -97,7 +97,7 @@ Section2HorizontalScroll.propTypes = {
 Section2HorizontalScroll.defaultProps = {
   title: 'Possible base characters',
   desktopHeightValue: 1100,
-  mobileHeightValue: 1600,
+  mobileHeightValue: 1500,
 };
 
 export default Section2HorizontalScroll;
