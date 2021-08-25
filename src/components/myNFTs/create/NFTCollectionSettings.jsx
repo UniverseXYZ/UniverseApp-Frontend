@@ -300,48 +300,49 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         if (!savedCollectionID) {
           document.getElementById('loading-hidden-btn').click();
           setTimeout(() => {
-            document.getElementById('popup-root').remove();
+            document.getElementById('loading-hidden-btn').click();
+          }, 2000);
+
+          setTimeout(() => {
             document.getElementById('congrats-hidden-btn').click();
-            setTimeout(() => {
-              if (collectionNFTs.length) {
-                const newMyNFTs = [...myNFTs];
-                collectionNFTs.forEach((nft) => {
-                  newMyNFTs.push({
-                    id: uuid(),
-                    type: 'collection',
-                    collectionId: collectionName,
-                    collectionName,
-                    collectionAvatar:
-                      coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                    tokenName,
-                    collectionDescription: description,
-                    shortURL,
-                    previewImage: nft.previewImage,
-                    name: nft.name,
-                    description: nft.description,
-                    numberOfEditions: Number(nft.editions),
-                    generatedEditions: nft.generatedEditions,
-                    releasedDate: new Date(),
-                    properties: nft.properties,
-                    royaltySplits: nft.royaltySplits,
-                  });
-                });
-                setMyNFTs(newMyNFTs);
-              }
-              setDeployedCollections([
-                ...deployedCollections,
-                {
-                  id: collectionName,
-                  previewImage:
+            if (collectionNFTs.length) {
+              const newMyNFTs = [...myNFTs];
+              collectionNFTs.forEach((nft) => {
+                newMyNFTs.push({
+                  id: uuid(),
+                  type: 'collection',
+                  collectionId: collectionName,
+                  collectionName,
+                  collectionAvatar:
                     coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                  name: collectionName,
                   tokenName,
-                  description,
+                  collectionDescription: description,
                   shortURL,
-                },
-              ]);
-            }, 2000);
-          }, 3000);
+                  previewImage: nft.previewImage,
+                  name: nft.name,
+                  description: nft.description,
+                  numberOfEditions: Number(nft.editions),
+                  generatedEditions: nft.generatedEditions,
+                  releasedDate: new Date(),
+                  properties: nft.properties,
+                  royaltySplits: nft.royaltySplits,
+                });
+              });
+              setMyNFTs(newMyNFTs);
+            }
+            setDeployedCollections([
+              ...deployedCollections,
+              {
+                id: collectionName,
+                previewImage:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                name: collectionName,
+                tokenName,
+                description,
+                shortURL,
+              },
+            ]);
+          }, 2500);
         } else {
           const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
           const coll = {

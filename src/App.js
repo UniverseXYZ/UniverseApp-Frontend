@@ -204,7 +204,7 @@ const App = () => {
           component={() => <Marketplace />}
         />
         <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-        <Route exact path="/my-nfts/create" component={() => <CreateNFT />} />
+        <Route exact path="/my-nfts/create" component={CreateNFT} />
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
