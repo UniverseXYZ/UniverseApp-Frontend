@@ -318,7 +318,7 @@ const Wallet = ({
         </div>
       </Animated>
 
-      {myNFTs.length ? (
+      {myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length ? (
         <>
           <div className="filtration">
             <div className="filter__by__collection">

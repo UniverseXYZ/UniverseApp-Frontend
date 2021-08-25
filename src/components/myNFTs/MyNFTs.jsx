@@ -69,7 +69,7 @@ const MyNFTs = () => {
   useEffect(() => {
     function handleResize() {
       if (document.querySelector('.tab__right__arrow')) {
-        if (window.innerWidth < 530) {
+        if (window.innerWidth < 660) {
           document.querySelector('.tab__right__arrow').style.display = 'flex';
         } else {
           document.querySelector('.tab__right__arrow').style.display = 'none';
@@ -154,8 +154,8 @@ const MyNFTs = () => {
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
         length:
-          index === 0 && myNFTs.length > 0
-            ? myNFTs.length
+          index === 0 && myNFTs.filter((nft) => !nft.hidden).length > 0
+            ? myNFTs.filter((nft) => !nft.hidden).length
             : index === 1 && deployedCollections.length > 0
             ? deployedCollections.length
             : index === 2 && savedNfts.length > 0
@@ -163,6 +163,8 @@ const MyNFTs = () => {
             : // printing dummyData length
             index === 3 && UNIVERSE_NFTS.length > 0
             ? UNIVERSE_NFTS.length
+            : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0
+            ? myNFTs.filter((nft) => nft.hidden).length
             : null,
         // label:
         //   index === 2 && savedNfts.length > 0
@@ -181,8 +183,8 @@ const MyNFTs = () => {
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
         length:
-          index === 0 && myNFTs.length > 0
-            ? myNFTs.length
+          index === 0 && myNFTs.filter((nft) => !nft.hidden).length > 0
+            ? myNFTs.filter((nft) => !nft.hidden).length
             : index === 1 && deployedCollections.length > 0
             ? deployedCollections.length
             : null,
