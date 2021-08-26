@@ -123,10 +123,15 @@ const MyAccount = () => {
     setInstagramLink(loggedInArtist.instagramLink);
   };
 
-  return loggedInArtist.name && editProfileButtonClick ? (
-    // <Artist />
-    <>{history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id })}</>
-  ) : (
+  return (
+    // loggedInArtist.name &&
+    //   loggedInArtist.universePageAddress &&
+    //   loggedInArtist.avatar &&
+    //   loggedInArtist.about &&
+    //   editProfileButtonClick ? (
+    //   // <Artist />
+    //   <>{history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id })}</>
+    // ) : (
     <div className="my-account">
       <Popup
         trigger={
@@ -173,6 +178,7 @@ const MyAccount = () => {
       {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
+  // );
 };
 
 export default MyAccount;

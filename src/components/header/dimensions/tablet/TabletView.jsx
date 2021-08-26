@@ -72,6 +72,7 @@ const TabletView = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const ref = useRef(null);
   const history = useHistory();
+  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -189,7 +190,19 @@ const TabletView = (props) => {
                   <button
                     type="button"
                     onClick={() => {
-                      history.push('/my-account');
+                      if (
+                        loggedInArtist.name &&
+                        loggedInArtist.universePageAddress &&
+                        loggedInArtist.avatar &&
+                        loggedInArtist.about &&
+                        editProfileButtonClick
+                      ) {
+                        history.push(`/${loggedInArtist.universePageAddress}`, {
+                          id: loggedInArtist.id,
+                        });
+                      } else {
+                        history.push('/my-account');
+                      }
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >

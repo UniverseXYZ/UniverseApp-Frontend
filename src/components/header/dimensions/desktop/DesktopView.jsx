@@ -55,6 +55,8 @@ const DesktopView = ({
     connectWeb3,
     isAuthenticated,
     address,
+    loggedInArtist,
+    editProfileButtonClick,
   } = useContext(AppContext);
 
   return (
@@ -304,7 +306,19 @@ const DesktopView = ({
                 <button
                   type="button"
                   onClick={() => {
-                    history.push('/my-account');
+                    if (
+                      loggedInArtist.name &&
+                      loggedInArtist.universePageAddress &&
+                      loggedInArtist.avatar &&
+                      loggedInArtist.about &&
+                      editProfileButtonClick
+                    ) {
+                      history.push(`/${loggedInArtist.universePageAddress}`, {
+                        id: loggedInArtist.id,
+                      });
+                    } else {
+                      history.push('/my-account');
+                    }
                     setIsAccountDropdownOpened(false);
                   }}
                 >
