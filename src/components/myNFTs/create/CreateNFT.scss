@@ -277,6 +277,12 @@
                             &.border--none {
                                 border: none;
                             }
+                            .image--not--selected--border {
+                                border: 3px dotted $white !important;
+                                background:
+                                    linear-gradient($white, $white) padding-box,
+                                    linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
+                            }
                             .image--not--selected {
                                 display: flex;
                                 border-radius: 50%;

@@ -35,6 +35,13 @@
     .single-nft-upload {
       width: 100%;
 
+      .single-nft-upload-file-border {
+        border: 3px dotted $white !important;
+        background:
+          linear-gradient($white, $white) padding-box,
+          linear-gradient(175deg, #bceb00, #00eaea) border-box !important;
+      }
+
       .single-nft-upload-file {
         display: flex;
         justify-content: space-between;
