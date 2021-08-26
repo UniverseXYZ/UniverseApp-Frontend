@@ -9,7 +9,8 @@ import './AuctionSettings.scss';
 import EthereumAddress from 'ethereum-address';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
-import delateIcon from '../../assets/images/inactive.svg';
+import delateIcon from '../../assets/images/RemoveBtn.svg';
+import delateIcon2 from '../../assets/images/RemoveBtn2.svg';
 import delIcon from '../../assets/images/del-icon.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
@@ -357,11 +358,23 @@ const AuctionSettings = () => {
                                 }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
                                   .toString()
                                   .split(' ')[4]
-                                  .substring(0, 5)} ${startDateTemp.timezone}`
+                                  .substring(0, 5)}
+                                    ${startDateTemp.timezone.toString().split(' ')[0]}`
                               : ''
                           }
                           error={isValidFields.startDate ? undefined : 'Start date is required!'}
                         />
+                        {values.startDate && (
+                          <p className="date--input--value">
+                            <b>
+                              {`${values.startDate.toString().split(' ')[1]} ${
+                                values.startDate.toString().split(' ')[2]
+                              }, ${values.startDate.toString().split(' ')[3]}, `}
+                            </b>
+                            {`${values.startDate.toString().split(' ')[4].substring(0, 5)}
+                              ${startDateTemp.timezone.toString().split(' ')[0]}`}
+                          </p>
+                        )}
                         <img
                           aria-hidden="true"
                           className="callendar__image"
@@ -406,11 +419,23 @@ const AuctionSettings = () => {
                                 }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
                                   .toString()
                                   .split(' ')[4]
-                                  .substring(0, 5)} ${endDateTemp.timezone}`
+                                  .substring(0, 5)}
+                                    ${endDateTemp.timezone.toString().split(' ')[0]}`
                               : ''
                           }
                           error={isValidFields.endDate ? undefined : 'End date is required!'}
                         />
+                        {values.endDate && (
+                          <p className="date--input--value">
+                            <b>
+                              {`${values.endDate.toString().split(' ')[1]} ${
+                                values.endDate.toString().split(' ')[2]
+                              }, ${values.endDate.toString().split(' ')[3]}, `}
+                            </b>
+                            {`${values.endDate.toString().split(' ')[4].substring(0, 5)}
+                              ${endDateTemp.timezone.toString().split(' ')[0]}`}
+                          </p>
+                        )}
                         <img
                           aria-hidden="true"
                           className="callendar__image"
@@ -520,6 +545,18 @@ const AuctionSettings = () => {
                   className="remove-img"
                   onClick={() => removeProperty(i)}
                   aria-hidden="true"
+                  onMouseOver={(e) => {
+                    e.currentTarget.src = delateIcon2;
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.src = delateIcon2;
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.src = delateIcon;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.src = delateIcon;
+                  }}
                 />
                 <Button
                   className="light-border-button remove-btn"
