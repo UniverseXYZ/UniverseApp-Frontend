@@ -10,8 +10,8 @@
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    align-items: center;
     .right--block {
-      padding-top: 120px;
       h1 {
         font-family: $sharpGroteskSemiBoldFont;
         font-size: 36px;
