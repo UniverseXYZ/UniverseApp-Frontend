@@ -30,6 +30,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
     savedNfts,
     savedCollectionID,
+    setSavedCollectionID,
     myNFTs,
     setMyNFTs,
     deployedCollections,
@@ -44,6 +45,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const history = useHistory();
 
   const [coverImage, setCoverImage] = useState(null);
+  const [bgImage, setBgImage] = useState(null);
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
@@ -280,6 +282,13 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     };
   });
 
+  useEffect(
+    () => () => {
+      setSavedCollectionID(null);
+    },
+    []
+  );
+
   useEffect(() => {
     // Prev Icon
     const prev = document.querySelectorAll('.slick-prev');
@@ -307,11 +316,14 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   useEffect(() => {
     if (mintNowClick) {
       if (!errors.collectionName && !errors.tokenName) {
-        document.getElementById('loading-hidden-btn').click();
-        setTimeout(() => {
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
+        if (!savedCollectionID) {
+          document.getElementById('loading-hidden-btn').click();
           setTimeout(() => {
+            document.getElementById('loading-hidden-btn').click();
+          }, 2000);
+
+          setTimeout(() => {
+            document.getElementById('congrats-hidden-btn').click();
             if (collectionNFTs.length) {
               const newMyNFTs = [...myNFTs];
               collectionNFTs.forEach((nft) => {
@@ -349,11 +361,46 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 shortURL,
               },
             ]);
-          }, 7000);
-        }, 3000);
+          }, 2500);
+        } else {
+          const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
+          const coll = {
+            id: res.id,
+            previewImage:
+              coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+            name: collectionName,
+            tokenName,
+            description,
+            shortURL,
+            bgImage,
+          };
+          setSavedCollectionID(null);
+          setDeployedCollections(
+            deployedCollections.map((item) => (item.id === savedCollectionID ? coll : item))
+          );
+          history.push(`/c/${coll.id.toLowerCase().replace(' ', '-')}`, {
+            collection: coll,
+            saved: false,
+          });
+        }
       }
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (savedCollectionID) {
+      const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
+      setCollectionName(res.name);
+      setCoverImage(
+        typeof res.previewImage === 'string' && res.previewImage.startsWith('#')
+          ? null
+          : res.previewImage
+      );
+      setTokenName(res.tokenName);
+      setDescription(res.description);
+      setBgImage(res.bgImage || null);
+    }
+  }, [collectionNFTs]);
 
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
@@ -379,7 +426,12 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           />
         }
       >
-        {(close) => <CongratsPopup onClose={close} />}
+        {(close) => (
+          <CongratsPopup
+            onClose={close}
+            message="NFT collection was successfully created and should be displayed in your wallet shortly"
+          />
+        )}
       </Popup>
       {/* <h1 className="nft--collection--settings--page--title">NFT collection settings</h1> */}
       <div className="image--name--token">
@@ -467,7 +519,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           Description <span>(optional)</span>
         </label>
         <textarea
-          placeholder="Spread the word about your collection"
+          placeholder="Spread some words about your collection"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -486,8 +538,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           onBlur={() => handleOnBlur()}
         />
       </div> */}
-      {/* <div className="collection--nfts">
-        <div className="collection--nfts--title">
+      <div className="collection--nfts">
+        {/* <div className="collection--nfts--title">
           <h1>NFTs</h1>
           {collectionNFTs.length ? (
             <Button className="light-border-button" onClick={handleShowCollectible}>
@@ -683,8 +735,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         ) : (
           <></>
         )}
-        {errors.collectible && <p className="error-message">{errors.collectible}</p>}
-        {(errors.collectionName || errors.tokenName || errors.tokenName || errors.shorturl) && (
+        {errors.collectible && <p className="error-message">{errors.collectible}</p>} */}
+        {(errors.collectionName || errors.tokenName) && (
           <div className="collection--final--error">
             <img src={errorIcon} alt="error" />
             <p>
@@ -693,15 +745,30 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             </p>
           </div>
         )}
-      </div> */}
+      </div>
       <div className="create--collection--btn">
-        <Button
-          className="light-button"
-          onClick={handleMinting}
-          disabled={!collectionName || !tokenName}
-        >
-          Create collection
-        </Button>
+        {!savedCollectionID ? (
+          <Button
+            className="light-button"
+            onClick={handleMinting}
+            disabled={!collectionName || !tokenName}
+          >
+            Create collection
+          </Button>
+        ) : (
+          <>
+            <Button className="light-border-button" onClick={() => history.goBack()}>
+              Cancel
+            </Button>
+            <Button
+              className="light-button"
+              onClick={handleMinting}
+              disabled={!collectionName || !tokenName}
+            >
+              Submit changes
+            </Button>
+          </>
+        )}
       </div>
     </div>
   ) : (

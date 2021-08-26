@@ -162,6 +162,9 @@ const Footer = () => {
                   <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
                     Polymorphs
                   </li>
+                  <li onClick={() => history.push('/lobby-lobsters')} aria-hidden="true">
+                    Lobby lobsters
+                  </li>
                   <li onClick={() => history.push('/core-drops')} aria-hidden="true">
                     OG planet drop
                   </li>

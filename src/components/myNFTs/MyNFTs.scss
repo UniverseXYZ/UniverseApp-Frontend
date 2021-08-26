@@ -67,23 +67,31 @@
     }
   }
 
+  // &__body {
+  //   max-width: 1110px;
+  //   margin: 60px auto;
+  //   @include xl {
+  //     padding: 0 20px;
+  //   }
+  // }
+
   .tabs-empty, .empty-universe{
-    margin-top: 20px;
+    margin: 90px 0 120px;
     text-align: center;
     position: relative;
     width: 100%;
-    h3{
+    h3 {
       font-family: $spaceGroteskFont;
       font-style: normal;
-      font-weight: 500!important;
-      font-size: 18px!important;
+      font-weight: 500 !important;
+      font-size: 18px !important;
       line-height: 22px;
       text-align: center;
-      color: rgba(0, 0, 0, 0.4)!important;
+      color: rgba(0, 0, 0, 0.4) !important;
       margin-top: 30px;
       margin-bottom: 6px;
     }
-    p{
+    p {
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: normal;
@@ -94,11 +102,11 @@
       width: 37%;
       margin-left: 32%;
       margin-bottom: 30px;
-      @include lg{
+      @include lg {
         width: 50%;
         margin-left: 25%;
       }
-      @include sm{
+      @include sm {
         width: 73%;
         margin-left: 14%;
       }
@@ -106,6 +114,11 @@
   }
   &__gradient {
     position: relative;
+    .tabs__wrapper {
+      @include sm {
+        margin-top: 10px;
+      }
+    }
   }
 
   &__gradient:before {
@@ -127,8 +140,8 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0 20px;
-    // gap: 22px;
+    padding: 60px 20px 0 0;
+    flex-wrap: wrap;
 
     h1.title {
       font-family: $sharpGroteskSemiBoldFont;
@@ -140,8 +153,23 @@
 
     .create__mint__btns {
       display: flex;
+      @include sm {
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        margin-top: 40px;
+        button {
+          width: 100%;
+        }
+      }
 
-      button {
+      button.light-border-button {
+        box-shadow: 2px 1000px 1px #fcf3f0 inset;
+        &:hover {
+          box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset;
+        }
+      }
+      button.light-button,
+      button.mint__btn {
         background: $primary-bg-color;
         box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
         border-radius: 12px;
@@ -164,12 +192,11 @@
           box-shadow: none;
           background: rgba(0, 0, 0, 0.05);
           color: rgba(0, 0, 0, 0.2);
-
         }
 
         @include sm {
           width: 100%;
-          margin-top: 22px;
+          margin-bottom: 22px;
         }
       }
 
@@ -184,6 +211,7 @@
 
     @include sm {
       flex-wrap: wrap;
+      margin-bottom: 0px;
     }
   }
 }
@@ -782,6 +810,12 @@
       border-radius: 12px;
       padding: 12px;
       position: relative;
+      transition: 0.3s ease-in-out;
+
+      &:hover {
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid $white;
+      }
 
       &.selected {
         background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
@@ -930,30 +964,30 @@
           right: 7px;
         }
       }
-      
-      .selected-div{
+
+      .selected-div {
         position: absolute;
         min-width: 50px;
         height: 25px;
         right: -25px;
         top: -25px;
-        background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
         border-radius: 100px;
         display: flex;
-      .check__icon {
-        width: 12px;
-        margin-right: 6px;
-      }
-      .selected-number {
-        font-style: normal;
-        font-weight: 600;
-        font-size: 10px;
-        line-height: 150%;
-        display: flex;
-        align-items: center;
-        font-family: $spaceGroteskFont;
-        padding: 3px 4px 3px 10px;
-       }
+        .check__icon {
+          width: 12px;
+          margin-right: 6px;
+        }
+        .selected-number {
+          font-style: normal;
+          font-weight: 600;
+          font-size: 10px;
+          line-height: 150%;
+          display: flex;
+          align-items: center;
+          font-family: $spaceGroteskFont;
+          padding: 3px 4px 3px 10px;
+        }
       }
       &__name {
         display: flex;
@@ -973,6 +1007,64 @@
           overflow: hidden;
         }
 
+        .three__dots {
+          position: relative;
+          display: flex;
+          align-items: center;
+          height: 15px;
+          width: 20px;
+          background-color: $white;
+          span {
+              height: 4px;
+              width: 4px;
+              background-color: $black;
+              border-radius: 50%;
+              margin-left: 3px;
+          }
+
+          .edit__remove {
+              position: absolute;
+              right: 0;
+              top: 15px;
+              background: $white;
+              box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+              width: 160px;
+              border-radius: 12px;
+              z-index: 10;
+              padding: 8px;
+
+              li {
+                  display: flex;
+                  align-items: center;
+                  border-radius: 6px;
+                  padding: 15px;
+
+                  &:hover {
+                      background: rgba(0, 0, 0, 0.05);
+                  }
+                  
+                  img {
+                      margin-right: 6px;
+                  }
+
+                  p {
+                      font-family: $spaceGroteskFont;
+                      font-style: normal;
+                      font-weight: 600;
+                      font-size: 16px;
+                      line-height: 20px;
+                  }
+
+                  &.edit p {
+                      color: $black;
+                  }
+                  &.remove p {
+                      color: #ff4949;
+                  }
+              }
+          }
+        }
+
         .editions-btn {
           width: 84px;
           height: 22px;
@@ -989,17 +1081,16 @@
           flex-grow: 0;
           padding: 2px 8px 2px 10px;
           // margin: 0px 2px 6px;
-          .icon-up{
+          .icon-up {
             transform: rotate(-180deg);
             margin-bottom: 3px;
           }
-          &.selected{
-          background-image: linear-gradient(101deg, #bceb00, #00eaea);
-                  background-origin: border-box;
-                  box-shadow: 2px 1000px 1px #fff inset;
-          border: 1px solid transparent;
-          border-radius: 12px;
-
+          &.selected {
+            background-image: linear-gradient(101deg, #bceb00, #00eaea);
+            background-origin: border-box;
+            box-shadow: 2px 1000px 1px #fff inset;
+            border: 1px solid transparent;
+            border-radius: 12px;
           }
         }
 
@@ -1216,7 +1307,7 @@
       li {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
         padding-left: 20px;
-        display: grid ;
+        display: grid;
 
         &:hover {
           background: #f6faf3;
@@ -1257,7 +1348,7 @@
         left: 0;
         height: 20px;
         width: 20px;
-        background: #FFFFFF;
+        background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         border-radius: 6px;
@@ -1435,7 +1526,7 @@
       cursor: pointer;
 
       input {
-        @include css-checkbox(16px, $black, $white, 'middle', $white, 8px);
+        @include css-checkbox(16px, $black, $white, 'middle', $white, 6px);
       }
     }
   }
@@ -1452,6 +1543,12 @@
       border-radius: 12px;
       padding: 12px;
       position: relative;
+      transition: 0.3s ease-in-out;
+
+      &:hover {
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid $white;
+      }
 
       &.selected {
         background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
@@ -1733,6 +1830,7 @@
       box-sizing: border-box;
       border-radius: 12px;
       cursor: pointer;
+      transition: 0.3s ease-in-out;
 
       &__header {
         height: 80px;
@@ -1761,7 +1859,6 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color: $white;
         position: relative;
         z-index: 2;
         padding: 0 15px 15px;
@@ -1793,10 +1890,11 @@
         }
 
         .collection__name {
-          font-family: $sharpGroteskMediumFont;
+          font-family: $spaceGroteskFont;
+          font-size: 16px;
           font-style: normal;
           font-weight: 500;
-          font-size: 12px;
+          line-height: 20px;
           text-align: center;
           color: $black;
           margin-top: 20px;
@@ -1866,6 +1964,10 @@
             }
           }
         }
+      }
+      &:hover {
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid white;
       }
     }
 

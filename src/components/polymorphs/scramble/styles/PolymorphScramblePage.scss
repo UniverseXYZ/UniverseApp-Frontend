@@ -65,7 +65,8 @@
     .avatar--wrapper {
       height: 445px;
       width: 445px;
-      position: relative;
+      position: sticky;
+      top: 100px;
       border: 1px solid rgba(0, 0, 0, 0.1);
       border-radius: 12px;
       // margin: 0 auto 100px;
@@ -203,6 +204,8 @@
       @include lg {
         width: 100%;
         height: 714px;
+        position: relative;
+        top: 0;
       }
       @include md {
         height: 335px;
@@ -225,8 +228,31 @@
         }
       }
 
+      .tags {
+        display: flex;
+        align-items: center;
+        margin: 20px 0 8px;
+        > div {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 12px;
+          margin-right: 12px;
+          margin-bottom: 12px;
+          padding: 6px 16px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 150%;
+          color: $black;
+          span {
+            font-weight: bold;
+          }
+        }
+        @include sm {
+          flex-wrap: wrap;
+        }
+      }
       .description {
-        margin-top: 16px;
         margin-bottom: 40px;
         font-weight: normal;
         font-size: 16px;
@@ -246,30 +272,188 @@
         }
       }
 
+      // .scramble--properties {
+      //   display: grid;
+      //   grid-template-columns: 1fr 1fr 1fr;
+      //   grid-gap: 20px;
+      //   margin-bottom: 40px;
+      //   @include xl { 
+      //     grid-template-columns: repeat(2, 1fr);
+      //   }
+      //   @include lg { 
+      //     grid-template-columns: repeat(4, 1fr);
+      //   }
+      //   @include md { 
+      //     grid-template-columns: repeat(3, 1fr);
+      //   }
+      //   @include sm { 
+      //     grid-template-columns: repeat(2, 1fr);
+      //   }
+      // }
+
       .scramble--properties {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-gap: 20px;
-        // display: flex;
-        // flex-direction: row;
-        // flex-wrap: wrap;
-        // justify-content: center;
         margin-bottom: 40px;
-        
-        // @media (min-width: $screen-md-max) {
-          //   justify-content: space-between
-        // }
-        @include xl { 
-          grid-template-columns: repeat(2, 1fr);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 17px;
+          .rarity--description--gradient {
+            position: relative;
+            .rarity--description {
+              z-index: 100;
+            }
+            .rarity--rank--border {
+              position: absolute;
+              width: calc(100% + 2px);
+              min-height: 58px;
+              background: linear-gradient(90deg, #c857ca 50%, #fb8c00 50%);
+              left: -1px;
+              right: 0px;
+              top: -1px;
+              bottom: -1px;
+              margin: auto;
+              border-radius: 12px;
+              opacity: 0.8;
+            }
+          }
+          .rarity--description {
+            position: relative;
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+            border-radius: 12px;
+            padding: 13px 0;
+            text-align: center;
+  
+            .matching {
+              img {
+                position: absolute;
+                top: -15px;
+                right: -15px;
+                // @include sm {
+                //   top: 4px;
+                //   right: 4px;
+                // }
+              }
+              .tooltiptext {
+                visibility: hidden;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 400;
+                font-size: 12px;
+                background-color: $black;
+                color: $white;
+                text-align: center;
+                border-radius: 100px;
+                padding: 4px 12px;
+                position: absolute;
+                z-index: 1111;
+                top: -48px;
+                right: -54px;
+                &::after {
+                  content: '';
+                  position: absolute;
+                  top: 100%;
+                  left: 50%;
+                  margin-left: -5px;
+                  border-width: 5px;
+                  border-style: solid;
+                  border-color: black transparent transparent transparent;
+                  @include xl {
+                    left: 84%;
+                  }
+                }
+                @include xl {
+                  right: -15px;
+                }
+                @include sm {
+                  right: 2px;
+                  top: -29px;
+                }
+              }
+              &:hover {
+                cursor: pointer;
+                .tooltiptext {
+                  visibility: visible;
+                }
+              }
+            }
+  
+            h4 {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500;
+              font-size: 10px;
+              line-height: 160%;
+              text-transform: uppercase;
+              color: $black;
+              margin-bottom: 3px;
+  
+              @include xl {
+                font-weight: normal;
+              }
+            }
+            h3 {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 130%;
+              color: $black;
+              margin-bottom: 3px;
+  
+              @include xl {
+                font-size: 12px;
+              }
+              @include md {
+                font-size: 14px;
+              }
+            }
+            .description {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 160%;
+              color: rgba(0, 0, 0, 0.4);
+              margin-bottom: 0px;
+            }
+            @include xl {
+              padding: 13px 5px;
+            }
+          }
+          @include xl {
+            gap: 14px;
+          }
+
+          @include lg {
+            grid-template-columns: repeat(4, 1fr);
+          }
+  
+          @include md {
+            grid-template-columns: repeat(3, 1fr);
+          }
+          @include sm {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        .selected {
+          box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.8) inset !important;
+          background-image: linear-gradient(101deg, #bceb00, #00eaea) !important;
+          background-origin: border-box;
         }
-        @include lg { 
-          grid-template-columns: repeat(4, 1fr);
+        .selected--blue {
+          background: rgba(30, 136, 229, 0.05) !important;
+          border: 1px solid #1e88e5 !important;
         }
-        @include md { 
-          grid-template-columns: repeat(3, 1fr);
+        .selected--pink {
+          background: rgba(200, 87, 202, 0.1) !important;
+          border: 1px solid #c857ca !important;
         }
-        @include sm { 
-          grid-template-columns: repeat(2, 1fr);
+        .selected--orange {
+          background: rgba(251, 140, 0, 0.05) !important;
+          border: 1px solid #fb8c00 !important;
+        }
+        .selected--pink--orange {
+          background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
         }
       }
 
@@ -301,19 +485,23 @@
 
       }
 
-      .light-button {
-        @include sm {
-          width: 100%;
+      .btn-actions {
+        .light-button {
+          margin-right: 20px;
+          @include sm {
+            margin-right: 0px;
+            margin-bottom: 20px;
+            width: 100%;
+          }
         }
-        // width: 90%;
-        // display: block;
-        // margin: 0 auto;
-
-        // @media (min-width: $screen-md-max) {
-        //   margin: unset!important;
-        //   width: unset;
-        // }
-
+        .light-border-button {
+          img {
+            margin-left: 13px;
+          }
+          @include sm {
+            width: 100%;
+          }
+        }
       }
 
     }

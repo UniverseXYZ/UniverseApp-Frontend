@@ -1,0 +1,200 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/mixins';
+
+.about--wrapper--row1 {
+  min-height: 500px;
+  width: 90%;
+  @include lg {
+    min-height: 355px;
+  }
+  @include sm {
+    width: 100%;
+    flex-wrap: nowrap;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 60px 20px;
+    div {
+      max-width: 627px;
+      width: 100%;
+      align-items: center;
+    }
+  }
+  .polymorph--section1--row1--left--block {
+    img {
+      position: relative;
+      right: 45px;
+      @include xl {
+        right: 30px;
+      }
+      @include lg {
+        right: 10px;
+      }
+      @include sm {
+        right: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+      }
+    }
+  }
+  .new--technology {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 40px;
+    @include sm {
+      padding: 0;
+    }
+    h2 {
+      @include lg {
+        font-size: 18px;
+      }
+      margin-top: 30px;
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 32px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 45px;
+      text-align: left;
+      max-width: 350px;
+    }
+    p {
+      @include lg {
+        font-size: 14px;
+      }
+      @include sm {
+        font-size: 14px;
+      }
+      max-width: 445px;
+      margin-top: 30px;
+      font-family: $spaceGroteskFont;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 22px;
+      letter-spacing: 0px;
+      text-align: left;
+      color: #0f0e0e;
+    }
+  }
+}
+.about--wrapper--row2 {
+  min-height: 500px;
+  width: 90%;
+  overflow: hidden;
+  @include lg {
+    min-height: 355px;
+  }
+  @include sm {
+    width: 100%;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    div {
+      max-width: 627px;
+      width: 100%;
+      align-items: center;
+    }
+  }
+  .released--left--block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 40px;
+    position: relative;
+    z-index: 80;
+    @include sm {
+      padding: 0;
+    }
+    h2 {
+      @include lg {
+        font-size: 26px;
+      }
+      @include sm {
+        font-size: 26px;
+      }
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 32px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 45px;
+      text-align: left;
+      max-width: 350px;
+    }
+    p {
+      @include lg {
+        font-size: 14px;
+        padding-right: 20px;
+      }
+      @include sm {
+        font-size: 14px;
+        padding: 0;
+      }
+      max-width: 363px;
+      margin-top: 30px;
+      font-family: $spaceGroteskFont;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 27px;
+      color: #666666;
+    }
+    button {
+      margin-top: 40px;
+    }
+  }
+  .relased--right--block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    @include sm {
+      min-height: 400px;
+      justify-content: center;
+    }
+    .images--charts--parent {
+      @include sm {
+        text-align: center;
+      }
+      .dominant--image {
+        z-index: 10;
+        position: relative;
+        width: 500px;
+        @include xl {
+          width: 415px;
+        }
+        @include lg {
+          width: 325px;
+        }
+        @include sm {
+          width: 100%;
+        }
+      }
+      .row2--background {
+        // filter: drop-shadow(0px 10px 36px rgba(136, 120, 172, 0.14));
+        position: absolute;
+        left: 85px;
+        max-height: 170%;
+        bottom: -83px;
+        @include xl {
+          bottom: -62px;
+          left: 70px;
+        }
+        @include lg {
+          bottom: -50px;
+          left: 4vw;
+        }
+        @include sm {
+          bottom: 40px;
+          top: 0;
+          margin: auto;
+          max-height: 600px;
+          height: 100vw;
+          left: 15vw;
+        }
+      }
+    }
+  }
+}

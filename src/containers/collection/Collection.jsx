@@ -40,11 +40,6 @@ const Collection = () => {
     setDarkMode(false);
     const newNFTs = [];
     if (location.state) {
-      savedNfts.forEach((nft) => {
-        if (nft.collectionId === selectedCollection.id) {
-          newNFTs.push(nft);
-        }
-      });
       myNFTs.forEach((nft) => {
         if (nft.collectionId === selectedCollection.id) {
           newNFTs.push(nft);
@@ -53,7 +48,7 @@ const Collection = () => {
     }
     setCollectionNFTs(newNFTs);
     setFilteredNFTs(newNFTs);
-  }, [savedNfts]);
+  }, [myNFTs]);
 
   useEffect(() => {
     let check = false;
@@ -80,9 +75,9 @@ const Collection = () => {
           <Avatar selectedCollection={selectedCollection} />
           <Title selectedCollection={selectedCollection} saved={location.state.saved} />
           <Description selectedCollection={selectedCollection} />
-          {collectionNFTs.length ? (
+          {collectionNFTs.filter((nft) => !nft.hidden).length ? (
             <>
-              <Filters search={search} setSearch={setSearch} />
+              <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
               <NFTs filteredNFTs={filteredNFTs} />
             </>
           ) : (

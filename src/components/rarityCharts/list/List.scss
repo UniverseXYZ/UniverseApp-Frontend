@@ -7,7 +7,7 @@
     grid-gap: 30px;
     .categories--filters {
         h2 {
-            font-family: $spaceGroteskFont;
+            font-family: "Space Grotesk SemiBold25", sans-serif;
             font-style: normal;
             font-weight: 600;
             font-size: 18px;
@@ -203,7 +203,7 @@
                         font-family: $spaceGroteskFont;
                         font-style: normal;
                         font-weight: bold;
-                        font-size: 16px;
+                        font-size: 14px;
                         line-height: 160%;
                         color: #B3B3B3;
                     }
@@ -213,7 +213,7 @@
                         font-family: $spaceGroteskFont;
                         font-style: normal;
                         font-weight: bold;
-                        font-size: 16px;
+                        font-size: 14px;
                         line-height: 120%;
                         color: $black;
                         img {
@@ -283,22 +283,27 @@
                     }
                 }
                 &--footer {
+                    display: flex;
+                    align-items: center;
                     h2 {
                         font-family: $spaceGroteskFont;
                         font-style: normal;
                         font-weight: 600;
-                        font-size: 18px;
+                        font-size: 16px;
                         line-height: 160%;
                         color: $black;
+                        width: 75%;
                         margin-bottom: 5px;
                     }
                     p {
                         font-family: $spaceGroteskFont;
                         font-style: normal;
-                        font-weight: 600;
-                        font-size: 18px;
-                        line-height: 160%;
-                        color: #B3B3B3;
+                        text-align: right;
+                        width: 25%;
+                        font-weight: normal;
+                        font-size: 12px;
+                        line-height: 25px;
+                        color: rgba(0, 0, 0, 0.4);
                     }
                 }
             }

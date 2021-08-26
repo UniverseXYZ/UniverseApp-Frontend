@@ -9,7 +9,7 @@ import Pagination from '../pagination/Pagionation.jsx';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import '../pagination/Pagination.scss';
-import bubbleIcon from '../../assets/images/text-bubble.svg';
+import bubbleIcon from '../../assets/images/text-bubble.png';
 import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
@@ -318,7 +318,7 @@ const Wallet = ({
         </div>
       </Animated>
 
-      {myNFTs.length ? (
+      {myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length ? (
         <>
           <div className="filtration">
             <div className="filter__by__collection">
@@ -437,29 +437,35 @@ const Wallet = ({
         </>
       ) : (
         <div className="empty__nfts">
-          {/* <div className="tabs-empty">
-            <div className="image-bubble">
-              <img src={bubbleIcon} alt="bubble-icon" />
+          {location.pathname === '/create-tiers' ? (
+            <>
+              <h3>No NFTs found in your wallet</h3>
+              <p className="desc">Mint some NFTs by clicking the button below</p>
+              <button
+                type="button"
+                className="set_up"
+                onClick={() => {
+                  history.push('/create-tiers/my-nfts/create');
+                }}
+              >
+                Go to Minting
+              </button>
+            </>
+          ) : (
+            <div className="tabs-empty">
+              <div className="image-bubble">
+                <img src={bubbleIcon} alt="bubble-icon" />
+              </div>
+              <h3>No NFTs found</h3>
+              <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
+              <Button
+                className="light-button"
+                onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+              >
+                Create NFT
+              </Button>
             </div>
-            <h3>No NFTs found</h3>
-            <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button className="light-button" onClick={() => history.push('/my-nfts/create')}>
-              Create NFT
-            </Button>
-          </div> */}
-          <h3>No NFTs found in your wallet</h3>
-          <p className="desc">Mint some NFTs by clicking the button below</p>
-          <button
-            type="button"
-            className="set_up"
-            onClick={() => {
-              history.push(
-                location.pathname === '/create-tiers' ? '/create-tiers/my-nfts/create' : '/my-nfts'
-              );
-            }}
-          >
-            Go to Minting
-          </button>
+          )}
         </div>
       )}
       {isCreatingAction && (

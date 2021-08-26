@@ -55,12 +55,12 @@
     }
     .filter--box--button {
       position: relative;
-      margin-left: 18px;
+      margin-right: 8px;
       .box--shadow--effect--block {
         position: absolute;
         width: 100%;
-        min-height: 44px;
-        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+        height: 100%;
+        background: #000000;
         right: 0;
         top: 0;
         margin: auto;
@@ -69,50 +69,26 @@
         cursor: pointer;
       }
       > button {
-        padding: 8px;
+        padding: 6px 14px;
         font-family: $spaceGroteskFont;
         font-size: 14px;
         font-style: normal;
         font-weight: 500;
         line-height: 20px;
-        border-radius: 8px;
+        border-radius: 50px;
         background: rgba(0, 0, 0, 0.02);
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         display: flex;
         align-items: center;
         width: 100%;
-        .chessIcon {
-          padding-right: 8px;
-        }
-        .closeIcon {
-          padding-left: 8px;
-          visibility: hidden;
-        }
-        .closebutton {
-          padding-left: 8px;
-          visibility: visible;
-        }
-        .scrambleschessIcon {
-          padding-right: 8px;
-        }
-        .scramblescloseIcon {
-          padding-left: 8px;
-          visibility: hidden;
-        }
-        .scramblesclosebutton {
-          padding-left: 8px;
-          visibility: visible;
-        }
       }
     }
     .filter--box--button.background--button {
       > button {
-        background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box;
+        background: #000000;
         border: 1px solid transparent;
-      }
-      .box--shadow--effect--block {
-        opacity: 0.2;
+        color: $white;
       }
     }
   }

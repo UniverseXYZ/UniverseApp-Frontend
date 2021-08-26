@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './CustomizeAuction.scss';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import arrow from '../../assets/images/arrow.svg';
 import Button from '../../components/button/Button.jsx';
@@ -11,9 +11,11 @@ import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
 import CongratsLandingPagePopup from '../../components/popups/CongratsLandingPagePopup';
+import { RouterPrompt } from '../../utils/routerPrompt';
 
 const CustomizeAuction = () => {
   const history = useHistory();
+  const location = useLocation();
   const {
     auction,
     setAuction,
@@ -28,6 +30,7 @@ const CustomizeAuction = () => {
     editProfileButtonClick,
     setEditProfileButtonClick,
   } = useContext(AppContext);
+  const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
     link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
@@ -229,8 +232,13 @@ const CustomizeAuction = () => {
     }
   };
 
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
+
   return (
     <div className="customize__auction">
+      <RouterPrompt when={showPrompt} onOK={() => true} />
       <Popup
         trigger={
           <button
@@ -244,7 +252,7 @@ const CustomizeAuction = () => {
         {(close) => <CongratsLandingPagePopup onClose={close} />}
       </Popup>
 
-      <div className="container ">
+      <div className="container">
         <div
           className="back-rew"
           onClick={() => {

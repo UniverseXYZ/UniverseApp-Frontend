@@ -11,6 +11,7 @@ import Input from '../../input/Input.jsx';
 import AppContext from '../../../ContextAPI';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
+import AreYouSurePopup from '../../popups/AreYouSurePopup';
 import arrow from '../../../assets/images/arrow.svg';
 import infoIcon from '../../../assets/images/icon.svg';
 import defaultImage from '../../../assets/images/default-img.svg';
@@ -24,6 +25,7 @@ import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
 import SuccessPopup from '../../popups/SuccessPopup.jsx';
+import { RouterPrompt } from '../../../utils/routerPrompt';
 
 const SingleNFTSettings = () => {
   const {
@@ -67,6 +69,7 @@ const SingleNFTSettings = () => {
   const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [border, setBorder] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -294,7 +297,7 @@ const SingleNFTSettings = () => {
             document.getElementById('congrats-hidden-btn').click();
             setTimeout(() => {
               closeCongratsPopupEvent();
-            }, 7000);
+            }, 2000);
           }, 3000);
         }
       }
@@ -442,11 +445,14 @@ const SingleNFTSettings = () => {
     setBorder(false);
   };
 
-  console.log(errors.name || errors.edition || errors.previewImage);
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
 
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
+        {/* <RouterPrompt when={showPrompt} onOK={() => true} /> */}
         <Popup
           trigger={
             <button
@@ -479,6 +485,7 @@ const SingleNFTSettings = () => {
                   ? 'Go to reward tier settings'
                   : 'Go to my NFTs'
               }
+              message="NFT was successfully created and should be displayed in your wallet shortly"
             />
           )}
         </Popup>
@@ -528,7 +535,6 @@ const SingleNFTSettings = () => {
                   />
                   <div className="single-nft-picture">
                     <div className="preview__image">
-                      {console.log('video ', previewImage)}
                       {previewImage.type === 'video/mp4' && (
                         <video
                           onMouseOver={(event) => event.target.play()}
@@ -673,10 +679,7 @@ const SingleNFTSettings = () => {
               </h5>
               {hideIcon && (
                 <div className="info-text">
-                  <p>
-                    NFTs are minted to our auction contract by default. Turn the toggle on if you
-                    want them to be minted to your wallet instead.
-                  </p>
+                  <p>The number of copies that can be minted.</p>
                 </div>
               )}
             </div>

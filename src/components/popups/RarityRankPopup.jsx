@@ -40,7 +40,7 @@ const RarityRankPopup = ({ onClose, item }) => {
                 View on Opensea <img src={linkIcon} alt="Link Icon" />
               </a>
             </div>
-            <p className="number">{`#${item.serialNumber}`}</p>
+            <p className="number">{`ID: #${item.serialNumber}`}</p>
           </div>
           <div className="rarity--rank--descriptions">
             <div className="rarity--description--gradient">

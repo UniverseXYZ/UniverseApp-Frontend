@@ -7,6 +7,10 @@
     overflow-y: auto;
     padding: 0;
 
+    .modal-close {
+      display: none;
+    }
+
     @include lg {
       padding: 84px 60px;
     }
@@ -240,15 +244,17 @@
           background: $white;
           box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
           border-radius: 12px;
-          width: 224px;
-          height: 106px;
+          width: 165px;
+          height: 68px;
           padding: 16px;
           bottom: 25px;
-          left: 85%;
+          left: 95%;
           transform: translateX(-50%);
 
           p {
             font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
             font-size: 12px;
             line-height: 150%;
             color: $black;
@@ -297,16 +303,18 @@
 
           &:hover {
             .box--shadow--effect--block {
-                opacity: 1;
+              opacity: 1;
             }
           }
         }
 
-        .box--shadow--effect--block{
-          background: linear-gradient(to right, #bceb00, #00eaea) border-box;
+        .box--shadow--effect--block {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
+          border: 4px solid transparent;
           border-radius: 12px;
           position: absolute;
-          filter: blur(3px);
+          filter: blur(4px);
           opacity: 0;
           width: 140px;
           height: 140px;
@@ -331,7 +339,7 @@
           z-index: 10;
           &:hover {
             background: linear-gradient($white, $white) padding-box,
-              linear-gradient(to right, #bceb00, #00eaea) border-box;
+              linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
             border: 1px solid transparent;
           }
 
@@ -594,9 +602,9 @@
         }
 
         .delete-img {
-          margin-top: 23px;
-          width: 50px;
-          height: 50px;
+          margin-top: 22px;
+          width: 52px;
+          height: 52px;
           border-radius: 12px;
           cursor: pointer;
 
@@ -833,12 +841,16 @@
           margin-right: 12px;
           @include sm {
             margin-right: 0;
-            margin-bottom: 20px;
+            margin-top: 20px;
           }
         }
       }
       @include sm {
-        display: grid;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        button {
+          width: 100%;
+        }
       }
     }
   }

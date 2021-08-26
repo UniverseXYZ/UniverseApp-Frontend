@@ -8,7 +8,7 @@
   .tab__left__arrow {
     display: none;
     position: absolute;
-    top: 0;
+    top: 11px;
     left: 0;
     right: 0;
     justify-content: flex-end;
@@ -24,7 +24,7 @@
   .tab__right__arrow {
     display: none;
     position: absolute;
-    top: 0;
+    top: 11px;
     left: 0;
     right: 0;
     justify-content: flex-end;
@@ -58,7 +58,7 @@
         line-height: 20px;
         color: rgba(0, 0, 0, 0.4);
         padding-bottom: 9px;
-        cursor: default;
+        cursor: pointer;
 
         &:last-child {
           margin-right: 0;

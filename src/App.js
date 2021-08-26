@@ -39,6 +39,8 @@ import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
 import MyProfile from './containers/myProfile/MyProfile';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
+import PolymorphUniverse from './containers/polymorphUniverse/PolymorphUniverse';
+import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
 
 const App = () => {
   const location = useLocation();
@@ -75,6 +77,7 @@ const App = () => {
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
   const [darkMode, setDarkMode] = useState(true);
+  const [sortName, setSortName] = useState('Sort by');
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [stepsData, setStepsData] = useState({
@@ -123,14 +126,14 @@ const App = () => {
         handleClickOutside,
         savedNfts,
         setSavedNfts,
-        selectedTabIndex,
-        setSelectedTabIndex,
         universeNFTs,
         setUniverseNFTs,
         showModal,
         setShowModal,
         myNFTsSelectedTabIndex,
         setMyNFTsSelectedTabIndex,
+        selectedTabIndex,
+        setSelectedTabIndex,
         savedCollections,
         setSavedCollections,
         activeView,
@@ -163,6 +166,8 @@ const App = () => {
         setDarkMode,
         editProfileButtonClick,
         setEditProfileButtonClick,
+        sortName,
+        setSortName,
         selectedTokenIndex,
         setSelectedTokenIndex,
       }}
@@ -173,6 +178,7 @@ const App = () => {
         <Route exact path="/about" component={() => <About />} />
         <Route exact path="/team" component={() => <Team />} />
         <Route exact path="/polymorphs" component={() => <Polymorphs />} />
+        <Route exact path="/polymorph-universe" component={() => <PolymorphUniverse />} />
         <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
         <Route exact path="/burn-to-mint" component={() => <BurnToMint />} />
         <Route exact path="/planets/adaka" component={() => <Planet1 />} />
@@ -180,11 +186,12 @@ const App = () => {
         <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
-        <Route path="/character-page" component={() => <CharacterPage />} />
+        <Route exact path="/character-page" component={() => <CharacterPage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
+        <Route exact path="/lobby-lobsters" component={() => <LobbyLobsters />} />
         <Route exact path="/polymorph-rarity" component={() => <RarityCharts />} />
         <Route exact path="/my-profile" component={() => <MyProfile />} />
         <Route path="/setup-auction" component={() => <SetupAuction />} />
@@ -199,7 +206,7 @@ const App = () => {
           component={() => <Marketplace />}
         />
         <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-        <Route exact path="/my-nfts/create" component={() => <CreateNFT />} />
+        <Route exact path="/my-nfts/create" component={CreateNFT} />
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />
