@@ -83,6 +83,8 @@
 span.inp-label,
 .inp-label {
   position: relative;
+  bottom: 1px;
+  line-height: 22px;
   font-family: $spaceGroteskFont;
   font-style: normal;
   font-weight: bold;
