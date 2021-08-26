@@ -68,6 +68,7 @@ const SingleNFTSettings = () => {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
+  const [border, setBorder] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
 
   const handleInputChange = (val) => {
@@ -436,6 +437,12 @@ const SingleNFTSettings = () => {
 
   const onDragOver = (e) => {
     e.preventDefault();
+    setBorder(true);
+  };
+
+  const onDragLeave = (e) => {
+    e.preventDefault();
+    setBorder(false);
   };
 
   useEffect(() => {
@@ -512,6 +519,7 @@ const SingleNFTSettings = () => {
               className={`dropzone ${errors.previewImage ? 'error' : ''}`}
               onDrop={(e) => onDrop(e)}
               onDragOver={(e) => onDragOver(e)}
+              onDragLeave={(e) => onDragLeave(e)}
             >
               {previewImage ? (
                 <div className="single-nft-preview">
@@ -519,7 +527,10 @@ const SingleNFTSettings = () => {
                     className="close"
                     src={closeIcon}
                     alt="Close"
-                    onClick={() => setPreviewImage(null)}
+                    onClick={() => {
+                      setPreviewImage(null);
+                      setBorder(false);
+                    }}
                     aria-hidden="true"
                   />
                   <div className="single-nft-picture">
@@ -552,7 +563,9 @@ const SingleNFTSettings = () => {
               ) : (
                 <div
                   className={
-                    errors.previewImage ? 'single-nft-upload-file error' : 'single-nft-upload-file'
+                    errors.previewImage
+                      ? 'single-nft-upload-file error'
+                      : `single-nft-upload-file ${border ? 'single-nft-upload-file-border' : ''}`
                   }
                 >
                   <div className="single-nft-drop-file">
