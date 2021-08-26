@@ -1,17 +1,17 @@
 import React from 'react';
 import './HeroSection.scss';
 import waveImage from '../../../assets/images/lobby-lobsters/moving-wave.png';
-import heroDesktopImage from '../../../assets/images/lobby-lobsters/floating-nfts.png';
-import heroTabletImage from '../../../assets/images/lobby-lobsters/floating-nfts-tablet.png';
+import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
+import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 
 const HeroSection = () => (
   <div className="lobby--lobsters--hero--section">
     <div className="wave--img">
-      <img src={waveImage} alt="Wave" />
+      <EndlessWaveAnimation />
+      {/* <img src={waveImage} alt="Wave" /> */}
     </div>
     <div className="hero--img">
-      <img src={heroDesktopImage} alt="Hero" className="for--desktop" />
-      <img src={heroTabletImage} alt="Hero" className="for--tablet" />
+      <FloatingNFTsAnimation />
     </div>
     <div className="lobby--lobsters--hero--section--container">
       <div className="left--section">
