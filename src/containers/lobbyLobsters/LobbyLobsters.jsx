@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import HeroSection from '../../components/lobbyLobsters/heroSection/HeroSection';
 import AppContext from '../../ContextAPI';
 import HelpUsBeHeard from '../../components/lobbyLobsters/helpUs/HelpUsBeHeard';
+import Donate from '../../components/lobbyLobsters/donate/Donate';
 import SliderSection from '../../components/lobbyLobsters/sliderSection/SliderSection';
 
 const LobbyLobsters = () => {
@@ -14,6 +15,7 @@ const LobbyLobsters = () => {
     <div className="lobby--lobsters--page">
       <HeroSection />
       <HelpUsBeHeard />
+      <Donate />
       <SliderSection />
     </div>
   );

@@ -23,17 +23,20 @@
   .wave--img {
     position: absolute;
     left: 0;
-    bottom: -106px;
+    bottom: -130px;
     z-index: 2;
     width: 100%;
     img {
       width: 100%;
     }
     @include lg {
-      bottom: -70px;
+      bottom: -74px;
     }
     @include md {
-      bottom: -54px;
+      bottom: -57px;
+    }
+    @media (max-width: 440px) {
+      bottom: -35px;
     }
   }
 
