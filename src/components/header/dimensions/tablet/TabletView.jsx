@@ -30,6 +30,7 @@ import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
 import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
+import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -510,6 +511,17 @@ const TabletView = (props) => {
                     >
                       <img src={polymorphsIcon} alt="Polymorphs" />
                       <span>Polymorphs</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        history.push('/lobby-lobsters');
+                      }}
+                    >
+                      <img src={lobbyLobstersIcon} alt="Lobby lobsters" />
+                      <span>Lobby lobsters</span>
                     </button>
                   </div>
                   <div>
