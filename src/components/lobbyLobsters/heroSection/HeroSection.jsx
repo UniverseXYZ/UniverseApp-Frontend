@@ -1,6 +1,5 @@
 import React from 'react';
 import './HeroSection.scss';
-import waveImage from '../../../assets/images/lobby-lobsters/moving-wave.png';
 import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
 import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 
@@ -8,7 +7,6 @@ const HeroSection = () => (
   <div className="lobby--lobsters--hero--section">
     <div className="wave--img">
       <EndlessWaveAnimation />
-      {/* <img src={waveImage} alt="Wave" /> */}
     </div>
     <div className="hero--img">
       <FloatingNFTsAnimation />
