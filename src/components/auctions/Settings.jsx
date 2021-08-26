@@ -10,7 +10,6 @@ import EthereumAddress from 'ethereum-address';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
-import delateIcon2 from '../../assets/images/RemoveBtn2.svg';
 import delIcon from '../../assets/images/del-icon.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
@@ -545,18 +544,6 @@ const AuctionSettings = () => {
                   className="remove-img"
                   onClick={() => removeProperty(i)}
                   aria-hidden="true"
-                  onMouseOver={(e) => {
-                    e.currentTarget.src = delateIcon2;
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.src = delateIcon2;
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.src = delateIcon;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.src = delateIcon;
-                  }}
                 />
                 <Button
                   className="light-border-button remove-btn"
