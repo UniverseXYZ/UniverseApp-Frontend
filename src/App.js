@@ -40,6 +40,7 @@ import MyProfile from './containers/myProfile/MyProfile';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 import PolymorphUniverse from './containers/polymorphUniverse/PolymorphUniverse';
+import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
 
 const App = () => {
   const location = useLocation();
@@ -190,6 +191,7 @@ const App = () => {
         <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
+        <Route exact path="/lobby-lobsters" component={() => <LobbyLobsters />} />
         <Route exact path="/polymorph-rarity" component={() => <RarityCharts />} />
         <Route exact path="/my-profile" component={() => <MyProfile />} />
         <Route path="/setup-auction" component={() => <SetupAuction />} />
@@ -204,7 +206,7 @@ const App = () => {
           component={() => <Marketplace />}
         />
         <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-        <Route exact path="/my-nfts/create" component={() => <CreateNFT />} />
+        <Route exact path="/my-nfts/create" component={CreateNFT} />
         <Route exact path="/my-account" component={() => <MyAccount />} />
         <Route exact path="/my-auctions" component={() => <Auctions />} />
         <Route exact path="/create-tiers" component={() => <CreateTiers />} />

@@ -95,6 +95,11 @@
         width: 50px;
         height: 50px;
         cursor: pointer;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 73, 73, 0.2);
+        &:hover {
+          background: rgba(255, 73, 73, 0.05);
+        }
         @include sm{
           display: none;
           }
@@ -196,6 +201,20 @@
         font-size: 16px;
         line-height: 20px;
         color: #1a1a1a;
+      }
+      #startDate, #endDate {
+        color: transparent;
+      }
+      .date--input--value {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-size: 16px;
+        line-height: 20px;
+        color: #1a1a1a;
+        position: absolute;
+        top: 53%;
+        left: 16px;
+        z-index: 100;
       }
       .auction-name, .starting-bid {
         position: relative;

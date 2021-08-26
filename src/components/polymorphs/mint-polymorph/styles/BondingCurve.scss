@@ -133,6 +133,9 @@
         }
         .light-button {
             height: 50px !important;
+            @include lg {
+                margin-top: auto;
+            }
         }
         .price--block {
             width: 25% !important;

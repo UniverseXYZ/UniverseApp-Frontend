@@ -14,6 +14,8 @@ import './styles/BondingCurve.scss';
 
 const BondingCurve = (props) => {
   const {
+    title,
+    price,
     value,
     setValue,
     min,
@@ -70,7 +72,7 @@ const BondingCurve = (props) => {
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
-        <h5>Distribution curve</h5>
+        <h5>{title}</h5>
       </div>
       <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
       <div className="row3--section">
@@ -104,7 +106,7 @@ const BondingCurve = (props) => {
                 alt="img"
                 src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
               />
-              {(quantity * 0.0777).toFixed(4)}
+              {price === 0.1 ? (quantity * price).toFixed(1) : (quantity * price).toFixed(4)}
             </span>
           </p>
         </div>
@@ -124,6 +126,8 @@ const BondingCurve = (props) => {
 };
 
 BondingCurve.propTypes = {
+  title: PropTypes.string,
+  price: PropTypes.number,
   value: PropTypes.number.isRequired,
   setValue: PropTypes.func,
   min: PropTypes.number,
@@ -139,6 +143,8 @@ BondingCurve.propTypes = {
 };
 
 BondingCurve.defaultProps = {
+  title: 'Distribution curve',
+  price: 0.0777,
   setValue: () => {},
   min: 0,
   max: 100,

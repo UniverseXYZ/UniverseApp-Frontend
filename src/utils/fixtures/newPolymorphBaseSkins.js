@@ -7,6 +7,7 @@ import Grishnak from '../../assets/images/new-polymorph-base-skins/Grishnak.png'
 import Mariguana from '../../assets/images/new-polymorph-base-skins/Mariguana.png';
 import Vitalik from '../../assets/images/new-polymorph-base-skins/Vitalik.png';
 import XYZ from '../../assets/images/new-polymorph-base-skins/X-YZ.png';
+import blank from '../../assets/images/blank.png';
 
 export default [
   { img: Vitalik, name: 'Vitalik' },
@@ -18,6 +19,8 @@ export default [
   { img: Grishnak, name: 'Troll God' },
   { img: XYZ, name: 'X-YZ' },
   { img: Frankie, name: 'Frankie' },
-  { img: Frankie, name: 'Frankie' },
-  { img: Frankie, name: 'Frankie' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
 ];

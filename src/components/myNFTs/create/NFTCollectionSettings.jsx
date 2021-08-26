@@ -56,6 +56,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const [mintNowClick, setMintNowClick] = useState(false);
+  const [border, setBorder] = useState(false);
 
   const [errors, setErrors] = useState({
     coverImage: '',
@@ -256,6 +257,24 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     }
   };
 
+  const onDrop = (e) => {
+    e.preventDefault();
+    const {
+      dataTransfer: { files },
+    } = e;
+    validateFile(files[0]);
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
+    setBorder(true);
+  };
+
+  const onDragLeave = (e) => {
+    e.preventDefault();
+    setBorder(false);
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
     return () => {
@@ -300,48 +319,49 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         if (!savedCollectionID) {
           document.getElementById('loading-hidden-btn').click();
           setTimeout(() => {
-            document.getElementById('popup-root').remove();
+            document.getElementById('loading-hidden-btn').click();
+          }, 2000);
+
+          setTimeout(() => {
             document.getElementById('congrats-hidden-btn').click();
-            setTimeout(() => {
-              if (collectionNFTs.length) {
-                const newMyNFTs = [...myNFTs];
-                collectionNFTs.forEach((nft) => {
-                  newMyNFTs.push({
-                    id: uuid(),
-                    type: 'collection',
-                    collectionId: collectionName,
-                    collectionName,
-                    collectionAvatar:
-                      coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                    tokenName,
-                    collectionDescription: description,
-                    shortURL,
-                    previewImage: nft.previewImage,
-                    name: nft.name,
-                    description: nft.description,
-                    numberOfEditions: Number(nft.editions),
-                    generatedEditions: nft.generatedEditions,
-                    releasedDate: new Date(),
-                    properties: nft.properties,
-                    royaltySplits: nft.royaltySplits,
-                  });
-                });
-                setMyNFTs(newMyNFTs);
-              }
-              setDeployedCollections([
-                ...deployedCollections,
-                {
-                  id: collectionName,
-                  previewImage:
+            if (collectionNFTs.length) {
+              const newMyNFTs = [...myNFTs];
+              collectionNFTs.forEach((nft) => {
+                newMyNFTs.push({
+                  id: uuid(),
+                  type: 'collection',
+                  collectionId: collectionName,
+                  collectionName,
+                  collectionAvatar:
                     coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                  name: collectionName,
                   tokenName,
-                  description,
+                  collectionDescription: description,
                   shortURL,
-                },
-              ]);
-            }, 2000);
-          }, 3000);
+                  previewImage: nft.previewImage,
+                  name: nft.name,
+                  description: nft.description,
+                  numberOfEditions: Number(nft.editions),
+                  generatedEditions: nft.generatedEditions,
+                  releasedDate: new Date(),
+                  properties: nft.properties,
+                  royaltySplits: nft.royaltySplits,
+                });
+              });
+              setMyNFTs(newMyNFTs);
+            }
+            setDeployedCollections([
+              ...deployedCollections,
+              {
+                id: collectionName,
+                previewImage:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                name: collectionName,
+                tokenName,
+                description,
+                shortURL,
+              },
+            ]);
+          }, 2500);
         } else {
           const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
           const coll = {
@@ -416,10 +436,16 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       {/* <h1 className="nft--collection--settings--page--title">NFT collection settings</h1> */}
       <div className="image--name--token">
         <div className="collection--cover--image">
-          <div className={`collection--cover--image--circle ${coverImage ? 'border--none' : ''}`}>
+          <div
+            className={`dropzone collection--cover--image--circle
+              ${coverImage ? 'border--none' : ''}`}
+            onDrop={(e) => onDrop(e)}
+            onDragOver={(e) => onDragOver(e)}
+            onDragLeave={(e) => onDragLeave(e)}
+          >
             {!coverImage ? (
               <div
-                className="image--not--selected"
+                className={`image--not--selected ${border ? 'image--not--selected--border' : ''}`}
                 onClick={() => inputFile.current.click()}
                 aria-hidden="true"
               >
@@ -443,7 +469,10 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 />
                 <div
                   className="remove--selected--image"
-                  onClick={() => setCoverImage(null)}
+                  onClick={() => {
+                    setCoverImage(null);
+                    setBorder(false);
+                  }}
                   aria-hidden="true"
                 >
                   <img src={closeIcon} alt="Close" />

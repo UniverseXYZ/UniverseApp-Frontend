@@ -1,0 +1,40 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/_mixins';
+
+.lobby--lobsters--mint--section {
+    padding: 110px 60px 200px;
+    background: linear-gradient(180deg, #44A4B6 0.01%, #042A33 100%);
+    &--container {
+        max-width: 1110px;
+        margin: 0 auto;
+        h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 36px;
+            line-height: 140%;
+            text-align: center;
+            color: $white;
+            @include lg {
+                font-size: 32px;
+            }
+            @include sm {
+                font-size: 26px;
+            }
+        }
+        p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 150%;
+            text-align: center;
+            color: $white;
+            max-width: 800px;
+            margin: 20px auto 60px;
+        }
+    }
+    @include sm {
+        padding: 90px 20px 200px;
+    }
+}
