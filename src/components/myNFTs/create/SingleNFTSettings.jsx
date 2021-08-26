@@ -24,8 +24,17 @@ import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
-import { saveNftForLater, saveNftImage, getSavedNfts } from '../../../utils/api/mintNFT';
-import { parseRoyalties, parseProperties } from '../../../utils/helpers/contractInteraction';
+import {
+  saveNftForLater,
+  saveNftImage,
+  getSavedNfts,
+  updateSavedForLaterNft,
+} from '../../../utils/api/mintNFT';
+import {
+  parseRoyalties,
+  parseProperties,
+  parsePropertiesForFrontEnd,
+} from '../../../utils/helpers/contractInteraction';
 import { MintSingleNftFlow } from '../../../userFlows/MintSingleNftFlow';
 
 const SingleNFTSettings = () => {
@@ -299,6 +308,47 @@ const SingleNFTSettings = () => {
     }
   };
 
+  const onEditSavedNft = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+
+    const nftData = {
+      name,
+      description,
+      editions,
+      propertiesParsed,
+      royaltiesParsed,
+      id: savedNFTsID,
+      collectionId: selectedCollection?.id,
+    };
+
+    let result = await updateSavedForLaterNft(nftData);
+
+    if (!result.message) {
+      const updateNFTImage = result.id && typeof previewImage === 'object';
+      if (updateNFTImage) {
+        const saveImageRes = await saveNftImage(previewImage, result.id);
+        result = saveImageRes;
+      }
+    }
+
+    if (result?.error) {
+      showErrorModal(true);
+      return;
+    }
+
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS || []);
+
+    document.getElementById('congrats-hidden-btn').click();
+    closeLoadingModal();
+  };
+
+  const getPreviewImageSource = (p) =>
+    typeof p === 'string' ? p : URL.createObjectURL(previewImage);
+
   useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
@@ -319,6 +369,31 @@ const SingleNFTSettings = () => {
   const onDragOver = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    if (savedNFTsID) {
+      const res = savedNfts.filter((item) => item.id === savedNFTsID)[0];
+      if (res) {
+        const parsedProperties = res.properties
+          ? parsePropertiesForFrontEnd(res.properties)
+          : [{ name: '', value: '', errors: { name: '', value: '' } }];
+        setName(res.name);
+        setDescription(res.description);
+        setEditions(res.numberOfEditions);
+        setPreviewImage(res.url);
+        setRoyaltyAddress(res.royalties);
+        setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
+        setProperties(parsedProperties);
+        console.log(res);
+        if (res.collectionId) {
+          const getCollection = deployedCollections.filter((col) => col.id === res.collectionId)[0];
+          if (getCollection) {
+            setSelectedCollection(getCollection);
+          }
+        }
+      }
+    }
+  }, []);
 
   return (
     <div className="single__nft">
@@ -407,7 +482,7 @@ const SingleNFTSettings = () => {
                           onMouseOut={(event) => event.target.pause()}
                           onBlur={(event) => event.target.pause()}
                         >
-                          <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                          <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
                           <track kind="captions" />
                           Your browser does not support the video tag.
                         </video>
@@ -418,7 +493,7 @@ const SingleNFTSettings = () => {
                       {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
                         <img
                           className="preview-image"
-                          src={URL.createObjectURL(previewImage)}
+                          src={getPreviewImageSource(previewImage)}
                           alt="Preview"
                         />
                       )}
@@ -463,7 +538,7 @@ const SingleNFTSettings = () => {
                   <div className="preview__image">
                     {previewImage.type === 'video/mp4' && (
                       <video>
-                        <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                        <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
@@ -474,7 +549,7 @@ const SingleNFTSettings = () => {
                     {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
                       <img
                         className="preview-image"
-                        src={URL.createObjectURL(previewImage)}
+                        src={getPreviewImageSource(previewImage)}
                         alt="Preview"
                       />
                     )}
@@ -652,7 +727,7 @@ const SingleNFTSettings = () => {
                       <h5>Property name</h5>
                       <Input
                         className="inp"
-                        error={elm.errors.name}
+                        error={elm.errors?.name}
                         placeholder="Colour"
                         value={elm.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
@@ -662,7 +737,7 @@ const SingleNFTSettings = () => {
                       <h5>Value</h5>
                       <Input
                         className="inp"
-                        error={elm.errors.value}
+                        error={elm.errors?.value}
                         placeholder="Red"
                         value={elm.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}

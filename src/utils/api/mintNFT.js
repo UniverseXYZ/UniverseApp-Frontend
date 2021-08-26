@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-debugger */
 /* eslint-disable no-useless-return */
 const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
@@ -105,6 +107,21 @@ export const getMyNfts = async () => {
     console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
   }
   const result = await request.text().then((data) => JSON.parse(data));
+  let currentList = JSON.parse(localStorage.getItem('nftsPlaceholders'));
+
+  if (currentList?.length) {
+    result.nfts.forEach((nft) => {
+      for (let i = 0; i < nft.tokenIds.length; i += 1) {
+        const match = currentList.indexOf(`${nft.collection.id}${nft.name}${nft.description}`);
+        if (match > -1) {
+          currentList.splice(match, 1);
+        }
+      }
+    });
+
+    localStorage.setItem('nftsPlaceholders', JSON.stringify(currentList));
+  }
+
   return result.nfts;
 };
 
@@ -215,14 +232,13 @@ export const getTokenURI = async ({
 };
 
 export const saveCollection = async (data) => {
-  const { file, name, symbol, description, shortUrl } = data;
+  const { file, name, symbol, description } = data;
 
   const formData = new FormData();
   if (file) formData.append('file', file, file.name);
   formData.append('name', name);
   formData.append('symbol', symbol);
   formData.append('description', description);
-  formData.append('shortUrl', shortUrl);
 
   const requestUrl = CREATE_COLLECTION_URL;
   const requestOptions = {

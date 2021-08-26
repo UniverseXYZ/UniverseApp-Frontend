@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useState, useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import './assets/scss/normalize.scss';
@@ -147,6 +148,7 @@ const App = () => {
     setUsdWethBalance(ethPrice.ethereum.usd * utils.formatEther(wethBalanceResult.result));
     // setAuctionFactoryContract(auctionFactoryContractResult);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
+    setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
     setIsWalletConnected(true);
     setContracts(contractsResult);
   };
@@ -374,6 +376,7 @@ const App = () => {
         setAuctionFactoryContract,
         universeERC721CoreContract,
         setUniverseERC721CoreContract,
+        universeERC721FactoryContract,
         signer,
         setSigner,
         connectWeb3,

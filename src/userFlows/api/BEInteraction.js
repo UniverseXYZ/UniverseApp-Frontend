@@ -1,7 +1,12 @@
 /* eslint-disable no-debugger */
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-await-in-loop */
-import { getMetaForSavedNft, getTokenURI } from '../../utils/api/mintNFT';
+import {
+  getMetaForSavedNft,
+  getTokenURI,
+  saveCollection,
+  attachTxHashToCollection,
+} from '../../utils/api/mintNFT';
 import { resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
 
 /**
@@ -87,16 +92,15 @@ export const generateTokenURIs = async ({ nfts }) => {
  * @param data.collection.description
  * @param data.collection.shortUrl
  * @param data.collection.id
- * @returns {Object} nfts: { collection: { id }, helpers }
+ * @returns {Object} nfts: { collection: { ...collection, id }, helpers }
  */
 export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
-  const { file, name, symbol, description, shortUrl } = collection;
+  const { file, name, symbol, description } = collection;
   const collectionCreationResult = await saveCollection({
     file,
     name,
     symbol,
     description,
-    shortUrl,
   });
 
   collection.id = collectionCreationResult?.id;
@@ -112,7 +116,6 @@ export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
  * @param {Object} data.collection
  * @param data.collection.transactionHash
  * @param data.collection.id
- * @returns {Object} collection
  */
 export const updateCollectionTxHash = async ({ collection }) => {
   const response = await attachTxHashToCollection(collection.transactionHash, collection.id);
@@ -121,10 +124,5 @@ export const updateCollectionTxHash = async ({ collection }) => {
     console.error(`Error while trying to save a new collection: ${response.statusText}`);
   }
 
-  return collection;
-};
-
-export const getSingleCollectionAddress = async (data) => {
-  // get collection address
-  return data;
+  return response;
 };

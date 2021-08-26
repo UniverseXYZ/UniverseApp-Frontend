@@ -94,29 +94,37 @@ export async function sendBatchMintRequest(
   await resolveAllPromises(promises);
 }
 
-// export const deployCollection = async ({ collection, helpers }) => {
-//   if (collection.id) {
-//     const unsignedMintCollectionTx =
-//       await helpers.universeERC721FactoryContract.deployUniverseERC721(
-//         collection.name,
-//         collection.tokenName
-//       );
+/**
+ * @param {Object} data
+ * @param {Object} data.helpers
+ * @param data.helpers.universeERC721FactoryContract
+ * @param {Object} data.collection
+ * @param data.collection.name
+ * @param data.collection.symbol
+ * @returns {Object} nfts: { collection: { ...collection, transactionHash, from }, helpers }
+ */
+export const deployCollection = async ({ collection, helpers }) => {
+  if (collection.id) {
+    const tx = await helpers.universeERC721FactoryContract.deployUniverseERC721(
+      collection.name,
+      collection.symbol
+    );
 
-//     const res = await unsignedMintCollectionTx.wait();
+    const res = await tx.wait();
 
-//     if (!res.status) {
-//       console.error('satus code:', res.status);
-//       return;
-//     }
+    if (!res.status) {
+      console.error('satus code:', res.status);
+      return;
+    }
 
-//     collection.transactionHash = res.transactionHash;
-//     collection.from = res.from;
-//   } else {
-//     console.error('There was an error');
-//   }
+    collection.transactionHash = res.transactionHash;
+    collection.from = res.from;
+  } else {
+    console.error('There was an error');
+  }
 
-//   return {
-//     collection,
-//     helpers,
-//   };
-// };
+  return {
+    collection,
+    helpers,
+  };
+};

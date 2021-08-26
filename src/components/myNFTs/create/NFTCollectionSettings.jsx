@@ -26,7 +26,7 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
-import { MintCollectionWithCollectiblesFlow } from '../../../userFlows/MintCollectionWithCollectiblesFlow';
+import { MintSingleCollectionFlow } from '../../../userFlows/MintSingleCollectionFlow';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -198,23 +198,13 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const handleMinting = () => {
     setMintNowClick(true);
-    if (
-      !collectionName ||
-      !tokenName ||
-      !collectionNFTs.length ||
-      shortURL.length <= 15 ||
-      shortURL === 'universe.xyz/c/shorturl'
-    ) {
+    if (!collectionName || !tokenName || !collectionNFTs.length) {
       setErrors({
         collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
-        shorturl:
-          shortURL.length <= 15 || shortURL === 'universe.xyz/c/shorturl'
-            ? '“Short URL” is not allowed to be empty'
-            : '',
       });
-      if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+      if (errors.shorturl.length > 0) {
         setInputClass('empty__error');
       } else {
         setInputClass('inp');
@@ -238,7 +228,6 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           collectionName: '',
           tokenName: '',
           collectible: '',
-          shorturl: '',
         });
       }
     }
@@ -264,12 +253,11 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   };
 
   const onMintCollection = async () => {
+    document.getElementById('loading-hidden-btn').click();
+    document.body.classList.add('no__scroll');
+
     const mintingFlowContext = {
-      universeERC721CoreContract,
       universeERC721FactoryContract,
-      contracts,
-      signer,
-      address,
     };
 
     const collectionData = {
@@ -277,15 +265,27 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       name: collectionName,
       symbol: tokenName,
       description,
-      shortUrl: shortURL,
       tokenName,
     };
 
-    await MintCollectionWithCollectiblesFlow({
-      collectionInput: collectionData,
-      helpersInput: mintingFlowContext,
-      nfts: collectionNFTs,
+    const res = await MintSingleCollectionFlow({
+      collection: collectionData,
+      helpers: mintingFlowContext,
     });
+
+    document.getElementById('popup-root').remove();
+
+    if (res) {
+      // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
+      // const mintedNfts = await getMyNfts();
+      // setMyNFTs(mintedNfts || []);
+
+      document.getElementById('congrats-hidden-btn').click();
+    } else {
+      // error
+    }
+
+    document.body.classList.remove('no__scroll');
   };
 
   useEffect(() => {
@@ -321,7 +321,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   useEffect(() => {
     if (mintNowClick) {
-      if (!errors.collectionName && !errors.tokenName && !errors.shorturl && !errors.collectible) {
+      if (!errors.collectionName && !errors.tokenName) {
         onMintCollection();
       }
     }

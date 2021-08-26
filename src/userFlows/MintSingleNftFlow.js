@@ -6,6 +6,7 @@ import {
   createContractInstancesFromAddresses,
   formatRoyalties,
   returnTokenURIsAndRoyalties,
+  createPlaceholders,
 } from '../utils/helpers/pureFunctions/minting';
 
 import { generateTokenURIs } from './api/BEInteraction';
@@ -37,6 +38,7 @@ export async function MintSingleNftFlow({ nfts, helpers }) {
   const { tokenURIsAndRoyaltiesObject, isSingle } = await asyncPipe(
     generateTokenURIs,
     formatRoyalties,
+    createPlaceholders,
     returnTokenURIsAndRoyalties
   )({ nfts });
 

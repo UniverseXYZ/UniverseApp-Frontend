@@ -27,30 +27,6 @@ export const getCollectionsAdddresses = ({ nfts, helpers }) => {
 /**
  * @param {Object} data
  * @param {Object} data.helpers
- * @param data.helpers.contracts
- * @param data.helpers.signer
- * @param {Object} data.collection
- * @param data.collection.id
- * @returns {Object} { contract: { collectionId: ContractInstance }, collection }
- */
-export const createSingleContract = ({ collection, helpers }) => {
-  const contract = {};
-
-  contract[collection.id] = new Contract(
-    collection.address,
-    helpers.contracts.UniverseERC721Core.abi,
-    helpers.signer
-  );
-
-  return {
-    contract,
-    collection,
-  };
-};
-
-/**
- * @param {Object} data
- * @param {Object} data.helpers
  * @param data.helpers.universeERC721CoreContract
  * @param data.helpers.contracts
  * @param data.helpers.signer
@@ -179,22 +155,6 @@ export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
 };
 
 /**
- * @param {Object} data
- * @param {Object[]} data.nfts
- * @param data.nfts.collectionId
- * @param {Object} data.collection
- * @param data.collection.id
- * @returns {Object[]} { nfts }
- */
-export const attachCollectionIdToNfts = ({ collection, nfts }) => {
-  nfts.map((nft) => {
-    nft.collectionId = collection?.id || 0;
-    return nft;
-  });
-  return { nfts };
-};
-
-/**
  * @param {Promise[]} promises
  * @returns {Array} result
  */
@@ -207,4 +167,27 @@ export const resolveAllPromises = async (promises) => {
     console.error('error');
   }
   return res;
+};
+
+const FACTTORY_CONTRACT_ID = 2;
+
+/**
+ * @param {Object} data
+ * @param {Object[]} data.nfts
+ * @param data.nfts.collectionId
+ * @param data.nfts.name
+ * @param data.nfts.description
+ * @returns {Object[]} { nfts }
+ */
+export const createPlaceholders = ({ nfts }) => {
+  const currentList = JSON.parse(localStorage.getItem('nftsPlaceholders')) || [];
+  nfts.forEach((nft) => {
+    for (let i = 0; i < nft.numberOfEditions; i += 1) {
+      currentList.push(`${nft.collectionId || FACTTORY_CONTRACT_ID}${nft.name}${nft.description}`);
+    }
+  });
+
+  localStorage.setItem('nftsPlaceholders', JSON.stringify(currentList));
+
+  return { nfts };
 };
