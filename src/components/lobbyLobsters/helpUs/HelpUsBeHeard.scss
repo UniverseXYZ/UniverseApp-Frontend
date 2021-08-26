@@ -1,0 +1,61 @@
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/_mixins';
+
+.helpus--general--section {
+  padding: 90px 60px;
+  background: linear-gradient(360deg, #000000 0.12%, #44a4b6 89.49%, rgba(68, 164, 182, 0) 93.55%);
+
+  .helpus--general--section--container {
+    max-width: 1110px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    .right--block {
+      padding-top: 120px;
+      h1 {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 50px;
+        color: $white;
+      }
+      p {
+        font-family: $spaceGroteskFont;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 27px;
+        color: $white;
+        margin-top: 20px;
+        margin-bottom: 40px;
+      }
+      .info--box {
+        display: flex;
+        border-radius: 12px;
+        .icon--section {
+          padding: 32.5px;
+          border-radius: 12px 0 0 12px;
+          background-color: rgba(255, 255, 255, 0.05);
+          img {
+            height: 25px;
+            width: 42px;
+          }
+        }
+        .text--section {
+          padding: 19px 30px;
+          background-color: rgba(255, 255, 255, 0.09);
+          border-radius: 0 12px 12px 0;
+          h2 {
+            font-family: $spaceGroteskFont;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 26px;
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+}

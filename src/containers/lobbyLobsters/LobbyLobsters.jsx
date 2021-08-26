@@ -5,6 +5,7 @@ import HeroSection from '../../components/lobbyLobsters/heroSection/HeroSection'
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import AppContext from '../../ContextAPI';
 import heroSectionImage from '../../assets/images/lobby-lobsters/floating-nfts.png';
+import HelpUsBeHeard from '../../components/lobbyLobsters/helpUs/HelpUsBeHeard';
 
 const LobbyLobsters = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -26,6 +27,7 @@ const LobbyLobsters = () => {
         <img src={heroSectionImage} alt="Hero" />
       </WelcomeWrapper>
       {/* <HeroSection /> */}
+      <HelpUsBeHeard />
     </div>
   );
 };
