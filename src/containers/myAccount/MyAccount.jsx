@@ -78,12 +78,11 @@ const MyAccount = () => {
     // } else {
     //   setShowSocial(true);
     // }
-    // setTimeout(() => {
-    //   if (accountName && accountImage && accountPage !== 'universe.xyz/your-address' && about) {
-    //     // setEditProfileButtonClick(false);
-    //     document.getElementById('congrats-hidden-btn').click();
-    //   }
-    // }, 500);
+    setTimeout(() => {
+      if (accountName && accountImage && accountPage !== 'universe.xyz/your-address' && about) {
+        document.getElementById('congrats-hidden-btn').click();
+      }
+    }, 500);
   };
 
   const cancelChanges = () => {
@@ -100,10 +99,15 @@ const MyAccount = () => {
     setInstagramLink(loggedInArtist.instagramLink);
   };
 
-  return loggedInArtist.name && editProfileButtonClick ? (
-    // <Artist />
-    <>{history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id })}</>
-  ) : (
+  return (
+    // loggedInArtist.name &&
+    //   loggedInArtist.universePageAddress &&
+    //   loggedInArtist.avatar &&
+    //   loggedInArtist.about &&
+    //   editProfileButtonClick ? (
+    //   // <Artist />
+    //   <>{history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id })}</>
+    // ) : (
     <div className="my-account">
       <Popup
         trigger={
@@ -149,6 +153,7 @@ const MyAccount = () => {
       /> */}
     </div>
   );
+  // );
 };
 
 export default MyAccount;

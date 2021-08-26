@@ -46,6 +46,7 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
+  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
 
   return (
     <div className="desktop__nav">
@@ -294,7 +295,19 @@ const DesktopView = ({
                 <button
                   type="button"
                   onClick={() => {
-                    history.push('/my-account');
+                    if (
+                      loggedInArtist.name &&
+                      loggedInArtist.universePageAddress &&
+                      loggedInArtist.avatar &&
+                      loggedInArtist.about &&
+                      editProfileButtonClick
+                    ) {
+                      history.push(`/${loggedInArtist.universePageAddress}`, {
+                        id: loggedInArtist.id,
+                      });
+                    } else {
+                      history.push('/my-account');
+                    }
                     setIsAccountDropdownOpened(false);
                   }}
                 >

@@ -20,7 +20,7 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import cloudIcon from '../../../assets/images/gray_cloud.svg';
 import createIcon from '../../../assets/images/create.svg';
-import delIcon from '../../../assets/images/red-delete.svg';
+import delIcon from '../../../assets/images/delete-red.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
@@ -296,7 +296,7 @@ const SingleNFTSettings = () => {
             document.getElementById('congrats-hidden-btn').click();
             setTimeout(() => {
               closeCongratsPopupEvent();
-            }, 2000);
+            }, 20000);
           }, 3000);
         }
       }
