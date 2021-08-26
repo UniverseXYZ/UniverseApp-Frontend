@@ -23,17 +23,20 @@
   .wave--img {
     position: absolute;
     left: 0;
-    bottom: -80px;
+    bottom: -130px;
     z-index: 2;
     width: 100%;
     img {
       width: 100%;
     }
     @include lg {
-      bottom: -30px;
+      bottom: -74px;
     }
     @include md {
-      bottom: -10px;
+      bottom: -57px;
+    }
+    @media (max-width: 440px) {
+      bottom: -35px;
     }
   }
 
@@ -41,7 +44,7 @@
     max-width: 840px;
     position: absolute;
     right: 0;
-    bottom: 40px;
+    bottom: 0px;
     z-index: 1;
     .for--desktop {
       @include lg {
@@ -60,15 +63,13 @@
     }
     @media (max-width: 1250px) {
       max-width: 700px;
-      bottom: 26px;
+      bottom: -30px;
     }
     @media (max-width: 1160px) {
       max-width: 630px;
-      bottom: 20px;
     }
     @media (max-width: 1100px) {
       max-width: 530px;
-      bottom: 10px;
     }
     @include lg {
       max-width: 100%;

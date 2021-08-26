@@ -3,6 +3,7 @@ import HeroSection from '../../components/lobbyLobsters/heroSection/HeroSection'
 import AppContext from '../../ContextAPI';
 import HelpUsBeHeard from '../../components/lobbyLobsters/helpUs/HelpUsBeHeard';
 import Donate from '../../components/lobbyLobsters/donate/Donate';
+import SliderSection from '../../components/lobbyLobsters/sliderSection/SliderSection';
 
 const LobbyLobsters = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -15,6 +16,7 @@ const LobbyLobsters = () => {
       <HeroSection />
       <HelpUsBeHeard />
       <Donate />
+      <SliderSection />
     </div>
   );
 };
