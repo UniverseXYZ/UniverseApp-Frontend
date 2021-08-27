@@ -1,13 +1,17 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
+import plusIcon from '../../assets/images/PlusIcon.png';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useContext(AppContext);
   const history = useHistory();
+  const ref = useRef(null);
+  const refMobile = useRef(null);
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   return (
     <div className="tab__saved__collections">
@@ -72,12 +76,37 @@ const DeployedCollections = () => {
             <h3>No collections found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
             <Button
-              className="light-button"
-              onClick={() =>
-                history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
-              }
+              // className="light-button"
+              // onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+              ref={ref}
+              className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}
+              onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+              aria-hidden="true"
             >
-              Create Collection
+              Create
+              <img src={plusIcon} alt="icon" />
+              {isDropdownOpened && (
+                <div className="sort__share__dropdown">
+                  <ul>
+                    <li
+                      aria-hidden="true"
+                      onClick={() =>
+                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                      }
+                    >
+                      NFT
+                    </li>
+                    <li
+                      aria-hidden="true"
+                      onClick={() =>
+                        history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
+                      }
+                    >
+                      Collection
+                    </li>
+                  </ul>
+                </div>
+              )}
             </Button>
           </div>
         </div>
