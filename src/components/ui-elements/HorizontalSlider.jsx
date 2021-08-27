@@ -19,7 +19,7 @@ const HorizontalSlider = (props) => {
       <p
         className="horizontall--scroll--value"
         style={{
-          width: `${calculate(value, max, min) > 30 ? calculate(value, max, min) : 30}%`,
+          width: `${calculate(value, max, min) > 50 ? calculate(value, max, min) : 50}%`,
           color: calculate(value, max, min) < 7 ? color1 : color2,
         }}
       >

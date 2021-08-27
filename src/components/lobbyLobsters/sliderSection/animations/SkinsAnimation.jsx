@@ -13,6 +13,7 @@ const SkinsAnimation = () => (
           preserveAspectRatio: 'xMidYMid slice',
         },
       }}
+      isClickToPauseDisabled
     />
   </div>
 );

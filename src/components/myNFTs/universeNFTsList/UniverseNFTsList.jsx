@@ -18,8 +18,14 @@ const UniverseNFTsList = ({
   setCategories,
   categoriesIndexes,
   setCategoriesIndexes,
+  selectedTypeIndex,
 }) => {
-  const sliceData = data.slice(offset, offset + perPage);
+  const sliceData =
+    selectedTypeIndex === 0
+      ? data.filter((i) => i.type === 'polymorph').slice(offset, offset + perPage)
+      : selectedTypeIndex === 1
+      ? data.filter((i) => i.type === 'lobster').slice(offset, offset + perPage)
+      : data.slice(offset, offset + perPage);
 
   const [showClearALL, setShowClearALL] = useState(false);
 
@@ -56,12 +62,12 @@ const UniverseNFTsList = ({
 
   return sliceData.length ? (
     <div className="rarity--charts--list">
-      <CategoriesFilter
+      {/* <CategoriesFilter
         categories={categories}
         setCategories={setCategories}
         categoriesIndexes={categoriesIndexes}
         setCategoriesIndexes={setCategoriesIndexes}
-      />
+      /> */}
       <div className="list--with--selected--filters">
         <div className="selected--filters">
           {showClearALL && <div className="result">898 results</div>}
@@ -97,7 +103,17 @@ const UniverseNFTsList = ({
         </div>
         {data.length ? (
           <div className="pagination__container">
-            <Pagination data={data} perPage={perPage} setOffset={setOffset} />
+            <Pagination
+              data={
+                selectedTypeIndex === 0
+                  ? data.filter((i) => i.type === 'polymorph')
+                  : selectedTypeIndex === 1
+                  ? data.filter((i) => i.type === 'lobster')
+                  : data
+              }
+              perPage={perPage}
+              setOffset={setOffset}
+            />
             <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
           </div>
         ) : (
@@ -122,6 +138,7 @@ UniverseNFTsList.propTypes = {
   setCategories: PropTypes.func.isRequired,
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
+  selectedTypeIndex: PropTypes.number.isRequired,
 };
 
 export default UniverseNFTsList;

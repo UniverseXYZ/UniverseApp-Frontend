@@ -30,10 +30,21 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity, loadingImage }) => 
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       <h1>Congratulations!</h1>
       <p className="desc">
-        You have successfully minted your {polymorphs.length > 1 ? polymorphs.length : ''}{' '}
-        Polymorphic Universe NFT
+        {!loadingImage
+          ? `You have successfully minted your ${
+              polymorphs.length > 1 ? polymorphs.length : ''
+            } Polymorphic Universe NFT`
+          : `You have successfully minted your ${
+              polymorphs.length > 1 ? polymorphs.length : ''
+            } Lobby Lobsters`}
       </p>
-      {!minted ? <p className="info">Your Polymoprhs may take up to 2 minutes to load</p> : <></>}
+      {!minted ? (
+        <p className="info">
+          Your {!loadingImage ? 'Polymoprhs' : 'Lobsters'} may take up to 2 minutes to load
+        </p>
+      ) : (
+        <></>
+      )}
       <div
         className={`polymorph_confirmation_image ${
           polymorphs.length > 1 && polymorphs.length < 5 ? 'img2x2' : ''
@@ -63,7 +74,7 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity, loadingImage }) => 
       </div>
       <div className="button__div_polymorph">
         <Button className="light-button" onClick={() => history.push('/my-nfts')}>
-          My polymorphs
+          {!loadingImage ? 'My polymorphs' : 'My Lobsters'}
         </Button>
         <Button className="light-border-button" onClick={onClose}>
           Mint again

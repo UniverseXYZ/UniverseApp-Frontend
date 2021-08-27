@@ -38,14 +38,18 @@ const AuctionSettings = () => {
     'Dec',
   ];
   const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
-  const [properties, setProperties] = useState([{ address: '', amount: '' }]);
+  const [properties, setProperties] = useState(
+    window.propertiesData ? window.propertiesData : [{ address: '', amount: '' }]
+  );
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
   const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
     useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
-  const [royalities, setRoyalities] = useState(true);
+  const [royalities, setRoyalities] = useState(
+    window.royalitiesValue ? window.royalitiesValue : false
+  );
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -80,10 +84,10 @@ const AuctionSettings = () => {
 
   const [bidValues, setBidValues] = useState([]);
   const [values, setValues] = useState({
-    name: '',
-    startingBid: '',
-    startDate: '',
-    endDate: '',
+    name: window.auctionData ? window.auctionData.name : '',
+    startingBid: window.auctionData ? window.auctionData.startingBid : '',
+    startDate: window.auctionData ? window.auctionData.startDate : '',
+    endDate: window.auctionData ? window.auctionData.endDate : '',
   });
 
   const [startDateTemp, setStartDateTemp] = useState({
@@ -274,6 +278,31 @@ const AuctionSettings = () => {
       setRoyaltyValidAddress(true);
     }
   }, [handleAddAuction]);
+
+  useEffect(() => {
+    if (window.auctionData) {
+      setValues({ ...window.auctionData });
+    }
+    if (window.propertiesData) {
+      setProperties(window.propertiesData);
+    }
+    if (typeof window.royalitiesValue !== 'undefined') {
+      setRoyalities(window.royalitiesValue);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.auctionData = { ...values };
+  }, [values]);
+
+  useEffect(() => {
+    window.propertiesData = properties;
+  }, [properties]);
+
+  useEffect(() => {
+    window.royalitiesValue = royalities;
+    if (royalities) setProperties([{ address: '', amount: '' }]);
+  }, [royalities]);
 
   return (
     <div className="auction-settings container">
@@ -502,13 +531,13 @@ const AuctionSettings = () => {
           <label className="switch">
             <input
               type="checkbox"
-              checked={royalities}
-              onChange={(e) => setRoyalities(e.target.checked)}
+              checked={!royalities}
+              onChange={(e) => setRoyalities(!e.target.checked)}
             />
             <span className="slider round" />
           </label>
         </div>
-        {royalities && (
+        {!royalities && (
           <div className="royalty-form">
             {properties.map((elm, i) => (
               // eslint-disable-next-line react/no-array-index-key

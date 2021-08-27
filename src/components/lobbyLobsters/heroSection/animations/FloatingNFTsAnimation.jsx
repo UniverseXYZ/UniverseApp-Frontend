@@ -12,6 +12,7 @@ const FloatingNFTsAnimation = () => (
         preserveAspectRatio: 'xMidYMid slice',
       },
     }}
+    isClickToPauseDisabled
   />
 );
 

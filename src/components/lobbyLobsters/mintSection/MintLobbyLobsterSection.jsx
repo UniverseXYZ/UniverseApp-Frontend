@@ -4,7 +4,7 @@ import './MintLobbyLobsterSection.scss';
 import lobsterLoadingBg from '../../../assets/images/lobby-lobsters/img_placeholder.png';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(4520);
   const [quantity, setQuantity] = useState(1);
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({
@@ -32,7 +32,7 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
             price={0.1}
             value={sliderValue}
             setValue={setSliderValue}
-            max={30}
+            max={10000}
             mobile={mobile}
             blur
             quantity={quantity}
