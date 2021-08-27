@@ -56,12 +56,12 @@ const UniverseNFTsList = ({
 
   return sliceData.length ? (
     <div className="rarity--charts--list">
-      <CategoriesFilter
+      {/* <CategoriesFilter
         categories={categories}
         setCategories={setCategories}
         categoriesIndexes={categoriesIndexes}
         setCategoriesIndexes={setCategoriesIndexes}
-      />
+      /> */}
       <div className="list--with--selected--filters">
         <div className="selected--filters">
           {showClearALL && <div className="result">898 results</div>}
