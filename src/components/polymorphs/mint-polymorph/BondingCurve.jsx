@@ -28,6 +28,7 @@ const BondingCurve = (props) => {
     quantity,
     setQuantity,
     light,
+    loadingImage,
   } = props;
 
   const mintPolymorph = () => {
@@ -67,7 +68,13 @@ const BondingCurve = (props) => {
           />
         }
       >
-        {(close) => <MintPolymorphConfirmationPopup onClose={close} quantity={quantity} />}
+        {(close) => (
+          <MintPolymorphConfirmationPopup
+            onClose={close}
+            quantity={quantity}
+            loadingImage={loadingImage}
+          />
+        )}
       </Popup>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
@@ -140,6 +147,7 @@ BondingCurve.propTypes = {
   quantity: PropTypes.number.isRequired,
   setQuantity: PropTypes.func.isRequired,
   light: PropTypes.bool.isRequired,
+  loadingImage: PropTypes.string,
 };
 
 BondingCurve.defaultProps = {
@@ -153,6 +161,7 @@ BondingCurve.defaultProps = {
   color2: 'black',
   mobile: false,
   blur: false,
+  loadingImage: '',
 };
 
 export default BondingCurve;
