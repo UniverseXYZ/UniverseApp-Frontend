@@ -589,6 +589,7 @@
       padding-left: 16px;
       top: 17px;
       height: 20px;
+      z-index: 10;
     }
     @include lg {
       float: none;
