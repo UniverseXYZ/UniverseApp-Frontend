@@ -66,7 +66,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       </div>
       {myAuctions
         .slice(offset, offset + perPage)
-        .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+        .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
         .filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
         .map((futureAuction) => (
           <div className="auction" key={uuid()}>
