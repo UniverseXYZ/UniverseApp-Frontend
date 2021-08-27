@@ -12,6 +12,7 @@ const EndlessWaveAnimation = () => (
         preserveAspectRatio: 'xMidYMid slice',
       },
     }}
+    isClickToPauseDisabled
   />
 );
 

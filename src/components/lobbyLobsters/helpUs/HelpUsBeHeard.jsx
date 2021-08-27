@@ -17,6 +17,7 @@ const HelpUsBeHeard = () => (
               preserveAspectRatio: 'xMidYMid slice',
             },
           }}
+          isClickToPauseDisabled
         />
       </div>
       <div className="right--block">
