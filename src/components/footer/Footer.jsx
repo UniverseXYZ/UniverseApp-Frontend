@@ -163,7 +163,7 @@ const Footer = () => {
                     Polymorphs
                   </li>
                   <li onClick={() => history.push('/lobby-lobsters')} aria-hidden="true">
-                    Lobby lobsters
+                    Lobby Lobsters
                   </li>
                   <li onClick={() => history.push('/core-drops')} aria-hidden="true">
                     OG planet drop

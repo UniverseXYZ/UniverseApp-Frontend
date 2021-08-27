@@ -34,12 +34,13 @@ const PolymorphCard = ({ item }) => {
         >
           {(close) => <RarityRankPopup onClose={close} item={item} />}
         </Popup> */}
-        {item.scrambled === 'single' ? (
+        {item.scrambled === 'single' && (
           <div className="card--scrambled">
             <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
             <span className="tooltiptext">Single trait scrambled</span>
           </div>
-        ) : (
+        )}
+        {item.scrambled === 'never' && (
           <div className="card--scrambled">
             <img alt="Never scrambled badge" src={neverScrambledIcon} />
             <span className="tooltiptext">Never scrambled</span>

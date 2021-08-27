@@ -530,8 +530,8 @@ const MobileView = (props) => {
                             history.push('/lobby-lobsters');
                           }}
                         >
-                          <img src={lobbyLobstersIcon} alt="Lobby lobsters" />
-                          <span>Lobby lobsters</span>
+                          <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
+                          <span>Lobby Lobsters</span>
                         </button>
                       </div>
                       <div>
