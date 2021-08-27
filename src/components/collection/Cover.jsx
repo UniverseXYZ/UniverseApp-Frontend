@@ -39,7 +39,14 @@ const Cover = ({ selectedCollection }) => {
           style={{ backgroundColor: selectedCollection.coverUrl }}
         />
       ) : (
-        <img className="bg blur" src={selectedCollection.coverUrl} alt={selectedCollection.name} />
+        <>
+          <img
+            className="bg blur"
+            src={selectedCollection.coverUrl}
+            alt={selectedCollection.name}
+          />
+          <div className="blured" />
+        </>
       )}
     </div>
   );

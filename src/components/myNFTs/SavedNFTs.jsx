@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import checkIcon from '../../assets/images/check.svg';
+import checkIcon from '../../assets/images/Completed.svg';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
