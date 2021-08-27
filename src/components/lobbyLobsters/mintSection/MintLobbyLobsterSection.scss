@@ -6,12 +6,12 @@
     &--background {
         padding: 110px 60px 200px;
         background-image: url('../../../assets/images/lobby-lobsters/mint-bg-image.png');
-        background-position: left bottom;
+        background-position: left 30%;
         background-repeat: no-repeat;
         background-size: cover;
         @include sm {
             padding: 90px 20px 200px;
-            background-position: -200px bottom;
+            background-position: -200px 30%;
         }
     }
     &--container {
