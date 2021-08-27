@@ -14,6 +14,8 @@ import closeIcon from '../../assets/images/cross.svg';
 import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import '../marketplace/browseNFT/NFTsList.scss';
+import plusIcon from '../../assets/images/PlusIcon.png';
 
 const Wallet = ({
   filteredNFTs,
@@ -25,6 +27,8 @@ const Wallet = ({
   nftsPerWinner,
   minBidValue,
 }) => {
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+
   const { myNFTs, auction, setAuction } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
@@ -444,9 +448,9 @@ const Wallet = ({
               <button
                 type="button"
                 className="set_up"
-                onClick={() => {
-                  history.push('/create-tiers/my-nfts/create');
-                }}
+                // onClick={() => {
+                //   history.push('/create-tiers/my-nfts/create');
+                // }}
               >
                 Go to Minting
               </button>
@@ -459,10 +463,39 @@ const Wallet = ({
               <h3>No NFTs found</h3>
               <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
               <Button
-                className="light-button"
-                onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+                // className="light-button"
+                // onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
+                ref={ref}
+                className={`create--nft--dropdown  ${
+                  isDropdownOpened ? 'opened' : ''
+                } light-button`}
+                onClick={() => setIsDropdownOpened(!isDropdownOpened)}
+                aria-hidden="true"
               >
-                Create NFT
+                Create
+                <img src={plusIcon} alt="icon" />
+                {isDropdownOpened && (
+                  <div className="sort__share__dropdown">
+                    <ul>
+                      <li
+                        aria-hidden="true"
+                        onClick={() =>
+                          history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                        }
+                      >
+                        NFT
+                      </li>
+                      <li
+                        aria-hidden="true"
+                        onClick={() =>
+                          history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' })
+                        }
+                      >
+                        Collection
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </Button>
             </div>
           )}
