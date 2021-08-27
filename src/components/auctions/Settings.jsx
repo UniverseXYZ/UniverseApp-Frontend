@@ -286,7 +286,7 @@ const AuctionSettings = () => {
     if (window.propertiesData) {
       setProperties(window.propertiesData);
     }
-    if (window.royalitiesValue) {
+    if (typeof window.royalitiesValue !== 'undefined') {
       setRoyalities(window.royalitiesValue);
     }
   }, []);
@@ -301,6 +301,7 @@ const AuctionSettings = () => {
 
   useEffect(() => {
     window.royalitiesValue = royalities;
+    if (royalities) setProperties([{ address: '', amount: '' }]);
   }, [royalities]);
 
   return (
