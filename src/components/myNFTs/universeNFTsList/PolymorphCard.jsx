@@ -15,7 +15,7 @@ const PolymorphCard = ({ item }) => {
   return (
     <div className="card">
       <div className="card--header">
-        <div className="card--number">{`#${item.id}`}</div>
+        <div className="card--number">{`#${item.rarityRank}`}</div>
         <div className="card--price">{`Rarity Score: ${item.rarityScore}`}</div>
       </div>
       <div className="card--body">
@@ -26,7 +26,9 @@ const PolymorphCard = ({ item }) => {
           aria-hidden="true"
           onClick={() => {
             setSelectedNftForScramble(item);
-            history.push(`/polymorphs/${item.id}`);
+            history.push(
+              item.type === 'polymorph' ? `/polymorphs/${item.id}` : `/lobsters/${item.id}`
+            );
           }}
         />
         {/* <Popup

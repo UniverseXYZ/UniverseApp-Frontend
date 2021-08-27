@@ -16,6 +16,7 @@ const SortBySelect = (props) => {
     desc,
     hideFirstOption,
     disableOptions,
+    setSelectedTypeIndex,
   } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
@@ -53,7 +54,12 @@ const SortBySelect = (props) => {
                 className={`dropdown--item ${disableOptions[index] ? 'disable' : ''}`}
                 key={uuid()}
                 aria-hidden="true"
-                onClick={() => !disableOptions[index] && setSortValue(item)}
+                onClick={() => {
+                  if (!disableOptions[index]) {
+                    setSortValue(item);
+                    setSelectedTypeIndex(index);
+                  }
+                }}
                 style={{ display: hideFirstOption && index === 0 ? 'none' : 'block' }}
               >
                 {item}
@@ -82,6 +88,7 @@ SortBySelect.propTypes = {
   desc: PropTypes.bool,
   hideFirstOption: PropTypes.bool,
   disableOptions: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedTypeIndex: PropTypes.func,
 };
 
 SortBySelect.defaultProps = {
@@ -102,6 +109,7 @@ SortBySelect.defaultProps = {
   desc: false,
   hideFirstOption: false,
   disableOptions: [],
+  setSelectedTypeIndex: () => {},
 };
 
 export default SortBySelect;

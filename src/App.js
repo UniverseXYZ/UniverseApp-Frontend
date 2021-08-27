@@ -185,6 +185,7 @@ const App = () => {
         <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
         <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
         <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
+        <Route exact path="/lobsters/:id" component={() => <PolymorphScramblePage />} />
         <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
         <Route exact path="/character-page" component={() => <CharacterPage />} />
         <Route exact path="/marketplace" component={() => <BrowseNFT />} />

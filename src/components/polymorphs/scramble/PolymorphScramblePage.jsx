@@ -256,7 +256,7 @@ const PolymorphScramblePage = () => {
           <div className="name">{selectedNftForScramble.name}</div>
           <div className="tags">
             <div>
-              Rarity rank: <span>{`#${selectedNftForScramble.id}`}</span>
+              Rarity rank: <span>{`#${selectedNftForScramble.rarityRank}`}</span>
             </div>
             <div>
               Rarity score: <span>{`${selectedNftForScramble.rarityScore}`}</span>
@@ -270,7 +270,13 @@ const PolymorphScramblePage = () => {
             code that can be scrambled at anytime.
           </div>
 
-          <Tabs items={tabs} />
+          <Tabs
+            items={
+              selectedNftForScramble.type === 'polymorph'
+                ? tabs
+                : tabs.filter((i) => i.name !== 'History')
+            }
+          />
           {propertiesTabSelected && (
             <>
               <div className="scramble--properties">
@@ -279,9 +285,11 @@ const PolymorphScramblePage = () => {
                 ))}
               </div>
               <div className="btn-actions">
-                <Button className="light-button" onClick={onOpenOptionsPopUp}>
-                  Scramble options
-                </Button>
+                {selectedNftForScramble.type === 'polymorph' && (
+                  <Button className="light-button" onClick={onOpenOptionsPopUp}>
+                    Scramble options
+                  </Button>
+                )}
                 <Button
                   className="light-border-button"
                   onClick={() =>
@@ -307,9 +315,11 @@ const PolymorphScramblePage = () => {
                 </div>
               </div>
               <div className="btn-actions">
-                <Button className="light-button" onClick={onOpenOptionsPopUp}>
-                  Scramble options
-                </Button>
+                {selectedNftForScramble.type === 'polymorph' && (
+                  <Button className="light-button" onClick={onOpenOptionsPopUp}>
+                    Scramble options
+                  </Button>
+                )}
                 <Button
                   className="light-border-button"
                   onClick={() =>

@@ -1151,6 +1151,7 @@ const UniverseNFTs = () => {
   ]);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
+  const [selectedTypeIndex, setSelectedTypeIndex] = useState(0);
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
@@ -1193,6 +1194,7 @@ const UniverseNFTs = () => {
               getDesc={(value) => setDesc(value)}
               desc={desc}
               disableOptions={[false, false, true]}
+              setSelectedTypeIndex={setSelectedTypeIndex}
             />
             <div className="rarity--charts--search--and--floor--price">
               <SearchField
@@ -1234,6 +1236,7 @@ const UniverseNFTs = () => {
                 setCategories={setCategories}
                 categoriesIndexes={categoriesIndexes}
                 setCategoriesIndexes={setCategoriesIndexes}
+                selectedTypeIndex={selectedTypeIndex}
               />
             </>
           )}
