@@ -13,6 +13,7 @@ const AttributesAnimation = () => (
           preserveAspectRatio: 'xMidYMid slice',
         },
       }}
+      isClickToPauseDisabled
     />
   </div>
 );

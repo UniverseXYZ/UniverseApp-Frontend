@@ -1188,15 +1188,11 @@ const UniverseNFTs = () => {
               id="sort--select"
               data={UNIVERSE_NFTS}
               defaultValue="Polymorphs"
-              sortData={[
-                'Polymorphs',
-                'OG characters (coming soon)',
-                'Lobby Lobsters (coming soon)',
-              ]}
+              sortData={['Polymorphs', 'Lobby Lobsters', 'OG characters (coming soon)']}
               getData={(find) => setPolymorphData(find)}
               getDesc={(value) => setDesc(value)}
               desc={desc}
-              disableOptions={[false, true, true]}
+              disableOptions={[false, false, true]}
             />
             <div className="rarity--charts--search--and--floor--price">
               <SearchField

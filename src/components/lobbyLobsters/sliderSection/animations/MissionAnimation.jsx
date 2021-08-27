@@ -13,6 +13,7 @@ const MissionAnimation = () => (
           preserveAspectRatio: 'xMidYMid slice',
         },
       }}
+      isClickToPauseDisabled
     />
   </div>
 );
