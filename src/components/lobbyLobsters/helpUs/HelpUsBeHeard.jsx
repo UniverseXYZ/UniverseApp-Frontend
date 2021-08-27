@@ -23,8 +23,8 @@ const HelpUsBeHeard = () => (
         <h1>Help us be heard</h1>
         <p>
           Cryptocurrency has been in the news a lot lately, currently we have a few ways to be
-          heard. We hope that rasing this money can get us representitives in Washington that can
-          help the industry as a hole.
+          heard. We hope that raising funds this money can get us representitives in Washington that
+          can help the industry as a hole.
         </p>
         <div className="info--box">
           <div className="icon--section">

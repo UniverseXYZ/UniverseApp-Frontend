@@ -32,7 +32,7 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
             price={0.1}
             value={sliderValue}
             setValue={setSliderValue}
-            max={30}
+            max={10000}
             mobile={mobile}
             blur
             quantity={quantity}
