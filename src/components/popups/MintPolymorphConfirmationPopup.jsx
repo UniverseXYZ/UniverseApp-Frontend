@@ -7,7 +7,7 @@ import closeIcon from '../../assets/images/cross.svg';
 import loadingBg from '../../assets/images/mint-polymorph-loading-bg.png';
 import { PLACEHOLDER_MINTED_POLYMORPHS } from '../../utils/fixtures/MintedPolymorphsDummyData.js';
 
-const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
+const MintPolymorphConfirmationPopup = ({ onClose, quantity, loadingImage }) => {
   const history = useHistory();
   const [polymorphs, setPolymorphs] = useState(PLACEHOLDER_MINTED_POLYMORPHS);
   const [minted, setMinted] = useState(false);
@@ -46,7 +46,7 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
             <img src={elm.polymorphImg} alt="polymorph" key={uuid()} />
           ) : (
             <div className="loading" key={uuid()}>
-              <img src={loadingBg} alt="polymorph" key={uuid()} />
+              <img src={loadingImage || loadingBg} alt="polymorph" key={uuid()} />
               <div className="lds-roller">
                 <div />
                 <div />
@@ -76,6 +76,11 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity }) => {
 MintPolymorphConfirmationPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  loadingImage: PropTypes.string,
+};
+
+MintPolymorphConfirmationPopup.defaultProps = {
+  loadingImage: '',
 };
 
 export default MintPolymorphConfirmationPopup;

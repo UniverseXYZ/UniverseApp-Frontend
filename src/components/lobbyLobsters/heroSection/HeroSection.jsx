@@ -3,7 +3,7 @@ import './HeroSection.scss';
 import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
 import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 
-const HeroSection = () => (
+const HeroSection = React.forwardRef((props, ref) => (
   <div className="lobby--lobsters--hero--section">
     <div className="wave--img">
       <EndlessWaveAnimation />
@@ -15,10 +15,12 @@ const HeroSection = () => (
       <div className="left--section">
         <h1>Lobby Lobsters</h1>
         <p>They wear the suits for us so we dont have too</p>
-        <button type="button">Mint Lobby Lobster</button>
+        <button type="button" onClick={() => ref.current.scrollIntoView()}>
+          Mint Lobby Lobster
+        </button>
       </div>
     </div>
   </div>
-);
+));
 
 export default HeroSection;

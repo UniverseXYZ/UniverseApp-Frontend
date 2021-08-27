@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import HeroSection from '../../components/lobbyLobsters/heroSection/HeroSection';
 import AppContext from '../../ContextAPI';
 import HelpUsBeHeard from '../../components/lobbyLobsters/helpUs/HelpUsBeHeard';
@@ -8,17 +8,18 @@ import MintLobbyLobsterSection from '../../components/lobbyLobsters/mintSection/
 
 const LobbyLobsters = () => {
   const { setDarkMode } = useContext(AppContext);
+  const myRef = useRef(null);
   useEffect(() => {
     setDarkMode(false);
   }, []);
 
   return (
     <div className="lobby--lobsters--page">
-      <HeroSection />
+      <HeroSection ref={myRef} />
       <HelpUsBeHeard />
       <Donate />
       <SliderSection />
-      <MintLobbyLobsterSection />
+      <MintLobbyLobsterSection ref={myRef} />
     </div>
   );
 };

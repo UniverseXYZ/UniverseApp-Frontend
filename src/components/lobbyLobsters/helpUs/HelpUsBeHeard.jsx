@@ -1,13 +1,23 @@
 import React from 'react';
+import Lottie from 'react-lottie';
 import './HelpUsBeHeard.scss';
-import lobster from '../../../assets/images/lobby-lobsters/img_1.png';
-import icon from '../../../assets/images/lobby-lobsters/Vector.png';
+import icon from '../../../assets/images/lobby-lobsters/info-icon.png';
+import animationData from '../../../utils/animations/megaphone_lobster_animation.json';
 
 const HelpUsBeHeard = () => (
   <div className="helpus--general--section">
     <div className="helpus--general--section--container">
       <div className="left--block">
-        <img src={lobster} alt="img" />
+        <Lottie
+          options={{
+            loop: true,
+            autoplay: true,
+            animationData,
+            rendererSettings: {
+              preserveAspectRatio: 'xMidYMid slice',
+            },
+          }}
+        />
       </div>
       <div className="right--block">
         <h1>Help us be heard</h1>

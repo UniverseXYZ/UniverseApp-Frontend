@@ -1,85 +1,85 @@
 import uuid from 'react-uuid';
-import soldier from '../../assets/images/soldier.png';
+import lobster from '../../assets/images/lobby-lobsters/8.png';
 
 export const PLACEHOLDER_MINTED_POLYMORPHS = [
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
   {
     id: uuid(),
-    polymorphImg: soldier,
+    polymorphImg: lobster,
   },
 ];
