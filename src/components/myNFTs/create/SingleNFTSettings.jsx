@@ -650,6 +650,7 @@ const SingleNFTSettings = () => {
               className="inp"
               error={errors.name}
               placeholder="Enter NFT name"
+              hoverBoxShadowGradient
               onChange={(e) => {
                 setName(e.target.value);
                 setErrors({
@@ -666,11 +667,12 @@ const SingleNFTSettings = () => {
             <h5>Description (optional)</h5>
             <textarea
               rows="5"
-              placeholder="Example copy"
+              placeholder="Spread some words about your NFT"
               className="inp"
               onChange={(e) => setDescription(e.target.value)}
               value={description}
             />
+            <div className="box--shadow--effect--block" />
           </div>
           <div className="single-nft-editions">
             <div className="single-nft-edition-header">
@@ -686,6 +688,7 @@ const SingleNFTSettings = () => {
             <Input
               className="inp"
               error={errors.edition}
+              hoverBoxShadowGradient
               placeholder="Enter Number of Editions"
               onChange={validateEdition}
               value={editions}

@@ -82,6 +82,7 @@ const Social = ({
           <Input
             placeholder="instagram.com/username"
             className="inp"
+            hoverBoxShadowGradient
             value={instagramLink}
             onChange={(e) => setInstagramLink(e.target.value)}
           />
@@ -92,6 +93,7 @@ const Social = ({
           <Input
             placeholder="twitter.com/username"
             className="inp"
+            hoverBoxShadowGradient
             value={twitterLink}
             onChange={(e) => setTwitterLink(e.target.value)}
           />
