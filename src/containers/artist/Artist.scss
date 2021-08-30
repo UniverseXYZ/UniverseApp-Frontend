@@ -128,16 +128,13 @@
           }
 
           a {
-            background-image: linear-gradient(175deg, #bceb00, #00eaea);
-            background-origin: border-box;
-            border: 1px solid transparent;
-            box-shadow: 2px 1000px 1px #fdfbff inset;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             border-radius: 12px;
             padding: 10px;
             margin-right: 15px;
             &:hover {
-              box-shadow: 2px 1000px 1px rgba(255, 255, 255, 0.9) inset!important;
+              background: linear-gradient(175deg, rgba(188,235,0,0.2), rgba(0,234,234,0.2));
             }
             @include sm {
               margin-right: 7px;
