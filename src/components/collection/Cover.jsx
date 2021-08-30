@@ -39,11 +39,14 @@ const Cover = ({ selectedCollection }) => {
           style={{ backgroundColor: selectedCollection.previewImage }}
         />
       ) : (
-        <img
-          className="bg blur"
-          src={URL.createObjectURL(selectedCollection.previewImage)}
-          alt={selectedCollection.name}
-        />
+        <>
+          <img
+            className="bg blur"
+            src={URL.createObjectURL(selectedCollection.previewImage)}
+            alt={selectedCollection.name}
+          />
+          <div className="blured" />
+        </>
       )}
     </div>
   );
