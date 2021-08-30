@@ -306,7 +306,7 @@
 
       .account-grid-name-editing {
         position: relative;
-        width: 100%;
+        // width: 100%;
 
         .about__artist__warning {
           display: none;
@@ -404,7 +404,35 @@
             margin-bottom: 4px;
           }
         }
+        .account-grid-address {
+          position: relative;
+
+          .box--shadow--effect--block {
+            position: absolute;
+            width: calc(100% + 8px);
+            min-height: 58px;
+            z-index: -9;
+            left: -4px;
+            right: 0;
+            bottom: -4px;
+            margin: auto;
+            border-radius: 12px;
+            opacity: 0;
+            background-image: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            background-origin: border-box;
+            box-shadow: 4px 1000px 1px #ffffff inset;
+            border: 4px solid transparent;
+            transition: 0.2s;
+          }
+          &:hover {
+            z-index: 9;
+            .box--shadow--effect--block {
+              opacity: 0.2;
+            }
+          }
+        }
         .account-grid-about-editing {
+          position: relative;
           width: 100%;
           textarea {
             max-width: 730px;
@@ -417,14 +445,42 @@
             line-height: 20px;
             padding: 15px 16px;
             // margin-bottom: 20px;
+            &::placeholder {
+              color: rgba(0, 0, 0, 0.2);
+            }
+            &:focus {
+              background: linear-gradient($white, $white) padding-box,
+                linear-gradient(to right, #bceb00, #00eaea) border-box;
+              border: 1px solid transparent;
+            }
+            &:hover {
+              border-radius: 10px;
+            }
           }
-          ::placeholder {
-            color: rgba(0, 0, 0, 0.2);
+          .box--shadow--effect--block {
+            position: absolute;
+            width: calc(100% + 8px);
+            min-height: 50px;
+            height: 158px;
+            z-index: -9;
+            left: -4px;
+            right: 0;
+            // top: 0;
+            bottom: 0;
+            margin: auto;
+            border-radius: 12px;
+            opacity: 0;
+            background-image: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            background-origin: border-box;
+            box-shadow: 4px 1000px 1px #ffffff inset;
+            border: 4px solid transparent;
+            transition: 0.2s;
           }
-          :focus {
-            background: linear-gradient($white, $white) padding-box,
-              linear-gradient(to right, #bceb00, #00eaea) border-box;
-            border: 1px solid transparent;
+          &:hover {
+            z-index: 9;
+            .box--shadow--effect--block {
+              opacity: 0.2;
+            }
           }
         }
         .display-warning {
@@ -903,7 +959,7 @@
             font-family: $spaceGroteskFont;
             font-size: 16px;
             line-height: 20px;
-            margin-bottom: 20px;
+            // margin-bottom: 20px;
 
             &::placeholder {
               color: rgba(0, 0, 0, 0.2);
