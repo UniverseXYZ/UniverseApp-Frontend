@@ -5,6 +5,9 @@
   .head-part {
     .tier-title {
       font-size: 20px;
+      @include sm {
+        font-size: 16px!important;
+      }
     }
     p {
       margin-top: 16px;
@@ -91,6 +94,9 @@
               order: 0;
               flex-grow: 0;
               margin: 6px 16px;
+              @include lg {
+                margin: 6px 16px 6px 0;
+              }
             }
             @include md {
               margin-bottom: 12px;
@@ -106,10 +112,10 @@
           @include md {
             flex-wrap: wrap;
           }
-          @include sm {
-            margin-left: 0%;
-            display: grid;
-          }
+          // @include sm {
+          //   margin-left: 0%;
+          //   display: grid;
+          // }
         }
         button {
           display: none;
@@ -326,7 +332,18 @@
         line-height: 22px;
         display: flex;
         align-items: center;
-        color: #000000;
+        color: $black;
+        &.show--on--desktop {
+          @include lg {
+            display: none;
+          }
+        }
+        &.hide--on--desktop {
+          display: none;
+          @include lg {
+            display: flex;
+          }
+        }
       }
       span {
         font-family: $spaceGroteskFont;

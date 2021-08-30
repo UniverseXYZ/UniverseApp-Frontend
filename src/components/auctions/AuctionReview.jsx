@@ -229,7 +229,13 @@ const AuctionReview = () => {
                 item.address &&
                 item.amount && (
                   <div className="royalty">
-                    <p>{item.address}</p>
+                    <p className="show--on--desktop">{item.address}</p>
+                    <p className="hide--on--desktop">
+                      {`${item.address.substring(0, 13)}...${item.address.substring(
+                        27,
+                        item.address.length
+                      )}`}
+                    </p>
                     <span>{item.amount}%</span>
                   </div>
                 )
