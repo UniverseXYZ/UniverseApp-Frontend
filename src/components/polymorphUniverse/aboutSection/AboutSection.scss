@@ -48,7 +48,8 @@
     }
     h2 {
       @include lg {
-        font-size: 18px;
+        font-size: 26px;
+        line-height: 35px;
       }
       margin-top: 30px;
       font-family: $sharpGroteskSemiBoldFont;
@@ -111,6 +112,7 @@
     h2 {
       @include lg {
         font-size: 26px;
+        line-height: 36px;
       }
       @include sm {
         font-size: 26px;
@@ -127,6 +129,7 @@
       @include lg {
         font-size: 14px;
         padding-right: 20px;
+        margin-top: 27px;
       }
       @include sm {
         font-size: 14px;
