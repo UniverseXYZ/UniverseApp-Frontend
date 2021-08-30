@@ -36,7 +36,7 @@ const HelpUsBeHeard = () => (
             <img src={icon} alt="icon" />
           </div>
           <div className="text--section">
-            <h2>We want to see policy efforts that help crypto, not prevent it from growing.</h2>
+            <h2>Lobby Lobsters want to see policy efforts empower the community.</h2>
           </div>
         </div>
       </div>
