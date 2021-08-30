@@ -202,6 +202,7 @@ const Main = ({
             placeholder="Enter your display name"
             className={!accountName && editProfileButtonClick ? 'error-inp' : 'inp'}
             value={accountName}
+            hoverBoxShadowGradient
             onChange={(e) => setAccountName(e.target.value)}
           />
           {!accountName && editProfileButtonClick && (
@@ -221,27 +222,31 @@ const Main = ({
               )}
             </div>
           </h5>
-          <Input
-            placeholder="Enter your universe page address"
-            className={
-              (accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
-              editProfileButtonClick
-                ? `${inputName} error-inp`
-                : inputName
-            }
-            value={accountPage}
-            onChange={(e) =>
-              e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
-            }
-            onFocus={handleOnFocus}
-            onBlur={handleOnBlur}
-          />
-          {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
-            editProfileButtonClick && (
-              <p className="error__text">
-                &quot;Universe page address&quot; is not allowed to be empty
-              </p>
-            )}
+          <div className="account-grid-address">
+            <Input
+              placeholder="Enter your universe page address"
+              className={
+                (accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+                editProfileButtonClick
+                  ? `${inputName} error-inp`
+                  : inputName
+              }
+              value={accountPage}
+              // hoverBoxShadowGradient
+              onChange={(e) =>
+                e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
+              }
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+            />
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+              editProfileButtonClick && (
+                <p className="error__text">
+                  &quot;Universe page address&quot; is not allowed to be empty
+                </p>
+              )}
+            <div className="box--shadow--effect--block" />
+          </div>
           <div className="account-grid-about-editing">
             <h5>Your bio</h5>
             <textarea
@@ -250,6 +255,7 @@ const Main = ({
               value={about}
               onChange={(e) => setAbout(e.target.value)}
             />
+            <div className="box--shadow--effect--block" />
             {!about && editProfileButtonClick && (
               <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
             )}
