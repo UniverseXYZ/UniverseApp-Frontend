@@ -6,11 +6,10 @@ const Donate = () => (
   <div className="donate--general--section">
     <div className="donate--general--section--container">
       <div className="left--block">
-        <h1>Donating all sales to lobby and policy efforts for crypto</h1>
+        <h1>100% of the money will be donated</h1>
         <p>
-          Lobby Lobsters aim to raise money that will be donated to efforts on creating policy that
-          improves the space. By owning a Lobby Lobster you have a badge to prove that you have
-          helped make a difference for the industry.
+          Lobby Lobsters goal is to raise money to donate to efforts that sanction decentralization.
+          A Lobby Lobster is a badge for collectors which proves they helped make a difference.
         </p>
       </div>
       <div className="right--block">

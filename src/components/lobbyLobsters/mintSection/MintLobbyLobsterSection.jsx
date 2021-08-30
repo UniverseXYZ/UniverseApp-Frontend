@@ -24,11 +24,12 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
         <div className="lobby--lobsters--mint--section--container">
           <h1 className="title">Mint a Lobby Lobster</h1>
           <p className="desc">
-            100% of sales will be donated to policy and lobby efforts and secondary sales will be
-            donated to groups creating a better Ethereum ecosystem.
+            100% of primary sales will be donated to policy and lobby efforts. Secondary sales will
+            be donated to groups focused on growing the Ethereum ecosystem. Mint a Lobby Lobster to
+            become part of a community that will change the universe!
           </p>
           <BondingCurve
-            title="You can mint up to 20 Lobsters in 1 TX"
+            title="You can mint 20 Lobby Lobsters at a time"
             price={0.1}
             value={sliderValue}
             setValue={setSliderValue}

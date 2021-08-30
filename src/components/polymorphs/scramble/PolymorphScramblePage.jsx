@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
+import ReactReadMoreReadLess from 'react-read-more-read-less';
 import uuid from 'react-uuid';
 import AppContext from '../../../ContextAPI';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
@@ -61,63 +62,50 @@ const PolymorphScramblePage = () => {
 
   const properties = [
     {
-      trait: 'Base character',
-      name: 'Charles',
+      trait: 'skin',
+      name: 'Cow',
       chance: '28% have this trait',
       type: 'pink-orange',
       icon: pinkOrangePuzzle,
     },
     {
-      trait: 'Eyewear',
-      name: 'Orange Sunglasses',
+      trait: 'Clothes',
+      name: 'Rainbow Suit w/ Tie',
       chance: '58% have this trait',
       type: 'blue',
       icon: bluePuzzle,
     },
     {
-      trait: 'Headwear',
-      name: 'Marine Helmet',
+      trait: 'Hand Item',
+      name: 'Corn',
       chance: '58% have this trait',
       type: 'orange',
       icon: orangePuzzle,
     },
     {
-      trait: 'Footwear',
-      name: 'Basketball Shoes',
+      trait: 'Mouth',
+      name: 'Toothpick',
       chance: '58% have this trait',
       type: 'pink',
       icon: pinkPuzzle,
     },
     {
-      trait: 'Torso',
-      name: 'Clown Jacket',
+      trait: 'Eyes',
+      name: 'Star Shades',
       chance: '58% have this trait',
       type: 'blue',
       icon: bluePuzzle,
     },
     {
-      trait: 'Pants',
-      name: 'Marine Pants',
+      trait: 'Head',
+      name: 'Cowboy Hat',
       chance: '58% have this trait',
       type: 'orange',
       icon: orangePuzzle,
-    },
-    {
-      trait: 'Left-hand accessory',
-      name: 'Golden Spartan Sword',
-      chance: '58% have this trait',
-      type: null,
-    },
-    {
-      trait: 'Right-hand accessory',
-      name: 'Double Degen Sword Red',
-      chance: '58% have this trait',
-      type: 'pink',
-      icon: pinkPuzzle,
     },
     {
       trait: 'Background',
-      name: 'Strong Bliss',
+      name: 'Yellow',
       chance: '58% have this trait',
       type: null,
     },
@@ -266,8 +254,17 @@ const PolymorphScramblePage = () => {
             </div>
           </div>
           <div className="description">
-            Charles the Clown is a citizen of the Polymorph Universe. Charles has a unique genetic
-            code that can be scrambled at anytime.
+            <ReactReadMoreReadLess
+              charLimit={182}
+              readMoreText="Read more"
+              readLessText="Read less"
+            >
+              10,000 rarity based Lobby Lobsters are on a mission to empower the community.
+              Collectors are buying more than an NFT. Lobby Lobsters are a badge of honor. 100% of
+              the money from each purchase is donated to lobbying efforts that fight for better laws
+              and policies surrounding cryptocurrency. Together we can make a difference and change
+              the universe!
+            </ReactReadMoreReadLess>
           </div>
 
           <Tabs

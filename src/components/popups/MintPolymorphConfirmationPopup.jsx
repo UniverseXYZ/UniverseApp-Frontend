@@ -30,13 +30,17 @@ const MintPolymorphConfirmationPopup = ({ onClose, quantity, loadingImage }) => 
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       <h1>Congratulations!</h1>
       <p className="desc">
-        {!loadingImage
-          ? `You have successfully minted your ${
-              polymorphs.length > 1 ? polymorphs.length : ''
-            } Polymorphic Universe NFT`
-          : `You have successfully minted your ${
-              polymorphs.length > 1 ? polymorphs.length : ''
-            } Lobby Lobsters`}
+        {!loadingImage ? (
+          <span>
+            You have successfully minted <br /> {polymorphs.length}
+            &nbsp; Polymorphic Universe NFT
+          </span>
+        ) : (
+          <span>
+            You have successfully minted <br /> {polymorphs.length}
+            &nbsp; {polymorphs.length > 1 ? 'Lobby Lobsters' : 'Lobby Lobster'}
+          </span>
+        )}
       </p>
       {!minted ? (
         <p className="info">
