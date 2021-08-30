@@ -258,6 +258,9 @@
         font-size: 16px;
         line-height: 160%;
         color: rgba(0, 0, 0, 0.6);
+        span {
+          font-weight: bold;
+        }
       }
 
       .tabs__wrapper {

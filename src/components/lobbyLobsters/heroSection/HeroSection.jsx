@@ -14,7 +14,7 @@ const HeroSection = React.forwardRef((props, ref) => (
     <div className="lobby--lobsters--hero--section--container">
       <div className="left--section">
         <h1>Lobby Lobsters</h1>
-        <p>They wear the suits for us so we dont have too</p>
+        <p>They wear suits, so we don&#39;t have to.</p>
         <button type="button" onClick={() => ref.current.scrollIntoView()}>
           Mint Lobby Lobster
         </button>
