@@ -67,13 +67,10 @@ const AuctionReview = () => {
         document.getElementById('congrats-hidden-btn').click();
       }, 2000);
       setSelectedTabIndex(1);
-      setTimeout(() => {
-        const newAuction = { ...auction };
-        newAuction.totalNFTs = totalNFTs;
-        setMyAuctions([...myAuctions, newAuction]);
-        setAuction({ tiers: [] });
-        history.push('/my-auctions');
-      }, 6000);
+      const newAuction = { ...auction };
+      newAuction.totalNFTs = totalNFTs;
+      setMyAuctions([...myAuctions, newAuction]);
+      setAuction({ tiers: [] });
     }
   };
 

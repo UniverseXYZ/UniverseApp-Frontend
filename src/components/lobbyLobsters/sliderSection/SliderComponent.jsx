@@ -21,9 +21,8 @@ const SliderComponent = () => {
     slidesToScroll: 1,
     autoplay: true,
     speed: 8000,
-    autoplaySpeed: 1000,
+    autoplaySpeed: 0,
     cssEase: 'linear',
-    pauseOnHover: true,
     variableWidth: true,
   };
 
@@ -42,38 +41,40 @@ const SliderComponent = () => {
   }, []);
 
   return (
-    <Slider {...settings}>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage1} alt="Slider 1" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage2} alt="Slider 2" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage3} alt="Slider 3" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage4} alt="Slider 4" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage5} alt="Slider 5" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage6} alt="Slider 6" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage7} alt="Slider 7" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage8} alt="Slider 8" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage9} alt="Slider 9" />
-      </div>
-      <div style={{ width: sliderWidth }}>
-        <img src={sliderImage10} alt="Slider 10" />
-      </div>
-    </Slider>
+    <div style={{ pointerEvents: 'none' }}>
+      <Slider {...settings}>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage1} alt="Slider 1" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage2} alt="Slider 2" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage3} alt="Slider 3" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage4} alt="Slider 4" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage5} alt="Slider 5" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage6} alt="Slider 6" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage7} alt="Slider 7" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage8} alt="Slider 8" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage9} alt="Slider 9" />
+        </div>
+        <div style={{ width: sliderWidth }}>
+          <img src={sliderImage10} alt="Slider 10" />
+        </div>
+      </Slider>
+    </div>
   );
 };
 

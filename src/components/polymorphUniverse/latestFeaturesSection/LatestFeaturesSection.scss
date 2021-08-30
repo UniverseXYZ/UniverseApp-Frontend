@@ -15,6 +15,10 @@
             line-height: 140%;
             color: $white;
             margin-bottom: 50px;
+            @include sm{
+                font-size: 20px;
+                line-height: 130%;
+            }
         }
         .grid {
             display: grid;
@@ -31,6 +35,10 @@
                     margin-top: 25px;
                     margin-bottom: 12px;
                 }
+                .burn-mint-h2{
+                    margin-top: 22px;
+                    margin-bottom: 11px;
+                }
                 p {
                     font-family: $spaceGroteskFont;
                     font-style: normal;
@@ -40,6 +48,9 @@
                     color: $white;
                     max-width: 250px;
                     margin-bottom: 30px;
+                    @include lg{
+                        max-width: 190px; 
+                    }
                 }
                 button {
                     font-family: $spaceGroteskFont;
@@ -59,11 +70,12 @@
                 }
             }
             @include lg {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
             @include sm {
                 grid-template-columns: 1fr;
             }
+            
         }
     }
     @include sm {

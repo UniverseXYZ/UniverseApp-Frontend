@@ -39,6 +39,7 @@ import socialMediaIcon from '../../../../assets/images/social-media.svg';
 import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
+import rarityChartIcon from '../../../../assets/images/rarity-chart.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -540,11 +541,22 @@ const MobileView = (props) => {
                         <button
                           type="button"
                           onClick={() => {
+                            history.push('/polymorph-rarity');
+                          }}
+                        >
+                          <img src={rarityChartIcon} alt="Rarity chart" />
+                          <span>Rarity chart</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => {
                             history.push('/lobby-lobsters');
                           }}
                         >
-                          <img src={lobbyLobstersIcon} alt="Lobby lobsters" />
-                          <span>Lobby lobsters</span>
+                          <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
+                          <span>Lobby Lobsters</span>
                         </button>
                       </div>
                       <div>

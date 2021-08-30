@@ -48,9 +48,9 @@
     }
     h2 {
       @include lg {
-        font-size: 18px;
+        font-size: 26px;
       }
-      margin-top: 30px;
+      margin-top: 15px;
       font-family: $sharpGroteskSemiBoldFont;
       font-size: 32px;
       font-style: normal;
@@ -67,7 +67,7 @@
         font-size: 14px;
       }
       max-width: 445px;
-      margin-top: 30px;
+      // margin-top: 30px;
       font-family: $spaceGroteskFont;
       font-size: 14px;
       font-style: normal;
@@ -142,7 +142,7 @@
       color: #666666;
     }
     button {
-      margin-top: 40px;
+      margin-top: 30px;
     }
   }
   .relased--right--block {
