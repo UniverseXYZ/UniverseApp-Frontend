@@ -13,14 +13,26 @@ export function chunkifyArray(nftsArr, chunkSize) {
   return chunkifiedArray;
 }
 
-export const parseRoyalties = (royalties) =>
+/**
+ * @param {Object[]} royalties
+ * @param {string} royalties.address
+ * @param {string} royalties.amount
+ * @returns [{ address: ${'address'}, amount: ${amount}}] - removes entries with missing data
+ */
+export const parseRoyalties = (royalties, amountPropertyName) =>
   royalties
     ?.filter((r) => r.address && r.amount)
     .map((r) => ({
       address: r.address,
-      amount: parseInt(r.amount, 10),
+      [amountPropertyName || 'amount']: parseInt(r.amount, 10),
     }));
 
+/**
+ * @param {Object[]} royalties
+ * @param {string} royalties.address
+ * @param {string} royalties.amount
+ * @returns [[${'address'}, ${amount}]]
+ */
 export const formatRoyaltiesForMinting = (royalties) =>
   royalties?.map((royalty) =>
     royalty.address && royalty.amount ? [royalty.address, royalty.amount * 100] : []

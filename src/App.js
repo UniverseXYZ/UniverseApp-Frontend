@@ -48,6 +48,7 @@ import Contracts from './contracts/contracts.json';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
+import { getFutureAuctions } from './utils/api/auctions';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
@@ -84,7 +85,7 @@ const App = () => {
   const [futureAuctions, setFutureAuctions] = useState([]);
   const [auction, setAuction] = useState({ tiers: [] });
   const [selectedNftForScramble, setSelectedNftForScramble] = useState({});
-  const [bidtype, setBidtype] = useState('eth');
+  const [bidtype, setBidtype] = useState(BidOptions[0].value);
   const [options, setOptions] = useState(BidOptions);
   const [darkMode, setDarkMode] = useState(true);
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
@@ -305,6 +306,39 @@ const App = () => {
       document.querySelector('header').style.position = 'fixed';
     }
   }, [location]);
+
+  const parseAuctionTiers = (tiers) => {
+    const tiersParsed = tiers?.map((t) => ({
+      winners: t.numberOfWinners,
+    }));
+
+    return tiersParsed;
+  };
+
+  const parseFutureAuctionsObject = (res) => {
+    const parsedFutureAuctionsArray = [];
+
+    res.forEach((auctionRes) => {
+      const parsedFutureAuctionObject = {
+        ...auctionRes,
+        tiers: parseAuctionTiers(auctionRes.rewardTiers),
+      };
+      delete parsedFutureAuctionObject.rewardTiers;
+      parsedFutureAuctionsArray.push(parsedFutureAuctionObject);
+    });
+
+    return parsedFutureAuctionsArray;
+  };
+
+  useEffect(async () => {
+    const futureAuctionResponse = await getFutureAuctions();
+    const parsedFutureAuctionsResponse = futureAuctionResponse
+      ? parseFutureAuctionsObject(futureAuctionResponse.auctions)
+      : [];
+
+    console.log(parsedFutureAuctionsResponse);
+    setMyAuctions(parsedFutureAuctionsResponse);
+  }, []);
 
   return (
     <AppContext.Provider

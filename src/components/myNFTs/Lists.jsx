@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -53,7 +54,7 @@ const Lists = ({
 
   const handleSavedNfts = (clickedNFT) => {
     if (isCreatingAction) {
-      if (tierById && winners <= clickedNFT.generatedEditions.length) {
+      if (tierById && winners <= getEditionsCount(clickedNFT)) {
         if (nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
           setSelectedNFTIds((prevValue) => {
             const nftIndex = prevValue.findIndex((nft) => nft === clickedNFT.id);
@@ -85,7 +86,7 @@ const Lists = ({
 
   const handleShow = (nft) => {
     if (tierById) {
-      if (selectedNFTIds.includes(nft.id) && winners <= getEditionsCount) {
+      if (selectedNFTIds.includes(nft.id) && winners <= getEditionsCount(nft)) {
         setOpenEditions(openEditions ? null : nft.id);
       }
     }
@@ -128,7 +129,7 @@ const Lists = ({
     <div className="nfts__lists">
       {sliceData.map((nft, index) => (
         <div style={{ position: 'relative' }} key={nft.id}>
-          {tierById && winners > getEditionsCount ? (
+          {tierById && winners > getEditionsCount(nft) ? (
             <>
               <img
                 className="nonicon__icon"
@@ -155,7 +156,7 @@ const Lists = ({
           )}
           <div
             className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${
-              (tierById && winners > getEditionsCount) ||
+              (tierById && winners > getEditionsCount(nft)) ||
               (tierById &&
                 nftsPerWinner === selectedNFTIds.length &&
                 !selectedNFTIds.includes(nft.id))
@@ -171,16 +172,18 @@ const Lists = ({
                   onClick={() => handleSavedNfts(nft)}
                   aria-hidden="true"
                 >
-                  {isCreatingAction && nft.generatedEditions && (
+                  {isCreatingAction && getEditionsCount(nft) && (
                     <>
-                      {selectedNFTIds.includes(nft.id) && tierById && winners <= getEditionsCount && (
-                        <>
-                          <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
-                          <span className="selected-number">
-                            {winners}/{getEditionsCount}
-                          </span>{' '}
-                        </>
-                      )}
+                      {selectedNFTIds.includes(nft.id) &&
+                        tierById &&
+                        winners <= getEditionsCount(nft) && (
+                          <>
+                            <img className="check__icon" src={checkIcon} alt="Check Icon" />{' '}
+                            <span className="selected-number">
+                              {winners}/{getEditionsCount(nft)}
+                            </span>{' '}
+                          </>
+                        )}
                     </>
                   )}
                   {isVideo(nft) && !isCreatingAction && (
@@ -265,7 +268,7 @@ const Lists = ({
                           </>
                         )}
                         {/* {nft.type === 'single' && (
-                      <div className="ed-num">{`x${getEditionsCount}`}</div>
+                      <div className="ed-num">{`x${getEditionsCount(nft)}`}</div>
                     )} */}
                         {!(
                           selectedNFTIds.includes(nft.id) &&
@@ -277,7 +280,7 @@ const Lists = ({
                               className="generatedEditions"
                               style={{
                                 gridTemplateColumns: `repeat(${Math.ceil(
-                                  nft.generatedEditions ? getEditionsCount / 10 : 1
+                                  getEditionsCount() / 10
                                 )}, auto)`,
                               }}
                             >
@@ -319,14 +322,14 @@ const Lists = ({
                   {nft?.generatedEditions?.length > 1 ? (
                     <div className="collection__count">
                       {selectedNFTIds && selectedNFTIds.includes(nft.id)
-                        ? `x${getEditionsCount - winners}`
-                        : `x${getEditionsCount}`}
+                        ? `x${getEditionsCount(nft) - winners}`
+                        : `x${getEditionsCount(nft)}`}
                       {!isCreatingAction ? (
                         <div
                           className="generatedEditions"
                           style={{
                             gridTemplateColumns: `repeat(${Math.ceil(
-                              getEditionsCount / 10
+                              getEditionsCount(nft) / 10
                             )}, auto)`,
                           }}
                         >
@@ -343,7 +346,7 @@ const Lists = ({
                     // <p className="collection__count">{`#${nft.generatedEditions[0]}`}</p>
                   )}
                 </div>
-                {getEditionsCount > 1 && (
+                {getEditionsCount(nft) > 1 && (
                   <>
                     <div className="nft__box__highlight__one" />
                     <div className="nft__box__highlight__two" />

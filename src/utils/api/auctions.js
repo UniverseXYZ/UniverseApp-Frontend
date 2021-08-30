@@ -1,4 +1,7 @@
 const CREATE_NEW_AUCTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auctions`;
+const GET_FUTURE_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/future`;
+const GET_ACTIVE_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/active`;
+const GET_PAST_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/past`;
 const EDIT_AUCTION_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
 const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}/landing-files`;
@@ -130,6 +133,51 @@ export const editRewardTier = async (
   };
 
   const request = await fetch(EDIT_REWARD_TIER_URL(id), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getFutureAuctions = async () => {
+  const requestOptions = {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_FUTURE_AUCTIONS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getActiveAuctions = async () => {
+  const requestOptions = {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_FUTURE_AUCTIONS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getPastAuctions = async () => {
+  const requestOptions = {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_FUTURE_AUCTIONS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 

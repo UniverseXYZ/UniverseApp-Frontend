@@ -11,6 +11,14 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
+import {
+  isImage,
+  isVideo,
+  isAudio,
+  getNftImage,
+  getNftColletionImage,
+  getEditionsCount,
+} from '../../utils/helpers/pureFunctions/nfts';
 
 const RewardTiers = () => {
   const history = useHistory();
@@ -106,30 +114,25 @@ const RewardTiers = () => {
                   {tier.nfts.map((nft) => (
                     <div className="rev-reward__box" key={uuid()}>
                       <div className="rev-reward__box__image">
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {isVideo(nft) && (
                           <video
                             onMouseOver={(event) => event.target.play()}
                             onFocus={(event) => event.target.play()}
                             onMouseOut={(event) => event.target.pause()}
                             onBlur={(event) => event.target.pause()}
                           >
-                            <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                            <source src={getNftImage(nft)} type="video/mp4" />
                             <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
-                        {nft.previewImage.type === 'audio/mpeg' && (
+                        {isAudio(nft) && (
                           <img className="preview-image" src={mp3Icon} alt={nft.name} />
                         )}
-                        {nft.previewImage.type !== 'audio/mpeg' &&
-                          nft.previewImage.type !== 'video/mp4' && (
-                            <img
-                              className="preview-image"
-                              src={URL.createObjectURL(nft.previewImage)}
-                              alt={nft.name}
-                            />
-                          )}
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {isImage(nft) && (
+                          <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
+                        )}
+                        {isVideo(nft) && (
                           <img className="video__icon" src={videoIcon} alt="Video Icon" />
                         )}
                       </div>
@@ -149,18 +152,15 @@ const RewardTiers = () => {
                                   {nft.collectionName.charAt(0)}
                                 </div>
                               ) : (
-                                <img
-                                  src={URL.createObjectURL(nft.collectionAvatar)}
-                                  alt={nft.collectionName}
-                                />
+                                <img src={getNftColletionImage(nft)} alt={nft.collectionName} />
                               )}
                               <span>{nft.collectionName}</span>
                             </>
                           )}
                         </div>
-                        <span className="ed-count">{`x${nft.generatedEditions.length}`}</span>
+                        <span className="ed-count">{`x${getEditionsCount(nft)}`}</span>
                       </div>
-                      {nft.generatedEditions.length > 1 && (
+                      {getEditionsCount(nft) > 1 && (
                         <>
                           <div className="rev-reward__box__highlight__one" />
                           <div className="rev-reward__box__highlight__two" />

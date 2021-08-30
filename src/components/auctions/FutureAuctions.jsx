@@ -344,15 +344,16 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       </div>
                     </div>
                     <div className="tier-body">
-                      {tier.nfts.map((nft) => (
+                      {console.log('get nft image', tier.nfts)}
+                      {/* {tier.nfts.map((nft) => (
                         <div className="tier-image" key={uuid()}>
                           <div className="tier-image-second" />
                           <div className="tier-image-first" />
                           <div className="tier-image-main">
-                            <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                            <img src={nft?.previewImage} alt={nft?.name} />
                           </div>
                         </div>
-                      ))}
+                      ))} */}
                     </div>
                   </div>
                 ))}

@@ -1,5 +1,12 @@
 export const getCollectionId = (nft) => nft.collection.id;
 export const getNftImage = (nft) => nft.thumbnailUrl || nft.thumbnail_url;
+export const getNftColletionImage = (nft) => nft.collection.cover;
+export const getEditionsCount = (nft) =>
+  nft?.generatedEditions?.length
+    ? nft.generatedEditions.length
+    : nft?.tokenIds?.length
+    ? nft.tokenIds.length
+    : 1;
 
 export const ARTWORK_TYPES = {
   image: 'image',
@@ -21,6 +28,3 @@ const getFileType = (nft) => nft.type || nft.artworkType;
 export const isVideo = (nft) => GET_NFT_ARTWORK_TYPE[getFileType(nft)] === ARTWORK_TYPES.video;
 export const isAudio = (nft) => GET_NFT_ARTWORK_TYPE[getFileType(nft)] === ARTWORK_TYPES.audio;
 export const isImage = (nft) => GET_NFT_ARTWORK_TYPE[getFileType(nft)] === ARTWORK_TYPES.image;
-
-export const getEditionsCount = (nft) =>
-  nft?.generatedEditions?.length ? nft.generatedEditions.length : 1;

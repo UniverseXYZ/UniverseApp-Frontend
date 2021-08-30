@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable no-cond-assign */
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -21,6 +22,15 @@ import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
+import {
+  isImage,
+  isVideo,
+  isAudio,
+  getNftImage,
+  getNftColletionImage,
+  getEditionsCount,
+} from '../../utils/helpers/pureFunctions/nfts';
+import { AuctionCreate } from '../../userFlows/AuctionCreate';
 
 const AuctionReview = () => {
   const {
@@ -55,25 +65,32 @@ const AuctionReview = () => {
     }
   }, []);
 
-  const handleSetAuction = () => {
+  const handleSetAuction = async () => {
     if (auction && auction.tiers.length) {
       let totalNFTs = 0;
       auction.tiers.forEach((tier) => {
         totalNFTs += tier.winners * tier.nftsPerWinner;
       });
-      // document.getElementById('loading-hidden-btn').click();
-      setTimeout(() => {
-        document.getElementById('popup-root').remove();
-        document.getElementById('congrats-hidden-btn').click();
-      }, 2000);
+
       setSelectedTabIndex(1);
-      setTimeout(() => {
-        const newAuction = { ...auction };
-        newAuction.totalNFTs = totalNFTs;
-        setMyAuctions([...myAuctions, newAuction]);
-        setAuction({ tiers: [] });
-        history.push('/my-auctions');
-      }, 6000);
+
+      // document.getElementById('loading-hidden-btn').click();
+      document.getElementById('popup-root').remove();
+
+      debugger;
+      const res = await AuctionCreate({ auction, bidtype });
+
+      if (res?.id) {
+        document.getElementById('congrats-hidden-btn').click();
+
+        // const newAuction = { ...auction };
+        // newAuction.totalNFTs = totalNFTs;
+        // setMyAuctions([...myAuctions, newAuction]);
+        // setAuction({ tiers: [] });
+        // history.push('/my-auctions');
+      } else {
+        console.error('an error occurred');
+      }
     }
   };
 
@@ -275,7 +292,7 @@ const AuctionReview = () => {
                   {tier.nfts.map((nft) => (
                     <div className="auction-reward__box" key={uuid()}>
                       <div className="auction-reward__box__image">
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {isVideo(nft) && (
                           <video
                             onMouseOver={(event) => event.target.play()}
                             onFocus={(event) => event.target.play()}
@@ -287,22 +304,17 @@ const AuctionReview = () => {
                             Your browser does not support the video tag.
                           </video>
                         )}
-                        {nft.previewImage.type === 'audio/mpeg' && (
+                        {isAudio(nft) && (
                           <img className="preview-image" src={mp3Icon} alt={nft.name} />
                         )}
-                        {nft.previewImage.type !== 'audio/mpeg' &&
-                          nft.previewImage.type !== 'video/mp4' && (
-                            <img
-                              className="preview-image"
-                              src={URL.createObjectURL(nft.previewImage)}
-                              alt={nft.name}
-                            />
-                          )}
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {isImage(nft) && (
+                          <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
+                        )}
+                        {isVideo(nft) && (
                           <img className="video__icon" src={videoIcon} alt="Video Icon" />
                         )}
                       </div>
-                      {nft.generatedEditions.length > 1 && (
+                      {getEditionsCount(nft) > 1 && (
                         <>
                           <div className="auction-reward__box__highlight__one" />
                           <div className="auction-reward__box__highlight__two" />
