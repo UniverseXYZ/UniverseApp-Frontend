@@ -159,8 +159,8 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <div>
                   <span className="head">Highest winning bid</span>
                   <span className="value">
-                    <img src={bidIcon} alt="Highest winning bid" />{' '}
-                    {pastAuction.highest_winning_bid} ETH{' '}
+                    <img src={bidIcon} alt="Highest winning bid" />
+                    14 ETH
                     <span className="dollar-val"> ~$41,594</span>
                   </span>
                 </div>
@@ -171,7 +171,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   <span className="head">Total bids amount</span>
                   <span className="value">
                     <img src={bidIcon} alt="Total bids amount" />
-                    {pastAuction.total_bids_amount} ETH{' '}
+                    14 ETH
                     <span className="dollar-val"> ~$41,594</span>
                   </span>
                 </div>
@@ -179,7 +179,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   <span className="head">Lower winning bid</span>
                   <span className="value">
                     <img src={bidIcon} alt="Lower winning bid" />
-                    {pastAuction.lower_winning_bid} ETH{' '}
+                    14 ETH
                     <span className="dollar-val"> ~$41,594</span>
                   </span>
                 </div>
