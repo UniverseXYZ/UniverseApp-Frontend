@@ -81,6 +81,7 @@ const MobileView = (props) => {
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
+  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -417,7 +418,19 @@ const MobileView = (props) => {
                   <button
                     type="button"
                     onClick={() => {
-                      history.push('/my-account');
+                      if (
+                        loggedInArtist.name &&
+                        loggedInArtist.universePageAddress &&
+                        loggedInArtist.avatar &&
+                        loggedInArtist.about &&
+                        editProfileButtonClick
+                      ) {
+                        history.push(`/${loggedInArtist.universePageAddress}`, {
+                          id: loggedInArtist.id,
+                        });
+                      } else {
+                        history.push('/my-account');
+                      }
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >

@@ -2,71 +2,83 @@
 @import '../../../assets/scss/variables';
 
 .latest--features--section {
-  background-color: $black;
-  padding: 90px 60px;
-  &--container {
-    max-width: 1110px;
-    margin: 0 auto;
-    h1.title {
-      font-family: $sharpGroteskSemiBoldFont;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 32px;
-      line-height: 140%;
-      color: $white;
-      margin-bottom: 50px;
+    background-color: $black;
+    padding: 90px 60px;
+    &--container {
+        max-width: 1110px;
+        margin: 0 auto;
+        h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 140%;
+            color: $white;
+            margin-bottom: 50px;
+            @include sm{
+                font-size: 20px;
+                line-height: 130%;
+            }
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 30px;
+            > div {
+                h2 {
+                    font-family: $sharpGroteskSemiBoldFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 130%;
+                    color: $white;
+                    margin-top: 25px;
+                    margin-bottom: 12px;
+                }
+                .burn-mint-h2{
+                    margin-top: 22px;
+                    margin-bottom: 11px;
+                }
+                p {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 14px;
+                    line-height: 160%;
+                    color: $white;
+                    max-width: 250px;
+                    margin-bottom: 30px;
+                    @include lg{
+                        max-width: 190px; 
+                    }
+                }
+                button {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 16px;
+                    line-height: 20px;
+                    color: $white;
+                    background: none;
+                    transition: .3s;
+                    img {
+                        margin-left: 10px;
+                    }
+                    &:hover {
+                        transform: scale(1.1);
+                    }
+                }
+            }
+            @include lg {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            @include sm {
+                grid-template-columns: 1fr;
+            }
+            
+        }
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 30px;
-      > div {
-        h2 {
-          font-family: $sharpGroteskSemiBoldFont;
-          font-style: normal;
-          font-weight: 600;
-          font-size: 16px;
-          line-height: 130%;
-          color: $white;
-          margin-top: 25px;
-          margin-bottom: 12px;
-        }
-        p {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 14px;
-          line-height: 160%;
-          color: $white;
-          max-width: 250px;
-          margin-bottom: 30px;
-        }
-        button {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 16px;
-          line-height: 20px;
-          color: $white;
-          background: none;
-          transition: 0.3s;
-          img {
-            margin-left: 10px;
-          }
-          &:hover {
-            transform: scale(1.1);
-          }
-        }
-      }
-      @include lg {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      @include sm {
-        grid-template-columns: 1fr;
-      }
+    @include sm {
+        padding: 90px 20px;
     }
-  }
-  @include sm {
-    padding: 90px 20px;
-  }
 }

@@ -20,7 +20,7 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import cloudIcon from '../../../assets/images/gray_cloud.svg';
 import createIcon from '../../../assets/images/create.svg';
-import delIcon from '../../../assets/images/red-delete.svg';
+import delIcon from '../../../assets/images/delete-red.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
@@ -176,12 +176,14 @@ const SingleNFTSettings = () => {
       setPreviewImage(null);
       setErrors({
         ...errors,
-        previewImage: 'File format must be PNG, GIF, WEBP or MP4 (Max Size: 30mb)',
+        previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     } else if (
       (file.type === 'video/mp4' ||
         file.type === 'image/webp' ||
+        file.type === 'audio/mpeg' ||
         file.type === 'image/gif' ||
+        file.type === 'image/jpeg' ||
         file.type === 'image/png') &&
       file.size / 1048576 < 30
     ) {
@@ -191,7 +193,7 @@ const SingleNFTSettings = () => {
       setPreviewImage(null);
       setErrors({
         ...errors,
-        previewImage: 'File format must be PNG, GIF, WEBP or MP4 (Max Size: 30mb)',
+        previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     }
   };
@@ -572,7 +574,8 @@ const SingleNFTSettings = () => {
                     <img src={cloudIcon} alt="Cloud" />
                     <h5>Drop your file here</h5>
                     <p>
-                      <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
+                      <span>( min 800x800px, PNG/JPEG/MP3/GIF/WEBP/MP4,</span>
+                      <span>max 30mb)</span>
                     </p>
                     <Button className="light-button" onClick={() => inputFile.current.click()}>
                       Choose file

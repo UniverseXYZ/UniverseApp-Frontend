@@ -28,6 +28,16 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [mobile, setMobile] = useState(false);
+  const [tablet, setTablet] = useState(false);
+
+  useEffect(() => {
+    if (Number(window.innerWidth) <= 768) setMobile(true);
+    else setMobile(false);
+
+    if (Number(window.innerWidth) > 768 && Number(window.innerWidth) <= 1230) setTablet(true);
+    else setTablet(false);
+  }, []);
 
   const handleSearch = (value) => {
     setSearchByName(value);
@@ -36,7 +46,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   return (
     <div className="past-auctions">
       <div className="input-search">
-        {searchByName ? (
+        {searchByName && !(mobile || tablet) ? (
           <button type="button" onClick={() => setSearchByName('')}>
             Clear
           </button>
@@ -49,6 +59,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
           onChange={(e) => handleSearch(e.target.value)}
           value={searchByName}
           placeholder="Search"
+          hoverBoxShadowGradient
         />
       </div>
       {myAuctions
@@ -148,8 +159,8 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <div>
                   <span className="head">Highest winning bid</span>
                   <span className="value">
-                    <img src={bidIcon} alt="Highest winning bid" />{' '}
-                    {pastAuction.highest_winning_bid} ETH{' '}
+                    <img src={bidIcon} alt="Highest winning bid" />
+                    14 ETH
                     <span className="dollar-val"> ~$41,594</span>
                   </span>
                 </div>
@@ -160,7 +171,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   <span className="head">Total bids amount</span>
                   <span className="value">
                     <img src={bidIcon} alt="Total bids amount" />
-                    {pastAuction.total_bids_amount} ETH{' '}
+                    14 ETH
                     <span className="dollar-val"> ~$41,594</span>
                   </span>
                 </div>
@@ -168,7 +179,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   <span className="head">Lower winning bid</span>
                   <span className="value">
                     <img src={bidIcon} alt="Lower winning bid" />
-                    {pastAuction.lower_winning_bid} ETH{' '}
+                    14 ETH
                     <span className="dollar-val"> ~$41,594</span>
                   </span>
                 </div>

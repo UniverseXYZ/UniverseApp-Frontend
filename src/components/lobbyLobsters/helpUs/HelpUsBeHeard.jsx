@@ -23,16 +23,20 @@ const HelpUsBeHeard = () => (
       <div className="right--block">
         <h1>Help us be heard</h1>
         <p>
-          Cryptocurrency has been in the news a lot lately, currently we have a few ways to be
-          heard. We hope that raising funds this money can get us representitives in Washington that
-          can help the industry as a hole.
+          Lobby Lobsters are shouting from underwater, but nobody hears them... &quot;WE WANT
+          DECENTRALIZATION!&quot; Help the Lobby Lobsters get in front of Congress.
+        </p>
+        <p>
+          Lobby Lobsters hope by raising funds, they can help educate the representatives in
+          Washington who make the laws around cryptocurrency. They will wear suits for Lobby
+          Lobsters!
         </p>
         <div className="info--box">
           <div className="icon--section">
             <img src={icon} alt="icon" />
           </div>
           <div className="text--section">
-            <h2>We want to see policy efforts that help crypto, not prevent it from growing.</h2>
+            <h2>Lobby Lobsters want to see policy efforts empower the community.</h2>
           </div>
         </div>
       </div>

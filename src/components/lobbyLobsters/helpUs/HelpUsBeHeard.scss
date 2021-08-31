@@ -48,7 +48,7 @@
         .icon--section {
           padding: 32.5px;
           border-radius: 12px 0 0 12px;
-          background-color: rgba(255, 255, 255, 0.05);
+          background-color: rgba(255, 255, 255, 0.09);
           display: flex;
           @include lg {
             align-items: center;
@@ -62,7 +62,7 @@
         }
         .text--section {
           padding: 19px 30px;
-          background-color: rgba(255, 255, 255, 0.09);
+          background-color: rgba(255, 255, 255, 0.05);
           border-radius: 0 12px 12px 0;
           @include md {
             padding: 22px 19px;

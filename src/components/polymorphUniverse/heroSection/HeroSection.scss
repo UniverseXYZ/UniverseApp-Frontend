@@ -34,6 +34,11 @@
     line-height: 77px;
     color: $white;
     text-align: center;
+    @include sm {
+      padding: 0px 30%;
+      font-size: 18px;
+      line-height: 27px;
+    }
   }
   h2 {
     z-index: 2;
@@ -46,6 +51,11 @@
     margin-top: 28px;
     max-width: 530px;
     text-align: center;
+    @include sm {
+      font-size: 18px;
+      max-width: 335px;
+      line-height: 27px;
+    }
   }
   .welcome--marquee {
     position: absolute;

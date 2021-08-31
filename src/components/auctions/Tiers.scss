@@ -150,6 +150,9 @@
     line-height: 140%;
     color: #000000;
     margin-bottom: 10px;
+    @include sm {
+      font-size: 20px;
+    }
   }
   .tiersInp {
     width: 100%;
@@ -468,7 +471,20 @@
 .hr-line {
   border-bottom: 1px solid #000000;
   opacity: 0.1;
-  width: 100%;
+  width: 1110px;
+  margin: 0 auto;
+  @media (max-width: 1229px) {
+    width: 935px;
+  }
+  @include lg {
+    width: 715px;
+  }
+  @include md {
+    width: 93%;
+  }
+  @include sm {
+    width: 90%;
+  }
 }
 .selectNftPart {
   h1 {

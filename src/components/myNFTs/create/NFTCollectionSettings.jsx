@@ -503,13 +503,24 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             />
           </div>
           <div className="collection--token">
-            <Input
-              label="Token name"
-              error={errors.tokenName}
-              placeholder="$ART"
-              onChange={(e) => handleTokenName(e.target.value)}
-              value={tokenName}
-            />
+            {savedCollectionID ? (
+              <Input
+                label="Token name"
+                error={errors.tokenName}
+                placeholder="$ART"
+                // onChange={(e) => handleTokenName(e.target.value)}
+                value={tokenName}
+              />
+            ) : (
+              <Input
+                label="Token name"
+                error={errors.tokenName}
+                placeholder="$ART"
+                onChange={(e) => handleTokenName(e.target.value)}
+                value={tokenName}
+              />
+            )}
+
             {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
           </div>
         </div>

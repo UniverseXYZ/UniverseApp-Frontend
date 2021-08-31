@@ -39,10 +39,13 @@
         line-height: 27px;
         color: white;
         margin-top: 20px;
-        // max-width: 540px;
+        max-width: 540px;
         @include lg {
           font-size: 16px;
           line-height: 25px;
+        }
+        @include md {
+          max-width: none;
         }
       }
     }

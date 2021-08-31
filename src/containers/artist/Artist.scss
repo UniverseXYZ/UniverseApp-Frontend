@@ -117,6 +117,9 @@
           align-items: center;
           button {
             margin-right: 20px;
+            &.light-border-button {
+              box-shadow: 2px 1000px 1px #fdfbff inset;
+            }
             img {
               width: 16px;
               height: 16px;
@@ -130,6 +133,9 @@
             border-radius: 12px;
             padding: 10px;
             margin-right: 15px;
+            &:hover {
+              background: linear-gradient(175deg, rgba(188,235,0,0.2), rgba(0,234,234,0.2));
+            }
             @include sm {
               margin-right: 7px;
             }
@@ -252,7 +258,7 @@
           position: absolute;
           top: 11px;
           left: 0;
-          right: 0;
+          right: -20px;
           justify-content: flex-end;
           pointer-events: none;
           img {
@@ -263,7 +269,7 @@
           display: none;
           position: absolute;
           top: 11px;
-          left: 0;
+          left: -20px;
           right: 0;
           justify-content: flex-end;
           transform: rotate(180deg);
@@ -277,15 +283,208 @@
       .tab__content {
         .empty__nfts {
           width: 100%;
-          margin-top: 100px;
-          margin-bottom: 40px;
+
+          .tabs-empty {
+            margin: 90px 0 120px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            h3 {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 500 !important;
+              font-size: 18px !important;
+              line-height: 22px;
+              text-align: center;
+              color: rgba(0, 0, 0, 0.4) !important;
+              margin-top: 30px;
+              margin-bottom: 6px;
+            }
+            p {
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 160%;
+              text-align: center;
+              color: rgba(0, 0, 0, 0.4);
+              width: 37%;
+              margin-left: 32%;
+              margin-bottom: 30px;
+              @include lg {
+                width: 50%;
+                margin-left: 25%;
+              }
+              @include sm {
+                width: 73%;
+                margin-left: 14%;
+              }
+            }
+            button {
+              img {
+                margin-left: 12px;
+              }
+            }
+          }
+      
+          h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            text-align: center;
+            color: $black;
+            margin-bottom: 130px;
+            @include lg {
+              margin-bottom: 100px;
+            }
+            @include sm {
+              margin-bottom: 75px;
+            }
+          }
+      
           h3 {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
             font-size: 22px;
             text-align: center;
+            color: $black;
+          }
+      
+          p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            text-align: center;
             color: rgba(0, 0, 0, 0.6);
+            max-width: 440px;
+            margin: 16px auto 40px;
+          }
+      
+          button.mint__btn {
+            display: block;
+            margin: 0 auto;
+            background: $primary-bg-color;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            color: $black;
+            padding: 11px 26px;
+            transition: 50ms ease-in;
+            img {
+              margin-left: 12px;
+            }
+      
+            &:hover {
+              background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+                linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+            }
+      
+            @include sm {
+              width: 100%;
+            }
+          }
+        }
+        .empty__auction {
+          margin-top: 100px;
+          margin-bottom: 100px;
+          text-align: center;
+      
+          .warning__div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px auto;
+            padding: 20px 20px 23px 24px;
+            background: #fdfcf9;
+            border: 1px solid #e4b613;
+            box-sizing: border-box;
+            border-radius: 12px;
+            width: fit-content;
+      
+            button {
+              font-family: $spaceGroteskFont;
+              font-weight: normal;
+              font-style: normal;
+              font-size: 16px;
+              text-decoration: underline;
+              background: none;
+            }
+      
+            img {
+              width: 20px;
+              height: 20px;
+      
+              @include md {
+                margin-bottom: 6px;
+              }
+            }
+      
+            p {
+              font-family: $spaceGroteskFont;
+              font-weight: 600;
+              font-style: normal;
+              font-size: 16px;
+              line-height: 160%;
+              color: #e4b613;
+              margin-left: 13px;
+              text-align: center;
+            }
+          }
+      
+          h1.title {
+            font-family: $sharpGroteskSemiBoldFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            text-align: center;
+            color: $black;
+            margin-bottom: 130px;
+          }
+          h3 {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 22px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.4);
+            margin-top: 30px;
+            // margin-bottom: 16px;
+          }
+          p.desc {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 160%;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.4);
+            margin: 6px auto 30px;
+      
+            &:disabled {
+              cursor: not-allowed;
+              background: #e6e6e6;
+              box-shadow: none;
+            }
+            @include sm {
+              max-width: 243px;
+            }
+          }
+          button.set_up {
+            display: block;
+            margin: 0 auto;
+      
+            // @include sm {
+            //   width: 100%;
+            // }
           }
         }
         .active__auctions__list {

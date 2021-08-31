@@ -8,7 +8,7 @@ const PolymorphScrambleProp = ({ data }) =>
       <div className="rarity--description selected--pink--orange">
         <div className="matching">
           <img src={data.icon} alt="Pink orage" />
-          <span className="tooltiptext">Matching trait</span>
+          <span className="tooltiptext">Main set trait</span>
         </div>
         <h4>{data.trait}</h4>
         <h3>{data.name}</h3>
@@ -31,7 +31,7 @@ const PolymorphScrambleProp = ({ data }) =>
       {data.type && (
         <div className="matching">
           <img src={data.icon} alt="Orange" />
-          <span className="tooltiptext">Matching trait</span>
+          <span className="tooltiptext">Main set trait</span>
         </div>
       )}
       <h4>{data.trait}</h4>
