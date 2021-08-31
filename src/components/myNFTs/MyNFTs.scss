@@ -636,10 +636,11 @@
         display: flex;
         justify-content: center;
         text-align: center;
-        left: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
         margin: auto;
-        bottom: 40px;
+        bottom: 250px;
+        width: 90%;
         z-index: 10;
       }
     }
@@ -1428,11 +1429,10 @@
 
   .selected-ntf {
     position: fixed;
-    height: 130px;
     width: 100%;
     left: 0;
     bottom: 0;
-    background: #ffffff;
+    background: $white;
     // padding-bottom: 16px;
     // padding-top: 16px;
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
