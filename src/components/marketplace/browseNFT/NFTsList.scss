@@ -266,6 +266,33 @@
         width: 20px;
         height: 20px;
       }
+      .nft--time--left {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        width: fit-content;
+        margin: auto;
+        padding: 6px 16px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        border-radius: 12px;
+
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 150%;
+          background: -webkit-linear-gradient(#bceb00, #00eaea);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+
+          img {
+            margin-right: 6px;
+          }
+        }
+      }
       img {
         @include lg {
           position: absolute;

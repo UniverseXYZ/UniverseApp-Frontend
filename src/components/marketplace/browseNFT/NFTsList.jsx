@@ -11,6 +11,7 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import leftArrow from '../../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../../assets/images/marketplace/bundles-right-arrow.svg';
 import count from '../../../assets/images/slidecounts.svg';
+import clockIcon from '../../../assets/images/marketplace/green-clock.svg';
 import Button from '../../button/Button';
 import AppContext from '../../../ContextAPI';
 
@@ -183,6 +184,13 @@ const NFTsList = ({ data, nftNumber }) => {
                     {nft.media.type === 'audio/mpeg' && (
                       <div className="video__icon">
                         <img src={audioIcon} alt="Video Icon" />
+                      </div>
+                    )}
+                    {nft.state === 'On Auction' && (
+                      <div className="nft--time--left">
+                        <p>
+                          <img src={clockIcon} alt="Clock" /> 20m : 30s left
+                        </p>
                       </div>
                     )}
                   </div>
