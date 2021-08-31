@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Slider from 'react-slick';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
 import AppContext from '../../../ContextAPI.js';
@@ -27,6 +27,7 @@ import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
 import { MintSingleCollectionFlow } from '../../../userFlows/MintSingleCollectionFlow';
+import { RouterPrompt } from '../../../utils/routerPrompt.js';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -48,6 +49,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
+  const [showPrompt, setShowPrompt] = useState(false);
+  const location = useLocation();
 
   const ref = useRef(null);
   const inputFile = useRef(null);
@@ -370,8 +373,17 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     }
   }, [collectionNFTs]);
 
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
+
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
+      <RouterPrompt
+        when={showPrompt}
+        onOK={() => true}
+        editing={!!(coverImage || collectionName || tokenName || description)}
+      />
       <Popup
         trigger={
           <button
