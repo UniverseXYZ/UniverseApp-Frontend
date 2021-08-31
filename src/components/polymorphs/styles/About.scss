@@ -185,5 +185,17 @@
         }
       }
     }
+    .row2-chart{
+      @include sm{
+        display: none;
+      }
+    }
+    .row2-chart-mobile{
+      display: none;
+      @include sm{
+        width: 100%;
+        display: block;
+      }
+    }
   }
 }

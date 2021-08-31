@@ -7,7 +7,7 @@ const battlePolymorphSection = () => (
   <div className="battle--polymorph--section">
     <div className="battle--polymorph--section--container">
       <div className="grid">
-        <div>
+        <div className="polymorph-div">
           <h1>Battle your Polymorph</h1>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -18,6 +18,7 @@ const battlePolymorphSection = () => (
           <Button className="light-button">Battle now</Button>
         </div>
         <div>
+          <h1 className="hidden-battle">Battle your Polymorph</h1>
           <img src={battlePolymorphImage} alt="Battle polymorph" />
         </div>
       </div>

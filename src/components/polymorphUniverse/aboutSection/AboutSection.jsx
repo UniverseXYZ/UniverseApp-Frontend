@@ -7,6 +7,7 @@ import ImgRow1 from '../../../assets/images/Section1-Illustration-min.png';
 import './AboutSection.scss';
 import Button from '../../button/Button';
 import imgRow2Chart from '../../../assets/images/universelandscape.png';
+import imgRow2ChartMobile from '../../../assets/images/universelandscapemobile.png';
 
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
@@ -41,6 +42,7 @@ const AboutSection = () => (
       <WrapperCenterTwoColumns
         leftBlock={
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
+            <h2>What are Polymorphs?</h2>
             <img alt="img" src={ImgRow1} />
           </AnimatedOnScroll>
         }
@@ -54,7 +56,9 @@ const AboutSection = () => (
         rightBlock={
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={500}>
             <div className="images--charts--parent">
-              <img src={imgRow2Chart} alt="img" />
+              <h2>Polymorph Rarity Chart</h2>
+              <img src={imgRow2Chart} alt="img" className="row2-chart" />
+              <img src={imgRow2ChartMobile} alt="img" className="row2-chart-mobile" />
             </div>
           </AnimatedOnScroll>
         }
