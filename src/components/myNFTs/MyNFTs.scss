@@ -534,6 +534,7 @@
       }
 
       &__input {
+        position: relative;
         input {
           background: $white;
           border: 1px solid #d4d4d4;
@@ -541,6 +542,7 @@
           border-radius: 12px;
           width: 100%;
           padding: 15px;
+          text-indent: 30px;
 
           &::placeholder {
             font-family: $spaceGroteskFont;
@@ -559,6 +561,12 @@
           &.focused::placeholder {
             color: transparent;
           }
+        }
+        .searchIcon{
+          position: absolute;
+          left: 18px;
+          z-index: 10;
+          top: 17px;
         }
       }
 
@@ -583,6 +591,7 @@
       }
 
       &__input {
+        position: relative;
         input {
           background: $white;
           border: 1px solid #d4d4d4;
@@ -590,6 +599,7 @@
           border-radius: 12px;
           width: 100%;
           padding: 15px;
+          text-indent: 30px;
 
           &::placeholder {
             font-family: $spaceGroteskFont;
@@ -608,6 +618,12 @@
           &:focus::placeholder {
             color: transparent;
           }
+        }
+        .searchIcon {
+          position: absolute;
+          z-index: 10;
+          left: 18px;
+          top: 17px;
         }
       }
     }
@@ -770,7 +786,6 @@
         font-style: normal;
         font-weight: 500;
         font-size: 12px;
-        text-transform: uppercase;
         color: $black;
         margin-left: 15px;
       }

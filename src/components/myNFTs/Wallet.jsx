@@ -16,6 +16,8 @@ import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import '../marketplace/browseNFT/NFTsList.scss';
 import plusIcon from '../../assets/images/PlusIcon.png';
+import Input from '../input/Input';
+import searchIcon from '../../assets/images/search-gray.svg';
 
 const Wallet = ({
   filteredNFTs,
@@ -333,12 +335,14 @@ const Wallet = ({
                 </button>
               </div>
               <div className="filter__by__collection__input">
-                <input
+                <Input
                   className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
                   type="text"
                   placeholder="Browse collections..."
                   onFocus={() => setIsCollectionDropdownOpened(true)}
+                  hoverBoxShadowGradient
                 />
+                <img src={searchIcon} alt="icon" className="searchIcon" />
               </div>
             </div>
 
@@ -347,12 +351,14 @@ const Wallet = ({
                 <span>Search by name</span>
               </div>
               <div className="search__by__name__input">
-                <input
+                <Input
                   type="text"
                   placeholder="Start typing"
                   value={searchByName}
                   onChange={(e) => handleSearchByName(e.target.value)}
+                  hoverBoxShadowGradient
                 />
+                <img src={searchIcon} alt="icon" className="searchIcon" />
               </div>
             </div>
 
