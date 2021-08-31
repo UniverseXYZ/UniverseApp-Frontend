@@ -50,6 +50,7 @@ import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/pol
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
+import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
 
 const App = () => {
   const location = useLocation();
@@ -426,6 +427,9 @@ const App = () => {
         </Route>
         <Route exact path="/polymorph-rarity">
           <RarityCharts />
+        </Route>
+        <Route exact path="/lobby-lobsters">
+          <LobbyLobsters />
         </Route>
         <Route path="*" component={() => <NotFound />} />
       </Switch>
