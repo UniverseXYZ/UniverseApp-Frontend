@@ -18,7 +18,7 @@ const PolymorphUniverse = () => (
     </div>
     <Section4
       title="Burn to mint"
-      hintText="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+      hintText="Universe is offering you the oppurtunity to burn your v1 Polymorph  and mint a new one. "
       buttonText="Burn a polymorph"
       backgroundImage={BurnPolymorphBg}
       leftBackground={Section4LeftBackground}
