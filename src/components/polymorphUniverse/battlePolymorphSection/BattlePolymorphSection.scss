@@ -12,6 +12,11 @@
             grid-template-columns: 1fr 1fr;
             grid-gap: 50px;
             align-items: center;
+            .polymorph-div{
+                @include sm{
+                    text-align: center;
+                }
+            }
             h1 {
                 font-family: $sharpGroteskSemiBoldFont;
                 font-style: normal;
@@ -19,6 +24,13 @@
                 font-size: 32px;
                 line-height: 140%;
                 color: $black;
+                @include md{
+                    font-size: 26px;
+                }
+                @include sm{
+                    font-size: 26px;
+                    display: none;
+                }
             }
             p {
                 font-family: $spaceGroteskFont;
@@ -30,9 +42,24 @@
                 margin-top: 20px;
                 margin-bottom: 62px;
                 max-width: 421px;
+                @include md {
+                    margin-bottom: 35px;
+                }
+                @include sm {
+                    margin-top: unset;    
+                }
             }
             @include sm {
-                grid-template-columns: 1fr;
+                display: flex;
+                flex-flow: column-reverse;
+                width: 100%;
+            }
+            .hidden-battle{
+                display: none;
+              @include sm {
+                display: block;
+                text-align: center;
+            }
             }
         }
     }
