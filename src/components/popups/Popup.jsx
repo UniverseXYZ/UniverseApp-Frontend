@@ -8,7 +8,7 @@ import './PopupStyle.scss';
 const PopupComponent = ({ onClose }) => (
   <Popup
     trigger={
-      <button type="button" className="modal-close" id="show-popup">
+      <button type="button" className="modal-close" id="show-popup" style={{ display: 'none' }}>
         <img src={closeIcon} alt="" />{' '}
       </button>
     }
