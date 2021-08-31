@@ -40,7 +40,7 @@ const CongratsPopup = ({ onClose, backButtonText, title, message }) => {
             history.push(
               location.pathname === '/create-tiers/my-nfts/create'
                 ? '/create-tiers/my-nfts/create'
-                : '/my-nfts/create'
+                : onClose()
             )
           }
         >

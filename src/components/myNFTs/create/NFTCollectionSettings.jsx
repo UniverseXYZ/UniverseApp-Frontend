@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Slider from 'react-slick';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Input from '../../input/Input.jsx';
 import Button from '../../button/Button.jsx';
 import AppContext from '../../../ContextAPI.js';
@@ -25,6 +25,7 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
+import { RouterPrompt } from '../../../utils/routerPrompt.js';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -39,6 +40,8 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
+  const [showPrompt, setShowPrompt] = useState(false);
+  const location = useLocation();
 
   const ref = useRef(null);
   const inputFile = useRef(null);
@@ -317,51 +320,52 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     if (mintNowClick) {
       if (!errors.collectionName && !errors.tokenName) {
         if (!savedCollectionID) {
+          if (collectionNFTs.length) {
+            const newMyNFTs = [...myNFTs];
+            collectionNFTs.forEach((nft) => {
+              newMyNFTs.push({
+                id: uuid(),
+                type: 'collection',
+                collectionId: collectionName,
+                collectionName,
+                collectionAvatar:
+                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                tokenName,
+                collectionDescription: description,
+                shortURL,
+                previewImage: nft.previewImage,
+                name: nft.name,
+                description: nft.description,
+                numberOfEditions: Number(nft.editions),
+                generatedEditions: nft.generatedEditions,
+                releasedDate: new Date(),
+                properties: nft.properties,
+                royaltySplits: nft.royaltySplits,
+              });
+            });
+            setMyNFTs(newMyNFTs);
+          }
+          setDeployedCollections([
+            ...deployedCollections,
+            {
+              id: collectionName,
+              previewImage:
+                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
+              name: collectionName,
+              tokenName,
+              description,
+              shortURL,
+            },
+          ]);
+          setCoverImage(null);
+          setCollectionName('');
+          setTokenName('');
+          setDescription('');
           document.getElementById('loading-hidden-btn').click();
           setTimeout(() => {
-            document.getElementById('loading-hidden-btn').click();
-          }, 2000);
-
-          setTimeout(() => {
+            document.getElementById('popup-root').remove();
             document.getElementById('congrats-hidden-btn').click();
-            if (collectionNFTs.length) {
-              const newMyNFTs = [...myNFTs];
-              collectionNFTs.forEach((nft) => {
-                newMyNFTs.push({
-                  id: uuid(),
-                  type: 'collection',
-                  collectionId: collectionName,
-                  collectionName,
-                  collectionAvatar:
-                    coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                  tokenName,
-                  collectionDescription: description,
-                  shortURL,
-                  previewImage: nft.previewImage,
-                  name: nft.name,
-                  description: nft.description,
-                  numberOfEditions: Number(nft.editions),
-                  generatedEditions: nft.generatedEditions,
-                  releasedDate: new Date(),
-                  properties: nft.properties,
-                  royaltySplits: nft.royaltySplits,
-                });
-              });
-              setMyNFTs(newMyNFTs);
-            }
-            setDeployedCollections([
-              ...deployedCollections,
-              {
-                id: collectionName,
-                previewImage:
-                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                name: collectionName,
-                tokenName,
-                description,
-                shortURL,
-              },
-            ]);
-          }, 2500);
+          }, 3000);
         } else {
           const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
           const coll = {
@@ -374,14 +378,20 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             shortURL,
             bgImage,
           };
+          setCoverImage(null);
+          setCollectionName('');
+          setTokenName('');
+          setDescription('');
           setSavedCollectionID(null);
           setDeployedCollections(
             deployedCollections.map((item) => (item.id === savedCollectionID ? coll : item))
           );
-          history.push(`/c/${coll.id.toLowerCase().replace(' ', '-')}`, {
-            collection: coll,
-            saved: false,
-          });
+          setTimeout(() => {
+            history.push(`/c/${coll.id.toLowerCase().replace(' ', '-')}`, {
+              collection: coll,
+              saved: false,
+            });
+          }, 1000);
         }
       }
     }
@@ -402,8 +412,17 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     }
   }, [collectionNFTs]);
 
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
+
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
+      <RouterPrompt
+        when={showPrompt}
+        onOK={() => true}
+        editing={!!(coverImage || collectionName || tokenName || description)}
+      />
       <Popup
         trigger={
           <button
