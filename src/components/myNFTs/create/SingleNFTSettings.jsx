@@ -289,6 +289,7 @@ const SingleNFTSettings = () => {
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
+        closeCongratsPopupEvent();
         document.getElementById('loading-hidden-btn').click();
         if (location.pathname === '/create-tiers/my-nfts/create') {
           setShowModal(false);
@@ -297,9 +298,6 @@ const SingleNFTSettings = () => {
           setTimeout(() => {
             document.getElementById('popup-root').remove();
             document.getElementById('congrats-hidden-btn').click();
-            setTimeout(() => {
-              closeCongratsPopupEvent();
-            }, 2000);
           }, 3000);
         }
       }
