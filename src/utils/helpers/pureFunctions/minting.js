@@ -181,7 +181,7 @@ const FACTTORY_CONTRACT_ID = 2;
  */
 export const createPlaceholders = ({ nfts }) => {
   const currentList = JSON.parse(localStorage.getItem('nftsPlaceholders')) || [];
-  nfts.forEach((nft) => {
+  nfts?.forEach((nft) => {
     for (let i = 0; i < nft.numberOfEditions; i += 1) {
       currentList.push(`${nft.collectionId || FACTTORY_CONTRACT_ID}${nft.name}${nft.description}`);
     }
