@@ -408,6 +408,18 @@
                             }
                         }
                         .collection--token {
+                            &.inactive {
+                                .inp-label {
+                                    color: rgba(0, 0, 0, 0.1);
+                                }
+                                .inp {
+                                    color: rgba(0, 0, 0, 0.1);
+                                    border: 1px solid rgba(0, 0, 0, 0.1);
+                                }
+                                .warning {
+                                    display: none;
+                                }
+                            }
                             .intup-l {
                                 width: 100%;
                                 input {
