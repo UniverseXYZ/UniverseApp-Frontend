@@ -552,10 +552,18 @@
   }
 
   .input-search {
-    position: relative;
     float: right;
     margin-top: -85px;
-
+    .input--section{
+      position: relative;
+      img {
+        position: absolute;
+        padding-left: 16px;
+        top: 17px;
+        left: 0;
+        z-index: 10;
+      }
+    }
     button {
       font-family: $spaceGroteskFont;
       font-size: 14px;
@@ -564,6 +572,9 @@
       color: $black;
       margin-right: 16px;
       background: transparent;
+      @include lg {
+        display: none;
+      }
     }
 
     .intup-l {
@@ -582,14 +593,6 @@
       @include lg {
         width: 100%;
       }
-    }
-
-    img {
-      position: absolute;
-      padding-left: 16px;
-      top: 17px;
-      height: 20px;
-      z-index: 10;
     }
     @include lg {
       float: none;

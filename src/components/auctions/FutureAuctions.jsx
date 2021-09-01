@@ -56,13 +56,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         ) : (
           <></>
         )}
-        <img src={searchIconGray} alt="search" />
-        <Input
-          className="searchInp"
-          onChange={(e) => handleSearch(e.target.value)}
-          value={searchByName}
-          placeholder="Search by name"
-        />
+        <div className="input--section">
+          <Input
+            className="searchInp"
+            onChange={(e) => handleSearch(e.target.value)}
+            value={searchByName}
+            placeholder="Search by name"
+          />
+          <img src={searchIconGray} alt="search" />
+        </div>
       </div>
       {myAuctions
         .slice(offset, offset + perPage)

@@ -15,7 +15,12 @@ const Title = ({ selectedCollection, saved }) => {
   return (
     <div className="collection__info">
       <div className="collection__name__desc">
-        <h1>{selectedCollection.name}</h1>
+        {/* <h1>{selectedCollection.name}</h1> */}
+        <h1 title={selectedCollection.name}>
+          {selectedCollection.name.length > 13
+            ? `${selectedCollection.name.substring(0, 13)}...`
+            : selectedCollection.name}
+        </h1>
       </div>
       <div className="collection__edit">
         <Button className="light-border-button" onClick={() => handleEdit(selectedCollection.id)}>
