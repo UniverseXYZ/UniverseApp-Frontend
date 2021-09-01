@@ -68,7 +68,7 @@ const SingleNFTSettings = () => {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [editions, setEditions] = useState(1);
+  const [editions, setEditions] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
@@ -273,6 +273,12 @@ const SingleNFTSettings = () => {
     }
 
     closeLoadingModal();
+    setName('');
+    setDescription('');
+    setEditions('');
+    setPreviewImage(null);
+    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    setRoyaltyAddress([{ address: '', amount: '' }]);
   };
 
   const onSaveNftForLaterMinting = async () => {
@@ -306,12 +312,24 @@ const SingleNFTSettings = () => {
 
     document.getElementById('congrats-hidden-btn').click();
     closeLoadingModal();
+    setName('');
+    setDescription('');
+    setEditions('');
+    setPreviewImage(null);
+    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    setRoyaltyAddress([{ address: '', amount: '' }]);
   };
 
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
     if (parseInt(value, 10) !== 0) {
       setEditions(value);
+      setErrors({
+        ...errors,
+        edition: !e.target.value ? '“Number of editions” is not allowed to be empty' : '',
+      });
+      setMintNowClick(false);
+      setSaveForLateClick(false);
     }
   };
 
@@ -351,6 +369,12 @@ const SingleNFTSettings = () => {
 
     document.getElementById('congrats-hidden-btn').click();
     closeLoadingModal();
+    setName('');
+    setDescription('');
+    setEditions('');
+    setPreviewImage(null);
+    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    setRoyaltyAddress([{ address: '', amount: '' }]);
   };
 
   const getPreviewImageSource = (p) =>
@@ -423,7 +447,24 @@ const SingleNFTSettings = () => {
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
-        {/* <RouterPrompt when={showPrompt} onOK={() => true} /> */}
+        <RouterPrompt
+          when={showPrompt}
+          onOK={() => true}
+          editing={
+            !!(
+              name ||
+              editions ||
+              previewImage ||
+              description ||
+              properties[0].name ||
+              properties[0].value ||
+              properties[1] ||
+              royaltyAddress[0].address ||
+              royaltyAddress[0].amount ||
+              royaltyAddress[1]
+            )
+          }
+        />
         <Popup
           trigger={
             <button
@@ -472,7 +513,7 @@ const SingleNFTSettings = () => {
         >
           {(close) => (
             <CongratsPopup
-              onClose={() => handleCloseSuccessPopup(close)}
+              onClose={close}
               title="Success!"
               message="NFT was successfully saved for later"
             />
