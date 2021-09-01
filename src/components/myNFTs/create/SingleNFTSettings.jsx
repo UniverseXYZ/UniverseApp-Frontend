@@ -371,7 +371,7 @@ const SingleNFTSettings = () => {
         onMintNft();
       }
     }
-  }, [errors, saveForLateClick, savedNfts]);
+  }, [errors, saveForLateClick]);
 
   const onDrop = (e) => {
     e.preventDefault();
