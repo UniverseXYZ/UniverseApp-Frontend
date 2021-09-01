@@ -4,6 +4,8 @@ import cover from '../../assets/images/cover.png';
 export const POLYMORPH_BASE_URI =
   'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=';
 
+export const POLYMORPHS_COLLECTION_NAME = 'Universe Polymorphs';
+
 export const getScrambleStatus = (scrambleEvents) => {
   // Check if there is only one event - this means the badge is Virgin
   if (scrambleEvents.length === 1 && scrambleEvents[0].oldGene === '0') {
@@ -45,5 +47,5 @@ export const convertPolymorphObjects = (nftMetadataObjects) =>
     },
     name: nft?.data?.name,
     collectionAvatar: cover,
-    collectionName: 'Universe Polymorphs',
+    collectionName: POLYMORPHS_COLLECTION_NAME,
   }));

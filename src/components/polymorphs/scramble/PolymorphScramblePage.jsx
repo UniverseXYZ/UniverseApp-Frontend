@@ -49,7 +49,6 @@ const PolymorphScramblePage = () => {
   const [showMetadataLoading, setShowMetadataLoading] = useState(false);
   const [showScramblePopup, setShowScramblePopup] = useState(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
-
   useEffect(() => {
     if (!data) return;
     const ownerOf = data?.transferEntities[0]?.to;
@@ -212,7 +211,7 @@ const PolymorphScramblePage = () => {
           <div className="name">{polymorphData?.data?.name}</div>
           <div className="description">{polymorphData?.data?.description}</div>
 
-          <Tabs items={tabs} />
+          <Tabs items={tabs} attributes={attributes} />
           {propertiesTabSelected ? (
             <>
               <div className="scramble--properties">

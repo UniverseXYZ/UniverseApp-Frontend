@@ -21,6 +21,7 @@
   }
 
   .wave--img {
+    pointer-events: none;
     position: absolute;
     left: 0;
     bottom: -142px;

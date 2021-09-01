@@ -1,16 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { utils, BigNumber, FixedNumber } from 'ethers';
+import Popup from 'reactjs-popup';
 import BondingCurve from '../../polymorphs/mint-polymorph/BondingCurve';
 import './MintLobbyLobsterSection.scss';
 import lobsterLoadingBg from '../../../assets/images/lobby-lobsters/img_placeholder.png';
+import AppContext from '../../../ContextAPI';
+import { convertLobsterObjects, LOBSTER_BASE_URI } from '../../../utils/helpers/lobsters';
+import { fetchTokensMetadataJson } from '../../../utils/api/polymorphs';
+import LoadingPopup from '../../popups/LoadingPopup';
+import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
-  const [sliderValue, setSliderValue] = useState(4520);
+  const { totalLobsters, lobsterContract, lobsterBaseURI, userLobsters } = useContext(AppContext);
+  const [sliderValue, setSliderValue] = useState(totalLobsters);
   const [quantity, setQuantity] = useState(1);
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [mintedTokens, setMintedTokens] = useState([]);
+  const [mintedLobsters, setMintedLobsters] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [congrats, setCongrats] = useState(false);
+  const [metadataLoading, setMetadataLoading] = useState(false);
+  const [metadataLoaded, setMetadataLoaded] = useState(false);
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -18,6 +32,57 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
     else setMobile(false);
   }, []);
 
+  useEffect(() => {
+    setSliderValue(totalLobsters);
+  }, [totalLobsters]);
+
+  useEffect(() => {
+    setSliderValue(totalLobsters);
+  }, [totalLobsters]);
+
+  const mintLobsters = async (amount) => {
+    if (!lobsterContract) {
+      try {
+        await connectWeb3();
+      } catch (err) {
+        alert(err.message || error);
+      }
+    }
+
+    if (!lobsterContract) return;
+
+    const mintedIds = [];
+    const overrideOptions = {
+      value: utils.parseEther((0.1 * amount).toString()),
+    };
+    try {
+      const mintTx = await lobsterContract?.functions['bulkBuy(uint256)'](amount, overrideOptions);
+      setMetadataLoaded(false);
+      setLoading(true);
+
+      const receipt = await mintTx?.wait();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const event of receipt.events) {
+        if (event.event !== 'Transfer') {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        mintedIds.push(event.args.tokenId.toString());
+      }
+      const metadataURIs = mintedIds.map((id) => `${lobsterBaseURI}${id}`);
+      setMintedTokens(metadataURIs);
+      setLoading(false);
+      setCongrats(true);
+      const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+      setMintedTokens(nftMetadataObjects);
+      const lobsterNFTs = userLobsters.concat(convertLobsterObjects(nftMetadataObjects));
+      setMetadataLoaded(true);
+      setMintedLobsters(lobsterNFTs);
+      setSliderValue(+sliderValue + quantity);
+    } catch (err) {
+      alert(err.message || error);
+    }
+  };
   return (
     <div className="lobby--lobsters--mint--section" ref={ref}>
       <div className="lobby--lobsters--mint--section--background">
@@ -39,10 +104,24 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
             quantity={quantity}
             setQuantity={setQuantity}
             light={false}
-            loadingImage={lobsterLoadingBg}
+            trailingZeros={1}
+            mintAction={mintLobsters}
           />
         </div>
       </div>
+      <Popup closeOnDocumentClick={false} open={loading}>
+        <LoadingPopup onClose={() => setLoading(false)} />
+      </Popup>
+      <Popup closeOnDocumentClick={false} open={congrats}>
+        <MintPolymorphConfirmationPopup
+          onClose={() => setCongrats(false)}
+          quantity={quantity}
+          mintedNFTs={mintedTokens}
+          collectionName="Lobby Lobster"
+          loadingImage={lobsterLoadingBg}
+          metadataLoaded={metadataLoaded}
+        />
+      </Popup>
     </div>
   );
 });
