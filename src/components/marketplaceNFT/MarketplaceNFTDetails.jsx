@@ -27,6 +27,7 @@ import miniplayerIcon from '../../assets/images/miniplayer.svg';
 import fullScreenIcon from '../../assets/images/full-screen.svg';
 import fullScreenOffIcon from '../../assets/images/full-screen-off.svg';
 import unveiling from '../../assets/images/unveiling.svg';
+import bordergradient from '../../assets/images/border-gradient.svg';
 import priceIcon from '../../assets/images/ETHiconupd.png';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
@@ -35,6 +36,7 @@ import closeIcon from '../../assets/images/marketplace/close.svg';
 import bundlesIcon from '../../assets/images/marketplace/bundles.svg';
 import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
+import Button from '../button/Button';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
@@ -833,20 +835,29 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <span className="selected__item">...</span>
                 {isDropdownOpened && (
                   <div className="sort__share__dropdown">
-                    <ul>
-                      <Popup trigger={<li aria-hidden="true">Share</li>}>
-                        {(close) => <SharePopup close={close} ref={sharePopupRef} />}
-                      </Popup>
-                      <Popup
-                        trigger={
-                          <li aria-hidden="true" className="dropdown__report">
-                            Report
-                          </li>
-                        }
-                      >
-                        {(close) => <ReportPopup onClose={close} ref={reportPopupRef} />}
-                      </Popup>
-                    </ul>
+                    {selectedNFT.view === 'user' ? (
+                      <ul>
+                        <Popup trigger={<li aria-hidden="true">Share</li>}>
+                          {(close) => <SharePopup close={close} ref={sharePopupRef} />}
+                        </Popup>
+                        <Popup
+                          trigger={
+                            <li aria-hidden="true" className="dropdown__report">
+                              Report
+                            </li>
+                          }
+                        >
+                          {(close) => <ReportPopup onClose={close} ref={reportPopupRef} />}
+                        </Popup>
+                      </ul>
+                    ) : (
+                      <ul>
+                        <li aria-hidden="true">Transfer</li>
+                        <li aria-hidden="true" className="dropdown__report">
+                          Burn
+                        </li>
+                      </ul>
+                    )}
                   </div>
                 )}
               </div>
@@ -921,12 +932,22 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </>
             )}
           </div>
-          <BuyNFTSection
-            highestBid={highestBid}
-            firstButtonText="Place a bid"
-            secondButtonText="Make offer"
-            auctionLeftTime="1d: 4h : 20m : 30s"
-          />
+          {selectedNFT.view === 'user' ? (
+            <BuyNFTSection
+              highestBid={highestBid}
+              firstButtonText="Place a bid"
+              secondButtonText="Make offer"
+              auctionLeftTime="1d: 4h : 20m : 30s"
+            />
+          ) : (
+            <div className="theunveiling" style={{ paddingBottom: '0px' }}>
+              <img className="border--gradient" src={bordergradient} alt="border" />
+              <div className="saler__content">
+                <Button className="light-button">Put on sale</Button>
+                <p>This NFT is on your wallet</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="collection">

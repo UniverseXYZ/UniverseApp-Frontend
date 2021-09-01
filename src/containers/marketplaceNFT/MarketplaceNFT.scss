@@ -845,6 +845,24 @@
         padding-left: 20px;
       }
     }
+    .saler__content {
+      display: grid;
+      padding: 13px 40px 22px;
+
+      p {
+        font-family: $spaceGroteskFont;
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 160%;
+        color: #e4b613;
+        margin-top: 12px;
+      }
+      @include sm {
+        padding: 20px;
+      }
+    }
   }
   @include lg {
     grid-template-columns: 1fr;

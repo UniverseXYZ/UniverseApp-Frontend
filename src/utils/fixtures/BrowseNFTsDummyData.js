@@ -50,6 +50,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 1,
     type: 'single',
+    view: 'user',
     state: '',
     creator: {
       id: 1,
@@ -86,6 +87,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 2,
     type: 'single',
+    view: 'seller',
     state: '',
     creator: {
       id: 2,
@@ -122,6 +124,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 3,
     type: 'single',
+    view: 'seller',
     state: '',
     creator: {
       id: 3,
@@ -158,6 +161,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 4,
     type: 'bundles',
+    view: 'user',
     state: '',
     creator: {
       id: 4,
@@ -231,6 +235,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 5,
     type: 'single',
+    view: 'user',
     state: '',
     creator: {
       id: 5,
@@ -267,6 +272,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 6,
     type: 'single',
+    view: 'user',
     state: 'On Auction',
     creator: {
       id: 6,
@@ -303,6 +309,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 7,
     type: 'single',
+    view: 'seller',
     state: '',
     creator: {
       id: 7,
@@ -339,6 +346,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 8,
     type: 'single',
+    view: 'user',
     state: '',
     creator: {
       id: 8,
@@ -375,6 +383,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 9,
     type: 'single',
+    view: 'seller',
     state: 'On Auction',
     creator: {
       id: 9,
@@ -411,6 +420,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 10,
     type: 'single',
+    view: 'seller',
     state: 'On Auction',
     creator: {
       id: 10,
@@ -447,6 +457,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 11,
     type: 'single',
+    view: 'user',
     state: '',
     creator: {
       id: 11,
@@ -483,6 +494,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 12,
     type: 'single',
+    view: 'user',
     state: '',
     creator: {
       id: 12,
@@ -519,6 +531,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 13,
     type: 'single',
+    view: 'user',
     state: '',
     creator: {
       id: 13,
@@ -555,6 +568,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 14,
     type: 'single',
+    view: 'seller',
     state: '',
     creator: {
       id: 14,
@@ -591,6 +605,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 15,
     type: 'single',
+    view: 'seller',
     state: 'On Auction',
     creator: {
       id: 15,
@@ -627,6 +642,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: 16,
     type: 'single',
+    view: 'seller',
     state: '',
     creator: {
       id: 16,
