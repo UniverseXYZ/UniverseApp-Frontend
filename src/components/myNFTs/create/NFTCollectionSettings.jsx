@@ -359,15 +359,13 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   }, [errors]);
 
   useEffect(() => {
+    // It means we have opened a collection for EDIT
     if (savedCollectionID) {
       const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
       setCollectionName(res.name);
-      setCoverImage(
-        typeof res.previewImage === 'string' && res.previewImage.startsWith('#')
-          ? null
-          : res.previewImage
-      );
-      setTokenName(res.tokenName);
+      // An already deployed collection should have a coverUrl
+      setCoverImage(res.coverUrl);
+      setTokenName(res.symbol);
       setDescription(res.description);
       setBgImage(res.bgImage || null);
     }
@@ -444,7 +442,9 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
               <div className="image--selected">
                 <img
                   className="cover"
-                  src={URL.createObjectURL(coverImage)}
+                  src={
+                    typeof coverImage === 'object' ? URL.createObjectURL(coverImage) : coverImage
+                  }
                   alt="Collection cover"
                 />
                 <div
@@ -474,13 +474,25 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         </div>
         <div className="collection--name--and--token">
           <div className="collection--name">
-            <Input
-              label="Collection name"
-              error={errors.collectionName}
-              placeholder="Enter the collection name"
-              onChange={(e) => handleCollectionName(e.target.value)}
-              value={collectionName}
-            />
+            {savedCollectionID ? (
+              <Input
+                label="Collection name"
+                error={errors.collectionName}
+                placeholder="Enter the collection name"
+                // onChange={(e) => handleCollectionName(e.target.value)}
+                value={collectionName}
+              />
+            ) : (
+              <Input
+                label="Collection name"
+                error={errors.collectionName}
+                placeholder="Enter the collection name"
+                onChange={(e) => handleCollectionName(e.target.value)}
+                value={collectionName}
+              />
+            )}
+
+            {<p className="warning">Collection name cannot be changed in future</p>}
           </div>
           <div className="collection--token">
             {savedCollectionID ? (
@@ -746,7 +758,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           </Button>
         ) : (
           <>
-            <Button className="light-border-button" onClick={() => history.goBack()}>
+            <Button className="light-border-button" onClick={() => history.push('/my-nfts')}>
               Cancel
             </Button>
             <Button
