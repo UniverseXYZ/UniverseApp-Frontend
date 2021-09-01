@@ -91,7 +91,11 @@ const CreateNFT = () => {
               : 'Create NFT collection'}
           </h1>
         )}
-        {savedNFTsID && <h1 className="page--title">Edit NFT</h1>}
+        {savedNFTsID && (
+          <h1 className="page--title" style={{ marginBottom: '20px' }}>
+            Edit NFT
+          </h1>
+        )}
         {savedCollectionID && <h1 className="page--title">Edit collection</h1>}
         {/* {!showCollectible && (
           <div id="tabs--wrapper">

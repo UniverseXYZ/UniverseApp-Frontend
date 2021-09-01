@@ -828,6 +828,7 @@ const SingleNFTSettings = () => {
                         className="inp"
                         error={elm.errors.name}
                         placeholder="Colour"
+                        hoverBoxShadowGradient
                         value={elm.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
                       />
@@ -838,6 +839,7 @@ const SingleNFTSettings = () => {
                         className="inp"
                         error={elm.errors.value}
                         placeholder="Red"
+                        hoverBoxShadowGradient
                         value={elm.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
                       />
@@ -904,6 +906,7 @@ const SingleNFTSettings = () => {
                       <Input
                         className="inp"
                         placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                        hoverBoxShadowGradient
                         value={elm.address}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
@@ -915,6 +918,7 @@ const SingleNFTSettings = () => {
                         className="percent-inp"
                         type="number"
                         placeholder="5%"
+                        hoverBoxShadowGradient
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
