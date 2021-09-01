@@ -25,7 +25,7 @@ const MyAccount = () => {
   const history = useHistory();
   const location = useLocation();
   const [about, setAbout] = useState(loggedInArtist.about);
-  const [logo, setLogo] = useState(loggedInArtist.personalLogo);
+  // const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
   const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
 
@@ -35,7 +35,6 @@ const MyAccount = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
-  const [showSocial, setShowSocial] = useState(loggedInArtist.social);
   const [errorModal, showErrorModal] = useState(false);
 
   useEffect(() => {
@@ -65,10 +64,8 @@ const MyAccount = () => {
       universePageAddress: page,
       avatar: accountImage,
       about,
-      personalLogo: logo,
       instagramLink,
       twitterLink,
-      social: showSocial,
     };
 
     const result = await saveProfileInfo(artistData);
@@ -79,16 +76,6 @@ const MyAccount = () => {
       }
     }
 
-    if (typeof logo === 'object') {
-      const saveLogoRequest = await saveUserLogo(logo);
-      if (saveLogoRequest.logoImageUrl) {
-        setLoggedInArtist({
-          ...loggedInArtist,
-          personalLogo: saveLogoRequest.logoImageUrl,
-        });
-      }
-    }
-
     if (!result.ok) {
       showErrorModal(true);
       return;
@@ -96,17 +83,11 @@ const MyAccount = () => {
 
     setLoggedInArtist({ ...artistData });
 
-    if (!showSocial) {
-      setShowSocial(false);
-    } else {
-      setShowSocial(true);
-    }
-
     setTimeout(() => {
       if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
         document.getElementById('congrats-hidden-btn').click();
       }
-    }, 500);
+    }, 2000);
   };
 
   const cancelChanges = () => {
@@ -118,7 +99,7 @@ const MyAccount = () => {
     }
     setAccountImage(loggedInArtist.avatar);
     setAbout(loggedInArtist.about);
-    setLogo(loggedInArtist.personalLogo);
+    // setLogo(loggedInArtist.personalLogo);
     setTwitterLink(loggedInArtist.twitterLink);
     setInstagramLink(loggedInArtist.instagramLink);
   };

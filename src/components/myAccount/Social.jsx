@@ -21,100 +21,93 @@ const Social = ({
 }) => (
   // const [showSocial, setShowSocial] = useState(true);
 
-  <div className="my-account container">
-    <div className="account-grid-container">
-      <div className="account-grid-social">
-        <div className="social">
-          <h5>Social</h5>
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={showSocial}
-              onChange={(e) => setShowSocial(e.target.checked)}
-            />
-            <span className="slider round" />
-          </label>
-        </div>
-        {/* {socialEditing ? (
-            <div className="account-grid-social-edit">
-              <div className="social-sites">
-                {!loggedInArtist.instagramLink ? (
-                  <div className="site">
-                    <img alt="" src={instagramLogo} />
-                    <p className="site-link">instagram.com/</p>
-                    <p className="site-default-address">youraddress</p>
-                  </div>
-                ) : (
-                  <div className="site">
-                    <img alt="" src={instagramLogo} />
-                    <p className="site-link">instagram.com/</p>
-                    <p className="site-link">{loggedInArtist.instagramLink}</p>
-                  </div>
-                )}
-                {!loggedInArtist.twitterLink ? (
-                  <div className="site">
-                    <img alt="" src={twitterLogo} />
-                    <p className="site-link">twitter.com/</p>
-                    <p className="site-default-address">youraddress</p>
-                  </div>
-                ) : (
-                  <div className="site">
-                    <img alt="" src={twitterLogo} />
-                    <p className="site-link">twitter.com/</p>
-                    <p className="site-link">{loggedInArtist.twitterLink}</p>
-                  </div>
-                )}
-              </div>
-              <Button className="light-border-button" onClick={() => setSocialEditing(false)}>
-                <span className="hide__on__mobile">Edit</span>
-                <img src={pencilIcon} alt="Edit Icon" />
-              </Button>
-            </div>
-          ) : ( */}
-        {/* <Animated animationIn="zoomIn"> */}
-        <div className="account-grid-social-editing">
-          {showSocial ? (
-            <>
-              <div className="instagram">
-                <h5>Instagram profile</h5>
+  <div className="account-grid-social">
+    {/* <div className="social">
+      <h5>Social</h5>
+      <label className="switch">
+        <input
+          type="checkbox"
+          checked={showSocial}
+          onChange={(e) => setShowSocial(e.target.checked)}
+        />
+        <span className="slider round" />
+      </label>
+    </div> */}
+    {/* {socialEditing ? (
+        <div className="account-grid-social-edit">
+          <div className="social-sites">
+            {!loggedInArtist.instagramLink ? (
+              <div className="site">
                 <img alt="" src={instagramLogo} />
-                <Input
-                  placeholder="instagram.com/username"
-                  className="inp"
-                  hoverBoxShadowGradient
-                  value={instagramLink}
-                  onChange={(e) => setInstagramLink(e.target.value)}
-                />
+                <p className="site-link">instagram.com/</p>
+                <p className="site-default-address">youraddress</p>
               </div>
-              <div className="twitter">
-                <h5>Twitter profile</h5>
+            ) : (
+              <div className="site">
+                <img alt="" src={instagramLogo} />
+                <p className="site-link">instagram.com/</p>
+                <p className="site-link">{loggedInArtist.instagramLink}</p>
+              </div>
+            )}
+            {!loggedInArtist.twitterLink ? (
+              <div className="site">
                 <img alt="" src={twitterLogo} />
-                <Input
-                  placeholder="twitter.com/username"
-                  className="inp"
-                  hoverBoxShadowGradient
-                  value={twitterLink}
-                  onChange={(e) => setTwitterLink(e.target.value)}
-                />
+                <p className="site-link">twitter.com/</p>
+                <p className="site-default-address">youraddress</p>
               </div>
-            </>
-          ) : (
-            <></>
-          )}
-
-          <div className="account-display-buttons">
-            <Button className="light-button" onClick={() => saveChanges()}>
-              Save changes
-            </Button>
-            <Button className="light-border-button" onClick={() => cancelChanges()}>
-              Cancel
-            </Button>
+            ) : (
+              <div className="site">
+                <img alt="" src={twitterLogo} />
+                <p className="site-link">twitter.com/</p>
+                <p className="site-link">{loggedInArtist.twitterLink}</p>
+              </div>
+            )}
           </div>
+          <Button className="light-border-button" onClick={() => setSocialEditing(false)}>
+            <span className="hide__on__mobile">Edit</span>
+            <img src={pencilIcon} alt="Edit Icon" />
+          </Button>
         </div>
-        {/* </Animated> */}
-        {/* )} */}
+      ) : ( */}
+    {/* <Animated animationIn="zoomIn"> */}
+    <div className="account-grid-social-editing">
+      <h3>
+        Social media <span>(optional)</span>
+      </h3>
+      <div className="instagram">
+        <h5>Instagram profile</h5>
+        <img alt="" src={instagramLogo} />
+        <Input
+          placeholder="instagram.com/username"
+          className="inp"
+          hoverBoxShadowGradient
+          value={instagramLink}
+          onChange={(e) => setInstagramLink(e.target.value)}
+        />
       </div>
+      <div className="twitter">
+        <h5>Twitter profile</h5>
+        <img alt="" src={twitterLogo} />
+        <Input
+          placeholder="twitter.com/username"
+          className="inp"
+          hoverBoxShadowGradient
+          value={twitterLink}
+          onChange={(e) => setTwitterLink(e.target.value)}
+        />
+      </div>
+
+      {/* <div className="account-display-buttons">
+        <Button className="light-button" onClick={() => saveChanges()}>
+          Save changes
+        </Button>
+        <Button className="light-border-button" onClick={() => cancelChanges()}>
+          Cancel
+        </Button>
+      </div> */}
     </div>
+    {/* </Animated> */}
+    {/* )} */}
   </div>
 );
 Social.propTypes = {

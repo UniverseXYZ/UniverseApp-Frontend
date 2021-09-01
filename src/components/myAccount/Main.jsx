@@ -78,6 +78,25 @@ const Main = ({
     }
   }, [loggedInArtist]);
 
+  const getProfileImage = () => {
+    const userUploadImageURL =
+      accountImage && typeof accountImage === 'object' && URL.createObjectURL(accountImage);
+    const alreadyUploadedImageURL = loggedInArtist && loggedInArtist.avatar;
+
+    let image;
+    if (userUploadImageURL) {
+      image = userUploadImageURL;
+    } else if (alreadyUploadedImageURL) {
+      image = alreadyUploadedImageURL;
+    } else {
+      image = defaultImage;
+    }
+
+    return image;
+  };
+
+  const profileImage = getProfileImage();
+
   return (
     <div className="account-grid-container container">
       {/* {nameEditing ? (
@@ -136,25 +155,16 @@ const Main = ({
       {/* <Animated animationIn="zoomIn"> */}
       <div className="account-grid-name1">
         <div className="account-picture">
-          <div className="account-image">
-            {accountImage && <img className="account-img" src={accountImage} alt="Avatar" />}
-            {!accountImage && loggedInArtist.avatar && (
-              <img
-                className="account-img"
-                src={
-                  typeof accountImage === 'object'
-                    ? URL.createObjectURL(accountImage)
-                    : accountImage
-                }
-                alt="Avatar"
-              />
-            )}
-            {!accountImage && loggedInArtist.avatar && (
-              <img className="account-img" src={loggedInArtist.avatar} alt="Avatar" />
-            )}
-            {!accountImage && !loggedInArtist.avatar && (
-              <img className="default-img" src={defaultImage} alt="Avatar" />
-            )}
+          <div
+            className={
+              !accountImage && editProfileButtonClick ? 'account-image error-img' : 'account-image'
+            }
+          >
+            <img
+              className={profileImage === defaultImage ? 'default-img' : 'account-img'}
+              src={getProfileImage()}
+              alt="Avatar"
+            />
           </div>
           <div className="account-picture-editing">
             <p>We recomend an image of at least 400x400.</p>
@@ -170,21 +180,6 @@ const Main = ({
             />
             {!accountImage && !loggedInArtist.avatar && (
               <img className="default-img" src={defaultImage} alt="Avatar" />
-            )}
-          </div>
-          <div className="account-picture-editing">
-            <p>We recomend an image of at least 400x400.</p>
-            <Button className="light-border-button" onClick={() => accountInput.current.click()}>
-              Choose file
-            </Button>
-            <input
-              type="file"
-              className="inp-disable"
-              ref={accountInput}
-              onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
-            />
-            {!accountImage && editProfileButtonClick && (
-              <p className="error__text">&quot;File&quot; is required.</p>
             )}
           </div>
         </div>
