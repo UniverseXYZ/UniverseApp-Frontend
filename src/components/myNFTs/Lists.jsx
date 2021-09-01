@@ -19,6 +19,7 @@ import {
   isImage,
   getNftImage,
 } from '../../utils/helpers/pureFunctions/nfts';
+import { getPlaceholdersLocalStorage } from '../../utils/helpers/pureFunctions/minting';
 
 const Lists = ({
   data,
@@ -29,7 +30,7 @@ const Lists = ({
   winners,
   nftsPerWinner,
 }) => {
-  const placeholdersList = JSON.parse(localStorage.getItem('nftsPlaceholders')) || [];
+  const placeholdersList = getPlaceholdersLocalStorage();
   const sliceData = [...placeholdersList, ...data.slice(offset, offset + perPage)];
 
   const location = useLocation();

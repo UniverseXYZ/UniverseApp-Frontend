@@ -51,6 +51,8 @@ import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
 import { getFutureAuctions } from './utils/api/auctions';
 import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
+import { placeholderBuster } from './utils/helpers/pureFunctions/minting';
+import { storageBuster } from './utils/localstorage/buster';
 // import { fetchUserNftIds, getUserNftsMetadata } from './utils/api/services';
 
 const App = () => {
@@ -331,6 +333,8 @@ const App = () => {
   };
 
   useEffect(async () => {
+    storageBuster();
+    placeholderBuster();
     const futureAuctionResponse = await getFutureAuctions();
     const parsedFutureAuctionsResponse = futureAuctionResponse
       ? parseFutureAuctionsObject(futureAuctionResponse.auctions)
