@@ -193,6 +193,9 @@
           // }
           .search {
             position: relative;
+            @include md {
+              margin-top: 16px;
+            }
             input {
               width: 100%;
               background: $white;
@@ -245,9 +248,10 @@
           }
           @include md {
             grid-template-columns: 1fr;
-            grid-gap: 15px;
+            grid-gap: unset;
             display: flex;
             flex-direction: column-reverse;
+            margin-top: 20px;
           }
         }
       }

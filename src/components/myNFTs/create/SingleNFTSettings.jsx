@@ -778,7 +778,9 @@ const SingleNFTSettings = () => {
                           <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
                         </div>
                       )}
-                      <h5>{col.name}</h5>
+                      <h5 title={col.name}>
+                        {col.name.length > 13 ? `${col.name.substring(0, 13)}...` : col.name}
+                      </h5>
                       <p>{col.tokenName}</p>
                     </div>
                     <div className="box--shadow--effect--block" />
