@@ -75,7 +75,24 @@ const CreateNFT = () => {
           </>
         )}
         {savedCollectionID && (
-          <div className="back-btn" onClick={() => history.goBack()} aria-hidden="true">
+          <div
+            className="back-btn"
+            onClick={() =>
+              history.push(
+                `/c/${deployedCollections
+                  .filter((item) => item.id === savedCollectionID)[0]
+                  .id.toLowerCase()
+                  .replace(' ', '-')}`,
+                {
+                  collection: deployedCollections.filter(
+                    (item) => item.id === savedCollectionID
+                  )[0],
+                  saved: false,
+                }
+              )
+            }
+            aria-hidden="true"
+          >
             <img src={arrow} alt="back" />
             <span>
               {deployedCollections.filter((item) => item.id === savedCollectionID)[0].name}

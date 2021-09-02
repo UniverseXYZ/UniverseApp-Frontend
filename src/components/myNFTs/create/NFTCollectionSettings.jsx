@@ -419,7 +419,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <RouterPrompt
-        when={showPrompt}
+        when={showPrompt && !savedCollectionID}
         onOK={() => true}
         editing={!!(coverImage || collectionName || tokenName || description)}
       />
