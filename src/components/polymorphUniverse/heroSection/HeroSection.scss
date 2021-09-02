@@ -35,9 +35,9 @@
     color: $white;
     text-align: center;
     @include sm {
-      padding: 0px 30%;
-      font-size: 18px;
-      line-height: 27px;
+      font-size: 26px;
+      line-height: 140%;
+      max-width: 335px;
     }
   }
   h2 {
