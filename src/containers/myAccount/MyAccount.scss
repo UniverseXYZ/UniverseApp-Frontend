@@ -354,7 +354,7 @@
           &:focus {
             background: linear-gradient($white, $white) padding-box,
               linear-gradient(to right, #bceb00, #00eaea) border-box;
-            border: 2px solid transparent;
+            border: 1px solid transparent;
           }
           &:focus::placeholder {
             color: transparent;
@@ -429,6 +429,9 @@
             .box--shadow--effect--block {
               opacity: 0.2;
             }
+          }
+          input:focus {
+            border: 2px solid transparent;
           }
         }
         .account-grid-about-editing {
