@@ -519,6 +519,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
               placeholder="Enter the collection name"
               onChange={(e) => handleCollectionName(e.target.value)}
               value={collectionName}
+              hoverBoxShadowGradient
             />
           </div>
           <div className={`collection--token ${savedCollectionID ? 'inactive' : ''}`}>
@@ -529,6 +530,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
               onChange={(e) => handleTokenName(e.target.value)}
               value={tokenName}
               disabled={savedCollectionID}
+              hoverBoxShadowGradient
             />
             {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
           </div>
@@ -538,11 +540,14 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         <label>
           Description <span>(optional)</span>
         </label>
-        <textarea
-          placeholder="Spread some words about your collection"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <div>
+          <textarea
+            placeholder="Spread some words about your collection"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <div className="box--shadow--effect--block" />
+        </div>
       </div>
       {/* <div className="collection--short--url">
         <Input
