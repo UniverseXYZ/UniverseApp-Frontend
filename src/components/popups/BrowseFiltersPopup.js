@@ -51,7 +51,7 @@ const BrowseFilterPopup = ({
     <div className="browse__nft__filter__popup">
       <div className="browse__nft__filter__header">
         <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
-        <h3>Filter</h3>
+        <h3>Filters</h3>
         <button type="button" className="clear__all" onClick={() => handleClearAll()}>
           Clear all
         </button>

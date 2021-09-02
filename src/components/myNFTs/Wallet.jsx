@@ -31,7 +31,7 @@ const Wallet = ({
 }) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const { myNFTs, auction, setAuction } = useContext(AppContext);
+  const { myNFTs, auction, setAuction, deployedCollections } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
@@ -177,16 +177,12 @@ const Wallet = ({
   };
 
   useEffect(() => {
-    const getCollections = myNFTs.filter((nft) => nft.collectionName);
-    const uniqueCollections = getCollections.filter(
-      (v, i, a) => a.findIndex((t) => t.collectionName === v.collectionName) === i
-    );
     const newCollections = [];
-    uniqueCollections.forEach((collection) => {
+    deployedCollections.forEach((collection) => {
       newCollections.push({
         id: uuid(),
-        name: collection.collectionName,
-        avatar: collection.collectionAvatar,
+        name: collection.name,
+        avatar: collection.previewImage,
         selected: false,
       });
     });
