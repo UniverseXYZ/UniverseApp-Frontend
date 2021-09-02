@@ -2,13 +2,13 @@
 @import '../../assets/scss/mixins';
 
 .background-part {
-  background-image: url('../../assets/images/tier-bg.svg');
+  background-image: url('../../assets/images/tier-bg3.png');
   background-size: cover;
-  @include sm {
-    background-image: url('../../assets/images/tier-bg1.png');
-  }
   @include lg {
     background-image: url('../../assets/images/tier-bg2.png');
+  }
+  @include sm {
+    background-image: url('../../assets/images/tier-bg1.png');
   }
 }
 
@@ -201,7 +201,7 @@
         display: flex;
         margin-bottom: 16px;
         align-items: center;
-        width: 100%;  
+        width: 100%;
 
         h1 {
           font-style: normal;
@@ -333,7 +333,7 @@
     }
 
     input:checked + .slider {
-        background:  linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);;
+      background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
     }
 
     input:checked + .slider:before {

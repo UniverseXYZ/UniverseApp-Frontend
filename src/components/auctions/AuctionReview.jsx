@@ -31,6 +31,7 @@ const AuctionReview = () => {
     setMyAuctions,
     selectedTabIndex,
     setSelectedTabIndex,
+    setAuctionSetupState,
   } = useContext(AppContext);
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -65,12 +66,13 @@ const AuctionReview = () => {
       setTimeout(() => {
         document.getElementById('popup-root').remove();
         document.getElementById('congrats-hidden-btn').click();
-      }, 2000);
+      }, 1000);
       setSelectedTabIndex(1);
       const newAuction = { ...auction };
       newAuction.totalNFTs = totalNFTs;
       setMyAuctions([...myAuctions, newAuction]);
       setAuction({ tiers: [] });
+      setAuctionSetupState(false);
     }
   };
 
@@ -88,8 +90,11 @@ const AuctionReview = () => {
         newAuction.totalNFTs = totalNFTs;
         setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
         setAuction({ tiers: [] });
-        history.push('/my-auctions');
-      }, 2000);
+        setAuctionSetupState(false);
+        setTimeout(() => {
+          history.push('/my-auctions');
+        }, 500);
+      }, 1000);
     }
   };
 

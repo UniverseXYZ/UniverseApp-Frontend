@@ -38,7 +38,6 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
       status: e.target.value.length > 0 ? 'filled' : 'empty',
     }));
     setValidLink(e.target.value.trim().length !== 0);
-    console.log(e.target.value.trim().length !== 0);
   };
 
   const handleFocus = () => {

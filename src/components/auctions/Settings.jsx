@@ -44,8 +44,16 @@ const AuctionSettings = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction, myAuctions, setMyAuctions, bidtype, setBidtype, options } =
-    useContext(AppContext);
+  const {
+    auction,
+    setAuction,
+    myAuctions,
+    setMyAuctions,
+    bidtype,
+    setBidtype,
+    options,
+    setAuctionSetupState,
+  } = useContext(AppContext);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royalities, setRoyalities] = useState(
     window.royalitiesValue ? window.royalitiesValue : false
@@ -89,6 +97,20 @@ const AuctionSettings = () => {
     startDate: window.auctionData ? window.auctionData.startDate : '',
     endDate: window.auctionData ? window.auctionData.endDate : '',
   });
+
+  useEffect(() => {
+    if (
+      values.name ||
+      values.startingBid ||
+      values.startDate ||
+      values.endDate ||
+      properties[0].address ||
+      properties[0].amount ||
+      properties[1]
+    ) {
+      setAuctionSetupState(true);
+    }
+  }, [values, properties]);
 
   const [startDateTemp, setStartDateTemp] = useState({
     month: monthNames[d.getMonth()],

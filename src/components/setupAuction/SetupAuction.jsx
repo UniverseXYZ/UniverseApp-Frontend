@@ -15,6 +15,7 @@ import ReviewIcon from '../../assets/images/eye-review.svg';
 import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import NewTabs from '../tabs/NewTabs';
 import AppContext from '../../ContextAPI';
+import { RouterPrompt } from '../../utils/routerPrompt';
 
 const newTabData = [
   {
@@ -44,9 +45,10 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
-  const { auction } = useContext(AppContext);
+  const { auction, auctionSetupState } = useContext(AppContext);
   const history = useHistory();
   const location = useLocation();
+  const [showPrompt, setShowPrompt] = useState(false);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
@@ -59,8 +61,13 @@ const SetupAuction = () => {
     }
   }, [location]);
 
+  useEffect(() => {
+    setShowPrompt(true);
+  }, [location.pathname]);
+
   return (
     <div className="auction-setup">
+      <RouterPrompt when={showPrompt} onOK={() => true} editing={auctionSetupState} />
       <div className="setup--auction--welcome--section">
         <div className="setup">
           <div
