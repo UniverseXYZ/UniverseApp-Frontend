@@ -648,15 +648,15 @@
       }
 
       @include sm {
-        position: fixed;
+        position: absolute;
         display: flex;
         justify-content: center;
         text-align: center;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 10%;
+        // transform: translateX(-50%);
         margin: auto;
-        bottom: 250px;
-        width: 90%;
+        margin-top: 32%;
+        width: 80%;
         z-index: 10;
       }
     }
