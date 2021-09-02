@@ -552,8 +552,11 @@
   }
 
   .input-search {
-    float: right;
-    margin-top: -85px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    // float: right;
+    // margin-top: -85px;
     .input--section{
       position: relative;
       img {

@@ -49,19 +49,20 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="future-auctions">
       <div className="input-search">
-        {searchByName ? (
+        {/* {searchByName ? (
           <button type="button" onClick={() => setSearchByName('')}>
             Clear
           </button>
         ) : (
           <></>
-        )}
+        )} */}
         <div className="input--section">
           <Input
             className="searchInp"
             onChange={(e) => handleSearch(e.target.value)}
             value={searchByName}
             placeholder="Search by name"
+            hoverBoxShadowGradient
           />
           <img src={searchIconGray} alt="search" />
         </div>
