@@ -16,7 +16,7 @@
       padding: 84px 60px;
     }
     @include sm {
-      padding: 34px 20px;
+      padding: 34px 0px;
     }
     .single-nft-title {
       font-family: $sharpGroteskSemiBoldFont;
@@ -340,8 +340,14 @@
       }
 
       .choose__collection {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 140px);
+        grid-gap: 20px;
+        // display: flex;
+        // flex-wrap: wrap;
+        @include sm {
+          grid-gap: 10px;
+        }
 
         .collection-box {
           width: 140px;
