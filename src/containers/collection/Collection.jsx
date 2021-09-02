@@ -52,15 +52,17 @@ const Collection = () => {
 
   useEffect(() => {
     let check = false;
-    deployedCollections.forEach((col) => {
-      if (
-        selectedCollection.id === col.id &&
-        selectedCollection.description === col.description &&
-        selectedCollection.previewImage.name === col.previewImage.name
-      ) {
-        check = true;
-      }
-    });
+    if (selectedCollection) {
+      deployedCollections.forEach((col) => {
+        if (
+          selectedCollection.id === col.id &&
+          selectedCollection.description === col.description &&
+          selectedCollection.previewImage.name === col.previewImage.name
+        ) {
+          check = true;
+        }
+      });
+    }
     if (selectedCollection && !check) {
       history.push('/my-nfts');
     }
