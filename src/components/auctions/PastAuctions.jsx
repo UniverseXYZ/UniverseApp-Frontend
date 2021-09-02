@@ -46,21 +46,23 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   return (
     <div className="past-auctions">
       <div className="input-search">
-        {searchByName && !(mobile || tablet) ? (
+        {/* {searchByName && !(mobile || tablet) ? (
           <button type="button" onClick={() => setSearchByName('')}>
             Clear
           </button>
         ) : (
           <></>
-        )}
-        <img src={searchIcon} alt="search" />
-        <Input
-          className="searchInp"
-          onChange={(e) => handleSearch(e.target.value)}
-          value={searchByName}
-          placeholder="Search"
-          hoverBoxShadowGradient
-        />
+        )} */}
+        <div className="input--section">
+          <Input
+            className="searchInp"
+            onChange={(e) => handleSearch(e.target.value)}
+            value={searchByName}
+            placeholder="Search"
+            hoverBoxShadowGradient
+          />
+          <img src={searchIcon} alt="search" />
+        </div>
       </div>
       {myAuctions
         .slice(offset, offset + perPage)
