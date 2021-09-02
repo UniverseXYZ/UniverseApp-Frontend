@@ -30,6 +30,7 @@ const CustomizeAuction = () => {
     editProfileButtonClick,
     setEditProfileButtonClick,
   } = useContext(AppContext);
+  const [customizeAuctionState, setCustomizeAuctionState] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: '',
@@ -53,24 +54,60 @@ const CustomizeAuction = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
+  const [userTempData, setUserTempData] = useState({});
 
   useEffect(() => {
-    if (auction) {
-      setDomainAndBranding({
-        headline: domainAndBranding.headline || '',
-        link:
-          domainAndBranding.link ||
-          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
-        promoImage: domainAndBranding.promoImage || null,
-        backgroundImage: domainAndBranding.backgroundImage || null,
-        hasBlur: domainAndBranding.hasBlur || '',
-        status:
-          domainAndBranding.link.toLowerCase() !==
-          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
-            ? 'filled'
-            : 'empty',
-      });
+    if (userTempData.accountName) {
+      const isTierEdited = rewardTiersAuction.filter((i) => i.description || i.tierImg);
+      if (
+        domainAndBranding.backgroundImage ||
+        domainAndBranding.hasBlur ||
+        domainAndBranding.headline ||
+        domainAndBranding.promoImage ||
+        domainAndBranding.link.split('/')[2] ||
+        userTempData.accountName !== accountName ||
+        userTempData.about !== about ||
+        userTempData.twitterLink !== twitterLink ||
+        userTempData.instagramLink !== instagramLink ||
+        isTierEdited.length
+      ) {
+        setCustomizeAuctionState(true);
+      }
     }
+  }, [
+    userTempData,
+    domainAndBranding,
+    accountName,
+    accountPage,
+    accountImage,
+    about,
+    twitterLink,
+    instagramLink,
+    rewardTiersAuction,
+  ]);
+
+  useEffect(() => {
+    setUserTempData({
+      accountName,
+      accountPage,
+      accountImage,
+      about,
+      twitterLink,
+      instagramLink,
+    });
+    setDomainAndBranding({
+      headline: auction.headline || '',
+      link: auction.link || `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
+      promoImage: auction.promoImage || null,
+      backgroundImage: auction.backgroundImage || null,
+      hasBlur: auction.hasBlur || '',
+      status:
+        auction.link &&
+        auction.link.toLowerCase() !==
+          `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
+          ? 'filled'
+          : 'empty',
+    });
   }, []);
 
   const handleSaveClose = () => {
@@ -124,6 +161,7 @@ const CustomizeAuction = () => {
           }
           setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setAuction({ tiers: [] });
+          setCustomizeAuctionState(false);
           document.getElementById('popup-root')?.remove();
           document.getElementById('congrats-hidden-btn').click();
         }, 1000);
@@ -177,6 +215,7 @@ const CustomizeAuction = () => {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
             setAuction({ tiers: [] });
+            setCustomizeAuctionState(false);
             history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,
             });
@@ -223,6 +262,7 @@ const CustomizeAuction = () => {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
             setAuction({ tiers: [] });
+            setCustomizeAuctionState(false);
             history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,
             });
@@ -238,7 +278,7 @@ const CustomizeAuction = () => {
 
   return (
     <div className="customize__auction">
-      <RouterPrompt when={showPrompt} onOK={() => true} />
+      <RouterPrompt when={showPrompt} onOK={() => true} editing={customizeAuctionState} />
       <Popup
         trigger={
           <button

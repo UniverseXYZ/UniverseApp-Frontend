@@ -402,13 +402,14 @@ const SingleNFTSettings = () => {
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
-        closeCongratsPopupEvent();
         document.getElementById('loading-hidden-btn').click();
+        closeCongratsPopupEvent();
         if (location.pathname === '/create-tiers/my-nfts/create') {
           setShowModal(false);
           document.body.classList.remove('no__scroll');
         } else {
           setTimeout(() => {
+            document.getElementById('loading-hidden-btn').click();
             document.getElementById('popup-root').remove();
             document.getElementById('congrats-hidden-btn').click();
           }, 3000);
