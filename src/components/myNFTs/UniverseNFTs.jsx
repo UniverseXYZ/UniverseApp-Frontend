@@ -5,19 +5,13 @@ import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
 import { useQuery } from '@apollo/client';
 import AppContext from '../../ContextAPI';
-import Pagination from '../pagination/Pagionation';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import { transferPolymorphs } from '../../utils/graphql/queries';
 import LobsterCard from './LobsterCard';
 import PolymorphCard from './PolymorphCard';
 import { LOBSTER_COLLECTION_NAME } from '../../utils/helpers/lobsters';
 import { POLYMORPHS_COLLECTION_NAME } from '../../utils/helpers/polymorphs';
 import SimplePagination from '../pagination/SimplePaginations';
 import CollectionDropdown from './CollectionDropdown';
-
-const allCharactersFilter = 'All Characters';
-const polymorphsFilter = 'My Polymorphs';
-const lobstersFilter = 'Lobby Lobsters';
 
 const UniverseNFTs = () => {
   const {
@@ -32,10 +26,14 @@ const UniverseNFTs = () => {
     setMyUniverseNFTsOffset,
     userLobstersLoaded,
     userPolymorphsLoaded,
+    collectionFilter,
+    setCollectionFilter,
+    allCharactersFilter,
+    polymorphsFilter,
+    lobstersFilter,
   } = useContext(AppContext);
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const [collectionFilter, setCollectionFilter] = useState(allCharactersFilter);
   const [displayItems, setDisplayItems] = useState([]);
 
   const filterByCollection = (collectionName) => {
@@ -67,25 +65,24 @@ const UniverseNFTs = () => {
   };
 
   useEffect(() => {
-    if (userPolymorphsLoaded && userPolymorphsLoaded) {
-      let itemsTodisplay = [];
-      itemsTodisplay = filterByCollection(collectionFilter);
-      if (myUniversNFTsSearchPhrase) {
-        itemsTodisplay = itemsTodisplay.filter(
-          (item) => item.name.toLowerCase().indexOf(myUniversNFTsSearchPhrase.toLowerCase()) > -1
-        );
-      }
-      setDisplayItems(itemsTodisplay);
+    let itemsTodisplay = [];
+    itemsTodisplay = filterByCollection(collectionFilter);
+    if (myUniversNFTsSearchPhrase) {
+      itemsTodisplay = itemsTodisplay.filter(
+        (item) => item.name.toLowerCase().indexOf(myUniversNFTsSearchPhrase.toLowerCase()) > -1
+      );
     }
+    setDisplayItems(itemsTodisplay);
   }, [userPolymorphs, userLobsters]);
 
+  useEffect(() => {
+    setCollectionFilter(collectionFilter);
+  }, [collectionFilter]);
+
   const handleSearchByName = (value) => {
-    if (myUniverseNFTsperPage !== 0) {
-      setMyUniverseNFTsActiverPage(0);
-    }
-    if (myUniverseNFTsperPage !== 0) {
-      setMyUniverseNFTsOffset(0);
-    }
+    setMyUniverseNFTsActiverPage(0);
+    setMyUniverseNFTsOffset(0);
+
     setMyUniversNFTsSearchPhrase(value);
 
     const itemsTodisplay = [...userLobsters, ...userPolymorphs].filter(

@@ -156,7 +156,7 @@ const LobsterInfoPage = () => {
                 <div className="owner--string--value">
                   {/* TODO: VIK: REPLACE FOR PRODUCTION */}
                   <a
-                    href={`https://ropsten.etherscan.io/token/0xA591332bEDe7C860caD90361Cf899A394F933ccA?a=${owner}`}
+                    href={`${process.env.REACT_APP_ETHERSCAN_URL}/token/${process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS}?a=${owner}`}
                     target="_blank"
                     rel="noreferrer"
                   >

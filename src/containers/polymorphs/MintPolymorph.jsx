@@ -99,8 +99,7 @@ const MintPolymorph = () => {
       }
 
       const metadataURIs = mintedIds.map(
-        (id) =>
-          `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=${id}`
+        (id) => `${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`
       );
       const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
 

@@ -5,13 +5,20 @@ import BondingCurve from '../../polymorphs/mint-polymorph/BondingCurve';
 import './MintLobbyLobsterSection.scss';
 import lobsterLoadingBg from '../../../assets/images/lobby-lobsters/img_placeholder.png';
 import AppContext from '../../../ContextAPI';
-import { convertLobsterObjects, LOBSTER_BASE_URI } from '../../../utils/helpers/lobsters';
+import { convertLobsterObjects } from '../../../utils/helpers/lobsters';
 import { fetchTokensMetadataJson } from '../../../utils/api/polymorphs';
 import LoadingPopup from '../../popups/LoadingPopup';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
-  const { totalLobsters, lobsterContract, lobsterBaseURI, userLobsters } = useContext(AppContext);
+  const {
+    totalLobsters,
+    lobsterContract,
+    lobsterBaseURI,
+    userLobsters,
+    setUserLobsters,
+    lobstersFilter,
+  } = useContext(AppContext);
   const [sliderValue, setSliderValue] = useState(totalLobsters);
   const [quantity, setQuantity] = useState(1);
   const [mobile, setMobile] = useState(false);
@@ -20,7 +27,6 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
     height: window.innerHeight,
   });
   const [mintedTokens, setMintedTokens] = useState([]);
-  const [mintedLobsters, setMintedLobsters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [congrats, setCongrats] = useState(false);
   const [metadataLoading, setMetadataLoading] = useState(false);
@@ -77,8 +83,8 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
       setMintedTokens(nftMetadataObjects);
       const lobsterNFTs = userLobsters.concat(convertLobsterObjects(nftMetadataObjects));
       setMetadataLoaded(true);
-      setMintedLobsters(lobsterNFTs);
       setSliderValue(+sliderValue + quantity);
+      setUserLobsters(lobsterNFTs);
     } catch (err) {
       alert(err.message || error);
     }
@@ -120,6 +126,8 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
           collectionName="Lobby Lobster"
           loadingImage={lobsterLoadingBg}
           metadataLoaded={metadataLoaded}
+          buttonText="My Lobsters"
+          collectionFilter={lobstersFilter}
         />
       </Popup>
     </div>

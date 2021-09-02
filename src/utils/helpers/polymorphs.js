@@ -1,9 +1,6 @@
 import { BigNumber } from 'ethers';
 import cover from '../../assets/images/cover.png';
 
-export const POLYMORPH_BASE_URI =
-  'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=';
-
 export const POLYMORPHS_COLLECTION_NAME = 'Universe Polymorphs';
 
 export const getScrambleStatus = (scrambleEvents) => {
@@ -35,7 +32,7 @@ export const getScrambleStatus = (scrambleEvents) => {
   return 'none';
 };
 const extractTokenIdFromURI = (tokenURI) =>
-  tokenURI.substring(POLYMORPH_BASE_URI.length, tokenURI.length);
+  tokenURI.substring(process.env.REACT_APP_POLYMORPHS_IMAGES_URL.length, tokenURI.length);
 
 export const convertPolymorphObjects = (nftMetadataObjects) =>
   nftMetadataObjects.map((nft) => ({

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
@@ -7,6 +7,7 @@ import closeIcon from '../../assets/images/cross.svg';
 import { PLACEHOLDER_MINTED_POLYMORPHS } from '../../utils/fixtures/MintedPolymorphsDummyData.js';
 import './PopupStyle.scss';
 import './LobsterLoader.scss';
+import AppContext from '../../ContextAPI.js';
 
 const MintPolymorphConfirmationPopup = ({
   onClose,
@@ -15,13 +16,15 @@ const MintPolymorphConfirmationPopup = ({
   collectionName,
   loadingImage,
   metadataLoaded,
+  buttonText,
+  collectionFilter,
 }) => {
   const history = useHistory();
-  const [minted, setMinted] = useState(false);
-
+  const { setCollectionFilter } = useContext(AppContext);
   const navigateMyPolymorphs = () => {
     onClose();
     history.push('/my-nfts');
+    setCollectionFilter(collectionFilter);
   };
 
   return (
@@ -69,7 +72,7 @@ const MintPolymorphConfirmationPopup = ({
       </div>
       <div className="button__div_polymorph">
         <Button className="light-button" onClick={() => navigateMyPolymorphs()}>
-          My polymorphs
+          {buttonText}
         </Button>
         <Button className="light-border-button" onClick={onClose}>
           Mint again
@@ -86,6 +89,8 @@ MintPolymorphConfirmationPopup.propTypes = {
   collectionName: PropTypes.string.isRequired,
   loadingImage: PropTypes.string.isRequired,
   metadataLoaded: PropTypes.bool.isRequired,
+  buttonText: PropTypes.bool.isRequired,
+  collectionFilter: PropTypes.string.isRequired,
 };
 
 export default MintPolymorphConfirmationPopup;

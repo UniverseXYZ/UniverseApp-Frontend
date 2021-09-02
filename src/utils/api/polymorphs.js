@@ -1,13 +1,11 @@
 import axios from 'axios';
 
-const GET_META_URL = `https://us-central1-polymorphmetadata.cloudfunctions.net/images-function-ropsten?id=`;
-
 /**
  * @param {string} id NFT id
  * @returns
  */
 export const getPolymorphMeta = async (id) => {
-  const request = await axios(`${GET_META_URL}${id}`, {
+  const request = await axios(`${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`, {
     credentials: 'include',
     method: 'GET',
     headers: {

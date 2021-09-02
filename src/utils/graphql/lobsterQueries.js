@@ -1,7 +1,5 @@
 import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
-export const LOBSTER_GRAPH_URL = 'https://api.thegraph.com/subgraphs/name/strenev/lobster';
-
 export const transferLobsters = (ownerAddress) => `
   query Lobsters {
     transferEntities(first: 1000, where: { to: "${ownerAddress}" }) {
@@ -33,7 +31,7 @@ export const lobsterTraitRarity = (searchedId) => `
 
 export const queryLobstersGraph = async (graphQuery) => {
   const client = new ApolloClient({
-    uri: LOBSTER_GRAPH_URL,
+    uri: process.env.REACT_APP_LOBSTERS_GRAPH_URL,
     cache: new InMemoryCache(),
   });
 

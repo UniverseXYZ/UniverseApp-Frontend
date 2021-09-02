@@ -5,30 +5,19 @@ import axios from 'axios';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import Contracts from './Contracts.json';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
-import Auctions from './containers/auctions/Auction.jsx';
-import SetupAuction from './components/setupAuction/SetupAuction';
-import CreateTiers from './components/createTiers/Create.jsx';
 import MyNFTs from './components/myNFTs/MyNFTs.jsx';
-import Artist from './containers/artist/Artist.jsx';
-import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage.jsx';
 import Homepage from './containers/homepage/Homepage.jsx';
 import About from './containers/mintingAndAuctions/about/About.jsx';
-import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace.jsx';
-import MyAccount from './containers/myAccount/MyAccount.jsx';
-import CustomizeAuction from './containers/customizeAuction/CustomizeAuction.jsx';
 import Team from './containers/team/Team.jsx';
-import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
-import Collection from './containers/collection/Collection.jsx';
-import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
 import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
@@ -36,15 +25,19 @@ import RarityCharts from './containers/rarityCharts/RarityCharts';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs } from './utils/graphql/queries';
 import { transferLobsters, queryLobstersGraph } from './utils/graphql/lobsterQueries';
-import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/polymorphs';
+import { convertPolymorphObjects } from './utils/helpers/polymorphs';
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
-import { convertLobsterObjects, LOBSTER_BASE_URI } from './utils/helpers/lobsters';
+import { convertLobsterObjects } from './utils/helpers/lobsters';
 import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
 
 const App = () => {
+  const allCharactersFilter = 'All Characters';
+  const polymorphsFilter = 'My Polymorphs';
+  const lobstersFilter = 'Lobby Lobsters';
+
   const location = useLocation();
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -115,6 +108,8 @@ const App = () => {
   const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
   const [providerObject, setProviderObject] = useState('');
 
+  const [collectionFilter, setCollectionFilter] = useState(allCharactersFilter);
+
   const triggerWrongNetworkPopup = async () => {
     document.getElementById('wrong-network-hidden-btn').click();
   };
@@ -123,7 +118,9 @@ const App = () => {
     setUserPolymorphsLoaded(false);
 
     const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
-    const metadataURIs = userNftIds?.map((id) => `${POLYMORPH_BASE_URI}${id}`);
+    const metadataURIs = userNftIds?.map(
+      (id) => `${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`
+    );
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
     const polymorphNFTs = convertPolymorphObjects(nftMetadataObjects);
     if (polymorphNFTs) {
@@ -133,17 +130,19 @@ const App = () => {
   };
 
   const fetchUserLobstersTheGraph = async (newAddress) => {
-    setUserPolymorphsLoaded(false);
+    setUserLobstersLoaded(false);
 
     const lobsters = await queryLobstersGraph(transferLobsters(newAddress));
     const userNftIds = lobsters?.transferEntities?.map((nft) => nft.tokenId);
-    const metadataURIs = userNftIds?.map((id) => `${LOBSTER_BASE_URI}${id}`);
+    const metadataURIs = userNftIds?.map(
+      (id) => `${process.env.REACT_APP_LOBSTER_IMAGES_URL}${id}`
+    );
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
     const lobsterNFTs = convertLobsterObjects(nftMetadataObjects);
     if (lobsterNFTs) {
       setUserLobsters(lobsterNFTs);
     }
-    setUserPolymorphsLoaded(true);
+    setUserLobstersLoaded(true);
   };
 
   const getEthPriceData = async (balance) => {
@@ -160,14 +159,14 @@ const App = () => {
       Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
 
     const polymorphContractInstance = new Contract(
-      polymContract?.address,
+      process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
       polymContract?.abi,
       signerResult
     );
 
     const lobsContract = Contracts[network.chainId][network.name].contracts.Lobster;
     const lobsterContractInstance = new Contract(
-      lobsContract?.address,
+      process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
       lobsContract?.abi,
       signerResult
     );
@@ -457,6 +456,12 @@ const App = () => {
         totalLobsters,
         userLobstersLoaded,
         userPolymorphsLoaded,
+        setUserLobsters,
+        collectionFilter,
+        setCollectionFilter,
+        polymorphsFilter,
+        lobstersFilter,
+        allCharactersFilter,
       }}
     >
       <Header />
