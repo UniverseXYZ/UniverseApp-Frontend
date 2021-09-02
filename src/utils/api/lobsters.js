@@ -4,8 +4,8 @@ import axios from 'axios';
  * @param {string} id NFT id
  * @returns
  */
-export const getPolymorphMeta = async (id) => {
-  const request = await axios(`${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`, {
+export const getLobsterMeta = async (id) => {
+  const request = await axios(`${process.env.REACT_APP_LOBSTER_IMAGES_URL}${id}`, {
     credentials: 'include',
     method: 'GET',
     headers: {

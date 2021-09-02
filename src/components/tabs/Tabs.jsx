@@ -5,7 +5,7 @@ import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scr
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import './Tabs.scss';
 
-const Tabs = ({ items }) => (
+const Tabs = ({ items, attributes }) => (
   <div className="container tabs__wrapper">
     <div className="tab__left__arrow">
       <img
@@ -22,7 +22,11 @@ const Tabs = ({ items }) => (
             key={uuid()}
             className={tab.active ? 'active' : ''}
             aria-hidden="true"
-            onClick={() => tab.handler && tab.handler(index, tab.name)}
+            onClick={() => {
+              if (tab.handler && attributes.length) {
+                tab.handler(index, tab.name);
+              }
+            }}
           >
             {tab.label ? (
               <div className="notification">
@@ -56,6 +60,7 @@ Tabs.propTypes = {
       label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     })
   ).isRequired,
+  attributes: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default Tabs;
