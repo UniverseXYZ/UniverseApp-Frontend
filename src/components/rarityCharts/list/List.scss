@@ -3,9 +3,28 @@
 
 .rarity--charts--list {
     display: grid;
-    // grid-template-columns: 255px 1fr;
-    grid-template-columns: 1fr;
+    grid-template-columns: 255px 1fr;
     grid-gap: 30px;
+    &.one--column {
+        grid-template-columns: 1fr;
+        & + div.mobile--filters {
+            display: none;
+        }
+        .list--with--selected--filters {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+                @include xl {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @include lg {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                @include sm {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+    }
     .categories--filters {
         h2 {
             font-family: "Space Grotesk SemiBold25", sans-serif;
@@ -185,7 +204,7 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             grid-gap: 30px;
             .card {
                 background: $white;
@@ -309,10 +328,6 @@
                 }
             }
             @include xl {
-                // grid-template-columns: repeat(2, 1fr);
-                grid-template-columns: repeat(3, 1fr);
-            }
-            @include lg {
                 grid-template-columns: repeat(2, 1fr);
             }
             @include sm {
