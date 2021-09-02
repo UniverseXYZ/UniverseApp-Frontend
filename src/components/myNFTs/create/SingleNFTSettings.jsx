@@ -259,7 +259,7 @@ const SingleNFTSettings = () => {
     ];
 
     const res = await MintSingleNftFlow({ nfts: nftData, helpers: mintingFlowContext });
-
+    document.getElementById('loading-hidden-btn').click();
     document.getElementById('popup-root').remove();
 
     if (res) {
