@@ -92,8 +92,8 @@
       .remove-img{
         margin-left: 12px;
         align-self: flex-end;
-        width: 50px;
-        height: 50px;
+        width: 52px;
+        height: 52px;
         cursor: pointer;
         border-radius: 12px;
         &:hover {
@@ -104,9 +104,16 @@
           }
       }
       .remove-btn{
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid #FF4949;
+        box-sizing: border-box;
+        border-radius: 10px;
+        color: #FF4949;
+        ;
         display: none;
         img{
-          margin-left: 13px;
+          margin-right: 10px;
         }
         @include sm{
         display: inline;
@@ -174,10 +181,12 @@
       font-style: normal;
       font-weight: 600;
       font-size: 16px;
+      padding-top: 1px;
       line-height: 130%;
       color: #000000;
       @include sm{
         font-size: 12px;
+        padding-top: 4px;
         }
     }
   }

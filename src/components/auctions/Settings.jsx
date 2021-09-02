@@ -10,7 +10,7 @@ import EthereumAddress from 'ethereum-address';
 import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
-import delIcon from '../../assets/images/del-icon.svg';
+import delIcon from '../../assets/images/red-delete.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
@@ -600,8 +600,8 @@ const AuctionSettings = () => {
                   className="light-border-button remove-btn"
                   onClick={() => removeProperty(i)}
                 >
-                  Remove
                   <img src={delIcon} alt="Delete" aria-hidden="true" />
+                  Remove
                 </Button>
               </div>
             ))}

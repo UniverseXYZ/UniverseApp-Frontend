@@ -20,7 +20,7 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import cloudIcon from '../../../assets/images/gray_cloud.svg';
 import createIcon from '../../../assets/images/create.svg';
-import delIcon from '../../../assets/images/delete-red.svg';
+import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
@@ -138,14 +138,16 @@ const SingleNFTSettings = () => {
   const propertyChangesName = (index, val) => {
     const newProperties = [...properties];
     newProperties[index].name = val;
-    newProperties[index].errors.name = !val ? '“Property name” is not allowed to be empty' : '';
+    newProperties[index].errors.name = !val ? 'вЂњProperty nameвЂќ is not allowed to be empty' : '';
     setProperties(newProperties);
   };
 
   const propertyChangesValue = (index, value) => {
     const newProperties = [...properties];
     newProperties[index].value = value;
-    newProperties[index].errors.value = !value ? '“Property value” is not allowed to be empty' : '';
+    newProperties[index].errors.value = !value
+      ? 'вЂњProperty valueвЂќ is not allowed to be empty'
+      : '';
     setProperties(newProperties);
   };
 
@@ -153,9 +155,9 @@ const SingleNFTSettings = () => {
     setMintNowClick(false);
     setSaveForLateClick(true);
     setErrors({
-      name: !name ? '“Name” is not allowed to be empty' : '',
-      edition: !editions ? '“Number of editions” is required' : '',
-      previewImage: !previewImage ? '“File” is required' : null,
+      name: !name ? 'вЂњNameвЂќ is not allowed to be empty' : '',
+      edition: !editions ? 'вЂњNumber of editionsвЂќ is required' : '',
+      previewImage: !previewImage ? 'вЂњFileвЂќ is required' : null,
     });
   };
 
@@ -163,9 +165,9 @@ const SingleNFTSettings = () => {
     setSaveForLateClick(false);
     setMintNowClick(true);
     setErrors({
-      name: !name ? '“Name” is not allowed to be empty' : '',
-      edition: !editions ? '“Number of editions” is required' : '',
-      previewImage: !previewImage ? '“File” is required' : null,
+      name: !name ? 'вЂњNameвЂќ is not allowed to be empty' : '',
+      edition: !editions ? 'вЂњNumber of editionsвЂќ is required' : '',
+      previewImage: !previewImage ? 'вЂњFileвЂќ is required' : null,
     });
   };
 
@@ -204,7 +206,7 @@ const SingleNFTSettings = () => {
       setEditions(value);
       setErrors({
         ...errors,
-        edition: !e.target.value ? '“Number of editions” is not allowed to be empty' : '',
+        edition: !e.target.value ? 'вЂњNumber of editionsвЂќ is not allowed to be empty' : '',
       });
       setMintNowClick(false);
       setSaveForLateClick(false);
@@ -693,7 +695,7 @@ const SingleNFTSettings = () => {
                 setName(e.target.value);
                 setErrors({
                   ...errors,
-                  name: !e.target.value ? '“Name” is not allowed to be empty' : '',
+                  name: !e.target.value ? 'вЂњNameвЂќ is not allowed to be empty' : '',
                 });
                 setMintNowClick(false);
                 setSaveForLateClick(false);
