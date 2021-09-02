@@ -232,7 +232,7 @@ const App = () => {
     const network = await web3ProviderWrapper.getNetwork();
     const { accounts: accountsWW } = web3ProviderWrapper.provider;
 
-    if (network.chainId !== 3) {
+    if (network.chainId !== process.env.REACT_APP_NETWORK_CHAIN_ID) {
       await provider.disconnect();
       triggerWrongNetworkPopup();
     } else {
@@ -273,7 +273,7 @@ const App = () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const network = await provider.getNetwork();
 
-    if (network.chainId !== 3) {
+    if (network.chainId !== process.env.REACT_APP_NETWORK_CHAIN_ID) {
       triggerWrongNetworkPopup();
     } else {
       web3AuthenticationProccess(provider, network, accounts);
