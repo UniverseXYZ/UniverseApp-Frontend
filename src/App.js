@@ -85,6 +85,7 @@ const App = () => {
     settings: null,
     summary: null,
   });
+  const [auctionSetupState, setAuctionSetupState] = useState(false);
 
   useEffect(() => {
     if (!darkMode) {
@@ -170,6 +171,8 @@ const App = () => {
         setSortName,
         selectedTokenIndex,
         setSelectedTokenIndex,
+        auctionSetupState,
+        setAuctionSetupState,
       }}
     >
       <Header />
