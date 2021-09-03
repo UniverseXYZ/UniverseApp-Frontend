@@ -252,6 +252,7 @@ const Create = () => {
                       placeholder="0.1"
                       value={minBidValue}
                       onChange={(e) => setMinBidValue(e.target.value)}
+                      hoverBoxShadowGradient
                     />
                   ) : (
                     <Input type="number" name="tierBid" placeholder="0.1" disabled />
