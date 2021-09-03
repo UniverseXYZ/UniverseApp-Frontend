@@ -136,7 +136,7 @@ const Main = ({
               onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
             />
             {!accountImage && editProfileButtonClick && (
-              <p className="error__text">&quot;File&quot; is required.</p>
+              <p className="error__text">Image is required.</p>
             )}
           </div>
         </div>
@@ -184,7 +184,7 @@ const Main = ({
                   : inputName
               }
               value={accountPage}
-              // hoverBoxShadowGradient
+              hoverBoxShadowGradient
               onChange={(e) =>
                 e.target.value.startsWith('universe.xyz/') &&
                 setAccountPage(e.target.value.replace(' ', '-'))
@@ -198,7 +198,7 @@ const Main = ({
                   &quot;Universe page address&quot; is not allowed to be empty
                 </p>
               )}
-            <div className="box--shadow--effect--block" />
+            {/* <div className="box--shadow--effect--block" /> */}
           </div>
           <div className="account-grid-about-editing">
             <h5>Your bio</h5>

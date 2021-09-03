@@ -363,6 +363,9 @@
           @include lg {
             width: 100%;
           }
+          &.error-inp+.box--shadow--effect--block{
+            display: none;
+          }
         }
         .error__text {
           padding-top: 4px;
@@ -414,7 +417,7 @@
             z-index: -9;
             left: -4px;
             right: 0;
-            bottom: -4px;
+            bottom: 0;
             margin: auto;
             border-radius: 12px;
             opacity: 0;
@@ -431,8 +434,9 @@
             }
           }
           input:focus {
-            border: 2px solid transparent;
+            border: 1px solid transparent;
           }
+
         }
         .account-grid-about-editing {
           position: relative;
@@ -454,10 +458,13 @@
             &:focus {
               background: linear-gradient($white, $white) padding-box,
                 linear-gradient(to right, #bceb00, #00eaea) border-box;
-              border: 2px solid transparent;
+              border: 1px solid transparent;
             }
             &:hover {
               border-radius: 10px;
+            }
+            &.error-inp+.box--shadow--effect--block{
+              display: none;
             }
           }
           .box--shadow--effect--block {
@@ -483,6 +490,9 @@
             z-index: 9;
             .box--shadow--effect--block {
               opacity: 0.2;
+            }
+            textarea{
+              border: 1px solid rgba(0, 0, 0, 0.01);
             }
           }
         }
