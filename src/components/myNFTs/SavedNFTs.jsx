@@ -158,14 +158,14 @@ const SavedNFTs = () => {
                     {dropdownID === nft.id && showDropdown && (
                       <ul ref={ref} className="edit__remove">
                         <li className="edit" onClick={() => handleEdit(nft.id)} aria-hidden="true">
-                          <p>Edit</p>
                           <img src={editIcon} alt="Edit Icon" />
+                          <p>Edit</p>
                         </li>
                         <Popup
                           trigger={
                             <li className="remove">
-                              <p>Remove</p>
                               <img src={removeIcon} alt="Remove Icon" />
+                              <p>Remove</p>
                             </li>
                           }
                         >
@@ -230,6 +230,7 @@ const SavedNFTs = () => {
                     <div className="saved__nft__box__highlight__two" />
                   </>
                 )}
+                <span className="tooltiptext">Complete editing this NFT</span>
               </div>
             ))}
           </div>

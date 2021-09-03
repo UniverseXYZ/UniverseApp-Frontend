@@ -45,6 +45,7 @@
         .circle {
           height: 20px;
           width: 20px;
+          margin-top: 3px;
           // background: linear-gradient($white, $white) padding-box,
           //   linear-gradient(to right, #bceb00, #00eaea) border-box;
           // border: 1px solid transparent;
@@ -80,10 +81,6 @@
           line-height: 130%;
           color: $black;
           margin-bottom: 10px;
-
-          @include sm {
-            font-size: 13px;
-          }
         }
         .auction__description {
           font-family: $spaceGroteskFont;
@@ -143,7 +140,7 @@
           padding: 30px 60px 30px 30px;
           margin-right: 30px;
           margin-bottom: 30px;
-          .approve-btn{
+          .approve-btn {
             padding: 11px 14px 11px 16px;
           }
           // h3{
@@ -151,7 +148,8 @@
           // }
           .random__bg__color {
             height: 80px;
-            width: 80px;margin-right: 30px;
+            width: 80px;
+            margin-right: 30px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -176,7 +174,7 @@
               margin-right: 18px;
             }
           }
-          .checkmark{
+          .checkmark {
             width: 20px;
             height: 20px;
             margin-right: 0;

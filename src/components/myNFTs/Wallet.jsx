@@ -269,7 +269,7 @@ const Wallet = ({
                   document.body.classList.remove('no__scroll');
                 }}
               >
-                Apply Filter
+                Apply filter
               </button>
             </div>
             <div className="filter__by__collection">

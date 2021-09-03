@@ -184,7 +184,6 @@ const Main = ({
                   : inputName
               }
               value={accountPage}
-              // hoverBoxShadowGradient
               onChange={(e) =>
                 e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
               }
