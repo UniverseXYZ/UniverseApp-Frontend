@@ -598,8 +598,7 @@
       }
     }
     @include lg {
-      float: none;
-      margin-top: 0%;
+      position: relative;
       margin-bottom: 30px;
     }
   }

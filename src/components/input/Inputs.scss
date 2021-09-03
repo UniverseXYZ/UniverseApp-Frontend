@@ -15,16 +15,16 @@
   background: linear-gradient($white, $white) padding-box,
     linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
 }
-.input--focus--field.intup-l {
-  > div:not(.error-div-inp) {
-    padding: 1px;
-    border-radius: 11px;
-    background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
-    .box--shadow--effect--block {
-      opacity: 0.2 !important;
-    }
-  }
-}
+// .input--focus--field.intup-l {
+//   > div:not(.error-div-inp) {
+//     padding: 1px;
+//     border-radius: 11px;
+//     background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+//     .box--shadow--effect--block {
+//       opacity: 0.2 !important;
+//     }
+//   }
+// }
 .intup-l {
   display: inline-grid;
   position: relative;

@@ -288,8 +288,14 @@
             position: relative;
             margin-bottom: 12px;
             cursor: pointer;
-            // height: 230px;
+            height: 230px;
             width: 100%;
+            @include lg {
+              height: 282px;
+            }
+            @include sm {
+              height: 335px;
+            }
 
             video {
               width: 100%;
@@ -501,7 +507,7 @@
         @include lg {
           grid-template-columns: repeat(2, 1fr);
         }
-        @include md {
+        @include sm {
           grid-template-columns: 1fr;
         }
       }
