@@ -104,6 +104,7 @@
             @include sm {
               margin-bottom: 10px;
               width: fit-content;
+              margin-right: 25px;
             }
           }
           @include lg {
@@ -112,10 +113,6 @@
           @include md {
             flex-wrap: wrap;
           }
-          // @include sm {
-          //   margin-left: 0%;
-          //   display: grid;
-          // }
         }
         button {
           display: none;
@@ -255,15 +252,6 @@
         left: 12px;
       }
     }
-    // @include lg {
-    //   grid-template-columns: repeat(3, 1fr);
-    // }
-    // @include md {
-    //   grid-template-columns: repeat(2, 1fr);
-    // }
-    // @include sm {
-    //   grid-template-columns: 1fr;
-    // }
   }
   .auction-settings-head {
     display: flex;
