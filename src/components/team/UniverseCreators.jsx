@@ -29,6 +29,12 @@ import IvanMykolaiv from '../../assets/images/team/Ivan-Mykolaiv.png';
 import VictoriaDutka from '../../assets/images/team/Victoria-Dutka.png';
 import SergePiven from '../../assets/images/team/Serge-Piven.png';
 import PavloBabenko from '../../assets/images/team/Pavlo-Babenko.png';
+import AsenAngelov from '../../assets/images/team/Asen-Angelov.png';
+import SteriosTaskudis from '../../assets/images/team/Sterios-Taskudis.png';
+import ViktorTodorov from '../../assets/images/team/Viktor-Todorov.png';
+import RaduGurau from '../../assets/images/team/Radu-Gurau.png';
+import ValeriiaGorenich from '../../assets/images/team/Valeriia-Gorenich.png';
+import AzamZafar from '../../assets/images/team/Azam-Zafar.png';
 
 const UniverseCreators = () => {
   const [creators, setCreators] = useState([
@@ -198,6 +204,42 @@ const UniverseCreators = () => {
       id: 28,
       name: 'Pavlo Babenko',
       avatar: PavloBabenko,
+      loaded: false,
+    },
+    {
+      id: 29,
+      name: 'Asen Angelov',
+      avatar: AsenAngelov,
+      loaded: false,
+    },
+    {
+      id: 30,
+      name: 'Sterios Taskudis',
+      avatar: SteriosTaskudis,
+      loaded: false,
+    },
+    {
+      id: 31,
+      name: 'Viktor Todorov',
+      avatar: ViktorTodorov,
+      loaded: false,
+    },
+    {
+      id: 32,
+      name: 'Radu Gurău',
+      avatar: RaduGurau,
+      loaded: false,
+    },
+    {
+      id: 33,
+      name: 'Valeriia Gorenich',
+      avatar: ValeriiaGorenich,
+      loaded: false,
+    },
+    {
+      id: 34,
+      name: 'Azam Zafar',
+      avatar: AzamZafar,
       loaded: false,
     },
   ]);

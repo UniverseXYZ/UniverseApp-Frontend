@@ -2459,7 +2459,7 @@
       grid-template-columns: 89px 89px 89px;
       justify-content: center;
       grid-gap: 14px;
-      .lds-roller {
+      .lobster-lds-roller {
         zoom: 0.6;
       }
       img {
@@ -2475,7 +2475,7 @@
       grid-template-columns: 66px 66px 66px 66px;
       justify-content: center;
       grid-gap: 10px;
-      .lds-roller {
+      .lobster-lds-roller {
         zoom: 0.5;
       }
       img {
@@ -2491,7 +2491,7 @@
       grid-template-columns: 52px 52px 52px 52px 52px;
       justify-content: center;
       grid-gap: 9px;
-      .lds-roller {
+      .lobster-lds-roller {
         zoom: 0.4;
       }
       img {
@@ -4257,6 +4257,7 @@
   background: $white;
   box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
   width: 530px;
+  border-radius: 12px;
   &--header {
     padding: 25px;
     display: flex;
@@ -4271,7 +4272,7 @@
       height: 16px;
     }
     p {
-      font-family: $spaceGroteskFont;
+      font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
       font-weight: bold;
       font-size: 16px;

@@ -160,13 +160,11 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>NFT Drops</li>
-                  <li
-                    // className="disable"
-                    onClick={() => history.push('/polymorphs')}
-                    aria-hidden="true"
-                  >
+                  <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
                     Polymorphs
-                    {/* <span className="tooltiptext">Coming soon</span> */}
+                  </li>
+                  <li onClick={() => history.push('/lobby-lobsters')} aria-hidden="true">
+                    Lobby Lobsters
                   </li>
                   <li className="disable">
                     Core Drops

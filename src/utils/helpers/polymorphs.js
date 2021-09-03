@@ -1,8 +1,7 @@
 import { BigNumber } from 'ethers';
 import cover from '../../assets/images/cover.png';
 
-export const POLYMORPH_BASE_URI =
-  'https://us-central1-polymorphmetadata.cloudfunctions.net/images-function?id=';
+export const POLYMORPHS_COLLECTION_NAME = 'Universe Polymorphs';
 
 export const getScrambleStatus = (scrambleEvents) => {
   // Check if there is only one event - this means the badge is Virgin
@@ -33,7 +32,7 @@ export const getScrambleStatus = (scrambleEvents) => {
   return 'none';
 };
 const extractTokenIdFromURI = (tokenURI) =>
-  tokenURI.substring(POLYMORPH_BASE_URI.length, tokenURI.length);
+  tokenURI.substring(process.env.REACT_APP_POLYMORPHS_IMAGES_URL.length, tokenURI.length);
 
 export const convertPolymorphObjects = (nftMetadataObjects) =>
   nftMetadataObjects.map((nft) => ({
@@ -45,5 +44,5 @@ export const convertPolymorphObjects = (nftMetadataObjects) =>
     },
     name: nft?.data?.name,
     collectionAvatar: cover,
-    collectionName: 'Universe Polymorphs',
+    collectionName: POLYMORPHS_COLLECTION_NAME,
   }));
