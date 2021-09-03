@@ -14,11 +14,7 @@ import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctions
 const AuctionLandingPage = () => {
   const { setDarkMode } = useContext(AppContext);
   const location = useLocation();
-  const selectedAuction = location.state
-    ? location.state.auction
-      ? location.state.auction
-      : PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === 1)[0]
-    : null;
+  const selectedAuction = location.state ? location.state.auction : null;
   const artist = selectedAuction?.artist;
 
   const [bidders, setBidders] = useState([]);
@@ -26,10 +22,6 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     setDarkMode(false);
     document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
-    console.log(
-      'selectedAuction PLACEHOLDER_ACTIVE_AUCTIONS',
-      PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === 1)[0].tiers
-    );
     if (selectedAuction) {
       // Fake data for testing
       setBidders([

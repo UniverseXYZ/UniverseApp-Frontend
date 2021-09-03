@@ -7,7 +7,8 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import Slider from 'react-slick';
 import leftArrow from '../../assets/images/arrow.svg';
-import copyIcon from '../../assets/images/copy2.svg';
+import darkCopyIcon from '../../assets/images/copy.svg';
+import lightCopyIcon from '../../assets/images/copy2.svg';
 import AppContext from '../../ContextAPI';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import PlaceBidPopup from '../popups/PlaceBidPopup.jsx';
@@ -26,6 +27,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
+    variableWidth: true,
   });
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -54,26 +56,26 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   };
 
   useEffect(() => {
-    // const interval = setInterval(() => {
-    const d = (new Date(selectedAuction.endDate) - Date.now()) / 1000;
-    const days = Math.floor(d / 86400);
-    const hours = Math.floor(d / 3600) % 24;
-    const minutes = Math.floor(d / 60) % 60;
-    const seconds = d % 60;
-    if (days < 0) {
-      // clearInterval(interval);
-      setSelectedAuctionEnded(true);
-    } else {
-      setSelectedAuctionEnded(false);
-      setCountdown({
-        days: parseInt(days, 10),
-        hours: parseInt(hours, 10),
-        minutes: parseInt(minutes, 10),
-        seconds: parseInt(seconds, 10),
-      });
-    }
-    // }, 1000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      const d = (new Date(selectedAuction.endDate) - Date.now()) / 1000;
+      const days = Math.floor(d / 86400);
+      const hours = Math.floor(d / 3600) % 24;
+      const minutes = Math.floor(d / 60) % 60;
+      const seconds = d % 60;
+      if (days < 0) {
+        clearInterval(interval);
+        setSelectedAuctionEnded(true);
+      } else {
+        setSelectedAuctionEnded(false);
+        setCountdown({
+          days: parseInt(days, 10),
+          hours: parseInt(hours, 10),
+          minutes: parseInt(minutes, 10),
+          seconds: parseInt(seconds, 10),
+        });
+      }
+    }, 1000);
+    return () => clearInterval(interval);
   }, [selectedAuction]);
 
   useEffect(() => {
@@ -92,16 +94,22 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, [loading]);
 
   useEffect(() => {
-    if (window.innerWidth >= 993) {
-      setSliderSettings({ ...sliderSettings, slidesToShow: 4 });
+    function handleResize() {
+      if (window.innerWidth < 1200) {
+        setSliderSettings({ ...sliderSettings, slidesToShow: 3 });
+      }
+      if (window.innerWidth < 993) {
+        setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
+      }
+      if (window.innerWidth < 576) {
+        setSliderSettings({ ...sliderSettings, slidesToShow: 1 });
+      }
     }
-    if (window.innerWidth < 993) {
-      setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
-    }
-    if (window.innerWidth < 576) {
-      setSliderSettings({ ...sliderSettings, slidesToShow: 1 });
-    }
-  }, [window.innerWidth]);
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Prev Icon
@@ -124,16 +132,20 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, []);
 
   return (
-    <div className="auction__details__section">
-      <div
-        className={`bg ${!selectedAuction.backgroundImage ? 'empty' : ''}`}
-        style={{
-          backgroundImage: selectedAuction.backgroundImage
-            ? `url(${URL.createObjectURL(selectedAuction.backgroundImage)})`
-            : '',
-          filter: selectedAuction.hasBlur ? 'blur(10px)' : 'blur(0px)',
-        }}
-      />
+    <div
+      className={`auction__details__section ${
+        selectedAuction.backgroundImage ? 'has--background' : ''
+      }`}
+    >
+      <div className="bg">
+        {selectedAuction.backgroundImage && (
+          <img
+            src={URL.createObjectURL(selectedAuction.backgroundImage)}
+            alt={selectedAuction.name}
+            style={{ filter: selectedAuction.hasBlur ? 'blur(10px)' : 'blur(0px)' }}
+          />
+        )}
+      </div>
       {selectedAuction.backgroundImage && <div className="overlay" />}
       <div className="auction__details__section__container">
         {getAllAuctionsForCurrentArtist.length && getAllAuctionsForCurrentArtist.length > 1 ? (
@@ -147,33 +159,36 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 onClick={() => {
                   setSelectedAuction(act);
                   setLoading(true);
-                  history.push(`/${act.artist.name.split(' ')[0]}/${act.title}`, { id: act.id });
+                  history.push(`/${act.link.split('/')[1]}/${act.link.split('/')[2]}`, {
+                    auction: act,
+                  });
                 }}
                 aria-hidden="true"
+                style={{ width: 278 }}
               >
-                <div
-                  className="carousel__auction"
-                  style={{
-                    border: selectedAuction.background
-                      ? '1px solid rgba(255, 255, 255, 0.2)'
-                      : '1px solid rgba(0, 0, 0, 0.2)',
-                  }}
-                >
-                  <div className={`carousel__auction__image ${act.image ? '' : 'show__avatar'}`}>
-                    <img className="original" src={act.image} alt={act.title} />
-                    <img className="artist__image" src={act.artist.avatar} alt={act.title} />
+                <div className="carousel__auction">
+                  <div
+                    className={`carousel__auction__image ${act.promoImage ? '' : 'show__avatar'}`}
+                  >
+                    {act.promoImage ? (
+                      <img
+                        className="original"
+                        src={URL.createObjectURL(act.promoImage)}
+                        alt={act.name}
+                      />
+                    ) : (
+                      <img
+                        className="artist__image"
+                        src={URL.createObjectURL(act.artist.avatar)}
+                        alt={act.name}
+                      />
+                    )}
                   </div>
                   <div className="carousel__auction__info">
-                    <h4 style={{ color: selectedAuction.background ? '#fff' : '#000' }}>
-                      {act.title}
+                    <h4 title={act.name}>
+                      {act.name.length > 20 ? `${act.name.substring(0, 20)}...` : act.name}
                     </h4>
-                    <p
-                      style={{
-                        color: selectedAuction.background
-                          ? 'rgba(255, 255, 255, 0.6)'
-                          : 'rgba(0, 0, 0, 0.6)',
-                      }}
-                    >
+                    <p>
                       {!convertDate(act.endDate) ? (
                         <span>Auction has ended</span>
                       ) : (
@@ -205,29 +220,19 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 ) : (
                   <img
                     className="artist__image"
-                    src={
-                      typeof selectedAuction.artist.avatar === 'string'
-                        ? selectedAuction.artist.avatar
-                        : URL.createObjectURL(selectedAuction.artist.avatar)
-                    }
-                    alt={selectedAuction.name}
+                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
+                    alt={selectedAuction.artist.name}
                   />
                 )}
               </div>
               <div className="auction__details__box__info">
-                <h1 className="title">
-                  {selectedAuction.name ? selectedAuction.name : selectedAuction.title}
-                </h1>
+                <h1 className="title">{selectedAuction.name}</h1>
                 <div className="artist__details">
                   <img
-                    src={
-                      typeof selectedAuction.artist.avatar === 'string'
-                        ? selectedAuction.artist.avatar
-                        : URL.createObjectURL(selectedAuction.artist.avatar)
-                    }
+                    src={URL.createObjectURL(selectedAuction.artist.avatar)}
                     alt={selectedAuction.artist.name}
                   />
-                  <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>by</span>
+                  <span>by</span>
                   <button
                     type="button"
                     onClick={() =>
@@ -235,7 +240,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         id: selectedAuction.artist.id,
                       })
                     }
-                    style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}
                   >
                     {selectedAuction.artist.name}
                   </button>
@@ -243,43 +247,15 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 <div className="auction__ends__in">
                   {!selectedAuctionEnded ? (
                     <div className="auction__ends__in__label">
-                      <span style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}>
-                        Auction ends in:&nbsp;
-                      </span>
+                      <span>Auction ends in:&nbsp;</span>
                       <div className="time">
-                        <div
-                          className="days"
-                          style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}
-                        >
-                          {`${countdown.days}d`}
-                        </div>
-                        <span style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}>
-                          :
-                        </span>
-                        <div
-                          className="hours"
-                          style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}
-                        >
-                          {`${countdown.hours}h`}
-                        </div>
-                        <span style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}>
-                          :
-                        </span>
-                        <div
-                          className="minutes"
-                          style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}
-                        >
-                          {`${countdown.minutes}m`}
-                        </div>
-                        <span style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}>
-                          :
-                        </span>
-                        <div
-                          className="seconds"
-                          style={{ color: selectedAuction.backgroundImage ? '#fff' : '#000' }}
-                        >
-                          {`${countdown.seconds}s`}
-                        </div>
+                        <div className="days">{`${countdown.days}d`}</div>
+                        <span>:</span>
+                        <div className="hours">{`${countdown.hours}h`}</div>
+                        <span>:</span>
+                        <div className="minutes">{`${countdown.minutes}m`}</div>
+                        <span>:</span>
+                        <div className="seconds">{`${countdown.seconds}s`}</div>
                       </div>
                     </div>
                   ) : (
@@ -302,8 +278,20 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                           }, 1000);
                         }}
                       >
-                        <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                          <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
+                        <span>
+                          {selectedAuction.backgroundImage ? (
+                            <img
+                              src={lightCopyIcon}
+                              alt="Copy to clipboard icon"
+                              className="copyImg"
+                            />
+                          ) : (
+                            <img
+                              src={darkCopyIcon}
+                              alt="Copy to clipboard icon"
+                              className="copyImg"
+                            />
+                          )}
                           Copy URL
                         </span>
                       </CopyToClipboard>

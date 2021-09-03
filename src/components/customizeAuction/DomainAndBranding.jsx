@@ -20,7 +20,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   // const [auctionLink, setAuctionLink] = useState(
   //   `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auctionname`
   // );
-  const [auctionLink, setAuctionLink] = useState('');
+  const [auctionLink, setAuctionLink] = useState(values.link.split('/')[2] || '');
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
@@ -34,7 +34,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
     setAuctionLink(e.target.value);
     onChange((prevValues) => ({
       ...prevValues,
-      link: prevValues.link + e.target.value,
+      link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/${e.target.value}`,
       status: e.target.value.length > 0 ? 'filled' : 'empty',
     }));
     setValidLink(e.target.value.trim().length !== 0);
@@ -95,7 +95,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                   ? 'inp error-inp'
                   : 'inp'
               }
-              onFocus
+              // onFocus
               value={values.headline}
               onChange={handleHeadline}
             />
@@ -257,6 +257,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                     className="toggle-switch-checkbox"
                     name="toggleSwitch"
                     value={values.hasBlur}
+                    checked={values.hasBlur}
                     onChange={(e) =>
                       onChange((prevValues) => ({ ...prevValues, hasBlur: e.target.checked }))
                     }
