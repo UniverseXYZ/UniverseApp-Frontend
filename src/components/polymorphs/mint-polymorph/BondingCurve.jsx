@@ -27,6 +27,7 @@ const BondingCurve = (props) => {
     price,
     trailingZeros,
     mintAction,
+    title,
   } = props;
 
   return (
@@ -34,7 +35,7 @@ const BondingCurve = (props) => {
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
-        <h5>Distribution curve</h5>
+        <h5>{title}</h5>
       </div>
       <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
       <div className="row3--section">
@@ -119,6 +120,7 @@ BondingCurve.propTypes = {
   price: PropTypes.number.isRequired,
   trailingZeros: PropTypes.number.isRequired,
   mintAction: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 BondingCurve.defaultProps = {

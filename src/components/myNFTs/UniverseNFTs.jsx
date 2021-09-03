@@ -92,7 +92,6 @@ const UniverseNFTs = () => {
   };
 
   const setFilter = (filter) => {
-    console.log(filter.target.innerText);
     setCollectionFilter(filter.target.innerText);
     setIsDropdownOpened(false);
     setMyUniverseNFTsActiverPage(0);

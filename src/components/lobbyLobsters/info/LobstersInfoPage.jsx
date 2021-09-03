@@ -30,7 +30,6 @@ const LobsterInfoPage = () => {
     if (!lobsterId) return;
     setLoading(true);
     const lobsterMetadata = await getLobsterMeta(lobsterId);
-    console.log(lobsterMetadata);
     setLobsterData(lobsterMetadata);
 
     const data = await queryLobstersGraph(lobsterOwner(lobsterId));

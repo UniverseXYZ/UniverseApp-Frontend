@@ -176,11 +176,8 @@ const App = () => {
     const polymPrice = await polymorphContractInstance.polymorphPrice();
 
     const totalLobsterMinted = await lobsterContractInstance.lastTokenId();
-    console.log(`totalLobstersMinted: ${totalLobsterMinted}`);
     const lobsterBaseURIData = await lobsterContractInstance.baseURI();
-    console.log(`lobsterBaseURIData: ${lobsterBaseURIData}`);
     const lobsPrice = await lobsterContractInstance.lobsterPrice();
-    console.log(`lobsPrice: ${lobsPrice}`);
 
     setWeb3Provider(provider);
     setAddress(accounts[0]);
@@ -232,7 +229,7 @@ const App = () => {
     const network = await web3ProviderWrapper.getNetwork();
     const { accounts: accountsWW } = web3ProviderWrapper.provider;
 
-    if (network.chainId !== process.env.REACT_APP_NETWORK_CHAIN_ID) {
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
       await provider.disconnect();
       triggerWrongNetworkPopup();
     } else {
@@ -272,8 +269,7 @@ const App = () => {
     const provider = new providers.Web3Provider(ethereum);
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const network = await provider.getNetwork();
-
-    if (network.chainId !== process.env.REACT_APP_NETWORK_CHAIN_ID) {
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
       triggerWrongNetworkPopup();
     } else {
       web3AuthenticationProccess(provider, network, accounts);
