@@ -161,6 +161,7 @@
             font-weight: bold;
             font-size: 16px;
             line-height: 20px;
+            white-space: nowrap;
           }
           input {
             font-family: $spaceGroteskFont;
@@ -211,6 +212,10 @@
             font-size: 16px;
             line-height: 130%;
             letter-spacing: 0.2px;
+
+            @include lg {
+              display: grid;
+            }
           }
           .promo-info {
             position: absolute;
@@ -814,6 +819,31 @@
 
       .account-grid-container {
         margin-bottom: 20px;
+
+        .account-grid-name1 {
+          justify-content: space-between;
+
+          .account-grid-name-editing {
+            .intup-l {
+              input {
+                max-width: 730px;
+              }
+              @include md {
+                max-width: 730px;
+              }
+            }
+          }
+        }
+
+        @include xl {
+          padding: 0px 40px 0px 0px;
+        }
+        @include lg {
+          margin-top: 0px;
+        }
+        @include md {
+          padding: 0%;
+        }
       }
     }
     .account-info {

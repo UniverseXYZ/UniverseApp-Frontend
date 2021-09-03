@@ -303,7 +303,7 @@
           background: linear-gradient($white, $white) padding-box,
             linear-gradient(to right, #bceb01, #9ceb28) border-box;
           border: 1px solid transparent;
-          width: 375px;
+          width: 400px;
 
           @include xl {
             width: 303px;
@@ -312,6 +312,11 @@
           @include lg {
             width: 225px;
           }
+        }
+      }
+      button {
+        &.light-border-button {
+          box-shadow: 2px 1000px 1px #fafafa inset;
         }
       }
       // button {
@@ -332,7 +337,7 @@
           height: 0px;
           z-index: 5;
           border: 1px solid rgba(0, 0, 0, 0.1);
-          width: 376px;
+          width: 390px;
 
           @include xl {
             width: 306px;
@@ -527,8 +532,9 @@
     button {
       margin-top: 20px;
       &.light-border-button {
-        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-        border: 1px solid transparent;
+        // background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+        // border: 1px solid transparent;
+        box-shadow: 2px 1000px 1px #fafafa inset;
       }
       @include sm {
         width: 100%;
@@ -557,7 +563,7 @@
     right: 0;
     // float: right;
     // margin-top: -85px;
-    .input--section{
+    .input--section {
       position: relative;
       img {
         position: absolute;

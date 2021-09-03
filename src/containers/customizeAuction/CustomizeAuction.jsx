@@ -34,7 +34,9 @@ const CustomizeAuction = () => {
   const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: auction.headline || '',
-    link: auction.link || `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
+    link:
+      auction.link ||
+      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
     promoImage: auction.promoImage || null,
     backgroundImage: auction.backgroundImage || null,
     hasBlur: auction.hasBlur || '',
@@ -100,19 +102,6 @@ const CustomizeAuction = () => {
       twitterLink,
       instagramLink,
     });
-    // setDomainAndBranding({
-    //   headline: auction.headline || '',
-    //   link: auction.link || `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
-    //   promoImage: auction.promoImage || null,
-    //   backgroundImage: auction.backgroundImage || null,
-    //   hasBlur: auction.hasBlur || '',
-    //   status:
-    //     auction.link &&
-    //     auction.link.toLowerCase() !==
-    //       `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
-    //       ? 'filled'
-    //       : 'empty',
-    // });
   }, []);
 
   const handleSaveClose = () => {

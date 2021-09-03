@@ -43,11 +43,11 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   const handleFocus = () => {
     if (
       values.link.toLowerCase() ===
-      `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`
+      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/auctionname`
     ) {
       onChange((prevValues) => ({
         ...prevValues,
-        link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`,
+        link: `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
         status: 'empty',
       }));
       setInputStyle('inp');
@@ -56,11 +56,13 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   const handleBlur = () => {
     if (
       values.link.toLowerCase() ===
-      `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
+      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`
     ) {
       onChange((prevValues) => ({
         ...prevValues,
-        link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/auctionname`,
+        link: `universe.xyz/${loggedInArtist.universePageAddress
+          .split(' ')[0]
+          .toLowerCase()}/auctionname`,
         status: 'empty',
       }));
       setInputStyle('inp empty');
@@ -134,13 +136,17 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
               className={
                 (editButtonClick || !validLink) &&
                 (values.link ===
-                  `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/` ||
+                  `universe.xyz/${loggedInArtist.universePageAddress
+                    .split(' ')[0]
+                    .toLowerCase()}/` ||
                   auctionLink.length === 0)
                   ? 'auction--link--div error-inp'
                   : `auction--link--div ${inputStyle}`
               }
             >
-              <span>universe.xyz/{loggedInArtist.name.split(' ')[0].toLowerCase()}/</span>
+              <span>
+                universe.xyz/{loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/
+              </span>
               <input
                 type="text"
                 placeholder="auctionname"
@@ -152,7 +158,8 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
             </div>
             {/* {(editButtonClick || validLink) && (!values.link || values.status === 'empty') && ( */}
             {(editButtonClick || !validLink) &&
-              (values.link === `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/` ||
+              (values.link ===
+                `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/` ||
                 auctionLink.length === 0) && (
                 <p className="error__text">
                   &quot;Auction website link&quot; is not allowed to be empty
@@ -165,15 +172,18 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
           <div className="upload__promo">
             <div className="upload__promo__title">
               <h4>
-                Upload promo image (optional){' '}
-                <img
-                  onMouseOver={() => setPromoInfo(true)}
-                  onFocus={() => setPromoInfo(true)}
-                  onMouseLeave={() => setPromoInfo(false)}
-                  onBlur={() => setPromoInfo(false)}
-                  src={infoIcon}
-                  alt="Info"
-                />
+                Upload promo image{' '}
+                <span>
+                  (optional){' '}
+                  <img
+                    onMouseOver={() => setPromoInfo(true)}
+                    onFocus={() => setPromoInfo(true)}
+                    onMouseLeave={() => setPromoInfo(false)}
+                    onBlur={() => setPromoInfo(false)}
+                    src={infoIcon}
+                    alt="Info"
+                  />
+                </span>
               </h4>
               {promoInfo && (
                 <Animated animationIn="zoomIn">
