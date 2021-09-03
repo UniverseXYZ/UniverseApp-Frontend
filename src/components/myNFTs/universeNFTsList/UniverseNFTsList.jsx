@@ -61,13 +61,17 @@ const UniverseNFTsList = ({
   }, [categories]);
 
   return sliceData.length ? (
-    <div className="rarity--charts--list">
-      {/* <CategoriesFilter
-        categories={categories}
-        setCategories={setCategories}
-        categoriesIndexes={categoriesIndexes}
-        setCategoriesIndexes={setCategoriesIndexes}
-      /> */}
+    <div className={`rarity--charts--list ${selectedTypeIndex === 1 ? 'one--column' : ''}`}>
+      {selectedTypeIndex !== 1 ? (
+        <CategoriesFilter
+          categories={categories}
+          setCategories={setCategories}
+          categoriesIndexes={categoriesIndexes}
+          setCategoriesIndexes={setCategoriesIndexes}
+        />
+      ) : (
+        <></>
+      )}
       <div className="list--with--selected--filters">
         <div className="selected--filters">
           {showClearALL && <div className="result">898 results</div>}

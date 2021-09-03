@@ -187,7 +187,7 @@ const RewardTiers = () => {
           </div>
         </div>
       </div>
-      <div className="btn-div">
+      <div className={!auction.tiers.length ? 'btn-div' : 'btn-div withtier'}>
         <Button
           className="light-border-button"
           onClick={() => history.push('/setup-auction/auction-settings', auction.id)}

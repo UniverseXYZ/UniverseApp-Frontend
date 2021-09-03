@@ -23,13 +23,14 @@
     }
     &--container {
         position: relative;
-        max-width: 730px;
+        max-width: 750px;
         margin: 40px auto 80px;
         .back-btn {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
             cursor: pointer;
+            padding: 0 10px;
             span {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
@@ -41,6 +42,7 @@
             }
         }
         .page--title {
+            padding: 0 10px;
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
             font-weight: 600;
@@ -252,6 +254,7 @@
                 }
             }
             .nft--collection--settings--page {
+                padding: 0 10px;
                 &--title {
                     font-family: $sharpGroteskSemiBoldFont;
                     font-style: normal;
@@ -450,6 +453,59 @@
                 }
                 .collection--description {
                     margin-bottom: 40px;
+                    > div {
+                        position: relative;
+                        &:hover {
+                            .box--shadow--effect--block {
+                                opacity: 0.2;
+                            }
+                            textarea {
+                                border: none;
+                            }
+                        }
+                        textarea {
+                            position: relative;
+                            z-index: 1;
+                            margin-top: 5px;
+                            padding: 15px;
+                            width: 100%;
+                            border: 1px solid rgba(0, 0, 0, 0.1);
+                            border-radius: 12px;
+                            font-family: $spaceGroteskFont;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 16px;
+                            line-height: 20px;
+                            color: $black;
+                            min-height: 86px;
+                            &:focus,
+                            &:active {
+                                background-image: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+                                background-origin: border-box;
+                                box-shadow: 2px 1000px 1px $white inset;
+                                border: 1px solid transparent;
+                            }
+                            &::placeholder {
+                                color: rgba(0, 0, 0, 0.2);
+                            }
+                        }
+                        textarea::-webkit-scrollbar{
+                            width: 0.1px;
+                            height: 5px;
+                        }
+                        .box--shadow--effect--block {
+                            position: absolute;
+                            width: calc(100% + 8px);
+                            background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+                            left: -4px;
+                            right: 0;
+                            top: 0;
+                            bottom: 0;
+                            margin: auto;
+                            border-radius: 12px;
+                            opacity: 0;
+                        }
+                    }
                     label {
                         display: block;
                         font-family: $spaceGroteskFont;
@@ -460,23 +516,6 @@
                         color: $black;
                         span {
                             color: #999999;
-                        }
-                    }
-                    textarea {
-                        margin-top: 5px;
-                        padding: 15px;
-                        width: 100%;
-                        border: 1px solid rgba(0, 0, 0, 0.1);
-                        border-radius: 12px;
-                        font-family: $spaceGroteskFont;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 16px;
-                        line-height: 20px;
-                        color: $black;
-                        min-height: 86px;
-                        &::placeholder {
-                            color: rgba(0, 0, 0, 0.2);
                         }
                     }
                 }

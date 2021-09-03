@@ -652,11 +652,7 @@
         display: flex;
         justify-content: center;
         text-align: center;
-        left: 10%;
-        // transform: translateX(-50%);
         margin: auto;
-        margin-top: 32%;
-        width: 80%;
         z-index: 10;
       }
     }
@@ -905,7 +901,7 @@
         img.preview-image {
           width: 100%;
           height: 100%;
-          object-fit: contain;
+          object-fit: cover;
           border-radius: 5px;
           cursor: pointer;
         }
@@ -1622,6 +1618,13 @@
         cursor: pointer;
         width: 100%;
         border-radius: 5px;
+        height: 230px;
+        @include lg {
+          height: 282px;
+        }
+        @include sm {
+          height: 335px;
+        }
 
         video {
           width: 100%;
@@ -1899,14 +1902,13 @@
         }
       }
     }
-
     @include xl {
       grid-template-columns: repeat(3, 1fr);
     }
     @include lg {
       grid-template-columns: repeat(2, 1fr);
     }
-    @include md {
+    @include sm {
       grid-template-columns: 1fr;
     }
   }

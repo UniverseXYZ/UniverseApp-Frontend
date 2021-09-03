@@ -33,12 +33,19 @@ const CustomizeAuction = () => {
   const [customizeAuctionState, setCustomizeAuctionState] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({
-    headline: '',
-    link: `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
-    promoImage: null,
-    backgroundImage: null,
-    hasBlur: '',
-    status: 'empty',
+    headline: auction.headline || '',
+    link:
+      auction.link ||
+      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
+    promoImage: auction.promoImage || null,
+    backgroundImage: auction.backgroundImage || null,
+    hasBlur: auction.hasBlur || '',
+    status:
+      auction.link &&
+      auction.link.toLowerCase() !==
+        `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`
+        ? 'filled'
+        : 'empty',
   });
   const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
@@ -95,21 +102,6 @@ const CustomizeAuction = () => {
       twitterLink,
       instagramLink,
     });
-    setDomainAndBranding({
-      headline: auction.headline || '',
-      link:
-        auction.link ||
-        `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
-      promoImage: auction.promoImage || null,
-      backgroundImage: auction.backgroundImage || null,
-      hasBlur: auction.hasBlur || '',
-      status:
-        auction.link &&
-        auction.link.toLowerCase() !==
-          `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`
-          ? 'filled'
-          : 'empty',
-    });
   }, []);
 
   const handleSaveClose = () => {
@@ -126,7 +118,7 @@ const CustomizeAuction = () => {
     ) {
       const newAuction = { ...auction };
       newAuction.headline = domainAndBranding.headline;
-      newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+      newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
       newAuction.copied = false;
       newAuction.promoImage = domainAndBranding.promoImage;
       newAuction.backgroundImage = domainAndBranding.backgroundImage;
@@ -194,7 +186,7 @@ const CustomizeAuction = () => {
       if (desc) {
         const newAuction = { ...auction };
         newAuction.headline = domainAndBranding.headline;
-        newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+        newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
         newAuction.copied = false;
         newAuction.promoImage = domainAndBranding.promoImage;
         newAuction.backgroundImage = domainAndBranding.backgroundImage;
@@ -242,7 +234,7 @@ const CustomizeAuction = () => {
       if (desc) {
         const newAuction = { ...auction };
         newAuction.headline = domainAndBranding.headline;
-        newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
+        newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
         newAuction.copied = false;
         newAuction.promoImage = domainAndBranding.promoImage;
         newAuction.backgroundImage = domainAndBranding.backgroundImage;
