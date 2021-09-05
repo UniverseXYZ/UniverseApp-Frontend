@@ -17,6 +17,7 @@ import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
 import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
@@ -131,6 +132,15 @@ const DesktopView = ({
               >
                 <img src={polymorphsIcon} alt="Polymorphs" />
                 <span>Polymorphs</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/lobby-lobsters');
+                }}
+              >
+                <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
+                <span>Lobby Lobsters</span>
               </button>
               <button type="button" className="disable">
                 <img src={coreDropsIcon} alt="Core drops" />

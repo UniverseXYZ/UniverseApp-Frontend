@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 const client = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/strenev/polymorph',
+  uri: process.env.REACT_APP_POLYMORPHS_GRAPH_URL,
   cache: new InMemoryCache(),
 });
 

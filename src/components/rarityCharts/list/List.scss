@@ -7,7 +7,7 @@
   grid-gap: 30px;
   .categories--filters {
     h2 {
-      font-family: $spaceGroteskFont;
+      font-family: "Space Grotesk SemiBold25",sans-serif;
       font-style: normal;
       font-weight: 600;
       font-size: 18px;
@@ -216,7 +216,7 @@
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 120%;
             color: $black;
             img {
@@ -286,11 +286,14 @@
           }
         }
         &--footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
           h2 {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 600;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 160%;
             color: $black;
             margin-bottom: 5px;
@@ -298,8 +301,8 @@
           p {
             font-family: $spaceGroteskFont;
             font-style: normal;
-            font-weight: 600;
-            font-size: 18px;
+            font-weight: 400;
+            font-size: 12px;
             line-height: 160%;
             color: #b3b3b3;
           }

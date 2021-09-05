@@ -23,6 +23,7 @@ import signOutIcon from '../../../../assets/images/sign-out.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
 import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
+import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
@@ -271,6 +272,17 @@ const MobileView = (props) => {
                         >
                           <img src={polymorphsIcon} alt="Polymorphs" />
                           <span>Polymorphs</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            history.push('/lobby-lobsters');
+                          }}
+                        >
+                          <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
+                          <span>Lobby Lobsters</span>
                         </button>
                       </div>
                       <div>

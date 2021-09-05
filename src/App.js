@@ -12,46 +12,32 @@ import Contracts from './Contracts.json';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
-import Auctions from './containers/auctions/Auction.jsx';
-import SetupAuction from './components/setupAuction/SetupAuction';
-import CreateTiers from './components/createTiers/Create.jsx';
 import MyNFTs from './components/myNFTs/MyNFTs.jsx';
-import Artist from './containers/artist/Artist.jsx';
-import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage.jsx';
 import Homepage from './containers/homepage/Homepage.jsx';
 import About from './containers/mintingAndAuctions/about/About.jsx';
-import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace.jsx';
-import MyAccount from './containers/myAccount/MyAccount.jsx';
-import CustomizeAuction from './containers/customizeAuction/CustomizeAuction.jsx';
 import Team from './containers/team/Team.jsx';
-import AuctionReview from './components/auctions/AuctionReview.jsx';
 import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
-import Collection from './containers/collection/Collection.jsx';
-import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
 import Polymorphs from './containers/polymorphs/Polymorphs.jsx';
 import MintPolymorph from './containers/polymorphs/MintPolymorph.jsx';
 import PolymorphScramblePage from './components/polymorphs/scramble/PolymorphScramblePage.jsx';
-// import MarketplaceNFT from './containers/marketplaceNFT/MarketplaceNFT';
-// import Planet1 from './containers/planets/Planet1.jsx';
-// import Planet2 from './containers/planets/Planet2.jsx';
-// import Planet3 from './containers/planets/Planet3.jsx';
-// import BrowseNFT from './containers/marketplace/browseNFT/BrowseNFT.jsx';
-// import CharectersDrop from './containers/charactersDrop/CharactersDrop.jsx';
-// import CharacterPage from './containers/characterPage/CharacterPage.jsx';
-// import Search from './containers/search/Search.jsx';
-// import NFTMarketplace from './containers/sellNFT/NFTMarketplace';
-// import MyProfile from './containers/myProfile/MyProfile';
-// import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { transferPolymorphs } from './utils/graphql/queries';
-import { convertPolymorphObjects, POLYMORPH_BASE_URI } from './utils/helpers/polymorphs';
+import { transferLobsters, queryLobstersGraph } from './utils/graphql/lobsterQueries';
+import { convertPolymorphObjects } from './utils/helpers/polymorphs';
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
+import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
+import { convertLobsterObjects } from './utils/helpers/lobsters';
+import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
 
 const App = () => {
+  const allCharactersFilter = 'All Characters';
+  const polymorphsFilter = 'My Polymorphs';
+  const lobstersFilter = 'Lobby Lobsters';
+
   const location = useLocation();
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
@@ -99,10 +85,19 @@ const App = () => {
   const [yourBalance, setYourBalance] = useState(0);
 
   const [userPolymorphs, setUserPolymorphs] = useState([]);
+  const [userPolymorphsLoaded, setUserPolymorphsLoaded] = useState(false);
   const [payableAmount, setPayableAmount] = useState(0.1);
   const [totalPolymorphs, setTotalPolymorphs] = useState(0);
   const [polymorphBaseURI, setPolymorphBaseURI] = useState('');
   const [polymorphPrice, setPolymorphPrice] = useState(0);
+
+  const [userLobsters, setUserLobsters] = useState([]);
+  const [userLobstersLoaded, setUserLobstersLoaded] = useState(false);
+  const [totalLobsters, setTotalLobsters] = useState(0);
+  const [lobsterBaseURI, setLobsterBaseURI] = useState('');
+  const [lobsterPrice, setLobsterPrice] = useState(0);
+  const [lobsterContract, setLobsterContract] = useState(null);
+
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [polymorphContract, setPolymorphContract] = useState(null);
   const { data } = useQuery(transferPolymorphs(address));
@@ -113,18 +108,41 @@ const App = () => {
   const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
   const [providerObject, setProviderObject] = useState('');
 
+  const [collectionFilter, setCollectionFilter] = useState(allCharactersFilter);
+
   const triggerWrongNetworkPopup = async () => {
     document.getElementById('wrong-network-hidden-btn').click();
   };
 
   const fetchUserPolymorphsTheGraph = async (theGraphData) => {
+    setUserPolymorphsLoaded(false);
+
     const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
-    const metadataURIs = userNftIds?.map((id) => `${POLYMORPH_BASE_URI}${id}`);
+    const metadataURIs = userNftIds?.map(
+      (id) => `${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`
+    );
     const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
     const polymorphNFTs = convertPolymorphObjects(nftMetadataObjects);
     if (polymorphNFTs) {
       setUserPolymorphs(polymorphNFTs);
     }
+    setUserPolymorphsLoaded(true);
+  };
+
+  const fetchUserLobstersTheGraph = async (newAddress) => {
+    setUserLobstersLoaded(false);
+
+    const lobsters = await queryLobstersGraph(transferLobsters(newAddress));
+    const userNftIds = lobsters?.transferEntities?.map((nft) => nft.tokenId);
+    const metadataURIs = userNftIds?.map(
+      (id) => `${process.env.REACT_APP_LOBSTER_IMAGES_URL}${id}`
+    );
+    const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+    const lobsterNFTs = convertLobsterObjects(nftMetadataObjects);
+    if (lobsterNFTs) {
+      setUserLobsters(lobsterNFTs);
+    }
+    setUserLobstersLoaded(true);
   };
 
   const getEthPriceData = async (balance) => {
@@ -141,14 +159,25 @@ const App = () => {
       Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
 
     const polymorphContractInstance = new Contract(
-      polymContract?.address,
+      process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
       polymContract?.abi,
       signerResult
     );
 
-    const totalMinted = await polymorphContractInstance.lastTokenId();
+    const lobsContract = Contracts[network.chainId][network.name].contracts.Lobster;
+    const lobsterContractInstance = new Contract(
+      process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
+      lobsContract?.abi,
+      signerResult
+    );
+
+    const totalPolyMinted = await polymorphContractInstance.lastTokenId();
     const polymorphBaseURIData = await polymorphContractInstance.baseURI();
     const polymPrice = await polymorphContractInstance.polymorphPrice();
+
+    const totalLobsterMinted = await lobsterContractInstance.lastTokenId();
+    const lobsterBaseURIData = await lobsterContractInstance.baseURI();
+    const lobsPrice = await lobsterContractInstance.lobsterPrice();
 
     setWeb3Provider(provider);
     setAddress(accounts[0]);
@@ -158,9 +187,14 @@ const App = () => {
     setEthereumNetwork(network);
 
     setPolymorphContract(polymorphContractInstance);
-    setTotalPolymorphs(totalMinted.toNumber());
+    setTotalPolymorphs(totalPolyMinted.toNumber());
     setPolymorphBaseURI(polymorphBaseURIData);
     setPolymorphPrice(utils.formatEther(polymPrice));
+
+    setLobsterContract(lobsterContractInstance);
+    setTotalLobsters(totalLobsterMinted);
+    setLobsterBaseURI(lobsterBaseURIData);
+    setLobsterPrice(lobsPrice);
   };
 
   const resetConnectionState = async (walletConnectEvent) => {
@@ -195,7 +229,7 @@ const App = () => {
     const network = await web3ProviderWrapper.getNetwork();
     const { accounts: accountsWW } = web3ProviderWrapper.provider;
 
-    if (network.chainId !== 1) {
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
       await provider.disconnect();
       triggerWrongNetworkPopup();
     } else {
@@ -235,8 +269,7 @@ const App = () => {
     const provider = new providers.Web3Provider(ethereum);
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const network = await provider.getNetwork();
-
-    if (network.chainId !== 1) {
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
       triggerWrongNetworkPopup();
     } else {
       web3AuthenticationProccess(provider, network, accounts);
@@ -271,7 +304,10 @@ const App = () => {
   };
 
   useEffect(async () => {
-    await fetchUserPolymorphsTheGraph(data);
+    setUserLobsters([]);
+    setUserPolymorphs([]);
+    fetchUserPolymorphsTheGraph(data);
+    fetchUserLobstersTheGraph(address);
   }, [address]);
 
   useEffect(() => {
@@ -300,6 +336,12 @@ const App = () => {
       getEthPriceData(yourBalance);
     }
   }, [data, yourBalance]);
+
+  useEffect(() => {
+    if (yourBalance) {
+      getEthPriceData(yourBalance);
+    }
+  }, [yourBalance]);
 
   useEffect(() => {
     if (
@@ -403,6 +445,19 @@ const App = () => {
         connectWithWalletConnect,
         connectWithMetaMask,
         resetConnectionState,
+        lobsterContract,
+        userLobsters,
+        lobsterPrice,
+        lobsterBaseURI,
+        totalLobsters,
+        userLobstersLoaded,
+        userPolymorphsLoaded,
+        setUserLobsters,
+        collectionFilter,
+        setCollectionFilter,
+        polymorphsFilter,
+        lobstersFilter,
+        allCharactersFilter,
       }}
     >
       <Header />
@@ -421,11 +476,17 @@ const App = () => {
         <Route exact path="/polymorphs/:id">
           <PolymorphScramblePage />
         </Route>
+        <Route exact path="/lobsters/:id">
+          <LobsterInfoPage />
+        </Route>
         <Route exact path="/my-nfts">
           <MyNFTs />
         </Route>
         <Route exact path="/polymorph-rarity">
           <RarityCharts />
+        </Route>
+        <Route exact path="/lobby-lobsters">
+          <LobbyLobsters />
         </Route>
         <Route path="*" component={() => <NotFound />} />
       </Switch>
