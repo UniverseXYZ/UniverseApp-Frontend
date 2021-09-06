@@ -427,7 +427,7 @@ const TabletView = (props) => {
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
-                    My profile
+                    Edit my profile
                   </button>
                   <button
                     type="button"
