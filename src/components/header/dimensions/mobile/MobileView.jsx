@@ -186,13 +186,13 @@ const MobileView = (props) => {
                     ).length > 0 ||
                     PLACEHOLDER_MARKETPLACE_COLLECTIONS.filter((item) =>
                       item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLowerCase())
-                    ).length > 0 ||
-                    PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
-                      item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
-                    ).length ? (
+                    ).length > 0 ? (
+                      // PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                      //   item.name.toLowerCase().includes(searchValue.toLowerCase())
+                      // ).length > 0 ||
+                      // PLACEHOLDER_MARKETPLACE_GALLERIES.filter((item) =>
+                      //   item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+                      // ).length ? (
                       <div className="search__nfts">
                         {PLACEHOLDER_MARKETPLACE_NFTS.filter((item) =>
                           item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -296,7 +296,7 @@ const MobileView = (props) => {
                             </div>
                           </div>
                         ))}
-                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        {/* {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                           item.name.toLowerCase().includes(searchValue.toLowerCase())
                         ).length > 0 && <h4>Communities</h4>}
                         {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
@@ -327,7 +327,7 @@ const MobileView = (props) => {
                               <p className="galleries--likes">{galleries.likesCount} Likes</p>
                             </div>
                           </div>
-                        ))}
+                        ))} */}
                         <Button
                           type="button"
                           className="light-border-button"

@@ -71,12 +71,9 @@ const Search = () => {
         .includes(query ? query.toLowerCase() : location.state.query.toLowerCase())
     );
     setResultsCount(
-      auctionsCount.length +
-        nftsCount.length +
-        usersCount.length +
-        collectionsCount.length +
-        communitiesCount.length +
-        galleriesCount.length
+      auctionsCount.length + nftsCount.length + usersCount.length + collectionsCount.length
+      // communitiesCount.length +
+      // galleriesCount.length
     );
   }, [query]);
 
