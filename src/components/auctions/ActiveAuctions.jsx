@@ -8,7 +8,6 @@ import moment from 'moment';
 import uuid from 'react-uuid';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
-import searchIcon from '../../assets/images/search-gray.svg';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import copyIcon from '../../assets/images/copy1.svg';
@@ -17,6 +16,7 @@ import Input from '../input/Input.jsx';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import Button from '../button/Button';
+import searchIconGray from '../../assets/images/search-gray.svg';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [shownActionId, setShownActionId] = useState(null);
@@ -58,20 +58,23 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="active-auctions">
       <div className="input-search">
-        {searchByName ? (
+        {/* {searchByName ? (
           <button type="button" onClick={() => setSearchByName('')}>
             Clear
           </button>
         ) : (
           <></>
-        )}
-        <img src={searchIcon} alt="search" />
-        <Input
-          className="searchInp"
-          onChange={(e) => handleSearch(e.target.value)}
-          value={searchByName}
-          placeholder="Search"
-        />
+        )} */}
+        <div className="input--section">
+          <Input
+            className="searchInp"
+            onChange={(e) => handleSearch(e.target.value)}
+            value={searchByName}
+            placeholder="Search by name"
+            hoverBoxShadowGradient
+          />
+          <img src={searchIconGray} alt="search" />
+        </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppableId">
