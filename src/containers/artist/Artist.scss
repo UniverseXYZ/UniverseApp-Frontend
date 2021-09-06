@@ -835,187 +835,6 @@
             grid-template-columns: 1fr;
           }
         }
-        .filtration {
-          position: relative;
-          display: grid;
-          grid-template-columns: auto 255px;
-          grid-gap: 30px;
-
-          .filter__by__collection {
-            &__label {
-              margin-bottom: 15px;
-
-              span {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 16px;
-                letter-spacing: 0.2px;
-                color: $black;
-                margin-right: 15px;
-              }
-              button {
-                background: none;
-                border: none;
-                font-family: $spaceGroteskFont;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 14px;
-                text-decoration: underline;
-                color: $black;
-              }
-            }
-            &__input {
-              input {
-                background: $white;
-                border: 1px solid #d4d4d4;
-                box-sizing: border-box;
-                border-radius: 12px;
-                width: 100%;
-                padding: 15px;
-
-                &::placeholder {
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: normal;
-                  font-size: 16px;
-                  color: #cacaca;
-                }
-
-                &.focused {
-                  background: linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #bceb00, #00eaea) border-box;
-                  border: 1px solid transparent;
-                }
-                &.focused::placeholder {
-                  color: transparent;
-                }
-              }
-            }
-          }
-
-          .search__by__name {
-            &__label {
-              margin-bottom: 15px;
-
-              span {
-                font-family: $sharpGroteskSemiBoldFont;
-                font-style: normal;
-                font-weight: 600;
-                font-size: 16px;
-                letter-spacing: 0.2px;
-                color: $black;
-                margin-right: 15px;
-              }
-            }
-            &__input {
-              input {
-                background: $white;
-                border: 1px solid #d4d4d4;
-                box-sizing: border-box;
-                border-radius: 12px;
-                width: 100%;
-                padding: 15px;
-
-                &::placeholder {
-                  font-family: $spaceGroteskFont;
-                  font-style: normal;
-                  font-weight: normal;
-                  font-size: 16px;
-                  color: #cacaca;
-                }
-
-                &:focus {
-                  background: linear-gradient($white, $white) padding-box,
-                    linear-gradient(to right, #bceb00, #00eaea) border-box;
-                  border: 1px solid transparent;
-                }
-                &:focus::placeholder {
-                  color: transparent;
-                }
-              }
-            }
-          }
-
-          .collections__dropdown {
-            background: $white;
-            box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            position: absolute;
-            left: 0;
-            top: 90px;
-            width: 100%;
-            z-index: 1;
-
-            button {
-              background: rgba(0, 0, 0, 0.02);
-              border: 1px solid rgba(0, 0, 0, 0.1);
-              box-sizing: border-box;
-              border-radius: 10px;
-              padding: 6px 14px;
-              display: flex;
-              align-items: center;
-              position: relative;
-
-              .random__bg__color {
-                height: 30px;
-                width: 30px;
-                border-radius: 50%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-family: $sharpGroteskMediumFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 12px;
-                text-transform: uppercase;
-                color: $black;
-              }
-
-              img {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-              }
-
-              &.selected {
-                background: linear-gradient($white, $white) padding-box,
-                  linear-gradient(to right, #bceb00, #00eaea) border-box;
-                box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
-                border: 1px solid transparent;
-
-                &::after {
-                  content: '\2716';
-                  background-color: $black;
-                  color: $white;
-                  position: absolute;
-                  top: -7px;
-                  right: -7px;
-                  border-radius: 50%;
-                  padding: 0px 3px;
-                }
-              }
-
-              span {
-                font-family: $sharpGroteskMediumFont;
-                font-style: normal;
-                font-weight: 500;
-                font-size: 12px;
-                text-transform: uppercase;
-                color: $black;
-                margin-left: 15px;
-              }
-            }
-          }
-          @include md {
-            grid-template-columns: 1fr;
-          }
-        }
         .selected__filters {
           margin-top: 40px;
           margin-bottom: 40px;
@@ -1295,5 +1114,187 @@
     @include sm {
       padding: 40px 20px;
     }
+  }
+}
+
+.filtration {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 255px;
+  grid-gap: 30px;
+
+  .filter__by__collection {
+    &__label {
+      margin-bottom: 15px;
+
+      span {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        color: $black;
+        margin-right: 15px;
+      }
+      button {
+        background: none;
+        border: none;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        text-decoration: underline;
+        color: $black;
+      }
+    }
+    &__input {
+      input {
+        background: $white;
+        border: 1px solid #d4d4d4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: 100%;
+        padding: 15px;
+
+        &::placeholder {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: #cacaca;
+        }
+
+        &.focused {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+        }
+        &.focused::placeholder {
+          color: transparent;
+        }
+      }
+    }
+  }
+
+  .search__by__name {
+    &__label {
+      margin-bottom: 15px;
+
+      span {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        color: $black;
+        margin-right: 15px;
+      }
+    }
+    &__input {
+      input {
+        background: $white;
+        border: 1px solid #d4d4d4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: 100%;
+        padding: 15px;
+
+        &::placeholder {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: #cacaca;
+        }
+
+        &:focus {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+        }
+        &:focus::placeholder {
+          color: transparent;
+        }
+      }
+    }
+  }
+
+  .collections__dropdown {
+    background: $white;
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: absolute;
+    left: 0;
+    top: 90px;
+    width: 100%;
+    z-index: 1;
+
+    button {
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 10px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      .random__bg__color {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: $sharpGroteskMediumFont;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: $black;
+      }
+
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+
+      &.selected {
+        background: linear-gradient($white, $white) padding-box,
+          linear-gradient(to right, #bceb00, #00eaea) border-box;
+        box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+        border: 1px solid transparent;
+
+        &::after {
+          content: '\2716';
+          background-color: $black;
+          color: $white;
+          position: absolute;
+          top: -7px;
+          right: -7px;
+          border-radius: 50%;
+          padding: 0px 3px;
+        }
+      }
+
+      span {
+        font-family: $sharpGroteskMediumFont;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: $black;
+        margin-left: 15px;
+      }
+    }
+  }
+  @include md {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,11 +1,10 @@
 @import '../../assets/scss/variables';
 
 .inp {
-  background: #ffffff;
+  background: $white;
   border: 1px solid #d4d4d4;
   box-sizing: border-box;
   border-radius: 12px;
-  // height: 50px;
   padding: 15px 16px;
   width: 100%;
 }
@@ -60,6 +59,14 @@
       &::placeholder {
         color: rgba(0, 0, 0, 0.2);
       }
+      &:focus {
+        background: linear-gradient($white, $white) padding-box,
+          linear-gradient(to right, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent!important;
+      }
+      &:focus::placeholder {
+        color: transparent;
+      }
     }
 
     &:not(.error-div-inp) {
@@ -69,13 +76,17 @@
         }
       }
       &:hover {
-        // padding: 1px;
         .box--shadow--effect--block {
           opacity: 0.2 !important;
         }
         input {
-          border: none;
-          border-radius: 10px !important;
+          &:not(:disabled) {
+            border: none;
+            border-radius: 10px !important;
+          }
+          &:disabled {
+            cursor: not-allowed;
+          }
         }
       }
     }

@@ -407,6 +407,14 @@
                                 width: 100%;
                                 input {
                                     width: 100%;
+                                    &:focus {
+                                        background: linear-gradient($white, $white) padding-box,
+                                        linear-gradient(to right, #bceb00, #00eaea) border-box;
+                                        border: 1px solid transparent;
+                                    }
+                                    &:focus::placeholder {
+                                        color: transparent;
+                                    }
                                 }
                             }
                         }
@@ -427,6 +435,14 @@
                                 width: 100%;
                                 input {
                                     width: 100%;
+                                    &:focus {
+                                        background: linear-gradient($white, $white) padding-box,
+                                        linear-gradient(to right, #bceb00, #00eaea) border-box;
+                                        border: 1px solid transparent;
+                                    }
+                                    &:focus::placeholder {
+                                        color: transparent;
+                                    }
                                 }
                             }
                             p.warning {

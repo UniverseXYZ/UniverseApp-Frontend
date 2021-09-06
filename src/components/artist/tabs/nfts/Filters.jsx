@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import testCollectionAvatar from '../../../../assets/images/test-collection-avatar.svg';
 import AppContext from '../../../../ContextAPI';
+import Input from '../../../input/Input.jsx';
 
 const NFTsFilters = () => {
   const { handleClickOutside } = useContext(AppContext);
@@ -65,11 +66,12 @@ const NFTsFilters = () => {
             </button>
           </div>
           <div className="filter__by__collection__input">
-            <input
+            <Input
               className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
               type="text"
               placeholder="Browse collections..."
               onFocus={() => setIsCollectionDropdownOpened(true)}
+              hoverBoxShadowGradient
             />
           </div>
         </div>
@@ -78,11 +80,13 @@ const NFTsFilters = () => {
             <span>Search by name</span>
           </div>
           <div className="search__by__name__input">
-            <input
+            <Input
+              className="inp"
               type="text"
               placeholder="Start typing"
               value={searchByName}
               onChange={(e) => setSearchByName(e.target.value)}
+              hoverBoxShadowGradient
             />
           </div>
         </div>
