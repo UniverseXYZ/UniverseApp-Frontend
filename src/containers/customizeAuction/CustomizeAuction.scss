@@ -78,6 +78,8 @@
         line-height: 20px;
         font-weight: normal;
         color: $black;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+
 
         &::placeholder {
           font-family: $spaceGroteskFont;
@@ -85,13 +87,9 @@
           line-height: 20px;
           color: #cacaca;
         }
-        &:focus {
-          background: linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #bceb00, #00eaea) border-box;
-          border: 1px solid transparent;
-        }
-        &:focus::placeholder {
-          color: transparent;
+       
+        &.error-inp+.box--shadow--effect--block{
+          display: none;
         }
       }
     }
@@ -113,9 +111,9 @@
         margin-bottom: 42px;
         margin-right: 30px;
 
-        .inp {
-          border: 1px solid rgba(0, 0, 0, 0.1);
-        }
+        // .inp {
+        //   border: 1px solid rgba(0, 0, 0, 0.1);
+        // }
 
         .auction__headline__title {
           display: flex;
