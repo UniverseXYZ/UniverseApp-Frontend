@@ -28,7 +28,7 @@ const Search = () => {
   const location = useLocation();
   const history = useHistory();
   const [query, setQuery] = useState('');
-  const tabs = ['Auctions', 'NFTs', 'Users', 'Collections', 'Communities', 'Galleries'];
+  const tabs = ['Auctions', 'NFTs', 'Users', 'Collections'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [resultsCount, setResultsCount] = useState(0);
   const [searchValue, setSearchValue] = useState(location.state.query);
