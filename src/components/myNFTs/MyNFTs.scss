@@ -654,6 +654,8 @@
         text-align: center;
         margin: auto;
         z-index: 10;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
 
