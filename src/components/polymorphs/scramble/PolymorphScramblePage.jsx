@@ -49,7 +49,6 @@ const PolymorphScramblePage = () => {
   const [showMetadataLoading, setShowMetadataLoading] = useState(false);
   const [showScramblePopup, setShowScramblePopup] = useState(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
-
   useEffect(() => {
     if (!data) return;
     const ownerOf = data?.transferEntities[0]?.to;
@@ -212,7 +211,7 @@ const PolymorphScramblePage = () => {
           <div className="name">{polymorphData?.data?.name}</div>
           <div className="description">{polymorphData?.data?.description}</div>
 
-          <Tabs items={tabs} />
+          <Tabs items={tabs} attributes={attributes} />
           {propertiesTabSelected ? (
             <>
               <div className="scramble--properties">
@@ -236,7 +235,7 @@ const PolymorphScramblePage = () => {
                 <div className="owner--string--value">
                   {/* TODO: Take address from .env */}
                   <a
-                    href={`https://etherscan.io/token/0x1cBB182322Aee8ce9F4F1f98d7460173ee30Af1F?a=${morphOwner}`}
+                    href={`${process.env.REACT_APP_ETHERSCAN_URL}/token/${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}?a=${morphOwner}`}
                     target="_blank"
                     rel="noreferrer"
                   >
