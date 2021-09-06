@@ -277,11 +277,12 @@ const Wallet = ({
                 <span>Filter by collection</span>
               </div>
               <div className="filter__by__collection__input">
-                <input
+                <Input
                   className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
                   type="text"
                   placeholder="Browse collections..."
                   onFocus={() => setIsCollectionDropdownOpened(true)}
+                  hoverBoxShadowGradient
                 />
               </div>
             </div>
