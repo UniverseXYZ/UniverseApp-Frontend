@@ -12,6 +12,15 @@
     position: relative;
     padding: 0 80px;
     overflow: hidden;
+    &.sold--out {
+        min-height: 295px!important;
+        @include sm {
+            min-height: 265px!important;
+        }
+        @media (max-width: 375px) {
+            min-height: 300px!important;
+        }
+    }
     @include lg {
         padding: 0 50px;
     }
@@ -173,10 +182,14 @@
             }
         }
     }
+    .row3--section--sold--out {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .light-button {
         position: relative;
         display: block;
-        width: 145px;
         height: 50px;
         box-shadow: 0px 10px 20px rgba(93, 247, 164, 0.2);
         @include sm {
