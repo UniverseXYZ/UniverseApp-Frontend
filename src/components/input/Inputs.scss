@@ -85,7 +85,7 @@
         }
         input {
           &:not(:disabled) {
-            border: none;
+            border: 1px solid transparent;
             border-radius: 10px !important;
           }
           &:disabled {
