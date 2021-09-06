@@ -1585,8 +1585,24 @@
       transition: 0.3s ease-in-out;
 
       &:hover {
-        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
-        border: 1px solid $white;
+        // box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        // border: 1px solid $white;
+        border: 2px solid #e4b613;
+        .saved__nft__box__highlight__one {
+          border-bottom: 2px solid #e4b613;
+          border-left: 2px solid #e4b613;
+          border-right: 2px solid #e4b613;
+          bottom: -6px;
+        }
+        .saved__nft__box__highlight__two {
+          border-bottom: 2px solid #e4b613;
+          border-left: 2px solid #e4b613;
+          border-right: 2px solid #e4b613;
+          bottom: -10px;
+        }
+        .tooltiptext {
+          visibility: visible;
+        }
       }
 
       &.selected {
@@ -1609,6 +1625,9 @@
           border-left: 2px solid transparent;
           border-right: 2px solid transparent;
           bottom: -10px;
+        }
+        .tooltiptext {
+          visibility: hidden;
         }
       }
 
@@ -1883,24 +1902,24 @@
           border-color: black transparent transparent transparent;
         }
       }
-      &:hover {
-        border: 2px solid #e4b613;
-        .saved__nft__box__highlight__one {
-          border-bottom: 2px solid #e4b613;
-          border-left: 2px solid #e4b613;
-          border-right: 2px solid #e4b613;
-          bottom: -6px;
-        }
-        .saved__nft__box__highlight__two {
-          border-bottom: 2px solid #e4b613;
-          border-left: 2px solid #e4b613;
-          border-right: 2px solid #e4b613;
-          bottom: -10px;
-        }
-        .tooltiptext {
-          visibility: visible;
-        }
-      }
+      // &:hover {
+      //   border: 2px solid #e4b613;
+      //   .saved__nft__box__highlight__one {
+      //     border-bottom: 2px solid #e4b613;
+      //     border-left: 2px solid #e4b613;
+      //     border-right: 2px solid #e4b613;
+      //     bottom: -6px;
+      //   }
+      //   .saved__nft__box__highlight__two {
+      //     border-bottom: 2px solid #e4b613;
+      //     border-left: 2px solid #e4b613;
+      //     border-right: 2px solid #e4b613;
+      //     bottom: -10px;
+      //   }
+      //   .tooltiptext {
+      //     visibility: visible;
+      //   }
+      // }
     }
     @include xl {
       grid-template-columns: repeat(3, 1fr);
