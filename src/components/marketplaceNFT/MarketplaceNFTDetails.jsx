@@ -76,12 +76,63 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       : selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
       ? useRef(new Audio(selectedNFT.allItems[selectedNFTIndex].url))
       : useRef(null);
+
+  function SampleNextArrow(props) {
+    // eslint-disable-next-line react/prop-types
+    const { className, style, onClick } = props;
+    const handleClick = () => {
+      onClick();
+      if (selectedNFTIndex < selectedNFT.allItems.length - 1) {
+        setSelectedNFTIndex(selectedNFTIndex + 1);
+      } else {
+        setSelectedNFTIndex(0);
+      }
+    };
+    return (
+      <button
+        type="button"
+        className={className}
+        style={{ ...style }}
+        onClick={handleClick}
+        aria-hidden="true"
+      >
+        <img src={rightArrow} alt="arrow right" />
+      </button>
+    );
+  }
+
+  function SamplePrevArrow(props) {
+    // eslint-disable-next-line react/prop-types
+    const { className, style, onClick } = props;
+    const handleClick = () => {
+      onClick();
+      if (selectedNFTIndex > 0) {
+        setSelectedNFTIndex(selectedNFTIndex - 1);
+      } else {
+        setSelectedNFTIndex(selectedNFT.allItems.length - 1);
+      }
+    };
+    return (
+      <button
+        type="button"
+        className={className}
+        style={{ ...style }}
+        onClick={handleClick}
+        aria-hidden="true"
+      >
+        <img src={leftArrow} alt="arrow left" />
+      </button>
+    );
+  }
+
   const sliderSettings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
   const highestBid = {
     userAvatar: unveiling,
@@ -239,26 +290,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     },
     []
   );
-
-  useEffect(() => {
-    // Prev Icon
-    const prev = document.querySelector('.slick-prev');
-    if (prev) {
-      const prevIcon = document.createElement('img');
-      prevIcon.src = leftArrow;
-      prev.innerHTML = '';
-      prev.appendChild(prevIcon);
-    }
-
-    // Next icon
-    const next = document.querySelector('.slick-next');
-    if (next) {
-      const nextIcon = document.createElement('img');
-      nextIcon.src = rightArrow;
-      next.innerHTML = '';
-      next.appendChild(nextIcon);
-    }
-  }, []);
 
   useEffect(() => {
     if (Number(window.innerWidth) <= 1230) {
