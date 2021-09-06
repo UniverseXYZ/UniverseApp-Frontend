@@ -9,7 +9,6 @@ import AuctionOwnerDetails from '../../components/auctionLandingPage/AuctionOwne
 import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
 import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../utils/fixtures/ActiveAuctionsDummyData';
 
 const AuctionLandingPage = () => {
   const { setDarkMode } = useContext(AppContext);
@@ -116,7 +115,7 @@ const AuctionLandingPage = () => {
     <div className="auction__landing__page">
       <AuctionDetails onAuction={selectedAuction} bidders={bidders} setBidders={setBidders} />
       <UniverseAuctionDetails />
-      <RewardTiers auction={PLACEHOLDER_ACTIVE_AUCTIONS.filter((a) => a.id === 1)[0]} />
+      <RewardTiers auction={selectedAuction} />
       <AuctionOwnerDetails artist={artist} />
       <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
       {artist && artist.personalLogo ? (

@@ -6,13 +6,14 @@ import Skeleton from 'react-loading-skeleton';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import Slider from 'react-slick';
-import leftArrow from '../../assets/images/arrow.svg';
-import darkCopyIcon from '../../assets/images/copy.svg';
-import lightCopyIcon from '../../assets/images/copy2.svg';
 import AppContext from '../../ContextAPI';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import PlaceBidPopup from '../popups/PlaceBidPopup.jsx';
 import Button from '../button/Button.jsx';
+import leftArrow from '../../assets/images/arrow.svg';
+import darkCopyIcon from '../../assets/images/copy.svg';
+import lightCopyIcon from '../../assets/images/copy2.svg';
+import smallCongratsIcon from '../../assets/images/congrats-small.png';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   const { loggedInArtist, myAuctions } = useContext(AppContext);
@@ -388,34 +389,34 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   </div>
                 </div>
               )}
-              {selectedAuctionEnded &&
-                currentBid &&
-                currentBid.rewardTier === 'Silver' &&
-                currentBid.bid <= 5 && (
-                  <Animated animationIn="zoomIn">
-                    <div className="ended__result">
-                      <div className="content">
-                        <h2 className="title">Unfortunately, your bid didn’t win</h2>
-                        <p className="desc">
-                          You are able to withdraw your funds by clicking the Withdraw button below.
-                          You can still buy individual NFTs from other sellers on NFT marketplaces.
-                        </p>
-                        <div className="view__rankings">
-                          <Popup trigger={<button type="button">View rankings</button>}>
-                            {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
-                          </Popup>
-                        </div>
-                      </div>
-                      <div className="footer">
-                        <Button className="light-button">Withdraw</Button>
+              {selectedAuctionEnded && currentBid && currentBid.bid <= 5 && (
+                <Animated animationIn="zoomIn">
+                  <div className="ended__result">
+                    <div className="content">
+                      <h2 className="title">Unfortunately, your bid didn’t win</h2>
+                      <p className="desc">
+                        You are able to withdraw your funds by clicking the Withdraw button below.
+                        You can still buy individual NFTs from other sellers on NFT marketplaces.
+                      </p>
+                      <div className="view__rankings">
+                        <Popup trigger={<button type="button">View rankings</button>}>
+                          {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
+                        </Popup>
                       </div>
                     </div>
-                  </Animated>
-                )}
+                    <div className="footer">
+                      <Button className="light-button">Withdraw</Button>
+                    </div>
+                  </div>
+                </Animated>
+              )}
               {selectedAuctionEnded && currentBid && currentBid.bid > 5 && (
                 <Animated animationIn="zoomIn">
                   <div className="ended__result">
                     <div className="content">
+                      <div className="icon">
+                        <img src={smallCongratsIcon} alt="Congrats" />
+                      </div>
                       <h2 className="title">Congratulations!</h2>
                       <p className="desc">
                         Your bid won the <b>{currentBid.rewardTier}</b> tier. You can claim your
