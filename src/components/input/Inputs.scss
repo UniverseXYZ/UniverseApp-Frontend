@@ -67,6 +67,7 @@
       &:focus::placeholder {
         color: transparent;
       }
+      
     }
 
     &:not(.error-div-inp) {
@@ -74,6 +75,7 @@
         &:focus {
           border-radius: 10px;
         }
+       
       }
       &:hover {
         .box--shadow--effect--block {
@@ -86,6 +88,9 @@
           }
           &:disabled {
             cursor: not-allowed;
+            &+.box--shadow--effect--block {
+              opacity: 0 !important;
+            }
           }
         }
       }
