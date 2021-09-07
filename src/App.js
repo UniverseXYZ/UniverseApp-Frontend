@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Contract, providers, utils } from 'ethers';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
@@ -35,10 +35,11 @@ import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
 
 const App = () => {
   const allCharactersFilter = 'All Characters';
-  const polymorphsFilter = 'My Polymorphs';
+  const polymorphsFilter = 'Polymorphs';
   const lobstersFilter = 'Lobby Lobsters';
 
   const location = useLocation();
+  const history = useHistory();
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
@@ -303,6 +304,14 @@ const App = () => {
     if (providerName === CONNECTORS_NAMES.WalletConnect) connectWithWalletConnect();
   };
 
+  const navigateToMyNFTsPage = (characterFilter) => {
+    setCollectionFilter(characterFilter);
+    setMyUniverseNFTsActiverPage(0);
+    setMyUniverseNFTsOffset(0);
+
+    history.push('/my-nfts');
+  };
+
   useEffect(async () => {
     setUserLobsters([]);
     setUserPolymorphs([]);
@@ -458,6 +467,7 @@ const App = () => {
         polymorphsFilter,
         lobstersFilter,
         allCharactersFilter,
+        navigateToMyNFTsPage,
       }}
     >
       <Header />

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
+import { useHistory } from 'react-router-dom';
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button.jsx';
 import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
@@ -9,6 +9,7 @@ import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
 import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg-left.png';
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
+import AppContext from '../../../ContextAPI';
 
 const BondingCurve = (props) => {
   const {
@@ -28,61 +29,83 @@ const BondingCurve = (props) => {
     trailingZeros,
     mintAction,
     title,
+    soldOut,
   } = props;
-
+  const history = useHistory();
+  const { lobstersFilter, navigateToMyNFTsPage } = useContext(AppContext);
   return (
-    <div className="welcome--slider--bonding--curve">
+    <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
         <h5>{title}</h5>
       </div>
-      <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
-      <div className="row3--section">
-        <QuantityUpDownGroup
-          value={quantity}
-          onChange={setQuantity}
-          labelText="Quantity"
-          btnLeftText={<div className="down--quantity" />}
-          btnRightText={
-            <>
-              <div className="up--quantity--horizontal" />
-              <div className="up--quantity--vertical" />
-            </>
-          }
-        />
-        {!mobile && !light && (
-          <Button
-            className="light-button dark"
-            onClick={() => mintAction(quantity)}
-            disabled={value >= max}
-          >
-            Mint now
-          </Button>
-        )}
-        {!mobile && light && (
-          <Button
-            className="light-button light"
-            onClick={() => mintAction(quantity)}
-            disabled={value >= max}
-          >
-            Mint now
-          </Button>
-        )}
-        <div className="price--block">
-          <p>
-            <span className="price--label">Price :</span>
-            <span>
-              <img
-                alt="img"
-                src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
-              />
-              {(quantity * price).toFixed(trailingZeros)}
-            </span>
-          </p>
+      <HorizontalSlider
+        max={max}
+        value={value}
+        min={min}
+        color1={color1}
+        color2={color2}
+        soldOut={soldOut}
+      />
+      {!soldOut ? (
+        <div className="row3--section">
+          <QuantityUpDownGroup
+            value={quantity}
+            onChange={setQuantity}
+            labelText="Quantity"
+            btnLeftText={<div className="down--quantity" />}
+            btnRightText={
+              <>
+                <div className="up--quantity--horizontal" />
+                <div className="up--quantity--vertical" />
+              </>
+            }
+          />
+          {!soldOut && !mobile && !light && (
+            <Button
+              className="light-button dark"
+              onClick={() => mintAction(quantity)}
+              disabled={value >= max}
+            >
+              Mint now
+            </Button>
+          )}
+          {!soldOut && !mobile && light && (
+            <Button
+              className="light-button light"
+              onClick={() => mintAction(quantity)}
+              disabled={value >= max}
+            >
+              Mint now
+            </Button>
+          )}
+          <div className="price--block">
+            <p>
+              <span className="price--label">Price :</span>
+              <span>
+                <img
+                  alt="img"
+                  src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
+                />
+                {(quantity * price).toFixed(trailingZeros)}
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
-      {!!mobile && !light && (
+      ) : (
+        <div className="row3--section--sold--out">
+          <Button
+            className={`light-button ${!mobile && !light ? 'dark' : 'light'}`}
+            onClick={() => {
+              navigateToMyNFTsPage(lobstersFilter);
+            }}
+          >
+            My Lobby Lobsters
+          </Button>
+        </div>
+      )}
+      {!soldOut && !!mobile && !light && (
         <Button
           className="light-button dark"
           onClick={() => mintAction(quantity)}
@@ -91,7 +114,7 @@ const BondingCurve = (props) => {
           Mint now
         </Button>
       )}
-      {!!mobile && light && (
+      {!soldOut && !!mobile && light && (
         <Button
           className="light-button light"
           onClick={() => mintAction(quantity)}
@@ -121,6 +144,7 @@ BondingCurve.propTypes = {
   trailingZeros: PropTypes.number.isRequired,
   mintAction: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  soldOut: PropTypes.bool,
 };
 
 BondingCurve.defaultProps = {
@@ -132,6 +156,7 @@ BondingCurve.defaultProps = {
   color2: 'black',
   mobile: false,
   blur: false,
+  soldOut: false,
 };
 
 export default BondingCurve;

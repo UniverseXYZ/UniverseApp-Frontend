@@ -38,7 +38,7 @@ const Polymorphs = () => {
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
   const { data } = useQuery(morphedPolymorphs);
-  const { ethPrice } = useContext(AppContext);
+  const { ethPrice, polymorphsFilter, navigateToMyNFTsPage } = useContext(AppContext);
 
   useLayoutEffect(() => {
     function handleResize() {
@@ -56,15 +56,18 @@ const Polymorphs = () => {
     if (+window.innerWidth <= 575) setMobile(true);
   }, [window.innerWidth]);
 
+  const redirectToMyPolymorphs = () => {
+    navigateToMyNFTsPage(polymorphsFilter);
+  };
   return (
     <div className="polymorphs">
       <WelcomeWrapper
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
-        popupBtnText="My polymorphs"
+        popupBtnText="My Polymorphs"
         btnText="Mint a morph"
-        btnOnClick={() => history.push('/my-nfts')}
-        btnAnotherOnClick={() => history.push('/my-nfts')}
+        btnOnClick={redirectToMyPolymorphs}
+        btnAnotherOnClick={redirectToMyPolymorphs}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}
