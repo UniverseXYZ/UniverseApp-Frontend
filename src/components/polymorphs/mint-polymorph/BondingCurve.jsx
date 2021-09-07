@@ -10,6 +10,7 @@ import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
 import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg-left.png';
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
+import AppContext from '../../../ContextAPI';
 
 const BondingCurve = (props) => {
   const {
@@ -35,7 +36,6 @@ const BondingCurve = (props) => {
   const { lobstersFilter, navigateToMyNFTsPage } = useContext(AppContext);
   return (
     <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>
-
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
@@ -146,7 +146,6 @@ BondingCurve.propTypes = {
   mintAction: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   soldOut: PropTypes.bool,
-
 };
 
 BondingCurve.defaultProps = {
