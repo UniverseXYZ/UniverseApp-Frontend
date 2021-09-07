@@ -12,7 +12,7 @@ const LobsterTrait = ({ traitData }) => {
     const data = await queryLobstersGraph(lobsterTraitRarity(traitData.chance));
 
     if (data?.traits?.length) {
-      const rarityText = `${Math.round(data.traits[0]?.rarity, 10)}% have this trait`;
+      const rarityText = `${parseFloat(data.traits[0]?.rarity).toFixed(2)}% have this trait`;
       setRarity(rarityText);
     }
   };
