@@ -32,7 +32,7 @@ const BondingCurve = (props) => {
     soldOut,
   } = props;
   const history = useHistory();
-
+  const { lobstersFilter, navigateToMyNFTsPage } = useContext(AppContext);
   return (
     <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
@@ -98,7 +98,7 @@ const BondingCurve = (props) => {
           <Button
             className={`light-button ${!mobile && !light ? 'dark' : 'light'}`}
             onClick={() => {
-              history.push('/my-nfts');
+              navigateToMyNFTsPage(lobstersFilter);
             }}
           >
             My Lobby Lobsters

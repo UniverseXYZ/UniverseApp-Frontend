@@ -60,6 +60,8 @@ const DesktopView = ({
     setYourBalance,
     setUsdEthBalance,
     resetConnectionState,
+    navigateToMyNFTsPage,
+    allCharactersFilter,
   } = useContext(AppContext);
 
   return (
@@ -303,7 +305,7 @@ const DesktopView = ({
                 <button
                   type="button"
                   onClick={() => {
-                    history.push('/my-nfts');
+                    navigateToMyNFTsPage(allCharactersFilter);
                     setIsAccountDropdownOpened(false);
                   }}
                 >

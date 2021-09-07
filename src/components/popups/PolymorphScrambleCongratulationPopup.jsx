@@ -10,6 +10,7 @@ import person from '../../assets/images/randomise-person-images/person.png';
 const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, polymorph }) => {
   // const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
   const history = useHistory();
+  const { polymorphsFilter, navigateToMyNFTsPage } = useContext(AppContext);
 
   return (
     <div className="polymorph_popup">
@@ -20,8 +21,13 @@ const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, pol
         <img src={polymorph?.data?.image} alt="soldier" key={uuid()} />
       </div>
       <div className="button__div_polymorph">
-        <Button className="light-button" onClick={() => history.push('/my-nfts')}>
-          My polymorphs
+        <Button
+          className="light-button"
+          onClick={() => {
+            navigateToMyNFTsPage(polymorphsFilter);
+          }}
+        >
+          My Polymorphs
         </Button>
         <Button
           className="light-border-button"

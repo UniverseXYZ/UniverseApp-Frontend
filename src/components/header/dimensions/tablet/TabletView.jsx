@@ -61,6 +61,8 @@ const TabletView = (props) => {
     setAddress,
     setYourBalance,
     setUsdEthBalance,
+    navigateToMyNFTsPage,
+    allCharactersFilter,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -164,7 +166,7 @@ const TabletView = (props) => {
                   <button
                     type="button"
                     onClick={() => {
-                      history.push('/my-nfts');
+                      navigateToMyNFTsPage(allCharactersFilter);
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
