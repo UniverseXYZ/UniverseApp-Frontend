@@ -9,21 +9,23 @@ const calculate = (value, max, min) => {
 };
 
 const HorizontalSlider = (props) => {
-  const { min, max, value, color1, color2 } = props;
+  const { min, max, value, color1, color2, soldOut } = props;
   return (
     <div className="parent--horizontall--slider">
       <div
         className="child--horizontall--slider"
-        style={{ width: `${calculate(value, max, min)}%` }}
+        style={{ width: `${!soldOut ? calculate(value, max, min) : 100}%` }}
       />
       <p
         className="horizontall--scroll--value"
         style={{
-          width: `${calculate(value, max, min) > 30 ? calculate(value, max, min) : 30}%`,
-          color: calculate(value, max, min) < 7 ? color1 : color2,
+          width: `${
+            !soldOut ? (calculate(value, max, min) > 30 ? calculate(value, max, min) : 30) : 100
+          }%`,
+          color: calculate(value, max, min) < 7 && !soldOut ? color1 : color2,
         }}
       >
-        {value < max ? <span> {`${value}/${max}`} minted</span> : <span>Sold out</span>}
+        {!soldOut ? <span> {`${value}/${max}`} minted</span> : <span>Sold out</span>}
       </p>
     </div>
   );
@@ -35,6 +37,7 @@ HorizontalSlider.propTypes = {
   value: PropTypes.number,
   color1: PropTypes.string,
   color2: PropTypes.string,
+  soldOut: PropTypes.bool,
 };
 
 HorizontalSlider.defaultProps = {
@@ -43,6 +46,7 @@ HorizontalSlider.defaultProps = {
   value: 0,
   color1: 'white',
   color2: 'black',
+  soldOut: false,
 };
 
 export default HorizontalSlider;

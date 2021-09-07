@@ -73,6 +73,8 @@ const MobileView = (props) => {
     setAddress,
     setYourBalance,
     setUsdEthBalance,
+    allCharactersFilter,
+    navigateToMyNFTsPage,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -176,7 +178,7 @@ const MobileView = (props) => {
                   <button
                     type="button"
                     onClick={() => {
-                      history.push('/my-nfts');
+                      navigateToMyNFTsPage(allCharactersFilter);
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
