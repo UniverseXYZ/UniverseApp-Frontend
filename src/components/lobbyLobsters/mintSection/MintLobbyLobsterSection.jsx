@@ -112,6 +112,7 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
             light={false}
             trailingZeros={1}
             mintAction={mintLobsters}
+            soldOut
           />
         </div>
       </div>
