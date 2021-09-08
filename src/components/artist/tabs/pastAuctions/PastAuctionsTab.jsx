@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 import Pagination from '../../../pagination/Pagionation.jsx';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
 import PastAuctionsList from './PastAuctionsList.jsx';
@@ -8,21 +10,24 @@ import AppContext from '../../../../ContextAPI.js';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 
-const PastAuctionsTab = () => {
+const PastAuctionsTab = ({ onArtist }) => {
+  const { loggedInArtist, myAuctions } = useContext(AppContext);
+  const history = useHistory();
+
   const location = useLocation();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
-  const artistPastAuctions = PLACEHOLDER_PAST_AUCTIONS.filter(
-    (auction) => auction.artist.id === location.state.id
-  );
-  const history = useHistory();
-  const { loggedInArtist } = useContext(AppContext);
+
+  const artistPastAuctions =
+    loggedInArtist.id === onArtist?.id
+      ? myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()))
+      : PLACEHOLDER_PAST_AUCTIONS;
 
   return artistPastAuctions.length ? (
     <>
-      <PastAuctionsList data={artistPastAuctions} perPage={perPage} offset={offset} />
+      <PastAuctionsList data={PLACEHOLDER_PAST_AUCTIONS} perPage={perPage} offset={offset} />
       <div className="pagination__container">
-        <Pagination data={artistPastAuctions} perPage={perPage} setOffset={setOffset} />
+        <Pagination data={PLACEHOLDER_PAST_AUCTIONS} perPage={perPage} setOffset={setOffset} />
         <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
       </div>
     </>
@@ -56,6 +61,10 @@ const PastAuctionsTab = () => {
       </button>
     </div>
   );
+};
+
+PastAuctionsTab.propTypes = {
+  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default PastAuctionsTab;
