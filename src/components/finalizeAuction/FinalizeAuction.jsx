@@ -315,6 +315,7 @@ const FinalizeAuction = () => {
                         <img className="checkmark" src={completedCheckmark} alt="Deposited" />
                       </Button>
                     ) : (
+                      // <Button className="light-border-button">Withdraw</Button>
                       <Button className="light-button" disabled>
                         Deposit
                       </Button>
