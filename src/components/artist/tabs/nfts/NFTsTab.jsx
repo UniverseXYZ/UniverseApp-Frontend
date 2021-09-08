@@ -16,7 +16,7 @@ const NFTsTab = ({ onArtist }) => {
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const history = useHistory();
-  const [quantity, setQuantity] = useState(2);
+  const [quantity, setQuantity] = useState(8);
 
   return data.length ? (
     <>
@@ -27,7 +27,7 @@ const NFTsTab = ({ onArtist }) => {
           .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
       </div>
       {data.filter((nft) => !nft.hidden).length >= quantity && (
-        <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={2} />
+        <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
       )}
     </>
   ) : (
