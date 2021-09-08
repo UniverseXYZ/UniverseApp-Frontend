@@ -1,17 +1,20 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
+import './CreateSingleNft.scss';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
+import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
-import { useLocation } from 'react-router-dom';
-import './CreateSingleNft.scss';
 import EthereumAddress from 'ethereum-address';
+import { RouterPrompt } from '../../../utils/routerPrompt';
+import AppContext from '../../../ContextAPI';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
-import AppContext from '../../../ContextAPI';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
-import AreYouSurePopup from '../../popups/AreYouSurePopup';
+import AreYouSurePopup from '../../popups/AreYouSurePopup.jsx';
+import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
+import SuccessPopup from '../../popups/SuccessPopup.jsx';
 import arrow from '../../../assets/images/arrow.svg';
 import infoIcon from '../../../assets/images/icon.svg';
 import defaultImage from '../../../assets/images/default-img.svg';
@@ -23,12 +26,12 @@ import createIcon from '../../../assets/images/create.svg';
 import delIcon from '../../../assets/images/red-delete.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
-import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
-import SuccessPopup from '../../popups/SuccessPopup.jsx';
-import { RouterPrompt } from '../../../utils/routerPrompt';
+import creatorTestImage from '../../../assets/images/marketplace/users/user1.png';
+import nftTestImage from '../../../assets/images/marketplace/nfts/nft1.png';
 
 const SingleNFTSettings = () => {
   const {
+    loggedInArtist,
     savedNfts,
     setSavedNfts,
     setShowModal,
@@ -222,30 +225,46 @@ const SingleNFTSettings = () => {
 
   const closeCongratsPopupEvent = () => {
     const mintingGeneratedEditions = [];
+    const allItems = [];
 
-    for (let i = 0; i < editions; i += 1) {
-      mintingGeneratedEditions.push(uuid().split('-')[0]);
+    for (let i = 0; i < Number(editions); i += 1) {
+      allItems.push({
+        id: uuid(),
+        url: nftTestImage,
+        type: 'image/png',
+      });
     }
+
     if (selectedCollection) {
       setMyNFTs([
         ...myNFTs,
         {
           id: uuid(),
-          type: 'collection',
-          collectionId: selectedCollection.id,
-          collectionName: selectedCollection.name,
-          collectionAvatar: selectedCollection.previewImage,
-          collectionDescription: selectedCollection.description,
-          shortURL: selectedCollection.shortURL,
-          tokenName: selectedCollection.tokenName,
-          previewImage,
+          type: Number(editions) > 1 ? 'bundles' : 'single',
+          creator: {
+            id: loggedInArtist.id,
+            name: loggedInArtist.name || 'John Doe',
+            avatar: loggedInArtist.avatar || creatorTestImage,
+          },
+          collection: {
+            id: selectedCollection.id,
+            name: selectedCollection.name,
+            avatar: selectedCollection.previewImage,
+          },
+          owner: {
+            id: loggedInArtist.id,
+            name: loggedInArtist.name || 'John Doe',
+            avatar: loggedInArtist.avatar || creatorTestImage,
+          },
+          likers: [],
+          allItems,
+          media: previewImage,
           name,
           description,
           numberOfEditions: Number(editions),
-          generatedEditions: mintingGeneratedEditions,
           properties,
-          percentAmount,
-          releasedDate: new Date(),
+          royaltyAddress,
+          state: 'new',
         },
       ]);
     } else {
@@ -253,15 +272,26 @@ const SingleNFTSettings = () => {
         ...myNFTs,
         {
           id: uuid(),
-          type: 'single',
-          previewImage,
+          type: Number(editions) > 1 ? 'bundles' : 'single',
+          creator: {
+            id: loggedInArtist.id,
+            name: loggedInArtist.name || 'John Doe',
+            avatar: loggedInArtist.avatar || creatorTestImage,
+          },
+          owner: {
+            id: loggedInArtist.id,
+            name: loggedInArtist.name || 'John Doe',
+            avatar: loggedInArtist.avatar || creatorTestImage,
+          },
+          likers: [],
+          allItems,
+          media: previewImage,
           name,
           description,
           numberOfEditions: Number(editions),
-          generatedEditions: mintingGeneratedEditions,
           properties,
-          percentAmount,
-          releasedDate: new Date(),
+          royaltyAddress,
+          state: 'new',
         },
       ]);
     }
