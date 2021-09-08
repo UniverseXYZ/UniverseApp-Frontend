@@ -108,7 +108,7 @@ const NFTCard = ({ nft }) => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1000);
   }, []);
 
   const handleClickOutside = (event) => {
