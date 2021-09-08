@@ -512,13 +512,14 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           <input type="file" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
         </div>
         <div className="collection--name--and--token">
-          <div className="collection--name">
+          <div className={`collection--name ${savedCollectionID ? 'inactive' : ''}`}>
             <Input
               label="Collection name"
               error={errors.collectionName}
               placeholder="Enter the collection name"
               onChange={(e) => handleCollectionName(e.target.value)}
               value={collectionName}
+              disabled={savedCollectionID}
               hoverBoxShadowGradient
             />
           </div>

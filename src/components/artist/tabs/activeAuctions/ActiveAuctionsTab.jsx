@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Pagination from '../../../pagination/Pagionation.jsx';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
 import ActiveAuctionsList from './ActiveAuctionsList.jsx';
@@ -8,21 +9,24 @@ import AppContext from '../../../../ContextAPI.js';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 
-const ActiveAuctionsTab = () => {
-  const { myAuctions, activeAuctions, futureAuctions, loggedInArtist } = useContext(AppContext);
+const ActiveAuctionsTab = ({ onArtist }) => {
+  const { loggedInArtist, myAuctions } = useContext(AppContext);
+  const history = useHistory();
+
   const location = useLocation();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
-  const artistActiveAuctions = PLACEHOLDER_ACTIVE_AUCTIONS.filter(
-    (auction) => auction.artist.id === location.state.id
-  );
-  const history = useHistory();
+
+  const artistActiveAuctions =
+    loggedInArtist.id === onArtist?.id
+      ? myAuctions.filter((item) => item.launch)
+      : PLACEHOLDER_ACTIVE_AUCTIONS;
 
   return artistActiveAuctions.length ? (
     <>
-      <ActiveAuctionsList data={artistActiveAuctions} perPage={perPage} offset={offset} />
+      <ActiveAuctionsList data={PLACEHOLDER_ACTIVE_AUCTIONS} perPage={perPage} offset={offset} />
       <div className="pagination__container">
-        <Pagination data={artistActiveAuctions} perPage={perPage} setOffset={setOffset} />
+        <Pagination data={PLACEHOLDER_ACTIVE_AUCTIONS} perPage={perPage} setOffset={setOffset} />
         <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
       </div>
     </>
@@ -56,6 +60,10 @@ const ActiveAuctionsTab = () => {
       </button>
     </div>
   );
+};
+
+ActiveAuctionsTab.propTypes = {
+  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default ActiveAuctionsTab;

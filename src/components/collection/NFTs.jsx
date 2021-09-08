@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import NFTPopup from '../popups/NFTPopup.jsx';
-import hideIcon from '../../assets/images/hide.svg';
+import hideIcon from '../../assets/images/hide-nft.svg';
 import AppContext from '../../ContextAPI';
 
 const NFTs = ({ filteredNFTs }) => {

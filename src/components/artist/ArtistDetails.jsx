@@ -38,9 +38,9 @@ const ArtistDetails = ({ onArtist }) => {
                 <h1 className="title">{onArtist.name}</h1>
                 <p className="desc">{onArtist.about}</p>
                 <div className="social__links">
-                  <Button className="light-border-button">
+                  {/* <Button className="light-border-button">
                     Edit <img src={pencilIcon} alt="Pencil" />
-                  </Button>
+                  </Button> */}
                   <a href={onArtist.instagramUrl} target="_blank" rel="noreferrer">
                     <img src={instagramIcon} alt="Instagram" />
                   </a>
@@ -82,7 +82,7 @@ const ArtistDetails = ({ onArtist }) => {
                 <h1 className="title">{loggedInArtist.name}</h1>
                 <p className="desc">{loggedInArtist.about}</p>
                 <div className="social__links">
-                  <Button
+                  {/* <Button
                     className="light-border-button"
                     onClick={() => {
                       history.push('/my-account');
@@ -90,7 +90,7 @@ const ArtistDetails = ({ onArtist }) => {
                     }}
                   >
                     Edit <img src={pencilIcon} alt="Pencil" />
-                  </Button>
+                  </Button> */}
                   {loggedInArtist.instagramLink ? (
                     <a
                       href={`https://www.instagram.com/${loggedInArtist.instagramLink}`}

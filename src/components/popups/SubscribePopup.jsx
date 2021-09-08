@@ -4,6 +4,7 @@ import axios from 'axios';
 import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
 import Button from '../button/Button.jsx';
+import Input from '../input/Input';
 
 const SubscribePopup = ({ close, showCongrats }) => {
   const [email, setEmail] = useState('');
@@ -54,11 +55,12 @@ const SubscribePopup = ({ close, showCongrats }) => {
             <h1 className="title">Subscribe for news & updates</h1>
             <p className="desc">Don’t miss the updates from us!</p>
             <div className="subscribe__form">
-              <input
+              <Input
                 type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                hoverBoxShadowGradient
               />
               <Button className="light-button w-100" onClick={handleSubscribe}>
                 Subscribe
