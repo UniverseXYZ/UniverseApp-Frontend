@@ -8,6 +8,7 @@ import infoIcon from '../../assets/images/icon.svg';
 import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
+import Input from '../input/Input.jsx';
 
 const PlaceBidPopup = ({
   onClose,
@@ -120,12 +121,13 @@ const PlaceBidPopup = ({
           </p>
           <div className="bid__form">
             <span>Your bid</span>
-            <input
+            <Input
               id="your-bid"
               type="text"
               placeholder="Enter your bid amount"
               value={yourBid}
               onChange={(e) => handleInputChange(e.target.value)}
+              hoverBoxShadowGradient
             />
             <div className="currency">
               <img src={currencyIcon} alt="Currency ETH" />
