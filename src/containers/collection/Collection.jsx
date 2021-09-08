@@ -10,10 +10,20 @@ import Description from '../../components/collection/Description.jsx';
 import Filters from '../../components/collection/Filters.jsx';
 import MintModal from '../../components/mintModal/MintModal.jsx';
 import NFTs from '../../components/collection/NFTs.jsx';
+import Button from '../../components/button/Button.jsx';
+import pencilIcon from '../../assets/images/edit.svg';
 
 const Collection = () => {
-  const { myNFTs, savedNfts, setDarkMode, showModal, setShowModal, deployedCollections } =
-    useContext(AppContext);
+  const {
+    myNFTs,
+    savedNfts,
+    setDarkMode,
+    showModal,
+    setShowModal,
+    deployedCollections,
+    setSavedCollectionID,
+    setActiveView,
+  } = useContext(AppContext);
   const location = useLocation();
   const selectedCollection = location.state ? location.state.collection : null;
   const [collectionNFTs, setCollectionNFTs] = useState([]);
@@ -68,6 +78,11 @@ const Collection = () => {
     }
   }, [deployedCollections]);
 
+  const handleEdit = (id) => {
+    setSavedCollectionID(id);
+    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
+  };
+  console.log(selectedCollection);
   return selectedCollection ? (
     <div className="collection__page">
       <Cover selectedCollection={selectedCollection} />
@@ -76,17 +91,24 @@ const Collection = () => {
         <div className="collection__details__container">
           <Avatar selectedCollection={selectedCollection} />
           <Title selectedCollection={selectedCollection} saved={location.state.saved} />
-          <Description selectedCollection={selectedCollection} />
-          {collectionNFTs.filter((nft) => !nft.hidden).length ? (
-            <>
-              <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
-              <NFTs filteredNFTs={filteredNFTs} />
-            </>
-          ) : (
-            <></>
-          )}
+
           {showModal && <MintModal open={showModal} onClose={handleClose} />}
         </div>
+        <Description selectedCollection={selectedCollection} />
+        <div className="collection__edit">
+          <Button className="light-border-button" onClick={() => handleEdit(selectedCollection.id)}>
+            <span>Edit</span>
+            <img src={pencilIcon} alt="Edit Icon" />
+          </Button>
+        </div>
+        {collectionNFTs.filter((nft) => !nft.hidden).length ? (
+          <>
+            <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
+            <NFTs filteredNFTs={filteredNFTs} />
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   ) : (
