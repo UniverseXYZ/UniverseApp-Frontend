@@ -87,6 +87,20 @@
         .owner--details {
           position: relative;
           cursor: pointer;
+          .random--bg--color {
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $sharpGroteskMediumFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: $black;
+          }
           .tooltiptext {
             visibility: hidden;
             font-family: $spaceGroteskFont;
