@@ -10,6 +10,7 @@ import pencilIcon from '../../assets/images/edit.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
+import arrowLeft from '../../assets/images/arrow-black.svg';
 
 const ArtistDetails = ({ onArtist }) => {
   const { loggedInArtist, setEditProfileButtonClick } = useContext(AppContext);
@@ -28,6 +29,12 @@ const ArtistDetails = ({ onArtist }) => {
     <div className="artist__details__section">
       {!loading ? (
         <Animated animationIn="zoomIn">
+          <div className="back__to__editing__btn">
+            <button type="button" onClick={() => history.push('/my-account')}>
+              <img src={arrowLeft} alt="arrow-back" />
+              Back to editing
+            </button>
+          </div>
           {loggedInArtist.id !== onArtist.id ? (
             <div className="artist__details__section__container">
               <div className="avatar">

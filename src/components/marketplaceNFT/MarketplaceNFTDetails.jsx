@@ -973,14 +973,24 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             </div>
             {selectedNFT.collection && (
               <div className="Marketplace--creators">
-                <img
-                  src={
-                    typeof selectedNFT.collection.avatar === 'string'
-                      ? selectedNFT.collection.avatar
-                      : URL.createObjectURL(selectedNFT.collection.avatar)
-                  }
-                  alt="icon1"
-                />
+                {typeof selectedNFT.collection.avatar === 'string' &&
+                selectedNFT.collection.avatar.startsWith('#') ? (
+                  <div
+                    className="random--bg--color"
+                    style={{ backgroundColor: selectedNFT.collection.avatar }}
+                  >
+                    {selectedNFT.collection.name.charAt(0)}
+                  </div>
+                ) : (
+                  <img
+                    src={
+                      typeof selectedNFT.collection.avatar === 'string'
+                        ? selectedNFT.collection.avatar
+                        : URL.createObjectURL(selectedNFT.collection.avatar)
+                    }
+                    alt={selectedNFT.collection.name}
+                  />
+                )}
                 <div className="creator--name">
                   <p>Collection</p>
                   <h6>{selectedNFT.collection.name}</h6>
