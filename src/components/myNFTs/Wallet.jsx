@@ -19,6 +19,7 @@ import plusIcon from '../../assets/images/PlusIcon.png';
 import Input from '../input/Input';
 import searchIcon from '../../assets/images/search-gray.svg';
 import NFTCard from '../nft/NFTCard';
+import LoadMore from '../pagination/LoadMore';
 
 const Wallet = ({
   filteredNFTs,
@@ -36,7 +37,7 @@ const Wallet = ({
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(8);
   const ref = useRef(null);
   const refMobile = useRef(null);
   const [collections, setCollections] = useState([]);
@@ -45,6 +46,7 @@ const Wallet = ({
   const [indexes, setIndexes] = useState([]);
   const [previewNFTs, setPreviewNFTs] = useState([]);
   const history = useHistory();
+  const [quantity, setQuantity] = useState(8);
 
   const saveIndexes = (index) => {
     const temp = [...indexes];
@@ -431,20 +433,22 @@ const Wallet = ({
                 nftsPerWinner={Number(nftsPerWinner)}
               /> */}
               <div className="nfts__lists">
-                {myNFTs.map((nft) => (
-                  <NFTCard nft={nft} key={nft.id} />
-                ))}
+                {myNFTs
+                  .filter((nft) => !nft.hidden)
+                  .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
               </div>
 
-              <div className="pagination__container">
+              {myNFTs.filter((nft) => !nft.hidden).length >= quantity && (
+                <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
+              )}
+
+              {/* <div className="pagination__container">
                 <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
                 <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-              </div>
+              </div> */}
             </>
           ) : (
-            <div className="empty__filter__nfts">
-              <h3>No NFTs found</h3>
-            </div>
+            <></>
           )}
         </>
       ) : (
