@@ -438,7 +438,7 @@ const Wallet = ({
                   .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
               </div>
 
-              {myNFTs.filter((nft) => !nft.hidden).length >= quantity && (
+              {myNFTs.filter((nft) => !nft.hidden).length > quantity && (
                 <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
               )}
 
