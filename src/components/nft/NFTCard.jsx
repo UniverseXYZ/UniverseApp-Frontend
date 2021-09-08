@@ -108,7 +108,7 @@ const NFTCard = ({ nft }) => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1000);
   }, []);
 
   const handleClickOutside = (event) => {
@@ -141,14 +141,24 @@ const NFTCard = ({ nft }) => {
           </div>
           {nft.collection && (
             <div className="collection--details">
-              <img
-                src={
-                  typeof nft.collection.avatar === 'string'
-                    ? nft.collection.avatar
-                    : URL.createObjectURL(nft.collection.avatar)
-                }
-                alt={nft.collection.name}
-              />
+              {typeof nft.collection.avatar === 'string' &&
+              nft.collection.avatar.startsWith('#') ? (
+                <div
+                  className="random--bg--color"
+                  style={{ backgroundColor: nft.collection.avatar }}
+                >
+                  {nft.collection.name.charAt(0)}
+                </div>
+              ) : (
+                <img
+                  src={
+                    typeof nft.collection.avatar === 'string'
+                      ? nft.collection.avatar
+                      : URL.createObjectURL(nft.collection.avatar)
+                  }
+                  alt={nft.collection.name}
+                />
+              )}
               <span className="tooltiptext">{`Collection: ${nft.collection.name}`}</span>
             </div>
           )}

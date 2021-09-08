@@ -18,19 +18,19 @@ const CongratsProfilePopup = ({ onClose }) => {
         <img src={successImg} alt="Success" />
       </div>
       <div className="popup-title">
-        <h4>Congratulations!</h4>
+        <h4>Success!</h4>
       </div>
       <div className="popup-text">
         <p>Your profile was successfully set up.</p>
       </div>
       <div className="popup-btns">
         <Button
-          className="light-border-button"
+          className="light-button"
           onClick={() => {
             history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id });
           }}
         >
-          Go to your Universe page
+          Go to my profile
         </Button>
       </div>
     </div>

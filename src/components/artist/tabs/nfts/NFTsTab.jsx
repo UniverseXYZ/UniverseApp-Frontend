@@ -1,33 +1,34 @@
 import React, { useContext, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import NFTsList from './NFTsList';
 import { PLACEHOLDER_NFTS } from '../../../../utils/fixtures/NFTsDummyData';
 import NFTsFilters from './Filters.jsx';
-import Pagination from '../../../pagination/Pagionation.jsx';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
 import AppContext from '../../../../ContextAPI';
 import bubbleIcon from '../../../../assets/images/text-bubble.png';
 import Button from '../../../button/Button';
 import plusIcon from '../../../../assets/images/PlusIcon.png';
+import LoadMore from '../../../pagination/LoadMore';
+import NFTCard from '../../../nft/NFTCard';
 
 const NFTsTab = ({ onArtist }) => {
   const { loggedInArtist, myNFTs } = useContext(AppContext);
-  const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
   const data = loggedInArtist.id === onArtist.id ? myNFTs : PLACEHOLDER_NFTS;
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const history = useHistory();
+  const [quantity, setQuantity] = useState(8);
 
   return data.length ? (
     <>
       <NFTsFilters />
-      <NFTsList data={data} perPage={perPage} offset={offset} />
-      <div className="pagination__container">
-        <Pagination data={data} perPage={perPage} setOffset={setOffset} />
-        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+      <div className="nfts__lists">
+        {data
+          .filter((nft) => !nft.hidden)
+          .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
       </div>
+      {data.filter((nft) => !nft.hidden).length >= quantity && (
+        <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
+      )}
     </>
   ) : (
     <div className="empty__nfts">

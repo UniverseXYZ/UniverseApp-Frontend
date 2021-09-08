@@ -25,6 +25,7 @@ import EmptyTabs from '../tabs/EmptyTabs';
 import HiddenNFTs from './HiddenNFTs';
 import plusIcon from '../../assets/images/PlusIcon.png';
 import NFTsActivity from './NFTsActivity';
+import LikedNFTs from './LikedNFTs';
 
 const MyNFTs = () => {
   const {
@@ -45,7 +46,15 @@ const MyNFTs = () => {
     setMyNFTsSelectedTabIndex,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
-  const tabs = ['Wallet', 'Collections', 'Saved NFTs', 'Universe NFTs', 'Hidden', 'Activity'];
+  const tabs = [
+    'Wallet',
+    'Collections',
+    'Saved NFTs',
+    'Universe NFTs',
+    'Hidden',
+    'Liked',
+    'Activity',
+  ];
   const emptyTabs = ['Wallet', 'Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const location = useLocation();
@@ -171,6 +180,8 @@ const MyNFTs = () => {
             ? UNIVERSE_NFTS.length
             : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0
             ? myNFTs.filter((nft) => nft.hidden).length
+            : index === 5 && myNFTs.filter((nft) => nft.likers.length).length > 0
+            ? myNFTs.filter((nft) => nft.likers.length).length
             : null,
         // label:
         //   index === 2 && savedNfts.length > 0
@@ -463,7 +474,8 @@ const MyNFTs = () => {
         {myNFTsSelectedTabIndex === 2 && <SavedNFTs />}
         {myNFTsSelectedTabIndex === 3 && <UniverseNFTs />}
         {myNFTsSelectedTabIndex === 4 && <HiddenNFTs />}
-        {myNFTsSelectedTabIndex === 5 && <NFTsActivity />}
+        {myNFTsSelectedTabIndex === 5 && <LikedNFTs />}
+        {myNFTsSelectedTabIndex === 6 && <NFTsActivity />}
       </div>
     </>
   );
