@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
+import { useHistory } from 'react-router-dom';
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button.jsx';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup.jsx';
@@ -11,6 +12,7 @@ import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
 import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg-left.png';
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
+import AppContext from '../../../ContextAPI';
 
 const BondingCurve = (props) => {
   const {
@@ -30,6 +32,8 @@ const BondingCurve = (props) => {
     light,
     loadingImage,
   } = props;
+  const { setMyNFTsSelectedTabIndex } = useContext(AppContext);
+  const history = useHistory();
 
   const mintPolymorph = () => {
     if (value + quantity <= max) {
@@ -45,7 +49,7 @@ const BondingCurve = (props) => {
   };
 
   return (
-    <div className="welcome--slider--bonding--curve">
+    <div className={`welcome--slider--bonding--curve ${value >= max ? 'sold--out' : ''}`}>
       <Popup
         trigger={
           <button
@@ -82,48 +86,62 @@ const BondingCurve = (props) => {
         <h5>{title}</h5>
       </div>
       <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
-      <div className="row3--section">
-        <QuantityUpDownGroup
-          value={quantity}
-          onChange={setQuantity}
-          labelText="Quantity"
-          btnLeftText={<div className="down--quantity" />}
-          btnRightText={
-            <>
-              <div className="up--quantity--horizontal" />
-              <div className="up--quantity--vertical" />
-            </>
-          }
-        />
-        {!mobile && !light && (
-          <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
-            Mint now
-          </Button>
-        )}
-        {!mobile && light && (
-          <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
-            Mint now
-          </Button>
-        )}
-        <div className="price--block">
-          <p>
-            <span className="price--label">Price :</span>
-            <span>
-              <img
-                alt="img"
-                src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
-              />
-              {price === 0.1 ? (quantity * price).toFixed(1) : (quantity * price).toFixed(4)}
-            </span>
-          </p>
+      {value < max ? (
+        <div className="row3--section">
+          <QuantityUpDownGroup
+            value={quantity}
+            onChange={setQuantity}
+            labelText="Quantity"
+            btnLeftText={<div className="down--quantity" />}
+            btnRightText={
+              <>
+                <div className="up--quantity--horizontal" />
+                <div className="up--quantity--vertical" />
+              </>
+            }
+          />
+          {value < max && !mobile && !light && (
+            <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+              Mint now
+            </Button>
+          )}
+          {value < max && !mobile && light && (
+            <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
+              Mint now
+            </Button>
+          )}
+          <div className="price--block">
+            <p>
+              <span className="price--label">Price :</span>
+              <span>
+                <img
+                  alt="img"
+                  src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
+                />
+                {price === 0.1 ? (quantity * price).toFixed(1) : (quantity * price).toFixed(4)}
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
-      {!!mobile && !light && (
+      ) : (
+        <div className="row3--section--sold--out">
+          <Button
+            className={`light-button ${!mobile && !light ? 'dark' : 'light'}`}
+            onClick={() => {
+              history.push('/my-nfts');
+              setMyNFTsSelectedTabIndex(3);
+            }}
+          >
+            My Lobby Lobsters
+          </Button>
+        </div>
+      )}
+      {value < max && !!mobile && !light && (
         <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
           Mint now
         </Button>
       )}
-      {!!mobile && light && (
+      {value < max && !!mobile && light && (
         <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
           Mint now
         </Button>

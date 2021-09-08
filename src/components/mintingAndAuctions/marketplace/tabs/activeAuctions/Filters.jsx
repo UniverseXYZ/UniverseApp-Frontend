@@ -69,11 +69,12 @@ const ActiveAuctionsFilters = () => {
           )}
         </div>
         <div className="search">
-          <input
+          <Input
             type="text"
             placeholder="Search auctions by name or artist"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            hoverBoxShadowGradient
           />
           <img src={searchIcon} alt="Search" />
         </div>

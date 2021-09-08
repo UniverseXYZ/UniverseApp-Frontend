@@ -923,6 +923,9 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 32px;
+    img {
+      max-width: 220px;
+    }
   }
   .congrats__title {
     font-family: $sharpGroteskSemiBoldFont;

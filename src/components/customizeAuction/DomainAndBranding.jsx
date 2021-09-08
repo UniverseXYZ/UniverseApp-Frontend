@@ -97,9 +97,9 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                   ? 'inp error-inp'
                   : 'inp'
               }
-              // onFocus
               value={values.headline}
               onChange={handleHeadline}
+              hoverBoxShadowGradient
             />
             {(editButtonClick || !validHeadline) && !values.headline && (
               <p className="error__text">&quot;Auction headline&quot; is not allowed to be empty</p>

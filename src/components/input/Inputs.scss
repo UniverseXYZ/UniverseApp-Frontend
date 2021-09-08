@@ -59,14 +59,17 @@
       &::placeholder {
         color: rgba(0, 0, 0, 0.2);
       }
-      &:focus {
-        background: linear-gradient($white, $white) padding-box,
-          linear-gradient(to right, #bceb00, #00eaea) border-box;
-        border: 1px solid transparent!important;
+      &:not(.error-inp) {
+        &:focus {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent!important;
+        }
+        &:focus::placeholder {
+          color: transparent;
+        }
       }
-      &:focus::placeholder {
-        color: transparent;
-      }
+      
     }
 
     &:not(.error-div-inp) {
@@ -74,6 +77,7 @@
         &:focus {
           border-radius: 10px;
         }
+       
       }
       &:hover {
         .box--shadow--effect--block {
@@ -86,6 +90,9 @@
           }
           &:disabled {
             cursor: not-allowed;
+            &+.box--shadow--effect--block {
+              opacity: 0 !important;
+            }
           }
         }
       }

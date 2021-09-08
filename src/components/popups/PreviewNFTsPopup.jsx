@@ -74,12 +74,8 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             style={{ height: '100%' }}
           >
             <img
-              src={
-                onTier.nfts[selectedNFTIndex].previewImage
-                  ? URL.createObjectURL(onTier.nfts[selectedNFTIndex].previewImage)
-                  : onTier.nfts[selectedNFTIndex].image
-              }
-              alt={onTier.nfts[selectedNFTIndex].name || onTier.nfts[selectedNFTIndex].title}
+              src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].previewImage)}
+              alt={onTier.nfts[selectedNFTIndex].name}
             />
           </Animated>
         </div>
@@ -89,10 +85,10 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <div className="tier__title">
             <span
               style={{
-                backgroundColor: onTier.color ? onTier.color.hex : '#80CCDF',
+                backgroundColor: onTier.color.hex,
               }}
             />
-            <h2>{onTier.name || 'Platinum'}</h2>
+            <h2>{onTier.name}</h2>
           </div>
           <div className="tier__info">
             <span>Bidders #10</span>
@@ -107,18 +103,13 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                 onClick={() => setSelectedNFTIndex(index)}
                 aria-hidden="true"
               >
-                <img
-                  src={nft.previewImage ? URL.createObjectURL(nft.previewImage) : nft.image}
-                  alt={nft.name || nft.title}
-                />
+                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
               </div>
             ))}
           </div>
         </div>
         <div className="nft__details">
-          <h2 className="nft__title">
-            {onTier.nfts[selectedNFTIndex].name || onTier.nfts[selectedNFTIndex].title}
-          </h2>
+          <h2 className="nft__title">{onTier.nfts[selectedNFTIndex].name}</h2>
           <div className="nft__released">
             <div className="item">
               <span>Released</span>
