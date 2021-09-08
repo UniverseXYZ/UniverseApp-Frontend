@@ -37,6 +37,28 @@
     );
     background-blend-mode: screen, normal;
 
+    .back__to__editing__btn {
+      max-width: 1110px;
+      margin: 0 auto;
+      margin-bottom: 30px;
+      button {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        background: transparent;
+        color: $black;
+        img {
+          transform: rotate(180deg);
+          margin-right: 10px;
+        }
+      }
+    }
+
     &__container {
       display: flex;
       align-items: center;
