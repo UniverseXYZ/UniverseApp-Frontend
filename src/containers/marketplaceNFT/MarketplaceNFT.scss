@@ -506,6 +506,20 @@
       .Marketplace--creators {
         display: flex;
         align-items: center;
+        .random--bg--color {
+          height: 30px;
+          width: 30px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-family: $sharpGroteskMediumFont;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          text-transform: uppercase;
+          color: $black;
+        }
         img {
           width: 30px;
           height: 30px;
