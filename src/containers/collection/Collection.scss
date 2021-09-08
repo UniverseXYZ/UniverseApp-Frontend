@@ -110,6 +110,9 @@
         line-height: 160%;
         color: rgba(0, 0, 0, 0.6);
         margin-bottom: 40px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
       .collection__filters {
         margin-bottom: 60px;
