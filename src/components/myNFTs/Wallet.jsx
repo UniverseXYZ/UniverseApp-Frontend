@@ -18,6 +18,7 @@ import '../marketplace/browseNFT/NFTsList.scss';
 import plusIcon from '../../assets/images/PlusIcon.png';
 import Input from '../input/Input';
 import searchIcon from '../../assets/images/search-gray.svg';
+import NFTCard from '../nft/NFTCard';
 
 const Wallet = ({
   filteredNFTs,
@@ -189,39 +190,39 @@ const Wallet = ({
     setCollections(newCollections);
   }, []);
 
-  useEffect(() => {
-    const res = collections.filter((col) => col.selected);
-    if (res.length || searchByName) {
-      const newFilteredNFTs = [];
-      myNFTs.forEach((nft) => {
-        if (!searchByName && res.length) {
-          if (nft.type === 'collection') {
-            res.forEach((item) => {
-              if (nft.collectionName === item.name) {
-                newFilteredNFTs.push(nft);
-              }
-            });
-          }
-        } else if (!res.length && searchByName) {
-          if (nft.name.toLowerCase().includes(searchByName.toLowerCase())) {
-            newFilteredNFTs.push(nft);
-          }
-        } else if (res.length && searchByName) {
-          res.forEach((item) => {
-            if (
-              nft.collectionName === item.name &&
-              nft.name.toLowerCase().includes(searchByName.toLowerCase())
-            ) {
-              newFilteredNFTs.push(nft);
-            }
-          });
-        }
-      });
-      setFilteredNFTs(newFilteredNFTs);
-    } else {
-      setFilteredNFTs(myNFTs);
-    }
-  }, [collections, searchByName]);
+  // useEffect(() => {
+  //   const res = collections.filter((col) => col.selected);
+  //   if (res.length || searchByName) {
+  //     const newFilteredNFTs = [];
+  //     myNFTs.forEach((nft) => {
+  //       if (!searchByName && res.length) {
+  //         if (nft.type === 'collection') {
+  //           res.forEach((item) => {
+  //             if (nft.collectionName === item.name) {
+  //               newFilteredNFTs.push(nft);
+  //             }
+  //           });
+  //         }
+  //       } else if (!res.length && searchByName) {
+  //         if (nft.name.toLowerCase().includes(searchByName.toLowerCase())) {
+  //           newFilteredNFTs.push(nft);
+  //         }
+  //       } else if (res.length && searchByName) {
+  //         res.forEach((item) => {
+  //           if (
+  //             nft.collectionName === item.name &&
+  //             nft.name.toLowerCase().includes(searchByName.toLowerCase())
+  //           ) {
+  //             newFilteredNFTs.push(nft);
+  //           }
+  //         });
+  //       }
+  //     });
+  //     setFilteredNFTs(newFilteredNFTs);
+  //   } else {
+  //     setFilteredNFTs(myNFTs);
+  //   }
+  // }, [collections, searchByName]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
@@ -238,7 +239,6 @@ const Wallet = ({
       }
     });
     setPreviewNFTs(prevNFTs);
-    // setAuction(data => ({ ...data, tier: { ...data.tier,nfts{...data.tier.nfts, previewNFTs}} }));
   }, [filteredNFTs, selectedNFTIds]);
 
   return (
@@ -419,9 +419,9 @@ const Wallet = ({
                 )
             )}
           </div>
-          {filteredNFTs.length ? (
+          {myNFTs.length ? (
             <>
-              <Lists
+              {/* <Lists
                 data={filteredNFTs}
                 perPage={perPage}
                 offset={offset}
@@ -429,7 +429,12 @@ const Wallet = ({
                 setSelectedNFTIds={setSelectedNFTIds}
                 winners={Number(winners)}
                 nftsPerWinner={Number(nftsPerWinner)}
-              />
+              /> */}
+              <div className="nfts__lists">
+                {myNFTs.map((nft) => (
+                  <NFTCard nft={nft} key={nft.id} />
+                ))}
+              </div>
 
               <div className="pagination__container">
                 <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />

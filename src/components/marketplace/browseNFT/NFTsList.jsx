@@ -154,8 +154,8 @@ const NFTsList = ({ data, nftNumber }) => {
               <div className="nft--box--body" aria-hidden="true">
                 {nft.type !== 'bundles' ? (
                   <div
-                    onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
-                    aria-hidden="true"
+                  // onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                  // aria-hidden="true"
                   >
                     {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
                       <img className="nft--image" src={nft.media.url} alt={nft.name} />
@@ -200,8 +200,8 @@ const NFTsList = ({ data, nftNumber }) => {
                       {nft.allItems.map((item) => (
                         <div
                           className="slider--box"
-                          onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
-                          aria-hidden="true"
+                          // onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                          // aria-hidden="true"
                           key={uuid()}
                         >
                           {item.type !== 'audio/mpeg' && item.type !== 'video/mp4' && (

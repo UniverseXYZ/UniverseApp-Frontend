@@ -9,7 +9,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
-import hideNFTIcon from '../../assets/images/hide.svg';
+import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import NFTPopup from '../popups/NFTPopup';
 
 const Lists = ({

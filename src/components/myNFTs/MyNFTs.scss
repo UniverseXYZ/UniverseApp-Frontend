@@ -808,7 +808,7 @@
 
   .nfts__lists {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, 255px);
     grid-gap: 30px;
 
     .nonicon__icon {
@@ -1431,14 +1431,16 @@
       }
     }
 
-    @include xl {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    // @include xl {
+    //   grid-template-columns: repeat(3, 1fr);
+    // }
     @include lg {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, 220px);
+      grid-gap: 20px;
     }
     @include sm {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(auto-fit, 335px);
+      justify-content: center;
     }
   }
 
