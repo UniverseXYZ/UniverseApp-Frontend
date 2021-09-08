@@ -27,7 +27,7 @@ const NFTsList = ({ data, perPage, offset }) => {
           <Animated animationIn="fadeIn" key={uuid()}>
             <div className="nft__box">
               <div className="nft__box__image">
-                {nft.previewImage.type === 'video/mp4' && (
+                {nft.previewImage?.type === 'video/mp4' && (
                   <Popup
                     trigger={
                       <video
