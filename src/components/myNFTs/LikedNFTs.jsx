@@ -1,0 +1,24 @@
+import React, { useContext, useState } from 'react';
+import AppContext from '../../ContextAPI';
+import NFTCard from '../nft/NFTCard';
+import LoadMore from '../pagination/LoadMore';
+
+const LikedNFTs = () => {
+  const { myNFTs } = useContext(AppContext);
+  const [quantity, setQuantity] = useState(4);
+
+  return (
+    <div className="tab__wallet">
+      <div className="nfts__lists">
+        {myNFTs
+          .filter((nft) => nft.likers.length)
+          .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
+      </div>
+      {myNFTs.filter((nft) => !nft.hidden).length >= quantity && (
+        <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={4} />
+      )}
+    </div>
+  );
+};
+
+export default LikedNFTs;
