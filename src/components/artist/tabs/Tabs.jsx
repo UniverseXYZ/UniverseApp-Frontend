@@ -80,9 +80,9 @@ const Tabs = ({ onArtist }) => {
         </div>
         <div className="tab__content">
           {selectedTabIndex === 0 && <NFTsTab onArtist={onArtist} />}
-          {selectedTabIndex === 1 && <ActiveAuctionsTab />}
-          {selectedTabIndex === 2 && <FutureAuctionsTab />}
-          {selectedTabIndex === 3 && <PastAuctionsTab />}
+          {selectedTabIndex === 1 && <ActiveAuctionsTab onArtist={onArtist} />}
+          {selectedTabIndex === 2 && <FutureAuctionsTab onArtist={onArtist} />}
+          {selectedTabIndex === 3 && <PastAuctionsTab onArtist={onArtist} />}
         </div>
       </div>
     </div>
