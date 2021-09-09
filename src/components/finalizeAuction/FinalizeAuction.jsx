@@ -310,10 +310,11 @@ const FinalizeAuction = () => {
                         Deposit
                       </button>
                     ) : approvals > collections.length + 2 + tierIndex ? (
-                      <Button className="light-border-button" disabled>
-                        Deposited
-                        <img className="checkmark" src={completedCheckmark} alt="Deposited" />
-                      </Button>
+                      // <Button className="light-border-button" disabled>
+                      //   Deposited
+                      //   <img className="checkmark" src={completedCheckmark} alt="Deposited" />
+                      // </Button>
+                      <Button className="light-border-button">Withdraw</Button>
                     ) : (
                       // <Button className="light-border-button">Withdraw</Button>
                       <Button className="light-button" disabled>
