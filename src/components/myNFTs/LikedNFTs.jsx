@@ -11,10 +11,10 @@ const LikedNFTs = () => {
     <div className="tab__wallet">
       <div className="nfts__lists">
         {myNFTs
-          .filter((nft) => nft.likers.length)
+          .filter((nft) => nft.likers.length && !nft.hidden)
           .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
       </div>
-      {myNFTs.filter((nft) => !nft.hidden).length > quantity && (
+      {myNFTs.filter((nft) => nft.likers.length && !nft.hidden).length > quantity && (
         <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
       )}
     </div>

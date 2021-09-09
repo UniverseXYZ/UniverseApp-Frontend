@@ -203,7 +203,7 @@ const AuctionReview = () => {
             .map((item) => item.address !== '' && item.amount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
-              <h2 className="royalty-settings-title">Royalty splits</h2>
+              <h2 className="royalty-settings-title">Revenue splits</h2>
             </div>
           )}
 
@@ -283,34 +283,33 @@ const AuctionReview = () => {
                   {tier.nfts.map((nft) => (
                     <div className="auction-reward__box" key={uuid()}>
                       <div className="auction-reward__box__image">
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {nft.media.type === 'video/mp4' && (
                           <video
                             onMouseOver={(event) => event.target.play()}
                             onFocus={(event) => event.target.play()}
                             onMouseOut={(event) => event.target.pause()}
                             onBlur={(event) => event.target.pause()}
                           >
-                            <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                            <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
                             <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
-                        {nft.previewImage.type === 'audio/mpeg' && (
+                        {nft.media.type === 'audio/mpeg' && (
                           <img className="preview-image" src={mp3Icon} alt={nft.name} />
                         )}
-                        {nft.previewImage.type !== 'audio/mpeg' &&
-                          nft.previewImage.type !== 'video/mp4' && (
-                            <img
-                              className="preview-image"
-                              src={URL.createObjectURL(nft.previewImage)}
-                              alt={nft.name}
-                            />
-                          )}
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
+                          <img
+                            className="preview-image"
+                            src={URL.createObjectURL(nft.media)}
+                            alt={nft.name}
+                          />
+                        )}
+                        {nft.media.type === 'video/mp4' && (
                           <img className="video__icon" src={videoIcon} alt="Video Icon" />
                         )}
                       </div>
-                      {nft.generatedEditions.length > 1 && (
+                      {nft.allItems.length > 1 && (
                         <>
                           <div className="auction-reward__box__highlight__one" />
                           <div className="auction-reward__box__highlight__two" />

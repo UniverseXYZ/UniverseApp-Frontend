@@ -888,6 +888,10 @@
 .collection {
   padding: 80px 40px;
   background: linear-gradient(127.59deg, #f2f3fb -1.33%, #fcf9f4 91.03%);
+  .collection--container {
+    max-width: 1110px;
+    margin: 0 auto;
+  }
   .collection--title {
     width: 100%;
     margin-bottom: 40px;

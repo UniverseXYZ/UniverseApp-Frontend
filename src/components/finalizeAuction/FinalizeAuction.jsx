@@ -39,7 +39,7 @@ const FinalizeAuction = () => {
     let arr = [];
     deployedCollections.forEach((item) => {
       auction.tiers.forEach((tier) => {
-        if (tier.nfts.filter((nft) => nft.collectionId === item.id && !item.approved).length) {
+        if (tier.nfts.filter((nft) => nft.collection.id === item.id && !item.approved).length) {
           arr.push(item);
         }
       });
@@ -286,7 +286,7 @@ const FinalizeAuction = () => {
                               <div className="first" />
                               <div className="second" />
                               <div className="image-main">
-                                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                                <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
                                 {tier.nfts.length > 3 && (
                                   <span className="show__more">{`+${
                                     tier.nfts.length - 3
@@ -310,10 +310,11 @@ const FinalizeAuction = () => {
                         Deposit
                       </button>
                     ) : approvals > collections.length + 2 + tierIndex ? (
-                      <Button className="light-border-button" disabled>
-                        Deposited
-                        <img className="checkmark" src={completedCheckmark} alt="Deposited" />
-                      </Button>
+                      // <Button className="light-border-button" disabled>
+                      //   Deposited
+                      //   <img className="checkmark" src={completedCheckmark} alt="Deposited" />
+                      // </Button>
+                      <Button className="light-border-button">Withdraw</Button>
                     ) : (
                       // <Button className="light-border-button">Withdraw</Button>
                       <Button className="light-button" disabled>

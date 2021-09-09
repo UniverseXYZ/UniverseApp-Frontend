@@ -106,30 +106,29 @@ const RewardTiers = () => {
                   {tier.nfts.map((nft) => (
                     <div className="rev-reward__box" key={uuid()}>
                       <div className="rev-reward__box__image">
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {nft.media.type === 'video/mp4' && (
                           <video
                             onMouseOver={(event) => event.target.play()}
                             onFocus={(event) => event.target.play()}
                             onMouseOut={(event) => event.target.pause()}
                             onBlur={(event) => event.target.pause()}
                           >
-                            <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                            <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
                             <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
-                        {nft.previewImage.type === 'audio/mpeg' && (
+                        {nft.media.type === 'audio/mpeg' && (
                           <img className="preview-image" src={mp3Icon} alt={nft.name} />
                         )}
-                        {nft.previewImage.type !== 'audio/mpeg' &&
-                          nft.previewImage.type !== 'video/mp4' && (
-                            <img
-                              className="preview-image"
-                              src={URL.createObjectURL(nft.previewImage)}
-                              alt={nft.name}
-                            />
-                          )}
-                        {nft.previewImage.type === 'video/mp4' && (
+                        {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
+                          <img
+                            className="preview-image"
+                            src={URL.createObjectURL(nft.media)}
+                            alt={nft.name}
+                          />
+                        )}
+                        {nft.media.type === 'video/mp4' && (
                           <img className="video__icon" src={videoIcon} alt="Video Icon" />
                         )}
                       </div>
@@ -138,29 +137,29 @@ const RewardTiers = () => {
                       </div>
                       <div className="rev-reward__box__footer">
                         <div className="collection__details">
-                          {nft.type === 'collection' && (
+                          {nft.collection && (
                             <>
-                              {typeof nft.collectionAvatar === 'string' &&
-                              nft.collectionAvatar.startsWith('#') ? (
+                              {typeof nft.collection.avatar === 'string' &&
+                              nft.collection.avatar.startsWith('#') ? (
                                 <div
                                   className="random__bg__color"
-                                  style={{ backgroundColor: nft.collectionAvatar }}
+                                  style={{ backgroundColor: nft.collection.avatar }}
                                 >
-                                  {nft.collectionName.charAt(0)}
+                                  {nft.collection.name.charAt(0)}
                                 </div>
                               ) : (
                                 <img
-                                  src={URL.createObjectURL(nft.collectionAvatar)}
-                                  alt={nft.collectionName}
+                                  src={URL.createObjectURL(nft.collection.avatar)}
+                                  alt={nft.collection.name}
                                 />
                               )}
-                              <span>{nft.collectionName}</span>
+                              <span>{nft.collection.name}</span>
                             </>
                           )}
                         </div>
-                        <span className="ed-count">{`x${nft.generatedEditions.length}`}</span>
+                        <span className="ed-count">{`x${nft.allItems.length}`}</span>
                       </div>
-                      {nft.generatedEditions.length > 1 && (
+                      {nft.allItems.length > 1 && (
                         <>
                           <div className="rev-reward__box__highlight__one" />
                           <div className="rev-reward__box__highlight__two" />

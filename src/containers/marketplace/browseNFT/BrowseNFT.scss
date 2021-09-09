@@ -660,7 +660,7 @@
     background: $white;
     z-index: 5;
     @include md {
-      z-index: 999;
+      z-index: 998;
     }
     .sorting__filters__desktop {
       @include lg {

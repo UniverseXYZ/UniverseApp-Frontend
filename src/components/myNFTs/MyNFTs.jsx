@@ -107,34 +107,40 @@ const MyNFTs = () => {
         const newMyNFTs = [...myNFTs];
         savedNfts.forEach((nft) => {
           if (nft.selected) {
-            if (nft.type === 'single') {
+            if (!nft.collection) {
               newMyNFTs.push({
                 id: nft.id,
                 type: nft.type,
-                previewImage: nft.previewImage,
+                creator: nft.creator,
+                owner: nft.owner,
+                likers: [],
+                allItems: nft.allItems,
+                media: nft.media,
                 name: nft.name,
                 description: nft.description,
-                numberOfEditions: Number(nft.numberOfEditions),
-                generatedEditions: nft.generatedEditions,
+                numberOfEditions: nft.numberOfEditions,
                 properties: nft.properties,
-                percentAmount: nft.percentAmount || '',
+                royaltyAddress: nft.royaltyAddress,
+                state: 'new',
+                releasedDate: new Date(),
               });
             } else {
               newMyNFTs.push({
                 id: nft.id,
                 type: nft.type,
-                collectionId: nft.collectionName,
-                collectionName: nft.collectionName,
-                collectionAvatar: nft.collectionAvatar,
-                collectionDescription: nft.collectionDescription,
-                shortURL: nft.shortURL,
-                previewImage: nft.previewImage,
+                creator: nft.creator,
+                collection: nft.collection,
+                owner: nft.owner,
+                likers: [],
+                allItems: nft.allItems,
+                media: nft.media,
                 name: nft.name,
                 description: nft.description,
-                numberOfEditions: Number(nft.numberOfEditions),
-                generatedEditions: nft.generatedEditions,
+                numberOfEditions: nft.numberOfEditions,
                 properties: nft.properties,
-                percentAmount: nft.percentAmount || '',
+                royaltyAddress: nft.royaltyAddress,
+                state: 'new',
+                releasedDate: new Date(),
               });
             }
           }
@@ -175,20 +181,13 @@ const MyNFTs = () => {
             ? deployedCollections.length
             : index === 2 && savedNfts.length > 0
             ? savedNfts.length
-            : // printing dummyData length
-            index === 3 && UNIVERSE_NFTS.length > 0
+            : index === 3 && UNIVERSE_NFTS.length > 0
             ? UNIVERSE_NFTS.length
             : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0
             ? myNFTs.filter((nft) => nft.hidden).length
             : index === 5 && myNFTs.filter((nft) => nft.likers.length).length > 0
             ? myNFTs.filter((nft) => nft.likers.length).length
             : null,
-        // label:
-        //   index === 2 && savedNfts.length > 0
-        //     ? savedNfts.length
-        //     : index === 3 && savedCollections.length > 0
-        //     ? savedCollections.length
-        //     : null,
       }))}
     />
   );
@@ -205,12 +204,6 @@ const MyNFTs = () => {
             : index === 1 && deployedCollections.length > 0
             ? deployedCollections.length
             : null,
-        // label:
-        //   index === 2 && savedNfts.length > 0
-        //     ? savedNfts.length
-        //     : index === 3 && savedCollections.length > 0
-        //     ? savedCollections.length
-        //     : null,
       }))}
     />
   );
