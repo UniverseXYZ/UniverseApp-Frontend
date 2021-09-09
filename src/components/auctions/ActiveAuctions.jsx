@@ -309,10 +309,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       <div className="tier-image-second" />
                                       <div className="tier-image-first" />
                                       <div className="tier-image-main">
-                                        <img
-                                          src={URL.createObjectURL(nft.previewImage)}
-                                          alt="NFT"
-                                        />
+                                        <img src={URL.createObjectURL(nft.media)} alt="NFT" />
                                       </div>
                                     </div>
                                   ))}

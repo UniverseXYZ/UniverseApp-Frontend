@@ -22,7 +22,7 @@ const RewardTiers = ({ auction }) => (
                   (nft, index) =>
                     index < 3 && (
                       <div className="nft__image" key={nft.id}>
-                        <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                        <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
                         {tier.nfts.length > 3 && (
                           <span className="show__more">{`+${tier.nfts.length - 3} more`}</span>
                         )}

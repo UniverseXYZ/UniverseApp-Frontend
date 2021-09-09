@@ -74,7 +74,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             style={{ height: '100%' }}
           >
             <img
-              src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].previewImage)}
+              src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].media)}
               alt={onTier.nfts[selectedNFTIndex].name}
             />
           </Animated>
@@ -103,7 +103,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                 onClick={() => setSelectedNFTIndex(index)}
                 aria-hidden="true"
               >
-                <img src={URL.createObjectURL(nft.previewImage)} alt={nft.name} />
+                <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
               </div>
             ))}
           </div>
@@ -117,15 +117,15 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                 onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[2]
               }, ${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[3]}`}</p>
             </div>
-            {onTier.nfts[selectedNFTIndex].type === 'collection' && (
+            {onTier.nfts[selectedNFTIndex].collection && (
               <div className="item">
                 <span>Collection</span>
                 <p>
                   <img
-                    src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].collectionAvatar)}
-                    alt={onTier.nfts[selectedNFTIndex].collectionName}
+                    src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].collection.avatar)}
+                    alt={onTier.nfts[selectedNFTIndex].collection.name}
                   />
-                  {onTier.nfts[selectedNFTIndex].collectionName}
+                  {onTier.nfts[selectedNFTIndex].collection.name}
                 </p>
               </div>
             )}

@@ -265,6 +265,7 @@ const SingleNFTSettings = () => {
           properties,
           royaltyAddress,
           state: 'new',
+          releasedDate: new Date(),
         },
       ]);
     } else {
@@ -292,6 +293,7 @@ const SingleNFTSettings = () => {
           properties,
           royaltyAddress,
           state: 'new',
+          releasedDate: new Date(),
         },
       ]);
     }
