@@ -137,10 +137,18 @@
     height: 100%;
     display: block;
     z-index: -1;
-    background-image: url('../../assets/images/bg.png');
+    background-image: url('../../assets/images/my-nfts-desktop.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+
+    @include lg {
+      background-image: url('../../assets/images/my-nfts-tablet.png');
+    }
+
+    @include sm {
+      background-image: url('../../assets/images/my-nfts-mobile.png');
+    }
   }
 
   &__header {
@@ -149,7 +157,7 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0 0;
+    padding: 60px 20px 0px 0px;
     flex-wrap: wrap;
 
     h1.title {
@@ -228,11 +236,13 @@
         width: 100%;
       }
     }
-
+    @include xl {
+      padding: 60px 20px 0 20px;
+    }
     @include sm {
       flex-wrap: wrap;
       margin-bottom: 0px;
-      padding: 0 20px;
+      padding: 40px 20px 0;
     }
   }
 }

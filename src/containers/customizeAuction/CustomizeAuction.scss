@@ -2,7 +2,7 @@
 @import '../../assets/scss/_mixins';
 
 .customize__auction {
-  background-image: url('../../assets/images/pink-bg1.png');
+  background-image: url('../../assets/images/set-up-auction-desktop.png');
   background-size: 100% 200px;
   background-repeat: no-repeat;
   background-position-y: 88px;
@@ -311,6 +311,7 @@
 
               .preview__image {
                 border-radius: 10px;
+                object-fit: cover;
               }
 
               .default__promo__image {
@@ -1045,8 +1046,11 @@
       display: grid;
     }
   }
+  @include lg {
+    background-image: url('../../assets//images/set-up-auction-tablet.png');
+  }
   @include sm {
-    background-image: url('../../assets/images/pink-bg3.png');
+    background-image: url('../../assets/images/set-up-auction-mobile.png');
   }
 }
 
