@@ -6,6 +6,20 @@ import Button from '../button/Button.jsx';
 
 const Head = () => {
   const { loggedInArtist } = useContext(AppContext);
+  const history = useHistory();
+  const { editProfileButtonClick, setEditProfileButtonClick } = useContext(AppContext);
+
+  const handlePublicPage = () => {
+    setEditProfileButtonClick(true);
+    if (
+      loggedInArtist.name &&
+      loggedInArtist.universePageAddress &&
+      loggedInArtist.avatar &&
+      loggedInArtist.about
+    ) {
+      history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id });
+    }
+  };
 
   return (
     // <div className="my-account">
@@ -14,7 +28,9 @@ const Head = () => {
         <h1>Edit my profile</h1>
       </div>
       <div className="button-section">
-        <Button className="light-border-button public-button">See public page</Button>
+        <Button className="light-border-button public-button" onClick={() => handlePublicPage()}>
+          See public page
+        </Button>
       </div>
       <p>
         You can set your preffered display name, create a branded profile URL and manage other

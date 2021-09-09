@@ -131,6 +131,7 @@
         margin: unset;
         .close {
           position: absolute;
+          cursor: pointer;
           right: 0;
           top: 2px;
         }
@@ -171,7 +172,7 @@
             width: inherit;
             max-height: 405px;
             border-radius: 12px;
-            object-fit: fill;
+            object-fit: cover;
             image-rendering: pixelated;
 
             // @include md {

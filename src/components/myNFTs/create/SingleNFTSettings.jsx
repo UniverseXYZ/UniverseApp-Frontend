@@ -965,7 +965,7 @@ const SingleNFTSettings = () => {
                   onMouseLeave={() => setHideRoyalitiesInfo(false)}
                   onBlur={() => setHideRoyalitiesInfo(false)}
                 >
-                  Royalty splits <img src={infoIcon} alt="Info Icon" />
+                  Revenue splits <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideRoyalitiesInfo && (
                   <div className="royalities-info-text">
@@ -1034,7 +1034,7 @@ const SingleNFTSettings = () => {
                 >
                   <h5>
                     <img src={addIcon} alt="Add" />
-                    Add the address
+                    Add wallet
                   </h5>
                 </div>
               )}
