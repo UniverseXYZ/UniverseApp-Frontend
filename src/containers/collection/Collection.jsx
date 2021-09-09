@@ -16,6 +16,7 @@ import NFTCard from '../../components/nft/NFTCard.jsx';
 import LoadMore from '../../components/pagination/LoadMore.jsx';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
+import SearchFilters from '../../components/nft/SearchFilters.jsx';
 
 const Collection = () => {
   const {
@@ -108,7 +109,7 @@ const Collection = () => {
           </Button>
         </div>
         <div className="collection--nfts--container">
-          <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
+          <SearchFilters data={collectionNFTs} />
           {collectionNFTs.filter((nft) => !nft.hidden).length ? (
             <>
               <div className="nfts__lists">
