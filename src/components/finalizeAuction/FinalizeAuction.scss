@@ -2,9 +2,10 @@
 @import '../../assets/scss/mixins';
 
 .finalize__auction {
-  background-image: url('../../assets/images/pink-bg1.png');
+  background-image: url('../../assets/images/finalise-auction-desktop.png');
   background-size: 100% 200px;
   background-repeat: no-repeat;
+  background-position-y: 88px;
 
   .back-rew {
     .set-text {
@@ -329,5 +330,11 @@
         }
       }
     }
+  }
+  @include lg {
+    background-image: url('../../assets/images/finalise-auction-tablet.png');
+  }
+  @include sm {
+    background-image: url('../../assets/images/finalise-auction-mobile.png');
   }
 }

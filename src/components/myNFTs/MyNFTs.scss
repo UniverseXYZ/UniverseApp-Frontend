@@ -137,10 +137,18 @@
     height: 100%;
     display: block;
     z-index: -1;
-    background-image: url('../../assets/images/bg.png');
+    background-image: url('../../assets/images/my-nfts-desktop.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+
+    @include lg {
+      background-image: url('../../assets/images/my-nfts-tablet.png');
+    }
+
+    @include sm {
+      background-image: url('../../assets/images/my-nfts-mobile.png');
+    }
   }
 
   &__header {

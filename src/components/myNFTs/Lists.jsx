@@ -191,8 +191,9 @@ const Lists = ({
                       winners <= nft.allItems?.length && (
                         <span className="selected-div">
                           <span className="selected-number">
-                            {selectedEditions[nft.id] ? selectedEditions[nft.id].length : 0}/
-                            {nft.allItems.length}
+                            {/* {selectedEditions[nft.id] ? selectedEditions[nft.id].length : 0}/
+                            {nft.allItems.length} */}
+                            {winners}/{nft.allItems.length}
                           </span>
                           <img className="check__icon" src={checkIcon} alt="Check Icon" />
                         </span>

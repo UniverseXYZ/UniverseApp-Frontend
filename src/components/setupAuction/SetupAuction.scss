@@ -20,20 +20,21 @@
     top: -25px;
   }
   .setup--auction--welcome--section {
-    background-image: url('../../assets/images/pink-bg1.png');
+    background-image: url('../../assets/images/set-up-auction-desktop.png');
     width: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     padding: 0 60px;
     @include lg {
+      background-image: url('../../assets/images/set-up-auction-tablet.png');
       background-position: 75% 0;
     }
     @include md {
       padding: 0 20px;
     }
     @include sm {
-      background-image: url('../../assets/images/pink-bg1-mobile.png');
+      background-image: url('../../assets/images/set-up-auction-mobile.png');
     }
     .setup {
       max-width: 1110px;
@@ -64,7 +65,7 @@
     .new--tab--content {
       .auction-settings {
         width: 100%;
-      } 
+      }
     }
   }
   // .tabs.container {
