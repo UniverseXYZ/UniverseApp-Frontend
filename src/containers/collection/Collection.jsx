@@ -54,7 +54,7 @@ const Collection = () => {
     const newNFTs = [];
     if (location.state) {
       myNFTs.forEach((nft) => {
-        if (nft.collection.id === selectedCollection.id) {
+        if (nft.collection?.id === selectedCollection.id) {
           newNFTs.push(nft);
         }
       });
@@ -103,21 +103,23 @@ const Collection = () => {
             <img src={pencilIcon} alt="Edit Icon" />
           </Button>
         </div>
-        {collectionNFTs.filter((nft) => !nft.hidden).length ? (
-          <div className="collection--nfts--container">
-            <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
-            <div className="nfts__lists">
-              {collectionNFTs
-                .filter((nft) => !nft.hidden)
-                .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
-            </div>
-            {collectionNFTs.filter((nft) => !nft.hidden).length > quantity && (
-              <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
-            )}
-          </div>
-        ) : (
-          <></>
-        )}
+        <div className="collection--nfts--container">
+          <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
+          {collectionNFTs.filter((nft) => !nft.hidden).length ? (
+            <>
+              <div className="nfts__lists">
+                {collectionNFTs
+                  .filter((nft) => !nft.hidden)
+                  .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
+              </div>
+              {collectionNFTs.filter((nft) => !nft.hidden).length > quantity && (
+                <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   ) : (
