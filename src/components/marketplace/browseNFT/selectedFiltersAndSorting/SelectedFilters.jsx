@@ -105,7 +105,7 @@ const SelectedFilters = ({
   return (
     <div className="selected--filters">
       <div className="show--selected--filters">
-        <div className="results--count">15,118,898 results</div>
+        {/* <div className="results--count">15,118,898 results</div> */}
         {saleTypeButtons.map(
           (item, index) =>
             item.selected && (

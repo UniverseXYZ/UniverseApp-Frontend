@@ -149,7 +149,7 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0 0;
+    padding: 60px 20px 0px 0px;
     flex-wrap: wrap;
 
     h1.title {
@@ -228,11 +228,13 @@
         width: 100%;
       }
     }
-
+    @include xl {
+      padding: 60px 20px 0 20px;
+    }
     @include sm {
       flex-wrap: wrap;
       margin-bottom: 0px;
-      padding: 0 20px;
+      padding: 40px 20px 0;
     }
   }
 }

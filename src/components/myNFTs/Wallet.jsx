@@ -20,6 +20,7 @@ import Input from '../input/Input';
 import searchIcon from '../../assets/images/search-gray.svg';
 import NFTCard from '../nft/NFTCard';
 import LoadMore from '../pagination/LoadMore';
+import SearchFilters from '../nft/SearchFilters';
 
 const Wallet = ({
   filteredNFTs,
@@ -244,182 +245,200 @@ const Wallet = ({
 
   return (
     <div className="tab__wallet">
-      <Animated animationIn="fadeInUp" className="animate__filters__popup">
-        <div hidden={mobileVersion} className="filter__by__collection_mobile">
-          <div className="filter__by__collection_mobile__overlay" />
-          <div className="filter__by__collection_mobile__popup">
-            <img
-              className="close"
-              src={closeIcon}
-              alt=""
-              onClick={() => {
-                closeCollectionMobile();
-                document.body.classList.remove('no__scroll');
-              }}
-              aria-hidden="true"
-            />
-            <div className="filter_by_collection_buttons">
-              <button type="button" className="clear_all" onClick={clearFiltersMobile}>
-                Clear all
-              </button>
-              <button
-                type="button"
-                className="light-button"
+      {isCreatingAction ? (
+        <Animated animationIn="fadeInUp" className="animate__filters__popup">
+          <div hidden={mobileVersion} className="filter__by__collection_mobile">
+            <div className="filter__by__collection_mobile__overlay" />
+            <div className="filter__by__collection_mobile__popup">
+              <img
+                className="close"
+                src={closeIcon}
+                alt=""
                 onClick={() => {
-                  handleCollectionsMobile();
+                  closeCollectionMobile();
                   document.body.classList.remove('no__scroll');
                 }}
-              >
-                Apply filter
-              </button>
+                aria-hidden="true"
+              />
+              <div className="filter_by_collection_buttons">
+                <button type="button" className="clear_all" onClick={clearFiltersMobile}>
+                  Clear all
+                </button>
+                <button
+                  type="button"
+                  className="light-button"
+                  onClick={() => {
+                    handleCollectionsMobile();
+                    document.body.classList.remove('no__scroll');
+                  }}
+                >
+                  Apply filter
+                </button>
+              </div>
+              <div className="filter__by__collection">
+                <div className="filter__by__collection__label">
+                  <span>Filter by collection</span>
+                </div>
+                <div className="filter__by__collection__input">
+                  <Input
+                    className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
+                    type="text"
+                    placeholder="Browse collections..."
+                    onFocus={() => setIsCollectionDropdownOpened(true)}
+                    hoverBoxShadowGradient
+                  />
+                </div>
+              </div>
+              {isCollectionDropdownOpened && (
+                <div ref={refMobile} className="collections__dropdown">
+                  {collections.length ? (
+                    collections.map((collection, index) => (
+                      <button
+                        type="button"
+                        key={collection.id}
+                        className={collection.selected ? 'selected' : ''}
+                        onClick={() => saveIndexes(index)}
+                      >
+                        {typeof collection.avatar === 'string' &&
+                        collection.avatar.startsWith('#') ? (
+                          <div
+                            className="random__bg__color"
+                            style={{ backgroundColor: collection.avatar }}
+                          >
+                            {collection.name.charAt(0)}
+                          </div>
+                        ) : (
+                          <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                        )}
+                        <span>{collection.name}</span>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="empty__collections">
+                      <h3>No Collections found</h3>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="filter__by__collection">
-              <div className="filter__by__collection__label">
-                <span>Filter by collection</span>
-              </div>
-              <div className="filter__by__collection__input">
-                <Input
-                  className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
-                  type="text"
-                  placeholder="Browse collections..."
-                  onFocus={() => setIsCollectionDropdownOpened(true)}
-                  hoverBoxShadowGradient
-                />
-              </div>
-            </div>
-            {isCollectionDropdownOpened && (
-              <div ref={refMobile} className="collections__dropdown">
-                {collections.length ? (
-                  collections.map((collection, index) => (
-                    <button
-                      type="button"
-                      key={collection.id}
-                      className={collection.selected ? 'selected' : ''}
-                      onClick={() => saveIndexes(index)}
-                    >
-                      {typeof collection.avatar === 'string' &&
-                      collection.avatar.startsWith('#') ? (
-                        <div
-                          className="random__bg__color"
-                          style={{ backgroundColor: collection.avatar }}
-                        >
-                          {collection.name.charAt(0)}
-                        </div>
-                      ) : (
-                        <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
-                      )}
-                      <span>{collection.name}</span>
-                    </button>
-                  ))
-                ) : (
-                  <div className="empty__collections">
-                    <h3>No Collections found</h3>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
-        </div>
-      </Animated>
+        </Animated>
+      ) : (
+        <></>
+      )}
 
       {myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length ? (
         <>
-          <div className="filtration">
-            <div className="filter__by__collection">
-              <div className="filter__by__collection__label">
-                <span>Filter by collection</span>
-                <button type="button" className="clear_all" onClick={clearFilters}>
-                  Clear all
-                </button>
-              </div>
-              <div className="filter__by__collection__input">
-                <Input
-                  className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
-                  type="text"
-                  placeholder="Browse collections..."
-                  onFocus={() => setIsCollectionDropdownOpened(true)}
-                  hoverBoxShadowGradient
-                />
-                <img src={searchIcon} alt="icon" className="searchIcon" />
-              </div>
-            </div>
-
-            <div className="search__by__name">
-              <div className="search__by__name__label">
-                <span>Search by name</span>
-              </div>
-              <div className="search__by__name__input">
-                <Input
-                  type="text"
-                  placeholder="Start typing"
-                  value={searchByName}
-                  onChange={(e) => handleSearchByName(e.target.value)}
-                  hoverBoxShadowGradient
-                />
-                <img src={searchIcon} alt="icon" className="searchIcon" />
-              </div>
-            </div>
-
-            {/* <Button className="filter" onClick={handleFiltersClick}>{`Filters ${collections.filter(col => col.selected).length !== 0 ? '('+collections.filter(col => col.selected).length+')' : ''}`}</Button> */}
-            <Button className="filter" onClick={handleFiltersClick}>
-              Filter by collection <img src={filterIcon} alt="Filter" />
-            </Button>
-            {isCollectionDropdownOpened && (
-              <div ref={ref} className="collections__dropdown">
-                {collections.length ? (
-                  collections.map((collection, index) => (
-                    <button
-                      type="button"
-                      key={collection.id}
-                      className={collection.selected ? 'selected' : ''}
-                      onClick={() => handleCollections(index)}
-                    >
-                      {typeof collection.avatar === 'string' &&
-                      collection.avatar.startsWith('#') ? (
-                        <div
-                          className="random__bg__color"
-                          style={{ backgroundColor: collection.avatar }}
-                        >
-                          {collection.name.charAt(0)}
-                        </div>
-                      ) : (
-                        <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
-                      )}
-                      <span>{collection.name}</span>
+          {isCreatingAction ? (
+            <>
+              <div className="filtration">
+                <div className="filter__by__collection">
+                  <div className="filter__by__collection__label">
+                    <span>Filter by collection</span>
+                    <button type="button" className="clear_all" onClick={clearFilters}>
+                      Clear all
                     </button>
-                  ))
-                ) : (
-                  <div className="empty__collections">
-                    <h3>No Collections found</h3>
+                  </div>
+                  <div className="filter__by__collection__input">
+                    <Input
+                      className={`target ${isCollectionDropdownOpened ? 'focused' : ''}`}
+                      type="text"
+                      placeholder="Browse collections..."
+                      onFocus={() => setIsCollectionDropdownOpened(true)}
+                      hoverBoxShadowGradient
+                    />
+                    <img src={searchIcon} alt="icon" className="searchIcon" />
+                  </div>
+                </div>
+
+                <div className="search__by__name">
+                  <div className="search__by__name__label">
+                    <span>Search by name</span>
+                  </div>
+                  <div className="search__by__name__input">
+                    <Input
+                      type="text"
+                      placeholder="Start typing"
+                      value={searchByName}
+                      onChange={(e) => handleSearchByName(e.target.value)}
+                      hoverBoxShadowGradient
+                    />
+                    <img src={searchIcon} alt="icon" className="searchIcon" />
+                  </div>
+                </div>
+
+                {/* <Button className="filter" onClick={handleFiltersClick}>{`Filters ${collections.filter(col => col.selected).length !== 0 ? '('+collections.filter(col => col.selected).length+')' : ''}`}</Button> */}
+                <Button className="filter" onClick={handleFiltersClick}>
+                  Filter by collection <img src={filterIcon} alt="Filter" />
+                </Button>
+                {isCollectionDropdownOpened && (
+                  <div ref={ref} className="collections__dropdown">
+                    {collections.length ? (
+                      collections.map((collection, index) => (
+                        <button
+                          type="button"
+                          key={collection.id}
+                          className={collection.selected ? 'selected' : ''}
+                          onClick={() => handleCollections(index)}
+                        >
+                          {typeof collection.avatar === 'string' &&
+                          collection.avatar.startsWith('#') ? (
+                            <div
+                              className="random__bg__color"
+                              style={{ backgroundColor: collection.avatar }}
+                            >
+                              {collection.name.charAt(0)}
+                            </div>
+                          ) : (
+                            <img
+                              src={URL.createObjectURL(collection.avatar)}
+                              alt={collection.name}
+                            />
+                          )}
+                          <span>{collection.name}</span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="empty__collections">
+                        <h3>No Collections found</h3>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            )}
-          </div>
 
-          <div className="selected__filters">
-            {collections.map(
-              (collection, index) =>
-                collection.selected && (
-                  <div key={collection.id}>
-                    {typeof collection.avatar === 'string' && collection.avatar.startsWith('#') ? (
-                      <div
-                        className="random__bg__color"
-                        style={{ backgroundColor: collection.avatar }}
-                      >
-                        {collection.name.charAt(0)}
+              <div className="selected__filters">
+                {collections.map(
+                  (collection, index) =>
+                    collection.selected && (
+                      <div key={collection.id}>
+                        {typeof collection.avatar === 'string' &&
+                        collection.avatar.startsWith('#') ? (
+                          <div
+                            className="random__bg__color"
+                            style={{ backgroundColor: collection.avatar }}
+                          >
+                            {collection.name.charAt(0)}
+                          </div>
+                        ) : (
+                          <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                        )}
+                        <span>{collection.name}</span>
+                        <button
+                          type="button"
+                          title="Remove"
+                          onClick={() => handleCollections(index)}
+                        >
+                          &#10006;
+                        </button>
                       </div>
-                    ) : (
-                      <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
-                    )}
-                    <span>{collection.name}</span>
-                    <button type="button" title="Remove" onClick={() => handleCollections(index)}>
-                      &#10006;
-                    </button>
-                  </div>
-                )
-            )}
-          </div>
+                    )
+                )}
+              </div>
+            </>
+          ) : (
+            <SearchFilters data={myNFTs} />
+          )}
           {myNFTs.length ? (
             <>
               {isCreatingAction ? (
