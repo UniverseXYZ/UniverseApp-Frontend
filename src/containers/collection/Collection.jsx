@@ -12,6 +12,8 @@ import MintModal from '../../components/mintModal/MintModal.jsx';
 import NFTs from '../../components/collection/NFTs.jsx';
 import Button from '../../components/button/Button.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
+import NFTCard from '../../components/nft/NFTCard.jsx';
+import LoadMore from '../../components/pagination/LoadMore.jsx';
 
 const Collection = () => {
   const {
@@ -30,6 +32,7 @@ const Collection = () => {
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [search, setSearch] = useState('');
   const history = useHistory();
+  const [quantity, setQuantity] = useState(8);
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
@@ -51,7 +54,7 @@ const Collection = () => {
     const newNFTs = [];
     if (location.state) {
       myNFTs.forEach((nft) => {
-        if (nft.collectionId === selectedCollection.id) {
+        if (nft.collection.id === selectedCollection.id) {
           newNFTs.push(nft);
         }
       });
@@ -82,7 +85,6 @@ const Collection = () => {
     setSavedCollectionID(id);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
-  console.log(selectedCollection);
   return selectedCollection ? (
     <div className="collection__page">
       <Cover selectedCollection={selectedCollection} />
@@ -102,10 +104,17 @@ const Collection = () => {
           </Button>
         </div>
         {collectionNFTs.filter((nft) => !nft.hidden).length ? (
-          <>
+          <div className="collection--nfts--container">
             <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
-            <NFTs filteredNFTs={filteredNFTs} />
-          </>
+            <div className="nfts__lists">
+              {collectionNFTs
+                .filter((nft) => !nft.hidden)
+                .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
+            </div>
+            {collectionNFTs.filter((nft) => !nft.hidden).length > quantity && (
+              <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
+            )}
+          </div>
         ) : (
           <></>
         )}

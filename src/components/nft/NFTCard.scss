@@ -1,7 +1,11 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/mixins';
 
-.nft--card {
+.nfts__lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 255px);
+  grid-gap: 30px;
+  .nft--card {
     background: $white;
     box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
     border-radius: 12px;
@@ -272,6 +276,9 @@
           @include sm {
             height: 311px;
           }
+          @media (max-width: 375px) {
+            height: 256px;
+          }
         }
         ul.slick-dots {
           bottom: 5px;
@@ -384,6 +391,10 @@
         width: 311px;
         height: 311px;
       }
+      @media (max-width: 375px) {
+        width: 256px;
+        height: 256px;
+      }
     }
     &--footer {
       .name--and--price {
@@ -453,3 +464,15 @@
       }
     }
   }
+  @include lg {
+    grid-template-columns: repeat(auto-fit, 220px);
+    grid-gap: 20px;
+  }
+  @include sm {
+    grid-template-columns: repeat(auto-fit, 335px);
+    justify-content: center;
+  }
+  @media (max-width: 375px) {
+    grid-template-columns: repeat(auto-fit, 280px);
+  }
+}

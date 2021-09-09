@@ -927,20 +927,6 @@
             }
           }
         }
-        .nfts__lists {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, 255px);
-          grid-gap: 30px;
-
-          @include lg {
-            grid-template-columns: repeat(auto-fit, 220px);
-            grid-gap: 20px;
-          }
-          @include sm {
-            grid-template-columns: repeat(auto-fit, 335px);
-            justify-content: center;
-          }
-        }
       }
     }
     @include md {
