@@ -9,6 +9,7 @@ import Button from '../../../button/Button';
 import plusIcon from '../../../../assets/images/PlusIcon.png';
 import LoadMore from '../../../pagination/LoadMore';
 import NFTCard from '../../../nft/NFTCard';
+import SearchFilters from '../../../nft/SearchFilters';
 
 const NFTsTab = ({ onArtist }) => {
   const { loggedInArtist, myNFTs } = useContext(AppContext);
@@ -20,7 +21,7 @@ const NFTsTab = ({ onArtist }) => {
 
   return data.length ? (
     <>
-      <NFTsFilters />
+      <SearchFilters data={data} />
       <div className="nfts__lists">
         {data
           .filter((nft) => !nft.hidden)

@@ -28,8 +28,8 @@
   }
   .focus--field--box--shadow {
     position: absolute;
-    width: calc(100% + 8px);
-    min-height: 58px;
+    width: calc(100% + 7px);
+    min-height: 56px;
     // background-color: black;
     background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
     left: -4px;
@@ -226,7 +226,7 @@
   }
 }
 .search--field--component:hover {
-  padding: 1px;
+  // padding: 1px;
   .focus--field--box--shadow {
     opacity: 0.2 !important;
   }
