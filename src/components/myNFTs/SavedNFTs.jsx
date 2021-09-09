@@ -171,7 +171,7 @@ const SavedNFTs = () => {
                           {(close) => (
                             <RemovePopup
                               close={close}
-                              nftID={Number(nft.id)}
+                              nftID={nft.id}
                               removedItemName={nft.name}
                               removeFrom="saved"
                             />
@@ -207,7 +207,7 @@ const SavedNFTs = () => {
                     <div className="collection__count">
                       {`x${nft.allItems.length}`}
                       <div
-                        className="allItems"
+                        className="generatedEditions"
                         style={{
                           gridTemplateColumns: `repeat(${Math.ceil(
                             nft.allItems.length / 10
@@ -215,12 +215,12 @@ const SavedNFTs = () => {
                         }}
                       >
                         {nft.allItems.map((edition) => (
-                          <div key={edition}>{`#${edition}`}</div>
+                          <div key={edition.id.split('-')[0]}>{`#${edition.id.split('-')[0]}`}</div>
                         ))}
                       </div>
                     </div>
                   ) : (
-                    <p className="collection__count">{`#${nft.allItems[0]}`}</p>
+                    <p className="collection__count">{`#${nft.allItems[0].id.split('-')[0]}`}</p>
                   )}
                 </div>
                 {nft.allItems.length > 1 && (

@@ -224,7 +224,6 @@ const SingleNFTSettings = () => {
   // }, [propertyChangesAmount]);
 
   const closeCongratsPopupEvent = () => {
-    const mintingGeneratedEditions = [];
     const allItems = [];
 
     for (let i = 0; i < Number(editions); i += 1) {
@@ -250,6 +249,9 @@ const SingleNFTSettings = () => {
             id: selectedCollection.id,
             name: selectedCollection.name,
             avatar: selectedCollection.previewImage,
+            description: selectedCollection.description,
+            shortURL: selectedCollection.shortURL,
+            tokenName: selectedCollection.tokenName,
           },
           owner: {
             id: loggedInArtist.id,
@@ -303,15 +305,20 @@ const SingleNFTSettings = () => {
     setPreviewImage(null);
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
     setRoyaltyAddress([{ address: '', amount: '' }]);
+    setSelectedCollection(null);
     setShowModal(false);
     document.body.classList.remove('no__scroll');
   };
 
   const handleCloseSuccessPopup = () => {
-    const generatedEditions = [];
+    const allItems = [];
 
-    for (let i = 0; i < editions; i += 1) {
-      generatedEditions.push(uuid().split('-')[0]);
+    for (let i = 0; i < Number(editions); i += 1) {
+      allItems.push({
+        id: uuid(),
+        url: nftTestImage,
+        type: 'image/png',
+      });
     }
     if (!savedNFTsID) {
       if (selectedCollection) {
@@ -319,20 +326,32 @@ const SingleNFTSettings = () => {
           ...savedNfts,
           {
             id: uuid(),
-            type: 'collection',
-            collectionId: selectedCollection.id,
-            collectionName: selectedCollection.name,
-            collectionAvatar: selectedCollection.previewImage,
-            collectionDescription: selectedCollection.description,
-            shortURL: selectedCollection.shortURL,
-            tokenName: selectedCollection.tokenName,
-            previewImage,
+            type: Number(editions) > 1 ? 'bundles' : 'single',
+            creator: {
+              id: loggedInArtist.id,
+              name: loggedInArtist.name || 'John Doe',
+              avatar: loggedInArtist.avatar || creatorTestImage,
+            },
+            collection: {
+              id: selectedCollection.id,
+              name: selectedCollection.name,
+              avatar: selectedCollection.previewImage,
+              description: selectedCollection.description,
+              shortURL: selectedCollection.shortURL,
+              tokenName: selectedCollection.tokenName,
+            },
+            owner: {
+              id: loggedInArtist.id,
+              name: loggedInArtist.name || 'John Doe',
+              avatar: loggedInArtist.avatar || creatorTestImage,
+            },
+            allItems,
+            media: previewImage,
             name,
             description,
             numberOfEditions: Number(editions),
-            generatedEditions,
             properties,
-            percentAmount,
+            royaltyAddress,
             selected: false,
           },
         ]);
@@ -341,14 +360,24 @@ const SingleNFTSettings = () => {
           ...savedNfts,
           {
             id: uuid(),
-            type: 'single',
-            previewImage,
+            type: Number(editions) > 1 ? 'bundles' : 'single',
+            creator: {
+              id: loggedInArtist.id,
+              name: loggedInArtist.name || 'John Doe',
+              avatar: loggedInArtist.avatar || creatorTestImage,
+            },
+            owner: {
+              id: loggedInArtist.id,
+              name: loggedInArtist.name || 'John Doe',
+              avatar: loggedInArtist.avatar || creatorTestImage,
+            },
             name,
             description,
-            numberOfEditions: editions,
-            generatedEditions,
+            numberOfEditions: Number(editions),
+            media: previewImage,
+            allItems,
             properties,
-            percentAmount,
+            royaltyAddress,
             selected: false,
           },
         ]);
@@ -359,20 +388,32 @@ const SingleNFTSettings = () => {
           item.id === savedNFTsID
             ? {
                 ...item,
-                type: 'collection',
-                collectionId: selectedCollection.id,
-                collectionName: selectedCollection.name,
-                collectionAvatar: selectedCollection.previewImage,
-                collectionDescription: selectedCollection.description,
-                shortURL: selectedCollection.shortURL,
-                tokenName: selectedCollection.tokenName,
-                previewImage,
+                type: Number(editions) > 1 ? 'bundles' : 'single',
+                creator: {
+                  id: loggedInArtist.id,
+                  name: loggedInArtist.name || 'John Doe',
+                  avatar: loggedInArtist.avatar || creatorTestImage,
+                },
+                collection: {
+                  id: selectedCollection.id,
+                  name: selectedCollection.name,
+                  avatar: selectedCollection.previewImage,
+                  description: selectedCollection.description,
+                  shortURL: selectedCollection.shortURL,
+                  tokenName: selectedCollection.tokenName,
+                },
+                owner: {
+                  id: loggedInArtist.id,
+                  name: loggedInArtist.name || 'John Doe',
+                  avatar: loggedInArtist.avatar || creatorTestImage,
+                },
+                media: previewImage,
                 name,
                 description,
-                numberOfEditions: editions,
-                generatedEditions,
+                numberOfEditions: Number(editions),
+                allItems,
                 properties,
-                percentAmount,
+                royaltyAddress,
               }
             : item
         )
@@ -383,14 +424,24 @@ const SingleNFTSettings = () => {
           item.id === savedNFTsID
             ? {
                 id: uuid(),
-                type: 'single',
-                previewImage,
+                type: Number(editions) > 1 ? 'bundles' : 'single',
+                creator: {
+                  id: loggedInArtist.id,
+                  name: loggedInArtist.name || 'John Doe',
+                  avatar: loggedInArtist.avatar || creatorTestImage,
+                },
+                owner: {
+                  id: loggedInArtist.id,
+                  name: loggedInArtist.name || 'John Doe',
+                  avatar: loggedInArtist.avatar || creatorTestImage,
+                },
+                media: previewImage,
                 name,
                 description,
-                numberOfEditions: editions,
-                generatedEditions,
+                numberOfEditions: Number(editions),
+                allItems,
                 properties,
-                percentAmount,
+                royaltyAddress,
               }
             : item
         )
@@ -402,6 +453,7 @@ const SingleNFTSettings = () => {
     setPreviewImage(null);
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
     setRoyaltyAddress([{ address: '', amount: '' }]);
+    setSelectedCollection(null);
     setSavedNFTsID(null);
     setShowModal(false);
     document.body.classList.remove('no__scroll');
@@ -413,11 +465,11 @@ const SingleNFTSettings = () => {
       setName(res[0]?.name);
       setDescription(res[0]?.description);
       setEditions(res[0]?.numberOfEditions);
-      setPreviewImage(res[0]?.previewImage);
-      setPercentAmount(res[0]?.percentAmount);
+      setPreviewImage(res[0]?.media);
+      setRoyaltyAddress(res[0]?.royaltyAddress);
       setProperties(res[0]?.properties);
-      if (res.length && res[0].collectionId) {
-        const getCollection = deployedCollections.filter((col) => col.id === res[0]?.collectionId);
+      if (res.length && res[0].collection?.id) {
+        const getCollection = deployedCollections.filter((col) => col.id === res[0].collection?.id);
         if (getCollection.length) {
           setSelectedCollection(getCollection[0]);
         }

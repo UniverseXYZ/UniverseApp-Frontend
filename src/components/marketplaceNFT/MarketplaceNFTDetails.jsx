@@ -1075,27 +1075,29 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       </div>
       {collection && moreFromThisCollection.length && (
         <div className="collection">
-          <div className="collection--title">
-            <h1>More from this collection</h1>
-          </div>
-          <div className="browse--nft--list">
-            {moreFromThisCollection.map((nft) => (
-              <NFTCard nft={nft} key={nft.id} />
-            ))}
-          </div>
-          <div className="view--button">
-            <button
-              type="button"
-              className="light-button"
-              onClick={() =>
-                history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
-                  collection,
-                  saved: false,
-                })
-              }
-            >
-              View Collection
-            </button>
+          <div className="collection--container">
+            <div className="collection--title">
+              <h1>More from this collection</h1>
+            </div>
+            <div className="browse--nft--list">
+              {moreFromThisCollection.map((nft) => (
+                <NFTCard nft={nft} key={nft.id} />
+              ))}
+            </div>
+            <div className="view--button">
+              <button
+                type="button"
+                className="light-button"
+                onClick={() =>
+                  history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                    collection,
+                    saved: false,
+                  })
+                }
+              >
+                View Collection
+              </button>
+            </div>
           </div>
         </div>
       )}
