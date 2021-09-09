@@ -9,13 +9,13 @@
   .my-account-title {
     display: grid;
     grid-template-columns: 1fr 253px;
-    .button-section{
+    .button-section {
       display: flex;
       justify-content: center;
-      .public-button{
+      .public-button {
         box-shadow: 2px 1000px 1px #feeaff inset;
         @include md {
-        box-shadow: 2px 1000px 1px #fff inset;
+          box-shadow: 2px 1000px 1px #fff inset;
         }
       }
     }
@@ -373,7 +373,7 @@
           @include lg {
             width: 100%;
           }
-          &.error-inp+.box--shadow--effect--block{
+          &.error-inp + .box--shadow--effect--block {
             display: none;
           }
         }
@@ -446,7 +446,6 @@
           input:focus {
             border: 1px solid transparent;
           }
-
         }
         .account-grid-about-editing {
           position: relative;
@@ -473,7 +472,7 @@
             &:hover {
               border-radius: 10px;
             }
-            &.error-inp+.box--shadow--effect--block{
+            &.error-inp + .box--shadow--effect--block {
               display: none;
             }
           }
@@ -501,7 +500,7 @@
             .box--shadow--effect--block {
               opacity: 0.2;
             }
-            textarea{
+            textarea {
               border-radius: 10px;
             }
           }
@@ -1084,11 +1083,13 @@
   }
 
   @include lg {
+    background-image: url('../../assets/images/my-profile-bg-tablet.png');
     width: 100%;
     padding: 0px 60px;
     margin: 0 auto;
   }
   @include sm {
+    background-image: url('../../assets/images/my-profile-bg-mobile.png');
     width: 100%;
     padding: 0px 20px;
     margin: 0 auto;
