@@ -39,6 +39,7 @@ const Wallet = ({
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
   const ref = useRef(null);
+  const ref2 = useRef(null);
   const refMobile = useRef(null);
   const [collections, setCollections] = useState([]);
   const [mobileVersion, setMobileVersion] = useState(true);
@@ -129,6 +130,10 @@ const Wallet = ({
       ) {
         setIsCollectionDropdownOpened(false);
       }
+    }
+
+    if (ref2.current && !ref2.current.contains(event.target)) {
+      setIsDropdownOpened(false);
     }
   };
 
@@ -476,8 +481,9 @@ const Wallet = ({
               </div>
               <h3>No NFTs found</h3>
               <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-              <Button
-                ref={ref}
+              <button
+                type="button"
+                ref={ref2}
                 className={`create--nft--dropdown  ${
                   isDropdownOpened ? 'opened' : ''
                 } light-button`}
@@ -508,7 +514,7 @@ const Wallet = ({
                     </ul>
                   </div>
                 )}
-              </Button>
+              </button>
             </div>
           )}
         </div>

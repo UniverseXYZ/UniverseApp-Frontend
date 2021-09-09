@@ -1,17 +1,30 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
-import plusIcon from '../../assets/images/PlusIcon.png';
+import plusIcon from '../../assets/images/plus.svg';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useContext(AppContext);
   const history = useHistory();
   const ref = useRef(null);
+  const ref2 = useRef(null);
   const refMobile = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+
+  const handleClickOutside = (event) => {
+    if (ref2.current && !ref2.current.contains(event.target)) {
+      setIsDropdownOpened(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   return (
     <div className="tab__saved__collections">
@@ -80,10 +93,11 @@ const DeployedCollections = () => {
             </div>
             <h3>No collections found</h3>
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
-            <Button
+            <button
+              type="button"
               // className="light-button"
               // onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
-              ref={ref}
+              ref={ref2}
               className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}
               onClick={() => setIsDropdownOpened(!isDropdownOpened)}
               aria-hidden="true"
@@ -112,7 +126,7 @@ const DeployedCollections = () => {
                   </ul>
                 </div>
               )}
-            </Button>
+            </button>
           </div>
         </div>
       )}

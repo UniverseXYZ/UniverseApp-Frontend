@@ -399,7 +399,7 @@
     &--footer {
       .name--and--price {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         margin-bottom: 10px;
         h4 {
