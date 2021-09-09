@@ -541,7 +541,7 @@ const AuctionSettings = () => {
             onBlur={() => setHideIcon(false)}
             className="royalty-title"
           >
-            Royalty splits <img src={infoIcon} alt="Info Icon" className="info-icon" />
+            Revenue splits <img src={infoIcon} alt="Info Icon" className="info-icon" />
           </h2>
           <span className="info">
             {hideIcon && (
@@ -609,7 +609,7 @@ const AuctionSettings = () => {
             <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
               <h5>
                 <img src={addIcon} alt="Add" />
-                Add property
+                Add wallet
               </h5>
             </div>
           </div>

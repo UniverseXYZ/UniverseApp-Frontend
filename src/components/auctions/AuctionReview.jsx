@@ -203,7 +203,7 @@ const AuctionReview = () => {
             .map((item) => item.address !== '' && item.amount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
-              <h2 className="royalty-settings-title">Royalty splits</h2>
+              <h2 className="royalty-settings-title">Revenue splits</h2>
             </div>
           )}
 
