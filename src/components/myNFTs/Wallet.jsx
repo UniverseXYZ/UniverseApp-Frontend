@@ -116,7 +116,6 @@ const Wallet = ({
   };
 
   const handledeleteNft = (nftSelected) => {
-    const nftIndex = selectedNFTIds.findIndex((nft) => nft === nftSelected.id);
     setSelectedNFTIds(selectedNFTIds.filter((item) => item !== nftSelected.id));
   };
 
@@ -235,13 +234,13 @@ const Wallet = ({
 
   useEffect(() => {
     const prevNFTs = [];
-    filteredNFTs.forEach((nft) => {
+    myNFTs.forEach((nft) => {
       if (selectedNFTIds.includes(nft.id)) {
         prevNFTs.push(nft);
       }
     });
     setPreviewNFTs(prevNFTs);
-  }, [filteredNFTs, selectedNFTIds]);
+  }, [myNFTs, selectedNFTIds]);
 
   return (
     <div className="tab__wallet">
@@ -423,20 +422,23 @@ const Wallet = ({
           </div>
           {myNFTs.length ? (
             <>
-              {/* <Lists
-                data={filteredNFTs}
-                perPage={perPage}
-                offset={offset}
-                selectedNFTIds={selectedNFTIds}
-                setSelectedNFTIds={setSelectedNFTIds}
-                winners={Number(winners)}
-                nftsPerWinner={Number(nftsPerWinner)}
-              /> */}
-              <div className="nfts__lists">
-                {myNFTs
-                  .filter((nft) => !nft.hidden)
-                  .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
-              </div>
+              {isCreatingAction ? (
+                <Lists
+                  data={myNFTs}
+                  perPage={perPage}
+                  offset={offset}
+                  selectedNFTIds={selectedNFTIds}
+                  setSelectedNFTIds={setSelectedNFTIds}
+                  winners={Number(winners)}
+                  nftsPerWinner={Number(nftsPerWinner)}
+                />
+              ) : (
+                <div className="nfts__lists">
+                  {myNFTs
+                    .filter((nft) => !nft.hidden)
+                    .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
+                </div>
+              )}
 
               {myNFTs.filter((nft) => !nft.hidden).length > quantity && (
                 <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
@@ -475,8 +477,6 @@ const Wallet = ({
               <h3>No NFTs found</h3>
               <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
               <Button
-                // className="light-button"
-                // onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
                 ref={ref}
                 className={`create--nft--dropdown  ${
                   isDropdownOpened ? 'opened' : ''
@@ -514,16 +514,15 @@ const Wallet = ({
         </div>
       )}
       {isCreatingAction && (
-        // <div>
         <div className="selected-ntf">
           <div className="container selected-body">
             <div className="infoSelect-div">
               <span>Number of winners : {winners}</span>
               <span>NFTs per winner : {nftsPerWinner}</span>
               <div className="img-div">
-                {previewNFTs.map((nft, index) => (
+                {previewNFTs.map((nft) => (
                   <div key={nft.id} className="imgs">
-                    {nft.previewImage.type === 'video/mp4' && (
+                    {nft.media.type === 'video/mp4' && (
                       <video
                         className="smallView-image"
                         onMouseOver={(event) => event.target.play()}
@@ -531,22 +530,21 @@ const Wallet = ({
                         onMouseOut={(event) => event.target.pause()}
                         onBlur={(event) => event.target.pause()}
                       >
-                        <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                        <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    {nft.previewImage.type === 'audio/mpeg' && (
+                    {nft.media.type === 'audio/mpeg' && (
                       <img className="smallView-image" src={mp3Icon} alt={nft.name} />
                     )}
-                    {nft.previewImage.type !== 'audio/mpeg' &&
-                      nft.previewImage.type !== 'video/mp4' && (
-                        <img
-                          className="smallView-image"
-                          src={URL.createObjectURL(nft.previewImage)}
-                          alt={nft.name}
-                        />
-                      )}
+                    {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
+                      <img
+                        className="smallView-image"
+                        src={URL.createObjectURL(nft.media)}
+                        alt={nft.name}
+                      />
+                    )}
                     <img
                       className="del-img"
                       src={crossSmall}
