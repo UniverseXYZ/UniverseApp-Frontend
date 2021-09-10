@@ -6,7 +6,6 @@ import AppContext from '../../../../../ContextAPI';
 
 const ActiveAuctionsTab = () => {
   const { myAuctions } = useContext(AppContext);
-  console.log('myAuctions', myAuctions);
 
   return (
     <div className="active__auctions__tab">
