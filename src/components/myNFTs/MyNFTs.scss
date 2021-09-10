@@ -2122,6 +2122,9 @@
         }
       }
     }
+    @include sm {
+      margin-right: -15px;
+    }
   }
   .nfts__activity__list {
     .nft__activity__div {
