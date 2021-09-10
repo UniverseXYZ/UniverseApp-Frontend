@@ -84,10 +84,6 @@
           opacity: 0.2 !important;
         }
         input {
-          &:not(:disabled) {
-            // border: 1px solid transparent;
-            border-radius: 10px !important;
-          }
           &:disabled {
             cursor: not-allowed;
             &+.box--shadow--effect--block {

@@ -348,6 +348,20 @@
           }
         }
       }
+      
+      button {
+        &.light-border-button {
+          box-shadow: 2px 1000px 1px #fafafa inset;
+        }
+      }
+    }
+    .step-3 {
+      button {
+        margin-bottom: 20px;
+        &.light-border-button {
+          box-shadow: 2px 1000px 1px #fafafa inset;
+        }
+      }
     }
     @include lg {
       margin: 30px 18px 60px 33px;
@@ -414,11 +428,17 @@
       .step-2 {
         button {
           margin-bottom: 40px;
+          &.light-border-button {
+            box-shadow: 2px 1000px 1px #fafafa inset;
+          }
         }
       }
       .step-3 {
         button {
           margin-bottom: 20px;
+          &.light-border-button {
+            box-shadow: 2px 1000px 1px #fafafa inset;
+          }
         }
       }
 

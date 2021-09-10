@@ -475,6 +475,16 @@ const SingleNFTSettings = () => {
         }
       }
     }
+    return () => {
+      setName('');
+      setDescription('');
+      setEditions('');
+      setPreviewImage(null);
+      setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+      setRoyaltyAddress([{ address: '', amount: '' }]);
+      setSelectedCollection(null);
+      setSavedNFTsID(null);
+    };
   }, []);
 
   useEffect(() => {
