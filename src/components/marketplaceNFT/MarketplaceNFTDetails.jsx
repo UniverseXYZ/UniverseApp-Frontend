@@ -1079,7 +1079,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             <div className="collection--title">
               <h1>More from this collection</h1>
             </div>
-            <div className="browse--nft--list">
+            <div className="nfts__lists">
               {moreFromThisCollection.map((nft) => (
                 <NFTCard nft={nft} key={nft.id} />
               ))}

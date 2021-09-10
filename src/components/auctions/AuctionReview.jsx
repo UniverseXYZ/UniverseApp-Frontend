@@ -24,6 +24,7 @@ import LoadingPopup from '../popups/LoadingPopup.jsx';
 
 const AuctionReview = () => {
   const {
+    loggedInArtist,
     auction,
     setAuction,
     bidtype,
@@ -70,6 +71,7 @@ const AuctionReview = () => {
       setSelectedTabIndex(1);
       const newAuction = { ...auction };
       newAuction.totalNFTs = totalNFTs;
+      newAuction.artist = loggedInArtist;
       setMyAuctions([...myAuctions, newAuction]);
       setAuction({ tiers: [] });
       setAuctionSetupState(false);
@@ -88,6 +90,7 @@ const AuctionReview = () => {
         document.getElementById('popup-root').remove();
         const newAuction = { ...auction };
         newAuction.totalNFTs = totalNFTs;
+        newAuction.artist = loggedInArtist;
         setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
         setAuction({ tiers: [] });
         setAuctionSetupState(false);
