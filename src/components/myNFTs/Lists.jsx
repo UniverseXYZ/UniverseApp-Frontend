@@ -28,7 +28,8 @@ const Lists = ({
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef();
 
-  const { auction, myNFTs, setMyNFTs } = useContext(AppContext);
+  const { auction, myAuctions, myNFTs, setMyNFTs } = useContext(AppContext);
+  console.log(auction);
 
   const [openEditions, setOpenEditions] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
@@ -78,6 +79,7 @@ const Lists = ({
       }
     }
   };
+  console.log(myNFTs);
 
   useEffect(() => {
     if (editMode) {
