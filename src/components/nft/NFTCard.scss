@@ -38,6 +38,7 @@
             width: 3px;
             height: 3px;
             background: $black;
+            border-radius: 50%;
             &:not(:last-child) {
               margin-right: 3px;
             }
@@ -120,7 +121,7 @@
             position: absolute;
             z-index: 1;
             top: -32px;
-            right: -69px;
+            right: -66px;
             &::after {
               content: '';
               position: absolute;
@@ -153,17 +154,20 @@
       .likes--count {
         display: flex;
         align-items: center;
+        &:hover {
+          path {
+            stroke: #ff4949;
+          }
+          .like-count {
+            color: #ff4949;
+          }
+        }
         > div {
           position: relative;
           display: flex;
           align-items: center;
           svg {
             cursor: pointer;
-            &:hover {
-              path {
-                stroke: #ff4949;
-              }
-            }
             &.fill {
               path {
                 fill: #ff4949;
@@ -241,6 +245,9 @@
           line-height: 22px;
           color: rgba(0, 0, 0, 0.4);
           margin-left: 6px;
+        }
+        .redlike{
+          color: #ff4949!important;
         }
       }
       .bundles--count {
