@@ -14,6 +14,9 @@ import Button from '../../components/button/Button.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
 import NFTCard from '../../components/nft/NFTCard.jsx';
 import LoadMore from '../../components/pagination/LoadMore.jsx';
+import bubbleIcon from '../../assets/images/text-bubble.png';
+import plusIcon from '../../assets/images/plus.svg';
+import SearchFilters from '../../components/nft/SearchFilters.jsx';
 
 const Collection = () => {
   const {
@@ -33,6 +36,8 @@ const Collection = () => {
   const [search, setSearch] = useState('');
   const history = useHistory();
   const [quantity, setQuantity] = useState(8);
+  const ref = useRef(null);
+  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
@@ -104,7 +109,7 @@ const Collection = () => {
           </Button>
         </div>
         <div className="collection--nfts--container">
-          <Filters search={search} setSearch={setSearch} filteredNFTs={filteredNFTs} />
+          <SearchFilters data={collectionNFTs} />
           {collectionNFTs.filter((nft) => !nft.hidden).length ? (
             <>
               <div className="nfts__lists">
@@ -117,7 +122,27 @@ const Collection = () => {
               )}
             </>
           ) : (
-            <></>
+            <div className="empty__nfts">
+              <div className="tabs-empty">
+                <div className="image-bubble">
+                  <img src={bubbleIcon} alt="bubble-icon" />
+                </div>
+                <h3>No NFTs found</h3>
+                <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
+                <Button
+                  ref={ref}
+                  className={`create--nft--dropdown  ${
+                    isDropdownOpened ? 'opened' : ''
+                  } light-button`}
+                  onClick={() =>
+                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                  }
+                  aria-hidden="true"
+                >
+                  Create NFT
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </div>

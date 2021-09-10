@@ -157,7 +157,7 @@
     align-items: center;
     margin-bottom: 40px;
     margin-top: 0;
-    padding: 60px 20px 0 0;
+    padding: 60px 20px 0px 0px;
     flex-wrap: wrap;
 
     h1.title {
@@ -236,11 +236,13 @@
         width: 100%;
       }
     }
-
+    @include xl {
+      padding: 60px 20px 0 20px;
+    }
     @include sm {
       flex-wrap: wrap;
       margin-bottom: 0px;
-      padding: 0 20px;
+      padding: 40px 20px 0;
     }
   }
 }
@@ -1583,7 +1585,7 @@
       &:hover {
         // box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
         // border: 1px solid $white;
-        border: 2px solid #e4b613;
+        border: 1px solid #e4b613;
         .saved__nft__box__highlight__one {
           border-bottom: 2px solid #e4b613;
           border-left: 2px solid #e4b613;
@@ -2119,6 +2121,9 @@
           margin-bottom: 8px;
         }
       }
+    }
+    @include sm {
+      margin-right: -15px;
     }
   }
   .nfts__activity__list {

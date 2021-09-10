@@ -28,9 +28,7 @@ const Lists = ({
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef();
 
-  const { auction, myAuctions, myNFTs, setMyNFTs } = useContext(AppContext);
-  console.log(auction);
-
+  const { auction, myNFTs, setMyNFTs, myAuctions } = useContext(AppContext);
   const [openEditions, setOpenEditions] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -67,7 +65,7 @@ const Lists = ({
 
   const handleSavedNfts = (clickedNFT) => {
     if (isCreatingAction) {
-      if (tierById && winners <= clickedNFT.allItems.length) {
+      if (tierById && winners <= clickedNFT.allItems.length && !clickedNFT.isUsed) {
         if (nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
           setSelectedNFTIds((prevValue) => {
             const nftIndex = prevValue.findIndex((nft) => nft === clickedNFT.id);
@@ -145,7 +143,7 @@ const Lists = ({
         .filter((nft) => !nft.hidden)
         .map((nft, index) => (
           <div style={{ position: 'relative' }} key={nft.id}>
-            {tierById && winners > nft.allItems.length ? (
+            {tierById && winners > nft.allItems.length && !nft.isUsed ? (
               <>
                 <img
                   className="nonicon__icon"
@@ -163,6 +161,31 @@ const Lists = ({
                         This NFT doesn&apos;t have enough editions to be entered into this tier. You
                         must have the equal amount of winners as NFTs available.
                       </p>
+                      {/* <p>
+                        This NFT is already used in another auction.
+                      </p> */}
+                    </div>
+                  </Animated>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+            {nft.isUsed ? (
+              <>
+                <img
+                  className="nonicon__icon"
+                  src={nonSelecting}
+                  alt="Check Icon"
+                  onMouseOver={() => activateInfo(index)}
+                  onFocus={() => activateInfo(index)}
+                  onMouseLeave={() => setHideIcon(false)}
+                  onBlur={() => setHideIcon(false)}
+                />
+                {hideIcon && index === activeIndex && (
+                  <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
+                    <div className="warning-text">
+                      <p>This NFT is already used in another auction.</p>
                     </div>
                   </Animated>
                 )}
@@ -173,6 +196,7 @@ const Lists = ({
             <div
               className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${
                 (tierById && winners > nft.allItems.length) ||
+                nft.isUsed ||
                 (tierById &&
                   nftsPerWinner === selectedNFTIds.length &&
                   !selectedNFTIds.includes(nft.id))
@@ -193,9 +217,13 @@ const Lists = ({
                       winners <= nft.allItems?.length && (
                         <span className="selected-div">
                           <span className="selected-number">
-                            {/* {selectedEditions[nft.id] ? selectedEditions[nft.id].length : 0}/
-                            {nft.allItems.length} */}
-                            {winners}/{nft.allItems.length}
+                            {`${
+                              nft.allItems.length === 1
+                                ? '1/1'
+                                : `${
+                                    selectedEditions[nft.id] ? selectedEditions[nft.id].length : 0
+                                  }/${nft.allItems.length}`
+                            }`}
                           </span>
                           <img className="check__icon" src={checkIcon} alt="Check Icon" />
                         </span>

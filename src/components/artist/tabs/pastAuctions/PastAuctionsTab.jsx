@@ -1,22 +1,16 @@
-import React, { useState, useContext } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Pagination from '../../../pagination/Pagionation.jsx';
-import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown.jsx';
-import PastAuctionsList from './PastAuctionsList.jsx';
 import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../utils/fixtures/PastAuctionsDummyData';
 import AppContext from '../../../../ContextAPI.js';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
+import PastAuctionsCard from '../../../auctionsCard/PastAuctionsCard';
 
 const PastAuctionsTab = ({ onArtist }) => {
   const { loggedInArtist, myAuctions } = useContext(AppContext);
   const history = useHistory();
-
-  const location = useLocation();
-  const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(6);
 
   const artistPastAuctions =
     loggedInArtist.id === onArtist?.id
@@ -25,11 +19,7 @@ const PastAuctionsTab = ({ onArtist }) => {
 
   return artistPastAuctions.length ? (
     <>
-      <PastAuctionsList data={PLACEHOLDER_PAST_AUCTIONS} perPage={perPage} offset={offset} />
-      <div className="pagination__container">
-        <Pagination data={PLACEHOLDER_PAST_AUCTIONS} perPage={perPage} setOffset={setOffset} />
-        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-      </div>
+      <PastAuctionsCard data={artistPastAuctions} />
     </>
   ) : (
     <div className="empty__auction">

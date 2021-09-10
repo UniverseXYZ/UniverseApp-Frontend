@@ -143,8 +143,8 @@
           margin-left: -7px;
         }
         img {
-          width: 22px;
-          height: 22px;
+          width: 26px;
+          height: 26px;
           object-fit: cover;
           border: 1px solid $white;
           border-radius: 50%;
@@ -184,8 +184,8 @@
             border-radius: 12px;
             padding: 9px 12px;
             position: absolute;
-            z-index: 9;
-            top: -80px;
+            top: -73px;
+            z-index: 111;
             right: -72px;
             .likers--text {
               font-family: $spaceGroteskFont;
@@ -399,7 +399,7 @@
     &--footer {
       .name--and--price {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
         margin-bottom: 10px;
         h4 {

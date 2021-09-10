@@ -23,7 +23,7 @@ import { UNIVERSE_NFTS } from '../../utils/fixtures/NFTsUniverseDummyData';
 import Tabs from '../tabs/Tabs';
 import EmptyTabs from '../tabs/EmptyTabs';
 import HiddenNFTs from './HiddenNFTs';
-import plusIcon from '../../assets/images/PlusIcon.png';
+import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
 import LikedNFTs from './LikedNFTs';
 
@@ -61,8 +61,21 @@ const MyNFTs = () => {
   const isCreatingAction = location.pathname === '/select-nfts';
   const history = useHistory();
   const ref = useRef(null);
+  const ref2 = useRef(null);
   const refMobile = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+
+  const handleClickOutside = (event) => {
+    if (ref2.current && !ref2.current.contains(event.target)) {
+      setIsDropdownOpened(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
@@ -362,8 +375,9 @@ const MyNFTs = () => {
                   >
                     Mint selected
                   </button>
-                  <Button
-                    ref={ref}
+                  <button
+                    type="button"
+                    ref={ref2}
                     className={`create--nft--dropdown  ${
                       isDropdownOpened ? 'opened' : ''
                     } light-button`}
@@ -397,7 +411,7 @@ const MyNFTs = () => {
                         </ul>
                       </div>
                     )}
-                  </Button>
+                  </button>
                 </>
               )}
               {myNFTsSelectedTabIndex === 3 && (
@@ -410,8 +424,9 @@ const MyNFTs = () => {
                 </button>
               )}
               {myNFTsSelectedTabIndex !== 2 && (
-                <Button
-                  ref={ref}
+                <button
+                  type="button"
+                  ref={ref2}
                   className={`create--nft--dropdown  ${
                     isDropdownOpened ? 'opened' : ''
                   } light-button light--button--mobile`}
@@ -445,7 +460,7 @@ const MyNFTs = () => {
                       </ul>
                     </div>
                   )}
-                </Button>
+                </button>
               )}
             </div>
             {showModal && <MintModal open={showModal} onClose={handleClose} />}
@@ -525,8 +540,9 @@ const MyNFTs = () => {
                   <p>
                     Create NFTs or NFT collections with our platform by clicking the button below
                   </p>
-                  <Button
-                    ref={ref}
+                  <button
+                    type="button"
+                    ref={ref2}
                     className={`create--nft--dropdown  ${
                       isDropdownOpened ? 'opened' : ''
                     } light-button`}
@@ -560,7 +576,7 @@ const MyNFTs = () => {
                         </ul>
                       </div>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </>
@@ -576,8 +592,9 @@ const MyNFTs = () => {
                   <p>
                     Create NFTs or NFT collections with our platform by clicking the button below
                   </p>
-                  <Button
-                    ref={ref}
+                  <button
+                    type="button"
+                    ref={ref2}
                     className={`create--nft--dropdown  ${
                       isDropdownOpened ? 'opened' : ''
                     } light-button`}
@@ -611,7 +628,7 @@ const MyNFTs = () => {
                         </ul>
                       </div>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </>
