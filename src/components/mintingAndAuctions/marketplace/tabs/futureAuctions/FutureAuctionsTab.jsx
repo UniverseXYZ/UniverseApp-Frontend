@@ -1,22 +1,28 @@
-import React, { useState } from 'react';
-import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
-import Pagination from '../../../../pagination/Pagionation.jsx';
+import React, { useContext } from 'react';
+import moment from 'moment';
 import FutureAuctionsFilters from './Filters.jsx';
-import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../../utils/fixtures/FutureAuctionsDummyData';
-import FutureAuctionsList from './FutureAuctionsList';
+import FutureAuctionsCard from '../../../../auctionsCard/FutureAuctionsCard.jsx';
+import AppContext from '../../../../../ContextAPI.js';
 
 const FutureAuctionsTab = () => {
-  const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
-
+  const { myAuctions } = useContext(AppContext);
   return (
     <div className="future__auctions__tab">
-      <FutureAuctionsFilters />
-      <FutureAuctionsList data={PLACEHOLDER_FUTURE_AUCTIONS} perPage={perPage} offset={offset} />
-      <div className="pagination__container">
-        <Pagination data={PLACEHOLDER_FUTURE_AUCTIONS} perPage={perPage} setOffset={setOffset} />
-        <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-      </div>
+      {myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
+        .length ? (
+        <>
+          <FutureAuctionsFilters />
+          <FutureAuctionsCard
+            data={myAuctions.filter(
+              (item) => !item.launch && !moment(item.endDate).isBefore(moment.now())
+            )}
+          />
+        </>
+      ) : (
+        <div className="empty__nfts">
+          <h3>No future auctions found</h3>
+        </div>
+      )}
     </div>
   );
 };

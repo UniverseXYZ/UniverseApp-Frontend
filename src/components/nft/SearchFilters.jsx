@@ -44,7 +44,6 @@ const SearchFilters = ({ data }) => {
   useEffect(() => {
     const onScroll = (e) => {
       const element = document.querySelector('.search--sort--filters--section');
-      console.log('element.offsetTop', element.offsetTop);
       if (element) {
         if (window.scrollY >= element.offsetTop) {
           document.querySelector('header').style.position = 'absolute';
