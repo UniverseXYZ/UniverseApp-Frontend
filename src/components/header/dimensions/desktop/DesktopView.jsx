@@ -19,6 +19,7 @@ import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
 import rarityChartIcon from '../../../../assets/images/rarity-chart.svg';
+import navChartIcon from '../../../../assets/images/chart-nav-icon.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -59,7 +60,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsMintingDropdownOpened(!isMintingDropdownOpened)}
           >
-            <span className="nav__link__title">Products</span>
+            <span className="nav__link__title">&#128293; Products</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -76,7 +77,6 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                // className="disable"
                 onClick={() => {
                   setIsMintingDropdownOpened(false);
                   history.push('/marketplace');
@@ -84,7 +84,6 @@ const DesktopView = ({
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
                 <span>NFT marketplace</span>
-                {/* <span className="tooltiptext">Coming soon</span> */}
               </button>
               <button
                 type="button"
@@ -106,7 +105,7 @@ const DesktopView = ({
             className="menu-li"
             onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
           >
-            <span className="nav__link__title">&#128293; NFT drops</span>
+            <span className="nav__link__title">NFT drops</span>
             <img className="arrow" src={arrowUP} alt="arrow" />
           </button>
           <div className="dropdown minting-drop">
@@ -123,15 +122,6 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  history.push('/polymorph-rarity');
-                }}
-              >
-                <img src={rarityChartIcon} alt="Rarity chart" />
-                <span>Rarity chart</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
                   history.push('/lobby-lobsters');
                 }}
               >
@@ -140,14 +130,40 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
-                // className="disable"
                 onClick={() => {
                   history.push('/core-drops');
                 }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
                 <span>OG planet drops</span>
-                {/* <span className="tooltiptext">Coming soon</span> */}
+              </button>
+            </div>
+          </div>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="menu-li"
+            onClick={() => setIsPolymorphsDropdownOpened(!isPolymorphsDropdownOpened)}
+          >
+            <span className="nav__link__title">Rarity charts</span>
+            <img className="arrow" src={arrowUP} alt="arrow" />
+          </button>
+          <div className="dropdown minting-drop">
+            <div className="dropdown__body">
+              <button
+                type="button"
+                onClick={() => {
+                  history.push('/polymorph-rarity');
+                }}
+              >
+                <img src={navChartIcon} alt="Polymorphs" />
+                <span>Polymorphs</span>
+              </button>
+              <button type="button" className="disable">
+                <img src={navChartIcon} alt="Lobby Lobsters" />
+                <span>Lobby Lobsters</span>
+                <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
           </div>

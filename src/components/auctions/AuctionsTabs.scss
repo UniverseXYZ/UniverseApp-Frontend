@@ -521,6 +521,8 @@
 
             img {
               z-index: 9999;
+              min-width: 100%;
+              min-height: 100%;
             }
           }
           .tier-image-first {
