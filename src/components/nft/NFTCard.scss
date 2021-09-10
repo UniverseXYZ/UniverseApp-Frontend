@@ -244,6 +244,8 @@
         }
       }
       .bundles--count {
+        display: flex;
+        align-items: center;
         background: rgba(0, 0, 0, 0.02);
         border: 0.5px solid rgba(0, 0, 0, 0.4);
         box-sizing: border-box;

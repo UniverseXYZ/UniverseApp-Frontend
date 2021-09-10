@@ -5,7 +5,7 @@
   background-image: url('../../assets/images/finalise-auction-desktop.png');
   background-size: 100% 200px;
   background-repeat: no-repeat;
-  background-position-y: 88px;
+  background-position-y: 80px;
 
   .back-rew {
     .set-text {
@@ -273,6 +273,8 @@
                 img {
                   z-index: 9999;
                   border-radius: 5px;
+                  min-height: 100%;
+                  min-width: 100%;
                 }
                 @include sm {
                   width: 75px;

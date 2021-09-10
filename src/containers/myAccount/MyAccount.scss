@@ -5,7 +5,7 @@
   background-image: url('../../assets/images/my-profile-bg.png');
   background-size: 100% 200px;
   background-repeat: no-repeat;
-  background-position-y: 88px;
+  background-position-y: 80px;
   .my-account-title {
     display: grid;
     grid-template-columns: 1fr 253px;
@@ -460,7 +460,6 @@
             font-size: 16px;
             line-height: 20px;
             padding: 15px 16px;
-            // margin-bottom: 20px;
             &::placeholder {
               color: rgba(0, 0, 0, 0.2);
             }
@@ -468,9 +467,6 @@
               background: linear-gradient($white, $white) padding-box,
                 linear-gradient(to right, #bceb00, #00eaea) border-box;
               border: 1px solid transparent;
-            }
-            &:hover {
-              border-radius: 10px;
             }
             &.error-inp + .box--shadow--effect--block {
               display: none;
@@ -499,9 +495,6 @@
             z-index: 9;
             .box--shadow--effect--block {
               opacity: 0.2;
-            }
-            textarea {
-              border-radius: 10px;
             }
           }
         }

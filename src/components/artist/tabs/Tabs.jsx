@@ -15,7 +15,7 @@ import NFTsActivity from '../../myNFTs/NFTsActivity.jsx';
 const Tabs = ({ onArtist }) => {
   const { myNFTs, myAuctions } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  console.log('myAuctions', myAuctions);
+
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 600) {

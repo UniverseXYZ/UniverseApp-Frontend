@@ -5,7 +5,7 @@
   background-image: url('../../assets/images/set-up-auction-desktop.png');
   background-size: 100% 200px;
   background-repeat: no-repeat;
-  background-position-y: 88px;
+  background-position-y: 80px;
   .customize__auction_title {
     display: flex;
     justify-content: space-between;
@@ -307,6 +307,7 @@
                 top: -13px;
                 right: -13px;
                 padding: 5px;
+                cursor: pointer;
               }
 
               .preview__image {
@@ -493,6 +494,7 @@
                 height: 26px;
                 top: -13px;
                 right: -13px;
+                cursor: pointer;
               }
 
               .background__image {

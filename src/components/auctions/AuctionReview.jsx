@@ -33,6 +33,8 @@ const AuctionReview = () => {
     selectedTabIndex,
     setSelectedTabIndex,
     setAuctionSetupState,
+    myNFTs,
+    setMyNFTs,
   } = useContext(AppContext);
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -60,10 +62,26 @@ const AuctionReview = () => {
   const handleSetAuction = () => {
     if (auction && auction.tiers.length) {
       let totalNFTs = 0;
+      const usedNFTsIds = [];
       auction.tiers.forEach((tier) => {
         totalNFTs += tier.winners * tier.nftsPerWinner;
+        tier.nfts.forEach((n) => {
+          usedNFTsIds.push(n.id);
+        });
       });
-      // document.getElementById('loading-hidden-btn').click();
+      const newMyNFTs = [];
+      usedNFTsIds.forEach((id) => {
+        const getUsedNFTs = myNFTs.filter((nft) => nft.id === id);
+        const getNotUsedNFTs = myNFTs.filter((nft) => nft.id !== id);
+        getUsedNFTs.forEach((nft) => {
+          nft.isUsed = true;
+          newMyNFTs.push(nft);
+        });
+        getNotUsedNFTs.forEach((nft) => {
+          newMyNFTs.push(nft);
+        });
+      });
+      document.getElementById('loading-hidden-btn').click();
       setTimeout(() => {
         document.getElementById('popup-root').remove();
         document.getElementById('congrats-hidden-btn').click();
@@ -72,6 +90,7 @@ const AuctionReview = () => {
       const newAuction = { ...auction };
       newAuction.totalNFTs = totalNFTs;
       newAuction.artist = loggedInArtist;
+      setMyNFTs(newMyNFTs);
       setMyAuctions([...myAuctions, newAuction]);
       setAuction({ tiers: [] });
       setAuctionSetupState(false);

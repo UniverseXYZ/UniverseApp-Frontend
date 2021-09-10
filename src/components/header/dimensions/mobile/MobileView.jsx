@@ -40,6 +40,7 @@ import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
 import rarityChartIcon from '../../../../assets/images/rarity-chart.svg';
+import navChartIcon from '../../../../assets/images/chart-nav-icon.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
 import teamIcon from '../../../../assets/images/team.svg';
@@ -48,6 +49,7 @@ import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
+import arrowDown from '../../../../assets/images/arrow-down.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import searchIcon from '../../../../assets/images/search-icon.svg';
 import img from '../../../../assets/images/search-gray.svg';
@@ -82,6 +84,11 @@ const MobileView = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
   const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
+  const [showProducts, setShowProducts] = useState(false);
+  const [showNFTDrops, setShowNFTDrops] = useState(false);
+  const [showRarityCharts, setShowRarityCharts] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [showDAO, setShowDAO] = useState(false);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -490,175 +497,251 @@ const MobileView = (props) => {
                 <li>
                   <div className="grid__menu">
                     <div>
-                      <p className="title">Products</p>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowMenu(false);
-                            history.push('/minting-and-auctions/marketplace/active-auctions');
-                          }}
-                        >
-                          <img src={auctionHouseIcon} alt="Auction House" />
-                          <span>Auction house</span>
-                        </button>
+                      <div
+                        className="head"
+                        aria-hidden="true"
+                        onClick={() => setShowProducts(!showProducts)}
+                      >
+                        <p className="title">Products</p>
+                        <img className={showProducts ? 'rotate' : ''} src={arrowDown} alt="arrow" />
                       </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowMenu(false);
-                            history.push('/marketplace');
-                          }}
-                        >
-                          <img src={marketplaceIcon} alt="NFT Marketplace" />
-                          <span>NFT marketplace</span>
-                        </button>
-                      </div>
-                      <div>
-                        <button type="button" className="disable">
-                          <img src={socialMediaIcon} alt="Social Media" />
-                          <span>Social media</span>
-                          <span className="tooltiptext">Coming soon</span>
-                        </button>
-                      </div>
+                      {showProducts ? (
+                        <>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/minting-and-auctions/marketplace/active-auctions');
+                              }}
+                            >
+                              <img src={auctionHouseIcon} alt="Auction House" />
+                              <span>Auction house</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/marketplace');
+                              }}
+                            >
+                              <img src={marketplaceIcon} alt="NFT Marketplace" />
+                              <span>NFT marketplace</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button type="button" className="disable">
+                              <img src={socialMediaIcon} alt="Social Media" />
+                              <span>Social media</span>
+                              <span className="tooltiptext">Coming soon</span>
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                     <div>
-                      <p className="title">NFT Drops</p>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowMenu(false);
-                            history.push('/polymorphs');
-                          }}
-                        >
-                          <img src={polymorphsIcon} alt="Polymorphs" />
-                          <span>Polymorphs</span>
-                        </button>
+                      <div
+                        className="head"
+                        aria-hidden="true"
+                        onClick={() => setShowNFTDrops(!showNFTDrops)}
+                      >
+                        <p className="title">NFT Drops</p>
+                        <img className={showNFTDrops ? 'rotate' : ''} src={arrowDown} alt="arrow" />
                       </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            history.push('/polymorph-rarity');
-                          }}
-                        >
-                          <img src={rarityChartIcon} alt="Rarity chart" />
-                          <span>Rarity chart</span>
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            history.push('/lobby-lobsters');
-                          }}
-                        >
-                          <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
-                          <span>Lobby Lobsters</span>
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            history.push('/core-drops');
-                          }}
-                          // className="disable"
-                        >
-                          <img src={coreDropsIcon} alt="Core drops" />
-                          <span>OG planet drops</span>
-                          {/* <span className="tooltiptext">Coming soon</span> */}
-                        </button>
-                      </div>
+                      {showNFTDrops ? (
+                        <>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/polymorphs');
+                              }}
+                            >
+                              <img src={polymorphsIcon} alt="Polymorphs" />
+                              <span>Polymorphs</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                history.push('/lobby-lobsters');
+                              }}
+                            >
+                              <img src={lobbyLobstersIcon} alt="Lobby Lobsters" />
+                              <span>Lobby Lobsters</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                history.push('/core-drops');
+                              }}
+                              // className="disable"
+                            >
+                              <img src={coreDropsIcon} alt="Core drops" />
+                              <span>OG planet drops</span>
+                              {/* <span className="tooltiptext">Coming soon</span> */}
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                     <div>
-                      <p className="title">Info</p>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowMenu(false);
-                            history.push('/about');
-                          }}
-                        >
-                          <img src={aboutIcon} alt="About" />
-                          About
-                        </button>
+                      <div
+                        className="head"
+                        aria-hidden="true"
+                        onClick={() => setShowRarityCharts(!showRarityCharts)}
+                      >
+                        <p className="title">Rarity charts</p>
+                        <img
+                          className={showRarityCharts ? 'rotate' : ''}
+                          src={arrowDown}
+                          alt="arrow"
+                        />
                       </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
-                          }
-                        >
-                          <img src={whitepaperIcon} alt="Whitepaper" />
-                          Whitepaper
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          className="team"
-                          onClick={() => {
-                            setShowMenu(false);
-                            history.push('/team');
-                          }}
-                        >
-                          <img src={teamIcon} alt="Team" />
-                          Team
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => window.open('https://docs.universe.xyz/')}
-                        >
-                          <img src={docsIcon} alt="Docs" />
-                          <span>Docs</span>
-                        </button>
-                      </div>
+                      {showRarityCharts ? (
+                        <>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/polymorph-rarity');
+                              }}
+                            >
+                              <img src={navChartIcon} alt="Polymorphs" />
+                              <span>Polymorphs</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button type="button" className="disable">
+                              <img src={navChartIcon} alt="Lobby Lobsters" />
+                              <span>Lobby Lobsters</span>
+                              <span className="tooltiptext">Coming soon</span>
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                     <div>
-                      <p className="title">DAO</p>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => window.open('https://dao.universe.xyz/governance')}
-                        >
-                          <img src={governanceIcon} alt="Governance" />
-                          <span>Governance</span>
-                        </button>
+                      <div
+                        className="head"
+                        aria-hidden="true"
+                        onClick={() => setShowInfo(!showInfo)}
+                      >
+                        <p className="title">Info</p>
+                        <img className={showInfo ? 'rotate' : ''} src={arrowDown} alt="arrow" />
                       </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
-                        >
-                          <img src={yieldFarmingIcon} alt="Yield Farming" />
-                          <span>Yield farming</span>
-                        </button>
+                      {showInfo ? (
+                        <>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/about');
+                              }}
+                            >
+                              <img src={aboutIcon} alt="About" />
+                              About
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
+                              }
+                            >
+                              <img src={whitepaperIcon} alt="Whitepaper" />
+                              Whitepaper
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              className="team"
+                              onClick={() => {
+                                setShowMenu(false);
+                                history.push('/team');
+                              }}
+                            >
+                              <img src={teamIcon} alt="Team" />
+                              Team
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://docs.universe.xyz/')}
+                            >
+                              <img src={docsIcon} alt="Docs" />
+                              <span>Docs</span>
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <div>
+                      <div className="head" aria-hidden="true" onClick={() => setShowDAO(!showDAO)}>
+                        <p className="title">DAO</p>
+                        <img className={showDAO ? 'rotate' : ''} src={arrowDown} alt="arrow" />
                       </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => window.open('https://forum.universe.xyz/')}
-                        >
-                          <img src={forumIcon} alt="Forum" />
-                          <span>Forum</span>
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => window.open('https://signal.universe.xyz/#/')}
-                        >
-                          <img src={signalIcon} alt="Signal" />
-                          <span>Signal</span>
-                        </button>
-                      </div>
+                      {showDAO ? (
+                        <>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://dao.universe.xyz/governance')}
+                            >
+                              <img src={governanceIcon} alt="Governance" />
+                              <span>Governance</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://dao.universe.xyz/yield-farming')}
+                            >
+                              <img src={yieldFarmingIcon} alt="Yield Farming" />
+                              <span>Yield farming</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://forum.universe.xyz/')}
+                            >
+                              <img src={forumIcon} alt="Forum" />
+                              <span>Forum</span>
+                            </button>
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://signal.universe.xyz/#/')}
+                            >
+                              <img src={signalIcon} alt="Signal" />
+                              <span>Signal</span>
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                 </li>
