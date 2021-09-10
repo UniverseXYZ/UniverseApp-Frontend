@@ -59,6 +59,15 @@ const Footer = () => {
       <div className="footer">
         <div className="footer__top">
           <div className="footer__top__container">
+            <div className="universe">
+              <div className="logo-div">
+                <img src={Logo} alt="logo" />
+              </div>
+              <p>
+                Launch your own community-driven NFT universe baked with social tools, media
+                services, and distribution - underpinned by the native $XYZ token.
+              </p>
+            </div>
             <div className="subscribe">
               <p>Stay up to date with our newsletter</p>
               <div className="form">
@@ -73,68 +82,10 @@ const Footer = () => {
                 </button>
               </div>
             </div>
-            <div className="join__community">
-              <p>Join the community</p>
-              <div className="icons">
-                <div>
-                  <img
-                    src={twitterIcon}
-                    alt="Twiter"
-                    aria-hidden="true"
-                    onClick={() => window.open('https://twitter.com/universe_xyz')}
-                  />
-                </div>
-                <div>
-                  <img
-                    src={discordIcon}
-                    alt="Discord"
-                    aria-hidden="true"
-                    onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
-                  />
-                </div>
-                <div>
-                  <img
-                    src={coinGesco}
-                    alt="Coin Gesko"
-                    aria-hidden="true"
-                    onClick={() => window.open('https://www.coingecko.com/en/coins/universe-xyz')}
-                  />
-                </div>
-                <div>
-                  <img
-                    src={youtubeIcon}
-                    alt="Youtube"
-                    aria-hidden="true"
-                    onClick={() =>
-                      window.open(
-                        'http://youtube.com/channel/UCWt00md9T2b4iTsHWp_Fapw?sub_confirmation=1'
-                      )
-                    }
-                  />
-                </div>
-                <div>
-                  <img
-                    src={mediumIcon}
-                    alt="Medium"
-                    aria-hidden="true"
-                    onClick={() => window.open('https://medium.com/universe-xyz')}
-                  />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div className="footer__middle">
           <div className="footer__middle__container">
-            <div className="universe">
-              <div className="logo-div">
-                <img src={Logo} alt="logo" />
-              </div>
-              <p>
-                Launch your own community-driven NFT universe baked with social tools, media
-                services, and distribution - underpinned by the native $XYZ token.
-              </p>
-            </div>
             <div className="universe-list">
               <div>
                 <ul>
@@ -162,14 +113,23 @@ const Footer = () => {
                   <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
                     Polymorphs
                   </li>
-                  <li onClick={() => history.push('/polymorph-rarity')} aria-hidden="true">
-                    Rarity chart
-                  </li>
                   <li onClick={() => history.push('/lobby-lobsters')} aria-hidden="true">
                     Lobby Lobsters
                   </li>
                   <li onClick={() => history.push('/core-drops')} aria-hidden="true">
                     OG planet drop
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <ul>
+                  <li>Rarity charts</li>
+                  <li onClick={() => history.push('/polymorphs')} aria-hidden="true">
+                    Polymorphs
+                  </li>
+                  <li className="disable">
+                    Lobby Lobsters
+                    <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>
@@ -227,10 +187,8 @@ const Footer = () => {
       </div>
       <div className="footer__bottom">
         <div className="footer__bottom__container">
-          <div className="op-sourced">
-            <span>Universe.xyz © 2021. Open-sourced.</span>
-          </div>
           <div className="powered-by">
+            <span className="op-sourced">Universe.xyz © 2021. Open-sourced.</span>
             <span
               aria-hidden="true"
               onClick={() =>
@@ -252,6 +210,55 @@ const Footer = () => {
               SushiSwap USDC/XYZ market
             </span>
           </div>
+          <div className="join__community">
+            <div className="icons">
+              <div>
+                <img
+                  src={twitterIcon}
+                  alt="Twiter"
+                  aria-hidden="true"
+                  onClick={() => window.open('https://twitter.com/universe_xyz')}
+                />
+              </div>
+              <div>
+                <img
+                  src={discordIcon}
+                  alt="Discord"
+                  aria-hidden="true"
+                  onClick={() => window.open('https://t.co/0hQWlbElpB?amp=1')}
+                />
+              </div>
+              <div>
+                <img
+                  src={coinGesco}
+                  alt="Coin Gesko"
+                  aria-hidden="true"
+                  onClick={() => window.open('https://www.coingecko.com/en/coins/universe-xyz')}
+                />
+              </div>
+              <div>
+                <img
+                  src={youtubeIcon}
+                  alt="Youtube"
+                  aria-hidden="true"
+                  onClick={() =>
+                    window.open(
+                      'http://youtube.com/channel/UCWt00md9T2b4iTsHWp_Fapw?sub_confirmation=1'
+                    )
+                  }
+                />
+              </div>
+              <div>
+                <img
+                  src={mediumIcon}
+                  alt="Medium"
+                  aria-hidden="true"
+                  onClick={() => window.open('https://medium.com/universe-xyz')}
+                />
+              </div>
+            </div>
+          </div>
+          <div />
         </div>
       </div>
     </footer>
