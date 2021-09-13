@@ -136,7 +136,7 @@
 
     .universe__protocol__section {
       position: relative;
-      padding: 90px 60px;
+      padding: 90px 60px 60px ;
 
       .circle-r {
         position: absolute;
@@ -246,7 +246,7 @@
       }
     }
     .polymorphs__universe__section {
-      padding: 90px 60px;
+      padding: 60px 60px;
       background-color: $black;
       &__container {
         max-width: 1110px;
@@ -257,10 +257,19 @@
       }
     }
     .about__section {
-      padding: 90px 60px;
+      padding: 60px 60px;
       &__container {
         max-width: 1110px;
         margin: 0 auto;
+      }
+      .characters__and__lore {
+        padding-bottom: 120px;
+        @include lg {
+          padding-bottom: 60px;
+        }
+        @include md {
+          padding-bottom: 0;
+        }
       }
       @include sm {
         padding: 40px 20px;
@@ -273,13 +282,13 @@
       grid-gap: 50px;
       align-items: center;
 
-      &.diff {
-        > div:nth-child(2) {
-          @include md {
-            grid-row-start: 1;
-          }
-        }
-      }
+      // &.diff {
+      //   > div:nth-child(2) {
+      //     @include md {
+      //       grid-row-start: 1;
+      //     }
+      //   }
+      // }
 
       > div:nth-child(4) {
         @include md {
@@ -534,7 +543,10 @@
           text-align: center;
         }
       }
-      button {
+      button { 
+        img {
+          margin-left: 10px;
+        }
         @include sm {
           width: 100%;
         }
