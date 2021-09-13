@@ -18,7 +18,7 @@ const Tabs = ({ items }) => (
     <div className="tabs">
       <ul className="tab_items">
         {items.map((tab, index) =>
-          tab.name !== 'Hidden' ? (
+          tab.name !== 'Hidden' && tab.name !== 'Liked' ? (
             <li
               key={uuid()}
               className={tab.active ? 'active' : ''}
