@@ -8,7 +8,7 @@ import Button from '../button/Button.jsx';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
 import animationData from '../../utils/animations/cards_animation.json';
 import circleImg from '../../assets/images/circle.svg';
-import blockOne from '../../assets/images/about-block1-new.png';
+import blockOne from '../../assets/images/homepage-block.png';
 import blockThree from '../../assets/images/homepage-block3.png';
 import universeMintingLogo from '../../assets/images/universe-minting.svg';
 import universeAuctionsLogo from '../../assets/images/universe-auctions.svg';
