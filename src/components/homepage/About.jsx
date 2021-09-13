@@ -241,11 +241,6 @@ const About = () => {
           </div>
         </div>
       </div>
-      <div className="polymorphs__universe__section">
-        <div className="polymorphs__universe__section__container">
-          <Section4 />
-        </div>
-      </div>
       <div className="about__section">
         <div className="about__section__container characters__and__lore">
           <div className="blocks diff">

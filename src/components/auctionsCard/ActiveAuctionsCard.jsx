@@ -12,8 +12,28 @@ const ActiveAuctionsCard = ({ data }) => {
       {data.map((auction) => (
         <Animated animationIn="fadeIn" key={auction.id}>
           <div className="active__auction__item">
-            <div className="active__auction__image timeLeft">
-              <img src={URL.createObjectURL(auction.promoImage)} alt={auction.name} />
+            <div
+              className={`active__auction__image timeLeft ${
+                auction.promoImage ? '' : 'show__avatar'
+              }`}
+            >
+              {auction.promoImage ? (
+                <img
+                  className="original"
+                  src={URL.createObjectURL(auction.promoImage)}
+                  alt={auction.name}
+                />
+              ) : (
+                <img
+                  className="artist__image"
+                  src={
+                    typeof auction.artist.avatar === 'string'
+                      ? auction.artist.avatar
+                      : URL.createObjectURL(auction.artist.avatar)
+                  }
+                  alt={auction.name}
+                />
+              )}
               <div className="date">
                 <div className="date__border__div" />
                 <label>Time left</label>

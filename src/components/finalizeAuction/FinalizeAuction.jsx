@@ -39,7 +39,7 @@ const FinalizeAuction = () => {
     let arr = [];
     deployedCollections.forEach((item) => {
       auction.tiers.forEach((tier) => {
-        if (tier.nfts.filter((nft) => nft.collection.id === item.id && !item.approved).length) {
+        if (tier.nfts.filter((nft) => nft.collection?.id === item.id && !item.approved).length) {
           arr.push(item);
         }
       });
