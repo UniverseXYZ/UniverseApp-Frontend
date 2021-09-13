@@ -22,6 +22,7 @@ import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
 import Section4 from '../polymorphs/Section4.jsx';
+import arrowLeft from '../../assets/images/arrow-black.svg';
 
 const About = () => {
   const history = useHistory();
@@ -181,10 +182,11 @@ const About = () => {
               </p>
               <Button
                 className="light-button"
-                // onClick={() => history.push('/about')}
-                disabled
+                onClick={() => history.push('/my-nfts')}
+                // disabled
               >
-                Coming soon
+                Go to minting
+                <img src={arrowLeft} alt="arrow-back" />
               </Button>
             </AnimatedOnScroll>
 
@@ -209,11 +211,11 @@ const About = () => {
               </p>
               <Button
                 className="light-button"
-                // onClick={() => history.push('/about')}
+                onClick={() => history.push('/my-auctions')}
                 style={{ marginBottom: '60px' }}
-                disabled
               >
-                Coming soon
+                Go to auctions
+                <img src={arrowLeft} alt="arrow-back" />
               </Button>
             </AnimatedOnScroll>
             <AnimatedOnScroll animationIn="fadeIn">
@@ -239,15 +241,16 @@ const About = () => {
           </div>
         </div>
       </div>
-      <div className="polymorphs__universe__section">
-        <div className="polymorphs__universe__section__container">
-          <Section4 />
-        </div>
-      </div>
       <div className="about__section">
-        <div className="about__section__container">
+        <div className="about__section__container characters__and__lore">
           <div className="blocks diff">
             {/* Block 4 */}
+            <AnimatedOnScroll
+              animationIn="fadeIn"
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <Lottie options={defaultOptions} />
+            </AnimatedOnScroll>
             <AnimatedOnScroll animationIn="fadeIn">
               <span className="coming__soon">Coming soon</span>
               <h1 className="title">Universe Original Characters and Lore</h1>
@@ -284,12 +287,6 @@ const About = () => {
                   </Popup>
                 </div>
               </div>
-            </AnimatedOnScroll>
-            <AnimatedOnScroll
-              animationIn="fadeIn"
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <Lottie options={defaultOptions} />
             </AnimatedOnScroll>
           </div>
         </div>

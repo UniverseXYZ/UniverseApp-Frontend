@@ -74,8 +74,8 @@ const BurnToMint = () => {
         width={windowSize.width}
         height={windowSize.height}
         title="New polymorph base skins"
-        desktopHeightValue={452}
-        mobileHeightValue={1200}
+        // desktopHeightValue={452}
+        // mobileHeightValue={1200}
         data={data}
       />
       <Section4

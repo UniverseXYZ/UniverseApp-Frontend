@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { useHistory } from 'react-router-dom';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import nfuSocialNetworkIcon from '../../assets/images/nfu-social-network.svg';
 import nfuAuctionsIcon from '../../assets/images/nfu-auctions.svg';
@@ -11,6 +12,7 @@ import ellipses from '../../assets/images/ellipses.svg';
 import rightArrow from '../../assets/images/arrow-right.svg';
 
 const NonFungibleUniverse = () => {
+  const history = useHistory();
   const [nfus, setNfus] = useState([
     {
       id: 1,
@@ -21,6 +23,7 @@ const NonFungibleUniverse = () => {
       loaded: false,
       action: 'Coming soon',
       link: '',
+      newTab: false,
     },
     {
       id: 2,
@@ -29,8 +32,9 @@ const NonFungibleUniverse = () => {
       description:
         'Creating a decentralized NFT launch system that is made by artists for artists.',
       loaded: false,
-      action: 'Coming soon',
-      link: '',
+      action: 'Explore',
+      link: '/my-auctions',
+      newTab: false,
     },
     {
       id: 3,
@@ -41,6 +45,7 @@ const NonFungibleUniverse = () => {
       loaded: false,
       action: 'Coming soon',
       link: '',
+      newTab: false,
     },
     {
       id: 4,
@@ -50,6 +55,7 @@ const NonFungibleUniverse = () => {
       loaded: false,
       action: 'Coming soon',
       link: '',
+      newTab: false,
     },
     {
       id: 5,
@@ -60,6 +66,7 @@ const NonFungibleUniverse = () => {
       loaded: false,
       action: 'Coming soon',
       link: '',
+      newTab: false,
     },
     {
       id: 6,
@@ -70,6 +77,7 @@ const NonFungibleUniverse = () => {
       loaded: false,
       action: 'Explore',
       link: 'https://dao.universe.xyz/',
+      newTab: true,
     },
   ]);
 
@@ -113,7 +121,10 @@ const NonFungibleUniverse = () => {
                   <h2 className="title">{nfu.title}</h2>
                   <p className="desc">{nfu.description}</p>
                   {nfu.action === 'Explore' ? (
-                    <button type="button" onClick={() => window.open(nfu.link)}>
+                    <button
+                      type="button"
+                      onClick={() => (nfu.newTab ? window.open(nfu.link) : history.push(nfu.link))}
+                    >
                       {nfu.action}
                       <img src={rightArrow} alt="Arrow" />
                     </button>

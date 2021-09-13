@@ -8,6 +8,8 @@ import Mariguana from '../../assets/images/new-polymorph-base-skins/Mariguana.pn
 import Vitalik from '../../assets/images/new-polymorph-base-skins/Vitalik.png';
 import XYZ from '../../assets/images/new-polymorph-base-skins/X-YZ.png';
 import blank from '../../assets/images/blank.png';
+import Ragnar from '../../assets/images/Ragnar.png';
+import DiamondPaws from '../../assets/images/Diamond-Paws.png';
 
 export default [
   { img: Vitalik, name: 'Vitalik' },
@@ -19,6 +21,10 @@ export default [
   { img: Grishnak, name: 'Troll God' },
   { img: XYZ, name: 'X-YZ' },
   { img: Frankie, name: 'Frankie' },
+  { img: Ragnar, name: 'Ragnar' },
+  { img: DiamondPaws, name: 'Diamond Paws' },
+  { img: blank, name: '' },
+  { img: blank, name: '' },
   { img: blank, name: '' },
   { img: blank, name: '' },
   { img: blank, name: '' },
