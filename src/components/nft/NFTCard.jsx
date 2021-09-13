@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import './NFTCard.scss';
 import { useHistory } from 'react-router-dom';
@@ -181,7 +183,7 @@ const NFTCard = ({ nft }) => {
               <span>{nft.numberOfEditions}</span>
             </div>
           ) : (
-            <div className="likes--count">
+            <div onClick={() => handleLikeClick(nft.id)} className="likes--count">
               <div>
                 <svg
                   className={
@@ -189,7 +191,6 @@ const NFTCard = ({ nft }) => {
                       ? 'fill'
                       : ''
                   }
-                  onClick={() => handleLikeClick(nft.id)}
                   width="16"
                   height="14"
                   viewBox="0 0 16 14"
@@ -224,7 +225,9 @@ const NFTCard = ({ nft }) => {
                   )}
                 </div>
               </div>
-              <span>{nft.likers.length}</span>
+              <span className={nft.likers.length ? 'redlike' : 'like-count'}>
+                {nft.likers.length}
+              </span>
             </div>
           )}
           <div
