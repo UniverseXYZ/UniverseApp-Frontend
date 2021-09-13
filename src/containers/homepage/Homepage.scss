@@ -482,14 +482,14 @@
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 160%;
         color: rgba(0, 0, 0, 0.6);
         div {
           margin-top: 20px;
           padding: 5px 20px;
           border-left: 1px solid #bceb00;
-          font-size: 14px;
+          font-size: 16px;
         }
         @include lg {
           font-size: 14px;
