@@ -1215,7 +1215,7 @@ const UniverseNFTs = () => {
               id="sort--select"
               data={UNIVERSE_NFTS}
               defaultValue="Sort by"
-              sortData={['Sort by', 'Rarity Score', 'Rank', 'Polymorph Id']}
+              sortData={['Sort by', 'Rank', 'Polymorph Id']}
               getData={(find) => setPolymorphData(find)}
               getDesc={(value) => setDesc(value)}
               desc={desc}
