@@ -14,7 +14,7 @@ const PastAuctionsTab = ({ onArtist }) => {
 
   const artistPastAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()))
+      ? myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
       : PLACEHOLDER_PAST_AUCTIONS;
 
   return artistPastAuctions.length ? (
