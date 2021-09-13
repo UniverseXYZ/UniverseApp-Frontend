@@ -39,9 +39,10 @@
             height: 3px;
             background: $black;
             border-radius: 50%;
-            &:not(:last-child) {
-              margin-right: 3px;
-            }
+          }
+          span:nth-child(1),
+          span:nth-child(2) {
+            margin-right: 3px;
           }
           ul {
             position: absolute;
@@ -154,6 +155,7 @@
       .likes--count {
         display: flex;
         align-items: center;
+        cursor: pointer;
         &:hover {
           path {
             stroke: #ff4949;
