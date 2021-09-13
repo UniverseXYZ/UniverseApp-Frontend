@@ -80,7 +80,7 @@ const Filters = (props) => {
           id="sort--select"
           data={data}
           defaultValue="Sort by"
-          sortData={['Sort by', 'Rarity Score', 'Rank', 'Polymorph Id']}
+          sortData={['Sort by', 'Rank', 'Polymorph Id']}
           getData={(find) => getData(find)}
           getDesc={(value) => getDesc(value)}
           desc={desc}
