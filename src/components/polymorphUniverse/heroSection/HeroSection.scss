@@ -3,11 +3,20 @@
 
 .general--section {
   position: relative;
-  min-height: 725px;
+  // min-height: 725px;
+  min-height: 1064px;
+  margin-top: -130px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (max-width: 1640px) {
+    min-height: 910px;
+  }
+  @media (max-width: 1300px) {
+    min-height: 725px;
+    margin-top: 0;
+  }
   .lottie--animation {
     position: absolute;
     z-index: 1;
@@ -24,6 +33,35 @@
     top: 0;
     left: 0;
     background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+  }
+  .body--text {
+    position: relative;
+    z-index: 1111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    button {
+      background: none;
+      transform: rotate(90deg);
+      margin-bottom: -130px;
+      margin-top: 50px;
+      img {
+        width: 30px;
+      }
+      @media (max-width: 1640px) {
+        margin-bottom: -100px;
+      }
+      @media (max-width: 1300px) {
+        margin-bottom: -40px;
+      }
+      @media (max-width: 850px) {
+        margin-bottom: 35px;
+      }
+      @include sm {
+        margin-bottom: -25px;
+      }
+    }
   }
   h1 {
     z-index: 2;
