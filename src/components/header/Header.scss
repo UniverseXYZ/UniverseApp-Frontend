@@ -23,7 +23,17 @@ header {
   &.dark {
     background-color: $black;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
+    .search--field {
+      &--wrapper {
+        .box--shadow--effect--block {
+        }
+        &.focus {
+          .box--shadow--effect--block {
+            box-shadow: 2px 1000px 1px $black inset!important;
+          }
+        }
+      }
+    }
     .app__logo {
       .dark {
         display: none;

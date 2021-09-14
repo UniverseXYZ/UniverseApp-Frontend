@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Link } from 'react-scroll';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
@@ -89,6 +90,9 @@ const MobileView = (props) => {
   const [showRarityCharts, setShowRarityCharts] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showDAO, setShowDAO] = useState(false);
+  const rarityChartsRef = useRef(null);
+  const infoRef = useRef(null);
+  const daoRef = useRef(null);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -138,6 +142,25 @@ const MobileView = (props) => {
       );
     };
   });
+
+  useEffect(() => {
+    if (showRarityCharts) {
+      rarityChartsRef.current.scrollIntoView();
+    }
+  }, [showRarityCharts]);
+
+  useEffect(() => {
+    if (showInfo) {
+      rarityChartsRef.current.scrollIntoView();
+    }
+  }, [showInfo]);
+
+  useEffect(() => {
+    if (showDAO) {
+      rarityChartsRef.current.scrollIntoView();
+    }
+  }, [showDAO]);
+
   return (
     <div className="mobile__nav">
       <button
@@ -595,7 +618,7 @@ const MobileView = (props) => {
                         <></>
                       )}
                     </div>
-                    <div>
+                    <div ref={rarityChartsRef}>
                       <div
                         className="head"
                         aria-hidden="true"
@@ -634,7 +657,7 @@ const MobileView = (props) => {
                         <></>
                       )}
                     </div>
-                    <div>
+                    <div ref={infoRef}>
                       <div
                         className="head"
                         aria-hidden="true"
@@ -695,7 +718,7 @@ const MobileView = (props) => {
                         <></>
                       )}
                     </div>
-                    <div>
+                    <div ref={daoRef}>
                       <div className="head" aria-hidden="true" onClick={() => setShowDAO(!showDAO)}>
                         <p className="title">DAO</p>
                         <img className={showDAO ? 'rotate' : ''} src={arrowDown} alt="arrow" />
