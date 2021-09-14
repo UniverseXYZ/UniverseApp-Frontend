@@ -28,6 +28,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import LoadingImage from '../general/LoadingImage';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import clockIcon from '../../assets/images/marketplace/green-clock.svg';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
 const NFTCard = React.memo(({ nft, collectionAddress }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -36,6 +37,7 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
+  const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
   const ref = useRef();
   function SampleNextArrow(props) {
     // eslint-disable-next-line react/prop-types
@@ -80,7 +82,7 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
   });
 
   const handleLikeClick = (id) => {
-    const newNFTs = [...myNFTs];
+    const newNFTs = placeholderData ? [...dummyData] : [...myNFTs];
     newNFTs.forEach((item) => {
       if (item.id === id) {
         if (!item.likers.length) {
@@ -103,7 +105,11 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
         }
       }
     });
-    setMyNFTs(newNFTs);
+    if (placeholderData) {
+      setDummyData(newNFTs);
+    } else {
+      setMyNFTs(newNFTs);
+    }
   };
 
   const hideNFT = (id) => {

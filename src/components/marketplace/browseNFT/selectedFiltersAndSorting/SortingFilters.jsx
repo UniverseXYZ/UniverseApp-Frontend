@@ -465,7 +465,7 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
-                  .map((coll, index) => (
+                  .map((coll, index) =>  index < 5 && (
                     <div
                       className="collection__item"
                       key={uuid()}
@@ -552,17 +552,20 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCreators.toLowerCase())
                   )
-                  .map((creator) => (
-                    <div
-                      className="artists__item"
-                      key={uuid()}
-                      aria-hidden="true"
-                      onClick={() => handleSelectCreators(creator)}
-                    >
-                      <img className="artist__avatar" src={creator.avatar} alt={creator.name} />
-                      <p>{creator.name}</p>
-                    </div>
-                  ))}
+                  .map(
+                    (creator, index) =>
+                      index < 5 && (
+                        <div
+                          className="artists__item"
+                          key={uuid()}
+                          aria-hidden="true"
+                          onClick={() => handleSelectCreators(creator)}
+                        >
+                          <img className="artist__avatar" src={creator.avatar} alt={creator.name} />
+                          <p>{creator.name}</p>
+                        </div>
+                      )
+                  )}
               </div>
             </div>
             <div className="artists--dropdown--footer">

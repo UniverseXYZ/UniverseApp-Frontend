@@ -76,7 +76,7 @@ const BrowseNFT = () => {
           />
           <div className="nfts__lists">
             {PLACEHOLDER_MARKETPLACE_NFTS.filter((nft) => !nft.hidden).map(
-              (nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />
+              (nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} placeholderData />
             )}
           </div>
           {PLACEHOLDER_MARKETPLACE_NFTS.filter((nft) => !nft.hidden).length > quantity && (
