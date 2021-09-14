@@ -1,19 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import NFTsTab from './nfts/NFTsTab.jsx';
 import tabArrow from '../../../assets/images/tab-arrow.svg';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
-import AppContext from '../../../ContextAPI.js';
-import HiddenNFTs from '../../myNFTs/HiddenNFTs.jsx';
-import LikedNFTs from '../../myNFTs/LikedNFTs.jsx';
-import NFTsActivity from '../../myNFTs/NFTsActivity.jsx';
 
 const Tabs = ({ onArtist }) => {
-  const { myNFTs, myAuctions } = useContext(AppContext);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
@@ -30,12 +24,6 @@ const Tabs = ({ onArtist }) => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  useEffect(() => {
-    if (!myNFTs.filter((nft) => nft.hidden).length) {
-      setSelectedTabIndex(0);
-    }
-  }, [myNFTs]);
 
   return (
     <div className="tabs__section">
@@ -56,97 +44,28 @@ const Tabs = ({ onArtist }) => {
                 onClick={() => setSelectedTabIndex(0)}
                 className={selectedTabIndex === 0 ? 'active' : ''}
               >
-                {`NFTs ${
-                  myNFTs.filter((item) => !item.hidden).length > 0
-                    ? `(${myNFTs.filter((item) => !item.hidden).length})`
-                    : ''
-                }`}
+                NFTs
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(1)}
                 className={selectedTabIndex === 1 ? 'active' : ''}
               >
-                {`Active auctions ${
-                  myAuctions.filter(
-                    (item) => item.launch && !moment(item.endDate).isBefore(moment.now())
-                  ).length > 0
-                    ? `(${
-                        myAuctions.filter(
-                          (item) => item.launch && !moment(item.endDate).isBefore(moment.now())
-                        ).length
-                      })`
-                    : ''
-                }`}
+                Active auctions
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(2)}
                 className={selectedTabIndex === 2 ? 'active' : ''}
               >
-                {`Future auctions ${
-                  myAuctions.filter(
-                    (item) => !item.launch && !moment(item.endDate).isBefore(moment.now())
-                  ).length > 0
-                    ? `(${
-                        myAuctions.filter(
-                          (item) => !item.launch && !moment(item.endDate).isBefore(moment.now())
-                        ).length
-                      })`
-                    : ''
-                }`}
+                Future auctions
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedTabIndex(3)}
                 className={selectedTabIndex === 3 ? 'active' : ''}
               >
-                {`Past auctions ${
-                  myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length >
-                  0
-                    ? `(${
-                        myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now()))
-                          .length
-                      })`
-                    : ''
-                }`}
-              </button>
-              {myNFTs.filter((nft) => nft.hidden).length ? (
-                <button
-                  type="button"
-                  onClick={() => setSelectedTabIndex(4)}
-                  className={selectedTabIndex === 4 ? 'active' : ''}
-                >
-                  {`Hidden ${
-                    myNFTs.filter((item) => item.hidden).length > 0
-                      ? `(${myNFTs.filter((item) => item.hidden).length})`
-                      : ''
-                  }`}
-                </button>
-              ) : (
-                <></>
-              )}
-              {myNFTs.filter((nft) => nft.likers.length).length ? (
-                <button
-                  type="button"
-                  onClick={() => setSelectedTabIndex(5)}
-                  className={selectedTabIndex === 5 ? 'active' : ''}
-                >
-                  {`Liked ${
-                    myNFTs.filter((item) => item.likers.length).length > 0
-                      ? `(${myNFTs.filter((item) => item.likers.length).length})`
-                      : ''
-                  }`}
-                </button>
-              ) : (
-                <></>
-              )}
-              <button
-                type="button"
-                onClick={() => setSelectedTabIndex(6)}
-                className={selectedTabIndex === 6 ? 'active' : ''}
-              >
-                Activity
+                Past auctions
               </button>
             </div>
           </div>
@@ -161,12 +80,9 @@ const Tabs = ({ onArtist }) => {
         </div>
         <div className="tab__content">
           {selectedTabIndex === 0 && <NFTsTab onArtist={onArtist} />}
-          {selectedTabIndex === 1 && <ActiveAuctionsTab onArtist={onArtist} />}
-          {selectedTabIndex === 2 && <FutureAuctionsTab onArtist={onArtist} />}
-          {selectedTabIndex === 3 && <PastAuctionsTab onArtist={onArtist} />}
-          {selectedTabIndex === 4 && <HiddenNFTs />}
-          {selectedTabIndex === 5 && <LikedNFTs />}
-          {selectedTabIndex === 6 && <NFTsActivity />}
+          {selectedTabIndex === 1 && <ActiveAuctionsTab />}
+          {selectedTabIndex === 2 && <FutureAuctionsTab />}
+          {selectedTabIndex === 3 && <PastAuctionsTab />}
         </div>
       </div>
     </div>

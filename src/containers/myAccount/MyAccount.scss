@@ -5,20 +5,10 @@
   background-image: url('../../assets/images/my-profile-bg.png');
   background-size: 100% 200px;
   background-repeat: no-repeat;
-  background-position-y: 80px;
+  background-position-y: 88px;
   .my-account-title {
     display: grid;
     grid-template-columns: 1fr 253px;
-    .button-section {
-      display: flex;
-      justify-content: center;
-      .public-button {
-        box-shadow: 2px 1000px 1px #feeaff inset;
-        @include md {
-          box-shadow: 2px 1000px 1px #fff inset;
-        }
-      }
-    }
 
     h1 {
       grid-column: 1/2;
@@ -30,7 +20,7 @@
       color: $black;
       margin-bottom: 16px;
 
-      @include md {
+      @include sm {
         grid-column: 1/2;
         grid-row: 1/2;
         font-size: 26px;
@@ -40,12 +30,12 @@
     p {
       grid-column: 1/3;
       grid-row: 2/3;
-      max-width: 552px;
+      max-width: 516px;
       font-family: $spaceGroteskFont;
       font-size: 18px;
       line-height: 150%;
       color: rgba(0, 0, 0, 0.6);
-      @include md {
+      @include sm {
         grid-column: 1/2;
         grid-row: 2/3;
       }
@@ -58,7 +48,7 @@
       box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
       height: fit-content;
 
-      @include md {
+      @include sm {
         grid-column: 1/2;
         grid-row: 3/4;
         width: 100%;
@@ -66,13 +56,13 @@
       }
     }
 
-    // @include lg {
-    //   padding-top: 40px;
-    // }
+    @include lg {
+      padding-top: 40px;
+    }
 
-    @include md {
+    @include sm {
       grid-template-columns: 1fr;
-      // padding-top: 40px;
+      padding-top: 40px;
     }
   }
 
@@ -364,7 +354,7 @@
           &:focus {
             background: linear-gradient($white, $white) padding-box,
               linear-gradient(to right, #bceb00, #00eaea) border-box;
-            border: 1px solid transparent;
+            border: 2px solid transparent;
           }
           &:focus::placeholder {
             color: transparent;
@@ -372,9 +362,6 @@
 
           @include lg {
             width: 100%;
-          }
-          &.error-inp + .box--shadow--effect--block {
-            display: none;
           }
         }
         .error__text {
@@ -427,7 +414,7 @@
             z-index: -9;
             left: -4px;
             right: 0;
-            bottom: 0;
+            bottom: -4px;
             margin: auto;
             border-radius: 12px;
             opacity: 0;
@@ -443,9 +430,6 @@
               opacity: 0.2;
             }
           }
-          input:focus {
-            border: 1px solid transparent;
-          }
         }
         .account-grid-about-editing {
           position: relative;
@@ -460,16 +444,17 @@
             font-size: 16px;
             line-height: 20px;
             padding: 15px 16px;
+            // margin-bottom: 20px;
             &::placeholder {
               color: rgba(0, 0, 0, 0.2);
             }
             &:focus {
               background: linear-gradient($white, $white) padding-box,
                 linear-gradient(to right, #bceb00, #00eaea) border-box;
-              border: 1px solid transparent;
+              border: 2px solid transparent;
             }
-            &.error-inp + .box--shadow--effect--block {
-              display: none;
+            &:hover {
+              border-radius: 10px;
             }
           }
           .box--shadow--effect--block {
@@ -1076,13 +1061,11 @@
   }
 
   @include lg {
-    background-image: url('../../assets/images/my-profile-bg-tablet.png');
     width: 100%;
     padding: 0px 60px;
     margin: 0 auto;
   }
   @include sm {
-    background-image: url('../../assets/images/my-profile-bg-mobile.png');
     width: 100%;
     padding: 0px 20px;
     margin: 0 auto;

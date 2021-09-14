@@ -9,7 +9,9 @@ import Social from '../../components/myAccount/Social.jsx';
 import Head from '../../components/myAccount/Head.jsx';
 import AppContext from '../../ContextAPI';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
-import Artist from '../artist/Artist.jsx';
+import ServerErrorPopup from '../../components/popups/ServerErrorPopup.jsx';
+
+import { saveProfileInfo, saveUserImage, saveUserLogo } from '../../utils/api/profile.js';
 
 const MyAccount = () => {
   const {
@@ -23,7 +25,7 @@ const MyAccount = () => {
   const history = useHistory();
   const location = useLocation();
   const [about, setAbout] = useState(loggedInArtist.about);
-  const [logo, setLogo] = useState(loggedInArtist.personalLogo);
+  // const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
   const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
 
@@ -33,13 +35,15 @@ const MyAccount = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
-  const [showSocial, setShowSocial] = useState(loggedInArtist.social);
-
-  const artist = location.state
-    ? location.state.id === loggedInArtist.id
-      ? loggedInArtist
-      : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
-    : null;
+  const [errorModal, showErrorModal] = useState(false);
+  const [fetchedUserData, setFetchedUserData] = useState({
+    accountName,
+    accountPage,
+    accountImage,
+    about,
+    instagramLink,
+    twitterLink,
+  });
 
   useEffect(() => {
     setDarkMode(false);
@@ -55,34 +59,43 @@ const MyAccount = () => {
     }
   }, [isWalletConnected]);
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     setEditProfileButtonClick(true);
     let page = accountPage.substring(13);
     if (page === 'your-address') {
       page = '';
     }
     setAccountPage(page);
-    setLoggedInArtist({
+    const artistData = {
       ...loggedInArtist,
       name: accountName,
       universePageAddress: page,
       avatar: accountImage,
       about,
-      personalLogo: logo,
       instagramLink,
       twitterLink,
-      social: showSocial,
-    });
-    // if (!showSocial) {
-    //   setShowSocial(false);
-    // } else {
-    //   setShowSocial(true);
-    // }
+    };
+
+    const result = await saveProfileInfo(artistData);
+    if (typeof accountImage === 'object') {
+      const saveImageRequest = await saveUserImage(accountImage);
+      if (saveImageRequest.profileImageUrl) {
+        artistData.avatar = saveImageRequest.profileImageUrl;
+      }
+    }
+
+    if (!result.ok) {
+      showErrorModal(true);
+      return;
+    }
+
+    setLoggedInArtist({ ...artistData });
+
     setTimeout(() => {
-      if (accountName && accountImage && accountPage !== 'universe.xyz/your-address' && about) {
+      if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
         document.getElementById('congrats-hidden-btn').click();
       }
-    }, 500);
+    }, 2000);
   };
 
   const cancelChanges = () => {
@@ -94,7 +107,7 @@ const MyAccount = () => {
     }
     setAccountImage(loggedInArtist.avatar);
     setAbout(loggedInArtist.about);
-    setLogo(loggedInArtist.personalLogo);
+    // setLogo(loggedInArtist.personalLogo);
     setTwitterLink(loggedInArtist.twitterLink);
     setInstagramLink(loggedInArtist.instagramLink);
   };
@@ -138,10 +151,11 @@ const MyAccount = () => {
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
         editProfileButtonClick={editProfileButtonClick}
+        fetchedUserData={fetchedUserData}
       />
       {/* <About about={about} setAbout={setAbout} /> */}
       {/* <PersonalLogo logo={logo} setLogo={setLogo} /> */}
-      {/* <Social
+      {/* { <Social
         twitterLink={twitterLink}
         setTwitterLink={setTwitterLink}
         instagramLink={instagramLink}
@@ -151,6 +165,7 @@ const MyAccount = () => {
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
       /> */}
+      {errorModal && <ServerErrorPopup close={() => showErrorModal(false)} />}
     </div>
   );
   // );

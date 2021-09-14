@@ -27,11 +27,42 @@ const Main = ({
   setInstagramLink,
   saveChanges,
   cancelChanges,
+  fetchedUserData,
 }) => {
+  const disabled =
+    fetchedUserData.accountName === accountName &&
+    fetchedUserData.accountPage === accountPage &&
+    fetchedUserData.about === about &&
+    fetchedUserData.twitterLink === twitterLink &&
+    fetchedUserData.instagramLink === instagramLink;
+
   const { loggedInArtist } = useContext(AppContext);
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);
+  const [errors, setErrors] = useState({
+    previewImage: '',
+  });
+
+  const validateFile = (file) => {
+    if (!file) {
+      setAccountImage(null);
+      setErrors({
+        previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
+      });
+    } else if (
+      (file.type === 'image/webp' || file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / 1048576 < 30
+    ) {
+      setAccountImage(file);
+      setErrors({ ...errors, previewImage: '' });
+    } else {
+      setAccountImage(null);
+      setErrors({
+        previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
+      });
+    }
+  };
 
   const handleOnFocus = () => {
     if (!loggedInArtist.universePageAddress && accountPage === 'universe.xyz/your-address') {
@@ -53,7 +84,26 @@ const Main = ({
     } else {
       setInputName('inp empty');
     }
-  }, []);
+  }, [loggedInArtist]);
+
+  const getProfileImage = () => {
+    const userUploadImageURL =
+      accountImage && typeof accountImage === 'object' && URL.createObjectURL(accountImage);
+    const alreadyUploadedImageURL = loggedInArtist && loggedInArtist.avatar;
+
+    let image;
+    if (userUploadImageURL) {
+      image = userUploadImageURL;
+    } else if (alreadyUploadedImageURL) {
+      image = alreadyUploadedImageURL;
+    } else {
+      image = defaultImage;
+    }
+
+    return image;
+  };
+
+  const profileImage = getProfileImage();
 
   return (
     <div className="account-grid-container container">
@@ -64,14 +114,22 @@ const Main = ({
                 {accountImage && (
                   <img
                     className="account-img"
-                    src={URL.createObjectURL(accountImage)}
+                    src={
+                      typeof accountImage === 'object'
+                        ? URL.createObjectURL(accountImage)
+                        : accountImage
+                    }
                     alt="Avatar"
                   />
                 )}
                 {!accountImage && loggedInArtist.avatar && (
                   <img
                     className="account-img"
-                    src={URL.createObjectURL(loggedInArtist.avatar)}
+                    src={
+                      typeof loggedInArtist.avatar === 'object'
+                        ? URL.createObjectURL(loggedInArtist.avatar)
+                        : loggedInArtist.avatar
+                    }
                     alt="Avatar"
                   />
                 )}
@@ -110,22 +168,15 @@ const Main = ({
               !accountImage && editProfileButtonClick ? 'account-image error-img' : 'account-image'
             }
           >
-            {accountImage && (
-              <img className="account-img" src={URL.createObjectURL(accountImage)} alt="Avatar" />
-            )}
-            {!accountImage && loggedInArtist.avatar && (
-              <img
-                className="account-img"
-                src={URL.createObjectURL(loggedInArtist.avatar)}
-                alt="Avatar"
-              />
-            )}
-            {!accountImage && !loggedInArtist.avatar && (
-              <img className="default-img" src={defaultImage} alt="Avatar" />
-            )}
+            <img
+              className={profileImage === defaultImage ? 'default-img' : 'account-img'}
+              src={getProfileImage()}
+              alt="Avatar"
+            />
           </div>
           <div className="account-picture-editing">
             <p>We recomend an image of at least 400x400.</p>
+            {errors.previewImage && <p style={{ color: '#ff4949' }}>{errors.previewImage}</p>}
             <Button className="light-border-button" onClick={() => accountInput.current.click()}>
               Choose file
             </Button>
@@ -133,10 +184,10 @@ const Main = ({
               type="file"
               className="inp-disable"
               ref={accountInput}
-              onChange={(e) => e.target.files[0] && setAccountImage(e.target.files[0])}
+              onChange={(e) => validateFile(e.target.files[0])}
             />
-            {!accountImage && editProfileButtonClick && (
-              <p className="error__text">Image is required.</p>
+            {!accountImage && !loggedInArtist.avatar && (
+              <img className="default-img" src={defaultImage} alt="Avatar" />
             )}
           </div>
         </div>
@@ -184,10 +235,9 @@ const Main = ({
                   : inputName
               }
               value={accountPage}
-              hoverBoxShadowGradient
+              // hoverBoxShadowGradient
               onChange={(e) =>
-                e.target.value.startsWith('universe.xyz/') &&
-                setAccountPage(e.target.value.replace(' ', '-'))
+                e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
               }
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
@@ -198,7 +248,7 @@ const Main = ({
                   &quot;Universe page address&quot; is not allowed to be empty
                 </p>
               )}
-            {/* <div className="box--shadow--effect--block" /> */}
+            <div className="box--shadow--effect--block" />
           </div>
           <div className="account-grid-about-editing">
             <h5>Your bio</h5>
@@ -248,12 +298,13 @@ const Main = ({
                 </p>
               </div>
             )}
-          {editProfileButtonClick &&
-          (!accountImage ||
-            !accountName ||
-            accountPage === 'universe.xyz/' ||
-            accountPage === 'universe.xyz/your-address' ||
-            !about) ? (
+          {(editProfileButtonClick &&
+            (!accountImage ||
+              !accountName ||
+              accountPage === 'universe.xyz/' ||
+              accountPage === 'universe.xyz/your-address' ||
+              !about)) ||
+          disabled ? (
             <div className="account-display-buttons">
               <Button className="light-button" disabled onClick={() => saveChanges()}>
                 Save changes
@@ -274,8 +325,6 @@ const Main = ({
           )}
         </div>
       </div>
-      {/* </Animated> */}
-      {/* )} */}
     </div>
   );
 };
@@ -296,6 +345,7 @@ Main.propTypes = {
   setInstagramLink: PropTypes.func,
   saveChanges: PropTypes.func,
   cancelChanges: PropTypes.func,
+  fetchedUserData: PropTypes.string,
 };
 
 Main.defaultProps = {
@@ -314,6 +364,7 @@ Main.defaultProps = {
   setInstagramLink: () => {},
   saveChanges: () => {},
   cancelChanges: () => {},
+  fetchedUserData: '',
 };
 
 export default Main;
