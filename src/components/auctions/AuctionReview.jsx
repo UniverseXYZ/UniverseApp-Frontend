@@ -33,6 +33,7 @@ import {
 import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const AuctionReview = () => {
   const {
@@ -42,9 +43,9 @@ const AuctionReview = () => {
     options,
     myAuctions,
     setMyAuctions,
-    selectedTabIndex,
     setSelectedTabIndex,
   } = useAuctionContext();
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);
@@ -71,6 +72,23 @@ const AuctionReview = () => {
   const handleSetAuction = async () => {
     // TODO:: after the new design changes we must add logic which prevents the user to select the same nfts for different tiers
     if (auction && auction?.rewardTiers?.length) {
+      const usedNFTsIds = [];
+      auction.rewardTiers.forEach((tier) => {
+        tier.nfts.forEach((n) => {
+          if (!usedNFTsIds.includes(n.id)) {
+            usedNFTsIds.push(n.id);
+          }
+        });
+      });
+      const newMyNFTs = [...myNFTs];
+      usedNFTsIds.forEach((id) => {
+        newMyNFTs.forEach((nft) => {
+          if (nft.id === id) {
+            nft.isUsed = true;
+          }
+        });
+      });
+      setMyNFTs(newMyNFTs);
       setSelectedTabIndex(1);
       // document.getElementById('loading-hidden-btn').click();
       const popupRoot = document.getElementById('popup-root');
