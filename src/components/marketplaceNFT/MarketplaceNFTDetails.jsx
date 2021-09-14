@@ -472,7 +472,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   selectedNFT.media.type !== 'video/mp4' && (
                     <img
                       src={
-                        typeof selectedNFT.media === 'string'
+                        selectedNFT.media.url
                           ? selectedNFT.media.url
                           : URL.createObjectURL(selectedNFT.media)
                       }
@@ -490,7 +490,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <video ref={mediaRef}>
                         <source
                           src={
-                            typeof selectedNFT.media === 'string'
+                            selectedNFT.media.url
                               ? selectedNFT.media.url
                               : URL.createObjectURL(selectedNFT.media)
                           }
