@@ -1,4 +1,4 @@
-import ethIcon from '../../assets/images/bid_icon.svg';
+import ethIcon from '../../assets/images/eth-icon.svg';
 import daiIcon from '../../assets/images/dai_icon.svg';
 import usdcIcon from '../../assets/images/usdc_icon.svg';
 import bondIcon from '../../assets/images/bond_icon.svg';

@@ -40,9 +40,11 @@ import bundlesIcon from '../../assets/images/marketplace/bundles.svg';
 import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
 import likerTestImage from '../../assets/images/marketplace/users/user1.png';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const MarketplaceNFTDetails = ({ data, onNFT }) => {
+const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
   const [nfts, setNFTs] = useState(data);
+  const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
   const { loggedInArtist, myNFTs, setMyNFTs, deployedCollections } = useContext(AppContext);
   const [selectedNFT, setSelectedNFT] = useState(onNFT);
   const collection = selectedNFT.collection
@@ -312,9 +314,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   }, []);
 
   const handleSelectedNFTLikeClick = (id) => {
-    const newNFTs = [...myNFTs];
-    console.log('id', id);
-    console.log('myNFTs', myNFTs);
+    const newNFTs = placeholderData ? [...dummyData] : [...myNFTs];
     newNFTs.forEach((item) => {
       if (item.id === id) {
         if (!item.likers.length) {
@@ -337,7 +337,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
         }
       }
     });
-    setMyNFTs(newNFTs);
+    if (placeholderData) {
+      setDummyData(newNFTs);
+    } else {
+      setMyNFTs(newNFTs);
+    }
     // setSelectedNFT({
     //   ...selectedNFT,
     //   likesCount: selectedNFT.liked ? selectedNFT.likesCount - 1 : selectedNFT.likesCount + 1,
@@ -1108,9 +1112,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 MarketplaceNFTDetails.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]),
   onNFT: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  placeholderData: PropTypes.bool,
 };
 
 MarketplaceNFTDetails.defaultProps = {
   data: [],
+  placeholderData: false,
 };
 export default MarketplaceNFTDetails;

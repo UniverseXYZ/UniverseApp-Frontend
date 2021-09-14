@@ -60,15 +60,21 @@
                 height: 24px;
                 margin-right: 12px;
                 &:hover {
-                  background-image: linear-gradient(101deg, #bceb00, #00eaea);
+                  background-image: linear-gradient(135deg, rgba(188, 235, 0, 1), rgba(0, 234, 234, 1));
                   background-origin: border-box;
                   box-shadow: 2px 1000px 1px $white inset;
                   border: 1px solid transparent;
                 }
 
                 &:checked {
-                  background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
-                  border-color: transparent;
+                  background: linear-gradient(135deg, rgba(188, 235, 0, 1), rgba(0, 234, 234, 1));
+                  border: 1px solid $white;
+                  &:hover {
+                    background-image: linear-gradient(135deg, rgba(188, 235, 0, 1), rgba(0, 234, 234, 1));
+                    background-origin: border-box;
+                    box-shadow: 2px 1000px 1px $white inset;
+                    border: 1px solid transparent;
+                  }
 
                   &::after {
                     content: '\2518';

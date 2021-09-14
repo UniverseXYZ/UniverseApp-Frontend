@@ -85,17 +85,20 @@ const ArtistFilter = (props) => {
             getData={(find) => setCreators(find)}
           />
           <div className="artists__list">
-            {creators.map((creator) => (
-              <div
-                className="artists__item"
-                key={uuid()}
-                aria-hidden="true"
-                onClick={() => handleSelectCreators(creator)}
-              >
-                <img className="artist__avatar" src={creator.avatar} alt={creator.name} />
-                <p>{creator.name}</p>
-              </div>
-            ))}
+            {creators.map(
+              (creator, index) =>
+                index < 5 && (
+                  <div
+                    className="artists__item"
+                    key={uuid()}
+                    aria-hidden="true"
+                    onClick={() => handleSelectCreators(creator)}
+                  >
+                    <img className="artist__avatar" src={creator.avatar} alt={creator.name} />
+                    <p>{creator.name}</p>
+                  </div>
+                )
+            )}
           </div>
         </div>
         <div className="artists--dropdown--footer">

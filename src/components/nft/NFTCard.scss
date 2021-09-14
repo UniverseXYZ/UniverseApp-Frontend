@@ -113,16 +113,17 @@
             font-style: normal;
             font-weight: normal;
             font-size: 12px;
-            width: 160px;
             background-color: $black;
             color: $white;
             text-align: center;
             border-radius: 100px;
-            padding: 5px 0;
+            padding: 5px 12px;
+            white-space: nowrap;
             position: absolute;
-            z-index: 111;
+            z-index: 1111;
             top: -32px;
-            right: -66px;
+            left: 50%;
+            transform: translateX(-50%);
             &::after {
               content: '';
               position: absolute;

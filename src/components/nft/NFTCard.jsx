@@ -23,13 +23,15 @@ import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
 import clockIcon from '../../assets/images/marketplace/green-clock.svg';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const NFTCard = ({ nft }) => {
+const NFTCard = ({ nft, placeholderData }) => {
   const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
+  const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
   const ref = useRef();
   function SampleNextArrow(props) {
     // eslint-disable-next-line react/prop-types
@@ -74,7 +76,7 @@ const NFTCard = ({ nft }) => {
   });
 
   const handleLikeClick = (id) => {
-    const newNFTs = [...myNFTs];
+    const newNFTs = placeholderData ? [...dummyData] : [...myNFTs];
     newNFTs.forEach((item) => {
       if (item.id === id) {
         if (!item.likers.length) {
@@ -97,7 +99,11 @@ const NFTCard = ({ nft }) => {
         }
       }
     });
-    setMyNFTs(newNFTs);
+    if (placeholderData) {
+      setDummyData(newNFTs);
+    } else {
+      setMyNFTs(newNFTs);
+    }
   };
 
   const hideNFT = (id) => {
@@ -283,7 +289,7 @@ const NFTCard = ({ nft }) => {
           <>
             {nft.type !== 'bundles' ? (
               <div
-                onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })}
                 aria-hidden="true"
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
@@ -338,7 +344,9 @@ const NFTCard = ({ nft }) => {
                       index < 7 && (
                         <div
                           className="slider--box"
-                          onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                          onClick={() =>
+                            history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
+                          }
                           aria-hidden="true"
                           key={uuid()}
                         >
@@ -403,6 +411,11 @@ const NFTCard = ({ nft }) => {
 
 NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  placeholderData: PropTypes.bool,
+};
+
+NFTCard.defaultProps = {
+  placeholderData: false,
 };
 
 export default NFTCard;

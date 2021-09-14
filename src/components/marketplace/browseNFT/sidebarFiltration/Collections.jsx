@@ -49,29 +49,32 @@ const Collections = ({ savedCollections, setSavedCollections }) => {
           </div>
           {collections
             .filter((item) => item.name.toLowerCase().includes(searchByCollections.toLowerCase()))
-            .map((col) => (
-              <div
-                className="collections--list"
-                key={uuid()}
-                onClick={() => handleSelect(col)}
-                aria-hidden="true"
-              >
-                {!col.photo ? (
+            .map(
+              (col, index) =>
+                index < 5 && (
                   <div
-                    className="random--avatar--color"
-                    style={{
-                      backgroundColor:
-                        defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                    }}
+                    className="collections--list"
+                    key={uuid()}
+                    onClick={() => handleSelect(col)}
+                    aria-hidden="true"
                   >
-                    {col.name.charAt(0)}
+                    {!col.photo ? (
+                      <div
+                        className="random--avatar--color"
+                        style={{
+                          backgroundColor:
+                            defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                        }}
+                      >
+                        {col.name.charAt(0)}
+                      </div>
+                    ) : (
+                      <img className="collection--avatar" src={col.photo} alt={col.name} />
+                    )}
+                    <p>{col.name}</p>
                   </div>
-                ) : (
-                  <img className="collection--avatar" src={col.photo} alt={col.name} />
-                )}
-                <p>{col.name}</p>
-              </div>
-            ))}
+                )
+            )}
         </div>
       </Animated>
     </div>
