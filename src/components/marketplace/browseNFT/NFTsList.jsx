@@ -33,7 +33,6 @@ const NFTsList = ({ data, nftNumber }) => {
       )
     );
   };
-  console.log(sortName);
 
   useEffect(() => {
     // Prev Icon

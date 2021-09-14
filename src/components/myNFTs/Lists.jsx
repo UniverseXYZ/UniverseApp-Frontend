@@ -77,7 +77,6 @@ const Lists = ({
       }
     }
   };
-  console.log(myNFTs);
 
   useEffect(() => {
     if (editMode) {
