@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Link } from 'react-scroll';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
