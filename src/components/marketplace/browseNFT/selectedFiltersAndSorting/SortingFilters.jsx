@@ -467,29 +467,32 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
-                  .map((col) => (
-                    <div
-                      className="collection__item"
-                      key={uuid()}
-                      onClick={() => handleSelectCollection(col)}
-                      aria-hidden="true"
-                    >
-                      {!col.photo ? (
+                  .map(
+                    (col, index) =>
+                      index < 5 && (
                         <div
-                          className="random--avatar--color"
-                          style={{
-                            backgroundColor:
-                              defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                          }}
+                          className="collection__item"
+                          key={uuid()}
+                          onClick={() => handleSelectCollection(col)}
+                          aria-hidden="true"
                         >
-                          {col.name.charAt(0)}
+                          {!col.photo ? (
+                            <div
+                              className="random--avatar--color"
+                              style={{
+                                backgroundColor:
+                                  defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                              }}
+                            >
+                              {col.name.charAt(0)}
+                            </div>
+                          ) : (
+                            <img className="collection__avatar" src={col.photo} alt={col.name} />
+                          )}
+                          <p>{col.name}</p>
                         </div>
-                      ) : (
-                        <img className="collection__avatar" src={col.photo} alt={col.name} />
-                      )}
-                      <p>{col.name}</p>
-                    </div>
-                  ))}
+                      )
+                  )}
               </div>
             </div>
             <div className="collection--dropdown--footer">
@@ -555,17 +558,20 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCreators.toLowerCase())
                   )
-                  .map((creator) => (
-                    <div
-                      className="artists__item"
-                      key={uuid()}
-                      aria-hidden="true"
-                      onClick={() => handleSelectCreators(creator)}
-                    >
-                      <img className="artist__avatar" src={creator.avatar} alt={creator.name} />
-                      <p>{creator.name}</p>
-                    </div>
-                  ))}
+                  .map(
+                    (creator, index) =>
+                      index < 5 && (
+                        <div
+                          className="artists__item"
+                          key={uuid()}
+                          aria-hidden="true"
+                          onClick={() => handleSelectCreators(creator)}
+                        >
+                          <img className="artist__avatar" src={creator.avatar} alt={creator.name} />
+                          <p>{creator.name}</p>
+                        </div>
+                      )
+                  )}
               </div>
             </div>
             <div className="artists--dropdown--footer">

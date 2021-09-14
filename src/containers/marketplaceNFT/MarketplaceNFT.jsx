@@ -18,7 +18,11 @@ const MarketplaceNFT = () => {
 
   return selectedNFT ? (
     <div className="marketplace--nft--page1">
-      <MarketplaceNFTDetails data={PLACEHOLDER_MARKETPLACE_NFTS} onNFT={selectedNFT} />
+      <MarketplaceNFTDetails
+        data={PLACEHOLDER_MARKETPLACE_NFTS}
+        onNFT={selectedNFT}
+        placeholderData={location.state.placeholderData}
+      />
     </div>
   ) : (
     <NotFound />

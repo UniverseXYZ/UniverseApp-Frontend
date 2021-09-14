@@ -49,17 +49,20 @@ const Creators = ({ savedCreators, setSavedCreators }) => {
           </div>
           {creators
             .filter((item) => item.name.toLowerCase().includes(searchByCreators.toLowerCase()))
-            .map((creator) => (
-              <div
-                className="creators--list"
-                key={uuid()}
-                aria-hidden="true"
-                onClick={() => handleSelect(creator)}
-              >
-                <img src={creator.avatar} alt={creator.name} />
-                <p>{creator.name}</p>
-              </div>
-            ))}
+            .map(
+              (creator, index) =>
+                index < 5 && (
+                  <div
+                    className="creators--list"
+                    key={uuid()}
+                    aria-hidden="true"
+                    onClick={() => handleSelect(creator)}
+                  >
+                    <img src={creator.avatar} alt={creator.name} />
+                    <p>{creator.name}</p>
+                  </div>
+                )
+            )}
         </div>
       </Animated>
     </div>

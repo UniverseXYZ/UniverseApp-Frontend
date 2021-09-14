@@ -99,29 +99,32 @@ const CollectionFilter = (props) => {
             getData={(find) => setCollections(find)}
           />
           <div className="collections__list">
-            {collections.map((col) => (
-              <div
-                className="collection__item"
-                key={uuid()}
-                onClick={() => handleSelectCollection(col)}
-                aria-hidden="true"
-              >
-                {!col.photo ? (
+            {collections.map(
+              (col, index) =>
+                index < 5 && (
                   <div
-                    className="random--avatar--color"
-                    style={{
-                      backgroundColor:
-                        defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                    }}
+                    className="collection__item"
+                    key={uuid()}
+                    onClick={() => handleSelectCollection(col)}
+                    aria-hidden="true"
                   >
-                    {col.name.charAt(0)}
+                    {!col.photo ? (
+                      <div
+                        className="random--avatar--color"
+                        style={{
+                          backgroundColor:
+                            defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                        }}
+                      >
+                        {col.name.charAt(0)}
+                      </div>
+                    ) : (
+                      <img className="collection__avatar" src={col.photo} alt={col.name} />
+                    )}
+                    <p>{col.name}</p>
                   </div>
-                ) : (
-                  <img className="collection__avatar" src={col.photo} alt={col.name} />
-                )}
-                <p>{col.name}</p>
-              </div>
-            ))}
+                )
+            )}
           </div>
         </div>
         <div className="collection--dropdown--footer">

@@ -29,6 +29,7 @@ const BrowseFilterPopup = ({
   onClose,
 }) => {
   const [filter, setFilter] = useState('');
+  const [singleItems, setSingleItems] = useState(true);
   const handleClick = (idx) => {
     const newSaleTypeButtons = [...saleTypeButtons];
     newSaleTypeButtons[idx].selected = !newSaleTypeButtons[idx].selected;
@@ -62,8 +63,20 @@ const BrowseFilterPopup = ({
         </h3>
         <div className="sale--dropdown--body">
           <div className="sale--dropdown--header">
-            <div className="active">Single items</div>
-            <div>Bundles</div>
+            <div
+              className={singleItems ? 'active' : ''}
+              onClick={() => setSingleItems(true)}
+              aria-hidden="true"
+            >
+              Single items
+            </div>
+            <div
+              className={singleItems ? '' : 'active'}
+              onClick={() => setSingleItems(false)}
+              aria-hidden="true"
+            >
+              Bundles
+            </div>
           </div>
           <div className="sale--types">
             {saleTypeButtons.map((item, index) => (
