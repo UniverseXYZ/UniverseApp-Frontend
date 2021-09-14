@@ -27,6 +27,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import LoadingImage from '../general/LoadingImage';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import clockIcon from '../../assets/images/marketplace/green-clock.svg';
 
 const NFTCard = React.memo(({ nft, collectionAddress }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -285,7 +286,11 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
                 aria-hidden="true"
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                  <img className="nft--image" src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                  <img
+                    className="nft--image"
+                    src={nft.media.url ? nft.media.url : URL.createObjectURL(nft.media)}
+                    alt={nft.name}
+                  />
                 )}
                 {nft.media.type === 'video/mp4' && (
                   <video
@@ -295,7 +300,10 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
                     onBlur={(event) => event.target.pause()}
                     muted
                   >
-                    <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
+                    <source
+                      src={nft.media.url ? nft.media.url : URL.createObjectURL(nft.media)}
+                      type="video/mp4"
+                    />
                     <track kind="captions" />
                     Your browser does not support the video tag.
                   </video>
