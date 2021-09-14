@@ -66,19 +66,17 @@ const AuctionReview = () => {
       auction.tiers.forEach((tier) => {
         totalNFTs += tier.winners * tier.nftsPerWinner;
         tier.nfts.forEach((n) => {
-          usedNFTsIds.push(n.id);
+          if (!usedNFTsIds.includes(n.id)) {
+            usedNFTsIds.push(n.id);
+          }
         });
       });
-      const newMyNFTs = [];
+      const newMyNFTs = [...myNFTs];
       usedNFTsIds.forEach((id) => {
-        const getUsedNFTs = myNFTs.filter((nft) => nft.id === id);
-        const getNotUsedNFTs = myNFTs.filter((nft) => nft.id !== id);
-        getUsedNFTs.forEach((nft) => {
-          nft.isUsed = true;
-          newMyNFTs.push(nft);
-        });
-        getNotUsedNFTs.forEach((nft) => {
-          newMyNFTs.push(nft);
+        newMyNFTs.forEach((nft) => {
+          if (nft.id === id) {
+            nft.isUsed = true;
+          }
         });
       });
       document.getElementById('loading-hidden-btn').click();
