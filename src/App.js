@@ -109,6 +109,7 @@ const App = () => {
   // Minting local state
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
+  const [contracts, setContracts] = useState(false);
 
   useEffect(() => {
     if (!darkMode) {
@@ -166,18 +167,18 @@ const App = () => {
     const balance = await provider.getBalance(accounts[0]);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
-    const { contracts } = Contracts[network.chainId];
+    const { contracts: contractsData } = Contracts[network.chainId];
 
     // Minting
     const universeERC721CoreContractResult = new Contract(
-      contracts.UniverseERC721Core.address,
-      contracts.UniverseERC721Core.abi,
+      contractsData.UniverseERC721Core.address,
+      contractsData.UniverseERC721Core.abi,
       signerResult
     );
 
     const universeERC721FactoryContractResult = new Contract(
-      contracts.UniverseERC721Factory.address,
-      contracts.UniverseERC721Factory.abi,
+      contractsData.UniverseERC721Factory.address,
+      contractsData.UniverseERC721Factory.abi,
       signerResult
     );
 
@@ -214,7 +215,7 @@ const App = () => {
     setEthereumNetwork(network);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
     setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
-    setContracts(contracts);
+    setContracts(contractsData);
 
     // setPolymorphContract(polymorphContractInstance);
     // setTotalPolymorphs(totalPolyMinted.toNumber());
