@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
+import { Contract, providers, utils } from 'ethers';
+import Popup from 'reactjs-popup';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
@@ -41,10 +44,12 @@ import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 import PolymorphUniverse from './containers/polymorphUniverse/PolymorphUniverse';
 import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
+import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
+import { CONNECTORS_NAMES } from './utils/dictionary';
+import { getEthPriceCoingecko } from './utils/api/etherscan';
 
 const App = () => {
   const location = useLocation();
-  const [isWalletConnected, setIsWalletConnected] = useState(true);
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -87,6 +92,17 @@ const App = () => {
   });
   const [auctionSetupState, setAuctionSetupState] = useState(false);
 
+  // Web3 local state
+  const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
+  const [web3Provider, setWeb3Provider] = useState(null);
+  const [address, setAddress] = useState('');
+  const [signer, setSigner] = useState('');
+  const [yourBalance, setYourBalance] = useState(0);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [ethereumNetwork, setEthereumNetwork] = useState('');
+  const [usdEthBalance, setUsdEthBalance] = useState(0);
+  const [ethPrice, setEthPrice] = useState({});
+
   useEffect(() => {
     if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
@@ -112,6 +128,185 @@ const App = () => {
       document.querySelector('header').style.position = 'fixed';
     }
   }, [location]);
+
+  // Popups
+  const triggerWrongNetworkPopup = async () => {
+    document.getElementById('wrong-network-hidden-btn').click();
+  };
+
+  // Getters
+  const getEthPriceData = async (balance) => {
+    const ethUsdPice = await getEthPriceCoingecko();
+    setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
+    setEthPrice(ethUsdPice);
+  };
+
+  // Authentication and Web3
+  const web3AuthenticationProccess = async (provider, network, accounts) => {
+    const balance = await provider.getBalance(accounts[0]);
+    const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
+
+    // TODO: Vik to check it
+    // const polymContract =
+    //   Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
+
+    // const polymorphContractInstance = new Contract(
+    //   process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
+    //   polymContract?.abi,
+    //   signerResult
+    // );
+
+    // const lobsContract = Contracts[network.chainId][network.name].contracts.Lobster;
+    // const lobsterContractInstance = new Contract(
+    //   process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
+    //   lobsContract?.abi,
+    //   signerResult
+    // );
+
+    // const totalPolyMinted = await polymorphContractInstance.lastTokenId();
+    // const polymorphBaseURIData = await polymorphContractInstance.baseURI();
+    // const polymPrice = await polymorphContractInstance.polymorphPrice();
+
+    // const totalLobsterMinted = await lobsterContractInstance.lastTokenId();
+    // const lobsterBaseURIData = await lobsterContractInstance.baseURI();
+    // const lobsPrice = await lobsterContractInstance.lobsterPrice();
+
+    setWeb3Provider(provider);
+    setAddress(accounts[0]);
+    setSigner(signerResult);
+    setYourBalance(utils.formatEther(balance));
+    setIsWalletConnected(true);
+    setEthereumNetwork(network);
+
+    // setPolymorphContract(polymorphContractInstance);
+    // setTotalPolymorphs(totalPolyMinted.toNumber());
+    // setPolymorphBaseURI(polymorphBaseURIData);
+    // setPolymorphPrice(utils.formatEther(polymPrice));
+
+    // setLobsterContract(lobsterContractInstance);
+    // setTotalLobsters(totalLobsterMinted);
+    // setLobsterBaseURI(lobsterBaseURIData);
+    // setLobsterPrice(lobsPrice);
+  };
+
+  const resetConnectionState = async (walletConnectEvent) => {
+    if (providerName === CONNECTORS_NAMES.WalletConnect && !walletConnectEvent) {
+      await providerObject.disconnect();
+    }
+
+    setWeb3Provider(null);
+    setAddress(null);
+    setSigner('');
+    setYourBalance(0);
+    setIsWalletConnected(false);
+    setEthereumNetwork('');
+    setUsdEthBalance(0);
+
+    // TODO: Vik to check it
+    // setUserPolymorphs([]);
+    // setPolymorphContract(null);
+    // setTotalPolymorphs(0);
+    // setPolymorphBaseURI('');
+    // setPolymorphPrice(0);
+  };
+
+  const connectWithMetaMask = async () => {
+    const { ethereum } = window;
+
+    await ethereum.request({ method: 'eth_requestAccounts' });
+    const provider = new providers.Web3Provider(ethereum);
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const network = await provider.getNetwork();
+
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
+      triggerWrongNetworkPopup();
+    } else {
+      await web3AuthenticationProccess(provider, network, accounts);
+    }
+
+    setProviderName(() => {
+      const name = CONNECTORS_NAMES.MetaMask;
+      localStorage.setItem('providerName', name);
+      return name;
+    });
+
+    ethereum.on('accountsChanged', async ([account]) => {
+      if (account) {
+        // await connectWithMetaMask();
+        web3AuthenticationProccess(provider, network, [account]);
+      } else {
+        resetConnectionState();
+      }
+    });
+
+    ethereum.on('chainChanged', async (networkId) => {
+      window.location.reload();
+    });
+
+    ethereum.on('disconnect', async (error) => {
+      resetConnectionState();
+    });
+  };
+
+  const connectWithWalletConnect = async () => {
+    const provider = new WalletConnectProvider({
+      infuraId: '1745e014e2ed4047acdaa135e869a11b',
+    });
+
+    await provider.enable();
+
+    const web3ProviderWrapper = new providers.Web3Provider(provider);
+    const network = await web3ProviderWrapper.getNetwork();
+    const { accounts: accountsWW } = web3ProviderWrapper.provider;
+
+    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
+      await provider.disconnect();
+      triggerWrongNetworkPopup();
+    } else {
+      web3AuthenticationProccess(web3ProviderWrapper, network, accountsWW);
+    }
+
+    setProviderName(() => {
+      const name = CONNECTORS_NAMES.WalletConnect;
+      localStorage.setItem('providerName', name);
+      return name;
+    });
+    setProviderObject(provider);
+
+    // Subscribe to accounts change
+    provider.on('accountsChanged', async (accounts) => {
+      web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
+    });
+
+    // Subscribe to chainId change
+    provider.on('chainChanged', async (chainId) => {
+      window.location.reload();
+    });
+
+    // Subscribe to session disconnection
+    provider.on('disconnect', (code, reason) => {
+      resetConnectionState(true);
+    });
+  };
+
+  const connectWeb3 = async () => {
+    if (providerName === CONNECTORS_NAMES.MetaMask) connectWithMetaMask();
+    if (providerName === CONNECTORS_NAMES.WalletConnect) connectWithWalletConnect();
+  };
+
+  useEffect(() => {
+    if (
+      !(providerName === CONNECTORS_NAMES.WalletConnect && !localStorage.getItem('walletconnect'))
+    ) {
+      connectWeb3();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (yourBalance) {
+      getEthPriceData(yourBalance);
+    }
+  }, [yourBalance]);
 
   return (
     <AppContext.Provider
@@ -173,6 +368,21 @@ const App = () => {
         setSelectedTokenIndex,
         auctionSetupState,
         setAuctionSetupState,
+        // Authentication and Web3
+        connectWithMetaMask,
+        connectWithWalletConnect,
+        web3Provider,
+        setWeb3Provider,
+        address,
+        setAddress,
+        signer,
+        setSigner,
+        yourBalance,
+        setYourBalance,
+        usdEthBalance,
+        setUsdEthBalance,
+        ethPrice,
+        setEthPrice,
       }}
     >
       <Header />
@@ -235,6 +445,19 @@ const App = () => {
         <Route path="*" component={() => <NotFound />} />
       </Switch>
       <Footer />
+      <Popup
+        closeOnDocumentClick={false}
+        trigger={
+          <button
+            type="button"
+            id="wrong-network-hidden-btn"
+            aria-label="hidden"
+            style={{ display: 'none' }}
+          />
+        }
+      >
+        {(close) => <WrongNetworkPopup close={close} />}
+      </Popup>
     </AppContext.Provider>
   );
 };

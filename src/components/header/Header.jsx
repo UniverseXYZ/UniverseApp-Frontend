@@ -22,10 +22,18 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors } from '../../utils/helpers';
+import { CONNECTORS_NAMES } from '../../utils/dictionary';
 
 const Header = ({ location }) => {
-  const { isWalletConnected, setIsWalletConnected, darkMode } = useContext(AppContext);
-  const PLACEHOLDER_ETHEREUM_ADDRESS = '0x5493a5a6f...ef8b';
+  const {
+    isWalletConnected,
+    setIsWalletConnected,
+    darkMode,
+    connectWithWalletConnect,
+    connectWithMetaMask,
+    address,
+  } = useContext(AppContext);
+
   const history = useHistory();
   const [selectedWallet, setSelectedWallet] = useState('');
   const [installed, setInstalled] = useState(true);
@@ -54,17 +62,26 @@ const Header = ({ location }) => {
     searchRef.current.blur();
   };
 
-  const handleConnectWallet = (wallet) => {
+  const handleConnectWallet = async (wallet) => {
     // Here need to check if selected wallet is installed in browser
     setSelectedWallet(wallet);
     if (installed) {
-      setIsWalletConnected(true);
-      setShowMenu(false);
-      setShowSelectWallet(false);
+      if (wallet === CONNECTORS_NAMES.MetaMask && typeof window.ethereum !== 'undefined') {
+        await connectWithMetaMask();
+        setIsWalletConnected(true);
+        setShowMenu(false);
+        setShowSelectWallet(false);
+      } else if (wallet === CONNECTORS_NAMES.WalletConnect) {
+        await connectWithWalletConnect();
+        setIsWalletConnected(true);
+        setShowMenu(false);
+        setShowSelectWallet(false);
+      }
     } else {
       setShowInstallWalletPopup(true);
     }
   };
+
   const handleClickOutside = (event) => {
     if (
       ref.current &&
@@ -316,7 +333,7 @@ const Header = ({ location }) => {
       <DesktopView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+        ethereumAddress={address}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -326,7 +343,7 @@ const Header = ({ location }) => {
       <TabletView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+        ethereumAddress={address}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -340,7 +357,7 @@ const Header = ({ location }) => {
       <MobileView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={PLACEHOLDER_ETHEREUM_ADDRESS}
+        ethereumAddress={address}
         handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}
         setShowSelectWallet={setShowSelectWallet}
