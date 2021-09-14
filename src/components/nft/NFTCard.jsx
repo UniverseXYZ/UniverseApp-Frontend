@@ -22,6 +22,7 @@ import shareNFTIcon from '../../assets/images/share-nft.svg';
 import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
+import clockIcon from '../../assets/images/marketplace/green-clock.svg';
 
 const NFTCard = ({ nft }) => {
   const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
@@ -286,7 +287,11 @@ const NFTCard = ({ nft }) => {
                 aria-hidden="true"
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                  <img className="nft--image" src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                  <img
+                    className="nft--image"
+                    src={nft.media.url ? nft.media.url : URL.createObjectURL(nft.media)}
+                    alt={nft.name}
+                  />
                 )}
                 {nft.media.type === 'video/mp4' && (
                   <video
@@ -296,7 +301,10 @@ const NFTCard = ({ nft }) => {
                     onBlur={(event) => event.target.pause()}
                     muted
                   >
-                    <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
+                    <source
+                      src={nft.media.url ? nft.media.url : URL.createObjectURL(nft.media)}
+                      type="video/mp4"
+                    />
                     <track kind="captions" />
                     Your browser does not support the video tag.
                   </video>
