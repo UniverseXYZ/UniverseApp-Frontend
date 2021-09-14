@@ -67,7 +67,8 @@ const TabletView = (props) => {
     showSearch,
     setShowSearch,
   } = props;
-  const { handleClickOutside, yourBalance, usdEthBalance } = useContext(AppContext);
+  const { handleClickOutside, yourBalance, usdEthBalance, resetConnectionState } =
+    useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -457,6 +458,7 @@ const TabletView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
+                      resetConnectionState();
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
                     }}

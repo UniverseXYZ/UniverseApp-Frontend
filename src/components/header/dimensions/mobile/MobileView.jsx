@@ -76,7 +76,8 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { handleClickOutside, yourBalance, usdEthBalance } = useContext(AppContext);
+  const { handleClickOutside, yourBalance, usdEthBalance, resetConnectionState } =
+    useContext(AppContext);
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -471,6 +472,7 @@ const MobileView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
+                      resetConnectionState();
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
                     }}

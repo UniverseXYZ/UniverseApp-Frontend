@@ -50,7 +50,7 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const { loggedInArtist, editProfileButtonClick, yourBalance, usdEthBalance } =
+  const { loggedInArtist, yourBalance, usdEthBalance, resetConnectionState } =
     useContext(AppContext);
 
   return (
@@ -377,6 +377,7 @@ const DesktopView = ({
                   type="button"
                   className="signOut"
                   onClick={() => {
+                    resetConnectionState();
                     setIsAccountDropdownOpened(false);
                     setIsWalletConnected(!isWalletConnected);
                   }}

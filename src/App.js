@@ -47,6 +47,7 @@ import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
+import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 
 const App = () => {
   const location = useLocation();
@@ -102,6 +103,7 @@ const App = () => {
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [usdEthBalance, setUsdEthBalance] = useState(0);
   const [ethPrice, setEthPrice] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     if (!darkMode) {
@@ -139,6 +141,19 @@ const App = () => {
     const ethUsdPice = await getEthPriceCoingecko();
     setUsdEthBalance(ethUsdPice?.market_data?.current_price?.usd * balance);
     setEthPrice(ethUsdPice);
+  };
+
+  useEffect(() => {
+    if (yourBalance) {
+      getEthPriceData(yourBalance);
+    }
+  }, [yourBalance]);
+
+  // HELPERS
+  const clearStorageAuthData = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_address');
+    localStorage.removeItem('providerName');
   };
 
   // Authentication and Web3
@@ -201,6 +216,7 @@ const App = () => {
     setIsWalletConnected(false);
     setEthereumNetwork('');
     setUsdEthBalance(0);
+    clearStorageAuthData();
 
     // TODO: Vik to check it
     // setUserPolymorphs([]);
@@ -231,6 +247,8 @@ const App = () => {
     });
 
     ethereum.on('accountsChanged', async ([account]) => {
+      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+      clearStorageAuthData();
       if (account) {
         // await connectWithMetaMask();
         web3AuthenticationProccess(provider, network, [account]);
@@ -240,6 +258,7 @@ const App = () => {
     });
 
     ethereum.on('chainChanged', async (networkId) => {
+      clearStorageAuthData();
       window.location.reload();
     });
 
@@ -275,11 +294,14 @@ const App = () => {
 
     // Subscribe to accounts change
     provider.on('accountsChanged', async (accounts) => {
+      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+      clearStorageAuthData();
       web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
     });
 
     // Subscribe to chainId change
     provider.on('chainChanged', async (chainId) => {
+      clearStorageAuthData();
       window.location.reload();
     });
 
@@ -302,11 +324,65 @@ const App = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (yourBalance) {
-      getEthPriceData(yourBalance);
+  // Sign message for BE authentication
+  const signMessage = async () => {
+    if (signer) {
+      const sameUser = address === localStorage.getItem('user_address');
+      const hasSigned = sameUser && localStorage.getItem('access_token');
+
+      if (!hasSigned) {
+        const chanllenge = uuid();
+        const challengeResult = await setChallenge(chanllenge);
+        const signedMessage = await signer?.signMessage(chanllenge);
+        const authInfo = await userAuthenticate({
+          address,
+          signedMessage,
+          uuid: challengeResult?.uuid,
+        });
+
+        if (!authInfo.error) {
+          setIsAuthenticated(true);
+          setLoggedInArtist({
+            id: authInfo.user.id,
+            name: authInfo.user.displayName,
+            universePageAddress: authInfo.user.universePageUrl,
+            avatar: authInfo.user.profileImageUrl,
+            about: authInfo.user.about,
+            personalLogo: authInfo.user.logoImageUrl,
+            instagramLink: authInfo.user.instagramUser,
+            twitterLink: authInfo.user.twitterUser,
+          });
+
+          // Save access_token into the local storage for later API requests usage
+          localStorage.setItem('access_token', authInfo.token);
+          localStorage.setItem('user_address', address);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } else {
+        // THE USER ALREADY HAS SIGNED
+        const userInfo = await getProfileInfo({ address });
+
+        if (!userInfo.error) {
+          setIsAuthenticated(true);
+
+          setLoggedInArtist({
+            name: userInfo.displayName,
+            universePageAddress: userInfo.universePageUrl,
+            avatar: userInfo.profileImageUrl,
+            about: userInfo.about,
+            personalLogo: userInfo.logoImageUrl,
+            instagramLink: userInfo.instagramUser,
+            twitterLink: userInfo.twitterUser,
+          });
+        }
+      }
     }
-  }, [yourBalance]);
+  };
+
+  useEffect(async () => {
+    if (signer) signMessage();
+  }, [signer]);
 
   return (
     <AppContext.Provider
@@ -383,6 +459,9 @@ const App = () => {
         setUsdEthBalance,
         ethPrice,
         setEthPrice,
+        isAuthenticated,
+        setIsAuthenticated,
+        resetConnectionState,
       }}
     >
       <Header />

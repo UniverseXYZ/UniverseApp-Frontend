@@ -333,7 +333,7 @@ const Header = ({ location }) => {
       <DesktopView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={address}
+        ethereumAddress={address || ''}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -343,7 +343,7 @@ const Header = ({ location }) => {
       <TabletView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={address}
+        ethereumAddress={address || ''}
         handleConnectWallet={handleConnectWallet}
         showInstallWalletPopup={showInstallWalletPopup}
         setShowInstallWalletPopup={setShowInstallWalletPopup}
@@ -357,7 +357,7 @@ const Header = ({ location }) => {
       <MobileView
         isWalletConnected={isWalletConnected}
         setIsWalletConnected={setIsWalletConnected}
-        ethereumAddress={address}
+        ethereumAddress={address || ''}
         handleConnectWallet={handleConnectWallet}
         setShowMenu={setShowMenu}
         setShowSelectWallet={setShowSelectWallet}
