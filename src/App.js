@@ -48,6 +48,7 @@ import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
+import Contracts from './contracts/contracts.json';
 
 const App = () => {
   const location = useLocation();
@@ -105,6 +106,10 @@ const App = () => {
   const [ethPrice, setEthPrice] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Minting local state
+  const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
+  const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
+
   useEffect(() => {
     if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
@@ -161,6 +166,21 @@ const App = () => {
     const balance = await provider.getBalance(accounts[0]);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
+    const { contracts } = Contracts[network.chainId];
+
+    // Minting
+    const universeERC721CoreContractResult = new Contract(
+      contracts.UniverseERC721Core.address,
+      contracts.UniverseERC721Core.abi,
+      signerResult
+    );
+
+    const universeERC721FactoryContractResult = new Contract(
+      contracts.UniverseERC721Factory.address,
+      contracts.UniverseERC721Factory.abi,
+      signerResult
+    );
+
     // TODO: Vik to check it
     // const polymContract =
     //   Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
@@ -192,6 +212,9 @@ const App = () => {
     setYourBalance(utils.formatEther(balance));
     setIsWalletConnected(true);
     setEthereumNetwork(network);
+    setUniverseERC721CoreContract(universeERC721CoreContractResult);
+    setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
+    setContracts(contracts);
 
     // setPolymorphContract(polymorphContractInstance);
     // setTotalPolymorphs(totalPolyMinted.toNumber());
@@ -462,6 +485,11 @@ const App = () => {
         isAuthenticated,
         setIsAuthenticated,
         resetConnectionState,
+        // Minting
+        universeERC721CoreContract,
+        setUniverseERC721CoreContract,
+        universeERC721FactoryContract,
+        contracts,
       }}
     >
       <Header />
