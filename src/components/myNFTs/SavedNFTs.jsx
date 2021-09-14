@@ -114,29 +114,28 @@ const SavedNFTs = () => {
                   onClick={() => handleSavedNfts(index)}
                   aria-hidden="true"
                 >
-                  {nft.media.type === 'video/mp4' && (
+                  {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <video
                       onMouseOver={(event) => event.target.play()}
                       onFocus={(event) => event.target.play()}
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
+                      <source src={nft.optimizedUrl} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  {nft.media.type === 'audio/mpeg' && (
+                  {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
                     <img className="preview-image" src={mp3Icon} alt={nft.name} />
                   )}
-                  {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                    <img
-                      className="preview-image"
-                      src={URL.createObjectURL(nft.media)}
-                      alt={nft.name}
-                    />
-                  )}
-                  {nft.media.type === 'video/mp4' && (
+                  {nft.artworkType &&
+                    !nft.artworkType.endsWith('mpeg') &&
+                    nft.artworkType &&
+                    !nft.artworkType.endsWith('mp4') && (
+                      <img className="preview-image" src={nft.optimizedUrl} alt={nft.name} />
+                    )}
+                  {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <img className="video__icon" src={videoIcon} alt="Video Icon" />
                   )}
                   {nft.selected && <img className="check__icon" src={checkIcon} alt="Check Icon" />}
@@ -203,27 +202,27 @@ const SavedNFTs = () => {
                       </>
                     )}
                   </div>
-                  {nft.allItems.length > 1 ? (
+                  {nft.tokenIds && nft.tokenIds.length > 1 ? (
                     <div className="collection__count">
-                      {`x${nft.allItems.length}`}
+                      {`x${nft.tokenIds.length}`}
                       <div
                         className="generatedEditions"
                         style={{
                           gridTemplateColumns: `repeat(${Math.ceil(
-                            nft.allItems.length / 10
+                            nft.tokenIds.length / 10
                           )}, auto)`,
                         }}
                       >
-                        {nft.allItems.map((edition) => (
+                        {nft.tokenIds.map((edition) => (
                           <div key={edition.id.split('-')[0]}>{`#${edition.id.split('-')[0]}`}</div>
                         ))}
                       </div>
                     </div>
                   ) : (
-                    <p className="collection__count">{`#${nft.allItems[0].id.split('-')[0]}`}</p>
+                    <p className="collection__count">{`#${0}`}</p>
                   )}
                 </div>
-                {nft.allItems.length > 1 && (
+                {nft.tokenIds && nft.tokenIds.length > 1 && (
                   <>
                     <div className="saved__nft__box__highlight__one" />
                     <div className="saved__nft__box__highlight__two" />

@@ -49,6 +49,7 @@ import { CONNECTORS_NAMES } from './utils/dictionary';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 import Contracts from './contracts/contracts.json';
+import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
 
 const App = () => {
   const location = useLocation();
@@ -71,11 +72,8 @@ const App = () => {
   const [savedNFTsID, setSavedNFTsID] = useState(null);
   const [savedCollectionID, setSavedCollectionID] = useState(null);
   const [myCollectionID, setMyCollectionID] = useState(null);
-  const [savedNfts, setSavedNfts] = useState([]);
   const [universeNFTs, setUniverseNFTs] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
-  const [myNFTs, setMyNFTs] = useState([]);
-  const [deployedCollections, setDeployedCollections] = useState([]);
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -110,6 +108,9 @@ const App = () => {
   const [universeERC721CoreContract, setUniverseERC721CoreContract] = useState(null);
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [contracts, setContracts] = useState(false);
+  const [savedNfts, setSavedNfts] = useState([]);
+  const [myNFTs, setMyNFTs] = useState([]);
+  const [deployedCollections, setDeployedCollections] = useState([]);
 
   useEffect(() => {
     if (!darkMode) {
@@ -408,6 +409,32 @@ const App = () => {
     if (signer) signMessage();
   }, [signer]);
 
+  // Minting
+  const fetchNfts = async () => {
+    // Fetch the saved NFTS for that addres
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS || []);
+
+    // Fetch the minted NFTS for that address
+    const mintedNfts = await getMyNfts();
+    setMyNFTs(mintedNfts || []);
+
+    // Fetch the minted NFTS for that address
+    const collectionsReturn = await getMyCollections();
+    setDeployedCollections(collectionsReturn || []);
+  };
+
+  useEffect(() => {
+    const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
+    if (canRequestData) {
+      fetchNfts();
+    } else {
+      setSavedNfts([]);
+      setMyNFTs([]);
+      setDeployedCollections([]);
+    }
+  }, [loggedInArtist, isWalletConnected]);
+
   return (
     <AppContext.Provider
       value={{
@@ -420,8 +447,6 @@ const App = () => {
         myBalance,
         setMyBalance,
         handleClickOutside,
-        savedNfts,
-        setSavedNfts,
         universeNFTs,
         setUniverseNFTs,
         showModal,
@@ -491,6 +516,8 @@ const App = () => {
         setUniverseERC721CoreContract,
         universeERC721FactoryContract,
         contracts,
+        savedNfts,
+        setSavedNfts,
       }}
     >
       <Header />
