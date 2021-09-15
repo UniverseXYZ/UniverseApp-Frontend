@@ -17,26 +17,19 @@ import LoadMore from '../../components/pagination/LoadMore.jsx';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
 import SearchFilters from '../../components/nft/SearchFilters.jsx';
+import { getCollectionData } from '../../utils/api/mintNFT';
 
 const Collection = () => {
-  const {
-    myNFTs,
-    savedNfts,
-    setDarkMode,
-    showModal,
-    setShowModal,
-    deployedCollections,
-    setSavedCollectionID,
-    setActiveView,
-  } = useContext(AppContext);
+  const { setDarkMode, showModal, setShowModal, setSavedCollectionID } = useContext(AppContext);
   const location = useLocation();
-  const selectedCollection = location.state ? location.state.collection : null;
+  const collectionId = location.state ? location.state.collection.id : null;
   const [collectionNFTs, setCollectionNFTs] = useState([]);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [search, setSearch] = useState('');
   const history = useHistory();
   const [quantity, setQuantity] = useState(8);
   const ref = useRef(null);
+  const [collectionData, setCollectionData] = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const handleClose = () => {
@@ -54,56 +47,44 @@ const Collection = () => {
     setFilteredNFTs(newFilteredNFTs);
   }, [search]);
 
-  useEffect(() => {
+  useEffect(async () => {
     setDarkMode(false);
-    const newNFTs = [];
-    if (location.state) {
-      myNFTs.forEach((nft) => {
-        if (nft.collection?.id === selectedCollection.id) {
-          newNFTs.push(nft);
-        }
-      });
-    }
-    setCollectionNFTs(newNFTs);
-    setFilteredNFTs(newNFTs);
-  }, [myNFTs]);
 
-  useEffect(() => {
-    let check = false;
-    if (selectedCollection) {
-      deployedCollections.forEach((col) => {
-        if (
-          selectedCollection.id === col.id &&
-          selectedCollection.description === col.description &&
-          selectedCollection.previewImage.name === col.previewImage.name
-        ) {
-          check = true;
-        }
-      });
-    }
-    if (selectedCollection && !check) {
-      history.push('/my-nfts');
-    }
-  }, [deployedCollections]);
+    const data = await getCollectionData(collectionId);
+    const cNFTs = data.nfts || [];
+
+    if (!data.message) setCollectionData(data);
+
+    setCollectionNFTs([...cNFTs]);
+    setFilteredNFTs([...cNFTs]);
+  }, []);
 
   const handleEdit = (id) => {
     setSavedCollectionID(id);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
-  return selectedCollection ? (
+
+  return collectionData ? (
     <div className="collection__page">
-      <Cover selectedCollection={selectedCollection} />
+      <Cover selectedCollection={collectionData.collection} />
 
       <div className="collection__details__section">
         <div className="collection__details__container">
-          <Avatar selectedCollection={selectedCollection} />
-          <Title selectedCollection={selectedCollection} saved={location.state.saved} />
+          <Avatar selectedCollection={collectionData.collection} />
+          <Title
+            selectedCollection={collectionData.collection}
+            saved={location.state.saved}
+            nftsCount={collectionNFTs.length}
+          />
 
           {showModal && <MintModal open={showModal} onClose={handleClose} />}
         </div>
-        <Description selectedCollection={selectedCollection} />
+        <Description selectedCollection={collectionData.collection} />
         <div className="collection__edit">
-          <Button className="light-border-button" onClick={() => handleEdit(selectedCollection.id)}>
+          <Button
+            className="light-border-button"
+            onClick={() => handleEdit(collectionData.collection.id)}
+          >
             <span>Edit</span>
             <img src={pencilIcon} alt="Edit Icon" />
           </Button>

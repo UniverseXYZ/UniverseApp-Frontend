@@ -36,7 +36,7 @@ const DeployedCollections = () => {
               key={uuid()}
               aria-hidden="true"
               onClick={() =>
-                history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                history.push(`/c/${collection.id}`, {
                   collection,
                   saved: false,
                 })

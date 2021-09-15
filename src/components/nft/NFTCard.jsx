@@ -319,39 +319,74 @@ const NFTCard = ({ nft }) => {
             ) : (
               <>
                 <Slider {...sliderSettings}>
-                  {nft.tokenIds.map(
-                    (item, index) =>
-                      index < 7 && (
-                        <div
-                          className="slider--box"
-                          onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
-                          aria-hidden="true"
-                          key={uuid()}
-                        >
-                          {/* {TODO:: We dont have the editions images urls and types} */}
-                          {nft.artworkType &&
-                            !nft.artworkType.endsWith('mpeg') &&
-                            !nft.artworkType.endsWith('mp4') && (
-                              <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
+                  {nft.tokenIds &&
+                    nft.tokenIds.map(
+                      (item, index) =>
+                        index < 7 && (
+                          <div
+                            className="slider--box"
+                            onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                            aria-hidden="true"
+                            key={uuid()}
+                          >
+                            {nft.artworkType &&
+                              !nft.artworkType.endsWith('mpeg') &&
+                              !nft.artworkType.endsWith('mp4') && (
+                                <img
+                                  className="nft--image"
+                                  src={nft.optimized_url}
+                                  alt={nft.name}
+                                />
+                              )}
+                            {nft.artworkType && nft.artworkType.endsWith('mp4') && (
+                              <video
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                                muted
+                              >
+                                <source src={nft.optimized_url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
                             )}
-                          {nft.artworkType && nft.artworkType.endsWith('mp4') && (
-                            <video
-                              onMouseOver={(event) => event.target.play()}
-                              onFocus={(event) => event.target.play()}
-                              onMouseOut={(event) => event.target.pause()}
-                              onBlur={(event) => event.target.pause()}
-                              muted
-                            >
-                              <source src={nft.optimized_url} type="video/mp4" />
-                              <track kind="captions" />
-                              Your browser does not support the video tag.
-                            </video>
-                          )}
-                          {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
-                            <img className="nft--image" src={mp3Icon} alt={nft.name} />
-                          )}
-                        </div>
-                      )
+                            {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
+                              <img className="nft--image" src={mp3Icon} alt={nft.name} />
+                            )}
+                          </div>
+                        )
+                    )}
+                  {/* Colelction View NFTs  TODO:: this response will be changed, so will need to edit here */}
+                  {nft.tokenId && (
+                    <div
+                      className="slider--box"
+                      onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                      aria-hidden="true"
+                      key={uuid()}
+                    >
+                      {nft.artworkType &&
+                        !nft.artworkType.endsWith('mpeg') &&
+                        !nft.artworkType.endsWith('mp4') && (
+                          <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
+                        )}
+                      {nft.artworkType && nft.artworkType.endsWith('mp4') && (
+                        <video
+                          onMouseOver={(event) => event.target.play()}
+                          onFocus={(event) => event.target.play()}
+                          onMouseOut={(event) => event.target.pause()}
+                          onBlur={(event) => event.target.pause()}
+                          muted
+                        >
+                          <source src={nft.optimized_url} type="video/mp4" />
+                          <track kind="captions" />
+                          Your browser does not support the video tag.
+                        </video>
+                      )}
+                      {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
+                        <img className="nft--image" src={mp3Icon} alt={nft.name} />
+                      )}
+                    </div>
                   )}
                 </Slider>
               </>
@@ -368,7 +403,7 @@ const NFTCard = ({ nft }) => {
           </div>
         </div>
         <div className="quantity--and--offer">
-          <p>{`1 / ${nft.tokenIds.length}`}</p>
+          <p>{`1 / ${nft.tokenIds ? nft.tokenIds.length : 1}`}</p>
           <div className="price--offer--div">
             <label>Offer for</label>
             <img src={priceIcon} alt="Price" />

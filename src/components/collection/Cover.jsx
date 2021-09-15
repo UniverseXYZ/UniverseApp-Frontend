@@ -16,7 +16,7 @@ const Cover = ({ selectedCollection }) => {
           item.id === selectedCollection.id
             ? {
                 ...item,
-                bgImage: e.target.files[0],
+                bannerUrl: e.target.files[0],
               }
             : item
         )
@@ -32,17 +32,17 @@ const Cover = ({ selectedCollection }) => {
       </div>
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
-      ) : typeof selectedCollection.previewImage === 'string' &&
-        selectedCollection.previewImage.startsWith('#') ? (
+      ) : typeof selectedCollection.bannerUrl === 'string' &&
+        selectedCollection.bannerUrl.startsWith('#') ? (
         <div
           className="random__bg__color"
-          style={{ backgroundColor: selectedCollection.previewImage }}
+          style={{ backgroundColor: selectedCollection.bannerUrl }}
         />
       ) : (
         <>
           <img
             className="bg blur"
-            src={URL.createObjectURL(selectedCollection.previewImage)}
+            src={selectedCollection.bannerUrl}
             alt={selectedCollection.name}
           />
           <div className="blured" />
