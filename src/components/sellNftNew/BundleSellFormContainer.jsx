@@ -16,7 +16,7 @@ const BundleSellFormContainer = (props) => {
 
   return (
     <div className="bundle--sell--container">
-      <BundleSellForm getData={setBundleFormData} />
+      <BundleSellForm data={data} getData={setBundleFormData} />
       <SelectNfts continueBtnDisabled={continueBtnDisabled} stepData={data} setStepData={setData} />
     </div>
   );

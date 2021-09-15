@@ -91,7 +91,7 @@ const NFTMarketplace = () => {
       <SellNftSubHeader backPageName="NFT name" title="Sell NFT" />
       <NewTabs tabData={headerLabels} />
       {/* <StepTabs tabData={headerLabels} verificationSteps={verificationSteps(stepsData)} required /> */}
-      {location.pathname === '/nft-marketplace/select-method' && (
+      {location.pathname === '/nft-marketplace/select-items' && (
         <div className="before--footer--black--bg--section" />
       )}
     </div>

@@ -72,15 +72,6 @@ const SelectSellMethodTab = (props) => {
           </div>
         </div>
       </div>
-      <div className="go--to--universe--auctions--section">
-        <div className="child">
-          <h3 className="section--title">Universe tiered auctions</h3>
-          <Button className="light-button" onClick={() => history.push('/my-auctions')}>
-            Go to Universe auctions
-            <img src={nextIcon} alt="img" />
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };
