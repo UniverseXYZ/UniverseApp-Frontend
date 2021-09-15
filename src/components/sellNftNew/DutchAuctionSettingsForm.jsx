@@ -67,7 +67,6 @@ const DutchAuctionSettingsForm = (props) => {
     dutchData.switch.includes('switchScheduleFutureTime')
   );
   const [switchPrivacy, setSwitchPrivacy] = useState(dutchData.switch.includes('switchPrivacy'));
-
   useEffect(() => {
     if (window.dutchData) {
       setDutchData({ ...window.dutchData });
