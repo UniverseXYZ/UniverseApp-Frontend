@@ -364,6 +364,15 @@ const DesktopView = ({
                 <button
                   type="button"
                   onClick={() => {
+                    history.push('/nft-marketplace/select-items');
+                    setIsAccountDropdownOpened(false);
+                  }}
+                >
+                  Sell NFT
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
                     history.push('/my-auctions');
                     setIsAccountDropdownOpened(false);
                   }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
@@ -16,19 +16,23 @@ import closeIcon from '../../assets/images/close-menu.svg';
 import closeIconWhite from '../../assets/images/marketplace/close.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import './styles/SelectNfts.scss';
+import AppContext from '../../ContextAPI';
+import SearchFilters from '../nft/SearchFilters';
+import NFTCard from '../nft/NFTCard';
 
-const clearCheck = (filtersSale, collections, artist, priceRange) => {
-  const arr = [].concat(filtersSale).concat(collections).concat(artist);
-  if (arr.length) {
-    return true;
-  }
-  if (priceRange) return true;
-  return false;
-};
+// const clearCheck = (filtersSale, collections, artist, priceRange) => {
+//   const arr = [].concat(filtersSale).concat(collections).concat(artist);
+//   if (arr.length) {
+//     return true;
+//   }
+//   if (priceRange) return true;
+//   return false;
+// };
 
 const checkContinueBtnDisabled = (parentControl) => parentControl;
 
 const SelectNfts = (props) => {
+  const { myNFTs } = useContext(AppContext);
   const { continueBtnDisabled, stepData, setStepData } = props;
   const [filtersCount, setFiltersCount] = useState(0);
   const [saleTypeFilters, setSaleTypeFilters] = useState([]);
@@ -48,13 +52,13 @@ const SelectNfts = (props) => {
   const [stickyParent, setStickyParent] = useState(1110);
   const history = useHistory();
   const location = useLocation();
-  useLayoutEffect(() => {
-    if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
-    if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
-    setBrowserWidth(window.innerWidth);
-    const stickyBlock = document.querySelector('.search--and--filters--section--sticky');
-    setStickyParent(stickyBlock.clientWidth);
-  });
+  // useLayoutEffect(() => {
+  //   if (window.innerWidth < 1000 && window.innerWidth >= 769) setGalleryRowItem(3);
+  //   if (window.innerWidth > 576 && window.innerWidth <= 769) setGalleryRowItem(2);
+  //   setBrowserWidth(window.innerWidth);
+  //   const stickyBlock = document.querySelector('.search--and--filters--section--sticky');
+  //   setStickyParent(stickyBlock.clientWidth);
+  // });
   useEffect(() => {
     if (clearAll) setClearAll(false);
     if (elemSaleRemove) setElemSaleRemove(null);
@@ -62,67 +66,67 @@ const SelectNfts = (props) => {
     if (removePrice) setRemovePrice(false);
   }, [clearAll, elemSaleRemove, clearCollectionSelectedItem, removePrice]);
 
-  const filterData = (dataFil, saleTypes, collectionSelected, artistSelected, filterPrice) => {
-    const copyData = [...dataFil];
-    let filterD = copyData.filter((elem) =>
-      collectionSelected.map((item) => item.name === elem.collection.name).includes(true)
-    );
-    if (!filterD.length) {
-      filterD = [...dataFil];
-    }
-    const filterWithCreator = filterD.filter((elem) =>
-      artistSelected
-        .map((item) => item.name.toLowerCase() === elem.creator.name.toLowerCase())
-        .includes(true)
-    );
-    if (artistSelected.length) {
-      filterD = filterWithCreator;
-    }
-    if (!filterD.length && !artistSelected.length) {
-      filterD = [...dataFil];
-    }
-    if (filterPrice) {
-      filterD = filterD.filter(
-        (elem) => +elem.price >= +filterPrice.min && +elem.price <= +filterPrice.max
-      );
-    }
-    setData(filterD);
-  };
+  // const filterData = (dataFil, saleTypes, collectionSelected, artistSelected, filterPrice) => {
+  //   const copyData = [...dataFil];
+  //   let filterD = copyData.filter((elem) =>
+  //     collectionSelected.map((item) => item.name === elem.collection.name).includes(true)
+  //   );
+  //   if (!filterD.length) {
+  //     filterD = [...dataFil];
+  //   }
+  //   const filterWithCreator = filterD.filter((elem) =>
+  //     artistSelected
+  //       .map((item) => item.name.toLowerCase() === elem.creator.name.toLowerCase())
+  //       .includes(true)
+  //   );
+  //   if (artistSelected.length) {
+  //     filterD = filterWithCreator;
+  //   }
+  //   if (!filterD.length && !artistSelected.length) {
+  //     filterD = [...dataFil];
+  //   }
+  //   if (filterPrice) {
+  //     filterD = filterD.filter(
+  //       (elem) => +elem.price >= +filterPrice.min && +elem.price <= +filterPrice.max
+  //     );
+  //   }
+  //   setData(filterD);
+  // };
 
-  useEffect(() => {
-    const arr = [].concat(saleTypeFilters).concat(collectionsSelected).concat(artistsSelected);
-    setFiltersCount(arr.length);
-    filterData(
-      PLACEHOLDER_MARKETPLACE_NFTS,
-      saleTypeFilters,
-      collectionsSelected,
-      artistsSelected,
-      filterRangePrice
-    );
-  }, [saleTypeFilters, collectionsSelected, artistsSelected, filterRangePrice]);
+  // useEffect(() => {
+  //   const arr = [].concat(saleTypeFilters).concat(collectionsSelected).concat(artistsSelected);
+  //   setFiltersCount(arr.length);
+  //   filterData(
+  //     PLACEHOLDER_MARKETPLACE_NFTS,
+  //     saleTypeFilters,
+  //     collectionsSelected,
+  //     artistsSelected,
+  //     filterRangePrice
+  //   );
+  // }, [saleTypeFilters, collectionsSelected, artistsSelected, filterRangePrice]);
 
-  const clickGalleryItem = (item, selected) => {
-    if (selected) {
-      const newSelectedArr = [...selectedGalleryItem];
-      newSelectedArr.push(item);
-      setSelectedGalleryItem(newSelectedArr);
-    } else {
-      const newSelectedArr = [...selectedGalleryItem];
-      const indx = newSelectedArr.findIndex((elem) => elem.id === item.id);
-      newSelectedArr.splice(indx, 1);
-      setSelectedGalleryItem(newSelectedArr);
-    }
-  };
+  // const clickGalleryItem = (item, selected) => {
+  //   if (selected) {
+  //     const newSelectedArr = [...selectedGalleryItem];
+  //     newSelectedArr.push(item);
+  //     setSelectedGalleryItem(newSelectedArr);
+  //   } else {
+  //     const newSelectedArr = [...selectedGalleryItem];
+  //     const indx = newSelectedArr.findIndex((elem) => elem.id === item.id);
+  //     newSelectedArr.splice(indx, 1);
+  //     setSelectedGalleryItem(newSelectedArr);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (removeGalleryItemId) {
-      const elIndx = selectedGalleryItem.findIndex((elem) => elem.id === removeGalleryItemId);
-      const copyArr = [...selectedGalleryItem];
-      copyArr.splice(elIndx, 1);
-      setSelectedGalleryItem(copyArr);
-      setRemoveGalleryItemId(null);
-    }
-  }, [removeGalleryItemId]);
+  // useEffect(() => {
+  //   if (removeGalleryItemId) {
+  //     const elIndx = selectedGalleryItem.findIndex((elem) => elem.id === removeGalleryItemId);
+  //     const copyArr = [...selectedGalleryItem];
+  //     copyArr.splice(elIndx, 1);
+  //     setSelectedGalleryItem(copyArr);
+  //     setRemoveGalleryItemId(null);
+  //   }
+  // }, [removeGalleryItemId]);
 
   // useEffect(() => {
   //   const header = document.querySelector('header');
@@ -140,14 +144,28 @@ const SelectNfts = (props) => {
 
   return (
     <div className="select--nfts--container">
-      <div className="section--title--block">
-        <h3 className="section--title">Select NFTs</h3>
-        <p className="section--hint--text">
-          You can only select minted NFTs from your wallet. If you want to create NFTs, go to
-          <Link to="/nft-marketplace/settings">Minting</Link>.
-        </p>
-      </div>
-      <div className="search--and--filters--section--sticky">
+      {stepData.selectedItems !== 'single' ? (
+        <>
+          <div className="section--title--block">
+            <h3 className="section--title">Select NFTs</h3>
+            <p className="section--hint--text">
+              You can only select minted NFTs from your wallet. If you want to create NFTs, go to
+              <Link to="/my-nfts">Minting</Link>.
+            </p>
+          </div>
+          <SearchFilters data={myNFTs} />
+          <div className="nfts__lists">
+            {myNFTs
+              .filter((nft) => !nft.hidden)
+              .map((nft) => (
+                <NFTCard key={nft.id} nft={nft} canSelect />
+              ))}
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
+      {/* <div className="search--and--filters--section--sticky">
         <div
           className="box--shadow--block--effect"
           style={{
@@ -205,8 +223,8 @@ const SelectNfts = (props) => {
             removeElemInSelected={clearCollectionSelectedItem}
           />
         </div>
-      </div>
-      <div className="filters--row--data">
+      </div> */}
+      {/* <div className="filters--row--data">
         <div className="nfts--data--count">
           <p>{data.length} results</p>
         </div>
@@ -304,21 +322,7 @@ const SelectNfts = (props) => {
             Clear all
           </div>
         )}
-      </div>
-      <div className="nfts--gallery">
-        {data.map((elem, index) => {
-          const rowLastElem = (index + 1) % galleryRowItem;
-          return (
-            <NftGalleryItemCard
-              key={index.toString()}
-              nft={elem}
-              onClick={(e, selected) => clickGalleryItem(e, selected)}
-              unSelected={elem.id === removeGalleryItemId}
-              style={rowLastElem === 0 ? { marginRight: 0 } : {}}
-            />
-          );
-        })}
-      </div>
+      </div> */}
       <div className="select--nfts--footer">
         <div className="selected--nft--block">
           {selectedGalleryItem.map((elem, index) => (
@@ -351,7 +355,7 @@ const SelectNfts = (props) => {
         <div className="buttons--group">
           <Button
             className="light-border-button"
-            onClick={() => history.push('/nft-marketplace/selected-method')}
+            onClick={() => history.push('/nft-marketplace/select-method')}
           >
             Back
           </Button>
@@ -370,15 +374,12 @@ const SelectNfts = (props) => {
 
 SelectNfts.propTypes = {
   continueBtnDisabled: PropTypes.bool,
-  stepData: PropTypes.shape({
-    selectedMethod: PropTypes.string,
-  }),
+  stepData: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setStepData: PropTypes.func,
 };
 
 SelectNfts.defaultProps = {
   continueBtnDisabled: true,
-  stepData: {},
   setStepData: () => {},
 };
 

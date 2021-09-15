@@ -265,4 +265,26 @@
             border-bottom: none;
         }
     }
+    .buttons--group {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 60px;
+        @include md {
+            width: 100%;
+            flex-direction: column-reverse;
+        }
+        button {
+            display: block;
+            height: 42px;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include md {
+                width: 100%;
+                margin-bottom: 12px;
+            }
+        }
+    }
 }

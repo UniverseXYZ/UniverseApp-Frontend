@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import SellNftSubHeader from '../../components/sellNftNew/SellNftSubHeader';
 import StepTabs from '../../components/sellNftNew/StepTabs';
 import SelectSellMethodTab from '../../components/sellNftNew/SelectSellMethodTab';
+import selectSellMethodIconWhite from '../../assets/images/sellNft/select-sell-method-white.svg';
+import selectSellMethodIconBlack from '../../assets/images/sellNft/select-sell-method-black.svg';
 import RewardIconActive from '../../assets/images/ion_layers.svg';
 import RewardIcon from '../../assets/images/ion_layers-disactive.svg';
 import ReviewIcon from '../../assets/images/eye-review.svg';
@@ -52,8 +54,8 @@ const NFTMarketplace = () => {
     },
     {
       labelText: 'Select sell method',
-      icon: RewardIcon,
-      iconActive: RewardIconActive,
+      icon: selectSellMethodIconBlack,
+      iconActive: selectSellMethodIconWhite,
       route: '/nft-marketplace/select-method',
       index: 1,
       content: <SelectSellMethodTab onSelect={setStepsData} data={stepsData} />,
