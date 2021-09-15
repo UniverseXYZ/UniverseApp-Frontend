@@ -2,185 +2,182 @@
 @import '../../../assets/scss/mixins';
 
 .welcome--section {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    background-color: $black;
-    min-height: 720px;
-    // padding-left: 60px;
-    @include lg {
-      padding-left: 0;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: $black;
+  min-height: 720px;
+  // padding-left: 60px;
+  @include lg {
+    padding-left: 0;
+  }
+  .ellipse-l {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 1;
+    @include sm {
+      height: 200px;
     }
-    .ellipse-l {
-      position: absolute;
-      top: 70px;
-      left: 20px;
-      z-index: 1;
+  }
+  .text-l {
+    position: absolute;
+    left: 30px;
+    bottom: -20px;
+    .elipses-bg {
+      width: 410px;
       @include sm {
-        height: 200px;
-      }
-    }
-    .text-l {
-      position: absolute;
-      left: 30px;
-      bottom: -20px;
-      .elipses-bg{
-        width: 410px;
-        @include sm {
-          width: 225px;
-        }
-      }
-      @include sm {
-        left: 0;
-      }
-      
-    }
-    .text-r {
-      position: absolute;
-      right: 0;
-      top: 0;
-      left: 100px;
-      text-align: end;
-      .elipses-bg{
-        width: 320px;
-        height: 650px;
-        margin-top: -25px;
-        @include sm {
-          height: 370px;
-        }
-      }
-      @include sm {
-        left: 30px;
-        top: 265px !important;
-      }
-      .opacity-r {
-        // width: 100%;
-        // max-height: 450px;
-        // height: 450px !important;
-        // position: absolute;
-        // top: 0;
-        // background-image: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.49343487394957986) 15%, rgba(0,0,0,0.36458333333333337) 50%, rgba(0,0,0,0.3113620448179272) 55%, rgba(0,0,0,0.5270483193277311) 85%, rgba(0,0,0,1) 100%);
-        // @include sm {
-        //   height: 250px !important;
-        // }
-      }
-    }
-    .ellipse-r {
-      position: absolute;
-      bottom: 70px;
-      right: 20px;
-      z-index: 1;
-      transform: rotate(180deg);
-      @include sm {
-        height: 200px;
-        bottom: 10px;
-      }
-    }
-
-    .welcome__section__container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-      width: 100%;
-      height: 720px - 35px;
-      padding-left: 10vw;
-      @include lg {
-        padding-left: 0;
-        flex-wrap: nowrap !important;
-      }
-
-      .left {
-        max-width: 627px;
-        h1.title {
-          font-family: $sharpGroteskSemiBoldFont;
-          font-style: normal;
-          font-weight: 600;
-          font-size: 48px;
-          line-height: 120%;
-          color: $white;
-          @include lg {
-            text-align: center;
-          }
-          @include sm {
-            font-size: 26px;
-            line-height: 140%;
-          }
-        }
-        p.desc {
-          margin: 30px 0 50px;
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: 300;
-          font-size: 18px;
-          line-height: 150%;
-          color: rgba(255, 255, 255, 0.6);
-          max-width: 370px;
-          @include lg {
-            text-align: center;
-            margin: 30px auto 50px;
-          }
-          @include sm {
-            font-size: 16px;
-            margin: 16px auto;
-          }
-        }
-        .links {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          flex-wrap: wrap;
-          .light-border-button {
-            background-image: linear-gradient(101deg, #bceb00, #00eaea);
-            background-origin: border-box;
-            box-shadow: 2px 1000px 1px #000 inset;
-            color: $white;
-            &:hover {
-              box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
-            }
-          }
-          .light-button {
-            margin-right: 15px;
-          }
-          button {
-            @include sm {
-              width: 100%;
-              margin-right: 0 !important;
-              margin-bottom: 20px;
-            }
-          }
-          @include lg {
-            justify-content: center;
-            margin-bottom: 140px;
-          }
-          @include sm {
-            margin-bottom: 30px;
-          }
-        }
-      }
-      .right {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        div {
-          width: 100%;
-          @include lg {
-            max-width: 500px;
-          }
-        }
-      }
-
-      @include lg {
-        flex-wrap: wrap;
-        justify-content: center;
-        flex-direction: column-reverse;
+        width: 225px;
       }
     }
     @include sm {
-      padding: 0px 20px;
+      left: 0;
     }
+  }
+  .text-r {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 100px;
+    text-align: end;
+    .elipses-bg {
+      width: 320px;
+      height: 650px;
+      margin-top: -25px;
+      @include sm {
+        height: 370px;
+      }
+    }
+    @include sm {
+      left: 30px;
+      top: 265px !important;
+    }
+    .opacity-r {
+      // width: 100%;
+      // max-height: 450px;
+      // height: 450px !important;
+      // position: absolute;
+      // top: 0;
+      // background-image: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.49343487394957986) 15%, rgba(0,0,0,0.36458333333333337) 50%, rgba(0,0,0,0.3113620448179272) 55%, rgba(0,0,0,0.5270483193277311) 85%, rgba(0,0,0,1) 100%);
+      // @include sm {
+      //   height: 250px !important;
+      // }
+    }
+  }
+  .ellipse-r {
+    position: absolute;
+    bottom: 70px;
+    right: 20px;
+    z-index: 1;
+    transform: rotate(180deg);
+    @include sm {
+      height: 200px;
+      bottom: 10px;
+    }
+  }
+
+  .welcome__section__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    width: 100%;
+    height: 720px - 35px;
+    padding-left: 10vw;
+    @include lg {
+      padding-left: 0;
+      flex-wrap: nowrap !important;
+    }
+
+    .left {
+      max-width: 627px;
+      h1.title {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 48px;
+        line-height: 120%;
+        color: $white;
+        @include lg {
+          text-align: center;
+        }
+        @include sm {
+          font-size: 26px;
+          line-height: 140%;
+        }
+      }
+      p.desc {
+        margin: 30px 0 50px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 150%;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 370px;
+        @include lg {
+          text-align: center;
+          margin: 30px auto 50px;
+        }
+        @include sm {
+          font-size: 16px;
+          margin: 16px auto;
+        }
+      }
+      .links {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        .light-border-button {
+          background-image: linear-gradient(101deg, #bceb00, #00eaea);
+          background-origin: border-box;
+          box-shadow: 2px 1000px 1px #000 inset;
+          color: $white;
+          margin-left: 15px;
+          &:hover {
+            box-shadow: 2px 1000px 1px rgba(0, 0, 0, 0.9) inset;
+          }
+        }
+        button {
+          @include sm {
+            width: 100%;
+            margin-left: 0 !important;
+            margin-bottom: 20px;
+          }
+        }
+        @include lg {
+          justify-content: center;
+          margin-bottom: 140px;
+        }
+        @include sm {
+          margin-bottom: 30px;
+        }
+      }
+    }
+    .right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      div {
+        width: 100%;
+        @include lg {
+          max-width: 500px;
+        }
+      }
+    }
+
+    @include lg {
+      flex-wrap: wrap;
+      justify-content: center;
+      flex-direction: column-reverse;
+    }
+  }
+  @include sm {
+    padding: 0px 20px;
+  }
   .welcome--marquee {
     color: white;
     height: auto;

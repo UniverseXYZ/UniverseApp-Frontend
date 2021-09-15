@@ -5,18 +5,13 @@ import AppContext from '../../ContextAPI';
 import leftArrow from '../../assets/images/left-arrow.svg';
 import rightArrow from '../../assets/images/right-arrow.svg';
 
-const Pagination = ({ data, perPage, setOffset, setApiPage, apiPage, setIsLastPage }) => {
+const SimplePagination = ({ data, perPage, setOffset }) => {
   const { myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage } = useContext(AppContext);
   const [pageCount, setPageCount] = useState(0);
 
   const handlePageClick = (item) => {
     setOffset(Math.ceil(item.selected * perPage));
     setMyUniverseNFTsActiverPage(item.selected);
-    // handle last page
-    if (item.selected === pageCount - 1) {
-      setApiPage(apiPage + 1);
-      setIsLastPage(true);
-    }
   };
 
   useEffect(() => {
@@ -61,13 +56,10 @@ const Pagination = ({ data, perPage, setOffset, setApiPage, apiPage, setIsLastPa
   );
 };
 
-Pagination.propTypes = {
+SimplePagination.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
   perPage: PropTypes.number.isRequired,
-  apiPage: PropTypes.number.isRequired,
   setOffset: PropTypes.func.isRequired,
-  setApiPage: PropTypes.func.isRequired,
-  setIsLastPage: PropTypes.func.isRequired,
 };
 
-export default Pagination;
+export default SimplePagination;

@@ -25,8 +25,6 @@ const WelcomeWrapper = (props) => {
     marquee,
     bgTextLeft,
     bgTextRight,
-    backgroundLeftImage,
-    backgroundRightImage,
   } = props;
 
   return (
@@ -37,7 +35,7 @@ const WelcomeWrapper = (props) => {
         {bgTextLeft && (
           <div className="text-l">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundLeftImage} className="elipses-bg" alt="Ellipses" />
+              <img src={backgroundTextLeft} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-l" />
           </div>
@@ -45,7 +43,7 @@ const WelcomeWrapper = (props) => {
         {bgTextRight && (
           <div className="text-r">
             <AnimatedOnScroll animationIn="fadeIn" animationInDelay={300}>
-              <img src={backgroundRightImage} className="elipses-bg" alt="Ellipses" />
+              <img src={backgroundTextRight} className="elipses-bg" alt="Ellipses" />
             </AnimatedOnScroll>
             <div className="opacity-r" />
           </div>
@@ -61,10 +59,10 @@ const WelcomeWrapper = (props) => {
             <div className="links">
               {!!btnText.length && (
                 <Button className="light-button" onClick={btnOnClick}>
-                  {btnText}
+                  {popupBtnText}
                 </Button>
               )}
-              {!!popupBtnText.length && !btnAnotherOnClick && (
+              {/* {!!popupBtnText.length && !btnAnotherOnClick && (
                 <Popup
                   trigger={
                     <button type="button" className="light-border-button">
@@ -74,16 +72,16 @@ const WelcomeWrapper = (props) => {
                 >
                   {(close) => <SubscribePopup close={close} />}
                 </Popup>
-              )}
-              {!!popupBtnText.length && btnAnotherOnClick && (
+              )} */}
+              {/* {!!popupBtnText.length && btnAnotherOnClick && (
                 <button type="button" className="light-border-button" onClick={btnAnotherOnClick}>
                   {popupBtnText}
                 </button>
-              )}
+              )} */}
             </div>
           </AnimatedOnScroll>
         </div>
-        <AnimatedOnScroll animationIn="fadeIn" className="right--cont">
+        <AnimatedOnScroll animationIn="fadeIn">
           <div className="right">{children && <div>{children}</div>}</div>
         </AnimatedOnScroll>
       </div>
@@ -100,8 +98,8 @@ const WelcomeWrapper = (props) => {
 WelcomeWrapper.propTypes = {
   ellipsesLeft: PropTypes.bool,
   ellipsesRight: PropTypes.bool,
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  hintText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  title: PropTypes.string.isRequired,
+  hintText: PropTypes.string,
   btnText: PropTypes.string,
   btnOnClick: PropTypes.func,
   btnAnotherOnClick: PropTypes.func,
@@ -110,14 +108,12 @@ WelcomeWrapper.propTypes = {
   marquee: PropTypes.node,
   bgTextLeft: PropTypes.bool,
   bgTextRight: PropTypes.bool,
-  backgroundLeftImage: PropTypes.node,
-  backgroundRightImage: PropTypes.node,
 };
 
 WelcomeWrapper.defaultProps = {
   ellipsesLeft: true,
   ellipsesRight: true,
-  hintText: '' || null,
+  hintText: '',
   children: null,
   marquee: null,
   btnText: '',
@@ -126,8 +122,6 @@ WelcomeWrapper.defaultProps = {
   popupBtnText: '',
   bgTextLeft: false,
   bgTextRight: false,
-  backgroundLeftImage: backgroundTextLeft,
-  backgroundRightImage: backgroundTextRight,
 };
 
 export default WelcomeWrapper;

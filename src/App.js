@@ -537,53 +537,105 @@ const App = () => {
     >
       <Header />
       <Switch>
-        <Route exact path="/" component={() => <Homepage />} />
-        <Route exact path="/about" component={() => <About />} />
-        <Route exact path="/team" component={() => <Team />} />
-        <Route exact path="/polymorphs" component={() => <Polymorphs />} />
-        <Route exact path="/polymorph-universe" component={() => <PolymorphUniverse />} />
-        <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
-        <Route exact path="/burn-to-mint" component={() => <BurnToMint />} />
-        <Route exact path="/planets/adaka" component={() => <Planet1 />} />
-        <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
-        <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
-        <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
-        <Route exact path="/lobsters/:id" component={() => <PolymorphScramblePage />} />
-        <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
-        <Route exact path="/character-page" component={() => <CharacterPage />} />
-        <Route exact path="/marketplace" component={() => <BrowseNFT />} />
-        <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
-        <Route exact path="/search" component={() => <Search />} />
-        <Route exact path="/core-drops" component={() => <CharectersDrop />} />
-        <Route exact path="/lobby-lobsters" component={() => <LobbyLobsters />} />
+        <Route exact path="/">
+          <Homepage />
+        </Route>
+        <Route exact path="/about">
+          <About />
+        </Route>
+        <Route exact path="/team">
+          <Team />
+        </Route>
+        <Route exact path="/polymorphs">
+          <Polymorphs />
+        </Route>
+        <Route exact path="/polymorph-universe">
+          <PolymorphUniverse />
+        </Route>
+        <Route exact path="/mint-polymorph">
+          <MintPolymorph />
+        </Route>
+        <Route exact path="/burn-to-mint">
+          <BurnToMint />
+        </Route>
+        <Route exact path="/planets/adaka">
+          <Planet1 />
+        </Route>
+        <Route exact path="/planets/prosopon">
+          <Planet2 />
+        </Route>
+        <Route exact path="/planets/kuapo">
+          <Planet3 />
+        </Route>
+        <Route exact path="/polymorphs/:id">
+          <PolymorphScramblePage />
+        </Route>
+        <Route exact path="/lobsters/:id">
+          <PolymorphScramblePage />
+        </Route>
+        <Route exact path="/marketplace/nft/:id">
+          <MarketplaceNFT />
+        </Route>
+        <Route exact path="/character-page">
+          <CharacterPage />
+        </Route>
+        <Route exact path="/marketplace">
+          <BrowseNFT />
+        </Route>
+        <Route exact path="/nft-marketplace/:steps">
+          <NFTMarketplace />
+        </Route>
+        <Route exact path="/search">
+          <Search />
+        </Route>
+        <Route exact path="/core-drops">
+          <CharectersDrop />
+        </Route>
+        <Route exact path="/lobby-lobsters">
+          <LobbyLobsters />
+        </Route>
         <Route exact path="/polymorph-rarity">
           <RarityCharts />
         </Route>
-        <Route exact path="/my-profile" component={() => <MyProfile />} />
-        <Route path="/setup-auction" component={() => <SetupAuction />} />
-        <Route
-          exact
-          path="/minting-and-auctions/marketplace/active-auctions"
-          component={() => <Marketplace />}
-        />
-        <Route
-          exact
-          path="/minting-and-auctions/marketplace/future-auctions"
-          component={() => <Marketplace />}
-        />
-        <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-        <Route exact path="/my-nfts/create" component={CreateNFT} />
-        <Route exact path="/my-account" component={() => <MyAccount />} />
-        <Route exact path="/my-auctions" component={() => <Auctions />} />
-        <Route exact path="/create-tiers" component={() => <CreateTiers />} />
-        <Route exact path="/create-tiers/my-nfts/create" component={() => <CreateNFT />} />
-        <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
-        <Route
-          exact
-          path="/customize-auction-landing-page"
-          component={() => <CustomizeAuction />}
-        />
-        <Route exact path="/auction-review" component={() => <AuctionReview />} />
+        <Route exact path="/my-profile">
+          <MyProfile />
+        </Route>
+        <Route path="/setup-auction">
+          <SetupAuction />
+        </Route>
+        <Route exact path="/minting-and-auctions/marketplace/active-auctions">
+          <Marketplace />
+        </Route>
+        <Route exact path="/minting-and-auctions/marketplace/future-auctions">
+          <Marketplace />
+        </Route>
+        <Route exact path="/my-nfts">
+          <MyNFTs />
+        </Route>
+        <Route exact path="/my-nfts/create">
+          <CreateNFT />
+        </Route>
+        <Route exact path="/my-account">
+          <MyAccount />
+        </Route>
+        <Route exact path="/my-auctions">
+          <Auctions />
+        </Route>
+        <Route exact path="/create-tiers">
+          <CreateTiers />
+        </Route>
+        <Route exact path="/create-tiers/my-nfts/create">
+          <CreateNFT />
+        </Route>
+        <Route exact path="/finalize-auction">
+          <FinalizeAuction />
+        </Route>
+        <Route exact path="/customize-auction-landing-page">
+          <CustomizeAuction />
+        </Route>
+        <Route exact path="/auction-review">
+          <AuctionReview />
+        </Route>
         <Route exact path="/:artist">
           <Artist />
         </Route>
@@ -593,8 +645,9 @@ const App = () => {
         <Route exact path="/:artist/:auction">
           <AuctionLandingPage />
         </Route>
-
-        <Route path="*" component={() => <NotFound />} />
+        <Route path="*">
+          <NotFound />
+        </Route>
       </Switch>
       <Footer />
       <Popup
