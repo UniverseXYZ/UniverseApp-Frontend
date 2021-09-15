@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import Input from '../input/Input';
 import SelectPrice from '../input/SelectPrice';
 import Switch from '../ui-elements/Switch';
 import './styles/BundleSellForm.scss';
+import Button from '../button/Button';
 
 const validationPrice = (price, setPriceError) => {
   const reg = /^\d+$/;
@@ -23,7 +25,7 @@ const validationPrice = (price, setPriceError) => {
 const continueValidationData = (data, setErrorStartPrice) => {
   const keys = Object.keys(data);
   const checkStartPrice = validationPrice(data.startPrice, setErrorStartPrice);
-  if (checkStartPrice) {
+  if (!checkStartPrice) {
     return false;
   }
   for (let i = 0; i < keys.length; i += 1) {
@@ -35,14 +37,13 @@ const continueValidationData = (data, setErrorStartPrice) => {
   return true;
 };
 
-const BundleSellForm = (props) => {
-  const { getData } = props;
+const SingleItemsFixedListing = (props) => {
+  const { stepData, setStepData, getData } = props;
+  const history = useHistory();
   const [errorStartPrice, setErrorStartPrice] = useState(false);
   const [bundleData, setBundleData] = useState({
     startPrice: window.bundleData ? window.bundleData.startPrice : null,
     priceType: window.bundleData ? window.bundleData.priceType : 'eth',
-    bundleName: window.bundleData ? window.bundleData.bundleName : null,
-    bundleDescription: window.bundleData ? window.bundleData.bundleDescription : null,
     switch: window.bundleData ? window.bundleData.switch : [],
     buyerAddress: window.bundleData ? window.bundleData.buyerAddres : null,
   });
@@ -60,43 +61,15 @@ const BundleSellForm = (props) => {
     window.bundleData = copyData;
   }, [bundleData]);
 
+  const clickContinue = () => {
+    setStepData({ ...stepData, settings: { ...window.bundleData } });
+    history.push('/nft-marketplace/summary');
+  };
+
   return (
     <div className="bundle--sell--form--container">
-      <h3 className="form--title">Bundle - Fixed Listing</h3>
+      <h3 className="form--title">Single item - Fixed Listing</h3>
       <div className="form--block--parent">
-        {/* bundle name */}
-        <div className="row row--bundle--name">
-          <div className="row--child">
-            <div className="left--block">
-              <h5 className="row--title">Bundle Name</h5>
-              <Input
-                type="text"
-                placeholder="Enter name"
-                value={bundleData.bundleName ? bundleData.bundleName : ''}
-                onChange={(e) => setBundleData({ ...bundleData, bundleName: e.target.value })}
-              />
-            </div>
-          </div>
-        </div>
-        {/* bundle description */}
-        <div className="row row--bundle--description">
-          <div className="row--child">
-            <div className="left--block">
-              <h5 className="row--title">
-                Bundle description (optional)
-                <span className="characters--used">0 of 500 characters used</span>
-              </h5>
-              <Input
-                type="text"
-                placeholder="Bundle description"
-                value={bundleData.bundleDescription ? bundleData.bundleDescription : ''}
-                onChange={(e) =>
-                  setBundleData({ ...bundleData, bundleDescription: e.target.value })
-                }
-              />
-            </div>
-          </div>
-        </div>
         {/* price row */}
         <div className="row">
           <div className="row--child">
@@ -162,16 +135,30 @@ const BundleSellForm = (props) => {
           )}
         </div>
       </div>
+      <div className="buttons--group">
+        <Button
+          className="light-border-button"
+          onClick={() => history.push('/nft-marketplace/select-method')}
+        >
+          Back
+        </Button>
+        <Button className="light-button" disabled={!bundleData.startPrice} onClick={clickContinue}>
+          Continue
+        </Button>
+      </div>
     </div>
   );
 };
 
-BundleSellForm.propTypes = {
+SingleItemsFixedListing.propTypes = {
+  stepData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setStepData: PropTypes.func,
   getData: PropTypes.func,
 };
 
-BundleSellForm.defaultProps = {
+SingleItemsFixedListing.defaultProps = {
   getData: () => {},
+  setStepData: () => {},
 };
 
-export default BundleSellForm;
+export default SingleItemsFixedListing;

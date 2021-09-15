@@ -30,7 +30,7 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import clockIcon from '../../assets/images/marketplace/green-clock.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const NFTCard = React.memo(({ nft, collectionAddress }) => {
+const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
@@ -38,6 +38,8 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
+  const [selectedNFTsIds, setSelectedNFTsIds] = useState([]);
+
   const ref = useRef();
   function SampleNextArrow(props) {
     // eslint-disable-next-line react/prop-types
@@ -134,7 +136,7 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
   });
   console.log(nft);
   return (
-    <div className="nft--card">
+    <div className={`nft--card ${canSelect ? 'can--select' : ''}`}>
       <div className="nft--card--header">
         <div className="three--images">
           {/* <div className="creator--details">
@@ -183,98 +185,103 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
               <img src={countIcon} alt="cover" />
               <span>{nft.numberOfEditions}</span>
             </div>
-          ) : null}
-          {/* ) : (
-             <div onClick={() => handleLikeClick(nft.id)} className="likes--count">
-               <div>
-               <svg
-                  className={
-                    nft.likers.filter((liker) => liker.id === loggedInArtist.id).length
-                      ? 'fill'
-                      : ''
-                  }
-                  width="16"
-                  height="14"
-                  viewBox="0 0 16 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7.9998 13.3996C8.15207 13.3996 8.36959 13.302 8.52911 13.2114C12.6113 10.7016 15.1998 7.78044 15.1998 4.8105C15.1998 2.34253 13.4379 0.599609 11.1611 0.599609C9.7974 0.599609 8.7372 1.30007 8.07164 2.38196C8.03914 2.4348 7.96094 2.43454 7.92872 2.38153C7.27515 1.30607 6.20174 0.599609 4.83848 0.599609C2.56174 0.599609 0.799805 2.34253 0.799805 4.8105C0.799805 7.78044 3.38832 10.7016 7.47775 13.2114C7.63002 13.302 7.84754 13.3996 7.9998 13.3996Z"
-                    stroke="black"
-                    strokeOpacity="0.4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div className="tooltiptext">
-                  <div className="likers--text">{`${nft.likers.length} people liked this`}</div>
-                  {nft.likers.length ? (
-                    <div className="likers--avatars">
-                      {nft.likers.map((liker) => (
-                        <img
-                          key={liker.id}
-                          src={
-                            typeof liker.avatar === 'string'
-                              ? liker.avatar
-                              : URL.createObjectURL(liker.avatar)
-                          }
-                          alt={liker.name}
-                        />
-                      ))}
+          ) : (
+            <>
+              {/* <div onClick={() => handleLikeClick(nft.id)} className="likes--count">
+                <div>
+                  <svg
+                      className={
+                        nft.likers.filter((liker) => liker.id === loggedInArtist.id).length
+                          ? 'fill'
+                          : ''
+                      }
+                      width="16"
+                      height="14"
+                      viewBox="0 0 16 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.9998 13.3996C8.15207 13.3996 8.36959 13.302 8.52911 13.2114C12.6113 10.7016 15.1998 7.78044 15.1998 4.8105C15.1998 2.34253 13.4379 0.599609 11.1611 0.599609C9.7974 0.599609 8.7372 1.30007 8.07164 2.38196C8.03914 2.4348 7.96094 2.43454 7.92872 2.38153C7.27515 1.30607 6.20174 0.599609 4.83848 0.599609C2.56174 0.599609 0.799805 2.34253 0.799805 4.8105C0.799805 7.78044 3.38832 10.7016 7.47775 13.2114C7.63002 13.302 7.84754 13.3996 7.9998 13.3996Z"
+                        stroke="black"
+                        strokeOpacity="0.4"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <div className="tooltiptext">
+                      <div className="likers--text">{`${nft.likers.length} people liked this`}</div>
+                      {nft.likers.length ? (
+                        <div className="likers--avatars">
+                          {nft.likers.map((liker) => (
+                            <img
+                              key={liker.id}
+                              src={
+                                typeof liker.avatar === 'string'
+                                  ? liker.avatar
+                                  : URL.createObjectURL(liker.avatar)
+                              }
+                              alt={liker.name}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                     </div>
-                  ) : (
-                    <></>
-                  )}
                 </div>
-              </div>
-              <span className={nft.likers.length ? 'redlike' : 'like-count'}>
-                {nft.likers.length}
-              </span>
+                <span className={nft.likers.length ? 'redlike' : 'like-count'}>
+                  {nft.likers.length}
+                </span>
+              </div> */}
+            </>
+          )}
+          {/* {!canSelect ? (
+            <div
+              className="nft--card--header--right--dropdown"
+              aria-hidden="true"
+              onClick={() => {
+                setShowDropdown(!showDropdown);
+                setDropdownID(nft.id);
+              }}
+            >
+              <span />
+              <span />
+              <span />
+              {dropdownID === nft.id && showDropdown && (
+                <ul ref={ref} className="nft--card--header--right--dropdown--items">
+                  <li aria-hidden="true">
+                    <img src={sellNFTIcon} alt="Sell" />
+                    <p>Sell</p>
+                  </li>
+                  <li aria-hidden="true">
+                    <img src={transferNFTIcon} alt="Transfer" />
+                    <p>Transfer</p>
+                  </li>
+                  <li aria-hidden="true">
+                    <img src={shareNFTIcon} alt="Share" />
+                    <p>Share</p>
+                  </li>
+                  {nft.hidden ? (
+                    <li aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
+                      <img src={unhideNFTIcon} alt="Hide" />
+                      <p>Unhide</p>
+                    </li>
+                  ) : (
+                    <li aria-hidden="true" onClick={() => hideNFT(nft.id)}>
+                      <img src={hideNFTIcon} alt="Hide" />
+                      <p>Hide</p>
+                    </li>
+                  )}
+                  <li className="burn" aria-hidden="true">
+                    <img src={burnNFTIcon} alt="Burn" />
+                    <p>Burn</p>
+                  </li>
+                </ul>
+              )}
             </div>
+          ) : (
+            <></>
           )} */}
-          {/* <div
-            className="nft--card--header--right--dropdown"
-            aria-hidden="true"
-            onClick={() => {
-              setShowDropdown(!showDropdown);
-              setDropdownID(nft.id);
-            }}
-          >
-            <span />
-            <span />
-            <span />
-            {dropdownID === nft.id && showDropdown && (
-              <ul ref={ref} className="nft--card--header--right--dropdown--items">
-                <li aria-hidden="true">
-                  <img src={sellNFTIcon} alt="Sell" />
-                  <p>Sell</p>
-                </li>
-                <li aria-hidden="true">
-                  <img src={transferNFTIcon} alt="Transfer" />
-                  <p>Transfer</p>
-                </li>
-                <li aria-hidden="true">
-                  <img src={shareNFTIcon} alt="Share" />
-                  <p>Share</p>
-                </li>
-                {nft.hidden ? (
-                  <li aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
-                    <img src={unhideNFTIcon} alt="Hide" />
-                    <p>Unhide</p>
-                  </li>
-                ) : (
-                  <li aria-hidden="true" onClick={() => hideNFT(nft.id)}>
-                    <img src={hideNFTIcon} alt="Hide" />
-                    <p>Hide</p>
-                  </li>
-                )}
-                <li className="burn" aria-hidden="true">
-                  <img src={burnNFTIcon} alt="Burn" />
-                  <p>Burn</p>
-                </li>
-              </ul>
-            )}
-          </div> */}
         </div>
       </div>
       <div className="nft--card--body" aria-hidden="true">
@@ -285,9 +292,11 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
             {nft.type && nft.type !== 'bundles' ? (
               <div
                 onClick={() =>
-                  history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, {
+                  !canSelect
+                    ? history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, {
                     nft,
                   })
+                    : setSelectedNFTsIds([...selectedNFTsIds, nft.id])
                 }
                 aria-hidden="true"
               >
@@ -446,10 +455,14 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
 
 NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  placeholderData: PropTypes.bool,
+  canSelect: PropTypes.bool,
   collectionAddress: PropTypes.string,
 };
 
 NFTCard.defaultProps = {
+  placeholderData: false,
+  canSelect: false,
   collectionAddress: '',
 };
 
