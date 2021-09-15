@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import uuid from 'react-uuid';
-import { renderLoaders } from '../../containers/rarityCharts/renderLoaders';
+import { renderLoaders } from '../../containers/rarityCharts/renderLoaders.jsx';
 import AppContext from '../../ContextAPI';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
