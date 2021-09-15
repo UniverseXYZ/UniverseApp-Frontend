@@ -16,6 +16,8 @@ import BundleSellFormContainer from '../../components/sellNftNew/BundleSellFormC
 import Summary from '../../components/sellNftNew/Summary';
 import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
 import './NFTMarketplace.scss';
+import SelectItemsMethodTab from '../../components/sellNftNew/SelectItemsMethodTab';
+import NewTabs from '../../components/tabs/NewTabs';
 
 const verificationSteps = (data) => {
   const keys = Object.keys(data);
@@ -36,43 +38,57 @@ const getContent = (type, data, setData) => {
 
 const NFTMarketplace = () => {
   const location = useLocation();
-  const { stepsData, setStepsData } = useContext(AppContext);
+  const { stepsData, setStepsData, setDarkMode } = useContext(AppContext);
 
   const headerLabels = [
     {
-      label: 'Select sell method',
+      labelText: 'Select items',
       icon: RewardIcon,
-      activeIcon: RewardIconActive,
-      link: '/nft-marketplace/select-method',
+      iconActive: RewardIconActive,
+      route: '/nft-marketplace/select-items',
       index: 0,
-      content: <SelectSellMethodTab onSelect={setStepsData} data={stepsData} />,
+      content: <SelectItemsMethodTab onSelect={setStepsData} data={stepsData} />,
       home: true,
     },
     {
-      label: 'Settings',
-      icon: SettingIcon,
-      activeIcon: SettingIconActive,
-      link: '/nft-marketplace/settings',
+      labelText: 'Select sell method',
+      icon: RewardIcon,
+      iconActive: RewardIconActive,
+      route: '/nft-marketplace/select-method',
       index: 1,
+      content: <SelectSellMethodTab onSelect={setStepsData} data={stepsData} />,
+      home: false,
+    },
+    {
+      labelText: 'Settings',
+      icon: SettingIcon,
+      iconActive: SettingIconActive,
+      route: '/nft-marketplace/settings',
+      index: 2,
       content: getContent(stepsData.selectedMethod, stepsData, setStepsData),
       home: false,
     },
     {
-      label: 'Summary',
+      labelText: 'Summary',
       icon: ReviewIcon,
-      activeIcon: ReviewIconActive,
-      link: '/nft-marketplace/summary',
-      index: 2,
+      iconActive: ReviewIconActive,
+      route: '/nft-marketplace/summary',
+      index: 3,
       content: <Summary nftImage={nftImage} data={stepsData} />,
       home: false,
     },
   ];
 
+  useEffect(() => {
+    setDarkMode(false);
+  }, []);
+
   return (
     <div className="nft--marketplace">
       <SellNftSubHeader backPageName="NFT name" title="Sell NFT" />
-      <StepTabs tabData={headerLabels} verificationSteps={verificationSteps(stepsData)} required />
-      {location.pathname === '/nft-marketplace/select-method' && (
+      <NewTabs tabData={headerLabels} />
+      {/* <StepTabs tabData={headerLabels} verificationSteps={verificationSteps(stepsData)} required /> */}
+      {location.pathname === '/nft-marketplace/select-items' && (
         <div className="before--footer--black--bg--section" />
       )}
     </div>
