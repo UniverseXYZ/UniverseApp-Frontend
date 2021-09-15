@@ -312,8 +312,6 @@
           }
         }
         button.slick-arrow {
-          background: linear-gradient($white, $white) padding-box,
-            linear-gradient(to right, #bceb00, #00eaea) border-box;
           border: 1px solid transparent;
           height: 30px;
           width: 30px;
@@ -339,6 +337,9 @@
           &.slick-disabled {
             background: transparent;
             border: 1px solid rgba(0, 0, 0, 0.1);
+          }
+          &:hover {
+            background: rgba(255,255,255, 0.7);
           }
         }
       }
@@ -381,6 +382,8 @@
         border-radius: 12px;
 
         p {
+          display: flex;
+          align-items: center;
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: bold;

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Button from '../button/Button';
 import DutchAuctionIcon from '../../assets/images/sellNft/dutch-auction-method-icon.svg';
 import EnglishAuctionIcon from '../../assets/images/sellNft/english-auction-method-icon.svg';
-import BundleSaleIcon from '../../assets/images/sellNft/bundle-sale-method-icon.svg';
+import FixedListingIcon from '../../assets/images/sellNft/fixed-listing-method-icon.svg';
 import nextIcon from '../../assets/images/arrow.svg';
 import './styles/SelectSellMethodTab.scss';
 
@@ -15,6 +15,24 @@ const SelectSellMethodTab = (props) => {
     <div className="select--sell--method--tab">
       <h3 className="select--sell--method--title">Select your sell method</h3>
       <div className="select--methods--section">
+        <div className="method--item">
+          <div className="child">
+            <div className="icon--block">
+              <img src={FixedListingIcon} alt="img" />
+            </div>
+            <h3 className="title">Fixed Listing</h3>
+            <p className="description">List your NFT for a fixed price</p>
+            <Button
+              className="light-button select--method--btn"
+              onClick={() => {
+                onSelect({ ...data, selectedMethod: 'bundle', settings: null });
+                history.push('/nft-marketplace/settings');
+              }}
+            >
+              Select
+            </Button>
+          </div>
+        </div>
         <div className="method--item">
           <div className="child">
             <div className="icon--block">
@@ -46,26 +64,6 @@ const SelectSellMethodTab = (props) => {
               className="light-button select--method--btn"
               onClick={() => {
                 onSelect({ ...data, selectedMethod: 'english', settings: null });
-                history.push('/nft-marketplace/settings');
-              }}
-            >
-              Select
-            </Button>
-          </div>
-        </div>
-        <div className="method--item">
-          <div className="child">
-            <div className="icon--block">
-              <img src={BundleSaleIcon} alt="img" />
-            </div>
-            <h3 className="title">Bundle Sale</h3>
-            <p className="description">
-              Group your NFT with other items to sell in a bundle at fixed price
-            </p>
-            <Button
-              className="light-button select--method--btn"
-              onClick={() => {
-                onSelect({ ...data, selectedMethod: 'bundle', settings: null });
                 history.push('/nft-marketplace/settings');
               }}
             >
