@@ -44,6 +44,7 @@ const MyNFTs = () => {
     deployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
+    collectionsIdAddressMapping,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = [

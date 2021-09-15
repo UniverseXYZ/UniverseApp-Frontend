@@ -1,20 +1,18 @@
+/* eslint-disable no-debugger */
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import './CreateSingleNft.scss';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import { useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
+import { useLocation } from 'react-router-dom';
+import './CreateSingleNft.scss';
 import EthereumAddress from 'ethereum-address';
-import { RouterPrompt } from '../../../utils/routerPrompt';
-import AppContext from '../../../ContextAPI';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
+import AppContext from '../../../ContextAPI';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
-import AreYouSurePopup from '../../popups/AreYouSurePopup.jsx';
-import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
-import SuccessPopup from '../../popups/SuccessPopup.jsx';
+import AreYouSurePopup from '../../popups/AreYouSurePopup';
 import arrow from '../../../assets/images/arrow.svg';
 import infoIcon from '../../../assets/images/icon.svg';
 import defaultImage from '../../../assets/images/default-img.svg';
@@ -23,15 +21,27 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import cloudIcon from '../../../assets/images/gray_cloud.svg';
 import createIcon from '../../../assets/images/create.svg';
-import delIcon from '../../../assets/images/red-delete.svg';
+import delIcon from '../../../assets/images/delete-red.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
-import creatorTestImage from '../../../assets/images/marketplace/users/user1.png';
-import nftTestImage from '../../../assets/images/marketplace/nfts/nft1.png';
+import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
+import {
+  saveNftForLater,
+  saveNftImage,
+  getSavedNfts,
+  updateSavedForLaterNft,
+} from '../../../utils/api/mintNFT';
+import {
+  parseRoyalties,
+  parseProperties,
+  parsePropertiesForFrontEnd,
+} from '../../../utils/helpers/contractInteraction';
+import { MintSingleNftFlow } from '../../../userFlows/MintSingleNftFlow';
+import SuccessPopup from '../../popups/SuccessPopup.jsx';
+import { RouterPrompt } from '../../../utils/routerPrompt';
 
 const SingleNFTSettings = () => {
   const {
-    loggedInArtist,
     savedNfts,
     setSavedNfts,
     setShowModal,
@@ -40,6 +50,11 @@ const SingleNFTSettings = () => {
     myNFTs,
     setMyNFTs,
     deployedCollections,
+    universeERC721CoreContract,
+    address,
+    collectionsIdAddressMapping,
+    contracts,
+    signer,
   } = useContext(AppContext);
   const [errors, setErrors] = useState({
     name: '',
@@ -71,8 +86,8 @@ const SingleNFTSettings = () => {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
-  const [border, setBorder] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [border, setBorder] = useState(false);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -138,17 +153,31 @@ const SingleNFTSettings = () => {
     }
   };
 
+  const handleCloseCongratsPopup = (close) => {
+    if (location.pathname === '/create-tiers/my-nfts/create') {
+      closeCongratsPopupEvent();
+    } else {
+      close();
+    }
+  };
+
   const propertyChangesName = (index, val) => {
     const newProperties = [...properties];
     newProperties[index].name = val;
-    newProperties[index].errors.name = !val ? '"Property name" is not allowed to be empty' : '';
+
+    // In case the data is fetched from the server it wont have the custom state defiend in this component, so we need to add it
+    if (!newProperties[index].errors) {
+      newProperties[index].errors = { name: '', value: '' };
+    }
+
+    newProperties[index].errors.name = !val ? '“Property name” is not allowed to be empty' : '';
     setProperties(newProperties);
   };
 
   const propertyChangesValue = (index, value) => {
     const newProperties = [...properties];
     newProperties[index].value = value;
-    newProperties[index].errors.value = !value ? '"Property value" is not allowed to be empty' : '';
+    newProperties[index].errors.value = !value ? '“Property value” is not allowed to be empty' : '';
     setProperties(newProperties);
   };
 
@@ -156,9 +185,9 @@ const SingleNFTSettings = () => {
     setMintNowClick(false);
     setSaveForLateClick(true);
     setErrors({
-      name: !name ? '"Name" is not allowed to be empty' : '',
-      edition: !editions ? '"Number of editions" is required' : '',
-      previewImage: !previewImage ? '"File" is required' : null,
+      name: !name ? '“Name” is not allowed to be empty' : '',
+      edition: !editions ? '“Number of editions” is required' : '',
+      previewImage: !previewImage ? '“File” is required' : null,
     });
   };
 
@@ -166,9 +195,9 @@ const SingleNFTSettings = () => {
     setSaveForLateClick(false);
     setMintNowClick(true);
     setErrors({
-      name: !name ? '"Name" is not allowed to be empty' : '',
-      edition: !editions ? '"Number of editions" is required' : '',
-      previewImage: !previewImage ? '"File" is required' : null,
+      name: !name ? '“Name” is not allowed to be empty' : '',
+      edition: !editions ? '“Number of editions” is required' : '',
+      previewImage: !previewImage ? '“File” is required' : null,
     });
   };
 
@@ -182,7 +211,9 @@ const SingleNFTSettings = () => {
         previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     } else if (
-      (file.type === 'video/mp4' ||
+      (file.type === 'audio/mpeg' ||
+        file.type === 'video/mp4' ||
+        file.type === 'image/jpeg' ||
         file.type === 'image/webp' ||
         file.type === 'audio/mpeg' ||
         file.type === 'image/gif' ||
@@ -201,345 +232,178 @@ const SingleNFTSettings = () => {
     }
   };
 
+  const closeLoadingModal = () => {
+    setShowModal(false);
+    document.body.classList.remove('no__scroll');
+  };
+
+  const onMintNft = async () => {
+    document.getElementById('loading-hidden-btn').click();
+    document.body.classList.add('no__scroll');
+    const mintingFlowContext = {
+      collectionsIdAddressMapping,
+      universeERC721CoreContract,
+      contracts,
+      signer,
+      address,
+    };
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+
+    const nftData = [
+      {
+        collectionId: selectedCollection?.id || 0,
+        royalties: royaltiesParsed,
+        numberOfEditions: editions,
+        file: previewImage,
+        name,
+        description,
+        propertiesParsed,
+        royaltiesParsed,
+      },
+    ];
+
+    const res = await MintSingleNftFlow({ nfts: nftData, helpers: mintingFlowContext });
+    document.getElementById('loading-hidden-btn').click();
+    document.getElementById('popup-root').remove();
+
+    if (res) {
+      // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
+      // const mintedNfts = await getMyNfts();
+      // setMyNFTs(mintedNfts || []);
+
+      document.getElementById('congrats-hidden-btn').click();
+    } else {
+      // error
+    }
+
+    closeLoadingModal();
+    setName('');
+    setDescription('');
+    setEditions('');
+    setPreviewImage(null);
+    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    setRoyaltyAddress([{ address: '', amount: '' }]);
+  };
+
+  const onSaveNftForLaterMinting = async () => {
+    document.getElementById('loading-hidden-btn').click();
+
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+
+    const nftData = {
+      name,
+      description,
+      editions,
+      propertiesParsed,
+      royaltiesParsed,
+      collectionId: selectedCollection?.id,
+    };
+
+    const result = await saveNftForLater(nftData);
+    let saveImageResult;
+
+    if (result.savedNft) saveImageResult = await saveNftImage(previewImage, result.savedNft.id);
+
+    // failed to upload image, but saved nft
+    if (!saveImageResult) {
+      console.error('server error. cant get meta data');
+      // showErrorModal(true);
+    }
+
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS || []);
+
+    document.getElementById('congrats-hidden-btn').click();
+    closeLoadingModal();
+    setName('');
+    setDescription('');
+    setEditions('');
+    setPreviewImage(null);
+    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    setRoyaltyAddress([{ address: '', amount: '' }]);
+  };
+
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
     if (parseInt(value, 10) !== 0) {
       setEditions(value);
       setErrors({
         ...errors,
-        edition: !e.target.value ? '"Number of editions" is not allowed to be empty' : '',
+        edition: !e.target.value ? '“Number of editions” is not allowed to be empty' : '',
       });
       setMintNowClick(false);
       setSaveForLateClick(false);
     }
   };
 
-  // useEffect(() => {
-  //   console.log([...royaltyAddress]);
-  //   const result = [...royaltyAddress].reduce(
-  //     (accumulator, current) => accumulator + Number(current.amount),
-  //     0
-  //   );
-  //   setAmountSum(result);
-  // }, [propertyChangesAmount]);
+  const onEditSavedNft = async () => {
+    document.getElementById('loading-hidden-btn').click();
 
-  const closeCongratsPopupEvent = () => {
-    const allItems = [];
+    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
+    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
-    for (let i = 0; i < Number(editions); i += 1) {
-      allItems.push({
-        id: uuid(),
-        url: nftTestImage,
-        type: 'image/png',
-      });
-    }
-
-    if (selectedCollection) {
-      setMyNFTs([
-        ...myNFTs,
-        {
-          id: uuid(),
-          type: Number(editions) > 1 ? 'bundles' : 'single',
-          creator: {
-            id: loggedInArtist.id,
-            name: loggedInArtist.name || 'John Doe',
-            avatar: loggedInArtist.avatar || creatorTestImage,
-          },
-          collection: {
-            id: selectedCollection.id,
-            name: selectedCollection.name,
-            avatar: selectedCollection.previewImage,
-            description: selectedCollection.description,
-            shortURL: selectedCollection.shortURL,
-            tokenName: selectedCollection.tokenName,
-          },
-          owner: {
-            id: loggedInArtist.id,
-            name: loggedInArtist.name || 'John Doe',
-            avatar: loggedInArtist.avatar || creatorTestImage,
-          },
-          likers: [],
-          allItems,
-          media: previewImage,
-          name,
-          description,
-          numberOfEditions: Number(editions),
-          properties,
-          royaltyAddress,
-          state: 'new',
-          releasedDate: new Date(),
-        },
-      ]);
-    } else {
-      setMyNFTs([
-        ...myNFTs,
-        {
-          id: uuid(),
-          type: Number(editions) > 1 ? 'bundles' : 'single',
-          creator: {
-            id: loggedInArtist.id,
-            name: loggedInArtist.name || 'John Doe',
-            avatar: loggedInArtist.avatar || creatorTestImage,
-          },
-          owner: {
-            id: loggedInArtist.id,
-            name: loggedInArtist.name || 'John Doe',
-            avatar: loggedInArtist.avatar || creatorTestImage,
-          },
-          likers: [],
-          allItems,
-          media: previewImage,
-          name,
-          description,
-          numberOfEditions: Number(editions),
-          properties,
-          royaltyAddress,
-          state: 'new',
-          releasedDate: new Date(),
-        },
-      ]);
-    }
-    setName('');
-    setDescription('');
-    setEditions('');
-    setPreviewImage(null);
-    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    setRoyaltyAddress([{ address: '', amount: '' }]);
-    setSelectedCollection(null);
-    setShowModal(false);
-    document.body.classList.remove('no__scroll');
-  };
-
-  const handleCloseSuccessPopup = () => {
-    const allItems = [];
-
-    for (let i = 0; i < Number(editions); i += 1) {
-      allItems.push({
-        id: uuid(),
-        url: nftTestImage,
-        type: 'image/png',
-      });
-    }
-    if (!savedNFTsID) {
-      if (selectedCollection) {
-        setSavedNfts([
-          ...savedNfts,
-          {
-            id: uuid(),
-            type: Number(editions) > 1 ? 'bundles' : 'single',
-            creator: {
-              id: loggedInArtist.id,
-              name: loggedInArtist.name || 'John Doe',
-              avatar: loggedInArtist.avatar || creatorTestImage,
-            },
-            collection: {
-              id: selectedCollection.id,
-              name: selectedCollection.name,
-              avatar: selectedCollection.previewImage,
-              description: selectedCollection.description,
-              shortURL: selectedCollection.shortURL,
-              tokenName: selectedCollection.tokenName,
-            },
-            owner: {
-              id: loggedInArtist.id,
-              name: loggedInArtist.name || 'John Doe',
-              avatar: loggedInArtist.avatar || creatorTestImage,
-            },
-            allItems,
-            media: previewImage,
-            name,
-            description,
-            numberOfEditions: Number(editions),
-            properties,
-            royaltyAddress,
-            selected: false,
-          },
-        ]);
-      } else {
-        setSavedNfts([
-          ...savedNfts,
-          {
-            id: uuid(),
-            type: Number(editions) > 1 ? 'bundles' : 'single',
-            creator: {
-              id: loggedInArtist.id,
-              name: loggedInArtist.name || 'John Doe',
-              avatar: loggedInArtist.avatar || creatorTestImage,
-            },
-            owner: {
-              id: loggedInArtist.id,
-              name: loggedInArtist.name || 'John Doe',
-              avatar: loggedInArtist.avatar || creatorTestImage,
-            },
-            name,
-            description,
-            numberOfEditions: Number(editions),
-            media: previewImage,
-            allItems,
-            properties,
-            royaltyAddress,
-            selected: false,
-          },
-        ]);
-      }
-    } else if (selectedCollection) {
-      setSavedNfts(
-        savedNfts.map((item) =>
-          item.id === savedNFTsID
-            ? {
-                ...item,
-                type: Number(editions) > 1 ? 'bundles' : 'single',
-                creator: {
-                  id: loggedInArtist.id,
-                  name: loggedInArtist.name || 'John Doe',
-                  avatar: loggedInArtist.avatar || creatorTestImage,
-                },
-                collection: {
-                  id: selectedCollection.id,
-                  name: selectedCollection.name,
-                  avatar: selectedCollection.previewImage,
-                  description: selectedCollection.description,
-                  shortURL: selectedCollection.shortURL,
-                  tokenName: selectedCollection.tokenName,
-                },
-                owner: {
-                  id: loggedInArtist.id,
-                  name: loggedInArtist.name || 'John Doe',
-                  avatar: loggedInArtist.avatar || creatorTestImage,
-                },
-                media: previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                allItems,
-                properties,
-                royaltyAddress,
-              }
-            : item
-        )
-      );
-    } else {
-      setSavedNfts(
-        savedNfts.map((item) =>
-          item.id === savedNFTsID
-            ? {
-                id: uuid(),
-                type: Number(editions) > 1 ? 'bundles' : 'single',
-                creator: {
-                  id: loggedInArtist.id,
-                  name: loggedInArtist.name || 'John Doe',
-                  avatar: loggedInArtist.avatar || creatorTestImage,
-                },
-                owner: {
-                  id: loggedInArtist.id,
-                  name: loggedInArtist.name || 'John Doe',
-                  avatar: loggedInArtist.avatar || creatorTestImage,
-                },
-                media: previewImage,
-                name,
-                description,
-                numberOfEditions: Number(editions),
-                allItems,
-                properties,
-                royaltyAddress,
-              }
-            : item
-        )
-      );
-    }
-    setName('');
-    setDescription('');
-    setEditions('');
-    setPreviewImage(null);
-    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    setRoyaltyAddress([{ address: '', amount: '' }]);
-    setSelectedCollection(null);
-    setSavedNFTsID(null);
-    setShowModal(false);
-    document.body.classList.remove('no__scroll');
-  };
-
-  useEffect(() => {
-    if (savedNFTsID) {
-      const res = savedNfts.filter((item) => item.id === savedNFTsID);
-      setName(res[0]?.name);
-      setDescription(res[0]?.description);
-      setEditions(res[0]?.numberOfEditions);
-      setPreviewImage(res[0]?.media);
-      setRoyaltyAddress(res[0]?.royaltyAddress);
-      setProperties(res[0]?.properties);
-      if (res.length && res[0].collection?.id) {
-        const getCollection = deployedCollections.filter((col) => col.id === res[0].collection?.id);
-        if (getCollection.length) {
-          setSelectedCollection(getCollection[0]);
-        }
-      }
-    }
-    return () => {
-      setName('');
-      setDescription('');
-      setEditions('');
-      setPreviewImage(null);
-      setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-      setRoyaltyAddress([{ address: '', amount: '' }]);
-      setSelectedCollection(null);
-      setSavedNFTsID(null);
+    const nftData = {
+      name,
+      description,
+      editions,
+      propertiesParsed,
+      royaltiesParsed,
+      id: savedNFTsID,
+      collectionId: selectedCollection?.id,
     };
-  }, []);
 
-  useEffect(() => {
+    let result = await updateSavedForLaterNft(nftData);
+
+    if (!result.message) {
+      const updateNFTImage = result.id && typeof previewImage === 'object';
+      if (updateNFTImage) {
+        const saveImageRes = await saveNftImage(previewImage, result.id);
+        result = saveImageRes;
+      }
+    }
+
+    if (result?.error) {
+      showErrorModal(true);
+      return;
+    }
+
+    const savedNFTS = await getSavedNfts();
+    setSavedNfts(savedNFTS || []);
+
+    document.getElementById('congrats-hidden-btn').click();
+    closeLoadingModal();
+    setName('');
+    setDescription('');
+    setEditions('');
+    setPreviewImage(null);
+    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+    setRoyaltyAddress([{ address: '', amount: '' }]);
+  };
+
+  const getPreviewImageSource = (p) =>
+    typeof p === 'string' ? p : URL.createObjectURL(previewImage);
+
+  const previewVideoSource = typeof previewImage === 'string' && previewImage.endsWith('.mp4');
+
+  useEffect(async () => {
     if (saveForLateClick) {
       if (!errors.name && !errors.edition && !errors.previewImage) {
-        handleCloseSuccessPopup();
-        document.getElementById('success-hidden-btn').click();
+        if (!savedNFTsID) {
+          onSaveNftForLaterMinting();
+        } else {
+          onEditSavedNft();
+        }
       }
     }
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
-        document.getElementById('loading-hidden-btn').click();
-        closeCongratsPopupEvent();
-        if (location.pathname === '/create-tiers/my-nfts/create') {
-          setShowModal(false);
-          document.body.classList.remove('no__scroll');
-        } else {
-          setTimeout(() => {
-            document.getElementById('loading-hidden-btn').click();
-            document.getElementById('popup-root').remove();
-            document.getElementById('congrats-hidden-btn').click();
-          }, 3000);
-        }
+        onMintNft();
       }
     }
   }, [errors, saveForLateClick]);
-
-  useEffect(() => {
-    const notValidAddress = royaltyAddress.find(
-      (el) => el.address.trim().length !== 0 && EthereumAddress.isAddress(el.address) === false
-    );
-    if (notValidAddress) {
-      setRoyaltyValidAddress(false);
-    } else {
-      setRoyaltyValidAddress(true);
-    }
-  }, [propertyChangesAddress]);
-
-  const handleCloseLoadingPopup = (close) => {
-    if (location.pathname === '/create-tiers/my-nfts/create') {
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
-      setShowCongratsPopup(true);
-    } else {
-      close();
-    }
-  };
-
-  const handleCloseCongratsPopup = (close) => {
-    if (location.pathname === '/create-tiers/my-nfts/create') {
-      closeCongratsPopupEvent();
-    } else {
-      close();
-    }
-  };
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -558,6 +422,34 @@ const SingleNFTSettings = () => {
     e.preventDefault();
     setBorder(false);
   };
+
+  useEffect(() => {
+    if (savedNFTsID) {
+      const res = savedNfts.filter((item) => item.id === savedNFTsID)[0];
+      if (res) {
+        const parsedProperties = res.properties
+          ? parsePropertiesForFrontEnd(res.properties)
+          : [{ name: '', value: '', errors: { name: '', value: '' } }];
+        setName(res.name);
+        setDescription(res.description);
+        setEditions(res.numberOfEditions);
+        setPreviewImage(res.url);
+        setRoyaltyAddress(res.royalties);
+        setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
+        setProperties(parsedProperties);
+        if (res.collectionId) {
+          const getCollection = deployedCollections.filter((col) => col.id === res.collectionId)[0];
+          if (getCollection) {
+            setSelectedCollection(getCollection);
+          }
+        }
+      }
+    }
+
+    return function resetSavedNFTsID() {
+      setSavedNFTsID(null);
+    };
+  }, []);
 
   useEffect(() => {
     setShowPrompt(true);
@@ -673,7 +565,7 @@ const SingleNFTSettings = () => {
                           onMouseOut={(event) => event.target.pause()}
                           onBlur={(event) => event.target.pause()}
                         >
-                          <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                          <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
                           <track kind="captions" />
                           Your browser does not support the video tag.
                         </video>
@@ -681,12 +573,26 @@ const SingleNFTSettings = () => {
                       {previewImage.type === 'audio/mpeg' && (
                         <img className="preview-image" src={mp3Icon} alt="Preview" />
                       )}
-                      {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
-                        <img
-                          className="preview-image"
-                          src={URL.createObjectURL(previewImage)}
-                          alt="Preview"
-                        />
+                      {previewImage.type !== 'audio/mpeg' &&
+                        previewImage.type !== 'video/mp4' &&
+                        !previewVideoSource && (
+                          <img
+                            className="preview-image"
+                            src={getPreviewImageSource(previewImage)}
+                            alt="Preview"
+                          />
+                        )}
+                      {previewVideoSource && (
+                        <video
+                          onMouseOver={(event) => event.target.play()}
+                          onFocus={(event) => event.target.play()}
+                          onMouseOut={(event) => event.target.pause()}
+                          onBlur={(event) => event.target.pause()}
+                        >
+                          <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
+                          <track kind="captions" />
+                          Your browser does not support the video tag.
+                        </video>
                       )}
                     </div>
                   </div>
@@ -732,7 +638,7 @@ const SingleNFTSettings = () => {
                   <div className="preview__image">
                     {previewImage.type === 'video/mp4' && (
                       <video>
-                        <source src={URL.createObjectURL(previewImage)} type="video/mp4" />
+                        <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
@@ -743,7 +649,7 @@ const SingleNFTSettings = () => {
                     {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
                       <img
                         className="preview-image"
-                        src={URL.createObjectURL(previewImage)}
+                        src={getPreviewImageSource(previewImage)}
                         alt="Preview"
                       />
                     )}
@@ -787,7 +693,7 @@ const SingleNFTSettings = () => {
                 setName(e.target.value);
                 setErrors({
                   ...errors,
-                  name: !e.target.value ? '"Name" is not allowed to be empty' : '',
+                  name: !e.target.value ? '“Name” is not allowed to be empty' : '',
                 });
                 setMintNowClick(false);
                 setSaveForLateClick(false);
@@ -861,21 +767,19 @@ const SingleNFTSettings = () => {
                           : setSelectedCollection(col)
                       }
                     >
-                      {typeof col.previewImage === 'string' && col.previewImage.startsWith('#') ? (
+                      {typeof col.coverUrl === 'string' && col?.coverUrl?.startsWith('#') ? (
                         <div
                           className="random__bg__color"
-                          style={{ backgroundColor: col.previewImage }}
+                          style={{ backgroundColor: col.coverUrl }}
                         >
                           {col.name.charAt(0)}
                         </div>
                       ) : (
                         <div>
-                          <img src={URL.createObjectURL(col.previewImage)} alt={col.name} />
+                          <img src={col.coverUrl} alt={col.name} />
                         </div>
                       )}
-                      <h5 title={col.name}>
-                        {col.name.length > 13 ? `${col.name.substring(0, 13)}...` : col.name}
-                      </h5>
+                      <h5>{col.name}</h5>
                       <p>{col.tokenName}</p>
                     </div>
                     <div className="box--shadow--effect--block" />
@@ -923,9 +827,8 @@ const SingleNFTSettings = () => {
                       <h5>Property name</h5>
                       <Input
                         className="inp"
-                        error={elm.errors.name}
+                        error={elm.errors?.name}
                         placeholder="Colour"
-                        hoverBoxShadowGradient
                         value={elm.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
                       />
@@ -934,9 +837,8 @@ const SingleNFTSettings = () => {
                       <h5>Value</h5>
                       <Input
                         className="inp"
-                        error={elm.errors.value}
+                        error={elm.errors?.value}
                         placeholder="Red"
-                        hoverBoxShadowGradient
                         value={elm.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
                       />
@@ -975,7 +877,7 @@ const SingleNFTSettings = () => {
                   onMouseLeave={() => setHideRoyalitiesInfo(false)}
                   onBlur={() => setHideRoyalitiesInfo(false)}
                 >
-                  Revenue splits <img src={infoIcon} alt="Info Icon" />
+                  Royalty splits <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideRoyalitiesInfo && (
                   <div className="royalities-info-text">
@@ -1003,7 +905,6 @@ const SingleNFTSettings = () => {
                       <Input
                         className="inp"
                         placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
-                        hoverBoxShadowGradient
                         value={elm.address}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
@@ -1015,7 +916,6 @@ const SingleNFTSettings = () => {
                         className="percent-inp"
                         type="number"
                         placeholder="5%"
-                        hoverBoxShadowGradient
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
@@ -1044,7 +944,7 @@ const SingleNFTSettings = () => {
                 >
                   <h5>
                     <img src={addIcon} alt="Add" />
-                    Add wallet
+                    Add the address
                   </h5>
                 </div>
               )}

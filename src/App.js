@@ -121,6 +121,7 @@ const App = () => {
   const [savedNfts, setSavedNfts] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
   const [deployedCollections, setDeployedCollections] = useState([]);
+  const [collectionsIdAddressMapping, setCollectionsIdAddressMapping] = useState({});
 
   // Pagination
   const [myUniversNFTsSearchPhrase, setMyUniversNFTsSearchPhrase] = useState('');
@@ -517,6 +518,14 @@ const App = () => {
   };
 
   useEffect(() => {
+    const mapping = {};
+    deployedCollections.forEach((collection) => {
+      mapping[collection.id] = collection.address;
+    });
+    setCollectionsIdAddressMapping(mapping);
+  }, [deployedCollections]);
+
+  useEffect(() => {
     const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
     if (canRequestData) {
       fetchNfts();
@@ -610,6 +619,7 @@ const App = () => {
         contracts,
         savedNfts,
         setSavedNfts,
+        collectionsIdAddressMapping,
         // Pagination
         myUniversNFTsSearchPhrase,
         setMyUniversNFTsSearchPhrase,
