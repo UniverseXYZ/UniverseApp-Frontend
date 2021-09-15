@@ -12,14 +12,13 @@ import clock from '../../assets/images/clock.svg';
 
 const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionLeftTime }) => {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-
   return (
     <div className="theunveiling">
-      <img className="border--gradient" src={bordergradient} alt="border" />
+      {/* <img className="border--gradient" src={bordergradient} alt="border" /> */}
+      <div className="border--gradient" />
       {auctionLeftTime && (
         <div className="auction-timer-box">
-          <img src={clock} alt="clock" />
-          <p>{auctionLeftTime} left</p>
+          <img src={clock} alt="clock" /> <p>{auctionLeftTime} left</p>
         </div>
       )}
       {highestBid && (
@@ -35,8 +34,7 @@ const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionL
                 <span className="weth--hover">WETH</span>
               </div>
               <p>
-                {highestBid.bid}
-                <span className="span--price">{highestBid.bid * 1862}$</span>
+                {highestBid.bid} <span className="span--price">{highestBid.bid * 1862}$</span>
                 <span className="span--percent">(10% of sales will go to creator)</span>
               </p>
             </div>
@@ -81,17 +79,11 @@ const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionL
     </div>
   );
 };
-
 BuyNFTSection.propTypes = {
   highestBid: PropTypes.oneOfType([PropTypes.object]),
   firstButtonText: PropTypes.string.isRequired,
   secondButtonText: PropTypes.string.isRequired,
   auctionLeftTime: PropTypes.string,
 };
-
-BuyNFTSection.defaultProps = {
-  highestBid: null,
-  auctionLeftTime: null,
-};
-
+BuyNFTSection.defaultProps = { highestBid: null, auctionLeftTime: null };
 export default BuyNFTSection;
