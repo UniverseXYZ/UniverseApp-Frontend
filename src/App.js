@@ -112,6 +112,12 @@ const App = () => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [deployedCollections, setDeployedCollections] = useState([]);
 
+  // Pagination
+  const [myUniversNFTsSearchPhrase, setMyUniversNFTsSearchPhrase] = useState('');
+  const [myUniverseNFTsperPage, setMyUniverseNFTsPerPage] = useState(12);
+  const [myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage] = useState(0);
+  const [myUniverseNFTsOffset, setMyUniverseNFTsOffset] = useState(0);
+
   useEffect(() => {
     if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
@@ -518,6 +524,15 @@ const App = () => {
         contracts,
         savedNfts,
         setSavedNfts,
+        // Pagination
+        myUniversNFTsSearchPhrase,
+        setMyUniversNFTsSearchPhrase,
+        myUniverseNFTsperPage,
+        setMyUniverseNFTsPerPage,
+        myUniverseNFTsActiverPage,
+        setMyUniverseNFTsActiverPage,
+        myUniverseNFTsOffset,
+        setMyUniverseNFTsOffset,
       }}
     >
       <Header />
@@ -541,7 +556,9 @@ const App = () => {
         <Route exact path="/search" component={() => <Search />} />
         <Route exact path="/core-drops" component={() => <CharectersDrop />} />
         <Route exact path="/lobby-lobsters" component={() => <LobbyLobsters />} />
-        <Route exact path="/polymorph-rarity" component={() => <RarityCharts />} />
+        <Route exact path="/polymorph-rarity">
+          <RarityCharts />
+        </Route>
         <Route exact path="/my-profile" component={() => <MyProfile />} />
         <Route path="/setup-auction" component={() => <SetupAuction />} />
         <Route

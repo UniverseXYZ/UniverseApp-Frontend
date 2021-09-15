@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
-import SearchField from '../../input/SearchField';
-import SortBySelect from '../../input/SortBySelect';
-import SortByOrder from '../../input/SortByOrder';
+import RaritySortBySelect from '../../input/RaritySortBySelect';
+import RaritySortByOrder from '../../input/RaritySortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import filterIcon from '../../../assets/images/filters-icon-black.svg';
-import './Filters.scss';
-import Button from '../../button/Button';
+import './RarityFilters.scss';
 import RarityChartFiltersPopup from '../../popups/RarityChartFiltersPopup';
+import RaritySearchField from '../../input/RaritySearchField';
 
-const Filters = (props) => {
+const RarityFilters = (props) => {
   const {
     floorPrice,
-    data,
-    getData,
-    getDesc,
-    desc,
+    searchText,
+    setSearchText,
+    setSortField,
+    setSortDir,
+    sortDir,
+    setApiPage,
+    resetPagination,
     categories,
     setCategories,
     categoriesIndexes,
     setCategoriesIndexes,
+    resultsCount,
+    handleCategoryFilterChange,
+    setFilter,
+    filter,
   } = props;
-
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
 
   return (
@@ -38,13 +43,12 @@ const Filters = (props) => {
       </div> */}
       <div className="rarity--charts--search--and--filters--row">
         <div className="rarity--charts--search--and--floor--price">
-          <SearchField
-            data={data}
+          <RaritySearchField
             placeholder="Search items"
-            dropdown={false}
-            CardElement={<></>}
-            enterKeyEvent={false}
-            getData={(find) => getData(find)}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            setApiPage={setApiPage}
+            resetPagination={resetPagination}
           />
           <div className="mobile--filters">
             <Popup
@@ -63,53 +67,57 @@ const Filters = (props) => {
                   setCategoriesIndexes={setCategoriesIndexes}
                   selectedFiltersLength={selectedFiltersLength}
                   setSelectedFiltersLength={setSelectedFiltersLength}
+                  resultsCount={resultsCount}
+                  handleCategoryFilterChange={handleCategoryFilterChange}
+                  setFilter={setFilter}
+                  filter={filter}
                 />
               )}
             </Popup>
             {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>}
           </div>
         </div>
-        {/* <div className="sort--by--label--and--select--block"> */}
-        {/* <label htmlFor="sort--select">Sort By:</label> */}
-        <SortByOrder
-          data={data}
-          getData={(find) => getData(find)}
-          getDesc={(value) => getDesc(value)}
+        <RaritySortByOrder
+          setSortDir={setSortDir}
+          sortDir={sortDir}
+          setApiPage={setApiPage}
+          resetPagination={resetPagination}
         />
-        <SortBySelect
+        <RaritySortBySelect
           id="sort--select"
-          data={data}
-          defaultValue="Sort by"
-          sortData={['Sort by', 'Rarity Score', 'Rank', 'Polymorph Id']}
-          getData={(find) => getData(find)}
-          getDesc={(value) => getDesc(value)}
-          desc={desc}
-          hideFirstOption
+          defaultValue="Rarity Score"
+          sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
+          setSortField={setSortField}
+          setApiPage={setApiPage}
+          resetPagination={resetPagination}
         />
-        {/* </div> */}
       </div>
     </div>
   );
 };
 
-Filters.propTypes = {
+RarityFilters.propTypes = {
   floorPrice: PropTypes.shape({ price: PropTypes.number, priceType: PropTypes.string }),
-  data: PropTypes.arrayOf(PropTypes.shape({})),
-  getData: PropTypes.func,
-  getDesc: PropTypes.func,
-  desc: PropTypes.bool,
+  searchText: PropTypes.string,
+  setSearchText: PropTypes.func.isRequired,
+  setSortField: PropTypes.func.isRequired,
+  setSortDir: PropTypes.func.isRequired,
+  sortDir: PropTypes.string.isRequired,
+  setApiPage: PropTypes.func.isRequired,
+  resetPagination: PropTypes.func.isRequired,
   categories: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategories: PropTypes.func.isRequired,
   categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setCategoriesIndexes: PropTypes.func.isRequired,
+  resultsCount: PropTypes.number.isRequired,
+  handleCategoryFilterChange: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
 };
 
-Filters.defaultProps = {
+RarityFilters.defaultProps = {
   floorPrice: { price: 0.8, priceIcon },
-  data: [],
-  getData: () => {},
-  getDesc: () => {},
-  desc: false,
+  searchText: '',
 };
 
-export default Filters;
+export default RarityFilters;
