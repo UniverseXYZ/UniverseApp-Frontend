@@ -159,7 +159,7 @@ const NFTPlaceBid = ({ close, setSelectedTokenIndex, selectedTokenIndex }) => {
         </div>
       ) : loading === 'processing' ? (
         <div className="step2">
-          <h1 className="title">Listing your item...</h1>
+          <h1 className="title">Placing a bid...</h1>
           <p className="desc">
             Just accept the signature request and wait for us to process your listing
           </p>
