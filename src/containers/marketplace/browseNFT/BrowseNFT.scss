@@ -659,7 +659,7 @@
     width: calc(100% + 80px);
     margin-left: -40px;
     background: $white;
-    z-index: 5;
+    z-index: 111;
     @include md {
       z-index: 998;
     }
@@ -1545,6 +1545,28 @@
       padding: 10px 20px;
       width: calc(100% + 40px);
       margin-left: -20px;
+    }
+  }
+  .nfts__lists {
+    margin-top: 30px;
+    grid-template-columns: repeat(auto-fit, 325px);
+    grid-gap: 20px;
+    .nft--card {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: unset;
+      &:hover {
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid transparent;
+      }
+      &--body {
+        width: 301px;
+        height: 301px;
+        .slick-slider {
+          .slider--box {
+            height: 301px;
+          }
+        }
+      }
     }
   }
   .load--more--nfts {

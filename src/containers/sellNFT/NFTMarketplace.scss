@@ -39,3 +39,17 @@
         }
     }
 }
+
+.new--tab--header {
+    .tabs--wrapper {
+        @include sm {
+            overflow-x: auto;
+        }
+        .tabs {
+            min-width: 500px;
+        }
+    }
+    @include sm {
+        margin-right: -20px;
+    }
+}

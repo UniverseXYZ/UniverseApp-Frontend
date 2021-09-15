@@ -1,8 +1,8 @@
 @import '../../../assets/scss/variables';
 @import '../../../assets/scss/mixins';
 
-.select--sell--method--tab {
-    .select--sell--method--title {
+.select--items--method--tab {
+    .select--items--method--title {
         font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
         font-weight: 600;
@@ -16,17 +16,15 @@
         }
     }
     .select--methods--section {
-        width: 100%;
         min-height: 310px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 120px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 30px;
         @include sm {
-            flex-direction: column;
+            grid-template-columns: 1fr;
+            grid-gap: 20px;
         }
         .method--item {
-            width: calc(33.3% - 20px);
             padding: 1px;
             box-sizing: border-box;
             background: rgba(0, 0, 0, 0.1);
@@ -35,13 +33,9 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            // cursor: pointer;
             user-select: none;
             cursor: pointer;
-            @include sm {
-                width: 100%;
-                margin-bottom: 20px;
-            }
+           
             .child {
                 width: 100%;
                 min-height: 310px;

@@ -58,7 +58,7 @@ const continueValidationData = (data, setErrorStartPrice, setErrorEndPrice) => {
 };
 
 const BundleSellForm = (props) => {
-  const { getData } = props;
+  const { data, getData } = props;
   const [errorStartPrice, setErrorStartPrice] = useState(false);
   const [errorEndingPrice, setErrorEndingPrice] = useState(false);
   const [continueDisabled, setContinueDisabled] = useState(true);
@@ -103,7 +103,9 @@ const BundleSellForm = (props) => {
 
   return (
     <div className="bundle--sell--form--container">
-      <h3 className="form--title">Bundle settings</h3>
+      <h3 className="form--title">{`${
+        data.selectedItems === 'single' ? 'Single item' : 'Bundle'
+      } - Fixed Listing`}</h3>
       <div className="form--block--parent">
         {/* bundle name */}
         <div className="row row--bundle--name">
@@ -354,6 +356,7 @@ const BundleSellForm = (props) => {
 };
 
 BundleSellForm.propTypes = {
+  data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   getData: PropTypes.func,
 };
 

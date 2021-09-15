@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'react-uuid';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import currencyIcon from '../../assets/images/eth-icon-new.svg';
 import congratsIcon from '../../assets/images/bid-submitted.png';
+import ethereumIcon from '../../assets/images/eth-icon.svg';
+import daiIcon from '../../assets/images/dai_icon.svg';
+import usdcIcon from '../../assets/images/usdc_icon.svg';
+import bondIcon from '../../assets/images/bond_icon.svg';
+import snxIcon from '../../assets/images/snx.svg';
 
-const NFTPlaceBid = ({ close }) => {
+const NFTPlaceBid = ({ close, setSelectedTokenIndex, selectedTokenIndex }) => {
   const [bidAmount, setBidAmount] = useState(0.25);
   const [loading, setLoading] = useState('');
   const [checkboxValue, setCheckboxValue] = useState(false);
+  const [showPriceItems, setShowPriceItems] = useState(false);
 
   const handleClick = () => {
     setLoading('processing');
@@ -17,6 +24,33 @@ const NFTPlaceBid = ({ close }) => {
       setLoading('done');
     }, 2000);
   };
+  const bidTokens = [
+    {
+      icon: ethereumIcon,
+      title: 'ETH',
+      subtitle: 'Ether',
+    },
+    {
+      icon: daiIcon,
+      title: 'DAI',
+      subtitle: 'DAI Stablecoin',
+    },
+    {
+      icon: usdcIcon,
+      title: 'USDC',
+      subtitle: 'USD Coin',
+    },
+    {
+      icon: bondIcon,
+      title: 'BOND',
+      subtitle: 'BarnBridge Gov. Token',
+    },
+    {
+      icon: snxIcon,
+      title: 'SNX',
+      subtitle: 'Synthetix Network Token',
+    },
+  ];
 
   return (
     <div className="nft--place--bid--popup">
@@ -34,10 +68,51 @@ const NFTPlaceBid = ({ close }) => {
             <label className="price">Price</label>
             <div className={`input--field ${!bidAmount ? 'error' : ''}`}>
               <div className="currency--dropdown">
-                <div>
-                  <img src={currencyIcon} alt="Currency" />
-                  <span className="currency">ETH</span>
-                  <img className="arrow" src={arrowDown} alt="arrow" />
+                <div
+                  className={`price--dropdown ${showPriceItems ? 'open' : ''}`}
+                  aria-hidden="true"
+                  onClick={(e) => {
+                    setShowPriceItems(!showPriceItems);
+                    e.stopPropagation();
+                  }}
+                >
+                  <div>
+                    <img
+                      src={bidTokens[selectedTokenIndex]?.icon}
+                      alt={bidTokens[selectedTokenIndex]?.title}
+                    />
+                  </div>
+                  <div>
+                    <h6>{bidTokens[selectedTokenIndex]?.title}</h6>
+                  </div>
+                  <div className="arrow--down--icon">
+                    <img
+                      src={arrowDown}
+                      alt="Arrow Down"
+                      className={showPriceItems ? 'rotate' : ''}
+                    />
+                  </div>
+                  {showPriceItems ? (
+                    <div className="price--dropdown--items">
+                      {bidTokens.map((token, index) => (
+                        <div
+                          className="price--dropdown--item"
+                          key={uuid()}
+                          aria-hidden="true"
+                          onClick={() => setSelectedTokenIndex(index)}
+                        >
+                          <div>
+                            <img src={token.icon} alt={token.title} />
+                          </div>
+                          <div>
+                            <h6>{token.title}</h6>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               <div>
@@ -84,7 +159,7 @@ const NFTPlaceBid = ({ close }) => {
         </div>
       ) : loading === 'processing' ? (
         <div className="step2">
-          <h1 className="title">Listing your item...</h1>
+          <h1 className="title">Placing a bid...</h1>
           <p className="desc">
             Just accept the signature request and wait for us to process your listing
           </p>
@@ -122,6 +197,11 @@ const NFTPlaceBid = ({ close }) => {
 
 NFTPlaceBid.propTypes = {
   close: PropTypes.func.isRequired,
+  setSelectedTokenIndex: PropTypes.func,
+  selectedTokenIndex: PropTypes.number,
 };
-
+NFTPlaceBid.defaultProps = {
+  setSelectedTokenIndex: () => {},
+  selectedTokenIndex: 0,
+};
 export default NFTPlaceBid;
