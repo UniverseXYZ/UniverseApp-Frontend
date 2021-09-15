@@ -22,6 +22,7 @@
     "ethereum-address": "0.0.4",
     "ethers": "^5.3.1",
     "express": "^4.17.1",
+    "graphql": "^15.5.3",
     "history": "^5.0.0",
     "ignore-styles": "^5.0.1",
     "moment": "^2.29.1",
