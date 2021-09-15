@@ -1,5 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
+import { utils } from 'ethers';
 import Tabs from '../tabs/Tabs';
 import Button from '../button/Button';
 import '../polymorphs/scramble/styles/PolymorphScramblePopup.scss';
@@ -7,148 +9,53 @@ import closeIcon from '../../assets/images/cross.svg';
 import ethIcon from '../../assets/images/eth.svg';
 import SelectComponent from '../select/SelectComponent';
 import AppContext from '../../ContextAPI';
-import person from '../../assets/images/randomise-person-images/person.png';
+import { getPolymorphMeta } from '../../utils/api/polymorphs.js';
+import { shortenEthereumAddress } from '../../utils/helpers/format.js';
+import { convertPolymorphObjects } from '../../utils/helpers/polymorphs';
 
-const PolymorphScramblePopup = ({ onClose }) => {
-  const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
+const GENE_POSITIONS_MAP = {
+  BACKGROUND: 1,
+  PANTS: 2,
+  TORSO: 3,
+  FOOTWEAR: 4,
+  FACE: 5,
+  HEAD: 6,
+  RIGHT_WEAPON: 7,
+  LEFT_WEAPON: 8,
+};
+
+const WEAR_TO_GENE_POSITION_MAP = {
+  Background: GENE_POSITIONS_MAP.BACKGROUND,
+  Pants: GENE_POSITIONS_MAP.PANTS,
+  Torso: GENE_POSITIONS_MAP.TORSO,
+  Footwear: GENE_POSITIONS_MAP.FOOTWEAR,
+  Eyewear: GENE_POSITIONS_MAP.FACE,
+  Headwear: GENE_POSITIONS_MAP.HEAD,
+  'Right Hand': GENE_POSITIONS_MAP.RIGHT_WEAPON,
+  'Left Hand': GENE_POSITIONS_MAP.LEFT_WEAPON,
+};
+
+const PolymorphScramblePopup = ({
+  onClose,
+  polymorph,
+  id,
+  setPolymorph,
+  setPolymorphGene,
+  setShowCongratulations,
+  setShowLoading,
+  setShowMetadataLoading,
+}) => {
+  const { polymorphContract, userPolymorphs, setUserPolymorphs } = useContext(AppContext);
   const [singleTraitTabSelected, setSingleTraitSelected] = useState(true);
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
-  const [selectedTrait, setSelectedTrait] = useState(null);
+  const [selectedTrait, setSelectedTrait] = useState('');
+  const [randomizeGenePrise, setRandomizeGenePrice] = useState('');
+  const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
 
-  const traits = [
-    {
-      label: 'Headwear',
-      value: 'headWear',
-      list: require
-        .context('../../assets/images/randomise-person-images/headwears-img', false, /\.(png|svg)$/)
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/headwears-img',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Eyewear',
-      value: 'eyeWear',
-      list: require
-        .context('../../assets/images/randomise-person-images/glasses-img', false, /\.(png|svg)$/)
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/glasses-img',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Torso',
-      value: 'torso',
-      list: require
-        .context('../../assets/images/randomise-person-images/torso-img', false, /\.(png|svg)$/)
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/torso-img',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Pants',
-      value: 'pants',
-      list: require
-        .context('../../assets/images/randomise-person-images/pants-img', false, /\.(png|svg)$/)
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/pants-img',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Footwear',
-      value: 'footWear',
-      list: require
-        .context('../../assets/images/randomise-person-images/shoes-img', false, /\.(png|svg)$/)
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/shoes-img',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Left-hand accessory',
-      value: 'leftHand',
-      list: require
-        .context(
-          '../../assets/images/randomise-person-images/leftHand-images',
-          false,
-          /\.(png|svg)$/
-        )
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/leftHand-images',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Right-hand accessory',
-      value: 'rightHand',
-      list: require
-        .context(
-          '../../assets/images/randomise-person-images/rightHand-images',
-          false,
-          /\.(png|svg)$/
-        )
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/rightHand-images',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-    {
-      label: 'Background',
-      value: 'background',
-      list: require
-        .context(
-          '../../assets/images/randomise-person-images/background-img',
-          false,
-          /\.(png|svg)$/
-        )
-        .keys()
-        .map(
-          require.context(
-            '../../assets/images/randomise-person-images/background-img',
-            false,
-            /\.(png|svg)$/
-          )
-        )
-        .map((m) => m.default),
-    },
-  ];
+  const traits = Object.keys(WEAR_TO_GENE_POSITION_MAP).map((key) => ({
+    label: `${key}: ${polymorph?.data?.attributes.find((attr) => attr?.trait_type === key).value}`,
+    value: key,
+  }));
 
   const tabs = [
     {
@@ -169,39 +76,85 @@ const PolymorphScramblePopup = ({ onClose }) => {
     },
   ];
 
-  const getRandomInt = (max) => Math.floor(Math.random() * max);
+  useEffect(async () => {
+    try {
+      // Fetch randomize Price
+      const amount = await polymorphContract.randomizeGenomePrice();
+      const formatedEther = utils.formatEther(amount);
+      setRandomizeGenePrice(formatedEther);
 
-  const onScramble = () => {
-    onClose();
+      // Set first trait to be selected
+      setSelectedTrait(traits[0]);
 
-    document.getElementById('loading-hidden-btn').click();
-
-    setTimeout(() => {
-      document.getElementById('popup-root').remove();
-      document.getElementById('scramble-hidden-btn').click();
-    }, 2000);
-
-    const traitsObj = {};
-
-    if (singleTraitTabSelected) {
-      if (selectedTrait.list.length !== 0) {
-        traitsObj[selectedTrait.value] =
-          selectedTrait.list[getRandomInt(selectedTrait.list.length)];
-      }
-    } else {
-      // eslint-disable-next-line no-restricted-syntax
-      for (const trait of traits) {
-        if (trait.list.length !== 0) {
-          traitsObj[trait.value] = trait.list[getRandomInt(trait.list.length)];
-        }
-      }
+      // Fetch single genom change price
+      const genomChangePrice = await polymorphContract.priceForGenomeChange(id);
+      const genomChangePriceToEther = utils.formatEther(genomChangePrice);
+      setMorphSingleGenePrice(genomChangePriceToEther);
+    } catch (e) {
+      alert(e);
     }
+  }, []);
 
-    setSelectedNftForScramble({
-      ...selectedNftForScramble,
-      ...traitsObj,
-    });
+  const onScramble = async () => {
+    onClose();
+    setShowLoading(true);
+
+    try {
+      if (singleTraitTabSelected) {
+        // Take the Gene Position
+        const genePosition = WEAR_TO_GENE_POSITION_MAP[selectedTrait?.value];
+        if (!genePosition) {
+          alert('There is no such Gene !');
+          return;
+        }
+
+        // Morph a Gene
+        const genomeChangePrice = await polymorphContract.priceForGenomeChange(id);
+        const morphGeneT = await polymorphContract.morphGene(id, genePosition, {
+          value: genomeChangePrice,
+        });
+        await morphGeneT.wait();
+      } else {
+        if (!id) return;
+        // Randomize Genom
+        const amount = await polymorphContract.randomizeGenomePrice();
+        const randomizeT = await polymorphContract.randomizeGenome(id, { value: amount });
+        await randomizeT.wait();
+      }
+      // Update the view //
+      setShowLoading(false);
+
+      setShowMetadataLoading(true);
+      // Get the new Meta
+      const data = await getPolymorphMeta(id);
+      setPolymorph(data);
+
+      // Update the Gene
+      const gene = await polymorphContract.geneOf(id);
+      setPolymorphGene(gene.toString());
+
+      // Update userPolymorphs
+      const newPolymorph = convertPolymorphObjects([data]);
+      const updatedPolymorphs = userPolymorphs.map((existingPolymorph) => {
+        if (existingPolymorph.id === newPolymorph[0].id) {
+          return newPolymorph[0];
+        }
+        return existingPolymorph;
+      });
+
+      setShowMetadataLoading(false);
+      setShowCongratulations(true);
+    } catch (err) {
+      setShowLoading(false);
+      setShowMetadataLoading(false);
+      setShowCongratulations(false);
+      alert(err.message || err);
+    }
   };
+
+  const currentTrait = polymorph?.data?.attributes.find(
+    (attr) => attr?.trait_type === selectedTrait.label
+  );
 
   return (
     <div className="scramble-popup">
@@ -212,18 +165,18 @@ const PolymorphScramblePopup = ({ onClose }) => {
         <div className="scramble--popup">
           <div className="scramble--popup--content">
             <div className="avatar-wrapper-popup">
-              <img src={person} className="avatar-popup" alt="avatar" />
+              <img src={polymorph?.data?.image} className="avatar-popup" alt="avatar" />
             </div>
 
             <div className="scramble--options--popup">
-              <div className="name">{selectedNftForScramble.name}</div>
+              <div className="name">{polymorph?.data?.name}</div>
 
               <Tabs items={tabs} />
               {singleTraitTabSelected ? (
                 <>
                   <div className="description">
                     Mutating a single trait means you can morph a hat or morph a torso. This option
-                    will only morph 1 gene.
+                    gene.
                   </div>
 
                   <div className="traits--popup">
@@ -245,7 +198,8 @@ const PolymorphScramblePopup = ({ onClose }) => {
 
               <div className="scramble--action">
                 <div className="scramble--price">
-                  <img src={ethIcon} alt="" /> {singleTraitTabSelected ? 0.02 : 0.16}
+                  <img src={ethIcon} alt="" />
+                  {singleTraitTabSelected ? morphSingleGenePrise : randomizeGenePrise}
                 </div>
                 <Button
                   className="light-button"
@@ -258,9 +212,12 @@ const PolymorphScramblePopup = ({ onClose }) => {
 
               {singleTraitTabSelected ? (
                 <div className="next-price-description">
-                  * You’re about to morph the <b>Marine Pants</b>. Your next scramble will cost more
-                  that last one. You have the same chance to receive the trait you already have as
-                  the trait you may want.
+                  * You’re about to morph the &nbsp;
+                  <b>
+                    {selectedTrait?.label}: {currentTrait?.value}
+                  </b>
+                  . Your next scramble will cost more than the last one. You have the same chance to
+                  receive the trait you already have as the trait you may want.
                 </div>
               ) : (
                 <div className="next-price-description">
@@ -277,6 +234,13 @@ const PolymorphScramblePopup = ({ onClose }) => {
 
 PolymorphScramblePopup.propTypes = {
   onClose: PropTypes.func.isRequired,
+  setPolymorph: PropTypes.func.isRequired,
+  setPolymorphGene: PropTypes.func.isRequired,
+  polymorph: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  id: PropTypes.string.isRequired,
+  setShowCongratulations: PropTypes.bool.isRequired,
+  setShowLoading: PropTypes.bool.isRequired,
+  setShowMetadataLoading: PropTypes.bool.isRequired,
 };
 
 export default PolymorphScramblePopup;

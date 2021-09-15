@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import Popup from 'reactjs-popup';
-import { useHistory } from 'react-router-dom';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
+import { utils } from 'ethers';
+import { useHistory, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import AppContext from '../../../ContextAPI';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
-import person from '../../../assets/images/randomise-person-images/person.png';
+// import person from '../../../assets/images/randomise-person-images/person.png';
 import Button from '../../button/Button';
 import Tabs from '../../tabs/Tabs';
 import PolymorphScrambleProp from './PolymorphScrambleProp';
@@ -17,19 +19,82 @@ import NotFound from '../../notFound/NotFound';
 import { isEmpty } from '../../../utils/helpers';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
-import linkIcon from '../../../assets/images/rarity-charts/linkIcon.svg';
-import PolymorphScrambleHistory from './PolymorphScrambleHistory';
-import bluePuzzle from '../../../assets/images/blue-puzzle.svg';
-import pinkPuzzle from '../../../assets/images/pink-puzzle.svg';
-import orangePuzzle from '../../../assets/images/orange-puzzle.svg';
-import pinkOrangePuzzle from '../../../assets/images/pink-orange-puzzle.svg';
+import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
+import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
+import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
+import { polymorphOwner } from '../../../utils/graphql/queries';
+import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
+import GeneParser from '../../../utils/helpers/GeneParser.js';
+import PolymorphMetadataLoading from '../../popups/PolymorphMetadataLoading';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
+  const { address } = useContext(AppContext);
   const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
-  const [historyTabSelected, setHistoryTabSelected] = useState(false);
+  const [polymorphId, setPolymorphId] = useState(useParams().id);
+  const [polymorphData, setPolymorphData] = useState({});
+  const [polymorpGene, setPolymorphGene] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [morphOwner, setMorphOwner] = useState(false);
+  const [geneCopied, setGeneCopied] = useState(false);
+  const [ownerCopied, setOwnerCopied] = useState(false);
+  const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
+  const [scrambled, setScrambled] = useState('none');
+  const { data } = useQuery(polymorphOwner(useParams().id));
+  const [traitsMap, setTraitsMap] = useState({});
+  const [showLoading, setShowLoading] = useState(false);
+  const [showMetadataLoading, setShowMetadataLoading] = useState(false);
+  const [showScramblePopup, setShowScramblePopup] = useState(false);
+  const [showCongratulations, setShowCongratulations] = useState(false);
+  useEffect(() => {
+    if (!data) return;
+    const ownerOf = data?.transferEntities[0]?.to;
+    const owner = ownerOf?.toLowerCase() === address?.toLowerCase();
+    setIsOwner(owner);
+    setMorphOwner(ownerOf);
+  }, [data, address]);
+
+  useEffect(async () => {
+    if (!polymorphId) return;
+    setLoading(true);
+    const polymorphMeta = await getPolymorphMeta(polymorphId);
+    setPolymorphData(polymorphMeta);
+    setLoading(false);
+  }, [polymorphId]);
+
+  useEffect(async () => {
+    if (!data) return;
+    const gene = data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.newGene;
+    setPolymorphGene(gene.toString());
+    const parsedGenes = GeneParser.parse(gene.toString());
+    setTraitsMap(parsedGenes);
+  }, [data]);
+
+  useEffect(async () => {
+    if (!data) return;
+    const genomChangePrice =
+      data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.priceForGenomeChange;
+    const genomChangePriceToEther = utils.formatEther(genomChangePrice);
+    setMorphSingleGenePrice(genomChangePriceToEther);
+  }, [data]);
+
+  useEffect(async () => {
+    if (!data) return;
+    const genomChangePrice =
+      data?.tokenMorphedEntities[data?.tokenMorphedEntities.length - 1]?.priceForGenomeChange;
+    const genomChangePriceToEther = utils.formatEther(genomChangePrice);
+    setMorphSingleGenePrice(genomChangePriceToEther);
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      setScrambled(getScrambleStatus(data.tokenMorphedEntities));
+    }
+  }, [data]);
+
   const tabs = [
     {
       name: 'Properties',
@@ -37,7 +102,6 @@ const PolymorphScramblePage = () => {
       handler: () => {
         setPropertiesTabSelected(true);
         setMetadataTabSelected(false);
-        setHistoryTabSelected(false);
       },
     },
     {
@@ -46,119 +110,58 @@ const PolymorphScramblePage = () => {
       handler: () => {
         setPropertiesTabSelected(false);
         setMetadataTabSelected(true);
-        setHistoryTabSelected(false);
-      },
-    },
-    {
-      name: 'History',
-      active: historyTabSelected,
-      handler: () => {
-        setPropertiesTabSelected(false);
-        setMetadataTabSelected(false);
-        setHistoryTabSelected(true);
       },
     },
   ];
 
-  const properties = [
-    {
-      trait: 'skin',
-      name: 'Cow',
-      chance: '28% have this trait',
-      type: 'pink-orange',
-      icon: pinkOrangePuzzle,
-    },
-    {
-      trait: 'Clothes',
-      name: 'Rainbow Suit w/ Tie',
-      chance: '58% have this trait',
-      type: 'blue',
-      icon: bluePuzzle,
-    },
-    {
-      trait: 'Hand Item',
-      name: 'Corn',
-      chance: '58% have this trait',
-      type: 'orange',
-      icon: orangePuzzle,
-    },
-    {
-      trait: 'Mouth',
-      name: 'Toothpick',
-      chance: '58% have this trait',
-      type: 'pink',
-      icon: pinkPuzzle,
-    },
-    {
-      trait: 'Eyes',
-      name: 'Star Shades',
-      chance: '58% have this trait',
-      type: 'blue',
-      icon: bluePuzzle,
-    },
-    {
-      trait: 'Head',
-      name: 'Cowboy Hat',
-      chance: '58% have this trait',
-      type: 'orange',
-      icon: orangePuzzle,
-    },
-    {
-      trait: 'Background',
-      name: 'Yellow',
-      chance: '58% have this trait',
-      type: null,
-    },
-  ];
-
-  const onOpenOptionsPopUp = () => {
-    document.getElementById('popup-root').remove();
-    document.getElementById('popup-hidden-btn').click();
+  const showScrambleOptions = () => {
+    setShowScramblePopup(true);
   };
 
-  return !isEmpty(selectedNftForScramble) ? (
+  const getAttributesMapping = (attributes = []) =>
+    attributes.map((attr) => ({
+      trait: attr.trait_type,
+      name: attr.value,
+      // chance: PropTypes.string.isRequired, //TODO:: We dont have it
+    }));
+
+  const attributes = getAttributesMapping(polymorphData?.data?.attributes);
+
+  return (
     <div className="container scramble--wrapper">
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="popup-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <PolymorphScramblePopup onClose={close} />}
+      <Popup closeOnDocumentClick={false} open={showScramblePopup}>
+        <PolymorphScramblePopup
+          onClose={() => setShowScramblePopup(false)}
+          polymorph={polymorphData}
+          id={polymorphId}
+          setPolymorph={setPolymorphData}
+          setPolymorphGene={setPolymorphGene}
+          setShowCongratulations={setShowCongratulations}
+          setShowLoading={setShowLoading}
+          setShowMetadataLoading={setShowMetadataLoading}
+        />
       </Popup>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="loading-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <LoadingPopup onClose={close} />}
+
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup onClose={() => setShowLoading(false)} />
       </Popup>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="scramble-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => (
-          <PolymorphScrambleCongratulationPopup
-            onClose={close}
-            onOpenOptionsPopUp={onOpenOptionsPopUp}
-          />
-        )}
+
+      <Popup closeOnDocumentClick={false} open={showMetadataLoading}>
+        <PolymorphMetadataLoading
+          onClose={() => setShowMetadataLoading(false)}
+          onOpenOptionsPopUp={showScrambleOptions}
+          polymorph={polymorphData}
+        />
       </Popup>
+
+      <Popup closeOnDocumentClick={false} open={showCongratulations}>
+        <PolymorphScrambleCongratulationPopup
+          onClose={() => setShowCongratulations(false)}
+          onOpenOptionsPopUp={showScrambleOptions}
+          polymorph={polymorphData}
+        />
+      </Popup>
+
       <div
         className="go--back--wrapper"
         aria-hidden="true"
@@ -168,179 +171,114 @@ const PolymorphScramblePage = () => {
         <span>My NFTs</span>
       </div>
       <div className="scramble--content">
-        <div className="avatar--wrapper">
-          {selectedNftForScramble.scrambled && selectedNftForScramble.scrambled === 'single' ? (
-            <div className="scrambled">
-              <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
-              <span className="tooltiptext">Single trait scrambled</span>
+        {!loading ? (
+          <div className="avatar--wrapper">
+            {scrambled && scrambled === 'single' ? (
+              <div className="scrambled">
+                <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />
+                <span className="tooltiptext">Single trait scrambled</span>
+              </div>
+            ) : (
+              <></>
+            )}
+            {scrambled && scrambled === 'never' ? (
+              <div className="scrambled">
+                <img alt="Never scrambled badge" src={neverScrambledIcon} />
+                <span className="tooltiptext">Never scrambled</span>
+              </div>
+            ) : (
+              <></>
+            )}
+            <img src={polymorphData?.data?.image} className="avatar person" alt="Polymorph" />
+          </div>
+        ) : (
+          <div className="loading" key={uuid()}>
+            <img src={loadingBg} alt="polymorph" key={uuid()} />
+            <div className="lds-roller">
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
             </div>
-          ) : (
-            <></>
-          )}
-          {selectedNftForScramble.scrambled && selectedNftForScramble.scrambled === 'never' ? (
-            <div className="scrambled">
-              <img alt="Never scrambled badge" src={neverScrambledIcon} />
-              <span className="tooltiptext">Never scrambled</span>
-            </div>
-          ) : (
-            <></>
-          )}
-          {selectedNftForScramble.background ? (
-            <img
-              src={selectedNftForScramble.background}
-              className="avatar background"
-              alt="background"
-            />
-          ) : (
-            ''
-          )}
-          <img
-            src={selectedNftForScramble.previewImage.url}
-            className="avatar person"
-            alt="person"
-          />
-          {selectedNftForScramble.headWear ? (
-            <img src={selectedNftForScramble.headWear} className="avatar headWear" alt="headWear" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.eyeWear ? (
-            <img src={selectedNftForScramble.eyeWear} className="avatar eyeWear" alt="eyeWear" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.torso ? (
-            <img src={selectedNftForScramble.torso} className="avatar torso" alt="torso" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.pants ? (
-            <img src={selectedNftForScramble.pants} className="avatar pants" alt="pants" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.footWear ? (
-            <img src={selectedNftForScramble.footWear} className="avatar footWear" alt="footWear" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.leftHand ? (
-            <img src={selectedNftForScramble.leftHand} className="avatar leftHand" alt="leftHand" />
-          ) : (
-            ''
-          )}
-          {selectedNftForScramble.rightHand ? (
-            <img
-              src={selectedNftForScramble.rightHand}
-              className="avatar rightHand"
-              alt="rightHand"
-            />
-          ) : (
-            ''
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="scramble--options">
-          <div className="name">{selectedNftForScramble.name}</div>
-          <div className="tags">
-            <div>
-              Rarity rank: <span>{`#${selectedNftForScramble.rarityRank}`}</span>
-            </div>
-            <div>
-              Rarity score: <span>{`${selectedNftForScramble.rarityScore}`}</span>
-            </div>
-            <div>
-              ID: <span>{`#${selectedNftForScramble.polymorphID}`}</span>
-            </div>
-          </div>
-          <div className="description">
-            <ReactReadMoreReadLess
-              charLimit={182}
-              readMoreText="Read more"
-              readLessText="Read less"
-            >
-              10,000 rarity based Lobby Lobsters are on a mission to empower the community.
-              Collectors are buying more than an NFT. Lobby Lobsters are a badge of honor. 100% of
-              the money from each purchase is donated to lobbying efforts that fight for better laws
-              and policies surrounding cryptocurrency. Together we can make a difference and change
-              the universe!
-            </ReactReadMoreReadLess>
-          </div>
+          <div className="name">{polymorphData?.data?.name}</div>
+          <div className="description">{polymorphData?.data?.description}</div>
 
-          <Tabs
-            items={
-              selectedNftForScramble.type === 'polymorph'
-                ? tabs
-                : tabs.filter((i) => i.name !== 'History')
-            }
-          />
-          {propertiesTabSelected && (
+          <Tabs items={tabs} attributes={attributes} />
+          {propertiesTabSelected ? (
             <>
               <div className="scramble--properties">
-                {properties.map((props) => (
-                  <PolymorphScrambleProp key={uuid()} data={props} />
-                ))}
-              </div>
-              <div className="btn-actions">
-                {selectedNftForScramble.type === 'polymorph' && (
-                  <Button className="light-button" onClick={onOpenOptionsPopUp}>
-                    Scramble options
-                  </Button>
-                )}
-                <Button
-                  className="light-border-button"
-                  onClick={() =>
-                    window.open(
-                      `https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${selectedNftForScramble.id}`
-                    )
-                  }
-                >
-                  View on Opensea
-                  <img src={linkIcon} alt="link" />
-                </Button>
+                {attributes.length && Object.keys(traitsMap).length !== 0
+                  ? attributes.map((attributeProps) => {
+                      const chance = traitsMap[attributeProps.trait.toUpperCase()];
+                      attributeProps.chance = chance;
+                      return <PolymorphScrambleProp key={uuid()} data={attributeProps} />;
+                    })
+                  : null}
               </div>
             </>
-          )}
-          {metadataTabSelected && (
+          ) : (
             <div>
               <div className="metadata">
-                <div className="genome--string--name">Genome string</div>
-                <div className="genome--string--value">
-                  {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(0, 14)}
-                  {'...'}
-                  {'0xDC25EF3F5B8A186998338A2ADA83795FBA2D695E'.substr(38)}
+                <div className="mp--string--name">Next Morph Price</div>
+                <div className="mp--string--value">{morphSingleGenePrise} ETH</div>
+              </div>
+              <div className="metadata">
+                <div className="owner--string--name">Owner</div>
+                <div className="owner--string--value">
+                  {/* TODO: Take address from .env */}
+                  <a
+                    href={`${process.env.REACT_APP_ETHERSCAN_URL}/token/${process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS}?a=${morphOwner}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {shortenEthereumAddress(morphOwner)}
+                  </a>
                 </div>
               </div>
-              <div className="btn-actions">
-                {selectedNftForScramble.type === 'polymorph' && (
-                  <Button className="light-button" onClick={onOpenOptionsPopUp}>
-                    Scramble options
-                  </Button>
-                )}
-                <Button
-                  className="light-border-button"
-                  onClick={() =>
-                    window.open(
-                      `https://opensea.io/assets/0x1cbb182322aee8ce9f4f1f98d7460173ee30af1f/${selectedNftForScramble.id}`
-                    )
-                  }
-                >
-                  View on Opensea
-                  <img src={linkIcon} alt="link" />
-                </Button>
+              <div className="metadata">
+                <div className="genome--string--name">Genome string</div>
+                <div className="copy-div">
+                  <div className="copy__div">
+                    <div className="copy" title="Copy to clipboard">
+                      <div className="copied-div" hidden={!geneCopied}>
+                        Gene copied!
+                        <span />
+                      </div>
+                      <CopyToClipboard
+                        text={polymorpGene}
+                        onCopy={() => {
+                          setGeneCopied(true);
+                          setTimeout(() => {
+                            setGeneCopied(false);
+                          }, 1000);
+                        }}
+                      >
+                        <div className="genome--string--value">
+                          {shortenEthereumAddress(polymorpGene)}
+                        </div>
+                      </CopyToClipboard>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
-          {historyTabSelected && (
-            <div>
-              <PolymorphScrambleHistory />
-            </div>
-          )}
+          {isOwner ? (
+            <Button className="light-button" onClick={showScrambleOptions}>
+              Scramble options
+            </Button>
+          ) : null}
         </div>
       </div>
     </div>
-  ) : (
-    <NotFound />
   );
 };
 

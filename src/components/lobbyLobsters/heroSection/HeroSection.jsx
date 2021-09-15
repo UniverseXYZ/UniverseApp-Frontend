@@ -6,8 +6,8 @@ import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 import AppContext from '../../../ContextAPI';
 
 const HeroSection = React.forwardRef((props, ref) => {
-  const { setMyNFTsSelectedTabIndex } = useContext(AppContext);
   const history = useHistory();
+  const { navigateToMyNFTsPage, lobstersFilter } = useContext(AppContext);
 
   return (
     <div className="lobby--lobsters--hero--section">
@@ -24,11 +24,10 @@ const HeroSection = React.forwardRef((props, ref) => {
           <button
             type="button"
             onClick={() => {
-              history.push('/my-nfts');
-              setMyNFTsSelectedTabIndex(1);
+              navigateToMyNFTsPage(lobstersFilter);
             }}
           >
-            My Lobby Lobster
+            My Lobby Lobsters
           </button>
         </div>
       </div>

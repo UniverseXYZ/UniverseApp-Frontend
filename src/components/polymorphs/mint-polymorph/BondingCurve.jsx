@@ -1,11 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
+
 import HorizontalSlider from '../../ui-elements/HorizontalSlider';
 import Button from '../../button/Button.jsx';
-import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup.jsx';
-import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import QuantityUpDownGroup from '../../ui-elements/QuantityUpDownGroup';
 import PriceETHIconWhite from '../../../assets/images/ethereum-white.svg';
 import PriceETHIconBlack from '../../../assets/images/ethereum-black.svg';
@@ -16,8 +14,6 @@ import AppContext from '../../../ContextAPI';
 
 const BondingCurve = (props) => {
   const {
-    title,
-    price,
     value,
     setValue,
     min,
@@ -30,63 +26,30 @@ const BondingCurve = (props) => {
     quantity,
     setQuantity,
     light,
-    loadingImage,
+    price,
+    trailingZeros,
+    mintAction,
+    title,
+    soldOut,
   } = props;
-  const { setMyNFTsSelectedTabIndex } = useContext(AppContext);
   const history = useHistory();
-
-  const mintPolymorph = () => {
-    if (value + quantity <= max) {
-      setValue(value + quantity);
-      document.getElementById('loading-hidden-btn').click();
-      setTimeout(() => {
-        document.getElementById('popup-root').remove();
-        document.getElementById('congrats-hidden-btn').click();
-      }, 2000);
-    } else {
-      alert(`You can mint maximum ${max - value} morphs`);
-    }
-  };
-
+  const { lobstersFilter, navigateToMyNFTsPage } = useContext(AppContext);
   return (
-    <div className={`welcome--slider--bonding--curve ${value >= max ? 'sold--out' : ''}`}>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="loading-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <LoadingPopup onClose={close} />}
-      </Popup>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="congrats-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => (
-          <MintPolymorphConfirmationPopup
-            onClose={close}
-            quantity={quantity}
-            loadingImage={loadingImage}
-          />
-        )}
-      </Popup>
+    <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}
       {blur && <img src={backgroundTextRight} alt="img" className="right--blur" />}
       <div className="row1">
         <h5>{title}</h5>
       </div>
-      <HorizontalSlider max={max} value={value} min={min} color1={color1} color2={color2} />
-      {value < max ? (
+      <HorizontalSlider
+        max={max}
+        value={value}
+        min={min}
+        color1={color1}
+        color2={color2}
+        soldOut={soldOut}
+      />
+      {!soldOut ? (
         <div className="row3--section">
           <QuantityUpDownGroup
             value={quantity}
@@ -100,13 +63,21 @@ const BondingCurve = (props) => {
               </>
             }
           />
-          {value < max && !mobile && !light && (
-            <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+          {!soldOut && !mobile && !light && (
+            <Button
+              className="light-button dark"
+              onClick={() => mintAction(quantity)}
+              disabled={value >= max}
+            >
               Mint now
             </Button>
           )}
-          {value < max && !mobile && light && (
-            <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
+          {!soldOut && !mobile && light && (
+            <Button
+              className="light-button light"
+              onClick={() => mintAction(quantity)}
+              disabled={value >= max}
+            >
               Mint now
             </Button>
           )}
@@ -118,7 +89,7 @@ const BondingCurve = (props) => {
                   alt="img"
                   src={colorPriceIcon === 'white' ? PriceETHIconWhite : PriceETHIconBlack}
                 />
-                {price === 0.1 ? (quantity * price).toFixed(1) : (quantity * price).toFixed(4)}
+                {(quantity * price).toFixed(trailingZeros)}
               </span>
             </p>
           </div>
@@ -128,21 +99,28 @@ const BondingCurve = (props) => {
           <Button
             className={`light-button ${!mobile && !light ? 'dark' : 'light'}`}
             onClick={() => {
-              history.push('/my-nfts');
-              setMyNFTsSelectedTabIndex(3);
+              navigateToMyNFTsPage(lobstersFilter);
             }}
           >
             My Lobby Lobsters
           </Button>
         </div>
       )}
-      {value < max && !!mobile && !light && (
-        <Button className="light-button dark" onClick={mintPolymorph} disabled={value >= max}>
+      {!soldOut && !!mobile && !light && (
+        <Button
+          className="light-button dark"
+          onClick={() => mintAction(quantity)}
+          disabled={value >= max}
+        >
           Mint now
         </Button>
       )}
-      {value < max && !!mobile && light && (
-        <Button className="light-button light" onClick={mintPolymorph} disabled={value >= max}>
+      {!soldOut && !!mobile && light && (
+        <Button
+          className="light-button light"
+          onClick={() => mintAction(quantity)}
+          disabled={value >= max}
+        >
           Mint now
         </Button>
       )}
@@ -151,8 +129,6 @@ const BondingCurve = (props) => {
 };
 
 BondingCurve.propTypes = {
-  title: PropTypes.string,
-  price: PropTypes.number,
   value: PropTypes.number.isRequired,
   setValue: PropTypes.func,
   min: PropTypes.number,
@@ -165,12 +141,14 @@ BondingCurve.propTypes = {
   quantity: PropTypes.number.isRequired,
   setQuantity: PropTypes.func.isRequired,
   light: PropTypes.bool.isRequired,
-  loadingImage: PropTypes.string,
+  price: PropTypes.number.isRequired,
+  trailingZeros: PropTypes.number.isRequired,
+  mintAction: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  soldOut: PropTypes.bool,
 };
 
 BondingCurve.defaultProps = {
-  title: 'Distribution curve',
-  price: 0.0777,
   setValue: () => {},
   min: 0,
   max: 100,
@@ -179,7 +157,7 @@ BondingCurve.defaultProps = {
   color2: 'black',
   mobile: false,
   blur: false,
-  loadingImage: '',
+  soldOut: false,
 };
 
 export default BondingCurve;

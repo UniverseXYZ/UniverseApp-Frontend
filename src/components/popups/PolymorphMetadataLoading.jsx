@@ -4,8 +4,8 @@ import Button from '../button/Button.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 
-const LoadingPopup = ({ onClose }) => (
-  <div className="loading-div popup-div" id="loading-popup-div">
+const PolymorphMetadataLoading = ({ onClose }) => (
+  <div className="loading-div popup-div" id="metadata-loading-popup-div">
     <div className="loading-ring">
       <div />
       <div />
@@ -17,9 +17,9 @@ const LoadingPopup = ({ onClose }) => (
     </button>
     <div className="loading-text">
       <p>
-        <span>Loading... do not click refresh or leave this page. </span>
-        <span>Just kidding, you can do whatever you want. </span>
-        <span>This is Ethereum!</span>
+        <span>Your new polymorph is being assembled... </span>
+        <span>You will see it&apos;s new morphed look in a few moments.</span>
+        <span>Be prepared!</span>
       </p>
     </div>
     <div className="loading-btns">
@@ -30,8 +30,8 @@ const LoadingPopup = ({ onClose }) => (
   </div>
 );
 
-LoadingPopup.propTypes = {
+PolymorphMetadataLoading.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default LoadingPopup;
+export default PolymorphMetadataLoading;

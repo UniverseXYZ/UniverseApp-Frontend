@@ -207,7 +207,6 @@
   padding: 40px;
   width: 100%;
   max-width: 469px;
-  z-index: 1000;
 
   .close__popup {
     position: absolute;
@@ -2460,7 +2459,7 @@
       grid-template-columns: 89px 89px 89px;
       justify-content: center;
       grid-gap: 14px;
-      .lds-roller {
+      .lobster-lds-roller {
         zoom: 0.6;
       }
       img {
@@ -2476,7 +2475,7 @@
       grid-template-columns: 66px 66px 66px 66px;
       justify-content: center;
       grid-gap: 10px;
-      .lds-roller {
+      .lobster-lds-roller {
         zoom: 0.5;
       }
       img {
@@ -2492,7 +2491,7 @@
       grid-template-columns: 52px 52px 52px 52px 52px;
       justify-content: center;
       grid-gap: 9px;
-      .lds-roller {
+      .lobster-lds-roller {
         zoom: 0.4;
       }
       img {
@@ -2588,13 +2587,6 @@
         border-radius: 50%;
         display: flex;
         padding: 0 20px;
-        cursor: pointer;
-        &:hover {
-          box-shadow: 2px 1000px 1px #fff inset;
-          border: 1px solid transparent;
-          background-origin: border-box;
-          background-image: linear-gradient(101deg, #bceb00, #00eaea);
-        }
         > img {
           text-align: center;
           margin: auto;
@@ -3142,12 +3134,12 @@
     .universe_filter_label {
       margin-bottom: 15px;
       span {
-        font-family: $spaceGroteskFont;
+        font-family: $sharpGroteskSemiBoldFont;
         font-style: normal;
         font-weight: 600;
         font-size: 16px;
         letter-spacing: 0.2px;
-        color: $black;
+        color: #000000;
         margin-right: 15px;
       }
     }
@@ -3175,9 +3167,10 @@
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: 400;
-        font-size: 16px;
+        font-size: 17px;
         line-height: 20px;
-        color: #cacaca;
+        color: $black;
+        opacity: 0.4;
       }
       .arrow__down {
         width: 14px;
@@ -3926,7 +3919,7 @@
     display: flex;
     justify-content: space-between;
     padding: 75px 60px;
-    max-height: 800px;
+    max-height: 962px;
     overflow-y: auto;
 
     .rarity--rank--image {
@@ -3993,7 +3986,7 @@
       @include xl {
         text-align: center;
       }
-      @include lg {
+      @media (max-width: 834px) {
         width: 100%;
         margin: auto;
         height: unset;
@@ -4052,11 +4045,11 @@
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: 600;
-          font-size: 18px;
-          line-height: 29px;
+          font-size: 16px;
+          line-height: 160%;
           color: #b3b3b3;
         }
-        @include lg {
+        @media (max-width: 834px) {
           margin-top: 32px;
         }
         @include xl {
@@ -4194,10 +4187,10 @@
           gap: 14px;
         }
 
-        // @include md {
-        //   grid-template-columns: repeat(3, 1fr);
-        // }
         @include md {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @include sm {
           grid-template-columns: repeat(1, 1fr);
         }
       }
@@ -4221,17 +4214,17 @@
       .selected--pink--orange {
         background: linear-gradient(90deg, #f9eef9 50%, #fff9f2 50%) !important;
       }
-      @include lg {
+      @media (max-width: 834px) {
         padding-bottom: 20px;
       }
     }
-    @include md {
+    @include sm {
       max-height: 600px;
     }
     @include xl {
       align-items: center;
     }
-    @include lg {
+    @media (max-width: 834px) {
       display: grid;
       padding: 30px 20px 20px;
     }
@@ -4244,11 +4237,11 @@
   //   height: 100%;
   //   overflow-y: auto;
   // }
-  @include lg {
-    width: fit-content !important;
-  }
-  @include md {
+  @include sm {
     max-width: 90%;
+  }
+  @media (max-width: 834px) {
+    width: fit-content !important;
   }
 
   @media (max-width: 1068px) and (min-width: #{$screen-lg-max}) {
@@ -4281,7 +4274,7 @@
     p {
       font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
-      font-weight: 600;
+      font-weight: bold;
       font-size: 16px;
       line-height: 150%;
       color: $black;
@@ -4493,6 +4486,5 @@
   @include md {
     width: 100%;
     height: 100%;
-    border-radius: 0px;
   }
 }

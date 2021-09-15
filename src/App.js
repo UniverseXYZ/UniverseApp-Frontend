@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import { Contract, providers, utils } from 'ethers';
 import Popup from 'reactjs-popup';
 import './assets/scss/normalize.scss';
 import uuid from 'react-uuid';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import { useQuery } from '@apollo/client';
 import { handleClickOutside, handleScroll } from './utils/helpers';
 import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
@@ -45,14 +46,23 @@ import RarityCharts from './containers/rarityCharts/RarityCharts';
 import PolymorphUniverse from './containers/polymorphUniverse/PolymorphUniverse';
 import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
 import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
+import { transferLobsters, queryLobstersGraph } from './utils/graphql/lobsterQueries';
+import { convertLobsterObjects } from './utils/helpers/lobsters';
+
 import { CONNECTORS_NAMES } from './utils/dictionary';
 import { getEthPriceCoingecko } from './utils/api/etherscan';
 import { getProfileInfo, setChallenge, userAuthenticate } from './utils/api/profile';
 import Contracts from './contracts/contracts.json';
 import { getSavedNfts, getMyNfts, getMyCollections } from './utils/api/mintNFT';
+import { transferPolymorphs } from './utils/graphql/queries';
+import { fetchTokensMetadataJson } from './utils/api/polymorphs';
+import { convertPolymorphObjects } from './utils/helpers/polymorphs';
+import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
 
 const App = () => {
   const location = useLocation();
+  const history = useHistory();
+
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -118,6 +128,30 @@ const App = () => {
   const [myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage] = useState(0);
   const [myUniverseNFTsOffset, setMyUniverseNFTsOffset] = useState(0);
 
+  // Polymorphs
+  const [polymorphContract, setPolymorphContract] = useState(null);
+  const [userPolymorphs, setUserPolymorphs] = useState([]);
+  const [userPolymorphsLoaded, setUserPolymorphsLoaded] = useState(false);
+  const [payableAmount, setPayableAmount] = useState(0.1);
+  const [totalPolymorphs, setTotalPolymorphs] = useState(0);
+  const [polymorphBaseURI, setPolymorphBaseURI] = useState('');
+  const [polymorphPrice, setPolymorphPrice] = useState(0);
+  const { data } = useQuery(transferPolymorphs(address));
+
+  // Lobsters
+  const [userLobsters, setUserLobsters] = useState([]);
+  const [userLobstersLoaded, setUserLobstersLoaded] = useState(false);
+  const [totalLobsters, setTotalLobsters] = useState(0);
+  const [lobsterBaseURI, setLobsterBaseURI] = useState('');
+  const [lobsterPrice, setLobsterPrice] = useState(0);
+  const [lobsterContract, setLobsterContract] = useState(null);
+
+  // Filters
+  const allCharactersFilter = 'All Characters';
+  const polymorphsFilter = 'Polymorphs';
+  const lobstersFilter = 'Lobby Lobsters';
+  const [collectionFilter, setCollectionFilter] = useState(allCharactersFilter);
+
   useEffect(() => {
     if (!darkMode) {
       window.document.querySelector('header').classList.remove('dark');
@@ -168,6 +202,59 @@ const App = () => {
     localStorage.removeItem('user_address');
     localStorage.removeItem('providerName');
   };
+  // Fetch user's polymorphs
+  const fetchUserPolymorphsTheGraph = async (theGraphData) => {
+    setUserPolymorphsLoaded(false);
+
+    const userNftIds = theGraphData?.transferEntities?.map((nft) => nft.tokenId);
+    const metadataURIs = userNftIds?.map(
+      (id) => `${process.env.REACT_APP_POLYMORPHS_IMAGES_URL}${id}`
+    );
+    const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+    const polymorphNFTs = convertPolymorphObjects(nftMetadataObjects);
+    if (polymorphNFTs) {
+      setUserPolymorphs(polymorphNFTs);
+    }
+    setUserPolymorphsLoaded(true);
+  };
+
+  // Fetch users's lobsters
+  const fetchUserLobstersTheGraph = async (newAddress) => {
+    setUserLobstersLoaded(false);
+
+    const lobsters = await queryLobstersGraph(transferLobsters(newAddress));
+    const userNftIds = lobsters?.transferEntities?.map((nft) => nft.tokenId);
+    const metadataURIs = userNftIds?.map(
+      (id) => `${process.env.REACT_APP_LOBSTER_IMAGES_URL}${id}`
+    );
+    const nftMetadataObjects = await fetchTokensMetadataJson(metadataURIs);
+    const lobsterNFTs = convertLobsterObjects(nftMetadataObjects);
+    if (lobsterNFTs) {
+      setUserLobsters(lobsterNFTs);
+    }
+    setUserLobstersLoaded(true);
+  };
+
+  const navigateToMyNFTsPage = (characterFilter) => {
+    setCollectionFilter(characterFilter);
+    setMyUniverseNFTsActiverPage(0);
+    setMyUniverseNFTsOffset(0);
+
+    history.push('/my-nfts');
+  };
+
+  useEffect(() => {
+    if (data) {
+      fetchUserPolymorphsTheGraph(data);
+    }
+  }, [data]);
+
+  useEffect(async () => {
+    setUserLobsters([]);
+    setUserPolymorphs([]);
+    fetchUserPolymorphsTheGraph(data);
+    fetchUserLobstersTheGraph(address);
+  }, [address]);
 
   // Authentication and Web3
   const web3AuthenticationProccess = async (provider, network, accounts) => {
@@ -190,29 +277,28 @@ const App = () => {
     );
 
     // TODO: Vik to check it
-    // const polymContract =
-    //   Contracts[network.chainId][network.name].contracts.PolymorphWithGeneChanger;
+    const polymContract = contractsData.PolymorphWithGeneChanger;
 
-    // const polymorphContractInstance = new Contract(
-    //   process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
-    //   polymContract?.abi,
-    //   signerResult
-    // );
+    const polymorphContractInstance = new Contract(
+      process.env.REACT_APP_POLYMORPHS_CONTRACT_ADDRESS,
+      polymContract?.abi,
+      signerResult
+    );
 
-    // const lobsContract = Contracts[network.chainId][network.name].contracts.Lobster;
-    // const lobsterContractInstance = new Contract(
-    //   process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
-    //   lobsContract?.abi,
-    //   signerResult
-    // );
+    const lobsContract = contractsData.Lobster;
+    const lobsterContractInstance = new Contract(
+      process.env.REACT_APP_LOBSTERS_CONTRACT_ADDRESS,
+      lobsContract?.abi,
+      signerResult
+    );
 
-    // const totalPolyMinted = await polymorphContractInstance.lastTokenId();
-    // const polymorphBaseURIData = await polymorphContractInstance.baseURI();
-    // const polymPrice = await polymorphContractInstance.polymorphPrice();
+    const totalPolyMinted = await polymorphContractInstance.lastTokenId();
+    const polymorphBaseURIData = await polymorphContractInstance.baseURI();
+    const polymPrice = await polymorphContractInstance.polymorphPrice();
 
-    // const totalLobsterMinted = await lobsterContractInstance.lastTokenId();
-    // const lobsterBaseURIData = await lobsterContractInstance.baseURI();
-    // const lobsPrice = await lobsterContractInstance.lobsterPrice();
+    const totalLobsterMinted = await lobsterContractInstance.lastTokenId();
+    const lobsterBaseURIData = await lobsterContractInstance.baseURI();
+    const lobsPrice = await lobsterContractInstance.lobsterPrice();
 
     setWeb3Provider(provider);
     setAddress(accounts[0]);
@@ -224,15 +310,15 @@ const App = () => {
     setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
     setContracts(contractsData);
 
-    // setPolymorphContract(polymorphContractInstance);
-    // setTotalPolymorphs(totalPolyMinted.toNumber());
-    // setPolymorphBaseURI(polymorphBaseURIData);
-    // setPolymorphPrice(utils.formatEther(polymPrice));
+    setPolymorphContract(polymorphContractInstance);
+    setTotalPolymorphs(totalPolyMinted.toNumber());
+    setPolymorphBaseURI(polymorphBaseURIData);
+    setPolymorphPrice(utils.formatEther(polymPrice));
 
-    // setLobsterContract(lobsterContractInstance);
-    // setTotalLobsters(totalLobsterMinted);
-    // setLobsterBaseURI(lobsterBaseURIData);
-    // setLobsterPrice(lobsPrice);
+    setLobsterContract(lobsterContractInstance);
+    setTotalLobsters(totalLobsterMinted);
+    setLobsterBaseURI(lobsterBaseURIData);
+    setLobsterPrice(lobsPrice);
   };
 
   const resetConnectionState = async (walletConnectEvent) => {
@@ -533,6 +619,27 @@ const App = () => {
         setMyUniverseNFTsActiverPage,
         myUniverseNFTsOffset,
         setMyUniverseNFTsOffset,
+        // Polymorphs
+        polymorphContract,
+        userPolymorphs,
+        userPolymorphsLoaded,
+        payableAmount,
+        totalPolymorphs,
+        polymorphBaseURI,
+        polymorphPrice,
+        // Lobsters
+        userLobsters,
+        userLobstersLoaded,
+        totalLobsters,
+        lobsterBaseURI,
+        lobsterPrice,
+        lobsterContract,
+        // Filters
+        navigateToMyNFTsPage,
+        polymorphsFilter,
+        lobstersFilter,
+        collectionFilter,
+        allCharactersFilter,
       }}
     >
       <Header />
@@ -571,7 +678,7 @@ const App = () => {
           <PolymorphScramblePage />
         </Route>
         <Route exact path="/lobsters/:id">
-          <PolymorphScramblePage />
+          <LobsterInfoPage />
         </Route>
         <Route exact path="/marketplace/nft/:id">
           <MarketplaceNFT />
