@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
@@ -25,7 +26,9 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
+import { MintSingleCollectionFlow } from '../../../userFlows/MintSingleCollectionFlow';
 import { RouterPrompt } from '../../../utils/routerPrompt.js';
+import { editCollection, editCollectionImage } from '../../../utils/api/mintNFT';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -36,6 +39,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     setMyNFTs,
     deployedCollections,
     setDeployedCollections,
+    universeERC721FactoryContract,
   } = useContext(AppContext);
 
   const [offset, setOffset] = useState(0);
@@ -195,23 +199,13 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const handleMinting = () => {
     setMintNowClick(true);
-    if (
-      !collectionName ||
-      !tokenName ||
-      !collectionNFTs.length ||
-      shortURL.length <= 15 ||
-      shortURL === 'universe.xyz/c/shorturl'
-    ) {
+    if (!collectionName || !tokenName || !collectionNFTs.length) {
       setErrors({
         collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
-        shorturl:
-          shortURL.length <= 15 || shortURL === 'universe.xyz/c/shorturl'
-            ? '“Short URL” is not allowed to be empty'
-            : '',
       });
-      if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+      if (errors.shorturl.length > 0) {
         setInputClass('empty__error');
       } else {
         setInputClass('inp');
@@ -235,7 +229,6 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           collectionName: '',
           tokenName: '',
           collectible: '',
-          shorturl: '',
         });
       }
     }
@@ -258,6 +251,65 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         }
       }
     }
+  };
+
+  const onMintCollection = async () => {
+    document.getElementById('loading-hidden-btn').click();
+    document.body.classList.add('no__scroll');
+
+    const mintingFlowContext = {
+      universeERC721FactoryContract,
+    };
+
+    const collectionData = {
+      file: coverImage,
+      name: collectionName,
+      symbol: tokenName,
+      description,
+      tokenName,
+    };
+
+    let res;
+    // If is editing
+    if (savedCollectionID) {
+      res = await editCollection({
+        id: savedCollectionID,
+        description,
+      });
+
+      if (res.message) {
+        // there is an error while updating the collection
+      } else {
+        const updateCoverImage = typeof coverImage === 'object';
+        if (updateCoverImage) {
+          res = await editCollectionImage(coverImage, savedCollectionID);
+        }
+
+        /* eslint-disable no-param-reassign */
+        const deployedCollectionsCopy = deployedCollections.map((col) => {
+          if (col.id === savedCollectionID) {
+            col = { ...res };
+          }
+          return col;
+        });
+        setDeployedCollections(deployedCollectionsCopy);
+      }
+    } else {
+      res = await MintSingleCollectionFlow({
+        collection: collectionData,
+        helpers: mintingFlowContext,
+      });
+    }
+
+    document.getElementById('popup-root').remove();
+
+    if (res) {
+      document.getElementById('congrats-hidden-btn').click();
+    } else {
+      // error
+    }
+
+    document.body.classList.remove('no__scroll');
   };
 
   const onDrop = (e) => {
@@ -319,94 +371,19 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   useEffect(() => {
     if (mintNowClick) {
       if (!errors.collectionName && !errors.tokenName) {
-        if (!savedCollectionID) {
-          if (collectionNFTs.length) {
-            const newMyNFTs = [...myNFTs];
-            collectionNFTs.forEach((nft) => {
-              newMyNFTs.push({
-                id: uuid(),
-                type: 'collection',
-                collectionId: collectionName,
-                collectionName,
-                collectionAvatar:
-                  coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-                tokenName,
-                collectionDescription: description,
-                shortURL,
-                previewImage: nft.previewImage,
-                name: nft.name,
-                description: nft.description,
-                numberOfEditions: Number(nft.editions),
-                generatedEditions: nft.generatedEditions,
-                releasedDate: new Date(),
-                properties: nft.properties,
-                royaltySplits: nft.royaltySplits,
-              });
-            });
-            setMyNFTs(newMyNFTs);
-          }
-          setDeployedCollections([
-            ...deployedCollections,
-            {
-              id: collectionName,
-              previewImage:
-                coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-              name: collectionName,
-              tokenName,
-              description,
-              shortURL,
-            },
-          ]);
-          setCoverImage(null);
-          setCollectionName('');
-          setTokenName('');
-          setDescription('');
-          document.getElementById('loading-hidden-btn').click();
-          setTimeout(() => {
-            document.getElementById('popup-root').remove();
-            document.getElementById('congrats-hidden-btn').click();
-          }, 3000);
-        } else {
-          const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
-          const coll = {
-            id: res.id,
-            previewImage:
-              coverImage || defaultColors[Math.floor(Math.random() * defaultColors.length)],
-            name: collectionName,
-            tokenName,
-            description,
-            shortURL,
-            bgImage,
-          };
-          setCoverImage(null);
-          setCollectionName('');
-          setTokenName('');
-          setDescription('');
-          setSavedCollectionID(null);
-          setDeployedCollections(
-            deployedCollections.map((item) => (item.id === savedCollectionID ? coll : item))
-          );
-          setTimeout(() => {
-            history.push(`/c/${coll.id.toLowerCase().replace(' ', '-')}`, {
-              collection: coll,
-              saved: false,
-            });
-          }, 1000);
-        }
+        onMintCollection();
       }
     }
   }, [errors]);
 
   useEffect(() => {
+    // It means we have opened a collection for EDIT
     if (savedCollectionID) {
       const res = deployedCollections.filter((item) => item.id === savedCollectionID)[0];
       setCollectionName(res.name);
-      setCoverImage(
-        typeof res.previewImage === 'string' && res.previewImage.startsWith('#')
-          ? null
-          : res.previewImage
-      );
-      setTokenName(res.tokenName);
+      // An already deployed collection should have a coverUrl
+      setCoverImage(res.coverUrl);
+      setTokenName(res.symbol);
       setDescription(res.description);
       setBgImage(res.bgImage || null);
     }
@@ -419,7 +396,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <RouterPrompt
-        when={showPrompt && !savedCollectionID}
+        when={showPrompt}
         onOK={() => true}
         editing={!!(coverImage || collectionName || tokenName || description)}
       />
@@ -448,7 +425,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         {(close) => (
           <CongratsPopup
             onClose={close}
-            message="NFT collection was successfully created and should be displayed in your wallet shortly"
+            message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
           />
         )}
       </Popup>
@@ -483,7 +460,9 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
               <div className="image--selected">
                 <img
                   className="cover"
-                  src={URL.createObjectURL(coverImage)}
+                  src={
+                    typeof coverImage === 'object' ? URL.createObjectURL(coverImage) : coverImage
+                  }
                   alt="Collection cover"
                 />
                 <div
@@ -512,27 +491,46 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           <input type="file" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
         </div>
         <div className="collection--name--and--token">
-          <div className={`collection--name ${savedCollectionID ? 'inactive' : ''}`}>
-            <Input
-              label="Collection name"
-              error={errors.collectionName}
-              placeholder="Enter the collection name"
-              onChange={(e) => handleCollectionName(e.target.value)}
-              value={collectionName}
-              disabled={savedCollectionID}
-              hoverBoxShadowGradient
-            />
+          <div className="collection--name">
+            {savedCollectionID ? (
+              <Input
+                label="Collection name"
+                error={errors.collectionName}
+                placeholder="Enter the collection name"
+                // onChange={(e) => handleCollectionName(e.target.value)}
+                value={collectionName}
+              />
+            ) : (
+              <Input
+                label="Collection name"
+                error={errors.collectionName}
+                placeholder="Enter the collection name"
+                onChange={(e) => handleCollectionName(e.target.value)}
+                value={collectionName}
+              />
+            )}
+
+            {<p className="warning">Collection name cannot be changed in future</p>}
           </div>
-          <div className={`collection--token ${savedCollectionID ? 'inactive' : ''}`}>
-            <Input
-              label="Token name"
-              error={errors.tokenName}
-              placeholder="$ART"
-              onChange={(e) => handleTokenName(e.target.value)}
-              value={tokenName}
-              disabled={savedCollectionID}
-              hoverBoxShadowGradient
-            />
+          <div className="collection--token">
+            {savedCollectionID ? (
+              <Input
+                label="Token name"
+                error={errors.tokenName}
+                placeholder="$ART"
+                // onChange={(e) => handleTokenName(e.target.value)}
+                value={tokenName}
+              />
+            ) : (
+              <Input
+                label="Token name"
+                error={errors.tokenName}
+                placeholder="$ART"
+                onChange={(e) => handleTokenName(e.target.value)}
+                value={tokenName}
+              />
+            )}
+
             {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
           </div>
         </div>
@@ -547,9 +545,10 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <div className="box--shadow--effect--block" />
         </div>
+        <div className="box--shadow--effect--block" />
       </div>
+
       {/* <div className="collection--short--url">
         <Input
           label="Short URL"
@@ -602,9 +601,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                 <div className="three--images">
                   <div className="creator--details">
                     <img
-                      src={
-                        nft.creator.avatar ? URL.createObjectURL(nft.creator.avatar) : testUserImage
-                      }
+                      src={nft.creator.avatar ? nft.creator.avatar : testUserImage}
                       alt={nft.creator.name ? nft.creator.name : 'Test'}
                     />
                     <span className="tooltiptext">{`Creator: ${
@@ -630,7 +627,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
                   </div>
                   <div className="owner--details">
                     <img
-                      src={nft.owner.avatar ? URL.createObjectURL(nft.owner.avatar) : testUserImage}
+                      src={nft.owner.avatar ? nft.owner.avatar : testUserImage}
                       alt={nft.owner.name ? nft.owner.name : 'Test'}
                     />
                     <span className="tooltiptext">{`Owner: ${
@@ -783,7 +780,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           </Button>
         ) : (
           <>
-            <Button className="light-border-button" onClick={() => history.goBack()}>
+            <Button className="light-border-button" onClick={() => history.push('/my-nfts')}>
               Cancel
             </Button>
             <Button

@@ -431,7 +431,7 @@
                 }
               }
             }
-            .collection--token {
+            .collection--token,.collection--name  {
               &.inactive {
                 .inp-label {
                   color: rgba(0, 0, 0, 0.1);

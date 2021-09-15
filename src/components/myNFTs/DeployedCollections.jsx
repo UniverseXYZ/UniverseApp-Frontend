@@ -38,7 +38,7 @@ const DeployedCollections = () => {
               onClick={() =>
                 history.push(`/c/${collection.id}`, {
                   collection,
-                  saved: false,
+                  saved: true,
                 })
               }
             >
