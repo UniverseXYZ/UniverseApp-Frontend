@@ -34,6 +34,7 @@ import bordergradient from '../../assets/images/border-gradient.svg';
 import priceIcon from '../../assets/images/ETHiconupd.png';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
+import threedotsIcon from '../../assets/images/marketplace/3-dots.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import closeIcon from '../../assets/images/marketplace/close.svg';
 import bundlesIcon from '../../assets/images/marketplace/bundles.svg';
@@ -917,7 +918,9 @@ const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
                       </div>
                     </div>
                   </div>
-                  <span>{selectedNFT.likers.length}</span>
+                  <span className={selectedNFT.likers.length ? 'redlike' : 'like-count'}>
+                    {selectedNFT.likers.length}
+                  </span>
                 </div>
               </div>
               <div
@@ -926,7 +929,12 @@ const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
                 onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                 aria-hidden="true"
               >
-                <span className="selected__item">...</span>
+                {/* <img src={threedotsIcon} alt="Dots" /> */}
+                <div className="selected__item">
+                  <span />
+                  <span />
+                  <span />
+                </div>
                 {isDropdownOpened && (
                   <div className="sort__share__dropdown">
                     {selectedNFT.view === 'user' ? (
@@ -1047,14 +1055,14 @@ const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
                 {selectedTabIndex === 0 && <Properties />}
                 {selectedTabIndex === 1 && <Owners />}
                 {selectedTabIndex === 2 && <Bids />}
-                {selectedTabIndex === 3 && <Offers />}
+                {selectedTabIndex === 3 && <Offers view={selectedNFT.view} />}
                 {selectedTabIndex === 4 && <TradingHistory />}
               </>
             ) : (
               <>
                 {selectedTabIndex === 0 && <NFTs data={selectedNFT.allItems} />}
                 {selectedTabIndex === 1 && <Bids />}
-                {selectedTabIndex === 2 && <Offers />}
+                {selectedTabIndex === 2 && <Offers view={selectedNFT.view} />}
                 {selectedTabIndex === 3 && <TradingHistory />}
               </>
             )}

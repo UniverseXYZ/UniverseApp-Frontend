@@ -12,7 +12,8 @@ import clock from '../../assets/images/clock.svg';
 
 const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionLeftTime }) => (
   <div className="theunveiling">
-    <img className="border--gradient" src={bordergradient} alt="border" />
+    {/* <img className="border--gradient" src={bordergradient} alt="border" /> */}
+    <div className="border--gradient" />
     {auctionLeftTime && (
       <div className="auction-timer-box">
         <img src={clock} alt="clock" />
