@@ -51,18 +51,6 @@ const StepTabs = (props) => {
                             ? ''
                             : 'disabled'
                         }
-                        // className={`
-                        //   ${selectedTabIndex === 2 ? 'active' : ''}
-                        //   ${
-                        //     !auction.name ||
-                        //     !auction.startingBid ||
-                        //     !auction.startDate ||
-                        //     !auction.endDate ||
-                        //     !auction.tiers.length
-                        //       ? 'disabled'
-                        //       : ''
-                        //   }
-                        // `}
                       >
                         <span className="first-triangle" />
                         <button type="button">
