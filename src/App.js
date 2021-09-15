@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import './assets/scss/normalize.scss';
@@ -49,10 +49,16 @@ import { MarketplaceContextProvider } from './contexts/MarketplaceContext';
 import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
+import {useLocation} from 'react-router-dom';
 
 const App = () => {
+  const location = useLocation();
   const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext();
   const { showError, closeError } = useErrorContext();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   return (
     <PolymorphContextProvider>
