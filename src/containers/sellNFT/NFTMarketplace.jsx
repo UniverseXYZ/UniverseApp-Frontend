@@ -16,6 +16,7 @@ import BundleSellFormContainer from '../../components/sellNftNew/BundleSellFormC
 import Summary from '../../components/sellNftNew/Summary';
 import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
 import './NFTMarketplace.scss';
+import SelectItemsMethodTab from '../../components/sellNftNew/SelectItemsMethodTab';
 
 const verificationSteps = (data) => {
   const keys = Object.keys(data);
@@ -36,24 +37,33 @@ const getContent = (type, data, setData) => {
 
 const NFTMarketplace = () => {
   const location = useLocation();
-  const { stepsData, setStepsData } = useContext(AppContext);
+  const { stepsData, setStepsData, setDarkMode } = useContext(AppContext);
 
   const headerLabels = [
+    {
+      label: 'Select items',
+      icon: RewardIcon,
+      activeIcon: RewardIconActive,
+      link: '/nft-marketplace/select-items',
+      index: 0,
+      content: <SelectItemsMethodTab onSelect={setStepsData} data={stepsData} />,
+      home: true,
+    },
     {
       label: 'Select sell method',
       icon: RewardIcon,
       activeIcon: RewardIconActive,
       link: '/nft-marketplace/select-method',
-      index: 0,
+      index: 1,
       content: <SelectSellMethodTab onSelect={setStepsData} data={stepsData} />,
-      home: true,
+      home: false,
     },
     {
       label: 'Settings',
       icon: SettingIcon,
       activeIcon: SettingIconActive,
       link: '/nft-marketplace/settings',
-      index: 1,
+      index: 2,
       content: getContent(stepsData.selectedMethod, stepsData, setStepsData),
       home: false,
     },
@@ -62,11 +72,15 @@ const NFTMarketplace = () => {
       icon: ReviewIcon,
       activeIcon: ReviewIconActive,
       link: '/nft-marketplace/summary',
-      index: 2,
+      index: 3,
       content: <Summary nftImage={nftImage} data={stepsData} />,
       home: false,
     },
   ];
+
+  useEffect(() => {
+    setDarkMode(false);
+  }, []);
 
   return (
     <div className="nft--marketplace">

@@ -81,6 +81,7 @@ const App = () => {
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [stepsData, setStepsData] = useState({
+    selectedItems: null,
     selectedMethod: null,
     settings: null,
     summary: null,
@@ -102,15 +103,15 @@ const App = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (
-      (location.pathname === '/nft-marketplace/settings' &&
-        stepsData.selectedMethod === 'bundle') ||
-      location.pathname === '/marketplace'
-    ) {
-      document.querySelector('header').style.position = 'absolute';
-    } else {
-      document.querySelector('header').style.position = 'fixed';
-    }
+    // if (
+    //   (location.pathname === '/nft-marketplace/settings' &&
+    //     stepsData.selectedMethod === 'bundle') ||
+    //   location.pathname === '/marketplace'
+    // ) {
+    //   document.querySelector('header').style.position = 'absolute';
+    // } else {
+    //   document.querySelector('header').style.position = 'fixed';
+    // }
   }, [location]);
 
   return (
