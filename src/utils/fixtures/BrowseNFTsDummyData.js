@@ -123,6 +123,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     id: uuid(),
     type: 'single',
     view: 'seller',
+    viewAction: 'On sale',
     state: '',
     creator: {
       id: 1,
@@ -193,6 +194,7 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
     id: uuid(),
     type: 'single',
     view: 'seller',
+    viewAction: 'Lower price',
     state: '',
     creator: {
       id: 1,
@@ -262,7 +264,8 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: uuid(),
     type: 'single',
-    view: 'user',
+    view: 'seller',
+    viewAction: 'Change price',
     state: '',
     creator: {
       id: 1,
@@ -297,7 +300,8 @@ export const PLACEHOLDER_MARKETPLACE_NFTS = [
   {
     id: uuid(),
     type: 'single',
-    view: 'user',
+    view: 'seller',
+    viewAction: 'On sale',
     state: '',
     creator: {
       id: 1,

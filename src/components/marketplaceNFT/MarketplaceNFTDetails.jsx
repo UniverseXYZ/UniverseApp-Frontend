@@ -1087,7 +1087,24 @@ const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
               highestBid={highestBid}
               firstButtonText="Place a bid"
               secondButtonText="Make offer"
-              auctionLeftTime="1d: 4h : 20m : 30s"
+              auctionLeftTime="1d : 4h : 20m : 30s"
+              infotext="(10% of sales will go to creator)"
+            />
+          ) : selectedNFT.viewAction === 'Change price' ? (
+            <BuyNFTSection
+              highestBid={highestBid}
+              firstButtonText="Change price"
+              secondButtonText="Cancel listing"
+              auctionLeftTime="1d : 4h : 20m : 30s"
+              infotext="(This NFT is on your wallet)"
+            />
+          ) : selectedNFT.viewAction === 'Lower price' ? (
+            <BuyNFTSection
+              highestBid={highestBid}
+              firstButtonText="Lower price"
+              secondButtonText="Cancel listing"
+              auctionLeftTime="1d : 4h : 20m : 30s"
+              infotext="(This NFT is on your wallet)"
             />
           ) : (
             <div className="theunveiling" style={{ paddingBottom: '0px' }}>
