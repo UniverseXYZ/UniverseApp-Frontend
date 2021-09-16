@@ -27,7 +27,11 @@ const row2LeftBlock = () => {
     <>
       <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
         <h2>Polymorph Rarity Chart</h2>
-        <p>MIirror, mirror on the wall, who has the rarest Polymorph of them all?</p>
+        <p>
+          Your Polymorph’s traits determine its rarity rating. Having a full set of matching traits
+          will help you climb the rarity chart. One sure way to obtain matching traits is to
+          scramble your way to the top.
+        </p>
         <Button className="light-button" onClick={() => history.push('/polymorph-rarity')}>
           Rarity chart
         </Button>
