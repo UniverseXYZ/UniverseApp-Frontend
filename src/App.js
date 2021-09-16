@@ -58,6 +58,7 @@ import { transferPolymorphs } from './utils/graphql/queries';
 import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 import { convertPolymorphObjects } from './utils/helpers/polymorphs';
 import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
+import AuthenticatedRoute from './components/authenticatedRoute/AuthenticatedRoute';
 
 const App = () => {
   const location = useLocation();
@@ -720,45 +721,45 @@ const App = () => {
         <Route exact path="/polymorph-rarity">
           <RarityCharts />
         </Route>
-        <Route exact path="/my-profile">
+        <AuthenticatedRoute exact path="/my-profile">
           <MyProfile />
-        </Route>
-        <Route path="/setup-auction">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute path="/setup-auction">
           <SetupAuction />
-        </Route>
+        </AuthenticatedRoute>
         <Route exact path="/minting-and-auctions/marketplace/active-auctions">
           <Marketplace />
         </Route>
         <Route exact path="/minting-and-auctions/marketplace/future-auctions">
           <Marketplace />
         </Route>
-        <Route exact path="/my-nfts">
+        <AuthenticatedRoute exact path="/my-nfts">
           <MyNFTs />
-        </Route>
-        <Route exact path="/my-nfts/create">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/my-nfts/create">
           <CreateNFT />
-        </Route>
-        <Route exact path="/my-account">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/my-account">
           <MyAccount />
-        </Route>
-        <Route exact path="/my-auctions">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/my-auctions">
           <Auctions />
-        </Route>
-        <Route exact path="/create-tiers">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/create-tiers">
           <CreateTiers />
-        </Route>
-        <Route exact path="/create-tiers/my-nfts/create">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/create-tiers/my-nfts/create">
           <CreateNFT />
-        </Route>
-        <Route exact path="/finalize-auction">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/finalize-auction">
           <FinalizeAuction />
-        </Route>
-        <Route exact path="/customize-auction-landing-page">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/customize-auction-landing-page">
           <CustomizeAuction />
-        </Route>
-        <Route exact path="/auction-review">
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/auction-review">
           <AuctionReview />
-        </Route>
+        </AuthenticatedRoute>
         <Route exact path="/:artist">
           <Artist />
         </Route>
