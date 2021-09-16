@@ -15,7 +15,7 @@ const SuccessPopup = ({ onClose, onAuction }) => {
       <img className="submitted" src={submitted} alt="Submitted" />
       <h1>Success</h1>
       <p>
-        Your auction <span>{onAuction.name}</span> was successfully created and scheduled for lounch
+        Your auction <span>{onAuction.name}</span> was successfully created and scheduled for launch
         on
         <span> {moment(onAuction.startDate).format('MMMM DD, YYYY')}</span>
       </p>

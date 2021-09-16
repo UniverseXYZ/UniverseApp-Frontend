@@ -223,7 +223,7 @@ const App = () => {
   const fetchUserLobstersTheGraph = async (newAddress) => {
     setUserLobstersLoaded(false);
 
-    const lobsters = await queryLobstersGraph(transferLobsters(newAddress));
+    const lobsters = (await queryLobstersGraph(transferLobsters(newAddress))) || [];
     const userNftIds = lobsters?.transferEntities?.map((nft) => nft.tokenId);
     const metadataURIs = userNftIds?.map(
       (id) => `${process.env.REACT_APP_LOBSTER_IMAGES_URL}${id}`
@@ -254,7 +254,7 @@ const App = () => {
     setUserLobsters([]);
     setUserPolymorphs([]);
     fetchUserPolymorphsTheGraph(data);
-    fetchUserLobstersTheGraph(address);
+    fetchUserLobstersTheGraph(address || '');
   }, [address]);
 
   // Authentication and Web3
@@ -335,13 +335,18 @@ const App = () => {
     setEthereumNetwork('');
     setUsdEthBalance(0);
     clearStorageAuthData();
+    setIsAuthenticated(false);
 
     // TODO: Vik to check it
-    // setUserPolymorphs([]);
-    // setPolymorphContract(null);
-    // setTotalPolymorphs(0);
-    // setPolymorphBaseURI('');
-    // setPolymorphPrice(0);
+    setUserPolymorphs([]);
+    setPolymorphContract(null);
+    setLobsterContract(null);
+    setTotalPolymorphs(0);
+    setTotalLobsters(0);
+    setPolymorphBaseURI('');
+    setLobsterBaseURI('');
+    setPolymorphPrice(0);
+    setLobsterPrice(0);
   };
 
   const connectWithMetaMask = async () => {

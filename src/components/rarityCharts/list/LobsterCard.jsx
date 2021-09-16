@@ -18,9 +18,7 @@ const LobsterCard = ({ item }) => {
     setLoading(false);
   };
 
-  return loading ? (
-    renderLoaderWithData(item)
-  ) : (
+  return (
     <div
       className="card"
       onClick={() => window.open(`${window.location.origin}/lobsters/${item.id}`, '_blank').focus()}

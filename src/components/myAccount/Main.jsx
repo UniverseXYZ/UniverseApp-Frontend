@@ -186,9 +186,9 @@ const Main = ({
               ref={accountInput}
               onChange={(e) => validateFile(e.target.files[0])}
             />
-            {!accountImage && !loggedInArtist.avatar && (
+            {/* {!accountImage && !loggedInArtist.avatar && (
               <img className="default-img" src={defaultImage} alt="Avatar" />
-            )}
+            )} */}
           </div>
         </div>
         <div className="account-grid-name-editing">

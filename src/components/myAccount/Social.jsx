@@ -80,7 +80,7 @@ const Social = ({
           <h5>Instagram profile</h5>
           <img alt="" src={instagramLogo} />
           <Input
-            placeholder="instagram.com/username"
+            placeholder="Instagram handle"
             className="inp"
             hoverBoxShadowGradient
             value={instagramLink}
@@ -91,7 +91,7 @@ const Social = ({
           <h5>Twitter profile</h5>
           <img alt="" src={twitterLogo} />
           <Input
-            placeholder="twitter.com/username"
+            placeholder="Twitter handle"
             className="inp"
             hoverBoxShadowGradient
             value={twitterLink}

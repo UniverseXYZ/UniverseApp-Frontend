@@ -39,7 +39,7 @@ const LobsterRarityList = ({
       <div className="list--with--selected--filters">
         {loading && !isLastPage ? (
           <div className="grid">
-            <LobsterRarityChartsLoader number={9} />
+            <LobsterRarityChartsLoader number={12} />
           </div>
         ) : results.length ? (
           <div className="grid">
