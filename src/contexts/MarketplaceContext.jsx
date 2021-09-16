@@ -8,9 +8,24 @@ const MarketplaceContextProvider = ({ children }) => {
   const location = useLocation();
 
   const [stepsData, setStepsData] = useState({
+    selectedItem: null,
     selectedMethod: null,
     settings: null,
     summary: null,
+  });
+  const [sellNFTSingleFixedListingData, setSellNFTSingleFixedListingData] = useState({
+    startPrice: null,
+    priceType: 'eth',
+    switch: [],
+    buyerAddress: null,
+  });
+  const [sellNFTBundleFixedListingData, setSellNFTBundleFixedListingData] = useState({
+    startPrice: null,
+    priceType: 'eth',
+    bundleName: null,
+    bundleDescription: null,
+    switch: [],
+    buyerAddress: null,
   });
 
   useEffect(() => {
@@ -31,6 +46,10 @@ const MarketplaceContextProvider = ({ children }) => {
       value={{
         stepsData,
         setStepsData,
+        sellNFTSingleFixedListingData,
+        setSellNFTSingleFixedListingData,
+        sellNFTBundleFixedListingData,
+        setSellNFTBundleFixedListingData,
       }}
     >
       {children}

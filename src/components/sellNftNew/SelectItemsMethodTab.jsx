@@ -24,7 +24,7 @@ const SelectItemsMethodTab = (props) => {
             <Button
               className="light-button select--method--btn"
               onClick={() => {
-                onSelect({ ...data, selectedItems: 'single', settings: null });
+                onSelect({ ...data, selectedItem: 'single', settings: null });
                 history.push('/nft-marketplace/select-method');
               }}
             >
@@ -42,7 +42,7 @@ const SelectItemsMethodTab = (props) => {
             <Button
               className="light-button select--method--btn"
               onClick={() => {
-                onSelect({ ...data, selectedItems: 'bundle', settings: null });
+                onSelect({ ...data, selectedItem: 'bundle', settings: null });
                 history.push('/nft-marketplace/select-method');
               }}
             >

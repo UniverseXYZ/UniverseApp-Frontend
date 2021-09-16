@@ -28,17 +28,18 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import LoadingImage from '../general/LoadingImage';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import clockIcon from '../../assets/images/marketplace/green-clock.svg';
+import checkIcon from '../../assets/images/check-black.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress }) => {
+const NFTCard = React.memo((mainProps) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { loggedInArtist } = useAuthContext();
+  const { nft, placeholderData, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds } = mainProps;
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
-  const [selectedNFTsIds, setSelectedNFTsIds] = useState([]);
 
   const ref = useRef();
   function SampleNextArrow(props) {
@@ -122,6 +123,21 @@ const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
 
+  const handleSelectNFT = (id) => {
+    if (selectedNFTsIds.includes(id)) {
+      const findById = selectedNFTsIds.filter((i) => i !== id);
+      setSelectedNFTsIds([...findById]);
+    } else {
+      setSelectedNFTsIds([...selectedNFTsIds, id]);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
+
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setShowDropdown(false);
@@ -136,7 +152,11 @@ const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress
   });
   console.log(nft);
   return (
-    <div className={`nft--card ${canSelect ? 'can--select' : ''}`}>
+    <div
+      className={`nft--card${canSelect ? ' can--select' : ''}${
+        selectedNFTsIds && selectedNFTsIds.includes(nft.id) ? ' selected' : ''
+      }`}
+    >
       <div className="nft--card--header">
         <div className="three--images">
           {/* <div className="creator--details">
@@ -249,7 +269,12 @@ const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress
               <span />
               {dropdownID === nft.id && showDropdown && (
                 <ul ref={ref} className="nft--card--header--right--dropdown--items">
-                  <li aria-hidden="true">
+                  <li
+                    aria-hidden="true"
+                    onClick={() =>
+                      history.push('/nft-marketplace/select-items', { name: nft.name })
+                    }
+                  >
                     <img src={sellNFTIcon} alt="Sell" />
                     <p>Sell</p>
                   </li>
@@ -294,9 +319,8 @@ const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress
                 onClick={() =>
                   !canSelect
                     ? history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, {
-                    nft,
-                  })
-                    : setSelectedNFTsIds([...selectedNFTsIds, nft.id])
+                      nft,
+                    }) : handleSelectNFT(nft.id)
                 }
                 aria-hidden="true"
               >
@@ -354,7 +378,11 @@ const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress
                       index < 7 && (
                         <div
                           className="slider--box"
-                          onClick={() => history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, { nft })}
+                          onClick={() =>
+                            !canSelect
+                              ?history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, { nft })
+                              : handleSelectNFT(nft.id)
+                          }
                           aria-hidden="true"
                           key={uuid()}
                         >
@@ -449,6 +477,11 @@ const NFTCard = React.memo(({ nft, placeholderData, canSelect, collectionAddress
           </div> */}
         </div>
       </div>
+      {selectedNFTsIds && selectedNFTsIds.includes(nft.id) && (
+        <div className="nft--selected">
+          <img src={checkIcon} alt="img" />
+        </div>
+      )}
     </div>
   );
 });
@@ -458,12 +491,16 @@ NFTCard.propTypes = {
   placeholderData: PropTypes.bool,
   canSelect: PropTypes.bool,
   collectionAddress: PropTypes.string,
+  selectedNFTsIds: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedNFTsIds: PropTypes.func,
 };
 
 NFTCard.defaultProps = {
   placeholderData: false,
   canSelect: false,
   collectionAddress: '',
+  selectedNFTsIds: [],
+  setSelectedNFTsIds: () => {},
 };
 
 export default NFTCard;

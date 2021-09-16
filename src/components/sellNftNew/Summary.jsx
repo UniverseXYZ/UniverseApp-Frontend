@@ -102,6 +102,7 @@ const getListedText = (data) => {
 };
 
 const Summary = (props) => {
+  console.log('aaaaaaaaaa', props);
   const history = useHistory();
   const [toUniverse] = useState(2.5);
   const [toCreator] = useState(10);

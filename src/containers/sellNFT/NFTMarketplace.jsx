@@ -36,7 +36,7 @@ const verificationSteps = (data) => {
 const getContent = (type, data, setData) => {
   if (type === 'dutch') return <DutchAuctionSettingsForm data={data} setData={setData} />;
   if (type === 'english') return <EnglishAuctionSettingsForm data={data} setData={setData} />;
-  if (type === 'bundle') return <BundleSellFormContainer data={data} setData={setData} />;
+  if (type === 'fixedListing') return <BundleSellFormContainer data={data} setData={setData} />;
   return <h1>other type</h1>;
 };
 
@@ -44,6 +44,7 @@ const NFTMarketplace = () => {
   const location = useLocation();
   const { stepsData, setStepsData } = useMarketplaceContext();
   const { setDarkMode } = useThemeContext();
+  const nftName = location.state?.name || 'NFT Name';
 
   const headerLabels = [
     {
@@ -90,7 +91,7 @@ const NFTMarketplace = () => {
 
   return (
     <div className="nft--marketplace">
-      <SellNftSubHeader backPageName="NFT name" title="Sell NFT" />
+      <SellNftSubHeader backPageName={nftName} title="Sell NFT" />
       <NewTabs tabData={headerLabels} />
       {/* <StepTabs tabData={headerLabels} verificationSteps={verificationSteps(stepsData)} required /> */}
       {location.pathname === '/nft-marketplace/select-items' && (
