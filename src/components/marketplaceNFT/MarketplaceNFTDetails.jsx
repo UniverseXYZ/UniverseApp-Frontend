@@ -78,9 +78,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [count, setCount] = useState(4);
   const mediaRef =
     selectedNFT.type !== 'bundles'
-      ? selectedNFT.media.type === 'video/mp4'
+      ? selectedNFT.artworkType === 'video/mp4'
         ? useRef()
-        : selectedNFT.media.type === 'audio/mpeg'
+        : selectedNFT.artworkType === 'audio/mpeg'
         ? useRef(new Audio(selectedNFT.media.url))
         : null
       : selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
@@ -137,7 +137,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   const sliderSettings = {
     dots: false,
-    infinite: selectedNFT.allItems.length > 6,
+    infinite: selectedNFT.tokenIds.length > 6,
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
@@ -468,18 +468,18 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           >
             {selectedNFT.type !== 'bundles' ? (
               <>
-                {selectedNFT.media.type !== 'audio/mpeg' &&
-                  selectedNFT.media.type !== 'video/mp4' && (
+                {selectedNFT.artworkType !== 'audio/mpeg' &&
+                  selectedNFT.artworkType !== 'video/mp4' && (
                     <img
                       src={
-                        typeof selectedNFT.media === 'string'
-                          ? selectedNFT.media.url
-                          : URL.createObjectURL(selectedNFT.media)
+                        typeof selectedNFT.optimized_url === 'string'
+                          ? selectedNFT.optimized_url
+                          : URL.createObjectURL(selectedNFT.optimized_url)
                       }
                       alt={selectedNFT.name}
                     />
                   )}
-                {selectedNFT.media.type === 'video/mp4' && (
+                {selectedNFT.artworkType === 'video/mp4' && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
                       {...bind}
@@ -490,9 +490,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <video ref={mediaRef}>
                         <source
                           src={
-                            typeof selectedNFT.media === 'string'
-                              ? selectedNFT.media.url
-                              : URL.createObjectURL(selectedNFT.media)
+                            typeof selectedNFT.optimized_url === 'string'
+                              ? selectedNFT.optimized_url
+                              : URL.createObjectURL(selectedNFT.optimized_url)
                           }
                           type="video/mp4"
                         />
@@ -529,7 +529,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     </div>
                   </Draggable>
                 )}
-                {selectedNFT.media.type === 'audio/mpeg' && (
+                {selectedNFT.artworkType === 'audio/mpeg' && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
                       {...bind}
@@ -568,11 +568,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     </div>
                   </Draggable>
                 )}
-                {(selectedNFT.media.type === 'video/mp4' ||
-                  selectedNFT.media.type === 'audio/mpeg') &&
+                {(selectedNFT.artworkType === 'video/mp4' ||
+                  selectedNFT.artworkType === 'audio/mpeg') &&
                   miniPlayer && <div className="empty--black--video" />}
-                {selectedNFT.media.type === 'audio/mpeg' ||
-                selectedNFT.media.type === 'video/mp4' ? (
+                {selectedNFT.artworkType === 'audio/mpeg' ||
+                selectedNFT.artworkType === 'video/mp4' ? (
                   <div className="custom--player" ref={customPlayerRef}>
                     <div className="controls">
                       <div className="controls--left">
@@ -873,7 +873,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           <div className="Marketplace--name">
             <h1>{selectedNFT.name}</h1>
             <div className="icon">
-              <div className="like--share" aria-hidden="true" onClick={handleLikeDivClick}>
+              {/* <div className="like--share" aria-hidden="true" onClick={handleLikeDivClick}>
                 <div className="likes--count">
                   <div>
                     <svg
@@ -915,8 +915,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   </div>
                   <span>{selectedNFT.likers.length}</span>
                 </div>
-              </div>
-              <div
+              </div> */}
+              {/* <div
                 ref={ref}
                 className={`share_dropdown ${isDropdownOpened ? 'opened' : ''}`}
                 onClick={() => setIsDropdownOpened(!isDropdownOpened)}
@@ -950,14 +950,14 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     )}
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="Marketplace--number">
             <p>Edition {`${selectedNFTIndex + 1} / ${selectedNFT.numberOfEditions}`}</p>
           </div>
           <div className="Marketplace--collections">
-            <div className="Marketplace--creators">
+            {/* <div className="Marketplace--creators">
               <img
                 src={
                   typeof selectedNFT.creator.avatar === 'string'
@@ -970,11 +970,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <p>Creator</p>
                 <h6>{selectedNFT.creator.name}</h6>
               </div>
-            </div>
+            </div> */}
             {selectedNFT.collection && (
               <div className="Marketplace--creators">
-                {typeof selectedNFT.collection.avatar === 'string' &&
-                selectedNFT.collection.avatar.startsWith('#') ? (
+                {typeof selectedNFT.collection.coverUrl === 'string' &&
+                selectedNFT.collection.coverUrl.startsWith('#') ? (
                   <div
                     className="random--bg--color"
                     style={{ backgroundColor: selectedNFT.collection.avatar }}
@@ -984,9 +984,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 ) : (
                   <img
                     src={
-                      typeof selectedNFT.collection.avatar === 'string'
-                        ? selectedNFT.collection.avatar
-                        : URL.createObjectURL(selectedNFT.collection.avatar)
+                      typeof selectedNFT.collection.coverUrl === 'string'
+                        ? selectedNFT.collection.coverUrl
+                        : URL.createObjectURL(selectedNFT.collection.coverUrl)
                     }
                     alt={selectedNFT.collection.name}
                   />
@@ -997,7 +997,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
             )}
-            <div className="Marketplace--creators">
+            {/* // TODO:: display owner data from my account */}
+            {/* <div className="Marketplace--creators">
               <img
                 src={
                   typeof selectedNFT.owner.avatar === 'string'
@@ -1010,7 +1011,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <p>Owner</p>
                 <h6>{selectedNFT.owner.name}</h6>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="Marketplace--text">
             <p>
