@@ -721,45 +721,27 @@ const App = () => {
         <Route exact path="/polymorph-rarity">
           <RarityCharts />
         </Route>
-        <AuthenticatedRoute exact path="/my-profile">
-          <MyProfile />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute path="/setup-auction">
-          <SetupAuction />
-        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/my-profile" component={MyProfile} />
+        <AuthenticatedRoute path="/setup-auction" component={SetupAuction} />
         <Route exact path="/minting-and-auctions/marketplace/active-auctions">
           <Marketplace />
         </Route>
         <Route exact path="/minting-and-auctions/marketplace/future-auctions">
           <Marketplace />
         </Route>
-        <AuthenticatedRoute exact path="/my-nfts">
-          <MyNFTs />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/my-nfts/create">
-          <CreateNFT />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/my-account">
-          <MyAccount />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/my-auctions">
-          <Auctions />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/create-tiers">
-          <CreateTiers />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/create-tiers/my-nfts/create">
-          <CreateNFT />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/finalize-auction">
-          <FinalizeAuction />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/customize-auction-landing-page">
-          <CustomizeAuction />
-        </AuthenticatedRoute>
-        <AuthenticatedRoute exact path="/auction-review">
-          <AuctionReview />
-        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/my-nfts" component={MyNFTs} />
+        <AuthenticatedRoute exact path="/my-nfts/create" component={CreateNFT} />
+        <AuthenticatedRoute exact path="/my-account" component={MyAccount} />
+        <AuthenticatedRoute exact path="/my-auctions" component={Auctions} />
+        <AuthenticatedRoute exact path="/create-tiers" component={CreateTiers} />
+        <AuthenticatedRoute exact path="/create-tiers/my-nfts/create" component={CreateNFT} />
+        <AuthenticatedRoute exact path="/finalize-auction" component={FinalizeAuction} />
+        <AuthenticatedRoute
+          exact
+          path="/customize-auction-landing-page"
+          component={CustomizeAuction}
+        />
+        <AuthenticatedRoute exact path="/auction-review" component={AuctionReview} />
         <Route exact path="/:artist">
           <Artist />
         </Route>
