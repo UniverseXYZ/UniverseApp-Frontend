@@ -18,7 +18,7 @@ const PolymorphUniverse = () => (
     </div>
     <Section4
       title="Burn to mint"
-      hintText="Universe is offering you the oppurtunity to burn your v1 Polymorph  and mint a new one. "
+      hintText="Polymorph holders are invited to burn their original NFTs to mint brand new ones. Same base skin, same traits but with a brand new look."
       buttonText="Burn a polymorph"
       backgroundImage={BurnPolymorphBg}
       leftBackground={Section4LeftBackground}

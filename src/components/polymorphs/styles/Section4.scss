@@ -130,9 +130,11 @@
         font-style: normal;
         font-weight: normal;
         font-size: 18px;
-        line-height: 150%;
+        line-height: 27px;
         color: $white;
+        font-weight: 400;
         margin: 20px 0 40px;
+        max-width: 404px;
       }
       button {
         height: 42px;

@@ -17,7 +17,10 @@ const LatestFeaturesSection = () => {
           <div>
             <img src={rarityChartIcon} alt="Rarity chart" />
             <h2>Rarity chart</h2>
-            <p>Compare you Polymorphs rarity with others using our brand new rarity tools.</p>
+            <p>
+              Compare your Polymorph’s ranking, scoring and information based on the rarity of its
+              traits.
+            </p>
             <button type="button" onClick={() => history.push('/polymorph-rarity')}>
               Explore
               <img src={arrowRight} alt="Arrow right" />
@@ -26,7 +29,7 @@ const LatestFeaturesSection = () => {
           <div>
             <img src={battleUniverseIcon} alt="Battle universe" />
             <h2>Battle universe</h2>
-            <p>Meet your match. Has your Polymorph got what it takes to be the champ?</p>
+            <p>Wager ETH and compete against other Polymorph owners around the world.</p>
             <button type="button">
               Explore
               <img src={arrowRight} alt="Arrow right" />
@@ -35,7 +38,10 @@ const LatestFeaturesSection = () => {
           <div>
             <img src={burnToMintIcon} alt="Burn to mint" />
             <h2 className="burn-mint-h2">Burn to mint</h2>
-            <p>Burn your v1 Polymorph and mint new one.</p>
+            <p>
+              Say goodbye to the old version of your Polymorph forever and hello to your shiny new
+              one.
+            </p>
             <button type="button" onClick={() => history.push('/burn-to-mint')}>
               Explore
               <img src={arrowRight} alt="Arrow right" />
