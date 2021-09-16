@@ -188,7 +188,7 @@ const MyNFTs = () => {
 
   const renderEmptyTabsWrapper = () => (
     <EmptyTabs
-      items={emptyTabs.map((tab, index) => ({
+      items={tabs.map((tab, index) => ({
         name: tab,
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
