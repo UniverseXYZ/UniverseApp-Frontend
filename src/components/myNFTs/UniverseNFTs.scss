@@ -2,279 +2,153 @@
 @import '../../assets/scss/_mixins';
 
 .universe_NFTs {
-  .rarity--charts--search--and--filters--row {
-    position: relative;
-    display: grid;
-    grid-template-columns: 255px 1fr 50px 224px;
-    grid-gap: 12px;
-    margin-bottom: 45px;
-    z-index: 101;
-    .sort--by--order {
-      margin-left: 0px;
-    }
-    @include lg {
-      grid-template-columns: 1fr 50px 224px;
-      .rarity--charts--search--and--floor--price {
-        grid-row: 2/3;
-        grid-column: 1/4;
-      }
-    }
-    @include sm {
-      grid-template-columns: 50px 1fr;
-      .sort--by--order {
-        grid-row: 2/3;
-        z-index: 8888;
-      }
-      .rarity--charts--search--and--floor--price {
-        grid-row: 3/4;
-        grid-column: 1/4;
-        z-index: 8888;
-      }
-      div:nth-child(1) {
-        grid-column: 1/4;
-        z-index: 9999;
-      }
-      div:nth-child(4) {
-        grid-column: 2/4;
-        z-index: 8888;
-      }
-    }
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 28px;
+  margin-bottom: 40px;
+
+  @include md {
+    grid-template-columns: 1fr;
   }
-  .rarity--charts--list {
-    .categories--filters {
-      h2 {
+
+  .universe_filter {
+    .universe_filter_label {
+      margin-bottom: 15px;
+      span {
         font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
         font-size: 16px;
+        letter-spacing: 0.2px;
+        color: #000000;
+        margin-right: 15px;
       }
     }
-    .list--with--selected--filters {
-      .grid {
-        .card--header {
-          .card--price {
-            font-size: 14px;
-          }
+  }
+
+  .universe_search_by_name {
+    .universe_search_by_name_label {
+      margin-bottom: 15px;
+      span {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 0.2px;
+        color: #000000;
+        margin-right: 15px;
+      }
+    }
+
+    .search_by_name_input {
+      input {
+        background: $white;
+        border: 1px solid #d4d4d4;
+        box-sizing: border-box;
+        border-radius: 12px;
+        width: 100%;
+        padding: 15px;
+
+        &::placeholder {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 16px;
+          color: #cacaca;
+          background-image: url('../../assets/images/search-gray.svg');
+          background-repeat: no-repeat;
+          text-indent: 25px;
         }
-        .card--footer {
-          display: block;
-          .name--id {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            h2 {
-              font-size: 16px;
-            }
-            p {
-              font-weight: normal;
-              font-size: 12px;
-              width: auto;
-            }
-          }
-          .polymorph--collection {
-            display: flex;
-            align-items: center;
-            img {
-              width: 20px;
-              height: 20px;
-              border-radius: 50%;
-              object-fit: cover;
-            }
-            > p {
-              font-family: $spaceGroteskFont;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 12px;
-              line-height: 150%;
-              color: $black;
-              margin-left: 6px;
-              width: auto;
-            }
-          }
+        &:focus {
+          background: linear-gradient(#ffffff, #ffffff) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
         }
       }
     }
   }
-  .mobile--filters {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 111;
-    display: none;
-    button {
-        padding: 15px 18px;
+
+  .universe_dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background: $white;
+    border: 1px solid #d4d4d4;
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 15px 16px;
+    cursor: pointer;
+    height: 47px;
+    margin-bottom: 15px;
+    &.opened {
+      background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box;
+      border: 1px solid transparent;
+      .arrow__down {
+        transform: rotate(180deg);
+      }
     }
-    .count {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 12px;
-        line-height: 150%;
-        color: $white;
-        min-width: 20px;
-        min-height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: $black;
-        border-radius: 50%;
+    .selected__universe__item {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      color: $black;
     }
-    @include lg {
-        display: block;
+    .arrow__down {
+      width: 14px;
+      transition: 0.5s ease;
+    }
+    .sort__dropdown {
+      position: absolute;
+      top: 55px;
+      left: 0;
+      width: 100%;
+      z-index: 1;
+      ul {
+        background: $white;
+        box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+        border-radius: 12px;
+        padding: 8px;
+
+        li {
+          padding: 15px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: $black;
+          border-radius: 6px;
+          height: 50px;
+          &:hover {
+            background: rgba(0, 0, 0, 0.05);
+          }
+        }
+      }
     }
   }
 }
-
-
-// .universe_NFTs {
-//   position: relative;
-//   display: grid;
-//   grid-template-columns: 1fr 1fr;
-//   grid-gap: 28px;
-//   margin-bottom: 40px;
-
-//   @include md {
-//     grid-template-columns: 1fr;
-//   }
-
-//   .universe_filter {   
-//     .universe_filter_label {
-//         margin-bottom: 15px;
-//       span  {
-//         font-family: $sharpGroteskSemiBoldFont;
-//         font-style: normal;
-//         font-weight: 600;
-//         font-size: 16px;
-//         letter-spacing: 0.2px;
-//         color: #000000;
-//         margin-right: 15px;
-//       }
-//     }
-//   }
-
-//   .universe_search_by_name {
-//     .universe_search_by_name_label{
-//       margin-bottom: 15px;
-//       span {
-//         font-family: $sharpGroteskSemiBoldFont;
-//         font-style: normal;
-//         font-weight: 600;
-//         font-size: 16px;
-//         letter-spacing: 0.2px;
-//         color: #000000;
-//         margin-right: 15px;
-//       }
-//     }
-
-//     .search_by_name_input {
-//       input {
-//         background: $white;
-//         border: 1px solid #d4d4d4;
-//         box-sizing: border-box;
-//         border-radius: 12px;
-//         width: 100%;
-//         padding: 15px;
-
-//         &::placeholder {
-//           font-family: $spaceGroteskFont;
-//           font-style: normal;
-//           font-weight: normal;
-//           font-size: 16px;
-//           color: #cacaca;
-//           background-image: url('../../assets/images/search-gray.svg');
-//           background-repeat: no-repeat;
-//           text-indent: 25px;
-//         }
-//         &:focus {
-//           background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-//           border: 1px solid transparent;
-//         }
-//       }
-//     }
-//   }
-
-//   .universe_dropdown {
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-//     position: relative;
-//     background: $white;
-//     border: 1px solid #d4d4d4;
-//     box-sizing: border-box;
-//     border-radius: 12px;
-//     padding: 15px 16px;
-//     cursor: pointer;
-//     height: 47px;
-//     margin-bottom: 15px;
-//     &.opened {
-//       background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box;
-//       border: 1px solid transparent;
-//       .arrow__down {
-//         transform: rotate(180deg);
-//       }
-//     }
-//     .selected__universe__item {
-//       font-family: $spaceGroteskFont;
-//       font-style: normal;
-//       font-weight: 600;
-//       font-size: 16px;
-//       line-height: 20px;
-//       color: $black;
-//     }
-//     .arrow__down {
-//       width: 14px;
-//       transition: 0.5s ease;
-//     }
-//     .sort__dropdown {
-//       position: absolute;
-//       top: 55px;
-//       left: 0;
-//       width: 100%;
-//       z-index: 1;
-//       ul {
-//         background: $white;
-//         box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-//         border-radius: 12px;
-//         padding: 8px;
-
-//         li {
-//           padding: 15px;
-//           font-family: $spaceGroteskFont;
-//           font-style: normal;
-//           font-weight: 600;
-//           font-size: 16px;
-//           line-height: 20px;
-//           color: $black;
-//           border-radius: 6px;
-//           height: 50px;
-//           &:hover {
-//             background: rgba(0, 0, 0, 0.05);
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
-.video_box{
+.video_box {
   height: 215px;
   width: 231px;
   position: relative;
-  >video{
+  > video {
     height: 100%;
     width: 100%;
     object-fit: cover;
     border-radius: 12px;
   }
 }
-.videoicon{
+.videoicon {
   position: absolute;
   z-index: 99;
   top: 20px;
   right: 20px;
 }
-.nft_box_footer{
+.nft_box_footer {
   display: flex;
   > p {
     font-family: $spaceGroteskFont;
@@ -312,5 +186,14 @@
     letter-spacing: 0px;
     text-align: left;
     padding-left: 10px;
+  }
+}
+.nft__box__image {
+  .loading-ring {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    margin: auto;
   }
 }

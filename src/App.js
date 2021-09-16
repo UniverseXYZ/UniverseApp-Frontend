@@ -151,7 +151,7 @@ const App = () => {
   const allCharactersFilter = 'All Characters';
   const polymorphsFilter = 'Polymorphs';
   const lobstersFilter = 'Lobby Lobsters';
-  const [collectionFilter, setCollectionFilter] = useState(allCharactersFilter);
+  const [collectionFilter, setCollectionFilter] = useState(polymorphsFilter);
 
   useEffect(() => {
     if (!darkMode) {
@@ -648,8 +648,9 @@ const App = () => {
         navigateToMyNFTsPage,
         polymorphsFilter,
         lobstersFilter,
-        collectionFilter,
         allCharactersFilter,
+        collectionFilter,
+        setCollectionFilter,
       }}
     >
       <Header />

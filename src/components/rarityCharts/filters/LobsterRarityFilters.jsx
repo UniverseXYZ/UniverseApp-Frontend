@@ -9,7 +9,7 @@ import './RarityFilters.scss';
 import RarityChartFiltersPopup from '../../popups/RarityChartFiltersPopup';
 import RaritySearchField from '../../input/RaritySearchField';
 
-const RarityFilters = (props) => {
+const LobsterRarityFilters = (props) => {
   const {
     floorPrice,
     searchText,
@@ -19,14 +19,6 @@ const RarityFilters = (props) => {
     sortDir,
     setApiPage,
     resetPagination,
-    categories,
-    setCategories,
-    categoriesIndexes,
-    setCategoriesIndexes,
-    resultsCount,
-    handleCategoryFilterChange,
-    setFilter,
-    filter,
     CollectionFilter,
   } = props;
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
@@ -52,32 +44,6 @@ const RarityFilters = (props) => {
             setApiPage={setApiPage}
             resetPagination={resetPagination}
           />
-          <div className="mobile--filters">
-            <Popup
-              trigger={
-                <button type="button" className="light-button">
-                  <img src={filterIcon} alt="Filter" />
-                </button>
-              }
-            >
-              {(close) => (
-                <RarityChartFiltersPopup
-                  close={close}
-                  categories={categories}
-                  setCategories={setCategories}
-                  categoriesIndexes={categoriesIndexes}
-                  setCategoriesIndexes={setCategoriesIndexes}
-                  selectedFiltersLength={selectedFiltersLength}
-                  setSelectedFiltersLength={setSelectedFiltersLength}
-                  resultsCount={resultsCount}
-                  handleCategoryFilterChange={handleCategoryFilterChange}
-                  setFilter={setFilter}
-                  filter={filter}
-                />
-              )}
-            </Popup>
-            {selectedFiltersLength !== 0 && <div className="count">{selectedFiltersLength}</div>}
-          </div>
         </div>
         <RaritySortByOrder
           setSortDir={setSortDir}
@@ -98,7 +64,7 @@ const RarityFilters = (props) => {
   );
 };
 
-RarityFilters.propTypes = {
+LobsterRarityFilters.propTypes = {
   floorPrice: PropTypes.shape({ price: PropTypes.number, priceType: PropTypes.string }),
   searchText: PropTypes.string,
   setSearchText: PropTypes.func.isRequired,
@@ -107,21 +73,13 @@ RarityFilters.propTypes = {
   sortDir: PropTypes.string.isRequired,
   setApiPage: PropTypes.func.isRequired,
   resetPagination: PropTypes.func.isRequired,
-  categories: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setCategories: PropTypes.func.isRequired,
-  categoriesIndexes: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setCategoriesIndexes: PropTypes.func.isRequired,
-  resultsCount: PropTypes.number.isRequired,
-  handleCategoryFilterChange: PropTypes.func.isRequired,
-  setFilter: PropTypes.func.isRequired,
   CollectionFilter: PropTypes.elementType,
 };
 
-RarityFilters.defaultProps = {
+LobsterRarityFilters.defaultProps = {
   floorPrice: { price: 0.8, priceIcon },
   searchText: '',
   CollectionFilter: () => <></>,
 };
 
-export default RarityFilters;
+export default LobsterRarityFilters;
