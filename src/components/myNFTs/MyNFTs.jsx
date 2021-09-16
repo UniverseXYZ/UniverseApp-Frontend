@@ -57,9 +57,9 @@ const MyNFTs = () => {
     'Collections',
     'Saved NFTs',
     'Universe NFTs',
-    'Hidden',
-    'Liked',
-    'Activity',
+    // 'Hidden',
+    // 'Liked',
+    // 'Activity',
   ];
   const emptyTabs = ['Wallet', 'Collections'];
   const [filteredNFTs, setFilteredNFTs] = useState([]);
