@@ -199,11 +199,11 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const handleMinting = () => {
     setMintNowClick(true);
-    if (!collectionName || !tokenName || !collectionNFTs.length) {
+    if (!collectionName || !tokenName) {
       setErrors({
         collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
-        collectible: !collectionNFTs.length ? '“NFT collectible” is required' : '',
+        collectible: '',
       });
       if (errors.shorturl.length > 0) {
         setInputClass('empty__error');
