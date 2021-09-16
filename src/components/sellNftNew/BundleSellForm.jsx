@@ -6,59 +6,50 @@ import SelectPrice from '../input/SelectPrice';
 import Switch from '../ui-elements/Switch';
 import './styles/BundleSellForm.scss';
 
-const validationPrice = (price, setPriceError) => {
-  const reg = /^\d+$/;
-  if (price?.[0] === '0' && price?.[1] !== '.') {
-    setPriceError('Invalid price');
-    return false;
-  }
-  if (!reg.test(price) && price?.[1] !== '.') {
-    setPriceError('Invalid price');
-    return false;
-  }
-  setPriceError(false);
-  return true;
-};
+const BundleSellForm = (props) => {
+  const { bundleData, setBundleData } = props;
+  const [errorStartPrice, setErrorStartPrice] = useState(false);
+  const [touchedPriceField, setTouchedPriceField] = useState(false);
+  const [switchPrivacy, setSwitchPrivacy] = useState(bundleData.switch.includes('switchPrivacy'));
 
-const continueValidationData = (data, setErrorStartPrice) => {
-  const keys = Object.keys(data);
-  const checkStartPrice = validationPrice(data.startPrice, setErrorStartPrice);
-  if (checkStartPrice) {
-    return false;
-  }
-  for (let i = 0; i < keys.length; i += 1) {
-    const key = keys[i];
-    if (data[key] === null || data[key] === '' || data[key] === undefined || !data[key]) {
+  const validationPrice = (price, setPriceError) => {
+    if (touchedPriceField) {
+      const reg = /^\d+$/;
+      if (price?.[0] === '0' && price?.[1] !== '.') {
+        setPriceError('Invalid price');
+        return false;
+      }
+      if (!reg.test(price) && price?.[1] !== '.') {
+        setPriceError('Invalid price');
+        return false;
+      }
+    }
+    setPriceError(false);
+    return true;
+  };
+
+  const continueValidationData = (data) => {
+    const keys = Object.keys(data);
+    const checkStartPrice = validationPrice(data.startPrice, setErrorStartPrice);
+    if (checkStartPrice) {
       return false;
     }
-  }
-  return true;
-};
-
-const BundleSellForm = (props) => {
-  const { getData } = props;
-  const [errorStartPrice, setErrorStartPrice] = useState(false);
-  const [bundleData, setBundleData] = useState({
-    startPrice: window.bundleData ? window.bundleData.startPrice : null,
-    priceType: window.bundleData ? window.bundleData.priceType : 'eth',
-    bundleName: window.bundleData ? window.bundleData.bundleName : null,
-    bundleDescription: window.bundleData ? window.bundleData.bundleDescription : null,
-    switch: window.bundleData ? window.bundleData.switch : [],
-    buyerAddress: window.bundleData ? window.bundleData.buyerAddres : null,
-  });
-  const [switchPrivacy, setSwitchPrivacy] = useState(bundleData.switch.includes('switchPrivacy'));
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i];
+      if (data[key] === null || data[key] === '' || data[key] === undefined || !data[key]) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   useEffect(() => {
     const copyData = { ...bundleData };
     if (!bundleData.switch.includes('switchPrivacy')) {
       delete copyData.buyerAddress;
     }
-    const valid = continueValidationData(copyData, setErrorStartPrice);
-    if (valid) {
-      getData(copyData);
-    } else getData(null);
-    window.bundleData = copyData;
-  }, [bundleData]);
+    continueValidationData(copyData);
+  }, [bundleData, touchedPriceField]);
 
   return (
     <div className="bundle--sell--form--container">
@@ -112,7 +103,10 @@ const BundleSellForm = (props) => {
                 placeholder="Amount"
                 value={bundleData.startPrice ? bundleData.startPrice : ''}
                 onChange={(e) => setBundleData({ ...bundleData, startPrice: e.target.value })}
-                onBlur={() => validationPrice(bundleData.startPrice, setErrorStartPrice)}
+                onBlur={() => {
+                  setTouchedPriceField(true);
+                  validationPrice(bundleData.startPrice, setErrorStartPrice);
+                }}
                 error={errorStartPrice}
               />
               <SelectPrice
@@ -152,8 +146,8 @@ const BundleSellForm = (props) => {
             <Animated animationIn="fadeIn">
               <div className="buyer--address">
                 <Input
-                  value={bundleData.buyerAddres ? bundleData.buyerAddres : ''}
-                  onChange={(e) => setBundleData({ ...bundleData, buyerAddres: e.target.value })}
+                  value={bundleData.buyerAddress ? bundleData.buyerAddress : ''}
+                  onChange={(e) => setBundleData({ ...bundleData, buyerAddress: e.target.value })}
                   placeholder="Buyer address"
                   type="text"
                 />
@@ -167,11 +161,8 @@ const BundleSellForm = (props) => {
 };
 
 BundleSellForm.propTypes = {
-  getData: PropTypes.func,
-};
-
-BundleSellForm.defaultProps = {
-  getData: () => {},
+  bundleData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setBundleData: PropTypes.func.isRequired,
 };
 
 export default BundleSellForm;

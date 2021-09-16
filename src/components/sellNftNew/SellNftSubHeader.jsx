@@ -12,7 +12,7 @@ const SellNftSubHeader = (props) => {
     <div className="sell--nft--page--header">
       <WrapperCenter>
         <div className="back--page--section">
-          <Link to={backPageLink}>
+          <Link to="/my-nfts">
             <img src={backPageIcon} alt="img" />
             <span className="back--page--name">{backPageName}</span>
           </Link>

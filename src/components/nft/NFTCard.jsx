@@ -23,16 +23,17 @@ import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
 import clockIcon from '../../assets/images/marketplace/green-clock.svg';
+import checkIcon from '../../assets/images/check-black.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const NFTCard = ({ nft, placeholderData, canSelect }) => {
+const NFTCard = (mainProps) => {
   const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
+  const { nft, placeholderData, canSelect, selectedNFTsIds, setSelectedNFTsIds } = mainProps;
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
-  const [selectedNFTsIds, setSelectedNFTsIds] = useState([]);
 
   const ref = useRef();
   function SampleNextArrow(props) {
@@ -116,6 +117,15 @@ const NFTCard = ({ nft, placeholderData, canSelect }) => {
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
 
+  const handleSelectNFT = (id) => {
+    if (selectedNFTsIds.includes(id)) {
+      const findById = selectedNFTsIds.filter((i) => i !== id);
+      setSelectedNFTsIds([...findById]);
+    } else {
+      setSelectedNFTsIds([...selectedNFTsIds, id]);
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -136,7 +146,11 @@ const NFTCard = ({ nft, placeholderData, canSelect }) => {
   });
 
   return (
-    <div className={`nft--card ${canSelect ? 'can--select' : ''}`}>
+    <div
+      className={`nft--card${canSelect ? ' can--select' : ''}${
+        selectedNFTsIds && selectedNFTsIds.includes(nft.id) ? ' selected' : ''
+      }`}
+    >
       <div className="nft--card--header">
         <div className="three--images">
           <div className="creator--details">
@@ -253,7 +267,12 @@ const NFTCard = ({ nft, placeholderData, canSelect }) => {
               <span />
               {dropdownID === nft.id && showDropdown && (
                 <ul ref={ref} className="nft--card--header--right--dropdown--items">
-                  <li aria-hidden="true">
+                  <li
+                    aria-hidden="true"
+                    onClick={() =>
+                      history.push('/nft-marketplace/select-items', { name: nft.name })
+                    }
+                  >
                     <img src={sellNFTIcon} alt="Sell" />
                     <p>Sell</p>
                   </li>
@@ -298,7 +317,7 @@ const NFTCard = ({ nft, placeholderData, canSelect }) => {
                 onClick={() =>
                   !canSelect
                     ? history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
-                    : setSelectedNFTsIds([...selectedNFTsIds, nft.id])
+                    : handleSelectNFT(nft.id)
                 }
                 aria-hidden="true"
               >
@@ -355,7 +374,9 @@ const NFTCard = ({ nft, placeholderData, canSelect }) => {
                         <div
                           className="slider--box"
                           onClick={() =>
-                            history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
+                            !canSelect
+                              ? history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
+                              : handleSelectNFT(nft.id)
                           }
                           aria-hidden="true"
                           key={uuid()}
@@ -415,6 +436,11 @@ const NFTCard = ({ nft, placeholderData, canSelect }) => {
           </div>
         </div>
       </div>
+      {selectedNFTsIds && selectedNFTsIds.includes(nft.id) && (
+        <div className="nft--selected">
+          <img src={checkIcon} alt="img" />
+        </div>
+      )}
     </div>
   );
 };
@@ -423,11 +449,15 @@ NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
   placeholderData: PropTypes.bool,
   canSelect: PropTypes.bool,
+  selectedNFTsIds: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedNFTsIds: PropTypes.func,
 };
 
 NFTCard.defaultProps = {
   placeholderData: false,
   canSelect: false,
+  selectedNFTsIds: [],
+  setSelectedNFTsIds: () => {},
 };
 
 export default NFTCard;
