@@ -26,6 +26,7 @@ import HiddenNFTs from './HiddenNFTs';
 import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
 import LikedNFTs from './LikedNFTs';
+import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
 
 const MyNFTs = () => {
   const {
@@ -45,6 +46,10 @@ const MyNFTs = () => {
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
     collectionsIdAddressMapping,
+    universeERC721CoreContract,
+    contracts,
+    signer,
+    address,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = [
@@ -112,59 +117,33 @@ const MyNFTs = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleMintSelected = () => {
+  const handleMintSelected = async () => {
     document.getElementById('loading-hidden-btn').click();
-    setTimeout(() => {
+
+    const selectedNfts = savedNfts.filter((nft) => nft.selected);
+    const mintingFlowContext = {
+      collectionsIdAddressMapping,
+      universeERC721CoreContract,
+      contracts,
+      signer,
+      address,
+    };
+
+    const res = await MintSavedNftsFlow({
+      nfts: selectedNfts,
+      helpers: mintingFlowContext,
+    });
+
+    if (res) {
+      // TODO temporarily use this
+      const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
+      setSavedNfts(newSavedNFTs);
+
       document.getElementById('popup-root').remove();
       document.getElementById('congrats-hidden-btn').click();
-      setTimeout(() => {
-        const newMyNFTs = [...myNFTs];
-        savedNfts.forEach((nft) => {
-          if (nft.selected) {
-            if (!nft.collection) {
-              newMyNFTs.push({
-                id: nft.id,
-                type: nft.type,
-                creator: nft.creator,
-                owner: nft.owner,
-                likers: [],
-                allItems: nft.allItems,
-                media: nft.media,
-                name: nft.name,
-                description: nft.description,
-                numberOfEditions: nft.numberOfEditions,
-                properties: nft.properties,
-                royaltyAddress: nft.royaltyAddress,
-                state: 'new',
-                releasedDate: new Date(),
-              });
-            } else {
-              newMyNFTs.push({
-                id: nft.id,
-                type: nft.type,
-                creator: nft.creator,
-                collection: nft.collection,
-                owner: nft.owner,
-                likers: [],
-                allItems: nft.allItems,
-                media: nft.media,
-                name: nft.name,
-                description: nft.description,
-                numberOfEditions: nft.numberOfEditions,
-                properties: nft.properties,
-                royaltyAddress: nft.royaltyAddress,
-                state: 'new',
-                releasedDate: new Date(),
-              });
-            }
-          }
-        });
-        setMyNFTs(newMyNFTs);
-        const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-        setSavedNfts(newSavedNFTs);
-        setSavedNFTsID(null);
-      }, 2000);
-    }, 3000);
+    } else {
+      document.getElementById('popup-root').remove();
+    }
   };
 
   useEffect(() => {
