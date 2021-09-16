@@ -10,7 +10,13 @@ import playIcon from '../../assets/images/play.svg';
 import Bids from '../marketplaceTabComponents/Bids';
 import clock from '../../assets/images/clock.svg';
 
-const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionLeftTime }) => {
+const BuyNFTSection = ({
+  highestBid,
+  firstButtonText,
+  secondButtonText,
+  auctionLeftTime,
+  infotext,
+}) => {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   return (
     <div className="theunveiling">
@@ -34,8 +40,8 @@ const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionL
                 <span className="weth--hover">WETH</span>
               </div>
               <p>
-                {highestBid.bid} <span className="span--price">{highestBid.bid * 1862}$</span>
-                <span className="span--percent">(10% of sales will go to creator)</span>
+                {highestBid.bid} <span className="span--price">${highestBid.bid * 1862}</span>
+                <span className="span--percent">{infotext}</span>
               </p>
             </div>
           </div>
@@ -73,9 +79,7 @@ const BuyNFTSection = ({ highestBid, firstButtonText, secondButtonText, auctionL
           )}
         </Popup>
       </div>
-      {!highestBid && (
-        <span className="span--percent--seperate">(10% of sales will go to creator)</span>
-      )}
+      {!highestBid && <span className="span--percent--seperate">{infotext}</span>}
     </div>
   );
 };
@@ -84,6 +88,7 @@ BuyNFTSection.propTypes = {
   firstButtonText: PropTypes.string.isRequired,
   secondButtonText: PropTypes.string.isRequired,
   auctionLeftTime: PropTypes.string,
+  infotext: PropTypes.string,
 };
-BuyNFTSection.defaultProps = { highestBid: null, auctionLeftTime: null };
+BuyNFTSection.defaultProps = { highestBid: null, auctionLeftTime: null, infotext: '' };
 export default BuyNFTSection;
