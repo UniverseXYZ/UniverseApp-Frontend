@@ -81,12 +81,26 @@ const App = () => {
   const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [stepsData, setStepsData] = useState({
-    selectedItems: null,
+    selectedItem: null,
     selectedMethod: null,
     settings: null,
     summary: null,
   });
   const [auctionSetupState, setAuctionSetupState] = useState(false);
+  const [sellNFTSingleFixedListingData, setSellNFTSingleFixedListingData] = useState({
+    startPrice: null,
+    priceType: 'eth',
+    switch: [],
+    buyerAddress: null,
+  });
+  const [sellNFTBundleFixedListingData, setSellNFTBundleFixedListingData] = useState({
+    startPrice: null,
+    priceType: 'eth',
+    bundleName: null,
+    bundleDescription: null,
+    switch: [],
+    buyerAddress: null,
+  });
 
   useEffect(() => {
     if (!darkMode) {
@@ -174,6 +188,10 @@ const App = () => {
         setSelectedTokenIndex,
         auctionSetupState,
         setAuctionSetupState,
+        sellNFTSingleFixedListingData,
+        setSellNFTSingleFixedListingData,
+        sellNFTBundleFixedListingData,
+        setSellNFTBundleFixedListingData,
       }}
     >
       <Header />

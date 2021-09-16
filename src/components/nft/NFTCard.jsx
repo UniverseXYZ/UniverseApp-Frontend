@@ -23,15 +23,18 @@ import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
 import clockIcon from '../../assets/images/marketplace/green-clock.svg';
+import checkIcon from '../../assets/images/check-black.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const NFTCard = ({ nft, placeholderData }) => {
+const NFTCard = (mainProps) => {
   const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
+  const { nft, placeholderData, canSelect, selectedNFTsIds, setSelectedNFTsIds } = mainProps;
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
+
   const ref = useRef();
   function SampleNextArrow(props) {
     // eslint-disable-next-line react/prop-types
@@ -114,6 +117,15 @@ const NFTCard = ({ nft, placeholderData }) => {
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
 
+  const handleSelectNFT = (id) => {
+    if (selectedNFTsIds.includes(id)) {
+      const findById = selectedNFTsIds.filter((i) => i !== id);
+      setSelectedNFTsIds([...findById]);
+    } else {
+      setSelectedNFTsIds([...selectedNFTsIds, id]);
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -134,7 +146,11 @@ const NFTCard = ({ nft, placeholderData }) => {
   });
 
   return (
-    <div className="nft--card">
+    <div
+      className={`nft--card${canSelect ? ' can--select' : ''}${
+        selectedNFTsIds && selectedNFTsIds.includes(nft.id) ? ' selected' : ''
+      }`}
+    >
       <div className="nft--card--header">
         <div className="three--images">
           <div className="creator--details">
@@ -237,49 +253,58 @@ const NFTCard = ({ nft, placeholderData }) => {
               </span>
             </div>
           )}
-          <div
-            className="nft--card--header--right--dropdown"
-            aria-hidden="true"
-            onClick={() => {
-              setShowDropdown(!showDropdown);
-              setDropdownID(nft.id);
-            }}
-          >
-            <span />
-            <span />
-            <span />
-            {dropdownID === nft.id && showDropdown && (
-              <ul ref={ref} className="nft--card--header--right--dropdown--items">
-                <li aria-hidden="true">
-                  <img src={sellNFTIcon} alt="Sell" />
-                  <p>Sell</p>
-                </li>
-                <li aria-hidden="true">
-                  <img src={transferNFTIcon} alt="Transfer" />
-                  <p>Transfer</p>
-                </li>
-                <li aria-hidden="true">
-                  <img src={shareNFTIcon} alt="Share" />
-                  <p>Share</p>
-                </li>
-                {nft.hidden ? (
-                  <li aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
-                    <img src={unhideNFTIcon} alt="Hide" />
-                    <p>Unhide</p>
+          {!canSelect ? (
+            <div
+              className="nft--card--header--right--dropdown"
+              aria-hidden="true"
+              onClick={() => {
+                setShowDropdown(!showDropdown);
+                setDropdownID(nft.id);
+              }}
+            >
+              <span />
+              <span />
+              <span />
+              {dropdownID === nft.id && showDropdown && (
+                <ul ref={ref} className="nft--card--header--right--dropdown--items">
+                  <li
+                    aria-hidden="true"
+                    onClick={() =>
+                      history.push('/nft-marketplace/select-items', { name: nft.name })
+                    }
+                  >
+                    <img src={sellNFTIcon} alt="Sell" />
+                    <p>Sell</p>
                   </li>
-                ) : (
-                  <li aria-hidden="true" onClick={() => hideNFT(nft.id)}>
-                    <img src={hideNFTIcon} alt="Hide" />
-                    <p>Hide</p>
+                  <li aria-hidden="true">
+                    <img src={transferNFTIcon} alt="Transfer" />
+                    <p>Transfer</p>
                   </li>
-                )}
-                <li className="burn" aria-hidden="true">
-                  <img src={burnNFTIcon} alt="Burn" />
-                  <p>Burn</p>
-                </li>
-              </ul>
-            )}
-          </div>
+                  <li aria-hidden="true">
+                    <img src={shareNFTIcon} alt="Share" />
+                    <p>Share</p>
+                  </li>
+                  {nft.hidden ? (
+                    <li aria-hidden="true" onClick={() => unhideNFT(nft.id)}>
+                      <img src={unhideNFTIcon} alt="Hide" />
+                      <p>Unhide</p>
+                    </li>
+                  ) : (
+                    <li aria-hidden="true" onClick={() => hideNFT(nft.id)}>
+                      <img src={hideNFTIcon} alt="Hide" />
+                      <p>Hide</p>
+                    </li>
+                  )}
+                  <li className="burn" aria-hidden="true">
+                    <img src={burnNFTIcon} alt="Burn" />
+                    <p>Burn</p>
+                  </li>
+                </ul>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="nft--card--body" aria-hidden="true">
@@ -289,7 +314,11 @@ const NFTCard = ({ nft, placeholderData }) => {
           <>
             {nft.type !== 'bundles' ? (
               <div
-                onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })}
+                onClick={() =>
+                  !canSelect
+                    ? history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
+                    : handleSelectNFT(nft.id)
+                }
                 aria-hidden="true"
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
@@ -345,7 +374,9 @@ const NFTCard = ({ nft, placeholderData }) => {
                         <div
                           className="slider--box"
                           onClick={() =>
-                            history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
+                            !canSelect
+                              ? history.push(`/marketplace/nft/${nft.id}`, { nft, placeholderData })
+                              : handleSelectNFT(nft.id)
                           }
                           aria-hidden="true"
                           key={uuid()}
@@ -405,6 +436,11 @@ const NFTCard = ({ nft, placeholderData }) => {
           </div>
         </div>
       </div>
+      {selectedNFTsIds && selectedNFTsIds.includes(nft.id) && (
+        <div className="nft--selected">
+          <img src={checkIcon} alt="img" />
+        </div>
+      )}
     </div>
   );
 };
@@ -412,10 +448,16 @@ const NFTCard = ({ nft, placeholderData }) => {
 NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
   placeholderData: PropTypes.bool,
+  canSelect: PropTypes.bool,
+  selectedNFTsIds: PropTypes.oneOfType([PropTypes.array]),
+  setSelectedNFTsIds: PropTypes.func,
 };
 
 NFTCard.defaultProps = {
   placeholderData: false,
+  canSelect: false,
+  selectedNFTsIds: [],
+  setSelectedNFTsIds: () => {},
 };
 
 export default NFTCard;
