@@ -8,7 +8,7 @@ function AuthenticatedRoute({ component: Component, ...restOfProps }) {
 
   return isAuthenticated && isWalletConnected ? (
     <Route {...restOfProps}>
-      <Component {...props} />
+      <Component />
     </Route>
   ) : (
     <Redirect to="/" />
