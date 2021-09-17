@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import Button from '../button/Button';
-import nextIcon from '../../assets/images/arrow.svg';
-import './styles/SelectItemsMethodTab.scss';
-import singleIcon from '../../assets/images/sellNft/single-icon.svg';
-import collectionIcon from '../../assets/images/sellNft/collection-icon.svg';
+import Button from '../../button/Button';
+import nextIcon from '../../../assets/images/arrow.svg';
+import './SelectItemsMethodTab.scss';
+import singleIcon from '../../../assets/images/sellNft/single-icon.svg';
+import collectionIcon from '../../../assets/images/sellNft/collection-icon.svg';
 
 const SelectItemsMethodTab = (props) => {
   const { onSelect, data } = props;

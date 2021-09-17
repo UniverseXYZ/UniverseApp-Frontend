@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import Input from '../input/Input';
-import SelectPrice from '../input/SelectPrice';
-import Switch from '../ui-elements/Switch';
-import './styles/BundleSellForm.scss';
+import Input from '../../input/Input';
+import SelectPrice from '../../input/SelectPrice';
+import Switch from '../../ui-elements/Switch';
+import './BundleFixedListing.scss';
 
-const BundleSellForm = (props) => {
+const BundleFixedListing = (props) => {
   const { bundleData, setBundleData } = props;
   const [errorStartPrice, setErrorStartPrice] = useState(false);
   const [touchedPriceField, setTouchedPriceField] = useState(false);
@@ -160,9 +160,9 @@ const BundleSellForm = (props) => {
   );
 };
 
-BundleSellForm.propTypes = {
+BundleFixedListing.propTypes = {
   bundleData: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setBundleData: PropTypes.func.isRequired,
 };
 
-export default BundleSellForm;
+export default BundleFixedListing;

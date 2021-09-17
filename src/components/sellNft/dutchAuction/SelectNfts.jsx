@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
+import './SelectNfts.scss';
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
-import Button from '../button/Button';
-import closeIconWhite from '../../assets/images/marketplace/close.svg';
-import mp3Icon from '../../assets/images/mp3-icon.png';
-import './styles/SelectNfts.scss';
-import AppContext from '../../ContextAPI';
-import SearchFilters from '../nft/SearchFilters';
-import NFTCard from '../nft/NFTCard';
+import Button from '../../button/Button';
+import closeIconWhite from '../../../assets/images/marketplace/close.svg';
+import mp3Icon from '../../../assets/images/mp3-icon.png';
+import AppContext from '../../../ContextAPI';
+import SearchFilters from '../../nft/SearchFilters';
+import NFTCard from '../../nft/NFTCard';
 
 const SelectNfts = (props) => {
-  const { myNFTs, setSellNFTBundleFixedListingData } = useContext(AppContext);
+  const { myNFTs, setSellNFTBundleDutchAuctionData } = useContext(AppContext);
   const { stepData, setStepData, bundleData } = props;
   const [selectedNFTsIds, setSelectedNFTsIds] = useState([]);
   const [selectedGalleryItem, setSelectedGalleryItem] = useState([]);
@@ -20,7 +20,7 @@ const SelectNfts = (props) => {
     let dataBundleSale = bundleData;
     dataBundleSale = { ...dataBundleSale, selectedNfts: selectedGalleryItem };
     setStepData({ ...stepData, settings: { ...dataBundleSale } });
-    setSellNFTBundleFixedListingData(bundleData);
+    setSellNFTBundleDutchAuctionData(bundleData);
     history.push('/nft-marketplace/summary');
   };
 
@@ -70,52 +70,54 @@ const SelectNfts = (props) => {
         <></>
       )}
       <div className="select--nfts--footer">
-        <div className="selected--nft--block">
-          {selectedGalleryItem.map((elem, index) => (
-            <div className="selected--nft--item" key={index.toString()}>
-              {elem.media.type === 'image/png' && (
-                <img src={URL.createObjectURL(elem.media)} alt="img" />
-              )}
-              {elem.media.type === 'audio/mpeg' && <img src={mp3Icon} alt="img" />}
-              {elem.media.type === 'video/mp4' && (
-                <video
-                  onMouseOver={(event) => event.target.play()}
-                  onFocus={(event) => event.target.play()}
-                  onMouseOut={(event) => event.target.pause()}
-                  onBlur={(event) => event.target.pause()}
-                  muted
+        <div className="select--nfts--footer--container">
+          <div className="selected--nft--block">
+            {selectedGalleryItem.map((elem, index) => (
+              <div className="selected--nft--item" key={index.toString()}>
+                {elem.media.type === 'image/png' && (
+                  <img src={URL.createObjectURL(elem.media)} alt="img" />
+                )}
+                {elem.media.type === 'audio/mpeg' && <img src={mp3Icon} alt="img" />}
+                {elem.media.type === 'video/mp4' && (
+                  <video
+                    onMouseOver={(event) => event.target.play()}
+                    onFocus={(event) => event.target.play()}
+                    onMouseOut={(event) => event.target.pause()}
+                    onBlur={(event) => event.target.pause()}
+                    muted
+                  >
+                    <source src={URL.createObjectURL(elem.media)} type="video/mp4" />
+                    <track kind="captions" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+                <div
+                  className="close--icon"
+                  aria-hidden="true"
+                  onClick={() => setSelectedNFTsIds(selectedNFTsIds.filter((i) => i !== elem.id))}
                 >
-                  <source src={URL.createObjectURL(elem.media)} type="video/mp4" />
-                  <track kind="captions" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-              <div
-                className="close--icon"
-                aria-hidden="true"
-                onClick={() => setSelectedNFTsIds(selectedNFTsIds.filter((i) => i !== elem.id))}
-              >
-                <img src={closeIconWhite} alt="img" />
+                  <img src={closeIconWhite} alt="img" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="buttons--group">
-          <Button
-            className="light-border-button"
-            onClick={() => history.push('/nft-marketplace/select-method')}
-          >
-            Back
-          </Button>
-          <Button
-            className="light-button"
-            disabled={
-              !bundleData.startPrice || !bundleData.bundleName || !selectedGalleryItem.length
-            }
-            onClick={clickContinue}
-          >
-            Continue
-          </Button>
+            ))}
+          </div>
+          <div className="buttons--group">
+            <Button
+              className="light-border-button"
+              onClick={() => history.push('/nft-marketplace/select-method')}
+            >
+              Back
+            </Button>
+            <Button
+              className="light-button"
+              disabled={
+                !bundleData.startPrice || !bundleData.bundleName || !selectedGalleryItem.length
+              }
+              onClick={clickContinue}
+            >
+              Continue
+            </Button>
+          </div>
         </div>
       </div>
     </div>

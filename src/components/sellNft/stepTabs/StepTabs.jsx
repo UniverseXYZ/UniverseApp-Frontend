@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom';
-import WrapperCenter from '../polymorphs/WrapperCenter';
-import './styles/StepTabs.scss';
+import WrapperCenter from '../../polymorphs/WrapperCenter';
+import './StepTabs.scss';
 
 const StepTabs = (props) => {
   const { tabData, verificationSteps, required } = props;

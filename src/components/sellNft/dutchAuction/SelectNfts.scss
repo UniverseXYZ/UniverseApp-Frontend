@@ -3,6 +3,7 @@
 
 .select--nfts--container {
     width: 100%;
+    padding-bottom: 60px;
     .search--and--filters--section--sticky {
         position: sticky;
         top: 0;
@@ -301,74 +302,89 @@
         }
     }
     .select--nfts--footer {
-        margin-top: 60px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: 9999;
+        background: $white;
         box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
-        @include md {
-            flex-direction: column;
-        }
-        .selected--nft--block {
-            width: calc(75% - 6px);
+        padding: 25px 60px;
+        width: 100%;
+        &--container {
             display: flex;
-            flex-wrap: wrap;
-            .selected--nft--item {
-                width: 60px;
-                height: 60px;
-                margin-right: 12px;
-                border-radius: 5px;
-                position: relative;
-                margin-bottom: 12px;
-                margin-top: 12px;
-                img {
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1110px;
+            margin: 0 auto;
+            @include md {
+                flex-direction: column;
+            }
+            .selected--nft--block {
+                width: calc(75% - 6px);
+                display: grid;
+                grid-template-columns: repeat(auto-fit, 60px);
+                grid-gap: 12px;
+                .selected--nft--item {
+                    width: 60px;
+                    height: 60px;
                     border-radius: 5px;
-                    object-fit: cover;
-                    height: 100%;
+                    position: relative;
+                    img {
+                        border-radius: 5px;
+                        object-fit: cover;
+                        height: 100%;
+                    }
+                    video {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 5px;
+                    }
+                    .close--icon {
+                        position: absolute;
+                        width: 12px;
+                        height: 12px;
+                        background: $black;
+                        z-index: 9;
+                        top: -6px;
+                        right: -6px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        padding: 2px;
+                        cursor: pointer;
+                    }
                 }
-                video {
+                @include md {
                     width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    border-radius: 5px;
+                    margin-bottom: 20px;
+                } 
+            }
+            .buttons--group {
+                display: flex;
+                align-items: center;
+                @include md {
+                    width: 100%;
+                    flex-direction: column-reverse;
                 }
-                .close--icon {
-                    position: absolute;
-                    width: 12px;
-                    height: 12px;
-                    background: $black;
-                    z-index: 9;
-                    top: -6px;
-                    right: -6px;
+                button {
+                    display: block;
+                    height: 42px;
+                    margin-left: 15px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border-radius: 50%;
-                    padding: 2px;
-                    cursor: pointer;
+                    @include md {
+                        width: 100%;
+                        margin-bottom: 12px;
+                        margin-left: 0px;
+                    }
                 }
             }
         }
-        .buttons--group {
-            display: flex;
-            align-items: center;
-            @include md {
-                width: 100%;
-                flex-direction: column-reverse;
-            }
-            button {
-                display: block;
-                height: 42px;
-                margin-left: 15px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                @include md {
-                    width: 100%;
-                    margin-bottom: 12px;
-                }
-            }
+        @include md {
+            padding: 25px 20px;
         }
     }
 }
