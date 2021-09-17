@@ -305,7 +305,7 @@ const AuctionReview = () => {
                           onMouseOut={(event) => event.target.pause()}
                           onBlur={(event) => event.target.pause()}
                         >
-                          <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                          <source src={nft.optimized_url} type="video/mp4" />
                           <track kind="captions" />
                           Your browser does not support the video tag.
                         </video>

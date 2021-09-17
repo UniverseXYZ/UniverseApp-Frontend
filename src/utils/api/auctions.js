@@ -27,7 +27,7 @@ export const createAuction = async ({
     tokenDecimals,
     startDate,
     endDate,
-    royaltySplits: royaltySplits.length ? royaltySplits : null,
+    royaltySplits: royaltySplits && royaltySplits.length ? royaltySplits : null,
     rewardTiers,
   };
 
