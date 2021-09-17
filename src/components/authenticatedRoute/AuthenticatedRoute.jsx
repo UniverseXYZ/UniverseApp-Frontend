@@ -5,8 +5,9 @@ import AppContext from '../../ContextAPI';
 
 function AuthenticatedRoute({ component: Component, ...restOfProps }) {
   const { isAuthenticated, isWalletConnected } = useContext(AppContext);
+  const accessToken = localStorage.getItem('access_token');
 
-  return isAuthenticated && isWalletConnected ? (
+  return accessToken || (isAuthenticated && isWalletConnected) ? (
     <Route {...restOfProps}>
       <Component />
     </Route>

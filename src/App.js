@@ -61,6 +61,19 @@ import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
 import AuthenticatedRoute from './components/authenticatedRoute/AuthenticatedRoute';
 
 const App = () => {
+  const authenticatedRoutes = [
+    '/auction-review',
+    '/my-profile',
+    '/setup-auction',
+    '/my-nfts',
+    '/my-nfts/create',
+    '/my-account',
+    '/my-auctions',
+    '/create-tiers',
+    '/create-tiers/my-nfts/create',
+    '/finalize-auction',
+  ];
+
   const location = useLocation();
   const history = useHistory();
 
@@ -337,6 +350,7 @@ const App = () => {
     setUsdEthBalance(0);
     clearStorageAuthData();
     setIsAuthenticated(false);
+    // localStorage.removeItem('isAuthenticated');
 
     // TODO: Vik to check it
     setUserPolymorphs([]);
@@ -482,6 +496,9 @@ const App = () => {
           localStorage.setItem('user_address', address);
         } else {
           setIsAuthenticated(false);
+          // if (authenticatedRoutes.includes(window.location.pathname)) {
+          //   history.push('/');
+          // }
         }
       } else {
         // THE USER ALREADY HAS SIGNED
@@ -510,17 +527,23 @@ const App = () => {
 
   // Minting
   const fetchNfts = async () => {
-    // Fetch the saved NFTS for that addres
-    const savedNFTS = await getSavedNfts();
-    setSavedNfts(savedNFTS || []);
+    try {
+      // Fetch the saved NFTS for that addres
+      const savedNFTS = await getSavedNfts();
+      setSavedNfts(savedNFTS || []);
 
-    // Fetch the minted NFTS for that address
-    const mintedNfts = await getMyNfts();
-    setMyNFTs(mintedNfts || []);
+      // Fetch the minted NFTS for that address
+      const mintedNfts = await getMyNfts();
+      setMyNFTs(mintedNfts || []);
 
-    // Fetch the minted NFTS for that address
-    const collectionsReturn = await getMyCollections();
-    setDeployedCollections(collectionsReturn || []);
+      // Fetch the minted NFTS for that address
+      const collectionsReturn = await getMyCollections();
+      setDeployedCollections(collectionsReturn || []);
+    } catch (err) {
+      alert(
+        'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
+      );
+    }
   };
 
   useEffect(() => {
