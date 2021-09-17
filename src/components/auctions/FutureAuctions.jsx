@@ -46,6 +46,14 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     setMintCongratsPopupOpen(false);
   };
 
+  const getTotalNFTSperAuction = (auction) => {
+    let nftsCount = 0;
+    auction.rewardTiers.forEach((tier) => {
+      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
+    });
+    return nftsCount;
+  };
+
   return (
     <div className="future-auctions">
       <div className="input-search">
@@ -101,7 +109,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             <div className="auctions-launch-dates">
               <div className="total-dates">
                 <p>
-                  Total NFTs: <b>{futureAuction.totalNFTs}</b>
+                  Total NFTs: <b>{getTotalNFTSperAuction(futureAuction)}</b>
                 </p>
               </div>
               <div
@@ -339,10 +347,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           NFTs per winner: <b>{tier.nftsPerWinner}</b>
                         </p>
                         <p>
-                          Winners: <b>{tier.winners}</b>
+                          Winners: <b>{tier.numberOfWinners}</b>
                         </p>
                         <p>
-                          Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
+                          Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
                         </p>
                       </div>
                     </div>
@@ -352,7 +360,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           <div className="tier-image-second" />
                           <div className="tier-image-first" />
                           <div className="tier-image-main">
-                            <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                            <img src={nft?.thumbnail_url} alt={nft.name} />
                           </div>
                         </div>
                       ))}

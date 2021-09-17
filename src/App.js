@@ -59,6 +59,7 @@ import { fetchTokensMetadataJson } from './utils/api/polymorphs';
 import { convertPolymorphObjects } from './utils/helpers/polymorphs';
 import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
 import AuthenticatedRoute from './components/authenticatedRoute/AuthenticatedRoute';
+import { getFutureAuctions } from './utils/api/auctions';
 
 const App = () => {
   const authenticatedRoutes = [
@@ -564,6 +565,15 @@ const App = () => {
       setDeployedCollections([]);
     }
   }, [loggedInArtist, isWalletConnected]);
+
+  // Fetch Auctions
+  useEffect(async () => {
+    // TODO:: Asen can transfer his logic here.
+    // storageBuster();
+    // placeholderBuster();
+    const futureAuctionResponse = await getFutureAuctions();
+    setMyAuctions(futureAuctionResponse?.auctions || []);
+  }, []);
 
   return (
     <AppContext.Provider
