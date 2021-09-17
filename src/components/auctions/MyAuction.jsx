@@ -47,7 +47,7 @@ const MyAuction = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   useEffect(() => {
-    // if (auction.tiers.length) {
+    // if (auction.rewardTiers.length) {
     //   setMyAuctions((prevValues) => {
     //     let foundAuction = false;
 

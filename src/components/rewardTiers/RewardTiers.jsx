@@ -11,6 +11,14 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
+import {
+  isImage,
+  isVideo,
+  isAudio,
+  getNftImage,
+  getNftColletionImage,
+  getEditionsCount,
+} from '../../utils/helpers/pureFunctions/nfts';
 
 const RewardTiers = () => {
   const history = useHistory();
@@ -28,8 +36,8 @@ const RewardTiers = () => {
             10 tiers in one auction.
           </p>
         </div>
-        {auction.tiers.length > 0 &&
-          auction.tiers.map((tier) => (
+        {auction.rewardTiers &&
+          auction.rewardTiers.map((tier) => (
             <div className="view-tier" key={uuid()}>
               <div className="auction-header">
                 <div className="img_head">
@@ -106,29 +114,25 @@ const RewardTiers = () => {
                   {tier.nfts.map((nft) => (
                     <div className="rev-reward__box" key={uuid()}>
                       <div className="rev-reward__box__image">
-                        {nft.media.type === 'video/mp4' && (
+                        {isVideo(nft) && (
                           <video
                             onMouseOver={(event) => event.target.play()}
                             onFocus={(event) => event.target.play()}
                             onMouseOut={(event) => event.target.pause()}
                             onBlur={(event) => event.target.pause()}
                           >
-                            <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
+                            <source src={getNftImage(nft)} type="video/mp4" />
                             <track kind="captions" />
                             Your browser does not support the video tag.
                           </video>
                         )}
-                        {nft.media.type === 'audio/mpeg' && (
+                        {isAudio(nft) && (
                           <img className="preview-image" src={mp3Icon} alt={nft.name} />
                         )}
-                        {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                          <img
-                            className="preview-image"
-                            src={URL.createObjectURL(nft.media)}
-                            alt={nft.name}
-                          />
+                        {isImage(nft) && (
+                          <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
                         )}
-                        {nft.media.type === 'video/mp4' && (
+                        {isVideo(nft) && (
                           <img className="video__icon" src={videoIcon} alt="Video Icon" />
                         )}
                       </div>
@@ -139,27 +143,24 @@ const RewardTiers = () => {
                         <div className="collection__details">
                           {nft.collection && (
                             <>
-                              {typeof nft.collection.avatar === 'string' &&
-                              nft.collection.avatar.startsWith('#') ? (
+                              {typeof nft.collection.coverUrl === 'string' &&
+                              nft.collection.coverUrl.startsWith('#') ? (
                                 <div
                                   className="random__bg__color"
-                                  style={{ backgroundColor: nft.collection.avatar }}
+                                  style={{ backgroundColor: nft.collection.coverUrl }}
                                 >
                                   {nft.collection.name.charAt(0)}
                                 </div>
                               ) : (
-                                <img
-                                  src={URL.createObjectURL(nft.collection.avatar)}
-                                  alt={nft.collection.name}
-                                />
+                                <img src={nft.collection.coverUrl} alt={nft.collection.name} />
                               )}
                               <span>{nft.collection.name}</span>
                             </>
                           )}
                         </div>
-                        <span className="ed-count">{`x${nft.allItems.length}`}</span>
+                        <span className="ed-count">{`x${nft.tokenIds.length}`}</span>
                       </div>
-                      {nft.allItems.length > 1 && (
+                      {nft.tokenIds.length > 1 && (
                         <>
                           <div className="rev-reward__box__highlight__one" />
                           <div className="rev-reward__box__highlight__two" />
@@ -186,7 +187,7 @@ const RewardTiers = () => {
           </div>
         </div>
       </div>
-      <div className={!auction.tiers.length ? 'btn-div' : 'btn-div withtier'}>
+      <div className={!auction?.rewardTiers?.length ? 'btn-div' : 'btn-div withtier'}>
         <Button
           className="light-border-button"
           onClick={() => history.push('/setup-auction/auction-settings', auction.id)}
@@ -195,8 +196,10 @@ const RewardTiers = () => {
         </Button>
         <Button
           className="light-button"
-          onClick={() => auction.tiers.length && history.push('/setup-auction/review-auction')}
-          disabled={!auction.tiers.length}
+          onClick={() =>
+            auction?.rewardTiers?.length && history.push('/setup-auction/review-auction')
+          }
+          disabled={!auction?.rewardTiers?.length}
         >
           Continue
         </Button>

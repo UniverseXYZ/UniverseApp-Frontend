@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable no-cond-assign */
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -21,20 +22,27 @@ import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
+import {
+  isImage,
+  isVideo,
+  isAudio,
+  getNftImage,
+  getNftColletionImage,
+  getEditionsCount,
+} from '../../utils/helpers/pureFunctions/nfts';
+import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
+import { getFutureAuctions } from '../../utils/api/auctions';
 
 const AuctionReview = () => {
   const {
-    loggedInArtist,
     auction,
     setAuction,
     bidtype,
+    options,
     myAuctions,
     setMyAuctions,
     selectedTabIndex,
     setSelectedTabIndex,
-    setAuctionSetupState,
-    myNFTs,
-    setMyNFTs,
   } = useContext(AppContext);
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -59,48 +67,33 @@ const AuctionReview = () => {
     }
   }, []);
 
-  const handleSetAuction = () => {
-    if (auction && auction.tiers.length) {
-      let totalNFTs = 0;
-      const usedNFTsIds = [];
-      auction.tiers.forEach((tier) => {
-        totalNFTs += tier.winners * tier.nftsPerWinner;
-        tier.nfts.forEach((n) => {
-          usedNFTsIds.push(n.id);
-        });
-      });
-      const newMyNFTs = [];
-      usedNFTsIds.forEach((id) => {
-        const getUsedNFTs = myNFTs.filter((nft) => nft.id === id);
-        const getNotUsedNFTs = myNFTs.filter((nft) => nft.id !== id);
-        getUsedNFTs.forEach((nft) => {
-          nft.isUsed = true;
-          newMyNFTs.push(nft);
-        });
-        getNotUsedNFTs.forEach((nft) => {
-          newMyNFTs.push(nft);
-        });
-      });
-      document.getElementById('loading-hidden-btn').click();
-      setTimeout(() => {
-        document.getElementById('popup-root').remove();
-        document.getElementById('congrats-hidden-btn').click();
-      }, 1000);
+  const handleSetAuction = async () => {
+    // TODO:: after the new design changes we must add logic which prevents the user to select the same nfts for different tiers
+    if (auction && auction?.rewardTiers?.length) {
       setSelectedTabIndex(1);
-      const newAuction = { ...auction };
-      newAuction.totalNFTs = totalNFTs;
-      newAuction.artist = loggedInArtist;
-      setMyNFTs(newMyNFTs);
-      setMyAuctions([...myAuctions, newAuction]);
-      setAuction({ tiers: [] });
-      setAuctionSetupState(false);
+      // document.getElementById('loading-hidden-btn').click();
+      const popupRoot = document.getElementById('popup-root');
+      if (popupRoot) popupRoot.remove();
+
+      let res;
+      if (isEditingAuction.length) {
+        res = await AuctionUpdate({ auction, bidtype, options });
+      } else {
+        res = await AuctionCreate({ auction, bidtype, options });
+      }
+
+      if (res?.id) {
+        document.getElementById('congrats-hidden-btn').click();
+      } else {
+        console.error('an error occurred');
+      }
     }
   };
 
   const handleSaveAuction = () => {
-    if (auction && auction.tiers.length) {
+    if (auction && auction?.rewardTiers?.length) {
       let totalNFTs = 0;
-      auction.tiers.forEach((tier) => {
+      auction?.rewardTiers?.forEach((tier) => {
         totalNFTs += tier.winners * tier.nftsPerWinner;
       });
       document.getElementById('loading-hidden-btn').click();
@@ -109,15 +102,16 @@ const AuctionReview = () => {
         document.getElementById('popup-root').remove();
         const newAuction = { ...auction };
         newAuction.totalNFTs = totalNFTs;
-        newAuction.artist = loggedInArtist;
         setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
         setAuction({ tiers: [] });
-        setAuctionSetupState(false);
-        setTimeout(() => {
-          history.push('/my-auctions');
-        }, 500);
-      }, 1000);
+        history.push('/my-auctions');
+      }, 2000);
     }
+  };
+
+  const handleAuctionPopupSuccess = async () => {
+    const futureAuctionResponse = await getFutureAuctions();
+    setMyAuctions(futureAuctionResponse?.auctions || []);
   };
 
   return (
@@ -144,7 +138,7 @@ const AuctionReview = () => {
           />
         }
       >
-        {(close) => <CongratsAuctionPopup onClose={close} />}
+        {(close) => <CongratsAuctionPopup onClose={handleAuctionPopupSuccess} />}
       </Popup>
       <div>
         <div className="head-part">
@@ -225,7 +219,7 @@ const AuctionReview = () => {
             .map((item) => item.address !== '' && item.amount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
-              <h2 className="royalty-settings-title">Revenue splits</h2>
+              <h2 className="royalty-settings-title">Royalty splits</h2>
             </div>
           )}
 
@@ -235,7 +229,7 @@ const AuctionReview = () => {
               (item) =>
                 item.address &&
                 item.amount && (
-                  <div className="royalty">
+                  <div key={item.address} className="royalty">
                     <p className="show--on--desktop">{item.address}</p>
                     <p className="hide--on--desktop">
                       {`${item.address.substring(0, 13)}...${item.address.substring(
@@ -262,87 +256,82 @@ const AuctionReview = () => {
             Edit <img src={pencil} alt="edit-icon" />
           </button>
         </div>
-        {auction.tiers.length &&
-          auction.tiers.map((tier) => (
-            <div key={tier.id} className="view-tier">
-              <div className="auction-header">
-                <div className="img_head">
-                  <div className="img_head_title">
-                    <h3>{tier.name}</h3>
-                  </div>
-                  <div className="winners__edit__btn">
-                    <div className="winners">
-                      <div className="tier-perwinners">
-                        <h4>
-                          NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
-                        </h4>
-                      </div>
-                      <div className="tier-winners">
-                        <h4>
-                          Winners:&nbsp;<b>{tier.winners}</b>
-                        </h4>
-                      </div>
-                      <div className="tier-minbid">
-                        <h4>
-                          Total NFTs:&nbsp;
-                          <b>{tier.nftsPerWinner * tier.winners}</b>
-                        </h4>
-                      </div>
-                    </div>
-                    {/* <Button
-                    className="light-border-button"
-                    onClick={() => {
-                      history.push('/create-tiers', 1);
-                    }}
-                  >
-                    Edit <img src={pencil} alt="edit-icon" />
-                  </Button> */}
-                  </div>
+        {auction?.rewardTiers?.map((tier) => (
+          <div key={tier.id} className="view-tier">
+            <div className="auction-header">
+              <div className="img_head">
+                <div className="img_head_title">
+                  <h3>{tier.name}</h3>
                 </div>
-              </div>
-              <div className="auctions-tier">
-                <div className="auction-reward">
-                  {tier.nfts.map((nft) => (
-                    <div className="auction-reward__box" key={uuid()}>
-                      <div className="auction-reward__box__image">
-                        {nft.media.type === 'video/mp4' && (
-                          <video
-                            onMouseOver={(event) => event.target.play()}
-                            onFocus={(event) => event.target.play()}
-                            onMouseOut={(event) => event.target.pause()}
-                            onBlur={(event) => event.target.pause()}
-                          >
-                            <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
-                            <track kind="captions" />
-                            Your browser does not support the video tag.
-                          </video>
-                        )}
-                        {nft.media.type === 'audio/mpeg' && (
-                          <img className="preview-image" src={mp3Icon} alt={nft.name} />
-                        )}
-                        {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                          <img
-                            className="preview-image"
-                            src={URL.createObjectURL(nft.media)}
-                            alt={nft.name}
-                          />
-                        )}
-                        {nft.media.type === 'video/mp4' && (
-                          <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                        )}
-                      </div>
-                      {nft.allItems.length > 1 && (
-                        <>
-                          <div className="auction-reward__box__highlight__one" />
-                          <div className="auction-reward__box__highlight__two" />
-                        </>
-                      )}
+                <div className="winners__edit__btn">
+                  <div className="winners">
+                    <div className="tier-perwinners">
+                      <h4>
+                        NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
+                      </h4>
                     </div>
-                  ))}
+                    <div className="tier-winners">
+                      <h4>
+                        Winners:&nbsp;<b>{tier.winners}</b>
+                      </h4>
+                    </div>
+                    <div className="tier-minbid">
+                      <h4>
+                        Total NFTs:&nbsp;
+                        <b>{tier.nftsPerWinner * tier.winners}</b>
+                      </h4>
+                    </div>
+                  </div>
+                  {/* <Button
+                  className="light-border-button"
+                  onClick={() => {
+                    history.push('/create-tiers', 1);
+                  }}
+                >
+                  Edit <img src={pencil} alt="edit-icon" />
+                </Button> */}
                 </div>
               </div>
             </div>
-          ))}
+            <div className="auctions-tier">
+              <div className="auction-reward">
+                {tier.nfts.map((nft) => (
+                  <div className="auction-reward__box" key={uuid()}>
+                    <div className="auction-reward__box__image">
+                      {isVideo(nft) && (
+                        <video
+                          onMouseOver={(event) => event.target.play()}
+                          onFocus={(event) => event.target.play()}
+                          onMouseOut={(event) => event.target.pause()}
+                          onBlur={(event) => event.target.pause()}
+                        >
+                          <source src={URL.createObjectURL(nft.previewImage)} type="video/mp4" />
+                          <track kind="captions" />
+                          Your browser does not support the video tag.
+                        </video>
+                      )}
+                      {isAudio(nft) && (
+                        <img className="preview-image" src={mp3Icon} alt={nft.name} />
+                      )}
+                      {isImage(nft) && (
+                        <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
+                      )}
+                      {isVideo(nft) && (
+                        <img className="video__icon" src={videoIcon} alt="Video Icon" />
+                      )}
+                    </div>
+                    {getEditionsCount(nft) > 1 && (
+                      <>
+                        <div className="auction-reward__box__highlight__one" />
+                        <div className="auction-reward__box__highlight__two" />
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="message">
         <span>
@@ -361,7 +350,7 @@ const AuctionReview = () => {
           Back
         </Button>
         {isEditingAuction.length ? (
-          <Button className="light-button" onClick={handleSaveAuction}>
+          <Button className="light-button" onClick={handleSetAuction}>
             Save changes
           </Button>
         ) : (

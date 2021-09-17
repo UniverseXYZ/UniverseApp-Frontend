@@ -12,7 +12,7 @@ export const createRequestObject = ({ auction, bidtype, options }) => {
     tokenSymbol: null,
     tokenDecimals: null,
     royaltySplits: null,
-    rewardTiers: null,
+    tiers: null,
   };
 
   return {

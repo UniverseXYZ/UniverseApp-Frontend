@@ -21,6 +21,7 @@ import searchIcon from '../../assets/images/search-gray.svg';
 import NFTCard from '../nft/NFTCard';
 import LoadMore from '../pagination/LoadMore';
 import SearchFilters from '../nft/SearchFilters';
+import { isImage, isAudio, isVideo, getNftImage } from '../../utils/helpers/pureFunctions/nfts';
 
 const Wallet = ({
   filteredNFTs,
@@ -62,7 +63,7 @@ const Wallet = ({
   const location = useLocation();
   const isCreatingAction = location.pathname === '/create-tiers';
   const tierById = !!(winners && nftsPerWinner);
-  const editMode = auction.tiers.find((element) => element.id === location.state);
+  const editMode = auction?.rewardTiers?.find((element) => element.id === location.state);
   const handleCollectionsMobile = () => {
     setCollections(draftCollections);
     setMobileVersion(true);
@@ -149,8 +150,8 @@ const Wallet = ({
     if (!editMode) {
       setAuction({
         ...auction,
-        tiers: [
-          ...auction.tiers,
+        rewardTiers: [
+          ...auction?.rewardTiers,
           {
             id: uuid(),
             name: tierName,
@@ -163,7 +164,7 @@ const Wallet = ({
       });
     } else {
       const newTiers = [];
-      auction.tiers.forEach((tier) => {
+      auction?.rewardTiers?.forEach((tier) => {
         if (tier.id === editMode.id) {
           tier.name = tierName;
           tier.winners = winners;
@@ -304,16 +305,16 @@ const Wallet = ({
                         className={collection.selected ? 'selected' : ''}
                         onClick={() => saveIndexes(index)}
                       >
-                        {typeof collection.avatar === 'string' &&
-                        collection.avatar.startsWith('#') ? (
+                        {typeof collection.coverUrl === 'string' &&
+                        collection.coverUrl.startsWith('#') ? (
                           <div
                             className="random__bg__color"
-                            style={{ backgroundColor: collection.avatar }}
+                            style={{ backgroundColor: collection.coverUrl }}
                           >
                             {collection.name.charAt(0)}
                           </div>
                         ) : (
-                          <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                          <img src={collection.coverUrl} alt={collection.name} />
                         )}
                         <span>{collection.name}</span>
                       </button>
@@ -386,19 +387,16 @@ const Wallet = ({
                           className={collection.selected ? 'selected' : ''}
                           onClick={() => handleCollections(index)}
                         >
-                          {typeof collection.avatar === 'string' &&
-                          collection.avatar.startsWith('#') ? (
+                          {typeof collection.coverUrl === 'string' &&
+                          collection.coverUrl.startsWith('#') ? (
                             <div
                               className="random__bg__color"
-                              style={{ backgroundColor: collection.avatar }}
+                              style={{ backgroundColor: collection.coverUrl }}
                             >
                               {collection.name.charAt(0)}
                             </div>
                           ) : (
-                            <img
-                              src={URL.createObjectURL(collection.avatar)}
-                              alt={collection.name}
-                            />
+                            <img src={collection.coverUrl} alt={collection.name} />
                           )}
                           <span>{collection.name}</span>
                         </button>
@@ -417,16 +415,16 @@ const Wallet = ({
                   (collection, index) =>
                     collection.selected && (
                       <div key={collection.id}>
-                        {typeof collection.avatar === 'string' &&
-                        collection.avatar.startsWith('#') ? (
+                        {typeof collection.coverUrl === 'string' &&
+                        collection.coverUrl.startsWith('#') ? (
                           <div
                             className="random__bg__color"
-                            style={{ backgroundColor: collection.avatar }}
+                            style={{ backgroundColor: collection.coverUrl }}
                           >
                             {collection.name.charAt(0)}
                           </div>
                         ) : (
-                          <img src={URL.createObjectURL(collection.avatar)} alt={collection.name} />
+                          <img src={collection.coverUrl} alt={collection.name} />
                         )}
                         <span>{collection.name}</span>
                         <button
@@ -547,7 +545,7 @@ const Wallet = ({
               <div className="img-div">
                 {previewNFTs.map((nft) => (
                   <div key={nft.id} className="imgs">
-                    {nft.media.type === 'video/mp4' && (
+                    {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                       <video
                         className="smallView-image"
                         onMouseOver={(event) => event.target.play()}
@@ -555,21 +553,19 @@ const Wallet = ({
                         onMouseOut={(event) => event.target.pause()}
                         onBlur={(event) => event.target.pause()}
                       >
-                        <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
+                        <source src={nft.optimized_url} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    {nft.media.type === 'audio/mpeg' && (
+                    {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
                       <img className="smallView-image" src={mp3Icon} alt={nft.name} />
                     )}
-                    {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                      <img
-                        className="smallView-image"
-                        src={URL.createObjectURL(nft.media)}
-                        alt={nft.name}
-                      />
-                    )}
+                    {nft.artworkType &&
+                      !nft.artworkType.endsWith('mpeg') &&
+                      !nft.artworkType.endsWith('mp4') && (
+                        <img className="smallView-image" src={nft.optimized_url} alt={nft.name} />
+                      )}
                     <img
                       className="del-img"
                       src={crossSmall}

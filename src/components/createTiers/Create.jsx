@@ -42,7 +42,7 @@ const Create = () => {
   };
   const location = useLocation();
   const tierId = location.state;
-  const tierById = auction.tiers.find((element) => element.id === tierId);
+  const tierById = auction?.rewardTiers?.find((element) => element.id === tierId);
 
   useEffect(() => {
     if (values.name) {
@@ -50,8 +50,8 @@ const Create = () => {
         if (tierId) {
           setAuction({
             ...auction,
-            tiers: [
-              ...auction.tiers.filter((tier) => tier.id !== tierId),
+            rewardTiers: [
+              ...auction?.rewardTiers?.filter((tier) => tier.id !== tierId),
               { ...tierById, ...values },
             ],
           });
@@ -59,7 +59,10 @@ const Create = () => {
           const createdTierId = uuid();
           setAuction({
             ...auction,
-            tiers: [...auction.tiers, { ...values, id: createdTierId, nfts: [], minBid: '' }],
+            rewardTiers: [
+              ...auction.rewardTiers,
+              { ...values, id: createdTierId, nfts: [], minBid: '' },
+            ],
           });
         }
       }

@@ -146,7 +146,7 @@ const SetupAuction = () => {
                     auction.startingBid &&
                     auction.startDate &&
                     auction.endDate &&
-                    auction.tiers.length &&
+                    auction.rewardTiers.length &&
                     history.push('/setup-auction/review-auction')
                   }
                   className={`
@@ -156,7 +156,7 @@ const SetupAuction = () => {
                       !auction.startingBid ||
                       !auction.startDate ||
                       !auction.endDate ||
-                      !auction.tiers.length
+                      !auction.rewardTiers.length
                         ? 'disabled'
                         : ''
                     }

@@ -47,7 +47,7 @@ const CustomizeAuction = () => {
         ? 'filled'
         : 'empty',
   });
-  const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.tiers);
+  const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.rewardTiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
   const [editButtonClick, setEditButtonClick] = useState(false);
 
@@ -123,7 +123,7 @@ const CustomizeAuction = () => {
       newAuction.promoImage = domainAndBranding.promoImage;
       newAuction.backgroundImage = domainAndBranding.backgroundImage;
       newAuction.hasBlur = domainAndBranding.hasBlur;
-      newAuction.tiers = auction.tiers.map((tier) => {
+      newAuction.rewardTiers = auction.rewardTiers.map((tier) => {
         const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
         return { ...tier, ...rewardTier };
       });
@@ -191,7 +191,7 @@ const CustomizeAuction = () => {
         newAuction.promoImage = domainAndBranding.promoImage;
         newAuction.backgroundImage = domainAndBranding.backgroundImage;
         newAuction.hasBlur = domainAndBranding.hasBlur;
-        newAuction.tiers = auction.tiers.map((tier) => {
+        newAuction.rewardTiers = auction.rewardTiers.map((tier) => {
           const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
           return { ...tier, ...rewardTier };
         });
@@ -239,7 +239,7 @@ const CustomizeAuction = () => {
         newAuction.promoImage = domainAndBranding.promoImage;
         newAuction.backgroundImage = domainAndBranding.backgroundImage;
         newAuction.hasBlur = domainAndBranding.hasBlur;
-        newAuction.tiers = auction.tiers.map((tier) => {
+        newAuction.rewardTiers = auction.rewardTiers.map((tier) => {
           const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
           return { ...tier, ...rewardTier };
         });

@@ -10,7 +10,7 @@ import AppContext from '../../ContextAPI';
 
 const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   const { auction, bidtype } = useContext(AppContext);
-  const arrLength = auction.tiers.length;
+  const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
 
   const handleDescriptionChange = (event, tierId) => {
@@ -25,7 +25,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   };
 
   // useEffect(() => {
-  //   auction.tiers.forEach((tier) => {
+  //   auction.tierrewardTierss.forEach((tier) => {
   //     if (tier.description) {
   //       onChange((prevValues) =>
   //         prevValues.map((t) => {
@@ -73,7 +73,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
     <div className="reward__tiers">
       <h3>Reward Tiers</h3>
       {auction &&
-        auction.tiers.map((tier, i) => {
+        auction.rewardTiers.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
           const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
           const image = checkTier ? checkTier.tierImg : null;

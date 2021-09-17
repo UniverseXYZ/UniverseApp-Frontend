@@ -24,7 +24,7 @@ const Reward = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const tierId = location.state;
-  const tierById = auction.tiers.find((element) => element.id === tierId);
+  const tierById = auction.rewardTiers.find((element) => element.id === tierId);
 
   const handleEdit = (id) => {
     document.body.classList.add('no__scroll');
@@ -34,8 +34,8 @@ const Reward = () => {
     document.body.classList.add('no__scroll');
     setAuction({
       ...auction,
-      tiers: [
-        ...auction.tiers.filter((tier) => tier.id !== tierById.id),
+      rewardTiers: [
+        ...auction.rewardTiers.filter((tier) => tier.id !== tierById.id),
         { ...tierById, nfts: tierById.nfts.filter((item) => item.id !== id) },
       ],
     });

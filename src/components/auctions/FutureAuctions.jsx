@@ -329,8 +329,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             </div>
 
             <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
-              {futureAuction.tiers.length &&
-                futureAuction.tiers.map((tier) => (
+              {futureAuction.rewardTiers.length &&
+                futureAuction.rewardTiers.map((tier) => (
                   <div className="tier" key={uuid()}>
                     <div className="tier-header">
                       <h3>{tier.name}</h3>

@@ -101,7 +101,7 @@ const App = () => {
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
-  const [auction, setAuction] = useState({ tiers: [] });
+  const [auction, setAuction] = useState({ rewardTiers: [] });
   const [selectedNftForScramble, setSelectedNftForScramble] = useState({});
   const [bidtype, setBidtype] = useState('eth');
   const [options, setOptions] = useState(BidOptions);
