@@ -52,7 +52,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const moreFromThisCollection = collection
     ? myNFTs.filter((nft) => nft.collection?.name === collection.name && nft.id !== selectedNFT.id)
     : null;
-  const tabs = selectedNFT.type !== 'bundles' ? ['Properties'] : ['NFTs'];
+  // let tabs = selectedNFT.type !== 'bundles' ? ['Properties'] : ['NFTs'];
+  const tabs = selectedNFT.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
   const ref = useRef(null);
@@ -308,6 +309,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       setCount(4);
     }
   }, []);
+
+  useEffect(() => {
+    if (onNFT.id !== selectedNFT.id) {
+      setSelectedNFT({ ...onNFT });
+    }
+  }, [onNFT]);
 
   const handleSelectedNFTLikeClick = (id) => {
     const newNFTs = [...myNFTs];
