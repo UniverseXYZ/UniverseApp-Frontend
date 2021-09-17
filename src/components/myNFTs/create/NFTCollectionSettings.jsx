@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import React, { useState, useRef, useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Slider from 'react-slick';
@@ -51,7 +51,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const inputFile = useRef(null);
   const history = useHistory();
 
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState('');
   const [bgImage, setBgImage] = useState(null);
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
@@ -84,7 +84,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const validateFile = (file) => {
     setMintNowClick(false);
     if (!file) {
-      setCoverImage(null);
+      setCoverImage('');
       setErrors({
         ...errors,
         coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
@@ -96,7 +96,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       setCoverImage(file);
       setErrors({ ...errors, coverImage: '' });
     } else {
-      setCoverImage(null);
+      setCoverImage('');
       setErrors({
         ...errors,
         coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
@@ -393,6 +393,10 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
     setShowPrompt(true);
   }, [location.pathname]);
 
+  const imageSrc = useMemo(
+    () => (typeof coverImage === 'object' ? URL.createObjectURL(coverImage) : coverImage),
+    [coverImage]
+  );
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <RouterPrompt
@@ -458,17 +462,11 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
               </div>
             ) : (
               <div className="image--selected">
-                <img
-                  className="cover"
-                  src={
-                    typeof coverImage === 'object' ? URL.createObjectURL(coverImage) : coverImage
-                  }
-                  alt="Collection cover"
-                />
+                <img className="cover" src={imageSrc} alt="Collection cover" />
                 <div
                   className="remove--selected--image"
                   onClick={() => {
-                    setCoverImage(null);
+                    setCoverImage('');
                     setBorder(false);
                   }}
                   aria-hidden="true"

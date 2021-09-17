@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/cross.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
@@ -9,7 +9,7 @@ import { defaultColors } from '../../utils/helpers';
 
 const CreateCollectionPopup = ({ onClose }) => {
   const inputFile = useRef(null);
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState('');
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
@@ -130,7 +130,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       }
     }
   }, [errors]);
-
+  const imageName = useMemo(() => URL.createObjectURL(coverImage), [coverImage]);
   return (
     <div className="create__collection">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
@@ -138,7 +138,7 @@ const CreateCollectionPopup = ({ onClose }) => {
       <div className="collection__cover__image">
         <div className="cover__picture">
           {coverImage && typeof coverImage === 'object' ? (
-            <img className="cover__image" src={URL.createObjectURL(coverImage)} alt="Cover" />
+            <img className="cover__image" src={imageName} alt="Cover" />
           ) : (
             <img className="cloud__icon" src={cloudIcon} alt="Cloud Icon" />
           )}
@@ -147,7 +147,7 @@ const CreateCollectionPopup = ({ onClose }) => {
             hidden
             className="inp-disable"
             ref={inputFile}
-            onChange={(e) => e.target.files[0] && setCoverImage(e.target.files[0])}
+            onChange={(e) => e.target.files[0] && setCoverImage(e.target.files[0] || '')}
           />
         </div>
         <div className="cover__description">

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import Social from './Social';
@@ -86,7 +86,7 @@ const Main = ({
     }
   }, [loggedInArtist]);
 
-  const getProfileImage = () => {
+  const getProfileImage = useMemo(() => {
     const userUploadImageURL =
       accountImage && typeof accountImage === 'object' && URL.createObjectURL(accountImage);
     const alreadyUploadedImageURL = loggedInArtist && loggedInArtist.avatar;
@@ -101,9 +101,7 @@ const Main = ({
     }
 
     return image;
-  };
-
-  const profileImage = getProfileImage();
+  }, [accountImage]);
 
   return (
     <div className="account-grid-container container">
@@ -169,8 +167,8 @@ const Main = ({
             }
           >
             <img
-              className={profileImage === defaultImage ? 'default-img' : 'account-img'}
-              src={getProfileImage()}
+              className={getProfileImage === defaultImage ? 'default-img' : 'account-img'}
+              src={getProfileImage}
               alt="Avatar"
             />
           </div>

@@ -205,7 +205,7 @@ const SingleNFTSettings = () => {
     setSaveForLateClick(false);
     setMintNowClick(false);
     if (!file) {
-      setPreviewImage(null);
+      setPreviewImage('');
       setErrors({
         ...errors,
         previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
@@ -224,7 +224,7 @@ const SingleNFTSettings = () => {
       setPreviewImage(file);
       setErrors({ ...errors, previewImage: '' });
     } else {
-      setPreviewImage(null);
+      setPreviewImage('');
       setErrors({
         ...errors,
         previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
@@ -282,7 +282,7 @@ const SingleNFTSettings = () => {
     setName('');
     setDescription('');
     setEditions('');
-    setPreviewImage(null);
+    setPreviewImage('');
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
     setRoyaltyAddress([{ address: '', amount: '' }]);
   };
@@ -321,7 +321,7 @@ const SingleNFTSettings = () => {
     setName('');
     setDescription('');
     setEditions('');
-    setPreviewImage(null);
+    setPreviewImage('');
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
     setRoyaltyAddress([{ address: '', amount: '' }]);
   };
@@ -378,7 +378,7 @@ const SingleNFTSettings = () => {
     setName('');
     setDescription('');
     setEditions('');
-    setPreviewImage(null);
+    setPreviewImage('');
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
     setRoyaltyAddress([{ address: '', amount: '' }]);
   };
@@ -555,7 +555,7 @@ const SingleNFTSettings = () => {
                     src={closeIcon}
                     alt="Close"
                     onClick={() => {
-                      setPreviewImage(null);
+                      setPreviewImage('');
                       setBorder(false);
                     }}
                     aria-hidden="true"
