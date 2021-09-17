@@ -111,9 +111,7 @@ const BundleDutchAuction = (props) => {
           <div className="row--child">
             <div className="left--block">
               <h5 className="row--title">Price</h5>
-              <p className="row--description">
-                Will be on sale until you transfer this item or cancel it.
-              </p>
+              <p className="row--description">Set an initial price</p>
             </div>
             <div className="right--block">
               <Input
@@ -224,7 +222,7 @@ const BundleDutchAuction = (props) => {
             <div className="left--block">
               <h5 className="row--title">Schedule for a future time</h5>
               <p className="row--description">
-                You can schedle this listing to only be buyable at a future date.
+                You can schedule this listing to only be buyable at a future date.
               </p>
             </div>
             <div className="right--block right--switch">
@@ -250,7 +248,7 @@ const BundleDutchAuction = (props) => {
                   <div className="left--block">
                     <h5 className="row--title">Select time and date</h5>
                     <p className="row--description">
-                      You can schedle this listing to only be buyable at a future date.
+                      You can schedule this listing to only be buyable at a future date.
                     </p>
                   </div>
                   <div className="right--block">
