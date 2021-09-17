@@ -14,7 +14,7 @@ const Pagination = ({ data, perPage, setOffset, setApiPage, apiPage, setIsLastPa
     setMyUniverseNFTsActiverPage(item.selected);
     // handle last page
     if (item.selected === pageCount - 1) {
-      setApiPage(apiPage + 1);
+      // setApiPage(apiPage + 1);
       setIsLastPage(true);
     }
   };

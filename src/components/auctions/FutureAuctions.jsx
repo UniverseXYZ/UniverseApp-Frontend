@@ -18,7 +18,7 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import Input from '../input/Input.jsx';
 import MintNftsPopup from '../popups/MintNftsPopup.jsx';
 import MintCongratsPopup from '../popups/MintCongratsPopup.jsx';
-import Pagination from '../pagination/Pagionation.jsx';
+import Pagination from '../pagination/SimplePaginations';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
