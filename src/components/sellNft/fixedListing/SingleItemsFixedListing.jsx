@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
-import Input from '../input/Input';
-import SelectPrice from '../input/SelectPrice';
-import Switch from '../ui-elements/Switch';
-import './styles/BundleSellForm.scss';
-import Button from '../button/Button';
-import AppContext from '../../ContextAPI';
+import Input from '../../input/Input';
+import SelectPrice from '../../input/SelectPrice';
+import Switch from '../../ui-elements/Switch';
+import './BundleFixedListing.scss';
+import Button from '../../button/Button';
+import AppContext from '../../../ContextAPI';
 
 const SingleItemsFixedListing = (props) => {
   const { sellNFTSingleFixedListingData, setSellNFTSingleFixedListingData } =

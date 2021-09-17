@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
-import Button from '../button/Button';
-import ethIcon from '../../assets/images/marketplace/eth-icon.svg';
-import daiIcon from '../../assets/images/dai_icon.svg';
-import usdcIcon from '../../assets/images/usdc_icon.svg';
-import bondIcon from '../../assets/images/bond_icon.svg';
-import snxIcon from '../../assets/images/snx.svg';
-import './styles/Summary.scss';
+import Button from '../../button/Button';
+import ethIcon from '../../../assets/images/marketplace/eth-icon.svg';
+import daiIcon from '../../../assets/images/dai_icon.svg';
+import usdcIcon from '../../../assets/images/usdc_icon.svg';
+import bondIcon from '../../../assets/images/bond_icon.svg';
+import snxIcon from '../../../assets/images/snx.svg';
+import './Summary.scss';
+import SellNFTCongratsPopup from '../../popups/SellNFTCongratsPopup';
 
 const mapPriceType = [
   { type: 'eth', icon: ethIcon },
@@ -46,14 +48,14 @@ const calculatePricePercent = (price, percent) => {
 };
 
 const getListedText = (data) => {
-  const { selectedMethod, settings } = data;
+  const { selectedItem, selectedMethod, settings } = data;
   const switchArray = settings.switch;
   const { priceType, startPrice } = settings;
-  if (selectedMethod === 'dutch' || selectedMethod === 'bundle') {
+  if (selectedMethod === 'dutch' || selectedMethod === 'fixedListing') {
     if (!switchArray?.length) {
       return (
         <p className="listed--paragraph">
-          Your item will be listed for
+          Your {selectedItem === 'single' ? 'item' : 'bundle'} will be listed for
           <img src={mapPriceType.find((elem) => elem.type === priceType).icon} alt="img" />
           <span className="price">{startPrice}</span>
         </p>
@@ -62,7 +64,7 @@ const getListedText = (data) => {
     if (switchArray?.includes('switchEndingPrice')) {
       return (
         <p className="listed--paragraph">
-          Your item will start at
+          Your {selectedItem === 'single' ? 'item' : 'bundle'} will start at
           <img src={mapPriceType.find((elem) => elem.type === priceType).icon} alt="img" />
           <span className="price">{startPrice}</span>
           <br />
@@ -70,27 +72,27 @@ const getListedText = (data) => {
           <img src={mapPriceType.find((elem) => elem.type === priceType).icon} alt="img" />
           <span className="price">{settings.endPrice}</span>
           on
-          <span className="date">{changeDateFormat(settings.date)}</span>
+          <span className="date">{changeDateFormat(settings.endingPriceDate)}</span>
         </p>
       );
     }
     if (switchArray?.includes('switchScheduleFutureTime')) {
       return (
         <p className="listed--paragraph">
-          Your item will be listed for
+          Your {selectedItem === 'single' ? 'item' : 'bundle'} will be listed for
           <img src={mapPriceType.find((elem) => elem.type === priceType).icon} alt="img" />
           <span className="price">{startPrice}</span>
           <br />
           Scheduled on
-          <span className="date">{changeDateFormat(settings.date)}</span>
+          <span className="date">{changeDateFormat(settings.scheduleDate)}</span>
         </p>
       );
     }
-  }
-  if (selectedMethod === 'english') {
+  } else {
     return (
       <p className="listed--paragraph">
-        Your item will be auctioned. The highest bidder will win on
+        Your {selectedItem === 'single' ? 'item' : 'bundle'} will be auctioned. The highest bidder
+        will win on
         <span className="date">{changeDateFormat(settings.date)}</span>
         as long as their bid is at least
         <img src={mapPriceType.find((elem) => elem.type === priceType).icon} alt="img" />
@@ -102,7 +104,6 @@ const getListedText = (data) => {
 };
 
 const Summary = (props) => {
-  console.log('aaaaaaaaaa', props);
   const history = useHistory();
   const [toUniverse] = useState(2.5);
   const [toCreator] = useState(10);
@@ -163,7 +164,15 @@ const Summary = (props) => {
         >
           Back
         </Button>
-        <Button className="light-button">Post your listing</Button>
+        <Popup
+          trigger={
+            <button type="button" className="light-button">
+              Post your listing
+            </button>
+          }
+        >
+          {(close) => <SellNFTCongratsPopup onClose={close} nftImage={nftImage} />}
+        </Popup>
       </div>
     </div>
   );

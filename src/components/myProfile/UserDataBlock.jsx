@@ -97,7 +97,6 @@ const UserDataBlock = (props) => {
               }}
             />
           </div>
-          {console.log(previewImage)}
         </div>
         <div className="report--profile--block">
           <div className="report--profile--child">

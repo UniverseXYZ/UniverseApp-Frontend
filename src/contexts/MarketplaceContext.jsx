@@ -27,6 +27,40 @@ const MarketplaceContextProvider = ({ children }) => {
     switch: [],
     buyerAddress: null,
   });
+  const [sellNFTSingleDutchAuctionData, setSellNFTSingleDutchAuctionData] = useState({
+    priceType: 'eth',
+    startPrice: null,
+    endPrice: null,
+    switch: [],
+    buyerAddress: null,
+    endingPriceDate: '',
+    scheduleDate: '',
+  });
+  const [sellNFTBundleDutchAuctionData, setSellNFTBundleDutchAuctionData] = useState({
+    priceType: 'eth',
+    startPrice: null,
+    endPrice: null,
+    switch: [],
+    buyerAddress: null,
+    endingPriceDate: '',
+    scheduleDate: '',
+    bundleName: null,
+    bundleDescription: null,
+  });
+  const [sellNFTSingleEnglishAuctionData, setSellNFTSingleEnglishAuctionData] = useState({
+    startPrice: null,
+    endPrice: null,
+    date: null,
+    priceType: 'eth',
+  });
+  const [sellNFTBundleEnglishAuctionData, setSellNFTBundleEnglishAuctionData] = useState({
+    startPrice: null,
+    endPrice: null,
+    date: null,
+    priceType: 'eth',
+    bundleName: null,
+    bundleDescription: null,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -50,6 +84,14 @@ const MarketplaceContextProvider = ({ children }) => {
         setSellNFTSingleFixedListingData,
         sellNFTBundleFixedListingData,
         setSellNFTBundleFixedListingData,
+        sellNFTSingleDutchAuctionData,
+        setSellNFTSingleDutchAuctionData,
+        sellNFTBundleDutchAuctionData,
+        setSellNFTBundleDutchAuctionData,
+        sellNFTSingleEnglishAuctionData,
+        setSellNFTSingleEnglishAuctionData,
+        sellNFTBundleEnglishAuctionData,
+        setSellNFTBundleEnglishAuctionData,
       }}
     >
       {children}
