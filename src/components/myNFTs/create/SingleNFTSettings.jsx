@@ -1,5 +1,5 @@
 /* eslint-disable no-debugger */
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
@@ -69,7 +69,7 @@ const SingleNFTSettings = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [editions, setEditions] = useState('');
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState('');
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
@@ -383,8 +383,12 @@ const SingleNFTSettings = () => {
     setRoyaltyAddress([{ address: '', amount: '' }]);
   };
 
-  const getPreviewImageSource = (p) =>
-    typeof p === 'string' ? p : URL.createObjectURL(previewImage);
+  const getPreviewImageSource = useMemo(() => {
+    if (typeof previewImage === 'string') {
+      return previewImage;
+    }
+    return URL.createObjectURL(previewImage);
+  }, [previewImage]);
 
   const previewVideoSource = typeof previewImage === 'string' && previewImage.endsWith('.mp4');
 
@@ -565,7 +569,7 @@ const SingleNFTSettings = () => {
                           onMouseOut={(event) => event.target.pause()}
                           onBlur={(event) => event.target.pause()}
                         >
-                          <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
+                          <source src={getPreviewImageSource} type="video/mp4" />
                           <track kind="captions" />
                           Your browser does not support the video tag.
                         </video>
@@ -578,7 +582,7 @@ const SingleNFTSettings = () => {
                         !previewVideoSource && (
                           <img
                             className="preview-image"
-                            src={getPreviewImageSource(previewImage)}
+                            src={getPreviewImageSource}
                             alt="Preview"
                           />
                         )}
@@ -589,7 +593,7 @@ const SingleNFTSettings = () => {
                           onMouseOut={(event) => event.target.pause()}
                           onBlur={(event) => event.target.pause()}
                         >
-                          <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
+                          <source src={getPreviewImageSource} type="video/mp4" />
                           <track kind="captions" />
                           Your browser does not support the video tag.
                         </video>
