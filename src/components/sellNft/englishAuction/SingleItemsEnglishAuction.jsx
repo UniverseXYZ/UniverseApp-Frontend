@@ -114,7 +114,7 @@ const SingleItemsEnglishAuction = (props) => {
                 Reserve price
                 <img src={infoIcon} alt="img" />
               </h5>
-              <p className="row--description">Set a minimum bid to start an auction</p>
+              <p className="row--description">Set a reserve price for your NFT</p>
             </div>
             <div className="right--block">
               <Input
