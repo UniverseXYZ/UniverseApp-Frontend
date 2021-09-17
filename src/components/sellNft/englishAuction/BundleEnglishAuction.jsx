@@ -47,7 +47,7 @@ const BundleEnglishAuction = (props) => {
 
   return (
     <div className="english--auction--settings--form">
-      <h3 className="form--title">Single item - English auction</h3>
+      <h3 className="form--title">Bundle - English auction</h3>
       <div className="form--block--parent">
         {/* bundle name */}
         <div className="row row--bundle--name">
