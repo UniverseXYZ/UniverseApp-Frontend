@@ -27,7 +27,7 @@ import universeIcon from '../../assets/images/universe-img.svg';
 const NFTCard = ({ nft }) => {
   const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
   const history = useHistory();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef();
@@ -107,12 +107,6 @@ const NFTCard = ({ nft }) => {
   const unhideNFT = (id) => {
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {

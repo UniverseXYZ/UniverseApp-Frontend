@@ -29,7 +29,6 @@ const Main = ({
   cancelChanges,
   fetchedUserData,
 }) => {
-  console.log(fetchedUserData);
   const disabled =
     fetchedUserData.accountName === accountName &&
     fetchedUserData.accountPage === accountPage &&

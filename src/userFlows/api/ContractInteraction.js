@@ -1,7 +1,6 @@
 /* eslint-disable no-debugger */
 /* eslint-disable consistent-return */
 import { getBatchMintingData, resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
-import { createAuction } from '../../utils/api/auctions';
 
 /**
  * @param {Object} data
