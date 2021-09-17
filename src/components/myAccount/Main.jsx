@@ -29,12 +29,14 @@ const Main = ({
   cancelChanges,
   fetchedUserData,
 }) => {
+  console.log(fetchedUserData);
   const disabled =
     fetchedUserData.accountName === accountName &&
     fetchedUserData.accountPage === accountPage &&
     fetchedUserData.about === about &&
     fetchedUserData.twitterLink === twitterLink &&
-    fetchedUserData.instagramLink === instagramLink;
+    fetchedUserData.instagramLink === instagramLink &&
+    fetchedUserData.accountImage === accountImage;
 
   const { loggedInArtist } = useContext(AppContext);
   const [hideIcon, setHideIcon] = useState(false);
@@ -46,7 +48,7 @@ const Main = ({
 
   const validateFile = (file) => {
     if (!file) {
-      setAccountImage(null);
+      // setAccountImage(null);
       setErrors({
         previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
       });
@@ -57,7 +59,7 @@ const Main = ({
       setAccountImage(file);
       setErrors({ ...errors, previewImage: '' });
     } else {
-      setAccountImage(null);
+      // setAccountImage(null);
       setErrors({
         previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
       });
@@ -105,60 +107,6 @@ const Main = ({
 
   return (
     <div className="account-grid-container container">
-      {/* {nameEditing ? (
-          <div className="account-grid-name">
-            <div className="account-picture">
-              <div className="account-image">
-                {accountImage && (
-                  <img
-                    className="account-img"
-                    src={
-                      typeof accountImage === 'object'
-                        ? URL.createObjectURL(accountImage)
-                        : accountImage
-                    }
-                    alt="Avatar"
-                  />
-                )}
-                {!accountImage && loggedInArtist.avatar && (
-                  <img
-                    className="account-img"
-                    src={
-                      typeof loggedInArtist.avatar === 'object'
-                        ? URL.createObjectURL(loggedInArtist.avatar)
-                        : loggedInArtist.avatar
-                    }
-                    alt="Avatar"
-                  />
-                )}
-                {!accountImage && !loggedInArtist.avatar && (
-                  <img className="default-img" src={defaultImage} alt="Avatar" />
-                )}
-              </div>
-            </div>
-            <div className="account-grid-name-edit">
-              <div className="account-name">
-                {loggedInArtist.name ? <h2>{loggedInArtist.name}</h2> : <h2>Your Name</h2>}
-                {loggedInArtist.universePageAddress ? (
-                  <div className="account-link">
-                    <p className="link">universe.xyz/</p>
-                    <p className="link">{loggedInArtist.universePageAddress}</p>
-                  </div>
-                ) : (
-                  <div className="account-link">
-                    <p className="link">universe.xyz/</p>
-                    <p className="default-address">youraddress</p>
-                  </div>
-                )}
-              </div>
-              <Button className="light-border-button" onClick={() => setNameEditing(false)}>
-                <span>Edit</span>
-                <img src={pencilIcon} alt="Edit Icon" />
-              </Button>
-            </div>
-          </div>
-        ) : ( */}
-      {/* <Animated animationIn="zoomIn"> */}
       <div className="account-grid-name1">
         <div className="account-picture">
           <div
@@ -296,31 +244,14 @@ const Main = ({
                 </p>
               </div>
             )}
-          {(editProfileButtonClick &&
-            (!accountImage ||
-              !accountName ||
-              accountPage === 'universe.xyz/' ||
-              accountPage === 'universe.xyz/your-address' ||
-              !about)) ||
-          disabled ? (
-            <div className="account-display-buttons">
-              <Button className="light-button" disabled onClick={() => saveChanges()}>
-                Save changes
-              </Button>
-              <Button className="light-border-button" onClick={() => cancelChanges()}>
-                Cancel
-              </Button>
-            </div>
-          ) : (
-            <div className="account-display-buttons">
-              <Button className="light-button" onClick={() => saveChanges()}>
-                Save changes
-              </Button>
-              <Button className="light-border-button" onClick={() => cancelChanges()}>
-                Cancel
-              </Button>
-            </div>
-          )}
+          <div className="account-display-buttons">
+            <Button className="light-button" disabled={disabled} onClick={() => saveChanges()}>
+              Save changes
+            </Button>
+            <Button className="light-border-button" onClick={() => cancelChanges()}>
+              Cancel
+            </Button>
+          </div>
         </div>
       </div>
     </div>
