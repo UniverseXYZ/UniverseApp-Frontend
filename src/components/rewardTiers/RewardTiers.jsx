@@ -158,9 +158,9 @@ const RewardTiers = () => {
                             </>
                           )}
                         </div>
-                        <span className="ed-count">{`x${nft.tokenIds.length}`}</span>
+                        <span className="ed-count">{`x${nft?.tokenIds?.length || 1}`}</span>
                       </div>
-                      {nft.tokenIds.length > 1 && (
+                      {nft?.tokenIds?.length > 1 && (
                         <>
                           <div className="rev-reward__box__highlight__one" />
                           <div className="rev-reward__box__highlight__two" />
