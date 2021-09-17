@@ -18,7 +18,7 @@ const NFTs = ({ data }) => {
             className="marketplace--nft--box"
             key={uuid()}
             aria-hidden="true"
-            // onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft: nftData })}
+            // onClick={() => history.push(`/nft/${nft.id}`, { nft: nftData })}
           >
             <div className="image--box">
               {nft.type === 'video/mp4' && (

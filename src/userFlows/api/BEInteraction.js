@@ -65,7 +65,7 @@ export const generateTokenURIs = async ({ nfts }) => {
         name: nft.name,
         description: nft.description,
         editions: nft.numberOfEditions,
-        propertiesParsed: nft.properties,
+        propertiesParsed: nft.propertiesParsed,
         royaltiesParsed: nft.royalties,
       })
     )

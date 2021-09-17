@@ -730,7 +730,7 @@ const App = () => {
         <Route exact path="/lobsters/:id">
           <LobsterInfoPage />
         </Route>
-        <Route exact path="/marketplace/nft/:id">
+        <Route exact path="/nft/:id">
           <MarketplaceNFT />
         </Route>
         <Route exact path="/character-page">

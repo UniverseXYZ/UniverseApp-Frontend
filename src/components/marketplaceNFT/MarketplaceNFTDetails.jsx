@@ -40,6 +40,7 @@ import bundlesIcon from '../../assets/images/marketplace/bundles.svg';
 import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
 import likerTestImage from '../../assets/images/marketplace/users/user1.png';
+import universeIcon from '../../assets/images/universe-img.svg';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
@@ -51,10 +52,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const moreFromThisCollection = collection
     ? myNFTs.filter((nft) => nft.collection?.name === collection.name && nft.id !== selectedNFT.id)
     : null;
-  const tabs =
-    selectedNFT.type !== 'bundles'
-      ? ['Properties', 'Owners', 'Bids', 'Offers', 'History']
-      : ['NFTs', 'Bids', 'Offers', 'History'];
+  const tabs = selectedNFT.type !== 'bundles' ? ['Properties'] : ['NFTs'];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const history = useHistory();
   const ref = useRef(null);
@@ -953,9 +951,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div> */}
             </div>
           </div>
-          <div className="Marketplace--number">
+          {/* <div className="Marketplace--number">
             <p>Edition {`${selectedNFTIndex + 1} / ${selectedNFT.numberOfEditions}`}</p>
-          </div>
+          </div> */}
           <div className="Marketplace--collections">
             {/* <div className="Marketplace--creators">
               <img
@@ -971,7 +969,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <h6>{selectedNFT.creator.name}</h6>
               </div>
             </div> */}
-            {selectedNFT.collection && (
+            {selectedNFT.collection && selectedNFT.collection.coverUrl && (
               <div className="Marketplace--creators">
                 {typeof selectedNFT.collection.coverUrl === 'string' &&
                 selectedNFT.collection.coverUrl.startsWith('#') ? (
@@ -997,21 +995,22 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
             )}
-            {/* // TODO:: display owner data from my account */}
-            {/* <div className="Marketplace--creators">
-              <img
-                src={
-                  typeof selectedNFT.owner.avatar === 'string'
-                    ? selectedNFT.owner.avatar
-                    : URL.createObjectURL(selectedNFT.owner.avatar)
-                }
-                alt="icon2"
-              />
+            {selectedNFT.collection && !selectedNFT.collection.coverUrl && (
+              <div className="Marketplace--creators">
+                <img src={universeIcon} alt={selectedNFT.collection.name} />
+                <div className="creator--name">
+                  <p>Collection</p>
+                  <h6>{selectedNFT.collection.name}</h6>
+                </div>
+              </div>
+            )}
+            <div className="Marketplace--creators">
+              <img src={loggedInArtist.avatar} alt="icon2" />
               <div className="creator--name">
                 <p>Owner</p>
-                <h6>{selectedNFT.owner.name}</h6>
+                <h6>{loggedInArtist.name}</h6>
               </div>
-            </div> */}
+            </div>
           </div>
           <div className="Marketplace--text">
             <p>
@@ -1041,7 +1040,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           <div>
             {selectedNFT.type !== 'bundles' ? (
               <>
-                {selectedTabIndex === 0 && <Properties />}
+                {selectedTabIndex === 0 && selectedNFT.properties !== null && (
+                  <Properties properties={selectedNFT.properties} />
+                )}
                 {selectedTabIndex === 1 && <Owners />}
                 {selectedTabIndex === 2 && <Bids />}
                 {selectedTabIndex === 3 && <Offers />}
@@ -1056,7 +1057,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </>
             )}
           </div>
-          {selectedNFT.view === 'user' ? (
+          {/* {selectedNFT.view === 'user' ? (
             <BuyNFTSection
               highestBid={highestBid}
               firstButtonText="Place a bid"
@@ -1071,7 +1072,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 <p>This NFT is on your wallet</p>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       {collection && moreFromThisCollection.length && (
