@@ -12,7 +12,6 @@
         margin-bottom: 40px;
     }
     .form--block--parent {
-        // min-height: 475px;
         width: 100%;
         background: rgba(0, 0, 0, 0.02);
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -22,6 +21,49 @@
         padding: 40px 50px;
         @include lg {
             padding: 35px 30px;
+        }
+        .row--bundle--name {
+            margin-bottom: 0 !important;
+            border-bottom: none !important;
+        }
+        .row--bundle--name, .row--bundle--description {
+            width: 100%;
+            .characters--used {
+                float: right;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 150%;
+                color: rgba(0, 0, 0, 0.4);
+                @include md {
+                    position: absolute;
+                    bottom: -20px;
+                    left: 0;
+                }
+            }
+            .left--block {
+                width: 100% !important;
+                @include md {
+                    position: relative;
+                }
+                .row--title {
+                    justify-content: space-between!important;
+                }
+                .intup-l {
+                    width: 100% !important;
+                    input {
+                        width: 100% !important;
+                        height: 50px;
+                        padding: 0 15px;
+                        font-family: $spaceGroteskFont;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 16px;
+                        line-height: 20px;
+                        color: $black;
+                    }
+                }
+            }
         }
         .row {
             padding-bottom: 30px;

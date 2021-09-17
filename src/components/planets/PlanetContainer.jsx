@@ -36,7 +36,6 @@ const PlanetContainer = (props) => {
     const legendaryDiv = document
       .getElementsByClassName('welcome--section')[0]
       .getBoundingClientRect();
-    console.log(legendaryDiv);
     window.scrollTo(0, legendaryDiv.height);
 
     // const element = document.getElementById('welcome_sec').getBoundingClientRect();

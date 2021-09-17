@@ -1,72 +1,79 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import Input from '../input/Input';
-import SelectPrice from '../input/SelectPrice';
-import EndDatePicker from '../calendar/EndDatePicker';
-import Button from '../button/Button';
-import infoIcon from '../../assets/images/icon.svg';
-import './styles/EnglishAuctionSettingsForm.scss';
+import Input from '../../input/Input';
+import SelectPrice from '../../input/SelectPrice';
+import EndDatePicker from '../../calendar/EndDatePicker';
+import Button from '../../button/Button';
+import infoIcon from '../../../assets/images/icon.svg';
+import './SingleItemsEnglishAuction.scss';
+import AppContext from '../../../ContextAPI';
 
-const validField = (minBid, reservePrice, setErrorMinBid, setErrorReservePrice) => {
-  if (minBid === '' || minBid?.[0] === '.' || !+minBid || +minBid <= 0) {
-    setErrorMinBid('Invalid price');
-    return false;
-  }
-  if (+minBid?.[0] === 0 && minBid?.[1] !== '.') {
-    setErrorMinBid('Invalid price');
-    return false;
-  }
-  setErrorMinBid(false);
-  if (!reservePrice?.length) {
-    setErrorReservePrice('Highest bid listings must have a reserve price.');
-    return false;
-  }
-  if (reservePrice === '' || reservePrice?.[0] === '.' || !+reservePrice || +reservePrice <= 0) {
-    setErrorReservePrice('Invalid price');
-    return false;
-  }
-  if (+reservePrice?.[0] === 0 && reservePrice?.[1] !== '.') {
-    setErrorReservePrice('Invalid price');
-    return false;
-  }
-  if (+reservePrice < 1 || +reservePrice <= +minBid) {
-    setErrorReservePrice(
-      'The reserve price must be greater than the start price. The reserve price must be greater than 1 ETH in value.'
-    );
-    return false;
-  }
-
-  setErrorReservePrice(false);
-  return true;
-};
-
-const EnglishAuctionSettingsForm = (props) => {
-  const { data, setData } = props;
+const SingleItemsEnglishAuction = (props) => {
+  const { sellNFTSingleEnglishAuctionData, setSellNFTSingleEnglishAuctionData } =
+    useContext(AppContext);
+  const { stepData, setStepData } = props;
   const history = useHistory();
   const [englishData, setEnglishData] = useState({
-    startPrice: window.englishData ? window.englishData.startPrice : null,
-    endPrice: window.englishData ? window.englishData.endPrice : null,
-    date: window.englishData ? window.englishData.date : null,
-    priceType: window.englishData ? window.englishData.priceType : 'eth',
+    startPrice: sellNFTSingleEnglishAuctionData.startPrice || null,
+    endPrice: sellNFTSingleEnglishAuctionData.endPrice || null,
+    date: sellNFTSingleEnglishAuctionData.date || null,
+    priceType: sellNFTSingleEnglishAuctionData.priceType || 'eth',
   });
   const [errorMinBid, setErrorMinBid] = useState(false);
   const [errorendPrice, setErrorendPrice] = useState(false);
-  useEffect(() => {
-    if (window.englishData) {
-      setEnglishData({ ...window.englishData });
-    }
-  }, []);
 
-  useEffect(() => {
-    window.englishData = { ...englishData };
-  }, [englishData]);
+  const validField = (minBid, reservePrice) => {
+    if (minBid === '' || minBid?.[0] === '.' || !+minBid || +minBid <= 0) {
+      setErrorMinBid('Invalid price');
+      return false;
+    }
+    if (+minBid?.[0] === 0 && minBid?.[1] !== '.') {
+      setErrorMinBid('Invalid price');
+      return false;
+    }
+    setErrorMinBid(false);
+    if (!reservePrice?.length) {
+      setErrorendPrice('Highest bid listings must have a reserve price.');
+      return false;
+    }
+    if (reservePrice === '' || reservePrice?.[0] === '.' || !+reservePrice || +reservePrice <= 0) {
+      setErrorendPrice('Invalid price');
+      return false;
+    }
+    if (+reservePrice?.[0] === 0 && reservePrice?.[1] !== '.') {
+      setErrorendPrice('Invalid price');
+      return false;
+    }
+    if (+reservePrice < 1 || +reservePrice <= +minBid) {
+      setErrorendPrice(
+        'The reserve price must be greater than the start price. The reserve price must be greater than 1 ETH in value.'
+      );
+      return false;
+    }
+
+    setErrorendPrice(false);
+    return true;
+  };
+
+  const clickContinue = () => {
+    if (
+      validField(englishData.startPrice, englishData.endPrice) &&
+      !!englishData.startPrice?.length &&
+      !!englishData.endPrice?.length &&
+      !!englishData.date?.length
+    ) {
+      setStepData({ ...stepData, settings: { ...englishData } });
+      setSellNFTSingleEnglishAuctionData(englishData);
+      history.push('/nft-marketplace/summary');
+    }
+  };
 
   return (
     <div className="english--auction--settings--form">
-      <h3 className="form--title">English auction settings</h3>
+      <h3 className="form--title">Single item - English auction</h3>
       <div className="form--block--parent">
-        {/* minimum bid */}
+        {/* Minimum bid */}
         <div className="row">
           <div className="row--child">
             <div className="left--block">
@@ -132,7 +139,7 @@ const EnglishAuctionSettingsForm = (props) => {
             </div>
           </div>
         </div>
-        {/*  */}
+        {/* Expiration date */}
         <div className="row last--row">
           <div className="row--child">
             <div className="left--block">
@@ -163,22 +170,10 @@ const EnglishAuctionSettingsForm = (props) => {
         </Button>
         <Button
           className="light-button"
-          onClick={() => {
-            if (
-              validField(
-                englishData.startPrice,
-                englishData.endPrice,
-                setErrorMinBid,
-                setErrorendPrice
-              ) &&
-              !!englishData.startPrice?.length &&
-              !!englishData.endPrice?.length &&
-              !!englishData.date?.length
-            ) {
-              setData({ ...data, settings: { ...englishData } });
-              history.push('/nft-marketplace/summary');
-            }
-          }}
+          disabled={
+            errorMinBid || errorendPrice || !englishData.startPrice || !englishData.endPrice
+          }
+          onClick={clickContinue}
         >
           Continue
         </Button>
@@ -187,12 +182,9 @@ const EnglishAuctionSettingsForm = (props) => {
   );
 };
 
-EnglishAuctionSettingsForm.propTypes = {
-  data: PropTypes.shape({
-    selectedMethod: PropTypes.string,
-    settings: PropTypes.shape({ startPrice: PropTypes.string }),
-  }).isRequired,
-  setData: PropTypes.func.isRequired,
+SingleItemsEnglishAuction.propTypes = {
+  stepData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setStepData: PropTypes.func.isRequired,
 };
 
-export default EnglishAuctionSettingsForm;
+export default SingleItemsEnglishAuction;

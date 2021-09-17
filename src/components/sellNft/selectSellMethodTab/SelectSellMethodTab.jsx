@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import Button from '../button/Button';
-import DutchAuctionIcon from '../../assets/images/sellNft/dutch-auction-method-icon.svg';
-import EnglishAuctionIcon from '../../assets/images/sellNft/english-auction-method-icon.svg';
-import FixedListingIcon from '../../assets/images/sellNft/fixed-listing-method-icon.svg';
-import nextIcon from '../../assets/images/arrow.svg';
-import './styles/SelectSellMethodTab.scss';
+import Button from '../../button/Button';
+import DutchAuctionIcon from '../../../assets/images/sellNft/dutch-auction-method-icon.svg';
+import EnglishAuctionIcon from '../../../assets/images/sellNft/english-auction-method-icon.svg';
+import FixedListingIcon from '../../../assets/images/sellNft/fixed-listing-method-icon.svg';
+import nextIcon from '../../../assets/images/arrow.svg';
+import './SelectSellMethodTab.scss';
 
 const SelectSellMethodTab = (props) => {
   const { onSelect, data } = props;
