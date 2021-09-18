@@ -333,26 +333,10 @@ export const getMyCollections = async () => {
     },
   };
 
-  const myCollectionsStream = await fetch(GET_MY_COLLECTIONS, requestOptions);
-  const reader = myCollectionsStream.body.getReader();
+  const request = await fetch(GET_MY_COLLECTIONS, requestOptions);
+  const result = await request.text().then((res) => JSON.parse(res));
 
-  const collectionsArray = [];
-
-  const read = async () => {
-    const { done, value } = await reader.read();
-
-    if (!done) {
-      const decoder = new TextDecoder();
-      const collectionsResult = value && (await JSON.parse(decoder.decode(value)));
-      if (collectionsResult) collectionsArray.push(...collectionsResult.collections);
-
-      await read();
-    }
-  };
-
-  await read();
-
-  return collectionsArray;
+  return result;
 };
 
 export const getCollectionData = async (id) => {

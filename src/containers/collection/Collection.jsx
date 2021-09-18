@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
+import { Contract } from 'ethers';
 import { useHistory, useLocation } from 'react-router-dom';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import AppContext from '../../ContextAPI';
@@ -20,7 +21,8 @@ import SearchFilters from '../../components/nft/SearchFilters.jsx';
 import { getCollectionData } from '../../utils/api/mintNFT';
 
 const Collection = () => {
-  const { setDarkMode, showModal, setShowModal, setSavedCollectionID } = useContext(AppContext);
+  const { setDarkMode, showModal, setShowModal, setSavedCollectionID, contracts, signer } =
+    useContext(AppContext);
   const location = useLocation();
   const collectionId = location.state ? location.state.collection.id : null;
   const [collectionNFTs, setCollectionNFTs] = useState([]);
@@ -31,11 +33,30 @@ const Collection = () => {
   const ref = useRef(null);
   const [collectionData, setCollectionData] = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [ownersCount, setOwnersCount] = useState(0);
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
     setShowModal(false);
   };
+
+  // TODO:: This code may be useful if we need any data from the collection contract
+  // const getCollectionOwnersInt = async (address, abi, txSigner) => {
+  //   const contract = new Contract(address, abi, txSigner);
+  //   const owners = await contract.totalSupply();
+  //   return owners.toNumber();
+  // };
+
+  // useEffect(async () => {
+  //   if (contracts && collectionData) {
+  //     const owners = await getCollectionOwnersInt(
+  //       collectionData.collection.address,
+  //       contracts.UniverseERC721Core.abi,
+  //       signer
+  //     );
+  //     setOwnersCount(owners);
+  //   }
+  // }, [contracts, collectionData]);
 
   useEffect(() => {
     const newFilteredNFTs = [];
@@ -75,6 +96,7 @@ const Collection = () => {
             selectedCollection={collectionData.collection}
             saved={location.state.saved}
             nftsCount={collectionNFTs.length}
+            ownersCount={ownersCount}
           />
 
           {showModal && <MintModal open={showModal} onClose={handleClose} />}

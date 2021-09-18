@@ -60,7 +60,7 @@ export const createContractInstancesFromAddresses = ({ nfts, helpers }) => {
   // if there is no address we need to use the Universe Contract
   nfts.forEach((nft) => {
     dataObject[nft.collectionId || 0] = nft.contractAddress
-      ? new Contract(nft.contractAddress, helpers.contracts.UniverseERC721Core.abi, helpers.signer)
+      ? new Contract(nft.contractAddress, helpers.contracts.UniverseERC721.abi, helpers.signer)
       : helpers.universeERC721CoreContract;
   });
 

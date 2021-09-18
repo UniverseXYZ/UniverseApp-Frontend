@@ -538,8 +538,8 @@ const App = () => {
       setMyNFTs(mintedNfts || []);
 
       // Fetch the minted NFTS for that address
-      const collectionsReturn = await getMyCollections();
-      setDeployedCollections(collectionsReturn || []);
+      const collectionsRequest = await getMyCollections();
+      setDeployedCollections(collectionsRequest.collections || []);
     } catch (err) {
       alert(
         'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'

@@ -302,9 +302,9 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       });
 
       // get the new collections and update the state
-      const collectionsReturn = await getMyCollections();
-      if (!collectionsReturn.message) {
-        setDeployedCollections(collectionsReturn);
+      const collectionsRequest = await getMyCollections();
+      if (!collectionsRequest.message) {
+        setDeployedCollections(collectionsRequest.collections);
       }
     }
 

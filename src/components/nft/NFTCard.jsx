@@ -160,7 +160,7 @@ const NFTCard = ({ nft }) => {
               src={
                 typeof loggedInArtist.avatar === 'string'
                   ? loggedInArtist.avatar
-                  : URL.createObjectURL(loggedInArtist.avatar)
+                  : loggedInArtist.avatar
               }
               alt={loggedInArtist.name}
             />

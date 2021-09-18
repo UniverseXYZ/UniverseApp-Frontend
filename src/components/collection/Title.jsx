@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import AppContext from '../../ContextAPI';
 import volumeIcon from '../../assets/images/volume-icon.svg';
 
-const Title = ({ selectedCollection, saved, nftsCount }) => {
+const Title = ({ selectedCollection, saved, nftsCount, ownersCount }) => {
   const NFTSCount = nftsCount >= 1000 ? `${nftsCount / 1000}K` : nftsCount;
   return (
     <div className="collection__info">
@@ -23,8 +23,12 @@ const Title = ({ selectedCollection, saved, nftsCount }) => {
           <span>items</span>
         </div>
         <div className="bordered">
-          <h1>354</h1>
-          <span>owners</span>
+          {ownersCount ? (
+            <>
+              <h1>{ownersCount}</h1>
+              <span>owners</span>
+            </>
+          ) : null}
         </div>
         {/* <div>
           <h1>
@@ -41,6 +45,11 @@ Title.propTypes = {
   selectedCollection: PropTypes.oneOfType([PropTypes.object]).isRequired,
   saved: PropTypes.bool.isRequired,
   nftsCount: PropTypes.bool.isRequired,
+  ownersCount: PropTypes.number,
+};
+
+Title.defaultProps = {
+  ownersCount: 0,
 };
 
 export default Title;
