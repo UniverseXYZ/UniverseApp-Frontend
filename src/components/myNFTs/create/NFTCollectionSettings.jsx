@@ -28,7 +28,7 @@ import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
 import { MintSingleCollectionFlow } from '../../../userFlows/MintSingleCollectionFlow';
 import { RouterPrompt } from '../../../utils/routerPrompt.js';
-import { editCollection, editCollectionImage } from '../../../utils/api/mintNFT';
+import { editCollection, editCollectionImage, getMyCollections } from '../../../utils/api/mintNFT';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const {
@@ -255,7 +255,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const onMintCollection = async () => {
     document.getElementById('loading-hidden-btn').click();
-    document.body.classList.add('no__scroll');
+    // document.body.classList.add('no__scroll');
 
     const mintingFlowContext = {
       universeERC721FactoryContract,
@@ -295,10 +295,17 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
         setDeployedCollections(deployedCollectionsCopy);
       }
     } else {
+      // Create the collection
       res = await MintSingleCollectionFlow({
         collection: collectionData,
         helpers: mintingFlowContext,
       });
+
+      // get the new collections and update the state
+      const collectionsReturn = await getMyCollections();
+      if (!collectionsReturn.message) {
+        setDeployedCollections(collectionsReturn);
+      }
     }
 
     document.getElementById('popup-root').remove();
@@ -400,9 +407,9 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <RouterPrompt
-        when={showPrompt}
+        when={showPrompt && savedCollectionID}
         onOK={() => true}
-        editing={!!(coverImage || collectionName || tokenName || description)}
+        editing={savedCollectionID}
       />
       <Popup
         trigger={
@@ -414,7 +421,12 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           />
         }
       >
-        {(close) => <LoadingPopup onClose={close} />}
+        {(close) => (
+          <LoadingPopup
+            text="The collection will appear, after the transaction finishes. Please wait..."
+            onClose={close}
+          />
+        )}
       </Popup>
       <Popup
         trigger={
@@ -425,6 +437,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
             style={{ display: 'none' }}
           />
         }
+        closeOnDocumentClick={false}
       >
         {(close) => (
           <CongratsPopup
