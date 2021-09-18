@@ -34,7 +34,9 @@ const Tabs = ({ items }) => (
                 <span>{tab.label}</span>
               </div>
             ) : (
-              tab.name
+              <>
+                {tab.name} {tab.length && `(${tab.length})`}
+              </>
             )}
           </li>
         ))}

@@ -50,6 +50,8 @@ const MyNFTs = () => {
     contracts,
     signer,
     address,
+    userLobsters,
+    userPolymorphs,
   } = useContext(AppContext);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = [
@@ -174,10 +176,9 @@ const MyNFTs = () => {
             ? deployedCollections.length
             : index === 2 && savedNfts.length > 0
             ? savedNfts.length
-            : index === 3 && UNIVERSE_NFTS.length > 0,
-        // TODO: Vik to check it
-        // ? UNIVERSE_NFTS.length
-        // : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0
+            : index === 3 && (userLobsters.length || userPolymorphs.length)
+            ? userLobsters.length + userPolymorphs.length
+            : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0,
         // ? myNFTs.filter((nft) => nft.hidden).length
         // : index === 5 && myNFTs.filter((nft) => nft.likers.length).length > 0
         // ? myNFTs.filter((nft) => nft.likers.length).length
