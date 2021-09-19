@@ -1,10 +1,11 @@
 import React, { useEffect, useContext, useState } from 'react';
 import AppContext from '../../ContextAPI';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import NFTCard from '../nft/NFTCard';
 import LoadMore from '../pagination/LoadMore';
 
 const HiddenNFTs = () => {
-  const { myNFTs, setMyNFTsSelectedTabIndex } = useContext(AppContext);
+  const { myNFTs, setMyNFTsSelectedTabIndex } = useMyNftsContext();
   const [quantity, setQuantity] = useState(8);
 
   useEffect(() => {

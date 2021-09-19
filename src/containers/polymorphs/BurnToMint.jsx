@@ -12,6 +12,7 @@ import BurnPolymorphBg from '../../assets/images/BurnPolymorphBg.png';
 import Section4 from '../../components/polymorphs/Section4';
 import data from '../../utils/fixtures/newPolymorphBaseSkins';
 import './BurnToMint.scss';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const marquee = () => (
   <p>
@@ -35,7 +36,7 @@ const marquee = () => (
 );
 
 const BurnToMint = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({

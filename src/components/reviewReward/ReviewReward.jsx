@@ -13,11 +13,12 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const Reward = () => {
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction } = useContext(AppContext);
+  const { auction, setAuction } = useAuctionContext();
   const [hideIcon, setHideIcon] = useState(false);
   const ref = useRef(null);
 

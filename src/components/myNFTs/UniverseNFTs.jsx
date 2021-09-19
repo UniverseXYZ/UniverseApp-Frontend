@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
 import uuid from 'react-uuid';
-import { useQuery } from '@apollo/client';
 import AppContext from '../../ContextAPI';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { LOBSTER_COLLECTION_NAME } from '../../utils/helpers/lobsters';
@@ -11,11 +10,12 @@ import { POLYMORPHS_COLLECTION_NAME } from '../../utils/helpers/polymorphs';
 import SimplePagination from '../pagination/SimplePaginations';
 import MyPolymorphsChart from './MyPolymorphsChart';
 import MyLobstersChart from './MyLobstersChart';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { usePolymorphContext } from '../../contexts/PolymorphContext';
+import { useLobsterContext } from '../../contexts/LobsterContext';
 
 const UniverseNFTs = () => {
   const {
-    userPolymorphs,
-    userLobsters,
     myUniversNFTsSearchPhrase,
     setMyUniversNFTsSearchPhrase,
     myUniverseNFTsperPage,
@@ -30,7 +30,10 @@ const UniverseNFTs = () => {
     allCharactersFilter,
     polymorphsFilter,
     lobstersFilter,
-  } = useContext(AppContext);
+  } = useMyNftsContext();
+
+  const { userPolymorphs } = usePolymorphContext();
+  const { userLobsters } = useLobsterContext();
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [displayItems, setDisplayItems] = useState([]);

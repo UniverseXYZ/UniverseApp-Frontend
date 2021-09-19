@@ -14,9 +14,12 @@ import deleteIcon from '../../../assets/images/delred-icon.svg';
 import delIcon from '../../../assets/images/red-delete.svg';
 import addIcon from '../../../assets/images/Add.svg';
 import testNFTImage from '../../../assets/images/marketplace/nfts/nft1.png';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
+import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 
 const NFTCollectible = (props) => {
-  const { savedNfts, setSavedNfts, loggedInArtist } = useContext(AppContext);
+  const { savedNfts, setSavedNfts } = useMyNftsContext();
+  const { loggedInArtist } = useAuthContext();
   const {
     setShowCollectible,
     collectionName,

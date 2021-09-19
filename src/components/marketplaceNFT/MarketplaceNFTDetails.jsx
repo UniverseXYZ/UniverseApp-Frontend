@@ -41,10 +41,13 @@ import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
 import likerTestImage from '../../assets/images/marketplace/users/user1.png';
 import universeIcon from '../../assets/images/universe-img.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [nfts, setNFTs] = useState(data);
-  const { loggedInArtist, myNFTs, setMyNFTs, deployedCollections } = useContext(AppContext);
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { loggedInArtist, deployedCollections } = useAuthContext();
   const [selectedNFT, setSelectedNFT] = useState(onNFT);
   const collection = selectedNFT.collection
     ? deployedCollections.filter((c) => c.name === selectedNFT.collection?.name)[0]

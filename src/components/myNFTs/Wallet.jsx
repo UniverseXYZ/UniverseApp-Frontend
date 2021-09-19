@@ -22,6 +22,9 @@ import NFTCard from '../nft/NFTCard';
 import LoadMore from '../pagination/LoadMore';
 import SearchFilters from '../nft/SearchFilters';
 import { isImage, isAudio, isVideo, getNftImage } from '../../utils/helpers/pureFunctions/nfts';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const Wallet = ({
   filteredNFTs,
@@ -35,7 +38,10 @@ const Wallet = ({
 }) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const { myNFTs, auction, setAuction, deployedCollections } = useContext(AppContext);
+  const { auction, setAuction } = useAuctionContext();
+  const { myNFTs } = useMyNftsContext();
+  const { deployedCollections } = useAuthContext();
+
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);

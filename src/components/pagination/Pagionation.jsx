@@ -4,9 +4,10 @@ import ReactPaginate from 'react-paginate';
 import AppContext from '../../ContextAPI';
 import leftArrow from '../../assets/images/left-arrow.svg';
 import rightArrow from '../../assets/images/right-arrow.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const Pagination = ({ data, perPage, setOffset, setApiPage, apiPage, setIsLastPage }) => {
-  const { myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage } = useContext(AppContext);
+  const { myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage } = useMyNftsContext();
   const [pageCount, setPageCount] = useState(0);
 
   const handlePageClick = (item) => {

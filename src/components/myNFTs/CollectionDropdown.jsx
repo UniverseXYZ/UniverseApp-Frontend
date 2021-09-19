@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import arrowDown from '../../assets/images/arrow-down.svg';
 import AppContext from '../../ContextAPI';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const CollectionDropdown = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const ref = useRef(null);
@@ -12,7 +13,7 @@ const CollectionDropdown = ({ isDropdownOpened, setIsDropdownOpened }) => {
     setCollectionFilter,
     setMyUniverseNFTsActiverPage,
     setMyUniverseNFTsOffset,
-  } = useContext(AppContext);
+  } = useMyNftsContext();
 
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {

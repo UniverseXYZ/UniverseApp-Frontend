@@ -5,9 +5,10 @@ import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 import MintCongratsPopup from './MintCongratsPopup.jsx';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const MintNftsPopup = ({ onClose, onAuctionId, handleMintCongratsPopupOpen }) => {
-  const { auction, setAuction, myAuctions, setMyAuctions } = useContext(AppContext);
+  const { auction, setAuction, myAuctions, setMyAuctions } = useAuctionContext();
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
 
   const handleMintClick = () => {

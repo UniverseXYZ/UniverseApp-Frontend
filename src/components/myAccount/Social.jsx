@@ -18,13 +18,9 @@ const Social = ({
   setInstagramLink,
   saveChanges,
   cancelChanges,
-}) => {
-  const { loggedInArtist } = useContext(AppContext);
-  // const [showSocial, setShowSocial] = useState(true);
-
-  return (
-    <div className="account-grid-social">
-      {/* <div className="social">
+}) => (
+  <div className="account-grid-social">
+    {/* <div className="social">
             <h5>Social</h5>
             <label className="switch">
               <input
@@ -35,7 +31,7 @@ const Social = ({
               <span className="slider round" />
             </label>
           </div> */}
-      {/* {socialEditing ? (
+    {/* {socialEditing ? (
             <div className="account-grid-social-edit">
               <div className="social-sites">
                 {!loggedInArtist.instagramLink ? (
@@ -71,34 +67,34 @@ const Social = ({
               </Button>
             </div>
           ) : ( */}
-      {/* <Animated animationIn="zoomIn"> */}
-      <div className="account-grid-social-editing">
-        <h3>
-          Social media <span>(optional)</span>
-        </h3>
-        <div className="instagram">
-          <h5>Instagram profile</h5>
-          <img alt="" src={instagramLogo} />
-          <Input
-            placeholder="Instagram handle"
-            className="inp"
-            hoverBoxShadowGradient
-            value={instagramLink}
-            onChange={(e) => setInstagramLink(e.target.value)}
-          />
-        </div>
-        <div className="twitter">
-          <h5>Twitter profile</h5>
-          <img alt="" src={twitterLogo} />
-          <Input
-            placeholder="Twitter handle"
-            className="inp"
-            hoverBoxShadowGradient
-            value={twitterLink}
-            onChange={(e) => setTwitterLink(e.target.value)}
-          />
-        </div>
-        {/* <div className="display__error">
+    {/* <Animated animationIn="zoomIn"> */}
+    <div className="account-grid-social-editing">
+      <h3>
+        Social media <span>(optional)</span>
+      </h3>
+      <div className="instagram">
+        <h5>Instagram profile</h5>
+        <img alt="" src={instagramLogo} />
+        <Input
+          placeholder="Instagram handle"
+          className="inp"
+          hoverBoxShadowGradient
+          value={instagramLink}
+          onChange={(e) => setInstagramLink(e.target.value)}
+        />
+      </div>
+      <div className="twitter">
+        <h5>Twitter profile</h5>
+        <img alt="" src={twitterLogo} />
+        <Input
+          placeholder="Twitter handle"
+          className="inp"
+          hoverBoxShadowGradient
+          value={twitterLink}
+          onChange={(e) => setTwitterLink(e.target.value)}
+        />
+      </div>
+      {/* <div className="display__error">
           <img alt="Error" src={errorIcon} />
           <p>
             Something went wrong. Please fix the errors in the field above and try again. The
@@ -114,12 +110,11 @@ const Social = ({
             Cancel
           </Button>
         </div> */}
-      </div>
-      {/* </Animated> */}
-      {/* )} */}
     </div>
-  );
-};
+    {/* </Animated> */}
+    {/* )} */}
+  </div>
+);
 
 Social.propTypes = {
   twitterLink: PropTypes.string,

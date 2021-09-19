@@ -5,9 +5,10 @@ import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import plusIcon from '../../assets/images/plus.svg';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const DeployedCollections = () => {
-  const { deployedCollections } = useContext(AppContext);
+  const { deployedCollections } = useAuthContext();
   const history = useHistory();
   const ref = useRef(null);
   const ref2 = useRef(null);

@@ -5,9 +5,10 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
 import backArrow from '../../assets/images/arrow.svg';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const AddTokenPopup = ({ setShowAddTokenPopup }) => {
-  const { setOptions } = useContext(AppContext);
+  const { setOptions } = useAuctionContext();
   const [token, setToken] = useState({
     value: '',
     name: '',

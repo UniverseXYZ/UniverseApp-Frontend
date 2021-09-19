@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png';
 import About from '../../components/polymorphs/About';
@@ -9,8 +8,12 @@ import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
-import { morphedPolymorphs } from '../../utils/graphql/queries';
+import { morphedPolymorphs, queryPolymorphsGraph } from '../../utils/graphql/polymorphQueries';
 import AppContext from '../../ContextAPI';
+import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const marquee = () => (
   <p>
@@ -34,12 +37,12 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
-  const { data } = useQuery(morphedPolymorphs);
-  const { ethPrice, polymorphsFilter, navigateToMyNFTsPage } = useContext(AppContext);
-
+  const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
+  const { polymorphsFilter, navigateToMyNFTsPage } = useMyNftsContext();
+  const { ethPrice } = useAuthContext();
   useLayoutEffect(() => {
     function handleResize() {
       if (+window.innerWidth <= 575) setMobile(true);

@@ -1,13 +1,9 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_POLYMORPHS_GRAPH_URL,
-  cache: new InMemoryCache(),
-});
+import { AuthContextProvider } from './contexts/AuthContext';
+import { ThemeContextProvider } from './contexts/ThemeContext';
 
 ReactDOM.render(
   <BrowserRouter
@@ -15,9 +11,11 @@ ReactDOM.render(
       /* Empty callback to block the default browser prompt */
     }}
   >
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <AuthContextProvider>
+      <ThemeContextProvider>
+        <App />
+      </ThemeContextProvider>
+    </AuthContextProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

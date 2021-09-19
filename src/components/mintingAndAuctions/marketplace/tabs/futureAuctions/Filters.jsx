@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import arrowDown from '../../../../../assets/images/arrow-down.svg';
 import AppContext from '../../../../../ContextAPI';
+import { handleClickOutside } from '../../../../../utils/helpers';
 import SearchField from '../../../../input/SearchField';
 
 const FutureAuctionsFilters = () => {
-  const { handleClickOutside } = useContext(AppContext);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Newest');
   const ref = useRef(null);

@@ -27,6 +27,11 @@ import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
 import LikedNFTs from './LikedNFTs';
 import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useLobsterContext } from '../../contexts/LobsterContext';
+import { usePolymorphContext } from '../../contexts/PolymorphContext';
 
 const MyNFTs = () => {
   const {
@@ -41,18 +46,18 @@ const MyNFTs = () => {
     myNFTs,
     setMyNFTs,
     selectedNft,
-    setDarkMode,
-    deployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
     collectionsIdAddressMapping,
-    universeERC721CoreContract,
-    contracts,
-    signer,
-    address,
-    userLobsters,
-    userPolymorphs,
-  } = useContext(AppContext);
+  } = useMyNftsContext();
+
+  const { userLobsters } = useLobsterContext();
+  const { userPolymorphs } = usePolymorphContext();
+
+  const { deployedCollections, universeERC721CoreContract, contracts, signer, address } =
+    useAuthContext();
+
+  const { setDarkMode } = useThemeContext();
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = [
     'Wallet',

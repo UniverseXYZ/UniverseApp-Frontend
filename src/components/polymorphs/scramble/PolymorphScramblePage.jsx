@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
 import Popup from 'reactjs-popup';
 import { utils } from 'ethers';
 import { useHistory, useParams } from 'react-router-dom';
@@ -22,15 +21,16 @@ import singleTraitScrambledIcon from '../../../assets/images/single-trait-scramb
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../../utils/helpers/format.js';
 import loadingBg from '../../../assets/images/mint-polymorph-loading-bg.png';
-import { polymorphOwner } from '../../../utils/graphql/queries';
+import { polymorphOwner, queryPolymorphsGraph } from '../../../utils/graphql/polymorphQueries';
 import { getScrambleStatus } from '../../../utils/helpers/polymorphs';
 import GeneParser from '../../../utils/helpers/GeneParser.js';
 import PolymorphMetadataLoading from '../../popups/PolymorphMetadataLoading';
+import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const PolymorphScramblePage = () => {
   const history = useHistory();
-  const { address } = useContext(AppContext);
-  const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
+  const { address } = useAuthContext();
   const [propertiesTabSelected, setPropertiesTabSelected] = useState(true);
   const [metadataTabSelected, setMetadataTabSelected] = useState(false);
   const [polymorphId, setPolymorphId] = useState(useParams().id);
@@ -43,7 +43,7 @@ const PolymorphScramblePage = () => {
   const [ownerCopied, setOwnerCopied] = useState(false);
   const [morphSingleGenePrise, setMorphSingleGenePrice] = useState('');
   const [scrambled, setScrambled] = useState('none');
-  const { data } = useQuery(polymorphOwner(useParams().id));
+  const { data } = useGraphQueryHook(queryPolymorphsGraph(polymorphOwner(useParams().id)));
   const [traitsMap, setTraitsMap] = useState({});
   const [showLoading, setShowLoading] = useState(false);
   const [showMetadataLoading, setShowMetadataLoading] = useState(false);

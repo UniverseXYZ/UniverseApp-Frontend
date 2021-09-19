@@ -20,6 +20,8 @@ import SelectToken from '../popups/SelectTokenPopup.jsx';
 import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const AuctionSettings = () => {
   // const d = new Date();
@@ -41,16 +43,9 @@ const AuctionSettings = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  const {
-    auction,
-    setAuction,
-    myAuctions,
-    setMyAuctions,
-    bidtype,
-    setBidtype,
-    options,
-    setAuctionSetupState,
-  } = useContext(AppContext);
+  const { auction, setAuction, bidtype, setBidtype, options, setAuctionSetupState } =
+    useAuctionContext();
+
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [hideIcon2, setHideIcon2] = useState(false);

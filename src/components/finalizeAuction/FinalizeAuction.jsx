@@ -18,17 +18,14 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import LeavePopup from '../popups/LeavePopup';
 import AppContext from '../../ContextAPI';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const FinalizeAuction = () => {
   const history = useHistory();
-  const {
-    auction,
-    myAuctions,
-    setMyAuctions,
-    loggedInArtist,
-    deployedCollections,
-    setDeployedCollections,
-  } = useContext(AppContext);
+  const { auction, myAuctions, setMyAuctions } = useAuctionContext();
+  const { deployedCollections, setDeployedCollections } = useAuthContext();
+
   const [proceed, setProceed] = useState(false);
   const [approvals, setApprovals] = useState(1);
   const [loadingApproval, setLoadingApproval] = useState(undefined);

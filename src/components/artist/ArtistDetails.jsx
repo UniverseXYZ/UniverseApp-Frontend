@@ -10,9 +10,12 @@ import pencilIcon from '../../assets/images/edit.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const ArtistDetails = ({ onArtist }) => {
-  const { loggedInArtist, setEditProfileButtonClick } = useContext(AppContext);
+  const { setEditProfileButtonClick } = useAuctionContext();
+  const { loggedInArtist } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const history = useHistory();

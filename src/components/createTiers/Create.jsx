@@ -10,6 +10,7 @@ import arrow from '../../assets/images/arrow.svg';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 // import UniverseNFTs from '../myNFTs/UniverseNFTs';
 
 const Create = () => {
@@ -17,7 +18,7 @@ const Create = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
-  const { auction, setAuction, bidtype, setBidtype, options } = useContext(AppContext);
+  const { auction, setAuction, bidtype, setBidtype, options } = useAuctionContext();
   const [minBid, setMinBId] = useState(false);
   const [minBidValue, setMinBidValue] = useState('');
   const bid = options.find((element) => element.value === bidtype);

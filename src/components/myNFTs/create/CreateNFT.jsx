@@ -10,11 +10,14 @@ import SelectType from './SelectType';
 import SingleNFTSettings from './SingleNFTSettings';
 import NFTCollectionSettings from './NFTCollectionSettings';
 import AppContext from '../../../ContextAPI';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const CreateNFT = () => {
   const history = useHistory();
   const location = useLocation();
-  const { savedNFTsID, savedCollectionID, deployedCollections } = useContext(AppContext);
+  const { savedNFTsID, savedCollectionID } = useMyNftsContext();
+  const { deployedCollections } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);

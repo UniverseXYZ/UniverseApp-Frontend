@@ -4,10 +4,13 @@ import { useHistory } from 'react-router-dom';
 import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
 import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 import AppContext from '../../../ContextAPI';
+import { useLobsterContext } from '../../../contexts/LobsterContext';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
 const HeroSection = React.forwardRef((props, ref) => {
   const history = useHistory();
-  const { navigateToMyNFTsPage, lobstersFilter } = useContext(AppContext);
+  const { lobstersFilter } = useLobsterContext();
+  const { navigateToMyNFTsPage } = useMyNftsContext();
 
   return (
     <div className="lobby--lobsters--hero--section">

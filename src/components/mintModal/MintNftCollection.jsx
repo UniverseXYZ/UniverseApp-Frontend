@@ -17,18 +17,14 @@ import removeIcon from '../../assets/images/remove.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const MintNftCollection = ({ onClick }) => {
-  const {
-    setShowModal,
-    savedCollections,
-    savedNfts,
-    savedCollectionID,
-    myNFTs,
-    setMyNFTs,
-    deployedCollections,
-    setDeployedCollections,
-  } = useContext(AppContext);
+  const { setShowModal, savedCollections, savedNfts, savedCollectionID, myNFTs, setMyNFTs } =
+    useMyNftsContext();
+
+  const { deployedCollections, setDeployedCollections } = useAuthContext();
 
   const [collectionNFTs, setCollectionNFTs] = useState([]);
   const [collectionNFTsID, setCollectionNFTsID] = useState(null);

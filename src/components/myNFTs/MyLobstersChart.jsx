@@ -10,11 +10,15 @@ import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer'
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import LobsterRarityList from '../rarityCharts/list/LobsterRarityList';
 import CollectionDropdown from './CollectionDropdown';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useLobsterContext } from '../../contexts/LobsterContext';
 
 const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
-  const { userLobsters } = useContext(AppContext);
+  const { userLobsters } = useLobsterContext();
+  const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
+  const { setDarkMode } = useThemeContext();
 
-  const { setDarkMode, setMyUniverseNFTsActiverPage } = useContext(AppContext);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
   const {

@@ -19,10 +19,12 @@ import bubbleIcon from '../../assets/images/text-bubble.png';
 import plusIcon from '../../assets/images/plus.svg';
 import SearchFilters from '../../components/nft/SearchFilters.jsx';
 import { getCollectionData } from '../../utils/api/mintNFT';
+import { useThemeContext } from '../../contexts/ThemeContext.jsx';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 
 const Collection = () => {
-  const { setDarkMode, showModal, setShowModal, setSavedCollectionID, contracts, signer } =
-    useContext(AppContext);
+  const { showModal, setShowModal, setSavedCollectionID } = useMyNftsContext();
+  const { setDarkMode } = useThemeContext();
   const location = useLocation();
   const collectionId = location.state ? location.state.collection.id : null;
   const [collectionNFTs, setCollectionNFTs] = useState([]);

@@ -49,8 +49,10 @@ import Button from '../../../button/Button';
 // import '../../Header.scss';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors } from '../../../../utils/helpers';
+import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
 import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 
 const TabletView = (props) => {
   const {
@@ -67,8 +69,9 @@ const TabletView = (props) => {
     showSearch,
     setShowSearch,
   } = props;
-  const { handleClickOutside, yourBalance, usdEthBalance, resetConnectionState } =
-    useContext(AppContext);
+  const { yourBalance, usdEthBalance, resetConnectionState, loggedInArtist } = useAuthContext();
+
+  const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -76,7 +79,6 @@ const TabletView = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const ref = useRef(null);
   const history = useHistory();
-  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {

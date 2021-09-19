@@ -11,6 +11,7 @@ import backgroundTextLeft from '../../../assets/images/mint-polymorph-welcome-bg
 import backgroundTextRight from '../../../assets/images/mint-polymorph-welcome-bg-right.png';
 import './styles/BondingCurve.scss';
 import AppContext from '../../../ContextAPI';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
 const BondingCurve = (props) => {
   const {
@@ -33,7 +34,7 @@ const BondingCurve = (props) => {
     soldOut,
   } = props;
   const history = useHistory();
-  const { lobstersFilter, navigateToMyNFTsPage } = useContext(AppContext);
+  const { lobstersFilter, navigateToMyNFTsPage } = useMyNftsContext();
   return (
     <div className={`welcome--slider--bonding--curve ${soldOut ? 'sold--out' : ''}`}>
       {blur && <img src={backgroundTextLeft} alt="img" className="left--blur" />}

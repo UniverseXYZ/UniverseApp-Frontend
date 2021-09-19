@@ -10,17 +10,14 @@ import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
 import PastAuctions from './PastAuctions.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const MyAuction = () => {
-  const {
-    myAuctions,
-    setMyAuctions,
-    auction,
-    setAuction,
-    loggedInArtist,
-    selectedTabIndex,
-    setSelectedTabIndex,
-  } = useContext(AppContext);
+  const { myAuctions, setMyAuctions, auction, setAuction, selectedTabIndex, setSelectedTabIndex } =
+    useAuctionContext();
+  const { loggedInArtist } = useAuthContext();
+
   const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
   const [showButton, setShowButton] = useState(true);
   const history = useHistory();

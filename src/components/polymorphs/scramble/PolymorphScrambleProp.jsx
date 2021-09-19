@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
-import { traitRarity } from '../../../utils/graphql/queries';
+import { queryPolymorphsGraph, traitRarity } from '../../../utils/graphql/polymorphQueries';
 import './styles/PolymorphScrambleProp.scss';
+import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
 
 const PolymorphScrambleProp = ({ data }) => {
-  const { data: characterRarityData, loading } = useQuery(traitRarity(data.chance));
+  const { data: characterRarityData, loading } = useGraphQueryHook(
+    queryPolymorphsGraph(traitRarity(data.chance))
+  );
 
   let rarity = '';
   if (characterRarityData?.traits?.length) {

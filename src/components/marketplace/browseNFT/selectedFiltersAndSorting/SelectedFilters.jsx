@@ -57,7 +57,6 @@ const SelectedFilters = ({
   setSavedCreators,
 }) => {
   const [showClearALL, setShowClearALL] = useState(false);
-  // const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
 
   const handleClearAll = () => {
     const newSaleTypeButtons = [...saleTypeButtons];

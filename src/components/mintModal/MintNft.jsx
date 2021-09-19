@@ -2,9 +2,10 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import defaultImage from '../../assets/images/big-def-img.svg';
 import AppContext from '../../ContextAPI';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const MintNft = ({ onClick }) => {
-  const { setSavedNFTsID, setSavedCollectionID } = useContext(AppContext);
+  const { setSavedNFTsID, setSavedCollectionID } = useMyNftsContext();
 
   return (
     <div className="mintNft-div">

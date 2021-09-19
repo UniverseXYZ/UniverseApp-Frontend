@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
-export const morphedPolymorphs = gql`
+export const morphedPolymorphs = `
   query Polymorphs {
     tokenMorphedEntities(first: 100, orderBy: timestamp, orderDirection: desc) {
       id
@@ -13,7 +13,7 @@ export const morphedPolymorphs = gql`
   }
 `;
 
-export const transferPolymorphs = (ownerAddress) => gql`
+export const transferPolymorphs = (ownerAddress) => `
   query Polymorphs {
     transferEntities(first: 1000, where: { to: "${ownerAddress}" }) {
       from
@@ -24,7 +24,7 @@ export const transferPolymorphs = (ownerAddress) => gql`
   }
 `;
 
-export const polymorphOwner = (tokenId) => gql`
+export const polymorphOwner = (tokenId) => `
   query Polymorphs {
     transferEntities(where: { tokenId: "${tokenId}" }) {
       to
@@ -40,7 +40,7 @@ export const polymorphOwner = (tokenId) => gql`
   }
 `;
 
-export const polymorphScrambleHistory = (tokenId) => gql`
+export const polymorphScrambleHistory = (tokenId) => `
   query Polymorphs {
     tokenMorphedEntities(where: {tokenId: ${tokenId}, eventType_not: 2}, orderBy: timestamp, orderDirection: asc) {
       tokenId
@@ -52,7 +52,7 @@ export const polymorphScrambleHistory = (tokenId) => gql`
   }
 `;
 
-export const traitRarity = (searchedId) => gql`
+export const traitRarity = (searchedId) => `
   query Polymorphs {
     traits(where: {id: ${searchedId}}) {
       id
@@ -60,3 +60,18 @@ export const traitRarity = (searchedId) => gql`
     }
   }
 `;
+
+export const queryPolymorphsGraph = async (graphQuery) => {
+  const client = new ApolloClient({
+    uri: process.env.REACT_APP_POLYMORPHS_GRAPH_URL,
+    cache: new InMemoryCache(),
+  });
+
+  const graphData = await client.query({
+    query: gql`
+      ${graphQuery}
+    `,
+  });
+
+  return graphData.data;
+};

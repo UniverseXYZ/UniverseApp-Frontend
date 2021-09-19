@@ -32,6 +32,7 @@ import {
 } from '../../utils/helpers/pureFunctions/nfts';
 import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const AuctionReview = () => {
   const {
@@ -43,7 +44,7 @@ const AuctionReview = () => {
     setMyAuctions,
     selectedTabIndex,
     setSelectedTabIndex,
-  } = useContext(AppContext);
+  } = useAuctionContext();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);

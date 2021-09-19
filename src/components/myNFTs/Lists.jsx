@@ -11,6 +11,8 @@ import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
 import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import NFTPopup from '../popups/NFTPopup';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const Lists = ({
   data,
@@ -28,7 +30,8 @@ const Lists = ({
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef();
 
-  const { auction, myNFTs, setMyNFTs, myAuctions } = useContext(AppContext);
+  const { auction, myAuctions } = useAuctionContext();
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
   const [openEditions, setOpenEditions] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);

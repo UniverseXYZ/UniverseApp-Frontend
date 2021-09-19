@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import testCollectionAvatar from '../../../../assets/images/test-collection-avatar.svg';
 import AppContext from '../../../../ContextAPI';
+import { handleClickOutside } from '../../../../utils/helpers';
 import Input from '../../../input/Input.jsx';
 
 const NFTsFilters = () => {
-  const { handleClickOutside } = useContext(AppContext);
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const ref = useRef(null);

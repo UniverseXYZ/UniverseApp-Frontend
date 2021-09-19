@@ -14,9 +14,12 @@ import leftArrow from '../../assets/images/arrow.svg';
 import darkCopyIcon from '../../assets/images/copy.svg';
 import lightCopyIcon from '../../assets/images/copy2.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
-  const { loggedInArtist, myAuctions } = useContext(AppContext);
+  const { myAuctions } = useAuctionContext();
+  const { loggedInArtist } = useAuthContext();
   const getAllAuctionsForCurrentArtist = myAuctions.filter(
     (act) => act.artist.id === onAuction.artist.id
   );

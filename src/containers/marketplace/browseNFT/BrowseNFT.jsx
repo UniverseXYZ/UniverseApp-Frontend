@@ -11,9 +11,10 @@ import VerifiedOnly from '../../../components/marketplace/browseNFT/sidebarFiltr
 import NFTsList from '../../../components/marketplace/browseNFT/NFTsList';
 import goToTopIcon from '../../../assets/images/marketplace/back-to-top.svg';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../../utils/fixtures/BrowseNFTsDummyData';
+import { useThemeContext } from '../../../contexts/ThemeContext';
 
 const BrowseNFT = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [saleTypeButtons, setSaleTypeButtons] = useState([
     {

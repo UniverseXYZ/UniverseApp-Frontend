@@ -12,16 +12,16 @@ import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.j
 import ServerErrorPopup from '../../components/popups/ServerErrorPopup.jsx';
 
 import { saveProfileInfo, saveUserImage, saveUserLogo } from '../../utils/api/profile.js';
+import { useThemeContext } from '../../contexts/ThemeContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const MyAccount = () => {
-  const {
-    isWalletConnected,
-    setDarkMode,
-    loggedInArtist,
-    setLoggedInArtist,
-    editProfileButtonClick,
-    setEditProfileButtonClick,
-  } = useContext(AppContext);
+  const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
+
+  const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
+
+  const { setDarkMode } = useThemeContext();
   const history = useHistory();
   const location = useLocation();
   const [about, setAbout] = useState(loggedInArtist.about);

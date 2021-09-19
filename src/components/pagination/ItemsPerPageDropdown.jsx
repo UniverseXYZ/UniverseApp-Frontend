@@ -4,9 +4,9 @@ import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import AppContext from '../../ContextAPI';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
+import { handleClickOutside } from '../../utils/helpers';
 
 const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
-  const { handleClickOutside } = useContext(AppContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const itemsPerPage = [9, 18, 36];
   const ref = useRef(null);

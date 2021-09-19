@@ -3,6 +3,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import useConstant from 'use-constant';
 import { useAsyncAbortable } from 'react-async-hook';
 import AppContext from '../../ContextAPI';
+import { usePolymorphContext } from '../../contexts/PolymorphContext';
 
 const buildRarityUrl = (
   page = 1,
@@ -64,16 +65,17 @@ const buildRarityUrl = (
   if (filter) {
     endpoint = `${endpoint}&filter=${filterQuery}`;
   }
-
   if (ids) {
     endpoint = `${endpoint}&ids=${ids.join(',')}`;
+  } else {
+    endpoint = `${endpoint}&ids=1000000`;
   }
 
   return endpoint;
 };
 
 export const useSearchPolymorphs = () => {
-  const { userPolymorphs } = useContext(AppContext);
+  const { userPolymorphs } = usePolymorphContext();
 
   const perPage = 100;
   const [inputText, setInputText] = useState('');
