@@ -6,9 +6,8 @@ import AppContext from '../../ContextAPI';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import { handleClickOutside } from '../../utils/helpers';
 
-const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
+const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const itemsPerPage = [9, 18, 36];
   const ref = useRef(null);
 
   useEffect(() => {
@@ -58,6 +57,11 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage }) => {
 ItemsPerPageDropdown.propTypes = {
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
+  itemsPerPage: PropTypes.arrayOf(PropTypes.number),
+};
+
+ItemsPerPageDropdown.defaultProps = {
+  itemsPerPage: [9, 18, 36],
 };
 
 export default ItemsPerPageDropdown;

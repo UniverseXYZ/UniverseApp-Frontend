@@ -9,7 +9,7 @@ import filtersIcon from '../../assets/images/marketplace/filters.svg';
 import SelectedFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/SelectedFilters';
 import BrowseFilterPopup from '../popups/BrowseFiltersPopup';
 
-const SearchFilters = ({ data, setData }) => {
+const SearchFilters = ({ data, setData, setOffset }) => {
   const [searchValue, setSearchValue] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(null);
@@ -74,6 +74,7 @@ const SearchFilters = ({ data, setData }) => {
         (item) => selectedCollections.map((coll) => coll.name).indexOf(item.collection.name) >= 0
       );
     }
+    setOffset(0);
     setData(filteredData);
   }, [searchValue, selectedCollections]);
 
@@ -197,6 +198,7 @@ const SearchFilters = ({ data, setData }) => {
 SearchFilters.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setData: PropTypes.func.isRequired,
+  setOffset: PropTypes.func.isRequired,
 };
 
 export default SearchFilters;

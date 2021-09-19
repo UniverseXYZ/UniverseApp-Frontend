@@ -370,6 +370,11 @@
               opacity: 0.2;
             }
           }
+
+          .collection-name {
+            max-width: 115px;
+            overflow-wrap: break-word;      
+          }
         }
 
         .box--shadow--effect--block {

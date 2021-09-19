@@ -25,6 +25,7 @@ import { isImage, isAudio, isVideo, getNftImage } from '../../utils/helpers/pure
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import SimplePagination from '../pagination/SimplePaginations';
 
 const Wallet = ({
   filteredNFTs,
@@ -57,7 +58,10 @@ const Wallet = ({
   const [indexes, setIndexes] = useState([]);
   const [previewNFTs, setPreviewNFTs] = useState([]);
   const history = useHistory();
-  const [quantity, setQuantity] = useState(8);
+
+  useEffect(() => {
+    setOffset(0);
+  }, [perPage]);
 
   const saveIndexes = (index) => {
     const temp = [...indexes];
@@ -153,7 +157,6 @@ const Wallet = ({
     document.querySelector('.filter__by__collection_mobile').style.top = `${window.scrollY}px`;
     document.querySelector('.animate__filters__popup').style.display = 'block';
   };
-
   const handleContinue = (prevNFTs) => {
     if (!editMode) {
       setAuction({
@@ -414,7 +417,7 @@ const Wallet = ({
               </div>
             </>
           ) : (
-            <SearchFilters data={myNFTs} setData={setShownNFTs} />
+            <SearchFilters data={myNFTs} setData={setShownNFTs} setOffset={setOffset} />
           )}
           {shownNFTs.length ? (
             <>
@@ -431,19 +434,22 @@ const Wallet = ({
               ) : (
                 <div className="nfts__lists">
                   {shownNFTs
+                    .slice(offset, offset + perPage)
                     .filter((nft) => !nft.hidden)
-                    .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
+                    .map((nft) => (
+                      <NFTCard key={nft.id} nft={nft} />
+                    ))}
                 </div>
               )}
 
-              {shownNFTs.filter((nft) => !nft.hidden).length > quantity && (
-                <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
-              )}
-
-              {/* <div className="pagination__container">
-                <Pagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
-                <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-              </div> */}
+              <div className="pagination__container">
+                <SimplePagination data={shownNFTs} perPage={perPage} setOffset={setOffset} />
+                <ItemsPerPageDropdown
+                  perPage={perPage}
+                  setPerPage={setPerPage}
+                  itemsPerPage={[8, 16, 32]}
+                />
+              </div>
             </>
           ) : (
             <></>
