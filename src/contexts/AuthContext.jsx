@@ -96,7 +96,7 @@ const AuthContextProvider = ({ children }) => {
     );
 
     setWeb3Provider(provider);
-    setAddress(accounts[0]);
+    setAddress(accounts[0] || '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
     setIsWalletConnected(true);
@@ -115,7 +115,7 @@ const AuthContextProvider = ({ children }) => {
     }
 
     setWeb3Provider(null);
-    setAddress(null);
+    setAddress('');
     setSigner('');
     setYourBalance(0);
     setIsWalletConnected(false);
