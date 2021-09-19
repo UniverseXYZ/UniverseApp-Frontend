@@ -6,9 +6,10 @@ import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import Button from '../button/Button.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const PersonalLogo = ({ logo, setLogo }) => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
   const logoInput = useRef(null);
 
   return (

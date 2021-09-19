@@ -21,17 +21,15 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import createIcon from '../../assets/images/create.svg';
 import delIcon from '../../assets/images/del-icon.svg';
 import CreateCollectionPopup from '../popups/CreateCollectionPopup.jsx';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const MintSingleNft = ({ onClick }) => {
-  const {
-    savedNfts,
-    setSavedNfts,
-    setShowModal,
-    savedNFTsID,
-    myNFTs,
-    setMyNFTs,
-    deployedCollections,
-  } = useContext(AppContext);
+  const { savedNfts, setSavedNfts, setShowModal, savedNFTsID, myNFTs, setMyNFTs } =
+    useMyNftsContext();
+
+  const { deployedCollections } = useAuthContext();
+
   const [errors, setErrors] = useState({
     name: '',
     edition: '',

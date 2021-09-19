@@ -56,8 +56,10 @@ import img from '../../../../assets/images/search-gray.svg';
 import img2 from '../../../../assets/images/crossclose.svg';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors } from '../../../../utils/helpers';
+import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
 import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 
 const MobileView = (props) => {
   const {
@@ -76,8 +78,7 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { handleClickOutside, yourBalance, usdEthBalance, resetConnectionState } =
-    useContext(AppContext);
+  const { yourBalance, usdEthBalance, resetConnectionState } = useAuthContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -85,7 +86,8 @@ const MobileView = (props) => {
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
-  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
+  const { editProfileButtonClick } = useAuctionContext();
   const [showProducts, setShowProducts] = useState(false);
   const [showNFTDrops, setShowNFTDrops] = useState(false);
   const [showRarityCharts, setShowRarityCharts] = useState(false);

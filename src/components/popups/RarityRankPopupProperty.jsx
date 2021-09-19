@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
-import { traitRarity } from '../../utils/graphql/queries';
+import { queryPolymorphsGraph, traitRarity } from '../../utils/graphql/polymorphQueries';
 import RarityRankOrangeProperty from './RarityRankOrangeProperty';
 import RarityRankBlueProperty from './RarityRankBlueProperty';
 import RarityRankPinkOrangeProperty from './RarityRankPinkOrangeProperty';
 import RarityRankNoColorProperty from './RarityRankNoColorProperty';
 import RarityRankPinkProperty from './RarityRankPinkProperty';
+import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
 
 function RarityRankPopupProperty({
   mainMatchingAttributes,
@@ -16,7 +16,9 @@ function RarityRankPopupProperty({
   genesMap,
   matchingHands,
 }) {
-  const { data, loading } = useQuery(traitRarity(genesMap[propertyName.toUpperCase()]));
+  const { data, loading } = useGraphQueryHook(
+    queryPolymorphsGraph(traitRarity(genesMap[propertyName.toUpperCase()]))
+  );
 
   let chance = '';
   if (data?.traits?.length) {

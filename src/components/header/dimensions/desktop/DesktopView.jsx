@@ -32,6 +32,7 @@ import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
 import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const DesktopView = ({
   isWalletConnected,
@@ -50,8 +51,7 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const { loggedInArtist, yourBalance, usdEthBalance, resetConnectionState } =
-    useContext(AppContext);
+  const { loggedInArtist, yourBalance, usdEthBalance, resetConnectionState } = useAuthContext();
 
   return (
     <div className="desktop__nav">

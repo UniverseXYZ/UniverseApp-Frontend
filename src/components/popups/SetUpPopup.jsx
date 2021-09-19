@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const SetUpPopup = ({ onClose, onAuctionId }) => {
   const { auction, setAuction, myAuctions, setMyAuctions, options, setOptions } =
-    useContext(AppContext);
+    useAuctionContext();
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
 
   const handleTokenChange = (event) => {

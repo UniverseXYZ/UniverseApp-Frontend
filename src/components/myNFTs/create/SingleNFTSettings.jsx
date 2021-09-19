@@ -39,6 +39,8 @@ import {
 import { MintSingleNftFlow } from '../../../userFlows/MintSingleNftFlow';
 import SuccessPopup from '../../popups/SuccessPopup.jsx';
 import { RouterPrompt } from '../../../utils/routerPrompt';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const SingleNFTSettings = () => {
   const {
@@ -49,13 +51,12 @@ const SingleNFTSettings = () => {
     setSavedNFTsID,
     myNFTs,
     setMyNFTs,
-    deployedCollections,
-    universeERC721CoreContract,
-    address,
     collectionsIdAddressMapping,
-    contracts,
-    signer,
-  } = useContext(AppContext);
+  } = useMyNftsContext();
+
+  const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
+    useAuthContext();
+
   const [errors, setErrors] = useState({
     name: '',
     edition: '',

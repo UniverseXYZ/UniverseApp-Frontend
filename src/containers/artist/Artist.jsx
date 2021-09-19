@@ -6,10 +6,13 @@ import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import { PLACEHOLDER_ARTISTS } from '../../utils/fixtures/ArtistDummyData';
 import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const Artist = () => {
   const location = useLocation();
-  const { loggedInArtist, setDarkMode } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
+  const { setDarkMode } = useThemeContext();
   const artist = location.state
     ? location.state.id === loggedInArtist.id
       ? loggedInArtist

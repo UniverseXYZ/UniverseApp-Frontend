@@ -4,9 +4,10 @@ import closeIcon from '../../assets/images/cross.svg';
 import coloredSuccess from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const MintCongratsPopup = ({ onClose, onAuctionId }) => {
-  const { auction, setAuction, myAuctions, setMyAuctions } = useContext(AppContext);
+  const { auction, setAuction, myAuctions, setMyAuctions } = useAuctionContext();
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
 
   useEffect(

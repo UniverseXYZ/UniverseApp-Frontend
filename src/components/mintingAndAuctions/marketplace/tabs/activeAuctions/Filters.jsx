@@ -3,9 +3,9 @@ import arrowDown from '../../../../../assets/images/arrow-down.svg';
 import searchIcon from '../../../../../assets/images/search.svg';
 import Input from '../../../../input/Input';
 import AppContext from '../../../../../ContextAPI';
+import { handleClickOutside } from '../../../../../utils/helpers';
 
 const ActiveAuctionsFilters = () => {
-  const { handleClickOutside } = useContext(AppContext);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Newest');
   const [search, setSearch] = useState('');

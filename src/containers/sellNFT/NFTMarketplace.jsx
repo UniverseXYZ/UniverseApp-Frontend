@@ -16,6 +16,7 @@ import BundleSellFormContainer from '../../components/sellNftNew/BundleSellFormC
 import Summary from '../../components/sellNftNew/Summary';
 import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
 import './NFTMarketplace.scss';
+import { useMarketplaceContext } from '../../contexts/MarketplaceContext';
 
 const verificationSteps = (data) => {
   const keys = Object.keys(data);
@@ -36,7 +37,7 @@ const getContent = (type, data, setData) => {
 
 const NFTMarketplace = () => {
   const location = useLocation();
-  const { stepsData, setStepsData } = useContext(AppContext);
+  const { stepsData, setStepsData } = useMarketplaceContext();
 
   const headerLabels = [
     {

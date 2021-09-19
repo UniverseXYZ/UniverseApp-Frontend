@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import uuid from 'react-uuid';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import AppContext from '../../../../ContextAPI';
+import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 
 const SortingDropdowns = () => {
   const [showFirstDropdown, setShowFirstDropdown] = useState(false);
   const [showSecondDropdown, setShowSecondDropdown] = useState(false);
   const [selectedFirstDropdownIndex, setSelectedFirstDropdownIndex] = useState(0);
   const [selectedSecondDropdownIndex, setSelectedSecondDropdownIndex] = useState(0);
-  const { sortName, setSortName } = useContext(AppContext);
+  const { sortName, setSortName } = useMyNftsContext();
   const firstDropdownItems = ['All Items', 'Single Items', 'Bundles'];
   const secondDropdownItems = [
     'Sort by',

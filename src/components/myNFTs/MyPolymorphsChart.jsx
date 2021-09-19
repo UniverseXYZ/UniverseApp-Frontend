@@ -10,9 +10,13 @@ import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer'
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import RarityList from '../rarityCharts/list/RarityList';
 import CollectionDropdown from './CollectionDropdown';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
-  const { setDarkMode, setMyUniverseNFTsActiverPage } = useContext(AppContext);
+  const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
+  const { setDarkMode } = useThemeContext();
+
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
   const {

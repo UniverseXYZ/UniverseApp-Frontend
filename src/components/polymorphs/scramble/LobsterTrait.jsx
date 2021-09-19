@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
-import { traitRarity } from '../../../utils/graphql/queries';
 import './styles/PolymorphScrambleProp.scss';
 import { lobsterTraitRarity, queryLobstersGraph } from '../../../utils/graphql/lobsterQueries';
 

@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
 import AppContext from '../../ContextAPI';
 import { editCollectionBanner } from '../../utils/api/mintNFT';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const Cover = ({ selectedCollection }) => {
-  const { deployedCollections, setDeployedCollections } = useContext(AppContext);
+  const { deployedCollections, setDeployedCollections } = useAuthContext();
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection.bgImage);
   const [imageUploadError, setError] = useState('');

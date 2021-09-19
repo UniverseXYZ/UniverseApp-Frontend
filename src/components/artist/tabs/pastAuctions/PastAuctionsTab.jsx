@@ -7,9 +7,12 @@ import AppContext from '../../../../ContextAPI.js';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import PastAuctionsCard from '../../../auctionsCard/PastAuctionsCard';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const PastAuctionsTab = ({ onArtist }) => {
-  const { loggedInArtist, myAuctions } = useContext(AppContext);
+  const { myAuctions } = useAuctionContext();
+  const { loggedInArtist } = useAuthContext();
   const history = useHistory();
 
   const artistPastAuctions =

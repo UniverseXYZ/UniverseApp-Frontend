@@ -6,9 +6,10 @@ import MintNftCollection from './MintNftCollection.jsx';
 import MintSingleNft from './MintSingleNft.jsx';
 import PopupComponent from '../popups/Popup.jsx';
 import AppContext from '../../ContextAPI';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const MintModal = ({ open, onClose, ...restProps }) => {
-  const { activeView, setActiveView } = useContext(AppContext);
+  const { activeView, setActiveView } = useMyNftsContext();
 
   const handleNtfClick = (type) => {
     setActiveView(type);

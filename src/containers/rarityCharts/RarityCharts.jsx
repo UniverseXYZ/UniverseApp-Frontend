@@ -7,9 +7,12 @@ import './RarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import { categoriesArray } from './categories';
 import RarityList from '../../components/rarityCharts/list/RarityList';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const RarityCharts = () => {
-  const { setDarkMode, setMyUniverseNFTsActiverPage } = useContext(AppContext);
+  const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
+  const { setDarkMode } = useThemeContext();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
 

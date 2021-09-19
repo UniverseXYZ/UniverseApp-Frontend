@@ -5,9 +5,10 @@ import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import AppContext from '../../ContextAPI';
 import SearchField from '../input/SearchField';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const SelectTokenPopup = ({ onClose }) => {
-  const { options, setBidtype } = useContext(AppContext);
+  const { options, setBidtype } = useAuctionContext();
   const [showAddTokenPopup, setShowAddTokenPopup] = useState(false);
   const [optionsClone, setOptionsClone] = useState([...options]);
 

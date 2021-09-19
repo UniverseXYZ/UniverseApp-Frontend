@@ -3,9 +3,10 @@ import moment from 'moment';
 import ActiveAuctionsFilters from './Filters.jsx';
 import ActiveAuctionsCard from '../../../../auctionsCard/ActiveAuctionsCard.jsx';
 import AppContext from '../../../../../ContextAPI';
+import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
 
 const ActiveAuctionsTab = () => {
-  const { myAuctions } = useContext(AppContext);
+  const { myAuctions } = useAuctionContext();
 
   return (
     <div className="active__auctions__tab">

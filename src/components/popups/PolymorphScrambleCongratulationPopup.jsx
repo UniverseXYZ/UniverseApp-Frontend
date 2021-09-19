@@ -6,11 +6,11 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import AppContext from '../../ContextAPI';
 import person from '../../assets/images/randomise-person-images/person.png';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 
 const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, polymorph }) => {
-  // const { selectedNftForScramble, setSelectedNftForScramble } = useContext(AppContext);
   const history = useHistory();
-  const { polymorphsFilter, navigateToMyNFTsPage } = useContext(AppContext);
+  const { polymorphsFilter, navigateToMyNFTsPage } = useMyNftsContext();
 
   return (
     <div className="polymorph_popup">

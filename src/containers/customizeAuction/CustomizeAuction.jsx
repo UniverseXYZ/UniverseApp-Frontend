@@ -12,6 +12,8 @@ import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
 import CongratsLandingPagePopup from '../../components/popups/CongratsLandingPagePopup';
 import { RouterPrompt } from '../../utils/routerPrompt';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const CustomizeAuction = () => {
   const history = useHistory();
@@ -19,8 +21,6 @@ const CustomizeAuction = () => {
   const {
     auction,
     setAuction,
-    loggedInArtist,
-    setLoggedInArtist,
     myAuctions,
     setMyAuctions,
     activeAuctions,
@@ -29,7 +29,8 @@ const CustomizeAuction = () => {
     setFutureAuctions,
     editProfileButtonClick,
     setEditProfileButtonClick,
-  } = useContext(AppContext);
+  } = useAuctionContext();
+  const { loggedInArtist, setLoggedInArtist } = useAuthContext();
   const [customizeAuctionState, setCustomizeAuctionState] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({

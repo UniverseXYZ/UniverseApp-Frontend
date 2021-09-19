@@ -6,9 +6,10 @@ import NotFound from '../../components/notFound/NotFound.jsx';
 import MarketplaceNFTDetails from '../../components/marketplaceNFT/MarketplaceNFTDetails';
 import '../../components/marketplace/browseNFT/NFTsList.scss';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const MarketplaceNFT = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const location = useLocation();
   const selectedNFT = location.state ? location.state.nft : null;
 

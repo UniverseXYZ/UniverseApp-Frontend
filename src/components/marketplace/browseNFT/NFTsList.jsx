@@ -14,11 +14,12 @@ import count from '../../../assets/images/slidecounts.svg';
 import clockIcon from '../../../assets/images/marketplace/green-clock.svg';
 import Button from '../../button/Button';
 import AppContext from '../../../ContextAPI';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
 const NFTsList = ({ data, nftNumber }) => {
   const [nfts, setNFTs] = useState(data);
   const history = useHistory();
-  const { sortName, setSortName } = useContext(AppContext);
+  const { sortName, setSortName } = useMyNftsContext();
 
   const handleLikeClick = (id) => {
     setNFTs((prevState) =>

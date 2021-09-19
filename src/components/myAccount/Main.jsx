@@ -10,6 +10,7 @@ import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const Main = ({
   accountName,
@@ -37,7 +38,7 @@ const Main = ({
     fetchedUserData.instagramLink === instagramLink &&
     fetchedUserData.accountImage === accountImage;
 
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
   const accountInput = useRef(null);

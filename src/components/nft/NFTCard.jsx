@@ -23,9 +23,12 @@ import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const NFTCard = ({ nft }) => {
-  const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { loggedInArtist } = useAuthContext();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);

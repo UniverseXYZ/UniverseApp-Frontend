@@ -29,19 +29,14 @@ import Pagination from '../../pagination/Pagionation.jsx';
 import { MintSingleCollectionFlow } from '../../../userFlows/MintSingleCollectionFlow';
 import { RouterPrompt } from '../../../utils/routerPrompt.js';
 import { editCollection, editCollectionImage } from '../../../utils/api/mintNFT';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
+import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 
 const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
-  const {
-    savedNfts,
-    savedCollectionID,
-    setSavedCollectionID,
-    myNFTs,
-    setMyNFTs,
-    deployedCollections,
-    setDeployedCollections,
-    universeERC721FactoryContract,
-  } = useContext(AppContext);
-
+  const { savedNfts, savedCollectionID, setSavedCollectionID, myNFTs, setMyNFTs } =
+    useMyNftsContext();
+  const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
+    useAuthContext();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
   const [showPrompt, setShowPrompt] = useState(false);

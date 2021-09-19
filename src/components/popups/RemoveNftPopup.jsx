@@ -5,6 +5,7 @@ import Button from '../button/Button.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import { removeSavedNft } from '../../utils/api/mintNFT';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const RemovePopup = ({
   close,
@@ -14,7 +15,7 @@ const RemovePopup = ({
   collectionNFTs,
   setCollectionNFTs,
 }) => {
-  const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useContext(AppContext);
+  const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useMyNftsContext();
 
   const handleRemove = async (id) => {
     if (removeFrom === 'collection') {

@@ -19,12 +19,13 @@ import {
   getNftColletionImage,
   getEditionsCount,
 } from '../../utils/helpers/pureFunctions/nfts';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const RewardTiers = () => {
   const history = useHistory();
   const [shownActionId, setShownActionId] = useState(null);
 
-  const { auction, bidtype } = useContext(AppContext);
+  const { auction, bidtype } = useAuctionContext();
 
   return (
     <div className="container reward-tiers">

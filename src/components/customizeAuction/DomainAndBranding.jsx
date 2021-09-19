@@ -10,9 +10,10 @@ import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import AppContext from '../../ContextAPI.js';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonClick }) => {
-  const { auction, loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
   const [blur, setBlur] = useState(false);

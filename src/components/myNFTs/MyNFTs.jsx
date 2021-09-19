@@ -27,6 +27,9 @@ import plusIcon from '../../assets/images/plus.svg';
 import NFTsActivity from './NFTsActivity';
 import LikedNFTs from './LikedNFTs';
 import { MintSavedNftsFlow } from '../../userFlows/MintSavedNftsFlow';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const MyNFTs = () => {
   const {
@@ -41,16 +44,15 @@ const MyNFTs = () => {
     myNFTs,
     setMyNFTs,
     selectedNft,
-    setDarkMode,
-    deployedCollections,
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
     collectionsIdAddressMapping,
-    universeERC721CoreContract,
-    contracts,
-    signer,
-    address,
-  } = useContext(AppContext);
+  } = useMyNftsContext();
+
+  const { deployedCollections, universeERC721CoreContract, contracts, signer, address } =
+    useAuthContext();
+
+  const { setDarkMode } = useThemeContext();
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const tabs = [
     'Wallet',

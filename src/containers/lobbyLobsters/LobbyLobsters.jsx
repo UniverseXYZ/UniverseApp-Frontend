@@ -5,9 +5,10 @@ import HelpUsBeHeard from '../../components/lobbyLobsters/helpUs/HelpUsBeHeard';
 import Donate from '../../components/lobbyLobsters/donate/Donate';
 import SliderSection from '../../components/lobbyLobsters/sliderSection/SliderSection';
 import MintLobbyLobsterSection from '../../components/lobbyLobsters/mintSection/MintLobbyLobsterSection';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const LobbyLobsters = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const myRef = useRef(null);
   useEffect(() => {
     setDarkMode(false);

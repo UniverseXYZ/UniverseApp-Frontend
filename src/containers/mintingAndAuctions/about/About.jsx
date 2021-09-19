@@ -6,9 +6,10 @@ import DigitalTools from '../../../components/mintingAndAuctions/about/DigitalTo
 import HowItWorks from '../../../components/mintingAndAuctions/about/howItWorks/HowItWorks.jsx';
 import OurTeam from '../../../components/mintingAndAuctions/about/OurTeam.jsx';
 import AppContext from '../../../ContextAPI';
+import { useThemeContext } from '../../../contexts/ThemeContext.jsx';
 
 const About = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   useEffect(() => {
     setDarkMode(true);
   }, []);

@@ -10,9 +10,12 @@ import plusIcon from '../../../../assets/images/PlusIcon.png';
 import LoadMore from '../../../pagination/LoadMore';
 import NFTCard from '../../../nft/NFTCard';
 import SearchFilters from '../../../nft/SearchFilters';
+import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const NFTsTab = ({ onArtist }) => {
-  const { loggedInArtist, myNFTs } = useContext(AppContext);
+  const { myNFTs } = useMyNftsContext();
+  const { loggedInArtist } = useAuthContext();
   const data = loggedInArtist.id === onArtist.id ? myNFTs : PLACEHOLDER_NFTS;
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);

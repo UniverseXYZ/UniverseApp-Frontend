@@ -11,10 +11,11 @@ import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
-    useContext(AppContext);
+    useMyNftsContext();
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);

@@ -12,6 +12,7 @@ import AppContext from '../../ContextAPI';
 import { getPolymorphMeta } from '../../utils/api/polymorphs.js';
 import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 import { convertPolymorphObjects } from '../../utils/helpers/polymorphs';
+import { usePolymorphContext } from '../../contexts/PolymorphContext';
 
 const GENE_POSITIONS_MAP = {
   BACKGROUND: 1,
@@ -45,7 +46,7 @@ const PolymorphScramblePopup = ({
   setShowLoading,
   setShowMetadataLoading,
 }) => {
-  const { polymorphContract, userPolymorphs, setUserPolymorphs } = useContext(AppContext);
+  const { polymorphContract, userPolymorphs, setUserPolymorphs } = usePolymorphContext();
   const [singleTraitTabSelected, setSingleTraitSelected] = useState(true);
   const [allTraitsTabSelected, setAllTraitsTabSelected] = useState(false);
   const [selectedTrait, setSelectedTrait] = useState('');

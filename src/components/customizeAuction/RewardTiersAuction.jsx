@@ -7,9 +7,10 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import AppContext from '../../ContextAPI';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
-  const { auction, bidtype } = useContext(AppContext);
+  const { auction, bidtype } = useAuctionContext();
   const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
 

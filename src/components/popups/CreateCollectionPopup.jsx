@@ -6,6 +6,8 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import AppContext from '../../ContextAPI';
 import { defaultColors } from '../../utils/helpers';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const CreateCollectionPopup = ({ onClose }) => {
   const inputFile = useRef(null);
@@ -19,7 +21,8 @@ const CreateCollectionPopup = ({ onClose }) => {
   const [errors, setErrors] = useState({ collectionName: '', tokenName: '', shorturl: '' });
   const [mintNowClick, setMintNowClick] = useState(false);
 
-  const { deployedCollections, setDeployedCollections, myNFTs } = useContext(AppContext);
+  const { myNFTs } = useMyNftsContext();
+  const { deployedCollections, setDeployedCollections } = useAuthContext();
 
   const handleOnFocus = () => {
     if (shortURL === 'universe.xyz/c/shorturl') {

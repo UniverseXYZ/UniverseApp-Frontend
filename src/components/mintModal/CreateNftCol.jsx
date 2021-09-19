@@ -18,9 +18,10 @@ import addIcon from '../../assets/images/Add.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import delIcon from '../../assets/images/del-icon.svg';
 import arrow from '../../assets/images/arrow.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const CreateNftCol = (props) => {
-  const { savedNfts, setSavedNfts } = useContext(AppContext);
+  const { savedNfts, setSavedNfts } = useMyNftsContext();
   const {
     setShowCollectible,
     collectionName,

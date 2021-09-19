@@ -7,9 +7,10 @@ import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
 import AppContext from '../../../ContextAPI.js';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 
 const PolymorphCard = ({ item }) => {
-  const { setSelectedNftForScramble } = useContext(AppContext);
+  const { setSelectedNftForScramble } = useMyNftsContext();
   const history = useHistory();
 
   return (

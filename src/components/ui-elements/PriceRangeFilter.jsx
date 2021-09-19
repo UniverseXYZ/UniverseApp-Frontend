@@ -13,6 +13,7 @@ import snxIcon from '../../assets/images/snx.svg';
 import priceIcon from '../../assets/images/marketplace/price-range.svg';
 import AppContext from '../../ContextAPI';
 import './styles/PriceRangeFilter.scss';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const bidTokens = [
   {
@@ -59,7 +60,7 @@ const validateMaxValue = (e, sliderValue, setSliderValue, setDisabledMax) => {
 const PriceRangeFilter = (props) => {
   const { getPrice, remove, onClear } = props;
   const [showPriceItems, setShowPriceItems] = useState(false);
-  const { selectedTokenIndex, setSelectedTokenIndex } = useContext(AppContext);
+  const { selectedTokenIndex, setSelectedTokenIndex } = useAuctionContext();
   const [sliderValue, setSliderValue] = useState({ min: 0, max: 4 });
   const [disabledMin, setDisabledMin] = useState(false);
   const [disabledMax, setDisabledMax] = useState(false);

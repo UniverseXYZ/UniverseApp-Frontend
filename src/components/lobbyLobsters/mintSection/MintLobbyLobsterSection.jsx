@@ -9,17 +9,15 @@ import { convertLobsterObjects } from '../../../utils/helpers/lobsters';
 import { fetchTokensMetadataJson } from '../../../utils/api/polymorphs';
 import LoadingPopup from '../../popups/LoadingPopup';
 import MintPolymorphConfirmationPopup from '../../popups/MintPolymorphConfirmationPopup';
+import { useLobsterContext } from '../../../contexts/LobsterContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
-  const {
-    totalLobsters,
-    lobsterContract,
-    lobsterBaseURI,
-    userLobsters,
-    setUserLobsters,
-    lobstersFilter,
-  } = useContext(AppContext);
-  const [sliderValue, setSliderValue] = useState(totalLobsters);
+  const { userLobsters, setUserLobsters, lobstersFilter } = useLobsterContext();
+
+  const { lobsterContract } = useAuthContext();
+
+  const [sliderValue, setSliderValue] = useState(10000);
   const [quantity, setQuantity] = useState(1);
   const [mobile, setMobile] = useState(false);
   const [windowSize, setWindowSize] = useState({
@@ -37,14 +35,6 @@ const MintLobbyLobsterSection = React.forwardRef((props, ref) => {
     if (+window.innerWidth <= 576) setMobile(true);
     else setMobile(false);
   }, []);
-
-  useEffect(() => {
-    setSliderValue(totalLobsters);
-  }, [totalLobsters]);
-
-  useEffect(() => {
-    setSliderValue(totalLobsters);
-  }, [totalLobsters]);
 
   const mintLobsters = async (amount) => {
     if (!lobsterContract) {

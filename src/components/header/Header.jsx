@@ -23,16 +23,19 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors } from '../../utils/helpers';
 import { CONNECTORS_NAMES } from '../../utils/dictionary';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const Header = ({ location }) => {
   const {
     isWalletConnected,
     setIsWalletConnected,
-    darkMode,
     connectWithWalletConnect,
     connectWithMetaMask,
     address,
-  } = useContext(AppContext);
+  } = useAuthContext();
+
+  const { darkMode } = useThemeContext();
 
   const history = useHistory();
   const [selectedWallet, setSelectedWallet] = useState('');
