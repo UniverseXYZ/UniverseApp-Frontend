@@ -46,6 +46,7 @@ import { RouterPrompt } from '../../../utils/routerPrompt';
 import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/minting';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useErrorContext } from '../../../contexts/ErrorContext';
 
 const SingleNFTSettings = () => {
   const {
@@ -61,7 +62,7 @@ const SingleNFTSettings = () => {
 
   const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
     useAuthContext();
-
+  const { showError } = useErrorContext();
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
@@ -334,10 +335,12 @@ const SingleNFTSettings = () => {
       } catch (e) {
         // TODO:: Add modal with the error text
         console.error(e, 'Error !');
+        showError(true);
       }
     } else {
       // TODO:: Add Error Handling
-      // error
+      console.error(e, 'Error !');
+      showError(true);
     }
   };
 
@@ -553,7 +556,7 @@ const SingleNFTSettings = () => {
             ) : (
               <LoadingPopup
                 text="The NFT will appear, after the transaction finishes. Please wait..."
-                onClose={() => handleCloseLoadingPopup(close)}
+                onClose={close}
               />
             )
           }
@@ -848,7 +851,7 @@ const SingleNFTSettings = () => {
                           <img src={col.coverUrl} alt={col.name} />
                         </div>
                       )}
-                      <h5>{col.name}</h5>
+                      <h5 className="collection-name">{col.name}</h5>
                       <p>{col.tokenName}</p>
                     </div>
                     <div className="box--shadow--effect--block" />

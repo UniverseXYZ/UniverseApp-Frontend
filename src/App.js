@@ -47,9 +47,12 @@ import { PolymorphContextProvider } from './contexts/PolymorphContext';
 import { LobsterContextProvider } from './contexts/LobsterContext';
 import { MarketplaceContextProvider } from './contexts/MarketplaceContext';
 import { useAuthContext } from './contexts/AuthContext';
+import ErrorPopup from './components/popups/ErrorPopup';
+import { useErrorContext } from './contexts/ErrorContext';
 
 const App = () => {
   const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext();
+  const { showError, closeError } = useErrorContext();
 
   return (
     <PolymorphContextProvider>
@@ -174,6 +177,9 @@ const App = () => {
               <Footer />
               <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
                 <WrongNetworkPopup close={() => setShowWrongNetworkPopup(false)} />
+              </Popup>
+              <Popup closeOnDocumentClick={false} open={showError}>
+                <ErrorPopup close={closeError} />
               </Popup>
             </MarketplaceContextProvider>
           </AuctionContextProvider>

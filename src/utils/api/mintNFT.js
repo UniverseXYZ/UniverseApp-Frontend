@@ -219,8 +219,8 @@ export const getTokenURI = async ({
 
   formData.append('file', file, file.name);
   formData.append('name', name);
-  formData.append('description', description);
   formData.append('numberOfEditions', parseInt(editions, 10));
+  if (description) formData.append('description', description);
   if (noProperties) formData.append('properties', JSON.stringify(propertiesParsed));
   if (noRoyalties) formData.append('royalties', JSON.stringify(royaltiesParsed));
 
