@@ -35,39 +35,43 @@ const LobsterRarityList = ({
   const [showClearALL, setShowClearALL] = useState(false);
 
   return (
-    <div className="lobster-rarity--charts--list">
-      <div className="list--with--selected--filters">
-        {loading && !isLastPage ? (
-          <div className="grid">
-            <LobsterRarityChartsLoader number={12} />
-          </div>
-        ) : results.length ? (
-          <div className="grid">
-            {sliceData.map((item, i) => (
-              <LobsterCard key={uuid()} item={item} index={offset + i + 1} />
-            ))}
-            {isLastPage ? <LobsterRarityChartsLoader number={emptySlots} /> : <></>}
-          </div>
-        ) : (
-          <div className="rarity--charts--empty">
-            <p>No Lobster could be found :’(</p>
-          </div>
-        )}
-        {data.length >= perPage ? (
-          <div className="pagination__container">
-            <RarityPagination
-              data={data}
-              perPage={perPage}
-              setOffset={setOffset}
-              setApiPage={setApiPage}
-              apiPage={apiPage}
-              setIsLastPage={setIsLastPage}
-            />
-            <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
-          </div>
-        ) : null}
+    <>
+      <div className="lobster-rarity--charts--list">
+        <div className="list--with--selected--filters">
+          {loading && !isLastPage ? (
+            <div className="grid">
+              <LobsterRarityChartsLoader number={12} />
+            </div>
+          ) : results.length ? (
+            <div className="grid">
+              {sliceData.map((item, i) => (
+                <LobsterCard key={uuid()} item={item} index={offset + i + 1} />
+              ))}
+              {isLastPage ? <LobsterRarityChartsLoader number={emptySlots} /> : <></>}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
-    </div>
+      {data.length >= perPage ? (
+        <div className="pagination__container">
+          <RarityPagination
+            data={data}
+            perPage={perPage}
+            setOffset={setOffset}
+            setApiPage={setApiPage}
+            apiPage={apiPage}
+            setIsLastPage={setIsLastPage}
+          />
+          <ItemsPerPageDropdown perPage={perPage} setPerPage={setPerPage} />
+        </div>
+      ) : null}
+
+      <div className="rarity--charts--empty">
+        {!loading && !isLastPage && !results.length ? <p>No Lobster could be found :’(</p> : <></>}
+      </div>
+    </>
   );
 };
 

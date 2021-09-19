@@ -2,16 +2,24 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import './SearchFilters.scss';
-import SearchField from '../input/SearchField.jsx';
+import SearchNFTsField from '../input/SearchNFTsField.jsx';
 import SortingDropdowns from '../marketplace/browseNFT/selectedFiltersAndSorting/SortingDropdowns.jsx';
 import SortingFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/SortingFilters.jsx';
 import filtersIcon from '../../assets/images/marketplace/filters.svg';
 import SelectedFilters from '../marketplace/browseNFT/selectedFiltersAndSorting/SelectedFilters';
 import BrowseFilterPopup from '../popups/BrowseFiltersPopup';
 
-const SearchFilters = ({ data }) => {
+const SearchFilters = ({ data, setData }) => {
+  const [searchValue, setSearchValue] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(null);
+  const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
+  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+  const [savedCollections, setSavedCollections] = useState([]);
+  const [selectedCollections, setSelectedCollections] = useState([]);
+  const [savedCreators, setSavedCreators] = useState([]);
+  const [selectedCreators, setSelectedCreators] = useState([]);
+
   const [saleTypeButtons, setSaleTypeButtons] = useState([
     {
       text: 'Buy now',
@@ -34,12 +42,6 @@ const SearchFilters = ({ data }) => {
       selected: false,
     },
   ]);
-  const [sliderValue, setSliderValue] = useState({ min: 0.01, max: 100 });
-  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-  const [savedCollections, setSavedCollections] = useState([]);
-  const [selectedCollections, setSelectedCollections] = useState([]);
-  const [savedCreators, setSavedCreators] = useState([]);
-  const [selectedCreators, setSelectedCreators] = useState([]);
 
   useEffect(() => {
     const onScroll = (e) => {
@@ -59,15 +61,29 @@ const SearchFilters = ({ data }) => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    let filteredData = data;
+    if (searchValue) {
+      filteredData = data.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLocaleLowerCase())
+      );
+    }
+
+    if (selectedCollections.length) {
+      filteredData = filteredData.filter(
+        (item) => selectedCollections.map((coll) => coll.name).indexOf(item.collection.name) >= 0
+      );
+    }
+    setData(filteredData);
+  }, [searchValue, selectedCollections]);
+
   return (
     <div className="search--sort--filters--section">
       <div className="search--sort--filters">
-        <SearchField
-          data={data}
-          CardElement={<h1>ok</h1>}
+        <SearchNFTsField
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
           placeholder="Search items"
-          dropdown={false}
-          // getData={(find) => setMyNFTsData(find)}
         />
         <SortingDropdowns />
         <div
@@ -180,6 +196,7 @@ const SearchFilters = ({ data }) => {
 
 SearchFilters.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setData: PropTypes.func.isRequired,
 };
 
 export default SearchFilters;

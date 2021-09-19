@@ -166,7 +166,12 @@ const MyNFTs = () => {
   }, []);
 
   const existsNFTs = () =>
-    myNFTs.length || deployedCollections.length || savedNfts.length || savedCollections.length;
+    myNFTs.length ||
+    deployedCollections.length ||
+    savedNfts.length ||
+    savedCollections.length ||
+    userPolymorphs.length ||
+    userLobsters.length;
 
   const renderTabsWrapper = () => (
     <Tabs

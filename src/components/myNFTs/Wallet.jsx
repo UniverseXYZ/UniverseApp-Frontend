@@ -42,6 +42,8 @@ const Wallet = ({
   const { myNFTs } = useMyNftsContext();
   const { deployedCollections } = useAuthContext();
 
+  const [shownNFTs, setShownNFTs] = useState(myNFTs);
+
   const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
@@ -204,40 +206,6 @@ const Wallet = ({
     setCollections(newCollections);
   }, []);
 
-  // useEffect(() => {
-  //   const res = collections.filter((col) => col.selected);
-  //   if (res.length || searchByName) {
-  //     const newFilteredNFTs = [];
-  //     myNFTs.forEach((nft) => {
-  //       if (!searchByName && res.length) {
-  //         if (nft.type === 'collection') {
-  //           res.forEach((item) => {
-  //             if (nft.collectionName === item.name) {
-  //               newFilteredNFTs.push(nft);
-  //             }
-  //           });
-  //         }
-  //       } else if (!res.length && searchByName) {
-  //         if (nft.name.toLowerCase().includes(searchByName.toLowerCase())) {
-  //           newFilteredNFTs.push(nft);
-  //         }
-  //       } else if (res.length && searchByName) {
-  //         res.forEach((item) => {
-  //           if (
-  //             nft.collectionName === item.name &&
-  //             nft.name.toLowerCase().includes(searchByName.toLowerCase())
-  //           ) {
-  //             newFilteredNFTs.push(nft);
-  //           }
-  //         });
-  //       }
-  //     });
-  //     setFilteredNFTs(newFilteredNFTs);
-  //   } else {
-  //     setFilteredNFTs(myNFTs);
-  //   }
-  // }, [collections, searchByName]);
-
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
     return () => {
@@ -247,13 +215,13 @@ const Wallet = ({
 
   useEffect(() => {
     const prevNFTs = [];
-    myNFTs.forEach((nft) => {
+    shownNFTs.forEach((nft) => {
       if (selectedNFTIds.includes(nft.id)) {
         prevNFTs.push(nft);
       }
     });
     setPreviewNFTs(prevNFTs);
-  }, [myNFTs, selectedNFTIds]);
+  }, [shownNFTs, selectedNFTIds]);
 
   return (
     <div className="tab__wallet">
@@ -446,13 +414,13 @@ const Wallet = ({
               </div>
             </>
           ) : (
-            <SearchFilters data={myNFTs} />
+            <SearchFilters data={myNFTs} setData={setShownNFTs} />
           )}
-          {myNFTs.length ? (
+          {shownNFTs.length ? (
             <>
               {isCreatingAction ? (
                 <Lists
-                  data={myNFTs}
+                  data={shownNFTs}
                   perPage={perPage}
                   offset={offset}
                   selectedNFTIds={selectedNFTIds}
@@ -462,13 +430,13 @@ const Wallet = ({
                 />
               ) : (
                 <div className="nfts__lists">
-                  {myNFTs
+                  {shownNFTs
                     .filter((nft) => !nft.hidden)
                     .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
                 </div>
               )}
 
-              {myNFTs.filter((nft) => !nft.hidden).length > quantity && (
+              {shownNFTs.filter((nft) => !nft.hidden).length > quantity && (
                 <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
               )}
 

@@ -138,17 +138,17 @@ const SelectedFilters = ({
         )}
         {savedCollections.map((coll, index) => (
           <button type="button" className="light-border-button" key={uuid()}>
-            {!coll.photo ? (
+            {!coll.coverUrl ? (
               <div
                 className="random--avatar--color"
                 style={{
-                  backgroundColor: defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                  backgroundColor: Math.floor(coll.id % defaultColors.length),
                 }}
               >
                 {coll.name.charAt(0)}
               </div>
             ) : (
-              <img className="sell__collection" src={coll.photo} alt={coll.name} />
+              <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
             )}
             {coll.name}
             <img

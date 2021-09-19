@@ -244,7 +244,9 @@ export const saveCollection = async (data) => {
   if (file) formData.append('file', file, file.name);
   formData.append('name', name);
   formData.append('symbol', symbol);
-  formData.append('description', description);
+  if (description) {
+    formData.append('description', description);
+  }
 
   const requestUrl = CREATE_COLLECTION_URL;
   const requestOptions = {

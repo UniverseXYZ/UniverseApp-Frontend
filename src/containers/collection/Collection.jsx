@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Contract } from 'ethers';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import AppContext from '../../ContextAPI';
 import './Collection.scss';
@@ -25,9 +25,10 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 const Collection = () => {
   const { showModal, setShowModal, setSavedCollectionID } = useMyNftsContext();
   const { setDarkMode } = useThemeContext();
+  const { collectionId } = useParams();
   const location = useLocation();
-  const collectionId = location.state ? location.state.collection.id : null;
   const [collectionNFTs, setCollectionNFTs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [search, setSearch] = useState('');
   const history = useHistory();
@@ -61,13 +62,14 @@ const Collection = () => {
   // }, [contracts, collectionData]);
 
   useEffect(() => {
-    const newFilteredNFTs = [];
-    collectionNFTs.forEach((nft) => {
-      if (nft.name.toLowerCase().includes(search.toLowerCase())) {
-        newFilteredNFTs.push(nft);
-      }
-    });
-    setFilteredNFTs(newFilteredNFTs);
+    if (search) {
+      const newFilteredNFTs = collectionNFTs.filter((item) =>
+        item.name.toLowerCase().includes(search.toLocaleLowerCase())
+      );
+      setFilteredNFTs(newFilteredNFTs);
+    } else {
+      setFilteredNFTs(collectionNFTs);
+    }
   }, [search]);
 
   useEffect(async () => {
@@ -80,6 +82,7 @@ const Collection = () => {
 
     setCollectionNFTs([...cNFTs]);
     setFilteredNFTs([...cNFTs]);
+    setLoading(false);
   }, []);
 
   const handleEdit = (id) => {
@@ -87,7 +90,9 @@ const Collection = () => {
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
 
-  return collectionData ? (
+  return loading ? (
+    <></>
+  ) : collectionData ? (
     <div className="collection__page">
       <Cover selectedCollection={collectionData.collection} />
 
@@ -96,7 +101,7 @@ const Collection = () => {
           <Avatar selectedCollection={collectionData.collection} />
           <Title
             selectedCollection={collectionData.collection}
-            saved={location.state.saved}
+            saved={location.state?.saved}
             nftsCount={collectionNFTs.length}
             ownersCount={ownersCount}
           />
@@ -114,15 +119,15 @@ const Collection = () => {
           </Button>
         </div>
         <div className="collection--nfts--container">
-          <SearchFilters data={collectionNFTs} />
-          {collectionNFTs.filter((nft) => !nft.hidden).length ? (
+          <SearchFilters data={collectionNFTs} setData={setFilteredNFTs} />
+          {filteredNFTs.filter((nft) => !nft.hidden).length ? (
             <>
               <div className="nfts__lists">
-                {collectionNFTs
+                {filteredNFTs
                   .filter((nft) => !nft.hidden)
                   .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
               </div>
-              {collectionNFTs.filter((nft) => !nft.hidden).length > quantity && (
+              {filteredNFTs.filter((nft) => !nft.hidden).length > quantity && (
                 <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
               )}
             </>

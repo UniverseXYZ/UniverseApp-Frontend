@@ -65,7 +65,7 @@ const buildRarityUrl = (
   if (filter) {
     endpoint = `${endpoint}&filter=${filterQuery}`;
   }
-  if (ids) {
+  if (ids.length) {
     endpoint = `${endpoint}&ids=${ids.join(',')}`;
   } else {
     endpoint = `${endpoint}&ids=1000000`;
