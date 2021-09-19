@@ -1031,7 +1031,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 readMoreText="Read more"
                 readLessText="Read less"
               >
-                {selectedNFT.description}
+                {selectedNFT.description || ''}
               </ReactReadMoreReadLess>
             </p>
           </div>
