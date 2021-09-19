@@ -32,6 +32,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 import { usePolymorphContext } from '../../contexts/PolymorphContext';
+import { getMyNfts, getSavedNfts } from '../../utils/api/mintNFT';
 
 const MyNFTs = () => {
   const {
@@ -142,12 +143,20 @@ const MyNFTs = () => {
     });
 
     if (res) {
-      // TODO temporarily use this
-      const newSavedNFTs = savedNfts.filter((nft) => !nft.selected);
-      setSavedNfts(newSavedNFTs);
+      try {
+        const serverProcessTime = 5000; // The BE needs some time to catch the transaction
+        setTimeout(async () => {
+          const [mintedNFTS, savedNFTS] = await Promise.all([getMyNfts(), getSavedNfts()]);
+          setMyNFTs(mintedNFTS || []);
+          setSavedNfts(savedNFTS || []);
 
-      document.getElementById('popup-root').remove();
-      document.getElementById('congrats-hidden-btn').click();
+          document.getElementById('popup-root').remove();
+          document.getElementById('congrats-hidden-btn').click();
+        }, serverProcessTime);
+      } catch (e) {
+        // TODO:: Add modal with the error text
+        console.error(e, 'Error !');
+      }
     } else {
       document.getElementById('popup-root').remove();
     }

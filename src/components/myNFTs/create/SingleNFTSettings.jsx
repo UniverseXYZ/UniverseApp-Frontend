@@ -33,6 +33,7 @@ import {
   updateSavedForLaterNft,
   getTokenURI,
   getMetaForSavedNft,
+  getMyNfts,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -308,28 +309,36 @@ const SingleNFTSettings = () => {
 
     const res = await Promise.all(mintPromises);
 
-    document.getElementById('loading-hidden-btn').click();
-    document.getElementById('popup-root').remove();
-
     const hasFailedTransaction = res.includes(0);
     if (!hasFailedTransaction) {
-      // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
-      // const mintedNfts = await getMyNfts();
-      // setMyNFTs(mintedNfts || []);
+      try {
+        const serverProcessTime = 5000; // The BE needs some time to catch the transaction
+        setTimeout(async () => {
+          const [mintedNFTS, savedNFTS] = await Promise.all([getMyNfts(), getSavedNfts()]);
+          setMyNFTs(mintedNFTS || []);
 
-      document.getElementById('congrats-hidden-btn').click();
+          setSavedNfts(savedNFTS || []);
+
+          document.getElementById('loading-hidden-btn').click();
+          document.getElementById('popup-root').remove();
+          document.getElementById('congrats-hidden-btn').click();
+
+          closeLoadingModal();
+          setName('');
+          setDescription('');
+          setEditions('');
+          setPreviewImage('');
+          setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+          setRoyaltyAddress([{ address: '', amount: '' }]);
+        }, serverProcessTime);
+      } catch (e) {
+        // TODO:: Add modal with the error text
+        console.error(e, 'Error !');
+      }
     } else {
       // TODO:: Add Error Handling
       // error
     }
-
-    closeLoadingModal();
-    setName('');
-    setDescription('');
-    setEditions('');
-    setPreviewImage('');
-    setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    setRoyaltyAddress([{ address: '', amount: '' }]);
   };
 
   const onSaveNftForLaterMinting = async () => {
