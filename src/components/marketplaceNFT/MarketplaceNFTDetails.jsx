@@ -79,10 +79,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [tablet, setTablet] = useState(false);
   const [count, setCount] = useState(4);
   const mediaRef =
-    selectedNFT.type !== 'bundles'
-      ? selectedNFT.artworkType === 'video/mp4'
+    selectedNFT.artworkType !== 'bundles'
+      ? selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4')
         ? useRef()
-        : selectedNFT.artworkType === 'audio/mpeg'
+        : selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mpeg')
         ? useRef(new Audio(selectedNFT.media.url))
         : null
       : selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
@@ -94,7 +94,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     const { className, style, onClick } = props;
     const handleClick = () => {
       onClick();
-      if (selectedNFTIndex < selectedNFT.allItems.length - 1) {
+      if (selectedNFTIndex < selectedNFT.tokenIds.length - 1) {
         setSelectedNFTIndex(selectedNFTIndex + 1);
       } else {
         setSelectedNFTIndex(0);
@@ -121,7 +121,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       if (selectedNFTIndex > 0) {
         setSelectedNFTIndex(selectedNFTIndex - 1);
       } else {
-        setSelectedNFTIndex(selectedNFT.allItems.length - 1);
+        setSelectedNFTIndex(selectedNFT.tokenIds.length - 1);
       }
     };
     return (
@@ -191,13 +191,13 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   useEffect(() => {
     if (mediaRef && selectedNFTIndex) {
       const video = document.querySelector('video');
-      if (selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' && video) {
-        video.setAttribute('src', selectedNFT.allItems[selectedNFTIndex].url);
+      if (selectedNFT.tokenIds[selectedNFTIndex].type === 'video/mp4' && video) {
+        video.setAttribute('src', selectedNFT.tokenIds[selectedNFTIndex].url);
       }
       mediaRef.current =
-        selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
-          ? new Audio(selectedNFT.allItems[selectedNFTIndex].url)
-          : selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4'
+        selectedNFT.tokenIds[selectedNFTIndex].type === 'audio/mpeg'
+          ? new Audio(selectedNFT.tokenIds[selectedNFTIndex].url)
+          : selectedNFT.tokenIds[selectedNFTIndex].type === 'video/mp4'
           ? video
           : null;
 
@@ -476,18 +476,19 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           >
             {selectedNFT.type !== 'bundles' ? (
               <>
-                {selectedNFT.artworkType !== 'audio/mpeg' &&
-                  selectedNFT.artworkType !== 'video/mp4' && (
+                {selectedNFT.artworkType &&
+                  !selectedNFT.artworkType.endsWith('mpeg') &&
+                  !selectedNFT.artworkType.endsWith('mp4') && (
                     <img
                       src={
                         typeof selectedNFT.optimized_url === 'string'
                           ? selectedNFT.optimized_url
-                          : URL.createObjectURL(selectedNFT.optimized_url)
+                          : selectedNFT.optimized_url
                       }
                       alt={selectedNFT.name}
                     />
                   )}
-                {selectedNFT.artworkType === 'video/mp4' && (
+                {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
                       {...bind}
@@ -537,7 +538,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     </div>
                   </Draggable>
                 )}
-                {selectedNFT.artworkType === 'audio/mpeg' && (
+                {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mpeg') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
                       {...bind}
@@ -576,11 +577,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     </div>
                   </Draggable>
                 )}
-                {(selectedNFT.artworkType === 'video/mp4' ||
-                  selectedNFT.artworkType === 'audio/mpeg') &&
+                {((selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4')) ||
+                  (selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mpeg'))) &&
                   miniPlayer && <div className="empty--black--video" />}
-                {selectedNFT.artworkType === 'audio/mpeg' ||
-                selectedNFT.artworkType === 'video/mp4' ? (
+                {(selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mpeg')) ||
+                (selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4')) ? (
                   <div className="custom--player" ref={customPlayerRef}>
                     <div className="controls">
                       <div className="controls--left">
@@ -655,11 +656,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </>
             ) : (
               <>
-                {selectedNFT.allItems[selectedNFTIndex].type !== 'audio/mpeg' &&
-                  selectedNFT.allItems[selectedNFTIndex].type !== 'video/mp4' && (
-                    <img src={selectedNFT.allItems[selectedNFTIndex].url} alt={selectedNFT.name} />
+                {/* // TODO:: there is no such format in the current BE */}
+                {selectedNFT.tokenIds[selectedNFTIndex].type !== 'audio/mpeg' &&
+                  selectedNFT.tokenIds[selectedNFTIndex].type !== 'video/mp4' && (
+                    <img src={selectedNFT.tokenIds[selectedNFTIndex].url} alt={selectedNFT.name} />
                   )}
-                {selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' && (
+                {selectedNFT.tokenIds[selectedNFTIndex].type === 'video/mp4' && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
                       {...bind}
@@ -668,7 +670,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       } ${scalePlayer ? 'scale--player' : ''}`}
                     >
                       <video ref={mediaRef}>
-                        <source src={selectedNFT.allItems[selectedNFTIndex].url} type="video/mp4" />
+                        <source src={selectedNFT.tokenIds[selectedNFTIndex].url} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
                       </video>
@@ -702,7 +704,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     </div>
                   </Draggable>
                 )}
-                {selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg' && (
+                {selectedNFT.tokenIds[selectedNFTIndex].type === 'audio/mpeg' && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
                       {...bind}
@@ -744,14 +746,14 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {!fullScreen && (
                   <div className="nft--count">
                     <img src={bundlesIcon} alt="Bundles" />
-                    <span>{`${selectedNFTIndex + 1} of ${selectedNFT.allItems.length}`}</span>
+                    <span>{`${selectedNFTIndex + 1} of ${selectedNFT.tokenIds.length}`}</span>
                   </div>
                 )}
-                {(selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' ||
-                  selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg') &&
+                {(selectedNFT.tokenIds[selectedNFTIndex].type === 'video/mp4' ||
+                  selectedNFT.tokenIds[selectedNFTIndex].type === 'audio/mpeg') &&
                   miniPlayer && <div className="empty--black--video" />}
-                {selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg' ||
-                selectedNFT.allItems[selectedNFTIndex].type === 'video/mp4' ? (
+                {selectedNFT.tokenIds[selectedNFTIndex].type === 'audio/mpeg' ||
+                selectedNFT.tokenIds[selectedNFTIndex].type === 'video/mp4' ? (
                   <div className="custom--player" ref={customPlayerRef}>
                     <div className="controls">
                       <div className="controls--left">
@@ -827,7 +829,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           {selectedNFT.type === 'bundles' && (
             <div className="bundles--slider">
               <Slider {...sliderSettings}>
-                {selectedNFT.allItems.map((nft, index) => (
+                {selectedNFT.tokenIds.map((nft, index) => (
                   <div
                     className={`each--nft ${selectedNFTIndex === index ? 'selected' : ''}`}
                     aria-hidden="true"
@@ -851,7 +853,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 ))}
               </Slider>
               <div className="slider--with--horizontall--scrolling">
-                {selectedNFT.allItems.map((nft, index) => (
+                {selectedNFT.tokenIds.map((nft, index) => (
                   <div
                     className={`each--nft ${selectedNFTIndex === index ? 'selected' : ''}`}
                     aria-hidden="true"
@@ -1060,7 +1062,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </>
             ) : (
               <>
-                {selectedTabIndex === 0 && <NFTs data={selectedNFT.allItems} />}
+                {selectedTabIndex === 0 && <NFTs data={selectedNFT.tokenIds} />}
                 {selectedTabIndex === 1 && <Bids />}
                 {selectedTabIndex === 2 && <Offers />}
                 {selectedTabIndex === 3 && <TradingHistory />}
