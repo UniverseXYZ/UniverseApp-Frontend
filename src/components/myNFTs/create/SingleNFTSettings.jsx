@@ -32,6 +32,7 @@ import {
   getSavedNfts,
   updateSavedForLaterNft,
   getTokenURI,
+  getMetaForSavedNft,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -261,8 +262,30 @@ const SingleNFTSettings = () => {
         ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
         : universeERC721CoreContract;
 
+    // Update saved NFT data, before getting the TokenURI
+    if (savedNFTsID) {
+      // Attach the needed data to identify the NFT and its Collection
+      data.id = savedNFTsID;
+      data.collectionId = selectedCollection?.id;
+
+      let result = await updateSavedForLaterNft(data);
+
+      if (!result.message) {
+        const updateNFTImage = result.id && typeof previewImage === 'object';
+        if (updateNFTImage) {
+          const saveImageRes = await saveNftImage(previewImage, result.id);
+          result = saveImageRes;
+        }
+      }
+
+      if (result?.error) {
+        showErrorModal(true);
+        return;
+      }
+    }
+
     // Get the Token URIs from the BE
-    const tokenURIs = await getTokenURI(data);
+    const tokenURIs = savedNFTsID ? await getMetaForSavedNft(savedNFTsID) : await getTokenURI(data);
 
     // Prepare the data for the smart contract
     const parsedRoyalties = formatRoyaltiesForMinting(data.royaltiesParsed);
@@ -270,7 +293,6 @@ const SingleNFTSettings = () => {
       token,
       royalties: parsedRoyalties,
     }));
-    // TODO:: Rename the method to parseDataForBatchMint
     const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(tokenURIsAndRoyalties);
 
     // Mint the data on Chunks
@@ -415,23 +437,7 @@ const SingleNFTSettings = () => {
 
   const previewVideoSource = typeof previewImage === 'string' && previewImage.endsWith('.mp4');
 
-  useEffect(async () => {
-    if (saveForLateClick) {
-      if (!errors.name && !errors.edition && !errors.previewImage) {
-        if (!savedNFTsID) {
-          onSaveNftForLaterMinting();
-        } else {
-          onEditSavedNft();
-        }
-      }
-    }
-    if (mintNowClick) {
-      if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
-        onMintNft();
-      }
-    }
-  }, [errors, saveForLateClick]);
-
+  // DRAG functionality
   const onDrop = (e) => {
     e.preventDefault();
     const {
@@ -450,7 +456,25 @@ const SingleNFTSettings = () => {
     setBorder(false);
   };
 
+  useEffect(async () => {
+    if (saveForLateClick) {
+      if (!errors.name && !errors.edition && !errors.previewImage) {
+        if (!savedNFTsID) {
+          onSaveNftForLaterMinting();
+        } else {
+          onEditSavedNft();
+        }
+      }
+    }
+    if (mintNowClick) {
+      if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
+        onMintNft();
+      }
+    }
+  }, [errors, saveForLateClick]);
+
   useEffect(() => {
+    // This means it's editing an saved nft
     if (savedNFTsID) {
       const res = savedNfts.filter((item) => item.id === savedNFTsID)[0];
       if (res) {
