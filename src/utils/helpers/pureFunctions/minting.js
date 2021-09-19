@@ -159,7 +159,7 @@ export const formatRoyalties = ({ nfts }) => {
  * @param {Object} tokenURIsAndRoyaltiesEntry
  * @returns {Object} { tokensChunks[], royaltiesChunks[], chunksCount (int) }
  */
-export const getBatchMintingData = (tokenURIsAndRoyaltiesEntry) => {
+export const parseDataForBatchMint = (tokenURIsAndRoyaltiesEntry) => {
   const CHUNK_SIZE = process.env.REACT_APP_BATCH_MINTING_CHUNK_SIZE;
 
   const { royaltiesArray, tokensArray } = formatTokenURIsAndRoyaltiesObject(

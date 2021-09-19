@@ -1,6 +1,9 @@
 /* eslint-disable no-debugger */
 /* eslint-disable consistent-return */
-import { getBatchMintingData, resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
+import {
+  parseDataForBatchMint,
+  resolveAllPromises,
+} from '../../utils/helpers/pureFunctions/minting';
 
 /**
  * @param {Object} data
@@ -75,7 +78,7 @@ export async function sendBatchMintRequest(
   const promises = [];
 
   collectionsIdsArray.forEach((collectionId) => {
-    const { tokensChunks, royaltiesChunks } = getBatchMintingData(
+    const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(
       tokenURIsAndRoyaltiesObject[collectionId]
     );
 

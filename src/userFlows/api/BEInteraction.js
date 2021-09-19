@@ -46,45 +46,6 @@ export const getTokenURIsForSavedNfts = async ({ nfts }) => {
 
 /**
  * @param {Object} data
- * @param {Object[]} data.nfts
- * @param data.nfts.previewImage || data.nfts.file
- * @param data.nfts.name
- * @param data.nfts.description
- * @param data.nfts.numberOfEditions
- * @param data.nfts.properties
- * @param data.nfts.royalties
- * @returns {Object[]} nfts: { tokenUri }
- */
-export const generateTokenURIs = async ({ nfts }) => {
-  const promises = [];
-
-  nfts.forEach((nft) =>
-    promises.push(
-      getTokenURI({
-        file: nft.previewImage || nft.file,
-        name: nft.name,
-        description: nft.description,
-        editions: nft.numberOfEditions,
-        propertiesParsed: nft.propertiesParsed,
-        royaltiesParsed: nft.royalties,
-      })
-    )
-  );
-
-  const res = await resolveAllPromises(promises);
-
-  if (!res.length) {
-    console.error('server error. cannot get token uri');
-    return {};
-  }
-
-  const nftsAttachedTokenUri = attachTokenURIs(nfts, res);
-
-  return { nfts: nftsAttachedTokenUri };
-};
-
-/**
- * @param {Object} data
  * @param {Object} data.helpers
  * @param {Object} data.collection
  * @param data.collection.file

@@ -5,6 +5,7 @@ import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useLocation } from 'react-router-dom';
+import { Contract } from 'ethers';
 import './CreateSingleNft.scss';
 import EthereumAddress from 'ethereum-address';
 import Button from '../../button/Button.jsx';
@@ -30,15 +31,17 @@ import {
   saveNftImage,
   getSavedNfts,
   updateSavedForLaterNft,
+  getTokenURI,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
   parseProperties,
   parsePropertiesForFrontEnd,
+  formatRoyaltiesForMinting,
 } from '../../../utils/helpers/contractInteraction';
-import { MintSingleNftFlow } from '../../../userFlows/MintSingleNftFlow';
 import SuccessPopup from '../../popups/SuccessPopup.jsx';
 import { RouterPrompt } from '../../../utils/routerPrompt';
+import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/minting';
 
 const SingleNFTSettings = () => {
   const {
@@ -240,41 +243,60 @@ const SingleNFTSettings = () => {
   const onMintNft = async () => {
     document.getElementById('loading-hidden-btn').click();
     document.body.classList.add('no__scroll');
-    const mintingFlowContext = {
-      collectionsIdAddressMapping,
-      universeERC721CoreContract,
-      contracts,
-      signer,
-      address,
+
+    // NFT data to generate token URI
+    const data = {
+      file: previewImage,
+      name,
+      description,
+      editions,
+      propertiesParsed: propertyCheck ? parseProperties(properties) : [],
+      royaltiesParsed: royalities ? parseRoyalties(royaltyAddress) : [],
     };
 
-    const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
-    const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
+    // Get the contract instance to mint from
+    const collectionContract =
+      selectedCollection && selectedCollection.address
+        ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
+        : universeERC721CoreContract;
 
-    const nftData = [
-      {
-        collectionId: selectedCollection?.id || 0,
-        royalties: royaltiesParsed,
-        numberOfEditions: editions,
-        file: previewImage,
-        name,
-        description,
-        propertiesParsed,
-        royaltiesParsed,
-      },
-    ];
+    // Get the Token URIs from the BE
+    const tokenURIs = await getTokenURI(data);
 
-    const res = await MintSingleNftFlow({ nfts: nftData, helpers: mintingFlowContext });
+    // Prepare the data for the smart contract
+    const parsedRoyalties = formatRoyaltiesForMinting(data.royaltiesParsed);
+    const tokenURIsAndRoyalties = tokenURIs.map((token) => ({
+      token,
+      royalties: parsedRoyalties,
+    }));
+    // TODO:: Rename the method to parseDataForBatchMint
+    const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(tokenURIsAndRoyalties);
+
+    // Mint the data on Chunks
+    const mintPromises = tokensChunks.map(async (chunk, i) => {
+      const mintTransaction = await collectionContract.batchMintWithDifferentFees(
+        address,
+        chunk,
+        royaltiesChunks[i]
+      );
+      const mintReceipt = await mintTransaction.wait();
+      return mintReceipt.status;
+    });
+
+    const res = await Promise.all(mintPromises);
+
     document.getElementById('loading-hidden-btn').click();
     document.getElementById('popup-root').remove();
 
-    if (res) {
+    const hasFailedTransaction = res.includes(0);
+    if (!hasFailedTransaction) {
       // TODO a better implementation is proposed (https://limechain.slack.com/archives/C02965WRS8M/p1628064001005600?thread_ts=1628063741.005200&cid=C02965WRS8M)
       // const mintedNfts = await getMyNfts();
       // setMyNFTs(mintedNfts || []);
 
       document.getElementById('congrats-hidden-btn').click();
     } else {
+      // TODO:: Add Error Handling
       // error
     }
 
@@ -489,9 +511,17 @@ const SingleNFTSettings = () => {
               style={{ display: 'none' }}
             />
           }
+          closeOnDocumentClick={false}
         >
           {(close) =>
-            showCongratsPopup ? '' : <LoadingPopup onClose={() => handleCloseLoadingPopup(close)} />
+            showCongratsPopup ? (
+              ''
+            ) : (
+              <LoadingPopup
+                text="The NFT will appear, after the transaction finishes. Please wait..."
+                onClose={() => handleCloseLoadingPopup(close)}
+              />
+            )
           }
         </Popup>
         <Popup
@@ -503,6 +533,7 @@ const SingleNFTSettings = () => {
               style={{ display: 'none' }}
             />
           }
+          closeOnDocumentClick={false}
         >
           {(close) => (
             <CongratsPopup
