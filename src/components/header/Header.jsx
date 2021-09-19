@@ -137,7 +137,7 @@ const Header = ({ location }) => {
         <Link className="light" to="/">
           <img src={appLightLogo} alt="App Logo" />
         </Link>
-        <div className="search--field">
+        {/* <div className="search--field">
           <div className={`search--field--wrapper ${searchFocus || searchValue ? 'focus' : ''}`}>
             <div className="box--shadow--effect--block" />
             <img className="search" src={searchIcon} alt="Search" />
@@ -282,7 +282,7 @@ const Header = ({ location }) => {
                           </div>
                         </div>
                       ))}
-                      {/* {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                      {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                         item.name.toLowerCase().includes(searchValue.toLowerCase())
                       ).length > 0 && <h4>Communities</h4>}
                       {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
@@ -313,7 +313,7 @@ const Header = ({ location }) => {
                             <p className="galleries--likes">{galleries.likesCount} Likes</p>
                           </div>
                         </div>
-                      ))} */}
+                      ))}
                       <Button
                         type="button"
                         className="light-border-button"
@@ -331,7 +331,7 @@ const Header = ({ location }) => {
               </>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
       <DesktopView
         isWalletConnected={isWalletConnected}

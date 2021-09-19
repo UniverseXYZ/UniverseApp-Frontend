@@ -144,7 +144,7 @@ const MobileView = (props) => {
   });
   return (
     <div className="mobile__nav">
-      <button
+      {/* <button
         type="button"
         className="mobile--search--box"
         onClick={() => {
@@ -307,7 +307,7 @@ const MobileView = (props) => {
                             </div>
                           </div>
                         ))}
-                        {/* {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                           item.name.toLowerCase().includes(searchValue.toLowerCase())
                         ).length > 0 && <h4>Communities</h4>}
                         {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
@@ -338,7 +338,7 @@ const MobileView = (props) => {
                               <p className="galleries--likes">{galleries.likesCount} Likes</p>
                             </div>
                           </div>
-                        ))} */}
+                        ))}
                         <Button
                           type="button"
                           className="light-border-button"
@@ -362,7 +362,7 @@ const MobileView = (props) => {
             </div>
           </div>
         </>
-      )}
+      )} */}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
           <img

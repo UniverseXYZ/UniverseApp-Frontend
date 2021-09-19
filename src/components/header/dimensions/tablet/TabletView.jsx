@@ -130,7 +130,7 @@ const TabletView = (props) => {
 
   return (
     <div className="tablet__nav">
-      <button
+      {/* <button
         className="search--box"
         type="button"
         onClick={() => {
@@ -138,8 +138,8 @@ const TabletView = (props) => {
         }}
       >
         <img src={searchIcon} alt="icon" />
-      </button>
-      {showSearch && (
+      </button> */}
+      {/* {showSearch && (
         <>
           <div className="search--section">
             <div className="input--search--box">
@@ -293,7 +293,7 @@ const TabletView = (props) => {
                             </div>
                           </div>
                         ))}
-                        {/* {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                           item.name.toLowerCase().includes(searchValue.toLowerCase())
                         ).length > 0 && <h4>Communities</h4>}
                         {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
@@ -324,7 +324,7 @@ const TabletView = (props) => {
                               <p className="galleries--likes">{galleries.likesCount} Likes</p>
                             </div>
                           </div>
-                        ))} */}
+                        ))}
                         <Button
                           type="button"
                           className="light-border-button"
@@ -348,7 +348,7 @@ const TabletView = (props) => {
             </div>
           </div>
         </>
-      )}
+      )} */}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
           <img
