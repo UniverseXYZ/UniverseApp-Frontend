@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from '@apollo/client';
 import { queryPolymorphsGraph, traitRarity } from '../../utils/graphql/polymorphQueries';
 import RarityRankOrangeProperty from './RarityRankOrangeProperty';
 import RarityRankBlueProperty from './RarityRankBlueProperty';
@@ -16,14 +17,24 @@ function RarityRankPopupProperty({
   genesMap,
   matchingHands,
 }) {
-  const { data, loading } = useGraphQueryHook(
-    queryPolymorphsGraph(traitRarity(genesMap[propertyName.toUpperCase()]))
-  );
+  const [data, setData] = useState(null);
 
   let chance = '';
   if (data?.traits?.length) {
     chance = `${Math.round(data.traits[0]?.rarity, 10)}% have this trait`;
   }
+  console.log(genesMap);
+  useEffect(() => {
+    const queryTraitRarity = async () => {
+      const traitData = await queryPolymorphsGraph(
+        traitRarity(genesMap[propertyName.toUpperCase()])
+      );
+      setData(traitData);
+    };
+    if (genesMap[propertyName.toUpperCase()]) {
+      queryTraitRarity();
+    }
+  }, []);
   const renderTrait = () => {
     // Checks if hands are matching different set than the main and secondary sets
     if (
