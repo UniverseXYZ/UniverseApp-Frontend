@@ -56,3 +56,6 @@ export const defaultColors = [
   '#FFCCBC',
   '#D7CCC8',
 ];
+
+export const getCollectionBackgroundColor = (collection) =>
+  defaultColors[Math.floor((collection.id * collection.name.charCodeAt(0)) % defaultColors.length)];

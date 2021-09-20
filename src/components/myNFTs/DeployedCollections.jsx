@@ -8,6 +8,7 @@ import plusIcon from '../../assets/images/plus.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
+import { defaultColors, getCollectionBackgroundColor } from '../../utils/helpers';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
@@ -29,12 +30,13 @@ const DeployedCollections = () => {
     };
   });
 
+  console.log(defaultColors[Math.floor(deployedCollections[0].id % defaultColors.length)]);
   return (
     <div className="tab__saved__collections">
       {deployedCollections.length ? (
         <>
           <div className="saved__collections__lists">
-            {deployedCollections.slice(offset, offset + perPage).map((collection) => (
+            {deployedCollections.slice(offset, offset + perPage).map((collection, index) => (
               <div
                 className="saved__collection__box"
                 key={uuid()}
@@ -55,16 +57,25 @@ const DeployedCollections = () => {
                       className="random__bg__color"
                       style={{ backgroundColor: collection.previewImage }}
                     />
-                  ) : (
+                  ) : collection.coverUrl ? (
                     <img className="blur" src={collection.coverUrl} alt={collection.name} />
+                  ) : (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: getCollectionBackgroundColor(collection),
+                      }}
+                    />
                   )}
                 </div>
                 <div className="saved__collection__box__body">
-                  {typeof collection.coverUrl === 'string' &&
-                  collection.coverUrl.startsWith('#') ? (
+                  {!collection.coverUrl ? (
                     <div
                       className="random__avatar__color"
-                      style={{ backgroundColor: collection.coverUrl }}
+                      style={{
+                        backgroundColor: getCollectionBackgroundColor(collection),
+                      }}
                     >
                       {collection.name.charAt(0)}
                     </div>

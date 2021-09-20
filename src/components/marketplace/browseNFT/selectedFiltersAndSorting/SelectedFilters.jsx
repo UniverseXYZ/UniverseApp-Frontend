@@ -142,7 +142,7 @@ const SelectedFilters = ({
               <div
                 className="random--avatar--color"
                 style={{
-                  backgroundColor: Math.floor(coll.id % defaultColors.length),
+                  backgroundColor: getCollectionBackgroundColor(coll),
                 }}
               >
                 {coll.name.charAt(0)}

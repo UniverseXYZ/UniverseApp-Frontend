@@ -17,10 +17,10 @@ import snxIcon from '../../../../assets/images/snx.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import AppContext from '../../../../ContextAPI';
-import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
+import { defaultColors } from '../../../../utils/helpers';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
-const SortingFilters = ({
+const CollectionSortingFilters = ({
   saleTypeButtons,
   setSaleTypeButtons,
   selectedPrice,
@@ -402,108 +402,6 @@ const SortingFilters = ({
           </div>
         )}
       </div> */}
-      <div
-        className={`sorting--filter ${showCollectionsDropdown ? 'open' : ''}`}
-        ref={ref3}
-        aria-hidden="true"
-        onClick={() => setShowCollectionsDropdown(!showCollectionsDropdown)}
-      >
-        <p className="filter--name">
-          <img className="filter__icon" src={collectionIcon} alt="Collection" />
-          Collections {selectedCollections.length > 0 && `(${selectedCollections.length})`}
-        </p>
-        <img
-          className={`arrow ${showCollectionsDropdown ? 'rotate' : ''}`}
-          src={arrowDown}
-          alt="Arrow"
-        />
-        <div className="box--shadow--effect--block" />
-        {showCollectionsDropdown && (
-          <div
-            className="collection--dropdown"
-            aria-hidden="true"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="collection--dropdown--body">
-              <div className="collection--dropdown--selected">
-                {selectedCollections.map((coll, index) => (
-                  <button type="button" className="light-border-button" key={uuid()}>
-                    {!coll.coverUrl ? (
-                      <div
-                        className="random--avatar--color"
-                        style={{
-                          backgroundColor: getCollectionBackgroundColor(coll),
-                        }}
-                      >
-                        {coll.name.charAt(0)}
-                      </div>
-                    ) : (
-                      <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
-                    )}
-                    {coll.name}
-                    <img
-                      className="close"
-                      src={closeIcon}
-                      alt="Close"
-                      aria-hidden="true"
-                      onClick={() => removeCollection(index)}
-                    />
-                  </button>
-                ))}
-              </div>
-              <div className="collection--search--field">
-                <input
-                  type="text"
-                  placeholder="Filter"
-                  onChange={(e) => handleSearchCollection(e.target.value)}
-                  value={searchByCollections}
-                />
-                <img src={searchIcon} alt="Search" />
-              </div>
-              <div className="collections__list">
-                {collections
-                  .filter((item) =>
-                    item.name.toLowerCase().includes(searchByCollections.toLowerCase())
-                  )
-                  .map((coll, index) => (
-                    <div
-                      className="collection__item"
-                      key={uuid()}
-                      onClick={() => handleSelectCollection(coll)}
-                      aria-hidden="true"
-                    >
-                      {!coll.coverUrl ? (
-                        <div
-                          className="random--avatar--color"
-                          style={{
-                            backgroundColor: getCollectionBackgroundColor(coll),
-                          }}
-                        >
-                          {coll.name.charAt(0)}
-                        </div>
-                      ) : (
-                        <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
-                      )}
-                      <p>{coll.name}</p>
-                    </div>
-                  ))}
-              </div>
-            </div>
-            <div className="collection--dropdown--footer">
-              <button type="button" className="clear--all" onClick={() => handleClearCollections()}>
-                Clear
-              </button>
-              <button
-                type="button"
-                className="light-button"
-                onClick={() => handleSaveCollections()}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
       {/* <div
         className={`sorting--filter ${showArtistsDropdown ? 'open' : ''}`}
         ref={ref4}
@@ -580,7 +478,7 @@ const SortingFilters = ({
   );
 };
 
-SortingFilters.propTypes = {
+CollectionSortingFilters.propTypes = {
   saleTypeButtons: PropTypes.oneOfType([PropTypes.array]),
   setSaleTypeButtons: PropTypes.func,
   selectedPrice: PropTypes.oneOfType([PropTypes.any]),
@@ -599,7 +497,7 @@ SortingFilters.propTypes = {
   setSavedCreators: PropTypes.func,
 };
 
-SortingFilters.defaultProps = {
+CollectionSortingFilters.defaultProps = {
   saleTypeButtons: [],
   setSaleTypeButtons: () => {},
   selectedPrice: null,
@@ -618,4 +516,4 @@ SortingFilters.defaultProps = {
   setSavedCreators: () => {},
 };
 
-export default SortingFilters;
+export default CollectionSortingFilters;

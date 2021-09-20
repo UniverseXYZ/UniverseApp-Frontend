@@ -5,7 +5,7 @@ import SortingFilter from '../input/SortingFilter';
 import collectionIcon from '../../assets/images/marketplace/collections.svg';
 import SearchField from '../input/SearchField';
 import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../utils/fixtures/BrowseNFTsDummyData';
-import { defaultColors } from '../../utils/helpers';
+import { defaultColors, getCollectionBackgroundColor } from '../../utils/helpers';
 import closeIcon from '../../assets/images/close-menu.svg';
 import './styles/CollectionFilter.scss';
 
@@ -71,7 +71,7 @@ const CollectionFilter = (props) => {
                   <div
                     className="random--avatar--color"
                     style={{
-                      backgroundColor: Math.floor(coll.id % defaultColors.length),
+                      backgroundColor: getCollectionBackgroundColor(coll),
                     }}
                   >
                     {coll.name.charAt(0)}

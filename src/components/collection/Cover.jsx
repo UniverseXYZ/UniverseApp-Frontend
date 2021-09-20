@@ -1,9 +1,9 @@
 import React, { useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
-import AppContext from '../../ContextAPI';
 import { editCollectionBanner } from '../../utils/api/mintNFT';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const Cover = ({ selectedCollection }) => {
   const { deployedCollections, setDeployedCollections } = useAuthContext();
@@ -49,14 +49,13 @@ const Cover = ({ selectedCollection }) => {
           style={{ backgroundColor: selectedCollection.bannerUrl }}
         />
       ) : (
-        <>
-          <img
-            className="bg blur"
-            src={selectedCollection.bannerUrl}
-            alt={selectedCollection.name}
-          />
-          <div className="blured" />
-        </>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: getCollectionBackgroundColor(selectedCollection),
+          }}
+        />
       )}
     </div>
   );
