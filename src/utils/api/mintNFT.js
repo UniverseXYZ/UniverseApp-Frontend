@@ -27,11 +27,18 @@ export const saveNftForLater = async (data) => {
   // Construct it in order to match the expected object keys at the BE
   const requestData = {
     name: data.name,
-    description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
-    properties: data.propertiesParsed.length ? data.propertiesParsed : null,
-    royalties: data.royaltiesParsed.length ? data.royaltiesParsed : null,
   };
+
+  if (data.description) {
+    requestData.description = data.description;
+  }
+  if (data.propertiesParsed.length) {
+    requestData.properties = data.propertiesParsed;
+  }
+  if (data.royaltiesParsed.length) {
+    requestData.royalties = data.royaltiesParsed;
+  }
 
   if (data.collectionId) requestData.collectionId = data.collectionId;
 
@@ -169,12 +176,18 @@ export const updateSavedForLaterNft = async (data) => {
   // Construct it in order to match the expected object keys at the BE
   const requestData = {
     name: data.name,
-    description: data.description,
     numberOfEditions: parseInt(data.editions, 10),
-    properties: data.propertiesParsed?.length ? data.propertiesParsed : null,
-    royalties: data.royaltiesParsed?.length ? data.royaltiesParsed : null,
-    collectionId: data.collectionId ? data.collectionId : null,
   };
+
+  if (data.description) {
+    requestData.description = data.description;
+  }
+  if (data.propertiesParsed.length) {
+    requestData.properties = data.propertiesParsed;
+  }
+  if (data.royaltiesParsed.length) {
+    requestData.royalties = data.royaltiesParsed;
+  }
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
     method: 'PATCH',
