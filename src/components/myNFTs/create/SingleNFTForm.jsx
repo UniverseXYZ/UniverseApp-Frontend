@@ -75,6 +75,7 @@ const SingleNFTForm = () => {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [showCreateMoreButton, setShowCreateMoreButton] = useState(true);
   const [editions, setEditions] = useState('');
   const [previewImage, setPreviewImage] = useState('');
   const [hideIcon, setHideIcon] = useState(false);
@@ -399,7 +400,7 @@ const SingleNFTForm = () => {
 
   const onEditSavedNft = async () => {
     setShowLoadingPopup(true);
-
+    setShowCreateMoreButton(false);
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
 
@@ -547,12 +548,8 @@ const SingleNFTForm = () => {
         </Popup>
         <Popup open={showCongratsPopup} closeOnDocumentClick={false}>
           <CongratsPopup
+            showCreateMore={showCreateMoreButton}
             onClose={() => setShowCongratsPopup(false)}
-            backButtonText={
-              location.pathname === '/create-tiers/my-nfts/create'
-                ? 'Go to reward tier settings'
-                : 'Go to my NFTs'
-            }
             message="NFT was successfully created and should be displayed in your wallet shortly"
           />
         </Popup>
