@@ -213,11 +213,15 @@ const MyNFTs = () => {
         active: myNFTsSelectedTabIndex === index,
         handler: setMyNFTsSelectedTabIndex.bind(this, index),
         length:
-          index === 0 && myNFTs.filter((nft) => !nft.hidden).length > 0
-            ? myNFTs.filter((nft) => !nft.hidden).length
+          index === 0 && myNFTs.filter((nft) => !nft?.hidden).length > 0
+            ? myNFTs.filter((nft) => !nft?.hidden).length
             : index === 1 && deployedCollections.length > 0
             ? deployedCollections.length
-            : null,
+            : index === 2 && savedNfts.length > 0
+            ? savedNfts.length
+            : index === 3 && (userLobsters.length || userPolymorphs.length)
+            ? userLobsters.length + userPolymorphs.length
+            : index === 4 && myNFTs.filter((nft) => nft.hidden).length > 0,
       }))}
     />
   );
@@ -641,7 +645,8 @@ const MyNFTs = () => {
   return (
     <>
       <div className="mynfts__page">
-        {existsNFTs() ? renderIfNFTsExist() : renderIfNFTsNotExist()}
+        {/* {existsNFTs() ? renderIfNFTsExist() : renderIfNFTsNotExist()} */}
+        {renderIfNFTsExist()}
       </div>
       {renderPopups()}
     </>

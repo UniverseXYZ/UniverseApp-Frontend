@@ -12,6 +12,8 @@ import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import SimplePagination from '../pagination/SimplePaginations';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
@@ -19,6 +21,9 @@ const SavedNFTs = () => {
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(8);
+
   const ref = useRef(null);
   const history = useHistory();
 
@@ -108,7 +113,7 @@ const SavedNFTs = () => {
           </div>
 
           <div className="saved__nfts__lists">
-            {savedNfts.map((nft, index) => (
+            {savedNfts.slice(offset, offset + perPage).map((nft, index) => (
               <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
                 <div
                   className="saved__nft__box__image"
@@ -232,6 +237,14 @@ const SavedNFTs = () => {
                 <span className="tooltiptext">Complete editing this NFT</span>
               </div>
             ))}
+          </div>
+          <div className="pagination__container">
+            <SimplePagination data={savedNfts} perPage={perPage} setOffset={setOffset} />
+            <ItemsPerPageDropdown
+              perPage={perPage}
+              setPerPage={setPerPage}
+              itemsPerPage={[8, 16, 32]}
+            />
           </div>
         </>
       ) : (

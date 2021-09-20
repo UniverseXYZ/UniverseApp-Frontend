@@ -6,14 +6,16 @@ import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import plusIcon from '../../assets/images/plus.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
+import SimplePagination from '../pagination/SimplePaginations';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
   const history = useHistory();
-  const ref = useRef(null);
   const ref2 = useRef(null);
-  const refMobile = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(8);
 
   const handleClickOutside = (event) => {
     if (ref2.current && !ref2.current.contains(event.target)) {
@@ -30,57 +32,68 @@ const DeployedCollections = () => {
   return (
     <div className="tab__saved__collections">
       {deployedCollections.length ? (
-        <div className="saved__collections__lists">
-          {deployedCollections.map((collection) => (
-            <div
-              className="saved__collection__box"
-              key={uuid()}
-              aria-hidden="true"
-              onClick={() =>
-                history.push(`/c/${collection.id}`, {
-                  collection,
-                  saved: true,
-                })
-              }
-            >
-              <div className="saved__collection__box__header">
-                {collection.bannerUrl ? (
-                  <img src={collection.bannerUrl} alt={collection.name} />
-                ) : typeof collection.previewImage === 'string' &&
-                  collection.previewImage.startsWith('#') ? (
-                  <div
-                    className="random__bg__color"
-                    style={{ backgroundColor: collection.previewImage }}
-                  />
-                ) : (
-                  <img className="blur" src={collection.coverUrl} alt={collection.name} />
-                )}
+        <>
+          <div className="saved__collections__lists">
+            {deployedCollections.slice(offset, offset + perPage).map((collection) => (
+              <div
+                className="saved__collection__box"
+                key={uuid()}
+                aria-hidden="true"
+                onClick={() =>
+                  history.push(`/c/${collection.id}`, {
+                    collection,
+                    saved: true,
+                  })
+                }
+              >
+                <div className="saved__collection__box__header">
+                  {collection.bannerUrl ? (
+                    <img src={collection.bannerUrl} alt={collection.name} />
+                  ) : typeof collection.previewImage === 'string' &&
+                    collection.previewImage.startsWith('#') ? (
+                    <div
+                      className="random__bg__color"
+                      style={{ backgroundColor: collection.previewImage }}
+                    />
+                  ) : (
+                    <img className="blur" src={collection.coverUrl} alt={collection.name} />
+                  )}
+                </div>
+                <div className="saved__collection__box__body">
+                  {typeof collection.coverUrl === 'string' &&
+                  collection.coverUrl.startsWith('#') ? (
+                    <div
+                      className="random__avatar__color"
+                      style={{ backgroundColor: collection.coverUrl }}
+                    >
+                      {collection.name.charAt(0)}
+                    </div>
+                  ) : (
+                    <img
+                      className="collection__avatar"
+                      src={collection.coverUrl}
+                      alt={collection.name}
+                    />
+                  )}
+                  {/* <h3 className="collection__name">{collection.name}</h3> */}
+                  <h3 title={collection.name} className="collection__name">
+                    {collection.name.length > 13
+                      ? `${collection.name.substring(0, 13)}...`
+                      : collection.name}
+                  </h3>
+                </div>
               </div>
-              <div className="saved__collection__box__body">
-                {typeof collection.coverUrl === 'string' && collection.coverUrl.startsWith('#') ? (
-                  <div
-                    className="random__avatar__color"
-                    style={{ backgroundColor: collection.coverUrl }}
-                  >
-                    {collection.name.charAt(0)}
-                  </div>
-                ) : (
-                  <img
-                    className="collection__avatar"
-                    src={collection.coverUrl}
-                    alt={collection.name}
-                  />
-                )}
-                {/* <h3 className="collection__name">{collection.name}</h3> */}
-                <h3 title={collection.name} className="collection__name">
-                  {collection.name.length > 13
-                    ? `${collection.name.substring(0, 13)}...`
-                    : collection.name}
-                </h3>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="pagination__container">
+            <SimplePagination data={deployedCollections} perPage={perPage} setOffset={setOffset} />
+            <ItemsPerPageDropdown
+              perPage={perPage}
+              setPerPage={setPerPage}
+              itemsPerPage={[8, 16, 32]}
+            />
+          </div>
+        </>
       ) : (
         <div className="empty__nfts">
           <div className="tabs-empty">
