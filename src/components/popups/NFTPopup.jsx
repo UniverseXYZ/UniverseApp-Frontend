@@ -101,7 +101,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
               <p
                 aria-hidden="true"
                 onClick={() =>
-                  history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                  history.push(`/collection/${collection.id.toLowerCase().replace(' ', '-')}`, {
                     collection,
                     saved: false,
                   })

@@ -42,7 +42,7 @@ const DeployedCollections = () => {
                 key={uuid()}
                 aria-hidden="true"
                 onClick={() =>
-                  history.push(`/c/${collection.id}`, {
+                  history.push(`/collection/${collection.id}`, {
                     collection,
                     saved: true,
                   })

@@ -51,7 +51,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   const [collectionName, setCollectionName] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [description, setDescription] = useState('');
-  const [shortURL, setShortURL] = useState('universe.xyz/c/shorturl');
+  const [shortURL, setShortURL] = useState('universe.xyz/collection/shorturl');
   const [inputClass, setInputClass] = useState('inp empty');
   const [collectionNFTs, setCollectionNFTs] = useState([]);
   const [collectionNFTsID, setCollectionNFTsID] = useState(null);
@@ -124,7 +124,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       ...errors,
       shorturl: value.length <= 15 ? '“Short URL” is not allowed to be empty' : '',
     });
-    if (value.length <= 15 || value === 'universe.xyz/c/shorturl') {
+    if (value.length <= 15 || value === 'universe.xyz/collection/shorturl') {
       setInputClass('empty__error');
     } else {
       setInputClass('inp');
@@ -132,15 +132,15 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   };
 
   const handleOnFocus = () => {
-    if (shortURL === 'universe.xyz/c/shorturl') {
-      setShortURL('universe.xyz/c/');
+    if (shortURL === 'universe.xyz/collection/shorturl') {
+      setShortURL('universe.xyz/collection/');
       setInputClass('inp');
     }
   };
 
   const handleOnBlur = () => {
-    if (shortURL === 'universe.xyz/c/') {
-      setShortURL('universe.xyz/c/shorturl');
+    if (shortURL === 'universe.xyz/collection/') {
+      setShortURL('universe.xyz/collection/shorturl');
       setInputClass('error-inp empty__error');
       setErrors({
         ...errors,
@@ -155,18 +155,18 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       !collectionName ||
       !tokenName ||
       shortURL.length <= 15 ||
-      shortURL === 'universe.xyz/c/shorturl'
+      shortURL === 'universe.xyz/collection/shorturl'
     ) {
       setErrors({
         collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: '',
         shorturl:
-          shortURL.length <= 15 || shortURL === 'universe.xyz/c/shorturl'
+          shortURL.length <= 15 || shortURL === 'universe.xyz/collection/shorturl'
             ? '“Short URL” is not allowed to be empty'
             : '',
       });
-      if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/c/shorturl') {
+      if (errors.shorturl.length > 0 || shortURL === 'universe.xyz/collection/shorturl') {
         setInputClass('empty__error');
       } else {
         setInputClass('inp');
@@ -565,10 +565,10 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
           label="Short URL"
           className={inputClass}
           error={errors.shorturl}
-          placeholder="universe.xyz/c/shorturl"
+          placeholder="universe.xyz/collection/shorturl"
           value={shortURL}
           onChange={(e) =>
-            e.target.value.startsWith('universe.xyz/c/') && handleShortUrl(e.target.value)
+            e.target.value.startsWith('universe.xyz/collection/') && handleShortUrl(e.target.value)
           }
           onFocus={() => handleOnFocus()}
           onBlur={() => handleOnBlur()}

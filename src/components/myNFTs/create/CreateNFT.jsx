@@ -31,7 +31,7 @@ const CreateNFT = () => {
 
   const goToCollectionPage = () => {
     const findCollection = deployedCollections.filter((item) => item.id === savedCollectionID);
-    history.push(`/c/${findCollection[0].id}`, {
+    history.push(`/collection/${findCollection[0].id}`, {
       collection: deployedCollections.filter((item) => item.id === savedCollectionID)[0],
       saved: false,
     });
