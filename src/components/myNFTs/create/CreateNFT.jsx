@@ -29,6 +29,14 @@ const CreateNFT = () => {
     }
   };
 
+  const goToCollectionPage = () => {
+    const findCollection = deployedCollections.filter((item) => item.id === savedCollectionID);
+    history.push(`/c/${findCollection[0].id}`, {
+      collection: deployedCollections.filter((item) => item.id === savedCollectionID)[0],
+      saved: false,
+    });
+  };
+
   useEffect(() => {
     if (savedNFTsID) {
       setSelectedTabIndex(1);
@@ -78,24 +86,7 @@ const CreateNFT = () => {
           </>
         )}
         {savedCollectionID && (
-          <div
-            className="back-btn"
-            onClick={() =>
-              history.push(
-                `/c/${deployedCollections
-                  .filter((item) => item.id === savedCollectionID)[0]
-                  .id.toLowerCase()
-                  .replace(' ', '-')}`,
-                {
-                  collection: deployedCollections.filter(
-                    (item) => item.id === savedCollectionID
-                  )[0],
-                  saved: false,
-                }
-              )
-            }
-            aria-hidden="true"
-          >
+          <div className="back-btn" onClick={goToCollectionPage} aria-hidden="true">
             <img src={arrow} alt="back" />
             <span>
               {deployedCollections.filter((item) => item.id === savedCollectionID)[0].name}

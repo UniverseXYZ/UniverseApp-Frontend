@@ -146,6 +146,7 @@
           margin-left: -7px;
         }
         img {
+          pointer-events: none;
           width: 26px;
           height: 26px;
           object-fit: cover;
@@ -350,6 +351,9 @@
         height: 100%;
         object-fit: cover;
         border-radius: 4px;
+      }
+      img.nft--image {
+        pointer-events: none;
       }
       .video--icon {
         display: flex;
