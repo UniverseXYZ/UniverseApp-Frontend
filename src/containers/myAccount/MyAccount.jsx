@@ -55,6 +55,15 @@ const MyAccount = () => {
   const saveChanges = async () => {
     try {
       setEditProfileButtonClick(true);
+      if (
+        !accountImage ||
+        !accountName ||
+        accountPage === 'universe.xyz/' ||
+        accountPage === 'universe.xyz/your-address' ||
+        !about
+      ) {
+        return;
+      }
       let page = accountPage.substring(13);
       if (page === 'your-address') {
         page = '';
@@ -87,7 +96,7 @@ const MyAccount = () => {
 
       setTimeout(() => {
         if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
-          document.getElementById('congrats-hidden-btn').click();
+          setShowCongrats(true);
         }
       }, 2000);
     } catch (err) {
