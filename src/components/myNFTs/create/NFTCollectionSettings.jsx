@@ -396,7 +396,12 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   }, [location.pathname]);
 
   const imageSrc = useMemo(
-    () => (typeof coverImage === 'object' ? URL.createObjectURL(coverImage) : coverImage),
+    () =>
+      coverImage
+        ? typeof coverImage === 'object'
+          ? URL.createObjectURL(coverImage)
+          : coverImage
+        : '',
     [coverImage]
   );
   return !showCollectible ? (

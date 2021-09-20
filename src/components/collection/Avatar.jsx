@@ -15,24 +15,16 @@ const Avatar = ({ selectedCollection }) => {
         <div
           className="random__bg__color"
           style={{
-            backgroundColor:
-              defaultColors[
-                Math.floor(
-                  (selectedCollection.name.charCodeAt(0) * selectedCollection.id) %
-                    defaultColors.length
-                )
-              ],
+            backgroundColor: getCollectionBackgroundColor(selectedCollection),
           }}
         >
           {selectedCollection.name.charAt(0)}
         </div>
       ) : (
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: getCollectionBackgroundColor(collection),
-          }}
+        <img
+          className="collection__avatar"
+          src={selectedCollection.coverUrl}
+          alt={selectedCollection.name}
         />
       )}
     </div>

@@ -42,12 +42,17 @@ const Cover = ({ selectedCollection }) => {
       </div>
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
-      ) : typeof selectedCollection.bannerUrl === 'string' &&
-        selectedCollection.bannerUrl.startsWith('#') ? (
-        <div
-          className="random__bg__color"
-          style={{ backgroundColor: selectedCollection.bannerUrl }}
-        />
+      ) : !selectedCollection.bannerUrl && selectedCollection.coverUrl ? (
+        <>
+          <img
+            className="bg blur"
+            src={selectedCollection.coverUrl}
+            alt={selectedCollection.name}
+          />
+          <div className="blured" />
+        </>
+      ) : selectedCollection.bannerUrl ? (
+        <img className="bg" src={selectedCollection.bannerUrl} alt={selectedCollection.name} />
       ) : (
         <div
           style={{
