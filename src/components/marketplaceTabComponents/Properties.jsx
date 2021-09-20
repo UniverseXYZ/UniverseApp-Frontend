@@ -9,7 +9,6 @@ const Properties = ({ properties }) => (
         <div>
           <p>{Object.keys(property)[0]}</p>
           <h1>{property[Object.keys(property)[0]]}</h1>
-          <h2>30% have this trait</h2>
         </div>
       ))}
     </div>
