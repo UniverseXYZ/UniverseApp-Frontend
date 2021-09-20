@@ -52,7 +52,6 @@ const SingleNFTForm = () => {
   const {
     savedNfts,
     setSavedNfts,
-    setShowModal,
     savedNFTsID,
     setSavedNFTsID,
     myNFTs,
@@ -93,6 +92,7 @@ const SingleNFTForm = () => {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
+  const [showLoadingPopup, setShowLoadingPopup] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
 
@@ -240,13 +240,12 @@ const SingleNFTForm = () => {
   };
 
   const closeLoadingModal = () => {
-    setShowModal(false);
     document.body.classList.remove('no__scroll');
   };
 
   const onMintNft = async () => {
-    document.getElementById('loading-hidden-btn').click();
-    document.body.classList.add('no__scroll');
+    setShowLoadingPopup(true);
+    // document.body.classList.add('no__scroll');
 
     // NFT data to generate token URI
     const data = {
@@ -281,6 +280,7 @@ const SingleNFTForm = () => {
       }
 
       if (result?.error) {
+        setShowLoadingPopup(false);
         showErrorModal(true);
         return;
       }
@@ -320,9 +320,8 @@ const SingleNFTForm = () => {
 
           setSavedNfts(savedNFTS || []);
 
-          document.getElementById('loading-hidden-btn').click();
-          document.getElementById('popup-root').remove();
-          document.getElementById('congrats-hidden-btn').click();
+          setShowLoadingPopup(false);
+          setShowCongratsPopup(true);
 
           closeLoadingModal();
           setName('');
@@ -335,11 +334,13 @@ const SingleNFTForm = () => {
       } catch (e) {
         // TODO:: Add modal with the error text
         console.error(e, 'Error !');
+        setShowLoadingPopup(false);
         setShowError(true);
       }
     } else {
       // TODO:: Add Error Handling
       console.error(e, 'Error !');
+      setShowLoadingPopup(false);
       setShowError(true);
     }
   };
@@ -539,50 +540,22 @@ const SingleNFTForm = () => {
             )
           }
         />
-        <Popup
-          trigger={
-            <button
-              type="button"
-              id="loading-hidden-btn"
-              aria-label="hidden"
-              style={{ display: 'none' }}
-            />
-          }
-          closeOnDocumentClick={false}
-        >
-          {(close) =>
-            showCongratsPopup ? (
-              ''
-            ) : (
-              <LoadingPopup
-                text="The NFT will appear, after the transaction finishes. Please wait..."
-                onClose={close}
-              />
-            )
-          }
+        <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
+          <LoadingPopup
+            text="The NFT will appear, after the transaction finishes. Please wait..."
+            onClose={() => setShowLoadingPopup(false)}
+          />
         </Popup>
-        <Popup
-          trigger={
-            <button
-              type="button"
-              id="congrats-hidden-btn"
-              aria-label="hidden"
-              style={{ display: 'none' }}
-            />
-          }
-          closeOnDocumentClick={false}
-        >
-          {(close) => (
-            <CongratsPopup
-              onClose={() => handleCloseCongratsPopup(close)}
-              backButtonText={
-                location.pathname === '/create-tiers/my-nfts/create'
-                  ? 'Go to reward tier settings'
-                  : 'Go to my NFTs'
-              }
-              message="NFT was successfully created and should be displayed in your wallet shortly"
-            />
-          )}
+        <Popup open={showCongratsPopup} closeOnDocumentClick={false}>
+          <CongratsPopup
+            onClose={() => setShowCongratsPopup(false)}
+            backButtonText={
+              location.pathname === '/create-tiers/my-nfts/create'
+                ? 'Go to reward tier settings'
+                : 'Go to my NFTs'
+            }
+            message="NFT was successfully created and should be displayed in your wallet shortly"
+          />
         </Popup>
         <Popup
           trigger={

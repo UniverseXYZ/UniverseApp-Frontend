@@ -9,8 +9,7 @@ import RemovePopup from '../popups/RemoveNftPopup.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const SavedCollections = () => {
-  const { savedCollections, setSavedCollectionID, setActiveView, setShowModal } =
-    useMyNftsContext();
+  const { savedCollections, setSavedCollectionID, setActiveView } = useMyNftsContext();
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);
@@ -41,7 +40,6 @@ const SavedCollections = () => {
     document.body.classList.add('no__scroll');
     setSavedCollectionID(id);
     setActiveView('collection');
-    setShowModal(true);
   };
 
   return (

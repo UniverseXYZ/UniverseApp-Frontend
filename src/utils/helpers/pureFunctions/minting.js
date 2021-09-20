@@ -181,13 +181,12 @@ export const parseDataForBatchMint = (tokenURIsAndRoyaltiesEntry) => {
  * @returns {Array} result
  */
 export const resolveAllPromises = async (promises) => {
-  let res;
-  try {
-    res = await Promise.all(promises);
-  } catch (e) {
-    res = [];
-    console.error('error');
-  }
+  const res = await Promise.all(promises);
+  // try {
+  // } catch (e) {
+  //   res = [];
+  //   console.error('error');
+  // }
   return res;
 };
 

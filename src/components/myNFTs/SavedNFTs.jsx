@@ -16,8 +16,7 @@ import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 
 const SavedNFTs = () => {
-  const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
-    useMyNftsContext();
+  const { savedNfts, setSavedNfts, setActiveView, setSavedNFTsID } = useMyNftsContext();
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
@@ -91,7 +90,6 @@ const SavedNFTs = () => {
     // document.body.classList.add('no__scroll');
     setSavedNFTsID(id);
     setActiveView('single');
-    // setShowModal(true);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
   };
 

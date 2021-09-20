@@ -27,7 +27,6 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage] = useState(0);
   const [myUniverseNFTsOffset, setMyUniverseNFTsOffset] = useState(0);
   const [collectionFilter, setCollectionFilter] = useState(polymorphsFilter);
-  const [showModal, setShowModal] = useState(false);
   const [myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex] = useState(0);
   const [activeView, setActiveView] = useState(null);
   const [savedNFTsID, setSavedNFTsID] = useState(null);
@@ -107,8 +106,6 @@ const MyNFTsContextProvider = ({ children }) => {
         setMyUniverseNFTsOffset,
         collectionFilter,
         setCollectionFilter,
-        showModal,
-        setShowModal,
         myNFTsSelectedTabIndex,
         setMyNFTsSelectedTabIndex,
         activeView,

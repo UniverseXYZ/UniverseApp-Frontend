@@ -9,7 +9,6 @@ import Avatar from '../../components/collection/Avatar.jsx';
 import Title from '../../components/collection/Title.jsx';
 import Description from '../../components/collection/Description.jsx';
 import Filters from '../../components/collection/Filters.jsx';
-import MintModal from '../../components/mintModal/MintModal.jsx';
 import NFTs from '../../components/collection/NFTs.jsx';
 import Button from '../../components/button/Button.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
@@ -24,7 +23,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const Collection = () => {
-  const { showModal, setShowModal, setSavedCollectionID } = useMyNftsContext();
+  const { setSavedCollectionID } = useMyNftsContext();
   const { address } = useAuthContext();
   const { setDarkMode } = useThemeContext();
   const { collectionId } = useParams();
@@ -42,7 +41,6 @@ const Collection = () => {
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
-    setShowModal(false);
   };
 
   // TODO:: This code may be useful if we need any data from the collection contract
@@ -107,8 +105,6 @@ const Collection = () => {
             nftsCount={collectionNFTs.length}
             ownersCount={ownersCount}
           />
-
-          {showModal && <MintModal open={showModal} onClose={handleClose} />}
         </div>
         <Description selectedCollection={collectionData.collection} />
         {address === collectionData?.collection?.owner ? (

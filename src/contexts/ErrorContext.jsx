@@ -17,10 +17,10 @@ const ErrorContextProvider = ({ children }) => {
   return (
     <ErrorContext.Provider
       value={{
-        setShowError,
         showError,
-        errorTitle,
-        errorBody,
+        setShowError,
+        setErrorTitle,
+        setErrorBody,
         closeError,
       }}
     >
