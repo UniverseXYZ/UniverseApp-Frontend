@@ -915,17 +915,26 @@ const SingleNFTSettings = () => {
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
                       />
                     </div>
-                    <img
-                      src={deleteIcon}
-                      alt="Delete"
-                      className="delete-img"
-                      onClick={() => removeProperty(i)}
-                      aria-hidden="true"
-                    />
-                    <Button className="light-border-button red" onClick={() => removeProperty(i)}>
-                      <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
-                      Remove
-                    </Button>
+                    {i > 0 ? (
+                      <>
+                        <img
+                          src={deleteIcon}
+                          alt="Delete"
+                          className="delete-img"
+                          onClick={() => removeProperty(i)}
+                          aria-hidden="true"
+                        />
+                        <Button
+                          className="light-border-button red"
+                          onClick={() => removeProperty(i)}
+                        >
+                          <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
+                          Remove
+                        </Button>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 )
             )}
@@ -992,20 +1001,26 @@ const SingleNFTSettings = () => {
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
                     </div>
-                    <img
-                      src={deleteIcon}
-                      alt="Delete"
-                      className="delete-img"
-                      onClick={() => removeRoyaltyAddress(i)}
-                      aria-hidden="true"
-                    />
-                    <Button
-                      className="light-border-button red"
-                      onClick={() => removeRoyaltyAddress(i)}
-                    >
-                      <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
-                      Remove
-                    </Button>
+                    {i > 0 ? (
+                      <>
+                        <img
+                          src={deleteIcon}
+                          alt="Delete"
+                          className="delete-img"
+                          onClick={() => removeRoyaltyAddress(i)}
+                          aria-hidden="true"
+                        />
+                        <Button
+                          className="light-border-button red"
+                          onClick={() => removeRoyaltyAddress(i)}
+                        >
+                          <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
+                          Remove
+                        </Button>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 ))}
               {royalities && (
