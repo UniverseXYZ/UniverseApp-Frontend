@@ -241,75 +241,77 @@ const SingleNFTForm = () => {
   };
 
   const onMintNft = async () => {
-    setShowLoadingPopup(true);
-    // document.body.classList.add('no__scroll');
+    try {
+      setShowLoadingPopup(true);
+      // document.body.classList.add('no__scroll');
 
-    // NFT data to generate token URI
-    const data = {
-      file: previewImage,
-      name,
-      description,
-      editions,
-      propertiesParsed: propertyCheck ? parseProperties(properties) : [],
-      royaltiesParsed: royalities ? parseRoyalties(royaltyAddress) : [],
-    };
+      // NFT data to generate token URI
+      const data = {
+        file: previewImage,
+        name,
+        description,
+        editions,
+        propertiesParsed: propertyCheck ? parseProperties(properties) : [],
+        royaltiesParsed: royalities ? parseRoyalties(royaltyAddress) : [],
+      };
 
-    // Get the contract instance to mint from
-    const collectionContract =
-      selectedCollection && selectedCollection.address
-        ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
-        : universeERC721CoreContract;
+      // Get the contract instance to mint from
+      const collectionContract =
+        selectedCollection && selectedCollection.address
+          ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
+          : universeERC721CoreContract;
 
-    // Update saved NFT data, before getting the TokenURI
-    if (savedNFTsID) {
-      // Attach the needed data to identify the NFT and its Collection
-      data.id = savedNFTsID;
-      data.collectionId = selectedCollection?.id;
+      // Update saved NFT data, before getting the TokenURI
+      if (savedNFTsID) {
+        // Attach the needed data to identify the NFT and its Collection
+        data.id = savedNFTsID;
+        data.collectionId = selectedCollection?.id;
 
-      let result = await updateSavedForLaterNft(data);
+        let result = await updateSavedForLaterNft(data);
 
-      if (!result.message) {
-        const updateNFTImage = result.id && typeof previewImage === 'object';
-        if (updateNFTImage) {
-          const saveImageRes = await saveNftImage(previewImage, result.id);
-          result = saveImageRes;
+        if (!result.message) {
+          const updateNFTImage = result.id && typeof previewImage === 'object';
+          if (updateNFTImage) {
+            const saveImageRes = await saveNftImage(previewImage, result.id);
+            result = saveImageRes;
+          }
+        }
+
+        if (result?.error) {
+          setShowLoadingPopup(false);
+          showErrorModal(true);
+          return;
         }
       }
 
-      if (result?.error) {
-        setShowLoadingPopup(false);
-        showErrorModal(true);
-        return;
-      }
-    }
+      // Get the Token URIs from the BE
+      const tokenURIs = savedNFTsID
+        ? await getMetaForSavedNft(savedNFTsID)
+        : await getTokenURI(data);
 
-    // Get the Token URIs from the BE
-    const tokenURIs = savedNFTsID ? await getMetaForSavedNft(savedNFTsID) : await getTokenURI(data);
+      // Prepare the data for the smart contract
+      const parsedRoyalties = formatRoyaltiesForMinting(data.royaltiesParsed);
+      const tokenURIsAndRoyalties = tokenURIs.map((token) => ({
+        token,
+        royalties: parsedRoyalties,
+      }));
+      const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(tokenURIsAndRoyalties);
 
-    // Prepare the data for the smart contract
-    const parsedRoyalties = formatRoyaltiesForMinting(data.royaltiesParsed);
-    const tokenURIsAndRoyalties = tokenURIs.map((token) => ({
-      token,
-      royalties: parsedRoyalties,
-    }));
-    const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(tokenURIsAndRoyalties);
+      // Mint the data on Chunks
+      const mintPromises = tokensChunks.map(async (chunk, i) => {
+        const mintTransaction = await collectionContract.batchMintWithDifferentFees(
+          address,
+          chunk,
+          royaltiesChunks[i]
+        );
+        const mintReceipt = await mintTransaction.wait();
+        return mintReceipt.status;
+      });
 
-    // Mint the data on Chunks
-    const mintPromises = tokensChunks.map(async (chunk, i) => {
-      const mintTransaction = await collectionContract.batchMintWithDifferentFees(
-        address,
-        chunk,
-        royaltiesChunks[i]
-      );
-      const mintReceipt = await mintTransaction.wait();
-      return mintReceipt.status;
-    });
+      const res = await Promise.all(mintPromises);
 
-    const res = await Promise.all(mintPromises);
-
-    const hasFailedTransaction = res.includes(0);
-    if (!hasFailedTransaction) {
-      try {
+      const hasFailedTransaction = res.includes(0);
+      if (!hasFailedTransaction) {
         const serverProcessTime = 5000; // The BE needs some time to catch the transaction
         setTimeout(async () => {
           const [mintedNFTS, savedNFTS] = await Promise.all([getMyNfts(), getSavedNfts()]);
@@ -327,14 +329,14 @@ const SingleNFTForm = () => {
           setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
           setRoyaltyAddress([{ address: '', amount: '' }]);
         }, serverProcessTime);
-      } catch (e) {
-        // TODO:: Add modal with the error text
+      } else {
+        // TODO:: Add Error Handling
         console.error(e, 'Error !');
         setShowLoadingPopup(false);
         setShowError(true);
       }
-    } else {
-      // TODO:: Add Error Handling
+    } catch (e) {
+      // TODO:: Add modal with the error text
       console.error(e, 'Error !');
       setShowLoadingPopup(false);
       setShowError(true);
@@ -342,7 +344,7 @@ const SingleNFTForm = () => {
   };
 
   const onSaveNftForLaterMinting = async () => {
-    showLoadingPopup(true);
+    setShowLoadingPopup(true);
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
@@ -370,7 +372,7 @@ const SingleNFTForm = () => {
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
 
-    showLoadingPopup(false);
+    setShowLoadingPopup(false);
     showCongratsPopup(true);
     setName('');
     setDescription('');
@@ -394,7 +396,7 @@ const SingleNFTForm = () => {
   };
 
   const onEditSavedNft = async () => {
-    showLoadingPopup(true);
+    setShowLoadingPopup(true);
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
@@ -426,7 +428,7 @@ const SingleNFTForm = () => {
 
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
-    showLoadingPopup(false);
+    setShowLoadingPopup(false);
     showCongratsPopup(true);
     setName('');
     setDescription('');
