@@ -21,6 +21,8 @@ import { getCollectionData } from '../../utils/api/mintNFT';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import SimplePagination from '../../components/pagination/SimplePaginations.jsx';
+import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown.jsx';
 
 const Collection = () => {
   const { setSavedCollectionID } = useMyNftsContext();
@@ -38,6 +40,8 @@ const Collection = () => {
   const [collectionData, setCollectionData] = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [ownersCount, setOwnersCount] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(8);
 
   const handleClose = () => {
     document.body.classList.remove('no__scroll');
@@ -126,12 +130,21 @@ const Collection = () => {
             <>
               <div className="nfts__lists">
                 {filteredNFTs
+                  .slice(offset, offset + perPage)
                   .filter((nft) => !nft.hidden)
                   .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
               </div>
-              {filteredNFTs.filter((nft) => !nft.hidden).length > quantity && (
+              {/* {filteredNFTs.filter((nft) => !nft.hidden).length > quantity && (
                 <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
-              )}
+              )} */}
+              <div className="pagination__container">
+                <SimplePagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
+                <ItemsPerPageDropdown
+                  perPage={perPage}
+                  setPerPage={setPerPage}
+                  itemsPerPage={[8, 16, 32]}
+                />
+              </div>
             </>
           ) : (
             <div className="empty__nfts">
