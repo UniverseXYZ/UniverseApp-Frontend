@@ -32,7 +32,7 @@ import { editCollection, editCollectionImage, getMyCollections } from '../../../
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 
-const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
+const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const { savedNfts, savedCollectionID, setSavedCollectionID, myNFTs, setMyNFTs } =
     useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
@@ -819,9 +819,9 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
   );
 };
 
-NFTCollectionSettings.propTypes = {
+NFTCollectionForm.propTypes = {
   showCollectible: PropTypes.bool.isRequired,
   setShowCollectible: PropTypes.func.isRequired,
 };
 
-export default NFTCollectionSettings;
+export default NFTCollectionForm;

@@ -7,8 +7,8 @@ import settingIcon from '../../../assets/images/setting-solid-disactive.svg';
 import selectTypeIconActive from '../../../assets/images/select-type-icon-active.svg';
 import selectTypeIcon from '../../../assets/images/select-type-icon.svg';
 import SelectType from './SelectType';
-import SingleNFTSettings from './SingleNFTSettings';
-import NFTCollectionSettings from './NFTCollectionSettings';
+import SingleNFTForm from './SingleNFTForm';
+import NFTCollectionForm from './NFTCollectionForm';
 import AppContext from '../../../ContextAPI';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
@@ -147,9 +147,9 @@ const CreateNFT = () => {
               setSelectedNFTType={setSelectedNFTType}
             />
           )} */}
-          {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTSettings />}
+          {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTForm />}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (
-            <NFTCollectionSettings
+            <NFTCollectionForm
               showCollectible={showCollectible}
               setShowCollectible={setShowCollectible}
             />

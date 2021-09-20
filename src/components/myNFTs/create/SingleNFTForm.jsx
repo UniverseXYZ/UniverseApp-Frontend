@@ -48,7 +48,7 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 
-const SingleNFTSettings = () => {
+const SingleNFTForm = () => {
   const {
     savedNfts,
     setSavedNfts,
@@ -1111,4 +1111,4 @@ const SingleNFTSettings = () => {
   );
 };
 
-export default SingleNFTSettings;
+export default SingleNFTForm;
