@@ -47,6 +47,7 @@ import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/mint
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
+import { getCollectionBackgroundColor } from '../../../utils/helpers';
 
 const SingleNFTForm = () => {
   const {
@@ -812,10 +813,10 @@ const SingleNFTForm = () => {
                           : setSelectedCollection(col)
                       }
                     >
-                      {typeof col.coverUrl === 'string' && col?.coverUrl?.startsWith('#') ? (
+                      {!col?.coverUrl ? (
                         <div
                           className="random__bg__color"
-                          style={{ backgroundColor: col.coverUrl }}
+                          style={{ backgroundColor: getCollectionBackgroundColor(col) }}
                         >
                           {col.name.charAt(0)}
                         </div>
