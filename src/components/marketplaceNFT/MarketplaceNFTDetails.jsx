@@ -78,16 +78,17 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   );
   const [tablet, setTablet] = useState(false);
   const [count, setCount] = useState(4);
-  const mediaRef =
-    selectedNFT.artworkType !== 'bundles'
-      ? selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4')
-        ? useRef()
-        : selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mpeg')
-        ? useRef(new Audio(selectedNFT.media.url))
-        : null
-      : selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
-      ? useRef(new Audio(selectedNFT.allItems[selectedNFTIndex].url))
-      : useRef(null);
+  const mediaRef = useRef(null);
+  // const mediaRef =
+  //   selectedNFT.artworkType !== 'bundles'
+  //     ? selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4')
+  //       ? useRef()
+  //       : selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mpeg')
+  //       ? useRef(new Audio(selectedNFT.media.url))
+  //       : null
+  //     : selectedNFT.allItems[selectedNFTIndex].type === 'audio/mpeg'
+  //     ? useRef(new Audio(selectedNFT.allItems[selectedNFTIndex].url))
+  //     : useRef(null);
 
   function SampleNextArrow(props) {
     // eslint-disable-next-line react/prop-types
