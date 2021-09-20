@@ -240,10 +240,6 @@ const SingleNFTForm = () => {
     }
   };
 
-  const closeLoadingModal = () => {
-    document.body.classList.remove('no__scroll');
-  };
-
   const onMintNft = async () => {
     setShowLoadingPopup(true);
     // document.body.classList.add('no__scroll');
@@ -324,7 +320,6 @@ const SingleNFTForm = () => {
           setShowLoadingPopup(false);
           setShowCongratsPopup(true);
 
-          closeLoadingModal();
           setName('');
           setDescription('');
           setEditions('');
@@ -347,7 +342,7 @@ const SingleNFTForm = () => {
   };
 
   const onSaveNftForLaterMinting = async () => {
-    document.getElementById('loading-hidden-btn').click();
+    showLoadingPopup(true);
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
@@ -375,8 +370,8 @@ const SingleNFTForm = () => {
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
 
-    document.getElementById('congrats-hidden-btn').click();
-    closeLoadingModal();
+    showLoadingPopup(false);
+    showCongratsPopup(true);
     setName('');
     setDescription('');
     setEditions('');
@@ -399,7 +394,7 @@ const SingleNFTForm = () => {
   };
 
   const onEditSavedNft = async () => {
-    document.getElementById('loading-hidden-btn').click();
+    showLoadingPopup(true);
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
     const propertiesParsed = propertyCheck ? parseProperties(properties) : [];
@@ -431,9 +426,8 @@ const SingleNFTForm = () => {
 
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
-
-    document.getElementById('congrats-hidden-btn').click();
-    closeLoadingModal();
+    showLoadingPopup(false);
+    showCongratsPopup(true);
     setName('');
     setDescription('');
     setEditions('');
