@@ -445,7 +445,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       >
         {(close) => (
           <CongratsPopup
-            onClose={close}
+            onClose={() => {
+              close();
+              setDescription('');
+              setTokenName('');
+              setCollectionName('');
+              setCoverImage(null);
+            }}
             message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
           />
         )}
