@@ -307,7 +307,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     document.getElementById('popup-root').remove();
 
     if (res) {
-      document.getElementById('congrats-hidden-btn').click();
+      const contragtsTrigger = document.getElementById('congrats-hidden-btn');
+      if (contragtsTrigger) {
+        document.getElementById('congrats-hidden-btn').click();
+      }
     } else {
       // error
     }
