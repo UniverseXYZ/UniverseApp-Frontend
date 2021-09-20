@@ -23,6 +23,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import SimplePagination from '../../components/pagination/SimplePaginations.jsx';
 import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown.jsx';
+import '../../components/pagination/Pagination.scss';
 
 const Collection = () => {
   const { setSavedCollectionID } = useMyNftsContext();
