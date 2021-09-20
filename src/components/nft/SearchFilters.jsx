@@ -74,7 +74,7 @@ const SearchFilters = ({ data, setData, setOffset }) => {
         (item) => selectedCollections.map((coll) => coll.name).indexOf(item.collection.name) >= 0
       );
     }
-    setOffset(0);
+    if (setOffset) setOffset(0);
     setData(filteredData);
   }, [searchValue, selectedCollections]);
 

@@ -1652,6 +1652,7 @@
         }
 
         img.preview-image {
+          pointer-events: none;
           width: 100%;
           height: 100%;
           object-fit: cover;
@@ -1939,6 +1940,7 @@
           object-fit: cover;
 
           &.blur {
+            pointer-events: none;
             filter: blur(8px);
           }
         }
@@ -1959,6 +1961,7 @@
         padding: 0 15px 15px;
 
         .collection__avatar {
+          pointer-events: none;
           height: 75px;
           width: 75px;
           object-fit: cover;
