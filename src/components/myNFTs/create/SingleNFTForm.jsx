@@ -62,7 +62,7 @@ const SingleNFTForm = () => {
 
   const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
     useAuthContext();
-  const { setShowError } = useErrorContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
@@ -330,15 +330,17 @@ const SingleNFTForm = () => {
           setRoyaltyAddress([{ address: '', amount: '' }]);
         }, serverProcessTime);
       } else {
-        // TODO:: Add Error Handling
-        console.error(e, 'Error !');
         setShowLoadingPopup(false);
+        console.error(e, 'Error !');
         setShowError(true);
       }
     } catch (e) {
-      // TODO:: Add modal with the error text
       console.error(e, 'Error !');
       setShowLoadingPopup(false);
+      if (e.code === 4001) {
+        setErrorTitle('Failed to mint NFT');
+        setErrorBody('User denied transaction signature');
+      }
       setShowError(true);
     }
   };
@@ -373,7 +375,7 @@ const SingleNFTForm = () => {
     setSavedNfts(savedNFTS || []);
 
     setShowLoadingPopup(false);
-    showCongratsPopup(true);
+    setShowCongratsPopup(true);
     setName('');
     setDescription('');
     setEditions('');
@@ -429,7 +431,7 @@ const SingleNFTForm = () => {
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
     setShowLoadingPopup(false);
-    showCongratsPopup(true);
+    setShowCongratsPopup(true);
     setName('');
     setDescription('');
     setEditions('');
