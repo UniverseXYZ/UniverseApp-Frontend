@@ -41,7 +41,7 @@ const Polymorphs = () => {
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
   const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
-  const { polymorphsFilter, navigateToMyNFTsPage } = useMyNftsContext();
+  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
   const { ethPrice } = useAuthContext();
   useLayoutEffect(() => {
     function handleResize() {
@@ -60,7 +60,7 @@ const Polymorphs = () => {
   }, [window.innerWidth]);
 
   const redirectToMyPolymorphs = () => {
-    navigateToMyNFTsPage(polymorphsFilter);
+    navigateToMyUniverseNFTsTab(polymorphsFilter);
   };
   return (
     <div className="polymorphs">

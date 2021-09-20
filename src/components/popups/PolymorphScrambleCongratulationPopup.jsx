@@ -10,7 +10,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 
 const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, polymorph }) => {
   const history = useHistory();
-  const { polymorphsFilter, navigateToMyNFTsPage } = useMyNftsContext();
+  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
 
   return (
     <div className="polymorph_popup">
@@ -24,7 +24,7 @@ const PolymorphScrambleCongratulationPopup = ({ onClose, onOpenOptionsPopUp, pol
         <Button
           className="light-button"
           onClick={() => {
-            navigateToMyNFTsPage(polymorphsFilter);
+            navigateToMyUniverseNFTsTab(polymorphsFilter);
           }}
         >
           My Polymorphs

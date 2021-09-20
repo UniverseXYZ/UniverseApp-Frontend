@@ -62,7 +62,7 @@ const SingleNFTSettings = () => {
 
   const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
     useAuthContext();
-  const { showError } = useErrorContext();
+  const { setShowError } = useErrorContext();
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
@@ -335,12 +335,12 @@ const SingleNFTSettings = () => {
       } catch (e) {
         // TODO:: Add modal with the error text
         console.error(e, 'Error !');
-        showError(true);
+        setShowError(true);
       }
     } else {
       // TODO:: Add Error Handling
       console.error(e, 'Error !');
-      showError(true);
+      setShowError(true);
     }
   };
 

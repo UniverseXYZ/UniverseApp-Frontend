@@ -75,8 +75,9 @@ const MyNFTsContextProvider = ({ children }) => {
     }
   }, [loggedInArtist, isWalletConnected]);
 
-  const navigateToMyNFTsPage = (characterFilter) => {
+  const navigateToMyUniverseNFTsTab = (characterFilter) => {
     setCollectionFilter(characterFilter);
+    setMyNFTsSelectedTabIndex(3);
     setMyUniverseNFTsActiverPage(0);
     setMyUniverseNFTsOffset(0);
 
@@ -89,7 +90,7 @@ const MyNFTsContextProvider = ({ children }) => {
         allCharactersFilter,
         polymorphsFilter,
         lobstersFilter,
-        navigateToMyNFTsPage,
+        navigateToMyUniverseNFTsTab,
         collectionsIdAddressMapping,
         setCollectionsIdAddressMapping,
         savedNfts,

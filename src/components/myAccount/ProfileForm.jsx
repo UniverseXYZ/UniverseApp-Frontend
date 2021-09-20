@@ -12,7 +12,7 @@ import errorIcon from '../../assets/images/red-msg.svg';
 import AppContext from '../../ContextAPI';
 import { useAuthContext } from '../../contexts/AuthContext';
 
-const Main = ({
+const ProfileForm = ({
   accountName,
   setAccountName,
   accountPage,
@@ -245,10 +245,10 @@ const Main = ({
               </div>
             )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled} onClick={() => saveChanges()}>
+            <Button className="light-button" disabled={disabled} onClick={saveChanges}>
               Save changes
             </Button>
-            <Button className="light-border-button" onClick={() => cancelChanges()}>
+            <Button className="light-border-button" onClick={cancelChanges}>
               Cancel
             </Button>
           </div>
@@ -258,7 +258,7 @@ const Main = ({
   );
 };
 
-Main.propTypes = {
+ProfileForm.propTypes = {
   accountName: PropTypes.string,
   setAccountName: PropTypes.func,
   accountPage: PropTypes.string,
@@ -277,7 +277,7 @@ Main.propTypes = {
   fetchedUserData: PropTypes.string,
 };
 
-Main.defaultProps = {
+ProfileForm.defaultProps = {
   accountName: '',
   setAccountName: () => {},
   accountPage: '',
@@ -296,4 +296,4 @@ Main.defaultProps = {
   fetchedUserData: '',
 };
 
-export default Main;
+export default ProfileForm;
