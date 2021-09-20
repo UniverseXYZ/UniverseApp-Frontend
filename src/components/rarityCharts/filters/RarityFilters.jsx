@@ -5,7 +5,7 @@ import RaritySortBySelect from '../../input/RaritySortBySelect';
 import RaritySortByOrder from '../../input/RaritySortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import filterIcon from '../../../assets/images/filters-icon-black.svg';
-import './LobsterRarityFilters.scss';
+import './RarityFilters.scss';
 import RarityChartFiltersPopup from '../../popups/RarityChartFiltersPopup';
 import RaritySearchField from '../../input/RaritySearchField';
 
@@ -32,7 +32,7 @@ const RarityFilters = (props) => {
   const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
 
   return (
-    <div className="lobsters-rarity--charts--search--and--filters--container">
+    <div className="rarity--charts--search--and--filters--container">
       {/* <div className="floor--price--block">
         <p className="floor--price--paragraph">
           <span>Floor Price: </span>
@@ -43,7 +43,7 @@ const RarityFilters = (props) => {
         </p>
       </div> */}
       <div className="rarity--charts--search--and--filters--row">
-        <CollectionFilter />
+        {/* <CollectionFilter /> */}
         <div className="rarity--charts--search--and--floor--price">
           <RaritySearchField
             placeholder="Search items"

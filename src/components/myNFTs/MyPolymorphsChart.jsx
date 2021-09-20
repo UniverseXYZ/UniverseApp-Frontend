@@ -12,6 +12,7 @@ import RarityList from '../rarityCharts/list/RarityList';
 import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
 
 const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
@@ -66,7 +67,7 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
 
   return (
     <div className="polymorph-rarity--charts--page--container">
-      <RarityFilters
+      <LobsterRarityFilters
         setSortField={setSortField}
         searchText={inputText}
         setSearchText={setInputText}
