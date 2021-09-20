@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Main from '../myAccount/Main.jsx';
+import ProfileForm from '../myAccount/ProfileForm.jsx';
 import AppContext from '../../ContextAPI.js';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
@@ -72,7 +72,7 @@ const AboutArtistAuction = ({
         <h3>About Artist</h3>
       </div>
       <div className="my-account">
-        <Main
+        <ProfileForm
           accountName={accountName}
           setAccountName={setAccountName}
           accountPage={accountPage}

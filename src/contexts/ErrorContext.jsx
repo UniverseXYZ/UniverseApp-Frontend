@@ -17,6 +17,7 @@ const ErrorContextProvider = ({ children }) => {
   return (
     <ErrorContext.Provider
       value={{
+        setShowError,
         showError,
         errorTitle,
         errorBody,
