@@ -30,7 +30,6 @@ const DeployedCollections = () => {
     };
   });
 
-  console.log(defaultColors[Math.floor(deployedCollections[0].id % defaultColors.length)]);
   return (
     <div className="tab__saved__collections">
       {deployedCollections.length ? (

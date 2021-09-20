@@ -21,9 +21,11 @@ import CollectionSearchFilters from '../../components/nft/CollectionSearchFilter
 import { getCollectionData } from '../../utils/api/mintNFT';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const Collection = () => {
   const { showModal, setShowModal, setSavedCollectionID } = useMyNftsContext();
+  const { address } = useAuthContext();
   const { setDarkMode } = useThemeContext();
   const { collectionId } = useParams();
   const location = useLocation();
@@ -89,7 +91,7 @@ const Collection = () => {
     setSavedCollectionID(id);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
-
+  console.log(collectionData);
   return loading ? (
     <></>
   ) : collectionData ? (
@@ -109,15 +111,19 @@ const Collection = () => {
           {showModal && <MintModal open={showModal} onClose={handleClose} />}
         </div>
         <Description selectedCollection={collectionData.collection} />
-        <div className="collection__edit">
-          <Button
-            className="light-border-button"
-            onClick={() => handleEdit(collectionData.collection.id)}
-          >
-            <span>Edit</span>
-            <img src={pencilIcon} alt="Edit Icon" />
-          </Button>
-        </div>
+        {address === collectionData?.collection?.owner ? (
+          <div className="collection__edit">
+            <Button
+              className="light-border-button"
+              onClick={() => handleEdit(collectionData.collection.id)}
+            >
+              <span>Edit</span>
+              <img src={pencilIcon} alt="Edit Icon" />
+            </Button>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="collection--nfts--container">
           <CollectionSearchFilters data={collectionNFTs} setData={setFilteredNFTs} />
           {filteredNFTs.filter((nft) => !nft.hidden).length ? (

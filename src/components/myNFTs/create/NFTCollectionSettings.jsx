@@ -82,7 +82,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
       setCoverImage('');
       setErrors({
         ...errors,
-        coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
+        coverImage: 'Collection image is required.',
       });
     } else if (
       (file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png') &&
@@ -194,11 +194,12 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   const handleMinting = () => {
     setMintNowClick(true);
-    if (!collectionName || !tokenName) {
+    if (!collectionName || !tokenName || !coverImage) {
       setErrors({
         collectionName: !collectionName ? '“Collection name” is not allowed to be empty' : '',
         tokenName: !tokenName ? '“Token name” is not allowed to be empty' : '',
         collectible: '',
+        coverImage: 'File format must be PNG, JPEG, GIF (Max Size: 1mb)',
       });
       if (errors.shorturl.length > 0) {
         setInputClass('empty__error');
@@ -372,7 +373,7 @@ const NFTCollectionSettings = ({ showCollectible, setShowCollectible }) => {
 
   useEffect(() => {
     if (mintNowClick) {
-      if (!errors.collectionName && !errors.tokenName) {
+      if (!errors.collectionName && !errors.tokenName && !errors.coverImage) {
         onMintCollection();
       }
     }

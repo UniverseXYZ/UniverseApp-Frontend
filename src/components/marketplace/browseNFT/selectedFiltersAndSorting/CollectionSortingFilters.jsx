@@ -79,7 +79,6 @@ const CollectionSortingFilters = ({
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
   const [searchByCollections, setSearchByCollections] = useState('');
   const [collections, setCollections] = useState(deployedCollections);
-  console.log(deployedCollections);
   const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
   const [searchByCreators, setSearchByCreators] = useState('');
 
