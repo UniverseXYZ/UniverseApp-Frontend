@@ -8,9 +8,7 @@ import { useLobsterContext } from '../../../contexts/LobsterContext';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
 const HeroSection = React.forwardRef((props, ref) => {
-  const history = useHistory();
-  const { lobstersFilter } = useLobsterContext();
-  const { navigateToMyNFTsPage } = useMyNftsContext();
+  const { navigateToMyUniverseNFTsTab, lobstersFilter } = useMyNftsContext();
 
   return (
     <div className="lobby--lobsters--hero--section">
@@ -27,7 +25,7 @@ const HeroSection = React.forwardRef((props, ref) => {
           <button
             type="button"
             onClick={() => {
-              navigateToMyNFTsPage(lobstersFilter);
+              navigateToMyUniverseNFTsTab(lobstersFilter);
             }}
           >
             My Lobby Lobsters
