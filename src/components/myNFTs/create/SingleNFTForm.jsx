@@ -334,10 +334,10 @@ const SingleNFTForm = () => {
         console.error(e, 'Error !');
         setShowError(true);
       }
-    } catch (e) {
-      console.error(e, 'Error !');
+    } catch (err) {
+      console.error(err, 'Error !');
       setShowLoadingPopup(false);
-      if (e.code === 4001) {
+      if (err.code === 4001) {
         setErrorTitle('Failed to mint NFT');
         setErrorBody('User denied transaction signature');
       }

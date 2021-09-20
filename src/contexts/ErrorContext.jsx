@@ -14,6 +14,7 @@ const ErrorContextProvider = ({ children }) => {
     setErrorTitle('');
     setErrorBody('');
   };
+
   return (
     <ErrorContext.Provider
       value={{
@@ -21,6 +22,8 @@ const ErrorContextProvider = ({ children }) => {
         setShowError,
         setErrorTitle,
         setErrorBody,
+        errorTitle,
+        errorBody,
         closeError,
       }}
     >
