@@ -18,11 +18,6 @@ const Artist = () => {
   const { artist: artistUsername } = useParams();
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const artist = location.state
-  //   ? location.state.id === loggedInArtist.id
-  //     ? loggedInArtist
-  //     : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
-  //   : null;
 
   useEffect(() => {
     setDarkMode(false);
@@ -33,20 +28,30 @@ const Artist = () => {
   }, []);
 
   useEffect(() => {
-    const getInfo = async () => {
-      try {
-        const artistInfo = await getProfilePage(artistUsername);
-        if (!artistInfo.error) {
-          const mappedArtist = mapUserData(artistInfo);
-          setArtist(mappedArtist);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-      setLoading(false);
-    };
-    getInfo();
     setLoading(false);
+    setArtist(
+      location.state
+        ? location.state.id === loggedInArtist.id
+          ? loggedInArtist
+          : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
+        : null
+    );
+
+    // TODO: Enable this when new endpoint is released
+    // const getInfo = async () => {
+    //   try {
+    //     const artistInfo = await getProfilePage(artistUsername);
+    //     if (!artistInfo.error) {
+    //       const mappedArtist = mapUserData(artistInfo);
+    //       setArtist(mappedArtist);
+    //     }
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    //   setLoading(false);
+    // };
+    // getInfo();
+    // setLoading(false);
   }, []);
 
   return loading ? (
