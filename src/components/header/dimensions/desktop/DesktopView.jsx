@@ -131,13 +131,15 @@ const DesktopView = ({
                 <span>Lobby Lobsters</span>
               </button>
               <button
+                className="disable"
                 type="button"
-                onClick={() => {
-                  history.push('/core-drops');
-                }}
+                // onClick={() => {
+                //   history.push('/core-drops');
+                // }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
                 <span>OG planet drops</span>
+                <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
           </div>

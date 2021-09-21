@@ -116,8 +116,13 @@ const Footer = () => {
                   <li onClick={() => history.push('/lobby-lobsters')} aria-hidden="true">
                     Lobby Lobsters
                   </li>
-                  <li onClick={() => history.push('/core-drops')} aria-hidden="true">
+                  <li
+                    className="disable"
+                    // onClick={() => history.push('/core-drops')}
+                    aria-hidden="true"
+                  >
                     OG planet drop
+                    <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>
