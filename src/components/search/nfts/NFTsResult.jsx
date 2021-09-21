@@ -89,7 +89,7 @@ const NFTsResult = ({ query, data }) => {
               <div
                 className="nft--box--body"
                 aria-hidden="true"
-                onClick={() => history.push(`/nft/${nft.id}`, { nft })}
+                onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
                   <img className="nft--image" src={nft.media.url} alt={nft.name} />

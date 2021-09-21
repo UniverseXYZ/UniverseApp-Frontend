@@ -23,7 +23,7 @@ const Collection = () => {
   const { setSavedCollectionID } = useMyNftsContext();
   const { address } = useAuthContext();
   const { setDarkMode } = useThemeContext();
-  const { collectionId } = useParams();
+  const { collectionAddress } = useParams();
   const location = useLocation();
   const [collectionNFTs, setCollectionNFTs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,7 +75,7 @@ const Collection = () => {
   useEffect(async () => {
     setDarkMode(false);
 
-    const data = await getCollectionData(collectionId);
+    const data = await getCollectionData(collectionAddress);
     const cNFTs = data.nfts || [];
 
     if (!data.message) setCollectionData(data);

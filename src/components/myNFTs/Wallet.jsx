@@ -226,7 +226,6 @@ const Wallet = ({
     });
     setPreviewNFTs(prevNFTs);
   }, [shownNFTs, selectedNFTIds]);
-
   return (
     <div className="tab__wallet">
       {isCreatingAction ? (

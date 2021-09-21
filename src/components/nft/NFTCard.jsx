@@ -276,7 +276,10 @@ const NFTCard = ({ nft }) => {
         ) : (
           <>
             {nft.type && nft.type !== 'bundles' ? (
-              <div onClick={() => history.push(`/nft/${nft.id}`, { nft })} aria-hidden="true">
+              <div
+                onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
+                aria-hidden="true"
+              >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
                   <img className="nft--image" src={URL.createObjectURL(nft.media)} alt={nft.name} />
                 )}
@@ -324,7 +327,7 @@ const NFTCard = ({ nft }) => {
                       index < 7 && (
                         <div
                           className="slider--box"
-                          onClick={() => history.push(`/nft/${nft.id}`, { nft })}
+                          onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
                           aria-hidden="true"
                           key={uuid()}
                         >
@@ -356,7 +359,9 @@ const NFTCard = ({ nft }) => {
                 {nft.tokenIds && (
                   <div
                     className="slider--box"
-                    onClick={() => history.push(`/nft/${nft.id}`, { nft })}
+                    onClick={() =>
+                      history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })
+                    }
                     aria-hidden="true"
                     key={uuid()}
                   >

@@ -98,7 +98,7 @@ const App = () => {
                 <Route exact path="/lobsters/:id">
                   <LobsterInfoPage />
                 </Route>
-                <Route exact path="/nft/:id">
+                <Route exact path="/nft/:contractAddress/:tokenId">
                   <MarketplaceNFT />
                 </Route>
                 <Route exact path="/character-page">

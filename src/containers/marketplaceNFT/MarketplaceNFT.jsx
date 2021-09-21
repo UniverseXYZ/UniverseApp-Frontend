@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import './MarketplaceNFT.scss';
 import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
@@ -11,6 +11,7 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 const MarketplaceNFT = () => {
   const { setDarkMode } = useThemeContext();
   const location = useLocation();
+  const { contractAddress, tokenId } = useParams();
   const selectedNFT = location.state ? location.state.nft : null;
 
   useEffect(() => {
