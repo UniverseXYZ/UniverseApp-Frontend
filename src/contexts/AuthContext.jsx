@@ -6,6 +6,7 @@ import { getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
+import { mapUserData } from '../utils/helpers';
 
 const AuthContext = createContext(null);
 
