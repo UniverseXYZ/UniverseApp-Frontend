@@ -49,6 +49,7 @@ const Wallet = ({
   const [searchByName, setSearchByName] = useState('');
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
+  const [page, setPage] = useState(8);
   const ref = useRef(null);
   const ref2 = useRef(null);
   const refMobile = useRef(null);
@@ -443,7 +444,13 @@ const Wallet = ({
               )}
 
               <div className="pagination__container">
-                <SimplePagination data={shownNFTs} perPage={perPage} setOffset={setOffset} />
+                <SimplePagination
+                  data={shownNFTs}
+                  perPage={perPage}
+                  setOffset={setOffset}
+                  setPage={setPage}
+                  page={page}
+                />
                 <ItemsPerPageDropdown
                   perPage={perPage}
                   setPerPage={setPerPage}

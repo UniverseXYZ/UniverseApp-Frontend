@@ -22,6 +22,7 @@ const SavedNFTs = () => {
   const [dropdownID, setDropdownID] = useState(0);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
+  const [page, setPage] = useState(8);
 
   const ref = useRef(null);
   const history = useHistory();
@@ -237,7 +238,13 @@ const SavedNFTs = () => {
             ))}
           </div>
           <div className="pagination__container">
-            <SimplePagination data={savedNfts} perPage={perPage} setOffset={setOffset} />
+            <SimplePagination
+              data={savedNfts}
+              perPage={perPage}
+              setOffset={setOffset}
+              setPage={setPage}
+              page={page}
+            />
             <ItemsPerPageDropdown
               perPage={perPage}
               setPerPage={setPerPage}

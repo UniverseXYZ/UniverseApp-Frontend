@@ -1,21 +1,15 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { Contract } from 'ethers';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import NotFound from '../../components/notFound/NotFound.jsx';
-import AppContext from '../../ContextAPI';
 import './Collection.scss';
 import Cover from '../../components/collection/Cover.jsx';
 import Avatar from '../../components/collection/Avatar.jsx';
 import Title from '../../components/collection/Title.jsx';
 import Description from '../../components/collection/Description.jsx';
-import Filters from '../../components/collection/Filters.jsx';
-import NFTs from '../../components/collection/NFTs.jsx';
 import Button from '../../components/button/Button.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
 import NFTCard from '../../components/nft/NFTCard.jsx';
-import LoadMore from '../../components/pagination/LoadMore.jsx';
 import bubbleIcon from '../../assets/images/text-bubble.png';
-import plusIcon from '../../assets/images/plus.svg';
 import CollectionSearchFilters from '../../components/nft/CollectionSearchFilters.jsx';
 import { getCollectionData } from '../../utils/api/mintNFT';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
@@ -42,6 +36,7 @@ const Collection = () => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [ownersCount, setOwnersCount] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(8);
 
   const handleClose = () => {
@@ -135,11 +130,14 @@ const Collection = () => {
                   .filter((nft) => !nft.hidden)
                   .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
               </div>
-              {/* {filteredNFTs.filter((nft) => !nft.hidden).length > quantity && (
-                <LoadMore quantity={quantity} setQuantity={setQuantity} perPage={8} />
-              )} */}
               <div className="pagination__container">
-                <SimplePagination data={filteredNFTs} perPage={perPage} setOffset={setOffset} />
+                <SimplePagination
+                  data={filteredNFTs}
+                  perPage={perPage}
+                  setOffset={setOffset}
+                  setPage={setPage}
+                  page={page}
+                />
                 <ItemsPerPageDropdown
                   perPage={perPage}
                   setPerPage={setPerPage}

@@ -197,12 +197,13 @@ const SearchFilters = ({ data, setData, setOffset }) => {
 
 SearchFilters.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setData: PropTypes.func.isRequired,
+  setData: PropTypes.func,
   setOffset: PropTypes.func,
 };
 
 SearchFilters.defaultProps = {
   setOffset: false,
+  setData: () => {},
 };
 
 export default SearchFilters;

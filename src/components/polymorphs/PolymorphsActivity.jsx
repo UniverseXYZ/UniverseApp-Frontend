@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Pagination from '../pagination/Pagionation';
 import WrapperCenter from './WrapperCenter';
 import PolymorphsActivityTable from './PolymorphsActivityTable';
 import PolymorphsActivityTableRow from './PolymorphsActivityTableRow';
@@ -36,6 +35,7 @@ const convertArrayToObject = (array, key) => {
 const PolymorphsActivity = (props) => {
   const { mobile, morphEntities, ethPrice } = props;
   const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(0);
   const morphEntitiesData = convertArrayToObject(morphEntities, 'id');
   const dataKeys = Object.keys(morphEntitiesData);
 
@@ -64,7 +64,13 @@ const PolymorphsActivity = (props) => {
         </div>
       )}
       <div className="pagination__container">
-        <SimplePagination data={dataKeys} perPage={5} setOffset={setOffset} />
+        <SimplePagination
+          data={dataKeys}
+          perPage={5}
+          setOffset={setOffset}
+          page={page}
+          setPage={setPage}
+        />
       </div>
     </WrapperCenter>
   );

@@ -16,6 +16,7 @@ const DeployedCollections = () => {
   const ref2 = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(8);
 
   const handleClickOutside = (event) => {
@@ -96,7 +97,13 @@ const DeployedCollections = () => {
             ))}
           </div>
           <div className="pagination__container">
-            <SimplePagination data={deployedCollections} perPage={perPage} setOffset={setOffset} />
+            <SimplePagination
+              data={deployedCollections}
+              perPage={perPage}
+              setOffset={setOffset}
+              setPage={setPage}
+              page={page}
+            />
             <ItemsPerPageDropdown
               perPage={perPage}
               setPerPage={setPerPage}
