@@ -50,13 +50,14 @@ const SearchField = (props) => {
 SearchField.propTypes = {
   searchText: PropTypes.string,
   setSearchText: PropTypes.func,
-  setApiPage: PropTypes.func.isRequired,
+  setApiPage: PropTypes.func,
   resetPagination: PropTypes.func.isRequired,
 };
 
 SearchField.defaultProps = {
   searchText: '',
   setSearchText: () => {},
+  setApiPage: () => {},
 };
 
 export default SearchField;

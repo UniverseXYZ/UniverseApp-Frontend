@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
-import AppContext from '../../ContextAPI';
 import leftArrow from '../../assets/images/left-arrow.svg';
 import rightArrow from '../../assets/images/right-arrow.svg';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
-const SimplePagination = ({ data, perPage, setOffset }) => {
-  const { myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage } = useMyNftsContext();
+const SimplePagination = ({ data, perPage, setOffset, page, setPage }) => {
   const [pageCount, setPageCount] = useState(0);
 
   const handlePageClick = (item) => {
     setOffset(Math.ceil(item.selected * perPage));
-    setMyUniverseNFTsActiverPage(item.selected);
+    setPage(item.selected);
   };
 
   useEffect(() => {
@@ -52,7 +49,7 @@ const SimplePagination = ({ data, perPage, setOffset }) => {
       containerClassName="pagination"
       subContainerClassName="pages pagination"
       activeClassName="active"
-      forcePage={myUniverseNFTsActiverPage}
+      forcePage={page}
     />
   );
 };
@@ -61,6 +58,8 @@ SimplePagination.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]).isRequired,
   perPage: PropTypes.number.isRequired,
   setOffset: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
 };
 
 export default SimplePagination;

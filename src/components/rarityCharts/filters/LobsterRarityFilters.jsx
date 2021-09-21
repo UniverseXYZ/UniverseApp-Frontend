@@ -17,11 +17,9 @@ const LobsterRarityFilters = (props) => {
     setSortField,
     setSortDir,
     sortDir,
-    setApiPage,
     resetPagination,
     CollectionFilter,
   } = props;
-  const [selectedFiltersLength, setSelectedFiltersLength] = useState(0);
 
   return (
     <div className="lobsters-rarity--charts--search--and--filters--container">
@@ -41,14 +39,12 @@ const LobsterRarityFilters = (props) => {
             placeholder="Search items"
             searchText={searchText}
             setSearchText={setSearchText}
-            setApiPage={setApiPage}
             resetPagination={resetPagination}
           />
         </div>
         <RaritySortByOrder
           setSortDir={setSortDir}
           sortDir={sortDir}
-          setApiPage={setApiPage}
           resetPagination={resetPagination}
         />
         <RaritySortBySelect
@@ -56,7 +52,6 @@ const LobsterRarityFilters = (props) => {
           defaultValue="Rarity Score"
           sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
           setSortField={setSortField}
-          setApiPage={setApiPage}
           resetPagination={resetPagination}
         />
       </div>
@@ -71,7 +66,6 @@ LobsterRarityFilters.propTypes = {
   setSortField: PropTypes.func.isRequired,
   setSortDir: PropTypes.func.isRequired,
   sortDir: PropTypes.string.isRequired,
-  setApiPage: PropTypes.func.isRequired,
   resetPagination: PropTypes.func.isRequired,
   CollectionFilter: PropTypes.elementType,
 };

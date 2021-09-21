@@ -6,26 +6,23 @@ import AppContext from '../../ContextAPI';
 import './SortByOrder.scss';
 
 const SortByOrder = ({ setSortDir, sortDir, setApiPage, resetPagination }) => {
-  const [direction, setDirection] = useState(sortDir);
-
   const handleChange = () => {
     let newDir = '';
-    if (direction === 'asc') {
+    if (sortDir === 'asc') {
       newDir = 'desc';
     } else {
       newDir = 'asc';
     }
-    setDirection(newDir);
     setSortDir(newDir);
-    setApiPage(1);
     resetPagination();
+    setApiPage(1);
   };
   return (
     <div className="sort--by--order" aria-hidden="true" onClick={handleChange}>
       <div className="sort--by--order--icon">
         <img
-          src={direction === 'desc' ? SortDownIcon : SortUpIcon}
-          alt={direction === 'desc' ? 'Arrow Down' : 'Arrow Up'}
+          src={sortDir === 'desc' ? SortDownIcon : SortUpIcon}
+          alt={sortDir === 'desc' ? 'Arrow Down' : 'Arrow Up'}
         />
       </div>
       <div className="box--shadow--effect--block" />
@@ -35,7 +32,11 @@ const SortByOrder = ({ setSortDir, sortDir, setApiPage, resetPagination }) => {
 SortByOrder.propTypes = {
   setSortDir: PropTypes.func.isRequired,
   sortDir: PropTypes.string.isRequired,
-  setApiPage: PropTypes.func.isRequired,
+  setApiPage: PropTypes.func,
   resetPagination: PropTypes.func.isRequired,
+};
+
+SortByOrder.defaultProps = {
+  setApiPage: () => {},
 };
 export default SortByOrder;

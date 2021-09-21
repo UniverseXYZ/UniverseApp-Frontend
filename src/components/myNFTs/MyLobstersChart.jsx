@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import '../pagination/Pagination.scss';
 
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
-import AppContext from '../../ContextAPI';
 import '../../containers/rarityCharts/LobsterRarityCharts.scss';
-import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
 import LobsterRarityList from '../rarityCharts/list/LobsterRarityList';
 import CollectionDropdown from './CollectionDropdown';
@@ -18,36 +16,42 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { userLobsters } = useLobsterContext();
   const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
   const { setDarkMode } = useThemeContext();
-
+  console.log(userLobsters);
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(9);
-  const {
-    inputText,
-    setInputText,
-    apiPage,
-    setApiPage,
-    sortField,
-    setSortField,
-    sortDir,
-    setSortDir,
-    filter,
-    setFilter,
-    search,
-    results,
-    isLastPage,
-    setIsLastPage,
-  } = useSearchPolymorphs();
+  const [perPage, setPerPage] = useState(8);
+  const [searchText, setSearchText] = useState('');
+  const [sortField, setSortField] = useState('id');
+  const [sortDir, setSortDir] = useState('asc');
   const [categories, setCategories] = useState(categoriesArray);
+  const [filteredLobsters, setFilteredLobsters] = useState(userLobsters);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     setDarkMode(true);
   }, []);
 
   const resetPagination = () => {
-    setMyUniverseNFTsActiverPage(0);
+    setPage(0);
     setOffset(0);
   };
+
+  useEffect(() => {
+    const filtered = userLobsters
+      .filter((lobster) => lobster.id.includes(searchText))
+      .sort((a, b) => {
+        let sort = -1;
+        if (sortDir === 'asc') {
+          sort = -sort;
+        }
+        if (+a.id < +b.id) {
+          return sort;
+        }
+        return -sort;
+      });
+    resetPagination();
+    setFilteredLobsters(filtered);
+  }, [searchText, sortDir]);
 
   const handleCategoryFilterChange = (idx, traitIdx) => {
     const newCategories = [...categories];
@@ -70,20 +74,17 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
     <div className="lobster-rarity--charts--page--container">
       <LobsterRarityFilters
         setSortField={setSortField}
-        searchText={inputText}
-        setSearchText={setInputText}
+        searchText={searchText}
+        setSearchText={setSearchText}
         setSortDir={setSortDir}
         sortDir={sortDir}
-        setApiPage={setApiPage}
         resetPagination={resetPagination}
         categories={categories}
         setCategories={setCategories}
         categoriesIndexes={categoriesIndexes}
         setCategoriesIndexes={setCategoriesIndexes}
-        resultsCount={results.length}
+        resultsCount={filteredLobsters.length}
         handleCategoryFilterChange={handleCategoryFilterChange}
-        setFilter={setFilter}
-        filter={filter}
         CollectionFilter={() => (
           <CollectionDropdown
             isDropdownOpened={isDropdownOpened}
@@ -92,24 +93,13 @@ const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
         )}
       />
       <LobsterRarityList
-        data={userLobsters}
-        isLastPage={isLastPage}
+        data={filteredLobsters}
         perPage={perPage}
+        setPerPage={setPerPage}
         offset={offset}
         setOffset={setOffset}
-        setPerPage={setPerPage}
-        setApiPage={setApiPage}
-        setIsLastPage={setIsLastPage}
-        categories={categories}
-        setCategories={setCategories}
-        categoriesIndexes={categoriesIndexes}
-        setCategoriesIndexes={setCategoriesIndexes}
-        setFilter={setFilter}
-        filter={filter}
-        loading={search.loading}
-        results={results}
-        apiPage={apiPage}
-        handleCategoryFilterChange={handleCategoryFilterChange}
+        page={page}
+        setPage={setPage}
       />
     </div>
   );

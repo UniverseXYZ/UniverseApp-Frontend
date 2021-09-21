@@ -84,7 +84,7 @@ SortBySelect.propTypes = {
   className: PropTypes.string,
   defaultValue: PropTypes.string,
   setSortField: PropTypes.func.isRequired,
-  setApiPage: PropTypes.func.isRequired,
+  setApiPage: PropTypes.func,
   resetPagination: PropTypes.func.isRequired,
   hideFirstOption: PropTypes.bool,
 };
@@ -102,6 +102,7 @@ SortBySelect.defaultProps = {
   className: '',
   defaultValue: 'Sort by',
   hideFirstOption: false,
+  setApiPage: () => {},
 };
 
 export default SortBySelect;

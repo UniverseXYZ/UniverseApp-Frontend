@@ -13,11 +13,11 @@ import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
+import { usePolymorphContext } from '../../contexts/PolymorphContext';
 
 const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
   const { setDarkMode } = useThemeContext();
-
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(9);
   const {
@@ -36,6 +36,7 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
     isLastPage,
     setIsLastPage,
   } = useSearchPolymorphs();
+  const [userPolymorphs, setUserPolymorphs] = useState(results);
   const [categories, setCategories] = useState(categoriesArray);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
 
