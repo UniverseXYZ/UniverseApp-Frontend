@@ -16,7 +16,7 @@ const Artist = () => {
   const location = useLocation();
   const { loggedInArtist } = useAuthContext();
   const { setDarkMode } = useThemeContext();
-  const { artist: artistUsername } = useParams();
+  const { artistUsername } = useParams();
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [artistNFTs, setArtistNFTs] = useState([]);
@@ -27,7 +27,7 @@ const Artist = () => {
     return () => {
       document.title = 'Universe Minting';
     };
-  }, []);
+  }, [artist]);
 
   useEffect(() => {
     setLoading(false);

@@ -31,12 +31,14 @@ import { RouterPrompt } from '../../../utils/routerPrompt.js';
 import { editCollection, editCollectionImage, getMyCollections } from '../../../utils/api/mintNFT';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
+import { useErrorContext } from '../../../contexts/ErrorContext';
 
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const { savedNfts, savedCollectionID, setSavedCollectionID, myNFTs, setMyNFTs } =
     useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(6);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -59,7 +61,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const [dropdownID, setDropdownID] = useState(0);
   const [mintNowClick, setMintNowClick] = useState(false);
   const [border, setBorder] = useState(false);
-
+  const [showLoading, setShowLoading] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
   const [errors, setErrors] = useState({
     coverImage: '',
     collectionName: '',
@@ -250,72 +253,76 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   };
 
   const onMintCollection = async () => {
-    document.getElementById('loading-hidden-btn').click();
-    // document.body.classList.add('no__scroll');
+    try {
+      setShowLoading(true);
 
-    const mintingFlowContext = {
-      universeERC721FactoryContract,
-    };
+      const mintingFlowContext = {
+        universeERC721FactoryContract,
+      };
 
-    const collectionData = {
-      file: coverImage,
-      name: collectionName,
-      symbol: tokenName,
-      description,
-      tokenName,
-    };
-
-    let res;
-    // If is editing
-    if (savedCollectionID) {
-      res = await editCollection({
-        id: savedCollectionID,
+      const collectionData = {
+        file: coverImage,
+        name: collectionName,
+        symbol: tokenName,
         description,
-      });
+        tokenName,
+      };
 
-      if (res.message) {
-        // there is an error while updating the collection
-      } else {
-        const updateCoverImage = typeof coverImage === 'object';
-        if (updateCoverImage) {
-          res = await editCollectionImage(coverImage, savedCollectionID);
-        }
-
-        /* eslint-disable no-param-reassign */
-        const deployedCollectionsCopy = deployedCollections.map((col) => {
-          if (col.id === savedCollectionID) {
-            col = { ...res };
-          }
-          return col;
+      let res;
+      // If is editing
+      if (savedCollectionID) {
+        res = await editCollection({
+          id: savedCollectionID,
+          description,
         });
-        setDeployedCollections(deployedCollectionsCopy);
-      }
-    } else {
-      // Create the collection
-      res = await MintSingleCollectionFlow({
-        collection: collectionData,
-        helpers: mintingFlowContext,
-      });
 
-      // get the new collections and update the state
-      const collectionsRequest = await getMyCollections();
-      if (!collectionsRequest.message) {
-        setDeployedCollections(collectionsRequest.collections);
+        if (res.message) {
+          // there is an error while updating the collection
+        } else {
+          const updateCoverImage = typeof coverImage === 'object';
+          if (updateCoverImage) {
+            res = await editCollectionImage(coverImage, savedCollectionID);
+          }
+
+          /* eslint-disable no-param-reassign */
+          const deployedCollectionsCopy = deployedCollections.map((col) => {
+            if (col.id === savedCollectionID) {
+              col = { ...res };
+            }
+            return col;
+          });
+          setDeployedCollections(deployedCollectionsCopy);
+        }
+      } else {
+        // Create the collection
+        res = await MintSingleCollectionFlow({
+          collection: collectionData,
+          helpers: mintingFlowContext,
+        });
+
+        // get the new collections and update the state
+        const collectionsRequest = await getMyCollections();
+        if (!collectionsRequest.message) {
+          setDeployedCollections(collectionsRequest.collections);
+        }
       }
+
+      showLoading(false);
+
+      if (res) {
+        setShowCongrats(true);
+      } else {
+        setShowError(true);
+      }
+    } catch (err) {
+      console.error(err, 'Error !');
+      setShowLoading(false);
+      if (err.code === 4001) {
+        setErrorTitle('Failed to mint collection');
+        setErrorBody('User denied transaction signature');
+      }
+      setShowError(true);
     }
-
-    document.getElementById('popup-root').remove();
-
-    if (res) {
-      const contragtsTrigger = document.getElementById('congrats-hidden-btn');
-      if (contragtsTrigger) {
-        document.getElementById('congrats-hidden-btn').click();
-      }
-    } else {
-      // error
-    }
-
-    document.body.classList.remove('no__scroll');
   };
 
   const onDrop = (e) => {
@@ -415,46 +422,23 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         onOK={() => true}
         editing={savedCollectionID}
       />
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="loading-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => (
-          <LoadingPopup
-            text="The collection will appear, after the transaction finishes. Please wait..."
-            onClose={close}
-          />
-        )}
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup
+          text="The collection will appear, after the transaction finishes. Please wait..."
+          onClose={() => setShowLoading(false)}
+        />
       </Popup>
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="congrats-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-        closeOnDocumentClick={false}
-      >
-        {(close) => (
-          <CongratsPopup
-            onClose={() => {
-              close();
-              setDescription('');
-              setTokenName('');
-              setCollectionName('');
-              setCoverImage(null);
-            }}
-            message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
-          />
-        )}
+      <Popup open={showCongrats} closeOnDocumentClick={false}>
+        <CongratsPopup
+          onClose={() => {
+            setShowCongrats(false);
+            setDescription('');
+            setTokenName('');
+            setCollectionName('');
+            setCoverImage(null);
+          }}
+          message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
+        />
       </Popup>
       {/* <h1 className="nft--collection--settings--page--title">NFT collection settings</h1> */}
       <div className="image--name--token">
