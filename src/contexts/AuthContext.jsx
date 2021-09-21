@@ -244,16 +244,7 @@ const AuthContextProvider = ({ children }) => {
 
         if (!authInfo.error) {
           setIsAuthenticated(true);
-          setLoggedInArtist({
-            id: authInfo.user.id,
-            name: authInfo.user.displayName,
-            universePageAddress: authInfo.user.universePageUrl,
-            avatar: authInfo.user.profileImageUrl,
-            about: authInfo.user.about,
-            personalLogo: authInfo.user.logoImageUrl,
-            instagramLink: authInfo.user.instagramUser,
-            twitterLink: authInfo.user.twitterUser,
-          });
+          setLoggedInArtist(mapUserData(authInfo.user));
 
           // Save access_token into the local storage for later API requests usage
           localStorage.setItem('access_token', authInfo.token);

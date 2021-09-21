@@ -4,6 +4,7 @@ const UPLOAD_LOGO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/upload-l
 const GET_PROFILE_INFO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info`;
 const CHALLENGE_RUL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/setChallenge`;
 const LOGIN_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
+const PROFILE_PAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/pages/user-profile`;
 
 /**
  * @param {Object} loggedInArtist
@@ -108,6 +109,7 @@ export const getProfileInfo = async ({ address }) => {
     console.error(`Error while trying to GET profile info: ${request.statusText}`);
   }
   const result = await request.text().then((data) => JSON.parse(data));
+  console.log(result);
   return result;
 };
 
@@ -157,5 +159,13 @@ export const userAuthenticate = async ({ address, signedMessage, uuid }) => {
     }),
   });
   const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const getProfilePage = async (username) => {
+  const request = await fetch(`${PROFILE_PAGE_URL}/${username}`);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
   return result;
 };
