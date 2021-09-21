@@ -13,6 +13,8 @@ const EDIT_COLLECTION_COVER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/cover-image`;
 const EDIT_COLLECTION_BANNER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/banner-image`;
+const GET_USER_NFTS_URL = (username) =>
+  `${process.env.REACT_APP_API_BASE_URL}/pages/user-profile/${username}/nfts`;
 
 /**
  * @param {Object} data
@@ -435,5 +437,15 @@ export const editCollectionBanner = async (file, collectionId) => {
   // if (!request.ok) return false;
 
   const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const getUserNfts = async (username) => {
+  const URL = GET_USER_NFTS_URL(username);
+
+  const request = await fetch(URL);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
   return result;
 };

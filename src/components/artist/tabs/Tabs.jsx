@@ -7,7 +7,7 @@ import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 import PastAuctionsTab from './pastAuctions/PastAuctionsTab.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../../utils/scrollingHandlers';
 
-const Tabs = ({ onArtist }) => {
+const Tabs = ({ nfts }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(() => {
@@ -79,10 +79,10 @@ const Tabs = ({ onArtist }) => {
           </div>
         </div>
         <div className="tab__content">
-          {selectedTabIndex === 0 && <NFTsTab onArtist={onArtist} />}
-          {selectedTabIndex === 1 && <ActiveAuctionsTab />}
-          {selectedTabIndex === 2 && <FutureAuctionsTab />}
-          {selectedTabIndex === 3 && <PastAuctionsTab />}
+          {selectedTabIndex === 0 && <NFTsTab showMintPrompt={false} nftData={nfts} />}
+          {selectedTabIndex === 1 && <ActiveAuctionsTab showMintPrompt={false} />}
+          {selectedTabIndex === 2 && <FutureAuctionsTab showMintPrompt={false} />}
+          {selectedTabIndex === 3 && <PastAuctionsTab showMintPrompt={false} />}
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@ const Tabs = ({ onArtist }) => {
 };
 
 Tabs.propTypes = {
-  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  nfts: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default Tabs;

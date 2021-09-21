@@ -10,6 +10,7 @@ import { useThemeContext } from '../../contexts/ThemeContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getProfilePage } from '../../utils/api/profile';
 import { mapUserData } from '../../utils/helpers';
+import { getUserNfts } from '../../utils/api/mintNFT';
 
 const Artist = () => {
   const location = useLocation();
@@ -18,6 +19,7 @@ const Artist = () => {
   const { artist: artistUsername } = useParams();
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [artistNFTs, setArtistNFTs] = useState([]);
 
   useEffect(() => {
     setDarkMode(false);
@@ -37,7 +39,7 @@ const Artist = () => {
         : null
     );
 
-    // TODO: Enable this when new endpoint is released
+    // TODO: Enable this when new endpoints are released
     // const getInfo = async () => {
     //   try {
     //     const artistInfo = await getProfilePage(artistUsername);
@@ -48,6 +50,16 @@ const Artist = () => {
     //   } catch (err) {
     //     console.log(err);
     //   }
+    //   try {
+    //     const artistNftsInfo = await getUserNfts(artistUsername);
+    //     if (!artistNftsInfo.error) {
+    //       setArtistNFTs(artistNftsInfo);
+    //     }
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+
+    //   // TODO: Add more requests for past/active/future auction, append results to state
     //   setLoading(false);
     // };
     // getInfo();
@@ -59,7 +71,7 @@ const Artist = () => {
   ) : artist ? (
     <div className="artist__page">
       <ArtistDetails onArtist={artist} />
-      <ArtistPageTabs onArtist={artist} />
+      <ArtistPageTabs nfts={artistNFTs} onArtist={artist} />
       {artist.personalLogo ? (
         <div className="artist__personal__logo">
           <img src={artist.personalLogo} alt="Artist personal logo" />

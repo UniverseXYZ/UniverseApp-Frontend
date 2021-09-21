@@ -10,7 +10,7 @@ import PastAuctionsCard from '../../../auctionsCard/PastAuctionsCard';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
-const PastAuctionsTab = ({ onArtist }) => {
+const PastAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
@@ -24,7 +24,7 @@ const PastAuctionsTab = ({ onArtist }) => {
     <>
       <PastAuctionsCard data={artistPastAuctions} />
     </>
-  ) : (
+  ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
       <h3>No past auctions found</h3>
@@ -53,11 +53,21 @@ const PastAuctionsTab = ({ onArtist }) => {
         Set up auction
       </button>
     </div>
+  ) : (
+    <div className="empty__auction">
+      <img src={bubleIcon} alt="Buble" />
+      <h3>No past auctions found</h3>
+    </div>
   );
 };
 
 PastAuctionsTab.propTypes = {
   onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  showCreatePrompt: PropTypes.bool,
+};
+
+PastAuctionsTab.defaultProps = {
+  showCreatePrompt: true,
 };
 
 export default PastAuctionsTab;

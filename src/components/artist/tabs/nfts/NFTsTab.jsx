@@ -12,10 +12,8 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import SimplePagination from '../../../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 
-const NFTsTab = ({ onArtist }) => {
-  const { myNFTs } = useMyNftsContext();
-  const { loggedInArtist } = useAuthContext();
-  const [data, setData] = useState(loggedInArtist.id === onArtist.id ? myNFTs : []);
+const NFTsTab = ({ nftData, showMintPrompt }) => {
+  const [data, setData] = useState(nftData);
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const history = useHistory();
@@ -25,7 +23,7 @@ const NFTsTab = ({ onArtist }) => {
 
   return (
     <>
-      <SearchFilters data={loggedInArtist.id === onArtist.id ? myNFTs : []} setData={setData} />
+      <SearchFilters data={nftData} setData={setData} />
       {data.length ? (
         <>
           <div className="nfts__lists">
@@ -51,7 +49,7 @@ const NFTsTab = ({ onArtist }) => {
             />
           </div>
         </>
-      ) : (
+      ) : showMintPrompt ? (
         <div className="empty__nfts">
           <div className="tabs-empty">
             <div className="image-bubble">
@@ -95,13 +93,27 @@ const NFTsTab = ({ onArtist }) => {
             </Button>
           </div>
         </div>
+      ) : (
+        <div className="empty__nfts">
+          <div className="tabs-empty">
+            <div className="image-bubble">
+              <img src={bubbleIcon} alt="bubble-icon" />
+            </div>
+            <h3>No NFTs found</h3>
+          </div>
+        </div>
       )}
     </>
   );
 };
 
 NFTsTab.propTypes = {
-  onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  nftData: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  showMintPrompt: PropTypes.bool,
+};
+
+NFTsTab.defaultProps = {
+  showMintPrompt: true,
 };
 
 export default NFTsTab;

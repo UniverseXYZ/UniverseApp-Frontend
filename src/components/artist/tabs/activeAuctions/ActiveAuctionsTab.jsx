@@ -10,7 +10,7 @@ import ActiveAuctionsCard from '../../../auctionsCard/ActiveAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
-const ActiveAuctionsTab = ({ onArtist }) => {
+const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
@@ -24,7 +24,7 @@ const ActiveAuctionsTab = ({ onArtist }) => {
     <>
       <ActiveAuctionsCard data={artistActiveAuctions} />
     </>
-  ) : (
+  ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
       <h3>No active auctions found</h3>
@@ -53,11 +53,20 @@ const ActiveAuctionsTab = ({ onArtist }) => {
         Set up auction
       </button>
     </div>
+  ) : (
+    <div className="empty__auction">
+      <img src={bubleIcon} alt="Buble" />
+      <h3>No active auctions found</h3>
+    </div>
   );
 };
 
 ActiveAuctionsTab.propTypes = {
   onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  showCreatePrompt: PropTypes.bool,
 };
 
+ActiveAuctionsTab.defaultProps = {
+  showCreatePrompt: true,
+};
 export default ActiveAuctionsTab;
