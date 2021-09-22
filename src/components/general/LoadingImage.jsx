@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import loadingBg from '../../assets/images/loading-white-background.png';
 
-const LoadingImage = React.memo(({ placeholderImage, realImage, alt, className, style }) => {
+const LoadingImage = React.memo(({ placeholderImage, src, alt, className, style }) => {
   const [loading, setLoading] = useState(true);
 
   const setLoadingFalse = () => {
@@ -10,12 +10,12 @@ const LoadingImage = React.memo(({ placeholderImage, realImage, alt, className, 
   };
 
   return (
-    <div className="loading-image">
+    <>
       <img
         alt={alt}
         className={className}
         style={style}
-        src={loading ? loadingBg || placeholderImage : realImage}
+        src={loading ? placeholderImage || loadingBg : src}
         onLoad={setLoadingFalse}
       />
       {loading ? (
@@ -32,13 +32,13 @@ const LoadingImage = React.memo(({ placeholderImage, realImage, alt, className, 
       ) : (
         <></>
       )}
-    </div>
+    </>
   );
 });
 
 LoadingImage.propTypes = {
   placeholderImage: PropTypes.string,
-  realImage: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   className: PropTypes.string,
   style: PropTypes.oneOfType(PropTypes.object),

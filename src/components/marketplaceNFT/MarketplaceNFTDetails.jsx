@@ -1104,7 +1104,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 type="button"
                 className="light-button"
                 onClick={() =>
-                  history.push(`/collection/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                  history.push(`/collection/${collection.address}`, {
                     collection,
                     saved: false,
                   })

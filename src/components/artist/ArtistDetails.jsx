@@ -13,19 +13,11 @@ import Button from '../button/Button';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
-const ArtistDetails = ({ onArtist }) => {
+const ArtistDetails = ({ onArtist, loading }) => {
   const { setEditProfileButtonClick } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
-  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-
-  useEffect(() => {
-    // Here need to get artist details
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
 
   return (
     <div className="artist__details__section">
@@ -176,6 +168,7 @@ const ArtistDetails = ({ onArtist }) => {
 
 ArtistDetails.propTypes = {
   onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default ArtistDetails;

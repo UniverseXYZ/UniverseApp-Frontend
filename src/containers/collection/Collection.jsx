@@ -77,6 +77,7 @@ const Collection = () => {
 
     const data = await getCollectionData(collectionAddress);
     const cNFTs = data.nfts || [];
+    console.log(cNFTs);
 
     if (!data.message) setCollectionData(data);
 
@@ -128,7 +129,12 @@ const Collection = () => {
                 {filteredNFTs
                   .slice(offset, offset + perPage)
                   .filter((nft) => !nft.hidden)
-                  .map((nft, index) => index < quantity && <NFTCard key={nft.id} nft={nft} />)}
+                  .map(
+                    (nft, index) =>
+                      index < quantity && (
+                        <NFTCard key={nft.id} nft={nft} collectionAddress={collectionAddress} />
+                      )
+                  )}
               </div>
               <div className="pagination__container">
                 <SimplePagination

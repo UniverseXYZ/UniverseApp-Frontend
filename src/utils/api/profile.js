@@ -4,7 +4,7 @@ const UPLOAD_LOGO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/upload-l
 const GET_PROFILE_INFO_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/get-profile-info`;
 const CHALLENGE_RUL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/setChallenge`;
 const LOGIN_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth/login`;
-const PROFILE_PAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/user/pages/user-profile`;
+const PROFILE_PAGE_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/user-profile`;
 
 /**
  * @param {Object} loggedInArtist
@@ -96,7 +96,7 @@ export const saveUserLogo = async (file) => {
  * @returns {string} result.twitterUser
  * @returns {string} result.universePageUrl
  */
-export const getProfileInfo = async ({ address }) => {
+export const getProfileInfo = async (address) => {
   const request = await fetch(`${GET_PROFILE_INFO_URL}/${address}`, {
     method: 'GET',
     headers: {

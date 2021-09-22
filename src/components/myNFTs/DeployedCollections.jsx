@@ -30,7 +30,7 @@ const DeployedCollections = () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
-
+  console.log(deployedCollections);
   return (
     <div className="tab__saved__collections">
       {deployedCollections.length ? (
@@ -42,7 +42,7 @@ const DeployedCollections = () => {
                 key={uuid()}
                 aria-hidden="true"
                 onClick={() =>
-                  history.push(`/collection/${collection.id}`, {
+                  history.push(`/collection/${collection.address}`, {
                     collection,
                     saved: true,
                   })

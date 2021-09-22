@@ -14,7 +14,7 @@ const EDIT_COLLECTION_COVER_URL = (id) =>
 const EDIT_COLLECTION_BANNER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/banner-image`;
 const GET_USER_NFTS_URL = (username) =>
-  `${process.env.REACT_APP_API_BASE_URL}/pages/user-profile/${username}/nfts`;
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/user-profile/${username}/nfts`;
 
 /**
  * @param {Object} data

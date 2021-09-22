@@ -161,10 +161,10 @@ const App = () => {
                 <AuthenticatedRoute exact path="/auction-review">
                   <AuctionReview />
                 </AuthenticatedRoute>
-                <Route exact path="/:artist">
+                <Route exact path="/:artistUsername">
                   <Artist />
                 </Route>
-                <Route exact path="/collection/:collectionId">
+                <Route exact path="/collection/:collectionAddress">
                   <Collection />
                 </Route>
                 <Route exact path="/:artist/:auction">

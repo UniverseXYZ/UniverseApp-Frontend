@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import bubbleIcon from '../../../../assets/images/text-bubble.png';
@@ -12,22 +12,33 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import SimplePagination from '../../../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 
-const NFTsTab = ({ nftData, showMintPrompt }) => {
-  const [data, setData] = useState(nftData);
+function nftsTabPropsAreEqual(prevProps, nextProps) {
+  if (prevProps.showMintPrompt !== nextProps.showMintPrompt) {
+    return false;
+  }
+  return JSON.stringify(prevProps.nftData) === JSON.stringify(nextProps.nftData);
+}
+
+const NFTsTab = React.memo(({ nftData, showMintPrompt }) => {
   const ref = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const history = useHistory();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
   const [page, setPage] = useState(8);
+  const [nfts, setNfts] = useState([]);
+
+  useEffect(() => {
+    setNfts(nftData);
+  }, [nftData]);
 
   return (
     <>
-      <SearchFilters data={nftData} setData={setData} />
-      {data.length ? (
+      <SearchFilters data={nftData} setData={setNfts} setOffset={setOffset} />
+      {nfts.length ? (
         <>
           <div className="nfts__lists">
-            {data
+            {nfts
               .slice(offset, offset + perPage)
               .filter((nft) => !nft.hidden)
               .map((nft) => (
@@ -36,7 +47,7 @@ const NFTsTab = ({ nftData, showMintPrompt }) => {
           </div>
           <div className="pagination__container">
             <SimplePagination
-              data={data}
+              data={nfts}
               perPage={perPage}
               setOffset={setOffset}
               setPage={setPage}
@@ -105,7 +116,7 @@ const NFTsTab = ({ nftData, showMintPrompt }) => {
       )}
     </>
   );
-};
+}, nftsTabPropsAreEqual);
 
 NFTsTab.propTypes = {
   nftData: PropTypes.oneOfType([PropTypes.array]).isRequired,

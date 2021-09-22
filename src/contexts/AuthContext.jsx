@@ -258,7 +258,7 @@ const AuthContextProvider = ({ children }) => {
         }
       } else {
         // THE USER ALREADY HAS SIGNED
-        const userInfo = await getProfileInfo({ address });
+        const userInfo = await getProfileInfo(address);
 
         if (!userInfo.error) {
           setIsAuthenticated(true);

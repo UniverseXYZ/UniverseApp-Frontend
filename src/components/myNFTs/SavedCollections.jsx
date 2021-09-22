@@ -52,7 +52,7 @@ const SavedCollections = () => {
               key={uuid()}
               aria-hidden="true"
               onClick={() =>
-                history.push(`/collection/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                history.push(`/collection/${collection.address}`, {
                   collection,
                   saved: true,
                 })

@@ -26,8 +26,9 @@ import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import LoadingImage from '../general/LoadingImage';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
-const NFTCard = React.memo(({ nft }) => {
+const NFTCard = React.memo(({ nft, collectionAddress }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
@@ -124,7 +125,7 @@ const NFTCard = React.memo(({ nft }) => {
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
-
+  console.log(nft);
   return (
     <div className="nft--card">
       <div className="nft--card--header">
@@ -142,19 +143,17 @@ const NFTCard = React.memo(({ nft }) => {
           </div> */}
           {nft.collection && (
             <div className="collection--details">
-              {typeof nft.collection.coverUrl === 'string' &&
-              nft.collection.coverUrl.startsWith('#') ? (
+              {nft.collection.name === 'Universe XYZ' ? (
+                <img src={universeIcon} alt={nft.collection.name} />
+              ) : !nft.collection.coverUrl ? (
                 <div
                   className="random--bg--color"
-                  style={{ backgroundColor: nft.collection.avatar }}
+                  style={{ backgroundColor: getCollectionBackgroundColor(nft.collection) }}
                 >
                   {nft.collection.name.charAt(0)}
                 </div>
               ) : (
-                <img
-                  src={nft.collection.coverUrl ? nft.collection.coverUrl : universeIcon}
-                  alt={nft.collection.name}
-                />
+                <img src={nft.collection.coverUrl} alt={nft.collection.name} />
               )}
               <span className="tooltiptext">{`Collection: ${nft.collection.name}`}</span>
             </div>
@@ -278,7 +277,11 @@ const NFTCard = React.memo(({ nft }) => {
           <>
             {nft.type && nft.type !== 'bundles' ? (
               <div
-                onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
+                onClick={() =>
+                  history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, {
+                    nft,
+                  })
+                }
                 aria-hidden="true"
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
@@ -328,7 +331,7 @@ const NFTCard = React.memo(({ nft }) => {
                       index < 7 && (
                         <div
                           className="slider--box"
-                          onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
+                          onClick={() => history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, { nft })}
                           aria-hidden="true"
                           key={uuid()}
                         >
@@ -361,7 +364,10 @@ const NFTCard = React.memo(({ nft }) => {
                   <div
                     className="slider--box"
                     onClick={() =>
-                      history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })
+                      history.push(
+                        `/nft/${nft.collection?.address || collectionAddress}/${nft.id}`,
+                        { nft }
+                      )
                     }
                     aria-hidden="true"
                     key={uuid()}
@@ -372,7 +378,7 @@ const NFTCard = React.memo(({ nft }) => {
                         <LoadingImage
                           className="nft--image"
                           alt={nft.name}
-                          realImage={nft.optimized_url}
+                          src={nft.optimized_url}
                           placeholderImage={nft.optimized_url}
                         />
                       )}
@@ -426,6 +432,11 @@ const NFTCard = React.memo(({ nft }) => {
 
 NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  collectionAddress: PropTypes.string,
+};
+
+NFTCard.defaultProps = {
+  collectionAddress: '',
 };
 
 export default NFTCard;

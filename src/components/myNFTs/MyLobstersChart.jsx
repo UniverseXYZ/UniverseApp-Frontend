@@ -14,7 +14,6 @@ import { useLobsterContext } from '../../contexts/LobsterContext';
 
 const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { userLobsters } = useLobsterContext();
-  const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
   const { setDarkMode } = useThemeContext();
   console.log(userLobsters);
   const [offset, setOffset] = useState(0);
