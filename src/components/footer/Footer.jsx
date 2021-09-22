@@ -17,7 +17,7 @@ const Footer = () => {
 
   const handleSubscribe = () => {
     const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+)")@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(email).toLowerCase())) {
       const config = {
         headers: { 'Access-Control-Allow-Origin': '*' },
@@ -132,9 +132,11 @@ const Footer = () => {
                   <li onClick={() => history.push('/polymorph-rarity')} aria-hidden="true">
                     Polymorphs
                   </li>
-                  <li className="disable">
+                  <li
+                    aria-hidden="true"
+                    onClick={() => window.open('https://rarity.tools/lobby-lobsters')}
+                  >
                     Lobby Lobsters
-                    <span className="tooltiptext">Coming soon</span>
                   </li>
                 </ul>
               </div>

@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 footer {
   padding: 0;
@@ -51,7 +51,7 @@ footer {
             @include md {
               text-align: center;
             }
-            @include sm{
+            @include sm {
               text-align: left;
             }
           }
@@ -96,7 +96,7 @@ footer {
               }
             }
           }
-          @include sm{
+          @include sm {
             padding-top: 0px;
           }
         }
@@ -189,7 +189,7 @@ footer {
                 transform: translateX(-50%);
                 box-shadow: 0px 0px 2px 0px rgba(255, 255, 255, 0.4);
                 &::before {
-                  content: '';
+                  content: "";
                   position: absolute;
                   top: 100%;
                   left: 50%;
@@ -200,7 +200,7 @@ footer {
                   border-color: rgba(255, 255, 255, 0.4) transparent transparent transparent;
                 }
                 &::after {
-                  content: '';
+                  content: "";
                   position: absolute;
                   top: 100%;
                   left: 50%;
@@ -244,35 +244,41 @@ footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      .powered-by{
+      .powered-by {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        .op-sourced{
+        .op-sourced {
           font-family: $spaceGroteskFont;
           font-size: 12px;
           font-style: normal;
           font-weight: 400;
           line-height: 22px;
-          color: rgba(255, 255, 255, 0.4)
+          color: rgba(255, 255, 255, 0.4);
         }
-        span{
+        span {
           font-family: $spaceGroteskFont;
           font-size: 12px;
           font-style: normal;
           font-weight: 600;
           line-height: 22px;
-          color: rgba(255, 255, 255, 0.6)
+          color: rgba(255, 255, 255, 0.6);
         }
-        span:last-child{
+        span:last-child {
           margin-left: 20px;
           @include sm {
             margin-left: 0px;
           }
+          @include lg {
+            margin-left: 0px;
+          }
         }
-        span:not(:first-child){
+        span:not(:first-child) {
           cursor: pointer;
         }
-        @include sm{
+        @include lg {
+          grid-template-columns: 1fr;
+        }
+        @include sm {
           grid-template-columns: 1fr;
           margin-top: 30px;
         }
@@ -306,7 +312,7 @@ footer {
           @include md {
             justify-content: center;
           }
-          @include sm{
+          @include sm {
             justify-content: space-between;
           }
         }
@@ -314,8 +320,8 @@ footer {
       @include md {
         flex-wrap: wrap;
       }
-      @include sm{
-        flex-wrap: wrap ;
+      @include sm {
+        flex-wrap: wrap;
         flex-direction: column-reverse;
         align-items: unset;
       }

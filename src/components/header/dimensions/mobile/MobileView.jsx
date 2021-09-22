@@ -671,10 +671,12 @@ const MobileView = (props) => {
                             </button>
                           </div>
                           <div>
-                            <button type="button" className="disable">
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://rarity.tools/lobby-lobsters')}
+                            >
                               <img src={navChartIcon} alt="Lobby Lobsters" />
                               <span>Lobby Lobsters</span>
-                              <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
                         </>
