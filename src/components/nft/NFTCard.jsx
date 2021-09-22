@@ -25,8 +25,9 @@ import burnNFTIcon from '../../assets/images/burn-nft.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import LoadingImage from '../general/LoadingImage';
 
-const NFTCard = ({ nft }) => {
+const NFTCard = React.memo(({ nft }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
@@ -368,7 +369,12 @@ const NFTCard = ({ nft }) => {
                     {nft.artworkType &&
                       !nft.artworkType.endsWith('mpeg') &&
                       !nft.artworkType.endsWith('mp4') && (
-                        <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
+                        <LoadingImage
+                          className="nft--image"
+                          alt={nft.name}
+                          realImage={nft.optimized_url}
+                          placeholderImage={nft.optimized_url}
+                        />
                       )}
                     {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                       <video
@@ -416,7 +422,7 @@ const NFTCard = ({ nft }) => {
       </div>
     </div>
   );
-};
+});
 
 NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
