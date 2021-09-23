@@ -51,7 +51,8 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const { loggedInArtist, yourBalance, usdEthBalance, resetConnectionState } = useAuthContext();
+  const { loggedInArtist, isAuthenticated, yourBalance, usdEthBalance, resetConnectionState } =
+    useAuthContext();
 
   return (
     <div className="desktop__nav">
@@ -281,7 +282,7 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected ? (
+        {isWalletConnected && isAuthenticated ? (
           <li>
             <button
               type="button"

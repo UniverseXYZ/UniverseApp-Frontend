@@ -7,10 +7,13 @@ import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
+import { useErrorContext } from './ErrorContext';
 
 const AuthContext = createContext(null);
 
 const AuthContextProvider = ({ children }) => {
+  const { setShowError, setErrorTitle, setErrorBody, closeError } = useErrorContext();
+
   const [loggedInArtist, setLoggedInArtist] = useState({
     id: uuid(),
     name: '',
@@ -100,7 +103,7 @@ const AuthContextProvider = ({ children }) => {
     setAddress(accounts[0] || '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
-    setIsWalletConnected(true);
+    // setIsWalletConnected(true);
     setEthereumNetwork(network);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
     setUniverseERC721FactoryContract(universeERC721FactoryContractResult);
@@ -229,50 +232,61 @@ const AuthContextProvider = ({ children }) => {
 
   // Sign message for BE authentication
   const signMessage = async () => {
-    if (signer) {
-      const sameUser = address === localStorage.getItem('user_address');
-      const hasSigned = sameUser && localStorage.getItem('access_token');
+    try {
+      if (signer) {
+        const sameUser = address === localStorage.getItem('user_address');
+        const hasSigned = sameUser && localStorage.getItem('access_token');
 
-      if (!hasSigned) {
-        const chanllenge = uuid();
-        const challengeResult = await setChallenge(chanllenge);
-        const signedMessage = await signer?.signMessage(chanllenge);
-        const authInfo = await userAuthenticate({
-          address,
-          signedMessage,
-          uuid: challengeResult?.uuid,
-        });
-
-        if (!authInfo.error) {
-          setIsAuthenticated(true);
-          setLoggedInArtist(mapUserData(authInfo.user));
-
-          // Save access_token into the local storage for later API requests usage
-          localStorage.setItem('access_token', authInfo.token);
-          localStorage.setItem('user_address', address);
-        } else {
-          setIsAuthenticated(false);
-          // if (authenticatedRoutes.includes(window.location.pathname)) {
-          //   history.push('/');
-          // }
-        }
-      } else {
-        // THE USER ALREADY HAS SIGNED
-        const userInfo = await getProfileInfo(address);
-
-        if (!userInfo.error) {
-          setIsAuthenticated(true);
-
-          setLoggedInArtist({
-            name: userInfo.displayName,
-            universePageAddress: userInfo.universePageUrl,
-            avatar: userInfo.profileImageUrl,
-            about: userInfo.about,
-            personalLogo: userInfo.logoImageUrl,
-            instagramLink: userInfo.instagramUser,
-            twitterLink: userInfo.twitterUser,
+        if (!hasSigned) {
+          const chanllenge = uuid();
+          const challengeResult = await setChallenge(chanllenge);
+          const signedMessage = await signer?.signMessage(chanllenge);
+          const authInfo = await userAuthenticate({
+            address,
+            signedMessage,
+            uuid: challengeResult?.uuid,
           });
+
+          if (!authInfo.error) {
+            setIsAuthenticated(true);
+            setLoggedInArtist(mapUserData(authInfo.user));
+
+            // Save access_token into the local storage for later API requests usage
+            localStorage.setItem('access_token', authInfo.token);
+            localStorage.setItem('user_address', address);
+          } else {
+            setIsAuthenticated(false);
+            // if (authenticatedRoutes.includes(window.location.pathname)) {
+            //   history.push('/');
+            // }
+          }
+        } else {
+          // THE USER ALREADY HAS SIGNED
+          const userInfo = await getProfileInfo(address);
+
+          if (!userInfo.error) {
+            setIsAuthenticated(true);
+
+            setLoggedInArtist({
+              name: userInfo.displayName,
+              universePageAddress: userInfo.universePageUrl,
+              avatar: userInfo.profileImageUrl,
+              about: userInfo.about,
+              personalLogo: userInfo.logoImageUrl,
+              instagramLink: userInfo.instagramUser,
+              twitterLink: userInfo.twitterUser,
+            });
+          }
         }
+        closeError();
+      }
+    } catch (err) {
+      if (err.code === 4001) {
+        setShowError(true);
+        setErrorTitle('Signature is required');
+        setErrorBody(
+          "Signing a challenge is part of the authentication process.\nWithout it the application can't authenticate you."
+        );
       }
     }
   };
