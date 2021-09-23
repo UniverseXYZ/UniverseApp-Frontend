@@ -26,12 +26,18 @@ import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
 import Pagination from '../../pagination/Pagionation.jsx';
-import { MintSingleCollectionFlow } from '../../../userFlows/MintSingleCollectionFlow';
 import { RouterPrompt } from '../../../utils/routerPrompt.js';
-import { editCollection, editCollectionImage, getMyCollections } from '../../../utils/api/mintNFT';
+import {
+  editCollection,
+  editCollectionImage,
+  getMyCollections,
+  saveCollection,
+  attachTxHashToCollection,
+} from '../../../utils/api/mintNFT';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../../contexts/ErrorContext';
+import Contracts from '../../../contracts/contracts.json';
 
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const { savedNfts, savedCollectionID, setSavedCollectionID, myNFTs, setMyNFTs } =
@@ -63,6 +69,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const [border, setBorder] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
+  const [trasnactionLink, setTransactionLink] = useState('');
+
   const [errors, setErrors] = useState({
     coverImage: '',
     collectionName: '',
@@ -295,24 +303,36 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         }
       } else {
         // Create the collection
-        res = await MintSingleCollectionFlow({
-          collection: collectionData,
-          helpers: mintingFlowContext,
-        });
+        const saveRequestPromise = saveCollection(collectionData);
+        const txReqPromise = universeERC721FactoryContract
+          .deployUniverseERC721(collectionData.name, collectionData.symbol)
+          .then(async (txRes) => {
+            const chain = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+            const etherscanLink = `https://${chain.name}.etherscan.io/tx/${txRes.hash}`;
+            setTransactionLink(etherscanLink);
+            return txRes.wait();
+          });
+        const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
+        res = await attachTxHashToCollection(tx.transactionHash, save.id);
 
+        // TODO:: we need to wait for server process time, otherwise the new collection is not retunred imediatly
+        // const serverProcessTime = 5000; // ms
+        // setTimeout(() => {
+
+        // }, serverProcessTime);
         // get the new collections and update the state
         const collectionsRequest = await getMyCollections();
         if (!collectionsRequest.message) {
           setDeployedCollections(collectionsRequest.collections);
         }
-      }
 
-      showLoading(false);
+        setShowLoading(false);
 
-      if (res) {
-        setShowCongrats(true);
-      } else {
-        setShowError(true);
+        if (res) {
+          setShowCongrats(true);
+        } else {
+          setShowError(true);
+        }
       }
     } catch (err) {
       console.error(err, 'Error !');
