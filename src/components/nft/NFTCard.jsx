@@ -417,7 +417,7 @@ const NFTCard = React.memo(({ nft, collectionAddress }) => {
         <div className="quantity--and--offer">
           {/* // TODO:: we need a property from the BE about the total editions count */}
           <p>{`${nft.tokenIds ? nft.tokenIds.length : 1} / ${
-            nft.tokenIds ? nft.tokenIds.length : 1
+            nft.numberOfEditions ? nft.numberOfEditions : nft.tokenIds ? nft.tokenIds.length : 1
           }`}</p>
           {/* <div className="price--offer--div">
             <label>Offer for</label>

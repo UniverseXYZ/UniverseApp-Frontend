@@ -5,14 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import './TabletView.scss';
-import {
-  PLACEHOLDER_MARKETPLACE_AUCTIONS,
-  PLACEHOLDER_MARKETPLACE_NFTS,
-  PLACEHOLDER_MARKETPLACE_USERS,
-  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
-  PLACEHOLDER_MARKETPLACE_COMMUNITIES,
-  PLACEHOLDER_MARKETPLACE_GALLERIES,
-} from '../../../../utils/fixtures/BrowseNFTsDummyData';
+import Blockie from 'react-blockies';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
@@ -69,7 +62,8 @@ const TabletView = (props) => {
     showSearch,
     setShowSearch,
   } = props;
-  const { yourBalance, usdEthBalance, resetConnectionState, loggedInArtist } = useAuthContext();
+  const { address, yourBalance, usdEthBalance, resetConnectionState, loggedInArtist } =
+    useAuthContext();
 
   const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -116,17 +110,25 @@ const TabletView = (props) => {
   useEffect(() => {
     document.addEventListener(
       'click',
-      (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
+      (e) => handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened),
       true
     );
     return () => {
       document.removeEventListener(
         'click',
-        (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
+        (e) => {
+          console.log('click');
+          handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened);
+        },
         true
       );
     };
-  });
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsAccountDropdownOpened(!isAccountDropdownOpened);
+    setShowMenu(false);
+  };
 
   return (
     <div className="tablet__nav">
@@ -351,17 +353,14 @@ const TabletView = (props) => {
       )} */}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
-          <img
-            className="account__icon hide__on__tablet"
-            src={accountIcon}
-            onClick={() => {
-              setIsAccountDropdownOpened(!isAccountDropdownOpened);
-              setShowMenu(false);
-            }}
-            alt="Account icon"
-            aria-hidden="true"
-          />
-          <img
+          <div
+            style={{ marginRight: 20, display: 'flex', cursor: 'pointer' }}
+            aria-hidden
+            onClick={toggleDropdown}
+          >
+            <Blockie className="blockie" seed={address} size={9} scale={4} />
+          </div>
+          {/* <img
             className="account__icon show__on__tablet"
             src={accountDarkIcon}
             onClick={() => {
@@ -370,13 +369,14 @@ const TabletView = (props) => {
             }}
             alt="Account icon"
             aria-hidden="true"
-          />
+          /> */}
+
           {isAccountDropdownOpened && (
             <Animated animationIn="fadeIn">
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <img className="icon-img" src={accountIcon} alt="icon" />
+                    <Blockie className="blockie" seed={address} size={9} scale={3} />
                     <div className="ethereum__address">
                       {shortenEthereumAddress(ethereumAddress)}
                     </div>

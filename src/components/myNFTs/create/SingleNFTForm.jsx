@@ -25,7 +25,7 @@ import createIcon from '../../../assets/images/create.svg';
 import delIcon from '../../../assets/images/delete-red.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
-import CreateCollectionPopup from '../../popups/CreateCollectionPopup.jsx';
+
 import {
   saveNftForLater,
   saveNftImage,
@@ -48,6 +48,7 @@ import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import { getCollectionBackgroundColor } from '../../../utils/helpers';
+import CollectionChoice from './CollectionChoice';
 
 const SingleNFTForm = () => {
   const {
@@ -60,9 +61,17 @@ const SingleNFTForm = () => {
     collectionsIdAddressMapping,
   } = useMyNftsContext();
 
-  const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
-    useAuthContext();
+  const {
+    deployedCollections,
+    universeERC721CoreContract,
+    address,
+    contracts,
+    signer,
+    universeCollection,
+  } = useAuthContext();
+
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+
   const [errors, setErrors] = useState({
     name: '',
     edition: '',
@@ -91,12 +100,15 @@ const SingleNFTForm = () => {
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
-  const [selectedCollection, setSelectedCollection] = useState(null);
+  const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
+  useEffect(() => {
+    setSelectedCollection(universeCollection);
+  }, [universeCollection]);
 
   const handleInputChange = (val) => {
     if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
@@ -258,7 +270,7 @@ const SingleNFTForm = () => {
 
       // Get the contract instance to mint from
       const collectionContract =
-        selectedCollection && selectedCollection.address
+        selectedCollection && selectedCollection.address !== universeCollection.address
           ? new Contract(selectedCollection.address, contracts.UniverseERC721.abi, signer)
           : universeERC721CoreContract;
 
@@ -773,14 +785,13 @@ const SingleNFTForm = () => {
               value={editions}
             />
           </div>
-          {deployedCollections.length ? (
-            <div className="single-nft-choose-collection">
-              <h4>Choose collection</h4>
-              {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
-              {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
-              <div className="choose__collection">
-                {/* {!savedNFTsID && ( */}
-                {/* <Popup
+          <div className="single-nft-choose-collection">
+            <h4>Choose collection</h4>
+            {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
+            {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
+            <div className="choose__collection">
+              {/* {!savedNFTsID && ( */}
+              {/* <Popup
                   trigger={
                     <div className="collection-box">
                       <div className="create">
@@ -794,43 +805,25 @@ const SingleNFTForm = () => {
                 >
                   {(close) => <CreateCollectionPopup onClose={close} />}
                 </Popup> */}
-                {/* )} */}
-                {deployedCollections.map((col) => (
-                  <div className="collection-box" key={uuid()}>
-                    <div
-                      className={`universe${
-                        selectedCollection && selectedCollection.id === col.id ? ' selected' : ''
-                      }`}
-                      aria-hidden="true"
-                      onClick={() =>
-                        selectedCollection && selectedCollection.id === col.id
-                          ? setSelectedCollection(null)
-                          : setSelectedCollection(col)
-                      }
-                    >
-                      {!col?.coverUrl ? (
-                        <div
-                          className="random__bg__color"
-                          style={{ backgroundColor: getCollectionBackgroundColor(col) }}
-                        >
-                          {col.name.charAt(0)}
-                        </div>
-                      ) : (
-                        <div>
-                          <img src={col.coverUrl} alt={col.name} />
-                        </div>
-                      )}
-                      <h5 className="collection-name">{col.name}</h5>
-                      <p>{col.tokenName}</p>
-                    </div>
-                    <div className="box--shadow--effect--block" />
-                  </div>
-                ))}
-              </div>
+              {/* )} */}
+              {universeCollection && (
+                <CollectionChoice
+                  selectedCollection={selectedCollection}
+                  setSelectedCollection={setSelectedCollection}
+                  col={universeCollection}
+                />
+              )}
+              {deployedCollections.map((col) => (
+                <CollectionChoice
+                  key={uuid()}
+                  selectedCollection={selectedCollection}
+                  setSelectedCollection={setSelectedCollection}
+                  col={col}
+                />
+              ))}
             </div>
-          ) : (
-            <></>
-          )}
+          </div>
+
           <div className="hr-div" />
           <div className="single-nft-properties">
             <div className="single-nft-properties-header">

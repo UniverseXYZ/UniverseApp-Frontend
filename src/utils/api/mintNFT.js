@@ -9,6 +9,8 @@ const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/mi
 const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
 const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection`;
 const EDIT_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/collections`;
+const GET_NFT_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`;
+
 const EDIT_COLLECTION_COVER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/cover-image`;
 const EDIT_COLLECTION_BANNER_URL = (id) =>
@@ -442,6 +444,16 @@ export const editCollectionBanner = async (file, collectionId) => {
 
 export const getUserNfts = async (username) => {
   const URL = GET_USER_NFTS_URL(username);
+
+  const request = await fetch(URL);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getNftData = async (collectionAddress, tokenId) => {
+  const URL = `${GET_NFT_INFO}/${collectionAddress}/${tokenId}`;
 
   const request = await fetch(URL);
 

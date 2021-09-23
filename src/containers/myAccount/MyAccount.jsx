@@ -75,8 +75,8 @@ const MyAccount = () => {
         universePageAddress: page,
         avatar: accountImage,
         about,
-        instagramLink,
-        twitterLink,
+        instagramLink: instagramLink.replace('@', ''),
+        twitterLink: twitterLink.replace('@', ''),
       };
 
       const result = await saveProfileInfo(artistData);

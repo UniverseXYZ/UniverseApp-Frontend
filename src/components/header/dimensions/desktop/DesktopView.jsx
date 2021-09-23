@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
+import Blockies from 'react-blockies';
 import AppContext from '../../../../ContextAPI';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
@@ -51,7 +52,7 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const { loggedInArtist, isAuthenticated, yourBalance, usdEthBalance, resetConnectionState } =
+  const { address, isAuthenticated, yourBalance, usdEthBalance, resetConnectionState } =
     useAuthContext();
 
   return (
@@ -285,18 +286,19 @@ const DesktopView = ({
         {isWalletConnected && isAuthenticated ? (
           <li>
             <button
+              style={{ width: 200 }}
               type="button"
               className="menu-li myAccount"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <img className="icon-img" src={Icon} alt="Diamond icon" />
+              <Blockies className="blockie" seed={address} size={9} scale={3} />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <img className="icon-img" src={Icon} alt="icon" />
+                  <Blockies className="blockie" seed={address} size={9} scale={3} />
                   <div className="ethereum__address">{shortenEthereumAddress(ethereumAddress)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">
