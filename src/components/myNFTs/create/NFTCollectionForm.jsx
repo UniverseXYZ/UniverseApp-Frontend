@@ -203,6 +203,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     }
   };
 
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const handleMinting = () => {
     setMintNowClick(true);
     if (!collectionName || !tokenName || !coverImage) {
@@ -315,24 +317,22 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
         res = await attachTxHashToCollection(tx.transactionHash, save.id);
 
-        // TODO:: we need to wait for server process time, otherwise the new collection is not retunred imediatly
-        // const serverProcessTime = 5000; // ms
-        // setTimeout(() => {
-
-        // }, serverProcessTime);
+        // We need to wait for server process time, otherwise the new collection is not retunred imediatly
+        const serverProcessTime = 5000; // ms
+        await sleep(serverProcessTime);
         // get the new collections and update the state
         const collectionsRequest = await getMyCollections();
         if (!collectionsRequest.message) {
           setDeployedCollections(collectionsRequest.collections);
         }
+      }
 
-        setShowLoading(false);
+      setShowLoading(false);
 
-        if (res) {
-          setShowCongrats(true);
-        } else {
-          setShowError(true);
-        }
+      if (res) {
+        setShowCongrats(true);
+      } else {
+        setShowError(true);
       }
     } catch (err) {
       console.error(err, 'Error !');
