@@ -73,21 +73,21 @@ export const sendSaveCollectionRequest = async ({ collection, helpers }) => {
   };
 };
 
-/**
- * @param {Object} data
- * @param {Object} data.collection
- * @param data.collection.transactionHash
- * @param data.collection.id
- */
-export const updateCollectionTxHash = async ({ collection }) => {
-  const response = await attachTxHashToCollection(collection.transactionHash, collection.id);
+// /**
+//  * @param {Object} data
+//  * @param {Object} data.collection
+//  * @param data.collection.transactionHash
+//  * @param data.collection.id
+//  */
+// export const updateCollectionTxHash = async ({ collection }) => {
+//   const response = await attachTxHashToCollection(collection.transactionHash, collection.id);
 
-  if (!response.ok && response.status !== 201) {
-    console.error(`Error while trying to save a new collection: ${response.statusText}`);
-  }
+//   if (!response.ok && response.status !== 201) {
+//     console.error(`Error while trying to save a new collection: ${response.statusText}`);
+//   }
 
-  return response;
-};
+//   return response;
+// };
 
 //
 // Auctions
