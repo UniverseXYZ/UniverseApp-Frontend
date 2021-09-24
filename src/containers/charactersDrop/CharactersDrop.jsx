@@ -6,17 +6,12 @@ import Planets from '../../components/charactersDrop/Planets1';
 import FutureCore from '../../components/charactersDrop/FutureCore';
 import AppContext from '../../ContextAPI';
 
-const CharactersDrop = () => {
-  const { setDarkMode } = useContext(AppContext);
-  const history = useHistory();
-  const [mobile, setMobile] = useState(false);
-  return (
-    <div className="characters-drop">
-      <WelcomeHead />
-      <Planets />
-      <FutureCore />
-    </div>
-  );
-};
+const CharactersDrop = () => (
+  <div className="characters-drop">
+    <WelcomeHead />
+    <Planets />
+    <FutureCore />
+  </div>
+);
 
 export default CharactersDrop;

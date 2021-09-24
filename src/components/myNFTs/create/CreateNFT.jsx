@@ -7,14 +7,17 @@ import settingIcon from '../../../assets/images/setting-solid-disactive.svg';
 import selectTypeIconActive from '../../../assets/images/select-type-icon-active.svg';
 import selectTypeIcon from '../../../assets/images/select-type-icon.svg';
 import SelectType from './SelectType';
-import SingleNFTSettings from './SingleNFTSettings';
-import NFTCollectionSettings from './NFTCollectionSettings';
+import SingleNFTForm from './SingleNFTForm';
+import NFTCollectionForm from './NFTCollectionForm';
 import AppContext from '../../../ContextAPI';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 const CreateNFT = () => {
   const history = useHistory();
   const location = useLocation();
-  const { savedNFTsID, savedCollectionID, deployedCollections } = useContext(AppContext);
+  const { savedNFTsID, savedCollectionID } = useMyNftsContext();
+  const { deployedCollections } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
@@ -24,6 +27,14 @@ const CreateNFT = () => {
       setSelectedTabIndex(0);
       setSelectedNFTType('');
     }
+  };
+
+  const goToCollectionPage = () => {
+    const findCollection = deployedCollections.filter((item) => item.id === savedCollectionID);
+    history.push(`/collection/${findCollection[0].address}`, {
+      collection: deployedCollections.filter((item) => item.id === savedCollectionID)[0],
+      saved: false,
+    });
   };
 
   useEffect(() => {
@@ -75,24 +86,7 @@ const CreateNFT = () => {
           </>
         )}
         {savedCollectionID && (
-          <div
-            className="back-btn"
-            onClick={() =>
-              history.push(
-                `/c/${deployedCollections
-                  .filter((item) => item.id === savedCollectionID)[0]
-                  .id.toLowerCase()
-                  .replace(' ', '-')}`,
-                {
-                  collection: deployedCollections.filter(
-                    (item) => item.id === savedCollectionID
-                  )[0],
-                  saved: false,
-                }
-              )
-            }
-            aria-hidden="true"
-          >
+          <div className="back-btn" onClick={goToCollectionPage} aria-hidden="true">
             <img src={arrow} alt="back" />
             <span>
               {deployedCollections.filter((item) => item.id === savedCollectionID)[0].name}
@@ -153,9 +147,9 @@ const CreateNFT = () => {
               setSelectedNFTType={setSelectedNFTType}
             />
           )}
-          {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTSettings />}
+          {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTForm />}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (
-            <NFTCollectionSettings
+            <NFTCollectionForm
               showCollectible={showCollectible}
               setShowCollectible={setShowCollectible}
             />

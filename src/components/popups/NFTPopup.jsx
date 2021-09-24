@@ -8,9 +8,12 @@ import AppContext from '../../ContextAPI';
 import buyerImage from '../../assets/images/nft-buyer.png';
 import hrefIcon from '../../assets/images/href.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const NFTPopup = ({ onClose, onNFT }) => {
-  const { loggedInArtist, deployedCollections } = useContext(AppContext);
+  const { deployedCollections } = useMyNftsContext();
+  const { loggedInArtist } = useAuthContext();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [collection, setCollection] = useState({});
   const PLACEHOLDER_NFT_BUYER = 'Fran Solo';
@@ -98,7 +101,7 @@ const NFTPopup = ({ onClose, onNFT }) => {
               <p
                 aria-hidden="true"
                 onClick={() =>
-                  history.push(`/c/${collection.id.toLowerCase().replace(' ', '-')}`, {
+                  history.push(`/collection/${collection.address}`, {
                     collection,
                     saved: false,
                   })

@@ -5,7 +5,7 @@ import SortingFilter from '../input/SortingFilter';
 import collectionIcon from '../../assets/images/marketplace/collections.svg';
 import SearchField from '../input/SearchField';
 import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../utils/fixtures/BrowseNFTsDummyData';
-import { defaultColors } from '../../utils/helpers';
+import { defaultColors, getCollectionBackgroundColor } from '../../utils/helpers';
 import closeIcon from '../../assets/images/close-menu.svg';
 import './styles/CollectionFilter.scss';
 
@@ -67,18 +67,17 @@ const CollectionFilter = (props) => {
           <div className="collection--dropdown--selected">
             {selectedCollections.map((coll, index) => (
               <button type="button" className="light-border-button" key={uuid()}>
-                {!coll.photo ? (
+                {!coll.coverUrl ? (
                   <div
                     className="random--avatar--color"
                     style={{
-                      backgroundColor:
-                        defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                      backgroundColor: getCollectionBackgroundColor(coll),
                     }}
                   >
                     {coll.name.charAt(0)}
                   </div>
                 ) : (
-                  <img className="collection" src={coll.photo} alt={coll.name} />
+                  <img className="collection" src={coll.coverUrl} alt={coll.name} />
                 )}
                 {coll.name}
                 <img

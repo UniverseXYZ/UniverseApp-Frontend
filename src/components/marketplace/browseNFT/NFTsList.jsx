@@ -14,11 +14,12 @@ import count from '../../../assets/images/slidecounts.svg';
 import clockIcon from '../../../assets/images/marketplace/green-clock.svg';
 import Button from '../../button/Button';
 import AppContext from '../../../ContextAPI';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
 const NFTsList = ({ data, nftNumber }) => {
   const [nfts, setNFTs] = useState(data);
   const history = useHistory();
-  const { sortName, setSortName } = useContext(AppContext);
+  const { sortName, setSortName } = useMyNftsContext();
 
   const handleLikeClick = (id) => {
     setNFTs((prevState) =>
@@ -154,7 +155,7 @@ const NFTsList = ({ data, nftNumber }) => {
               <div className="nft--box--body" aria-hidden="true">
                 {nft.type !== 'bundles' ? (
                   <div
-                  // onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                  // onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
                   // aria-hidden="true"
                   >
                     {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
@@ -200,7 +201,7 @@ const NFTsList = ({ data, nftNumber }) => {
                       {nft.allItems.map((item) => (
                         <div
                           className="slider--box"
-                          // onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                          // onClick={() => history.push(`/nft/${nft.collection.address}/${nft.id}`, { nft })}
                           // aria-hidden="true"
                           key={uuid()}
                         >

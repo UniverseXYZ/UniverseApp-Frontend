@@ -16,6 +16,7 @@ import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import NewTabs from '../tabs/NewTabs';
 import AppContext from '../../ContextAPI';
 import { RouterPrompt } from '../../utils/routerPrompt';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const newTabData = [
   {
@@ -45,7 +46,7 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
-  const { auction, auctionSetupState } = useContext(AppContext);
+  const { auction, auctionSetupState } = useAuctionContext();
   const history = useHistory();
   const location = useLocation();
   const [showPrompt, setShowPrompt] = useState(false);
@@ -146,7 +147,7 @@ const SetupAuction = () => {
                     auction.startingBid &&
                     auction.startDate &&
                     auction.endDate &&
-                    auction.tiers.length &&
+                    auction.rewardTiers.length &&
                     history.push('/setup-auction/review-auction')
                   }
                   className={`
@@ -156,7 +157,7 @@ const SetupAuction = () => {
                       !auction.startingBid ||
                       !auction.startDate ||
                       !auction.endDate ||
-                      !auction.tiers.length
+                      !auction.rewardTiers.length
                         ? 'disabled'
                         : ''
                     }

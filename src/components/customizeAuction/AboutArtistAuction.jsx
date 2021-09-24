@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Main from '../myAccount/Main.jsx';
+import ProfileForm from '../myAccount/ProfileForm.jsx';
 import AppContext from '../../ContextAPI.js';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const AboutArtistAuction = ({
   accountName,
@@ -17,7 +18,7 @@ const AboutArtistAuction = ({
   instagramLink,
   setInstagramLink,
 }) => {
-  const { editProfileButtonClick } = useContext(AppContext);
+  const { editProfileButtonClick } = useAuctionContext();
   // const [about, setAbout] = useState(loggedInArtist.about);
   // const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   // const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
@@ -71,7 +72,7 @@ const AboutArtistAuction = ({
         <h3>About Artist</h3>
       </div>
       <div className="my-account">
-        <Main
+        <ProfileForm
           accountName={accountName}
           setAccountName={setAccountName}
           accountPage={accountPage}

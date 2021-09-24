@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 
 const SelectComponent = (props) => {
-  const { options, onChange, value, placeholder } = props;
+  const { options, onChange, placeholder } = props;
   const styles = {
     placeholder: (defaultStyles) => ({
       ...defaultStyles,
@@ -48,7 +48,7 @@ const SelectComponent = (props) => {
     <Select
       options={options}
       onChange={onChange}
-      value={value}
+      // value={value}
       placeholder={placeholder}
       styles={styles}
       components={{
@@ -61,21 +61,21 @@ const SelectComponent = (props) => {
 
 SelectComponent.defaultProps = {
   placeholder: '',
-  value: null,
+  // value: '',
 };
 
 SelectComponent.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.number]),
+      value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
     })
   ).isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  value: PropTypes.objectOf({
-    label: PropTypes.string,
-  }),
+  // value: PropTypes.objectOf({
+  //   label: PropTypes.string,
+  // }),
 };
 
 export default SelectComponent;

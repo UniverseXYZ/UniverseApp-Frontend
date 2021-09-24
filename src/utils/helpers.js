@@ -56,3 +56,22 @@ export const defaultColors = [
   '#FFCCBC',
   '#D7CCC8',
 ];
+
+export const getCollectionBackgroundColor = (collection) =>
+  defaultColors[
+    Math.floor((collection?.id * collection?.name.charCodeAt(0)) % defaultColors.length)
+  ];
+
+export const mapUserData = (userInfo) => {
+  const map = {
+    id: userInfo.id,
+    name: userInfo.displayName,
+    universePageAddress: userInfo.universePageUrl,
+    avatar: userInfo.profileImageUrl,
+    about: userInfo.about,
+    personalLogo: userInfo.logoImageUrl,
+    instagramLink: userInfo.instagramUser,
+    twitterLink: userInfo.twitterUser,
+  };
+  return map;
+};

@@ -3,9 +3,10 @@ import moment from 'moment';
 import FutureAuctionsFilters from './Filters.jsx';
 import FutureAuctionsCard from '../../../../auctionsCard/FutureAuctionsCard.jsx';
 import AppContext from '../../../../../ContextAPI.js';
+import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
 
 const FutureAuctionsTab = () => {
-  const { myAuctions } = useContext(AppContext);
+  const { myAuctions } = useAuctionContext();
   return (
     <div className="future__auctions__tab">
       {myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))

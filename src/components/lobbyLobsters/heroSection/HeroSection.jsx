@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import FloatingNFTsAnimation from './animations/FloatingNFTsAnimation';
 import EndlessWaveAnimation from './animations/EndlessWaveAnimation';
 import AppContext from '../../../ContextAPI';
+import { useLobsterContext } from '../../../contexts/LobsterContext';
+import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 
 const HeroSection = React.forwardRef((props, ref) => {
-  const { setMyNFTsSelectedTabIndex } = useContext(AppContext);
-  const history = useHistory();
+  const { navigateToMyUniverseNFTsTab, lobstersFilter } = useMyNftsContext();
 
   return (
     <div className="lobby--lobsters--hero--section">
@@ -24,11 +25,10 @@ const HeroSection = React.forwardRef((props, ref) => {
           <button
             type="button"
             onClick={() => {
-              history.push('/my-nfts');
-              setMyNFTsSelectedTabIndex(1);
+              navigateToMyUniverseNFTsTab(lobstersFilter);
             }}
           >
-            My Lobby Lobster
+            My Lobby Lobsters
           </button>
         </div>
       </div>

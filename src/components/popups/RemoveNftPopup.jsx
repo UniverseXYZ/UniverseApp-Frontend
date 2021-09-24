@@ -4,6 +4,8 @@ import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
+import { removeSavedNft } from '../../utils/api/mintNFT';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const RemovePopup = ({
   close,
@@ -13,16 +15,21 @@ const RemovePopup = ({
   collectionNFTs,
   setCollectionNFTs,
 }) => {
-  const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useContext(AppContext);
+  const { savedNfts, setSavedNfts, savedCollections, setSavedCollections } = useMyNftsContext();
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     if (removeFrom === 'collection') {
       setCollectionNFTs(collectionNFTs.filter((item) => item.id !== id));
       // setSavedNfts(savedNfts.filter((item) => item.id !== id));
     } else if (removeFrom === 'saved') {
-      setSavedNfts(savedNfts.filter((item) => item.id !== id));
+      setSavedNfts(savedNfts.filter((item) => item.id !== id) || []);
+      const result = await removeSavedNft(id);
+
+      if (!result.ok || result.status !== 200) {
+        console.error(`Cannot delete NFT with id: ${id}`);
+      }
     } else if (removeFrom === 'savedCollection') {
-      setSavedNfts(savedNfts.filter((item) => item.collectionId !== id));
+      setSavedNfts(savedNfts.filter((item) => item.collectionId !== id) || []);
       setSavedCollections(savedCollections.filter((item) => item.id !== id));
     }
   };
@@ -65,5 +72,4 @@ RemovePopup.defaultProps = {
   collectionNFTs: [],
   setCollectionNFTs: () => {},
 };
-
 export default RemovePopup;

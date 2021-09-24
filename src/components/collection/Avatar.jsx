@@ -1,19 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defaultColors, getCollectionBackgroundColor } from '../../utils/helpers';
 
 const Avatar = ({ selectedCollection }) => (
   <div className="collection__image">
-    {typeof selectedCollection.previewImage === 'string' &&
-    selectedCollection.previewImage.startsWith('#') ? (
+    {!selectedCollection.coverUrl ? (
       <div
         className="random__bg__color"
-        style={{ backgroundColor: selectedCollection.previewImage }}
+        style={{
+          backgroundColor: getCollectionBackgroundColor(selectedCollection),
+        }}
       >
         {selectedCollection.name.charAt(0)}
       </div>
     ) : (
       <img
-        src={URL.createObjectURL(selectedCollection.previewImage)}
+        className="collection__avatar"
+        src={selectedCollection.coverUrl}
         alt={selectedCollection.name}
       />
     )}

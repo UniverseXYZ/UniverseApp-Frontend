@@ -4,9 +4,10 @@ import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
 import './NotFound.scss';
 import notFoundImg from '../../assets/images/404img.png';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const NotFound = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const history = useHistory();
   useEffect(() => {
     setDarkMode(false);

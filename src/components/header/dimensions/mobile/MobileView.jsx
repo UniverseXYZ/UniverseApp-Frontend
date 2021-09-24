@@ -5,6 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
+import Blockie from 'react-blockies';
 import {
   PLACEHOLDER_MARKETPLACE_AUCTIONS,
   PLACEHOLDER_MARKETPLACE_NFTS,
@@ -56,7 +57,10 @@ import img from '../../../../assets/images/search-gray.svg';
 import img2 from '../../../../assets/images/crossclose.svg';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors } from '../../../../utils/helpers';
+import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 
 const MobileView = (props) => {
   const {
@@ -75,7 +79,7 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { handleClickOutside } = useContext(AppContext);
+  const { address, yourBalance, usdEthBalance, resetConnectionState } = useAuthContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -83,7 +87,8 @@ const MobileView = (props) => {
   const searchRef = useRef();
   const [searchValue, setSearchValue] = useState('');
   const [searchFocus, setSearchFocus] = useState(false);
-  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
+  const { editProfileButtonClick } = useAuctionContext();
   const [showProducts, setShowProducts] = useState(false);
   const [showNFTDrops, setShowNFTDrops] = useState(false);
   const [showRarityCharts, setShowRarityCharts] = useState(false);
@@ -127,20 +132,28 @@ const MobileView = (props) => {
   useEffect(() => {
     document.addEventListener(
       'click',
-      (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
+      (e) => handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened),
       true
     );
     return () => {
       document.removeEventListener(
         'click',
-        (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
+        (e) => {
+          console.log('click');
+          handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened);
+        },
         true
       );
     };
-  });
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsAccountDropdownOpened(!isAccountDropdownOpened);
+    setShowMenu(false);
+  };
   return (
     <div className="mobile__nav">
-      <button
+      {/* <button
         type="button"
         className="mobile--search--box"
         onClick={() => {
@@ -303,7 +316,7 @@ const MobileView = (props) => {
                             </div>
                           </div>
                         ))}
-                        {/* {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                           item.name.toLowerCase().includes(searchValue.toLowerCase())
                         ).length > 0 && <h4>Communities</h4>}
                         {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
@@ -334,7 +347,7 @@ const MobileView = (props) => {
                               <p className="galleries--likes">{galleries.likesCount} Likes</p>
                             </div>
                           </div>
-                        ))} */}
+                        ))}
                         <Button
                           type="button"
                           className="light-border-button"
@@ -358,10 +371,10 @@ const MobileView = (props) => {
             </div>
           </div>
         </>
-      )}
+      )} */}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
-          <img
+          {/* <img
             className="account__icon hide__on__tablet"
             src={accountIcon}
             onClick={() => {
@@ -370,8 +383,8 @@ const MobileView = (props) => {
             }}
             alt="Account icon"
             aria-hidden="true"
-          />
-          <img
+          /> */}
+          {/* <img
             className="account__icon show__on__tablet"
             src={accountDarkIcon}
             onClick={() => {
@@ -380,14 +393,26 @@ const MobileView = (props) => {
             }}
             alt="Account icon"
             aria-hidden="true"
-          />
+          /> */}
+          <div
+            style={{ marginRight: 20, display: 'flex', cursor: 'pointer' }}
+            aria-hidden
+            onClick={toggleDropdown}
+          >
+            <Blockie className="blockie" seed={address} size={9} scale={6} />
+          </div>
+
           {isAccountDropdownOpened && (
             <Animated animationIn="fadeIn">
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <Blockie className="blockie" seed={address} size={9} scale={6} />
+
+                    {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
+                    <div className="ethereum__address">
+                      {shortenEthereumAddress(ethereumAddress)}
+                    </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -412,14 +437,14 @@ const MobileView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
-                  <div className="group2">
+                  {/* <div className="group2">
                     <img src={Group2} alt="WETH" />
                     <span className="first-span">6,24 WETH</span>
                     <span className="second-span">$10,554</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="dropdown__body">
                   <button
@@ -468,6 +493,7 @@ const MobileView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
+                      resetConnectionState();
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
                     }}

@@ -10,7 +10,14 @@ const CongratsAuctionPopup = ({ onClose }) => {
 
   return (
     <div className="popup-div congrats-popup">
-      <button type="button" className="popup-close" onClick={onClose}>
+      <button
+        type="button"
+        className="popup-close"
+        onClick={async () => {
+          await onClose();
+          history.push('/my-auctions');
+        }}
+      >
         <img src={closeIcon} alt="" />
       </button>
       <div className="congrats--icon">
@@ -28,7 +35,8 @@ const CongratsAuctionPopup = ({ onClose }) => {
       <div className="popup-btns">
         <Button
           className="light-button"
-          onClick={() => {
+          onClick={async () => {
+            await onClose();
             history.push('/my-auctions');
           }}
         >

@@ -10,31 +10,19 @@ import pencilIcon from '../../assets/images/edit.svg';
 import copyIcon from '../../assets/images/copy.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
-import arrowLeft from '../../assets/images/arrow-black.svg';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
-const ArtistDetails = ({ onArtist }) => {
-  const { loggedInArtist, setEditProfileButtonClick } = useContext(AppContext);
-  const [loading, setLoading] = useState(true);
+const ArtistDetails = ({ onArtist, loading }) => {
+  const { setEditProfileButtonClick } = useAuctionContext();
+  const { loggedInArtist } = useAuthContext();
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-
-  useEffect(() => {
-    // Here need to get artist details
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
 
   return (
     <div className="artist__details__section">
       {!loading ? (
         <Animated animationIn="zoomIn">
-          <div className="back__to__editing__btn">
-            <button type="button" onClick={() => history.push('/my-account')}>
-              <img src={arrowLeft} alt="arrow-back" />
-              Back to editing
-            </button>
-          </div>
           {loggedInArtist.id !== onArtist.id ? (
             <div className="artist__details__section__container">
               <div className="avatar">
@@ -45,9 +33,9 @@ const ArtistDetails = ({ onArtist }) => {
                 <h1 className="title">{onArtist.name}</h1>
                 <p className="desc">{onArtist.about}</p>
                 <div className="social__links">
-                  {/* <Button className="light-border-button">
+                  <Button className="light-border-button">
                     Edit <img src={pencilIcon} alt="Pencil" />
-                  </Button> */}
+                  </Button>
                   <a href={onArtist.instagramUrl} target="_blank" rel="noreferrer">
                     <img src={instagramIcon} alt="Instagram" />
                   </a>
@@ -82,14 +70,14 @@ const ArtistDetails = ({ onArtist }) => {
           ) : (
             <div className="artist__details__section__container">
               <div className="avatar">
-                <img src={URL.createObjectURL(loggedInArtist.avatar)} alt={loggedInArtist.name} />
+                <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
                 <h2 className="show__on__mobile">{loggedInArtist.name}</h2>
               </div>
               <div className="info">
                 <h1 className="title">{loggedInArtist.name}</h1>
                 <p className="desc">{loggedInArtist.about}</p>
                 <div className="social__links">
-                  {/* <Button
+                  <Button
                     className="light-border-button"
                     onClick={() => {
                       history.push('/my-account');
@@ -97,7 +85,7 @@ const ArtistDetails = ({ onArtist }) => {
                     }}
                   >
                     Edit <img src={pencilIcon} alt="Pencil" />
-                  </Button> */}
+                  </Button>
                   {loggedInArtist.instagramLink ? (
                     <a
                       href={`https://www.instagram.com/${loggedInArtist.instagramLink}`}
@@ -180,6 +168,7 @@ const ArtistDetails = ({ onArtist }) => {
 
 ArtistDetails.propTypes = {
   onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default ArtistDetails;

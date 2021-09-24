@@ -41,35 +41,35 @@
 
   .scramble-popup-div {
     padding: 70px;
-    max-height: calc(100vh - 80px);
-    
+    max-height: calc(100vh - 88px);
+
     @media (max-width: 1200px) {
       overflow-y: auto;
       overflow-x: hidden;
     }
-    
+
     &::-webkit-scrollbar {
       width: 0px;
     }
-  
+
     .scramble--popup {
       // margin: 0 auto;
       font-family: $spaceGroteskFont;
       line-height: 160%;
       font-style: normal;
       // display: flex;
-  
+
       .scramble--popup--content {
         display: flex;
         // flex-direction: row;
         justify-content: space-between;
         align-items: center;
         // margin: 0 auto;
-  
+
         @media (max-width: 1200px) {
           flex-wrap: wrap;
         }
-  
+
         .avatar-wrapper-popup {
           // flex-basis: 445px;
           // flex-shrink: 0;
@@ -78,7 +78,7 @@
             margin-right: 0px;
             margin-bottom: 40px;
           }
-  
+
           .avatar-popup {
             // height: 356px;
             width: 100%;
@@ -98,18 +98,17 @@
               height: 295px;
             }
           }
-  
         }
-  
+
         .scramble--options--popup {
           // height: 445px;
           width: 445px;
           // max-width: 90%;
-          
+
           @media (max-width: 1200px) {
             width: 100%;
           }
-  
+
           .name {
             font-family: $sharpGroteskSemiBoldFont;
             font-style: normal;
@@ -121,7 +120,7 @@
               font-size: 16px;
             }
           }
-  
+
           .description {
             font-family: $spaceGroteskFont;
             font-style: normal;
@@ -131,16 +130,16 @@
             color: rgba(0, 0, 0, 0.6);
             margin-bottom: 30px;
           }
-  
+
           .traits--popup {
             margin-bottom: 30px;
           }
-  
+
           .scramble--action {
             display: flex;
             justify-content: space-between;
             margin-bottom: 30px;
-  
+
             .scramble--price {
               font-weight: bold;
               font-size: 16px;
@@ -149,37 +148,38 @@
               align-items: center;
               text-align: center;
               font-feature-settings: 'ss02' on, 'ss03' on, 'ss04' on;
-  
+
               img {
                 margin-right: 10px;
               }
-  
             }
-  
+
             .light-button {
               width: 80%;
             }
-  
           }
-  
+
           .next-price-description {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: normal;
             font-size: 12px;
             line-height: 150%;
-            color: #4D66EB;
+            color: #4d66eb;
           }
-  
+
           .tabs__wrapper {
             padding: 0;
             margin: 15px 0;
+
+            .tab_items {
+              li {
+                cursor: pointer;
+              }
+            }
           }
-  
         }
-  
       }
-  
     }
     @include lg {
       padding: 40px;

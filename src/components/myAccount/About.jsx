@@ -4,9 +4,10 @@ import { Animated } from 'react-animated-css';
 import pencilIcon from '../../assets/images/edit.svg';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const About = ({ about, setAbout }) => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
 
   return (
     <div className="my-account container">

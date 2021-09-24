@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Popup from 'reactjs-popup';
 import './assets/scss/normalize.scss';
-import uuid from 'react-uuid';
-import { handleClickOutside, handleScroll } from './utils/helpers';
-import AppContext from './ContextAPI';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
 import Auctions from './containers/auctions/Auction.jsx';
@@ -19,7 +17,6 @@ import MyAccount from './containers/myAccount/MyAccount.jsx';
 import CustomizeAuction from './containers/customizeAuction/CustomizeAuction.jsx';
 import Team from './containers/team/Team.jsx';
 import AuctionReview from './components/auctions/AuctionReview.jsx';
-import BidOptions from './utils/fixtures/BidOptions';
 import NotFound from './components/notFound/NotFound.jsx';
 import Collection from './containers/collection/Collection.jsx';
 import FinalizeAuction from './components/finalizeAuction/FinalizeAuction.jsx';
@@ -41,201 +38,154 @@ import CreateNFT from './components/myNFTs/create/CreateNFT';
 import RarityCharts from './containers/rarityCharts/RarityCharts';
 import PolymorphUniverse from './containers/polymorphUniverse/PolymorphUniverse';
 import LobbyLobsters from './containers/lobbyLobsters/LobbyLobsters';
+import WrongNetworkPopup from './components/popups/WrongNetworkPopup';
+import LobsterInfoPage from './components/lobbyLobsters/info/LobstersInfoPage';
+import AuthenticatedRoute from './components/authenticatedRoute/AuthenticatedRoute';
+import { AuctionContextProvider } from './contexts/AuctionContext';
+import { MyNFTsContextProvider } from './contexts/MyNFTsContext';
+import { PolymorphContextProvider } from './contexts/PolymorphContext';
+import { LobsterContextProvider } from './contexts/LobsterContext';
+import { MarketplaceContextProvider } from './contexts/MarketplaceContext';
+import { useAuthContext } from './contexts/AuthContext';
+import ErrorPopup from './components/popups/ErrorPopup';
+import { useErrorContext } from './contexts/ErrorContext';
 
 const App = () => {
-  const location = useLocation();
-  const [isWalletConnected, setIsWalletConnected] = useState(true);
-  const [loggedInArtist, setLoggedInArtist] = useState({
-    id: uuid(),
-    name: '',
-    universePageAddress: '',
-    avatar: null,
-    about: '',
-    personalLogo: null,
-    instagramLink: '',
-    twitterLink: '',
-    social: true,
-  });
-  const [myBalance, setMyBalance] = useState(48.24);
-  const [showModal, setShowModal] = useState(false);
-  const [myNFTsSelectedTabIndex, setMyNFTsSelectedTabIndex] = useState(0);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [activeView, setActiveView] = useState(null);
-  const [savedNFTsID, setSavedNFTsID] = useState(null);
-  const [savedCollectionID, setSavedCollectionID] = useState(null);
-  const [myCollectionID, setMyCollectionID] = useState(null);
-  const [savedNfts, setSavedNfts] = useState([]);
-  const [universeNFTs, setUniverseNFTs] = useState([]);
-  const [savedCollections, setSavedCollections] = useState([]);
-  const [myNFTs, setMyNFTs] = useState([]);
-  const [deployedCollections, setDeployedCollections] = useState([]);
-  const [myAuctions, setMyAuctions] = useState([]);
-  const [activeAuctions, setActiveAuctions] = useState([]);
-  const [futureAuctions, setFutureAuctions] = useState([]);
-  const [auction, setAuction] = useState({ tiers: [] });
-  const [selectedNftForScramble, setSelectedNftForScramble] = useState({});
-  const [bidtype, setBidtype] = useState('eth');
-  const [options, setOptions] = useState(BidOptions);
-  const [darkMode, setDarkMode] = useState(true);
-  const [sortName, setSortName] = useState('Sort by');
-  const [editProfileButtonClick, setEditProfileButtonClick] = useState(false);
-  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-  const [stepsData, setStepsData] = useState({
-    selectedMethod: null,
-    settings: null,
-    summary: null,
-  });
-  const [auctionSetupState, setAuctionSetupState] = useState(false);
-
-  useEffect(() => {
-    if (!darkMode) {
-      window.document.querySelector('header').classList.remove('dark');
-    }
-    handleScroll(darkMode);
-
-    window.addEventListener('scroll', () => handleScroll(darkMode));
-
-    return () => {
-      window.removeEventListener('scroll', () => handleScroll(darkMode));
-    };
-  }, [darkMode]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    if (
-      (location.pathname === '/nft-marketplace/settings' &&
-        stepsData.selectedMethod === 'bundle') ||
-      location.pathname === '/marketplace'
-    ) {
-      document.querySelector('header').style.position = 'absolute';
-    } else {
-      document.querySelector('header').style.position = 'fixed';
-    }
-  }, [location]);
+  const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext();
+  const { showError, closeError } = useErrorContext();
 
   return (
-    <AppContext.Provider
-      value={{
-        stepsData,
-        setStepsData,
-        isWalletConnected,
-        setIsWalletConnected,
-        loggedInArtist,
-        setLoggedInArtist,
-        myBalance,
-        setMyBalance,
-        handleClickOutside,
-        savedNfts,
-        setSavedNfts,
-        universeNFTs,
-        setUniverseNFTs,
-        showModal,
-        setShowModal,
-        myNFTsSelectedTabIndex,
-        setMyNFTsSelectedTabIndex,
-        selectedTabIndex,
-        setSelectedTabIndex,
-        savedCollections,
-        setSavedCollections,
-        activeView,
-        setActiveView,
-        savedNFTsID,
-        setSavedNFTsID,
-        savedCollectionID,
-        setSavedCollectionID,
-        myCollectionID,
-        setMyCollectionID,
-        myNFTs,
-        setMyNFTs,
-        deployedCollections,
-        setDeployedCollections,
-        myAuctions,
-        setMyAuctions,
-        activeAuctions,
-        setActiveAuctions,
-        futureAuctions,
-        setFutureAuctions,
-        auction,
-        setAuction,
-        selectedNftForScramble,
-        setSelectedNftForScramble,
-        bidtype,
-        setBidtype,
-        options,
-        setOptions,
-        darkMode,
-        setDarkMode,
-        editProfileButtonClick,
-        setEditProfileButtonClick,
-        sortName,
-        setSortName,
-        selectedTokenIndex,
-        setSelectedTokenIndex,
-        auctionSetupState,
-        setAuctionSetupState,
-      }}
-    >
-      <Header />
-      <Switch>
-        <Route exact path="/" component={() => <Homepage />} />
-        <Route exact path="/about" component={() => <About />} />
-        <Route exact path="/team" component={() => <Team />} />
-        <Route exact path="/polymorphs" component={() => <Polymorphs />} />
-        <Route exact path="/polymorph-universe" component={() => <PolymorphUniverse />} />
-        <Route exact path="/mint-polymorph" component={() => <MintPolymorph />} />
-        <Route exact path="/burn-to-mint" component={() => <BurnToMint />} />
-        <Route exact path="/planets/adaka" component={() => <Planet1 />} />
-        <Route exact path="/planets/prosopon" component={() => <Planet2 />} />
-        <Route exact path="/planets/kuapo" component={() => <Planet3 />} />
-        <Route exact path="/polymorphs/:id" component={() => <PolymorphScramblePage />} />
-        <Route exact path="/lobsters/:id" component={() => <PolymorphScramblePage />} />
-        <Route exact path="/marketplace/nft/:id" component={() => <MarketplaceNFT />} />
-        <Route exact path="/character-page" component={() => <CharacterPage />} />
-        <Route exact path="/marketplace" component={() => <BrowseNFT />} />
-        <Route exact path="/nft-marketplace/:steps" component={() => <NFTMarketplace />} />
-        <Route exact path="/search" component={() => <Search />} />
-        <Route exact path="/core-drops" component={() => <CharectersDrop />} />
-        <Route exact path="/lobby-lobsters" component={() => <LobbyLobsters />} />
-        <Route exact path="/polymorph-rarity" component={() => <RarityCharts />} />
-        <Route exact path="/my-profile" component={() => <MyProfile />} />
-        <Route path="/setup-auction" component={() => <SetupAuction />} />
-        <Route
-          exact
-          path="/minting-and-auctions/marketplace/active-auctions"
-          component={() => <Marketplace />}
-        />
-        <Route
-          exact
-          path="/minting-and-auctions/marketplace/future-auctions"
-          component={() => <Marketplace />}
-        />
-        <Route exact path="/my-nfts" component={() => <MyNFTs />} />
-        <Route exact path="/my-nfts/create" component={CreateNFT} />
-        <Route exact path="/my-account" component={() => <MyAccount />} />
-        <Route exact path="/my-auctions" component={() => <Auctions />} />
-        <Route exact path="/create-tiers" component={() => <CreateTiers />} />
-        <Route exact path="/create-tiers/my-nfts/create" component={() => <CreateNFT />} />
-        <Route exact path="/finalize-auction" component={() => <FinalizeAuction />} />
-        <Route
-          exact
-          path="/customize-auction-landing-page"
-          component={() => <CustomizeAuction />}
-        />
-        <Route exact path="/auction-review" component={() => <AuctionReview />} />
-        <Route exact path="/:artist">
-          <Artist />
-        </Route>
-        <Route exact path="/c/:collectionId">
-          <Collection />
-        </Route>
-        <Route exact path="/:artist/:auction">
-          <AuctionLandingPage />
-        </Route>
-
-        <Route path="*" component={() => <NotFound />} />
-      </Switch>
-      <Footer />
-    </AppContext.Provider>
+    <PolymorphContextProvider>
+      <LobsterContextProvider>
+        <MyNFTsContextProvider>
+          <AuctionContextProvider>
+            <MarketplaceContextProvider>
+              <Header />
+              <Switch>
+                <Route exact path="/">
+                  <Homepage />
+                </Route>
+                <Route exact path="/about">
+                  <About />
+                </Route>
+                <Route exact path="/team">
+                  <Team />
+                </Route>
+                <Route exact path="/polymorphs">
+                  <Polymorphs />
+                </Route>
+                <Route exact path="/polymorph-universe">
+                  <PolymorphUniverse />
+                </Route>
+                <Route exact path="/mint-polymorph">
+                  <MintPolymorph />
+                </Route>
+                <Route exact path="/burn-to-mint">
+                  <BurnToMint />
+                </Route>
+                <Route exact path="/planets/adaka">
+                  <Planet1 />
+                </Route>
+                <Route exact path="/planets/prosopon">
+                  <Planet2 />
+                </Route>
+                <Route exact path="/planets/kuapo">
+                  <Planet3 />
+                </Route>
+                <Route exact path="/polymorphs/:id">
+                  <PolymorphScramblePage />
+                </Route>
+                <Route exact path="/lobsters/:id">
+                  <LobsterInfoPage />
+                </Route>
+                <Route exact path="/nft/:collectionAddress/:tokenId">
+                  <MarketplaceNFT />
+                </Route>
+                <Route exact path="/character-page">
+                  <CharacterPage />
+                </Route>
+                <Route exact path="/marketplace">
+                  <BrowseNFT />
+                </Route>
+                <Route exact path="/nft-marketplace/:steps">
+                  <NFTMarketplace />
+                </Route>
+                <Route exact path="/search">
+                  <Search />
+                </Route>
+                <Route exact path="/core-drops">
+                  <CharectersDrop />
+                </Route>
+                <Route exact path="/lobby-lobsters">
+                  <LobbyLobsters />
+                </Route>
+                <Route exact path="/polymorph-rarity">
+                  <RarityCharts />
+                </Route>
+                <AuthenticatedRoute exact path="/my-profile">
+                  <MyProfile />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute path="/setup-auction">
+                  <SetupAuction />
+                </AuthenticatedRoute>
+                <Route exact path="/minting-and-auctions/marketplace/active-auctions">
+                  <Marketplace />
+                </Route>
+                <Route exact path="/minting-and-auctions/marketplace/future-auctions">
+                  <Marketplace />
+                </Route>
+                <AuthenticatedRoute exact path="/my-nfts">
+                  <MyNFTs />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/my-nfts/create">
+                  <CreateNFT />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/my-account">
+                  <MyAccount />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/my-auctions">
+                  <Auctions />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/create-tiers">
+                  <CreateTiers />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/create-tiers/my-nfts/create">
+                  <CreateNFT />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/finalize-auction">
+                  <FinalizeAuction />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/customize-auction-landing-page">
+                  <CustomizeAuction />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/auction-review">
+                  <AuctionReview />
+                </AuthenticatedRoute>
+                <Route exact path="/:artistUsername">
+                  <Artist />
+                </Route>
+                <Route exact path="/collection/:collectionAddress">
+                  <Collection />
+                </Route>
+                <Route exact path="/:artist/:auction">
+                  <AuctionLandingPage />
+                </Route>
+                <Route path="*">
+                  <NotFound />
+                </Route>
+              </Switch>
+              <Footer />
+              <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
+                <WrongNetworkPopup close={() => setShowWrongNetworkPopup(false)} />
+              </Popup>
+              <Popup closeOnDocumentClick={false} open={showError}>
+                <ErrorPopup close={closeError} />
+              </Popup>
+            </MarketplaceContextProvider>
+          </AuctionContextProvider>
+        </MyNFTsContextProvider>
+      </LobsterContextProvider>
+    </PolymorphContextProvider>
   );
 };
 

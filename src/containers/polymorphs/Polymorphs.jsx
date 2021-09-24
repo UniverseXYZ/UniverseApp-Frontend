@@ -8,7 +8,12 @@ import Section4 from '../../components/polymorphs/Section4';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
+import { morphedPolymorphs, queryPolymorphsGraph } from '../../utils/graphql/polymorphQueries';
 import AppContext from '../../ContextAPI';
+import { useGraphQueryHook } from '../../utils/hooks/useGraphQueryHook';
+import { useThemeContext } from '../../contexts/ThemeContext';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const marquee = () => (
   <p>
@@ -32,10 +37,12 @@ const marquee = () => (
 );
 
 const Polymorphs = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const history = useHistory();
   const [mobile, setMobile] = useState(false);
-
+  const { data } = useGraphQueryHook(queryPolymorphsGraph(morphedPolymorphs));
+  const { polymorphsFilter, navigateToMyUniverseNFTsTab } = useMyNftsContext();
+  const { ethPrice } = useAuthContext();
   useLayoutEffect(() => {
     function handleResize() {
       if (+window.innerWidth <= 575) setMobile(true);
@@ -52,15 +59,18 @@ const Polymorphs = () => {
     if (+window.innerWidth <= 575) setMobile(true);
   }, [window.innerWidth]);
 
+  const redirectToMyPolymorphs = () => {
+    navigateToMyUniverseNFTsTab(polymorphsFilter);
+  };
   return (
     <div className="polymorphs">
       <WelcomeWrapper
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
-        // popupBtnText="My polymorphs"
-        btnText="My Polymorphs"
-        btnOnClick={() => history.push('/my-nfts')}
-        // btnAnotherOnClick={() => history.push('/my-nfts')}
+        popupBtnText="My Polymorphs"
+        btnText="Mint a morph"
+        btnOnClick={redirectToMyPolymorphs}
+        btnAnotherOnClick={redirectToMyPolymorphs}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}
@@ -72,7 +82,11 @@ const Polymorphs = () => {
       </div>
       {/* <Characters /> */}
       <Section4 />
-      <PolymorphsActivity mobile={mobile} />
+      <PolymorphsActivity
+        ethPrice={ethPrice?.market_data?.current_price?.usd.toString()}
+        mobile={mobile}
+        morphEntities={data?.tokenMorphedEntities}
+      />
       <Section6 />
     </div>
   );

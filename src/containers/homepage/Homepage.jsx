@@ -6,9 +6,10 @@ import './Homepage.scss';
 import NonFungibleUniverse from '../../components/homepage/NonFungibleUniverse.jsx';
 import Welcome from '../../components/homepage/Welcome.jsx';
 import AppContext from '../../ContextAPI';
+import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 
 const Homepage = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   useEffect(() => {
     setDarkMode(true);
   }, []);

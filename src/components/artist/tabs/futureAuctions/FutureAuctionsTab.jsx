@@ -7,9 +7,12 @@ import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import AppContext from '../../../../ContextAPI.js';
 import FutureAuctionsCard from '../../../auctionsCard/FutureAuctionsCard.jsx';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
-const FutureAuctionsTab = ({ onArtist }) => {
-  const { loggedInArtist, myAuctions } = useContext(AppContext);
+const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
+  const { myAuctions } = useAuctionContext();
+  const { loggedInArtist } = useAuthContext();
   const history = useHistory();
 
   const artistFutureAuctions =
@@ -21,7 +24,7 @@ const FutureAuctionsTab = ({ onArtist }) => {
     <>
       <FutureAuctionsCard data={artistFutureAuctions} />
     </>
-  ) : (
+  ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
       <h3>No future auctions found</h3>
@@ -50,11 +53,21 @@ const FutureAuctionsTab = ({ onArtist }) => {
         Set up auction
       </button>
     </div>
+  ) : (
+    <div className="empty__auction">
+      <img src={bubleIcon} alt="Buble" />
+      <h3>No future auctions found</h3>
+    </div>
   );
 };
 
 FutureAuctionsTab.propTypes = {
   onArtist: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  showCreatePrompt: PropTypes.bool,
+};
+
+FutureAuctionsTab.defaultProps = {
+  showCreatePrompt: true,
 };
 
 export default FutureAuctionsTab;

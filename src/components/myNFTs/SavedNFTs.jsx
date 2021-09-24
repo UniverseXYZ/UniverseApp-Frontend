@@ -11,13 +11,19 @@ import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
 import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import SimplePagination from '../pagination/SimplePaginations';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 
 const SavedNFTs = () => {
-  const { savedNfts, setSavedNfts, setActiveView, setShowModal, setSavedNFTsID } =
-    useContext(AppContext);
+  const { savedNfts, setSavedNfts, setActiveView, setSavedNFTsID } = useMyNftsContext();
   const [selectAllIsChecked, setSelectAllIsChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(8);
+  const [page, setPage] = useState(8);
+
   const ref = useRef(null);
   const history = useHistory();
 
@@ -85,7 +91,6 @@ const SavedNFTs = () => {
     // document.body.classList.add('no__scroll');
     setSavedNFTsID(id);
     setActiveView('single');
-    // setShowModal(true);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
   };
 
@@ -107,36 +112,35 @@ const SavedNFTs = () => {
           </div>
 
           <div className="saved__nfts__lists">
-            {savedNfts.map((nft, index) => (
+            {savedNfts.slice(offset, offset + perPage).map((nft, index) => (
               <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
                 <div
                   className="saved__nft__box__image"
                   onClick={() => handleSavedNfts(index)}
                   aria-hidden="true"
                 >
-                  {nft.media.type === 'video/mp4' && (
+                  {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <video
                       onMouseOver={(event) => event.target.play()}
                       onFocus={(event) => event.target.play()}
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={URL.createObjectURL(nft.media)} type="video/mp4" />
+                      <source src={nft.optimizedUrl} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  {nft.media.type === 'audio/mpeg' && (
+                  {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
                     <img className="preview-image" src={mp3Icon} alt={nft.name} />
                   )}
-                  {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                    <img
-                      className="preview-image"
-                      src={URL.createObjectURL(nft.media)}
-                      alt={nft.name}
-                    />
-                  )}
-                  {nft.media.type === 'video/mp4' && (
+                  {nft.artworkType &&
+                    !nft.artworkType.endsWith('mpeg') &&
+                    nft.artworkType &&
+                    !nft.artworkType.endsWith('mp4') && (
+                      <img className="preview-image" src={nft.optimizedUrl} alt={nft.name} />
+                    )}
+                  {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <img className="video__icon" src={videoIcon} alt="Video Icon" />
                   )}
                   {nft.selected && <img className="check__icon" src={checkIcon} alt="Check Icon" />}
@@ -203,27 +207,27 @@ const SavedNFTs = () => {
                       </>
                     )}
                   </div>
-                  {nft.allItems.length > 1 ? (
+                  {nft.tokenIds && nft.tokenIds.length > 1 ? (
                     <div className="collection__count">
-                      {`x${nft.allItems.length}`}
+                      {`x${nft.tokenIds.length}`}
                       <div
                         className="generatedEditions"
                         style={{
                           gridTemplateColumns: `repeat(${Math.ceil(
-                            nft.allItems.length / 10
+                            nft.tokenIds.length / 10
                           )}, auto)`,
                         }}
                       >
-                        {nft.allItems.map((edition) => (
+                        {nft.tokenIds.map((edition) => (
                           <div key={edition.id.split('-')[0]}>{`#${edition.id.split('-')[0]}`}</div>
                         ))}
                       </div>
                     </div>
                   ) : (
-                    <p className="collection__count">{`#${nft.allItems[0].id.split('-')[0]}`}</p>
+                    <p className="collection__count">{`#${0}`}</p>
                   )}
                 </div>
-                {nft.allItems.length > 1 && (
+                {nft.tokenIds && nft.tokenIds.length > 1 && (
                   <>
                     <div className="saved__nft__box__highlight__one" />
                     <div className="saved__nft__box__highlight__two" />
@@ -232,6 +236,20 @@ const SavedNFTs = () => {
                 <span className="tooltiptext">Complete editing this NFT</span>
               </div>
             ))}
+          </div>
+          <div className="pagination__container">
+            <SimplePagination
+              data={savedNfts}
+              perPage={perPage}
+              setOffset={setOffset}
+              setPage={setPage}
+              page={page}
+            />
+            <ItemsPerPageDropdown
+              perPage={perPage}
+              setPerPage={setPerPage}
+              itemsPerPage={[8, 16, 32]}
+            />
           </div>
         </>
       ) : (

@@ -9,6 +9,7 @@ import bidSubmittedIcon from '../../assets/images/bid-submitted.png';
 import Button from '../button/Button.jsx';
 import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const PlaceBidPopup = ({
   onClose,
@@ -18,7 +19,7 @@ const PlaceBidPopup = ({
   onBidders,
   onSetBidders,
 }) => {
-  const { loggedInArtist, myBalance, setMyBalance } = useContext(AppContext);
+  const { loggedInArtist, myBalance, setMyBalance } = useAuthContext();
   const PLACEHOLDER_SERVICE__FEE = 0.105;
   const [yourBid, setYourBid] = useState('');
   const [totalBidAmount, setTotalBidAmount] = useState(0);

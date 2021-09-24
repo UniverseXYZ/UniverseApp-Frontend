@@ -2,10 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import InputRange from 'react-input-range';
-import {
-  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
-  PLACEHOLDER_MARKETPLACE_USERS,
-} from '../../../../utils/fixtures/BrowseNFTsDummyData';
+import { PLACEHOLDER_MARKETPLACE_USERS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 
 import salesIcon from '../../../../assets/images/marketplace/sale-type.svg';
 import priceIcon from '../../../../assets/images/marketplace/price-range.svg';
@@ -20,7 +17,8 @@ import snxIcon from '../../../../assets/images/snx.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import AppContext from '../../../../ContextAPI';
-import { defaultColors } from '../../../../utils/helpers';
+import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const SortingFilters = ({
   saleTypeButtons,
@@ -77,10 +75,11 @@ const SortingFilters = ({
       subtitle: 'Synthetix Network Token',
     },
   ];
+  const { deployedCollections } = useAuthContext();
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
   const [searchByCollections, setSearchByCollections] = useState('');
-  const [collections, setCollections] = useState(PLACEHOLDER_MARKETPLACE_COLLECTIONS);
-
+  const [collections, setCollections] = useState(deployedCollections);
+  console.log(deployedCollections);
   const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
   const [searchByCreators, setSearchByCreators] = useState('');
 
@@ -221,10 +220,10 @@ const SortingFilters = ({
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
-
+  // TODO: Uncomment for marketplace
   return (
     <div className="sorting--filters--list">
-      <div
+      {/* <div
         className={`sorting--filter ${showSaleDropdown ? 'open' : ''}`}
         aria-hidden="true"
         ref={ref1}
@@ -284,8 +283,8 @@ const SortingFilters = ({
             </div>
           </div>
         )}
-      </div>
-      <div
+      </div> */}
+      {/* <div
         className={`sorting--filter ${showPriceDropdown ? 'open' : ''}`}
         ref={ref2}
         aria-hidden="true"
@@ -402,7 +401,7 @@ const SortingFilters = ({
             </div>
           </div>
         )}
-      </div>
+      </div> */}
       <div
         className={`sorting--filter ${showCollectionsDropdown ? 'open' : ''}`}
         ref={ref3}
@@ -429,18 +428,17 @@ const SortingFilters = ({
               <div className="collection--dropdown--selected">
                 {selectedCollections.map((coll, index) => (
                   <button type="button" className="light-border-button" key={uuid()}>
-                    {!coll.photo ? (
+                    {!coll.coverUrl ? (
                       <div
                         className="random--avatar--color"
                         style={{
-                          backgroundColor:
-                            defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                          backgroundColor: getCollectionBackgroundColor(coll),
                         }}
                       >
                         {coll.name.charAt(0)}
                       </div>
                     ) : (
-                      <img className="sell__collection" src={coll.photo} alt={coll.name} />
+                      <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
                     )}
                     {coll.name}
                     <img
@@ -467,27 +465,26 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
-                  .map((col) => (
+                  .map((coll, index) => (
                     <div
                       className="collection__item"
                       key={uuid()}
-                      onClick={() => handleSelectCollection(col)}
+                      onClick={() => handleSelectCollection(coll)}
                       aria-hidden="true"
                     >
-                      {!col.photo ? (
+                      {!coll.coverUrl ? (
                         <div
                           className="random--avatar--color"
                           style={{
-                            backgroundColor:
-                              defaultColors[Math.floor(Math.random() * defaultColors.length)],
+                            backgroundColor: getCollectionBackgroundColor(coll),
                           }}
                         >
-                          {col.name.charAt(0)}
+                          {coll.name.charAt(0)}
                         </div>
                       ) : (
-                        <img className="collection__avatar" src={col.photo} alt={col.name} />
+                        <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
                       )}
-                      <p>{col.name}</p>
+                      <p>{coll.name}</p>
                     </div>
                   ))}
               </div>
@@ -507,7 +504,7 @@ const SortingFilters = ({
           </div>
         )}
       </div>
-      <div
+      {/* <div
         className={`sorting--filter ${showArtistsDropdown ? 'open' : ''}`}
         ref={ref4}
         aria-hidden="true"
@@ -578,7 +575,7 @@ const SortingFilters = ({
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

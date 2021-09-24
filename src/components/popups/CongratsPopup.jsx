@@ -5,7 +5,7 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import checkIcon from '../../assets/images/bid-submitted.png';
 
-const CongratsPopup = ({ onClose, backButtonText, title, message }) => {
+const CongratsPopup = ({ onClose, backButtonText, title, message, showCreateMore }) => {
   const history = useHistory();
   const location = useLocation();
   return (
@@ -34,18 +34,20 @@ const CongratsPopup = ({ onClose, backButtonText, title, message }) => {
         >
           {backButtonText}
         </Button>
-        <Button
-          className="light-border-button"
-          onClick={() =>
-            history.push(
-              location.pathname === '/create-tiers/my-nfts/create'
-                ? '/create-tiers/my-nfts/create'
-                : onClose()
-            )
-          }
-        >
-          Create more
-        </Button>
+        {showCreateMore && (
+          <Button
+            className="light-border-button"
+            onClick={() =>
+              history.push(
+                location.pathname === '/create-tiers/my-nfts/create'
+                  ? '/create-tiers/my-nfts/create'
+                  : onClose()
+              )
+            }
+          >
+            Create more
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -54,12 +56,14 @@ const CongratsPopup = ({ onClose, backButtonText, title, message }) => {
 CongratsPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   backButtonText: PropTypes.string,
+  showCreateMore: PropTypes.bool,
   title: PropTypes.string,
   message: PropTypes.string,
 };
 
 CongratsPopup.defaultProps = {
   backButtonText: 'Go to my NFTs',
+  showCreateMore: true,
   title: 'Congratulations!',
   message: '',
 };

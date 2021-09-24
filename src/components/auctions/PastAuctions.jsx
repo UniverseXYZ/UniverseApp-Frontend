@@ -188,7 +188,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
               </div>
             </div>
             <div hidden={shownActionId !== pastAuction.id} className="auctions-tier">
-              {pastAuction.tiers.map((tier) => (
+              {pastAuction.rewardTiers.map((tier) => (
                 <div className="tier" key={uuid()}>
                   <div className="tier-header">
                     <h3>{tier.name}</h3>

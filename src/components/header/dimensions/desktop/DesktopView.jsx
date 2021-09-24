@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
+import Blockies from 'react-blockies';
 import AppContext from '../../../../ContextAPI';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
@@ -31,6 +32,8 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const DesktopView = ({
   isWalletConnected,
@@ -49,7 +52,8 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
+  const { address, isAuthenticated, yourBalance, usdEthBalance, resetConnectionState } =
+    useAuthContext();
 
   return (
     <div className="desktop__nav">
@@ -129,13 +133,15 @@ const DesktopView = ({
                 <span>Lobby Lobsters</span>
               </button>
               <button
+                className="disable"
                 type="button"
-                onClick={() => {
-                  history.push('/core-drops');
-                }}
+                // onClick={() => {
+                //   history.push('/core-drops');
+                // }}
               >
                 <img src={coreDropsIcon} alt="Core drops" />
                 <span>OG planet drops</span>
+                <span className="tooltiptext">Coming soon</span>
               </button>
             </div>
           </div>
@@ -277,22 +283,23 @@ const DesktopView = ({
             </div>
           </div>
         </li>
-        {isWalletConnected ? (
+        {isWalletConnected && isAuthenticated ? (
           <li>
             <button
+              style={{ width: 200 }}
               type="button"
               className="menu-li myAccount"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <img className="icon-img" src={Icon} alt="Diamond icon" />
+              <Blockies className="blockie" seed={address} size={9} scale={3} />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <img className="icon-img" src={Icon} alt="icon" />
-                  <div className="ethereum__address">{ethereumAddress}</div>
+                  <Blockies className="blockie" seed={address} size={9} scale={3} />
+                  <div className="ethereum__address">{shortenEthereumAddress(ethereumAddress)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">
                       <div className="copied-div" hidden={!copied}>
@@ -318,14 +325,14 @@ const DesktopView = ({
 
                 <div className="group1">
                   <img src={Group1} alt="ETH" />
-                  <span className="first-span">6,24 ETH</span>
-                  <span className="second-span">$10,554</span>
+                  <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                  <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                 </div>
-                <div className="group2">
+                {/* <div className="group2">
                   <img src={Group2} alt="WETH" />
                   <span className="first-span">6,24 WETH</span>
                   <span className="second-span">$10,554</span>
-                </div>
+                </div> */}
               </div>
               <div className="dropdown__body">
                 <button
@@ -375,6 +382,7 @@ const DesktopView = ({
                   type="button"
                   className="signOut"
                   onClick={() => {
+                    resetConnectionState();
                     setIsAccountDropdownOpened(false);
                     setIsWalletConnected(!isWalletConnected);
                   }}

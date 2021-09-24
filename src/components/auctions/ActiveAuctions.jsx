@@ -287,7 +287,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                             hidden={shownActionId !== activeAuction.name}
                             className="auctions-tier"
                           >
-                            {activeAuction.tiers.map((tier) => (
+                            {activeAuction.rewardTiers.map((tier) => (
                               <div className="tier">
                                 <div className="tier-header">
                                   <h3>{tier.name}</h3>

@@ -18,7 +18,7 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import Input from '../input/Input.jsx';
 import MintNftsPopup from '../popups/MintNftsPopup.jsx';
 import MintCongratsPopup from '../popups/MintCongratsPopup.jsx';
-import Pagination from '../pagination/Pagionation.jsx';
+import Pagination from '../pagination/SimplePaginations';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
@@ -44,6 +44,14 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 
   const handleMintCongratsPopupClose = () => {
     setMintCongratsPopupOpen(false);
+  };
+
+  const getTotalNFTSperAuction = (auction) => {
+    let nftsCount = 0;
+    auction.rewardTiers.forEach((tier) => {
+      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
+    });
+    return nftsCount;
   };
 
   return (
@@ -101,7 +109,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             <div className="auctions-launch-dates">
               <div className="total-dates">
                 <p>
-                  Total NFTs: <b>{futureAuction.totalNFTs}</b>
+                  Total NFTs: <b>{getTotalNFTSperAuction(futureAuction)}</b>
                 </p>
               </div>
               <div
@@ -329,8 +337,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
             </div>
 
             <div hidden={shownActionId !== futureAuction.id} className="auctions-tier">
-              {futureAuction.tiers.length &&
-                futureAuction.tiers.map((tier) => (
+              {futureAuction.rewardTiers.length &&
+                futureAuction.rewardTiers.map((tier) => (
                   <div className="tier" key={uuid()}>
                     <div className="tier-header">
                       <h3>{tier.name}</h3>
@@ -339,10 +347,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           NFTs per winner: <b>{tier.nftsPerWinner}</b>
                         </p>
                         <p>
-                          Winners: <b>{tier.winners}</b>
+                          Winners: <b>{tier.numberOfWinners}</b>
                         </p>
                         <p>
-                          Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
+                          Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
                         </p>
                       </div>
                     </div>
@@ -352,7 +360,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           <div className="tier-image-second" />
                           <div className="tier-image-first" />
                           <div className="tier-image-main">
-                            <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                            <img src={nft?.thumbnail_url} alt={nft.name} />
                           </div>
                         </div>
                       ))}

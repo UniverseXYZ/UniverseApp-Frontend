@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import uuid from 'react-uuid';
-import { renderLoaders } from '../../containers/rarityCharts/renderLoaders';
+import { renderLoaders } from '../../containers/rarityCharts/renderLoaders.jsx';
 import AppContext from '../../ContextAPI';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
@@ -22,11 +22,17 @@ import shareNFTIcon from '../../assets/images/share-nft.svg';
 import hideNFTIcon from '../../assets/images/hide-nft.svg';
 import unhideNFTIcon from '../../assets/images/unhide-nft.svg';
 import burnNFTIcon from '../../assets/images/burn-nft.svg';
+import universeIcon from '../../assets/images/universe-img.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { useAuthContext } from '../../contexts/AuthContext';
+import LoadingImage from '../general/LoadingImage';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
-const NFTCard = ({ nft }) => {
-  const { myNFTs, setMyNFTs, loggedInArtist } = useContext(AppContext);
+const NFTCard = React.memo(({ nft, collectionAddress }) => {
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { loggedInArtist } = useAuthContext();
   const history = useHistory();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef();
@@ -107,12 +113,6 @@ const NFTCard = ({ nft }) => {
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
-
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setShowDropdown(false);
@@ -125,12 +125,12 @@ const NFTCard = ({ nft }) => {
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
-
+  console.log(nft);
   return (
     <div className="nft--card">
       <div className="nft--card--header">
         <div className="three--images">
-          <div className="creator--details">
+          {/* <div className="creator--details">
             <img
               src={
                 typeof nft.creator.avatar === 'string'
@@ -140,26 +140,20 @@ const NFTCard = ({ nft }) => {
               alt={nft.creator.name}
             />
             <span className="tooltiptext">{`Creator: ${nft.creator.name}`}</span>
-          </div>
+          </div> */}
           {nft.collection && (
             <div className="collection--details">
-              {typeof nft.collection.avatar === 'string' &&
-              nft.collection.avatar.startsWith('#') ? (
+              {nft.collection.name === 'Universe XYZ' ? (
+                <img src={universeIcon} alt={nft.collection.name} />
+              ) : !nft.collection.coverUrl ? (
                 <div
                   className="random--bg--color"
-                  style={{ backgroundColor: nft.collection.avatar }}
+                  style={{ backgroundColor: getCollectionBackgroundColor(nft.collection) }}
                 >
                   {nft.collection.name.charAt(0)}
                 </div>
               ) : (
-                <img
-                  src={
-                    typeof nft.collection.avatar === 'string'
-                      ? nft.collection.avatar
-                      : URL.createObjectURL(nft.collection.avatar)
-                  }
-                  alt={nft.collection.name}
-                />
+                <img src={nft.collection.coverUrl} alt={nft.collection.name} />
               )}
               <span className="tooltiptext">{`Collection: ${nft.collection.name}`}</span>
             </div>
@@ -167,13 +161,13 @@ const NFTCard = ({ nft }) => {
           <div className="owner--details">
             <img
               src={
-                typeof nft.owner.avatar === 'string'
-                  ? nft.owner.avatar
-                  : URL.createObjectURL(nft.owner.avatar)
+                typeof loggedInArtist.avatar === 'string'
+                  ? loggedInArtist.avatar
+                  : loggedInArtist.avatar
               }
-              alt={nft.owner.name}
+              alt={loggedInArtist.name}
             />
-            <span className="tooltiptext">{`Owner: ${nft.owner.name}`}</span>
+            <span className="tooltiptext">{`Owner: ${loggedInArtist.name}`}</span>
           </div>
         </div>
         <div className="nft--card--header--right">
@@ -182,10 +176,11 @@ const NFTCard = ({ nft }) => {
               <img src={countIcon} alt="cover" />
               <span>{nft.numberOfEditions}</span>
             </div>
-          ) : (
-            <div onClick={() => handleLikeClick(nft.id)} className="likes--count">
-              <div>
-                <svg
+          ) : null}
+          {/* ) : (
+             <div onClick={() => handleLikeClick(nft.id)} className="likes--count">
+               <div>
+               <svg
                   className={
                     nft.likers.filter((liker) => liker.id === loggedInArtist.id).length
                       ? 'fill'
@@ -229,8 +224,8 @@ const NFTCard = ({ nft }) => {
                 {nft.likers.length}
               </span>
             </div>
-          )}
-          <div
+          )} */}
+          {/* <div
             className="nft--card--header--right--dropdown"
             aria-hidden="true"
             onClick={() => {
@@ -272,7 +267,7 @@ const NFTCard = ({ nft }) => {
                 </li>
               </ul>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="nft--card--body" aria-hidden="true">
@@ -280,9 +275,13 @@ const NFTCard = ({ nft }) => {
           renderLoaders(1, 'nft')
         ) : (
           <>
-            {nft.type !== 'bundles' ? (
+            {nft.type && nft.type !== 'bundles' ? (
               <div
-                onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                onClick={() =>
+                  history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, {
+                    nft,
+                  })
+                }
                 aria-hidden="true"
               >
                 {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
@@ -324,20 +323,24 @@ const NFTCard = ({ nft }) => {
               </div>
             ) : (
               <>
-                <Slider {...sliderSettings}>
-                  {nft.allItems.map(
+                {/* TODO:: comment out the slider, its going to be needed for the Marketplace only */}
+                {/* <Slider {...sliderSettings}> */}
+                {/* {nft.tokenIds &&
+                  nft.tokenIds.map(
                     (item, index) =>
                       index < 7 && (
                         <div
                           className="slider--box"
-                          onClick={() => history.push(`/marketplace/nft/${nft.id}`, { nft })}
+                          onClick={() => history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, { nft })}
                           aria-hidden="true"
                           key={uuid()}
                         >
-                          {item.type !== 'audio/mpeg' && item.type !== 'video/mp4' && (
-                            <img className="nft--image" src={item.url} alt={nft.name} />
-                          )}
-                          {item.type === 'video/mp4' && (
+                          {nft.artworkType &&
+                            !nft.artworkType.endsWith('mpeg') &&
+                            !nft.artworkType.endsWith('mp4') && (
+                              <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
+                            )}
+                          {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                             <video
                               onMouseOver={(event) => event.target.play()}
                               onFocus={(event) => event.target.play()}
@@ -345,28 +348,59 @@ const NFTCard = ({ nft }) => {
                               onBlur={(event) => event.target.pause()}
                               muted
                             >
-                              <source src={item.url} type="video/mp4" />
+                              <source src={nft.optimized_url} type="video/mp4" />
                               <track kind="captions" />
                               Your browser does not support the video tag.
                             </video>
                           )}
-                          {item.type === 'audio/mpeg' && (
+                          {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
                             <img className="nft--image" src={mp3Icon} alt={nft.name} />
-                          )}
-                          {item.type === 'video/mp4' && (
-                            <div className="video--icon">
-                              <img src={videoIcon} alt="Video Icon" />
-                            </div>
-                          )}
-                          {item.type === 'audio/mpeg' && (
-                            <div className="video--icon">
-                              <img src={audioIcon} alt="Audio Icon" />
-                            </div>
                           )}
                         </div>
                       )
-                  )}
-                </Slider>
+                  )} */}
+                {/* Colelction View NFTs  TODO:: The code below should be commented when we realse Marketplace and uncomment the upper one */}
+                {nft.tokenIds && (
+                  <div
+                    className="slider--box"
+                    onClick={() =>
+                      history.push(
+                        `/nft/${nft.collection?.address || collectionAddress}/${nft.id}`,
+                        { nft }
+                      )
+                    }
+                    aria-hidden="true"
+                    key={uuid()}
+                  >
+                    {nft.artworkType &&
+                      !nft.artworkType.endsWith('mpeg') &&
+                      !nft.artworkType.endsWith('mp4') && (
+                        <LoadingImage
+                          className="nft--image"
+                          alt={nft.name}
+                          src={nft.optimized_url}
+                          placeholderImage={nft.optimized_url}
+                        />
+                      )}
+                    {nft.artworkType && nft.artworkType.endsWith('mp4') && (
+                      <video
+                        onMouseOver={(event) => event.target.play()}
+                        onFocus={(event) => event.target.play()}
+                        onMouseOut={(event) => event.target.pause()}
+                        onBlur={(event) => event.target.pause()}
+                        muted
+                      >
+                        <source src={nft.optimized_url} type="video/mp4" />
+                        <track kind="captions" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                    {nft.artworkType && nft.artworkType.endsWith('mpeg') && (
+                      <img className="nft--image" src={mp3Icon} alt={nft.name} />
+                    )}
+                  </div>
+                )}
+                {/* </Slider> */}
               </>
             )}
           </>
@@ -375,26 +409,34 @@ const NFTCard = ({ nft }) => {
       <div className="nft--card--footer">
         <div className="name--and--price">
           <h4>{nft.name}</h4>
-          <div className="price--div">
+          {/* <div className="price--div">
             <img src={priceIcon} alt="Price" />
             <span>0.5</span>
-          </div>
+          </div> */}
         </div>
         <div className="quantity--and--offer">
-          <p>{`1 / ${nft.numberOfEditions}`}</p>
-          <div className="price--offer--div">
+          {/* // TODO:: we need a property from the BE about the total editions count */}
+          <p>{`${nft.tokenIds ? nft.tokenIds.length : 1} / ${
+            nft.numberOfEditions ? nft.numberOfEditions : nft.tokenIds ? nft.tokenIds.length : 1
+          }`}</p>
+          {/* <div className="price--offer--div">
             <label>Offer for</label>
             <img src={priceIcon} alt="Price" />
             <span>0.35</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
   );
-};
+});
 
 NFTCard.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  collectionAddress: PropTypes.string,
+};
+
+NFTCard.defaultProps = {
+  collectionAddress: '',
 };
 
 export default NFTCard;

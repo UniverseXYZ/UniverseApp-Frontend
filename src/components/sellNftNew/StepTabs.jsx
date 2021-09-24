@@ -58,7 +58,7 @@ const StepTabs = (props) => {
                         //     !auction.startingBid ||
                         //     !auction.startDate ||
                         //     !auction.endDate ||
-                        //     !auction.tiers.length
+                        //     !auction.rewardTiers.length
                         //       ? 'disabled'
                         //       : ''
                         //   }

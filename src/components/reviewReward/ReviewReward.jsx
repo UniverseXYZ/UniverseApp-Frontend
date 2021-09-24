@@ -13,18 +13,19 @@ import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const Reward = () => {
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction } = useContext(AppContext);
+  const { auction, setAuction } = useAuctionContext();
   const [hideIcon, setHideIcon] = useState(false);
   const ref = useRef(null);
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const tierId = location.state;
-  const tierById = auction.tiers.find((element) => element.id === tierId);
+  const tierById = auction.rewardTiers.find((element) => element.id === tierId);
 
   const handleEdit = (id) => {
     document.body.classList.add('no__scroll');
@@ -34,8 +35,8 @@ const Reward = () => {
     document.body.classList.add('no__scroll');
     setAuction({
       ...auction,
-      tiers: [
-        ...auction.tiers.filter((tier) => tier.id !== tierById.id),
+      rewardTiers: [
+        ...auction.rewardTiers.filter((tier) => tier.id !== tierById.id),
         { ...tierById, nfts: tierById.nfts.filter((item) => item.id !== id) },
       ],
     });

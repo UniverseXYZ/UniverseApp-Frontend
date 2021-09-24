@@ -7,9 +7,10 @@ import Section3Randomise from '../../components/polymorphs/mint-polymorph/Sectio
 import './MintPolymorph.scss';
 import AppContext from '../../ContextAPI';
 import data from '../../utils/fixtures/horizontalScrollCharactersData';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const MintPolymorph = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   const [quantity, setQuantity] = useState(1);
   const [sliderValue, setSliderValue] = useState(0);
   const [mobile, setMobile] = useState(false);

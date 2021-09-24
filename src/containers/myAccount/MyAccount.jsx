@@ -1,29 +1,24 @@
 import React, { useEffect, useContext, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory, useLocation } from 'react-router-dom';
-import Main from '../../components/myAccount/Main.jsx';
+import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
 import './MyAccount.scss';
-import About from '../../components/myAccount/About.jsx';
-import PersonalLogo from '../../components/myAccount/PersonalLogo.jsx';
-import Social from '../../components/myAccount/Social.jsx';
 import Head from '../../components/myAccount/Head.jsx';
-import AppContext from '../../ContextAPI';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
-import Artist from '../artist/Artist.jsx';
+import { saveProfileInfo, saveUserImage, saveUserLogo } from '../../utils/api/profile.js';
+import { useThemeContext } from '../../contexts/ThemeContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const MyAccount = () => {
-  const {
-    isWalletConnected,
-    setDarkMode,
-    loggedInArtist,
-    setLoggedInArtist,
-    editProfileButtonClick,
-    setEditProfileButtonClick,
-  } = useContext(AppContext);
+  const { isWalletConnected, loggedInArtist, setLoggedInArtist } = useAuthContext();
+  const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
+  const { setShowError } = useErrorContext();
+  const { setDarkMode } = useThemeContext();
+
   const history = useHistory();
-  const location = useLocation();
   const [about, setAbout] = useState(loggedInArtist.about);
-  const [logo, setLogo] = useState(loggedInArtist.personalLogo);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
   const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
 
@@ -33,13 +28,15 @@ const MyAccount = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
-  const [showSocial, setShowSocial] = useState(loggedInArtist.social);
-
-  const artist = location.state
-    ? location.state.id === loggedInArtist.id
-      ? loggedInArtist
-      : PLACEHOLDER_ARTISTS.filter((a) => a.id === location.state.id)[0]
-    : null;
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [fetchedUserData, setFetchedUserData] = useState({
+    accountName,
+    accountPage,
+    accountImage,
+    about,
+    instagramLink,
+    twitterLink,
+  });
 
   useEffect(() => {
     setDarkMode(false);
@@ -55,34 +52,56 @@ const MyAccount = () => {
     }
   }, [isWalletConnected]);
 
-  const saveChanges = () => {
-    setEditProfileButtonClick(true);
-    let page = accountPage.substring(13);
-    if (page === 'your-address') {
-      page = '';
-    }
-    setAccountPage(page);
-    setLoggedInArtist({
-      ...loggedInArtist,
-      name: accountName,
-      universePageAddress: page,
-      avatar: accountImage,
-      about,
-      personalLogo: logo,
-      instagramLink,
-      twitterLink,
-      social: showSocial,
-    });
-    // if (!showSocial) {
-    //   setShowSocial(false);
-    // } else {
-    //   setShowSocial(true);
-    // }
-    setTimeout(() => {
-      if (accountName && accountImage && accountPage !== 'universe.xyz/your-address' && about) {
-        document.getElementById('congrats-hidden-btn').click();
+  const saveChanges = async () => {
+    try {
+      setEditProfileButtonClick(true);
+      if (
+        !accountImage ||
+        !accountName ||
+        accountPage === 'universe.xyz/' ||
+        accountPage === 'universe.xyz/your-address' ||
+        !about
+      ) {
+        return;
       }
-    }, 500);
+      let page = accountPage.substring(13);
+      if (page === 'your-address') {
+        page = '';
+      }
+      setAccountPage(page);
+      const artistData = {
+        ...loggedInArtist,
+        name: accountName,
+        universePageAddress: page,
+        avatar: accountImage,
+        about,
+        instagramLink: instagramLink.replace('@', ''),
+        twitterLink: twitterLink.replace('@', ''),
+      };
+
+      const result = await saveProfileInfo(artistData);
+      if (typeof accountImage === 'object') {
+        const saveImageRequest = await saveUserImage(accountImage);
+        if (saveImageRequest.profileImageUrl) {
+          artistData.avatar = saveImageRequest.profileImageUrl;
+        }
+      }
+
+      if (!result.ok) {
+        setShowError(true);
+        return;
+      }
+
+      setLoggedInArtist({ ...artistData });
+
+      setTimeout(() => {
+        if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
+          setShowCongrats(true);
+        }
+      }, 2000);
+    } catch (err) {
+      setShowError(true);
+    }
   };
 
   const cancelChanges = () => {
@@ -94,35 +113,15 @@ const MyAccount = () => {
     }
     setAccountImage(loggedInArtist.avatar);
     setAbout(loggedInArtist.about);
-    setLogo(loggedInArtist.personalLogo);
+    // setLogo(loggedInArtist.personalLogo);
     setTwitterLink(loggedInArtist.twitterLink);
     setInstagramLink(loggedInArtist.instagramLink);
   };
 
   return (
-    // loggedInArtist.name &&
-    //   loggedInArtist.universePageAddress &&
-    //   loggedInArtist.avatar &&
-    //   loggedInArtist.about &&
-    //   editProfileButtonClick ? (
-    //   // <Artist />
-    //   <>{history.push(`/${loggedInArtist.universePageAddress}`, { id: loggedInArtist.id })}</>
-    // ) : (
     <div className="my-account">
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="congrats-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <CongratsProfilePopup onClose={close} />}
-      </Popup>
       <Head />
-      <Main
+      <ProfileForm
         accountName={accountName}
         setAccountName={setAccountName}
         accountPage={accountPage}
@@ -138,19 +137,11 @@ const MyAccount = () => {
         saveChanges={saveChanges}
         cancelChanges={cancelChanges}
         editProfileButtonClick={editProfileButtonClick}
+        fetchedUserData={fetchedUserData}
       />
-      {/* <About about={about} setAbout={setAbout} /> */}
-      {/* <PersonalLogo logo={logo} setLogo={setLogo} /> */}
-      {/* <Social
-        twitterLink={twitterLink}
-        setTwitterLink={setTwitterLink}
-        instagramLink={instagramLink}
-        setInstagramLink={setInstagramLink}
-        showSocial={showSocial}
-        setShowSocial={setShowSocial}
-        saveChanges={saveChanges}
-        cancelChanges={cancelChanges}
-      /> */}
+      <Popup closeOnDocumentClick={false} open={showCongrats}>
+        <CongratsProfilePopup onClose={() => setShowCongrats(false)} />
+      </Popup>
     </div>
   );
   // );

@@ -1,47 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { queryPolymorphsGraph, traitRarity } from '../../../utils/graphql/polymorphQueries';
 import './styles/PolymorphScrambleProp.scss';
+import { useGraphQueryHook } from '../../../utils/hooks/useGraphQueryHook';
 
-const PolymorphScrambleProp = ({ data }) =>
-  data.type === 'pink-orange' ? (
-    <div className="rarity--description--gradient">
-      <div className="rarity--description selected--pink--orange">
-        <div className="matching">
-          <img src={data.icon} alt="Pink orage" />
-          <span className="tooltiptext">Main set trait</span>
-        </div>
-        <h4>{data.trait}</h4>
-        <h3>{data.name}</h3>
-        <p className="description">{data.chance}</p>
-      </div>
-      <div className="rarity--rank--border" />
-    </div>
-  ) : (
-    <div
-      className={`rarity--description ${
-        data.type === 'orange'
-          ? 'selected--orange'
-          : data.type === 'blue'
-          ? 'selected--blue'
-          : data.type === 'pink'
-          ? 'selected--pink'
-          : ''
-      }`}
-    >
-      {data.type && (
-        <div className="matching">
-          <img src={data.icon} alt="Orange" />
-          <span className="tooltiptext">Main set trait</span>
-        </div>
-      )}
-      <h4>{data.trait}</h4>
-      <h3>{data.name}</h3>
-      <p className="description">{data.chance}</p>
-    </div>
+const PolymorphScrambleProp = ({ data }) => {
+  const { data: characterRarityData, loading } = useGraphQueryHook(
+    queryPolymorphsGraph(traitRarity(data.chance))
   );
 
+  let rarity = '';
+  if (characterRarityData?.traits?.length) {
+    rarity = `${Math.round(characterRarityData.traits[0]?.rarity, 10)}% have this trait`;
+  }
+  return (
+    <div className="scramble--prop">
+      <div className="prop--trait">{data.trait}</div>
+      <div className="prop--name">{data.name}</div>
+      <div className="prop--chance">{rarity}</div>
+    </div>
+  );
+};
+
 PolymorphScrambleProp.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  data: PropTypes.shape({
+    trait: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    chance: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default PolymorphScrambleProp;

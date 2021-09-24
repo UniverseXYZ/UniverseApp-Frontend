@@ -1,52 +1,66 @@
 import React, { useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
-import AppContext from '../../ContextAPI';
+import { editCollectionBanner } from '../../utils/api/mintNFT';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const Cover = ({ selectedCollection }) => {
-  const { deployedCollections, setDeployedCollections } = useContext(AppContext);
+  const { deployedCollections, setDeployedCollections } = useAuthContext();
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection.bgImage);
+  const [imageUploadError, setError] = useState('');
 
-  const onInputChange = (e) => {
+  const onInputChange = async (e) => {
     if (e.target.files[0]) {
-      setBgImage(e.target.files[0]);
-      setDeployedCollections(
-        deployedCollections.map((item) =>
-          item.id === selectedCollection.id
-            ? {
-                ...item,
-                bgImage: e.target.files[0],
-              }
-            : item
-        )
-      );
+      const res = await editCollectionBanner(e.target.files[0], selectedCollection.id);
+
+      if (!res.message) {
+        setError('');
+        setBgImage(e.target.files[0]);
+        setDeployedCollections(
+          deployedCollections.map((item) =>
+            item.id === selectedCollection.id
+              ? {
+                  ...res,
+                }
+              : item
+          ) || []
+        );
+      } else {
+        setError(res.message);
+      }
     }
   };
 
   return (
     <div className="collection__page__cover">
+      <p className="image-upload-error">{imageUploadError}</p>
       <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
         <img src={uploadIcon} alt="Upload" />
         <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
       </div>
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
-      ) : typeof selectedCollection.previewImage === 'string' &&
-        selectedCollection.previewImage.startsWith('#') ? (
-        <div
-          className="random__bg__color"
-          style={{ backgroundColor: selectedCollection.previewImage }}
-        />
-      ) : (
+      ) : !selectedCollection.bannerUrl && selectedCollection.coverUrl ? (
         <>
           <img
             className="bg blur"
-            src={URL.createObjectURL(selectedCollection.previewImage)}
+            src={selectedCollection.coverUrl}
             alt={selectedCollection.name}
           />
           <div className="blured" />
         </>
+      ) : selectedCollection.bannerUrl ? (
+        <img className="bg" src={selectedCollection.bannerUrl} alt={selectedCollection.name} />
+      ) : (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: getCollectionBackgroundColor(selectedCollection),
+          }}
+        />
       )}
     </div>
   );

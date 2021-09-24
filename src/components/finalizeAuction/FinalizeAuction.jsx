@@ -18,17 +18,14 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import LeavePopup from '../popups/LeavePopup';
 import AppContext from '../../ContextAPI';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const FinalizeAuction = () => {
   const history = useHistory();
-  const {
-    auction,
-    myAuctions,
-    setMyAuctions,
-    loggedInArtist,
-    deployedCollections,
-    setDeployedCollections,
-  } = useContext(AppContext);
+  const { auction, myAuctions, setMyAuctions } = useAuctionContext();
+  const { deployedCollections, setDeployedCollections } = useAuthContext();
+
   const [proceed, setProceed] = useState(false);
   const [approvals, setApprovals] = useState(1);
   const [loadingApproval, setLoadingApproval] = useState(undefined);
@@ -38,7 +35,7 @@ const FinalizeAuction = () => {
   useEffect(() => {
     let arr = [];
     deployedCollections.forEach((item) => {
-      auction.tiers.forEach((tier) => {
+      auction.rewardTiers.forEach((tier) => {
         if (tier.nfts.filter((nft) => nft.collection?.id === item.id && !item.approved).length) {
           arr.push(item);
         }
@@ -264,7 +261,7 @@ const FinalizeAuction = () => {
             <div className="create__auction__body">
               <h2>Deposit NFTs</h2>
               <p className="auction__description">Deposit 55 NFTs to the auction contract</p>
-              {auction.tiers.map((tier, tierIndex) => (
+              {auction.rewardTiers.map((tier, tierIndex) => (
                 <div className="transaction" key={uuid()}>
                   <div className="transaction__details">
                     <div className="transaction__header">
@@ -300,12 +297,12 @@ const FinalizeAuction = () => {
                   </div>
                   <div className="deposit__button">
                     {approvals === collections.length + 2 + tierIndex &&
-                    auction.tiers.length !== tierIndex + 1 ? (
+                    auction.rewardTiers.length !== tierIndex + 1 ? (
                       <Button className="light-button" onClick={handleDeposit}>
                         Deposit
                       </Button>
                     ) : approvals === collections.length + 2 + tierIndex &&
-                      auction.tiers.length === tierIndex + 1 ? (
+                      auction.rewardTiers.length === tierIndex + 1 ? (
                       <button type="button" className="light-button" onClick={handleLastDeposit}>
                         Deposit
                       </button>

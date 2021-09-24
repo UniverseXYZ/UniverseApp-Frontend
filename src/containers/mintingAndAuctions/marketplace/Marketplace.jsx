@@ -4,9 +4,10 @@ import CreateYourAuction from '../../../components/mintingAndAuctions/marketplac
 import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs.jsx';
 import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome.jsx';
 import AppContext from '../../../ContextAPI';
+import { useThemeContext } from '../../../contexts/ThemeContext';
 
 const Marketplace = () => {
-  const { setDarkMode } = useContext(AppContext);
+  const { setDarkMode } = useThemeContext();
   useEffect(() => {
     setDarkMode(true);
     document.title = 'Universe Minting - Minting & Auctions - Marketplace';

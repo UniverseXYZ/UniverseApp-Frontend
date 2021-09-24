@@ -7,9 +7,10 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import NFTPopup from '../popups/NFTPopup.jsx';
 import hideIcon from '../../assets/images/hide-nft.svg';
 import AppContext from '../../ContextAPI';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const NFTs = ({ filteredNFTs }) => {
-  const { myNFTs, setMyNFTs } = useContext(AppContext);
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
   const ref = useRef(null);

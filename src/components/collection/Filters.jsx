@@ -4,9 +4,9 @@ import arrowDown from '../../assets/images/arrow-down.svg';
 import searchIcon from '../../assets/images/search.svg';
 import AppContext from '../../ContextAPI';
 import SortBySelect from '../input/SortBySelect';
+import { handleClickOutside } from '../../utils/helpers';
 
 const Filters = ({ search, setSearch, filteredNFTs }) => {
-  const { handleClickOutside } = useContext(AppContext);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Sort by');
   const ref = useRef(null);

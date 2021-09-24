@@ -10,11 +10,6 @@ import './styles/About.scss';
 const row1RightBlock = () => (
   <AnimatedOnScroll animationIn="fadeIn" animationInDelay={200}>
     <h2>The Polymorphs are a collection of morphing NFTs, with 11 base skins and 200+ traits.</h2>
-    {/* <p>
-      A first in the Universe and on the blockchain, we’ve built technology that allows you to morph
-      your Polymorph’s characteristics. When you mint, you will get a random Polymorph with traits
-      and wearables that can be scrambled.
-    </p> */}
   </AnimatedOnScroll>
 );
 

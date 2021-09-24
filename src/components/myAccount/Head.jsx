@@ -3,11 +3,13 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const Head = () => {
-  const { loggedInArtist } = useContext(AppContext);
+  const { loggedInArtist } = useAuthContext();
   const history = useHistory();
-  const { editProfileButtonClick, setEditProfileButtonClick } = useContext(AppContext);
+  const { editProfileButtonClick, setEditProfileButtonClick } = useAuctionContext();
 
   const handlePublicPage = () => {
     setEditProfileButtonClick(true);

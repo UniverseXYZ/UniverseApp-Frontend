@@ -20,9 +20,11 @@ import SelectToken from '../popups/SelectTokenPopup.jsx';
 import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
+import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const AuctionSettings = () => {
-  const d = new Date();
+  // const d = new Date();
   const monthNames = [
     'Jan',
     'Feb',
@@ -38,26 +40,13 @@ const AuctionSettings = () => {
     'Dec',
   ];
   const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
-  const [properties, setProperties] = useState(
-    window.propertiesData ? window.propertiesData : [{ address: '', amount: '' }]
-  );
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  const {
-    auction,
-    setAuction,
-    myAuctions,
-    setMyAuctions,
-    bidtype,
-    setBidtype,
-    options,
-    setAuctionSetupState,
-  } = useContext(AppContext);
+  const { auction, setAuction, bidtype, setBidtype, options, setAuctionSetupState } =
+    useAuctionContext();
+
   const [hideIcon1, setHideIcon1] = useState(false);
-  const [royalities, setRoyalities] = useState(
-    window.royalitiesValue ? window.royalitiesValue : false
-  );
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [hideIcon2, setHideIcon2] = useState(false);
   const [openList, setOpenList] = useState(true);
@@ -91,11 +80,41 @@ const AuctionSettings = () => {
   });
 
   const [bidValues, setBidValues] = useState([]);
+  const hasRoyalties = auction.royaltySplits && auction.royaltySplits.length;
+  const [royalities, useRoyalities] = useState(hasRoyalties);
+  const isEditingAuction = location.state !== undefined;
+
+  const [properties, setProperties] = useState(
+    auction && auction.royaltySplits ? [...auction.royaltySplits] : [{ address: '', amount: '' }]
+  );
+
+  const parseDate = (dateString) => {
+    const date = dateString ? new Date(dateString) : new Date();
+
+    return {
+      month: monthNames[date.getMonth()],
+      day: date.getDate(),
+      year: date.getFullYear(),
+      hours: date.getHours(),
+      minutes: date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes(),
+      timezone: 'GMT +04:00', // // TODO:: this shoud be dynamic ?
+      format: 'AM',
+    };
+  };
+
+  const startDate =
+    isEditingAuction && auction.startDate ? parseDate(auction.startDate) : parseDate();
+
+  const endDate = isEditingAuction && auction.startDate ? parseDate(auction.endDate) : parseDate();
+
+  const [startDateTemp, setStartDateTemp] = useState({ ...startDate });
+  const [endDateTemp, setEndDateTemp] = useState({ ...endDate });
+
   const [values, setValues] = useState({
-    name: window.auctionData ? window.auctionData.name : '',
-    startingBid: window.auctionData ? window.auctionData.startingBid : '',
-    startDate: window.auctionData ? window.auctionData.startDate : '',
-    endDate: window.auctionData ? window.auctionData.endDate : '',
+    name: auction ? auction.name : '',
+    startingBid: auction ? auction.startingBid : '',
+    startDate: auction.startDate ? auction.startDate : '',
+    endDate: auction.endDateTemp ? auction.endDate : '',
   });
 
   useEffect(() => {
@@ -112,25 +131,6 @@ const AuctionSettings = () => {
     }
   }, [values, properties]);
 
-  const [startDateTemp, setStartDateTemp] = useState({
-    month: monthNames[d.getMonth()],
-    day: d.getDate(),
-    year: d.getFullYear(),
-    hours: new Date().getHours(),
-    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
-    timezone: 'GMT +04:00',
-    format: 'AM',
-  });
-
-  const [endDateTemp, setEndDateTemp] = useState({
-    month: monthNames[d.getMonth()],
-    day: d.getDate(),
-    year: d.getFullYear(),
-    hours: new Date().getHours(),
-    minutes: new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes(),
-    timezone: 'GMT +04:00',
-    format: 'AM',
-  });
   const handleShow = () => {
     setOpenList(!openList);
     if (openList) {
@@ -147,7 +147,7 @@ const AuctionSettings = () => {
     setMinBId(e.target.checked);
   };
   const bid = options.find((element) => element.value === bidtype);
-  const isEditingAuction = location.state !== undefined;
+
   const handleAddAuction = () => {
     setTimeout(() => {
       setIsValidFields((prevValues) => ({
@@ -195,10 +195,10 @@ const AuctionSettings = () => {
           startingBid: values.startingBid,
           startDate: moment(values.startDate).format(),
           endDate: moment(values.endDate).format(),
-          tiers: minBid
-            ? prevValue.tiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
-            : prevValue.tiers,
-          properties,
+          rewardTiers: minBid
+            ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
+            : prevValue.rewardTiers,
+          properties: properties.length === 1 && !properties[0].address ? null : properties,
         }));
       } else {
         setAuction((prevValue) => ({
@@ -208,9 +208,9 @@ const AuctionSettings = () => {
           startDate: moment(values.startDate).format(),
           endDate: moment(values.endDate).format(),
           properties,
-          // tiers: minBid
-          //   ? prevValue.tiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
-          //   : prevValue.tiers,
+          rewardTiers: minBid
+            ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
+            : prevValue.rewardTiers,
         }));
       }
       history.push('/setup-auction/reward-tiers', location.pathname);
@@ -279,7 +279,7 @@ const AuctionSettings = () => {
         endDate: new Date(auction.endDate),
       });
       // setBidValues(
-      //   auction.tiers.reduce((acc, currentTier) => {
+      //   auction.rewardTiers.reduce((acc, currentTier) => {
       //     acc[currentTier.id] = currentTier.minBid;
       //     return acc;
       //   }),
@@ -300,31 +300,6 @@ const AuctionSettings = () => {
       setRoyaltyValidAddress(true);
     }
   }, [handleAddAuction]);
-
-  useEffect(() => {
-    if (window.auctionData) {
-      setValues({ ...window.auctionData });
-    }
-    if (window.propertiesData) {
-      setProperties(window.propertiesData);
-    }
-    if (typeof window.royalitiesValue !== 'undefined') {
-      setRoyalities(window.royalitiesValue);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.auctionData = { ...values };
-  }, [values]);
-
-  useEffect(() => {
-    window.propertiesData = properties;
-  }, [properties]);
-
-  useEffect(() => {
-    window.royalitiesValue = royalities;
-    if (royalities) setProperties([{ address: '', amount: '' }]);
-  }, [royalities]);
 
   return (
     <div className="auction-settings container">
@@ -401,28 +376,16 @@ const AuctionSettings = () => {
                           label="Start date"
                           autoComplete="off"
                           hoverBoxShadowGradient
-                          value={
-                            values.startDate
-                              ? `${values.startDate.toString().split(' ')[1]} ${
-                                  values.startDate.toString().split(' ')[2]
-                                }, ${values.startDate.toString().split(' ')[3]}, ${values.startDate
-                                  .toString()
-                                  .split(' ')[4]
-                                  .substring(0, 5)}
-                                    ${startDateTemp.timezone.toString().split(' ')[0]}`
-                              : ''
-                          }
+                          value={`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, ${startDateTemp.hours} ${startDateTemp.minutes}`}
                           error={isValidFields.startDate ? undefined : 'Start date is required!'}
                         />
                         {values.startDate && (
                           <p className="date--input--value">
                             <b>
-                              {`${values.startDate.toString().split(' ')[1]} ${
-                                values.startDate.toString().split(' ')[2]
-                              }, ${values.startDate.toString().split(' ')[3]}, `}
+                              {`${startDateTemp.month} ${startDateTemp.day}, ${startDateTemp.year}, `}
                             </b>
-                            {`${values.startDate.toString().split(' ')[4].substring(0, 5)}
-                              ${startDateTemp.timezone.toString().split(' ')[0]}`}
+                            {`${startDateTemp.hours}:${startDateTemp.minutes}
+                              ${startDateTemp.timezone?.toString().split(' ')[0]}`}
                           </p>
                         )}
                         <img
@@ -462,28 +425,16 @@ const AuctionSettings = () => {
                           label="End date"
                           autoComplete="off"
                           hoverBoxShadowGradient
-                          value={
-                            values.endDate
-                              ? `${values.endDate.toString().split(' ')[1]} ${
-                                  values.endDate.toString().split(' ')[2]
-                                }, ${values.endDate.toString().split(' ')[3]}, ${values.endDate
-                                  .toString()
-                                  .split(' ')[4]
-                                  .substring(0, 5)}
-                                    ${endDateTemp.timezone.toString().split(' ')[0]}`
-                              : ''
-                          }
+                          value={`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, ${endDateTemp.hours} ${endDateTemp.minutes}`}
                           error={isValidFields.endDate ? undefined : 'End date is required!'}
                         />
                         {values.endDate && (
                           <p className="date--input--value">
                             <b>
-                              {`${values.endDate.toString().split(' ')[1]} ${
-                                values.endDate.toString().split(' ')[2]
-                              }, ${values.endDate.toString().split(' ')[3]}, `}
+                              {`${endDateTemp.month} ${endDateTemp.day}, ${endDateTemp.year}, `}
                             </b>
-                            {`${values.endDate.toString().split(' ')[4].substring(0, 5)}
-                              ${endDateTemp.timezone.toString().split(' ')[0]}`}
+                            {`${endDateTemp.hours}:${endDateTemp.minutes}
+                              ${endDateTemp.timezone?.toString().split(' ')[0]}`}
                           </p>
                         )}
                         <img
@@ -553,8 +504,8 @@ const AuctionSettings = () => {
           <label className="switch">
             <input
               type="checkbox"
-              checked={!royalities}
-              onChange={(e) => setRoyalities(!e.target.checked)}
+              checked={!!royalities}
+              onChange={(e) => useRoyalities(e.target.checked)}
             />
             <span className="slider round" />
           </label>

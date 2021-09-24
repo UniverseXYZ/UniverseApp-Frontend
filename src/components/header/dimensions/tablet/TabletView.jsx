@@ -5,14 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import './TabletView.scss';
-import {
-  PLACEHOLDER_MARKETPLACE_AUCTIONS,
-  PLACEHOLDER_MARKETPLACE_NFTS,
-  PLACEHOLDER_MARKETPLACE_USERS,
-  PLACEHOLDER_MARKETPLACE_COLLECTIONS,
-  PLACEHOLDER_MARKETPLACE_COMMUNITIES,
-  PLACEHOLDER_MARKETPLACE_GALLERIES,
-} from '../../../../utils/fixtures/BrowseNFTsDummyData';
+import Blockie from 'react-blockies';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
@@ -49,7 +42,10 @@ import Button from '../../../button/Button';
 // import '../../Header.scss';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors } from '../../../../utils/helpers';
+import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
+import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 
 const TabletView = (props) => {
   const {
@@ -66,7 +62,10 @@ const TabletView = (props) => {
     showSearch,
     setShowSearch,
   } = props;
-  const { handleClickOutside } = useContext(AppContext);
+  const { address, yourBalance, usdEthBalance, resetConnectionState, loggedInArtist } =
+    useAuthContext();
+
+  const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -74,7 +73,6 @@ const TabletView = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const ref = useRef(null);
   const history = useHistory();
-  const { loggedInArtist, editProfileButtonClick } = useContext(AppContext);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -112,21 +110,29 @@ const TabletView = (props) => {
   useEffect(() => {
     document.addEventListener(
       'click',
-      (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
+      (e) => handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened),
       true
     );
     return () => {
       document.removeEventListener(
         'click',
-        (e) => handleClickOutside(e, 'account__icon', ref, setIsAccountDropdownOpened),
+        (e) => {
+          console.log('click');
+          handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened);
+        },
         true
       );
     };
-  });
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsAccountDropdownOpened(!isAccountDropdownOpened);
+    setShowMenu(false);
+  };
 
   return (
     <div className="tablet__nav">
-      <button
+      {/* <button
         className="search--box"
         type="button"
         onClick={() => {
@@ -134,8 +140,8 @@ const TabletView = (props) => {
         }}
       >
         <img src={searchIcon} alt="icon" />
-      </button>
-      {showSearch && (
+      </button> */}
+      {/* {showSearch && (
         <>
           <div className="search--section">
             <div className="input--search--box">
@@ -289,7 +295,7 @@ const TabletView = (props) => {
                             </div>
                           </div>
                         ))}
-                        {/* {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
+                        {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
                           item.name.toLowerCase().includes(searchValue.toLowerCase())
                         ).length > 0 && <h4>Communities</h4>}
                         {PLACEHOLDER_MARKETPLACE_COMMUNITIES.filter((item) =>
@@ -320,7 +326,7 @@ const TabletView = (props) => {
                               <p className="galleries--likes">{galleries.likesCount} Likes</p>
                             </div>
                           </div>
-                        ))} */}
+                        ))}
                         <Button
                           type="button"
                           className="light-border-button"
@@ -344,20 +350,17 @@ const TabletView = (props) => {
             </div>
           </div>
         </>
-      )}
+      )} */}
       {isWalletConnected && (
         <div className="wallet__connected__tablet">
-          <img
-            className="account__icon hide__on__tablet"
-            src={accountIcon}
-            onClick={() => {
-              setIsAccountDropdownOpened(!isAccountDropdownOpened);
-              setShowMenu(false);
-            }}
-            alt="Account icon"
-            aria-hidden="true"
-          />
-          <img
+          <div
+            style={{ marginRight: 20, display: 'flex', cursor: 'pointer' }}
+            aria-hidden
+            onClick={toggleDropdown}
+          >
+            <Blockie className="blockie" seed={address} size={9} scale={4} />
+          </div>
+          {/* <img
             className="account__icon show__on__tablet"
             src={accountDarkIcon}
             onClick={() => {
@@ -366,14 +369,17 @@ const TabletView = (props) => {
             }}
             alt="Account icon"
             aria-hidden="true"
-          />
+          /> */}
+
           {isAccountDropdownOpened && (
             <Animated animationIn="fadeIn">
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <img className="icon-img" src={accountIcon} alt="icon" />
-                    <div className="ethereum__address">{ethereumAddress}</div>
+                    <Blockie className="blockie" seed={address} size={9} scale={3} />
+                    <div className="ethereum__address">
+                      {shortenEthereumAddress(ethereumAddress)}
+                    </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
                         <div className="copied-div" hidden={!copied}>
@@ -398,14 +404,14 @@ const TabletView = (props) => {
                   </div>
                   <div className="group1">
                     <img src={Group1} alt="ETH" />
-                    <span className="first-span">6,24 ETH</span>
-                    <span className="second-span">$10,554</span>
+                    <span className="first-span">{toFixed(yourBalance, 2)} ETH</span>
+                    <span className="second-span">${toFixed(usdEthBalance, 2)}</span>
                   </div>
-                  <div className="group2">
+                  {/* <div className="group2">
                     <img src={Group2} alt="WETH" />
                     <span className="first-span">6,24 WETH</span>
                     <span className="second-span">$10,554</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="dropdown__body">
                   <button
@@ -454,6 +460,7 @@ const TabletView = (props) => {
                     type="button"
                     className="signOut"
                     onClick={() => {
+                      resetConnectionState();
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
                     }}
