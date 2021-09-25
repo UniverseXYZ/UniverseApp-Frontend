@@ -18,11 +18,8 @@ import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import SettingIconActive from '../../assets/images/settings-solid.svg';
 import SettingIcon from '../../assets/images/setting-solid-disactive.svg';
 import nftImage from '../../assets/images/marketplace/nfts/nft13.png';
-import './NFTMarketplace.scss';
 import { useMarketplaceContext } from '../../contexts/MarketplaceContext';
 import { useThemeContext } from '../../contexts/ThemeContext';
-import SelectItemsMethodTab from '../../components/sellNftNew/SelectItemsMethodTab';
-import NewTabs from '../../components/tabs/NewTabs';
 
 const getContent = (type, data, setData) => {
   if (type === 'dutch') return <DutchAuctionContainer data={data} setData={setData} />;

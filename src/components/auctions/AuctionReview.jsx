@@ -36,15 +36,8 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const AuctionReview = () => {
-  const {
-    auction,
-    setAuction,
-    bidtype,
-    options,
-    myAuctions,
-    setMyAuctions,
-    setSelectedTabIndex,
-  } = useAuctionContext();
+  const { auction, setAuction, bidtype, options, myAuctions, setMyAuctions, setSelectedTabIndex } =
+    useAuctionContext();
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);

@@ -22,7 +22,6 @@ import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import cloudIcon from '../../../assets/images/gray_cloud.svg';
 import createIcon from '../../../assets/images/create.svg';
-import delIcon from '../../../assets/images/delete-red.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
 
@@ -890,7 +889,12 @@ const SingleNFTForm = () => {
                           className="light-border-button red"
                           onClick={() => removeProperty(i)}
                         >
-                          <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
+                          <img
+                            src={deleteIcon}
+                            className="del-icon"
+                            alt="Delete"
+                            aria-hidden="true"
+                          />
                           Remove
                         </Button>
                       </>
@@ -976,7 +980,12 @@ const SingleNFTForm = () => {
                           className="light-border-button red"
                           onClick={() => removeRoyaltyAddress(i)}
                         >
-                          <img src={delIcon} className="del-icon" alt="Delete" aria-hidden="true" />
+                          <img
+                            src={deleteIcon}
+                            className="del-icon"
+                            alt="Delete"
+                            aria-hidden="true"
+                          />
                           Remove
                         </Button>
                       </>
