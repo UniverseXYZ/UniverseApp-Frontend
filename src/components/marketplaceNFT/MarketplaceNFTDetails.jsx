@@ -940,7 +940,6 @@ const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
                 onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                 aria-hidden="true"
               >
-                {/* <img src={threedotsIcon} alt="Dots" /> */}
                 <div className="selected__item">
                   <span />
                   <span />
