@@ -18,7 +18,6 @@ const FinalizeAuction = () => {
   const history = useHistory();
   const { auction, myAuctions, setMyAuctions } = useAuctionContext();
   const { deployedCollections, setDeployedCollections } = useAuthContext();
-
   const [proceed, setProceed] = useState(false);
   const [approvals, setApprovals] = useState(1);
   const [loadingApproval, setLoadingApproval] = useState(undefined);
@@ -258,10 +257,10 @@ const FinalizeAuction = () => {
                       <h4>{tier.name}</h4>
                       <div className="head">
                         <p>
-                          Slot: <b>{tier.winners}</b>
+                          Slot: <b>{tier.numberOfWinners}</b>
                         </p>
                         <p>
-                          Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
+                          Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
                         </p>
                       </div>
                     </div>
@@ -273,7 +272,7 @@ const FinalizeAuction = () => {
                               <div className="first" />
                               <div className="second" />
                               <div className="image-main">
-                                <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                                <img src={nft.optimized_url} alt={nft.name} />
                                 {tier.nfts.length > 3 && (
                                   <span className="show__more">{`+${
                                     tier.nfts.length - 3
