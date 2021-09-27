@@ -5,6 +5,7 @@
 .active-auctions,
 .past-auctions {
   .auction {
+    position: relative;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(0, 0, 0, 0.02);
     box-sizing: border-box;
@@ -12,6 +13,23 @@
     padding: 34px 30px;
     margin-bottom: 24px;
     cursor: default;
+    .left-border-effect {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 9px;
+      border-radius: 9px 0px 0px 9px;
+      background: #ffc700;
+
+      &.datePassed {
+        background: #ff4949;
+      }
+      &.readyForLaunch {
+        background: linear-gradient(180deg, #bceb00 0%, #00eaea 100%);
+      }
+    }
 
     @include sm {
       padding: 20px 16px;
@@ -652,11 +670,28 @@
 .active-auctions,
 .past-auctions {
   .active-auction {
-    border: 2px solid;
-    border-image-source: linear-gradient(135deg, rgba(188, 235, 0, 0.4) 15.57%, rgba(0, 234, 234, 0.4) 84.88%);
-    background: linear-gradient($white, $white) padding-box,
-      linear-gradient(to right, #2ad0ca, #e1f664, #feb0fe, #abb3fc, #5df7a4, #58c4f6) border-box;
     padding-bottom: 0;
+    position: relative;
+    .active-left-border-effect {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      width: 9px;
+      height: 100%;
+      background: radial-gradient(
+        2232.66% 100% at 55.56% 0%,
+        #2ad0ca 0%,
+        #e1f664 22.92%,
+        #feb0fe 46.87%,
+        #abb3fc 68.23%,
+        #5df7a4 87.5%,
+        #58c4f6 100%
+      );
+      background-blend-mode: overlay, normal;
+      border-radius: 0px 9px 9px 0px;
+      transform: matrix(-1, 0, 0, 1, 0, 0);
+    }
   }
   .past-auction {
     padding-bottom: 0;
