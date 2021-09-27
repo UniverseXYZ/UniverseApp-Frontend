@@ -76,7 +76,12 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
               {myAuctions
                 .slice(offset, offset + perPage)
                 .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-                .filter((item) => item.launch && !moment(item.endDate).isBefore(moment.now()))
+                .filter(
+                  (item) =>
+                    item.launch &&
+                    moment(item.startDate).isBefore(moment.now()) &&
+                    !moment(item.endDate).isBefore(moment.now())
+                )
                 .map((activeAuction, index) => {
                   const duration = moment(activeAuction.startDate).isBefore(moment.now())
                     ? moment.duration(moment(activeAuction.endDate).diff(moment.now()))
@@ -94,6 +99,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                           {...prov.dragHandleProps}
                           ref={prov.innerRef}
                         >
+                          <div className="active-left-border-effect" />
                           <div className="auction-header">
                             <div className="img_head">
                               <div className="img_head_title">
@@ -302,7 +308,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       <div className="tier-image-second" />
                                       <div className="tier-image-first" />
                                       <div className="tier-image-main">
-                                        <img src={URL.createObjectURL(nft.media)} alt="NFT" />
+                                        <img src={nft.optimized_url} alt="NFT" />
                                       </div>
                                     </div>
                                   ))}

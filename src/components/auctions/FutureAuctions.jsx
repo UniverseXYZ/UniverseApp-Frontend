@@ -59,9 +59,20 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
+        .filter(
+          (item) => !item.launch || (item.launch && !moment(item.startDate).isBefore(moment.now()))
+        )
         .map((futureAuction) => (
           <div className="auction" key={uuid()}>
+            <div
+              className={`left-border-effect ${
+                moment(futureAuction.startDate).isBefore(moment.now()) ? 'datePassed' : ''
+              } ${
+                futureAuction.launch && !moment(futureAuction.startDate).isBefore(moment.now())
+                  ? 'readyForLaunch'
+                  : ''
+              }`}
+            />
             <div className="auction-header">
               <div className="auction-header-button">
                 <h3>{futureAuction.name}</h3>
@@ -214,14 +225,21 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 </div>
                 {futureAuction.headline || futureAuction.link ? (
                   <Button
-                    className="light-button"
+                    className={
+                      futureAuction.launch &&
+                      !moment(futureAuction.startDate).isBefore(moment.now())
+                        ? 'light-border-button'
+                        : 'light-button'
+                    }
                     onClick={() => {
                       setAuction(futureAuction);
                       history.push('/finalize-auction', futureAuction.id);
                     }}
                     disabled={moment(futureAuction.startDate).isBefore(moment.now())}
                   >
-                    Start
+                    {futureAuction.launch && !moment(futureAuction.startDate).isBefore(moment.now())
+                      ? 'Edit'
+                      : 'Start'}
                   </Button>
                 ) : (
                   <Button className="light-button" disabled>
