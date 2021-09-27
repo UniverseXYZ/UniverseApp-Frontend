@@ -138,7 +138,13 @@ const MyAuction = () => {
             <span> Go to my profile.</span>
           </p>
         </div>
-        {selectedTabIndex === 0 && myAuctions.filter((item) => item.launch).length ? (
+        {selectedTabIndex === 0 &&
+        myAuctions.filter(
+          (item) =>
+            item.launch &&
+            moment(item.startDate).isBefore(moment.now()) &&
+            !moment(item.endDate).isBefore(moment.now())
+        ).length ? (
           <ActiveAuctions
             myAuctions={myAuctions}
             setMyAuctions={setMyAuctions}
@@ -147,7 +153,13 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length ? (
+        {selectedTabIndex === 0 &&
+        !myAuctions.filter(
+          (item) =>
+            item.launch &&
+            moment(item.startDate).isBefore(moment.now()) &&
+            !moment(item.endDate).isBefore(moment.now())
+        ).length ? (
           <div className="empty__auction">
             <img src={bubleIcon} alt="Buble" />
             <h3>No active auctions found</h3>
@@ -179,9 +191,7 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 &&
-        myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
-          .length ? (
+        {selectedTabIndex === 1 && myAuctions.filter((item) => !item.launch).length ? (
           <FutureAuctions
             myAuctions={myAuctions}
             setMyAuctions={setMyAuctions}
@@ -190,9 +200,7 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 &&
-        !myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
-          .length ? (
+        {selectedTabIndex === 1 && !myAuctions.filter((item) => !item.launch).length ? (
           <div className="empty__auction">
             <img src={bubleIcon} alt="Buble" />
             <h3>No scheduled auctions found</h3>
@@ -226,13 +234,15 @@ const MyAuction = () => {
         )}
 
         {selectedTabIndex === 2 &&
-        myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length ? (
+        myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
+          .length ? (
           <PastAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
         ) : (
           <></>
         )}
         {selectedTabIndex === 2 &&
-        !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length ? (
+        !myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
+          .length ? (
           <div className="empty__auction">
             <img src={bubleIcon} alt="Buble" />
             <h3>No past auctions found</h3>
