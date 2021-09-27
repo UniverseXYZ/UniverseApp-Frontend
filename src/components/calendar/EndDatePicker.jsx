@@ -60,7 +60,6 @@ const EndDatePicker = (props) => {
           autoComplete="off"
           value={values.endDate ? formatDate(values.endDate) : ''}
           error={error}
-          //   error={!value.length ? undefined : 'End date is required!'}
         />
         <Popup
           trigger={
@@ -69,7 +68,6 @@ const EndDatePicker = (props) => {
               className="callendar__image"
               src={callendarIcon}
               alt="Callendar"
-              //   onClick={() => setShowStartDate(true)}
             />
           }
         >

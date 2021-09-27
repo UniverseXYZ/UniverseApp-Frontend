@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import uploadIcon from '../../assets/images/upload.svg';
 import { editCollectionBanner } from '../../utils/api/mintNFT';

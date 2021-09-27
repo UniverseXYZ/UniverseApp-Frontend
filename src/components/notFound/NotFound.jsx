@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import AppContext from '../../ContextAPI';
 import Button from '../button/Button';
 import './NotFound.scss';
 import notFoundImg from '../../assets/images/404img.png';

@@ -2,7 +2,6 @@ import React from 'react';
 import Marquee from 'react-fast-marquee';
 import Lottie from 'react-lottie';
 import animationData from '../../../utils/animations/polymorph_universe_hero_section_animation.json';
-import Arrow from '../../../assets/images/arrow-right.svg';
 import './HeroSection.scss';
 
 const HeroSection = () => {
@@ -46,9 +45,6 @@ const HeroSection = () => {
           <h2>
             The Polymorphs are a collection of morphing NFTs, with 11 base skins and 200+ traits.
           </h2>
-          {/* <button type="button">
-            <img src={Arrow} alt="arrow" />
-          </button> */}
         </div>
         <Marquee gradient={false} className="welcome--marquee">
           <div className="border--top" />

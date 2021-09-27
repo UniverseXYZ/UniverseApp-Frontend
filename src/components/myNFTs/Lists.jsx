@@ -1,18 +1,13 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
-import Popup from 'reactjs-popup';
-import AppContext from '../../ContextAPI';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
-import hideNFTIcon from '../../assets/images/hide-nft.svg';
-import NFTPopup from '../popups/NFTPopup';
 import { useAuctionContext } from '../../contexts/AuctionContext';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const Lists = ({
   data,
@@ -26,40 +21,16 @@ const Lists = ({
   const sliceData = data.slice(offset, offset + perPage);
   const location = useLocation();
   const isCreatingAction = location.pathname === '/create-tiers';
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [dropdownID, setDropdownID] = useState(0);
-  const ref = useRef();
 
-  const { auction, myAuctions } = useAuctionContext();
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { auction } = useAuctionContext();
   const [openEditions, setOpenEditions] = useState(null);
   const [hideIcon, setHideIcon] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [selectedNft, SetSelectedNft] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEditions, setSelectedEditions] = useState({});
 
   const tierById = !!(winners && nftsPerWinner);
   const editMode = auction?.rewardTiers?.find((element) => element.id === location.state);
-
-  const hideNFT = (id) => {
-    setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: true } : item)));
-  };
-
-  const handleClickOutside = (event) => {
-    if (!event.target.classList.contains('three__dots')) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  });
 
   const activateInfo = (index) => {
     setHideIcon(true);
@@ -90,13 +61,6 @@ const Lists = ({
       setSelectedNFTIds(newSelectedNFTIds);
     }
   }, []);
-
-  useEffect(() => {
-    if (selectedNFTIds) {
-      const selected = sliceData.filter((nft) => selectedNFTIds.includes(nft.id));
-      SetSelectedNft(selected);
-    }
-  }, [selectedNFTIds]);
 
   const handleShow = (nft) => {
     if (tierById) {
@@ -163,9 +127,6 @@ const Lists = ({
                         This NFT doesn&apos;t have enough editions to be entered into this tier. You
                         must have the equal amount of winners as NFTs available.
                       </p>
-                      {/* <p>
-                        This NFT is already used in another auction.
-                      </p> */}
                     </div>
                   </Animated>
                 )}
@@ -338,7 +299,6 @@ const Lists = ({
                     </div>
                   ) : (
                     <></>
-                    // <p className="collection__count">{`#${nft.tokenIds[0].id.split('-')[0]}`}</p>
                   )
                 ) : (
                   <></>
@@ -371,7 +331,6 @@ const Lists = ({
                   </div>
                 ) : (
                   <></>
-                  // <p className="collection__count">{`#${nft.tokenIds[0]}`}</p>
                 )}
               </div>
               {nft.tokenIds.length > 1 && (

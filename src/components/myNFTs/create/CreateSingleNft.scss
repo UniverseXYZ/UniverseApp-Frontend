@@ -1,5 +1,5 @@
-@import '../../../assets/scss/variables';
-@import '../../../assets/scss/_mixins';
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/_mixins";
 
 .single__nft {
   .mintNftCollection-div {
@@ -174,13 +174,6 @@
             border-radius: 12px;
             object-fit: cover;
             image-rendering: pixelated;
-
-            // @include md {
-            //   max-height: 350px;
-            // }
-            // @include sm {
-            //   max-height: 250px;
-            // }
           }
         }
         &:hover {
@@ -373,7 +366,7 @@
 
           .collection-name {
             max-width: 115px;
-            overflow-wrap: break-word;      
+            overflow-wrap: break-word;
           }
         }
 
@@ -454,9 +447,6 @@
               linear-gradient(135deg, #bceb00, #00eaea) border-box;
             border: 1px solid transparent;
           }
-          // @include sm {
-          //   width: 100%;
-          // }
         }
         .create > img {
           border-radius: 50%;
@@ -542,7 +532,7 @@
 
         .slider:before {
           position: absolute;
-          content: '';
+          content: "";
           height: 16px;
           width: 16px;
           left: 4px;
@@ -799,7 +789,7 @@
 
           .slider:before {
             position: absolute;
-            content: '';
+            content: "";
             height: 16px;
             width: 16px;
             left: 4px;

@@ -6,7 +6,6 @@ import uuid from 'react-uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import AppContext from '../../../ContextAPI';
 import backArrow from '../../../assets/images/go-back-arrow.svg';
-// import person from '../../../assets/images/randomise-person-images/person.png';
 import Button from '../../button/Button';
 import Tabs from '../../tabs/Tabs';
 import PolymorphScrambleProp from './PolymorphScrambleProp';

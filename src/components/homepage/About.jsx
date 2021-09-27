@@ -20,7 +20,6 @@ import squareFour from '../../assets/images/square4.png';
 import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
-import Section4 from '../polymorphs/Section4.jsx';
 import arrowLeft from '../../assets/images/arrow-black.svg';
 
 const About = () => {

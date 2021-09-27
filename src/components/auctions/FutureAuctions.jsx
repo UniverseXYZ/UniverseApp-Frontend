@@ -1,12 +1,11 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import moment from 'moment';
 import uuid from 'react-uuid';
-import Popup from 'reactjs-popup';
 import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -16,8 +15,6 @@ import searchIconGray from '../../assets/images/search-gray.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import Input from '../input/Input.jsx';
-import MintNftsPopup from '../popups/MintNftsPopup.jsx';
-import MintCongratsPopup from '../popups/MintCongratsPopup.jsx';
 import Pagination from '../pagination/SimplePaginations';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
@@ -28,7 +25,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
   const history = useHistory();
-  const [mintCongratsPopupOpen, setMintCongratsPopupOpen] = useState(false);
 
   const handleRemove = (id) => {
     setMyAuctions((d) => d.filter((item) => item.id !== id));
@@ -36,14 +32,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 
   const handleSearch = (value) => {
     setSearchByName(value);
-  };
-
-  const handleMintCongratsPopupOpen = () => {
-    setMintCongratsPopupOpen(true);
-  };
-
-  const handleMintCongratsPopupClose = () => {
-    setMintCongratsPopupOpen(false);
   };
 
   const getTotalNFTSperAuction = (auction) => {
@@ -57,13 +45,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="future-auctions">
       <div className="input-search">
-        {/* {searchByName ? (
-          <button type="button" onClick={() => setSearchByName('')}>
-            Clear
-          </button>
-        ) : (
-          <></>
-        )} */}
         <div className="input--section">
           <Input
             className="searchInp"
@@ -86,7 +67,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 <h3>{futureAuction.name}</h3>
               </div>
               <div className="launch-auction">
-                {/* <div className="line" /> */}
                 <div className="arrow">
                   {shownActionId === futureAuction.id ? (
                     <img
@@ -276,9 +256,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   ) : (
                     <img alt="landing_page" src={emptyWhite} />
                   )}
-                  {/* {futureAuction.mint && futureAuction.landingCustom && (
-                    <img alt="landing_page" src={doneIcon} />
-                  )} */}
                 </div>
               </div>
               <div className="steps">

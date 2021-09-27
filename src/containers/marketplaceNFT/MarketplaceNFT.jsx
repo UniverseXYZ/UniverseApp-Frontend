@@ -1,7 +1,6 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './MarketplaceNFT.scss';
-import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import MarketplaceNFTDetails from '../../components/marketplaceNFT/MarketplaceNFTDetails';
 import '../../components/marketplace/browseNFT/NFTsList.scss';

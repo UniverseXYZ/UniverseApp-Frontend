@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 .future-auctions,
 .active-auctions,
@@ -21,7 +21,6 @@
   .auction-header {
     display: flex;
     justify-content: space-between;
-    // height: 42px;
     align-items: center;
     margin-bottom: 20px;
 
@@ -277,15 +276,6 @@
       margin-bottom: 7px;
       z-index: 10;
 
-      // .hz-line{
-      //     position: absolute;
-      //     left: 20px;
-      //     top: 10px;
-      //     width: 340px;
-      //     height: 0px;
-      //     border: 1px solid red;
-      // }
-
       img {
         width: 20px;
         height: 20px;
@@ -319,13 +309,6 @@
           box-shadow: 2px 1000px 1px #fafafa inset;
         }
       }
-      // button {
-      //   &.light-border-button {
-      //     background: linear-gradient($white, $white) padding-box,
-      //       linear-gradient(to right, #bceb00, #00eaea) border-box;
-      //     border: 1px solid transparent;
-      //   }
-      // }
     }
 
     .step-2 {
@@ -348,7 +331,7 @@
           }
         }
       }
-      
+
       button {
         &.light-border-button {
           box-shadow: 2px 1000px 1px #fafafa inset;
@@ -554,8 +537,6 @@
     button {
       margin-top: 20px;
       &.light-border-button {
-        // background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
-        // border: 1px solid transparent;
         box-shadow: 2px 1000px 1px #fafafa inset;
       }
       @include sm {
@@ -571,7 +552,6 @@
     box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
     border-radius: 12px;
     width: 251px;
-    // height: fit-content;
     padding: 16px;
     font-size: 12px;
     font-family: $spaceGroteskFont;
@@ -583,8 +563,6 @@
     position: absolute;
     top: 0;
     right: 0;
-    // float: right;
-    // margin-top: -85px;
     .input--section {
       position: relative;
       img {
@@ -723,7 +701,6 @@
       }
       .copyImg {
         margin-right: 5px;
-        // margin-left: 11px;
       }
       &:hover {
         background: rgba(0, 0, 0, 0.05);
@@ -741,7 +718,6 @@
       }
       .copied-div {
         position: absolute;
-        // width: 94px;
         height: 27px;
         background: #000;
         border-radius: 100px;

@@ -1,14 +1,12 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import bubbleIcon from '../../assets/images/text-bubble.png';
-import Button from '../button/Button';
-import AppContext from '../../ContextAPI';
 import plusIcon from '../../assets/images/plus.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
-import { defaultColors, getCollectionBackgroundColor } from '../../utils/helpers';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
@@ -86,7 +84,6 @@ const DeployedCollections = () => {
                       alt={collection.name}
                     />
                   )}
-                  {/* <h3 className="collection__name">{collection.name}</h3> */}
                   <h3 title={collection.name} className="collection__name">
                     {collection.name.length > 13
                       ? `${collection.name.substring(0, 13)}...`
@@ -121,8 +118,6 @@ const DeployedCollections = () => {
             <p>Create NFTs or NFT collections with our platform by clicking the button below</p>
             <button
               type="button"
-              // className="light-button"
-              // onClick={() => history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })}
               ref={ref2}
               className={`create--nft--dropdown  ${isDropdownOpened ? 'opened' : ''} light-button`}
               onClick={() => setIsDropdownOpened(!isDropdownOpened)}

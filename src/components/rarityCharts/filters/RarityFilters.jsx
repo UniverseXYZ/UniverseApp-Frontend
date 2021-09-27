@@ -33,15 +33,6 @@ const RarityFilters = (props) => {
 
   return (
     <div className="rarity--charts--search--and--filters--container">
-      {/* <div className="floor--price--block">
-        <p className="floor--price--paragraph">
-          <span>Floor Price: </span>
-          <div>
-            <img src={priceIcon} alt="Price" />
-            {`${floorPrice.price}`}
-          </div>
-        </p>
-      </div> */}
       <div className="rarity--charts--search--and--filters--row">
         {/* <CollectionFilter /> */}
         <div className="rarity--charts--search--and--floor--price">

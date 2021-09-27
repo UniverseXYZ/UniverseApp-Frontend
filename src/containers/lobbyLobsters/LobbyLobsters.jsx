@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import HeroSection from '../../components/lobbyLobsters/heroSection/HeroSection';
-import AppContext from '../../ContextAPI';
 import HelpUsBeHeard from '../../components/lobbyLobsters/helpUs/HelpUsBeHeard';
 import Donate from '../../components/lobbyLobsters/donate/Donate';
 import SliderSection from '../../components/lobbyLobsters/sliderSection/SliderSection';

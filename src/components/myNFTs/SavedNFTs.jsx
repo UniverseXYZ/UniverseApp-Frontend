@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
@@ -9,7 +9,6 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import bubbleIcon from '../../assets/images/text-bubble.png';
 import Button from '../button/Button';
-import AppContext from '../../ContextAPI';
 import RemovePopup from '../popups/RemoveNftPopup.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import SimplePagination from '../pagination/SimplePaginations';

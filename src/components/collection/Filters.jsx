@@ -1,32 +1,11 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import arrowDown from '../../assets/images/arrow-down.svg';
 import searchIcon from '../../assets/images/search.svg';
-import AppContext from '../../ContextAPI';
 import SortBySelect from '../input/SortBySelect';
-import { handleClickOutside } from '../../utils/helpers';
 
 const Filters = ({ search, setSearch, filteredNFTs }) => {
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('Sort by');
-  const ref = useRef(null);
   const [desc, setDesc] = useState(false);
   const [nftData, setNftData] = useState([...filteredNFTs]);
-
-  useEffect(() => {
-    document.addEventListener(
-      'click',
-      (e) => handleClickOutside(e, 'dropdown', ref, setIsDropdownOpened),
-      true
-    );
-    return () => {
-      document.removeEventListener(
-        'click',
-        (e) => handleClickOutside(e, 'dropdown', ref, setIsDropdownOpened),
-        true
-      );
-    };
-  });
 
   return (
     <div className="collection__filters">
@@ -54,66 +33,6 @@ const Filters = ({ search, setSearch, filteredNFTs }) => {
           desc={desc}
           hideFirstOption
         />
-        {/* <div
-          ref={ref}
-          className={`dropdown ${isDropdownOpened ? 'opened' : ''}`}
-          onClick={() => setIsDropdownOpened(!isDropdownOpened)}
-          aria-hidden="true"
-        >
-          <span className="selected__item">{selectedItem}</span>
-          <img className="chevron__down" src={arrowDown} alt="Arrow" />
-          {isDropdownOpened && (
-            <div className="sorting__dropdown">
-              <ul>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Sort by');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Sort by
-                </li>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Recently created');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Recently created
-                </li>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Recently sold');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Recently sold
-                </li>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Most viewed');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Most viewed
-                </li>
-                <li
-                  onClick={() => {
-                    setSelectedItem('Oldest');
-                    setIsDropdownOpened(false);
-                  }}
-                  aria-hidden="true"
-                >
-                  Oldest
-                </li>
-              </ul>
-            </div>
-          )}
-        </div> */}
       </div>
     </div>
   );

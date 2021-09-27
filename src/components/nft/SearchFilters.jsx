@@ -43,24 +43,6 @@ const SearchFilters = ({ data, setData, setOffset }) => {
     },
   ]);
 
-  // useEffect(() => {
-  //   const onScroll = (e) => {
-  //     const element = document.querySelector('.search--sort--filters--section');
-  //     if (element) {
-  //       if (window.scrollY >= element.offsetTop) {
-  //         document.querySelector('header').style.position = 'absolute';
-  //         // element.classList.add('fixed');
-  //       } else {
-  //         document.querySelector('header').style.position = 'fixed';
-  //         // element.classList.remove('fixed');
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener('scroll', onScroll);
-
-  //   return () => window.removeEventListener('scroll', onScroll);
-  // }, []);
-
   useEffect(() => {
     let filteredData = data;
     if (searchValue) {

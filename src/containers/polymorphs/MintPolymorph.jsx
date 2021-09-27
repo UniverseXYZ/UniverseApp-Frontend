@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
 import BondingCurve from '../../components/polymorphs/mint-polymorph/BondingCurve';
 import Section3Randomise from '../../components/polymorphs/mint-polymorph/Section3Randomise';
 import './MintPolymorph.scss';
-import AppContext from '../../ContextAPI';
 import data from '../../utils/fixtures/horizontalScrollCharactersData';
 import { useThemeContext } from '../../contexts/ThemeContext';
 

@@ -49,10 +49,8 @@ const CollectionSearchFilters = ({ data, setData, setOffset }) => {
       if (element) {
         if (window.scrollY >= element.offsetTop) {
           document.querySelector('header').style.position = 'absolute';
-          // element.classList.add('fixed');
         } else {
           document.querySelector('header').style.position = 'fixed';
-          // element.classList.remove('fixed');
         }
       }
     };

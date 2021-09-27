@@ -1,15 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CreateNFT.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import arrow from '../../../assets/images/arrow.svg';
-import settingIconActive from '../../../assets/images/settings-solid.svg';
-import settingIcon from '../../../assets/images/setting-solid-disactive.svg';
-import selectTypeIconActive from '../../../assets/images/select-type-icon-active.svg';
-import selectTypeIcon from '../../../assets/images/select-type-icon.svg';
 import SelectType from './SelectType';
 import SingleNFTForm from './SingleNFTForm';
 import NFTCollectionForm from './NFTCollectionForm';
-import AppContext from '../../../ContextAPI';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
@@ -21,13 +16,6 @@ const CreateNFT = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [showCollectible, setShowCollectible] = useState(false);
-
-  const handleSelectTypeClick = () => {
-    if (selectedTabIndex !== 0) {
-      setSelectedTabIndex(0);
-      setSelectedNFTType('');
-    }
-  };
 
   const goToCollectionPage = () => {
     const findCollection = deployedCollections.filter((item) => item.id === savedCollectionID);
@@ -108,38 +96,6 @@ const CreateNFT = () => {
           </h1>
         )}
         {savedCollectionID && <h1 className="page--title">Edit collection</h1>}
-        {/* {!showCollectible && (
-          <div id="tabs--wrapper">
-            <ul className="tabs">
-              <li
-                className={selectedTabIndex === 0 ? 'active' : 'box--shadow--effect'}
-                onClick={handleSelectTypeClick}
-                aria-hidden="true"
-              >
-                <div>
-                  <img
-                    src={selectedTabIndex === 0 ? selectTypeIconActive : selectTypeIcon}
-                    alt="Select type"
-                  />
-                  Select type
-                </div>
-              </li>
-              <li
-                className={`
-                    ${selectedTabIndex === 1 ? 'active' : ''}
-                    ${selectedTabIndex === 0 ? 'disabled' : ''}
-                  `}
-              >
-                <img
-                  src={selectedTabIndex === 1 ? settingIconActive : settingIcon}
-                  alt="Setting"
-                  className="setting--icon"
-                />
-                Settings
-              </li>
-            </ul>
-          </div>
-        )} */}
         <div className="tab__content">
           {selectedTabIndex === 0 && (
             <SelectType

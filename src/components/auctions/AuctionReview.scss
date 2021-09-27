@@ -1,12 +1,12 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 .auction-reward {
   .head-part {
     .tier-title {
       font-size: 20px;
       @include sm {
-        font-size: 16px!important;
+        font-size: 16px !important;
       }
     }
     p {
@@ -217,16 +217,6 @@
           top: 9px;
           right: 7px;
         }
-        // @include lg {
-        //   width: 100%;
-        //   height: 129px;
-        //   text-align: center;
-        //   margin: auto;
-        // }
-        // @include sm {
-        //   width: 100%;
-        //   height: 312px;
-        // }
       }
       &__highlight__one {
         position: absolute;

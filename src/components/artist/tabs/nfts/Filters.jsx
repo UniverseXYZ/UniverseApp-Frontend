@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import testCollectionAvatar from '../../../../assets/images/test-collection-avatar.svg';
-import AppContext from '../../../../ContextAPI';
 import { handleClickOutside } from '../../../../utils/helpers';
 import Input from '../../../input/Input.jsx';
 

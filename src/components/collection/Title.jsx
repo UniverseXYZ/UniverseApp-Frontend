@@ -1,15 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import AppContext from '../../ContextAPI';
-import volumeIcon from '../../assets/images/volume-icon.svg';
 
 const Title = ({ selectedCollection, saved, nftsCount, ownersCount }) => {
   const NFTSCount = nftsCount >= 1000 ? `${nftsCount / 1000}K` : nftsCount;
   return (
     <div className="collection__info">
       <div className="collection__name__desc">
-        {/* <h1>{selectedCollection.name}</h1> */}
         <h1 title={selectedCollection.name}>
           {selectedCollection.name.length > 15
             ? `${selectedCollection.name.substring(0, 15)}...`
@@ -30,12 +26,6 @@ const Title = ({ selectedCollection, saved, nftsCount, ownersCount }) => {
             </>
           ) : null}
         </div>
-        {/* <div>
-          <h1>
-            <img src={volumeIcon} alt="icom" /> 343.6
-          </h1>
-          <span>volume traded</span>
-        </div> */}
       </div>
     </div>
   );

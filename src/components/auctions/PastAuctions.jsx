@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Moment from 'react-moment';
 import moment from 'moment';
 import uuid from 'react-uuid';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
-import infoIconRed from '../../assets/images/Vector.svg';
 import searchIcon from '../../assets/images/search-gray.svg';
-import doneIcon from '../../assets/images/Completed.svg';
-import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import Input from '../input/Input.jsx';
 import copyIcon from '../../assets/images/copy1.svg';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
-import MyAccount from '../../containers/myAccount/MyAccount.jsx';
 
 const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);
@@ -28,16 +22,6 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
-  const [mobile, setMobile] = useState(false);
-  const [tablet, setTablet] = useState(false);
-
-  useEffect(() => {
-    if (Number(window.innerWidth) <= 768) setMobile(true);
-    else setMobile(false);
-
-    if (Number(window.innerWidth) > 768 && Number(window.innerWidth) <= 1230) setTablet(true);
-    else setTablet(false);
-  }, []);
 
   const handleSearch = (value) => {
     setSearchByName(value);
@@ -46,13 +30,6 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   return (
     <div className="past-auctions">
       <div className="input-search">
-        {/* {searchByName && !(mobile || tablet) ? (
-          <button type="button" onClick={() => setSearchByName('')}>
-            Clear
-          </button>
-        ) : (
-          <></>
-        )} */}
         <div className="input--section">
           <Input
             className="searchInp"

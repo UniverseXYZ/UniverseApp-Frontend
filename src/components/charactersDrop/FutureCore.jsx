@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { useHistory } from 'react-router-dom';
-import Button from '../button/Button.jsx';
 import Frame from '../../assets/images/char-frame-future-core-drops.png';
 import FrameMobile from '../../assets/images/char-frame-future-core-drops-mobile.png';
 import BookVector from '../../assets/images/play-vector.svg';
 import PlayVector from '../../assets/images/book-vector.svg';
 
 const FutureCore = () => {
-  const history = useHistory();
   const [frame, setFrame] = useState(Frame);
 
   useEffect(() => {

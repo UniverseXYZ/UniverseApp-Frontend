@@ -1,12 +1,11 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, useRef, useContext, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import EthereumAddress from 'ethereum-address';
 import uuid from 'react-uuid';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
 import { defaultColors } from '../../../utils/helpers.js';
-import AppContext from '../../../ContextAPI.js';
 import uploadIcon from '../../../assets/images/ion_cloud.svg';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import infoIcon from '../../../assets/images/icon.svg';
@@ -284,45 +283,6 @@ const NFTCollectible = (props) => {
                   : item
               )
             );
-            // const newSavedNFTs = [...savedNfts];
-            // collectionNFTs.forEach((nft) => {
-            //   if (nft.id === collectionNFTsID) {
-            //     newSavedNFTs.push({
-            //       id: nft.id,
-            //       type: 'collection',
-            //       collection: nft.collection,
-            //       creator: nft.creator,
-            //       owner: nft.owner,
-            //       allItems: generatedNFTs,
-            //       previewImage,
-            //       name,
-            //       description,
-            //       numberOfEditions: Number(editions),
-            //       generatedEditions,
-            //       properties,
-            //       royaltySplits,
-            //       selected: false,
-            //     });
-            //   } else {
-            //     newSavedNFTs.push({
-            //       id: nft.id,
-            //       type: 'collection',
-            //       collection: nft.collection,
-            //       creator: nft.creator,
-            //       owner: nft.owner,
-            //       allItems: nft.generatedNFTs,
-            //       previewImage: nft.previewImage,
-            //       name: nft.name,
-            //       description: nft.description,
-            //       numberOfEditions: Number(nft.editions),
-            //       generatedEditions: nft.generatedEditions,
-            //       properties,
-            //       royaltySplits,
-            //       selected: false,
-            //     });
-            //   }
-            // });
-            // setSavedNfts(newSavedNFTs);
           }
           setCollectionNFTsID(null);
         }

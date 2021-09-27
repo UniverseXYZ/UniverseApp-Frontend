@@ -1,11 +1,10 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import About from '../../components/homepage/About.jsx';
 import BuyUniverseNFTs from '../../components/homepage/BuyUniverseNFTs.jsx';
 import './Homepage.scss';
 import NonFungibleUniverse from '../../components/homepage/NonFungibleUniverse.jsx';
 import Welcome from '../../components/homepage/Welcome.jsx';
-import AppContext from '../../ContextAPI';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 
 const Homepage = () => {

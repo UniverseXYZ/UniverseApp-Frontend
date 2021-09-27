@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router';
-import AppContext from '../../ContextAPI';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 function AuthenticatedRoute({ children, ...restOfProps }) {

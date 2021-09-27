@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
@@ -9,7 +9,6 @@ import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuc
 import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction.jsx';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
-import AppContext from '../../ContextAPI';
 import CongratsLandingPagePopup from '../../components/popups/CongratsLandingPagePopup';
 import { RouterPrompt } from '../../utils/routerPrompt';
 import { useAuctionContext } from '../../contexts/AuctionContext';
@@ -144,7 +143,6 @@ const CustomizeAuction = () => {
       });
       if (loggedInArtist.name && loggedInArtist.avatar) {
         newAuction.artist = loggedInArtist;
-        // history.push('/my-auctions');
         setTimeout(() => {
           if (
             new Date() < new Date(newAuction.endDate) &&

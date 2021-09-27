@@ -1,15 +1,12 @@
-import React, { useRef, useState, useContext, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Animated } from 'react-animated-css';
 import Social from './Social';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
-import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import infoIcon from '../../assets/images/icon.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
-import AppContext from '../../ContextAPI';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const ProfileForm = ({
@@ -48,7 +45,6 @@ const ProfileForm = ({
 
   const validateFile = (file) => {
     if (!file) {
-      // setAccountImage(null);
       setErrors({
         previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
       });
@@ -59,7 +55,6 @@ const ProfileForm = ({
       setAccountImage(file);
       setErrors({ ...errors, previewImage: '' });
     } else {
-      // setAccountImage(null);
       setErrors({
         previewImage: 'File format must be PNG, WEBP, JPEG (Max Size: 30mb)',
       });
@@ -132,9 +127,6 @@ const ProfileForm = ({
               ref={accountInput}
               onChange={(e) => validateFile(e.target.files[0])}
             />
-            {/* {!accountImage && !loggedInArtist.avatar && (
-              <img className="default-img" src={defaultImage} alt="Avatar" />
-            )} */}
           </div>
         </div>
         <div className="account-grid-name-editing">
@@ -181,7 +173,6 @@ const ProfileForm = ({
                   : inputName
               }
               value={accountPage}
-              // hoverBoxShadowGradient
               onChange={(e) =>
                 e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
               }
@@ -209,11 +200,6 @@ const ProfileForm = ({
               <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
             )}
           </div>
-          {/* {accountName !== loggedInArtist.name ||
-          accountPage !== `universe.xyz/${loggedInArtist.universePageAddress}` ||
-          (accountImage &&
-            loggedInArtist.avatar &&
-            accountImage.name !== loggedInArtist.avatar.name) ? ( */}
           <div className="display-warning">
             <img alt="" src={warningIcon} />
             <p>
@@ -221,7 +207,6 @@ const ProfileForm = ({
               on the current running auctions landing pages.
             </p>
           </div>
-          {/* // ) : null} */}
           <Social
             twitterLink={twitterLink}
             setTwitterLink={setTwitterLink}

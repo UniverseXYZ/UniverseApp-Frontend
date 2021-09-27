@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './RewardTiers.scss';
@@ -10,7 +10,6 @@ import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
-import AppContext from '../../ContextAPI';
 import {
   isImage,
   isVideo,

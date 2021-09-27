@@ -1,23 +1,16 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import Skeleton from 'react-loading-skeleton';
 import SuccessPopup from '../popups/SuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import Button from '../button/Button.jsx';
-import collectionImg from '../../assets/images/collection-img.svg';
-import NFT3 from '../../assets/images/ntf3.svg';
-import NFT4 from '../../assets/images/ntf4.svg';
-import NFT6 from '../../assets/images/ntf6.svg';
 import doneIcon from '../../assets/images/Completed.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
-import LeavePopup from '../popups/LeavePopup';
-import AppContext from '../../ContextAPI';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
@@ -146,9 +139,6 @@ const FinalizeAuction = () => {
                   Proceed
                 </Button>
               )}
-              {/* <Popup trigger={<Button className="light-button">Proceed</Button>}>
-                {(close) => <LeavePopup onClose={close} />}
-              </Popup> */}
             </div>
           </div>
           {collections.length ? (
@@ -307,13 +297,8 @@ const FinalizeAuction = () => {
                         Deposit
                       </button>
                     ) : approvals > collections.length + 2 + tierIndex ? (
-                      // <Button className="light-border-button" disabled>
-                      //   Deposited
-                      //   <img className="checkmark" src={completedCheckmark} alt="Deposited" />
-                      // </Button>
                       <Button className="light-border-button">Withdraw</Button>
                     ) : (
-                      // <Button className="light-border-button">Withdraw</Button>
                       <Button className="light-button" disabled>
                         Deposit
                       </Button>

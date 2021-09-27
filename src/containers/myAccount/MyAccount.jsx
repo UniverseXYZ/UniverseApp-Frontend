@@ -1,11 +1,11 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
 import './MyAccount.scss';
 import Head from '../../components/myAccount/Head.jsx';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
-import { saveProfileInfo, saveUserImage, saveUserLogo } from '../../utils/api/profile.js';
+import { saveProfileInfo, saveUserImage } from '../../utils/api/profile.js';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../contexts/ErrorContext';

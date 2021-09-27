@@ -95,7 +95,6 @@ const NewTabs = (props) => {
                     key={index.toString()}
                     style={{
                       width: `${tabHeaderElemWidth}%`,
-                      // left: `-${leftPosition * index}px`,
                       left: '0',
                     }}
                     onMouseOver={() => {

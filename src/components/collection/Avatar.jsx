@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defaultColors, getCollectionBackgroundColor } from '../../utils/helpers';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const Avatar = ({ selectedCollection }) => (
   <div className="collection__image">

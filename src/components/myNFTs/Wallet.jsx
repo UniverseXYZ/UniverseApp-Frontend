@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import Lists from './Lists';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
-import Pagination from '../pagination/Pagionation.jsx';
-import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import '../pagination/Pagination.scss';
 import bubbleIcon from '../../assets/images/text-bubble.png';
@@ -19,7 +17,6 @@ import plusIcon from '../../assets/images/PlusIcon.png';
 import Input from '../input/Input';
 import searchIcon from '../../assets/images/search-gray.svg';
 import NFTCard from '../nft/NFTCard';
-import LoadMore from '../pagination/LoadMore';
 import SearchFilters from '../nft/SearchFilters';
 import { isImage, isAudio, isVideo, getNftImage } from '../../utils/helpers/pureFunctions/nfts';
 import { useAuctionContext } from '../../contexts/AuctionContext';
@@ -350,8 +347,6 @@ const Wallet = React.memo(
                       <img src={searchIcon} alt="icon" className="searchIcon" />
                     </div>
                   </div>
-
-                  {/* <Button className="filter" onClick={handleFiltersClick}>{`Filters ${collections.filter(col => col.selected).length !== 0 ? '('+collections.filter(col => col.selected).length+')' : ''}`}</Button> */}
                   <Button className="filter" onClick={handleFiltersClick}>
                     Filter by collection <img src={filterIcon} alt="Filter" />
                   </Button>

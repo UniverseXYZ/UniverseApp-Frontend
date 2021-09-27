@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './RarityLobsterList.scss';
 import uuid from 'react-uuid';
@@ -7,7 +7,6 @@ import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown';
 import '../../../containers/rarityCharts/RarityCharsLoader.scss';
 import '../../../containers/rarityCharts/RarityCharts.scss';
 import LobsterRarityChartsLoader from '../../../containers/rarityCharts/LobsterRarityChartsLoader';
-import RarityPagination from './RarityPagination';
 import LobsterCard from './LobsterCard';
 import SimplePagination from '../../pagination/SimplePaginations';
 

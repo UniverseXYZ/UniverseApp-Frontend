@@ -1,5 +1,5 @@
 import './UniverseNFTs.scss';
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import '../pagination/Pagination.scss';
 
@@ -9,13 +9,11 @@ import { categoriesArray } from '../../containers/rarityCharts/categories';
 import LobsterRarityList from '../rarityCharts/list/LobsterRarityList';
 import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useLobsterContext } from '../../contexts/LobsterContext';
 
 const MyLobstersChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { userLobsters } = useLobsterContext();
   const { setDarkMode } = useThemeContext();
-  console.log(userLobsters);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
   const [searchText, setSearchText] = useState('');

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { utils } from 'ethers';
 import Tabs from '../tabs/Tabs';
@@ -8,9 +7,7 @@ import '../polymorphs/scramble/styles/PolymorphScramblePopup.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import ethIcon from '../../assets/images/eth.svg';
 import SelectComponent from '../select/SelectComponent';
-import AppContext from '../../ContextAPI';
 import { getPolymorphMeta } from '../../utils/api/polymorphs.js';
-import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 import { convertPolymorphObjects } from '../../utils/helpers/polymorphs';
 import { usePolymorphContext } from '../../contexts/PolymorphContext';
 

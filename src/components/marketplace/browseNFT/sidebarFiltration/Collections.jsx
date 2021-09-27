@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
-import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
 import collectionIcon from '../../../../assets/images/marketplace/collections.svg';
 import { PLACEHOLDER_MARKETPLACE_COLLECTIONS } from '../../../../utils/fixtures/BrowseNFTsDummyData';

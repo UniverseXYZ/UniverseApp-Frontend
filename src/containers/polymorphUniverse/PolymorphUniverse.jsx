@@ -4,7 +4,6 @@ import HeroSection from '../../components/polymorphUniverse/heroSection/HeroSect
 import './PolymorphUniverse.scss';
 import Section4 from '../../components/polymorphs/Section4';
 import LatestFeaturesSection from '../../components/polymorphUniverse/latestFeaturesSection/LatestFeaturesSection';
-// import '../polymorphs/Polymorphs.scss';
 import BurnPolymorphBg from '../../assets/images/BurnPolymorphBg.png';
 import Section4LeftBackground from '../../assets/images/Section4GroupImage.png';
 import BattlePolymorphSection from '../../components/polymorphUniverse/battlePolymorphSection/BattlePolymorphSection';

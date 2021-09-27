@@ -58,13 +58,6 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   return (
     <div className="active-auctions">
       <div className="input-search">
-        {/* {searchByName ? (
-          <button type="button" onClick={() => setSearchByName('')}>
-            Clear
-          </button>
-        ) : (
-          <></>
-        )} */}
         <div className="input--section">
           <Input
             className="searchInp"

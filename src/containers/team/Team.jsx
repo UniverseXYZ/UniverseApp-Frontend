@@ -1,9 +1,8 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import UniverseContributors from '../../components/team/UniverseContributors.jsx';
 import UniverseCreators from '../../components/team/UniverseCreators.jsx';
 import Welcome from '../../components/team/Welcome.jsx';
-import AppContext from '../../ContextAPI';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import './Team.scss';
 

@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Calendar.scss';
 import uuid from 'react-uuid';
-import moment from 'moment';
 import arrow from '../../assets/images/arrow.svg';
 import closeIcon from '../../assets/images/cross.svg';
-import arrowDown from '../../assets/images/arrow-down.svg';
 import Button from '../button/Button.jsx';
 
 const EndDateCalendar = React.forwardRef(
@@ -15,35 +13,7 @@ const EndDateCalendar = React.forwardRef(
   ) => {
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    const timezones = [
-      'GMT -12:00',
-      'GMT -11:00',
-      'GMT -10:00',
-      'GMT -09:00',
-      'GMT -08:00',
-      'GMT -07:00',
-      'GMT -06:00',
-      'GMT -05:00',
-      'GMT -04:00',
-      'GMT -03:00',
-      'GMT -02:00',
-      'GMT -01:00',
-      'GMT +00:00',
-      'GMT +01:00',
-      'GMT +02:00',
-      'GMT +03:00',
-      'GMT +04:00',
-      'GMT +05:00',
-      'GMT +06:00',
-      'GMT +07:00',
-      'GMT +08:00',
-      'GMT +09:00',
-      'GMT +10:00',
-      'GMT +11:00',
-      'GMT +12:00',
-    ];
     const [currentMonth, setCurrentMonth] = useState([]);
-    const [showTimezones, setShowTimezones] = useState(false);
     const [selectedDate, setSelectedDate] = useState({
       year: values.endDate ? Number(values.endDate.toString().split(' ')[3]) : d.getFullYear(),
       month: values.endDate
@@ -200,13 +170,6 @@ const EndDateCalendar = React.forwardRef(
       }
     };
 
-    const handleFormatClick = (val) => {
-      setEndDateTemp((prevState) => ({
-        ...prevState,
-        format: val,
-      }));
-    };
-
     useEffect(() => {
       if (!values.endDate && values.startDate) {
         setEndDateTemp((prevState) => ({
@@ -321,45 +284,9 @@ const EndDateCalendar = React.forwardRef(
             <div className="timezone">
               <div className="label">Select time</div>
               <div className="selected__timezone" aria-hidden="true">
-                {/* {endDateTemp.timezone}
-                <img src={arrowDown} alt="Arrow Down" className={showTimezones ? 'rotate' : ''} />
-                {showTimezones && (
-                  <ul>
-                    {timezones.map((tz) => (
-                      <li
-                        key={uuid()}
-                        aria-hidden="true"
-                        onClick={() =>
-                          setEndDateTemp((prevState) => ({
-                            ...prevState,
-                            timezone: tz,
-                          }))
-                        }
-                      >
-                        {tz}
-                      </li>
-                    ))}
-                  </ul>
-                )} */}
                 Your time zone is UTC+3
               </div>
             </div>
-            {/* <div className="time__format">
-              <div
-                className={endDateTemp.format === 'AM' ? 'selected' : ''}
-                aria-hidden="true"
-                onClick={() => handleFormatClick('AM')}
-              >
-                AM
-              </div>
-              <div
-                className={endDateTemp.format === 'PM' ? 'selected' : ''}
-                aria-hidden="true"
-                onClick={() => handleFormatClick('PM')}
-              >
-                PM
-              </div>
-            </div> */}
             <div className="time">
               <input
                 type="text"

@@ -1,25 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
 import Blockies from 'react-blockies';
-import AppContext from '../../../../ContextAPI';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
-import SubscribePopup from '../../../popups/SubscribePopup.jsx';
-import Icon from '../../../../assets/images/icon1.svg';
 import copyIcon from '../../../../assets/images/copy.svg';
 import arrowUP from '../../../../assets/images/arrow-down.svg';
 import Group1 from '../../../../assets/images/Group1.svg';
-import Group2 from '../../../../assets/images/Group2.svg';
 import auctionHouseIcon from '../../../../assets/images/auction-house.svg';
 import marketplaceIcon from '../../../../assets/images/nft-marketplace.svg';
 import socialMediaIcon from '../../../../assets/images/social-media.svg';
 import polymorphsIcon from '../../../../assets/images/polymorphs.svg';
 import coreDropsIcon from '../../../../assets/images/core-drops.svg';
 import lobbyLobstersIcon from '../../../../assets/images/lobby-lobsters.svg';
-import rarityChartIcon from '../../../../assets/images/rarity-chart.svg';
 import navChartIcon from '../../../../assets/images/chart-nav-icon.svg';
 import aboutIcon from '../../../../assets/images/about.svg';
 import whitepaperIcon from '../../../../assets/images/whitepaper.svg';
@@ -340,19 +335,6 @@ const DesktopView = ({
                 <button
                   type="button"
                   onClick={() => {
-                    // if (
-                    //   loggedInArtist.name &&
-                    //   loggedInArtist.universePageAddress &&
-                    //   loggedInArtist.avatar &&
-                    //   loggedInArtist.about &&
-                    //   editProfileButtonClick
-                    // ) {
-                    //   history.push(`/${loggedInArtist.universePageAddress}`, {
-                    //     id: loggedInArtist.id,
-                    //   });
-                    // } else {
-                    //   history.push('/my-account');
-                    // }
                     history.push('/my-account');
                     setIsAccountDropdownOpened(false);
                   }}
@@ -397,15 +379,6 @@ const DesktopView = ({
           </li>
         ) : (
           <li>
-            {/* <Popup
-              trigger={
-                <button type="button" className="sign__in">
-                  Join newsletter
-                </button>
-              }
-            >
-              {(close) => <SubscribePopup close={close} />}
-            </Popup> */}
             <Popup
               trigger={
                 <button type="button" className="sign__in">

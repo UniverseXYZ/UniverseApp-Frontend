@@ -1,17 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import './CreateTiers.scss';
 import '../auctions/Tiers.scss';
 import Wallet from '../myNFTs/Wallet';
 import '../myNFTs/MyNFTs.scss';
 import arrow from '../../assets/images/arrow.svg';
-import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
-// import UniverseNFTs from '../myNFTs/UniverseNFTs';
 
 const Create = () => {
   const history = useHistory();
@@ -97,18 +94,6 @@ const Create = () => {
     } else {
       setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
     }
-  };
-
-  const handleClick = () => {
-    setIsValidFields((prevValues) => ({ ...prevValues, name: values.name.trim().length !== 0 }));
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
-      winners: values.winners.trim().length !== 0,
-    }));
-    setIsValidFields((prevValues) => ({
-      ...prevValues,
-      nftsPerWinner: values.nftsPerWinner.trim().length !== 0,
-    }));
   };
 
   return (
@@ -287,16 +272,6 @@ const Create = () => {
           nftsPerWinner={Number(values.nftsPerWinner)}
           minBidValue={minBidValue}
         />
-        {/* <UniverseNFTs
-          filteredNFTs={filteredNFTs}
-          setFilteredNFTs={setFilteredNFTs}
-          selectedNFTIds={selectedNFTIds}
-          setSelectedNFTIds={setSelectedNFTIds}
-          tierName={values.name}
-          winners={Number(values.winners)}
-          nftsPerWinner={Number(values.nftsPerWinner)}
-          minBidValue={minBidValue}
-        /> */}
       </div>
     </>
   );
