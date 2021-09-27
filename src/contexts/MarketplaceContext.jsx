@@ -8,9 +8,58 @@ const MarketplaceContextProvider = ({ children }) => {
   const location = useLocation();
 
   const [stepsData, setStepsData] = useState({
+    selectedItem: null,
     selectedMethod: null,
     settings: null,
     summary: null,
+  });
+  const [sellNFTSingleFixedListingData, setSellNFTSingleFixedListingData] = useState({
+    startPrice: null,
+    priceType: 'eth',
+    switch: [],
+    buyerAddress: null,
+  });
+  const [sellNFTBundleFixedListingData, setSellNFTBundleFixedListingData] = useState({
+    startPrice: null,
+    priceType: 'eth',
+    bundleName: null,
+    bundleDescription: null,
+    switch: [],
+    buyerAddress: null,
+  });
+  const [sellNFTSingleDutchAuctionData, setSellNFTSingleDutchAuctionData] = useState({
+    priceType: 'eth',
+    startPrice: null,
+    endPrice: null,
+    switch: [],
+    buyerAddress: null,
+    endingPriceDate: '',
+    scheduleDate: '',
+  });
+  const [sellNFTBundleDutchAuctionData, setSellNFTBundleDutchAuctionData] = useState({
+    priceType: 'eth',
+    startPrice: null,
+    endPrice: null,
+    switch: [],
+    buyerAddress: null,
+    endingPriceDate: '',
+    scheduleDate: '',
+    bundleName: null,
+    bundleDescription: null,
+  });
+  const [sellNFTSingleEnglishAuctionData, setSellNFTSingleEnglishAuctionData] = useState({
+    startPrice: null,
+    endPrice: null,
+    date: null,
+    priceType: 'eth',
+  });
+  const [sellNFTBundleEnglishAuctionData, setSellNFTBundleEnglishAuctionData] = useState({
+    startPrice: null,
+    endPrice: null,
+    date: null,
+    priceType: 'eth',
+    bundleName: null,
+    bundleDescription: null,
   });
 
   useEffect(() => {
@@ -31,6 +80,18 @@ const MarketplaceContextProvider = ({ children }) => {
       value={{
         stepsData,
         setStepsData,
+        sellNFTSingleFixedListingData,
+        setSellNFTSingleFixedListingData,
+        sellNFTBundleFixedListingData,
+        setSellNFTBundleFixedListingData,
+        sellNFTSingleDutchAuctionData,
+        setSellNFTSingleDutchAuctionData,
+        sellNFTBundleDutchAuctionData,
+        setSellNFTBundleDutchAuctionData,
+        sellNFTSingleEnglishAuctionData,
+        setSellNFTSingleEnglishAuctionData,
+        sellNFTBundleEnglishAuctionData,
+        setSellNFTBundleEnglishAuctionData,
       }}
     >
       {children}

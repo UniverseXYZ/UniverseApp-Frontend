@@ -67,7 +67,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => moment(item.endDate).isBefore(moment.now()))
+        .filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
         .map((pastAuction, index) => (
           <div className="auction past-auction" key={pastAuction.id}>
             <div className="auction-header">

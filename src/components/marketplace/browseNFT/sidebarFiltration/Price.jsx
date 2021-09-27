@@ -6,7 +6,7 @@ import InputRange from 'react-input-range';
 import Button from '../../../button/Button';
 import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import AppContext from '../../../../ContextAPI';
-import ethereumIcon from '../../../../assets/images/bid_icon.svg';
+import ethereumIcon from '../../../../assets/images/eth-icon.svg';
 import daiIcon from '../../../../assets/images/dai_icon.svg';
 import usdcIcon from '../../../../assets/images/usdc_icon.svg';
 import bondIcon from '../../../../assets/images/bond_icon.svg';

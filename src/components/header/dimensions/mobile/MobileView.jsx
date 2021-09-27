@@ -94,6 +94,9 @@ const MobileView = (props) => {
   const [showRarityCharts, setShowRarityCharts] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showDAO, setShowDAO] = useState(false);
+  const rarityChartsRef = useRef(null);
+  const infoRef = useRef(null);
+  const daoRef = useRef(null);
 
   const handleSearchKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -151,6 +154,25 @@ const MobileView = (props) => {
     setIsAccountDropdownOpened(!isAccountDropdownOpened);
     setShowMenu(false);
   };
+
+  useEffect(() => {
+    if (showRarityCharts) {
+      rarityChartsRef.current.scrollIntoView();
+    }
+  }, [showRarityCharts]);
+
+  useEffect(() => {
+    if (showInfo) {
+      rarityChartsRef.current.scrollIntoView();
+    }
+  }, [showInfo]);
+
+  useEffect(() => {
+    if (showDAO) {
+      rarityChartsRef.current.scrollIntoView();
+    }
+  }, [showDAO]);
+
   return (
     <div className="mobile__nav">
       {/* <button
@@ -621,7 +643,7 @@ const MobileView = (props) => {
                         <></>
                       )}
                     </div>
-                    <div>
+                    <div ref={rarityChartsRef}>
                       <div
                         className="head"
                         aria-hidden="true"
@@ -649,10 +671,12 @@ const MobileView = (props) => {
                             </button>
                           </div>
                           <div>
-                            <button type="button" className="disable">
+                            <button
+                              type="button"
+                              onClick={() => window.open('https://rarity.tools/lobby-lobsters')}
+                            >
                               <img src={navChartIcon} alt="Lobby Lobsters" />
                               <span>Lobby Lobsters</span>
-                              <span className="tooltiptext">Coming soon</span>
                             </button>
                           </div>
                         </>
@@ -660,7 +684,7 @@ const MobileView = (props) => {
                         <></>
                       )}
                     </div>
-                    <div>
+                    <div ref={infoRef}>
                       <div
                         className="head"
                         aria-hidden="true"
@@ -721,7 +745,7 @@ const MobileView = (props) => {
                         <></>
                       )}
                     </div>
-                    <div>
+                    <div ref={daoRef}>
                       <div className="head" aria-hidden="true" onClick={() => setShowDAO(!showDAO)}>
                         <p className="title">DAO</p>
                         <img className={showDAO ? 'rotate' : ''} src={arrowDown} alt="arrow" />

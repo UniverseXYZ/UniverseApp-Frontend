@@ -34,6 +34,7 @@ import bordergradient from '../../assets/images/border-gradient.svg';
 import priceIcon from '../../assets/images/ETHiconupd.png';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
+import threedotsIcon from '../../assets/images/marketplace/3-dots.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import closeIcon from '../../assets/images/marketplace/close.svg';
 import bundlesIcon from '../../assets/images/marketplace/bundles.svg';
@@ -43,11 +44,13 @@ import likerTestImage from '../../assets/images/marketplace/users/user1.png';
 import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 
-const MarketplaceNFTDetails = ({ data, onNFT }) => {
+const MarketplaceNFTDetails = ({ data, onNFT, placeholderData }) => {
   const [nfts, setNFTs] = useState(data);
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { loggedInArtist, deployedCollections } = useAuthContext();
+  const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
   const [selectedNFT, setSelectedNFT] = useState(onNFT);
   const collection = selectedNFT.collection
     ? deployedCollections.filter((c) => c.name === selectedNFT.collection?.name)[0]
@@ -321,9 +324,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   }, [onNFT]);
 
   const handleSelectedNFTLikeClick = (id) => {
-    const newNFTs = [...myNFTs];
-    console.log('id', id);
-    console.log('myNFTs', myNFTs);
+    const newNFTs = placeholderData ? [...dummyData] : [...myNFTs];
     newNFTs.forEach((item) => {
       if (item.id === id) {
         if (!item.likers.length) {
@@ -346,7 +347,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
         }
       }
     });
-    setMyNFTs(newNFTs);
+    if (placeholderData) {
+      setDummyData(newNFTs);
+    } else {
+      setMyNFTs(newNFTs);
+    }
     // setSelectedNFT({
     //   ...selectedNFT,
     //   likesCount: selectedNFT.liked ? selectedNFT.likesCount - 1 : selectedNFT.likesCount + 1,
@@ -924,7 +929,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       </div>
                     </div>
                   </div>
-                  <span>{selectedNFT.likers.length}</span>
+                  <span className={selectedNFT.likers.length ? 'redlike' : 'like-count'}>
+                    {selectedNFT.likers.length}
+                  </span>
                 </div>
               </div> */}
               {/* <div
@@ -933,7 +940,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 onClick={() => setIsDropdownOpened(!isDropdownOpened)}
                 aria-hidden="true"
               >
-                <span className="selected__item">...</span>
+                <div className="selected__item">
+                  <span />
+                  <span />
+                  <span />
+                </div>
                 {isDropdownOpened && (
                   <div className="sort__share__dropdown">
                     {selectedNFT.view === 'user' ? (
@@ -1058,14 +1069,14 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 )}
                 {selectedTabIndex === 1 && <Owners />}
                 {selectedTabIndex === 2 && <Bids />}
-                {selectedTabIndex === 3 && <Offers />}
+                {selectedTabIndex === 3 && <Offers view={selectedNFT.view} />}
                 {selectedTabIndex === 4 && <TradingHistory />}
               </>
             ) : (
               <>
                 {selectedTabIndex === 0 && <NFTs data={selectedNFT.tokenIds} />}
                 {selectedTabIndex === 1 && <Bids />}
-                {selectedTabIndex === 2 && <Offers />}
+                {selectedTabIndex === 2 && <Offers view={selectedNFT.view} />}
                 {selectedTabIndex === 3 && <TradingHistory />}
               </>
             )}
@@ -1075,7 +1086,24 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               highestBid={highestBid}
               firstButtonText="Place a bid"
               secondButtonText="Make offer"
-              auctionLeftTime="1d: 4h : 20m : 30s"
+              auctionLeftTime="1d : 4h : 20m : 30s"
+              infotext="(10% of sales will go to creator)"
+            />
+          ) : selectedNFT.viewAction === 'Change price' ? (
+            <BuyNFTSection
+              highestBid={highestBid}
+              firstButtonText="Change price"
+              secondButtonText="Cancel listing"
+              auctionLeftTime="1d : 4h : 20m : 30s"
+              infotext="(This NFT is on your wallet)"
+            />
+          ) : selectedNFT.viewAction === 'Lower price' ? (
+            <BuyNFTSection
+              highestBid={highestBid}
+              firstButtonText="Lower price"
+              secondButtonText="Cancel listing"
+              auctionLeftTime="1d : 4h : 20m : 30s"
+              infotext="(This NFT is on your wallet)"
             />
           ) : (
             <div className="theunveiling" style={{ paddingBottom: '0px' }}>
@@ -1123,9 +1151,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 MarketplaceNFTDetails.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array]),
   onNFT: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  placeholderData: PropTypes.bool,
 };
 
 MarketplaceNFTDetails.defaultProps = {
   data: [],
+  placeholderData: false,
 };
 export default MarketplaceNFTDetails;
