@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
-import Popup from 'reactjs-popup';
 import Skeleton from 'react-loading-skeleton';
 import { Animated } from 'react-animated-css';
-import videoIcon from '../../../../assets/images/video-icon.svg';
-import NFTPopup from '../../../popups/NFTPopup';
 import NFTCard from '../../../nft/NFTCard';
 
 const NFTsList = ({ data, perPage, offset }) => {

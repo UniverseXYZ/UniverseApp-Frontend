@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import AppContext from '../../ContextAPI';
 import Button from '../button/Button.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
@@ -24,7 +22,6 @@ const Head = () => {
   };
 
   return (
-    // <div className="my-account">
     <div className="my-account-title container">
       <div>
         <h1>Edit my profile</h1>
@@ -39,7 +36,6 @@ const Head = () => {
         personal settings.
       </p>
     </div>
-    // </div>
   );
 };
 export default Head;

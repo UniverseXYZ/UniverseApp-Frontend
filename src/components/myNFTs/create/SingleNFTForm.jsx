@@ -1,30 +1,21 @@
 /* eslint-disable no-debugger */
-import React, { useRef, useState, useEffect, useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { Animated } from 'react-animated-css';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useLocation } from 'react-router-dom';
 import { Contract } from 'ethers';
 import './CreateSingleNft.scss';
-import EthereumAddress from 'ethereum-address';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
-import AppContext from '../../../ContextAPI';
 import LoadingPopup from '../../popups/LoadingPopup.jsx';
 import CongratsPopup from '../../popups/CongratsPopup.jsx';
-import AreYouSurePopup from '../../popups/AreYouSurePopup';
-import arrow from '../../../assets/images/arrow.svg';
 import infoIcon from '../../../assets/images/icon.svg';
-import defaultImage from '../../../assets/images/default-img.svg';
 import deleteIcon from '../../../assets/images/delred-icon.svg';
 import mp3Icon from '../../../assets/images/mp3-icon.png';
 import addIcon from '../../../assets/images/Add.svg';
 import cloudIcon from '../../../assets/images/gray_cloud.svg';
-import createIcon from '../../../assets/images/create.svg';
 import closeIcon from '../../../assets/images/cross-sidebar.svg';
 import redIcon from '../../../assets/images/red-msg.svg';
-
 import {
   saveNftForLater,
   saveNftImage,
@@ -40,13 +31,11 @@ import {
   parsePropertiesForFrontEnd,
   formatRoyaltiesForMinting,
 } from '../../../utils/helpers/contractInteraction';
-import SuccessPopup from '../../popups/SuccessPopup.jsx';
 import { RouterPrompt } from '../../../utils/routerPrompt';
 import { parseDataForBatchMint } from '../../../utils/helpers/pureFunctions/minting';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
-import { getCollectionBackgroundColor } from '../../../utils/helpers';
 import CollectionChoice from './CollectionChoice';
 
 const SingleNFTForm = () => {
@@ -89,7 +78,6 @@ const SingleNFTForm = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
-  const [percentAmount, setPercentAmount] = useState('');
   const [royalities, setRoyalities] = useState(true);
   const [propertyCheck, setPropertyCheck] = useState(true);
   const inputFile = useRef(null);
@@ -100,22 +88,14 @@ const SingleNFTForm = () => {
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
-  const [amountSum, setAmountSum] = useState(0);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
+
   useEffect(() => {
     setSelectedCollection(universeCollection);
   }, [universeCollection]);
-
-  const handleInputChange = (val) => {
-    if (!val || val.match(/^\d{1,}(\.\d{0,4})?$/)) {
-      if (val <= 100) {
-        setPercentAmount(val);
-      }
-    }
-  };
 
   const removeProperty = (index) => {
     const temp = [...properties];
@@ -170,14 +150,6 @@ const SingleNFTForm = () => {
     );
     if (result <= 100 && val >= 0) {
       setRoyaltyAddress(newProperties);
-    }
-  };
-
-  const handleCloseCongratsPopup = (close) => {
-    if (location.pathname === '/create-tiers/my-nfts/create') {
-      closeCongratsPopupEvent();
-    } else {
-      close();
     }
   };
 
@@ -582,11 +554,6 @@ const SingleNFTForm = () => {
             />
           )}
         </Popup>
-        {/* <div className="back-nft" onClick={() => onClick(null)} aria-hidden="true">
-        <img src={arrow} alt="back" />
-        <span>Create NFT</span>
-      </div> */}
-        {/* <h2 className="single-nft-title">{!savedNFTsID ? 'Single NFT settings' : 'Edit NFT'}</h2> */}
         <div className="single-nft-content">
           <div className="single-nft-upload">
             <h5>Upload file</h5>
@@ -677,61 +644,6 @@ const SingleNFTForm = () => {
                 </div>
               )}
             </div>
-            {/* {previewImage ? (
-              <div className="single-nft-preview">
-                <img
-                  className="close"
-                  src={closeIcon}
-                  alt="Close"
-                  onClick={() => setPreviewImage(null)}
-                  aria-hidden="true"
-                />
-                <div className="single-nft-picture">
-                  <div className="preview__image">
-                    {previewImage.type === 'video/mp4' && (
-                      <video>
-                        <source src={getPreviewImageSource(previewImage)} type="video/mp4" />
-                        <track kind="captions" />
-                        Your browser does not support the video tag.
-                      </video>
-                    )}
-                    {previewImage.type === 'audio/mpeg' && (
-                      <img className="preview-image" src={mp3Icon} alt="Preview" />
-                    )}
-                    {previewImage.type !== 'audio/mpeg' && previewImage.type !== 'video/mp4' && (
-                      <img
-                        className="preview-image"
-                        src={getPreviewImageSource(previewImage)}
-                        alt="Preview"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div
-                className={
-                  errors.previewImage ? 'single-nft-upload-file error' : 'single-nft-upload-file'
-                }
-              >
-                <div className="single-nft-drop-file">
-                  <img src={cloudIcon} alt="Cloud" />
-                  <h5>Drop your file here</h5>
-                  <p>
-                    <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span> <span>max 30mb)</span>
-                  </p>
-                  <Button className="light-button" onClick={() => inputFile.current.click()}>
-                    Choose file
-                  </Button>
-                  <input
-                    type="file"
-                    className="inp-disable"
-                    ref={inputFile}
-                    onChange={(e) => validateFile(e.target.files[0])}
-                  />
-                </div>
-              </div>
-            )} */}
           </div>
           {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
           <div className="single-nft-name">
@@ -786,25 +698,7 @@ const SingleNFTForm = () => {
           </div>
           <div className="single-nft-choose-collection">
             <h4>Choose collection</h4>
-            {/* {deployedCollections.length ? <h4>Choose collection</h4> : <></>} */}
-            {/* {!deployedCollections.length && !savedNFTsID ? <h4>Choose collection</h4> : <></>} */}
             <div className="choose__collection">
-              {/* {!savedNFTsID && ( */}
-              {/* <Popup
-                  trigger={
-                    <div className="collection-box">
-                      <div className="create">
-                        <img aria-hidden="true" src={createIcon} alt="Create Icon" />
-                        <h5>Create</h5>
-                        <p>ERC-721</p>
-                      </div>
-                      <div className="box--shadow--effect--block" />
-                    </div>
-                  }
-                >
-                  {(close) => <CreateCollectionPopup onClose={close} />}
-                </Popup> */}
-              {/* )} */}
               {universeCollection && (
                 <CollectionChoice
                   selectedCollection={selectedCollection}

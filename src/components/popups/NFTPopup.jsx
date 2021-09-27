@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
 import closeIcon from '../../assets/images/close-menu.svg';
-import AppContext from '../../ContextAPI';
 import buyerImage from '../../assets/images/nft-buyer.png';
 import hrefIcon from '../../assets/images/href.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';

@@ -1,17 +1,14 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
 import EthereumAddress from 'ethereum-address';
-import arrow from '../../assets/images/arrow.svg';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import delIcon from '../../assets/images/red-delete.svg';
-import AppContext from '../../ContextAPI';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 import Button from '../button/Button.jsx';
@@ -21,10 +18,8 @@ import addIcon from '../../assets/images/Add.svg';
 import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
-import { useAuthContext } from '../../contexts/AuthContext';
 
 const AuctionSettings = () => {
-  // const d = new Date();
   const monthNames = [
     'Jan',
     'Feb',
@@ -39,7 +34,6 @@ const AuctionSettings = () => {
     'Nov',
     'Dec',
   ];
-  const [searchByNameAndAddress, setsearchByNameAndAddress] = useState('');
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
@@ -48,28 +42,12 @@ const AuctionSettings = () => {
 
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
-  const [hideIcon2, setHideIcon2] = useState(false);
-  const [openList, setOpenList] = useState(true);
   const [minBid, setMinBId] = useState(false);
-  const [showStartDate, setShowStartDate] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
   const [errorArray, setErrorArray] = useState([]);
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
   const [dropDown, setDropDown] = useState('');
-  const [auctionNameFocusField, setAuctionNameFocusField] = useState('');
-  const [startingBidFocusField, setStartingBidFocusField] = useState('');
-  const [walletAddressFocusField, setWalletAddressFocusField] = useState('');
-  const [percentAmountFocusField, setPercentAmountFocusField] = useState('');
-  const [focusField, setFocusField] = useState('');
-
-  const handleSearch = (value) => {
-    setsearchByNameAndAddress(value);
-  };
-
-  const handleEdit = () => {
-    document.body.classList.add('no__scroll');
-  };
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
@@ -131,21 +109,6 @@ const AuctionSettings = () => {
     }
   }, [values, properties]);
 
-  const handleShow = () => {
-    setOpenList(!openList);
-    if (openList) {
-      setDropDown('active');
-    } else {
-      setDropDown('');
-    }
-  };
-  const handleChange = (key) => {
-    setBidtype(key);
-    setOpenList(true);
-  };
-  const handeClick = (e) => {
-    setMinBId(e.target.checked);
-  };
   const bid = options.find((element) => element.value === bidtype);
 
   const handleAddAuction = () => {
@@ -221,11 +184,6 @@ const AuctionSettings = () => {
     setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
   };
 
-  const handleBidChange = (event, index) => {
-    bidValues[index] = +event.target.value;
-    setBidValues(bidValues);
-  };
-
   const addProperty = () => {
     const prevProperties = [...properties];
     const temp = { address: '', amount: '' };
@@ -234,7 +192,6 @@ const AuctionSettings = () => {
   };
 
   const propertyChangesAddress = (index, val) => {
-    // token.address.trim().length !== 0 && EthereumAddress.isAddress(token.address),
     const prevProperties = [...properties];
     prevProperties[index].address = val;
     setProperties(prevProperties);
@@ -278,13 +235,6 @@ const AuctionSettings = () => {
         startDate: new Date(auction.startDate),
         endDate: new Date(auction.endDate),
       });
-      // setBidValues(
-      //   auction.rewardTiers.reduce((acc, currentTier) => {
-      //     acc[currentTier.id] = currentTier.minBid;
-      //     return acc;
-      //   }),
-      //   {}
-      // );
     } else if (!isEditingAuction && auction.id) {
       setAuction({ tiers: [] });
     }
@@ -303,11 +253,6 @@ const AuctionSettings = () => {
 
   return (
     <div className="auction-settings container">
-      {/* <div className="back-rew" onClick={() => history.push('/reward-tiers')} aria-hidden="true">
-        <img src={arrow} alt="back" />
-        <span>My auctions</span>
-      </div> */}
-
       <div>
         <div className="head-part">
           <h2 className="tier-title">Auction settings</h2>
@@ -342,11 +287,6 @@ const AuctionSettings = () => {
                 />
 
                 <div className="drop-down">
-                  {/* <button type="button" className={dropDown} onClick={() => handleShow()}>
-                    {bid.img && <img src={bid.img} alt="icon" />}
-                    <span className="button-name">{bid.name}</span>
-                    <img src={arrowDown} alt="arrow" />
-                  </button> */}
                   <Popup
                     nested
                     handleEdit
@@ -393,7 +333,6 @@ const AuctionSettings = () => {
                           className="callendar__image"
                           src={callendarIcon}
                           alt="Callendar"
-                          // onClick={() => setShowStartDate(true)}
                         />
                       </div>
                     }
@@ -442,7 +381,6 @@ const AuctionSettings = () => {
                           className="callendar__image"
                           src={callendarIcon}
                           alt="Callendar"
-                          // onClick={() => setShowStartDate(true)}
                         />
                       </div>
                     }

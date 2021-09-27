@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../pagination/Pagination.scss';
 import './UniverseNFTs.scss';
 import MyPolymorphsChart from './MyPolymorphsChart';

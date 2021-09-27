@@ -105,7 +105,6 @@ const BrowseFilterPopup = ({
           setSavedCollections={setSavedCollections}
         />
         <Creators savedCreators={savedCreators} setSavedCreators={setSavedCreators} />
-        {/* <VerifiedOnly /> */}
       </div>
       <div className="show--results">
         <button type="button" className="light-button">

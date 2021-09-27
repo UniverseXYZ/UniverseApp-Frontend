@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './NFTMarketplace.scss';
 import { useLocation } from 'react-router-dom';
 import NewTabs from '../../components/tabs/NewTabs.jsx';

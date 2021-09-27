@@ -1,8 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-cond-assign */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
 import './AuctionReview.scss';
@@ -19,7 +18,6 @@ import yellowIcon from '../../assets/images/yellowIcon.svg';
 import videoIcon from '../../assets/images/video-icon.svg';
 import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
-import AppContext from '../../ContextAPI';
 import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
 import {
@@ -27,7 +25,6 @@ import {
   isVideo,
   isAudio,
   getNftImage,
-  getNftColletionImage,
   getEditionsCount,
 } from '../../utils/helpers/pureFunctions/nfts';
 import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
@@ -294,14 +291,6 @@ const AuctionReview = () => {
                       </h4>
                     </div>
                   </div>
-                  {/* <Button
-                  className="light-border-button"
-                  onClick={() => {
-                    history.push('/create-tiers', 1);
-                  }}
-                >
-                  Edit <img src={pencil} alt="edit-icon" />
-                </Button> */}
                 </div>
               </div>
             </div>

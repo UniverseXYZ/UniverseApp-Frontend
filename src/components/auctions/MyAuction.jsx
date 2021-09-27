@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import moment from 'moment';
-import AppContext from '../../ContextAPI';
 import Exclamation from '../../assets/images/Exclamation.svg';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import bubleIcon from '../../assets/images/text-bubble.png';
@@ -14,7 +13,7 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const MyAuction = () => {
-  const { myAuctions, setMyAuctions, auction, setAuction, selectedTabIndex, setSelectedTabIndex } =
+  const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex } =
     useAuctionContext();
   const { loggedInArtist } = useAuthContext();
 
@@ -43,27 +42,8 @@ const MyAuction = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   useEffect(() => {
-    // if (auction.rewardTiers.length) {
-    //   setMyAuctions((prevValues) => {
-    //     let foundAuction = false;
-
-    //     const modifiedMyAuctions = prevValues.map((myAuction) => {
-    //       if (myAuction.id === auction.id) {
-    //         foundAuction = true;
-    //         return { ...auction };
-    //       }
-    //       return myAuction;
-    //     });
-
-    //     if (foundAuction) {
-    //       return modifiedMyAuctions;
-    //     }
-    //     return [...modifiedMyAuctions, auction];
-    //   });
-
-    //   setAuction({ tiers: [] });
-    // }
     function handleShowButton() {
       if (window.innerWidth < 576) {
         if (selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length) {

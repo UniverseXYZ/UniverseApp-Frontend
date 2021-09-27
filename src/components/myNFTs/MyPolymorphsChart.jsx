@@ -1,10 +1,7 @@
 import './UniverseNFTs.scss';
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import '../pagination/Pagination.scss';
-
-import RarityFilters from '../rarityCharts/filters/RarityFilters';
-import AppContext from '../../ContextAPI';
 import '../../containers/rarityCharts/PolymorphRarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
@@ -13,7 +10,6 @@ import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
-import { usePolymorphContext } from '../../contexts/PolymorphContext';
 
 const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
@@ -36,7 +32,6 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
     isLastPage,
     setIsLastPage,
   } = useSearchPolymorphs();
-  const [userPolymorphs, setUserPolymorphs] = useState(results);
   const [categories, setCategories] = useState(categoriesArray);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
 

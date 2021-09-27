@@ -1,32 +1,17 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/cross.svg';
 import Button from '../button/Button.jsx';
-import AppContext from '../../ContextAPI';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const SetUpPopup = ({ onClose, onAuctionId }) => {
-  const { auction, setAuction, myAuctions, setMyAuctions, options, setOptions } =
-    useAuctionContext();
+  const { myAuctions } = useAuctionContext();
   const auction1 = myAuctions.find((element) => element.id === onAuctionId);
-
-  const handleTokenChange = (event) => {
-    setToken((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
-    setToken((prevValues) => ({ ...prevValues, value: token.name }));
-  };
-  const handleAddToken = () => {
-    if (token.name && token.address && token.subtitle) {
-      setOptions((prevValues) => [...prevValues, token]);
-    }
-  };
 
   return (
     <div className="mintNfts">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       <h3>Set up the auction</h3>
-      {/* <p className="first-p">
-        You are about to set up the auction <span>“{auction1.name}”.</span>
-      </p> */}
       <p>
         You are about to set up the auction <span>“{auction1.name}”.</span> Keep in mind you won’t
         be able to edit or stop it after it starts.

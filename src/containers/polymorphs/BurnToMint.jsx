@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import PolymorphGroupFire from '../../assets/images/PolymorphGroupFire.png';
-import AppContext from '../../ContextAPI';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import BurnPolymorphLeft from '../../assets/images/bgElementLeft.png';

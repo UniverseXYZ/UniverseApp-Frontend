@@ -4,11 +4,8 @@ import PropTypes from 'prop-types';
 import bubbleIcon from '../../../../assets/images/text-bubble.png';
 import Button from '../../../button/Button';
 import plusIcon from '../../../../assets/images/PlusIcon.png';
-import LoadMore from '../../../pagination/LoadMore';
 import NFTCard from '../../../nft/NFTCard';
 import SearchFilters from '../../../nft/SearchFilters';
-import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
-import { useAuthContext } from '../../../../contexts/AuthContext';
 import SimplePagination from '../../../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../../../pagination/ItemsPerPageDropdown';
 

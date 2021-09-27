@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect, useContext } from 'react';
-import { Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import AuctionSettings from '../auctions/Settings';
 import RewardTiers from '../rewardTiers/RewardTiers';
 import ReviewAuction from '../auctions/AuctionReview';
@@ -14,7 +14,6 @@ import RewardIcon from '../../assets/images/ion_layers-disactive.svg';
 import ReviewIcon from '../../assets/images/eye-review.svg';
 import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import NewTabs from '../tabs/NewTabs';
-import AppContext from '../../ContextAPI';
 import { RouterPrompt } from '../../utils/routerPrompt';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 
@@ -46,21 +45,10 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
-  const { auction, auctionSetupState } = useAuctionContext();
+  const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
   const location = useLocation();
   const [showPrompt, setShowPrompt] = useState(false);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-
-  useEffect(() => {
-    if (location.pathname === '/setup-auction/auction-settings') {
-      setSelectedTabIndex(0);
-    } else if (location.pathname === '/setup-auction/reward-tiers') {
-      setSelectedTabIndex(1);
-    } else {
-      setSelectedTabIndex(2);
-    }
-  }, [location]);
 
   useEffect(() => {
     setShowPrompt(true);
@@ -87,115 +75,6 @@ const SetupAuction = () => {
       <div className="setup--auction--content">
         <NewTabs tabData={newTabData} />
       </div>
-      {/* <div className="tabs__section">
-        <div className="tabs container">
-          <div className="tabs__wrapper">
-            <div className="tabs">
-              <div className="tab_items">
-                <div
-                  id="tabsdiv"
-                  onClick={() =>
-                    history.push('/setup-auction/auction-settings', auction && auction.id)
-                  }
-                  className={selectedTabIndex === 0 ? 'active' : ''}
-                >
-                  <span className="first-triangle" />
-                  <button type="button">
-                    <img
-                      src={selectedTabIndex === 0 ? SettingIconActive : SettingIcon}
-                      alt="setting-icon"
-                    />
-                    Auction settings
-                  </button>
-                  <span className="last-triangle" />
-                </div>
-                <div
-                  id="tabsdiv"
-                  onClick={() =>
-                    auction.name &&
-                    auction.startingBid &&
-                    auction.startDate &&
-                    auction.endDate &&
-                    history.push('/setup-auction/reward-tiers')
-                  }
-                  className={`
-                    ${selectedTabIndex === 1 ? 'active' : ''} 
-                    ${
-                      !auction.name ||
-                      !auction.startingBid ||
-                      !auction.startDate ||
-                      !auction.endDate
-                        ? 'disabled'
-                        : ''
-                    }
-                  `}
-                >
-                  <span className="first-triangle" />
-                  <button type="button">
-                    <img
-                      src={selectedTabIndex === 1 ? RewardIconActive : RewardIcon}
-                      alt="reward-icon"
-                    />
-                    Reward tiers
-                  </button>
-                  <span className="last-triangle" />
-                </div>
-                <div
-                  id="tabsdiv"
-                  onClick={() =>
-                    auction.name &&
-                    auction.startingBid &&
-                    auction.startDate &&
-                    auction.endDate &&
-                    auction.rewardTiers.length &&
-                    history.push('/setup-auction/review-auction')
-                  }
-                  className={`
-                    ${selectedTabIndex === 2 ? 'active' : ''} 
-                    ${
-                      !auction.name ||
-                      !auction.startingBid ||
-                      !auction.startDate ||
-                      !auction.endDate ||
-                      !auction.rewardTiers.length
-                        ? 'disabled'
-                        : ''
-                    }
-                  `}
-                >
-                  <span className="first-triangle" />
-                  <button type="button">
-                    <img
-                      src={selectedTabIndex === 2 ? ReviewIconActive : ReviewIcon}
-                      alt="review-icon"
-                    />
-                    Review auction
-                  </button>
-                  <span className="last-triangle third" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="tab__content">
-            <Switch>
-              <Route
-                exact
-                path="/setup-auction/auction-settings"
-                component={() => <AuctionSettings />}
-              />
-              <Route exact path="/setup-auction/reward-tiers" component={() => <RewardTiers />} />
-              <Route
-                exact
-                path="/setup-auction/review-auction"
-                component={() => <ReviewAuction />}
-              />
-              <Route path="*">
-                <Redirect to="/setup-auction/auction-settings" />
-              </Route>
-            </Switch>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };

@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { useHistory } from 'react-router-dom';
-import { AnimatedOnScroll } from 'react-animated-css-onscroll';
+import React from 'react';
 import char1 from '../../assets/images/character1-1.png';
 import char2 from '../../assets/images/character2.png';
 import char3 from '../../assets/images/character3.png';
@@ -9,8 +6,6 @@ import vector from '../../assets/images/vector-bottom.svg';
 import Button from '../button/Button.jsx';
 
 const WelcomeHead = () => {
-  const history = useHistory();
-
   const handleScroll = () => {
     const element = document.getElementById('welcome_sec').getBoundingClientRect();
     window.scrollTo(0, element.height);

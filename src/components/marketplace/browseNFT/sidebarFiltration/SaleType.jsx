@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Animated } from 'react-animated-css';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
-import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 
 const SaleType = ({ saleTypeButtons, setSaleTypeButtons }) => {
   const [showFilters, setShowFilters] = useState(true);

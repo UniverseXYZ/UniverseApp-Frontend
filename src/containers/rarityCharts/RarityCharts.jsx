@@ -1,8 +1,6 @@
-import React, { useEffect, useContext, useState } from 'react';
-import uuid from 'react-uuid';
+import React, { useEffect, useState } from 'react';
 import RarityFilters from '../../components/rarityCharts/filters/RarityFilters';
 import Welcome from '../../components/rarityCharts/welcome/Welcome';
-import AppContext from '../../ContextAPI';
 import './RarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useRarityDebouncer';
 import { categoriesArray } from './categories';

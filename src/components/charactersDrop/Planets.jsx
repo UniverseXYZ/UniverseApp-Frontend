@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '../button/Button.jsx';
 import RightIcon from '../../assets/images/arrow-black.svg';

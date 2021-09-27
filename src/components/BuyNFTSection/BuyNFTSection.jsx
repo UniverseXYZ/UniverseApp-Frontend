@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import bordergradient from '../../assets/images/border-gradient.svg';
-import unveiling from '../../assets/images/unveiling.svg';
 import pyramid from '../../assets/images/marketplace/eth-icon.svg';
 import NFTPlaceBid from '../popups/NFTPlaceBid';
 import NFTMakeOffer from '../popups/NFTMakeOffer';
-import playIcon from '../../assets/images/play.svg';
-import Bids from '../marketplaceTabComponents/Bids';
 import clock from '../../assets/images/clock.svg';
 
 const BuyNFTSection = ({

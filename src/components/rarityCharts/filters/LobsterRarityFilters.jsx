@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Popup from 'reactjs-popup';
 import RaritySortBySelect from '../../input/RaritySortBySelect';
 import RaritySortByOrder from '../../input/RaritySortByOrder';
 import priceIcon from '../../../assets/images/eth-icon-new.svg';
-import filterIcon from '../../../assets/images/filters-icon-black.svg';
 import './LobsterRarityFilters.scss';
-import RarityChartFiltersPopup from '../../popups/RarityChartFiltersPopup';
 import RaritySearchField from '../../input/RaritySearchField';
 
 const LobsterRarityFilters = (props) => {
@@ -23,15 +20,6 @@ const LobsterRarityFilters = (props) => {
 
   return (
     <div className="lobsters-rarity--charts--search--and--filters--container">
-      {/* <div className="floor--price--block">
-        <p className="floor--price--paragraph">
-          <span>Floor Price: </span>
-          <div>
-            <img src={priceIcon} alt="Price" />
-            {`${floorPrice.price}`}
-          </div>
-        </p>
-      </div> */}
       <div className="rarity--charts--search--and--filters--row">
         <CollectionFilter />
         <div className="rarity--charts--search--and--floor--price">

@@ -1,12 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import Popup from 'reactjs-popup';
-import RarityRankPopup from '../../popups/RarityRankPopup.jsx';
-import priceIcon from '../../../assets/images/eth-icon-new.svg';
 import neverScrambledIcon from '../../../assets/images/never-scrambled-badge.svg';
 import singleTraitScrambledIcon from '../../../assets/images/single-trait-scrambled-badge.svg';
-import AppContext from '../../../ContextAPI.js';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext.jsx';
 
 const PolymorphCard = ({ item }) => {
@@ -32,11 +28,6 @@ const PolymorphCard = ({ item }) => {
             );
           }}
         />
-        {/* <Popup
-          trigger={<img className="rarity--chart" src={item.previewImage.url} alt={item.name} />}
-        >
-          {(close) => <RarityRankPopup onClose={close} item={item} />}
-        </Popup> */}
         {item.scrambled === 'single' && (
           <div className="card--scrambled">
             <img alt="Single trait scrambled badge" src={singleTraitScrambledIcon} />

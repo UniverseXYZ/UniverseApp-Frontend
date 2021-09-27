@@ -1,8 +1,5 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Animated } from 'react-animated-css';
-import AppContext from '../../ContextAPI';
-import pencilIcon from '../../assets/images/edit.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import Button from '../button/Button.jsx';
@@ -17,24 +14,6 @@ const PersonalLogo = ({ logo, setLogo }) => {
       <div className="account-grid-container">
         <div className="account-grid-logo">
           <h5>Personal logo</h5>
-          {/* {logoEditing ? (
-            <div className="account-grid-logo-edit">
-              {loggedInArtist.personalLogo ? (
-                <img
-                  alt=""
-                  className="image-logo"
-                  src={URL.createObjectURL(loggedInArtist.personalLogo)}
-                />
-              ) : (
-                <img className="default-logo" src={defaultImage} alt="Cover" />
-              )}
-              <Button className="light-border-button" onClick={() => setLogoEditing(false)}>
-                <span className="hide__on__mobile">Edit</span>
-                <img src={pencilIcon} alt="Edit Icon" />
-              </Button>
-            </div>
-          ) : ( */}
-          {/* <Animated animationIn="zoomIn"> */}
           <div className="account-grid-logo-editing">
             <div className="import-logo">
               <img alt="" className="cloud" src={cloudIcon} />
@@ -66,17 +45,7 @@ const PersonalLogo = ({ logo, setLogo }) => {
                 </div>
               </div>
             </div>
-            {/* <div className="account-display-buttons">
-                  <Button className="light-button" onClick={() => saveLogoChanges()}>
-                    Save changes
-                  </Button>
-                  <Button className="light-border-button" onClick={() => cancelLogoChanges()}>
-                    Cancel
-                  </Button>
-                </div> */}
           </div>
-          {/* </Animated> */}
-          {/* )} */}
         </div>
       </div>
     </div>

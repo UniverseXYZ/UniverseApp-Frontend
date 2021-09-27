@@ -96,11 +96,6 @@ const NFTMakeOffer = ({ close, setSelectedTokenIndex, selectedTokenIndex }) => {
             <label className="price">Price</label>
             <div className={`input--field ${!bidAmount ? 'error' : ''}`}>
               <div className="currency--dropdown">
-                {/* <div>
-                  <img src={currencyIcon} alt="Currency" />
-                  <span className="currency">ETH</span>
-                  <img className="arrow" src={arrowDown} alt="arrow" />
-                </div> */}
                 <div
                   className={`price--dropdown ${showPriceItems ? 'open' : ''}`}
                   aria-hidden="true"

@@ -98,7 +98,6 @@ const NFTsActivity = () => {
                         <p className="time">{nft.time}</p>
                       </div>
                       <div className="nft__view">
-                        {/* <img src={viewIcon} alt="View" /> */}
                         <span className="tooltiptext">View on Etherscan</span>
                       </div>
                     </div>

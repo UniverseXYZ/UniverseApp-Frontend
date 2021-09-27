@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState } from 'react';
 import { Animated } from 'react-animated-css';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
@@ -9,25 +9,18 @@ import defaultImage from '../../assets/images/default-img.svg';
 import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
-import AppContext from '../../ContextAPI.js';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonClick }) => {
   const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
-  const [blur, setBlur] = useState(false);
-  const [auctionHeadline, setAuctionHeadline] = useState('');
-  // const [auctionLink, setAuctionLink] = useState(
-  //   `universe.xyz/${loggedInArtist.name.split(' ')[0]}/auctionname`
-  // );
   const [auctionLink, setAuctionLink] = useState(values.link.split('/')[2] || '');
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
   const [validLink, setValidLink] = useState(true);
   const [validHeadline, setValidHeadline] = useState(true);
-  const [promoImage, setPromoImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [inputStyle, setInputStyle] = useState('');
 
@@ -39,35 +32,6 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
       status: e.target.value.length > 0 ? 'filled' : 'empty',
     }));
     setValidLink(e.target.value.trim().length !== 0);
-  };
-
-  const handleFocus = () => {
-    if (
-      values.link.toLowerCase() ===
-      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/auctionname`
-    ) {
-      onChange((prevValues) => ({
-        ...prevValues,
-        link: `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
-        status: 'empty',
-      }));
-      setInputStyle('inp');
-    }
-  };
-  const handleBlur = () => {
-    if (
-      values.link.toLowerCase() ===
-      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`
-    ) {
-      onChange((prevValues) => ({
-        ...prevValues,
-        link: `universe.xyz/${loggedInArtist.universePageAddress
-          .split(' ')[0]
-          .toLowerCase()}/auctionname`,
-        status: 'empty',
-      }));
-      setInputStyle('inp empty');
-    }
   };
 
   const handleHeadline = (e) => {
@@ -108,31 +72,6 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
           </div>
           <div className="auction__link__input">
             <h5>Auction link</h5>
-            {/* Auction link */}
-
-            {/* <Input
-              type="text"
-              className={
-                (editButtonClick || validLink) && values.status === 'empty'
-                  ? 'inp error-inp'
-                  : 'inp'
-              }
-              value={values.link}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChange={(e) =>
-                e.target.value
-                  .toLowerCase()
-                  .startsWith(`universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/`) &&
-                handleLink(e)
-              }
-              placeholder="Enter the auction link"
-            />
-            {(editButtonClick || validLink) && (!values.link || values.status === 'empty') && (
-              <p className="error__text">
-                &quot;Auction website link&quot; is not allowed to be empty
-              </p>
-            )} */}
             <div
               className={
                 (editButtonClick || !validLink) &&
@@ -157,7 +96,6 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                 onChange={(e) => handleLink(e)}
               />
             </div>
-            {/* {(editButtonClick || validLink) && (!values.link || values.status === 'empty') && ( */}
             {(editButtonClick || !validLink) &&
               (values.link ===
                 `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/` ||

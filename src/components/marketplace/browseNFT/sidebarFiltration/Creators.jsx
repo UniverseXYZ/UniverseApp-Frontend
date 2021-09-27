@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import uuid from 'react-uuid';
-import arrowDown from '../../../../assets/images/browse-nft-arrow-down.svg';
 import artistIcon from '../../../../assets/images/marketplace/artist.svg';
 import searchIcon from '../../../../assets/images/search-gray.svg';
-import creatorImg from '../../../../assets/images/Justin-3LAU.png';
 import { PLACEHOLDER_MARKETPLACE_USERS } from '../../../../utils/fixtures/BrowseNFTsDummyData';
 
 const Creators = ({ savedCreators, setSavedCreators }) => {

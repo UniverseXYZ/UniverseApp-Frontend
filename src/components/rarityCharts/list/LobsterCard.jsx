@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import LoadingImage from '../../general/LoadingImage';
 import lobsterLoadingBg from '../../../assets/images/lobby-lobsters/img_placeholder.png';
@@ -20,7 +20,6 @@ const LobsterCard = ({ item }) => (
         alt={item.name}
         placeholderImage={lobsterLoadingBg}
       />
-      {/* <img className="rarity--chart" src={item.previewImage.url} alt={item.name} /> */}
     </div>
     <div className="card--footer">
       <h2>Lobby Lobster</h2>

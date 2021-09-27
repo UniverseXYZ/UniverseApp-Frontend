@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-shadow */
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
 import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
-import AppContext from '../../ContextAPI';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
@@ -24,31 +23,6 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
       })
     );
   };
-
-  // useEffect(() => {
-  //   auction.tierrewardTierss.forEach((tier) => {
-  //     if (tier.description) {
-  //       onChange((prevValues) =>
-  //         prevValues.map((t) => {
-  //           if (t.id === tier.id) {
-  //             return { ...tier, description: tier.description };
-  //           }
-  //           return tier;
-  //         })
-  //       );
-  //     }
-  //     if (tier.tierImg) {
-  //       onChange((prevValues) =>
-  //         prevValues.map((t) => {
-  //           if (t.id === tier.id) {
-  //             return { ...tier, tierImg: tier.tierImg };
-  //           }
-  //           return tier;
-  //         })
-  //       );
-  //     }
-  //   });
-  // }, []);
 
   useEffect(() => {
     setElRefs((elr) =>

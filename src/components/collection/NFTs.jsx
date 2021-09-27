@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
@@ -6,7 +6,6 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
 import NFTPopup from '../popups/NFTPopup.jsx';
 import hideIcon from '../../assets/images/hide-nft.svg';
-import AppContext from '../../ContextAPI';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const NFTs = ({ filteredNFTs }) => {

@@ -48,7 +48,6 @@ const SelectComponent = (props) => {
     <Select
       options={options}
       onChange={onChange}
-      // value={value}
       placeholder={placeholder}
       styles={styles}
       components={{
@@ -61,7 +60,6 @@ const SelectComponent = (props) => {
 
 SelectComponent.defaultProps = {
   placeholder: '',
-  // value: '',
 };
 
 SelectComponent.propTypes = {
@@ -73,9 +71,6 @@ SelectComponent.propTypes = {
   ).isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
-  // value: PropTypes.objectOf({
-  //   label: PropTypes.string,
-  // }),
 };
 
 export default SelectComponent;

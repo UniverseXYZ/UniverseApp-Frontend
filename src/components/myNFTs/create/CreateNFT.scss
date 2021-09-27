@@ -1,5 +1,5 @@
-@import '../../../assets/scss/variables';
-@import '../../../assets/scss/_mixins';
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/_mixins";
 
 .create--nft--page {
   position: relative;
@@ -9,16 +9,16 @@
     top: 80px;
     height: 200px;
     width: 100%;
-    background-image: url('../../../assets/images/create-nft-header-background-desktop1.png');
+    background-image: url("../../../assets/images/create-nft-header-background-desktop1.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     box-shadow: inset 0 -90px 90px -10px $white;
     @include lg {
-      background-image: url('../../../assets/images/create-nft-header-background-tablet.png');
+      background-image: url("../../../assets/images/create-nft-header-background-tablet.png");
     }
     @include sm {
-      background-image: url('../../../assets/images/create-nft-header-background-mobile.png');
+      background-image: url("../../../assets/images/create-nft-header-background-mobile.png");
       background-position: bottom;
     }
   }
@@ -71,8 +71,6 @@
           position: relative;
           top: -3px;
           clip-path: polygon(94% 0%, 100% 50%, 94% 100%, 0% 100%, 4% 50%, 0% 0%);
-          // opacity: 0;
-          // transition: 0.2s;
           > div {
             display: flex;
             align-items: center;
@@ -85,12 +83,6 @@
           &:hover {
             background: linear-gradient(135deg, #bceb0036 15.57%, #00eaea31 84.88%);
             padding: 0 4px;
-            //   > div {
-            //       width: 100%;
-            //       height: 50px;
-            //       background: white;
-            //       clip-path: polygon(94.7% 0%, 100% 50%, 94.7% 100%, 0.5% 100%, 4% 50%, 0.5% 0%);
-            //   }
           }
         }
         li {
@@ -99,7 +91,6 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          // padding: 10px 10px 10px 30px;
           text-align: center;
           font-family: $sharpGroteskSemiBoldFont;
           font-style: normal;
@@ -132,35 +123,12 @@
             }
           }
           &.disabled {
-            // background-color: rgba(0, 0, 0, 0.03);
             background: rgba(241, 241, 241, 72%);
             color: rgba(0, 0, 0, 0.2);
             &::after {
               border-left: 10px solid rgba(0, 0, 0, 0.03);
             }
           }
-          // &::after {
-          //     content: "";
-          //     position: absolute;
-          //     right: -10px;
-          //     top: 0;
-          //     width: 0;
-          //     height: 0;
-          //     border-top: 25px solid transparent;
-          //     border-left: 10px solid $white;
-          //     border-bottom: 25px solid transparent;
-          // }
-          // &::before {
-          //     content: "";
-          //     position: absolute;
-          //     width: 0;
-          //     height: 0;
-          //     left: 0;
-          //     top: 0;
-          //     border-top: 25px solid transparent;
-          //     border-left: 10px solid #f7f7fa;
-          //     border-bottom: 25px solid transparent;
-          // }
           &:nth-child(1) {
             box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
             cursor: pointer;
@@ -170,7 +138,6 @@
             z-index: 1;
             position: relative;
             left: -13px;
-            // margin-left: 4px;
             &.disabled {
               cursor: not-allowed;
             }
@@ -323,7 +290,6 @@
                 }
                 .fourth-p {
                   margin-top: unset;
-                  // margin-bottom: unset;
                 }
                 @include sm {
                   height: 140px;
@@ -431,7 +397,8 @@
                 }
               }
             }
-            .collection--token,.collection--name  {
+            .collection--token,
+            .collection--name {
               &.inactive {
                 .inp-label {
                   color: rgba(0, 0, 0, 0.1);

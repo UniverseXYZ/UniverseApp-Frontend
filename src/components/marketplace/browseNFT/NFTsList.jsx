@@ -256,10 +256,6 @@ const NFTsList = ({ data, nftNumber }) => {
                   </div>
                 </div>
               </div>
-              {/* <p>Start date {nft.startDate}</p>
-                <p>End date {nft.endDate}</p>
-                <p>Listed Date {nft.listedDate}</p>
-                <p>Sold Date {nft.soldDate}</p> */}
             </div>
           )
       )}
