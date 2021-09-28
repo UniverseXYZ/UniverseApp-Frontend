@@ -1,9 +1,6 @@
 /* eslint-disable no-debugger */
 /* eslint-disable consistent-return */
-import {
-  parseDataForBatchMint,
-  resolveAllPromises,
-} from '../../utils/helpers/pureFunctions/minting';
+import { parseDataForBatchMint } from '../../utils/helpers/pureFunctions/minting';
 
 /**
  * @param {Object} data
@@ -12,10 +9,14 @@ import {
  * @param data.address
  * @param data.contract
  */
-const mintChunkToContract = async ({ address, tokens, royalties, contract }) => {
+const sendTransactions = async ({ address, tokens, royalties, contract }) => {
   const mintTransaction = await contract.batchMintWithDifferentFees(address, tokens, royalties);
 
-  const mintReceipt = await mintTransaction.wait();
+  return mintTransaction;
+};
+
+const mintTransactions = async (req) => {
+  const mintReceipt = await req.wait();
 
   if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
 
@@ -70,6 +71,7 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
  * @param {Array} tokenURIsAndRoyaltiesObject.collectionId.royalties
  * @param {String} tokenURIsAndRoyaltiesObject.collectionId.token
  * @param {Object} helpers
+ * @param {Object} helpers
  * @param helpers.address
  */
 export async function sendBatchMintRequest(
@@ -84,7 +86,10 @@ export async function sendBatchMintRequest(
   }
 
   const collectionsIdsArray = Object.keys(requiredContracts);
-  const promises = [];
+  const txPromises = [];
+  const mintPromises = [];
+
+  const txHashesArray = [];
 
   collectionsIdsArray.forEach((collectionId) => {
     const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(
@@ -92,17 +97,25 @@ export async function sendBatchMintRequest(
     );
 
     tokensChunks.map((tokenChunk, i) =>
-      promises.push(
-        mintChunkToContract({
+      txPromises.push(
+        sendTransactions({
           address: helpers.address,
           tokens: tokenChunk,
           royalties: royaltiesChunks[i],
           contract: requiredContracts[collectionId],
+          txHashesArray,
         })
       )
     );
   });
 
-  const txHashes = await resolveAllPromises(promises);
-  return txHashes;
+  const txResponse = await Promise.all(txPromises);
+
+  txResponse.forEach((res) => {
+    txHashesArray.push(res.hash);
+    mintPromises.push(res);
+  });
+
+  helpers.setActiveTxHashes(txHashesArray);
+  await Promise.all(mintPromises);
 }

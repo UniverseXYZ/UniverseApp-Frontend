@@ -34,6 +34,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     myNFTs,
     setMyNFTs,
     collectionMintingTxHash,
+    activeTxHashes,
+    setActiveTxHashes,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -191,14 +193,14 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       } else {
         // Create the collection
         const saveRequestPromise = saveCollection(collectionData);
-        const txReqPromise = universeERC721FactoryContract
-          .deployUniverseERC721(collectionData.name, collectionData.symbol)
-          .then(async (txRes) => {
-            const chain = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
-            const etherscanLink = `https://${chain.name}.etherscan.io/tx/${txRes.hash}`;
-            setTransactionLink(etherscanLink);
-            return txRes.wait();
-          });
+        const txReqPromise = await universeERC721FactoryContract.deployUniverseERC721(
+          collectionData.name,
+          collectionData.symbol
+        );
+
+        setActiveTxHashes([...activeTxHashes, txReqPromise.hash]);
+        const txhash = await txReqPromise.wait();
+
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
         res = await attachTxHashToCollection(tx.transactionHash, save.id);
 
@@ -254,6 +256,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     },
     []
   );
+
+  useEffect(() => {
+    if (!showLoading) setActiveTxHashes([]);
+  }, [showLoading]);
 
   useEffect(() => {
     // Prev Icon
@@ -322,9 +328,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       />
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
-          text="The collection will appear, after the transaction finishes. Please wait..."
-          txAddress={collectionMintingTxHash}
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
           onClose={() => setShowLoading(false)}
+          contractInteraction
         />
       </Popup>
       <Popup open={showCongrats} closeOnDocumentClick={false}>
