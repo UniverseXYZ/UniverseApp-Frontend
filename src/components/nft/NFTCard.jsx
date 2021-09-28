@@ -335,10 +335,10 @@ const NFTCard = React.memo(
                   }
                   aria-hidden="true"
                 >
-                  {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'video/mp4' && (
+                  {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && (
                     <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
                   )}
-                  {nft.artworkType === 'video/mp4' && (
+                  {nft.artworkType === 'mp4' && (
                     <video
                       onMouseOver={(event) => event.target.play()}
                       onFocus={(event) => event.target.play()}
@@ -346,10 +346,7 @@ const NFTCard = React.memo(
                       onBlur={(event) => event.target.pause()}
                       muted
                     >
-                      <source
-                        src={nft.media.url ? nft.media.url : URL.createObjectURL(nft.media)}
-                        type="video/mp4"
-                      />
+                      <source src={nft.optimized_url} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
@@ -357,11 +354,11 @@ const NFTCard = React.memo(
                   {nft.artworkType === 'audio/mpeg' && (
                     <img className="nft--image" src={mp3Icon} alt={nft.name} />
                   )}
-                  {nft.artworkType === 'video/mp4' && (
+                  {/* {nft.artworkType === 'video/mp4' && (
                     <div className="video--icon">
                       <img src={videoIcon} alt="Video Icon" />
                     </div>
-                  )}
+                  )} */}
                   {nft.artworkType === 'audio/mpeg' && (
                     <div className="video--icon">
                       <img src={audioIcon} alt="Video Icon" />
