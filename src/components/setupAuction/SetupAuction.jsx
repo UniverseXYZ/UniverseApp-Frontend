@@ -45,18 +45,13 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
-  const { auctionSetupState } = useAuctionContext();
+  // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
-  const location = useLocation();
-  const [showPrompt, setShowPrompt] = useState(false);
-
-  useEffect(() => {
-    setShowPrompt(true);
-  }, [location.pathname]);
 
   return (
     <div className="auction-setup">
-      <RouterPrompt when={showPrompt} onOK={() => true} editing={auctionSetupState} />
+      {/* // TODO:: The router prompt is causing rerenders, making the Settings.jsx to lose state Investigate */}
+      {/* <RouterPrompt when onOK={handleOK} editing={auctionSetupState} /> */}
       <div className="setup--auction--welcome--section">
         <div className="setup">
           <div

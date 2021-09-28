@@ -89,8 +89,8 @@ const AuctionSettings = () => {
   const [endDateTemp, setEndDateTemp] = useState({ ...endDate });
 
   const [values, setValues] = useState({
-    name: auction ? auction.name : '',
-    startingBid: auction ? auction.startingBid : '',
+    name: auction && auction.name ? auction.name : '',
+    startingBid: auction && auction.startingBid ? auction.startingBid : '',
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDateTemp ? auction.endDate : '',
   });
@@ -235,8 +235,6 @@ const AuctionSettings = () => {
         startDate: new Date(auction.startDate),
         endDate: new Date(auction.endDate),
       });
-    } else if (!isEditingAuction && auction.id) {
-      setAuction({ tiers: [] });
     }
   }, []);
 
@@ -250,6 +248,8 @@ const AuctionSettings = () => {
       setRoyaltyValidAddress(true);
     }
   }, [handleAddAuction]);
+
+  console.log('Rerender');
 
   return (
     <div className="auction-settings container">
