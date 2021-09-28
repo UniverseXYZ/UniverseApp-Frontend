@@ -25,17 +25,19 @@ const Welcome = () => {
               multiple NFTs per winner. In this Universe anything is possible.
             </p>
           </AnimatedOnScroll>
-          {/* <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
+          <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              <Button className="light-button">Set up auction</Button>
+              <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+                Set up auction
+              </Button>
               <Button
                 className="light-border-button"
                 onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
               >
-                Open marketplace
+                Auction house
               </Button>
             </div>
-          </AnimatedOnScroll> */}
+          </AnimatedOnScroll>
         </div>
         <AnimatedOnScroll animationIn="fadeIn">
           <div className="right">
