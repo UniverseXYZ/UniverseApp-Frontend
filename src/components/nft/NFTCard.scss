@@ -170,6 +170,11 @@
               border-color: black transparent transparent transparent;
             }
           }
+          .blockie--details {
+            border-radius: 50%;
+            margin-left: -7px;
+            margin-top: 4px;
+          }
           &:hover {
             .tooltiptext {
               visibility: visible;

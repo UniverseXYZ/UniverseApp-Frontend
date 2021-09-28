@@ -2,10 +2,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import './NFTCard.scss';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import uuid from 'react-uuid';
+import Blockies from 'react-blockies';
 import { renderLoaders } from '../../containers/rarityCharts/renderLoaders.jsx';
 import AppContext from '../../ContextAPI';
 import videoIcon from '../../assets/images/marketplace/video-icon.svg';
@@ -34,13 +35,17 @@ import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDum
 const NFTCard = React.memo(
   ({ nft, placeholderData, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
     const { myNFTs, setMyNFTs } = useMyNftsContext();
-    const { loggedInArtist } = useAuthContext();
+    const { loggedInArtist, address } = useAuthContext();
     const history = useHistory();
+    const location = useLocation();
     const [loading, setLoading] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownID, setDropdownID] = useState(0);
     const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
-    const { creator, owner } = nft;
+    const { creator } = nft;
+
+    const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
+
     const ref = useRef();
     function SampleNextArrow(props) {
       // eslint-disable-next-line react/prop-types
@@ -150,7 +155,7 @@ const NFTCard = React.memo(
         document.removeEventListener('click', handleClickOutside, true);
       };
     });
-    console.log(nft);
+
     return (
       <div
         className={`nft--card${canSelect ? ' can--select' : ''}${
@@ -169,7 +174,8 @@ const NFTCard = React.memo(
             )}
             {nft.collection && (
               <div className="collection--details">
-                {nft.collection.name === 'Non Fungible Universe Core' ? (
+                {nft.collection.name === 'Non Fungible Universe Core' ||
+                nft.collection.name === 'Universe XYZ' ? (
                   <img src={universeIcon} alt={nft.collection.name} />
                 ) : !nft.collection.coverUrl ? (
                   <div
@@ -184,17 +190,20 @@ const NFTCard = React.memo(
                 <span className="tooltiptext">{`Collection: ${nft.collection.name}`}</span>
               </div>
             )}
-            <div className="owner--details">
-              <img
-                src={
-                  typeof loggedInArtist.avatar === 'string'
-                    ? loggedInArtist.avatar
-                    : loggedInArtist.avatar
-                }
-                alt={loggedInArtist.name}
-              />
-              <span className="tooltiptext">{`Owner: ${loggedInArtist.name}`}</span>
-            </div>
+            {owner && (owner.avatar || owner.profileImageUrl) ? (
+              <div className="owner--details">
+                <img
+                  src={owner.avatar || owner.profileImageUrl}
+                  alt={owner.name || owner.displayName}
+                />
+                <span className="tooltiptext">{`Owner: ${owner.name || owner.displayName}`}</span>
+              </div>
+            ) : (
+              <div className="owner--details">
+                <Blockies className="blockie--details" seed={address} size={9} scale={3} />
+                <span className="tooltiptext">{`Owner: ${address}`}</span>
+              </div>
+            )}
           </div>
           <div className="nft--card--header--right">
             {nft.type === 'bundles' ? (
