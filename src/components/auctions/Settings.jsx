@@ -58,7 +58,7 @@ const AuctionSettings = () => {
   });
 
   const [bidValues, setBidValues] = useState([]);
-  const hasRoyalties = auction.royaltySplits && auction.royaltySplits.length;
+  const hasRoyalties = auction.royaltySplits ? auction.royaltySplits.length : false;
   const [royalities, useRoyalities] = useState(hasRoyalties);
   const isEditingAuction = location.state !== undefined;
 
@@ -248,8 +248,6 @@ const AuctionSettings = () => {
       setRoyaltyValidAddress(true);
     }
   }, [handleAddAuction]);
-
-  console.log('Rerender');
 
   return (
     <div className="auction-settings container">
@@ -442,13 +440,15 @@ const AuctionSettings = () => {
           <label className="switch">
             <input
               type="checkbox"
-              checked={!!royalities}
-              onChange={(e) => useRoyalities(e.target.checked)}
+              checked={royalities}
+              onChange={(e) => {
+                useRoyalities(e.target.checked);
+              }}
             />
             <span className="slider round" />
           </label>
         </div>
-        {!royalities && (
+        {royalities && (
           <div className="royalty-form">
             {properties.map((elm, i) => (
               // eslint-disable-next-line react/no-array-index-key
