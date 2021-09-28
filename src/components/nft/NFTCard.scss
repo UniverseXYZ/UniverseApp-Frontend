@@ -172,8 +172,9 @@
           }
           .blockie--details {
             border-radius: 50%;
-            margin-left: -7px;
             margin-top: 4px;
+            width: 24px !important;
+            height: 24px !important;
           }
           &:hover {
             .tooltiptext {

@@ -190,7 +190,8 @@ const NFTCard = React.memo(
                 <span className="tooltiptext">{`Collection: ${nft.collection.name}`}</span>
               </div>
             )}
-            {owner && (owner.avatar || owner.profileImageUrl) ? (
+            {owner &&
+            (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
               <div className="owner--details">
                 <img
                   src={owner.avatar || owner.profileImageUrl}
