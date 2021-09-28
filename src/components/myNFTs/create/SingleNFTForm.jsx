@@ -46,7 +46,8 @@ const SingleNFTForm = () => {
     setSavedNFTsID,
     myNFTs,
     setMyNFTs,
-    collectionsIdAddressMapping,
+    activeTxHashes,
+    setActiveTxHashes,
   } = useMyNftsContext();
 
   const {
@@ -288,6 +289,8 @@ const SingleNFTForm = () => {
           chunk,
           royaltiesChunks[i]
         );
+
+        setActiveTxHashes([...activeTxHashes, mintTransaction.hash]);
         const mintReceipt = await mintTransaction.wait();
         return mintReceipt.status;
       });
@@ -501,6 +504,10 @@ const SingleNFTForm = () => {
   useEffect(() => {
     setShowPrompt(true);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!showLoadingPopup) setActiveTxHashes([]);
+  }, [showLoadingPopup]);
 
   return (
     <div className="single__nft">

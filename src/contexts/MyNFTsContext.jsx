@@ -34,6 +34,7 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myCollectionID, setMyCollectionID] = useState(null);
   const [universeNFTs, setUniverseNFTs] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
+  const [activeTxHashes, setActiveTxHashes] = useState([]);
 
   const fetchNfts = async () => {
     try {
@@ -120,6 +121,8 @@ const MyNFTsContextProvider = ({ children }) => {
         setUniverseNFTs,
         savedCollections,
         setSavedCollections,
+        activeTxHashes,
+        setActiveTxHashes,
       }}
     >
       {children}

@@ -27,8 +27,14 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import Contracts from '../../../contracts/contracts.json';
 
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
-  const { savedNfts, savedCollectionID, setSavedCollectionID, myNFTs, setMyNFTs } =
-    useMyNftsContext();
+  const {
+    savedNfts,
+    savedCollectionID,
+    setSavedCollectionID,
+    myNFTs,
+    setMyNFTs,
+    collectionMintingTxHash,
+  } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
@@ -317,6 +323,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
           text="The collection will appear, after the transaction finishes. Please wait..."
+          txAddress={collectionMintingTxHash}
           onClose={() => setShowLoading(false)}
         />
       </Popup>
