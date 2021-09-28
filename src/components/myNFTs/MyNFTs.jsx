@@ -48,6 +48,8 @@ const MyNFTs = () => {
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
     collectionsIdAddressMapping,
+    activeTxHashes,
+    setActiveTxHashes,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -126,6 +128,8 @@ const MyNFTs = () => {
         contracts,
         signer,
         address,
+        activeTxHashes,
+        setActiveTxHashes,
       };
 
       await MintSavedNftsFlow({
@@ -152,6 +156,10 @@ const MyNFTs = () => {
       setShowError(true);
     }
   };
+
+  useEffect(() => {
+    if (!showloading) setActiveTxHashes([]);
+  }, [showloading]);
 
   useEffect(() => {
     setDarkMode(false);

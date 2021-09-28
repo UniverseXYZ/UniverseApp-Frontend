@@ -29,6 +29,8 @@ const mintChunkToContract = async ({ address, tokens, royalties, contract }) => 
  * @param {String} tokenURIsAndRoyaltiesObject.collectionId.token
  * @param {Object} helpers
  * @param helpers.address
+ * @param helpers.setActiveTxHashes
+ * @param helpers.activeTxHashes
  */
 export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers) {
   const dataIsNotComplete = !requiredContracts || !tokenURIsAndRoyaltiesObject;
@@ -47,6 +49,9 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
     mintingData.token,
     mintingData.royalties
   );
+
+  if (helpers.setActiveTxHashes)
+    setActiveTxHashes([...helpers.activeTxHashes, mintTransaction.hash]);
 
   const mintReceipt = await mintTransaction.wait();
 
