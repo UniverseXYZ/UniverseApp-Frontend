@@ -158,9 +158,10 @@ const CustomizeAuction = () => {
           document.getElementById('popup-root')?.remove();
           document.getElementById('congrats-hidden-btn').click();
         }, 1000);
-        setTimeout(() => {
-          history.push('/my-auctions');
-        }, 6000);
+        // setTimeout(() => {
+        //   setAuction({ tiers: [] });
+        //   history.push('/my-auctions');
+        // }, 6000);
       }
     }
   };
