@@ -1824,6 +1824,28 @@
   margin-top: 30px;
   text-align: center;
   padding: 0;
+
+  .popup-hash {
+    opacity: 0.8;
+    font-size: 13px;
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    a {
+      margin-left: 5px;
+    }
+
+    & + .popup-hash {
+      margin-top: 0px;
+    }
+  }
+
+  .popup-semi-text {
+    margin-top: 15px;
+    opacity: 0.8;
+  }
 }
 .loading-text > p {
   display: grid;

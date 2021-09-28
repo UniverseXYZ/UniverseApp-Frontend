@@ -18,7 +18,7 @@ export function RouterPrompt({ when, onOK, editing }) {
           prompt.pathname !== '/setup-auction/review-auction'
         ) {
           setCurrentPath(prompt.pathname);
-          document.getElementById('show-popup').click();
+          document.getElementById('show-popup')?.click();
           return 'true';
         }
         return {};

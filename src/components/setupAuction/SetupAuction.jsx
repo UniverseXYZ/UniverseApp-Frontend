@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom';
 import AuctionSettings from '../auctions/Settings';
 import RewardTiers from '../rewardTiers/RewardTiers';
 import ReviewAuction from '../auctions/AuctionReview';
@@ -45,18 +45,15 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
-  const { auctionSetupState } = useAuctionContext();
+  // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
-  const location = useLocation();
-  const [showPrompt, setShowPrompt] = useState(false);
 
-  useEffect(() => {
-    setShowPrompt(true);
-  }, [location.pathname]);
+  const handleOK = useCallback(() => true, []);
 
   return (
     <div className="auction-setup">
-      <RouterPrompt when={showPrompt} onOK={() => true} editing={auctionSetupState} />
+      {/* // TODO:: The router prompt is causing rerenders, making the Settings.jsx to lose state Investigate */}
+      {/* <RouterPrompt when onOK={handleOK} editing={auctionSetupState} /> */}
       <div className="setup--auction--welcome--section">
         <div className="setup">
           <div

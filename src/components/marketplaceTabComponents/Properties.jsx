@@ -5,8 +5,9 @@ import './MarketplaceTabComponent.scss';
 const Properties = ({ properties }) => (
   <>
     <div className="marketplace--properties">
-      {properties.map((property) => (
-        <div>
+      {properties?.map((property, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div key={index}>
           <p>{Object.keys(property)[0]}</p>
           <h1>{property[Object.keys(property)[0]]}</h1>
         </div>

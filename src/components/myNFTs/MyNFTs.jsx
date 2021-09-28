@@ -48,6 +48,8 @@ const MyNFTs = () => {
     myNFTsSelectedTabIndex,
     setMyNFTsSelectedTabIndex,
     collectionsIdAddressMapping,
+    activeTxHashes,
+    setActiveTxHashes,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -126,6 +128,8 @@ const MyNFTs = () => {
         contracts,
         signer,
         address,
+        activeTxHashes,
+        setActiveTxHashes,
       };
 
       await MintSavedNftsFlow({
@@ -152,6 +156,10 @@ const MyNFTs = () => {
       setShowError(true);
     }
   };
+
+  useEffect(() => {
+    if (!showloading) setActiveTxHashes([]);
+  }, [showloading]);
 
   useEffect(() => {
     setDarkMode(false);
@@ -220,7 +228,11 @@ const MyNFTs = () => {
   const renderPopups = () => (
     <>
       <Popup closeOnDocumentClick={false} open={showloading}>
-        <LoadingPopup onClose={() => setShowLoading(false)} />
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress."
+          onClose={() => setShowLoading(false)}
+          contractInteraction
+        />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsPopup onClose={() => setShowCongrats(false)} />

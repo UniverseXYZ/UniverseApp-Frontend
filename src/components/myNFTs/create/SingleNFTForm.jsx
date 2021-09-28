@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useLocation } from 'react-router-dom';
-import { Contract } from 'ethers';
+import { Contract, utils } from 'ethers';
 import './CreateSingleNft.scss';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
@@ -24,6 +24,7 @@ import {
   getTokenURI,
   getMetaForSavedNft,
   getMyNfts,
+  createMintingNFT,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -46,7 +47,8 @@ const SingleNFTForm = () => {
     setSavedNFTsID,
     myNFTs,
     setMyNFTs,
-    collectionsIdAddressMapping,
+    activeTxHashes,
+    setActiveTxHashes,
   } = useMyNftsContext();
 
   const {
@@ -87,6 +89,7 @@ const SingleNFTForm = () => {
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
+  const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
@@ -96,6 +99,16 @@ const SingleNFTForm = () => {
   useEffect(() => {
     setSelectedCollection(universeCollection);
   }, [universeCollection]);
+
+  const hasError = (royalty, index) => {
+    if (royalty && royaltiesMapIndexes[royalty]) {
+      const isRepeated = royaltiesMapIndexes[royalty].length > 1;
+      if (!isRepeated) return false;
+      const firstAppearenceIndex = royaltiesMapIndexes[royalty][0];
+      if (index !== firstAppearenceIndex) return 'Duplicated address';
+    }
+    return false;
+  };
 
   const removeProperty = (index) => {
     const temp = [...properties];
@@ -126,7 +139,39 @@ const SingleNFTForm = () => {
   const propertyChangesAddress = (index, val) => {
     const prevProperties = [...royaltyAddress];
     prevProperties[index].address = val;
+    prevProperties[index].error = !utils.isAddress(val) ? 'Please enter valid address' : '';
+    const addressErrors = prevProperties.filter((prop) => prop.error !== '');
+
+    const lastAddress = prevProperties[index].address;
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const r in royaltiesMapIndexes) {
+      if (royaltiesMapIndexes[r].includes(index)) {
+        if (royaltiesMapIndexes[r].length > 1) {
+          royaltiesMapIndexes[r].splice(index, 1);
+        } else {
+          delete royaltiesMapIndexes[r];
+        }
+      }
+    }
+
+    if (royaltiesMapIndexes[lastAddress]) {
+      if (royaltiesMapIndexes.length === 1) {
+        delete royaltiesMapIndexes[lastAddress];
+      } else {
+        royaltiesMapIndexes[lastAddress].splice(index, 1);
+      }
+    }
+    if (royaltiesMapIndexes[val] && !royaltiesMapIndexes[val].includes(index)) {
+      royaltiesMapIndexes[val].push(index);
+    } else {
+      royaltiesMapIndexes[val] = [];
+      royaltiesMapIndexes[val].push(index);
+    }
+
+    setRoyaltiesMapIndexes(royaltiesMapIndexes);
     setRoyaltyAddress(prevProperties);
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const propertyChangesAmount = (index, val, inp) => {
@@ -269,30 +314,41 @@ const SingleNFTForm = () => {
       }
 
       // Get the Token URIs from the BE
-      const tokenURIs = savedNFTsID
+      const mintInfo = savedNFTsID
         ? await getMetaForSavedNft(savedNFTsID)
         : await getTokenURI(data);
 
       // Prepare the data for the smart contract
       const parsedRoyalties = formatRoyaltiesForMinting(data.royaltiesParsed);
-      const tokenURIsAndRoyalties = tokenURIs.map((token) => ({
+      const tokenURIsAndRoyalties = mintInfo.tokenUris.map((token) => ({
         token,
         royalties: parsedRoyalties,
       }));
       const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(tokenURIsAndRoyalties);
 
       // Mint the data on Chunks
+      const txHashes = [];
       const mintPromises = tokensChunks.map(async (chunk, i) => {
         const mintTransaction = await collectionContract.batchMintWithDifferentFees(
           address,
           chunk,
           royaltiesChunks[i]
         );
+
+        txHashes.push(mintTransaction.hash);
+        setActiveTxHashes([...activeTxHashes, mintTransaction.hash]);
         const mintReceipt = await mintTransaction.wait();
         return mintReceipt.status;
       });
 
+      // setActiveTxHashes(txHashesArray);
       const res = await Promise.all(mintPromises);
+      const mintNftPromises = [];
+
+      for (let i = 0; i < txHashes.length; i += 1) {
+        const txHash = txHashes[i];
+        mintNftPromises.push(createMintingNFT(txHash, mintInfo.mintingNft.id));
+      }
 
       const hasFailedTransaction = res.includes(0);
       if (!hasFailedTransaction) {
@@ -462,6 +518,7 @@ const SingleNFTForm = () => {
         }
       }
     }
+
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         onMintNft();
@@ -502,6 +559,10 @@ const SingleNFTForm = () => {
     setShowPrompt(true);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!showLoadingPopup) setActiveTxHashes([]);
+  }, [showLoadingPopup]);
+
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
@@ -514,19 +575,20 @@ const SingleNFTForm = () => {
               editions ||
               previewImage ||
               description ||
-              properties[0].name ||
-              properties[0].value ||
+              properties[0]?.name ||
+              properties[0]?.value ||
               properties[1] ||
-              royaltyAddress[0].address ||
-              royaltyAddress[0].amount ||
+              royaltyAddress[0]?.address ||
+              royaltyAddress[0]?.amount ||
               royaltyAddress[1]
             )
           }
         />
         <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
           <LoadingPopup
-            text="The NFT will appear, after the transaction finishes. Please wait..."
+            text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
             onClose={() => setShowLoadingPopup(false)}
+            contractInteraction={mintNowClick}
           />
         </Popup>
         <Popup open={showCongratsPopup} closeOnDocumentClick={false}>
@@ -746,7 +808,7 @@ const SingleNFTForm = () => {
               </label>
             </div>
             {properties?.map(
-              (elm, i) =>
+              (property, i) =>
                 propertyCheck && (
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="properties">
@@ -754,9 +816,9 @@ const SingleNFTForm = () => {
                       <h5>Property name</h5>
                       <Input
                         className="inp"
-                        error={elm.errors?.name}
+                        error={property.errors?.name}
                         placeholder="Colour"
-                        value={elm.name}
+                        value={property.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
                       />
                     </div>
@@ -764,9 +826,9 @@ const SingleNFTForm = () => {
                       <h5>Value</h5>
                       <Input
                         className="inp"
-                        error={elm.errors?.value}
+                        error={property.errors?.value}
                         placeholder="Red"
-                        value={elm.value}
+                        value={property.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
                       />
                     </div>
@@ -847,21 +909,22 @@ const SingleNFTForm = () => {
                         className="inp"
                         placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                         value={elm.address}
+                        error={elm.error || hasError(elm.address, i)}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
                     </div>
                     <div className="property-amount">
-                      <span className="percent-sign">%</span>
                       <h5>Percent amount</h5>
                       <Input
                         className="percent-inp"
                         type="number"
-                        placeholder="5%"
+                        placeholder="5"
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
+                      <span className="percent-sign">%</span>
                     </div>
-                    {i > 0 ? (
+                    {i > 0 && (
                       <>
                         <img
                           src={deleteIcon}
@@ -883,8 +946,6 @@ const SingleNFTForm = () => {
                           Remove
                         </Button>
                       </>
-                    ) : (
-                      <></>
                     )}
                   </div>
                 ))}
@@ -939,7 +1000,15 @@ const SingleNFTForm = () => {
                     !editions ||
                     !previewImage ||
                     (propertyCheck &&
-                      properties.find((property) => property.name === '' || property.value === ''))
+                      properties.find(
+                        (property) => property.name === '' || property.value === ''
+                      )) ||
+                    (royalities &&
+                      royaltyAddress.find(
+                        (royalty) => royalty.address === '' || royalty.amount === ''
+                      )) ||
+                    (propertyCheck && !properties.length) ||
+                    (royalities && !royaltyAddress.length)
                   }
                 >
                   Mint now

@@ -6,7 +6,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const Cover = ({ selectedCollection }) => {
-  const { deployedCollections, setDeployedCollections } = useAuthContext();
+  const { deployedCollections, setDeployedCollections, address } = useAuthContext();
   const ref = useRef(null);
   const [bgImage, setBgImage] = useState(selectedCollection.bgImage);
   const [imageUploadError, setError] = useState('');
@@ -32,14 +32,19 @@ const Cover = ({ selectedCollection }) => {
       }
     }
   };
-
+  console.log('collection:');
+  console.log(selectedCollection);
   return (
     <div className="collection__page__cover">
-      <p className="image-upload-error">{imageUploadError}</p>
-      <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
-        <img src={uploadIcon} alt="Upload" />
-        <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
-      </div>
+      {address === selectedCollection.owner && (
+        <>
+          <p className="image-upload-error">{imageUploadError}</p>
+          <div className="upload" onClick={() => ref.current.click()} aria-hidden="true">
+            <img src={uploadIcon} alt="Upload" />
+            <input type="file" className="inp-disable" ref={ref} onChange={onInputChange} />
+          </div>
+        </>
+      )}
       {bgImage ? (
         <img className="bg" src={URL.createObjectURL(bgImage)} alt={selectedCollection.name} />
       ) : !selectedCollection.bannerUrl && selectedCollection.coverUrl ? (

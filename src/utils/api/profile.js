@@ -108,7 +108,10 @@ export const getProfileInfo = async (address) => {
   if (!request.ok && request.status !== 201) {
     console.error(`Error while trying to GET profile info: ${request.statusText}`);
   }
-  const result = await request.text().then((data) => JSON.parse(data));
+  const result = await request.text().then((data) => {
+    console.log(data);
+    return data ? JSON.parse(data) : null;
+  });
   console.log(result);
   return result;
 };

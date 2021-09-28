@@ -55,15 +55,6 @@ const SelectTokenPopup = ({ onClose }) => {
               {item.subtitle && <span className="subtitle">{item.subtitle}</span>}
             </li>
           ))}
-          <div className="token-div">
-            <button
-              type="button"
-              className="light-border-button add-token"
-              onClick={() => setShowAddTokenPopup(true)}
-            >
-              Add custom token
-            </button>
-          </div>
         </ul>
       ) : (
         <AddToken setShowAddTokenPopup={setShowAddTokenPopup} />

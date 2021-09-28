@@ -174,7 +174,8 @@ const ProfileForm = ({
               }
               value={accountPage}
               onChange={(e) =>
-                e.target.value.startsWith('universe.xyz/') && setAccountPage(e.target.value)
+                e.target.value.startsWith('universe.xyz/') &&
+                setAccountPage(e.target.value.replace(' ', '-'))
               }
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
