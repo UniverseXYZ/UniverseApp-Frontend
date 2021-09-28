@@ -103,86 +103,91 @@ const SelectedFilters = ({
 
   return (
     <div className="selected--filters">
-      <div className="show--selected--filters">
-        {/* <div className="results--count">15,118,898 results</div> */}
-        {saleTypeButtons.map(
-          (item, index) =>
-            item.selected && (
-              <button type="button" className="light-border-button" key={uuid()}>
-                {item.text}
-                <img
-                  className="close"
-                  src={closeIcon}
-                  alt="Close"
-                  aria-hidden="true"
-                  onClick={() => removeSelectedFilter(index)}
-                />
-              </button>
-            )
-        )}
-        {selectedPrice && (
-          <button type="button" className="light-border-button" key={uuid()}>
-            <img className="price" src={bidTokens[selectedTokenIndex].icon} alt="Price" />
-            {`${bidTokens[selectedTokenIndex].title}: ${selectedPrice.min} - ${selectedPrice.max}`}
-            <img
-              className="close"
-              src={closeIcon}
-              alt="Close"
-              aria-hidden="true"
-              onClick={() => {
-                setSelectedPrice(null);
-                setSliderValue({ min: 0.01, max: 100 });
-              }}
-            />
-          </button>
-        )}
-        {savedCollections.map((coll, index) => (
-          <button type="button" className="light-border-button" key={uuid()}>
-            {!coll.coverUrl ? (
-              <div
-                className="random--avatar--color"
-                style={{
-                  backgroundColor: getCollectionBackgroundColor(coll),
+      {(saleTypeButtons.filter((item) => item.selected).length > 0 ||
+        selectedPrice ||
+        savedCollections.length > 0 ||
+        savedCreators.length > 0) && (
+        <div className="show--selected--filters">
+          {/* <div className="results--count">15,118,898 results</div> */}
+          {saleTypeButtons.map(
+            (item, index) =>
+              item.selected && (
+                <button type="button" className="light-border-button" key={uuid()}>
+                  {item.text}
+                  <img
+                    className="close"
+                    src={closeIcon}
+                    alt="Close"
+                    aria-hidden="true"
+                    onClick={() => removeSelectedFilter(index)}
+                  />
+                </button>
+              )
+          )}
+          {selectedPrice && (
+            <button type="button" className="light-border-button" key={uuid()}>
+              <img className="price" src={bidTokens[selectedTokenIndex].icon} alt="Price" />
+              {`${bidTokens[selectedTokenIndex].title}: ${selectedPrice.min} - ${selectedPrice.max}`}
+              <img
+                className="close"
+                src={closeIcon}
+                alt="Close"
+                aria-hidden="true"
+                onClick={() => {
+                  setSelectedPrice(null);
+                  setSliderValue({ min: 0.01, max: 100 });
                 }}
-              >
-                {coll.name.charAt(0)}
-              </div>
-            ) : (
-              <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
-            )}
-            {coll.name}
-            <img
-              className="close"
-              src={closeIcon}
-              alt="Close"
+              />
+            </button>
+          )}
+          {savedCollections.map((coll, index) => (
+            <button type="button" className="light-border-button" key={uuid()}>
+              {!coll.coverUrl ? (
+                <div
+                  className="random--avatar--color"
+                  style={{
+                    backgroundColor: getCollectionBackgroundColor(coll),
+                  }}
+                >
+                  {coll.name.charAt(0)}
+                </div>
+              ) : (
+                <img className="sell__collection" src={coll.coverUrl} alt={coll.name} />
+              )}
+              {coll.name}
+              <img
+                className="close"
+                src={closeIcon}
+                alt="Close"
+                aria-hidden="true"
+                onClick={() => removeCollection(index)}
+              />
+            </button>
+          ))}
+          {savedCreators.map((creator, index) => (
+            <button type="button" className="light-border-button" key={uuid()}>
+              <img className="creator" src={creator.avatar} alt={creator.name} />
+              {creator.name}
+              <img
+                className="close"
+                src={closeIcon}
+                alt="Close"
+                aria-hidden="true"
+                onClick={() => removeCreator(index)}
+              />
+            </button>
+          ))}
+          {showClearALL && (
+            <div
+              className="clear--all--selected--filters"
               aria-hidden="true"
-              onClick={() => removeCollection(index)}
-            />
-          </button>
-        ))}
-        {savedCreators.map((creator, index) => (
-          <button type="button" className="light-border-button" key={uuid()}>
-            <img className="creator" src={creator.avatar} alt={creator.name} />
-            {creator.name}
-            <img
-              className="close"
-              src={closeIcon}
-              alt="Close"
-              aria-hidden="true"
-              onClick={() => removeCreator(index)}
-            />
-          </button>
-        ))}
-        {showClearALL && (
-          <div
-            className="clear--all--selected--filters"
-            aria-hidden="true"
-            onClick={() => handleClearAll()}
-          >
-            Clear all
-          </div>
-        )}
-      </div>
+              onClick={() => handleClearAll()}
+            >
+              Clear all
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -452,7 +452,7 @@
     }
     img.go--to--top {
       position: fixed;
-      top: 50%;
+      top: 80%;
       transform: translateY(-50%);
       right: 40px;
     }
@@ -655,7 +655,7 @@
   .selected--filters--and--sorting {
     position: sticky;
     top: 0;
-    padding: 10px 40px;
+    padding: 0px 40px;
     width: calc(100% + 80px);
     margin-left: -40px;
     background: $white;
@@ -1379,11 +1379,12 @@
       display: flex;
       align-items: center;
       // max-width: 500px;
-      margin-top: 30px;
+      margin-top: 40px;
       .show--selected--filters {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
+        margin-bottom: 30px;
         .light-border-button {
           display: flex;
           cursor: default;
@@ -1548,7 +1549,7 @@
     }
   }
   .nfts__lists {
-    margin-top: 30px;
+    // margin-top: 30px;
     grid-template-columns: repeat(auto-fit, 325px);
     grid-gap: 20px;
     .nft--card {
