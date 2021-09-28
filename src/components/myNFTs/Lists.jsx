@@ -7,6 +7,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import checkIcon from '../../assets/images/check-nft.svg';
 import nonSelecting from '../../assets/images/nonSelecting.svg';
 import vector from '../../assets/images/vector2.svg';
+import universeIcon from '../../assets/images/universe-img.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const Lists = ({
@@ -316,6 +317,8 @@ const Lists = ({
                         >
                           {nft.collection.name.charAt(0)}
                         </div>
+                      ) : nft.collection.symbol === 'NFUC' ? (
+                        <img src={universeIcon} alt={nft.collection.name} />
                       ) : (
                         <img src={nft.collection.coverUrl} alt={nft.collection.name} />
                       )}

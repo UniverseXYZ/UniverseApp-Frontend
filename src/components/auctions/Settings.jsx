@@ -92,7 +92,7 @@ const AuctionSettings = () => {
     name: auction && auction.name ? auction.name : '',
     startingBid: auction && auction.startingBid ? auction.startingBid : '',
     startDate: auction.startDate ? auction.startDate : '',
-    endDate: auction.endDateTemp ? auction.endDate : '',
+    endDate: auction.endDate ? auction.endDate : '',
   });
 
   useEffect(() => {
@@ -186,7 +186,7 @@ const AuctionSettings = () => {
 
   const addProperty = () => {
     const prevProperties = [...properties];
-    const temp = { address: '', amount: '' };
+    const temp = { address: '', percentAmount: '' };
     prevProperties.push(temp);
     setProperties(prevProperties);
   };
@@ -207,7 +207,7 @@ const AuctionSettings = () => {
       if (propertyIndex === index) {
         return {
           ...property,
-          amount: val,
+          percentAmount: val,
         };
       }
       return property;
@@ -473,7 +473,7 @@ const AuctionSettings = () => {
                     pattern="\d*"
                     placeholder="5%"
                     className="amount-inp"
-                    value={elm.amount}
+                    value={elm.percentAmount}
                     hoverBoxShadowGradient
                     onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                   />

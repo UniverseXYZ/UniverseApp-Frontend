@@ -25,13 +25,13 @@ const Create = () => {
 
   const [values, setValues] = useState({
     name: '',
-    winners: '',
+    numberOfWinners: '',
     nftsPerWinner: '',
   });
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
-    winners: true,
+    numberOfWinners: true,
     nftsPerWinner: true,
   });
 
@@ -44,7 +44,7 @@ const Create = () => {
 
   useEffect(() => {
     if (values.name) {
-      if (isValidFields.name && isValidFields.winners && isValidFields.nftsPerWinner) {
+      if (isValidFields.name && isValidFields.numberOfWinners && isValidFields.nftsPerWinner) {
         if (tierId) {
           setAuction({
             ...auction,
@@ -71,7 +71,7 @@ const Create = () => {
     if (tierById) {
       setValues({
         name: tierById.name,
-        winners: tierById.winners,
+        numberOfWinners: tierById.numberOfWinners,
         nftsPerWinner: tierById.nftsPerWinner,
       });
       if (tierById.minBidValue) {
@@ -83,7 +83,7 @@ const Create = () => {
 
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
-    if (event.target.id === 'winners') {
+    if (event.target.id === 'numberOfWinners') {
       if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 21 || !value)) {
         setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
       }
@@ -154,12 +154,12 @@ const Create = () => {
               </span>
             </div>
             <Input
-              id="winners"
+              id="numberOfWinners"
               type="text"
               hoverBoxShadowGradient
-              error={isValidFields.winners ? undefined : 'Number of winners is required!'}
+              error={isValidFields.numberOfWinners ? undefined : 'Number of winners is required!'}
               className="inp"
-              value={values.winners}
+              value={values.numberOfWinners}
               onChange={handleChange}
             />
 
@@ -268,7 +268,7 @@ const Create = () => {
           selectedNFTIds={selectedNFTIds}
           setSelectedNFTIds={setSelectedNFTIds}
           tierName={values.name}
-          winners={Number(values.winners)}
+          winners={Number(values.numberOfWinners)}
           nftsPerWinner={Number(values.nftsPerWinner)}
           minBidValue={minBidValue}
         />
