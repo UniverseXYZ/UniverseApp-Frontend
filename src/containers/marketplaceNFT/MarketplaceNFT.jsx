@@ -7,12 +7,13 @@ import '../../components/marketplace/browseNFT/NFTsList.scss';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { getNftData } from '../../utils/api/mintNFT';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const MarketplaceNFT = () => {
   const { setDarkMode } = useThemeContext();
   const location = useLocation();
   const { collectionAddress, tokenId } = useParams();
-  const selectedNFT = location.state ? location.state.nft : null;
+  // const selectedNFT = location.state ? location.state.nft : null;
   const [nft, setNft] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,22 +25,22 @@ const MarketplaceNFT = () => {
     const fetchInfo = async () => {
       try {
         const data = await getNftData(collectionAddress, tokenId);
-        setNft(data.nft);
+        if (!data.error && !data.statusCode) {
+          setNft(data);
+        }
       } catch (err) {
         console.error(err);
       }
       setLoading(false);
     };
     fetchInfo();
-  }, []);
+  }, [collectionAddress, tokenId]);
 
-  return selectedNFT ? (
+  return loading ? (
+    <></>
+  ) : nft ? (
     <div className="marketplace--nft--page1">
-      <MarketplaceNFTDetails
-        data={PLACEHOLDER_MARKETPLACE_NFTS}
-        onNFT={selectedNFT}
-        placeholderData={location.state.placeholderData}
-      />
+      <MarketplaceNFTDetails onNFT={nft} />
     </div>
   ) : (
     <NotFound />

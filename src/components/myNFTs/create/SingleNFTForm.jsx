@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useLocation } from 'react-router-dom';
-import { Contract } from 'ethers';
+import { Contract, utils } from 'ethers';
 import './CreateSingleNft.scss';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
@@ -127,7 +127,11 @@ const SingleNFTForm = () => {
   const propertyChangesAddress = (index, val) => {
     const prevProperties = [...royaltyAddress];
     prevProperties[index].address = val;
+    prevProperties[index].error = !utils.isAddress(val) ? 'Please enter valid address' : '';
+    const addressErrors = prevProperties.filter((prop) => prop.error !== '');
+
     setRoyaltyAddress(prevProperties);
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const propertyChangesAmount = (index, val, inp) => {
@@ -465,6 +469,7 @@ const SingleNFTForm = () => {
         }
       }
     }
+
     if (mintNowClick) {
       if (!errors.name && !errors.edition && !errors.previewImage && royaltyValidAddress) {
         onMintNft();
@@ -754,7 +759,7 @@ const SingleNFTForm = () => {
               </label>
             </div>
             {properties?.map(
-              (elm, i) =>
+              (property, i) =>
                 propertyCheck && (
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="properties">
@@ -762,9 +767,9 @@ const SingleNFTForm = () => {
                       <h5>Property name</h5>
                       <Input
                         className="inp"
-                        error={elm.errors?.name}
+                        error={property.errors?.name}
                         placeholder="Colour"
-                        value={elm.name}
+                        value={property.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
                       />
                     </div>
@@ -772,9 +777,9 @@ const SingleNFTForm = () => {
                       <h5>Value</h5>
                       <Input
                         className="inp"
-                        error={elm.errors?.value}
+                        error={property.errors?.value}
                         placeholder="Red"
-                        value={elm.value}
+                        value={property.value}
                         onChange={(e) => propertyChangesValue(i, e.target.value)}
                       />
                     </div>
@@ -855,21 +860,22 @@ const SingleNFTForm = () => {
                         className="inp"
                         placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                         value={elm.address}
+                        error={elm.error}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
                     </div>
                     <div className="property-amount">
-                      <span className="percent-sign">%</span>
                       <h5>Percent amount</h5>
                       <Input
                         className="percent-inp"
                         type="number"
-                        placeholder="5%"
+                        placeholder="5"
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                       />
+                      <span className="percent-sign">%</span>
                     </div>
-                    {i > 0 ? (
+                    {i > 0 && (
                       <>
                         <img
                           src={deleteIcon}
@@ -891,8 +897,6 @@ const SingleNFTForm = () => {
                           Remove
                         </Button>
                       </>
-                    ) : (
-                      <></>
                     )}
                   </div>
                 ))}

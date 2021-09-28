@@ -40,7 +40,7 @@ const NFTCard = React.memo(
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownID, setDropdownID] = useState(0);
     const [dummyData, setDummyData] = useState(PLACEHOLDER_MARKETPLACE_NFTS);
-
+    const { creator, owner } = nft;
     const ref = useRef();
     function SampleNextArrow(props) {
       // eslint-disable-next-line react/prop-types
@@ -159,20 +159,17 @@ const NFTCard = React.memo(
       >
         <div className="nft--card--header">
           <div className="three--images">
-            {/* <div className="creator--details">
-            <img
-              src={
-                typeof nft.creator.avatar === 'string'
-                  ? nft.creator.avatar
-                  : URL.createObjectURL(nft.creator.avatar)
-              }
-              alt={nft.creator.name}
-            />
-            <span className="tooltiptext">{`Creator: ${nft.creator.name}`}</span>
-          </div> */}
+            {creator && (
+              <>
+                <div className="creator--details">
+                  <img src={creator.profileImageUrl} alt={creator.displayName} />
+                  <span className="tooltiptext">{`Creator: ${creator.displayName}`}</span>
+                </div>
+              </>
+            )}
             {nft.collection && (
               <div className="collection--details">
-                {nft.collection.name === 'Universe XYZ' ? (
+                {nft.collection.name === 'Non Fungible Universe Core' ? (
                   <img src={universeIcon} alt={nft.collection.name} />
                 ) : !nft.collection.coverUrl ? (
                   <div
@@ -314,12 +311,12 @@ const NFTCard = React.memo(
             renderLoaders(1, 'nft')
           ) : (
             <>
-              {nft.type && nft.type !== 'bundles' ? (
+              {nft?.artworkType && nft.artworkType !== 'bundles' ? (
                 <div
                   onClick={() =>
                     !canSelect
                       ? history.push(
-                          `/nft/${nft.collection?.address || collectionAddress}/${nft.id}`,
+                          `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
                           {
                             nft,
                           }
@@ -328,14 +325,10 @@ const NFTCard = React.memo(
                   }
                   aria-hidden="true"
                 >
-                  {nft.media.type !== 'audio/mpeg' && nft.media.type !== 'video/mp4' && (
-                    <img
-                      className="nft--image"
-                      src={nft.media.url ? nft.media.url : URL.createObjectURL(nft.media)}
-                      alt={nft.name}
-                    />
+                  {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'video/mp4' && (
+                    <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
                   )}
-                  {nft.media.type === 'video/mp4' && (
+                  {nft.artworkType === 'video/mp4' && (
                     <video
                       onMouseOver={(event) => event.target.play()}
                       onFocus={(event) => event.target.play()}
@@ -351,15 +344,15 @@ const NFTCard = React.memo(
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  {nft.media.type === 'audio/mpeg' && (
+                  {nft.artworkType === 'audio/mpeg' && (
                     <img className="nft--image" src={mp3Icon} alt={nft.name} />
                   )}
-                  {nft.media.type === 'video/mp4' && (
+                  {nft.artworkType === 'video/mp4' && (
                     <div className="video--icon">
                       <img src={videoIcon} alt="Video Icon" />
                     </div>
                   )}
-                  {nft.media.type === 'audio/mpeg' && (
+                  {nft.artworkType === 'audio/mpeg' && (
                     <div className="video--icon">
                       <img src={audioIcon} alt="Video Icon" />
                     </div>
@@ -384,7 +377,7 @@ const NFTCard = React.memo(
                           className="slider--box"
                           onClick={() =>
                             !canSelect
-                              ?history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.id}`, { nft })
+                              ?history.push(`/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`, { nft })
                               : handleSelectNFT(nft.id)
                           }
                           aria-hidden="true"
@@ -420,7 +413,7 @@ const NFTCard = React.memo(
                       className="slider--box"
                       onClick={() =>
                         history.push(
-                          `/nft/${nft.collection?.address || collectionAddress}/${nft.id}`,
+                          `/nft/${nft.collection?.address || collectionAddress}/${nft.tokenId}`,
                           { nft }
                         )
                       }

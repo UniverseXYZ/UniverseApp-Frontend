@@ -458,6 +458,6 @@ export const getNftData = async (collectionAddress, tokenId) => {
   const request = await fetch(URL);
 
   const result = await request.text().then((data) => JSON.parse(data));
-
+  console.log(result);
   return result;
 };
