@@ -109,13 +109,17 @@ export async function sendBatchMintRequest(
     );
   });
 
-  const txResponse = await Promise.all(txPromises);
+  const contractPromises = await Promise.all(txPromises);
+  const txHashes = contractPromises.map((res) => res.hash);
+  helpers.setActiveTxHashes(txHashes);
+  return txHashes;
 
-  txResponse.forEach((res) => {
-    txHashesArray.push(res.hash);
-    mintPromises.push(res);
-  });
+  // const txResponse = await Promise.all(txPromises);
 
-  helpers.setActiveTxHashes(txHashesArray);
-  await Promise.all(mintPromises);
+  // txResponse.forEach((res) => {
+  //   txHashesArray.push(res.hash);
+  //   mintPromises.push(res);
+  // });
+
+  // await Promise.all(mintPromises);
 }

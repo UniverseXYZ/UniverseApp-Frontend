@@ -341,7 +341,7 @@ const SingleNFTForm = () => {
         return mintReceipt.status;
       });
 
-      setActiveTxHashes(txHashesArray);
+      // setActiveTxHashes(txHashesArray);
       const res = await Promise.all(mintPromises);
       const mintNftPromises = [];
 
