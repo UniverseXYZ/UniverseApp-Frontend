@@ -18,6 +18,8 @@ const mintChunkToContract = async ({ address, tokens, royalties, contract }) => 
   const mintReceipt = await mintTransaction.wait();
 
   if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
+
+  return mintTransaction.hash;
 };
 
 /**
@@ -56,6 +58,8 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
   const mintReceipt = await mintTransaction.wait();
 
   if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
+
+  return mintTransaction.hash;
 }
 
 /**
@@ -99,5 +103,6 @@ export async function sendBatchMintRequest(
     );
   });
 
-  await resolveAllPromises(promises);
+  const txHashes = await resolveAllPromises(promises);
+  return txHashes;
 }

@@ -24,6 +24,7 @@ import {
   getTokenURI,
   getMetaForSavedNft,
   getMyNfts,
+  createMintingNFT,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -274,19 +275,20 @@ const SingleNFTForm = () => {
       }
 
       // Get the Token URIs from the BE
-      const tokenURIs = savedNFTsID
+      const mintInfo = savedNFTsID
         ? await getMetaForSavedNft(savedNFTsID)
         : await getTokenURI(data);
 
       // Prepare the data for the smart contract
       const parsedRoyalties = formatRoyaltiesForMinting(data.royaltiesParsed);
-      const tokenURIsAndRoyalties = tokenURIs.map((token) => ({
+      const tokenURIsAndRoyalties = mintInfo.tokenUris.map((token) => ({
         token,
         royalties: parsedRoyalties,
       }));
       const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(tokenURIsAndRoyalties);
 
       // Mint the data on Chunks
+      const txHashes = [];
       const mintPromises = tokensChunks.map(async (chunk, i) => {
         const mintTransaction = await collectionContract.batchMintWithDifferentFees(
           address,
@@ -294,12 +296,19 @@ const SingleNFTForm = () => {
           royaltiesChunks[i]
         );
 
+        txHashes.push(mintTransaction.hash);
         setActiveTxHashes([...activeTxHashes, mintTransaction.hash]);
         const mintReceipt = await mintTransaction.wait();
         return mintReceipt.status;
       });
 
       const res = await Promise.all(mintPromises);
+      const mintNftPromises = [];
+
+      for (let i = 0; i < txHashes.length; i += 1) {
+        const txHash = txHashes[i];
+        mintNftPromises.push(createMintingNFT(txHash, mintInfo.mintingNft.id));
+      }
 
       const hasFailedTransaction = res.includes(0);
       if (!hasFailedTransaction) {
