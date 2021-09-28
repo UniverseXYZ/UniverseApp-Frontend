@@ -25,7 +25,7 @@ const PlaceBid = ({ auction, bidders, setBidders }) => (
               onClose={close}
               onAuctionId={auction.id}
               onAuctionTitle={auction.name}
-              onArtistName={auction.artist.name}
+              onArtistName={auction.name} // TODO:: we should display artist name here
               onBidders={bidders}
               onSetBidders={setBidders}
             />

@@ -6,6 +6,7 @@ import twitterIcon from '../../assets/images/icons_twitter.svg';
 import instagramIcon from '../../assets/images/instagram-outlined.svg';
 
 const AuctionOwnerDetails = ({ artist }) => {
+  // TODO:: all the info in this component should be dynamic
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,29 +21,26 @@ const AuctionOwnerDetails = ({ artist }) => {
         <AnimatedOnScroll animationIn="zoomIn">
           <div className="artist__details__section__container">
             <div className="avatar">
+              {/* // TODO:: we should have a fallback image here */}
               <img
-                src={
-                  typeof artist.avatar === 'string'
-                    ? artist.avatar
-                    : URL.createObjectURL(artist.avatar)
-                }
-                alt={artist.name}
+                src={artist && typeof artist.avatar === 'string' ? artist.avatar : instagramIcon}
+                alt="artist.name"
               />
-              <h2 className="show__on__mobile">{artist.name}</h2>
+              <h2 className="show__on__mobile">artist.name</h2>
             </div>
             <div className="info">
-              <h1 className="title">{`About ${artist.name}`}</h1>
-              <p className="desc">{artist.about}</p>
+              <h1 className="title">{`About ${'artist.name'}`}</h1>
+              <p className="desc">artist.about</p>
               <div className="social__links">
                 <a
-                  href={`https://www.instagram.com/${artist.instagramLink}`}
+                  href={`https://www.instagram.com/${artist?.instagramLink}`}
                   target="_blank"
                   rel="noreferrer"
                 >
                   <img src={instagramIcon} alt="Instagram" />
                 </a>
                 <a
-                  href={`https://twitter.com/${artist.twitterLink}`}
+                  href={`https://twitter.com/${artist?.twitterLink}`}
                   target="_blank"
                   rel="noreferrer"
                 >

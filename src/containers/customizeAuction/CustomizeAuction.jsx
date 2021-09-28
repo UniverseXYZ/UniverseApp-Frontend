@@ -153,7 +153,7 @@ const CustomizeAuction = () => {
             setFutureAuctions([...futureAuctions, newAuction]);
           }
           setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
-          setAuction({ tiers: [] });
+          setAuction({ rewardTiers: [] });
           setCustomizeAuctionState(false);
           document.getElementById('popup-root')?.remove();
           document.getElementById('congrats-hidden-btn').click();
@@ -207,7 +207,7 @@ const CustomizeAuction = () => {
             } else if (new Date() < new Date(newAuction.startDate)) {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
-            setAuction({ tiers: [] });
+            setAuction({ rewardTiers: [] });
             setCustomizeAuctionState(false);
             history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,
@@ -254,7 +254,7 @@ const CustomizeAuction = () => {
             } else if (new Date() < new Date(newAuction.startDate)) {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
-            setAuction({ tiers: [] });
+            // setAuction({ rewardTiers: [] });
             setCustomizeAuctionState(false);
             history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,

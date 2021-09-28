@@ -10,11 +10,13 @@ import PlaceBid from '../../components/auctionLandingPage/PlaceBid.jsx';
 import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const AuctionLandingPage = () => {
+  const { auction } = useAuctionContext();
   const { setDarkMode } = useThemeContext();
   const location = useLocation();
-  const selectedAuction = location.state ? location.state.auction : null;
+  const selectedAuction = auction || null;
   const artist = selectedAuction?.artist;
 
   const [bidders, setBidders] = useState([]);

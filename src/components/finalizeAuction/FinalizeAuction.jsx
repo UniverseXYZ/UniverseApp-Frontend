@@ -273,7 +273,7 @@ const FinalizeAuction = () => {
                               <div className="first" />
                               <div className="second" />
                               <div className="image-main">
-                                <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                                <img src={nft.original_url} alt={nft.name} />
                                 {tier.nfts.length > 3 && (
                                   <span className="show__more">{`+${
                                     tier.nfts.length - 3
