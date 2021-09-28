@@ -532,8 +532,9 @@ const SingleNFTForm = () => {
         />
         <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
           <LoadingPopup
-            text="The NFT will appear, after the transaction finishes. Please wait..."
+            text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
             onClose={() => setShowLoadingPopup(false)}
+            contractInteraction={mintNowClick}
           />
         </Popup>
         <Popup open={showCongratsPopup} closeOnDocumentClick={false}>

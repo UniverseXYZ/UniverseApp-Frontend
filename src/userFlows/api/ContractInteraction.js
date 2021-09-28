@@ -51,7 +51,7 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
   );
 
   if (helpers.setActiveTxHashes)
-    setActiveTxHashes([...helpers.activeTxHashes, mintTransaction.hash]);
+    helpers.setActiveTxHashes([...helpers.activeTxHashes, mintTransaction.hash]);
 
   const mintReceipt = await mintTransaction.wait();
 

@@ -228,7 +228,11 @@ const MyNFTs = () => {
   const renderPopups = () => (
     <>
       <Popup closeOnDocumentClick={false} open={showloading}>
-        <LoadingPopup onClose={() => setShowLoading(false)} />
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the current progress."
+          onClose={() => setShowLoading(false)}
+          contractInteraction
+        />
       </Popup>
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsPopup onClose={() => setShowCongrats(false)} />

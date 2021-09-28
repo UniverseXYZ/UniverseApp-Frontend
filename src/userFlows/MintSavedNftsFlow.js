@@ -38,6 +38,8 @@ const createPlaceholders = (nfts) => {
  * @param data.helpers.signer
  * @param data.helpers.universeERC721CoreContract
  * @param data.helpers.contracts
+ * @param data.helpers.activeTxHashes
+ * @param data.helpers.setActiveTxHashes
  */
 export async function MintSavedNftsFlow({ nfts, helpers }) {
   const requiredContracts = {};

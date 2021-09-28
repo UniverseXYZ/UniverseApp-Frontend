@@ -7,7 +7,7 @@ import closeIcon from '../../assets/images/cross.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import Contracts from '../../contracts/contracts.json';
 
-const LoadingPopup = ({ onClose, text }) => {
+const LoadingPopup = ({ onClose, text, contractInteraction }) => {
   const { activeTxHashes } = useMyNftsContext();
 
   const formatAddress = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -30,7 +30,7 @@ const LoadingPopup = ({ onClose, text }) => {
         {text ? (
           <>
             <p>{text}</p>
-            {!activeTxHashes?.length ? (
+            {contractInteraction && !activeTxHashes?.length ? (
               <p className="popup-semi-text">The transaction hash will appear here soon.</p>
             ) : activeTxHashes.length === 1 ? (
               <>
@@ -72,10 +72,12 @@ const LoadingPopup = ({ onClose, text }) => {
 LoadingPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   text: PropTypes.string,
+  contractInteraction: PropTypes.bool,
 };
 
 LoadingPopup.defaultProps = {
   text: '',
+  contractInteraction: false,
 };
 
 export default LoadingPopup;
