@@ -514,11 +514,11 @@ const SingleNFTForm = () => {
               editions ||
               previewImage ||
               description ||
-              properties[0].name ||
-              properties[0].value ||
+              properties[0]?.name ||
+              properties[0]?.value ||
               properties[1] ||
-              royaltyAddress[0].address ||
-              royaltyAddress[0].amount ||
+              royaltyAddress[0]?.address ||
+              royaltyAddress[0]?.amount ||
               royaltyAddress[1]
             )
           }
@@ -939,7 +939,15 @@ const SingleNFTForm = () => {
                     !editions ||
                     !previewImage ||
                     (propertyCheck &&
-                      properties.find((property) => property.name === '' || property.value === ''))
+                      properties.find(
+                        (property) => property.name === '' || property.value === ''
+                      )) ||
+                    (royalities &&
+                      royaltyAddress.find(
+                        (royalty) => royalty.address === '' || royalty.amount === ''
+                      )) ||
+                    (propertyCheck && !properties.length) ||
+                    (royalities && !royaltyAddress.length)
                   }
                 >
                   Mint now
