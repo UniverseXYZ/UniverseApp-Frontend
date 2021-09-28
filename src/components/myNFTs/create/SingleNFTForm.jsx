@@ -89,6 +89,7 @@ const SingleNFTForm = () => {
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
+  const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
@@ -98,6 +99,16 @@ const SingleNFTForm = () => {
   useEffect(() => {
     setSelectedCollection(universeCollection);
   }, [universeCollection]);
+
+  const hasError = (royalty, index) => {
+    if (royalty && royaltiesMapIndexes[royalty]) {
+      const isRepeated = royaltiesMapIndexes[royalty].length > 1;
+      if (!isRepeated) return false;
+      const firstAppearenceIndex = royaltiesMapIndexes[royalty][0];
+      if (index !== firstAppearenceIndex) return 'Duplicated address';
+    }
+    return false;
+  };
 
   const removeProperty = (index) => {
     const temp = [...properties];
@@ -131,6 +142,34 @@ const SingleNFTForm = () => {
     prevProperties[index].error = !utils.isAddress(val) ? 'Please enter valid address' : '';
     const addressErrors = prevProperties.filter((prop) => prop.error !== '');
 
+    const lastAddress = prevProperties[index].address;
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const r in royaltiesMapIndexes) {
+      if (royaltiesMapIndexes[r].includes(index)) {
+        if (royaltiesMapIndexes[r].length > 1) {
+          royaltiesMapIndexes[r].splice(index, 1);
+        } else {
+          delete royaltiesMapIndexes[r];
+        }
+      }
+    }
+
+    if (royaltiesMapIndexes[lastAddress]) {
+      if (royaltiesMapIndexes.length === 1) {
+        delete royaltiesMapIndexes[lastAddress];
+      } else {
+        royaltiesMapIndexes[lastAddress].splice(index, 1);
+      }
+    }
+    if (royaltiesMapIndexes[val] && !royaltiesMapIndexes[val].includes(index)) {
+      royaltiesMapIndexes[val].push(index);
+    } else {
+      royaltiesMapIndexes[val] = [];
+      royaltiesMapIndexes[val].push(index);
+    }
+
+    setRoyaltiesMapIndexes(royaltiesMapIndexes);
     setRoyaltyAddress(prevProperties);
     setRoyaltyValidAddress(!addressErrors.length);
   };
@@ -869,7 +908,7 @@ const SingleNFTForm = () => {
                         className="inp"
                         placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                         value={elm.address}
-                        error={elm.error}
+                        error={elm.error || hasError(elm.address, i)}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
                     </div>
