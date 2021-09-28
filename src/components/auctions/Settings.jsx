@@ -249,6 +249,8 @@ const AuctionSettings = () => {
     }
   }, [handleAddAuction]);
 
+  console.log('Rerender');
+
   return (
     <div className="auction-settings container">
       <div>

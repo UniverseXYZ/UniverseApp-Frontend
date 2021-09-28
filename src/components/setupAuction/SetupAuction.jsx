@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { Switch, Route, Redirect, useHistory, useLocation } from 'react-router-dom';
 import AuctionSettings from '../auctions/Settings';
 import RewardTiers from '../rewardTiers/RewardTiers';
 import ReviewAuction from '../auctions/AuctionReview';
@@ -47,6 +47,8 @@ const newTabData = [
 const SetupAuction = () => {
   // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
+
+  const handleOK = useCallback(() => true, []);
 
   return (
     <div className="auction-setup">
