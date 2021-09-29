@@ -17,7 +17,9 @@ const MyAuction = () => {
     useAuctionContext();
   const { loggedInArtist } = useAuthContext();
 
-  const tabs = ['Active auctions', 'Future auctions', 'Past auctions'];
+  const tabTitles = ['Active auctions', 'Future auctions', 'Past auctions'];
+  const tabs = { ActiveAuctions: 0, FutureAuctions: 1, PastAuctions: 2 };
+
   const [showButton, setShowButton] = useState(true);
   const history = useHistory();
 
@@ -46,10 +48,13 @@ const MyAuction = () => {
   useEffect(() => {
     function handleShowButton() {
       if (window.innerWidth < 576) {
-        if (selectedTabIndex === 0 && !myAuctions.filter((item) => item.launch).length) {
+        if (
+          selectedTabIndex === tabs.ActiveAuctions &&
+          !myAuctions.filter((item) => item.launch).length
+        ) {
           setShowButton(false);
         } else if (
-          selectedTabIndex === 1 &&
+          selectedTabIndex === tabs.FutureAuctions &&
           !myAuctions.filter(
             (item) =>
               !item.launch &&
@@ -63,7 +68,7 @@ const MyAuction = () => {
         ) {
           setShowButton(false);
         } else if (
-          selectedTabIndex === 2 &&
+          selectedTabIndex === tabs.PastAuctions &&
           !myAuctions.filter((item) => moment(item.endDate).isBefore(moment.now())).length
         ) {
           setShowButton(false);
@@ -111,14 +116,14 @@ const MyAuction = () => {
             />
           </div>
           <ul className="tabs">
-            {tabs.map((tab, index) => (
+            {tabTitles.map((title, index) => (
               <li
                 key={uuid()}
                 className={selectedTabIndex === index ? 'active' : ''}
                 onClick={() => setSelectedTabIndex(index)}
                 aria-hidden="true"
               >
-                {tab}
+                {title}
               </li>
             ))}
           </ul>
@@ -138,7 +143,7 @@ const MyAuction = () => {
             <span> Go to my profile.</span>
           </p>
         </div>
-        {selectedTabIndex === 0 &&
+        {selectedTabIndex === tabs.ActiveAuctions &&
         myAuctions.filter(
           (item) =>
             item.launch &&
@@ -153,7 +158,7 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 0 &&
+        {selectedTabIndex === tabs.ActiveAuctions &&
         !myAuctions.filter(
           (item) =>
             item.launch &&
@@ -191,7 +196,8 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 && myAuctions.filter((item) => !item.launch).length ? (
+        {selectedTabIndex === tabs.FutureAuctions &&
+        myAuctions.filter((item) => !item.launch).length ? (
           <FutureAuctions
             myAuctions={myAuctions}
             setMyAuctions={setMyAuctions}
@@ -200,7 +206,8 @@ const MyAuction = () => {
         ) : (
           <></>
         )}
-        {selectedTabIndex === 1 && !myAuctions.filter((item) => !item.launch).length ? (
+        {selectedTabIndex === tabs.FutureAuctions &&
+        !myAuctions.filter((item) => !item.launch).length ? (
           <div className="empty__auction">
             <img src={bubleIcon} alt="Buble" />
             <h3>No scheduled auctions found</h3>
@@ -233,14 +240,14 @@ const MyAuction = () => {
           <></>
         )}
 
-        {selectedTabIndex === 2 &&
+        {selectedTabIndex === tabs.PastAuctions &&
         myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
           .length ? (
           <PastAuctions myAuctions={myAuctions} setMyAuctions={setMyAuctions} />
         ) : (
           <></>
         )}
-        {selectedTabIndex === 2 &&
+        {selectedTabIndex === tabs.PastAuctions &&
         !myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
           .length ? (
           <div className="empty__auction">

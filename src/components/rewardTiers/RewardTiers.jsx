@@ -9,6 +9,7 @@ import videoIcon from '../../assets/images/video-icon.svg';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
+import universeIcon from '../../assets/images/universe-img.svg';
 import Button from '../button/Button.jsx';
 import {
   isImage,
@@ -151,6 +152,8 @@ const RewardTiers = () => {
                                 >
                                   {nft.collection.name.charAt(0)}
                                 </div>
+                              ) : nft.collection.symbol === 'NFUC' ? (
+                                <img src={universeIcon} alt={nft.collection.name} />
                               ) : (
                                 <img src={nft.collection.coverUrl} alt={nft.collection.name} />
                               )}

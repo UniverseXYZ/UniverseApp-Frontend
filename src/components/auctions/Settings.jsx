@@ -58,7 +58,7 @@ const AuctionSettings = () => {
   });
 
   const [bidValues, setBidValues] = useState([]);
-  const hasRoyalties = auction.royaltySplits && auction.royaltySplits.length;
+  const hasRoyalties = auction.royaltySplits ? auction.royaltySplits.length : false;
   const [royalities, useRoyalities] = useState(hasRoyalties);
   const isEditingAuction = location.state !== undefined;
 
@@ -89,10 +89,10 @@ const AuctionSettings = () => {
   const [endDateTemp, setEndDateTemp] = useState({ ...endDate });
 
   const [values, setValues] = useState({
-    name: auction ? auction.name : '',
-    startingBid: auction ? auction.startingBid : '',
+    name: auction && auction.name ? auction.name : '',
+    startingBid: auction && auction.startingBid ? auction.startingBid : '',
     startDate: auction.startDate ? auction.startDate : '',
-    endDate: auction.endDateTemp ? auction.endDate : '',
+    endDate: auction.endDate ? auction.endDate : '',
   });
 
   useEffect(() => {
@@ -186,7 +186,7 @@ const AuctionSettings = () => {
 
   const addProperty = () => {
     const prevProperties = [...properties];
-    const temp = { address: '', amount: '' };
+    const temp = { address: '', percentAmount: '' };
     prevProperties.push(temp);
     setProperties(prevProperties);
   };
@@ -207,7 +207,7 @@ const AuctionSettings = () => {
       if (propertyIndex === index) {
         return {
           ...property,
-          amount: val,
+          percentAmount: val,
         };
       }
       return property;
@@ -235,8 +235,6 @@ const AuctionSettings = () => {
         startDate: new Date(auction.startDate),
         endDate: new Date(auction.endDate),
       });
-    } else if (!isEditingAuction && auction.id) {
-      setAuction({ tiers: [] });
     }
   }, []);
 
@@ -442,13 +440,15 @@ const AuctionSettings = () => {
           <label className="switch">
             <input
               type="checkbox"
-              checked={!!royalities}
-              onChange={(e) => useRoyalities(e.target.checked)}
+              checked={royalities}
+              onChange={(e) => {
+                useRoyalities(e.target.checked);
+              }}
             />
             <span className="slider round" />
           </label>
         </div>
-        {!royalities && (
+        {royalities && (
           <div className="royalty-form">
             {properties.map((elm, i) => (
               // eslint-disable-next-line react/no-array-index-key
@@ -473,7 +473,7 @@ const AuctionSettings = () => {
                     pattern="\d*"
                     placeholder="5%"
                     className="amount-inp"
-                    value={elm.amount}
+                    value={elm.percentAmount}
                     hoverBoxShadowGradient
                     onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                   />

@@ -10,6 +10,7 @@ const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/colle
 const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection`;
 const EDIT_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/collections`;
 const GET_NFT_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`;
+const CREATE_MINTING_NFT = `${process.env.REACT_APP_API_BASE_URL}/api/minting-nfts`;
 
 const EDIT_COLLECTION_COVER_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/collections/${id}/cover-image`;
@@ -161,6 +162,7 @@ export const getMetaForSavedNft = async (id) => {
     console.error(`Error while trying to GET meta for saved NFT: ${request.statusText}`);
   }
   const result = await request.text().then((data) => JSON.parse(data));
+  console.log(result);
   return result;
 };
 
@@ -458,6 +460,26 @@ export const getNftData = async (collectionAddress, tokenId) => {
   const request = await fetch(URL);
 
   const result = await request.text().then((data) => JSON.parse(data));
-
+  console.log(result);
   return result;
+};
+
+export const createMintingNFT = async (txHash, nftId) => {
+  const URL = `${CREATE_MINTING_NFT}/${nftId}`;
+
+  const request = await fetch(URL, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+    body: JSON.stringify({
+      txHash,
+    }),
+  });
+
+  return true;
+  // const result = await request.text().then((data) => JSON.parse(data));
+  // console.log(result);
+  // return result;
 };

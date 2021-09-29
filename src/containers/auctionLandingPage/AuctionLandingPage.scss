@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .auction__landing__page {
   .artist__personal__logo {
@@ -42,7 +42,7 @@
         .carousel__auction__container {
           &.selected {
             .carousel__auction {
-              background-image: url('../../assets/images/auction-slider-gradient-border.svg');
+              background-image: url("../../assets/images/auction-slider-gradient-border.svg");
               background-position: center;
               background-repeat: no-repeat;
               background-size: cover;
@@ -130,17 +130,17 @@
           #000000 335.2deg,
           #000000 335.34deg,
           #ffffff 360.25deg
-          ),
+        ),
         radial-gradient(95.11% 95.11% at 36.64% 4.89%, #f0e939 0%, #feb0fe 49.86%, #42a4ff 100%);
-        background-blend-mode: screen, normal;
-        opacity: 0.1;
+      background-blend-mode: screen, normal;
+      opacity: 0.1;
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
     }
-    .overlay{
+    .overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -233,7 +233,7 @@
             margin-right: 16px;
             border-radius: 4px;
             &.show__avatar {
-              background-image: url('../../assets/images/artist_card_bg.png');
+              background-image: url("../../assets/images/artist_card_bg.png");
               background-position: center;
               background-size: cover;
               background-repeat: no-repeat;
@@ -291,7 +291,7 @@
           align-items: center;
           justify-content: center;
           &.show__avatar {
-            background-image: url('../../assets/images/artist_card_bg.png');
+            background-image: url("../../assets/images/artist_card_bg.png");
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -558,31 +558,22 @@
           }
           &__content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             align-items: center;
-            padding: 25px 40px;
+            padding: 20px 40px;
 
-            .ten__bidders__left {
-              padding-right: 40px;
-              border-right: 1px solid rgba(0, 0, 0, 0.1);
-              @include sm {
-                padding-right: 0px;
-                border-right: none;
-              }
-            }
-            .ten__bidders__right {
-              padding-left: 40px;
-              border-left: 1px solid rgba(0, 0, 0, 0.1);
-              @include sm {
-                padding-left: 0px;
-                border-left: none;
-              }
+            .five__bidders {
             }
             .bidder {
               display: flex;
               justify-content: space-between;
               align-items: center;
-              margin-bottom: 6px;
+              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+              padding-bottom: 6px;
+              padding-top: 6px;
+              &:nth-child(5) {
+                border-bottom: none;
+              }
               .name {
                 font-family: $spaceGroteskFont;
                 font-style: normal;
@@ -619,12 +610,23 @@
                 }
               }
               .bid {
+                display: grid;
+                grid-template-columns: repeat(3, auto);
+                grid-gap: 4px;
+                align-items: center;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
-                font-weight: normal;
+                font-weight: 500;
                 font-size: 14px;
                 line-height: 22px;
                 color: rgba(0, 0, 0, 0.6);
+                b {
+                  color: $black;
+                }
+                span {
+                  font-size: 10px;
+                  color: rgba(0, 0, 0, 0.2);
+                }
               }
             }
             @include sm {
@@ -654,6 +656,8 @@
                 color: rgba(0, 0, 0, 0.6);
               }
               .your__current__bid {
+                display: flex;
+                align-items: center;
                 font-family: $spaceGroteskFont;
                 font-style: normal;
                 font-weight: normal;
@@ -661,8 +665,15 @@
                 line-height: 160%;
                 color: rgba(0, 0, 0, 0.6);
                 b {
+                  display: flex;
+                  align-items: center;
                   font-weight: bold;
                   color: $black;
+                  margin-right: 6px;
+                  img {
+                    margin-right: 4px;
+                    margin-left: 6px;
+                  }
                 }
               }
             }
@@ -1176,7 +1187,7 @@
   .place__bid__section {
     position: relative;
     padding: 65px 60px;
-    background-image: url('../../assets/images/place-bid-bg-desktop.png');
+    background-image: url("../../assets/images/place-bid-bg-desktop.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -1252,11 +1263,11 @@
     }
     @include lg {
       padding: 65px 20px;
-      background-image: url('../../assets/images/place-bid-bg-tablet.png');
+      background-image: url("../../assets/images/place-bid-bg-tablet.png");
     }
     @include sm {
       padding: 65px 20px;
-      background-image: url('../../assets/images/place-bid-bg-mobile.png');
+      background-image: url("../../assets/images/place-bid-bg-mobile.png");
     }
   }
 }

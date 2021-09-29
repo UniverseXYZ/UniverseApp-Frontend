@@ -132,7 +132,15 @@ const Collection = () => {
                   .map(
                     (nft, index) =>
                       index < quantity && (
-                        <NFTCard key={nft.id} nft={nft} collectionAddress={collectionAddress} />
+                        <NFTCard
+                          key={nft.id}
+                          nft={{
+                            ...nft,
+                            collection: collectionData.collection,
+                            creator: collectionData.creator,
+                          }}
+                          collectionAddress={collectionAddress}
+                        />
                       )
                   )}
               </div>

@@ -13,6 +13,7 @@ import RemovePopup from '../popups/RemoveNftPopup.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
+import LoadingImage from '../general/LoadingImage';
 
 const SavedNFTs = () => {
   const { savedNfts, setSavedNfts, setActiveView, setSavedNFTsID } = useMyNftsContext();
@@ -137,7 +138,12 @@ const SavedNFTs = () => {
                     !nft.artworkType.endsWith('mpeg') &&
                     nft.artworkType &&
                     !nft.artworkType.endsWith('mp4') && (
-                      <img className="preview-image" src={nft.optimizedUrl} alt={nft.name} />
+                      <LoadingImage
+                        className="preview-image"
+                        src={nft.optimizedUrl}
+                        alt={nft.name}
+                      />
+                      // <img className="preview-image" src={nft.optimizedUrl}  />
                     )}
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <img className="video__icon" src={videoIcon} alt="Video Icon" />

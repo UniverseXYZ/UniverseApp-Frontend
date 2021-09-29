@@ -23,8 +23,7 @@
     }
     &.selected {
       position: relative;
-      background: linear-gradient($white, $white) padding-box,
-      linear-gradient(135deg, #bceb00, #00eaea) border-box !important;
+      background: linear-gradient($white, $white) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box !important;
       border: 2px solid transparent !important;
       .nft--selected {
         border-radius: 50%;
@@ -33,7 +32,7 @@
         height: 20px;
         right: -10px;
         top: -10px;
-        background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%) !important;
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -62,10 +61,14 @@
           justify-content: center;
           height: 32px;
           width: 32px;
-          border: 1px solid rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(0, 0, 0, 0.1);
           box-sizing: border-box;
           border-radius: 8px;
           cursor: pointer;
+
+          &:hover {
+            border: 1px solid rgba(0, 0, 0, 0.3);
+          }
           span {
             width: 3px;
             height: 3px;
@@ -96,7 +99,7 @@
               }
               &.burn {
                 p {
-                  color: #FF4949;
+                  color: #ff4949;
                 }
                 &:hover {
                   background: rgba(255, 73, 73, 0.05);
@@ -166,6 +169,12 @@
               border-style: solid;
               border-color: black transparent transparent transparent;
             }
+          }
+          .blockie--details {
+            border-radius: 50%;
+            margin-top: 4px;
+            width: 24px !important;
+            height: 24px !important;
           }
           &:hover {
             .tooltiptext {
@@ -276,14 +285,14 @@
         span:not(.tooltiptext) {
           font-family: $spaceGroteskFont;
           font-style: normal;
-          font-weight: bold;
+          font-weight: normal;
           font-size: 12px;
-          line-height: 22px;
+          line-height: 100%;
           color: rgba(0, 0, 0, 0.4);
           margin-left: 6px;
         }
-        .redlike{
-          color: #ff4949!important;
+        .redlike {
+          color: #ff4949 !important;
         }
       }
       .bundles--count {
@@ -370,7 +379,7 @@
             border: 1px solid rgba(0, 0, 0, 0.1);
           }
           &:hover {
-            background: rgba(255,255,255, 0.7);
+            background: rgba(255, 255, 255, 0.7);
           }
         }
       }

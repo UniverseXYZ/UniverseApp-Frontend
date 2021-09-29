@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .popup-overlay {
   background: rgba(0, 0, 0, 0.7);
@@ -255,10 +255,8 @@
   background: $white;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   border-radius: 12px;
-  padding: 40px 10px 40px 40px;
   width: 100%;
   max-width: 500px;
-
   .close__popup {
     position: absolute;
     top: -10px;
@@ -269,153 +267,264 @@
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
     cursor: pointer;
   }
-  h1.title {
-    font-family: $sharpGroteskSemiBoldFont;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 130%;
-    color: $black;
-  }
-  .reward__tiers {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    // gap: 6px;
-    margin: 15px 0;
-
-    .label {
-      font-family: $spaceGroteskFont;
+  &__content {
+    padding: 40px;
+    overflow-y: auto;
+    max-height: 570px;
+    h1.title {
+      font-family: $sharpGroteskSemiBoldFont;
       font-style: normal;
-      font-weight: bold;
-      font-size: 16px;
-      line-height: 22px;
-      letter-spacing: 0.3px;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 130%;
       color: $black;
-      margin-right: 6px;
     }
-    .tiers {
+    .reward__tiers {
       display: flex;
       align-items: center;
-      // gap: 6px;
-      span {
+      flex-wrap: wrap;
+      margin: 15px 0;
+
+      .label {
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 22px;
-        padding: 5px 10px;
-        border-radius: 6px;
+        letter-spacing: 0.3px;
+        color: $black;
         margin-right: 6px;
+      }
+      .tiers {
+        display: flex;
+        align-items: center;
+        span {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 22px;
+          padding: 0px 10px;
+          border-radius: 100px;
+          margin-right: 6px;
 
-        &:nth-child(1) {
-          color: #80ccdf;
-          border: 1px solid #80ccdf;
-        }
-        &:nth-child(2) {
-          color: #ddbc45;
-          border: 1px solid #ddbc45;
-        }
-        &:nth-child(3) {
-          color: #bcbcbc;
-          border: 1px solid #bcbcbc;
+          &:nth-child(1) {
+            color: #80ccdf;
+            border: 1px solid #80ccdf;
+          }
+          &:nth-child(2) {
+            color: #ddbc45;
+            border: 1px solid #ddbc45;
+          }
+          &:nth-child(3) {
+            color: #bcbcbc;
+            border: 1px solid #bcbcbc;
+          }
         }
       }
     }
-  }
-  .bids__list {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 12px;
-    max-height: 310px;
-    overflow-y: auto;
-    padding-right: 30px;
+    .bids__list {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 12px;
 
-    .platinum {
-      border: 1px solid #80ccdf;
-      padding: 10px 20px;
-      border-radius: 12px;
-    }
-    .gold {
-      border: 1px solid #ddbc45;
-      padding: 10px 20px;
-      border-radius: 12px;
-    }
-    .silver {
-      border: 1px solid #bcbcbc;
-      padding: 10px 20px;
-      border-radius: 12px;
-    }
+      .platinum {
+        border: 1px solid #80ccdf;
+        padding: 10px 20px;
+        border-radius: 12px;
+      }
+      .gold {
+        border: 1px solid #ddbc45;
+        padding: 10px 20px;
+        border-radius: 12px;
+      }
+      .silver {
+        border: 1px solid #bcbcbc;
+        padding: 10px 20px;
+        border-radius: 12px;
+      }
 
-    table {
-      tr {
-        td {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 14px;
-          line-height: 22px;
-          color: $black;
-          padding: 5px 0;
-
-          span.platinum__small {
-            border: 1px solid #80ccdf;
-            color: #80ccdf;
-            padding: 2px 5px;
-            border-radius: 12px;
-            margin-left: 5px;
+      .each--bid {
+        padding: 5px 0;
+        &:not(:last-child) {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .header {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          grid-gap: 20px;
+          align-items: center;
+          .bidder {
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 600;
-            font-size: 10px;
-            line-height: 120%;
+            line-height: 150%;
+            font-size: 14px;
+            .index {
+              font-size: 10px;
+              color: $black;
+            }
+            .tier {
+              border: 1px solid;
+              padding: 2px 5px;
+              border-radius: 12px;
+              margin-left: 5px;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 10px;
+              line-height: 120%;
+            }
           }
-          span.gold__small {
-            border: 1px solid #ddbc45;
-            color: #ddbc45;
-            padding: 2px 5px;
-            border-radius: 12px;
-            margin-left: 5px;
+          .bid {
+            display: grid;
+            grid-template-columns: repeat(3, auto);
+            grid-gap: 4px;
+            align-items: center;
             font-family: $spaceGroteskFont;
             font-style: normal;
-            font-weight: 600;
-            font-size: 10px;
-            line-height: 120%;
-          }
-          span.silver__small {
-            border: 1px solid #bcbcbc;
-            color: #bcbcbc;
-            padding: 2px 5px;
-            border-radius: 12px;
-            margin-left: 5px;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 10px;
-            line-height: 120%;
-          }
-
-          &:nth-child(1) {
-            font-size: 12px;
-          }
-          &:nth-child(2) {
-            font-weight: bold;
-          }
-          &:nth-child(4) {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 22px;
             color: rgba(0, 0, 0, 0.6);
-            font-size: 10px;
-            text-align: right;
+            b {
+              color: $black;
+            }
+            span {
+              font-size: 10px;
+              color: rgba(0, 0, 0, 0.2);
+            }
+            img {
+              width: 16px;
+              height: 16px;
+              min-width: 16px;
+              min-height: 16px;
+            }
+          }
+          .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            &.opened {
+              img {
+                transform: rotate(180deg);
+                margin-bottom: 2px;
+              }
+            }
+            img {
+              margin-top: 2px;
+            }
+          }
+        }
+        .nfts {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          grid-gap: 13px;
+          margin-top: 20px;
+          margin-bottom: 20px;
+          .each--nft {
+            position: relative;
+            max-height: 80px;
+            cursor: pointer;
+            img {
+              border-radius: 10px;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+            &:hover {
+              .tooltiptext {
+                visibility: visible;
+              }
+            }
+            .tooltiptext {
+              visibility: hidden;
+              background-color: $black;
+              border-radius: 12px;
+              padding: 20px;
+              position: absolute;
+              z-index: 1;
+              bottom: calc(100% + 8px);
+              left: 50%;
+              transform: translateX(-50%);
+              cursor: default;
+              min-width: 140px;
+              &::before {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-top: 0.6px;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: rgba(255, 255, 255, 0.4) transparent transparent transparent;
+              }
+              &::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: black transparent transparent transparent;
+              }
+              > div {
+                &:not(:last-child) {
+                  margin-bottom: 10px;
+                }
+                &:last-child {
+                  p {
+                    cursor: pointer;
+                  }
+                }
+                label {
+                  display: block;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 10px;
+                  line-height: 150%;
+                  color: $white;
+                  opacity: 0.4;
+                  margin-bottom: 3px;
+                }
+                p {
+                  display: flex;
+                  align-items: center;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 12px;
+                  line-height: 150%;
+                  color: $white;
+                  img {
+                    width: 16px;
+                    height: 16px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin-right: 4px;
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
     @include sm {
-      padding-right: 10px;
+      padding: 20px;
     }
   }
   @include sm {
     width: 90%;
-    padding: 20px 10px 20px 20px;
   }
 }
 .nft--place--bid--popup {
@@ -493,7 +602,7 @@
           cursor: pointer;
           padding: 8px 0 8px 8px;
           width: 127px;
-          .arrow--down--icon{
+          .arrow--down--icon {
             display: flex;
             margin-left: 21px;
           }
@@ -643,7 +752,7 @@
             cursor: pointer;
 
             input {
-              @include css-checkbox(16px, $black, $white, 'middle', $black, 4px);
+              @include css-checkbox(16px, $black, $white, "middle", $black, 4px);
             }
           }
         }
@@ -671,7 +780,7 @@
             font-size: 14px;
           }
         }
-        .light-border-button{
+        .light-border-button {
           @include sm {
             font-size: 14px;
           }
@@ -949,6 +1058,9 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 32px;
+    img {
+      max-width: 220px;
+    }
   }
   .congrats__title {
     font-family: $sharpGroteskSemiBoldFont;
@@ -1824,6 +1936,28 @@
   margin-top: 30px;
   text-align: center;
   padding: 0;
+
+  .popup-hash {
+    opacity: 0.8;
+    font-size: 13px;
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    a {
+      margin-left: 5px;
+    }
+
+    & + .popup-hash {
+      margin-top: 0px;
+    }
+  }
+
+  .popup-semi-text {
+    margin-top: 15px;
+    opacity: 0.8;
+  }
 }
 .loading-text > p {
   display: grid;
@@ -2654,7 +2788,7 @@
             font-weight: normal;
             font-size: 16px;
             color: #cacaca;
-            background-image: url('../../assets/images/search-gray.svg');
+            background-image: url("../../assets/images/search-gray.svg");
             background-repeat: no-repeat;
             text-indent: 25px;
           }
@@ -2980,7 +3114,7 @@
           cursor: pointer;
 
           input {
-            @include css-checkbox(16px, $black, $white, 'middle', $black, 4px);
+            @include css-checkbox(16px, $black, $white, "middle", $black, 4px);
           }
         }
       }
@@ -3579,7 +3713,7 @@
               }
 
               &::after {
-                content: '\2518';
+                content: "\2518";
                 color: #000000;
                 font-size: 16px;
                 position: absolute;
@@ -3986,7 +4120,7 @@
           top: -19px;
           right: -51px;
           &::after {
-            content: '';
+            content: "";
             position: absolute;
             top: 100%;
             left: 50%;
@@ -4146,7 +4280,7 @@
               top: -48px;
               right: -54px;
               &::after {
-                content: '';
+                content: "";
                 position: absolute;
                 top: 100%;
                 left: 50%;
@@ -4483,7 +4617,7 @@
                 background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
                 border-color: transparent;
                 &::after {
-                  content: '\2518';
+                  content: "\2518";
                   color: #000000;
                   font-size: 16px;
                   position: absolute;
