@@ -5,6 +5,7 @@ import sizeUpIcon from '../../assets/images/size-up.svg';
 import sizeDownIcon from '../../assets/images/size-down.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowIcon from '../../assets/images/arrow.svg';
+import frankie from '../../assets/images/frankie.png';
 
 const PreviewNFTsPopup = ({ onClose, onTier }) => {
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(0);
@@ -74,7 +75,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             style={{ height: '100%' }}
           >
             <img
-              src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].media)}
+              src={onTier.nfts[selectedNFTIndex].optimized_url}
               alt={onTier.nfts[selectedNFTIndex].name}
             />
           </Animated>
@@ -85,7 +86,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <div className="tier__title">
             <span
               style={{
-                backgroundColor: onTier.color.hex,
+                backgroundColor: onTier?.color,
               }}
             />
             <h2>{onTier.name}</h2>
@@ -103,7 +104,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                 onClick={() => setSelectedNFTIndex(index)}
                 aria-hidden="true"
               >
-                <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                <img src={nft.optimized_url} alt={nft.name} />
               </div>
             ))}
           </div>
@@ -113,19 +114,22 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
           <div className="nft__released">
             <div className="item">
               <span>Released</span>
-              <p>{`${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[1]} ${
+              {/* // TODO:: we don't have that info yet */}
+              {/* <p>{`${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[1]} ${
                 onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[2]
-              }, ${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[3]}`}</p>
+              }, ${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[3]}`}</p> */}
             </div>
             {onTier.nfts[selectedNFTIndex].collection && (
               <div className="item">
                 <span>Collection</span>
+                {/* // TODO:: we don't have the info about the collection yet, so you a dummy image */}
                 <p>
                   <img
-                    src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].collection.avatar)}
-                    alt={onTier.nfts[selectedNFTIndex].collection.name}
+                    // src={URL.createObjectURL(onTier.nfts[selectedNFTIndex].collection.avatar)}
+                    src={frankie}
+                    alt="onTier.nfts[selectedNFTIndex].collection.name"
                   />
-                  {onTier.nfts[selectedNFTIndex].collection.name}
+                  onTier.nfts[selectedNFTIndex].collection.name
                 </p>
               </div>
             )}
