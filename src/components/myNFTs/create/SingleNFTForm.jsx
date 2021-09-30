@@ -93,6 +93,8 @@ const SingleNFTForm = () => {
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
+  const [showCongratsPopupOnSaveForLaterClick, setShowCongratsPopupOnSaveForLaterClick] =
+    useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
@@ -455,7 +457,7 @@ const SingleNFTForm = () => {
     setSavedNfts(savedNFTS || []);
 
     setShowLoadingPopup(false);
-    setShowCongratsPopup(true);
+    setShowCongratsPopupOnSaveForLaterClick(true);
     setName('');
     setDescription('');
     setEditions('');
@@ -638,23 +640,12 @@ const SingleNFTForm = () => {
             message="NFT was successfully created and should be displayed in your wallet shortly"
           />
         </Popup>
-        <Popup
-          trigger={
-            <button
-              type="button"
-              id="success-hidden-btn"
-              aria-label="hidden"
-              style={{ display: 'none' }}
-            />
-          }
-        >
-          {(close) => (
-            <CongratsPopup
-              onClose={close}
-              title="Success!"
-              message="NFT was successfully saved for later"
-            />
-          )}
+        <Popup open={showCongratsPopupOnSaveForLaterClick} closeOnDocumentClick={false}>
+          <CongratsPopup
+            showCreateMore={showCreateMoreButton}
+            onClose={() => setShowCongratsPopupOnSaveForLaterClick(false)}
+            message="NFT was successfully saved for later"
+          />
         </Popup>
         <div className="single-nft-content">
           <div className="single-nft-upload">
