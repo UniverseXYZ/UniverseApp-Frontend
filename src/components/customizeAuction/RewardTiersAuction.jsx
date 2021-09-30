@@ -36,9 +36,8 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
     onChange((prevValues) =>
       prevValues.map((tier) => {
         if (tier.id === tierId) {
-          return { ...tier, tierImg: event.target.files[0] };
+          return { ...tier, imageUrl: event.target.files[0] };
         }
-
         return tier;
       })
     );
@@ -47,8 +46,8 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   return (
     <div className="reward__tiers">
       <h3>Reward Tiers</h3>
-      {auction &&
-        auction.rewardTiers.map((tier, i) => {
+      {values &&
+        values.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
           // const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
           const image = tier.imageUrl || null;
@@ -97,7 +96,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                   <div className="custom__description__title">
                     <h4>Custom description</h4>
                     <p>
-                      {description.length}
+                      {values[i].description ? values[i].description.length : 0}
                       /600
                     </p>
                   </div>
@@ -105,13 +104,13 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                     className={editButtonClick && !description ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
-                    value={description}
+                    value={values[i].description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
                   {editButtonClick && !description && (
                     <p className="error__text">Fill out the description</p>
                   )}
-                  {description.length >= 600 && (
+                  {values[i].description?.length >= 600 && (
                     <p className="warning-text">You have reached the max amount of symbols</p>
                   )}
                 </div>
