@@ -13,7 +13,7 @@
     transform-origin: 40px 40px;
   }
   .card-lds-roller div:after {
-    content: ' ';
+    content: " ";
     display: block;
     position: absolute;
     width: 7px;
@@ -93,5 +93,4 @@
       transform: rotate(360deg);
     }
   }
-    
 }

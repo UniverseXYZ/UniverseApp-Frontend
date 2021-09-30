@@ -7,6 +7,8 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import CollectionPendingDropdown from './pendingDropdown/CollectionPendingDropdown.jsx';
+import { PLACEHOLDER_PENDING_COLLECTIONS } from '../../utils/fixtures/PendingCollectionsDummyData';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
@@ -31,6 +33,11 @@ const DeployedCollections = () => {
   console.log(deployedCollections);
   return (
     <div className="tab__saved__collections">
+      {PLACEHOLDER_PENDING_COLLECTIONS.length ? (
+        <CollectionPendingDropdown data={PLACEHOLDER_PENDING_COLLECTIONS} />
+      ) : (
+        <></>
+      )}
       {deployedCollections.length ? (
         <>
           <div className="saved__collections__lists">
