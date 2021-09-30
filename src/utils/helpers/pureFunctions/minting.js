@@ -127,15 +127,18 @@ export const returnTokenURIsAndRoyalties = ({ nfts }) => {
 const formatTokenURIsAndRoyaltiesObject = (nfts) => {
   const royaltiesArray = [];
   const tokensArray = [];
+  const mintingIdArray = [];
 
   nfts.forEach((entry) => {
     royaltiesArray.push(entry.royalties);
     tokensArray.push(entry.token);
+    mintingIdArray.push(entry.mintingId);
   });
 
   return {
     royaltiesArray,
     tokensArray,
+    mintingIdArray,
   };
 };
 
@@ -162,16 +165,18 @@ export const formatRoyalties = ({ nfts }) => {
 export const parseDataForBatchMint = (tokenURIsAndRoyaltiesEntry) => {
   const CHUNK_SIZE = parseInt(process.env.REACT_APP_BATCH_MINTING_CHUNK_SIZE, 10);
 
-  const { royaltiesArray, tokensArray } = formatTokenURIsAndRoyaltiesObject(
+  const { royaltiesArray, tokensArray, mintingIdArray } = formatTokenURIsAndRoyaltiesObject(
     tokenURIsAndRoyaltiesEntry
   );
 
   const tokensChunks = chunkifyArray(tokensArray, CHUNK_SIZE);
   const royaltiesChunks = chunkifyArray(royaltiesArray, CHUNK_SIZE);
+  const mintingIdChunks = chunkifyArray(mintingIdArray, CHUNK_SIZE);
 
   return {
     tokensChunks,
     royaltiesChunks,
+    mintingIdChunks,
     chunksCount: royaltiesChunks.length,
   };
 };

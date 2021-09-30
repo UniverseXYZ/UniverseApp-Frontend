@@ -60,7 +60,13 @@ export async function sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesOb
 
   if (!mintReceipt.status) console.error('satus code:', mintReceipt.status);
 
-  return mintTransaction.hash;
+  return [
+    {
+      transaction: mintTransaction,
+      tokens: mintingData.token,
+      mintingIds: [mintingData.mintingId],
+    },
+  ];
 }
 
 /**
@@ -87,32 +93,32 @@ export async function sendBatchMintRequest(
 
   const collectionsIdsArray = Object.keys(requiredContracts);
   const txPromises = [];
-  const mintPromises = [];
-
-  const txHashesArray = [];
 
   collectionsIdsArray.forEach((collectionId) => {
-    const { tokensChunks, royaltiesChunks } = parseDataForBatchMint(
+    const { tokensChunks, royaltiesChunks, mintingIdChunks } = parseDataForBatchMint(
       tokenURIsAndRoyaltiesObject[collectionId]
     );
-
-    tokensChunks.map((tokenChunk, i) =>
-      txPromises.push(
-        sendTransactions({
-          address: helpers.address,
-          tokens: tokenChunk,
-          royalties: royaltiesChunks[i],
-          contract: requiredContracts[collectionId],
-          txHashesArray,
-        })
-      )
-    );
+    const mints = tokensChunks.map(async (tokenChunk, i) => {
+      const mintingIdChunk = mintingIdChunks[i];
+      const txn = await sendTransactions({
+        address: helpers.address,
+        tokens: tokenChunk,
+        royalties: royaltiesChunks[i],
+        contract: requiredContracts[collectionId],
+      });
+      return {
+        transaction: txn,
+        tokens: tokenChunk,
+        mintingIds: mintingIdChunk,
+      };
+    });
+    txPromises.push(...mints);
   });
 
-  const contractPromises = await Promise.all(txPromises);
-  const txHashes = contractPromises.map((res) => res.hash);
+  const contractData = await Promise.all(txPromises);
+  const txHashes = contractData.map((res) => res.transaction.hash);
   helpers.setActiveTxHashes(txHashes);
-  return txHashes;
+  return contractData;
 
   // const txResponse = await Promise.all(txPromises);
 

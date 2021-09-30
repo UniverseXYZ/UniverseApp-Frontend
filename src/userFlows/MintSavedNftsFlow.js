@@ -45,16 +45,19 @@ const createPlaceholders = (nfts) => {
 export async function MintSavedNftsFlow({ nfts, helpers }) {
   const requiredContracts = {};
 
-  const nftsAttachedAddress = nfts.map((nft) => ({
-    ...nft,
-    contractAddress: helpers.collectionsIdAddressMapping[nft.collectionId] || 0,
-  }));
-
-  // if there is no address we need to use the Universe Contract
   nfts.forEach((nft) => {
-    requiredContracts[nft.collectionId || 0] = nft.contractAddress
-      ? new Contract(nft.contractAddress, helpers.contracts.UniverseERC721.abi, helpers.signer)
-      : helpers.universeERC721CoreContract;
+    const contractAddress = helpers.collectionsIdAddressMapping[nft.collectionId];
+    requiredContracts[nft.collectionId] = requiredContracts[nft.collectionId] || {};
+
+    if (!contractAddress) {
+      requiredContracts[nft.collectionId] = helpers.universeERC721CoreContract;
+    } else {
+      requiredContracts[nft.collectionId] = new Contract(
+        contractAddress,
+        helpers.contracts.UniverseERC721.abi,
+        helpers.signer
+      );
+    }
   });
 
   const formatNfts = nfts.map((nft) => ({
@@ -66,55 +69,60 @@ export async function MintSavedNftsFlow({ nfts, helpers }) {
     description: nft.description,
   }));
 
-  const promises = [];
-  const createMintingNftsPromises = [];
+  const tokenURIsPromises = formatNfts.map(async (nft) => {
+    const meta = await getMetaForSavedNft(nft.id);
+    return { ...meta, nftId: nft.id };
+  });
+  const tokenURIs = await Promise.all(tokenURIsPromises);
 
-  formatNfts.forEach((nft) => promises.push(getMetaForSavedNft(nft.id)));
-
-  const mintingIds = await Promise.all(promises);
-
-  if (!mintingIds.length) {
+  if (!tokenURIs.length) {
     console.error('server error. cannot get meta data');
     return {};
   }
-  for (let i = 0; i < mintingIds.length; i += 1) {
-    const mId = mintingIds[i];
-    // TODO:  Check if there may be index out of range exception or incorrect mapping
-    const nftsAttachedTokenUri = [
-      {
-        ...formatNfts[i],
-        tokenUri: mId.tokenUris,
-      },
-    ];
-    createPlaceholders(nftsAttachedTokenUri);
 
-    const tokenURIsAndRoyaltiesObject = {};
+  const nftsAttachedTokenUri = formatNfts.map((nft) => {
+    const tokenData = tokenURIs.find((data) => data.nftId === nft.id);
 
-    nftsAttachedTokenUri.forEach((nft) => {
-      if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
-        tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
+    return {
+      ...nft,
+      tokenUri: tokenData.tokenUris,
+      mintingId: tokenData.mintingNft.id,
+    };
+  });
 
-      nft.tokenUri.forEach((token) => {
-        tokenURIsAndRoyaltiesObject[nft.collectionId].push({
-          token,
-          royalties: nft.royalties,
-        });
+  const tokenURIsAndRoyaltiesObject = {};
+
+  nftsAttachedTokenUri.forEach((nft) => {
+    if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
+      tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
+
+    nft.tokenUri.forEach((token) => {
+      tokenURIsAndRoyaltiesObject[nft.collectionId].push({
+        token,
+        royalties: nft.royalties,
+        mintingId: nft.mintingId,
       });
     });
+  });
 
-    const isSingle =
-      nftsAttachedTokenUri.length === 1 && nftsAttachedTokenUri[0].tokenUri.length === 1;
+  const isSingle =
+    nftsAttachedTokenUri.length === 1 && nftsAttachedTokenUri[0].tokenUri.length === 1;
 
-    if (!tokenURIsAndRoyaltiesObject) return false;
+  const txDataArray = isSingle
+    ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers)
+    : await sendBatchMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers);
 
-    const txHashes = isSingle
-      ? await sendMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers)
-      : await sendBatchMintRequest(requiredContracts, tokenURIsAndRoyaltiesObject, helpers);
+  const mintingNftsPromises = txDataArray.map(async (data) => {
+    const txHash = data.transaction.hash;
+    const uniqueMintingIds = data.mintingIds.filter(
+      (c, index) => data.mintingIds.indexOf(c) === index
+    );
 
-    for (let q = 0; q < txHashes.length; q += 1) {
-      const txHash = txHashes[q];
-      createMintingNftsPromises.push(createMintingNFT(txHash, mId.mintingNft.id));
-    }
-  }
+    const mints = uniqueMintingIds.map((id) => createMintingNFT(txHash, id));
+    await Promise.all(mints);
+  });
+
+  await Promise.all(mintingNftsPromises);
+
   return true;
 }
