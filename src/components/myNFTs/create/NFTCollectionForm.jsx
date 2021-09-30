@@ -202,7 +202,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         const txhash = await txReqPromise.wait();
 
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
-        res = await attachTxHashToCollection(tx.transactionHash, save.id);
+        res = await attachTxHashToCollection(tx.hash, save.id);
 
         // We need to wait for server process time, otherwise the new collection is not retunred imediatly
         const serverProcessTime = 5000; // ms

@@ -104,7 +104,7 @@ export const returnTokenURIsAndRoyalties = ({ nfts }) => {
     if (!tokenURIsAndRoyaltiesObject[nft.collectionId])
       tokenURIsAndRoyaltiesObject[nft.collectionId] = [];
 
-    nft.tokenUri.forEach((token) => {
+    nft.tokenUri.tokenUri.forEach((token) => {
       tokenURIsAndRoyaltiesObject[nft.collectionId].push({
         token,
         royalties: nft.royalties,
