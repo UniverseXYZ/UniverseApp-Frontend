@@ -50,7 +50,7 @@ const CustomizeAuction = () => {
         ? 'filled'
         : 'empty',
   });
-  const [currentAuction, setCurrentAuction] = useState(myAuctions[0]);
+  const [currentAuction, setCurrentAuction] = useState(auction.rewardTiers);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
   const [editButtonClick, setEditButtonClick] = useState(false);
 
@@ -340,7 +340,7 @@ const CustomizeAuction = () => {
         />
         <RewardTiersAuction
           values={currentAuction}
-          // onChange={setRewardTiersAuction}
+          onChange={setCurrentAuction}
           editButtonClick={editButtonClick}
           setEditButtonClick={setEditButtonClick}
         />
