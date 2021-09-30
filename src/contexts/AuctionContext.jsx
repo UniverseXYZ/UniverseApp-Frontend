@@ -20,9 +20,6 @@ const AuctionContextProvider = ({ children }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   useEffect(async () => {
-    // TODO:: Asen can transfer his logic here.
-    // storageBuster();
-    // placeholderBuster();
     const futureAuctionResponse = await getFutureAuctions();
     setMyAuctions(futureAuctionResponse?.auctions || []);
   }, []);

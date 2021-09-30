@@ -2,7 +2,13 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { useAuthContext } from './AuthContext';
-import { getMyCollections, getMyNfts, getSavedNfts } from '../utils/api/mintNFT';
+import {
+  getMyMintedCollections,
+  getMyMintingCollections,
+  getMyMintingNfts,
+  getMyNfts,
+  getSavedNfts,
+} from '../utils/api/mintNFT';
 
 const MyNFTsContext = createContext(null);
 
@@ -22,6 +28,7 @@ const MyNFTsContextProvider = ({ children }) => {
   const [collectionsIdAddressMapping, setCollectionsIdAddressMapping] = useState({});
   const [savedNfts, setSavedNfts] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
+  const [myMintingNFTs, setMyMintingNFTs] = useState([]);
   const [myUniversNFTsSearchPhrase, setMyUniversNFTsSearchPhrase] = useState('');
   const [myUniverseNFTsperPage, setMyUniverseNFTsPerPage] = useState(12);
   const [myUniverseNFTsActiverPage, setMyUniverseNFTsActiverPage] = useState(0);
@@ -35,20 +42,24 @@ const MyNFTsContextProvider = ({ children }) => {
   const [universeNFTs, setUniverseNFTs] = useState([]);
   const [savedCollections, setSavedCollections] = useState([]);
   const [activeTxHashes, setActiveTxHashes] = useState([]);
+  const [myMintingCollections, setMyMintingCollections] = useState([]);
 
   const fetchNfts = async () => {
     try {
-      // Fetch the saved NFTS for that addres
-      const savedNFTS = await getSavedNfts();
+      const [savedNFTS, myNfts, mintingNfts, mintedCollectionsRequest, mintingcollectionsRequest] =
+        await Promise.all([
+          getSavedNfts(),
+          getMyNfts(),
+          getMyMintingNfts(),
+          getMyMintedCollections(),
+          getMyMintingCollections(),
+        ]);
+
       setSavedNfts(savedNFTS || []);
-
-      // Fetch the minted NFTS for that address
-      const mintedNfts = await getMyNfts();
-      setMyNFTs(mintedNfts || []);
-
-      // Fetch the minted NFTS for that address
-      const collectionsRequest = await getMyCollections();
-      setDeployedCollections(collectionsRequest.collections || []);
+      setMyNFTs(myNfts || []);
+      setMyMintingNFTs(mintingNfts || []);
+      setDeployedCollections(mintedCollectionsRequest.collections || []);
+      setMyMintingCollections(mintingcollectionsRequest.collections || []);
     } catch (err) {
       alert(
         'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
@@ -123,6 +134,10 @@ const MyNFTsContextProvider = ({ children }) => {
         setSavedCollections,
         activeTxHashes,
         setActiveTxHashes,
+        myMintingNFTs,
+        setMyMintingNFTs,
+        myMintingCollections,
+        setMyMintingCollections,
       }}
     >
       {children}
