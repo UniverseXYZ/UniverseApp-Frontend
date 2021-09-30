@@ -25,7 +25,7 @@ const AuctionsTab = () => {
   return (
     <div className="accordion">
       <div
-        className="accordion__item"
+        className={`accordion__item ${isFirstAccordionOpened ? 'opened' : ''}`}
         onClick={() => setIsFirstAccordionOpened(!isFirstAccordionOpened)}
         aria-hidden="true"
       >
@@ -49,7 +49,7 @@ const AuctionsTab = () => {
         </div>
       </div>
       <div
-        className="accordion__item auction-middle"
+        className={`accordion__item auction-middle ${isSecondAccordionOpened ? 'opened' : ''}`}
         onClick={() => setIsSecondAccordionOpened(!isSecondAccordionOpened)}
         aria-hidden="true"
       >
@@ -72,7 +72,7 @@ const AuctionsTab = () => {
         </div>
       </div>
       <div
-        className="accordion__item"
+        className={`accordion__item ${isThirdAccordionOpened ? 'opened' : ''}`}
         onClick={() => setIsThirdAccordionOpened(!isThirdAccordionOpened)}
         aria-hidden="true"
       >
