@@ -9,13 +9,14 @@ import Slider from 'react-slick';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import PlaceBidPopup from '../popups/PlaceBidPopup.jsx';
 import Button from '../button/Button.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 import leftArrow from '../../assets/images/arrow.svg';
 import darkCopyIcon from '../../assets/images/copy.svg';
 import lightCopyIcon from '../../assets/images/copy2.svg';
+import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   const { myAuctions } = useAuctionContext();
@@ -293,7 +294,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
               {!selectedAuctionEnded && (
                 <div className="auction__details__box__top__bidders">
                   <div className="auction__details__box__top__bidders__header">
-                    <h2 className="title">Top 10 bidders</h2>
+                    <h2 className="title">Top 5 bidders</h2>
                     <Popup
                       trigger={
                         <button type="button" className="view__all__bids">
@@ -305,7 +306,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                     </Popup>
                   </div>
                   <div className="auction__details__box__top__bidders__content">
-                    <div className="ten__bidders__left">
+                    <div className="five__bidders">
                       {bidders.map(
                         (bidder, index) =>
                           index < 5 && (
@@ -317,25 +318,11 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                                   {bidder.rewardTier}
                                 </span>
                               </div>
-                              <div className="bid">{`Ξ${bidder.bid}`}</div>
-                            </div>
-                          )
-                      )}
-                    </div>
-                    <div className="ten__bidders__right">
-                      {bidders.map(
-                        (bidder, index) =>
-                          index >= 5 &&
-                          index < 10 && (
-                            <div className="bidder" key={bidder.id}>
-                              <div className="name">
-                                <b>{`${index + 1}.`}</b>
-                                {bidder.name}
-                                <span className={bidder.rewardTier.toLocaleLowerCase()}>
-                                  {bidder.rewardTier}
-                                </span>
+                              <div className="bid">
+                                <img src={currencyETHIcon} alt="Currency" />
+                                <b>{bidder.bid}</b>
+                                <span>~$48,580</span>
                               </div>
-                              <div className="bid">{`Ξ${bidder.bid}`}</div>
                             </div>
                           )
                       )}
@@ -345,7 +332,11 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                     <div className="your__bid">
                       {currentBid && currentBid.aucionId === selectedAuction.id ? (
                         <span className="your__current__bid">
-                          <b>{`Your bid: Ξ${currentBid.bid} `}</b>
+                          <b>
+                            Your bid:
+                            <img src={currencyETHIcon} alt="Currency" />
+                            {currentBid.bid}
+                          </b>
                           {`(#${
                             bidders.findIndex(
                               (x) => x.artistId === currentBid.artistId && x.bid === currentBid.bid
