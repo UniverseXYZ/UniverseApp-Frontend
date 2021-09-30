@@ -11,8 +11,8 @@ import MyNFTs from './components/myNFTs/MyNFTs.jsx';
 import Artist from './containers/artist/Artist.jsx';
 import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage.jsx';
 import Homepage from './containers/homepage/Homepage.jsx';
-import About from './containers/mintingAndAuctions/about/About.jsx';
-import Marketplace from './containers/mintingAndAuctions/marketplace/Marketplace.jsx';
+import About from './containers/products/about/About.jsx';
+import Marketplace from './containers/products/marketplace/Marketplace.jsx';
 import MyAccount from './containers/myAccount/MyAccount.jsx';
 import CustomizeAuction from './containers/customizeAuction/CustomizeAuction.jsx';
 import Team from './containers/team/Team.jsx';
@@ -49,6 +49,7 @@ import { MarketplaceContextProvider } from './contexts/MarketplaceContext';
 import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
+import Minting from './components/products/minting/Minting';
 
 const App = () => {
   const location = useLocation();
@@ -75,6 +76,9 @@ const App = () => {
                 </Route>
                 <Route exact path="/team">
                   <Team />
+                </Route>
+                <Route exact path="/minting">
+                  <Minting />
                 </Route>
                 <Route exact path="/polymorphs">
                   <Polymorphs />

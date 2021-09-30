@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './CreateNFT.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import arrow from '../../../assets/images/arrow.svg';
-import SelectType from './SelectType';
 import SingleNFTForm from './SingleNFTForm';
 import NFTCollectionForm from './NFTCollectionForm';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
@@ -97,12 +96,6 @@ const CreateNFT = () => {
         )}
         {savedCollectionID && <h1 className="page--title">Edit collection</h1>}
         <div className="tab__content">
-          {selectedTabIndex === 0 && (
-            <SelectType
-              setSelectedTabIndex={setSelectedTabIndex}
-              setSelectedNFTType={setSelectedNFTType}
-            />
-          )}
           {selectedTabIndex === 1 && selectedNFTType === 'single' && <SingleNFTForm />}
           {selectedTabIndex === 1 && selectedNFTType === 'collection' && (
             <NFTCollectionForm

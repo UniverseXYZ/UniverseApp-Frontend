@@ -1,0 +1,118 @@
+@import "../../../assets/scss/mixins";
+@import "../../../assets/scss/variables";
+.minting-page {
+  padding-bottom: 100px;
+  .select--title {
+    background-image: url("../../../assets/images/mintingGradient.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: inset 0 -34px 50px 0px #ffffff;
+    .container {
+      margin: 0px auto !important;
+      padding: 60px 0;
+      @include xl {
+        padding: 60px 20px;
+      }
+      > h1 {
+        font-family: $sharpGroteskSemiBoldFont;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 45px;
+      }
+      > p {
+        color: #00000099;
+        font-family: $spaceGroteskFont;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 27px;
+        margin-top: 10px;
+      }
+    }
+  }
+  .container {
+    margin: 2px auto !important;
+  }
+  .selecttype--section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    @include sm {
+      grid-template-columns: 1fr;
+    }
+    .nft-section {
+      position: relative;
+      z-index: 100;
+      &:hover {
+        .singlebox-shadow {
+          opacity: 1;
+        }
+      }
+      .single-box {
+        border-radius: 12px;
+        border: 1px solid #0000001a;
+        padding: 49px 0 53px 0;
+        text-align: center;
+        background-color: $white;
+        cursor: pointer;
+        @include sm {
+          display: grid;
+          grid-template-columns: 72px 1fr;
+          grid-gap: 20px;
+          align-items: center;
+          justify-content: center;
+          padding: 30px;
+        }
+        &:hover {
+          background: linear-gradient(#ffffff, #ffffff) padding-box,
+            linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
+        }
+        .image-section {
+        }
+        .text-section {
+          max-width: 230px;
+          margin: 28px auto 0px;
+          @include sm {
+            margin: 0;
+            max-width: unset;
+            text-align: left;
+          }
+          > h3 {
+            font-family: $spaceGroteskFont;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 29px;
+            color: $black;
+          }
+          > p {
+            font-family: $spaceGroteskFont;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 22px;
+            color: #00000066;
+            margin-top: 15px;
+            @include sm {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+      .singlebox-shadow {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%) border-box;
+        border-radius: 12px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        filter: blur(3px);
+        opacity: 0;
+        z-index: -1;
+      }
+    }
+  }
+}
