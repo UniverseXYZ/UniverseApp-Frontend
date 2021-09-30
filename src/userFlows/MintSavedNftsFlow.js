@@ -9,27 +9,6 @@ import { createMintingNFT, getMetaForSavedNft } from '../utils/api/mintNFT';
 const FACTTORY_CONTRACT_ID = 2;
 const getCurrentDay = () => parseInt(new Date().getTime() / (10000 * 60 * 60 * 24), 10);
 
-export const getPlaceholdersLocalStorage = () =>
-  JSON.parse(localStorage.getItem('nftsPlaceholders')) || [];
-
-export const setPlaceholdersLocalStorage = (data) => {
-  localStorage.setItem('nftsPlaceholders', JSON.stringify(data));
-  localStorage.setItem('nftsPlaceholdersBuster', JSON.stringify(getCurrentDay()));
-};
-
-const createPlaceholders = (nfts) => {
-  const currentList = getPlaceholdersLocalStorage();
-  nfts?.forEach((nft) => {
-    for (let i = 0; i < nft.numberOfEditions; i += 1) {
-      currentList.push(
-        `${nft.collectionId || FACTTORY_CONTRACT_ID}${nft?.name || ''}${nft?.description || ''}`
-      );
-    }
-  });
-
-  setPlaceholdersLocalStorage(currentList);
-};
-
 /**
  * @param {Object} data
  * @param {Array} data.nfts

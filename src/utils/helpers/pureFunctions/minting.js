@@ -4,25 +4,6 @@
 import { Contract } from 'ethers';
 import { chunkifyArray, formatRoyaltiesForMinting } from '../contractInteraction';
 
-const getCurrentDay = () => parseInt(new Date().getTime() / (10000 * 60 * 60 * 24), 10);
-
-export const placeholderBuster = () => {
-  const bustStorage = () => localStorage.setItem('nftsPlaceholders', JSON.stringify([]));
-
-  const lastUpdateDay = localStorage.getItem('nftsPlaceholdersBuster');
-  const timeExceeded = getCurrentDay() - lastUpdateDay;
-
-  if (timeExceeded) bustStorage();
-};
-
-export const getPlaceholdersLocalStorage = () =>
-  JSON.parse(localStorage.getItem('nftsPlaceholders')) || [];
-
-export const setPlaceholdersLocalStorage = (data) => {
-  localStorage.setItem('nftsPlaceholders', JSON.stringify(data));
-  localStorage.setItem('nftsPlaceholdersBuster', JSON.stringify(getCurrentDay()));
-};
-
 /**
  * @param {Object} data
  * @param {Object} data.helpers
@@ -196,26 +177,3 @@ export const resolveAllPromises = async (promises) => {
 };
 
 const FACTTORY_CONTRACT_ID = 2;
-
-/**
- * @param {Object} data
- * @param {Object[]} data.nfts
- * @param data.nfts.collectionId
- * @param data.nfts.name
- * @param data.nfts.description
- * @returns {Object[]} { nfts }
- */
-export const createPlaceholders = ({ nfts }) => {
-  const currentList = getPlaceholdersLocalStorage();
-  nfts?.forEach((nft) => {
-    for (let i = 0; i < nft.numberOfEditions; i += 1) {
-      currentList.push(
-        `${nft.collectionId || FACTTORY_CONTRACT_ID}${nft?.name || ''}${nft?.description || ''}`
-      );
-    }
-  });
-
-  setPlaceholdersLocalStorage(currentList);
-
-  return { nfts };
-};

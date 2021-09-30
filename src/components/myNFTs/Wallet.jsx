@@ -23,8 +23,8 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import SimplePagination from '../pagination/SimplePaginations';
-import WalletPendingDropdown from './pendingDropdown/WalletPendingDropdown.jsx';
 import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
+import PendingNFTs from './pendingDropdown/pendingNFTs/PendingNFTs';
 
 const Wallet = React.memo(
   ({
@@ -419,7 +419,7 @@ const Wallet = React.memo(
                 <SearchFilters data={myNFTs} setData={setShownNFTs} setOffset={setOffset} />
               </>
             )}
-            {PLACEHOLDER_MARKETPLACE_NFTS.length ? <WalletPendingDropdown /> : <> </>}
+            <PendingNFTs />
             {shownNFTs.length ? (
               <>
                 {isCreatingAction ? (

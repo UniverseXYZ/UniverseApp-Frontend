@@ -25,6 +25,7 @@ import {
   getMetaForSavedNft,
   getMyNfts,
   createMintingNFT,
+  getMyMintingNfts,
 } from '../../../utils/api/mintNFT';
 import {
   parseRoyalties,
@@ -47,6 +48,7 @@ const SingleNFTForm = () => {
     setSavedNFTsID,
     myNFTs,
     setMyNFTs,
+    setMyMintingNFTs,
     activeTxHashes,
     setActiveTxHashes,
   } = useMyNftsContext();
@@ -324,6 +326,7 @@ const SingleNFTForm = () => {
         editions,
         propertiesParsed: propertyCheck ? parseProperties(properties) : [],
         royaltiesParsed: royalities ? parseRoyalties(royaltyAddress) : [],
+        collectionId: selectedCollection?.id,
       };
 
       // Get the contract instance to mint from
@@ -336,7 +339,6 @@ const SingleNFTForm = () => {
       if (savedNFTsID) {
         // Attach the needed data to identify the NFT and its Collection
         data.id = savedNFTsID;
-        data.collectionId = selectedCollection?.id;
 
         let result = await updateSavedForLaterNft(data);
 
@@ -356,6 +358,7 @@ const SingleNFTForm = () => {
       }
 
       // Get the Token URIs from the BE
+      // TODO: Test this: We have to send collection id to get collection id appended
       const mintInfo = savedNFTsID
         ? await getMetaForSavedNft(savedNFTsID)
         : await getTokenURI(data);
@@ -396,9 +399,13 @@ const SingleNFTForm = () => {
       if (!hasFailedTransaction) {
         const serverProcessTime = 5000; // The BE needs some time to catch the transaction
         setTimeout(async () => {
-          const [mintedNFTS, savedNFTS] = await Promise.all([getMyNfts(), getSavedNfts()]);
-          setMyNFTs(mintedNFTS || []);
-
+          const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
+            getMyNfts(),
+            getMyMintingNfts(),
+            getSavedNfts(),
+          ]);
+          setMyNFTs(myNfts || []);
+          setMyMintingNFTs(mintingNfts || []);
           setSavedNfts(savedNFTS || []);
 
           setShowLoadingPopup(false);

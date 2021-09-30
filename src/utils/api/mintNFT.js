@@ -3,10 +3,12 @@
 /* eslint-disable no-useless-return */
 const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
-const GET_MY_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts`;
+const GET_MY_MINTED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts`;
+const GET_MY_MINTING_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/pending`;
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
-const GET_MY_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
+const GET_MY_MINTED_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
+const GET_MY_MINTING_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending`;
 const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection`;
 const EDIT_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/collections`;
 const GET_NFT_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`;
@@ -113,7 +115,7 @@ export const getSavedNfts = async () => {
  * @returns {array} with my NFTs
  */
 export const getMyNfts = async () => {
-  const request = await fetch(GET_MY_NFTS_URL, {
+  const request = await fetch(GET_MY_MINTED_NFTS_URL, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -125,22 +127,25 @@ export const getMyNfts = async () => {
     console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
   }
   const result = await request.text().then((data) => JSON.parse(data));
-  let currentList = JSON.parse(localStorage.getItem('nftsPlaceholders'));
-
-  if (currentList?.length) {
-    result.nfts.forEach((nft) => {
-      for (let i = 0; i < nft.tokenIds.length; i += 1) {
-        const match = currentList.indexOf(`${nft.collection.id}${nft.name}${nft.description}`);
-        if (match > -1) {
-          currentList.splice(match, 1);
-        }
-      }
-    });
-
-    localStorage.setItem('nftsPlaceholders', JSON.stringify(currentList));
-  }
 
   return result.nfts;
+};
+
+export const getMyMintingNfts = async () => {
+  const request = await fetch(GET_MY_MINTING_NFTS_URL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  });
+
+  if (!request.ok && request.status !== 201) {
+    console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
+  }
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result.mintingNfts;
 };
 
 /**
@@ -222,6 +227,7 @@ export const updateSavedForLaterNft = async (data) => {
  * @param {string} data.editions
  * @param {array} data.propertiesParsed
  * @param {array} data.royaltiesParsed
+ * @param {number} collectionId
  * @returns
  */
 export const getTokenURI = async ({
@@ -231,6 +237,7 @@ export const getTokenURI = async ({
   editions,
   propertiesParsed,
   royaltiesParsed,
+  collectionId,
 }) => {
   const formData = new FormData();
   const noProperties = propertiesParsed?.length;
@@ -239,6 +246,7 @@ export const getTokenURI = async ({
   formData.append('file', file, file.name);
   formData.append('name', name);
   formData.append('numberOfEditions', parseInt(editions, 10));
+  formData.append('collectionId', collectionId);
   if (description) formData.append('description', description);
   if (noProperties) formData.append('properties', JSON.stringify(propertiesParsed));
   if (noRoyalties) formData.append('royalties', JSON.stringify(royaltiesParsed));
@@ -345,7 +353,7 @@ export const updateSavedNft = async ({
   }
 };
 
-export const getMyCollections = async () => {
+export const getMyMintedCollections = async () => {
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -354,7 +362,22 @@ export const getMyCollections = async () => {
     },
   };
 
-  const request = await fetch(GET_MY_COLLECTIONS, requestOptions);
+  const request = await fetch(GET_MY_MINTED_COLLECTIONS, requestOptions);
+  const result = await request.text().then((res) => JSON.parse(res));
+
+  return result;
+};
+
+export const getMyMintingCollections = async () => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_MY_MINTING_COLLECTIONS, requestOptions);
   const result = await request.text().then((res) => JSON.parse(res));
 
   return result;
