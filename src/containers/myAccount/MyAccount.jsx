@@ -5,6 +5,7 @@ import ProfileForm from '../../components/myAccount/ProfileForm.jsx';
 import './MyAccount.scss';
 import Head from '../../components/myAccount/Head.jsx';
 import CongratsProfilePopup from '../../components/popups/CongratsProfilePopup.jsx';
+import LoadingPopup from '../../components/popups/LoadingPopup.jsx';
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile.js';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
@@ -18,6 +19,7 @@ const MyAccount = () => {
   const { setDarkMode } = useThemeContext();
 
   const history = useHistory();
+  const [showLoading, setShowLoading] = useState(false);
   const [about, setAbout] = useState(loggedInArtist.about);
   const [twitterLink, setTwitterLink] = useState(loggedInArtist.twitterLink);
   const [instagramLink, setInstagramLink] = useState(loggedInArtist.instagramLink);
@@ -54,6 +56,7 @@ const MyAccount = () => {
 
   const saveChanges = async () => {
     try {
+      setShowLoading(true);
       setEditProfileButtonClick(true);
       if (
         !accountImage ||
@@ -96,10 +99,12 @@ const MyAccount = () => {
 
       setTimeout(() => {
         if (accountName && accountImage && accountPage !== 'universe.xyz/your-address') {
+          setShowLoading(false);
           setShowCongrats(true);
         }
       }, 2000);
     } catch (err) {
+      setShowLoading(false);
       setShowError(true);
     }
   };
@@ -141,6 +146,9 @@ const MyAccount = () => {
       />
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsProfilePopup onClose={() => setShowCongrats(false)} />
+      </Popup>
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup text="Saving your profile changes" onClose={() => setShowLoading(false)} />
       </Popup>
     </div>
   );
