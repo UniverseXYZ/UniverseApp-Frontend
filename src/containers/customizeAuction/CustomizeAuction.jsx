@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './CustomizeAuction.scss';
 import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
@@ -9,10 +9,13 @@ import RewardTiersAuction from '../../components/customizeAuction/RewardTiersAuc
 import AboutArtistAuction from '../../components/customizeAuction/AboutArtistAuction.jsx';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
+import AppContext from '../../ContextAPI';
 import CongratsLandingPagePopup from '../../components/popups/CongratsLandingPagePopup';
 import { RouterPrompt } from '../../utils/routerPrompt';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { uploadImagesForTheLandingPage, editAuction } from '../../utils/api/auctions';
+import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
 
 const CustomizeAuction = () => {
   const history = useHistory();
@@ -47,7 +50,7 @@ const CustomizeAuction = () => {
         ? 'filled'
         : 'empty',
   });
-  const [rewardTiersAuction, setRewardTiersAuction] = useState(auction.rewardTiers);
+  const [currentAuction, setCurrentAuction] = useState(myAuctions[0]);
   const [saveAndPreview, setSaveAndPreview] = useState(false);
   const [editButtonClick, setEditButtonClick] = useState(false);
 
@@ -61,50 +64,68 @@ const CustomizeAuction = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
-  const [userTempData, setUserTempData] = useState({});
 
+  // Prepopulate profile data (use data from context instead of setting local state?)
   useEffect(() => {
-    if (userTempData.accountName) {
-      const isTierEdited = rewardTiersAuction.filter((i) => i.description || i.tierImg);
-      if (
-        domainAndBranding.backgroundImage ||
-        domainAndBranding.hasBlur ||
-        domainAndBranding.headline ||
-        domainAndBranding.promoImage ||
-        domainAndBranding.link.split('/')[2] ||
-        userTempData.accountName !== accountName ||
-        userTempData.about !== about ||
-        userTempData.twitterLink !== twitterLink ||
-        userTempData.instagramLink !== instagramLink ||
-        isTierEdited.length
-      ) {
-        setCustomizeAuctionState(true);
+    if (loggedInArtist) {
+      setAccountName(loggedInArtist.name);
+      setAbout(loggedInArtist.about);
+      setAccountImage(loggedInArtist.avatar);
+      setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`);
+      setTwitterLink(loggedInArtist.twitterLink);
+      setInstagramLink(loggedInArtist.instagramLink);
+    }
+  }, [loggedInArtist]);
+
+  // Prepopulate auction data (use data from context instead of setting local state?)
+  useEffect(() => {
+    if (myAuctions) {
+      setCurrentAuction(myAuctions[0]); // Hardcoded for now
+    }
+  }, [myAuctions]);
+
+  const saveUserData = async (_loggedInArtist) => {
+    try {
+      await saveProfileInfo(_loggedInArtist);
+    } catch (error) {
+      console.log(error);
+    }
+    if (typeof accountImage === 'object') {
+      try {
+        await saveUserImage(accountImage);
+      } catch (error) {
+        console.log(error);
       }
     }
-  }, [
-    userTempData,
-    domainAndBranding,
-    accountName,
-    accountPage,
-    accountImage,
-    about,
-    twitterLink,
-    instagramLink,
-    rewardTiersAuction,
-  ]);
+  };
 
-  useEffect(() => {
-    setUserTempData({
-      accountName,
-      accountPage,
-      accountImage,
-      about,
-      twitterLink,
-      instagramLink,
-    });
-  }, []);
+  const uploadLandingImages = async (_newAuction) => {
+    try {
+      console.info(_newAuction);
+      // await editAuction(_newAuction);
+    } catch (error) {
+      console.log(error);
+    }
+    if (
+      typeof domainAndBranding.promoImage === 'object' ||
+      typeof domainAndBranding.backgroundImage === 'object'
+    ) {
+      try {
+        // const test = await uploadImagesForTheLandingPage(
+        //   domainAndBranding.promoImage,
+        //   domainAndBranding.backgroundImage,
+        //   64
+        // );
+        // console.info(domainAndBranding.promoImage);
+        // console.info(domainAndBranding.backgroundImage);
+        // console.info(auction);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
-  const handleSaveClose = () => {
+  const handleSaveClose = async () => {
     setEditButtonClick(true);
     setEditProfileButtonClick(true);
     if (
@@ -116,9 +137,10 @@ const CustomizeAuction = () => {
       (accountPage !== 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
       about
     ) {
+      console.log(auction);
       const newAuction = { ...auction };
       newAuction.headline = domainAndBranding.headline;
-      newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
+      newAuction.link = domainAndBranding.link.replace(/\s+/g, '-').toLowerCase();
       newAuction.copied = false;
       newAuction.promoImage = domainAndBranding.promoImage;
       newAuction.backgroundImage = domainAndBranding.backgroundImage;
@@ -132,7 +154,7 @@ const CustomizeAuction = () => {
         page = '';
       }
       setAccountPage(page);
-      setLoggedInArtist({
+      const loggedInArtistClone = {
         ...loggedInArtist,
         name: accountName,
         universePageAddress: page,
@@ -140,9 +162,15 @@ const CustomizeAuction = () => {
         about,
         instagramLink,
         twitterLink,
-      });
+      };
+      setLoggedInArtist(loggedInArtistClone);
+      saveUserData(loggedInArtistClone);
+      uploadLandingImages(newAuction);
+
       if (loggedInArtist.name && loggedInArtist.avatar) {
-        newAuction.artist = loggedInArtist;
+        // newAuction.artist = loggedInArtist;
+        // history.push('/my-auctions');
+        // TODO:: consider removing this logic
         setTimeout(() => {
           if (
             new Date() < new Date(newAuction.endDate) &&
@@ -154,7 +182,6 @@ const CustomizeAuction = () => {
           }
           setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
           setAuction({ rewardTiers: [] });
-          setCustomizeAuctionState(false);
           document.getElementById('popup-root')?.remove();
           document.getElementById('congrats-hidden-btn').click();
         }, 1000);
@@ -255,7 +282,7 @@ const CustomizeAuction = () => {
             } else if (new Date() < new Date(newAuction.startDate)) {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
-            // setAuction({ rewardTiers: [] });
+            // setAuction({ tiers: [] });
             setCustomizeAuctionState(false);
             history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,
@@ -269,6 +296,8 @@ const CustomizeAuction = () => {
   useEffect(() => {
     setShowPrompt(true);
   }, [location.pathname]);
+
+  // console.info('before return: ====== ', currentAuction);
 
   return (
     <div className="customize__auction">
@@ -310,8 +339,8 @@ const CustomizeAuction = () => {
           setEditButtonClick={setEditButtonClick}
         />
         <RewardTiersAuction
-          values={rewardTiersAuction}
-          onChange={setRewardTiersAuction}
+          values={currentAuction}
+          // onChange={setRewardTiersAuction}
           editButtonClick={editButtonClick}
           setEditButtonClick={setEditButtonClick}
         />
