@@ -90,6 +90,7 @@ const SingleNFTForm = () => {
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
+  const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
@@ -100,12 +101,22 @@ const SingleNFTForm = () => {
     setSelectedCollection(universeCollection);
   }, [universeCollection]);
 
-  const hasError = (royalty, index) => {
+  const hasAddressError = (royalty, index) => {
     if (royalty && royaltiesMapIndexes[royalty]) {
       const isRepeated = royaltiesMapIndexes[royalty].length > 1;
       if (!isRepeated) return false;
       const firstAppearenceIndex = royaltiesMapIndexes[royalty][0];
       if (index !== firstAppearenceIndex) return 'Duplicated address';
+    }
+    return false;
+  };
+
+  const hasPropError = (value, index) => {
+    if (value && propertiesIndexes[value]) {
+      const isRepeated = propertiesIndexes[value].length > 1;
+      if (!isRepeated) return false;
+      const firstAppearenceIndex = propertiesIndexes[value][0];
+      if (index !== firstAppearenceIndex) return 'Duplicated property name';
     }
     return false;
   };
@@ -148,18 +159,18 @@ const SingleNFTForm = () => {
     for (const r in royaltiesMapIndexes) {
       if (royaltiesMapIndexes[r].includes(index)) {
         if (royaltiesMapIndexes[r].length > 1) {
-          royaltiesMapIndexes[r].splice(index, 1);
+          royaltiesMapIndexes[r].splice(royaltiesMapIndexes[r].indexOf(index), 1);
         } else {
           delete royaltiesMapIndexes[r];
         }
       }
     }
 
-    if (royaltiesMapIndexes[lastAddress]) {
+    if (royaltiesMapIndexes[lastAddress] && royaltiesMapIndexes[lastAddress].includes(index)) {
       if (royaltiesMapIndexes.length === 1) {
         delete royaltiesMapIndexes[lastAddress];
       } else {
-        royaltiesMapIndexes[lastAddress].splice(index, 1);
+        royaltiesMapIndexes[lastAddress].splice(royaltiesMapIndexes[r].indexOf(index), 1);
       }
     }
     if (royaltiesMapIndexes[val] && !royaltiesMapIndexes[val].includes(index)) {
@@ -208,6 +219,35 @@ const SingleNFTForm = () => {
     }
 
     newProperties[index].errors.name = !val ? '“Property name” is not allowed to be empty' : '';
+
+    const lastAddress = newProperties[index].name;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const r in propertiesIndexes) {
+      if (propertiesIndexes[r].includes(index)) {
+        if (propertiesIndexes[r].length > 1) {
+          propertiesIndexes[r].splice(propertiesIndexes[r].indexOf(index), 1);
+        } else {
+          delete propertiesIndexes[r];
+        }
+      }
+    }
+
+    if (propertiesIndexes[lastAddress] && propertiesIndexes[lastAddress].includes(index)) {
+      if (propertiesIndexes.length === 1) {
+        delete propertiesIndexes[lastAddress];
+      } else {
+        propertiesIndexes[lastAddress].splice(propertiesIndexes[r].indexOf(index), 1);
+      }
+    }
+    if (propertiesIndexes[val] && !propertiesIndexes[val].includes(index)) {
+      propertiesIndexes[val].push(index);
+    } else {
+      propertiesIndexes[val] = [];
+      propertiesIndexes[val].push(index);
+    }
+
+    setPropertiesMapIndexes(propertiesIndexes);
+
     setProperties(newProperties);
   };
 
@@ -816,7 +856,7 @@ const SingleNFTForm = () => {
                       <h5>Property name</h5>
                       <Input
                         className="inp"
-                        error={property.errors?.name}
+                        error={property.errors?.name || hasPropError(property.name, i)}
                         placeholder="Colour"
                         value={property.name}
                         onChange={(e) => propertyChangesName(i, e.target.value)}
@@ -909,7 +949,7 @@ const SingleNFTForm = () => {
                         className="inp"
                         placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                         value={elm.address}
-                        error={elm.error || hasError(elm.address, i)}
+                        error={elm.error || hasAddressError(elm.address, i)}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
                       />
                     </div>
