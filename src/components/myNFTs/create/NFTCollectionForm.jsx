@@ -17,7 +17,8 @@ import { RouterPrompt } from '../../../utils/routerPrompt.js';
 import {
   editCollection,
   editCollectionImage,
-  getMyCollections,
+  getMyMintingCollections,
+  getMyMintedCollections,
   saveCollection,
   attachTxHashToCollection,
 } from '../../../utils/api/mintNFT';
@@ -36,6 +37,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     collectionMintingTxHash,
     activeTxHashes,
     setActiveTxHashes,
+    setMyMintingCollections,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -202,15 +204,19 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         const txhash = await txReqPromise.wait();
 
         const [save, tx] = await Promise.all([saveRequestPromise, txReqPromise]);
-        res = await attachTxHashToCollection(tx.transactionHash, save.id);
+        res = await attachTxHashToCollection(tx.hash, save.id);
 
         // We need to wait for server process time, otherwise the new collection is not retunred imediatly
-        const serverProcessTime = 5000; // ms
-        await sleep(serverProcessTime);
+        // const serverProcessTime = 5000; // ms
+        // await sleep(serverProcessTime);
         // get the new collections and update the state
-        const collectionsRequest = await getMyCollections();
-        if (!collectionsRequest.message) {
-          setDeployedCollections(collectionsRequest.collections);
+        const mintedCollectionsRequest = await getMyMintedCollections();
+        if (!mintedCollectionsRequest.message) {
+          setDeployedCollections(mintedCollectionsRequest.collections);
+        }
+        const mintingCollectionsRequest = await getMyMintingCollections();
+        if (!mintingCollectionsRequest.message) {
+          setMyMintingCollections(mintingCollectionsRequest.collections);
         }
       }
 

@@ -13,6 +13,13 @@ import CongratsLandingPagePopup from '../../components/popups/CongratsLandingPag
 import { RouterPrompt } from '../../utils/routerPrompt';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import {
+  uploadImagesForTheLandingPage,
+  editRewardTier,
+  editAuction,
+  editRewardTierImage,
+} from '../../utils/api/auctions';
+import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
 
 const CustomizeAuction = () => {
   const history = useHistory();
@@ -26,7 +33,6 @@ const CustomizeAuction = () => {
     setActiveAuctions,
     futureAuctions,
     setFutureAuctions,
-    editProfileButtonClick,
     setEditProfileButtonClick,
   } = useAuctionContext();
   const { loggedInArtist, setLoggedInArtist } = useAuthContext();
@@ -39,7 +45,7 @@ const CustomizeAuction = () => {
       `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
     promoImage: auction.promoImage || null,
     backgroundImage: auction.backgroundImage || null,
-    hasBlur: auction.hasBlur || '',
+    hasBlur: auction.backgroundImageBlur || '',
     status:
       auction.link &&
       auction.link.toLowerCase() !==
@@ -61,50 +67,77 @@ const CustomizeAuction = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
-  const [userTempData, setUserTempData] = useState({});
 
+  // Prepopulate profile data (use data from context instead of setting local state?)
   useEffect(() => {
-    if (userTempData.accountName) {
-      const isTierEdited = rewardTiersAuction.filter((i) => i.description || i.tierImg);
-      if (
-        domainAndBranding.backgroundImage ||
-        domainAndBranding.hasBlur ||
-        domainAndBranding.headline ||
-        domainAndBranding.promoImage ||
-        domainAndBranding.link.split('/')[2] ||
-        userTempData.accountName !== accountName ||
-        userTempData.about !== about ||
-        userTempData.twitterLink !== twitterLink ||
-        userTempData.instagramLink !== instagramLink ||
-        isTierEdited.length
-      ) {
-        setCustomizeAuctionState(true);
+    if (loggedInArtist) {
+      setAccountName(loggedInArtist.name);
+      setAbout(loggedInArtist.about);
+      setAccountImage(loggedInArtist.avatar);
+      setAccountPage(`universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`);
+      setTwitterLink(loggedInArtist.twitterLink);
+      setInstagramLink(loggedInArtist.instagramLink);
+    }
+  }, [loggedInArtist]);
+
+  const saveUserData = async (_loggedInArtist) => {
+    if (
+      loggedInArtist.name !== accountName ||
+      loggedInArtist.about !== about ||
+      loggedInArtist.instagramLink !== instagramLink ||
+      loggedInArtist.twitterLink !== twitterLink
+    ) {
+      try {
+        // TODO: redundant data is being sent
+        await saveProfileInfo(_loggedInArtist);
+      } catch (error) {
+        console.log(error);
       }
     }
-  }, [
-    userTempData,
-    domainAndBranding,
-    accountName,
-    accountPage,
-    accountImage,
-    about,
-    twitterLink,
-    instagramLink,
-    rewardTiersAuction,
-  ]);
+    try {
+      // TODO: make this call only if the user changed his/her avatar
+      await saveUserImage(accountImage);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  useEffect(() => {
-    setUserTempData({
-      accountName,
-      accountPage,
-      accountImage,
-      about,
-      twitterLink,
-      instagramLink,
-    });
-  }, []);
+  const saveTierData = async (editedRewardTier) => {
+    console.info(editedRewardTier);
+    try {
+      // await editRewardTier(editedRewardTier, editedRewardTier.id);
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      console.info(rewardTiersAuction);
+      await editRewardTierImage(rewardTiersAuction[0].imageUrl, rewardTiersAuction[0].id);
+    } catch (error) {
+      console.timeLog(error);
+    }
+  };
 
-  const handleSaveClose = () => {
+  const saveAuctionData = async (editedAuction) => {
+    if (
+      auction.headline !== domainAndBranding.headline ||
+      auction.link !== domainAndBranding.link
+    ) {
+      try {
+        await editAuction(editedAuction);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    // TODO: make this call only if the user changed his/her auction images
+    const { id, promoImage, backgroundImage } = editedAuction;
+    try {
+      await uploadImagesForTheLandingPage(promoImage, backgroundImage, id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSaveClose = async () => {
     setEditButtonClick(true);
     setEditProfileButtonClick(true);
     if (
@@ -116,23 +149,33 @@ const CustomizeAuction = () => {
       (accountPage !== 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
       about
     ) {
-      const newAuction = { ...auction };
-      newAuction.headline = domainAndBranding.headline;
-      newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
-      newAuction.copied = false;
-      newAuction.promoImage = domainAndBranding.promoImage;
-      newAuction.backgroundImage = domainAndBranding.backgroundImage;
-      newAuction.hasBlur = domainAndBranding.hasBlur;
-      newAuction.rewardTiers = auction.rewardTiers.map((tier) => {
-        const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-        return { ...tier, ...rewardTier };
-      });
+      const editedAuction = {
+        ...auction,
+        ...domainAndBranding,
+      };
+      const rewardTiersAuctionClone = {
+        // TODO: hardcoded as the first element for now
+        ...rewardTiersAuction[0],
+      };
+
+      rewardTiersAuctionClone.color = rewardTiersAuctionClone.color?.hex;
+      rewardTiersAuctionClone.nftIds = rewardTiersAuctionClone.nfts.map((nft) => nft.id.toString());
+      if (
+        // eslint-disable-next-line no-restricted-globals
+        !isNaN(rewardTiersAuctionClone.minimumBid) &&
+        rewardTiersAuctionClone.minimumBid.toString().indexOf('.') !== -1
+      ) {
+        rewardTiersAuctionClone.minimumBid = parseFloat(rewardTiersAuctionClone.minimumBid, 10);
+      } else {
+        rewardTiersAuctionClone.minimumBid = parseInt(rewardTiersAuctionClone.minimumBid, 10);
+      }
+
       let page = accountPage.substring(13);
       if (page === 'your-address') {
         page = '';
       }
       setAccountPage(page);
-      setLoggedInArtist({
+      const loggedInArtistClone = {
         ...loggedInArtist,
         name: accountName,
         universePageAddress: page,
@@ -140,28 +183,37 @@ const CustomizeAuction = () => {
         about,
         instagramLink,
         twitterLink,
-      });
+      };
+
+      setLoggedInArtist(loggedInArtistClone);
+      saveUserData(loggedInArtistClone);
+      saveAuctionData(editedAuction);
+      // saveTierData(rewardTiersAuctionClone);
+
       if (loggedInArtist.name && loggedInArtist.avatar) {
-        newAuction.artist = loggedInArtist;
+        // newAuction.artist = loggedInArtist;
+        // history.push('/my-auctions');
+        // TODO:: consider removing this logic
         setTimeout(() => {
           if (
-            new Date() < new Date(newAuction.endDate) &&
-            new Date() >= new Date(newAuction.startDate)
+            new Date() < new Date(editedAuction.endDate) &&
+            new Date() >= new Date(editedAuction.startDate)
           ) {
-            setActiveAuctions([...activeAuctions, newAuction]);
-          } else if (new Date() < new Date(newAuction.startDate)) {
-            setFutureAuctions([...futureAuctions, newAuction]);
+            setActiveAuctions([...activeAuctions, editedAuction]);
+          } else if (new Date() < new Date(editedAuction.startDate)) {
+            setFutureAuctions([...futureAuctions, editedAuction]);
           }
-          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
+          setMyAuctions(
+            myAuctions.map((item) => (item.id === editedAuction.id ? editedAuction : item))
+          );
           setAuction({ rewardTiers: [] });
-          setCustomizeAuctionState(false);
           document.getElementById('popup-root')?.remove();
           document.getElementById('congrats-hidden-btn').click();
         }, 1000);
-        // setTimeout(() => {
-        //   setAuction({ tiers: [] });
-        //   history.push('/my-auctions');
-        // }, 6000);
+        setTimeout(() => {
+          // setAuction({ tiers: [] });
+          history.push('/my-auctions');
+        }, 6000);
       }
     }
   };
@@ -255,7 +307,7 @@ const CustomizeAuction = () => {
             } else if (new Date() < new Date(newAuction.startDate)) {
               setFutureAuctions([...futureAuctions, newAuction]);
             }
-            // setAuction({ rewardTiers: [] });
+            // setAuction({ tiers: [] });
             setCustomizeAuctionState(false);
             history.push(newAuction.link.replace('universe.xyz', ''), {
               auction: newAuction,
@@ -309,12 +361,12 @@ const CustomizeAuction = () => {
           editButtonClick={editButtonClick}
           setEditButtonClick={setEditButtonClick}
         />
-        <RewardTiersAuction
+        {/* <RewardTiersAuction
           values={rewardTiersAuction}
           onChange={setRewardTiersAuction}
           editButtonClick={editButtonClick}
           setEditButtonClick={setEditButtonClick}
-        />
+        /> */}
         <AboutArtistAuction
           accountName={accountName}
           setAccountName={setAccountName}

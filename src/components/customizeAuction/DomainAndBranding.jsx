@@ -250,16 +250,11 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                 <h6>Preview</h6>
                 <div className="preview-div">
                   {values.hasBlur && <div className="blur" />}
-                  {values.backgroundImage && (
+                  {values.backgroundImage ? (
                     <>
                       <img
                         className="background__image"
                         src={URL.createObjectURL(values.backgroundImage)}
-                        alt="background"
-                      />
-                      <img
-                        className="background__default__image"
-                        src={backgroundTransparent}
                         alt="background"
                       />
                       <img
@@ -272,12 +267,13 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                         }
                       />
                     </>
+                  ) : (
+                    <img
+                      className="background__default__image"
+                      src={backgroundDef}
+                      alt="background"
+                    />
                   )}
-                  <img
-                    className="background__default__image"
-                    src={backgroundDef}
-                    alt="background"
-                  />
                 </div>
               </div>
             </div>

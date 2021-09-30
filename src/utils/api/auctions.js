@@ -7,6 +7,8 @@ const EDIT_AUCTION_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auct
 const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}/landing-files`;
 const EDIT_REWARD_TIER_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}`;
+const EDIT_REWARD_TIER_IMAGE = (id) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}/image`;
 
 export const createAuction = async ({
   name,
@@ -93,7 +95,7 @@ export const editAuction = async ({
 };
 
 export const editRewardTier = async (
-  { name, numberOfWinners, nftsPerWinner, minimumBid, nftIds },
+  { name, numberOfWinners, nftsPerWinner, minimumBid, nftIds, color, description },
   id
 ) => {
   const requestBody = {
@@ -102,6 +104,8 @@ export const editRewardTier = async (
     nftsPerWinner,
     minimumBid,
     nftIds,
+    color,
+    description,
   };
 
   const requestOptions = {
@@ -114,6 +118,33 @@ export const editRewardTier = async (
   };
 
   const request = await fetch(EDIT_REWARD_TIER_URL(id), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const editRewardTierImage = async (image = null, id) => {
+  if (!id) {
+    console.error('Missing id, please provide it !');
+    return false;
+  }
+  const formData = new FormData();
+
+  image && formData.append('image', image);
+
+  const requestOptions = {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+    body: JSON.stringify({
+      ...formData,
+    }),
+  };
+
+  const request = await fetch(EDIT_REWARD_TIER_IMAGE(id), requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
@@ -187,7 +218,9 @@ export const uploadImagesForTheLandingPage = async (
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
-    body: formData,
+    body: JSON.stringify({
+      ...formData,
+    }),
   };
 
   const request = await fetch(UPLAD_IMAGES_FOR_LANDING_PAGE_URL(id), requestOptions);

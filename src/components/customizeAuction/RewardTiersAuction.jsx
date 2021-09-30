@@ -36,9 +36,8 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
     onChange((prevValues) =>
       prevValues.map((tier) => {
         if (tier.id === tierId) {
-          return { ...tier, tierImg: event.target.files[0] };
+          return { ...tier, imageUrl: event.target.files[0] };
         }
-
         return tier;
       })
     );
@@ -47,12 +46,12 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   return (
     <div className="reward__tiers">
       <h3>Reward Tiers</h3>
-      {auction &&
-        auction.rewardTiers.map((tier, i) => {
+      {values &&
+        values.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
-          const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
-          const image = checkTier ? checkTier.tierImg : null;
-          const description = checkTier ? checkTier.description : null;
+          // const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
+          const image = tier.imageUrl || null;
+          const description = tier.description || '';
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -105,7 +104,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                     className={editButtonClick && !description ? 'inp error-inp' : 'inp'}
                     placeholder="Enter the description"
                     // eslint-disable-next-line react/prop-types
-                    value={description}
+                    value={values[i].description}
                     onChange={(event) => handleDescriptionChange(event, tier.id)}
                   />
                   {editButtonClick && !description && (
