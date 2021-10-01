@@ -51,6 +51,7 @@ import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
 import arrowDown from '../../../../assets/images/arrow-down.svg';
+import mintingIcon from '../../../../assets/images/Minting.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import searchIcon from '../../../../assets/images/search-icon.svg';
 import img from '../../../../assets/images/search-gray.svg';
@@ -555,6 +556,12 @@ const MobileView = (props) => {
                       </div>
                       {showProducts ? (
                         <>
+                          <div>
+                            <button type="button" onClick={() => history.push('/minting')}>
+                              <img src={mintingIcon} alt="Minting" />
+                              <span>Minting</span>
+                            </button>
+                          </div>
                           <div>
                             <button
                               type="button"

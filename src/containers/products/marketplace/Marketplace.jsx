@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import './Marketplace.scss';
-import CreateYourAuction from '../../../components/mintingAndAuctions/marketplace/tabs/CreateYourAuction.jsx';
-import Tabs from '../../../components/mintingAndAuctions/marketplace/tabs/Tabs.jsx';
-import Welcome from '../../../components/mintingAndAuctions/marketplace/Welcome.jsx';
+import CreateYourAuction from '../../../components/products/marketplace/tabs/CreateYourAuction.jsx';
+import Tabs from '../../../components/products/marketplace/tabs/Tabs.jsx';
+import Welcome from '../../../components/products/marketplace/Welcome.jsx';
 import { useThemeContext } from '../../../contexts/ThemeContext';
 
 const Marketplace = () => {

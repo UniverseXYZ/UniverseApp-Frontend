@@ -90,6 +90,9 @@ const Footer = () => {
               <div>
                 <ul>
                   <li>Products</li>
+                  <li aria-hidden="true" onClick={() => history.push('/minting')}>
+                    Minting
+                  </li>
                   <li
                     onClick={() =>
                       history.push('/minting-and-auctions/marketplace/active-auctions')

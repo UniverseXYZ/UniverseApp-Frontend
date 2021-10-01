@@ -34,6 +34,7 @@ import yieldFarmingIcon from '../../../../assets/images/yield-farming.svg';
 import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
+import mintingIcon from '../../../../assets/images/Minting.svg';
 import SubscribePopup from '../../../popups/SubscribePopup.jsx';
 import searchIcon from '../../../../assets/images/search-icon.svg';
 import img from '../../../../assets/images/search-gray.svg';
@@ -489,6 +490,12 @@ const TabletView = (props) => {
               <div className="grid__menu">
                 <div>
                   <p className="title">Products</p>
+                  <div>
+                    <button type="button" onClick={() => history.push('/minting')}>
+                      <img src={mintingIcon} alt="Minting" />
+                      <span>Minting</span>
+                    </button>
+                  </div>
                   <div>
                     <button
                       type="button"
