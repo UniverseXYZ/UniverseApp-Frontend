@@ -58,7 +58,7 @@ const LobsterRarityList = ({
         </div>
       ) : null}
 
-      <div className="rarity--charts--empty">
+      <div className="rarity--charts--empty lobsters">
         {!loading && !data.length ? <p>No Lobster could be found :’(</p> : <></>}
       </div>
     </>
