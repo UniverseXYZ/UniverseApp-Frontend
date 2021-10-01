@@ -51,6 +51,7 @@ const SingleNFTForm = () => {
     setMyMintingNFTs,
     activeTxHashes,
     setActiveTxHashes,
+    setStartMintingNftPolling,
   } = useMyNftsContext();
 
   const {
@@ -408,6 +409,7 @@ const SingleNFTForm = () => {
           setMyMintingNFTs(mintingNfts || []);
           setSavedNfts(savedNFTS || []);
 
+          setStartMintingNftPolling(true);
           setShowLoadingPopup(false);
           setShowCongratsPopup(true);
 

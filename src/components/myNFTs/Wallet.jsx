@@ -40,29 +40,42 @@ const Wallet = React.memo(
     const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
     const { auction, setAuction } = useAuctionContext();
-    const { myNFTs } = useMyNftsContext();
+    const { myNFTs, myMintingNFTs } = useMyNftsContext();
     const { deployedCollections } = useAuthContext();
 
     const [shownNFTs, setShownNFTs] = useState(myNFTs);
-
     const [isCollectionDropdownOpened, setIsCollectionDropdownOpened] = useState(false);
     const [searchByName, setSearchByName] = useState('');
     const [offset, setOffset] = useState(0);
     const [perPage, setPerPage] = useState(8);
     const [page, setPage] = useState(8);
-    const ref = useRef(null);
-    const ref2 = useRef(null);
-    const refMobile = useRef(null);
     const [collections, setCollections] = useState([]);
     const [mobileVersion, setMobileVersion] = useState(true);
     const [draftCollections, setDraftCollections] = useState([]);
     const [indexes, setIndexes] = useState([]);
     const [previewNFTs, setPreviewNFTs] = useState([]);
+
+    const ref = useRef(null);
+    const ref2 = useRef(null);
+    const refMobile = useRef(null);
+
     const history = useHistory();
+    const location = useLocation();
+
+    const isCreatingAction = location.pathname === '/create-tiers';
+    const tierById = !!(winners && nftsPerWinner);
+    const editMode = auction?.rewardTiers?.find((element) => element.id === location.state);
 
     useEffect(() => {
       setOffset(0);
     }, [perPage]);
+
+    // We need this otherwise after updating my nfts with
+    // the newly minted ones from the polling mechanism
+    // the component won't rerender and show the new ones
+    useEffect(() => {
+      setShownNFTs(myNFTs);
+    }, [myNFTs]);
 
     const saveIndexes = (index) => {
       const temp = [...indexes];
@@ -73,16 +86,13 @@ const Wallet = React.memo(
       setDraftCollections(newCollections);
     };
 
-    const location = useLocation();
-    const isCreatingAction = location.pathname === '/create-tiers';
-    const tierById = !!(winners && nftsPerWinner);
-    const editMode = auction?.rewardTiers?.find((element) => element.id === location.state);
     const handleCollectionsMobile = () => {
       setCollections(draftCollections);
       setMobileVersion(true);
       document.querySelector('.animate__filters__popup').style.display = 'none';
       setIndexes([]);
     };
+
     const closeCollectionMobile = () => {
       const newCollections = [...draftCollections];
       indexes.forEach((index) => {
@@ -158,6 +168,7 @@ const Wallet = React.memo(
       document.querySelector('.filter__by__collection_mobile').style.top = `${window.scrollY}px`;
       document.querySelector('.animate__filters__popup').style.display = 'block';
     };
+
     const handleContinue = (prevNFTs) => {
       if (!editMode) {
         setAuction({
@@ -310,7 +321,7 @@ const Wallet = React.memo(
           <></>
         )}
 
-        {myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length ? (
+        {myMintingNFTs.length || (myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length) ? (
           <>
             {isCreatingAction ? (
               <>

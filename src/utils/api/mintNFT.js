@@ -5,10 +5,12 @@ const SAVE_FOR_LATER_MINT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved
 const GET_SAVED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/saved-nfts`;
 const GET_MY_MINTED_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts`;
 const GET_MY_MINTING_NFTS_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/pending`;
+const GET_MY_MINTING_NFTS_COUNT_URL = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-nfts/pending/count`;
 const GENERATE_TOKEN_URI_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/token-uri`;
 const CREATE_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/minting-collections`;
 const GET_MY_MINTED_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/collections/my-collections`;
 const GET_MY_MINTING_COLLECTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending`;
+const GET_MY_MINTING_COLLECTIONS_COUNT = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-collections/pending/count`;
 const GET_SPECIFIC_COLLECTION = `${process.env.REACT_APP_API_BASE_URL}/api/pages/collection`;
 const EDIT_COLLECTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/collections`;
 const GET_NFT_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/pages/nft`;
@@ -146,6 +148,23 @@ export const getMyMintingNfts = async () => {
   const result = await request.text().then((data) => JSON.parse(data));
 
   return result.mintingNfts;
+};
+
+export const getMyMintingNftsCount = async () => {
+  const request = await fetch(GET_MY_MINTING_NFTS_COUNT_URL, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  });
+
+  if (!request.ok && request.status !== 201) {
+    console.error(`Error while trying to GET saved NFTS info: ${request.statusText}`);
+  }
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result.count;
 };
 
 /**
@@ -381,6 +400,21 @@ export const getMyMintingCollections = async () => {
   const result = await request.text().then((res) => JSON.parse(res));
 
   return result;
+};
+
+export const getMyMintingCollectionsCount = async () => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_MY_MINTING_COLLECTIONS_COUNT, requestOptions);
+  const result = await request.text().then((res) => JSON.parse(res));
+
+  return result.count;
 };
 
 export const getCollectionData = async (address) => {

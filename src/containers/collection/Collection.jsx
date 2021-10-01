@@ -137,7 +137,6 @@ const Collection = () => {
                           nft={{
                             ...nft,
                             collection: collectionData.collection,
-                            creator: collectionData.creator,
                           }}
                           collectionAddress={collectionAddress}
                         />
