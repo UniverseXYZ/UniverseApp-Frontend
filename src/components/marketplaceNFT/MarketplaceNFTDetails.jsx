@@ -9,6 +9,7 @@ import ReactReadMoreReadLess from 'react-read-more-read-less';
 import Slider from 'react-slick';
 import Draggable from 'react-draggable';
 import { useDoubleTap } from 'use-double-tap';
+import Blockies from 'react-blockies';
 import Properties from '../marketplaceTabComponents/Properties.jsx';
 import Owners from '../marketplaceTabComponents/Owners.jsx';
 import Bids from '../marketplaceTabComponents/Bids.jsx';
@@ -57,8 +58,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
   const [selectedNFT, setSelectedNFT] = useState(onNFT.nft);
   const { moreFromCollection, collection, owner, creator } = onNFT;
-  console.log('creator:');
-  console.log(creator);
   const tabs = selectedNFT?.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
@@ -970,7 +969,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             <p>Edition {`${selectedNFTIndex + 1} / ${selectedNFT.numberOfEditions}`}</p>
           </div> */}
           <div className="Marketplace--collections">
-            {creator && (
+            {creator &&
+            (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
               <div className="Marketplace--creators">
                 <img src={creator.profileImageUrl} alt="icon" />
                 <div className="creator--name">
@@ -978,7 +978,27 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   <h6>{creator.displayName}</h6>
                 </div>
               </div>
+            ) : (
+              <div className="Marketplace--creators">
+                <Blockies className="blockie--details" seed={creator.address} size={9} scale={4} />
+                <div className="creator--name">
+                  <p>Creator</p>
+                  <h6
+                    // TODO: Vik to fix this or someone else
+                    style={{
+                      maxWidth: '100px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {creator.address}
+                  </h6>
+                  <span className="tooltiptext">{creator.address}</span>
+                </div>
+              </div>
             )}
+
             {collection && collection.coverUrl && (
               <div className="Marketplace--creators">
                 {!collection.coverUrl ? (
@@ -997,6 +1017,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
             )}
+
             {collection && !collection.coverUrl && (
               <div className="Marketplace--creators">
                 <img src={universeIcon} alt={collection.name} />
@@ -1006,14 +1027,38 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
             )}
-            <div className="Marketplace--creators">
-              <img src={loggedInArtist.avatar} alt="icon2" />
-              <div className="creator--name">
-                <p>Owner</p>
-                <h6>{owner.displayName}</h6>
+
+            {owner &&
+            (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
+              <div className="Marketplace--creators">
+                <img src={owner.avatar || owner.profileImageUrl} alt="icon2" />
+                <div className="creator--name">
+                  <p>Owner</p>
+                  <h6>{owner.displayName}</h6>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="Marketplace--creators">
+                <Blockies className="blockie--details" seed={owner.address} size={9} scale={4} />
+                <div className="creator--name">
+                  <p>Owner</p>
+                  <h6
+                    // TODO: Vik to fix this or someone else
+                    style={{
+                      maxWidth: '100px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {owner.address}
+                  </h6>
+                  <span className="tooltiptext">{owner.address}</span>
+                </div>
+              </div>
+            )}
           </div>
+
           <div className="Marketplace--text">
             <p>
               <ReactReadMoreReadLess
@@ -1102,14 +1147,12 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               <h1>More from this collection</h1>
             </div>
             <div className="nfts__lists">
-              {moreFromCollection.map((fromCollection) => (
+              {moreFromCollection.map((nft) => (
                 <NFTCard
-                  key={fromCollection.nft.id}
+                  key={nft.id}
                   nft={{
-                    ...fromCollection.nft,
-                    owner: fromCollection.owner,
+                    ...nft,
                     collection,
-                    creator,
                   }}
                 />
               ))}
@@ -1119,7 +1162,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 type="button"
                 className="light-button"
                 onClick={() =>
-                  history.push(`/collection/${collection.id}`, {
+                  history.push(`/collection/${collection.address}`, {
                     collection,
                     saved: false,
                   })

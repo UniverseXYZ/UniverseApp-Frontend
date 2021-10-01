@@ -40,7 +40,7 @@ const Wallet = React.memo(
     const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
     const { auction, setAuction } = useAuctionContext();
-    const { myNFTs } = useMyNftsContext();
+    const { myNFTs, myMintingNFTs } = useMyNftsContext();
     const { deployedCollections } = useAuthContext();
 
     const [shownNFTs, setShownNFTs] = useState(myNFTs);
@@ -310,7 +310,7 @@ const Wallet = React.memo(
           <></>
         )}
 
-        {myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length ? (
+        {myMintingNFTs.length || (myNFTs.length && myNFTs.filter((nft) => !nft.hidden).length) ? (
           <>
             {isCreatingAction ? (
               <>

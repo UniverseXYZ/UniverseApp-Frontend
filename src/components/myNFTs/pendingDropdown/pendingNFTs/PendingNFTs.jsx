@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './PendingNFTs.scss';
+import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
@@ -9,7 +10,7 @@ import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const PendingNFTs = () => {
   const { myMintingNFTs } = useMyNftsContext();
-  const { loggedInArtist } = useAuthContext();
+  const { loggedInArtist, address } = useAuthContext();
 
   const renderMintingNfts = useMemo(
     () =>
@@ -26,9 +27,18 @@ const PendingNFTs = () => {
           <span className="tooltiptext">View on Etherscan</span>
           <div className="nft__card__header">
             <div className="three__images">
-              <div className="creator--details">
-                <img src={loggedInArtist?.avatar} alt="first" />
-              </div>
+              {loggedInArtist &&
+              (loggedInArtist.avatar ||
+                (loggedInArtist.profileImageUrl && loggedInArtist.profileImageUrl.length > 48)) ? (
+                <div className="creator--details">
+                  <img src={loggedInArtist.avatar} alt="first" />
+                </div>
+              ) : (
+                <div className="creator--details">
+                  <Blockies className="blockie--details" seed={address} size={9} scale={3} />
+                </div>
+              )}
+
               <div className="collection--details">
                 {nft.collection.name === 'Non Fungible Universe Core' ||
                 nft.collection.name === 'Universe XYZ' ? (
@@ -37,9 +47,18 @@ const PendingNFTs = () => {
                   <img src={nft.collection?.coverUrl} alt="second" />
                 )}
               </div>
-              <div className="owner--details">
-                <img src={loggedInArtist?.avatar} alt="last" />
-              </div>
+
+              {loggedInArtist &&
+              (loggedInArtist.avatar ||
+                (loggedInArtist.profileImageUrl && loggedInArtist.profileImageUrl.length > 48)) ? (
+                <div className="owner--details">
+                  <img src={loggedInArtist?.avatar} alt="last" />
+                </div>
+              ) : (
+                <div className="owner--details">
+                  <Blockies className="blockie--details" seed={address} size={9} scale={3} />
+                </div>
+              )}
             </div>
             <p className="nfts__qantity">{`${nft.numberOfEditions}/${nft.numberOfEditions}`}</p>
           </div>

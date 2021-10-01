@@ -348,6 +348,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             setCollectionName('');
             setCoverImage(null);
           }}
+          backButtonText="Go to my Collections"
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
         />
       </Popup>
