@@ -48,7 +48,7 @@ const MintingPage = () => {
               <img src={collectionIcon} alt="cover" />
             </div>
             <div className="text-section">
-              <h3>Collection NFT</h3>
+              <h3>Create Collection</h3>
               <p className="collection-box">
                 ERC-721 non-fungible token with built-in ERC-721 tokens inside
               </p>
