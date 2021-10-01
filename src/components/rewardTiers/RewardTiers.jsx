@@ -58,7 +58,8 @@ const RewardTiers = () => {
                       </div>
                       <div className="tier-perwinners">
                         <h4>
-                          NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
+                          NFTs per winner:&nbsp;
+                          <b>{tier.nftsPerWinner > 0 && tier.nftsPerWinner}</b>
                         </h4>
                       </div>
                       {tier.minBidValue ? (

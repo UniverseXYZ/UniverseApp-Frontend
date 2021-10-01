@@ -33,6 +33,10 @@ const Wallet = React.memo(
     selectedNFTIds,
     setSelectedNFTIds,
     tierName,
+    customSelected,
+    selectedWinner,
+    winnersSelectedNFTs,
+    setWinnersSelectedNFTs,
     winners,
     nftsPerWinner,
     minBidValue,
@@ -171,6 +175,7 @@ const Wallet = React.memo(
 
     const handleContinue = (prevNFTs) => {
       if (!editMode) {
+        console.log(prevNFTs);
         setAuction({
           ...auction,
           rewardTiers: [
@@ -207,6 +212,7 @@ const Wallet = React.memo(
       setSelectedNFTIds([]);
       history.push('/setup-auction/reward-tiers');
     };
+    console.log(auction, 'ssssss');
 
     useEffect(() => {
       const newCollections = [];
@@ -231,12 +237,12 @@ const Wallet = React.memo(
     useEffect(() => {
       const prevNFTs = [];
       shownNFTs.forEach((nft) => {
-        if (selectedNFTIds.includes(nft.id)) {
+        if (selectedNFTIds.includes(nft.id) || customSelected) {
           prevNFTs.push(nft);
         }
       });
       setPreviewNFTs(prevNFTs);
-    }, [shownNFTs, selectedNFTIds]);
+    }, [shownNFTs]);
     return (
       <div className="tab__wallet">
         {isCreatingAction ? (
@@ -440,6 +446,10 @@ const Wallet = React.memo(
                     offset={offset}
                     selectedNFTIds={selectedNFTIds}
                     setSelectedNFTIds={setSelectedNFTIds}
+                    customSelected={customSelected}
+                    selectedWinner={selectedWinner}
+                    winnersSelectedNFTs={winnersSelectedNFTs}
+                    setWinnersSelectedNFTs={setWinnersSelectedNFTs}
                     winners={Number(winners)}
                     nftsPerWinner={Number(nftsPerWinner)}
                   />
@@ -539,7 +549,7 @@ const Wallet = React.memo(
             <div className="container selected-body">
               <div className="infoSelect-div">
                 <span>Number of winners : {winners}</span>
-                <span>NFTs per winner : {nftsPerWinner}</span>
+                <span>NFTs per winner : {customSelected ? ' ' : nftsPerWinner}</span>
                 <div className="img-div">
                   {previewNFTs.map((nft) => (
                     <div key={nft.id} className="imgs">
@@ -573,7 +583,9 @@ const Wallet = React.memo(
                       />
                     </div>
                   ))}
-                  {Array(nftsPerWinner - previewNFTs.length)
+                  {Array(
+                    nftsPerWinner - previewNFTs.length > 0 ? nftsPerWinner - previewNFTs.length : 0
+                  )
                     .fill(0)
                     .map((el, i) => (
                       <div className="placeholder" key={uuid()} />
@@ -587,7 +599,13 @@ const Wallet = React.memo(
                   </span>
                 )}
                 <div className="continue-nft">
-                  {tierById && Number(nftsPerWinner) === Number(previewNFTs.length) ? (
+                  {(tierById &&
+                    !customSelected &&
+                    Number(nftsPerWinner) === Number(previewNFTs.length)) ||
+                  (tierById &&
+                    customSelected &&
+                    winners === Object.keys(winnersSelectedNFTs).length &&
+                    Object.values(winnersSelectedNFTs).every((nfts) => nfts.length > 0)) ? (
                     <Button onClick={() => handleContinue(previewNFTs)} className="light-button">
                       Continue
                     </Button>
@@ -611,7 +629,11 @@ Wallet.propTypes = {
   setFilteredNFTs: PropTypes.func.isRequired,
   selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setSelectedNFTIds: PropTypes.func.isRequired,
+  selectedWinner: PropTypes.number,
+  winnersSelectedNFTs: PropTypes.objectOf(PropTypes.array),
+  setWinnersSelectedNFTs: PropTypes.func.isRequired,
   tierName: PropTypes.string,
+  customSelected: PropTypes.bool,
   winners: PropTypes.number,
   nftsPerWinner: PropTypes.number,
   minBidValue: PropTypes.string,
@@ -622,6 +644,9 @@ Wallet.defaultProps = {
   winners: null,
   nftsPerWinner: null,
   minBidValue: '',
+  customSelected: false,
+  selectedWinner: null,
+  winnersSelectedNFTs: {},
 };
 
 export default Wallet;
