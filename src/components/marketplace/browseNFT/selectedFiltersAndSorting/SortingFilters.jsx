@@ -465,35 +465,28 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
-                  .map(
-                    (coll, index) =>
-                      index < 5 && (
+                  .map((coll, index) => (
+                    <div
+                      className="collection__item"
+                      key={uuid()}
+                      onClick={() => handleSelectCollection(coll)}
+                      aria-hidden="true"
+                    >
+                      {!coll.coverUrl ? (
                         <div
-                          className="collection__item"
-                          key={uuid()}
-                          onClick={() => handleSelectCollection(coll)}
-                          aria-hidden="true"
+                          className="random--avatar--color"
+                          style={{
+                            backgroundColor: getCollectionBackgroundColor(coll),
+                          }}
                         >
-                          {!coll.coverUrl ? (
-                            <div
-                              className="random--avatar--color"
-                              style={{
-                                backgroundColor: getCollectionBackgroundColor(coll),
-                              }}
-                            >
-                              {coll.name.charAt(0)}
-                            </div>
-                          ) : (
-                            <img
-                              className="collection__avatar"
-                              src={coll.coverUrl}
-                              alt={coll.name}
-                            />
-                          )}
-                          <p>{coll.name}</p>
+                          {coll.name.charAt(0)}
                         </div>
-                      )
-                  )}
+                      ) : (
+                        <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
+                      )}
+                      <p>{coll.name}</p>
+                    </div>
+                  ))}
               </div>
             </div>
             <div className="collection--dropdown--footer">

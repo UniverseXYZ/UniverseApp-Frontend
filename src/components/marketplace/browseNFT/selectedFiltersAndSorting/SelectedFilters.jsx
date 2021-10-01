@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
-import { defaultColors } from '../../../../utils/helpers';
+import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
 import AppContext from '../../../../ContextAPI';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import priceIcon from '../../../../assets/images/marketplace/price.svg';
