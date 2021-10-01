@@ -355,6 +355,8 @@
         @include sm {
           grid-gap: 10px;
         }
+        max-height: 300px;
+        overflow: scroll;
 
         .collection-box {
           position: relative;
