@@ -45,6 +45,7 @@ import universeIcon from '../../assets/images/universe-img.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import FullScreenImage from '../popups/FullScreenImage';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -480,7 +481,13 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.artworkType &&
                   !selectedNFT.artworkType.endsWith('mpeg') &&
                   !selectedNFT.artworkType.endsWith('mp4') && (
-                    <img src={selectedNFT.optimized_url} alt={selectedNFT.name} />
+                    <Popup
+                      modal
+                      lockScroll
+                      trigger={<img src={selectedNFT.optimized_url} alt={selectedNFT.name} />}
+                    >
+                      {(close) => <FullScreenImage onClose={close} selectedNFT={selectedNFT} />}
+                    </Popup>
                   )}
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
