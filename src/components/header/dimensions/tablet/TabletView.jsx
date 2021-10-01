@@ -499,25 +499,29 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
+                      className="disable"
                       onClick={() => {
-                        setShowMenu(false);
-                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                        // setShowMenu(false);
+                        // history.push('/minting-and-auctions/marketplace/active-auctions');
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
+                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
                     <button
                       type="button"
+                      className="disable"
                       onClick={() => {
-                        setShowMenu(false);
-                        history.push('/marketplace');
+                        // setShowMenu(false);
+                        // history.push('/marketplace');
                       }}
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
                       <span>NFT marketplace</span>
+                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
