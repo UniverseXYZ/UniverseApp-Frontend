@@ -11,6 +11,7 @@ const CategoriesFilter = ({
   setFilter,
   filter,
   handleCategoryFilterChange,
+  resultsCount,
 }) => {
   const handleClick = useCallback(
     (idx) => {
@@ -24,7 +25,10 @@ const CategoriesFilter = ({
   );
 
   return (
-    <div className="categories--filters">
+    <div
+      className="categories--filters"
+      style={{ visibility: resultsCount ? 'inherit' : 'hidden' }}
+    >
       <h2>Filters</h2>
       {categories.map((item, index) => (
         <div className="each--category" key={uuid()}>
@@ -68,6 +72,7 @@ CategoriesFilter.propTypes = {
   setFilter: PropTypes.func.isRequired,
   handleCategoryFilterChange: PropTypes.func.isRequired,
   filter: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  resultsCount: PropTypes.number.isRequired,
 };
 
 export default CategoriesFilter;
