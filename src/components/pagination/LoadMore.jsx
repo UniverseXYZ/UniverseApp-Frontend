@@ -5,7 +5,11 @@ import './Pagination.scss';
 
 const LoadMore = ({ quantity, setQuantity, perPage }) => (
   <div className="load--more--btn">
-    <Button className="light-border-button" onClick={() => setQuantity(quantity + perPage)}>
+    <Button
+      className="light-border-button"
+      onClick={() => setQuantity(quantity + perPage)}
+      style={{ width: '100%' }}
+    >
       Load more
     </Button>
   </div>

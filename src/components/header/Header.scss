@@ -10,7 +10,7 @@ header {
   padding: 11.5px 40px;
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto auto;
   grid-gap: 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: $white;
@@ -27,7 +27,7 @@ header {
       &--wrapper {
         &.focus {
           .box--shadow--effect--block {
-            box-shadow: 2px 1000px 1px $black inset!important;
+            box-shadow: 2px 1000px 1px $black inset !important;
           }
         }
       }
@@ -49,11 +49,13 @@ header {
             color: rgba(255, 255, 255, 0.4);
           }
           &:focus {
-            background: linear-gradient(#000000, #000000) padding-box, linear-gradient(170deg, #bceb00, #00eaea) border-box;
+            background: linear-gradient(#000000, #000000) padding-box,
+              linear-gradient(170deg, #bceb00, #00eaea) border-box;
             border: 1px solid transparent;
           }
           &:active {
-            background: linear-gradient(#000000, #000000) padding-box, linear-gradient(170deg, #bceb00, #00eaea) border-box;
+            background: linear-gradient(#000000, #000000) padding-box,
+              linear-gradient(170deg, #bceb00, #00eaea) border-box;
             border: 1px solid transparent;
           }
         }
@@ -61,7 +63,7 @@ header {
           filter: invert(1);
         }
         img.search {
-          filter: invert(0)!important;
+          filter: invert(0) !important;
         }
       }
     }
@@ -76,7 +78,7 @@ header {
       .wallet__connected__tablet img.account__icon.show__on__tablet {
         border: 1px solid rgba(255, 255, 255, 0.2);
       }
-    } 
+    }
     .mobile__nav {
       .mobile--search--box {
         background-color: transparent;
@@ -198,11 +200,13 @@ header {
             color: rgba(0, 0, 0, 0.2);
           }
           &:focus {
-            background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(170deg, #bceb00, #00eaea) border-box;
+            background: linear-gradient(#ffffff, #ffffff) padding-box,
+              linear-gradient(170deg, #bceb00, #00eaea) border-box;
             border: 1px solid transparent;
           }
           &:active {
-            background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(170deg, #bceb00, #00eaea) border-box;
+            background: linear-gradient(#ffffff, #ffffff) padding-box,
+              linear-gradient(170deg, #bceb00, #00eaea) border-box;
             border: 1px solid transparent;
           }
         }
