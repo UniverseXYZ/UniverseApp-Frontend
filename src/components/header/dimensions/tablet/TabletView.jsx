@@ -418,20 +418,22 @@ const TabletView = (props) => {
                   <button
                     type="button"
                     onClick={() => {
-                      if (
-                        loggedInArtist.name &&
-                        loggedInArtist.universePageAddress &&
-                        loggedInArtist.avatar &&
-                        loggedInArtist.about &&
-                        editProfileButtonClick
-                      ) {
-                        history.push(`/${loggedInArtist.universePageAddress}`, {
-                          id: loggedInArtist.id,
-                        });
-                      } else {
-                        history.push('/my-account');
-                      }
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
+                      history.push('/my-account');
+                      setIsAccountDropdownOpened(false);
+                      // if (
+                      //   loggedInArtist.name &&
+                      //   loggedInArtist.universePageAddress &&
+                      //   loggedInArtist.avatar &&
+                      //   loggedInArtist.about &&
+                      //   editProfileButtonClick
+                      // ) {
+                      //   history.push(`/${loggedInArtist.universePageAddress}`, {
+                      //     id: loggedInArtist.id,
+                      //   });
+                      // } else {
+                      //   history.push('/my-account');
+                      // }
+                      // setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
