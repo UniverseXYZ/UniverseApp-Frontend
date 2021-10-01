@@ -277,6 +277,7 @@ const AuthContextProvider = ({ children }) => {
             setIsWalletConnected(true);
 
             setLoggedInArtist({
+              id: userInfo.id,
               name: userInfo.displayName,
               universePageAddress: userInfo.universePageUrl,
               avatar: userInfo.profileImageUrl,

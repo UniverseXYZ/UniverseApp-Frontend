@@ -135,32 +135,15 @@ const SearchFilters = ({ data, setData, setOffset }) => {
         )}
       </div>
       <div className="mobile--filters">
-        <Popup
-          trigger={
-            <button type="button" className="light-button">
-              <img src={filtersIcon} alt="Filter" />
-            </button>
-          }
+        <div
+          onClick={() => setShowFilters(!showFilters)}
+          className="filter--button"
+          aria-hidden="true"
         >
-          {(close) => (
-            <BrowseFilterPopup
-              onClose={close}
-              saleTypeButtons={saleTypeButtons}
-              setSaleTypeButtons={setSaleTypeButtons}
-              setSelectedPrice={setSelectedPrice}
-              selectedTokenIndex={selectedTokenIndex}
-              setSelectedTokenIndex={setSelectedTokenIndex}
-              selectedCollections={selectedCollections}
-              setSelectedCollections={setSelectedCollections}
-              savedCollections={savedCollections}
-              setSavedCollections={setSavedCollections}
-              selectedCreators={selectedCreators}
-              setSelectedCreators={setSelectedCreators}
-              savedCreators={savedCreators}
-              setSavedCreators={setSavedCreators}
-            />
-          )}
-        </Popup>
+          <button type="button" className="light-button">
+            <img src={filtersIcon} alt="Filter" />
+          </button>
+        </div>
         {(saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
           selectedPrice ||
           savedCollections.length > 0 ||
