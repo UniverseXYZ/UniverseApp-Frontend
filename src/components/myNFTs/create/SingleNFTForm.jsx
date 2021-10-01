@@ -614,6 +614,8 @@ const SingleNFTForm = () => {
     if (!showLoadingPopup) setActiveTxHashes([]);
   }, [showLoadingPopup]);
 
+  const emptyForm = !name && !previewImage && !description;
+
   return (
     <div className="single__nft">
       <div className="mintNftCollection-div">
@@ -961,6 +963,7 @@ const SingleNFTForm = () => {
                         placeholder="5"
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
+                        onWheel={(e) => e.target.blur()}
                       />
                       <span className="percent-sign">%</span>
                     </div>
@@ -1028,7 +1031,7 @@ const SingleNFTForm = () => {
                 <Button
                   className="light-border-button"
                   onClick={handleSaveForLater}
-                  disabled={errors.name || errors.edition || errors.previewImage}
+                  disabled={errors.name || errors.edition || errors.previewImage || emptyForm}
                 >
                   Save for later
                 </Button>
