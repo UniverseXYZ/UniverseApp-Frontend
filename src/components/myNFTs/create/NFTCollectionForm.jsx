@@ -38,6 +38,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     activeTxHashes,
     setActiveTxHashes,
     setMyMintingCollections,
+    setStartMintingCollectionPolling,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -224,6 +225,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
 
       if (res) {
         setShowCongrats(true);
+        setStartMintingCollectionPolling(true);
       } else {
         setShowError(true);
       }
