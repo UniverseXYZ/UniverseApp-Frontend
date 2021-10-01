@@ -42,7 +42,6 @@ const Collections = ({
     setSelectedCollections(newSelectedColl);
   };
 
-  console.log(selectedCollections);
   return (
     <div className="browse--nft--sidebar--filtration--item">
       <div
