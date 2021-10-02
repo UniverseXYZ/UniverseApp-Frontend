@@ -9,6 +9,14 @@ import warningIcon from '../../assets/images/Exclamation.svg';
 import errorIcon from '../../assets/images/red-msg.svg';
 import { useAuthContext } from '../../contexts/AuthContext';
 
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+  pageAddress: 50,
+  bio: 400,
+  instagram: 100,
+  twitter: 100,
+};
+
 const ProfileForm = ({
   accountName,
   setAccountName,
@@ -34,6 +42,8 @@ const ProfileForm = ({
     fetchedUserData.twitterLink === twitterLink &&
     fetchedUserData.instagramLink === instagramLink &&
     fetchedUserData.accountImage === accountImage;
+
+  const hasError = [accountName, accountPage, about, accountImage].some((e) => !e);
 
   const { loggedInArtist } = useAuthContext();
   const [hideIcon, setHideIcon] = useState(false);
@@ -144,8 +154,14 @@ const ProfileForm = ({
             className={!accountName && editProfileButtonClick ? 'error-inp' : 'inp'}
             value={accountName}
             hoverBoxShadowGradient
-            onChange={(e) => setAccountName(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+              setAccountName(e.target.value);
+            }}
           />
+          <p className="input-max-chars">
+            Characters: {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
+          </p>
           {!accountName && editProfileButtonClick && (
             <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
           )}
@@ -173,10 +189,12 @@ const ProfileForm = ({
                   : inputName
               }
               value={accountPage}
-              onChange={(e) =>
-                e.target.value.startsWith('universe.xyz/') &&
-                setAccountPage(e.target.value.replace(' ', '-'))
-              }
+              onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.pageAddress) return;
+                if (e.target.value.startsWith('universe.xyz/')) {
+                  setAccountPage(e.target.value.replace(' ', '-'));
+                }
+              }}
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
             />
@@ -188,26 +206,35 @@ const ProfileForm = ({
               )}
             <div className="box--shadow--effect--block" />
           </div>
+          <p className="input-max-chars">
+            Characters: {accountPage.length}/{MAX_FIELD_CHARS_LENGTH.pageAddress}
+          </p>
           <div className="account-grid-about-editing">
             <h5>Your bio</h5>
             <textarea
               placeholder="Please write a few lines about yourself"
               className={!about && editProfileButtonClick ? 'error-inp' : 'inp'}
               value={about}
-              onChange={(e) => setAbout(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.bio) return;
+                setAbout(e.target.value);
+              }}
             />
             <div className="box--shadow--effect--block" />
             {!about && editProfileButtonClick && (
               <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
             )}
           </div>
-          <div className="display-warning">
+          <p className="input-max-chars">
+            Characters: {about.length}/{MAX_FIELD_CHARS_LENGTH.bio}
+          </p>
+          {/* <div className="display-warning">
             <img alt="" src={warningIcon} />
             <p>
               Your edits will be visible on the My Universe landing page but will not be displayed
               on the current running auctions landing pages.
             </p>
-          </div>
+          </div> */}
           <Social
             twitterLink={twitterLink}
             setTwitterLink={setTwitterLink}
@@ -231,7 +258,7 @@ const ProfileForm = ({
               </div>
             )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled} onClick={saveChanges}>
+            <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
               Save changes
             </Button>
             <Button className="light-border-button" onClick={cancelChanges}>

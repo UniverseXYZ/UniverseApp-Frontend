@@ -355,6 +355,8 @@
         @include sm {
           grid-gap: 10px;
         }
+        max-height: 300px;
+        overflow: scroll;
 
         .collection-box {
           position: relative;
@@ -922,5 +924,11 @@
         }
       }
     }
+  }
+
+  .input-max-chars {
+    font-family: $spaceGroteskFont;
+    font-size: 10px;
+    color: #e4b613;
   }
 }

@@ -2,10 +2,13 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import BidOptions from '../utils/fixtures/BidOptions';
 import { getFutureAuctions } from '../utils/api/auctions';
+import { useAuthContext } from './AuthContext';
 
 const AuctionContext = createContext(null);
 
 const AuctionContextProvider = ({ children }) => {
+  const { isAuthenticated } = useAuthContext();
+
   const [myAuctions, setMyAuctions] = useState([]);
   const [activeAuctions, setActiveAuctions] = useState([]);
   const [futureAuctions, setFutureAuctions] = useState([]);
@@ -19,10 +22,14 @@ const AuctionContextProvider = ({ children }) => {
   const [auctionSetupState, setAuctionSetupState] = useState(false);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  useEffect(async () => {
-    const futureAuctionResponse = await getFutureAuctions();
-    setMyAuctions(futureAuctionResponse?.auctions || []);
-  }, []);
+  // useEffect(async () => {
+  //   if (isAuthenticated) {
+  //     const futureAuctionResponse = await getFutureAuctions();
+  //     setMyAuctions(futureAuctionResponse?.auctions || []);
+  //   } else {
+  //     setMyAuctions([]);
+  //   }
+  // }, [isAuthenticated]);
 
   return (
     <AuctionContext.Provider

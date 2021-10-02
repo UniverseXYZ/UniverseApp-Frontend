@@ -77,7 +77,6 @@ const Collection = () => {
 
     const data = await getCollectionData(collectionAddress);
     const cNFTs = data.nfts || [];
-    console.log(cNFTs);
 
     if (!data.message) setCollectionData(data);
 
@@ -90,7 +89,6 @@ const Collection = () => {
     setSavedCollectionID(id);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
-  console.log(collectionData);
   return loading ? (
     <></>
   ) : collectionData ? (
@@ -137,7 +135,6 @@ const Collection = () => {
                           nft={{
                             ...nft,
                             collection: collectionData.collection,
-                            creator: collectionData.creator,
                           }}
                           collectionAddress={collectionAddress}
                         />

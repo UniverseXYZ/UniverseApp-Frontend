@@ -118,7 +118,6 @@ const TabletView = (props) => {
       document.removeEventListener(
         'click',
         (e) => {
-          console.log('click');
           handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened);
         },
         true
@@ -418,20 +417,22 @@ const TabletView = (props) => {
                   <button
                     type="button"
                     onClick={() => {
-                      if (
-                        loggedInArtist.name &&
-                        loggedInArtist.universePageAddress &&
-                        loggedInArtist.avatar &&
-                        loggedInArtist.about &&
-                        editProfileButtonClick
-                      ) {
-                        history.push(`/${loggedInArtist.universePageAddress}`, {
-                          id: loggedInArtist.id,
-                        });
-                      } else {
-                        history.push('/my-account');
-                      }
-                      setIsAccountDropdownOpened(!isAccountDropdownOpened);
+                      history.push('/my-account');
+                      setIsAccountDropdownOpened(false);
+                      // if (
+                      //   loggedInArtist.name &&
+                      //   loggedInArtist.universePageAddress &&
+                      //   loggedInArtist.avatar &&
+                      //   loggedInArtist.about &&
+                      //   editProfileButtonClick
+                      // ) {
+                      //   history.push(`/${loggedInArtist.universePageAddress}`, {
+                      //     id: loggedInArtist.id,
+                      //   });
+                      // } else {
+                      //   history.push('/my-account');
+                      // }
+                      // setIsAccountDropdownOpened(!isAccountDropdownOpened);
                     }}
                   >
                     <img src={myProfileIcon} alt="My Profile" />
@@ -447,7 +448,7 @@ const TabletView = (props) => {
                     <img src={myNFTsIcon} alt="My NFTs" />
                     My NTFs
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => {
                       history.push('/my-auctions');
@@ -456,7 +457,7 @@ const TabletView = (props) => {
                   >
                     <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     className="signOut"
@@ -464,6 +465,7 @@ const TabletView = (props) => {
                       resetConnectionState();
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
+                      history.push('/');
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />
@@ -499,25 +501,29 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
+                      className="disable"
                       onClick={() => {
-                        setShowMenu(false);
-                        history.push('/minting-and-auctions/marketplace/active-auctions');
+                        // setShowMenu(false);
+                        // history.push('/minting-and-auctions/marketplace/active-auctions');
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
+                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>
                     <button
                       type="button"
+                      className="disable"
                       onClick={() => {
-                        setShowMenu(false);
-                        history.push('/marketplace');
+                        // setShowMenu(false);
+                        // history.push('/marketplace');
                       }}
                     >
                       <img src={marketplaceIcon} alt="NFT Marketplace" />
                       <span>NFT marketplace</span>
+                      <span className="tooltiptext">Coming soon</span>
                     </button>
                   </div>
                   <div>

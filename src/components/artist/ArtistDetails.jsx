@@ -32,13 +32,18 @@ const ArtistDetails = ({ onArtist, loading }) => {
                 <h1 className="title">{onArtist.name}</h1>
                 <p className="desc">{onArtist.about}</p>
                 <div className="social__links">
-                  <Button className="light-border-button">
-                    Edit <img src={pencilIcon} alt="Pencil" />
-                  </Button>
-                  <a href={onArtist.instagramUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={`https://instagram.com/${onArtist.instagramLink}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <img src={instagramIcon} alt="Instagram" />
                   </a>
-                  <a href={onArtist.twitterUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={`https://twitter.com/${onArtist.twitterLink}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <img src={twitterIcon} alt="Twitter" />
                   </a>
                   <div className="copy-div">
@@ -48,7 +53,7 @@ const ArtistDetails = ({ onArtist, loading }) => {
                         <span />
                       </div>
                       <CopyToClipboard
-                        text={onArtist.address}
+                        text={window.location.href}
                         onCopy={() => {
                           setCopied(true);
                           setTimeout(() => {

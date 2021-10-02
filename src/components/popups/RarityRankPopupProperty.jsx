@@ -23,7 +23,6 @@ function RarityRankPopupProperty({
   if (data?.traits?.length) {
     chance = `${Math.round(data.traits[0]?.rarity, 10)}% have this trait`;
   }
-  console.log(genesMap);
   useEffect(() => {
     const queryTraitRarity = async () => {
       const traitData = await queryPolymorphsGraph(

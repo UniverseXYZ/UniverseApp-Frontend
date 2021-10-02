@@ -86,7 +86,7 @@ const App = () => {
                 <Route exact path="/polymorph-universe">
                   <PolymorphUniverse />
                 </Route>
-                <Route exact path="/mint-polymorph">
+                {/* <Route exact path="/mint-polymorph">
                   <MintPolymorph />
                 </Route>
                 <Route exact path="/burn-to-mint">
@@ -100,7 +100,7 @@ const App = () => {
                 </Route>
                 <Route exact path="/planets/kuapo">
                   <Planet3 />
-                </Route>
+                </Route> */}
                 <Route exact path="/polymorphs/:id">
                   <PolymorphScramblePage />
                 </Route>
@@ -110,21 +110,21 @@ const App = () => {
                 <Route exact path="/nft/:collectionAddress/:tokenId">
                   <MarketplaceNFT />
                 </Route>
-                <Route exact path="/character-page">
+                {/* <Route exact path="/character-page">
                   <CharacterPage />
-                </Route>
-                <Route exact path="/marketplace">
+                </Route> */}
+                {/* <Route exact path="/marketplace">
                   <BrowseNFT />
-                </Route>
-                <Route exact path="/nft-marketplace/:steps">
+                </Route> */}
+                {/* <Route exact path="/nft-marketplace/:steps">
                   <NFTMarketplace />
-                </Route>
-                <Route exact path="/search">
+                </Route> */}
+                {/* <Route exact path="/search">
                   <Search />
                 </Route>
                 <Route exact path="/core-drops">
                   <CharectersDrop />
-                </Route>
+                </Route> */}
                 <Route exact path="/lobby-lobsters">
                   <LobbyLobsters />
                 </Route>
@@ -134,15 +134,15 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-profile">
                   <MyProfile />
                 </AuthenticatedRoute>
-                <AuthenticatedRoute path="/setup-auction">
+                {/* <AuthenticatedRoute path="/setup-auction">
                   <SetupAuction />
                 </AuthenticatedRoute>
                 <Route exact path="/minting-and-auctions/marketplace/active-auctions">
                   <Marketplace />
-                </Route>
-                <Route exact path="/minting-and-auctions/marketplace/future-auctions">
+                </Route> */}
+                {/* <Route exact path="/minting-and-auctions/marketplace/future-auctions">
                   <Marketplace />
-                </Route>
+                </Route> */}
                 <AuthenticatedRoute exact path="/my-nfts">
                   <MyNFTs />
                 </AuthenticatedRoute>
@@ -152,7 +152,7 @@ const App = () => {
                 <AuthenticatedRoute exact path="/my-account">
                   <MyAccount />
                 </AuthenticatedRoute>
-                <AuthenticatedRoute exact path="/my-auctions">
+                {/* <AuthenticatedRoute exact path="/my-auctions">
                   <Auctions />
                 </AuthenticatedRoute>
                 <AuthenticatedRoute exact path="/create-tiers">
@@ -169,16 +169,16 @@ const App = () => {
                 </AuthenticatedRoute>
                 <AuthenticatedRoute exact path="/auction-review">
                   <AuctionReview />
-                </AuthenticatedRoute>
+                </AuthenticatedRoute> */}
                 <Route exact path="/:artistUsername">
                   <Artist />
                 </Route>
                 <Route exact path="/collection/:collectionAddress">
                   <Collection />
                 </Route>
-                <Route exact path="/:artist/:auction">
+                {/* <Route exact path="/:artist/:auction">
                   <AuctionLandingPage />
-                </Route>
+                </Route> */}
                 <Route path="*">
                   <NotFound />
                 </Route>

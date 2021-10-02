@@ -89,6 +89,7 @@ const List = ({
         setFilter={setFilter}
         filter={filter}
         handleCategoryFilterChange={handleCategoryFilterChange}
+        resultsCount={results?.length || 0}
       />
       <div className="list--with--selected--filters">
         <div className="selected--filters">
@@ -118,7 +119,7 @@ const List = ({
             </button>
           )}
         </div>
-        {loading && !isLastPage ? (
+        {loading && !isLastPage && results.length ? (
           <div className="grid">
             <RarityChartsLoader number={9} />
           </div>
@@ -130,7 +131,7 @@ const List = ({
             {isLastPage ? <RarityChartsLoader number={emptySlots} /> : <></>}
           </div>
         ) : (
-          <div className="rarity--charts--empty">
+          <div className="rarity--charts--empty polymorphs">
             <p>No Polymorph could be found :’(</p>
           </div>
         )}

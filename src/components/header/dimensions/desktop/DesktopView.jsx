@@ -71,23 +71,27 @@ const DesktopView = ({
               </button>
               <button
                 type="button"
+                className="disable"
                 onClick={() => {
-                  history.push('/minting-and-auctions/marketplace/active-auctions');
-                  setIsMintingDropdownOpened(false);
+                  // history.push('/minting-and-auctions/marketplace/active-auctions');
+                  // setIsMintingDropdownOpened(false);
                 }}
               >
                 <img src={auctionHouseIcon} alt="Auction House" />
                 <span>Auction house</span>
+                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
+                className="disable"
                 onClick={() => {
-                  setIsMintingDropdownOpened(false);
-                  history.push('/marketplace');
+                  // setIsMintingDropdownOpened(false);
+                  // history.push('/marketplace');
                 }}
               >
                 <img src={marketplaceIcon} alt="NFT Marketplace" />
                 <span>NFT marketplace</span>
+                <span className="tooltiptext">Coming soon</span>
               </button>
               <button
                 type="button"
@@ -357,7 +361,7 @@ const DesktopView = ({
                   <img src={myNFTsIcon} alt="My NFTs" />
                   My NFTs
                 </button>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     history.push('/my-auctions');
@@ -366,7 +370,7 @@ const DesktopView = ({
                 >
                   <img src={auctionHouseIcon} alt="My Auctions" />
                   My auctions
-                </button>
+                </button> */}
                 <button
                   type="button"
                   className="signOut"
@@ -374,6 +378,7 @@ const DesktopView = ({
                     resetConnectionState();
                     setIsAccountDropdownOpened(false);
                     setIsWalletConnected(!isWalletConnected);
+                    history.push('/');
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />

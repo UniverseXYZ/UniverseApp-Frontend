@@ -32,8 +32,10 @@ const NonFungibleUniverse = () => {
       description:
         'Creating a decentralized NFT launch system that is made by artists for artists.',
       loaded: false,
-      action: 'Explore',
-      link: '/my-auctions',
+      // action: 'Explore',
+      // link: '/my-auctions',
+      action: 'Coming soon',
+      link: '',
       newTab: false,
     },
     {

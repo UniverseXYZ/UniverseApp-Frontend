@@ -27,6 +27,12 @@ import { useAuthContext } from '../../../contexts/AuthContext.jsx';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import Contracts from '../../../contracts/contracts.json';
 
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+  description: 200,
+  token: 20,
+};
+
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   const {
     savedNfts,
@@ -38,6 +44,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     activeTxHashes,
     setActiveTxHashes,
     setMyMintingCollections,
+    setStartMintingCollectionPolling,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -224,6 +231,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
 
       if (res) {
         setShowCongrats(true);
+        setStartMintingCollectionPolling(true);
       } else {
         setShowError(true);
       }
@@ -348,6 +356,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             setCollectionName('');
             setCoverImage(null);
           }}
+          backButtonText="Go to my Collections"
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
         />
       </Popup>
@@ -419,12 +428,17 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                 label="Collection name"
                 error={errors.collectionName}
                 placeholder="Enter the collection name"
-                onChange={(e) => handleCollectionName(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+                  handleCollectionName(e.target.value);
+                }}
                 value={collectionName}
               />
             )}
-
-            {<p className="warning">Collection name cannot be changed in future</p>}
+            <p className="input-max-chars">
+              Characters: {collectionName.length}/{MAX_FIELD_CHARS_LENGTH.name}
+            </p>
+            <p className="warning">Collection name cannot be changed in future</p>
           </div>
           <div className="collection--token">
             {savedCollectionID ? (
@@ -439,11 +453,17 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                 label="Token name"
                 error={errors.tokenName}
                 placeholder="$ART"
-                onChange={(e) => handleTokenName(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.token) return;
+                  handleTokenName(e.target.value);
+                }}
                 value={tokenName}
               />
             )}
 
+            <p className="input-max-chars">
+              Characters: {tokenName.length}/{MAX_FIELD_CHARS_LENGTH.token}
+            </p>
             {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
           </div>
         </div>
@@ -456,10 +476,16 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           <textarea
             placeholder="Spread some words about your collection"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.description) return;
+              setDescription(e.target.value);
+            }}
           />
         </div>
         <div className="box--shadow--effect--block" />
+        <p className="input-max-chars">
+          Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+        </p>
       </div>
       <div className="collection--nfts">
         {(errors.collectionName || errors.tokenName) && (

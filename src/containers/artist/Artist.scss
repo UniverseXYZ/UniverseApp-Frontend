@@ -142,6 +142,7 @@
           }
           .copy-div {
             position: relative;
+            cursor: pointer;
             padding: 7px 8px;
 
             .copy > span {
@@ -1275,7 +1276,8 @@
             grid-template-columns: repeat(3, 1fr);
           }
           @include lg {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, 220px);
+            grid-gap: 20px;
           }
           @include sm {
             grid-template-columns: 1fr;

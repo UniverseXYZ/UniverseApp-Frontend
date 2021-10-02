@@ -80,7 +80,6 @@ const AuthContextProvider = ({ children }) => {
       signerResult
     );
     const universeColl = await getCollectionData(contractsData.UniverseERC721Core.address);
-    console.log(universeColl);
     setUniverseCollection({
       ...universeColl.collection,
       coverUrl: universeIcon,
@@ -277,6 +276,7 @@ const AuthContextProvider = ({ children }) => {
             setIsWalletConnected(true);
 
             setLoggedInArtist({
+              id: userInfo.id,
               name: userInfo.displayName,
               universePageAddress: userInfo.universePageUrl,
               avatar: userInfo.profileImageUrl,

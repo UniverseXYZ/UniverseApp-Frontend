@@ -46,7 +46,7 @@ const BrowseFilterPopup = ({
     setSavedCollections([]);
     setSelectedCreators([]);
     setSavedCreators([]);
-    onClose();
+    // onClose();
   };
   return (
     <div className="browse__nft__filter__popup">
@@ -58,7 +58,7 @@ const BrowseFilterPopup = ({
         </button>
       </div>
       <div className="browse__nft__filter__body">
-        <h3>
+        {/* <h3>
           <img src={salesIcon} alt="Sale" /> Sale types
         </h3>
         <div className="sale--dropdown--body">
@@ -94,21 +94,23 @@ const BrowseFilterPopup = ({
               </div>
             ))}
           </div>
-        </div>
-        <Price
+        </div> */}
+        {/* <Price
           setSelectedPrice={setSelectedPrice}
           selectedTokenIndex={selectedTokenIndex}
           setSelectedTokenIndex={setSelectedTokenIndex}
-        />
+        /> */}
         <Collections
           savedCollections={savedCollections}
           setSavedCollections={setSavedCollections}
+          selectedCollections={selectedCollections}
+          setSelectedCollections={setSelectedCollections}
         />
-        <Creators savedCreators={savedCreators} setSavedCreators={setSavedCreators} />
+        {/* <Creators savedCreators={savedCreators} setSavedCreators={setSavedCreators} /> */}
       </div>
       <div className="show--results">
-        <button type="button" className="light-button">
-          Show 231 results
+        <button type="button" className="light-button" onClick={onClose}>
+          Show results
         </button>
       </div>
     </div>

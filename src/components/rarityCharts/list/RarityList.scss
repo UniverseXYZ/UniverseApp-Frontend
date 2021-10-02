@@ -334,4 +334,13 @@
     margin-top: 176px;
     margin-bottom: 66px;
   }
+  &.polymorphs {
+    @media (min-width: #{$screen-lg-max}) {
+      p {
+        position: absolute;
+        left: 0%;
+        width: 100%;
+      }
+    }
+  }
 }
