@@ -503,7 +503,7 @@ const MobileView = (props) => {
                     <img src={myNFTsIcon} alt="My NFTs" />
                     My NFTs
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     onClick={() => {
                       history.push('/my-auctions');
@@ -512,7 +512,7 @@ const MobileView = (props) => {
                   >
                     <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     className="signOut"

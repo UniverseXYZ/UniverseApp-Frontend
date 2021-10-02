@@ -361,7 +361,7 @@ const DesktopView = ({
                   <img src={myNFTsIcon} alt="My NFTs" />
                   My NFTs
                 </button>
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     history.push('/my-auctions');
@@ -370,7 +370,7 @@ const DesktopView = ({
                 >
                   <img src={auctionHouseIcon} alt="My Auctions" />
                   My auctions
-                </button>
+                </button> */}
                 <button
                   type="button"
                   className="signOut"
