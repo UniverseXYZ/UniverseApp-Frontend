@@ -421,7 +421,7 @@ const MobileView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <Blockie className="blockie" seed={address} size={9} scale={6} />
+            <Blockie className="blockie" seed={address} size={9} scale={4} />
           </div>
 
           {isAccountDropdownOpened && (
