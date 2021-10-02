@@ -209,10 +209,11 @@ const About = () => {
               </p>
               <Button
                 className="light-button"
-                onClick={() => history.push('/my-auctions')}
+                disabled
+                // onClick={() => history.push('/my-auctions')}
                 style={{ marginBottom: '60px' }}
               >
-                Go to auctions
+                Coming soon
                 <img src={arrowLeft} alt="arrow-back" />
               </Button>
             </AnimatedOnScroll>
