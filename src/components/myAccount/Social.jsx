@@ -4,6 +4,11 @@ import instagramLogo from '../../assets/images/instagram-outlined.svg';
 import twitterLogo from '../../assets/images/icons_twitter.svg';
 import Input from '../input/Input.jsx';
 
+const MAX_FIELD_CHARS_LENGTH = {
+  instagram: 100,
+  twitter: 100,
+};
+
 const Social = ({
   showSocial,
   setShowSocial,
@@ -27,8 +32,14 @@ const Social = ({
           className="inp"
           hoverBoxShadowGradient
           value={instagramLink}
-          onChange={(e) => setInstagramLink(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.instagram) return;
+            setInstagramLink(e.target.value);
+          }}
         />
+        <p className="input-max-chars">
+          Characters: {instagramLink.length}/{MAX_FIELD_CHARS_LENGTH.instagram}
+        </p>
       </div>
       <div className="twitter">
         <h5>Twitter profile</h5>
@@ -38,8 +49,14 @@ const Social = ({
           className="inp"
           hoverBoxShadowGradient
           value={twitterLink}
-          onChange={(e) => setTwitterLink(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.twitter) return;
+            setTwitterLink(e.target.value);
+          }}
         />
+        <p className="input-max-chars">
+          Characters: {twitterLink.length}/{MAX_FIELD_CHARS_LENGTH.twitter}
+        </p>
       </div>
     </div>
   </div>
