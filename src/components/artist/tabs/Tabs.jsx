@@ -46,7 +46,7 @@ const Tabs = ({ nfts }) => {
               >
                 NFTs
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setSelectedTabIndex(1)}
                 className={selectedTabIndex === 1 ? 'active' : ''}
@@ -66,7 +66,7 @@ const Tabs = ({ nfts }) => {
                 className={selectedTabIndex === 3 ? 'active' : ''}
               >
                 Past auctions
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="tab__right__arrow">
