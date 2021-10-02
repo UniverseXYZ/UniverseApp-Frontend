@@ -40,6 +40,16 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+  description: 200,
+  editions: 10000,
+  propertyName: 50,
+  propertyValue: 50,
+  propertiesCount: 50,
+  royaltiesCount: 5,
+};
+
 const SingleNFTForm = () => {
   const {
     savedNfts,
@@ -78,7 +88,7 @@ const SingleNFTForm = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [showCreateMoreButton, setShowCreateMoreButton] = useState(true);
-  const [editions, setEditions] = useState('');
+  const [editions, setEditions] = useState(1);
   const [previewImage, setPreviewImage] = useState('');
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
@@ -477,7 +487,7 @@ const SingleNFTForm = () => {
 
   const validateEdition = (e) => {
     const value = e.target.value.replace(/[^\d]/, '');
-    if (parseInt(value, 10) !== 0) {
+    if (parseInt(value, 10) !== 0 && value <= MAX_FIELD_CHARS_LENGTH.editions) {
       setEditions(value);
       setErrors({
         ...errors,
@@ -758,6 +768,7 @@ const SingleNFTForm = () => {
               placeholder="Enter NFT name"
               hoverBoxShadowGradient
               onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
                 setName(e.target.value);
                 setErrors({
                   ...errors,
@@ -768,6 +779,9 @@ const SingleNFTForm = () => {
               }}
               value={name}
             />
+            <p className="input-max-chars">
+              Characters: {name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+            </p>
           </div>
           <div className="single-nft-description">
             <h5>Description (optional)</h5>
@@ -775,10 +789,16 @@ const SingleNFTForm = () => {
               rows="5"
               placeholder="Spread some words about your NFT"
               className="inp"
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.description) return;
+                setDescription(e.target.value);
+              }}
               value={description}
             />
             <div className="box--shadow--effect--block" />
+            <p className="input-max-chars">
+              Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+            </p>
           </div>
           <div className="single-nft-editions">
             <div className="single-nft-edition-header">
@@ -787,7 +807,9 @@ const SingleNFTForm = () => {
               </h5>
               {hideIcon && (
                 <div className="info-text">
-                  <p>The number of copies that can be minted.</p>
+                  <p>
+                    The number of copies that can be minted is {MAX_FIELD_CHARS_LENGTH.editions}.
+                  </p>
                 </div>
               )}
             </div>
@@ -861,8 +883,14 @@ const SingleNFTForm = () => {
                         error={property.errors?.name || hasPropError(property.name, i)}
                         placeholder="Colour"
                         value={property.name}
-                        onChange={(e) => propertyChangesName(i, e.target.value)}
+                        onChange={(e) => {
+                          if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.propertyName) return;
+                          propertyChangesName(i, e.target.value);
+                        }}
                       />
+                      <p className="input-max-chars">
+                        Characters: {property.name.length}/{MAX_FIELD_CHARS_LENGTH.propertyName}
+                      </p>
                     </div>
                     <div className="property-value">
                       <h5>Value</h5>
@@ -871,8 +899,14 @@ const SingleNFTForm = () => {
                         error={property.errors?.value}
                         placeholder="Red"
                         value={property.value}
-                        onChange={(e) => propertyChangesValue(i, e.target.value)}
+                        onChange={(e) => {
+                          if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.propertyValue) return;
+                          propertyChangesValue(i, e.target.value);
+                        }}
                       />
+                      <p className="input-max-chars">
+                        Characters: {property.value.length}/{MAX_FIELD_CHARS_LENGTH.propertyValue}
+                      </p>
                     </div>
                     {i > 0 ? (
                       <>
@@ -905,7 +939,10 @@ const SingleNFTForm = () => {
             <div
               hidden={!propertyCheck}
               className="property-add"
-              onClick={() => addProperty()}
+              onClick={() => {
+                if (properties.length >= MAX_FIELD_CHARS_LENGTH.propertiesCount) return;
+                addProperty();
+              }}
               aria-hidden="true"
             >
               <h5>
@@ -995,7 +1032,10 @@ const SingleNFTForm = () => {
               {royalities && (
                 <div
                   className="property-add"
-                  onClick={() => addRoyaltyAddress()}
+                  onClick={() => {
+                    if (royaltyAddress.length >= MAX_FIELD_CHARS_LENGTH.royaltiesCount) return;
+                    addRoyaltyAddress();
+                  }}
                   aria-hidden="true"
                 >
                   <h5>
