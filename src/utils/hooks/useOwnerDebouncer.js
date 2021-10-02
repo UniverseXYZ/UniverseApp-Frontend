@@ -17,7 +17,6 @@ const searchOwner = async (address, abortSignal) => {
     },
     signal: abortSignal,
   });
-  console.log('sent request to api');
   if (result.status !== 200) {
     throw new Error(`bad status = ${result.status}`);
   }

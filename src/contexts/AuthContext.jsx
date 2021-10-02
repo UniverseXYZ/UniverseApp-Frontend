@@ -80,7 +80,6 @@ const AuthContextProvider = ({ children }) => {
       signerResult
     );
     const universeColl = await getCollectionData(contractsData.UniverseERC721Core.address);
-    console.log(universeColl);
     setUniverseCollection({
       ...universeColl.collection,
       coverUrl: universeIcon,

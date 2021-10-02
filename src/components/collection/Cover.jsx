@@ -32,8 +32,6 @@ const Cover = ({ selectedCollection }) => {
       }
     }
   };
-  console.log('collection:');
-  console.log(selectedCollection);
   return (
     <div className="collection__page__cover">
       {address === selectedCollection.owner && (

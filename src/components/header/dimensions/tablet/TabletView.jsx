@@ -118,7 +118,6 @@ const TabletView = (props) => {
       document.removeEventListener(
         'click',
         (e) => {
-          console.log('click');
           handleClickOutside(e, 'blockie', ref, setIsAccountDropdownOpened);
         },
         true
