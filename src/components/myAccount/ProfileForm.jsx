@@ -226,13 +226,13 @@ const ProfileForm = ({
           <p className="input-max-chars">
             Characters: {about.length}/{MAX_FIELD_CHARS_LENGTH.bio}
           </p>
-          <div className="display-warning">
+          {/* <div className="display-warning">
             <img alt="" src={warningIcon} />
             <p>
               Your edits will be visible on the My Universe landing page but will not be displayed
               on the current running auctions landing pages.
             </p>
-          </div>
+          </div> */}
           <Social
             twitterLink={twitterLink}
             setTwitterLink={setTwitterLink}
