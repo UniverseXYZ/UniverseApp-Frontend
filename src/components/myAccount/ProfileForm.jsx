@@ -43,6 +43,8 @@ const ProfileForm = ({
     fetchedUserData.instagramLink === instagramLink &&
     fetchedUserData.accountImage === accountImage;
 
+  const hasError = [accountName, accountPage, about, accountImage].some((e) => !e);
+
   const { loggedInArtist } = useAuthContext();
   const [hideIcon, setHideIcon] = useState(false);
   const [inputName, setInputName] = useState('inp empty');
@@ -256,7 +258,7 @@ const ProfileForm = ({
               </div>
             )}
           <div className="account-display-buttons">
-            <Button className="light-button" disabled={disabled} onClick={saveChanges}>
+            <Button className="light-button" disabled={disabled || hasError} onClick={saveChanges}>
               Save changes
             </Button>
             <Button className="light-border-button" onClick={cancelChanges}>
