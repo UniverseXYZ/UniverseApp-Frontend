@@ -465,6 +465,7 @@ const TabletView = (props) => {
                       resetConnectionState();
                       setIsAccountDropdownOpened(!isAccountDropdownOpened);
                       setIsWalletConnected(!isWalletConnected);
+                      history.push('/');
                     }}
                   >
                     <img src={signOutIcon} alt="Sign out" />

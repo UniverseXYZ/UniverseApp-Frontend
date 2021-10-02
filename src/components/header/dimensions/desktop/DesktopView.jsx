@@ -378,6 +378,7 @@ const DesktopView = ({
                     resetConnectionState();
                     setIsAccountDropdownOpened(false);
                     setIsWalletConnected(!isWalletConnected);
+                    history.push('/');
                   }}
                 >
                   <img src={signOutIcon} alt="Sign out" />
