@@ -166,11 +166,6 @@
           padding: 11px;
           margin-right: 12px;
           cursor: pointer;
-
-          @include md {
-            max-width: calc(50% - 24px);
-          }
-
           .box--shadow--effect--block {
             position: absolute;
             width: calc(100% + 8px);
@@ -714,10 +709,6 @@
               right: 0px;
               left: unset;
             }
-
-            @include md {
-              right: unset;
-            }
           }
           .artist--dropdown {
             position: absolute;
@@ -854,6 +845,9 @@
           width: 100%;
           // margin-top: 20px;
         }
+        @include md {
+          display: none;
+        }
       }
       .selected--filters {
         grid-column: 1/4;
@@ -921,9 +915,12 @@
             margin-bottom: 10px;
           }
         }
+        @include md {
+          display: none;
+        }
       }
       @include md {
-        grid-template-columns: 1fr 50%;
+        grid-template-columns: 1fr;
       }
     }
     .mobile--filters {
@@ -931,7 +928,7 @@
       button {
         position: fixed;
         bottom: 30px;
-        right: 40px;
+        right: 20px;
         z-index: 9;
         padding: 15px;
       }
