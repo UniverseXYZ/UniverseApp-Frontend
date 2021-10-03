@@ -50,6 +50,8 @@ const MAX_FIELD_CHARS_LENGTH = {
   royaltiesCount: 5,
 };
 
+const COLLECTIONS_PER_ROW = 4;
+
 const SingleNFTForm = () => {
   const {
     savedNfts,
@@ -825,7 +827,11 @@ const SingleNFTForm = () => {
               value={editions}
             />
           </div>
-          <div className="single-nft-choose-collection">
+          <div
+            className={`banner ${
+              deployedCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
+            } single-nft-choose-collection`}
+          >
             <h4>Choose collection</h4>
             <div className="choose__collection">
               {universeCollection && (
