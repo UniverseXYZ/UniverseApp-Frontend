@@ -994,7 +994,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   >
                     {creator.address}
                   </h6>
-                  <span className="tooltiptext">{creator.address}</span>
+                  <span className="tooltiptext tooltiptext--left">{creator.address}</span>
                 </div>
               </div>
             )}
@@ -1013,7 +1013,17 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 )}
                 <div className="creator--name">
                   <p>Collection</p>
-                  <h6>{collection.name}</h6>
+                  <h6
+                    style={{
+                      maxWidth: '100px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {collection.name}
+                  </h6>
+                  <span className="tooltiptext tooltiptext--center">{collection.name}</span>
                 </div>
               </div>
             )}
@@ -1053,7 +1063,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   >
                     {owner.address}
                   </h6>
-                  <span className="tooltiptext">{owner.address}</span>
+                  <span className="tooltiptext tooltiptext--right">{owner.address}</span>
                 </div>
               </div>
             )}
