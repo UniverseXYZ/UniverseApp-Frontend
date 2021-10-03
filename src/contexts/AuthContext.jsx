@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { useHistory } from 'react-router-dom';
 import { getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
@@ -46,6 +48,7 @@ const AuthContextProvider = ({ children }) => {
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
   const [universeCollection, setUniverseCollection] = useState(null);
+  const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
     const ethUsdPice = await getEthPriceCoingecko();
@@ -164,6 +167,7 @@ const AuthContextProvider = ({ children }) => {
       clearStorageAuthData();
       if (account) {
         // await connectWithMetaMask();
+        history.push('/');
         web3AuthenticationProccess(provider, network, [account]);
       } else {
         resetConnectionState();
@@ -209,6 +213,7 @@ const AuthContextProvider = ({ children }) => {
     provider.on('accountsChanged', async (accounts) => {
       // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
       clearStorageAuthData();
+      history.push('/');
       web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
     });
 

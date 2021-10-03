@@ -17,7 +17,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { myNFTs, setMyNFTs, universeCollectionDisplayName } = useMyNftsContext();
   const { address } = useAuthContext();
   const [dropdownID, setDropdownID] = useState(0);
 
@@ -71,13 +71,12 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         ) : (
           <div className="owner--details">
             <Blockies className="blockie--details" seed={creator?.address} size={9} scale={3} />
-            <span className="tooltiptext">{`Owner: ${creator?.address}`}</span>
+            <span className="tooltiptext">{`Creator: ${creator?.address}`}</span>
           </div>
         )}
         {collection && (
           <div className="collection--details">
-            {collection.name === 'Non Fungible Universe Core' ||
-            collection.name === 'Universe XYZ' ? (
+            {collection.name === universeCollectionDisplayName ? (
               <img src={universeIcon} alt={collection.name} />
             ) : !collection.coverUrl ? (
               <div
@@ -102,8 +101,13 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
           </div>
         ) : (
           <div className="owner--details">
-            <Blockies className="blockie--details" seed={address} size={9} scale={3} />
-            <span className="tooltiptext">{`Owner: ${address}`}</span>
+            <Blockies
+              className="blockie--details"
+              seed={owner.address || address}
+              size={9}
+              scale={3}
+            />
+            <span className="tooltiptext">{`Owner: ${owner.address || address}`}</span>
           </div>
         )}
       </div>

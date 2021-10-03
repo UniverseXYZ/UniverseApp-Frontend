@@ -576,19 +576,42 @@
           white-space: nowrap;
           position: absolute;
           z-index: 10000;
-          top: -32px;
-          left: 50%;
-          transform: translateX(-50%);
+          bottom: 45px;
           &::after {
             content: '';
             position: absolute;
-            top: 100%;
-            left: 50%;
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
             border-color: black transparent transparent transparent;
           }
+        }
+        .tooltiptext--left {
+          left: 100%;
+          transform: translateX(-50%);
+          &::after {
+            top: 100%;
+            left: 25%;
+          }
+
+        }
+
+        .tooltiptext--center {
+          left: 50%;
+          transform: translateX(-50%);
+          &::after {
+            top: 100%;
+            left: 50%;
+          }
+        }
+        .tooltiptext--right {
+          left: -25%;
+          transform: translateX(-50%);
+          &::after {
+            top: 100%;
+            left: 75%;
+          }
+
         }
         .blockie--details {
           border-radius: 50%;

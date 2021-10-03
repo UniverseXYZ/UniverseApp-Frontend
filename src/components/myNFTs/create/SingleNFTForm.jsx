@@ -41,14 +41,16 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 
 const MAX_FIELD_CHARS_LENGTH = {
-  name: 100,
-  description: 200,
+  name: 32,
+  description: 1024,
   editions: 10000,
   propertyName: 50,
   propertyValue: 50,
   propertiesCount: 50,
   royaltiesCount: 5,
 };
+
+const COLLECTIONS_PER_ROW = 4;
 
 const SingleNFTForm = () => {
   const {
@@ -61,7 +63,8 @@ const SingleNFTForm = () => {
     setMyMintingNFTs,
     activeTxHashes,
     setActiveTxHashes,
-    setStartMintingNftPolling,
+    mintingNftsCount,
+    setMintingNftsCount,
   } = useMyNftsContext();
 
   const {
@@ -106,6 +109,7 @@ const SingleNFTForm = () => {
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
+  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
   const [showCongratsPopupOnSaveForLaterClick, setShowCongratsPopupOnSaveForLaterClick] =
     useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
@@ -146,6 +150,9 @@ const SingleNFTForm = () => {
     const temp = [...royaltyAddress];
     temp.splice(index, 1);
     setRoyaltyAddress(temp);
+
+    const addressErrors = temp.filter((prop) => prop.error !== '');
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const addProperty = () => {
@@ -408,28 +415,29 @@ const SingleNFTForm = () => {
 
       const hasFailedTransaction = res.includes(0);
       if (!hasFailedTransaction) {
-        const serverProcessTime = 5000; // The BE needs some time to catch the transaction
-        setTimeout(async () => {
-          const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
-            getMyNfts(),
-            getMyMintingNfts(),
-            getSavedNfts(),
-          ]);
-          setMyNFTs(myNfts || []);
-          setMyMintingNFTs(mintingNfts || []);
-          setSavedNfts(savedNFTS || []);
+        const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
+          getMyNfts(),
+          getMyMintingNfts(),
+          getSavedNfts(),
+        ]);
+        setMyNFTs(myNfts || []);
+        setMyMintingNFTs(mintingNfts || []);
+        setSavedNfts(savedNFTS || []);
 
-          setStartMintingNftPolling(true);
-          setShowLoadingPopup(false);
+        setMintingNftsCount(mintingNftsCount + 1);
+        setShowLoadingPopup(false);
+        if (savedNFTsID) {
+          setShowCongratsMintedSavedForLater(true);
+        } else {
           setShowCongratsPopup(true);
+        }
 
-          setName('');
-          setDescription('');
-          setEditions('');
-          setPreviewImage('');
-          setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-          setRoyaltyAddress([{ address: '', amount: '' }]);
-        }, serverProcessTime);
+        setName('');
+        setDescription('');
+        setEditions('');
+        setPreviewImage('');
+        setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+        setRoyaltyAddress([{ address: '', amount: '' }]);
       } else {
         setShowLoadingPopup(false);
         console.error(e, 'Error !');
@@ -668,6 +676,13 @@ const SingleNFTForm = () => {
             message="NFT was successfully saved for later"
           />
         </Popup>
+        <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
+          <CongratsPopup
+            showCreateMore={showCreateMoreButton}
+            onClose={() => setShowCongratsMintedSavedForLater(false)}
+            message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
+          />
+        </Popup>
         <div className="single-nft-content">
           <div className="single-nft-upload">
             <h5>Upload file</h5>
@@ -742,7 +757,7 @@ const SingleNFTForm = () => {
                     <img src={cloudIcon} alt="Cloud" />
                     <h5>Drop your file here</h5>
                     <p>
-                      <span>( min 800x800px, PNG/JPEG/MP3/GIF/WEBP/MP4,</span>
+                      <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span>
                       <span>max 30mb)</span>
                     </p>
                     <Button className="light-button" onClick={() => inputFile.current.click()}>
@@ -796,10 +811,10 @@ const SingleNFTForm = () => {
               value={description}
             />
             <div className="box--shadow--effect--block" />
-            <p className="input-max-chars">
-              Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
-            </p>
           </div>
+          <p className="input-max-chars">
+            Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+          </p>
           <div className="single-nft-editions">
             <div className="single-nft-edition-header">
               <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
@@ -822,7 +837,11 @@ const SingleNFTForm = () => {
               value={editions}
             />
           </div>
-          <div className="single-nft-choose-collection">
+          <div
+            className={`banner ${
+              deployedCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
+            } single-nft-choose-collection`}
+          >
             <h4>Choose collection</h4>
             <div className="choose__collection">
               {universeCollection && (
