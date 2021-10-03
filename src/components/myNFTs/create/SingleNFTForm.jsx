@@ -41,8 +41,8 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import CollectionChoice from './CollectionChoice';
 
 const MAX_FIELD_CHARS_LENGTH = {
-  name: 100,
-  description: 200,
+  name: 32,
+  description: 1024,
   editions: 10000,
   propertyName: 50,
   propertyValue: 50,
@@ -742,7 +742,7 @@ const SingleNFTForm = () => {
                     <img src={cloudIcon} alt="Cloud" />
                     <h5>Drop your file here</h5>
                     <p>
-                      <span>( min 800x800px, PNG/JPEG/MP3/GIF/WEBP/MP4,</span>
+                      <span>( min 800x800px, PNG/JPEG/GIF/WEBP/MP4,</span>
                       <span>max 30mb)</span>
                     </p>
                     <Button className="light-button" onClick={() => inputFile.current.click()}>
