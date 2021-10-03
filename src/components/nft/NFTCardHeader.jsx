@@ -71,7 +71,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         ) : (
           <div className="owner--details">
             <Blockies className="blockie--details" seed={creator?.address} size={9} scale={3} />
-            <span className="tooltiptext">{`Owner: ${creator?.address}`}</span>
+            <span className="tooltiptext">{`Creator: ${creator?.address}`}</span>
           </div>
         )}
         {collection && (
@@ -101,8 +101,13 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
           </div>
         ) : (
           <div className="owner--details">
-            <Blockies className="blockie--details" seed={address} size={9} scale={3} />
-            <span className="tooltiptext">{`Owner: ${address}`}</span>
+            <Blockies
+              className="blockie--details"
+              seed={owner.address || address}
+              size={9}
+              scale={3}
+            />
+            <span className="tooltiptext">{`Owner: ${owner.address || address}`}</span>
           </div>
         )}
       </div>
