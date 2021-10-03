@@ -796,10 +796,10 @@ const SingleNFTForm = () => {
               value={description}
             />
             <div className="box--shadow--effect--block" />
-            <p className="input-max-chars">
-              Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
-            </p>
           </div>
+          <p className="input-max-chars">
+            Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+          </p>
           <div className="single-nft-editions">
             <div className="single-nft-edition-header">
               <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
