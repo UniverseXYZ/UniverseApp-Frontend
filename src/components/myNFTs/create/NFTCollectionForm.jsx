@@ -28,9 +28,9 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import Contracts from '../../../contracts/contracts.json';
 
 const MAX_FIELD_CHARS_LENGTH = {
-  name: 100,
-  description: 200,
-  token: 20,
+  name: 32,
+  description: 1024,
+  token: 10,
 };
 
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
