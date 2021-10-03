@@ -108,6 +108,7 @@ const SingleNFTForm = () => {
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(universeCollection);
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
+  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
   const [showCongratsPopupOnSaveForLaterClick, setShowCongratsPopupOnSaveForLaterClick] =
     useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
@@ -413,28 +414,29 @@ const SingleNFTForm = () => {
 
       const hasFailedTransaction = res.includes(0);
       if (!hasFailedTransaction) {
-        const serverProcessTime = 5000; // The BE needs some time to catch the transaction
-        setTimeout(async () => {
-          const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
-            getMyNfts(),
-            getMyMintingNfts(),
-            getSavedNfts(),
-          ]);
-          setMyNFTs(myNfts || []);
-          setMyMintingNFTs(mintingNfts || []);
-          setSavedNfts(savedNFTS || []);
+        const [myNfts, mintingNfts, savedNFTS] = await Promise.all([
+          getMyNfts(),
+          getMyMintingNfts(),
+          getSavedNfts(),
+        ]);
+        setMyNFTs(myNfts || []);
+        setMyMintingNFTs(mintingNfts || []);
+        setSavedNfts(savedNFTS || []);
 
-          setStartMintingNftPolling(true);
-          setShowLoadingPopup(false);
+        setStartMintingNftPolling(true);
+        setShowLoadingPopup(false);
+        if (savedNFTsID) {
+          setShowCongratsMintedSavedForLater(true);
+        } else {
           setShowCongratsPopup(true);
+        }
 
-          setName('');
-          setDescription('');
-          setEditions('');
-          setPreviewImage('');
-          setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-          setRoyaltyAddress([{ address: '', amount: '' }]);
-        }, serverProcessTime);
+        setName('');
+        setDescription('');
+        setEditions('');
+        setPreviewImage('');
+        setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
+        setRoyaltyAddress([{ address: '', amount: '' }]);
       } else {
         setShowLoadingPopup(false);
         console.error(e, 'Error !');
@@ -671,6 +673,13 @@ const SingleNFTForm = () => {
             showCreateMore={showCreateMoreButton}
             onClose={() => setShowCongratsPopupOnSaveForLaterClick(false)}
             message="NFT was successfully saved for later"
+          />
+        </Popup>
+        <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
+          <CongratsPopup
+            showCreateMore={showCreateMoreButton}
+            onClose={() => setShowCongratsMintedSavedForLater(false)}
+            message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
           />
         </Popup>
         <div className="single-nft-content">

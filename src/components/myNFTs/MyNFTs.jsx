@@ -64,6 +64,8 @@ const MyNFTs = () => {
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [showloading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
+  const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
+
   const tabs = [
     'Wallet',
     'Collections',
@@ -144,7 +146,7 @@ const MyNFTs = () => {
         setSavedNfts(savedNFTS || []);
 
         setShowLoading(false);
-        setShowCongrats(true);
+        setShowCongratsMintedSavedForLater(true);
       }, serverProcessTime);
     } catch (e) {
       console.error(e, 'Error !');
@@ -236,6 +238,13 @@ const MyNFTs = () => {
       </Popup>
       <Popup closeOnDocumentClick={false} open={showCongrats}>
         <CongratsPopup onClose={() => setShowCongrats(false)} />
+      </Popup>
+      <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
+        <CongratsPopup
+          showCreateMore
+          onClose={() => setShowCongratsMintedSavedForLater(false)}
+          message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
+        />
       </Popup>
     </>
   );
