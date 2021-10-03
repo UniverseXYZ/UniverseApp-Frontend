@@ -217,6 +217,9 @@ export const updateSavedForLaterNft = async (data) => {
   if (data.royaltiesParsed.length) {
     requestData.royalties = data.royaltiesParsed;
   }
+  if (data.collectionId) {
+    requestData.collectionId = data.collectionId;
+  }
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
     method: 'PATCH',
