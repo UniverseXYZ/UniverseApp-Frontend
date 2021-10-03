@@ -44,7 +44,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     activeTxHashes,
     setActiveTxHashes,
     setMyMintingCollections,
-    setStartMintingCollectionPolling,
+    mintingCollectionsCount,
+    setMintingCollectionsCount,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -225,13 +226,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         if (!mintingCollectionsRequest.message) {
           setMyMintingCollections(mintingCollectionsRequest.collections);
         }
+        setMintingCollectionsCount(mintingCollectionsCount + 1);
       }
 
       setShowLoading(false);
 
       if (res) {
         setShowCongrats(true);
-        setStartMintingCollectionPolling(true);
       } else {
         setShowError(true);
       }

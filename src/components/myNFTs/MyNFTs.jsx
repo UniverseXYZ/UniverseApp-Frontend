@@ -50,6 +50,8 @@ const MyNFTs = () => {
     collectionsIdAddressMapping,
     activeTxHashes,
     setActiveTxHashes,
+    mintingNftsCount,
+    setMintingNftsCount,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -145,6 +147,7 @@ const MyNFTs = () => {
         setMyNFTs(mintedNFTS || []);
         setSavedNfts(savedNFTS || []);
 
+        setMintingNftsCount(mintingNftsCount + selectedNfts.length);
         setShowLoading(false);
         setShowCongratsMintedSavedForLater(true);
       }, serverProcessTime);

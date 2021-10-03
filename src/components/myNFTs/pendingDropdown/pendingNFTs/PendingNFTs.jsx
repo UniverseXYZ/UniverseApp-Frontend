@@ -9,7 +9,7 @@ import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const PendingNFTs = () => {
-  const { myMintingNFTs } = useMyNftsContext();
+  const { myMintingNFTs, universeCollectionDisplayName } = useMyNftsContext();
   const { loggedInArtist, address } = useAuthContext();
 
   const renderMintingNfts = useMemo(
@@ -40,8 +40,7 @@ const PendingNFTs = () => {
               )}
 
               <div className="collection--details">
-                {nft.collection.name === 'Non Fungible Universe Core' ||
-                nft.collection.name === 'Universe XYZ' ? (
+                {nft.collection.name === universeCollectionDisplayName ? (
                   <img src={universeIcon} alt={nft.collection.name} />
                 ) : (
                   <img src={nft.collection?.coverUrl} alt="second" />

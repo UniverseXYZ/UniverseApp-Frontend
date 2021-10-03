@@ -29,6 +29,7 @@ const DeployedCollections = () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
+
   return (
     <div className="tab__saved__collections">
       <PendingCollections />

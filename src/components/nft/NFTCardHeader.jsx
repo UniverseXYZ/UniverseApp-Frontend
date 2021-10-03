@@ -17,7 +17,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
+  const { myNFTs, setMyNFTs, universeCollectionDisplayName } = useMyNftsContext();
   const { address } = useAuthContext();
   const [dropdownID, setDropdownID] = useState(0);
 
@@ -76,8 +76,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         )}
         {collection && (
           <div className="collection--details">
-            {collection.name === 'Non Fungible Universe Core' ||
-            collection.name === 'Universe XYZ' ? (
+            {collection.name === universeCollectionDisplayName ? (
               <img src={universeIcon} alt={collection.name} />
             ) : !collection.coverUrl ? (
               <div
