@@ -146,6 +146,9 @@ const SingleNFTForm = () => {
     const temp = [...royaltyAddress];
     temp.splice(index, 1);
     setRoyaltyAddress(temp);
+
+    const addressErrors = temp.filter((prop) => prop.error !== '');
+    setRoyaltyValidAddress(!addressErrors.length);
   };
 
   const addProperty = () => {
