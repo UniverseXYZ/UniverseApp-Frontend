@@ -68,9 +68,12 @@ const DigitalTools = () => {
               and a Beeple. This Auction will allow you to mix and match 100s of NFTs in tiers to be
               bid on.
             </p>
-            <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+            {/* <Button className="light-button" onClick={() => history.push('/my-auctions')}>
               Set up auction
-            </Button>
+            </Button> */}
+            <button type="button" className="light-border-button" disabled>
+              Coming soon
+            </button>
           </AnimatedOnScroll>
         </div>
       </div>
