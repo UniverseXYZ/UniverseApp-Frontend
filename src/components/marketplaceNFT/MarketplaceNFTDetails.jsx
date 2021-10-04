@@ -1180,7 +1180,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           )} */}
         </div>
       </div>
-      {collection && moreFromCollection?.length && (
+      {collection && moreFromCollection?.length ? (
         <div className="collection">
           <div className="collection--container">
             <div className="collection--title">
@@ -1213,6 +1213,8 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             </div>
           </div>
         </div>
+      ) : (
+        <></>
       )}
     </>
   );
