@@ -1024,7 +1024,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                   >
                     {owner.address}
                   </h6>
-                  <span className="tooltiptext tooltiptext--right">{owner.address}</span>
+                  <span className="tooltiptext tooltiptext--left">{owner.address}</span>
                 </div>
               </div>
             )}
