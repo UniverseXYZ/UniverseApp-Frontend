@@ -17,7 +17,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
-  const { myNFTs, setMyNFTs, universeCollectionDisplayName } = useMyNftsContext();
+  const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { address } = useAuthContext();
   const [dropdownID, setDropdownID] = useState(0);
 
@@ -76,7 +76,7 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         )}
         {collection && (
           <div className="collection--details">
-            {collection.name === universeCollectionDisplayName ? (
+            {collection.address === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
               <img src={universeIcon} alt={collection.name} />
             ) : !collection.coverUrl ? (
               <div

@@ -9,7 +9,7 @@ import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const PendingNFTs = () => {
-  const { myMintingNFTs, universeCollectionDisplayName } = useMyNftsContext();
+  const { myMintingNFTs } = useMyNftsContext();
   const { loggedInArtist, address } = useAuthContext();
 
   const renderMintingNfts = useMemo(
@@ -40,7 +40,8 @@ const PendingNFTs = () => {
               )}
 
               <div className="collection--details">
-                {nft.collection.name === universeCollectionDisplayName ? (
+                {nft.collection.address ===
+                process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
                   <img src={universeIcon} alt={nft.collection.name} />
                 ) : (
                   <img src={nft.collection?.coverUrl} alt="second" />
