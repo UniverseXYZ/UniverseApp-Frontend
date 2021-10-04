@@ -109,7 +109,7 @@ export const editRewardTier = async (
   };
 
   const requestOptions = {
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -136,12 +136,9 @@ export const editRewardTierImage = async (image = null, id) => {
   const requestOptions = {
     method: 'PATCH',
     headers: {
-      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
-    body: JSON.stringify({
-      ...formData,
-    }),
+    body: formData,
   };
 
   const request = await fetch(EDIT_REWARD_TIER_IMAGE(id), requestOptions);
@@ -215,12 +212,9 @@ export const uploadImagesForTheLandingPage = async (
   const requestOptions = {
     method: 'post',
     headers: {
-      'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,
     },
-    body: JSON.stringify({
-      ...formData,
-    }),
+    body: formData,
   };
 
   const request = await fetch(UPLAD_IMAGES_FOR_LANDING_PAGE_URL(id), requestOptions);
