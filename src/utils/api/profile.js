@@ -40,8 +40,8 @@ export const saveProfileInfo = async (loggedInArtist) => {
 
   if (!result.ok && result.status !== 201) {
     console.error(`Error while trying to save profile data: ${result.statusText}`);
+    return result.text().then((data) => JSON.parse(data));
   }
-
   return result;
 };
 

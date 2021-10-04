@@ -71,6 +71,16 @@ const CustomizeAuction = () => {
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
 
+  const saveDataToContextOnSuccess = (_loggedInArtistClone, _futureAuctions, _editedAuction) => {
+    setLoggedInArtist(_loggedInArtistClone);
+    setFutureAuctions([..._futureAuctions, _editedAuction]);
+    setMyAuctions(
+      myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
+    );
+    document.getElementById('popup-root')?.remove();
+    document.getElementById('congrats-hidden-btn').click();
+  };
+
   const handleSave = async () => {
     setEditButtonClick(true);
     setEditProfileButtonClick(true);
@@ -184,46 +194,20 @@ const CustomizeAuction = () => {
       const auctionAndProfileResponses = await saveAuctionAndProfile();
       const rewardTierResponses = await saveRewardTiers();
 
+      const errorMessages = [];
+
       if (rewardTierResponses.length) {
-        rewardTierResponses[0].forEach((res) => {
-          if (res.error) {
-            setErrorTitle('Unexpected error');
-            setErrorBody((prevState) => {
-              if (prevState) {
-                return `${prevState}, ${res.message}`;
-              }
-              return res.message;
-            });
-            setShowError(true);
-          }
-        });
+        rewardTierResponses[0].forEach((res) => res.error && errorMessages.push(res.message));
       }
 
-      auctionAndProfileResponses.forEach((res, index) => {
-        if (res.error) {
-          setErrorTitle('Unexpected error');
-          setErrorBody((prevState) => {
-            if (prevState) {
-              return `${prevState}, ${res.message}`;
-            }
-            return res.message;
-          });
-          setShowError(true);
-        }
-      });
+      auctionAndProfileResponses.forEach((res) => res.error && errorMessages.push(res.message));
 
-      if (loggedInArtist.name && loggedInArtist.avatar) {
-        if (!showError) {
-          setLoggedInArtist(loggedInArtistClone);
-        }
-        setTimeout(() => {
-          setFutureAuctions([...futureAuctions, editedAuction]);
-          setMyAuctions(
-            myAuctions.map((item) => (item.id === editedAuction.id ? editedAuction : item))
-          );
-          document.getElementById('popup-root')?.remove();
-          document.getElementById('congrats-hidden-btn').click();
-        }, 1000);
+      if (errorMessages.length) {
+        setErrorTitle('Unexpected error');
+        setErrorBody(errorMessages.join(', '));
+        setShowError(true);
+      } else {
+        saveDataToContextOnSuccess(loggedInArtistClone, futureAuctions, editedAuction);
       }
     }
   };
