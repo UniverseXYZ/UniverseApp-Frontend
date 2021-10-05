@@ -61,6 +61,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { moreFromCollection, collection, owner, creator } = onNFT;
   const tabs = selectedNFT?.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [showFullScreenNft, setShowFullScreenNft] = useState(false);
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [trackProgress, setTrackProgress] = useState('00:00');
@@ -480,13 +481,20 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.artworkType &&
                   !selectedNFT.artworkType.endsWith('mpeg') &&
                   !selectedNFT.artworkType.endsWith('mp4') && (
-                    <Popup
-                      modal
-                      lockScroll
-                      trigger={<img src={selectedNFT.optimized_url} alt={selectedNFT.name} />}
-                    >
-                      {(close) => <FullScreenImage onClose={close} selectedNFT={selectedNFT} />}
-                    </Popup>
+                    <>
+                      <img
+                        src={selectedNFT.optimized_url}
+                        alt={selectedNFT.name}
+                        aria-hidden="true"
+                        onClick={() => setShowFullScreenNft(true)}
+                      />
+                      <Popup modal lockScroll closeOnDocumentClick={false} open={showFullScreenNft}>
+                        <FullScreenImage
+                          onClose={() => setShowFullScreenNft(false)}
+                          selectedNFT={selectedNFT}
+                        />
+                      </Popup>
+                    </>
                   )}
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
@@ -987,7 +995,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div>
             ) : (
               <div className="Marketplace--creators">
-                <Blockies className="blockie--details" seed={creator.address} size={9} scale={4} />
+                <Blockies className="blockie--details" seed={creator?.address} size={9} scale={4} />
                 <div className="creator--name">
                   <p>Creator</p>
                   <h6
@@ -999,9 +1007,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {creator.address}
+                    {creator?.address}
                   </h6>
-                  <span className="tooltiptext">{creator.address}</span>
+                  <span className="tooltiptext">{creator?.address}</span>
                 </div>
               </div>
             )}
