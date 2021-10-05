@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { useAuthContext } from './AuthContext';
 import {
+  getMyMintableCollections,
   getMyMintedCollections,
   getMyMintingCollections,
   getMyMintingCollectionsCount,
@@ -11,6 +12,7 @@ import {
   getMyNfts,
   getSavedNfts,
 } from '../utils/api/mintNFT';
+import universeIcon from '../assets/images/universe-img.svg';
 
 const MyNFTsContext = createContext(null);
 
@@ -47,22 +49,29 @@ const MyNFTsContextProvider = ({ children }) => {
   const [myMintingCollections, setMyMintingCollections] = useState([]);
   const [mintingNftsCount, setMintingNftsCount] = useState(0);
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
+  const [universeCollection, setUniverseCollection] = useState(null);
 
   let nftPollInterval = null;
   let collPollInterval = null;
-  const universeCollectionDisplayName = 'Universe Core';
   const pollingInterval = 10000;
 
   const fetchNfts = async () => {
     try {
-      const [savedNFTS, myNfts, mintingNfts, mintedCollectionsRequest, mintingcollectionsRequest] =
-        await Promise.all([
-          getSavedNfts(),
-          getMyNfts(),
-          getMyMintingNfts(),
-          getMyMintedCollections(),
-          getMyMintingCollections(),
-        ]);
+      const [
+        savedNFTS,
+        myNfts,
+        mintingNfts,
+        mintedCollectionsRequest,
+        mintingcollectionsRequest,
+        mintableCollections,
+      ] = await Promise.all([
+        getSavedNfts(),
+        getMyNfts(),
+        getMyMintingNfts(),
+        getMyMintedCollections(),
+        getMyMintingCollections(),
+        getMyMintableCollections(),
+      ]);
 
       setSavedNfts(savedNFTS || []);
 
@@ -71,6 +80,19 @@ const MyNFTsContextProvider = ({ children }) => {
 
       setDeployedCollections(mintedCollectionsRequest.collections || []);
       setMyMintingCollections(mintingcollectionsRequest.collections || []);
+
+      const universeColl = mintableCollections.collections.filter(
+        (coll) => coll.address === '0xd3ccbb9f3e5b9678c5f4fef91055704df81a104c'
+      )[0];
+
+      if (!universeColl) {
+        alert('Failed to load Universe Core collection');
+      } else {
+        setUniverseCollection({
+          ...universeColl,
+          coverUrl: universeIcon,
+        });
+      }
 
       if (mintingNfts.length) {
         setMintingNftsCount(mintingNfts.length);
@@ -205,11 +227,11 @@ const MyNFTsContextProvider = ({ children }) => {
         setMyMintingNFTs,
         myMintingCollections,
         setMyMintingCollections,
-        universeCollectionDisplayName,
         mintingNftsCount,
         setMintingNftsCount,
         mintingCollectionsCount,
         setMintingCollectionsCount,
+        universeCollection,
       }}
     >
       {children}

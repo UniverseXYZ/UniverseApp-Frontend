@@ -65,16 +65,11 @@ const SingleNFTForm = () => {
     setActiveTxHashes,
     mintingNftsCount,
     setMintingNftsCount,
+    universeCollection,
   } = useMyNftsContext();
 
-  const {
-    deployedCollections,
-    universeERC721CoreContract,
-    address,
-    contracts,
-    signer,
-    universeCollection,
-  } = useAuthContext();
+  const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
+    useAuthContext();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 

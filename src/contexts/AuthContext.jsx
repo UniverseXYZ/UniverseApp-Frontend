@@ -10,8 +10,6 @@ import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
-import { getCollectionData } from '../utils/api/mintNFT';
-import universeIcon from '../assets/images/universe-img.svg';
 
 const AuthContext = createContext(null);
 
@@ -47,7 +45,6 @@ const AuthContextProvider = ({ children }) => {
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
-  const [universeCollection, setUniverseCollection] = useState(null);
   const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
@@ -82,12 +79,6 @@ const AuthContextProvider = ({ children }) => {
       contractsData.UniverseERC721Core.abi,
       signerResult
     );
-    const universeColl = await getCollectionData(contractsData.UniverseERC721Core.address);
-    setUniverseCollection({
-      ...universeColl.collection,
-      coverUrl: universeIcon,
-      name: 'Universe XYZ',
-    });
     const universeERC721FactoryContractResult = new Contract(
       contractsData.UniverseERC721Factory.address,
       contractsData.UniverseERC721Factory.abi,
@@ -354,7 +345,6 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
-        universeCollection,
       }}
     >
       {children}
