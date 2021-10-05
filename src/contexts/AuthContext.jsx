@@ -35,7 +35,7 @@ const AuthContextProvider = ({ children }) => {
   const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
   const [web3Provider, setWeb3Provider] = useState(null);
   const [address, setAddress] = useState('');
-  const [signer, setSigner] = useState('');
+  const [signer, setSigner] = useState(null);
   const [yourBalance, setYourBalance] = useState(0);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
@@ -64,7 +64,7 @@ const AuthContextProvider = ({ children }) => {
 
   // HELPERS
   const clearStorageAuthData = () => {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('xyz_access_token');
     localStorage.removeItem('user_address');
     localStorage.removeItem('providerName');
   };
@@ -112,6 +112,7 @@ const AuthContextProvider = ({ children }) => {
     setWeb3Provider(provider);
     setAddress(accounts[0] || '');
     setSigner(signerResult);
+    console.log(signerResult);
     setYourBalance(utils.formatEther(balance));
     // setIsWalletConnected(true);
     setEthereumNetwork(network);
@@ -247,7 +248,7 @@ const AuthContextProvider = ({ children }) => {
     try {
       if (signer) {
         const sameUser = address === localStorage.getItem('user_address');
-        const hasSigned = sameUser && localStorage.getItem('access_token');
+        const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
 
         if (!hasSigned) {
           const chanllenge = uuid();
@@ -263,14 +264,11 @@ const AuthContextProvider = ({ children }) => {
             setIsAuthenticated(true);
             setLoggedInArtist(mapUserData(authInfo.user));
 
-            // Save access_token into the local storage for later API requests usage
-            localStorage.setItem('access_token', authInfo.token);
+            // Save xyz_access_token into the local storage for later API requests usage
+            localStorage.setItem('xyz_access_token', authInfo.token);
             localStorage.setItem('user_address', address);
           } else {
             setIsAuthenticated(false);
-            // if (authenticatedRoutes.includes(window.location.pathname)) {
-            //   history.push('/');
-            // }
           }
         } else {
           // THE USER ALREADY HAS SIGNED
@@ -308,7 +306,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(async () => {
-    if (signer) signMessage();
+    if (signer?.address !== address) signMessage();
   }, [signer]);
 
   return (

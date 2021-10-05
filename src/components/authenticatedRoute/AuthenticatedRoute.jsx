@@ -5,7 +5,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 
 function AuthenticatedRoute({ children, ...restOfProps }) {
   const { isAuthenticated, isWalletConnected } = useAuthContext();
-  const accessToken = localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('xyz_access_token');
 
   return accessToken || (isAuthenticated && isWalletConnected) ? (
     <Route {...restOfProps}>{children}</Route>
