@@ -6,14 +6,6 @@
     max-width: 1110px;
     margin: 0 auto;
     padding-bottom: 100px;
-    @include xl {
-      padding-left: 60px;
-      padding-right: 60px;
-    }
-    @include md {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
   }
 }
 
