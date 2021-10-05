@@ -394,7 +394,7 @@ export const getMyMintedCollections = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
   const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=false`;

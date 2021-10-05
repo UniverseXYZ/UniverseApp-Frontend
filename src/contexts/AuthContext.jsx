@@ -103,7 +103,6 @@ const AuthContextProvider = ({ children }) => {
     setWeb3Provider(provider);
     setAddress(accounts[0] || '');
     setSigner(signerResult);
-    console.log(signerResult);
     setYourBalance(utils.formatEther(balance));
     // setIsWalletConnected(true);
     setEthereumNetwork(network);

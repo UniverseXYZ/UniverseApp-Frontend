@@ -969,7 +969,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             <p>Edition {`${selectedNFTIndex + 1} / ${selectedNFT.numberOfEditions}`}</p>
           </div> */}
           <div className="Marketplace--collections">
-            {/* {creator &&
+            {creator &&
             (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
               <div className="Marketplace--creators">
                 <img src={creator.profileImageUrl} alt="icon" />
@@ -995,36 +995,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                     {creator.address}
                   </h6>
                   <span className="tooltiptext tooltiptext--left">{creator.address}</span>
-                </div>
-              </div>
-            )} */}
-
-            {owner &&
-            (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
-              <div className="Marketplace--creators">
-                <img src={owner.avatar || owner.profileImageUrl} alt="icon2" />
-                <div className="creator--name">
-                  <p>Creator</p>
-                  <h6>{owner.displayName}</h6>
-                </div>
-              </div>
-            ) : (
-              <div className="Marketplace--creators">
-                <Blockies className="blockie--details" seed={owner.address} size={9} scale={4} />
-                <div className="creator--name">
-                  <p>Creator</p>
-                  <h6
-                    // TODO: Vik to fix this or someone else
-                    style={{
-                      maxWidth: '100px',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {owner.address}
-                  </h6>
-                  <span className="tooltiptext tooltiptext--left">{owner.address}</span>
                 </div>
               </div>
             )}
