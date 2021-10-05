@@ -43,6 +43,29 @@ const LobsterRarityFilters = (props) => {
           resetPagination={resetPagination}
         />
       </div>
+      <div className="rarity--charts--mobile">
+        <CollectionFilter />
+        <RaritySortBySelect
+          id="sort--select"
+          defaultValue="Rarity Score"
+          sortData={['Rarity Score', 'Rank', 'Polymorph Id']}
+          setSortField={setSortField}
+          resetPagination={resetPagination}
+        />
+        <div className="rarity--charts--search--and--floor--price">
+          <RaritySearchField
+            placeholder="Search items"
+            searchText={searchText}
+            setSearchText={setSearchText}
+            resetPagination={resetPagination}
+          />
+          <RaritySortByOrder
+            setSortDir={setSortDir}
+            sortDir={sortDir}
+            resetPagination={resetPagination}
+          />
+        </div>
+      </div>
     </div>
   );
 };
