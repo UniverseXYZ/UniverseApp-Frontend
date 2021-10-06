@@ -209,10 +209,13 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                     type="checkbox"
                     className="toggle-switch-checkbox"
                     name="toggleSwitch"
-                    value={values.hasBlur}
-                    checked={values.hasBlur}
+                    value={values.backgroundImageBlur}
+                    checked={values.backgroundImageBlur}
                     onChange={(e) =>
-                      onChange((prevValues) => ({ ...prevValues, hasBlur: e.target.checked }))
+                      onChange((prevValues) => ({
+                        ...prevValues,
+                        backgroundImageBlur: e.target.checked,
+                      }))
                     }
                   />
                   <label htmlFor="toggleSwitch" className="toggle-switch-label">
@@ -253,7 +256,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
               <div className="background__preview">
                 <h6>Preview</h6>
                 <div className="preview-div">
-                  {values.hasBlur && <div className="blur" />}
+                  {values.backgroundImageBlur && <div className="blur" />}
                   {values.backgroundImage ? (
                     <>
                       <img className="background__image" src={bgImageSrc} alt="background" />
@@ -295,7 +298,7 @@ DomainAndBranding.defaultProps = {
   values: {
     promoImage: '',
     backgroundImage: '',
-    hasBlur: false,
+    backgroundImageBlur: false,
   },
   editButtonClick: false,
   setEditButtonClick: () => {},
