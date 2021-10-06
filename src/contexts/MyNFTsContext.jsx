@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router';
 import { useAuthContext } from './AuthContext';
 import {
+  getMyMintableCollections,
   getMyMintedCollections,
   getMyMintingCollections,
   getMyMintingCollectionsCount,
@@ -11,6 +12,7 @@ import {
   getMyNfts,
   getSavedNfts,
 } from '../utils/api/mintNFT';
+import universeIcon from '../assets/images/universe-img.svg';
 
 const MyNFTsContext = createContext(null);
 
@@ -45,19 +47,31 @@ const MyNFTsContextProvider = ({ children }) => {
   const [savedCollections, setSavedCollections] = useState([]);
   const [activeTxHashes, setActiveTxHashes] = useState([]);
   const [myMintingCollections, setMyMintingCollections] = useState([]);
-  const [startMintingNftPolling, setStartMintingNftPolling] = useState(false);
-  const [startMintingCollectionPolling, setStartMintingCollectionPolling] = useState(false);
+  const [mintingNftsCount, setMintingNftsCount] = useState(0);
+  const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
+  const [universeCollection, setUniverseCollection] = useState(null);
+
+  let nftPollInterval = null;
+  let collPollInterval = null;
+  const pollingInterval = 10000;
 
   const fetchNfts = async () => {
     try {
-      const [savedNFTS, myNfts, mintingNfts, mintedCollectionsRequest, mintingcollectionsRequest] =
-        await Promise.all([
-          getSavedNfts(),
-          getMyNfts(),
-          getMyMintingNfts(),
-          getMyMintedCollections(),
-          getMyMintingCollections(),
-        ]);
+      const [
+        savedNFTS,
+        myNfts,
+        mintingNfts,
+        mintedCollectionsRequest,
+        mintingcollectionsRequest,
+        mintableCollections,
+      ] = await Promise.all([
+        getSavedNfts(),
+        getMyNfts(),
+        getMyMintingNfts(),
+        getMyMintedCollections(),
+        getMyMintingCollections(),
+        getMyMintableCollections(),
+      ]);
 
       setSavedNfts(savedNFTS || []);
 
@@ -67,12 +81,25 @@ const MyNFTsContextProvider = ({ children }) => {
       setDeployedCollections(mintedCollectionsRequest.collections || []);
       setMyMintingCollections(mintingcollectionsRequest.collections || []);
 
+      const universeColl = mintableCollections.collections.filter(
+        (coll) => coll.address === '0xd3ccbb9f3e5b9678c5f4fef91055704df81a104c'
+      )[0];
+
+      if (!universeColl) {
+        alert('Failed to load Universe Core collection');
+      } else {
+        setUniverseCollection({
+          ...universeColl,
+          coverUrl: universeIcon,
+        });
+      }
+
       if (mintingNfts.length) {
-        setStartMintingNftPolling(true);
+        setMintingNftsCount(mintingNfts.length);
       }
 
       if (mintingcollectionsRequest.collections.length) {
-        setStartMintingCollectionPolling(true);
+        mintingCollectionsCount(mintingcollectionsRequest.collections.length);
       }
     } catch (err) {
       alert(
@@ -90,52 +117,52 @@ const MyNFTsContextProvider = ({ children }) => {
   }, [deployedCollections]);
 
   useEffect(() => {
-    let nftPollInterval = null;
-    if (startMintingNftPolling) {
-      nftPollInterval = setInterval(async () => {
-        const mintingNftsCount = await getMyMintingNftsCount();
-        if (mintingNftsCount !== myMintingNFTs.length) {
-          const [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
-          setMyNFTs(myNfts);
-          setMyMintingNFTs(mintingNfts);
-          if (mintingNfts.length === 0) {
-            clearInterval(nftPollInterval);
+    if (mintingNftsCount && !nftPollInterval) {
+      setTimeout(async () => {
+        // We need to wait a bit as the API isn't fast enough
+        let [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
+        setMyNFTs(myNfts);
+        setMyMintingNFTs(mintingNfts);
+        nftPollInterval = setInterval(async () => {
+          const apiMintingNftsCount = await getMyMintingNftsCount();
+          if (apiMintingNftsCount !== mintingNftsCount) {
+            [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
+            setMyNFTs(myNfts);
+            setMyMintingNFTs(mintingNfts);
+            setMintingNftsCount(mintingNfts.length);
+            if (mintingNfts.length === 0) {
+              clearInterval(nftPollInterval);
+            }
           }
-        }
-      }, 10000);
-    } else {
+        }, pollingInterval);
+      }, 1000);
+    } else if (!mintingNftsCount && nftPollInterval) {
       clearInterval(nftPollInterval);
     }
-    return () => {
-      clearInterval(nftPollInterval);
-    };
-  }, [startMintingNftPolling]);
+  }, [mintingNftsCount]);
 
   useEffect(() => {
-    let collPollInterval = null;
-    if (startMintingCollectionPolling) {
+    if (mintingCollectionsCount && !collPollInterval) {
       collPollInterval = setInterval(async () => {
-        const mintingCollectionsCount = await getMyMintingCollectionsCount();
-        if (mintingCollectionsCount !== deployedCollections.length) {
+        const apiMintingCount = await getMyMintingCollectionsCount();
+        if (apiMintingCount !== mintingCollectionsCount) {
           const [mintedCollections, mintingCollections] = await Promise.all([
             getMyMintedCollections(),
             getMyMintingCollections(),
           ]);
           setDeployedCollections(mintedCollections.collections);
           setMyMintingCollections(mintingCollections.collections);
-        }
+          setMintingCollectionsCount(mintingCollections.collections.length);
 
-        if (mintingCollectionsCount === 0) {
-          clearInterval(collPollInterval);
+          if (mintingCollections.collections.length === 0) {
+            clearInterval(collPollInterval);
+          }
         }
-      }, 10000);
-    } else {
+      }, pollingInterval);
+    } else if (!mintingCollectionsCount && nftPollInterval) {
       clearInterval(collPollInterval);
     }
-    return () => {
-      clearInterval(collPollInterval);
-    };
-  }, [startMintingCollectionPolling]);
+  }, [mintingCollectionsCount]);
 
   useEffect(() => {
     const canRequestData = loggedInArtist && isWalletConnected && isAuthenticated;
@@ -200,8 +227,11 @@ const MyNFTsContextProvider = ({ children }) => {
         setMyMintingNFTs,
         myMintingCollections,
         setMyMintingCollections,
-        setStartMintingNftPolling,
-        setStartMintingCollectionPolling,
+        mintingNftsCount,
+        setMintingNftsCount,
+        mintingCollectionsCount,
+        setMintingCollectionsCount,
+        universeCollection,
       }}
     >
       {children}

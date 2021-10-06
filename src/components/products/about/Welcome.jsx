@@ -27,7 +27,7 @@ const Welcome = () => {
           </AnimatedOnScroll>
           <AnimatedOnScroll animationIn="fadeIn" animationInDelay={600}>
             <div className="links">
-              <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+              {/* <Button className="light-button" onClick={() => history.push('/my-auctions')}>
                 Set up auction
               </Button>
               <Button
@@ -35,7 +35,7 @@ const Welcome = () => {
                 onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
               >
                 Auction house
-              </Button>
+              </Button> */}
             </div>
           </AnimatedOnScroll>
         </div>

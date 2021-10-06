@@ -14,7 +14,6 @@ const CollectionDropdown = ({ isDropdownOpened, setIsDropdownOpened }) => {
     setMyUniverseNFTsActiverPage,
     setMyUniverseNFTsOffset,
   } = useMyNftsContext();
-
   const handleClickOutside = (event) => {
     if (!event.target.classList.contains('target')) {
       if (ref.current && !ref.current.contains(event.target)) {

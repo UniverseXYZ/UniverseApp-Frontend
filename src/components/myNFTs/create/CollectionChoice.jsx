@@ -30,7 +30,7 @@ const CollectionChoice = ({ col, selectedCollection, setSelectedCollection }) =>
         </div>
       )}
       <h5 className="collection-name">{col.name}</h5>
-      <p>{col.tokenName}</p>
+      <p>{col.symbol}</p>
     </div>
     <div className="box--shadow--effect--block" />
   </div>

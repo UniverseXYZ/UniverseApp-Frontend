@@ -80,9 +80,6 @@
         img:not(.icon-img) {
           transition: 0.5s ease;
         }
-        .blockie {
-          border-radius: 5px;
-        }
       }
       .myAccount {
         padding-left: 30px;
@@ -109,7 +106,7 @@
         opacity: 0;
         pointer-events: none;
         &.drop-account {
-          top: 50px;
+          top: 45px;
           width: 280px;
         }
         &__header {
@@ -293,4 +290,6 @@
   @include xl {
     display: none;
   }
+
+  
 }

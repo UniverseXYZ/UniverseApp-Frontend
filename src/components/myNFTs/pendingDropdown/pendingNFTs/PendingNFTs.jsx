@@ -40,8 +40,8 @@ const PendingNFTs = () => {
               )}
 
               <div className="collection--details">
-                {nft.collection.name === 'Non Fungible Universe Core' ||
-                nft.collection.name === 'Universe XYZ' ? (
+                {nft.collection.address ===
+                process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
                   <img src={universeIcon} alt={nft.collection.name} />
                 ) : (
                   <img src={nft.collection?.coverUrl} alt="second" />

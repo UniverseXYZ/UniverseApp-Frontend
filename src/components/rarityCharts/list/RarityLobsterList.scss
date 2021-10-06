@@ -309,10 +309,16 @@
         }
       }
       @include xl {
-        grid-template-columns: repeat(3, 98%);
+        grid-template-columns: repeat(3, 113%);
+      }
+      @include lg {
+        grid-template-columns: 1fr 1fr;
+      }
+      @include md {
+        grid-template-columns: 1fr;
       }
       @include sm {
-        grid-template-columns: 1fr;
+        grid-template-columns: 0.5fr 0.5fr;
       }
     }
   }

@@ -13,7 +13,7 @@ const searchOwner = async (address, abortSignal) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     signal: abortSignal,
   });

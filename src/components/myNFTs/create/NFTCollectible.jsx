@@ -572,7 +572,7 @@ const NFTCollectible = (props) => {
             >
               <h5>
                 <img src={addIcon} alt="Add" />
-                Add the address
+                Add address
               </h5>
             </div>
           )}

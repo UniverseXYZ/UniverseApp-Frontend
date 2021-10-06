@@ -2,14 +2,14 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Contract, providers, utils } from 'ethers';
 import uuid from 'react-uuid';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { useHistory } from 'react-router-dom';
 import { getEthPriceCoingecko } from '../utils/api/etherscan';
 import Contracts from '../contracts/contracts.json';
 import { CONNECTORS_NAMES } from '../utils/dictionary';
 import { getProfileInfo, setChallenge, userAuthenticate } from '../utils/api/profile';
 import { mapUserData } from '../utils/helpers';
 import { useErrorContext } from './ErrorContext';
-import { getCollectionData } from '../utils/api/mintNFT';
-import universeIcon from '../assets/images/universe-img.svg';
 
 const AuthContext = createContext(null);
 
@@ -33,7 +33,7 @@ const AuthContextProvider = ({ children }) => {
   const [providerName, setProviderName] = useState(localStorage.getItem('providerName') || '');
   const [web3Provider, setWeb3Provider] = useState(null);
   const [address, setAddress] = useState('');
-  const [signer, setSigner] = useState('');
+  const [signer, setSigner] = useState(null);
   const [yourBalance, setYourBalance] = useState(0);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
@@ -45,7 +45,7 @@ const AuthContextProvider = ({ children }) => {
   const [universeERC721FactoryContract, setUniverseERC721FactoryContract] = useState(null);
   const [contracts, setContracts] = useState(false);
   const [deployedCollections, setDeployedCollections] = useState([]);
-  const [universeCollection, setUniverseCollection] = useState(null);
+  const history = useHistory();
   // Getters
   const getEthPriceData = async (balance) => {
     const ethUsdPice = await getEthPriceCoingecko();
@@ -61,7 +61,7 @@ const AuthContextProvider = ({ children }) => {
 
   // HELPERS
   const clearStorageAuthData = () => {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('xyz_access_token');
     localStorage.removeItem('user_address');
     localStorage.removeItem('providerName');
   };
@@ -79,12 +79,6 @@ const AuthContextProvider = ({ children }) => {
       contractsData.UniverseERC721Core.abi,
       signerResult
     );
-    const universeColl = await getCollectionData(contractsData.UniverseERC721Core.address);
-    setUniverseCollection({
-      ...universeColl.collection,
-      coverUrl: universeIcon,
-      name: 'Universe XYZ',
-    });
     const universeERC721FactoryContractResult = new Contract(
       contractsData.UniverseERC721Factory.address,
       contractsData.UniverseERC721Factory.abi,
@@ -164,6 +158,7 @@ const AuthContextProvider = ({ children }) => {
       clearStorageAuthData();
       if (account) {
         // await connectWithMetaMask();
+        history.push('/');
         web3AuthenticationProccess(provider, network, [account]);
       } else {
         resetConnectionState();
@@ -209,6 +204,7 @@ const AuthContextProvider = ({ children }) => {
     provider.on('accountsChanged', async (accounts) => {
       // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
       clearStorageAuthData();
+      history.push('/');
       web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
     });
 
@@ -242,7 +238,7 @@ const AuthContextProvider = ({ children }) => {
     try {
       if (signer) {
         const sameUser = address === localStorage.getItem('user_address');
-        const hasSigned = sameUser && localStorage.getItem('access_token');
+        const hasSigned = sameUser && localStorage.getItem('xyz_access_token');
 
         if (!hasSigned) {
           const chanllenge = uuid();
@@ -258,14 +254,11 @@ const AuthContextProvider = ({ children }) => {
             setIsAuthenticated(true);
             setLoggedInArtist(mapUserData(authInfo.user));
 
-            // Save access_token into the local storage for later API requests usage
-            localStorage.setItem('access_token', authInfo.token);
+            // Save xyz_access_token into the local storage for later API requests usage
+            localStorage.setItem('xyz_access_token', authInfo.token);
             localStorage.setItem('user_address', address);
           } else {
             setIsAuthenticated(false);
-            // if (authenticatedRoutes.includes(window.location.pathname)) {
-            //   history.push('/');
-            // }
           }
         } else {
           // THE USER ALREADY HAS SIGNED
@@ -303,7 +296,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(async () => {
-    if (signer) signMessage();
+    if (signer?.address !== address) signMessage();
   }, [signer]);
 
   return (
@@ -351,7 +344,6 @@ const AuthContextProvider = ({ children }) => {
         connectWithMetaMask,
         connectWeb3,
         connectWithWalletConnect,
-        universeCollection,
       }}
     >
       {children}

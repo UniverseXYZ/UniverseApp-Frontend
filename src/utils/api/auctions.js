@@ -37,7 +37,7 @@ export const createAuction = async ({
     method: 'post',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify(requestBody),
   };
@@ -82,7 +82,7 @@ export const editAuction = async ({
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify(requestBody),
   };
@@ -112,7 +112,7 @@ export const editRewardTier = async (
     method: 'patch',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify(requestBody),
   };
@@ -137,7 +137,7 @@ export const editRewardTierImage = async (image = null, id) => {
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...formData,
@@ -155,7 +155,7 @@ export const getFutureAuctions = async () => {
   const requestOptions = {
     method: 'get',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
 
@@ -170,7 +170,7 @@ export const getActiveAuctions = async () => {
   const requestOptions = {
     method: 'get',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
 
@@ -185,7 +185,7 @@ export const getPastAuctions = async () => {
   const requestOptions = {
     method: 'get',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
 
@@ -216,7 +216,7 @@ export const uploadImagesForTheLandingPage = async (
     method: 'post',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...formData,

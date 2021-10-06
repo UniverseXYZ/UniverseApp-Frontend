@@ -31,7 +31,7 @@ export const saveProfileInfo = async (loggedInArtist) => {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -55,7 +55,7 @@ export const saveUserImage = async (file) => {
   const request = await fetch(UPLOAD_PROFILE_IMAGE_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -74,7 +74,7 @@ export const saveUserLogo = async (file) => {
   const request = await fetch(UPLOAD_LOGO_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -101,7 +101,7 @@ export const getProfileInfo = async (address) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -134,7 +134,7 @@ export const setChallenge = async (challenge) => {
  * @param {string} param.address user address
  * @param {string} param.signedMessage user signed message
  * @returns {Object} result
- * @returns {string} result.access_token JWT of the user
+ * @returns {string} result.xyz_access_token JWT of the user
  * @returns {string} result.user.about
  * @returns {string} result.user.address
  * @returns {string} result.user.createdAt

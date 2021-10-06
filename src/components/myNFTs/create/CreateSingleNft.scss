@@ -355,8 +355,6 @@
         @include sm {
           grid-gap: 10px;
         }
-        max-height: 300px;
-        overflow: scroll;
 
         .collection-box {
           position: relative;
@@ -930,5 +928,10 @@
     font-family: $spaceGroteskFont;
     font-size: 10px;
     color: #e4b613;
+  }
+
+  .scroll-box {
+    max-height: 300px;
+    overflow: scroll;
   }
 }

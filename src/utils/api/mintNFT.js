@@ -55,7 +55,7 @@ export const saveNftForLater = async (data) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -83,7 +83,7 @@ export const saveNftImage = async (file, id) => {
   const request = await fetch(UPLOAG_NFT_IMAGE_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -102,7 +102,7 @@ export const getSavedNfts = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -121,7 +121,7 @@ export const getMyNfts = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -138,7 +138,7 @@ export const getMyMintingNfts = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -155,7 +155,7 @@ export const getMyMintingNftsCount = async () => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -178,7 +178,7 @@ export const getMetaForSavedNft = async (id) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -217,12 +217,15 @@ export const updateSavedForLaterNft = async (data) => {
   if (data.royaltiesParsed.length) {
     requestData.royalties = data.royaltiesParsed;
   }
+  if (data.collectionId) {
+    requestData.collectionId = data.collectionId;
+  }
 
   const request = await fetch(UPDATE_SAVED_FOR_LATER_NFT_URL, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -272,7 +275,7 @@ export const getTokenURI = async ({
   const request = await fetch(GENERATE_TOKEN_URI_URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -297,7 +300,7 @@ export const saveCollection = async (data) => {
   const requestOptions = {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   };
@@ -316,7 +319,7 @@ export const attachTxHashToCollection = (txHash, collectionId) => {
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       txHash,
@@ -331,7 +334,7 @@ export const removeSavedNft = (id) =>
     method: 'DELETE',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   });
 
@@ -359,7 +362,7 @@ export const updateSavedNft = async ({
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       ...requestData,
@@ -371,16 +374,31 @@ export const updateSavedNft = async ({
   }
 };
 
+export const getMyMintableCollections = async () => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+  const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=true`;
+  const request = await fetch(url, requestOptions);
+  const result = await request.text().then((res) => JSON.parse(res));
+
+  return result;
+};
+
 export const getMyMintedCollections = async () => {
   const requestOptions = {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
-
-  const request = await fetch(GET_MY_MINTED_COLLECTIONS, requestOptions);
+  const url = `${GET_MY_MINTED_COLLECTIONS}?mintable=false`;
+  const request = await fetch(url, requestOptions);
   const result = await request.text().then((res) => JSON.parse(res));
 
   return result;
@@ -391,7 +409,7 @@ export const getMyMintingCollections = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
 
@@ -406,7 +424,7 @@ export const getMyMintingCollectionsCount = async () => {
     method: 'GET',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
   };
 
@@ -443,7 +461,7 @@ export const editCollection = async (data) => {
     method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       description: data.description || '',
@@ -469,7 +487,7 @@ export const editCollectionImage = async (file, collectionId) => {
   const request = await fetch(URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -489,7 +507,7 @@ export const editCollectionBanner = async (file, collectionId) => {
   const request = await fetch(URL, {
     method: 'post',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: formData,
   });
@@ -526,7 +544,7 @@ export const createMintingNFT = async (txHash, nftId) => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
     body: JSON.stringify({
       txHash,

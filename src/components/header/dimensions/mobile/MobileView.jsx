@@ -5,7 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
 import './MobileView.scss';
-import Blockie from 'react-blockies';
+import HeaderAvatar from '../../HeaderAvatar';
 import {
   PLACEHOLDER_MARKETPLACE_AUCTIONS,
   PLACEHOLDER_MARKETPLACE_NFTS,
@@ -421,7 +421,7 @@ const MobileView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <Blockie className="blockie" seed={address} size={9} scale={4} />
+            <HeaderAvatar scale={4} />
           </div>
 
           {isAccountDropdownOpened && (
@@ -429,7 +429,7 @@ const MobileView = (props) => {
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <Blockie className="blockie" seed={address} size={9} scale={6} />
+                    <HeaderAvatar scale={4} />
 
                     {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
                     <div className="ethereum__address">

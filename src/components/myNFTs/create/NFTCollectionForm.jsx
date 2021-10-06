@@ -28,9 +28,9 @@ import { useErrorContext } from '../../../contexts/ErrorContext';
 import Contracts from '../../../contracts/contracts.json';
 
 const MAX_FIELD_CHARS_LENGTH = {
-  name: 100,
-  description: 200,
-  token: 20,
+  name: 32,
+  description: 1024,
+  token: 10,
 };
 
 const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
@@ -44,7 +44,8 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     activeTxHashes,
     setActiveTxHashes,
     setMyMintingCollections,
-    setStartMintingCollectionPolling,
+    mintingCollectionsCount,
+    setMintingCollectionsCount,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -225,13 +226,13 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
         if (!mintingCollectionsRequest.message) {
           setMyMintingCollections(mintingCollectionsRequest.collections);
         }
+        setMintingCollectionsCount(mintingCollectionsCount + 1);
       }
 
       setShowLoading(false);
 
       if (res) {
         setShowCongrats(true);
-        setStartMintingCollectionPolling(true);
       } else {
         setShowError(true);
       }
