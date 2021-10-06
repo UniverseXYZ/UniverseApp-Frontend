@@ -251,12 +251,12 @@ const AuthContextProvider = ({ children }) => {
           });
 
           if (!authInfo.error) {
-            setIsAuthenticated(true);
-            setLoggedInArtist(mapUserData(authInfo.user));
-
             // Save xyz_access_token into the local storage for later API requests usage
             localStorage.setItem('xyz_access_token', authInfo.token);
             localStorage.setItem('user_address', address);
+
+            setIsAuthenticated(true);
+            setLoggedInArtist(mapUserData(authInfo.user));
           } else {
             setIsAuthenticated(false);
           }
