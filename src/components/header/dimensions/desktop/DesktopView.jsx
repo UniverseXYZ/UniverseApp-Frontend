@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Popup from 'reactjs-popup';
 import './DesktopView.scss';
-import Blockies from 'react-blockies';
+import HeaderAvatar from '../../HeaderAvatar';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import copyIcon from '../../../../assets/images/copy.svg';
 import arrowUP from '../../../../assets/images/arrow-down.svg';
@@ -48,8 +48,14 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const { address, isAuthenticated, yourBalance, usdEthBalance, resetConnectionState } =
-    useAuthContext();
+  const {
+    loggedInArtist,
+    address,
+    isAuthenticated,
+    yourBalance,
+    usdEthBalance,
+    resetConnectionState,
+  } = useAuthContext();
 
   return (
     <div className="desktop__nav">
@@ -297,14 +303,14 @@ const DesktopView = ({
               className="menu-li myAccount"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <Blockies className="blockie" seed={address} size={9} scale={3} />
+              <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={3} />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <Blockies className="blockie" seed={address} size={9} scale={3} />
+                  <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={3} />
                   <div className="ethereum__address">{shortenEthereumAddress(ethereumAddress)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">

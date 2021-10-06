@@ -80,9 +80,6 @@
         img:not(.icon-img) {
           transition: 0.5s ease;
         }
-        .blockie {
-          border-radius: 5px;
-        }
       }
       .myAccount {
         padding-left: 30px;
@@ -293,4 +290,6 @@
   @include xl {
     display: none;
   }
+
+  
 }
