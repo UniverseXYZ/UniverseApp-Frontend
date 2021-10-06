@@ -255,12 +255,12 @@ const AuthContextProvider = ({ children }) => {
           });
 
           if (!authInfo.error) {
-            setIsAuthenticated(true);
-            setLoggedInArtist(mapUserData(authInfo.user));
-
             // Save access_token into the local storage for later API requests usage
             localStorage.setItem('access_token', authInfo.token);
             localStorage.setItem('user_address', address);
+
+            setIsAuthenticated(true);
+            setLoggedInArtist(mapUserData(authInfo.user));
           } else {
             setIsAuthenticated(false);
             // if (authenticatedRoutes.includes(window.location.pathname)) {
