@@ -50,7 +50,10 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
         values.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
           // const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
-          const image = tier.imageUrl || null;
+          let image = tier.imageUrl || null;
+          if (tier.imageUrl instanceof File) {
+            image = URL.createObjectURL(tier.imageUrl);
+          }
           const description = tier.description || '';
 
           return (
@@ -138,11 +141,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                       <h6>Preview</h6>
                       <div className="preview-div">
                         {image ? (
-                          <img
-                            src={URL.createObjectURL(image)}
-                            className="preview__image"
-                            alt="Platinum"
-                          />
+                          <img src={image} className="preview__image" alt="Platinum" />
                         ) : (
                           <img
                             className="default__upload__image"
