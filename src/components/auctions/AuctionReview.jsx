@@ -122,7 +122,6 @@ const AuctionReview = () => {
     const futureAuctionResponse = await getFutureAuctions();
     setMyAuctions(futureAuctionResponse?.auctions || []);
   };
-  console.log(auction);
 
   return (
     <div className="container auction-reward">
@@ -277,7 +276,7 @@ const AuctionReview = () => {
                   <div className="winners">
                     <div className="tier-perwinners">
                       <h4>
-                        NFTs per winner:&nbsp;<b>{tier.nftsPerWinner > 0 && tier.nftsPerWinner}</b>
+                        NFTs per winner:&nbsp;<b>{tier.nftsPerWinner && tier.nftsPerWinner}</b>
                       </h4>
                     </div>
                     <div className="tier-winners">
