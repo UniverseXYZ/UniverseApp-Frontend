@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './PendingNFTs.scss';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
@@ -7,10 +7,16 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
+import Contracts from '../../../../contracts/contracts.json';
 
 const PendingNFTs = () => {
   const { myMintingNFTs } = useMyNftsContext();
   const { loggedInArtist, address } = useAuthContext();
+
+  const formatAddress = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+
+  const chain = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
+  const generateLink = (addr) => `https://${chain.name}.etherscan.io/tx/${addr}`;
 
   const renderMintingNfts = useMemo(
     () =>
@@ -24,7 +30,26 @@ const PendingNFTs = () => {
           style={{ width: 160 }}
           aria-hidden
         >
-          <span className="tooltiptext">View on Etherscan</span>
+          {nft.numberOfEditions < 41 ? (
+            <span className="tooltiptext">View on Etherscan</span>
+          ) : (
+            <span className="tooltiptext-big">
+              <p className="title"> View on Etherscan:</p>
+              <div className="tooltiptext-big-body">
+                {Array(Math.ceil(nft.numberOfEditions / 40))
+                  .fill(0)
+                  .map((el, i) => (
+                    <div className="txns" key={nft.id}>
+                      <span>Txn{i + 1}:</span>
+                      <a target="_blank" href={generateLink(nft.txHash)} rel="noreferrer">
+                        {formatAddress(nft.txHash)}
+                      </a>
+                    </div>
+                  ))}
+              </div>
+            </span>
+          )}
+
           <div className="nft__card__header">
             <div className="three__images">
               {loggedInArtist &&
@@ -60,7 +85,9 @@ const PendingNFTs = () => {
                 </div>
               )}
             </div>
-            <p className="nfts__qantity">{`${nft.numberOfEditions}/${nft.numberOfEditions}`}</p>
+            <p className="nfts__qantity">{`${Math.ceil(nft.numberOfEditions / 40)}/${Math.ceil(
+              nft.numberOfEditions / 40
+            )}`}</p>
           </div>
           <div className="nft__card__body">
             <div className="loading-image">
