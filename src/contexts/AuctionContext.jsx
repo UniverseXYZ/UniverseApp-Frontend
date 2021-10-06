@@ -22,14 +22,14 @@ const AuctionContextProvider = ({ children }) => {
   const [auctionSetupState, setAuctionSetupState] = useState(false);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  // useEffect(async () => {
-  //   if (isAuthenticated) {
-  //     const futureAuctionResponse = await getFutureAuctions();
-  //     setMyAuctions(futureAuctionResponse?.auctions || []);
-  //   } else {
-  //     setMyAuctions([]);
-  //   }
-  // }, [isAuthenticated]);
+  useEffect(async () => {
+    if (isAuthenticated) {
+      const futureAuctionResponse = await getFutureAuctions();
+      setMyAuctions(futureAuctionResponse?.auctions || []);
+    } else {
+      setMyAuctions([]);
+    }
+  }, [isAuthenticated]);
 
   return (
     <AuctionContext.Provider
