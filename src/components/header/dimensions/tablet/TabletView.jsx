@@ -358,7 +358,7 @@ const TabletView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={4} />
+            <HeaderAvatar scale={4} />
           </div>
           {/* <img
             className="account__icon show__on__tablet"
@@ -376,7 +376,7 @@ const TabletView = (props) => {
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={3} />
+                    <HeaderAvatar scale={3} />
                     <div className="ethereum__address">
                       {shortenEthereumAddress(ethereumAddress)}
                     </div>

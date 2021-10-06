@@ -1,20 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
+import { useAuthContext } from '../../contexts/AuthContext';
 
-const HeaderAvatar = ({ avatarUrl, address, scale }) => (
-  <>
-    {avatarUrl ? (
-      <img className={scale === 3 ? 'blockie-md' : 'blockie-lg'} src={avatarUrl} alt="avatar" />
-    ) : (
-      <Blockies seed={address} size={9} scale={scale} />
-    )}
-  </>
-);
+const HeaderAvatar = ({ scale }) => {
+  const { loggedInArtist, address } = useAuthContext();
+
+  return (
+    <>
+      {loggedInArtist.avatar ? (
+        <img
+          className={scale === 3 ? 'blockie-md' : 'blockie-lg'}
+          src={loggedInArtist.avatar}
+          alt="avatar"
+        />
+      ) : (
+        <Blockies seed={address} size={9} scale={scale} />
+      )}
+    </>
+  );
+};
 
 HeaderAvatar.propTypes = {
-  avatarUrl: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
   scale: PropTypes.number.isRequired,
 };
 

@@ -48,14 +48,8 @@ const DesktopView = ({
   const [isDAODropdownOpened, setIsDAODropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const history = useHistory();
-  const {
-    loggedInArtist,
-    address,
-    isAuthenticated,
-    yourBalance,
-    usdEthBalance,
-    resetConnectionState,
-  } = useAuthContext();
+  const { address, isAuthenticated, yourBalance, usdEthBalance, resetConnectionState } =
+    useAuthContext();
 
   return (
     <div className="desktop__nav">
@@ -303,14 +297,14 @@ const DesktopView = ({
               className="menu-li myAccount"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={3} />
+              <HeaderAvatar scale={3} />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={3} />
+                  <HeaderAvatar scale={3} />
                   <div className="ethereum__address">{shortenEthereumAddress(ethereumAddress)}</div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">

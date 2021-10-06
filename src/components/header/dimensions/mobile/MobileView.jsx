@@ -421,7 +421,7 @@ const MobileView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={4} />
+            <HeaderAvatar scale={4} />
           </div>
 
           {isAccountDropdownOpened && (
@@ -429,7 +429,7 @@ const MobileView = (props) => {
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <HeaderAvatar avatarUrl={loggedInArtist.avatar} address={address} scale={4} />
+                    <HeaderAvatar scale={4} />
 
                     {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
                     <div className="ethereum__address">
