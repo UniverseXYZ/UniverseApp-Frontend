@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { Animated } from 'react-animated-css';
 import './TabletView.scss';
-import Blockie from 'react-blockies';
+import HeaderAvatar from '../../HeaderAvatar';
 import SelectWalletPopup from '../../../popups/SelectWalletPopup.jsx';
 import hamburgerIcon from '../../../../assets/images/hamburger.svg';
 import closeIcon from '../../../../assets/images/close-menu.svg';
@@ -358,7 +358,7 @@ const TabletView = (props) => {
             aria-hidden
             onClick={toggleDropdown}
           >
-            <Blockie className="blockie" seed={address} size={9} scale={4} />
+            <HeaderAvatar scale={4} />
           </div>
           {/* <img
             className="account__icon show__on__tablet"
@@ -376,7 +376,7 @@ const TabletView = (props) => {
               <div ref={ref} className="dropdown drop-account">
                 <div className="dropdown__header">
                   <div className="copy-div">
-                    <Blockie className="blockie" seed={address} size={9} scale={3} />
+                    <HeaderAvatar scale={3} />
                     <div className="ethereum__address">
                       {shortenEthereumAddress(ethereumAddress)}
                     </div>

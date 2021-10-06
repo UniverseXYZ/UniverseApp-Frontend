@@ -378,6 +378,19 @@ header {
       min-width: 153px;
       display: none;
     }
+
+  }
+
+  .blockie-lg {
+    width: 36px;
+    height: 36px;
+    border-radius: 5px;
+  }
+  
+  .blockie-md {
+    width: 27px;
+    height: 27px;
+    border-radius: 5px;
   }
 
   @include sm {
