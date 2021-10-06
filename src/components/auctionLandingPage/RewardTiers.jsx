@@ -34,16 +34,19 @@ const RewardTiers = ({ auction }) => (
             <div className="tier__details">
               <div className="tier__title">
                 <h2>{tier.name}</h2>
-                {/* // TODO:: THIS COLLOR SHOULD COME FROM THE BE */}
                 <span
                   style={{
-                    backgroundColor: 'red',
+                    backgroundColor: tier.color,
                   }}
                 />
               </div>
               <div className="tier__info">
                 <span>Bidders #10</span>
-                <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
+                {!tier.customNFTs ? (
+                  <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
+                ) : (
+                  <span className="custom--nfts">Different NFTs per winner</span>
+                )}
                 {tier.minBidValue ? <span>{`Minimum bid: ${tier.minBidValue} ETH`}</span> : <></>}
               </div>
               <div className="tier__description">{tier.description}</div>
