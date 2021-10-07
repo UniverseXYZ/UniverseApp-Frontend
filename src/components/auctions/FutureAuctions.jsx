@@ -34,6 +34,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     setSearchByName(value);
   };
 
+  const handleAuctionExpand = (futureAuctionId) => {
+    const canExpandAuction = !futureAuctionId || futureAuctionId !== shownActionId;
+    if (canExpandAuction) {
+      setshownActionId(futureAuctionId);
+    } else {
+      setshownActionId(null);
+    }
+  };
+
   const getTotalNFTSperAuction = (auction) => {
     let nftsCount = 0;
     auction.rewardTiers.forEach((tier) => {
@@ -77,22 +86,18 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
               <div className="auction-header-button">
                 <h3>{futureAuction.name}</h3>
               </div>
-              <div className="launch-auction">
+              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+              <div
+                onClick={() => handleAuctionExpand(futureAuction.id)}
+                role="button"
+                tabIndex={0}
+                className="launch-auction"
+              >
                 <div className="arrow">
                   {shownActionId === futureAuction.id ? (
-                    <img
-                      src={arrowUp}
-                      onClick={() => setshownActionId(null)}
-                      alt="Arrow up"
-                      aria-hidden="true"
-                    />
+                    <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
                   ) : (
-                    <img
-                      src={arrowDown}
-                      onClick={() => setshownActionId(futureAuction.id)}
-                      alt="Arrow down"
-                      aria-hidden="true"
-                    />
+                    <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
                   )}
                 </div>
               </div>
