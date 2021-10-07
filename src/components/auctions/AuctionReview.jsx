@@ -62,6 +62,8 @@ const AuctionReview = () => {
   const handleSetAuction = async () => {
     // TODO:: after the new design changes we must add logic which prevents the user to select the same nfts for different tiers
     if (auction && auction?.rewardTiers?.length) {
+      // TODO: usedNFTsIds should be changed to [{nftId: ${id}, slot: ${slotNumber}, ...}]
+      // Let Viktor know that you've reached this point so we make sure the api is already deployed
       const usedNFTsIds = [];
       auction.rewardTiers.forEach((tier) => {
         tier.nfts.forEach((n) => {
