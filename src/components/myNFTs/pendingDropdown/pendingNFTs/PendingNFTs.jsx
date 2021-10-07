@@ -7,6 +7,7 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
+import { formatAddress } from '../../../../utils/helpers/format';
 
 const PendingNFTs = () => {
   const { myMintingNFTs } = useMyNftsContext();
