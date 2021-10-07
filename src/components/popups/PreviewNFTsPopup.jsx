@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import ReactReadMoreReadLess from 'react-read-more-read-less';
 import { Animated } from 'react-animated-css';
 import sizeUpIcon from '../../assets/images/size-up.svg';
 import sizeDownIcon from '../../assets/images/size-down.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import arrowIcon from '../../assets/images/arrow.svg';
 import frankie from '../../assets/images/frankie.png';
+import BiddersDropdown from '../input/biddersDropdown/BiddersDropdown';
 
 const PreviewNFTsPopup = ({ onClose, onTier }) => {
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(0);
   const [fullScreen, setFullScreen] = useState(false);
+  console.log('aaaaaaaaaaaa', onTier);
 
   const handleArrowClick = (direction) => {
     if (direction === 'right') {
@@ -91,10 +94,17 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
             />
             <h2>{onTier.name}</h2>
           </div>
-          <div className="tier__info">
-            <span>Bidders #10</span>
-            <span>{`${onTier.nftsPerWinner} NFTs per winner`}</span>
-            {onTier.minBidValue ? <span>{`Minimum bid: ${onTier.minBidValue} ETH`}</span> : <></>}
+          <div className="tier__info__header">
+            <div className="tier__info">
+              <span>Bidders #10</span>
+              {!onTier.customNFTs ? (
+                <span>{`${onTier.nftsPerWinner} NFTs per winner`}</span>
+              ) : (
+                <span className="custom--nfts">Different NFTs per winner</span>
+              )}
+              {onTier.minBidValue ? <span>{`Minimum bid: ${onTier.minBidValue} ETH`}</span> : <></>}
+            </div>
+            {onTier.customNFTs ? <BiddersDropdown /> : <></>}
           </div>
           <div className="tier__nfts">
             {onTier.nfts.map((nft, index) => (
@@ -111,13 +121,16 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
         </div>
         <div className="nft__details">
           <h2 className="nft__title">{onTier.nfts[selectedNFTIndex].name}</h2>
-          <div className="nft__released">
+          <div className="nft__editions">
             <div className="item">
-              <span>Released</span>
-              {/* // TODO:: we don't have that info yet */}
-              {/* <p>{`${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[1]} ${
-                onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[2]
-              }, ${onTier.nfts[selectedNFTIndex].releasedDate.toString().split(' ')[3]}`}</p> */}
+              <span>Edition</span>
+              <p>
+                {`${onTier.nfts[selectedNFTIndex].numberOfEditions}/${onTier.nfts[selectedNFTIndex].numberOfEditions}`}
+                <span className="tooltiptext">
+                  <span className="title">Token IDs:</span>
+                  {`#${onTier.nfts[selectedNFTIndex].tokenId}`}
+                </span>
+              </p>
             </div>
             {onTier.nfts[selectedNFTIndex].collection && (
               <div className="item">
@@ -129,13 +142,20 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
                     src={frankie}
                     alt="onTier.nfts[selectedNFTIndex].collection.name"
                   />
-                  onTier.nfts[selectedNFTIndex].collection.name
+                  {/* {onTier.nfts[selectedNFTIndex].collection.name} */}
+                  Collection name
                 </p>
               </div>
             )}
           </div>
           <div className="description">
-            {onTier.nfts[selectedNFTIndex].description || onTier.description}
+            <ReactReadMoreReadLess
+              charLimit={200}
+              readMoreText="Read more"
+              readLessText="Read less"
+            >
+              {onTier.nfts[selectedNFTIndex].description || onTier.description}
+            </ReactReadMoreReadLess>
           </div>
         </div>
       </div>
