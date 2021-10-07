@@ -67,10 +67,10 @@ const PendingNFTs = () => {
               <div className="image__bg__effect" />
               {nft.artworkType &&
                 !nft.artworkType.endsWith('mpeg') &&
-                !nft.artworkType.endsWith('mp4') && <img src={nft.optimizedUrl} alt={nft.name} />}
+                !nft.artworkType.endsWith('mp4') && <img src={nft.thumbnailUrl} alt={nft.name} />}
               {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                 <video>
-                  <source src={nft.optimizedUrl} type="video/mp4" />
+                  <source src={nft.thumbnailUrl} type="video/mp4" />
                   <track kind="captions" />
                   Your browser does not support the video tag.
                 </video>

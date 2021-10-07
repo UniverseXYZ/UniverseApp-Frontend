@@ -15,7 +15,12 @@ const HeaderAvatar = ({ scale }) => {
           alt="avatar"
         />
       ) : (
-        <Blockies seed={address} size={9} scale={scale} />
+        <Blockies
+          className={scale === 3 ? 'blockie-md' : 'blockie-lg'}
+          seed={address}
+          size={9}
+          scale={scale}
+        />
       )}
     </>
   );
