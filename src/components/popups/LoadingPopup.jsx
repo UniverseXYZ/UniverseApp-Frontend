@@ -6,11 +6,10 @@ import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import Contracts from '../../contracts/contracts.json';
+import { formatAddress } from '../../utils/helpers/format.js';
 
 const LoadingPopup = ({ onClose, text, contractInteraction }) => {
   const { activeTxHashes } = useMyNftsContext();
-
-  const formatAddress = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
   const chain = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
   const generateLink = (addr) => `https://${chain.name}.etherscan.io/tx/${addr}`;
