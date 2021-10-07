@@ -15,6 +15,7 @@ import checkIcon from '../../assets/images/check-black.svg';
 import NFTCardHeader from './NFTCardHeader';
 import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
+import SearchTokenIdField from '../input/SearchTokenIdField';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
@@ -22,6 +23,7 @@ const NFTCard = React.memo(
     const history = useHistory();
     const location = useLocation();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
 
     const { creator } = nft;
     const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
@@ -216,7 +218,48 @@ const NFTCard = React.memo(
           </div>
           <div className="quantity--and--offer">
             {/* // TODO:: we need a property from the BE about the total editions count */}
-            <p>{`${nft.tokenIds.length} / ${nft.numberOfEditions}`}</p>
+            <div className="editions">
+              <p>
+                {`${nft.tokenIds ? nft.tokenIds.length : 1}/${
+                  nft.numberOfEditions
+                    ? nft.numberOfEditions
+                    : nft.tokenIds
+                    ? nft.tokenIds.length
+                    : 1
+                }`}
+              </p>
+              {nft.tokenIds && nft.tokenIds.length && (
+                <div className="tokenIds-dropdown">
+                  <SearchTokenIdField searchValue={searchValue} setSearchValue={setSearchValue} />
+                  <ul className="tokenIds">
+                    {nft.tokenIds.filter((tokenId) => tokenId.toString().includes(searchValue))
+                      .length ? (
+                      <>
+                        {nft.tokenIds
+                          .filter((tokenId) => tokenId.toString().includes(searchValue))
+                          .map((tokenId) => (
+                            <li
+                              key={uuid()}
+                              aria-hidden="true"
+                              onClick={() => {
+                                history.push(
+                                  `/nft/${nft.collection?.address || collectionAddress}/${tokenId}`,
+                                  {
+                                    nft,
+                                  }
+                                );
+                              }}
+                            >{`#${tokenId}`}</li>
+                          ))}
+                      </>
+                    ) : (
+                      <p>No results</p>
+                    )}
+                  </ul>
+                  <div className="inset--bottom--shadow" />
+                </div>
+              )}
+            </div>
             {/* <div className="price--offer--div">
             <label>Offer for</label>
             <img src={priceIcon} alt="Price" />
