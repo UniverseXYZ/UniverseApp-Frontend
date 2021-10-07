@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './PendingNFTs.scss';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
@@ -12,19 +12,38 @@ const PendingNFTs = () => {
   const { myMintingNFTs } = useMyNftsContext();
   const { loggedInArtist, address } = useAuthContext();
 
+  const generateLink = (addr) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${addr}`;
+
   const renderMintingNfts = useMemo(
     () =>
       myMintingNFTs.map((nft) => (
         <div
-          onClick={() =>
-            window.open(`${process.env.REACT_APP_ETHERSCAN_URL}/tx/${nft.txHash}`, '_blank').focus()
-          }
+          onClick={() => window.open(generateLink(nft.txHash), '_blank').focus()}
           className="nft__card"
           key={nft.id}
           style={{ width: 160 }}
           aria-hidden
         >
-          <span className="tooltiptext">View on Etherscan</span>
+          {nft.numberOfEditions < 41 ? (
+            <span className="tooltiptext">View on Etherscan</span>
+          ) : (
+            <span className="tooltiptext-big">
+              <p className="title"> View on Etherscan:</p>
+              <div className="tooltiptext-big-body">
+                {Array(Math.ceil(nft.numberOfEditions / 40))
+                  .fill(0)
+                  .map((el, i) => (
+                    <div className="txns" key={nft.id}>
+                      <span>Txn{i + 1}:</span>
+                      <a target="_blank" href={generateLink(nft.txHash)} rel="noreferrer">
+                        {formatAddress(nft.txHash)}
+                      </a>
+                    </div>
+                  ))}
+              </div>
+            </span>
+          )}
+
           <div className="nft__card__header">
             <div className="three__images">
               {loggedInArtist &&
@@ -60,7 +79,9 @@ const PendingNFTs = () => {
                 </div>
               )}
             </div>
-            <p className="nfts__qantity">{`${nft.numberOfEditions}/${nft.numberOfEditions}`}</p>
+            <p className="nfts__qantity">{`${Math.ceil(nft.numberOfEditions / 40)}/${Math.ceil(
+              nft.numberOfEditions / 40
+            )}`}</p>
           </div>
           <div className="nft__card__body">
             <div className="loading-image">
