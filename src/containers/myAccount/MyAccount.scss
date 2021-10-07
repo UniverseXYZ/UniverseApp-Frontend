@@ -1,11 +1,11 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 .my-account {
-  background-image: url('../../assets/images/my-profile-bg.png');
+  background-image: url("../../assets/images/my-profile-bg.png");
   background-size: 100% 200px;
   background-repeat: no-repeat;
-  background-position-y: 88px;
+  background-position-y: 80px;
   .my-account-title {
     display: grid;
     grid-template-columns: 1fr 253px;
@@ -323,12 +323,25 @@
         h5 {
           display: flex;
           align-items: center;
+          justify-content: space-between;
           font-family: $spaceGroteskFont;
           font-style: normal;
           font-weight: bold;
           font-size: 14px;
           line-height: 22px;
           margin-top: 20px;
+          > span {
+            display: flex;
+            grid-gap: 6px;
+          }
+          .input-max-chars {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 10px;
+            line-height: 13px;
+            color: rgba(0, 0, 0, 0.4);
+          }
         }
 
         .intup-l {
@@ -420,7 +433,6 @@
             opacity: 0;
             background-image: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
             background-origin: border-box;
-            box-shadow: 4px 1000px 1px #ffffff inset;
             border: 4px solid transparent;
             transition: 0.2s;
           }
@@ -465,14 +477,12 @@
             z-index: -9;
             left: -4px;
             right: 0;
-            // top: 0;
             bottom: 0;
             margin: auto;
             border-radius: 12px;
             opacity: 0;
             background-image: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
             background-origin: border-box;
-            box-shadow: 4px 1000px 1px #ffffff inset;
             border: 4px solid transparent;
             transition: 0.2s;
           }
@@ -854,7 +864,7 @@
 
       .slider:before {
         position: absolute;
-        content: '';
+        content: "";
         height: 16px;
         width: 16px;
         left: 4px;
@@ -1074,11 +1084,5 @@
     width: 100%;
     padding: 0px 20px;
     margin: 0 auto;
-  }
-
-  .input-max-chars {
-    font-family: $spaceGroteskFont;
-    font-size: 10px;
-    color: #e4b613;
   }
 }

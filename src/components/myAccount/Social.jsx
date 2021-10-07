@@ -25,7 +25,12 @@ const Social = ({
         Social media <span>(optional)</span>
       </h3>
       <div className="instagram">
-        <h5>Instagram profile</h5>
+        <h5>
+          <span>Instagram profile</span>
+          <p className="input-max-chars">
+            {instagramLink.length}/{MAX_FIELD_CHARS_LENGTH.instagram}
+          </p>
+        </h5>
         <img alt="" src={instagramLogo} />
         <Input
           placeholder="Instagram handle"
@@ -37,12 +42,14 @@ const Social = ({
             setInstagramLink(e.target.value);
           }}
         />
-        <p className="input-max-chars">
-          Characters: {instagramLink.length}/{MAX_FIELD_CHARS_LENGTH.instagram}
-        </p>
       </div>
       <div className="twitter">
-        <h5>Twitter profile</h5>
+        <h5>
+          <span>Twitter profile</span>
+          <p className="input-max-chars">
+            {twitterLink.length}/{MAX_FIELD_CHARS_LENGTH.twitter}
+          </p>
+        </h5>
         <img alt="" src={twitterLogo} />
         <Input
           placeholder="Twitter handle"
@@ -54,9 +61,6 @@ const Social = ({
             setTwitterLink(e.target.value);
           }}
         />
-        <p className="input-max-chars">
-          Characters: {twitterLink.length}/{MAX_FIELD_CHARS_LENGTH.twitter}
-        </p>
       </div>
     </div>
   </div>
