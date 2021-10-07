@@ -18,7 +18,7 @@ const PlaceBidPopup = ({
   onBidders,
   onSetBidders,
 }) => {
-  const { loggedInArtist, myBalance, setMyBalance } = useAuthContext();
+  const { loggedInArtist, yourBalance, setYourBalance } = useAuthContext();
   const PLACEHOLDER_SERVICE__FEE = 0.105;
   const [yourBid, setYourBid] = useState('');
   const [totalBidAmount, setTotalBidAmount] = useState(0);
@@ -47,7 +47,7 @@ const PlaceBidPopup = ({
           setTotalBidAmount(0 + parseFloat(val));
         }
       }
-      if (val && !val.endsWith('.') && val < myBalance) {
+      if (val && !val.endsWith('.') && val < yourBalance) {
         setError('');
       }
       // just for testing
@@ -67,7 +67,7 @@ const PlaceBidPopup = ({
       setError('"Your bid" field is required.');
     } else if (yourBid.endsWith('.')) {
       setError('Incorrect bid amount.');
-    } else if (parseFloat(yourBid) > myBalance) {
+    } else if (parseFloat(yourBid) > yourBalance) {
       setError('Not enough funds');
     } else if (!loggedInArtist.name) {
       setError('Please first fill in your profile.');
@@ -80,7 +80,7 @@ const PlaceBidPopup = ({
     if (clicked) {
       if (!error) {
         setShowBidSubmitted(true);
-        setMyBalance(parseFloat(myBalance) - parseFloat(yourBid));
+        setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
         const newBidders = [...onBidders];
 
         newBidders.push({
@@ -169,7 +169,7 @@ const PlaceBidPopup = ({
           <div className="total">
             <div className="total_row">
               <div className="label">Your balance</div>
-              <div className="value">{`${myBalance.toString().substring(0, 5)} ETH`}</div>
+              <div className="value">{`${yourBalance.toString().substring(0, 5)} ETH`}</div>
             </div>
             <div className="total_row">
               <div
@@ -181,7 +181,7 @@ const PlaceBidPopup = ({
                 <div className="service__fee">
                   <img src={infoIcon} alt="Info" />
                   {showServiceFeeInfo && (
-                    <Animated animationIn="zoomIn">
+                    <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
                       <div className="service__fee__info">
                         We are decentralization maxis and our goal is to empower the creators and
                         community to create, buy and sell digital art in a feeless way.
@@ -204,7 +204,7 @@ const PlaceBidPopup = ({
                 <div className="total__bid__amount">
                   <img src={infoIcon} alt="Info" />
                   {showTotalBidAmountInfo && (
-                    <Animated animationIn="zoomIn">
+                    <Animated animationIn="zoomIn" style={{ position: 'relative', zIndex: 111 }}>
                       <div className="total__bid__amount__info">
                         Keep in mind that your funds will be used only if your bid wins a certain
                         tier. If you don&apos;t win, you will be able to withdraw your funds by
