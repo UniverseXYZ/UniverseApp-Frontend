@@ -23,16 +23,16 @@ import {
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
 import ErrorPopup from '../../components/popups/ErrorPopup';
 
+const SAVE_PREVIEW_ACTION = 'save-preview';
+const PREVIEW_ACTION = 'preview';
+
 const CustomizeAuction = () => {
   const history = useHistory();
   const location = useLocation();
   const {
     auction,
-    setAuction,
     myAuctions,
     setMyAuctions,
-    activeAuctions,
-    setActiveAuctions,
     futureAuctions,
     setFutureAuctions,
     setEditProfileButtonClick,
@@ -71,17 +71,127 @@ const CustomizeAuction = () => {
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
 
-  const saveDataToContextOnSuccess = (_loggedInArtistClone, _futureAuctions, _editedAuction) => {
+  const setContext = (_loggedInArtistClone, _futureAuctions, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
     setFutureAuctions([..._futureAuctions, _editedAuction]);
     setMyAuctions(
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
-    document.getElementById('popup-root')?.remove();
-    document.getElementById('congrats-hidden-btn').click();
+    if (action === PREVIEW_ACTION || action === SAVE_PREVIEW_ACTION) {
+      history.push(_editedAuction.link.replace('universe.xyz', ''), {
+        auction: _editedAuction,
+      });
+    } else {
+      document.getElementById('popup-root')?.remove();
+      document.getElementById('congrats-hidden-btn').click();
+    }
   };
 
-  const handleSave = async () => {
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
+    // Check if data is edited
+    const canEditUserInfo =
+      loggedInArtist.name !== accountName ||
+      loggedInArtist.about !== about ||
+      loggedInArtist.instagramLink !== instagramLink ||
+      loggedInArtist.twitterLink !== twitterLink ||
+      loggedInArtist.universePageAddress !== accountPage.split('universe.xyz/').pop();
+
+    const canEditUserAvatar = typeof accountImage === 'object';
+
+    const canEditAuction =
+      auction.headline !== domainAndBranding.headline ||
+      auction.link !== domainAndBranding.link ||
+      auction.backgroundImageBlur !== domainAndBranding.backgroundImageBlur;
+
+    const canEditAuctionImages =
+      typeof editedAuction.promoImage === 'object' ||
+      typeof editedAuction.backgroundImage === 'object';
+
+    const rewardTiersAuctionClone = [...rewardTiersAuction];
+    // reward tiers API calls
+    const saveRewardTiers = () => {
+      try {
+        const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
+          const tierResponses = [];
+          tier.nftIds = tier.nfts.map((nft) => nft.id);
+          tier.minimumBid = parseFloat(tier.minimumBid, 10);
+          // Check if data is edited
+          const canEditRewardTier =
+            auction.rewardTiers[index].description !== tier.description ||
+            auction.rewardTiers[index].color !== tier.color;
+
+          const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
+
+          if (canEditRewardTier) {
+            try {
+              const response = await editRewardTier(tier, tier.id);
+              tierResponses.push(response);
+            } catch (error) {
+              return error;
+            }
+          }
+
+          if (canEditRewardTierImage) {
+            try {
+              const response = await editRewardTierImage(tier.imageUrl, tier.id);
+              tierResponses.push(response);
+            } catch (error) {
+              return error;
+            }
+          }
+          return tierResponses;
+        });
+        return Promise.all(tiers);
+      } catch (error) {
+        console.error(error);
+        return error;
+      }
+    };
+    // auction and profile API calls
+    const saveAuctionAndProfile = async () => {
+      const apiCalls = [];
+      if (canEditUserInfo) apiCalls.push(saveProfileInfo(loggedInArtistClone));
+      if (canEditUserAvatar) apiCalls.push(saveUserImage(accountImage));
+      if (canEditAuction) apiCalls.push(editAuction(editedAuction));
+      if (canEditAuctionImages) {
+        apiCalls.push(
+          uploadImagesForTheLandingPage(
+            editedAuction.promoImage,
+            editedAuction.backgroundImage,
+            editedAuction.id
+          )
+        );
+      }
+
+      try {
+        const result = await Promise.all(apiCalls);
+        return result;
+      } catch (error) {
+        return error;
+      }
+    };
+
+    const auctionAndProfileResponses = await saveAuctionAndProfile();
+    const rewardTierResponses = await saveRewardTiers();
+
+    const errorMessages = [];
+
+    if (rewardTierResponses.length) {
+      rewardTierResponses[0].forEach((res) => res.error && errorMessages.push(res.message));
+    }
+
+    auctionAndProfileResponses.forEach((res) => res.error && errorMessages.push(res.message));
+
+    if (errorMessages.length) {
+      setErrorTitle('Unexpected error');
+      setErrorBody(errorMessages.join(', '));
+      setShowError(true);
+    } else {
+      setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
+    }
+  };
+
+  const handleSave = async (action) => {
     setEditButtonClick(true);
     setEditProfileButtonClick(true);
     if (
@@ -112,204 +222,20 @@ const CustomizeAuction = () => {
         instagramLink,
         twitterLink,
       };
-      // Check if data is edited
-      const canEditUserInfo =
-        loggedInArtist.name !== accountName ||
-        loggedInArtist.about !== about ||
-        loggedInArtist.instagramLink !== instagramLink ||
-        loggedInArtist.twitterLink !== twitterLink ||
-        loggedInArtist.universePageAddress !== accountPage.split('universe.xyz/').pop();
-
-      const canEditUserAvatar = typeof accountImage === 'object';
-
-      const canEditAuction =
-        auction.headline !== domainAndBranding.headline ||
-        auction.link !== domainAndBranding.link ||
-        auction.backgroundImageBlur !== domainAndBranding.backgroundImageBlur;
-
-      const canEditAuctionImages =
-        typeof editedAuction.promoImage === 'object' ||
-        typeof editedAuction.backgroundImage === 'object';
-
-      const rewardTiersAuctionClone = [...rewardTiersAuction];
-      // reward tiers API calls
-      const saveRewardTiers = () => {
-        try {
-          const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
-            const tierResponses = [];
-            tier.nftIds = tier.nfts.map((nft) => nft.id);
-            tier.minimumBid = parseFloat(tier.minimumBid, 10);
-            // Check if data is edited
-            const canEditRewardTier =
-              auction.rewardTiers[index].description !== tier.description ||
-              auction.rewardTiers[index].color !== tier.color;
-
-            const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
-
-            if (canEditRewardTier) {
-              try {
-                const response = await editRewardTier(tier, tier.id);
-                tierResponses.push(response);
-              } catch (error) {
-                return error;
-              }
-            }
-
-            if (canEditRewardTierImage) {
-              try {
-                const response = await editRewardTierImage(tier.imageUrl, tier.id);
-                tierResponses.push(response);
-              } catch (error) {
-                return error;
-              }
-            }
-            return tierResponses;
-          });
-          return Promise.all(tiers);
-        } catch (error) {
-          console.error(error);
-          return error;
-        }
-      };
-      // auction and profile API calls
-      const saveAuctionAndProfile = async () => {
-        try {
-          const result = await Promise.all([
-            canEditUserInfo && saveProfileInfo(loggedInArtistClone),
-            canEditUserAvatar && saveUserImage(accountImage),
-            canEditAuction && editAuction(editedAuction),
-            canEditAuctionImages &&
-              uploadImagesForTheLandingPage(
-                editedAuction.promoImage,
-                editedAuction.backgroundImage,
-                editedAuction.id
-              ),
-          ]);
-          return result;
-        } catch (error) {
-          return error;
-        }
-      };
-
-      const auctionAndProfileResponses = await saveAuctionAndProfile();
-      const rewardTierResponses = await saveRewardTiers();
-
-      const errorMessages = [];
-
-      if (rewardTierResponses.length) {
-        rewardTierResponses[0].forEach((res) => res.error && errorMessages.push(res.message));
-      }
-
-      auctionAndProfileResponses.forEach((res) => res.error && errorMessages.push(res.message));
-
-      if (errorMessages.length) {
-        setErrorTitle('Unexpected error');
-        setErrorBody(errorMessages.join(', '));
-        setShowError(true);
+      if (action === SAVE_PREVIEW_ACTION) {
+        saveOnServer(editedAuction, loggedInArtist, action);
+      } else if (action === PREVIEW_ACTION) {
+        // TODO:
+        // setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
       } else {
-        saveDataToContextOnSuccess(loggedInArtistClone, futureAuctions, editedAuction);
+        saveOnServer(editedAuction, loggedInArtistClone, action);
       }
     }
   };
 
-  const handleSavePreview = () => {
-    setEditButtonClick(true);
-    let descriptionCount = 0;
-    let desc = false;
-    if (
-      domainAndBranding.headline &&
-      domainAndBranding.link &&
-      domainAndBranding.status === 'filled'
-    ) {
-      if (rewardTiersAuction) {
-        for (let i = 0; i < rewardTiersAuction.length; i += 1) {
-          if (rewardTiersAuction[i].description !== '') {
-            descriptionCount += 1;
-          }
-        }
-        if (descriptionCount === rewardTiersAuction.length) desc = true;
-      }
-      if (desc) {
-        const newAuction = { ...auction };
-        newAuction.headline = domainAndBranding.headline;
-        newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
-        newAuction.copied = false;
-        newAuction.promoImage = domainAndBranding.promoImage;
-        newAuction.backgroundImage = domainAndBranding.backgroundImage;
-        newAuction.backgroundImageBlur = domainAndBranding.backgroundImageBlur;
-        newAuction.rewardTiers = auction.rewardTiers.map((tier) => {
-          const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-          return { ...tier, ...rewardTier };
-        });
-        if (loggedInArtist.name && loggedInArtist.avatar) {
-          newAuction.artist = loggedInArtist;
-          setSaveAndPreview(true);
-          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
-          setTimeout(() => {
-            if (
-              new Date() < new Date(newAuction.endDate) &&
-              new Date() >= new Date(newAuction.startDate)
-            ) {
-              setActiveAuctions([...activeAuctions, newAuction]);
-            } else if (new Date() < new Date(newAuction.startDate)) {
-              setFutureAuctions([...futureAuctions, newAuction]);
-            }
-            setAuction({ rewardTiers: [] });
-            setCustomizeAuctionState(false);
-            history.push(newAuction.link.replace('universe.xyz', ''), {
-              auction: newAuction,
-            });
-          }, 500);
-        }
-      }
-    }
-  };
+  const handleSavePreview = () => handleSave(SAVE_PREVIEW_ACTION);
 
-  const handlePreview = () => {
-    if (domainAndBranding.headline && domainAndBranding.link) {
-      let descriptionCount = 0;
-      let desc = false;
-      if (rewardTiersAuction) {
-        for (let i = 0; i < rewardTiersAuction.length; i += 1) {
-          if (rewardTiersAuction[i].description !== '') {
-            descriptionCount += 1;
-          }
-        }
-        if (descriptionCount === rewardTiersAuction.length) desc = true;
-      }
-      if (desc) {
-        const newAuction = { ...auction };
-        newAuction.headline = domainAndBranding.headline;
-        newAuction.link = domainAndBranding.link.replaceAll(' ', '-').toLowerCase();
-        newAuction.copied = false;
-        newAuction.promoImage = domainAndBranding.promoImage;
-        newAuction.backgroundImage = domainAndBranding.backgroundImage;
-        newAuction.backgroundImageBlur = domainAndBranding.backgroundImageBlur;
-        newAuction.rewardTiers = auction.rewardTiers.map((tier) => {
-          const rewardTier = rewardTiersAuction.find((rewTier) => rewTier.id === tier.id);
-          return { ...tier, ...rewardTier };
-        });
-        if (loggedInArtist.name && loggedInArtist.avatar) {
-          newAuction.artist = loggedInArtist;
-          setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
-          setTimeout(() => {
-            if (
-              new Date() < new Date(newAuction.endDate) &&
-              new Date() >= new Date(newAuction.startDate)
-            ) {
-              setActiveAuctions([...activeAuctions, newAuction]);
-            } else if (new Date() < new Date(newAuction.startDate)) {
-              setFutureAuctions([...futureAuctions, newAuction]);
-            }
-            setCustomizeAuctionState(false);
-            history.push(newAuction.link.replace('universe.xyz', ''), {
-              auction: newAuction,
-            });
-          }, 500);
-        }
-      }
-    }
-  };
+  const handlePreview = () => handleSave(PREVIEW_ACTION);
 
   useEffect(() => {
     setShowPrompt(true);

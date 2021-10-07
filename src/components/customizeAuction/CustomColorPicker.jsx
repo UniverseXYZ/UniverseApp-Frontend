@@ -5,7 +5,8 @@ import 'react-color-palette/lib/css/styles.css';
 import arrowDown from '../../assets/images/arrow-down.svg';
 
 const CustomColorPicker = ({ index, onChange, onColor }) => {
-  const [color, setColor] = useColor('hex', onColor || '#EABD16');
+  const defaultColor = '#EABD16';
+  const [color, setColor] = useColor('hex', onColor || defaultColor);
   const [hidePicker, setHidePicker] = useState(true);
   const ref = useRef(null);
 
