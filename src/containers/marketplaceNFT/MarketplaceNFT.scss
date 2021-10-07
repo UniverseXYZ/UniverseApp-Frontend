@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 .marketplace--nft--page {
   display: grid;
   grid-template-columns: 1fr 560px;
@@ -409,7 +409,7 @@
                 }
               }
               &::after {
-                content: '';
+                content: "";
                 position: absolute;
                 top: -10px;
                 left: 50%;
@@ -486,9 +486,16 @@
       }
     }
     .Marketplace--number {
+      position: relative;
+      cursor: pointer;
       margin-top: 15px;
       padding-left: 40px;
       padding-right: 40px;
+      &:hover {
+        .tokenIds-dropdown {
+          visibility: visible;
+        }
+      }
       > p {
         font-family: $spaceGroteskFont;
         font-size: 14px;
@@ -498,6 +505,78 @@
         letter-spacing: 0em;
         text-align: left;
         color: #00000066;
+      }
+      .tokenIds-dropdown {
+        visibility: hidden;
+        position: absolute;
+        background: $white;
+        border-radius: 12px;
+        padding: 8px;
+        width: 156px;
+        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        top: 25px;
+        left: 25px;
+        z-index: 111;
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          left: 43%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: transparent transparent $white transparent;
+        }
+        .inset--bottom--shadow {
+          pointer-events: none;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+          height: 40px;
+          border-radius: 0px 0px 12px 12px;
+        }
+        ul.tokenIds {
+          position: relative;
+          max-height: 150px;
+          overflow-y: auto;
+          margin-top: 8px;
+          li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 15px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 140%;
+            color: $black;
+            border-radius: 6px;
+            &:hover {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+          p {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 140%;
+            color: rgba(0, 0, 0, 0.2);
+          }
+        }
+        @include lg {
+          left: 10px;
+          &::after {
+            left: 50%;
+          }
+        }
       }
       @include sm {
         padding-left: 20px;
@@ -579,7 +658,7 @@
           z-index: 10000;
           bottom: 45px;
           &::after {
-            content: '';
+            content: "";
             position: absolute;
             margin-left: -5px;
             border-width: 5px;
@@ -594,7 +673,6 @@
             top: 100%;
             left: 25%;
           }
-
         }
 
         .tooltiptext--center {
@@ -612,7 +690,6 @@
             top: 100%;
             left: 75%;
           }
-
         }
         .blockie--details {
           border-radius: 50%;
@@ -625,7 +702,6 @@
             visibility: visible;
           }
         }
-
       }
       @include sm {
         grid-gap: 20px;
@@ -840,7 +916,7 @@
               left: 33%;
               transform: translateX(-50%);
               &::after {
-                content: '';
+                content: "";
                 position: absolute;
                 top: 100%;
                 left: 50%;

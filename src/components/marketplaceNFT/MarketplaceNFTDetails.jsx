@@ -43,9 +43,11 @@ import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
 import likerTestImage from '../../assets/images/marketplace/users/user1.png';
 import universeIcon from '../../assets/images/universe-img.svg';
+import checkIcon from '../../assets/images/check.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -60,6 +62,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { moreFromCollection, collection, owner, creator } = onNFT;
   const tabs = selectedNFT?.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
+
+  // TODO:: this array should come from BE
+  const tokenIds = [selectedNFT.tokenId, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118];
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [trackProgress, setTrackProgress] = useState('00:00');
@@ -965,9 +971,53 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div> */}
             </div>
           </div>
-          {/* <div className="Marketplace--number">
-            <p>Edition {`${selectedNFTIndex + 1} / ${selectedNFT.numberOfEditions}`}</p>
-          </div> */}
+          <div className="Marketplace--number">
+            <p>
+              Editions&nbsp;
+              {`${selectedNFT.tokenIds ? selectedNFT.tokenIds.length : 1}/${
+                selectedNFT.numberOfEditions
+                  ? selectedNFT.numberOfEditions
+                  : selectedNFT.tokenIds
+                  ? selectedNFT.tokenIds.length
+                  : 1
+              }`}
+            </p>
+            <div className="tokenIds-dropdown">
+              <SearchTokenIdField searchValue={searchValue} setSearchValue={setSearchValue} />
+              <ul className="tokenIds">
+                {tokenIds.filter((tokenId) => tokenId.toString().includes(searchValue)).length ? (
+                  <>
+                    {tokenIds
+                      .filter((tokenId) => tokenId.toString().includes(searchValue))
+                      .map((tokenId) => (
+                        <li
+                          key={uuid()}
+                          aria-hidden="true"
+                          // onClick={() => {
+                          //   history.push(
+                          //     `/nft/${nft.collection?.address || collectionAddress}/${tokenId}`,
+                          //     {
+                          //       nft,
+                          //     }
+                          //   );
+                          // }}
+                        >
+                          <span>{`#${tokenId}`}</span>
+                          {tokenId === selectedNFT.tokenId ? (
+                            <img src={checkIcon} alt="check" />
+                          ) : (
+                            <></>
+                          )}
+                        </li>
+                      ))}
+                  </>
+                ) : (
+                  <p>No results</p>
+                )}
+              </ul>
+              <div className="inset--bottom--shadow" />
+            </div>
+          </div>
           <div className="Marketplace--collections">
             {creator &&
             (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
