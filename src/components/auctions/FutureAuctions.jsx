@@ -86,8 +86,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
               <div className="auction-header-button">
                 <h3>{futureAuction.name}</h3>
               </div>
-              {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
               <div
+                aria-hidden
                 onClick={() => handleAuctionExpand(futureAuction.id)}
                 role="button"
                 tabIndex={0}
