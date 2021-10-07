@@ -145,7 +145,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
           <img
             src={URL.createObjectURL(selectedAuction.backgroundImage)}
             alt={selectedAuction.name}
-            style={{ filter: selectedAuction.hasBlur ? 'blur(10px)' : 'blur(0px)' }}
+            style={{ filter: selectedAuction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)' }}
           />
         )}
       </div>
