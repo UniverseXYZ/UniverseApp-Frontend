@@ -1,5 +1,5 @@
-@import '../../../../assets/scss/variables';
-@import '../../../../assets/scss/_mixins';
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/_mixins";
 
 .mobile__nav {
   display: none;
@@ -259,7 +259,7 @@
         line-height: 24px;
         letter-spacing: 0px;
         text-align: center;
-        color: rgba(0,0,0,0.6);
+        color: rgba(0, 0, 0, 0.6);
       }
     }
   }
@@ -382,7 +382,7 @@
               left: 30%;
               transform: translateX(-50%);
               &::after {
-                content: '';
+                content: "";
                 position: absolute;
                 top: 100%;
                 left: 50%;
@@ -528,7 +528,7 @@
     .dropdown {
       position: absolute;
       right: 0;
-      top: 60px;
+      top: 50px;
       background: $white;
       border-radius: 10px;
       width: 280px;
@@ -536,13 +536,14 @@
       filter: drop-shadow(0px 10px 20px rgba(136, 120, 172, 0.2));
 
       &__header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 20px;
         .copy-div {
           position: relative;
-          padding: 15px 20px;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
           display: flex;
           align-items: center;
           justify-content: space-between;
+          margin-bottom: 20px;
           .copy__div {
             padding-top: 2px;
             padding-right: 8px;
@@ -617,15 +618,8 @@
           margin: 0px 12px 0 0;
         }
 
-        .group1,
         .group2 {
-          margin-top: 15px;
-          padding: 0 20px;
-        }
-
-        .group2 {
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-          padding-bottom: 20px;
+          margin-top: 12px;
         }
 
         .diamond {
