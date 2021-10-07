@@ -1,5 +1,5 @@
-@import '../../../../assets/scss/variables';
-@import '../../../../assets/scss/_mixins';
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/_mixins";
 
 .desktop__nav {
   display: flex;
@@ -106,17 +106,18 @@
         opacity: 0;
         pointer-events: none;
         &.drop-account {
-          top: 45px;
+          top: 60px;
           width: 280px;
         }
         &__header {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 20px;
           .copy-div {
             position: relative;
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 20px;
             .blockie {
               border-radius: 5px;
             }
@@ -193,15 +194,8 @@
           .group2 > img {
             margin: 0px 12px 0 0;
           }
-          .group1,
           .group2 {
-            margin-top: 15px;
-            padding: 0 20px;
-          }
-
-          .group2 {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            padding-bottom: 20px;
+            margin-top: 12px;
           }
           .diamond {
             border: 1px solid #e6e6e6;
@@ -263,7 +257,7 @@
                 left: 50%;
                 transform: translateX(-50%);
                 &::after {
-                  content: '';
+                  content: "";
                   position: absolute;
                   top: 100%;
                   left: 50%;
@@ -290,6 +284,4 @@
   @include xl {
     display: none;
   }
-
-  
 }
