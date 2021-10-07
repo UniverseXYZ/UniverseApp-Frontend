@@ -97,16 +97,50 @@ const CustomizeAuction = () => {
     }
   };
 
-  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
-    // Check if data is edited
-    const canEditUserInfo =
-      loggedInArtist.name !== accountName ||
-      loggedInArtist.about !== about ||
-      loggedInArtist.instagramLink !== instagramLink ||
-      loggedInArtist.twitterLink !== twitterLink ||
-      loggedInArtist.universePageAddress !== accountPage.split('universe.xyz/').pop();
+  // reward tiers API calls
+  const saveRewardTiers = () => {
+    const rewardTiersAuctionClone = [...rewardTiersAuction];
 
-    const canEditUserAvatar = typeof accountImage === 'object';
+    try {
+      const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
+        const tierResponses = [];
+        tier.nftIds = tier.nfts.map((nft) => nft.id);
+        tier.minimumBid = parseFloat(tier.minimumBid, 10);
+        // Check if data is edited
+        const canEditRewardTier =
+          auction.rewardTiers[index].description !== tier.description ||
+          auction.rewardTiers[index].color !== tier.color;
+
+        const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
+
+        if (canEditRewardTier) {
+          try {
+            const response = await editRewardTier(tier, tier.id);
+            tierResponses.push(response);
+          } catch (error) {
+            return error;
+          }
+        }
+
+        if (canEditRewardTierImage) {
+          try {
+            const response = await editRewardTierImage(tier.imageUrl, tier.id);
+            tierResponses.push(response);
+          } catch (error) {
+            return error;
+          }
+        }
+        return tierResponses;
+      });
+      return Promise.all(tiers);
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+  };
+
+  const saveAuction = async (editedAuction) => {
+    let newAuctionData = null;
 
     const canEditAuction =
       auction.headline !== domainAndBranding.headline ||
@@ -117,67 +151,46 @@ const CustomizeAuction = () => {
       typeof editedAuction.promoImage === 'object' ||
       typeof editedAuction.backgroundImage === 'object';
 
-    const rewardTiersAuctionClone = [...rewardTiersAuction];
-    // reward tiers API calls
-    const saveRewardTiers = () => {
-      try {
-        const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
-          const tierResponses = [];
-          tier.nftIds = tier.nfts.map((nft) => nft.id);
-          tier.minimumBid = parseFloat(tier.minimumBid, 10);
-          // Check if data is edited
-          const canEditRewardTier =
-            auction.rewardTiers[index].description !== tier.description ||
-            auction.rewardTiers[index].color !== tier.color;
+    if (canEditAuction) {
+      newAuctionData = await editAuction(editedAuction);
+    }
 
-          const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
+    if (canEditAuctionImages) {
+      newAuctionData = await uploadImagesForTheLandingPage(
+        editedAuction.promoImage,
+        editedAuction.backgroundImage,
+        editedAuction.id
+      );
+    }
 
-          if (canEditRewardTier) {
-            try {
-              const response = await editRewardTier(tier, tier.id);
-              tierResponses.push(response);
-            } catch (error) {
-              return error;
-            }
-          }
+    return newAuctionData;
+  };
 
-          if (canEditRewardTierImage) {
-            try {
-              const response = await editRewardTierImage(tier.imageUrl, tier.id);
-              tierResponses.push(response);
-            } catch (error) {
-              return error;
-            }
-          }
-          return tierResponses;
-        });
-        return Promise.all(tiers);
-      } catch (error) {
-        console.error(error);
-        return error;
-      }
-    };
-    // auction and profile API calls
-    const saveAuctionAndProfile = async () => {
-      try {
-        const result = await Promise.all([
-          canEditUserInfo && saveProfileInfo(loggedInArtistClone),
-          canEditUserAvatar && saveUserImage(accountImage),
-          canEditAuction && editAuction(editedAuction),
-          canEditAuctionImages &&
-            uploadImagesForTheLandingPage(
-              editedAuction.promoImage,
-              editedAuction.backgroundImage,
-              editedAuction.id
-            ),
-        ]);
-        return result;
-      } catch (error) {
-        return error;
-      }
-    };
+  // auction and profile API calls
+  const saveProfile = async (loggedInArtistClone) => {
+    // Check if data is edited
+    const canEditUserInfo =
+      loggedInArtist.name !== accountName ||
+      loggedInArtist.about !== about ||
+      loggedInArtist.instagramLink !== instagramLink ||
+      loggedInArtist.twitterLink !== twitterLink ||
+      loggedInArtist.universePageAddress !== accountPage.split('universe.xyz/').pop();
 
-    const auctionAndProfileResponses = await saveAuctionAndProfile();
+    const canEditUserAvatar = typeof accountImage === 'object';
+
+    try {
+      return await Promise.all([
+        canEditUserInfo && saveProfileInfo(loggedInArtistClone),
+        canEditUserAvatar && saveUserImage(accountImage),
+      ]);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
+    const newAuctionData = await saveAuction(editedAuction);
+    const profileResponses = await saveProfile(loggedInArtistClone);
     const rewardTierResponses = await saveRewardTiers();
 
     const errorMessages = [];
@@ -186,9 +199,16 @@ const CustomizeAuction = () => {
       rewardTierResponses[0].forEach((res) => res.error && errorMessages.push(res.message));
     }
 
-    auctionAndProfileResponses.forEach((res) => res.error && errorMessages.push(res.message));
+    profileResponses.forEach((res) => res.error && errorMessages.push(res.message));
+    if (newAuctionData.error) errorMessages.push(newAuctionData.message);
 
-    handleStatus(errorMessages, loggedInArtistClone, futureAuctions, editedAuction, action);
+    handleStatus(
+      errorMessages,
+      loggedInArtistClone,
+      // futureAuctions,
+      newAuctionData || editedAuction,
+      action
+    );
   };
 
   const handleSave = async (action) => {

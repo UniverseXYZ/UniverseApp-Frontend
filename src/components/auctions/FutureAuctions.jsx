@@ -45,7 +45,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 
   const getTotalNFTSperAuction = (auction) => {
     let nftsCount = 0;
-    auction.rewardTiers.forEach((tier) => {
+    auction?.rewardTiers?.forEach((tier) => {
       nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
     });
     return nftsCount;
