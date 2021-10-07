@@ -14,7 +14,6 @@ const PendingNFTs = () => {
   const { loggedInArtist, address } = useAuthContext();
 
   const generateLink = (addr) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${addr}`;
-
   const renderMintingNfts = useMemo(
     () =>
       myMintingNFTs.map((nft) => (
@@ -80,9 +79,7 @@ const PendingNFTs = () => {
                 </div>
               )}
             </div>
-            <p className="nfts__qantity">{`${Math.ceil(nft.numberOfEditions / 40)}/${Math.ceil(
-              nft.numberOfEditions / 40
-            )}`}</p>
+            <p className="nfts__qantity">{`${nft.numberOfEditions}/${nft.numberOfEditions}`}</p>
           </div>
           <div className="nft__card__body">
             <div className="loading-image">
