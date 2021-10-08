@@ -41,17 +41,6 @@ const PendingAccordion = ({ title, dataLength, children }) => {
     ],
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (document.querySelectorAll('.accordion__item__body')) {
-        const elems = document.querySelectorAll('.accordion__item__body');
-        elems.forEach((el, i) => {
-          el.style.animationDuration = '.5s';
-        });
-      }
-    }, 500);
-  }, []);
-
   return (
     <div className="accordion">
       <div className="box--shadow--effect--block" />
@@ -67,9 +56,13 @@ const PendingAccordion = ({ title, dataLength, children }) => {
           </div>
         </div>
         <div className={`accordion__item__body ${isAccordionOpened ? 'open' : ''}`}>
-          <div className="nfts__list collections__list">
-            <Slider {...sliderSettings}>{children}</Slider>
-          </div>
+          {isAccordionOpened ? (
+            <div className="nfts__list collections__list">
+              <Slider {...sliderSettings}>{children}</Slider>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>
