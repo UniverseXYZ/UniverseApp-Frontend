@@ -196,57 +196,71 @@
     gap: 12px;
   }
 }
-.wrong__network__popup {
+.modal {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: $white;
-  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-  border-radius: 12px;
-  padding: 40px;
+  z-index: 1000;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
   width: 100%;
-  max-width: 469px;
-
-  .close__popup {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background-color: $white;
-    padding: 5px;
-    border-radius: 50%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  .wrong__network__popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: $white;
     box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-    cursor: pointer;
-  }
-  h1.title {
-    font-family: $sharpGroteskSemiBoldFont;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 26px;
-    line-height: 140%;
-    letter-spacing: 0.2px;
-    color: $black;
-    margin-top: 24px;
-    margin-bottom: 24px;
-  }
-  p.desc {
-    font-family: $spaceGroteskFont;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 160%;
-    color: rgba(0, 0, 0, 0.6);
-    margin-bottom: 40px;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 469px;
 
-    span {
-      color: $black;
+    .close__popup {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: $white;
+      padding: 5px;
+      border-radius: 50%;
+      box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+      cursor: pointer;
     }
-    a {
+    h1.title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 140%;
+      letter-spacing: 0.2px;
       color: $black;
-      text-decoration: underline;
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+    p.desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 160%;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 40px;
+
+      span {
+        color: $black;
+      }
+      a {
+        color: $black;
+        text-decoration: underline;
+      }
     }
   }
+
 }
+
 .bid__rankings__popup {
   position: fixed;
   left: 50%;
