@@ -87,6 +87,16 @@ const CustomizeAuction = () => {
     }
   };
 
+  const handleStatus = (errorMessages, loggedInArtistClone, editedAuction, action) => {
+    if (errorMessages.length) {
+      setErrorTitle('Unexpected error');
+      setErrorBody(errorMessages.join(', '));
+      setShowError(true);
+    } else {
+      setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
+    }
+  };
+
   const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
     // Check if data is edited
     const canEditUserInfo =
@@ -149,22 +159,18 @@ const CustomizeAuction = () => {
     };
     // auction and profile API calls
     const saveAuctionAndProfile = async () => {
-      const apiCalls = [];
-      if (canEditUserInfo) apiCalls.push(saveProfileInfo(loggedInArtistClone));
-      if (canEditUserAvatar) apiCalls.push(saveUserImage(accountImage));
-      if (canEditAuction) apiCalls.push(editAuction(editedAuction));
-      if (canEditAuctionImages) {
-        apiCalls.push(
-          uploadImagesForTheLandingPage(
-            editedAuction.promoImage,
-            editedAuction.backgroundImage,
-            editedAuction.id
-          )
-        );
-      }
-
       try {
-        const result = await Promise.all(apiCalls);
+        const result = await Promise.all([
+          canEditUserInfo && saveProfileInfo(loggedInArtistClone),
+          canEditUserAvatar && saveUserImage(accountImage),
+          canEditAuction && editAuction(editedAuction),
+          canEditAuctionImages &&
+            uploadImagesForTheLandingPage(
+              editedAuction.promoImage,
+              editedAuction.backgroundImage,
+              editedAuction.id
+            ),
+        ]);
         return result;
       } catch (error) {
         return error;
@@ -182,13 +188,7 @@ const CustomizeAuction = () => {
 
     auctionAndProfileResponses.forEach((res) => res.error && errorMessages.push(res.message));
 
-    if (errorMessages.length) {
-      setErrorTitle('Unexpected error');
-      setErrorBody(errorMessages.join(', '));
-      setShowError(true);
-    } else {
-      setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
-    }
+    handleStatus(errorMessages, loggedInArtistClone, futureAuctions, editedAuction, action);
   };
 
   const handleSave = async (action) => {
@@ -223,7 +223,7 @@ const CustomizeAuction = () => {
         twitterLink,
       };
       if (action === SAVE_PREVIEW_ACTION) {
-        saveOnServer(editedAuction, loggedInArtist, action);
+        saveOnServer(editedAuction, loggedInArtistClone, action);
       } else if (action === PREVIEW_ACTION) {
         // TODO:
         // setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
