@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
+import { useHistory } from 'react-router';
 import RarityRankPopup from '../../popups/RarityRankPopup.jsx';
 import { getPolymorphMeta } from '../../../utils/api/polymorphs.js';
 import { renderLoaderWithData } from '../../../containers/rarityCharts/renderLoaders.js';
 
-const PolymorphCard = ({ item }) => {
+const MyPolymorphCard = ({ item }) => {
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
   const fetchMetadata = async () => {
     setLoading(true);
     const data = await getPolymorphMeta(item.tokenid);
@@ -20,9 +21,7 @@ const PolymorphCard = ({ item }) => {
   ) : (
     <div
       className="card"
-      onClick={() =>
-        window.open(`${window.location.origin}/polymorphs/${item.id}`, '_blank').focus()
-      }
+      onClick={() => history.push(`/polymorphs/${item.tokenid}`)}
       aria-hidden="true"
     >
       <div className="card--header">
@@ -41,15 +40,12 @@ const PolymorphCard = ({ item }) => {
         <h2>Lobby Lobster</h2>
         <p>{`ID: #${item.tokenid}`}</p>
       </div>
-      <Popup open={showPopup}>
-        <RarityRankPopup onClose={() => setShowPopup(false)} item={item} />
-      </Popup>
     </div>
   );
 };
 
-PolymorphCard.propTypes = {
+MyPolymorphCard.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
-export default PolymorphCard;
+export default MyPolymorphCard;

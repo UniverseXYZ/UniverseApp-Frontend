@@ -33,7 +33,7 @@ const PendingNFTs = () => {
                 {Array(Math.ceil(nft.numberOfEditions / 40))
                   .fill(0)
                   .map((el, i) => (
-                    <div className="txns" key={nft.id}>
+                    <div className="txns" key={nft.txHash}>
                       <span>Txn{i + 1}:</span>
                       <a target="_blank" href={generateLink(nft.txHash)} rel="noreferrer">
                         {formatAddress(nft.txHash)}
