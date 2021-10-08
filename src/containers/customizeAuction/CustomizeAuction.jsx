@@ -72,9 +72,9 @@ const CustomizeAuction = () => {
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [successPopup, setSuccessPopup] = useState(false);
 
-  const setContext = (_loggedInArtistClone, _futureAuctions, _editedAuction, action) => {
+  const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
-    setFutureAuctions([..._futureAuctions, _editedAuction]);
+    setFutureAuctions([...futureAuctions, _editedAuction]);
     setMyAuctions(
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
@@ -93,7 +93,7 @@ const CustomizeAuction = () => {
       setErrorBody(errorMessages.join(', '));
       setShowError(true);
     } else {
-      setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
+      setContext(loggedInArtistClone, editedAuction, action);
     }
   };
 
@@ -103,6 +103,7 @@ const CustomizeAuction = () => {
 
     try {
       const tiers = rewardTiersAuctionClone.map(async (tier, index) => {
+        let newTierData = null;
         const tierResponses = [];
         tier.nftIds = tier.nfts.map((nft) => nft.id);
         tier.minimumBid = parseFloat(tier.minimumBid, 10);
@@ -115,30 +116,30 @@ const CustomizeAuction = () => {
 
         if (canEditRewardTier) {
           try {
-            const response = await editRewardTier(tier, tier.id);
-            tierResponses.push(response);
+            newTierData = await editRewardTier(tier, tier.id);
+            tierResponses.push(newTierData);
           } catch (error) {
             return error;
           }
         }
-
+        const updatedTier = { ...tier, newTierData };
         if (canEditRewardTierImage) {
           try {
-            const response = await editRewardTierImage(tier.imageUrl, tier.id);
-            tierResponses.push(response);
+            newTierData = await editRewardTierImage(tier.imageUrl, tier.id);
+            tierResponses.push(newTierData);
           } catch (error) {
             return error;
           }
         }
-        return tierResponses;
+        return { ...updatedTier, ...newTierData };
       });
       return Promise.all(tiers);
     } catch (error) {
-      console.error(error);
       return error;
     }
   };
 
+  // auction API calls
   const saveAuction = async (editedAuction) => {
     let newAuctionData = null;
 
@@ -170,7 +171,7 @@ const CustomizeAuction = () => {
     return updatedAuction;
   };
 
-  // auction and profile API calls
+  // profile API calls
   const saveProfile = async (loggedInArtistClone) => {
     // Check if data is edited
     const canEditUserInfo =
@@ -200,19 +201,16 @@ const CustomizeAuction = () => {
     const errorMessages = [];
 
     if (rewardTierResponses.length) {
-      rewardTierResponses[0].forEach((res) => res.error && errorMessages.push(res.message));
+      rewardTierResponses.forEach((res) => res.error && errorMessages.push(res.message));
+      if (!errorMessages.length) {
+        newAuctionData.rewardTiers = rewardTierResponses;
+      }
     }
 
     profileResponses.forEach((res) => res.error && errorMessages.push(res.message));
     if (newAuctionData.error) errorMessages.push(newAuctionData.message);
 
-    handleStatus(
-      errorMessages,
-      loggedInArtistClone,
-      // futureAuctions,
-      newAuctionData || editedAuction,
-      action
-    );
+    handleStatus(errorMessages, loggedInArtistClone, newAuctionData, action);
   };
 
   const handleSave = async (action) => {
@@ -249,8 +247,7 @@ const CustomizeAuction = () => {
       if (action === SAVE_PREVIEW_ACTION) {
         saveOnServer(editedAuction, loggedInArtistClone, action);
       } else if (action === PREVIEW_ACTION) {
-        // TODO:
-        // setContext(loggedInArtistClone, futureAuctions, editedAuction, action);
+        setContext(loggedInArtistClone, editedAuction, action);
       } else {
         saveOnServer(editedAuction, loggedInArtistClone, action);
       }
@@ -373,7 +370,7 @@ const CustomizeAuction = () => {
       </div>
       {showError && <ErrorPopup />}
       <Popup open={successPopup} closeOnDocumentClick={false}>
-        {(close) => <CongratsLandingPagePopup onClose={close} />}
+        <CongratsLandingPagePopup onClose={() => setSuccessPopup(false)} />
       </Popup>
     </div>
   );
