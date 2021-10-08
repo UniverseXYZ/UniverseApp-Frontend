@@ -80,7 +80,8 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { address, yourBalance, usdEthBalance, resetConnectionState } = useAuthContext();
+  const { address, yourBalance, yourEnsDomain, usdEthBalance, resetConnectionState } =
+    useAuthContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -433,7 +434,7 @@ const MobileView = (props) => {
 
                     {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
                     <div className="ethereum__address">
-                      {shortenEthereumAddress(ethereumAddress)}
+                      {yourEnsDomain || shortenEthereumAddress(ethereumAddress)}
                     </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">

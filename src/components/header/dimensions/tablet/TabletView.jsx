@@ -63,8 +63,14 @@ const TabletView = (props) => {
     showSearch,
     setShowSearch,
   } = props;
-  const { address, yourBalance, usdEthBalance, resetConnectionState, loggedInArtist } =
-    useAuthContext();
+  const {
+    address,
+    yourBalance,
+    yourEnsDomain,
+    usdEthBalance,
+    resetConnectionState,
+    loggedInArtist,
+  } = useAuthContext();
 
   const { editProfileButtonClick } = useAuctionContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
@@ -378,7 +384,7 @@ const TabletView = (props) => {
                   <div className="copy-div">
                     <HeaderAvatar scale={3} />
                     <div className="ethereum__address">
-                      {shortenEthereumAddress(ethereumAddress)}
+                      {yourEnsDomain || shortenEthereumAddress(ethereumAddress)}
                     </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
