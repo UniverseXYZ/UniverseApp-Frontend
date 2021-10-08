@@ -35,10 +35,6 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const [categories, setCategories] = useState(categoriesArray);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
 
-  useEffect(() => {
-    setDarkMode(true);
-  }, []);
-
   const resetPagination = () => {
     setMyUniverseNFTsActiverPage(0);
     setOffset(0);
