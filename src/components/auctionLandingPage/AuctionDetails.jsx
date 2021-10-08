@@ -8,6 +8,7 @@ import Popup from 'reactjs-popup';
 import Slider from 'react-slick';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import PlaceBidPopup from '../popups/PlaceBidPopup.jsx';
+import CancelBidPopup from '../popups/CancelBidPopup.jsx';
 import Button from '../button/Button.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
@@ -17,6 +18,7 @@ import lightCopyIcon from '../../assets/images/copy2.svg';
 import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
+import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   const { myAuctions } = useAuctionContext();
@@ -366,6 +368,28 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                           />
                         )}
                       </Popup>
+                      {currentBid && currentBid.aucionId === selectedAuction.id ? (
+                        <div className="cacnel__bid">
+                          <Popup
+                            trigger={
+                              <button type="button" className="cancel--button">
+                                <span className="tooltiptext">Cancel my bid</span>
+                                <img src={cancelIcon} alt="cancel" />
+                              </button>
+                            }
+                          >
+                            {(close) => (
+                              <CancelBidPopup
+                                close={close}
+                                setCurrentBid={setCurrentBid}
+                                myBid={currentBid}
+                              />
+                            )}
+                          </Popup>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                 </div>
