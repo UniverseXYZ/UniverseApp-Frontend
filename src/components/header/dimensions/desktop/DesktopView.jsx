@@ -28,7 +28,11 @@ import docsIcon from '../../../../assets/images/docs.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
-import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import {
+  shortenEnsDomain,
+  shortenEthereumAddress,
+  toFixed,
+} from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const DesktopView = ({
@@ -312,7 +316,7 @@ const DesktopView = ({
                 <div className="copy-div">
                   <HeaderAvatar scale={3} />
                   <div className="ethereum__address">
-                    {yourEnsDomain || shortenEthereumAddress(ethereumAddress)}
+                    {shortenEnsDomain(yourEnsDomain) || shortenEthereumAddress(ethereumAddress)}
                   </div>
                   <div className="copy__div">
                     <div className="copy" title="Copy to clipboard">

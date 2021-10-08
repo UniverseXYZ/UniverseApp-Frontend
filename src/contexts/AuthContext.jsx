@@ -71,7 +71,6 @@ const AuthContextProvider = ({ children }) => {
   const web3AuthenticationProccess = async (provider, network, accounts) => {
     const balance = await provider.getBalance(accounts[0]);
     const ensDomain = await provider.lookupAddress(accounts[0]);
-    console.log(ensDomain);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
     const { contracts: contractsData } = Contracts[network.chainId];
