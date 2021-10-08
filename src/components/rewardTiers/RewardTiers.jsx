@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './RewardTiers.scss';
 import '../auctions/Tiers.scss';
+import { Popup } from 'reactjs-popup';
 import union from '../../assets/images/Union.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import videoIcon from '../../assets/images/video-icon.svg';
@@ -11,6 +12,8 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import pencil from '../../assets/images/pencil.svg';
 import universeIcon from '../../assets/images/universe-img.svg';
 import Button from '../button/Button.jsx';
+import delateIcon from '../../assets/images/RemoveBtn.svg';
+
 import {
   isImage,
   isVideo,
@@ -20,6 +23,7 @@ import {
   getEditionsCount,
 } from '../../utils/helpers/pureFunctions/nfts';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import RewardTierRemovePopup from '../popups/RewardTierRemovePopup';
 
 const RewardTiers = () => {
   const history = useHistory();
@@ -90,6 +94,23 @@ const RewardTiers = () => {
                     >
                       Edit <img src={pencil} alt="edit-icon" />
                     </Button>
+                    <Popup
+                      nested
+                      handleEdit
+                      trigger={
+                        <div className="remove-image">
+                          <img
+                            src={delateIcon}
+                            alt="Delete"
+                            className="remove-img"
+                            aria-hidden="true"
+                          />
+                          <span className="tooltiptext">Remove reward tier</span>
+                        </div>
+                      }
+                    >
+                      {(close) => <RewardTierRemovePopup onClose={close} id={tier.id} />}
+                    </Popup>
                   </div>
                   <div className="launch-auction">
                     {shownActionId === tier.id ? (
