@@ -59,7 +59,11 @@ import img2 from '../../../../assets/images/crossclose.svg';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
 import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
-import { shortenEthereumAddress, toFixed } from '../../../../utils/helpers/format';
+import {
+  toFixed,
+  shortenEnsDomain,
+  shortenEthereumAddress,
+} from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 
@@ -80,7 +84,8 @@ const MobileView = (props) => {
     showMobileSearch,
     setShowMobileSearch,
   } = props;
-  const { address, yourBalance, usdEthBalance, resetConnectionState } = useAuthContext();
+  const { address, yourBalance, yourEnsDomain, usdEthBalance, resetConnectionState } =
+    useAuthContext();
   const [isAccountDropdownOpened, setIsAccountDropdownOpened] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
@@ -433,7 +438,7 @@ const MobileView = (props) => {
 
                     {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
                     <div className="ethereum__address">
-                      {shortenEthereumAddress(ethereumAddress)}
+                      {shortenEnsDomain(yourEnsDomain) || shortenEthereumAddress(ethereumAddress)}
                     </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">

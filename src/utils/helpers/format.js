@@ -10,6 +10,12 @@ export const formatEtherWithDecimals = (ether, decimals) => {
   return decimals ? parsed.toFixed(decimals) : parsed;
 };
 
+export const shortenEnsDomain = (ens) => {
+  const ensArray = ens.split('.eth');
+  if (ensArray[0].length < 15) return ens;
+  return `${ensArray[0].substring(0, 12)}...eth`;
+};
+
 export const shortenEthereumAddress = (address) =>
   `${address.substring(0, 5)}...${address.substring(address.length - 6, address.length)}`;
 

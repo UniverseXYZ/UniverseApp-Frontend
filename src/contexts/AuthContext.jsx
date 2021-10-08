@@ -35,6 +35,7 @@ const AuthContextProvider = ({ children }) => {
   const [address, setAddress] = useState('');
   const [signer, setSigner] = useState(null);
   const [yourBalance, setYourBalance] = useState(0);
+  const [yourEnsDomain, setYourEnsDomain] = useState(null);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [ethereumNetwork, setEthereumNetwork] = useState('');
   const [usdEthBalance, setUsdEthBalance] = useState(0);
@@ -69,6 +70,7 @@ const AuthContextProvider = ({ children }) => {
   // Authentication and Web3
   const web3AuthenticationProccess = async (provider, network, accounts) => {
     const balance = await provider.getBalance(accounts[0]);
+    const ensDomain = await provider.lookupAddress(accounts[0]);
     const signerResult = provider.getSigner(accounts[0]).connectUnchecked();
 
     const { contracts: contractsData } = Contracts[network.chainId];
@@ -104,6 +106,7 @@ const AuthContextProvider = ({ children }) => {
     setAddress(accounts[0] || '');
     setSigner(signerResult);
     setYourBalance(utils.formatEther(balance));
+    setYourEnsDomain(ensDomain);
     // setIsWalletConnected(true);
     setEthereumNetwork(network);
     setUniverseERC721CoreContract(universeERC721CoreContractResult);
@@ -123,6 +126,7 @@ const AuthContextProvider = ({ children }) => {
     setAddress('');
     setSigner('');
     setYourBalance(0);
+    setYourEnsDomain(null);
     setIsWalletConnected(false);
     setEthereumNetwork('');
     setUsdEthBalance(0);
@@ -320,6 +324,8 @@ const AuthContextProvider = ({ children }) => {
         setSigner,
         yourBalance,
         setYourBalance,
+        yourEnsDomain,
+        setYourEnsDomain,
         isWalletConnected,
         setIsWalletConnected,
         ethereumNetwork,
