@@ -207,7 +207,6 @@ const Wallet = React.memo(
       setSelectedNFTIds([]);
       history.push('/setup-auction/reward-tiers');
     };
-
     useEffect(() => {
       const newCollections = [];
       deployedCollections.forEach((collection) => {
@@ -227,7 +226,6 @@ const Wallet = React.memo(
         document.removeEventListener('click', handleClickOutside, true);
       };
     });
-
     useEffect(() => {
       const prevNFTs = [];
       shownNFTs.forEach((nft) => {
@@ -237,6 +235,7 @@ const Wallet = React.memo(
       });
       setPreviewNFTs(prevNFTs);
     }, [shownNFTs, selectedNFTIds]);
+
     return (
       <div className="tab__wallet">
         {isCreatingAction ? (
@@ -573,7 +572,9 @@ const Wallet = React.memo(
                       />
                     </div>
                   ))}
-                  {Array(nftsPerWinner - previewNFTs.length)
+                  {Array(
+                    nftsPerWinner - previewNFTs.length > 0 ? nftsPerWinner - previewNFTs.length : 0
+                  )
                     .fill(0)
                     .map((el, i) => (
                       <div className="placeholder" key={uuid()} />

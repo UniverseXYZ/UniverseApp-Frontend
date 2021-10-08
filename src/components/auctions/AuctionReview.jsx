@@ -276,7 +276,7 @@ const AuctionReview = () => {
                   <div className="winners">
                     <div className="tier-perwinners">
                       <h4>
-                        NFTs per winner:&nbsp;<b>{tier.nftsPerWinner}</b>
+                        NFTs per winner:&nbsp;<b>{tier.nftsPerWinner && tier.nftsPerWinner}</b>
                       </h4>
                     </div>
                     <div className="tier-winners">

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import uuid from 'react-uuid';
@@ -8,7 +9,9 @@ import '../myNFTs/MyNFTs.scss';
 import arrow from '../../assets/images/arrow.svg';
 import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
+import WinnerIcon from '../../assets/images/winner-icon.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import CustomNftsSection from '../customNfts/CustomNftsSection';
 
 const Create = () => {
   const history = useHistory();
@@ -17,12 +20,13 @@ const Create = () => {
   const [hideIcon2, setHideIcon2] = useState(false);
   const { auction, setAuction, bidtype, setBidtype, options } = useAuctionContext();
   const [minBid, setMinBId] = useState(false);
+  const [custom, setCustom] = useState(false);
   const [minBidValue, setMinBidValue] = useState('');
+  const [winnersSelectedNFTs, setWinnersSelectedNFTs] = useState({});
+  const [selectedWinner, setSelectedWinner] = useState(null);
   const bid = options.find((element) => element.value === bidtype);
-
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
-
   const [values, setValues] = useState({
     name: '',
     numberOfWinners: '',
@@ -38,10 +42,11 @@ const Create = () => {
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
+
   const location = useLocation();
   const tierId = location.state;
   const tierById = auction?.rewardTiers?.find((element) => element.id === tierId);
-
+  const maxWinner = 11;
   useEffect(() => {
     if (values.name) {
       if (isValidFields.name && isValidFields.numberOfWinners && isValidFields.nftsPerWinner) {
@@ -67,6 +72,14 @@ const Create = () => {
     }
   }, [isValidFields]);
 
+  const handleWinnerSelect = (winner) => {
+    if (!winnersSelectedNFTs[winner]) {
+      setWinnersSelectedNFTs((prevValue) => ({ ...prevValue, [winner]: [] }));
+    }
+
+    setSelectedWinner((prevValue) => (prevValue === winner ? 'null' : winner));
+  };
+
   useEffect(() => {
     if (tierById) {
       setValues({
@@ -84,7 +97,7 @@ const Create = () => {
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
     if (event.target.id === 'numberOfWinners') {
-      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 21 || !value)) {
+      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < maxWinner || !value)) {
         setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
       }
     } else if (event.target.id === 'nftsPerWinner') {
@@ -114,8 +127,8 @@ const Create = () => {
             <div className="head-part">
               <h2 className="tier-title">Create reward tier</h2>
               <p className="create-p">
-                Each reward tier can contain up to 20 winners and up to 5 NFTs for each winner
-                (total: 100 NFTs).
+                Each reward tier can contain up to 10 winners and up to 5 NFTs for each winner
+                (total: 50 NFTs).
               </p>
             </div>
           </div>
@@ -180,12 +193,20 @@ const Create = () => {
                   </div>
                 )}
               </span>
+              <CustomNftsSection
+                custom={custom}
+                setCustom={setCustom}
+                values={values}
+                setValues={setValues}
+              />
             </div>
             <Input
               id="nftsPerWinner"
               type="text"
               hoverBoxShadowGradient
               error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'}
+              disabled={custom}
+              placeholder={custom && 'Custom'}
               className="inp"
               value={values.nftsPerWinner}
               onChange={handleChange}
@@ -263,6 +284,34 @@ const Create = () => {
             Your progress with the current auction will be automatically saved.
           </p>
         </p>
+        {custom && (
+          <div className="winner__lists">
+            {values.numberOfWinners &&
+              new Array(+values.numberOfWinners)
+                .fill(1)
+                .map((number, index) => number + index)
+                .map((earchWinner) => (
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                  <div
+                    className={
+                      selectedWinner === earchWinner ? 'winner-box selected' : 'winner-box'
+                    }
+                    key={earchWinner}
+                    onClick={() => handleWinnerSelect(earchWinner)}
+                  >
+                    <img src={WinnerIcon} alt="winner-icon" />
+                    <p>Winner #{earchWinner}</p>
+                    <span>
+                      {winnersSelectedNFTs && winnersSelectedNFTs[earchWinner]?.length > 0
+                        ? winnersSelectedNFTs[earchWinner]?.length
+                        : ''}{' '}
+                      NFTs
+                    </span>
+                    <div className="box--shadow--effect--block" />
+                  </div>
+                ))}
+          </div>
+        )}
         <Wallet
           filteredNFTs={filteredNFTs}
           setFilteredNFTs={setFilteredNFTs}
