@@ -129,8 +129,8 @@ const MyNFTsContextProvider = ({ children }) => {
             [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
             setMyNFTs(myNfts);
             setMyMintingNFTs(mintingNfts);
-            setMintingNftsCount(mintingNfts.length);
-            if (mintingNfts.length === 0) {
+            setMintingNftsCount(mintingNfts?.length || 0);
+            if (!mintingNfts?.length || mintingNfts.length === 0) {
               clearInterval(nftPollInterval);
             }
           }
@@ -152,9 +152,12 @@ const MyNFTsContextProvider = ({ children }) => {
           ]);
           setDeployedCollections(mintedCollections.collections);
           setMyMintingCollections(mintingCollections.collections);
-          setMintingCollectionsCount(mintingCollections.collections.length);
+          setMintingCollectionsCount(mintingCollections?.collections?.length || 0);
 
-          if (mintingCollections.collections.length === 0) {
+          if (
+            !mintingCollections?.collections?.length ||
+            mintingCollections?.collections?.length === 0
+          ) {
             clearInterval(collPollInterval);
           }
         }
