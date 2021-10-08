@@ -11,7 +11,6 @@ import arrowDown from '../../assets/images/ArrowDown.svg';
 import icon from '../../assets/images/auction_icon.svg';
 import bidIcon from '../../assets/images/bid_icon.svg';
 import copyIcon from '../../assets/images/copy1.svg';
-import editIcon from '../../assets/images/edit.svg';
 import Input from '../input/Input.jsx';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
@@ -114,61 +113,45 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       <span />
                                     </div>
                                   )}
-                                  {activeAuction.artist ? (
-                                    <CopyToClipboard
-                                      text={`${activeAuction.link.replace(
-                                        'universe.xyz',
-                                        window.location.origin
-                                      )}`}
-                                      onCopy={() => {
+                                  <CopyToClipboard
+                                    text={`${activeAuction.link.replace(
+                                      'universe.xyz',
+                                      window.location.origin
+                                    )}`}
+                                    onCopy={() => {
+                                      setCopied({
+                                        state: true,
+                                        index,
+                                      });
+                                      setTimeout(() => {
                                         setCopied({
-                                          state: true,
-                                          index,
+                                          state: false,
+                                          index: null,
                                         });
-                                        setTimeout(() => {
-                                          setCopied({
-                                            state: false,
-                                            index: null,
-                                          });
-                                        }, 1000);
-                                      }}
-                                    >
-                                      <span>
-                                        <img
-                                          src={copyIcon}
-                                          alt="Copy to clipboard icon"
-                                          className="copyImg"
-                                        />
-                                        Copy URL
-                                      </span>
-                                    </CopyToClipboard>
-                                  ) : (
-                                    <></>
-                                  )}
+                                      }, 1000);
+                                    }}
+                                  >
+                                    <span>
+                                      <img
+                                        src={copyIcon}
+                                        alt="Copy to clipboard icon"
+                                        className="copyImg"
+                                      />
+                                      Copy URL
+                                    </span>
+                                  </CopyToClipboard>
                                 </div>
                               </div>
                             </div>
                             <div className="launch-auction">
-                              {moment(activeAuction.endDate).isAfter(moment.now()) &&
-                              moment(activeAuction.endDate).diff(moment(activeAuction.startDate)) >
-                                0 &&
-                              !moment(activeAuction.startDate).isBefore(moment.now()) ? (
-                                <Button
-                                  className="light-border-button hide__on__mobile"
-                                  onClick={() => {
-                                    setAuction(activeAuction);
-                                    history.push(
-                                      '/customize-auction-landing-page',
-                                      activeAuction.id
-                                    );
-                                  }}
-                                >
-                                  <span>Edit landing page</span>
-                                  <img src={editIcon} alt="Edit" />
-                                </Button>
-                              ) : (
-                                <></>
-                              )}
+                              <Button
+                                className="light-border-button hide__on__mobile"
+                                onClick={() =>
+                                  history.push(activeAuction.link.replace('universe.xyz', ''))
+                                }
+                              >
+                                <span>Go to landing page</span>
+                              </Button>
                               <div className="arrow">
                                 {shownActionId === activeAuction.name ? (
                                   <img
@@ -189,6 +172,16 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                             </div>
                           </div>
                           <div className="auctions-launch-dates">
+                            <div className="show__on__mobile">
+                              <Button
+                                className="light-border-button"
+                                onClick={() =>
+                                  history.push(activeAuction.link.replace('universe.xyz', ''))
+                                }
+                              >
+                                <span>Go to landing page</span>
+                              </Button>
+                            </div>
                             <div className="total-dates">
                               <p>
                                 Total NFTs: <b>45</b>
@@ -223,28 +216,6 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                   <Moment format="MMMM DD, HH:mm">{activeAuction.endDate}</Moment>
                                 </b>
                               </p>
-                            </div>
-                            <div className="show__on__mobile">
-                              {moment(activeAuction.endDate).isAfter(moment.now()) &&
-                              moment(activeAuction.endDate).diff(moment(activeAuction.startDate)) >
-                                0 &&
-                              !moment(activeAuction.startDate).isBefore(moment.now()) ? (
-                                <Button
-                                  className="light-border-button"
-                                  onClick={() => {
-                                    setAuction(activeAuction);
-                                    history.push(
-                                      '/customize-auction-landing-page',
-                                      activeAuction.id
-                                    );
-                                  }}
-                                >
-                                  <span>Edit landing page</span>
-                                  <img src={editIcon} alt="Edit" />
-                                </Button>
-                              ) : (
-                                <></>
-                              )}
                             </div>
                           </div>
                           <div className="bid_info">
