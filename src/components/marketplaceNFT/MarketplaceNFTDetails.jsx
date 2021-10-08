@@ -446,7 +446,6 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     }
   };
 
-  console.log(selectedNFT);
   return (
     <>
       <div className="marketplace--nft--page">
