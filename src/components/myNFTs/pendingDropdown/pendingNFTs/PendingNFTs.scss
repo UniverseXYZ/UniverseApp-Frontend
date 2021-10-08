@@ -258,7 +258,7 @@
     }
   }
   .tooltiptext-big {
-    visibility: visible;
+    visibility: hidden;
     font-family: $spaceGroteskFont;
     font-style: normal;
     font-weight: normal;
@@ -331,5 +331,9 @@
     .tooltiptext {
       visibility: visible;
     }
+    .tooltiptext-big {
+      visibility: visible;
+    }
+
   }
 }

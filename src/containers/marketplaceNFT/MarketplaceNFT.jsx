@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './MarketplaceNFT.scss';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import MarketplaceNFTDetails from '../../components/marketplaceNFT/MarketplaceNFTDetails';
 import '../../components/marketplace/browseNFT/NFTsList.scss';
-import { PLACEHOLDER_MARKETPLACE_NFTS } from '../../utils/fixtures/BrowseNFTsDummyData';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { getNftData } from '../../utils/api/mintNFT';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const MarketplaceNFT = () => {
   const { setDarkMode } = useThemeContext();
-  const location = useLocation();
   const { collectionAddress, tokenId } = useParams();
-  // const selectedNFT = location.state ? location.state.nft : null;
   const [nft, setNft] = useState(null);
   const [loading, setLoading] = useState(true);
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Artist.scss';
+import { utils } from 'ethers';
+import Skeleton from 'react-loading-skeleton';
 import ArtistDetails from '../../components/artist/ArtistDetails.jsx';
 import ArtistPageTabs from '../../components/artist/tabs/Tabs.jsx';
 import NotFound from '../../components/notFound/NotFound.jsx';
@@ -15,6 +17,7 @@ const Artist = () => {
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [artistNFTs, setArtistNFTs] = useState([]);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     setDarkMode(false);
@@ -27,12 +30,17 @@ const Artist = () => {
   useEffect(() => {
     const getInfo = async () => {
       try {
-        const artistInfo = await getProfilePage(artistUsername);
-        if (!artistInfo.error) {
-          const mappedArtist = mapUserData(artistInfo);
-          setArtist(mappedArtist);
+        if (!utils.isAddress(artistUsername)) {
+          const artistInfo = await getProfilePage(artistUsername);
+          if (!artistInfo.error) {
+            const mappedArtist = mapUserData(artistInfo);
+            setArtist(mappedArtist);
+          } else {
+            setNotFound(true);
+          }
         }
       } catch (err) {
+        setNotFound(true);
         console.log(err);
       }
 
@@ -51,13 +59,41 @@ const Artist = () => {
     getInfo();
   }, []);
 
-  return !loading && !artist ? (
+  return loading ? (
+    <div className="artist__details__section">
+      <div className="artist__page">
+        <div className="artist__details__section__container">
+          <div className="avatar">
+            <Skeleton
+              height={window.innerWidth > 576 ? 280 : 90}
+              width={window.innerWidth > 576 ? 280 : 90}
+              circle
+            />
+            <h2 className="show__on__mobile">
+              <Skeleton width={200} />
+            </h2>
+          </div>
+          <div className="info">
+            <h1 className="title">
+              <Skeleton width={200} />
+            </h1>
+            <p className="desc">
+              <Skeleton height={200} />
+            </p>
+            <div className="social__links">
+              <Skeleton width={300} height={50} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : notFound ? (
     <NotFound />
-  ) : artist ? (
+  ) : (
     <div className="artist__page">
-      <ArtistDetails onArtist={artist} loading={loading} />
+      <ArtistDetails artistAddress={artistUsername} onArtist={artist} loading={loading} />
       <ArtistPageTabs nfts={artistNFTs} />
-      {artist.personalLogo ? (
+      {artist && artist.personalLogo ? (
         <div className="artist__personal__logo">
           <img src={artist.personalLogo} alt="Artist personal logo" />
         </div>
@@ -65,8 +101,6 @@ const Artist = () => {
         <></>
       )}
     </div>
-  ) : (
-    <></>
   );
 };
 
