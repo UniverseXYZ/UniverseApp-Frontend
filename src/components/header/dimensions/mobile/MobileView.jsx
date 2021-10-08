@@ -438,7 +438,9 @@ const MobileView = (props) => {
 
                     {/* <img className="icon-img" src={accountIcon} alt="icon" /> */}
                     <div className="ethereum__address">
-                      {shortenEnsDomain(yourEnsDomain) || shortenEthereumAddress(ethereumAddress)}
+                      {yourEnsDomain
+                        ? shortenEnsDomain(yourEnsDomain)
+                        : shortenEthereumAddress(ethereumAddress)}
                     </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">

@@ -388,7 +388,9 @@ const TabletView = (props) => {
                   <div className="copy-div">
                     <HeaderAvatar scale={3} />
                     <div className="ethereum__address">
-                      {shortenEnsDomain(yourEnsDomain) || shortenEthereumAddress(ethereumAddress)}
+                      {yourEnsDomain
+                        ? shortenEnsDomain(yourEnsDomain)
+                        : shortenEthereumAddress(ethereumAddress)}
                     </div>
                     <div className="copy__div">
                       <div className="copy" title="Copy to clipboard">
