@@ -589,7 +589,6 @@ const SingleNFTForm = () => {
       }
     }
   }, [errors, saveForLateClick]);
-
   useEffect(() => {
     // This means it's editing an saved nft
     if (savedNFTsID) {
@@ -1096,6 +1095,7 @@ const SingleNFTForm = () => {
                     !name ||
                     !editions ||
                     !previewImage ||
+                    !selectedCollection ||
                     (propertyCheck &&
                       properties.find(
                         (property) => property.name === '' || property.value === ''
