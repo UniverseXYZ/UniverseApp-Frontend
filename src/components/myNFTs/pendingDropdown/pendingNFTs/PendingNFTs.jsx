@@ -18,28 +18,26 @@ const PendingNFTs = () => {
     () =>
       myMintingNFTs.map((nft) => (
         <div
-          onClick={() => window.open(generateLink(nft.txHash), '_blank').focus()}
+          onClick={() => window.open(generateLink(nft.txHashes[0]), '_blank').focus()}
           className="nft__card"
           key={nft.id}
           style={{ width: 160 }}
           aria-hidden
         >
-          {nft.numberOfEditions < 41 ? (
+          {nft.txHashes?.length <= 40 ? (
             <span className="tooltiptext">View on Etherscan</span>
           ) : (
             <span className="tooltiptext-big">
               <p className="title"> View on Etherscan:</p>
               <div className="tooltiptext-big-body">
-                {Array(Math.ceil(nft.numberOfEditions / 40))
-                  .fill(0)
-                  .map((el, i) => (
-                    <div className="txns" key={nft.txHash}>
-                      <span>Txn{i + 1}:</span>
-                      <a target="_blank" href={generateLink(nft.txHash)} rel="noreferrer">
-                        {formatAddress(nft.txHash)}
-                      </a>
-                    </div>
-                  ))}
+                {nft.txHashes?.map((txHash, i) => (
+                  <div className="txns" key={nft.txHash}>
+                    <span>Txn{i + 1}:</span>
+                    <a target="_blank" href={generateLink(txHash)} rel="noreferrer">
+                      {formatAddress(txHash)}
+                    </a>
+                  </div>
+                ))}
               </div>
             </span>
           )}
@@ -79,7 +77,9 @@ const PendingNFTs = () => {
                 </div>
               )}
             </div>
-            <p className="nfts__qantity">{`${nft.numberOfEditions}/${nft.numberOfEditions}`}</p>
+            <p className="nfts__qantity">{`${nft.numberOfEditions - nft.mintedEditions}/${
+              nft.numberOfEditions
+            }`}</p>
           </div>
           <div className="nft__card__body">
             <div className="loading-image">
