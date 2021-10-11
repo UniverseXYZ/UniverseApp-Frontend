@@ -24,6 +24,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [page, setPage] = useState(0);
   const history = useHistory();
 
   const handleRemove = (id) => {
@@ -377,7 +378,13 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
           </div>
         ))}
       <div className="pagination__container">
-        <Pagination data={myAuctions} perPage={perPage} setOffset={setOffset} />
+        <Pagination
+          data={myAuctions}
+          perPage={perPage}
+          setOffset={setOffset}
+          page={page}
+          setPage={setPage}
+        />
       </div>
     </div>
   );
