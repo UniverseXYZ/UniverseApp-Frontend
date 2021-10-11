@@ -700,7 +700,10 @@ const TabletView = (props) => {
                 {/* <Popup trigger={<button type="button">Join newsletter</button>}>
                   {(close) => <SubscribePopup close={close} />}
                 </Popup> */}
-                <Popup trigger={<button type="button">Sign in</button>}>
+                <Popup
+                  closeOnDocumentClick={false}
+                  trigger={<button type="button">Sign in</button>}
+                >
                   {(close) => (
                     <SelectWalletPopup
                       close={close}
