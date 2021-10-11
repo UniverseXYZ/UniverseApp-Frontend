@@ -1551,6 +1551,7 @@
 
 .tab__saved__nfts {
   .custom__checkbox {
+    padding-top: 20px;
     margin-bottom: 20px;
 
     label {
@@ -1914,8 +1915,9 @@
   }
 }
 
-.tab__saved__collections {
+.tab__saved__collections {  
   .saved__collections__lists {
+    padding-top: 20px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 30px;

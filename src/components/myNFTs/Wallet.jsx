@@ -13,7 +13,7 @@ import filterIcon from '../../assets/images/filters-icon.svg';
 import crossSmall from '../../assets/images/crossSmall.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import '../marketplace/browseNFT/NFTsList.scss';
-import plusIcon from '../../assets/images/PlusIcon.png';
+import plusIcon from '../../assets/images/plus.svg';
 import Input from '../input/Input';
 import searchIcon from '../../assets/images/search-gray.svg';
 import NFTCard from '../nft/NFTCard';
