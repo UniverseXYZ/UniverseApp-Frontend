@@ -230,7 +230,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
       }
 
       setShowLoading(false);
-
+      setShowPrompt(false);
       if (res) {
         setShowCongrats(true);
       } else {
@@ -321,10 +321,6 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     }
   }, [collectionNFTs]);
 
-  useEffect(() => {
-    setShowPrompt(true);
-  }, [location.pathname]);
-
   const imageSrc = useMemo(
     () =>
       coverImage
@@ -337,9 +333,9 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
   return !showCollectible ? (
     <div className="nft--collection--settings--page">
       <RouterPrompt
-        when={showPrompt && savedCollectionID}
+        when={!!showPrompt && !!savedCollectionID}
         onOK={() => true}
-        editing={savedCollectionID}
+        editing={!!savedCollectionID}
       />
       <Popup closeOnDocumentClick={false} open={showLoading}>
         <LoadingPopup
@@ -432,6 +428,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                 onChange={(e) => {
                   if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
                   handleCollectionName(e.target.value);
+                  setShowPrompt(true);
                 }}
                 value={collectionName}
               />
@@ -457,6 +454,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                 onChange={(e) => {
                   if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.token) return;
                   handleTokenName(e.target.value);
+                  setShowPrompt(true);
                 }}
                 value={tokenName}
               />
@@ -480,6 +478,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             onChange={(e) => {
               if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.description) return;
               setDescription(e.target.value);
+              setShowPrompt(true);
             }}
           />
         </div>
