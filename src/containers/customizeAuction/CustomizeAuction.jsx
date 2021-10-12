@@ -23,6 +23,13 @@ import {
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
 import ErrorPopup from '../../components/popups/ErrorPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
+import {
+  validateUserProfile,
+  validateUserAvatar,
+  validateAuctionData,
+  validateAuctionImages,
+  validateRewardTierData,
+} from './validateData';
 
 const SAVE_PREVIEW_ACTION = 'save-preview';
 const PREVIEW_ACTION = 'preview';
@@ -73,6 +80,9 @@ const CustomizeAuction = () => {
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [successPopup, setSuccessPopup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [invalidPromoImage, setInvalidPromoImage] = useState(null);
+  const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
+  const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
@@ -116,6 +126,7 @@ const CustomizeAuction = () => {
           auction.rewardTiers[index].color !== tier.color;
 
         const canEditRewardTierImage = auction.rewardTiers[index].imageUrl !== tier.imageUrl;
+        const invalidImages = invalidTierImageIds.length;
 
         if (canEditRewardTier) {
           try {
@@ -126,7 +137,7 @@ const CustomizeAuction = () => {
           }
         }
         const updatedTier = { ...tier, newTierData };
-        if (canEditRewardTierImage) {
+        if (canEditRewardTierImage && !invalidImages) {
           try {
             newTierData = await editRewardTierImage(tier.imageUrl, tier.id);
             tierResponses.push(newTierData);
@@ -146,14 +157,13 @@ const CustomizeAuction = () => {
   const saveAuction = async (editedAuction) => {
     let newAuctionData = null;
 
-    const canEditAuction =
-      auction.headline !== domainAndBranding.headline ||
-      auction.link !== domainAndBranding.link ||
-      auction.backgroundImageBlur !== domainAndBranding.backgroundImageBlur;
+    const canEditAuction = validateAuctionData(auction, domainAndBranding);
 
-    const canEditAuctionImages =
-      typeof editedAuction.promoImage === 'object' ||
-      typeof editedAuction.backgroundImage === 'object';
+    const canEditAuctionImages = validateAuctionImages(
+      editedAuction,
+      invalidPromoImage,
+      invalidBackgroundImage
+    );
 
     if (canEditAuction) {
       newAuctionData = await editAuction(editedAuction);
@@ -177,14 +187,16 @@ const CustomizeAuction = () => {
   // profile API calls
   const saveProfile = async (loggedInArtistClone) => {
     // Check if data is edited
-    const canEditUserInfo =
-      loggedInArtist.name !== accountName ||
-      loggedInArtist.about !== about ||
-      loggedInArtist.instagramLink !== instagramLink ||
-      loggedInArtist.twitterLink !== twitterLink ||
-      loggedInArtist.universePageAddress !== accountPage.split('universe.xyz/').pop();
+    const canEditUserInfo = validateUserProfile(
+      loggedInArtist,
+      accountName,
+      about,
+      instagramLink,
+      twitterLink,
+      accountPage
+    );
 
-    const canEditUserAvatar = typeof accountImage === 'object';
+    const canEditUserAvatar = validateUserAvatar(accountImage);
 
     try {
       return await Promise.all([
@@ -266,6 +278,59 @@ const CustomizeAuction = () => {
     setShowPrompt(true);
   }, [location.pathname]);
 
+  const handleButtonState = () => {
+    // user profile checks
+    const canEditUserInfo = validateUserProfile(
+      loggedInArtist,
+      accountName,
+      about,
+      instagramLink,
+      twitterLink,
+      accountPage
+    );
+    const canEditUserAvatar = validateUserAvatar(accountImage);
+
+    // auction checks
+    const editedAuction = {
+      ...auction,
+      ...domainAndBranding,
+    };
+    const canEditAuction = validateAuctionData(auction, domainAndBranding);
+
+    const canEditAuctionImages = validateAuctionImages(
+      editedAuction,
+      invalidPromoImage,
+      invalidBackgroundImage
+    );
+
+    // tier checks
+    const rewardTiersAuctionClone = [...rewardTiersAuction];
+
+    const canEditRewardTier = validateRewardTierData(
+      auction,
+      rewardTiersAuctionClone,
+      invalidTierImageIds
+    );
+
+    let buttonDisabled = false;
+
+    if (
+      !canEditUserInfo &&
+      !canEditUserAvatar &&
+      !canEditAuction &&
+      !canEditAuctionImages &&
+      !canEditRewardTier
+    ) {
+      buttonDisabled = true;
+    }
+
+    if (invalidPromoImage || invalidBackgroundImage || invalidTierImageIds.length) {
+      buttonDisabled = true;
+    }
+
+    return buttonDisabled;
+  };
+
   return (
     <div className="customize__auction">
       <RouterPrompt when={showPrompt} onOK={() => true} editing={customizeAuctionState} />
@@ -287,12 +352,18 @@ const CustomizeAuction = () => {
           </Button>
         </div>
         <DomainAndBranding
+          invalidPromoImage={invalidPromoImage}
+          setInvalidPromoImage={setInvalidPromoImage}
+          invalidBackgroundImage={invalidBackgroundImage}
+          setInvalidBackgroundImage={setInvalidBackgroundImage}
           values={domainAndBranding}
           onChange={setDomainAndBranding}
           editButtonClick={editButtonClick}
           setEditButtonClick={setEditButtonClick}
         />
         <RewardTiersAuction
+          invalidImageIds={invalidTierImageIds}
+          setInvalidImageIds={setInvalidTierImageIds}
           values={rewardTiersAuction}
           onChange={setRewardTiersAuction}
           editButtonClick={editButtonClick}
@@ -336,41 +407,18 @@ const CustomizeAuction = () => {
               </p>
             </div>
           )}
-        {editButtonClick &&
-        (!domainAndBranding.headline ||
-          !domainAndBranding.link ||
-          domainAndBranding.status === 'empty' ||
-          !accountImage ||
-          !accountName ||
-          accountPage === 'universe.xyz/' ||
-          accountPage === 'universe.xyz/your-address' ||
-          !about) ? (
-          <div className="customize-buttons">
-            <Button
-              className="light-border-button"
-              onClick={handleSavePreview}
-              disabled={saveAndPreview}
-            >
-              Save and preview
-            </Button>
-            <Button className="light-button" disabled onClick={handleSave}>
-              Save and close
-            </Button>
-          </div>
-        ) : (
-          <div className="customize-buttons">
-            <Button
-              className="light-border-button"
-              onClick={handleSavePreview}
-              disabled={saveAndPreview}
-            >
-              Save and preview
-            </Button>
-            <Button className="light-button" onClick={handleSave}>
-              Save and close
-            </Button>
-          </div>
-        )}
+        <div className="customize-buttons">
+          <Button
+            className="light-border-button"
+            onClick={handleSavePreview}
+            disabled={handleButtonState()}
+          >
+            Save and preview
+          </Button>
+          <Button className="light-button" disabled={handleButtonState()} onClick={handleSave}>
+            Save and close
+          </Button>
+        </div>
       </div>
       {showError && <ErrorPopup />}
       <Popup open={successPopup} closeOnDocumentClick={false}>

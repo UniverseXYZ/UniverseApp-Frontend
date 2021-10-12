@@ -9,9 +9,14 @@ import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
 
-const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
+const RewardTiersAuction = ({
+  values,
+  onChange,
+  editButtonClick,
+  invalidImageIds,
+  setInvalidImageIds,
+}) => {
   const { auction, bidtype } = useAuctionContext();
-  const [invalidImageIds, setInvalidImageIds] = useState([]);
   const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
 
