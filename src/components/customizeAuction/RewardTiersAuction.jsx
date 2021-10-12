@@ -7,9 +7,11 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
 
 const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
   const { auction, bidtype } = useAuctionContext();
+  const [invalidImageIds, setInvalidImageIds] = useState([]);
   const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
 
@@ -43,15 +45,21 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
     );
   };
 
+  const handleImageError = (tierId, fileValid) => {
+    if (!fileValid) {
+      setInvalidImageIds([...invalidImageIds, tierId]);
+    } else {
+      const invalidImages = invalidImageIds.filter((id) => id !== tierId);
+      setInvalidImageIds(invalidImages);
+    }
+  };
+
   const validateFile = (file, tierId) => {
     const fileValid =
       (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
-    if (fileValid) {
-      handleUploadImage(file, tierId);
-    } else {
-      // TODO: set error here
-      console.error('File format must be PNG or JPEG (Max Size: 30mb)');
-    }
+
+    handleImageError(tierId, fileValid);
+    handleUploadImage(file, tierId);
   };
 
   const onDrop = (e, tierId) => {
@@ -78,6 +86,14 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
             image = URL.createObjectURL(tier.imageUrl);
           }
           const description = tier.description || '';
+
+          const imageErrorId = invalidImageIds.find((id) => id === tier.id);
+          let uploadImageContainerClasses = 'upload__image';
+          let errorMessage = false;
+          if (imageErrorId) {
+            uploadImageContainerClasses += ' error-inp';
+            errorMessage = true;
+          }
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -140,7 +156,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                     <p className="warning-text">You have reached the max amount of symbols</p>
                   )}
                 </div>
-                <div className="upload__image">
+                <div className={uploadImageContainerClasses}>
                   <h4>Upload tier image (optional)</h4>
                   <div
                     className="dropzone"
@@ -181,6 +197,7 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                       </div>
                     </div>
                   </div>
+                  {errorMessage && <p className="error-message">{auctionPageImageErrorMessage}</p>}
                 </div>
               </div>
             </div>
