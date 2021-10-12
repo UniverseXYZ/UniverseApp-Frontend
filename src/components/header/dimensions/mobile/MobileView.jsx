@@ -58,7 +58,7 @@ import img from '../../../../assets/images/search-gray.svg';
 import img2 from '../../../../assets/images/crossclose.svg';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
+import { defaultColors, handleClickOutside, whitepaperUrl } from '../../../../utils/helpers';
 import {
   toFixed,
   shortenEnsDomain,
@@ -728,12 +728,7 @@ const MobileView = (props) => {
                             </button>
                           </div>
                           <div>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
-                              }
-                            >
+                            <button type="button" onClick={() => window.open(whitepaperUrl)}>
                               <img src={whitepaperIcon} alt="Whitepaper" />
                               Whitepaper
                             </button>

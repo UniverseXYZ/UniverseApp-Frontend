@@ -75,3 +75,5 @@ export const mapUserData = (userInfo) => {
   };
   return map;
 };
+
+export const whitepaperUrl = 'https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper';
