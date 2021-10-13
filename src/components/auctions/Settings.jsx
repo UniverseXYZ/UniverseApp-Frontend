@@ -175,7 +175,10 @@ const AuctionSettings = () => {
             : prevValue.rewardTiers,
         }));
       }
-      history.push('/setup-auction/reward-tiers', location.pathname);
+      history.push({
+        pathname: '/setup-auction/reward-tiers',
+        state: location.state,
+      });
     }
   };
 

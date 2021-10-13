@@ -1,7 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-cond-assign */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
 import './AuctionReview.scss';
@@ -35,6 +35,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 const AuctionReview = () => {
   const { auction, setAuction, bidtype, options, myAuctions, setMyAuctions, setSelectedTabIndex } =
     useAuctionContext();
+  const location = useLocation();
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -346,7 +347,9 @@ const AuctionReview = () => {
       <div className="btn-div">
         <Button
           className="light-border-button"
-          onClick={() => history.push('/setup-auction/reward-tiers')}
+          onClick={() =>
+            history.push({ pathname: '/setup-auction/reward-tiers', state: location.state })
+          }
         >
           Back
         </Button>

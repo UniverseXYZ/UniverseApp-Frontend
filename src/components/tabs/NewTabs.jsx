@@ -28,6 +28,10 @@ const NewTabs = (props) => {
 
   useEffect(() => {
     const routes = tabData.map((elem) => elem.route);
+    if (location.state === 'edit') {
+      setRoutesArray(routes);
+      return;
+    }
     setRoutesArray(routes.splice(0, routes.indexOf(pathname) + 1));
   }, [pathname]);
 
@@ -50,7 +54,7 @@ const NewTabs = (props) => {
                 const className =
                   pathname === route
                     ? 'active'
-                    : routesArray.includes(route)
+                    : routesArray.includes(route) || location.state === 'edit'
                     ? 'verification--step--tab'
                     : 'disabled';
                 const arrowBlack = mobile
@@ -89,7 +93,10 @@ const NewTabs = (props) => {
                     aria-hidden="true"
                     onClick={() => {
                       if (className !== 'disabled') {
-                        history.push(route);
+                        history.push({
+                          pathname: route,
+                          state: location.state,
+                        });
                       }
                     }}
                     key={index.toString()}
