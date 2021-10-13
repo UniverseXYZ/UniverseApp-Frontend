@@ -404,6 +404,7 @@ const DesktopView = ({
         ) : (
           <li>
             <Popup
+              closeOnDocumentClick={false}
               trigger={
                 <button type="button" className="sign__in">
                   Sign In
