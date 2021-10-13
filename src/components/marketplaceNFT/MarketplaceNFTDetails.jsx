@@ -483,7 +483,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.artworkType &&
                   !selectedNFT.artworkType.endsWith('mpeg') &&
                   !selectedNFT.artworkType.endsWith('mp4') && (
-                    <img src={selectedNFT.optimized_url} alt={selectedNFT.name} />
+                    <img src={selectedNFT.original_url} alt={selectedNFT.name} />
                   )}
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
@@ -496,9 +496,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <video ref={mediaRef}>
                         <source
                           src={
-                            typeof selectedNFT.optimized_url === 'string'
-                              ? selectedNFT.optimized_url
-                              : URL.createObjectURL(selectedNFT.optimized_url)
+                            typeof selectedNFT.original_url === 'string'
+                              ? selectedNFT.original_url
+                              : URL.createObjectURL(selectedNFT.original_url)
                           }
                           type="video/mp4"
                         />
@@ -657,7 +657,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.tokenIds[selectedNFTIndex].type !== 'audio/mpeg' &&
                   selectedNFT.tokenIds[selectedNFTIndex].type !== 'video/mp4' && (
                     <img
-                      src={selectedNFT.tokenIds[selectedNFTIndex].optimized_url}
+                      src={selectedNFT.tokenIds[selectedNFTIndex].original_url}
                       alt={selectedNFT.name}
                     />
                   )}
