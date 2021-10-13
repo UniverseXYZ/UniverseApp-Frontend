@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import axios from 'axios';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import { useHistory } from 'react-router-dom';
 import Lottie from 'react-lottie';
@@ -21,36 +20,19 @@ import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
 import arrowLeft from '../../assets/images/arrow-black.svg';
+import { handleMailSubscribe } from '../../utils/api/mailSubscribe';
 
 const About = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
 
-  const handleSubscribe = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(String(email).toLowerCase())) {
-      const config = {
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        params: {
-          email,
-        },
-      };
-      axios
-        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
-        .then((response) => {
-          if (response.status === 200) {
-            setEmail('');
-            document.getElementById('sub-hidden-btn').click();
-          } else {
-            alert('OOPS! Something went wrong.');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const handleSubscribe = async () => {
+    const response = await handleMailSubscribe(email);
+    if (response?.status === 200) {
+      setEmail('');
+      document.getElementById('sub-hidden-btn').click();
     } else {
-      alert('Email address is invalid.');
+      alert(response);
     }
   };
 
