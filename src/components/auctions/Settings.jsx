@@ -212,7 +212,7 @@ const AuctionSettings = () => {
       return property;
     });
     const result = newProperties.reduce(
-      (accumulator, current) => accumulator + Number(current.amount),
+      (accumulator, current) => accumulator + Number(current.percentAmount),
       0
     );
     if (result <= 100 && val >= 0) {
