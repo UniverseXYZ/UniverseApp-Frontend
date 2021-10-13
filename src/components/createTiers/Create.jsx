@@ -29,6 +29,10 @@ const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
 };
 
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+};
+
 const Create = () => {
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
