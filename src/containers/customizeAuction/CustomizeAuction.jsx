@@ -84,6 +84,19 @@ const CustomizeAuction = () => {
   const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
   const [invalidTierImageIds, setInvalidTierImageIds] = useState([]);
 
+  const disableSaveChanges = () =>
+    !domainAndBranding.headline ||
+    !domainAndBranding.link ||
+    domainAndBranding.status === 'empty' ||
+    !accountImage ||
+    !accountName ||
+    accountPage === 'universe.xyz/' ||
+    accountPage === 'universe.xyz/your-address' ||
+    !about ||
+    invalidPromoImage ||
+    invalidBackgroundImage ||
+    invalidTierImageIds.length;
+
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
     setFutureAuctions([...futureAuctions, _editedAuction]);
@@ -278,58 +291,7 @@ const CustomizeAuction = () => {
     setShowPrompt(true);
   }, [location.pathname]);
 
-  const handleButtonState = () => {
-    // user profile checks
-    const canEditUserInfo = validateUserProfile(
-      loggedInArtist,
-      accountName,
-      about,
-      instagramLink,
-      twitterLink,
-      accountPage
-    );
-    const canEditUserAvatar = validateUserAvatar(accountImage);
-
-    // auction checks
-    const editedAuction = {
-      ...auction,
-      ...domainAndBranding,
-    };
-    const canEditAuction = validateAuctionData(auction, domainAndBranding);
-
-    const canEditAuctionImages = validateAuctionImages(
-      editedAuction,
-      invalidPromoImage,
-      invalidBackgroundImage
-    );
-
-    // tier checks
-    const rewardTiersAuctionClone = [...rewardTiersAuction];
-
-    const canEditRewardTier = validateRewardTierData(
-      auction,
-      rewardTiersAuctionClone,
-      invalidTierImageIds
-    );
-
-    let buttonDisabled = false;
-
-    if (
-      !canEditUserInfo &&
-      !canEditUserAvatar &&
-      !canEditAuction &&
-      !canEditAuctionImages &&
-      !canEditRewardTier
-    ) {
-      buttonDisabled = true;
-    }
-
-    if (invalidPromoImage || invalidBackgroundImage || invalidTierImageIds.length) {
-      buttonDisabled = true;
-    }
-
-    return buttonDisabled;
-  };
+  const disableSave = disableSaveChanges();
 
   return (
     <div className="customize__auction">
@@ -390,32 +352,24 @@ const CustomizeAuction = () => {
             transactions on the Finalize auction step.
           </p>
         </div>
-        {editButtonClick &&
-          (!domainAndBranding.headline ||
-            !domainAndBranding.link ||
-            domainAndBranding.status === 'empty' ||
-            !accountImage ||
-            !accountName ||
-            accountPage === 'universe.xyz/' ||
-            accountPage === 'universe.xyz/your-address' ||
-            !about) && (
-            <div className="customize__auction__error">
-              <img alt="Error" src={errorIcon} />
-              <p>
-                Something went wrong. Please fix the errors in the field above and try again. The
-                buttons will be enabled after information has been entered into the fields.
-              </p>
-            </div>
-          )}
+        {disableSave ? (
+          <div className="customize__auction__error">
+            <img alt="Error" src={errorIcon} />
+            <p>
+              Something went wrong. Please fix the errors in the field above and try again. The
+              buttons will be enabled after information has been entered into the fields.
+            </p>
+          </div>
+        ) : null}
         <div className="customize-buttons">
           <Button
             className="light-border-button"
             onClick={handleSavePreview}
-            disabled={handleButtonState()}
+            disabled={disableSave}
           >
             Save and preview
           </Button>
-          <Button className="light-button" disabled={handleButtonState()} onClick={handleSave}>
+          <Button className="light-button" disabled={disableSave} onClick={handleSave}>
             Save and close
           </Button>
         </div>
