@@ -124,11 +124,11 @@ const MyNFTsContextProvider = ({ children }) => {
         setMyNFTs(myNfts);
         setMyMintingNFTs(mintingNfts);
         nftPollInterval = setInterval(async () => {
-          const apiMintingNftsCount = await getMyMintingNftsCount();
-          if (apiMintingNftsCount !== mintingNftsCount) {
-            [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
+          mintingNfts = await getMyMintingNfts();
+          setMyMintingNFTs(mintingNfts);
+          if (mintingNfts.length !== mintingNftsCount) {
+            myNfts = await getMyNfts();
             setMyNFTs(myNfts);
-            setMyMintingNFTs(mintingNfts);
             setMintingNftsCount(mintingNfts?.length || 0);
             if (!mintingNfts?.length || mintingNfts.length === 0) {
               clearInterval(nftPollInterval);
