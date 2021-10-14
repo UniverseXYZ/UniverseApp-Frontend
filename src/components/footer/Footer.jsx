@@ -13,7 +13,6 @@ import SubscribePopup from '../popups/SubscribePopup.jsx';
 import { handleMailSubscribe } from '../../utils/api/mailSubscribe';
 import { whitepaperUrl } from '../../utils/helpers';
 
-
 const Footer = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');

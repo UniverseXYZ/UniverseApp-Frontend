@@ -182,7 +182,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   className="light-border-button"
                   onClick={() => {
                     setAuction(futureAuction);
-                    history.push('/setup-auction/auction-settings', futureAuction.id);
+                    history.push({
+                      pathname: '/setup-auction/auction-settings',
+                      state: 'edit',
+                    });
                   }}
                 >
                   Edit

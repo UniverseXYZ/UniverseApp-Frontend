@@ -1,7 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-cond-assign */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import moment from 'moment';
 import './AuctionReview.scss';
@@ -35,6 +35,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 const AuctionReview = () => {
   const { auction, setAuction, bidtype, options, myAuctions, setMyAuctions, setSelectedTabIndex } =
     useAuctionContext();
+  const location = useLocation();
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -225,7 +226,7 @@ const AuctionReview = () => {
         {auction.properties &&
           auction.properties.length &&
           auction.properties
-            .map((item) => item.address !== '' && item.amount !== '')
+            .map((item) => item.address !== '' && item.percentAmount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
               <h2 className="royalty-settings-title">Royalty splits</h2>
@@ -237,7 +238,7 @@ const AuctionReview = () => {
             {auction.properties.map(
               (item) =>
                 item.address &&
-                item.amount && (
+                item.percentAmount && (
                   <div key={item.address} className="royalty">
                     <p className="show--on--desktop">{item.address}</p>
                     <p className="hide--on--desktop">
@@ -246,7 +247,7 @@ const AuctionReview = () => {
                         item.address.length
                       )}`}
                     </p>
-                    <span>{item.amount}%</span>
+                    <span>{item.percentAmount}%</span>
                   </div>
                 )
             )}
@@ -346,7 +347,9 @@ const AuctionReview = () => {
       <div className="btn-div">
         <Button
           className="light-border-button"
-          onClick={() => history.push('/setup-auction/reward-tiers')}
+          onClick={() =>
+            history.push({ pathname: '/setup-auction/reward-tiers', state: location.state })
+          }
         >
           Back
         </Button>

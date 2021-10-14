@@ -13,6 +13,10 @@ import WinnerIcon from '../../assets/images/winner-icon.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import CustomNftsSection from '../customNfts/CustomNftsSection';
 
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+};
+
 const Create = () => {
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -84,7 +88,7 @@ const Create = () => {
     if (tierById) {
       setValues({
         name: tierById.name,
-        numberOfWinners: tierById.numberOfWinners,
+        numberOfWinners: tierById.numberOfWinners ? tierById.numberOfWinners : tierById.winners,
         nftsPerWinner: tierById.nftsPerWinner,
       });
       if (tierById.minBidValue) {
@@ -145,9 +149,14 @@ const Create = () => {
               className="inp"
               hoverBoxShadowGradient
               value={values.name}
-              onChange={handleChange}
+              onChange={(e) => {
+                if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+                handleChange(e);
+              }}
             />
-
+            <p className="input-max-chars">
+              Characters: {values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+            </p>
             <div className="tier-info_icon">
               <span
                 className="inp-label"
@@ -172,7 +181,7 @@ const Create = () => {
               hoverBoxShadowGradient
               error={isValidFields.numberOfWinners ? undefined : 'Number of winners is required!'}
               className="inp"
-              value={values.numberOfWinners}
+              value={values.numberOfWinners ? values.numberOfWinners : auction.winners}
               onChange={handleChange}
             />
 
@@ -261,7 +270,10 @@ const Create = () => {
                       name="tierBid"
                       placeholder="0.1"
                       value={minBidValue}
-                      onChange={(e) => setMinBidValue(e.target.value)}
+                      onChange={(e) => {
+                        if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
+                        setMinBidValue(e.target.value);
+                      }}
                       hoverBoxShadowGradient
                       onWheel={(e) => e.target.blur()}
                     />
