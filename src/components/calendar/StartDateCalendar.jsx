@@ -14,6 +14,9 @@ const StartDateCalendar = React.forwardRef(
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const [currentMonth, setCurrentMonth] = useState([]);
+    const [minDateTimeError, setMinDateTimeError] = useState(false);
+    const [minHours, setMinHours] = useState(new Date().getHours() + 1);
+    const [minMins, setMinMins] = useState(new Date().getMinutes() + 1);
     const [selectedDate, setSelectedDate] = useState({
       year: values.startDate ? Number(values.startDate.toString().split(' ')[3]) : d.getFullYear(),
       month: values.startDate
@@ -66,12 +69,23 @@ const StartDateCalendar = React.forwardRef(
 
     const handleHoursChange = (val) => {
       const value = val.replace(/[^\d]/, '');
+
       if (value.length < 3 && Number(value) < 25) {
         setStartDateTemp((prevState) => ({
           ...prevState,
           hours: value,
         }));
       }
+
+      if (
+        new Date().getDate() === startDateTemp.day &&
+        (Number(value) < minHours ||
+          (Number(value) === minHours && Number(startDateTemp.minutes) < minMins))
+      ) {
+        setMinDateTimeError(true);
+        return;
+      }
+      setMinDateTimeError(false);
     };
 
     const handleMinutesChange = (val) => {
@@ -82,6 +96,16 @@ const StartDateCalendar = React.forwardRef(
           minutes: value,
         }));
       }
+
+      if (
+        new Date().getDate() === startDateTemp.day &&
+        Number(startDateTemp.hours) <= minHours &&
+        Number(value) < minMins
+      ) {
+        setMinDateTimeError(true);
+        return;
+      }
+      setMinDateTimeError(false);
     };
 
     const handleDayClick = (day) => {
@@ -165,6 +189,21 @@ const StartDateCalendar = React.forwardRef(
         onClose();
       }
     };
+
+    useEffect(() => {
+      console.log(values);
+      console.log(Number(values.startDate.toString().split(' ')[3]));
+      if (!values.startDate) {
+        setStartDateTemp((prevState) => ({
+          ...prevState,
+          hours: new Date().getHours() === 24 ? 1 : new Date().getHours() + 1,
+          minutes:
+            new Date().getMinutes() < 10
+              ? `0${new Date().getMinutes() + 1}`
+              : new Date().getMinutes(),
+        }));
+      }
+    }, []);
 
     useEffect(() => {
       createDaysArray();
@@ -294,11 +333,20 @@ const StartDateCalendar = React.forwardRef(
                 onChange={(e) => handleMinutesChange(e.target.value)}
               />
             </div>
+            {minDateTimeError && (
+              <p className="error-message">
+                Selected time must be after {minHours}:{minMins}
+              </p>
+            )}
             <div className="actions">
               <Button className="light-border-button" onClick={handleCancelClick}>
                 Cancel
               </Button>
-              <Button className="light-button" onClick={handleSaveClick}>
+              <Button
+                className="light-button"
+                onClick={handleSaveClick}
+                disabled={minDateTimeError}
+              >
                 Save
               </Button>
             </div>

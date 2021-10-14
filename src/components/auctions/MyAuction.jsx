@@ -14,7 +14,7 @@ import MyBidsCard from '../auctionsCard/MyBidsCard';
 import NoAuctionsFound from './NoAuctionsFound';
 
 const MyAuction = () => {
-  const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex } =
+  const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =
     useAuctionContext();
   const { loggedInArtist } = useAuthContext();
 
@@ -92,9 +92,12 @@ const MyAuction = () => {
             <button
               type="button"
               className="light-button set_up"
-              onClick={() =>
-                loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
-              }
+              onClick={() => {
+                setAuction({ rewardTiers: [] });
+                return (
+                  loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
+                );
+              }}
               disabled={!loggedInArtist.name || !loggedInArtist.avatar}
             >
               Set up auction

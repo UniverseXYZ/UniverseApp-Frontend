@@ -14,6 +14,9 @@ const EndDateCalendar = React.forwardRef(
     const d = new Date();
     const weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     const [currentMonth, setCurrentMonth] = useState([]);
+    const [minDateTimeError, setMinDateTimeError] = useState(false);
+    const [minHours, setMinHours] = useState(new Date().getHours() + 1);
+    const [minMins, setMinMins] = useState(new Date().getMinutes() + 1);
     const [selectedDate, setSelectedDate] = useState({
       year: values.endDate ? Number(values.endDate.toString().split(' ')[3]) : d.getFullYear(),
       month: values.endDate
@@ -72,11 +75,44 @@ const EndDateCalendar = React.forwardRef(
 
     const handleHoursChange = (val) => {
       const value = val.replace(/[^\d]/, '');
+
       if (value.length < 3 && Number(value) < 25) {
         setEndDateTemp((prevState) => ({
           ...prevState,
           hours: value,
         }));
+        console.log(
+          new Date(
+            endDateTemp.year,
+            monthNames.indexOf(endDateTemp.month),
+            endDateTemp.day,
+            value,
+            endDateTemp.minutes
+          )
+        );
+        if (
+          new Date(
+            endDateTemp.year,
+            monthNames.indexOf(endDateTemp.month),
+            endDateTemp.day,
+            value,
+            endDateTemp.minutes
+          ) <= new Date(values.startDate)
+        ) {
+          console.log('ne tuk');
+          setMinDateTimeError(true);
+          return;
+        }
+        if (
+          endDateTemp.day === new Date().getDate() &&
+          (Number(value) < minHours ||
+            (Number(value) === minHours && Number(endDateTemp.minutes) < minMins))
+        ) {
+          setMinDateTimeError(true);
+          return;
+        }
+
+        setMinDateTimeError(false);
       }
     };
 
@@ -87,6 +123,30 @@ const EndDateCalendar = React.forwardRef(
           ...prevState,
           minutes: value,
         }));
+
+        if (
+          new Date(
+            endDateTemp.year,
+            monthNames.indexOf(endDateTemp.month),
+            endDateTemp.day,
+            endDateTemp.hours,
+            value
+          ) <= new Date(values.startDate)
+        ) {
+          setMinDateTimeError(true);
+          return;
+        }
+
+        if (
+          endDateTemp.day === new Date().getDate() &&
+          Number(endDateTemp.hours) <= minHours &&
+          Number(value) < minMins
+        ) {
+          setMinDateTimeError(true);
+          return;
+        }
+
+        setMinDateTimeError(false);
       }
     };
 
@@ -147,19 +207,6 @@ const EndDateCalendar = React.forwardRef(
     };
 
     const handleSaveClick = () => {
-      if (
-        new Date(
-          endDateTemp.year,
-          monthNames.indexOf(endDateTemp.month),
-          endDateTemp.day,
-          endDateTemp.hours,
-          endDateTemp.minutes
-        ) <= new Date(values.startDate)
-      ) {
-        endDateTemp.hours = new Date().getHours();
-        endDateTemp.minutes = new Date().getMinutes();
-      }
-
       if (endDateTemp.hours && endDateTemp.minutes) {
         setValues((prevValues) => ({
           ...prevValues,
@@ -182,6 +229,28 @@ const EndDateCalendar = React.forwardRef(
         onClose();
       }
     };
+
+    useEffect(() => {
+      if (values.startDate) {
+        setEndDateTemp((prevState) => ({
+          ...prevState,
+          hours:
+            new Date(values.startDate).getHours() === 24
+              ? 1
+              : new Date(values.startDate).getHours() + 1,
+          minutes:
+            new Date().getMinutes() < 10
+              ? `0${new Date().getMinutes() + 1}`
+              : new Date().getMinutes(),
+        }));
+      } else if (!values.endDate) {
+        setEndDateTemp((prevState) => ({
+          ...prevState,
+          hours: new Date().getHours() === 24 ? 1 : new Date().getHours() + 1,
+          minutes: new Date().getMinutes() === 59 ? 1 : new Date().getMinutes() + 1,
+        }));
+      }
+    }, []);
 
     useEffect(() => {
       if (!values.endDate && values.startDate) {
@@ -313,11 +382,25 @@ const EndDateCalendar = React.forwardRef(
                 onChange={(e) => handleMinutesChange(e.target.value)}
               />
             </div>
+            {minDateTimeError && (
+              <p className="error-message">
+                Selected time must be after
+                {values.startDate
+                  ? ` ${new Date(values.startDate).getHours()}:${new Date(
+                      values.startDate
+                    ).getMinutes()}`
+                  : ` ${minHours}:${minMins}`}
+              </p>
+            )}
             <div className="actions">
               <Button className="light-border-button" onClick={handleCancelClick}>
                 Cancel
               </Button>
-              <Button className="light-button" onClick={handleSaveClick}>
+              <Button
+                className="light-button"
+                onClick={handleSaveClick}
+                disabled={minDateTimeError}
+              >
                 Save
               </Button>
             </div>

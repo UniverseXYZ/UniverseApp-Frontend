@@ -291,7 +291,10 @@ const AuctionSettings = () => {
                 <Input
                   id="startingBid"
                   type="number"
-                  onChange={handleOnChange}
+                  onChange={(e) => {
+                    if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
+                    handleOnChange(e);
+                  }}
                   label="Starting bid"
                   value={values.startingBid}
                   hoverBoxShadowGradient
@@ -302,6 +305,7 @@ const AuctionSettings = () => {
                   <Popup
                     nested
                     handleEdit
+                    closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
                         {bid.img && <img src={bid.img} alt="icon" />}
@@ -319,6 +323,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
                   <Popup
+                    closeOnDocumentClick={false}
                     trigger={
                       <div>
                         <Input
@@ -366,6 +371,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
                   <Popup
+                    closeOnDocumentClick={false}
                     trigger={
                       <div>
                         <Input
