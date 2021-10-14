@@ -1,4 +1,4 @@
-@import '../../assets/scss/variables';
+@import "../../assets/scss/variables";
 
 .inp {
   background: $white;
@@ -63,22 +63,15 @@
         &:focus {
           background: linear-gradient($white, $white) padding-box,
             linear-gradient(to right, #bceb00, #00eaea) border-box;
-          border: 1px solid transparent!important;
+          border: 1px solid transparent !important;
         }
         &:focus::placeholder {
           color: transparent;
         }
       }
-      
     }
 
     &:not(.error-div-inp) {
-      input {
-        &:focus {
-          border-radius: 10px;
-        }
-       
-      }
       &:hover {
         .box--shadow--effect--block {
           opacity: 0.2 !important;
@@ -86,7 +79,7 @@
         input {
           &:disabled {
             cursor: not-allowed;
-            &+.box--shadow--effect--block {
+            & + .box--shadow--effect--block {
               opacity: 0 !important;
             }
           }
