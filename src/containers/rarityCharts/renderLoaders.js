@@ -7,8 +7,8 @@ export const renderLoaders = (number) =>
     React.memo(
       <div key={uuid()} className="card" style={{ cursor: 'default' }}>
         <div className="card--header">
-          <div className="card--number">#???</div>
-          <div className="card--price">Rarity Score: ???</div>
+          <div className="card--number" />
+          <div className="card--price" />
         </div>
         <div className="card--body">
           <img
@@ -28,10 +28,7 @@ export const renderLoaders = (number) =>
             <div />
           </div>
         </div>
-        <div className="card--footer">
-          <h2>?????</h2>
-          <p>#?????</p>
-        </div>
+        <div className="card--footer" />
       </div>
     )
   );

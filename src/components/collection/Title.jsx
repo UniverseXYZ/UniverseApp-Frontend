@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Title = ({ selectedCollection, saved, nftsCount, ownersCount }) => {
+const Title = ({ selectedCollection, nftsCount, ownersCount }) => {
   const NFTSCount = nftsCount >= 1000 ? `${nftsCount / 1000}K` : nftsCount;
   return (
     <div className="collection__info">
@@ -33,8 +33,7 @@ const Title = ({ selectedCollection, saved, nftsCount, ownersCount }) => {
 
 Title.propTypes = {
   selectedCollection: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  saved: PropTypes.bool.isRequired,
-  nftsCount: PropTypes.bool.isRequired,
+  nftsCount: PropTypes.number.isRequired,
   ownersCount: PropTypes.number,
 };
 

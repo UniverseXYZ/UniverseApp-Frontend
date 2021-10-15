@@ -10,14 +10,18 @@ import Button from '../../components/button/Button.jsx';
 import pencilIcon from '../../assets/images/edit.svg';
 import NFTCard from '../../components/nft/NFTCard.jsx';
 import bubbleIcon from '../../assets/images/text-bubble.png';
-import CollectionSearchFilters from '../../components/nft/CollectionSearchFilters.jsx';
 import { getCollectionData } from '../../utils/api/mintNFT';
 import { useThemeContext } from '../../contexts/ThemeContext.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import SimplePagination from '../../components/pagination/SimplePaginations.jsx';
 import ItemsPerPageDropdown from '../../components/pagination/ItemsPerPageDropdown.jsx';
 import '../../components/pagination/Pagination.scss';
+import ApiPagination from '../../components/pagination/ApiPagination.jsx';
+import ApiCollectionSearchFilters from '../../components/nft/ApiCollectionSearchFilters.jsx';
+import { useSearchCollection } from '../../utils/hooks/useCollectionPageDebouncer.js';
+import RarityChartsLoader from '../rarityCharts/RarityChartsLoader.jsx';
+import { renderLoaders } from '../rarityCharts/renderLoaders.js';
+import { CollectionPageLoader } from './CollectionPageLoader.jsx';
 
 const Collection = () => {
   const { setSavedCollectionID } = useMyNftsContext();
@@ -25,72 +29,62 @@ const Collection = () => {
   const { setDarkMode } = useThemeContext();
   const { collectionAddress } = useParams();
   const location = useLocation();
-  const [collectionNFTs, setCollectionNFTs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filteredNFTs, setFilteredNFTs] = useState([]);
-  const [search, setSearch] = useState('');
   const history = useHistory();
-  const [quantity, setQuantity] = useState(8);
   const ref = useRef(null);
+
+  const {
+    inputText,
+    setInputText,
+    apiPage,
+    setApiPage,
+    search: { loading },
+    results,
+    isLastPage,
+    setIsLastPage,
+    loadedPages,
+    setLoadedPages,
+  } = useSearchCollection(collectionAddress);
+
   const [collectionData, setCollectionData] = useState(null);
+  const [perPage, setPerPage] = useState(8);
+  const [page, setPage] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [ownersCount, setOwnersCount] = useState(0);
-  const [offset, setOffset] = useState(0);
-  const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(8);
-
-  const handleClose = () => {
-    document.body.classList.remove('no__scroll');
-  };
-
-  // TODO:: This code may be useful if we need any data from the collection contract
-  // const getCollectionOwnersInt = async (address, abi, txSigner) => {
-  //   const contract = new Contract(address, abi, txSigner);
-  //   const owners = await contract.totalSupply();
-  //   return owners.toNumber();
-  // };
-
-  // useEffect(async () => {
-  //   if (contracts && collectionData) {
-  //     const owners = await getCollectionOwnersInt(
-  //       collectionData.collection.address,
-  //       contracts.UniverseERC721Core.abi,
-  //       signer
-  //     );
-  //     setOwnersCount(owners);
-  //   }
-  // }, [contracts, collectionData]);
-
-  useEffect(() => {
-    if (search) {
-      const newFilteredNFTs = collectionNFTs.filter((item) =>
-        item.name.toLowerCase().includes(search.toLocaleLowerCase())
-      );
-      setFilteredNFTs(newFilteredNFTs);
-    } else {
-      setFilteredNFTs(collectionNFTs);
-    }
-  }, [search]);
 
   useEffect(async () => {
     setDarkMode(false);
-
-    const data = await getCollectionData(collectionAddress);
-    const cNFTs = data.nfts || [];
-
-    if (!data.message) setCollectionData(data);
-
-    setCollectionNFTs([...cNFTs]);
-    setFilteredNFTs([...cNFTs]);
-    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (results.collection) {
+      setCollectionData(results);
+      setIsSearching(false);
+    }
+  }, [results]);
 
   const handleEdit = (id) => {
     setSavedCollectionID(id);
     history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
   };
-  return loading ? (
-    <></>
+
+  const resetPagination = () => {
+    setOffset(0);
+    setPage(0);
+    setApiPage(0);
+    setIsSearching(true);
+  };
+
+  useEffect(() => {
+    setPage(0);
+    setOffset(0);
+  }, [perPage]);
+  return !collectionData ? (
+    <div className="loader-wrapper">
+      <CollectionPageLoader />
+    </div>
   ) : collectionData ? (
     <div className="collection__page">
       <Cover selectedCollection={collectionData.collection} />
@@ -101,7 +95,7 @@ const Collection = () => {
           <Title
             selectedCollection={collectionData.collection}
             saved={location.state?.saved}
-            nftsCount={collectionNFTs.length}
+            nftsCount={collectionData?.pagination?.totalCount}
             ownersCount={ownersCount}
           />
         </div>
@@ -120,34 +114,47 @@ const Collection = () => {
           <></>
         )}
         <div className="collection--nfts--container">
-          <CollectionSearchFilters data={collectionNFTs} setData={setFilteredNFTs} />
-          {filteredNFTs.filter((nft) => !nft.hidden).length ? (
+          <ApiCollectionSearchFilters
+            searchText={inputText}
+            search={setInputText}
+            resetPagination={resetPagination}
+          />
+
+          {isSearching ? (
+            <CollectionPageLoader />
+          ) : collectionData?.nfts?.filter((nft) => !nft.hidden).length ? (
             <>
               <div className="nfts__lists">
-                {filteredNFTs
+                {collectionData?.nfts
                   .slice(offset, offset + perPage)
                   .filter((nft) => !nft.hidden)
-                  .map(
-                    (nft, index) =>
-                      index < quantity && (
-                        <NFTCard
-                          key={nft.id}
-                          nft={{
-                            ...nft,
-                            collection: collectionData.collection,
-                          }}
-                          collectionAddress={collectionAddress}
-                        />
-                      )
-                  )}
+                  .map((nft) => (
+                    <NFTCard
+                      key={nft.id}
+                      nft={{
+                        ...nft,
+                        collection: collectionData.collection,
+                      }}
+                      collectionAddress={collectionAddress}
+                    />
+                  ))}
               </div>
+
+              {isLastPage ? <CollectionPageLoader /> : <></>}
+
               <div className="pagination__container">
-                <SimplePagination
-                  data={filteredNFTs}
+                <ApiPagination
+                  data={collectionData?.nfts}
                   perPage={perPage}
                   setOffset={setOffset}
-                  setPage={setPage}
+                  setApiPage={setApiPage}
+                  apiPage={apiPage}
+                  setIsLastPage={setIsLastPage}
                   page={page}
+                  setPage={setPage}
+                  loadedPages={loadedPages}
+                  setLoadedPages={setLoadedPages}
+                  pagination={collectionData.pagination}
                 />
                 <ItemsPerPageDropdown
                   perPage={perPage}

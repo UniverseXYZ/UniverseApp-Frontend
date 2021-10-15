@@ -119,16 +119,16 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         ) : (
           <div
             className="owner--details"
-            onClick={() => history.push(`/${owner.address || address}`)}
+            onClick={() => history.push(`/${owner?.address || address}`)}
             aria-hidden
           >
             <Blockies
               className="blockie--details"
-              seed={owner.address || address}
+              seed={owner?.address || address}
               size={9}
               scale={3}
             />
-            <span className="tooltiptext">{`Owner: ${owner.address || address}`}</span>
+            <span className="tooltiptext">{`Owner: ${owner?.address || address}`}</span>
           </div>
         )}
       </div>
