@@ -6,6 +6,7 @@ import MarketplaceNFTDetails from '../../components/marketplaceNFT/MarketplaceNF
 import '../../components/marketplace/browseNFT/NFTsList.scss';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { getNftData } from '../../utils/api/mintNFT';
+import { CollectionPageLoader } from '../collection/CollectionPageLoader';
 
 const MarketplaceNFT = () => {
   const { setDarkMode } = useThemeContext();
@@ -33,7 +34,9 @@ const MarketplaceNFT = () => {
   }, [collectionAddress, tokenId]);
 
   return loading ? (
-    <></>
+    <div className="loader-wrapper">
+      <CollectionPageLoader />
+    </div>
   ) : nft ? (
     <div className="marketplace--nft--page1">
       <MarketplaceNFTDetails onNFT={nft} />
