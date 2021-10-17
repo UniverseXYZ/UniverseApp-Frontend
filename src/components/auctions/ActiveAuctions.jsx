@@ -54,6 +54,15 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
 
+  const handleAuctionExpand = (name) => {
+    const canExpandAuction = !name || name !== shownActionId;
+    if (canExpandAuction) {
+      setShownActionId(name);
+    } else {
+      setShownActionId(null);
+    }
+  };
+
   return (
     <div className="active-auctions">
       <div className="input-search">
@@ -77,7 +86,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
                 .filter(
                   (item) =>
-                    item.launch &&
+                    item &&
                     moment(item.startDate).isBefore(moment.now()) &&
                     !moment(item.endDate).isBefore(moment.now())
                 )
@@ -89,6 +98,11 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   const hours = duration.hours();
                   const minutes = duration.minutes();
                   const seconds = duration.seconds();
+
+                  const auctionTotalNfts = activeAuction.rewardTiers
+                    .map((tier) => tier.nfts.length)
+                    .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
+
                   return (
                     <Draggable draggableId={activeAuction.name} index={index} key={uuid()}>
                       {(prov) => (
@@ -113,33 +127,35 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       <span />
                                     </div>
                                   )}
-                                  <CopyToClipboard
-                                    text={`${activeAuction.link.replace(
-                                      'universe.xyz',
-                                      window.location.origin
-                                    )}`}
-                                    onCopy={() => {
-                                      setCopied({
-                                        state: true,
-                                        index,
-                                      });
-                                      setTimeout(() => {
+                                  {activeAuction.link ? (
+                                    <CopyToClipboard
+                                      text={`${activeAuction.link.replace(
+                                        'universe.xyz',
+                                        window.location.origin
+                                      )}`}
+                                      onCopy={() => {
                                         setCopied({
-                                          state: false,
-                                          index: null,
+                                          state: true,
+                                          index,
                                         });
-                                      }, 1000);
-                                    }}
-                                  >
-                                    <span>
-                                      <img
-                                        src={copyIcon}
-                                        alt="Copy to clipboard icon"
-                                        className="copyImg"
-                                      />
-                                      Copy URL
-                                    </span>
-                                  </CopyToClipboard>
+                                        setTimeout(() => {
+                                          setCopied({
+                                            state: false,
+                                            index: null,
+                                          });
+                                        }, 1000);
+                                      }}
+                                    >
+                                      <span>
+                                        <img
+                                          src={copyIcon}
+                                          alt="Copy to clipboard icon"
+                                          className="copyImg"
+                                        />
+                                        Copy URL
+                                      </span>
+                                    </CopyToClipboard>
+                                  ) : null}
                                 </div>
                               </div>
                             </div>
@@ -152,21 +168,17 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               >
                                 <span>Go to landing page</span>
                               </Button>
-                              <div className="arrow">
+                              <div
+                                className="arrow"
+                                onClick={() => handleAuctionExpand(activeAuction.name)}
+                                role="button"
+                                tabIndex={0}
+                                aria-hidden
+                              >
                                 {shownActionId === activeAuction.name ? (
-                                  <img
-                                    src={arrowUp}
-                                    onClick={() => setShownActionId(null)}
-                                    alt="Arrow up"
-                                    aria-hidden="true"
-                                  />
+                                  <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
                                 ) : (
-                                  <img
-                                    src={arrowDown}
-                                    onClick={() => setShownActionId(activeAuction.name)}
-                                    alt="Arrow down"
-                                    aria-hidden="true"
-                                  />
+                                  <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
                                 )}
                               </div>
                             </div>
@@ -184,7 +196,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                             </div>
                             <div className="total-dates">
                               <p>
-                                Total NFTs: <b>45</b>
+                                Total NFTs: <b>{auctionTotalNfts}</b>
                               </p>
                             </div>
                             <div className="total-dates">
@@ -266,10 +278,10 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       NFTs per winner: <b>{tier.nftsPerWinner}</b>
                                     </p>
                                     <p>
-                                      Winners: <b>{tier.winners}</b>
+                                      Winners: <b>{tier.numberOfWinners || ''}</b>
                                     </p>
                                     <p>
-                                      Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
+                                      Total NFTs: <b>{tier.nfts?.length}</b>
                                     </p>
                                   </div>
                                 </div>
