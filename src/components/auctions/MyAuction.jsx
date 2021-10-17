@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import moment from 'moment';
+import { Helmet } from 'react-helmet';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
@@ -572,28 +573,6 @@ const MyAuction = () => {
   const history = useHistory();
 
   useEffect(() => {
-    document.title = 'Universe Minting - My Auctions';
-    return () => {
-      document.title = 'Universe Minting';
-    };
-  }, []);
-
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 500) {
-        document.querySelector('.tab__right__arrow').style.display = 'flex';
-      } else {
-        document.querySelector('.tab__right__arrow').style.display = 'none';
-        document.querySelector('.tab__left__arrow').style.display = 'none';
-      }
-    }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
     function handleShowButton() {
       if (window.innerWidth < 576) {
         if (
@@ -632,6 +611,9 @@ const MyAuction = () => {
 
   return (
     <div className="container auction__page">
+      <Helmet>
+        <title>Universe Minting - My Auctions</title>
+      </Helmet>
       <div className="auction__page__header">
         <h1 className="title">My auctions</h1>
         {showButton && (
