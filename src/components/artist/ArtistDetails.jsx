@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
@@ -13,28 +13,69 @@ import Button from '../button/Button';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
+import { useWindowSize } from '../../utils/hooks/useWindowSize';
 
 const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
+  const blockieSizes = {
+    small: 9,
+    medium: 24,
+    large: 31,
+  };
+  const blockieResizePoints = {
+    small: 768,
+    medium: 992,
+    large: 1230,
+  };
+
+  const history = useHistory();
+
   const { setEditProfileButtonClick } = useAuctionContext();
-  const { loggedInArtist, address } = useAuthContext();
+  const { address } = useAuthContext();
+
   const [copied, setCopied] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState(false);
-  const history = useHistory();
-  console.log(artistAddress);
+  const [blockieScale, setBlockieScale] = useState(31);
+  const [width, height] = useWindowSize();
 
+  useEffect(() => {
+    if (width < blockieResizePoints.small && blockieScale !== blockieSizes.small) {
+      setBlockieScale(blockieSizes.small);
+    } else if (width < blockieResizePoints.medium && blockieScale !== blockieSizes.medium) {
+      setBlockieScale(blockieSizes.medium);
+    } else if (width < blockieResizePoints.large && blockieScale !== blockieSizes.large) {
+      setBlockieScale(blockieSizes.large);
+    }
+  }, [width]);
   return (
     <div className="artist__details__section">
       <Animated animationIn="zoomIn">
         {artistAddress && !onArtist ? (
           <div className="artist__details__section__container">
             <div className="avatar">
-              <Blockies seed={artistAddress} size={9} scale={31} />
-              <h6 className="show__on__mobile">{artistAddress}</h6>
+              <Blockies seed={artistAddress} size={9} scale={blockieScale} />
+              <h6 className="show__on__mobile">Unnamed</h6>
             </div>
             <div className="info">
-              <h1 style={{ fontSize: 25 }} className="title">
-                {artistAddress}
-              </h1>
+              <h1 className="title">Unnamed</h1>
+              <div className="address__copy">
+                <div className="copy" title="Copy to clipboard">
+                  <div className="copied-address" hidden={!copiedAddress}>
+                    Copied
+                    <span />
+                  </div>
+                  <CopyToClipboard
+                    text={artistAddress}
+                    onCopy={() => {
+                      setCopiedAddress(true);
+                      setTimeout(() => {
+                        setCopiedAddress(false);
+                      }, 1000);
+                    }}
+                  >
+                    <p className="address">{shortenEthereumAddress(artistAddress)}</p>
+                  </CopyToClipboard>
+                </div>
+              </div>
               <div className="social__links">
                 {address === artistAddress ? (
                   <Button
@@ -49,6 +90,28 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
                 ) : (
                   <></>
                 )}
+                <div className="copy-div">
+                  <div className="copy" title="Copy to clipboard">
+                    <div className="copied-div" hidden={!copied}>
+                      URL copied!
+                      <span />
+                    </div>
+                    <CopyToClipboard
+                      text={window.location.href}
+                      onCopy={() => {
+                        setCopied(true);
+                        setTimeout(() => {
+                          setCopied(false);
+                        }, 1000);
+                      }}
+                    >
+                      <span>
+                        <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
+                        Copy URL
+                      </span>
+                    </CopyToClipboard>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -59,26 +122,7 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
               <h2 className="show__on__mobile">{onArtist.name}</h2>
             </div>
             <div className="info">
-              <h1 className="title">{onArtist.name ? onArtist.name : 'Unnamed'}</h1>
-              <div className="address__copy">
-                <div className="copy" title="Copy to clipboard">
-                  <div className="copied-address" hidden={!copiedAddress}>
-                    Copy
-                    <span />
-                  </div>
-                  <CopyToClipboard
-                    text={address}
-                    onCopy={() => {
-                      setCopiedAddress(true);
-                      setTimeout(() => {
-                        setCopiedAddress(false);
-                      }, 1000);
-                    }}
-                  >
-                    <p className="address">{shortenEthereumAddress(address)}</p>
-                  </CopyToClipboard>
-                </div>
-              </div>
+              <h1 className="title">{onArtist.name}</h1>
               <p className="desc">{onArtist.about}</p>
               {onArtist.name && onArtist.about && (
                 <div className="social__links">
