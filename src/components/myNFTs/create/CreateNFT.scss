@@ -327,6 +327,18 @@
             }
             .collection--token,
             .collection--name {
+              position: relative;
+              .input-max-chars {
+                position: absolute;
+                top: 2px;
+                right: 0;
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 10px;
+                line-height: 13px;
+                color: rgba(0, 0, 0, 0.4);
+              }
               &.inactive {
                 .inp-label {
                   color: rgba(0, 0, 0, 0.1);
@@ -376,7 +388,19 @@
           }
         }
         .collection--description {
+          position: relative;
           margin-bottom: 40px;
+          .input-max-chars {
+            position: absolute;
+            top: 2px;
+            right: 0;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 10px;
+            line-height: 13px;
+            color: rgba(0, 0, 0, 0.4);
+          }
           > div {
             position: relative;
             &:hover {
@@ -1166,11 +1190,5 @@
     @include md {
       padding: 0 20px;
     }
-  }
-
-  .input-max-chars {
-    font-family: $spaceGroteskFont;
-    font-size: 10px;
-    color: #e4b613;
   }
 }
