@@ -158,7 +158,7 @@ const ProfileForm = ({
             placeholder="Enter your display name"
             className={!accountName && editProfileButtonClick ? 'error-inp' : 'inp'}
             value={accountName}
-            hoverBoxShadowGradient
+            hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
             onChange={(e) => {
               if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
               setAccountName(e.target.value);
@@ -212,7 +212,10 @@ const ProfileForm = ({
                   &quot;Universe page address&quot; is not allowed to be empty
                 </p>
               )}
-            <div className="box--shadow--effect--block" />
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+            editProfileButtonClick ? null : (
+              <div className="box--shadow--effect--block" />
+            )}
           </div>
 
           <div className="account-grid-about-editing">
@@ -231,7 +234,9 @@ const ProfileForm = ({
                 setAbout(e.target.value);
               }}
             />
-            <div className="box--shadow--effect--block" />
+            {!about && editProfileButtonClick ? null : (
+              <div className="box--shadow--effect--block" />
+            )}
             {!about && editProfileButtonClick && (
               <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
             )}

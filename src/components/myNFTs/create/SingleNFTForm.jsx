@@ -974,6 +974,7 @@ const SingleNFTForm = () => {
               </h5>
             </div>
             {/* {editableNFTType !== 'collection' && ( */}
+            <div className="hr-div" />
             <div className="royalities">
               <div className="title">
                 <h4

@@ -1,5 +1,5 @@
-@import "../../../assets/scss/variables";
-@import "../../../assets/scss/_mixins";
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/_mixins';
 
 .single__nft {
   .mintNftCollection-div {
@@ -461,7 +461,7 @@
     .hr-div {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       margin-top: 60px;
-      margin-bottom: 20px;
+      margin-bottom: 60px;
     }
     .single-nft-properties {
       margin-top: 40px;
@@ -532,7 +532,7 @@
 
         .slider:before {
           position: absolute;
-          content: "";
+          content: '';
           height: 16px;
           width: 16px;
           left: 4px;
@@ -790,7 +790,7 @@
 
           .slider:before {
             position: absolute;
-            content: "";
+            content: '';
             height: 16px;
             width: 16px;
             left: 4px;
@@ -903,7 +903,7 @@
     .single-nft-buttons {
       display: flex;
       justify-content: flex-end;
-      margin-top: 40px;
+      margin-top: 60px;
       margin-bottom: 40px;
       text-align: right;
       button {
