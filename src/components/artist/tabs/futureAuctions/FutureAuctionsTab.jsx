@@ -10,7 +10,7 @@ import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 
 const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
-  const { myAuctions } = useAuctionContext();
+  const { myAuctions, setAuction } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
 
@@ -44,9 +44,10 @@ const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
       <button
         type="button"
         className="light-button set_up"
-        onClick={() =>
-          loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
-        }
+        onClick={() => {
+          setAuction({ rewardTiers: [] });
+          return loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction');
+        }}
         disabled={!loggedInArtist.name || !loggedInArtist.avatar}
       >
         Set up auction

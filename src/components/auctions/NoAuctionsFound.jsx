@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 import bubleIcon from '../../assets/images/text-bubble.png';
 import Exclamation from '../../assets/images/Exclamation.svg';
 
 const NoAuctionsFound = ({ title, desc, btnText, btnAction }) => {
   const { loggedInArtist } = useAuthContext();
+  const { setAuction } = useAuctionContext();
+
   const history = useHistory();
   return (
     <div className="empty__auction">
@@ -29,7 +32,10 @@ const NoAuctionsFound = ({ title, desc, btnText, btnAction }) => {
       <button
         type="button"
         className="light-button set_up"
-        onClick={() => history.push(btnAction)}
+        onClick={() => {
+          setAuction({ rewardTiers: [] });
+          history.push(btnAction);
+        }}
         disabled={!loggedInArtist.name || !loggedInArtist.avatar}
       >
         {btnText}

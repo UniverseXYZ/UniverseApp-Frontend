@@ -19,6 +19,10 @@ import StartDateCalendar from '../calendar/StartDateCalendar.jsx';
 import EndDateCalendar from '../calendar/EndDateCalendar.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 
+const MAX_FIELD_CHARS_LENGTH = {
+  name: 100,
+};
+
 const AuctionSettings = () => {
   const monthNames = [
     'Jan',
@@ -57,14 +61,14 @@ const AuctionSettings = () => {
   });
 
   const [bidValues, setBidValues] = useState([]);
-  const hasRoyalties = auction.royaltySplits ? auction.royaltySplits.length : false;
-  const [royalities, useRoyalities] = useState(hasRoyalties);
   const isEditingAuction = location.state !== undefined;
 
   const [properties, setProperties] = useState(
-    auction && auction.royaltySplits ? [...auction.royaltySplits] : [{ address: '', amount: '' }]
+    auction && auction.properties ? [...auction.properties] : [{ address: '', amount: '' }]
   );
 
+  const hasRoyalties = properties[0].address.length > 0;
+  const [royalities, useRoyalities] = useState(hasRoyalties);
   const parseDate = (dateString) => {
     const date = dateString ? new Date(dateString) : new Date();
 
@@ -118,11 +122,13 @@ const AuctionSettings = () => {
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
         name: values.name.trim().length !== 0,
+        properties: royalities ? properties : [{ address: '', amount: '' }],
       }));
     }, 2000);
 
     let auctionFieldsValid = false;
     let bidFieldsValid = false;
+    setProperties(royalities ? properties : [{ address: '', amount: '' }]);
 
     if (values.name && values.startingBid && values.startDate && values.endDate) {
       if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
@@ -160,7 +166,7 @@ const AuctionSettings = () => {
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.rewardTiers,
-          properties: properties.length === 1 && !properties[0].address ? null : properties,
+          properties: royalities ? properties : null,
         }));
       } else {
         setAuction((prevValue) => ({
@@ -169,7 +175,7 @@ const AuctionSettings = () => {
           startingBid: values.startingBid,
           startDate: moment(values.startDate).format(),
           endDate: moment(values.endDate).format(),
-          properties,
+          properties: royalities ? properties : null,
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
             : prevValue.rewardTiers,
@@ -177,7 +183,7 @@ const AuctionSettings = () => {
       }
       history.push({
         pathname: '/setup-auction/reward-tiers',
-        state: location.state,
+        state: location.state === 'edit' ? location.state : true,
       });
     }
   };
@@ -234,8 +240,8 @@ const AuctionSettings = () => {
       setValues({
         name: auction.name,
         startingBid: auction.startingBid,
-        startDate: new Date(auction.startDate),
-        endDate: new Date(auction.endDate),
+        startDate: auction.startDate ? new Date(auction.startDate) : '',
+        endDate: auction.endDate ? new Date(auction.endDate) : '',
       });
     }
   }, []);
@@ -266,20 +272,29 @@ const AuctionSettings = () => {
               <div className="auction-name">
                 <Input
                   id="name"
-                  onChange={handleOnChange}
                   label="Auction name"
                   value={values.name}
                   hoverBoxShadowGradient
+                  onChange={(e) => {
+                    if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
+                    handleOnChange(e);
+                  }}
                   error={
                     isValidFields.name ? undefined : '"Auction name" is not allowed to be empty!'
                   }
                 />
+                <p className="input-max-chars">
+                  Characters: {values.name && values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+                </p>
               </div>
               <div className="starting-bid">
                 <Input
                   id="startingBid"
                   type="number"
-                  onChange={handleOnChange}
+                  onChange={(e) => {
+                    if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
+                    handleOnChange(e);
+                  }}
                   label="Starting bid"
                   value={values.startingBid}
                   hoverBoxShadowGradient
@@ -290,6 +305,7 @@ const AuctionSettings = () => {
                   <Popup
                     nested
                     handleEdit
+                    closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
                         {bid.img && <img src={bid.img} alt="icon" />}
@@ -307,6 +323,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
                   <Popup
+                    closeOnDocumentClick={false}
                     trigger={
                       <div>
                         <Input
@@ -354,6 +371,7 @@ const AuctionSettings = () => {
               <div className="date__input">
                 <div style={{ position: 'relative' }}>
                   <Popup
+                    closeOnDocumentClick={false}
                     trigger={
                       <div>
                         <Input
@@ -497,12 +515,14 @@ const AuctionSettings = () => {
               </div>
             ))}
 
-            <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
-              <h5>
-                <img src={addIcon} alt="Add" />
-                Add wallet
-              </h5>
-            </div>
+            {properties.length < 5 && (
+              <div className="property-add" onClick={() => addProperty()} aria-hidden="true">
+                <h5>
+                  <img src={addIcon} alt="Add" />
+                  Add wallet
+                </h5>
+              </div>
+            )}
           </div>
         )}
       </div>
