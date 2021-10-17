@@ -412,13 +412,14 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           <input type="file" ref={inputFile} onChange={(e) => validateFile(e.target.files[0])} />
         </div>
         <div className="collection--name--and--token">
-          <div className="collection--name">
+          <div className={`collection--name ${savedCollectionID ? 'inactive' : ''}`}>
             {savedCollectionID ? (
               <Input
                 label="Collection name"
                 error={errors.collectionName}
                 placeholder="Enter the collection name"
                 value={collectionName}
+                disabled
               />
             ) : (
               <Input
@@ -431,20 +432,22 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                   setShowPrompt(true);
                 }}
                 value={collectionName}
+                hoverBoxShadowGradient
               />
             )}
             <p className="input-max-chars">
-              Characters: {collectionName.length}/{MAX_FIELD_CHARS_LENGTH.name}
+              {collectionName.length}/{MAX_FIELD_CHARS_LENGTH.name}
             </p>
             <p className="warning">Collection name cannot be changed in future</p>
           </div>
-          <div className="collection--token">
+          <div className={`collection--token ${savedCollectionID ? 'inactive' : ''}`}>
             {savedCollectionID ? (
               <Input
                 label="Token name"
                 error={errors.tokenName}
                 placeholder="$ART"
                 value={tokenName}
+                disabled
               />
             ) : (
               <Input
@@ -457,11 +460,12 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
                   setShowPrompt(true);
                 }}
                 value={tokenName}
+                hoverBoxShadowGradient
               />
             )}
 
             <p className="input-max-chars">
-              Characters: {tokenName.length}/{MAX_FIELD_CHARS_LENGTH.token}
+              {tokenName.length}/{MAX_FIELD_CHARS_LENGTH.token}
             </p>
             {!errors.tokenName && <p className="warning">Token name cannot be changed in future</p>}
           </div>
@@ -481,10 +485,10 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
               setShowPrompt(true);
             }}
           />
+          <div className="box--shadow--effect--block" />
         </div>
-        <div className="box--shadow--effect--block" />
         <p className="input-max-chars">
-          Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+          {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
         </p>
       </div>
       <div className="collection--nfts">

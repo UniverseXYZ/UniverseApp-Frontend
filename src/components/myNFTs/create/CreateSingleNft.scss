@@ -3,20 +3,8 @@
 
 .single__nft {
   .mintNftCollection-div {
-    padding: 0 10px;
-    max-height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-
     .modal-close {
       display: none;
-    }
-
-    @include lg {
-      padding: 84px 60px;
-    }
-    @include sm {
-      padding: 34px 10px;
     }
     .single-nft-title {
       font-family: $sharpGroteskSemiBoldFont;
@@ -31,12 +19,23 @@
     margin-top: 20px;
 
     h5 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
       line-height: 22px;
       margin-bottom: 4px;
+      p.input-max-chars {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 13px;
+        color: rgba(0, 0, 0, 0.4);
+      }
     }
 
     .single-nft-upload {
@@ -62,6 +61,7 @@
           text-align: center;
 
           h5 {
+            display: block;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 500;
@@ -708,6 +708,7 @@
       .property-add {
         cursor: pointer;
         h5 {
+          display: block;
           font-family: $spaceGroteskFont;
           font-weight: 600;
           font-size: 16px;
@@ -922,12 +923,6 @@
         }
       }
     }
-  }
-
-  .input-max-chars {
-    font-family: $spaceGroteskFont;
-    font-size: 10px;
-    color: #e4b613;
   }
 
   .scroll-box {
