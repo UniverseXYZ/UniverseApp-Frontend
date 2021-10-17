@@ -22,8 +22,8 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
     large: 31,
   };
   const blockieResizePoints = {
-    small: 768,
-    medium: 992,
+    small: 562,
+    medium: 768,
     large: 1230,
   };
 
@@ -40,9 +40,13 @@ const ArtistDetails = ({ artistAddress, onArtist, loading }) => {
   useEffect(() => {
     if (width < blockieResizePoints.small && blockieScale !== blockieSizes.small) {
       setBlockieScale(blockieSizes.small);
-    } else if (width < blockieResizePoints.medium && blockieScale !== blockieSizes.medium) {
+    } else if (
+      width > blockieResizePoints.small &&
+      width <= blockieResizePoints.medium &&
+      blockieScale !== blockieSizes.medium
+    ) {
       setBlockieScale(blockieSizes.medium);
-    } else if (width < blockieResizePoints.large && blockieScale !== blockieSizes.large) {
+    } else if (width > blockieResizePoints.large && blockieScale !== blockieSizes.large) {
       setBlockieScale(blockieSizes.large);
     }
   }, [width]);
