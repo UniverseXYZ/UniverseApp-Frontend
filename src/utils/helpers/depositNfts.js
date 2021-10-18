@@ -1,3 +1,5 @@
+import { utils } from 'ethers';
+
 const chunkSize = 5;
 const maxSlotSize = 10;
 
@@ -23,25 +25,47 @@ const chunkifySlots = (nftsBySlots) => {
 };
 
 const splitSlots = (chunkedSlots, collections) => {
-  console.log(chunkedSlots);
+  // console.log(chunkedSlots);
   const finalNfts = [];
-  const nfts = [];
+  let nfts = [];
   const finalSlotIndices = [];
-  const slotIndices = [];
+  let slotIndices = [];
+  const displayNfts = [];
+  let tempDisplayNfts = [];
   const keys = Object.keys(chunkedSlots);
 
-  keys.forEach((key) => {
+  // We make sure the indexes start from 0
+  let nonZeroIndexKeys = keys;
+  if (keys[0] === '0') {
+    nonZeroIndexKeys = keys.map((key) => +key + 1);
+  }
+
+  keys.forEach((key, i) => {
     chunkedSlots[key].forEach((nftsChunk) => {
-      console.log(nftsChunk);
+      // console.log(nftsChunk);
       const nftsChunke = [];
       nftsChunk.forEach((nft) => {
-        nftsChunke.push([nft.id, collections.find((coll) => coll.id === nft.collectionId)]);
+        const pushedNftIndx = tempDisplayNfts.map((n) => n.editionUUID).indexOf(nft.editionUUID);
+        if (pushedNftIndx < 0) {
+          tempDisplayNfts.push({ ...nft, count: 1 });
+        } else {
+          tempDisplayNfts[pushedNftIndx] = {
+            ...tempDisplayNfts[pushedNftIndx],
+            count: tempDisplayNfts[pushedNftIndx].count + 1,
+          };
+        }
+        const collAddress = collections.find((coll) => coll.id === nft.collectionId)?.address;
+        nftsChunke.push([nft.id, utils.getAddress(collAddress)]);
       });
-      slotIndices.push(+key);
+      slotIndices.push(nonZeroIndexKeys[i]);
       nfts.push(nftsChunke);
       if (slotIndices.length === maxSlotSize) {
         finalSlotIndices.push(slotIndices);
+        slotIndices = [];
         finalNfts.push(nfts);
+        nfts = [];
+        displayNfts.push(tempDisplayNfts);
+        tempDisplayNfts = [];
       }
     });
   });
@@ -50,22 +74,23 @@ const splitSlots = (chunkedSlots, collections) => {
   if (slotIndices.length) {
     finalSlotIndices.push(slotIndices);
     finalNfts.push(nfts);
+    displayNfts.push(tempDisplayNfts);
   }
 
-  return [finalSlotIndices, finalNfts];
+  return { finalSlotIndices, displayNfts, finalNfts };
 };
 
 export const getNftsForSlots = (chunkedSlots, slotArrays) => {
   slotArrays.forEach((slot) => {
     slot.forEach((slotKey) => {
       const nfts = chunkedSlots[slotKey.toString()];
-      console.log(nfts);
+      // console.log(nfts);
     });
   });
 };
 
-export const calculateTransactions = (auction) => {
-  let nftsBySlots = auction.rewardTiers.map((tier) =>
+const groupTiersToSlots = (rewardTiers) => {
+  const nftsBySlots = rewardTiers.map((tier) =>
     tier.nfts.reduce((groups, item) => {
       const group = groups[item.slot] || [];
       group.push(item);
@@ -73,19 +98,24 @@ export const calculateTransactions = (auction) => {
       return groups;
     }, {})
   );
+  const flatNftsBySlots = [];
+  nftsBySlots.forEach((array) => {
+    flatNftsBySlots.push(array);
+  });
+  return flatNftsBySlots;
+};
 
-  console.log(nftsBySlots);
-  // Sort by slot id( I don't think it's necessary)
-  nftsBySlots = nftsBySlots.sort((x, y) => x[1].length - y[1].length);
+export const calculateTransactions = (auction) => {
+  const nftsBySlots = groupTiersToSlots(auction.rewardTiers);
+  // console.log(nftsBySlots);
 
-  console.log(nftsBySlots);
-  // Split into chunks
   const chunkedSlots = chunkifySlots(nftsBySlots);
-  console.log(chunkedSlots);
+  // console.log(chunkedSlots);
+
   // Create slot arrays for function
   // We assume the slots start from
-  const slotArrays = splitSlots(JSON.parse(JSON.stringify(chunkedSlots)), auction.collections);
-  console.log(slotArrays);
+  const transactionConfig = splitSlots(chunkedSlots, auction.collections);
+  // console.log(slotArrays);
 
-  const nftArrays = getNftsForSlots(chunkedSlots, slotArrays);
+  return transactionConfig;
 };

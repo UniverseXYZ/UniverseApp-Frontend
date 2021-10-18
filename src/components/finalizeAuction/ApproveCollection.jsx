@@ -6,7 +6,7 @@ import Button from '../button/Button';
 import universeIcon from '../../assets/images/universe-img.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 
-const ApproveCollection = ({ collection, approveCollection, isApproved, hasDeployedAuction }) => {
+const ApproveCollection = ({ collection, approveCollection, isApproved, auctionOnChainId }) => {
   const [isApproving, setIsApproving] = useState(false);
   console.log(`is approved: ${isApproved}`);
   // TODO: Add image blur condtion from auction.backgroundImageBlur prop
@@ -33,7 +33,7 @@ const ApproveCollection = ({ collection, approveCollection, isApproved, hasDeplo
         {!isApproving ? (
           <Button
             className={`${isApproving ? 'light-border-button' : 'light-button'} approve-btn`}
-            disabled={isApproved || !hasDeployedAuction}
+            disabled={isApproved || !auctionOnChainId}
             onClick={() => approveCollection(collection.address, setIsApproving)}
           >
             {isApproved ? (
@@ -62,7 +62,7 @@ ApproveCollection.propTypes = {
   collection: PropTypes.oneOfType([PropTypes.object]).isRequired,
   approveCollection: PropTypes.func.isRequired,
   isApproved: PropTypes.bool.isRequired,
-  hasDeployedAuction: PropTypes.bool.isRequired,
+  auctionOnChainId: PropTypes.bool.isRequired,
 };
 
 export default ApproveCollection;

@@ -249,7 +249,7 @@ export const addDeployInfoToAuction = async (body) => {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify(body),
   };
 
   const request = await fetch(ADD_DEPLOY_INFO, requestOptions);
