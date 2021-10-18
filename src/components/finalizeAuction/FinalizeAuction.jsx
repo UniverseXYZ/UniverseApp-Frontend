@@ -16,7 +16,7 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { createContractInstanceFromAddress } from '../../utils/helpers/pureFunctions/minting';
 import ApproveCollection from './ApproveCollection';
-import { addDeployInfoToAuction } from '../../utils/api/auctions';
+import { addDeployInfoToAuction, depositNfts, withdrawNfts } from '../../utils/api/auctions';
 import LoadingImage from '../general/LoadingImage';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
@@ -35,8 +35,6 @@ const FinalizeAuction = () => {
     universeAuctionHouseContract,
   } = useAuthContext();
 
-  const [approvals, setApprovals] = useState(1);
-  const [loadingApproval, setLoadingApproval] = useState(undefined);
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
 
@@ -46,25 +44,38 @@ const FinalizeAuction = () => {
   const [auctionOnChainId, setAuctionOnChainId] = useState(0);
   const [transactions, setTransactions] = useState(null);
   const [approvedTxCount, setApprovedTxCount] = useState(0);
-  const [approvedTx, setApprovedTx] = useState([]);
-  // TODO: if auction is null -> redirect to my auctions page
-  // console.log(approvals);
-  console.log(auction);
+  const [approvedTxs, setApprovedTxs] = useState([]);
+  const [auctionCanceled, setAuctionCanceled] = useState(false);
+
+  // console.log(auction);
+  console.log(approvedTxCount);
+  console.log(approvedTxs);
+  // console.log(collections.length);
+  // console.log(universeAuctionHouseContract);
+
+  const completedAuctionCreationStep = auctionOnChainId && !auctionCanceled;
+
+  const completedCollectionsStep =
+    completedAuctionCreationStep && approvedCollections.length === collections.length;
+
+  const completedDepositStep =
+    completedCollectionsStep && approvedTxCount === transactions.finalSlotIndices.length;
 
   const setupPage = async () => {
-    // Get optimal transaction setup
+    // Set nftsToWithdraw
     const transactionsConfig = calculateTransactions(auction);
     setTransactions(transactionsConfig);
-    console.log(transactionsConfig);
+    // console.log(transactionsConfig);
 
-    // TODO: Check if auction is deployed
     if (auction.onChain && auction.onChainId) {
+      const onChainAuction = await universeAuctionHouseContract.auctions(auction.onChainId);
+      setAuctionCanceled(onChainAuction.isCanceled);
+
       setAuctionOnChainId(auction.onChainId);
     }
 
     if (auction.collections) {
       setCollections(auction.collections);
-      // TODO: Check if collections are already approved
       for (let i = 0; i < auction.collections.length; i += 1) {
         const collection = auction.collections[i];
         const contract = createContractInstanceFromAddress(
@@ -80,7 +91,7 @@ const FinalizeAuction = () => {
         );
         // console.log(`isApproved result:`);
         // console.log(isApproved);
-        if (isApproved) {
+        if (isApproved && approvedCollections.indexOf(contract.address) < 0) {
           setApprovedCollections([...approvedCollections, contract.address]);
         }
       }
@@ -95,17 +106,11 @@ const FinalizeAuction = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (loadingApproval !== undefined) {
-      setTimeout(() => {
-        setApprovals(loadingApproval + 1);
-        setLoadingApproval(undefined);
-      }, 1000);
-    }
-  }, [loadingApproval]);
-  // console.log(universeAuctionHouseContract);
-
   const handleCreateAuction = async () => {
+    if (approvedTxs.length) {
+      alert('Please withdraw your nfts before creating a new auction');
+      return;
+    }
     setShowAuctionDeployLoading(true);
 
     try {
@@ -146,7 +151,7 @@ const FinalizeAuction = () => {
         console.log(txResult);
         const auctionid = txResult.events[0].args[0].toString();
         setAuctionOnChainId(+auctionid);
-
+        setAuctionCanceled(false);
         // TODO: Call api to save auction
         // This will be temporary while the scraper isn't ready
         await addDeployInfoToAuction({
@@ -181,15 +186,29 @@ const FinalizeAuction = () => {
         process.env.REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS,
         true
       );
-      const result = await tx.wait();
-      setApprovedCollections([...approvedCollections, collectionAddress]);
-      setLoadingApproval(approvals);
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setApprovedCollections([...approvedCollections, collectionAddress]);
+      } else {
+        // TODO: show error that tx has failed
+      }
       setIsApproving(false);
     } catch (err) {
       console.log(err);
       setIsApproving(false);
     }
   };
+
+  function getNftIds(nftMap) {
+    const nftIds = [];
+    nftMap.forEach((slot) => {
+      slot.forEach((slotArray) => {
+        nftIds.push(slotArray[0]);
+      });
+    });
+
+    return nftIds;
+  }
 
   const handleDepositTier = async (txIndex) => {
     try {
@@ -203,13 +222,24 @@ const FinalizeAuction = () => {
       );
       setActiveTxHashes([tx.hash]);
 
-      const txReceipt = tx.wait();
+      const txReceipt = await tx.wait();
       // If last tier show success modal
-      if (txReceipt.status === 1 && txIndex === transactions.finalSlotIndices.length - 1) {
-        setShowSuccessPopup(true);
+      if (txReceipt.status === 1) {
+        // TODO: Mark nfts as deployed on backend
+        // const result = await depositNfts({ auctionId: auction.id, nftIds });
+        const nftIds = getNftIds(transactions.finalNfts[txIndex]);
+        const result = await depositNfts({ auctionId: auction.id, nftIds });
+
+        setApprovedTxCount(approvedTxCount + 1);
+        setApprovedTxs([...approvedTxs, txIndex]);
+
+        if (!auctionCanceled && txIndex === transactions.finalSlotIndices.length - 1) {
+          setShowSuccessPopup(true);
+        }
+      } else {
+        // TODO: show error that tx has failed
       }
-      setApprovedTx([...approvedTxCount, txIndex]);
-      setApprovedTxCount(approvedTxCount + 1);
+
       setShowAuctionDeployLoading(false);
       setActiveTxHashes([]);
     } catch (err) {
@@ -220,16 +250,70 @@ const FinalizeAuction = () => {
     }
   };
 
-  const handleWithdraw = async (txIndex) => {};
+  const handleWithdraw = async (txIndex) => {
+    try {
+      // TODO: What to do if auction is canceled? How do we mark that in the backend? Can we restart the auction?
+      const onChainAuction = await universeAuctionHouseContract.auctions(auctionOnChainId);
 
-  console.log(approvedCollections);
-  console.log(collections.length);
+      // Cancel auction if not canceled
+      if (!onChainAuction.isCanceled) {
+        // Cancel auction
+        setShowAuctionDeployLoading(true);
+        const tx = await universeAuctionHouseContract.cancelAuction(auctionOnChainId);
+        setActiveTxHashes([tx.hash]);
+        const txReceipt = await tx.wait();
+        if (txReceipt.status !== 1) {
+          // Implement error handling
+        }
+        setAuctionCanceled(true);
+        setActiveTxHashes([]);
+      }
 
-  const completedCollectionsStep =
-    auctionOnChainId && approvedCollections.length === collections.length;
+      setShowAuctionDeployLoading(true);
+      // We need to withdraw each slot at a time
+      // Calculate all count of deposited nfts at a slot
+      const nftsCountMap = {};
+      const nfts = transactions.finalNfts[txIndex];
+      transactions.finalSlotIndices[txIndex].forEach((slot, index) => {
+        if (!nftsCountMap[slot]) {
+          nftsCountMap[slot] = nfts[index].length;
+        } else {
+          nftsCountMap[slot] += nfts[index].length;
+        }
+      });
+      const nftIds = getNftIds(nfts);
+      console.log(nftsCountMap);
+      const txHashes = [];
+      const txs = Object.keys(nftsCountMap).map(async (slot) => {
+        const tx = await universeAuctionHouseContract.withdrawDepositedERC721(
+          auctionOnChainId,
+          slot,
+          nftsCountMap[slot]
+        );
+        txHashes.push(tx.hash);
+        setActiveTxHashes(txHashes);
 
-  const completedDepositStep =
-    completedCollectionsStep && approvedTxCount === transactions.finalSlotIndices.length;
+        const txReceipt = await tx.wait();
+        return txReceipt.status;
+      });
+      const results = await Promise.all(txs);
+      setShowAuctionDeployLoading(false);
+      // Withdraw from backend
+      const withdrawBE = await withdrawNfts({ auction: auctionOnChainId, nftIds });
+      console.log(results);
+      console.log(withdrawBE);
+
+      // Update nfts to withdraw
+      const newApprovedTxs = [...approvedTxs];
+      newApprovedTxs.splice(newApprovedTxs.indexOf(txIndex), 1);
+      setApprovedTxs(newApprovedTxs);
+      setApprovedTxCount(approvedTxCount - 1);
+    } catch (err) {
+      console.log(err);
+      setShowAuctionDeployLoading(false);
+    }
+  };
+
   return !auction ? (
     <></>
   ) : (
@@ -254,13 +338,13 @@ const FinalizeAuction = () => {
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                {auctionOnChainId ? (
+                {completedAuctionCreationStep ? (
                   <img src={doneIcon} alt="Done" />
                 ) : (
                   <img src={emptyMark} alt="Empty mark" />
                 )}
               </div>
-              <div className={`line ${auctionOnChainId ? 'colored' : ''}`} />
+              <div className={`line ${completedAuctionCreationStep ? 'colored' : ''}`} />
             </div>
             <div className="create__auction__body">
               <h2>Create auction</h2>
@@ -273,7 +357,7 @@ const FinalizeAuction = () => {
                   You will not be able to make any changes to the auction settings if you proceed
                 </p>
               </div>
-              {auctionOnChainId ? (
+              {completedAuctionCreationStep ? (
                 <Button className="light-border-button" disabled>
                   Completed <img src={completedCheckmark} alt="completed" />
                 </Button>
@@ -340,7 +424,9 @@ const FinalizeAuction = () => {
             completedDepositStep={completedDepositStep}
             completedCollectionsStep={completedCollectionsStep}
             approvedTxCount={approvedTxCount}
-            approvedTx={approvedTx}
+            approvedTxs={approvedTxs}
+            isCanceledAuction={auctionCanceled}
+            // withdrawTxs={withdrawTxs}
           />
         </div>
       </div>
