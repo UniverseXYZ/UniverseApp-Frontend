@@ -8,7 +8,7 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import Select from '../availableNFTsEditionSelect';
 import universeIcon from '../../assets/images/universe-img.svg';
 
-const NFTCard = React.memo(({ data, onEditionClick }) => {
+const NFTCard = React.memo(({ data, onEditionClick, canSelect }) => {
   const { nfts, collection, optimized_url: url, artworkType } = data;
   const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
     value: `${tokenId}||${id}||${url}||${artworkType}`,
@@ -16,7 +16,7 @@ const NFTCard = React.memo(({ data, onEditionClick }) => {
   }));
 
   return (
-    <div className="nft--card can--select nft__box">
+    <div className={`nft--card nft__box ${canSelect ? 'can--select' : 'disabled'}`}>
       <div className="nft--card--body" aria-hidden="true">
         <div aria-hidden="true">
           {nfts.artworkType !== 'audio/mpeg' && nfts.artworkType !== 'mp4' && (
@@ -85,6 +85,7 @@ const NFTCard = React.memo(({ data, onEditionClick }) => {
 NFTCard.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   onEditionClick: PropTypes.func.isRequired,
+  canSelect: PropTypes.bool.isRequired,
 };
 
 export default NFTCard;
