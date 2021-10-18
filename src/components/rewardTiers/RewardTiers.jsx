@@ -135,7 +135,7 @@ const RewardTiers = () => {
               </div>
               <div hidden={shownActionId !== tier.id} className="auctions-tier">
                 <div className="rev-reward">
-                  {tier.nfts.map((nft) => (
+                  {tier.nftSlots.map((nft) => (
                     <div className="rev-reward__box" key={uuid()}>
                       <div className="rev-reward__box__image">
                         {isVideo(nft) && (

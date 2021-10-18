@@ -9,9 +9,9 @@ import Select from '../select/SelectComponent';
 import SearchFilters from '../nft/SearchFilters';
 
 const NFTCard = React.memo(({ data, onEditionClick }) => {
-  const { nfts, collection } = data;
+  const { nfts, collection, optimized_url: url, artworkType } = data;
   const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
-    value: `${tokenId}/${id}`,
+    value: `${tokenId}||${id}||${url}||${artworkType}`,
     label: `#${tokenId}`,
   }));
 
