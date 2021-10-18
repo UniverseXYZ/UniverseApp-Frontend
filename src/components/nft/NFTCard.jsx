@@ -85,7 +85,12 @@ const NFTCard = React.memo(
               aria-hidden="true"
             >
               {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && (
-                <img className="nft--image" src={nft.thumbnail_url} alt={nft.name} />
+                <LoadingImage
+                  className="nft--image"
+                  alt={nft.name}
+                  src={nft.thumbnail_url}
+                  placeholderImage={nft.thumbnail_url}
+                />
               )}
               {nft.artworkType === 'mp4' && (
                 <video

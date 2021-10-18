@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import loadingBg from '../../assets/images/loading-white-background.png';
 
-const LoadingImage = React.memo(({ placeholderImage, src, alt, className, style }) => {
+const LoadingImage = React.memo(({ placeholderImage, src, alt, className, showSpinner, style }) => {
   const [loading, setLoading] = useState(true);
 
   const setLoadingFalse = () => {
@@ -18,7 +18,7 @@ const LoadingImage = React.memo(({ placeholderImage, src, alt, className, style 
         src={loading ? placeholderImage || loadingBg : src}
         onLoad={setLoadingFalse}
       />
-      {loading ? (
+      {loading && showSpinner ? (
         <div className="card-lds-roller">
           <div />
           <div />
@@ -42,12 +42,14 @@ LoadingImage.propTypes = {
   alt: PropTypes.string.isRequired,
   className: PropTypes.string,
   style: PropTypes.oneOfType(PropTypes.object),
+  showSpinner: PropTypes.bool,
 };
 
 LoadingImage.defaultProps = {
   className: '',
   style: {},
   placeholderImage: '',
+  showSpinner: false,
 };
 
 export default LoadingImage;
