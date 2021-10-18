@@ -82,3 +82,8 @@
     gap: 12px;
   }
 }
+
+.available-select.disabled{
+  opacity: 0.2;
+  pointer-events: none;
+}
