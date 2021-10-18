@@ -203,6 +203,7 @@ const Create = () => {
             nftsPerWinner: values.nftsPerWinner || 0,
             minBidValue,
             nftSlots,
+            customNFTsPerWinner: custom,
           },
         ],
       });
