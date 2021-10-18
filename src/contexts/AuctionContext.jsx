@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import BidOptions from '../utils/fixtures/BidOptions';
-import { getFutureAuctions } from '../utils/api/auctions';
+import { getFutureAuctions, getAvailableNFTs } from '../utils/api/auctions';
 import { useAuthContext } from './AuthContext';
 
 const AuctionContext = createContext(null);
@@ -21,6 +21,7 @@ const AuctionContextProvider = ({ children }) => {
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
   const [auctionSetupState, setAuctionSetupState] = useState(false);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [availableNFTs, setAvailableNFTs] = useState([]);
 
   useEffect(async () => {
     if (isAuthenticated) {
@@ -58,6 +59,9 @@ const AuctionContextProvider = ({ children }) => {
         setAuctionSetupState,
         selectedTabIndex,
         setSelectedTabIndex,
+        availableNFTs,
+        setAvailableNFTs,
+        getAvailableNFTs,
       }}
     >
       {children}
