@@ -241,6 +241,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                         : 'light-button'
                     }
                     onClick={() => {
+                      console.log(futureAuction);
                       setAuction(futureAuction);
                       history.push('/finalize-auction', futureAuction.id);
                     }}

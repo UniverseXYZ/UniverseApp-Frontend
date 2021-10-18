@@ -48,6 +48,19 @@ export const createContractInstancesFromAddresses = ({ nfts, helpers }) => {
   return dataObject;
 };
 
+export const createContractInstanceFromAddress = (
+  collectionAddress,
+  universeCoreContract,
+  universeCollectionABI,
+  signer
+) => {
+  // if there is no address we need to use the Universe Contract
+  if (collectionAddress === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()) {
+    return universeCoreContract;
+  }
+  return new Contract(nft.contractAddress, universeCollectionABI, signer);
+};
+
 /**
  * @param {Object} data
  * @param {Object} data.nfts
