@@ -185,7 +185,7 @@ const Create = () => {
     const winners = [];
 
     while (slot < n) {
-      winners.push({ slotIndex: slot, nftIds: [] });
+      winners.push({ slot, nftIds: [] });
       slot += 1;
     }
 
@@ -200,7 +200,7 @@ const Create = () => {
         return slot;
       });
 
-      setAuction({
+      const auctionUpdated = {
         ...auction,
         rewardTiers: [
           ...auction?.rewardTiers,
@@ -214,7 +214,9 @@ const Create = () => {
             customNFTsPerWinner: custom,
           },
         ],
-      });
+      };
+
+      setAuction(auctionUpdated);
     } else {
       // TODO:: check edit auction logic
       // const newTiers = [];
@@ -456,6 +458,7 @@ const Create = () => {
           </div>
         )}
         {
+          // TODO:: Upon second Tier crieation we shoud disable the already selected NFTs from the first tier
           // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
