@@ -70,8 +70,9 @@ const Create = () => {
 
   const location = useLocation();
   const tierId = location.state;
-  const tierById = auction?.rewardTiers?.find((element) => element.id === tierId);
-  const maxWinner = 11;
+  const editedTier = auction?.rewardTiers?.find((element) => element.id === tierId);
+  const maxWinner = 11; // TODO:: where the heck this came from ?
+
   useEffect(() => {
     if (values.name) {
       if (isValidFields.name && isValidFields.numberOfWinners && isValidFields.nftsPerWinner) {
@@ -80,7 +81,7 @@ const Create = () => {
             ...auction,
             rewardTiers: [
               ...auction?.rewardTiers?.filter((tier) => tier.id !== tierId),
-              { ...tierById, ...values },
+              { ...editedTier, ...values },
             ],
           });
         } else {
@@ -96,20 +97,6 @@ const Create = () => {
       }
     }
   }, [isValidFields]);
-
-  useEffect(() => {
-    if (tierById) {
-      setValues({
-        name: tierById.name,
-        numberOfWinners: tierById.numberOfWinners ? tierById.numberOfWinners : tierById.winners,
-        nftsPerWinner: tierById.nftsPerWinner,
-      });
-      if (tierById.minBidValue) {
-        setMinBidValue(tierById.minBidValue);
-        setMinBId(true);
-      }
-    }
-  }, [tierById]);
 
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
@@ -211,8 +198,7 @@ const Create = () => {
   };
 
   const handleContinue = (winnersSlots) => {
-    const editMode = false;
-    if (!editMode) {
+    if (!editedTier) {
       const nftSlots = winnersSlots.map((slot) => {
         const slotCopy = { ...slot };
         slotCopy.fullData = slot;
@@ -266,6 +252,41 @@ const Create = () => {
       setWinnersData(winners);
     } else setWinnersData([]);
   }, [custom]);
+
+  useEffect(async () => {
+    // Const if we are editing Tier we will pass this if check and pre-populate the Data
+    if (editedTier) {
+      const {
+        name,
+        numberOfWinners,
+        winners,
+        customNFTsPerWinner,
+        nftsPerWinner,
+        minBidValue: bidValue,
+      } = editedTier;
+
+      const isCustom = customNFTsPerWinner || parseInt(nftsPerWinner, 10) === 0;
+      await setCustom(isCustom);
+      setValues({
+        name,
+        numberOfWinners: numberOfWinners || winners,
+        nftsPerWinner,
+      });
+
+      if (bidValue) {
+        setMinBidValue(bidValue);
+        setMinBId(true);
+      }
+
+      // We must populate Winners Data based on the editedTier Data
+      // We have already prepared the winnersData object to be ready to accept the data upon triggering the custom watcher useEffect
+      const winnersDataCopy = [...winnersData];
+      editedTier.nftSlots.forEach((slotInfo) => {
+        winnersDataCopy[slotInfo.slot] = slotInfo;
+      });
+      setWinnersData([...winnersDataCopy]);
+    }
+  }, [editedTier]);
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
   const canContinue = winnersData.every((data) => data.nftIds.length > 0) && custom;
@@ -479,7 +500,6 @@ const Create = () => {
         )}
         {
           // ----- Custom distribution -----
-          // TODO:: Properly populate reward Tiers data on the next steps
           // TODO:: When an edition dropdown is opened, if you click eslwhere on the page, close the dropdown
           // TODO:: Make the whole dropdown button click to open the menu
           // ----- Stick menu -----
