@@ -22,29 +22,29 @@
     }
   }
 
-.infoSelect-div {
-  // display: flex;
-  padding: 16px 0px;
+  .infoSelect-div {
+    // display: flex;
+    padding: 16px 0px;
 
-  span {
-    // width: 15%;
-    margin-right: 20px;
-    font-family: $spaceGroteskFont;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 18px;
+    span {
+      // width: 15%;
+      margin-right: 20px;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 18px;
+    }
   }
-}
 
-.sel-info {
-  // display: flex;
-  padding: 16px 0;
+  .sel-info {
+    // display: flex;
+    padding: 16px 0;
 
-  @include sm {
-    display: grid;
+    @include sm {
+      display: grid;
+    }
   }
-}
 
   .continue-nft {
     display: flex;
