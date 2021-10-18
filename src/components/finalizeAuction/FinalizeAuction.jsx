@@ -39,6 +39,7 @@ const FinalizeAuction = () => {
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
   const [showAuctionDeployLoading, setShowAuctionDeployLoading] = useState(false);
+  const [auctionId, setAuctionId] = useState(0);
   // TODO: if auction is null -> redirect to my auctions page
   // console.log(approvals);
   console.log(auction);
@@ -57,7 +58,7 @@ const FinalizeAuction = () => {
             signer
           );
           // eslint-disable-next-line no-await-in-loop
-          const isApproved = await contract.isApprovedForAll(collection.address, address);
+          const isApproved = await contract.isApprovedForAll(contract.address, address);
           console.log(`isApproved result:`);
           console.log(isApproved);
           if (isApproved) {
@@ -118,9 +119,12 @@ const FinalizeAuction = () => {
 
       if (txResult.status === 1) {
         console.log(txResult);
+        const auctionid = txResult.events[0].args[0].toString();
+        setAuctionId(+auctionid);
+        setHasDeployedAuction(true);
+
         // TODO: Call api to save auction
         // This will be temporary while the scraper isn't ready
-        setHasDeployedAuction(true);
       } else {
         // TODO: show error that tx has failed
       }
@@ -154,21 +158,15 @@ const FinalizeAuction = () => {
     }
   };
 
-  const handleDeposit = () => {
+  const handleDepositTier = async () => {
     setApprovals(approvals + 1);
-  };
-
-  const handleLastDeposit = () => {
-    setApprovals(approvals + 1);
-    setTimeout(() => {
-      // setDeployedCollections(approvedCollections);
-      setMyAuctions(
-        myAuctions.map((item) => (item.id === auction.id ? { ...item, launch: true } : item))
-      );
-      setTimeout(() => {
-        document.getElementById('success-hidden-btn').click();
-      }, 1000);
-    }, 1000);
+    // TODO: Deposit tier
+    const depositResult = await universeAuctionHouseContract.batchDepositToAuction(
+      auctionId,
+      [],
+      []
+    );
+    // TODO: If last tier show success modal
   };
 
   return (
@@ -308,7 +306,7 @@ const FinalizeAuction = () => {
                       <h4>{tier.name}</h4>
                       <div className="head">
                         <p>
-                          Slot: <b>{tier.numberOfWinners}</b>
+                          Slots: <b>{tier.numberOfWinners}</b>
                         </p>
                         <p>
                           Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
@@ -316,43 +314,23 @@ const FinalizeAuction = () => {
                       </div>
                     </div>
                     <div className="transaction__body">
-                      {tier.nfts.map(
-                        (nft, index) =>
-                          index < 3 && (
-                            <div className="transaction__image" key={nft.id}>
-                              <div className="first" />
-                              <div className="second" />
-                              <div className="image-main">
-                                <img src={nft.original_url} alt={nft.name} />
-                                {tier.nfts.length > 3 && (
-                                  <span className="show__more">{`+${
-                                    tier.nfts.length - 3
-                                  } more`}</span>
-                                )}
-                              </div>
-                            </div>
-                          )
-                      )}
+                      {tier.nfts.map((nft, index) => (
+                        <div className="transaction__image" key={nft.id}>
+                          <div className="first" />
+                          <div className="second" />
+                          <div className="image-main">
+                            <img src={nft.thumbnail_url} alt={nft.name} />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div className="deposit__button">
-                    {approvals === collections.length + 2 + tierIndex &&
-                    auction.rewardTiers.length !== tierIndex + 1 ? (
-                      <Button className="light-button" onClick={handleDeposit}>
-                        Deposit
-                      </Button>
-                    ) : approvals === collections.length + 2 + tierIndex &&
-                      auction.rewardTiers.length === tierIndex + 1 ? (
-                      <button type="button" className="light-button" onClick={handleLastDeposit}>
-                        Deposit
-                      </button>
-                    ) : approvals > collections.length + 2 + tierIndex ? (
-                      <Button className="light-border-button">Withdraw</Button>
-                    ) : (
-                      <Button className="light-button" disabled>
-                        Deposit
-                      </Button>
-                    )}
+                    <Button className="light-button" onClick={handleDepositTier}>
+                      Deposit
+                    </Button>
+
+                    <Button className="light-border-button">Withdraw</Button>
                   </div>
                 </div>
               ))}
