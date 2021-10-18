@@ -5,7 +5,8 @@ import './index.scss';
 import PropTypes from 'prop-types';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import Select from '../select/SelectComponent';
+import Select from '../availableNFTsEditionSelect';
+import universeIcon from '../../assets/images/universe-img.svg';
 
 const NFTCard = React.memo(({ data, onEditionClick }) => {
   const { nfts, collection, optimized_url: url, artworkType } = data;
@@ -15,7 +16,7 @@ const NFTCard = React.memo(({ data, onEditionClick }) => {
   }));
 
   return (
-    <div className="nft--card can--select">
+    <div className="nft--card can--select nft__box">
       <div className="nft--card--body" aria-hidden="true">
         <div aria-hidden="true">
           {nfts.artworkType !== 'audio/mpeg' && nfts.artworkType !== 'mp4' && (
@@ -50,9 +51,28 @@ const NFTCard = React.memo(({ data, onEditionClick }) => {
           <Select options={selectOptions} onChange={onEditionClick} isMulti />
         </div>
         <div className="quantity--and--offer">
-          <p>{`${nfts.rewardAndTokenIds.length} / ${nfts.numberOfEditions}`}</p>
+          <div className="collection__details">
+            {collection && (
+              <>
+                {collection.address ===
+                process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                  <img src={universeIcon} alt={collection.name} />
+                ) : (
+                  <img src={collection.coverUrl} alt={collection.name} />
+                )}
+                <span>{collection.name}</span>
+              </>
+            )}
+          </div>
+          <div className="collection__count">{`x${nfts.rewardAndTokenIds.length}`}</div>
         </div>
       </div>
+      {nfts.rewardAndTokenIds.length > 1 && (
+        <>
+          <div className="nft__box__highlight__one" />
+          <div className="nft__box__highlight__two" />
+        </>
+      )}
       {/* {selectedNFTsIds && selectedNFTsIds.includes(nft.id) && (
         <div className="nft--selected">
           <img src={checkIcon} alt="img" />
