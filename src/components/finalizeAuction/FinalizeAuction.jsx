@@ -20,8 +20,11 @@ import { addDeployInfoToAuction } from '../../utils/api/auctions';
 import LoadingImage from '../general/LoadingImage';
 import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { calculateTransactions } from '../../utils/helpers/depositNfts';
 
 const FinalizeAuction = () => {
+  const batchSize = 5;
+
   const history = useHistory();
   const { auction, myAuctions, setMyAuctions, bidExtendTime } = useAuctionContext();
   const { setActiveTxHashes } = useMyNftsContext();
@@ -44,6 +47,9 @@ const FinalizeAuction = () => {
   // console.log(approvals);
   console.log(auction);
   useEffect(() => {
+    if (auction) {
+      const transactions = calculateTransactions(auction);
+    }
     const setupPage = async () => {
       // TODO: Check if auction is deployed
       if (auction.collections) {
@@ -67,7 +73,7 @@ const FinalizeAuction = () => {
         }
       }
     };
-    setupPage();
+    // setupPage();
   }, [auction]);
 
   useEffect(() => {
@@ -147,7 +153,10 @@ const FinalizeAuction = () => {
         signer
       );
 
-      const tx = await contract.setApprovalForAll(collectionAddress, true);
+      const tx = await contract.setApprovalForAll(
+        process.env.REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS,
+        true
+      );
       const result = await tx.wait();
       setApprovedCollections([...approvedCollections, collectionAddress]);
       setLoadingApproval(approvals);
@@ -158,14 +167,16 @@ const FinalizeAuction = () => {
     }
   };
 
-  const handleDepositTier = async () => {
-    setApprovals(approvals + 1);
+  const handleDepositTier = async (tierIndex) => {
     // TODO: Deposit tier
-    const depositResult = await universeAuctionHouseContract.batchDepositToAuction(
-      auctionId,
-      [],
-      []
-    );
+
+    const nftsBySlots = auction.rewardTiers[tierIndex].nfts.reduce((groups, item) => {
+      const group = groups[item.slot] || [];
+      group.push(item);
+      groups[item.slot] = group;
+      return groups;
+    }, {});
+
     // TODO: If last tier show success modal
   };
 
@@ -309,7 +320,7 @@ const FinalizeAuction = () => {
                           Slots: <b>{tier.numberOfWinners}</b>
                         </p>
                         <p>
-                          Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
+                          Total NFTs: <b>{tier.nfts.length}</b>
                         </p>
                       </div>
                     </div>
@@ -326,7 +337,7 @@ const FinalizeAuction = () => {
                     </div>
                   </div>
                   <div className="deposit__button">
-                    <Button className="light-button" onClick={handleDepositTier}>
+                    <Button className="light-button" onClick={() => handleDepositTier(tierIndex)}>
                       Deposit
                     </Button>
 
