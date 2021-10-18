@@ -445,15 +445,13 @@ const Create = () => {
           </div>
         )}
         {
-          // TODO:: NFT card component CSS
-          // TODO:: Addjust shown nfts to the pagination
           // TODO:  Upon changing the selected winner we should display the already selected nfts for him
           // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
           // TODO:: User should not be allowed to continue to the next stage if all the custom winners don't have at least 1 nft attached to them
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
-          {filteredNFTs.map((data) => (
+          {filteredNFTs.slice(offset, offset + perPage).map((data) => (
             <AvailabilityNFTCard key={data.nfts.id} data={data} onEditionClick={onEditionClick} />
           ))}
         </div>
