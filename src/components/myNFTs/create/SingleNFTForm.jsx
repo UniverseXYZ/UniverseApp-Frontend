@@ -97,7 +97,7 @@ const SingleNFTForm = () => {
   const [properties, setProperties] = useState([
     { name: '', value: '', errors: { name: '', value: '' } },
   ]);
-  const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
+  const [royaltyAddress, setRoyaltyAddress] = useState([{ address, amount: '10' }]);
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
