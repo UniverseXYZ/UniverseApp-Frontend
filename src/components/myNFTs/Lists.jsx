@@ -16,11 +16,7 @@ const Lists = ({
   offset,
   selectedNFTIds,
   setSelectedNFTIds,
-  customSelected,
   winners,
-  selectedWinner,
-  winnersSelectedNFTs,
-  setWinnersSelectedNFTs,
   nftsPerWinner,
 }) => {
   const sliceData = data.slice(offset, offset + perPage);
@@ -34,7 +30,7 @@ const Lists = ({
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEditions, setSelectedEditions] = useState({});
 
-  const tierById = customSelected ? !!winners : !!(winners && nftsPerWinner);
+  const tierById = !!(winners && nftsPerWinner);
   const editMode = auction?.rewardTiers?.find((element) => element.id === location.state);
   const activateInfo = (index) => {
     setHideIcon(true);
@@ -43,54 +39,17 @@ const Lists = ({
   const handleSavedNfts = (clickedNFT) => {
     if (isCreatingAction) {
       if (tierById && winners <= clickedNFT.tokenIds.length && !clickedNFT.isUsed) {
-        if (customSelected) {
-          // eslint-disable-next-line no-lonely-if
-          if (winnersSelectedNFTs[selectedWinner]?.includes(clickedNFT.id)) {
-            setWinnersSelectedNFTs((prevValue) => ({
-              ...prevValue,
-              [selectedWinner]: winnersSelectedNFTs[selectedWinner].filter(
-                (nft) => nft !== clickedNFT.id
-              ),
-            }));
-          } else {
-            setWinnersSelectedNFTs((prevValue) => ({
-              ...prevValue,
-              [selectedWinner]: [...(winnersSelectedNFTs[selectedWinner] || []), clickedNFT.id],
-            }));
-          }
-        } else {
-          // eslint-disable-next-line no-lonely-if
-          if (selectedNFTIds.includes(clickedNFT.id)) {
-            setSelectedNFTIds((prevValue) => prevValue.filter((nft) => nft !== clickedNFT.id));
-          } else {
-            // eslint-disable-next-line no-lonely-if
-            if (nftsPerWinner > selectedNFTIds.length) {
-              setSelectedNFTIds((prevValue) => [...prevValue, clickedNFT.id]);
+        if (nftsPerWinner > selectedNFTIds.length || selectedNFTIds.includes(clickedNFT.id))
+          setSelectedNFTIds((prevValue) => {
+            const nftIndex = prevValue.findIndex((nft) => nft === clickedNFT.id);
+            if (nftIndex !== -1) {
+              return [...prevValue.slice(0, nftIndex), ...prevValue.slice(nftIndex + 1)];
             }
-          }
-        }
-        // if (
-        //   (!customSelected && nftsPerWinner > winnersSelectedNFTs[selectedWinner]?.length) ||
-        //   winnersSelectedNFTs[selectedWinner]?.includes(clickedNFT.id)
-        // ) {
-        //   if (winnersSelectedNFTs[selectedWinner]?.includes(clickedNFT.id)) {
-        //     setWinnersSelectedNFTs((prevValue) => ({
-        //       ...prevValue,
-        //       [selectedWinner]: winnersSelectedNFTs[selectedWinner].filter(
-        //         (nft) => nft !== clickedNFT.id
-        //       ),
-        //     }));
-        //   } else {
-        //     setWinnersSelectedNFTs((prevValue) => ({
-        //       ...prevValue,
-        //       [selectedWinner]: [...winnersSelectedNFTs[selectedWinner], clickedNFT.id],
-        //     }));
-        //   }
-        // }
+            return [...prevValue, clickedNFT.id];
+          });
       }
     }
   };
-  const currentNFTIds = customSelected ? winnersSelectedNFTs[selectedWinner] || [] : selectedNFTIds;
 
   useEffect(() => {
     if (editMode) {
@@ -104,7 +63,7 @@ const Lists = ({
 
   const handleShow = (nft) => {
     if (tierById) {
-      if (currentNFTIds.includes(nft.id) && winners <= nft.tokenIds.length) {
+      if (selectedNFTIds.includes(nft.id) && winners <= nft.tokenIds.length) {
         setOpenEditions(openEditions ? null : nft.id);
       }
     }
@@ -196,14 +155,12 @@ const Lists = ({
               <></>
             )}
             <div
-              className={`nft__box ${currentNFTIds.includes(nft.id) ? 'selected' : ''} ${
+              className={`nft__box ${selectedNFTIds.includes(nft.id) ? 'selected' : ''} ${
                 (tierById && winners > nft.tokenIds.length) ||
                 nft.isUsed ||
                 (tierById &&
-                  !customSelected &&
-                  nftsPerWinner === currentNFTIds.length &&
-                  !currentNFTIds.includes(nft.id)) ||
-                (tierById && customSelected && !selectedWinner)
+                  nftsPerWinner === selectedNFTIds.length &&
+                  !selectedNFTIds.includes(nft.id))
                   ? 'disabled'
                   : ''
               }`}
@@ -216,20 +173,22 @@ const Lists = ({
               >
                 {isCreatingAction && (
                   <>
-                    {currentNFTIds.includes(nft.id) && tierById && winners <= nft.tokenIds?.length && (
-                      <span className="selected-div">
-                        <span className="selected-number">
-                          {`${
-                            nft.tokenIds.length === 1
-                              ? '1/1'
-                              : `${
-                                  selectedEditions[nft.id] ? selectedEditions[nft.id].length : 0
-                                }/${nft.tokenIds.length}`
-                          }`}
+                    {selectedNFTIds.includes(nft.id) &&
+                      tierById &&
+                      winners <= nft.tokenIds?.length && (
+                        <span className="selected-div">
+                          <span className="selected-number">
+                            {`${
+                              nft.tokenIds.length === 1
+                                ? '1/1'
+                                : `${
+                                    selectedEditions[nft.id] ? selectedEditions[nft.id].length : 0
+                                  }/${nft.tokenIds.length}`
+                            }`}
+                          </span>
+                          <img className="check__icon" src={checkIcon} alt="Check Icon" />
                         </span>
-                        <img className="check__icon" src={checkIcon} alt="Check Icon" />
-                      </span>
-                    )}
+                      )}
                   </>
                 )}
                 {nft.artworkType && nft.artworkType.endsWith('mp4') && isCreatingAction && (
@@ -317,7 +276,7 @@ const Lists = ({
                         </>
                       )}
                       {!(
-                        currentNFTIds.includes(nft.id) &&
+                        selectedNFTIds.includes(nft.id) &&
                         tierById &&
                         winners <= nft.tokenIds.length
                       ) &&
@@ -393,10 +352,6 @@ Lists.propTypes = {
   offset: PropTypes.number.isRequired,
   selectedNFTIds: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setSelectedNFTIds: PropTypes.func.isRequired,
-  customSelected: PropTypes.bool,
-  selectedWinner: PropTypes.number,
-  winnersSelectedNFTs: PropTypes.objectOf(PropTypes.array),
-  setWinnersSelectedNFTs: PropTypes.func,
   winners: PropTypes.number,
   nftsPerWinner: PropTypes.number,
 };
@@ -404,10 +359,6 @@ Lists.propTypes = {
 Lists.defaultProps = {
   winners: null,
   nftsPerWinner: null,
-  customSelected: false,
-  setWinnersSelectedNFTs: () => {},
-  selectedWinner: null,
-  winnersSelectedNFTs: {},
 };
 
 export default Lists;

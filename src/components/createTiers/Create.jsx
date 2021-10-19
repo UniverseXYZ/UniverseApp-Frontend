@@ -52,7 +52,7 @@ const Create = () => {
   const location = useLocation();
   const tierId = location.state;
   const tierById = auction?.rewardTiers?.find((element) => element.id === tierId);
-
+  const maxWinner = 11;
   useEffect(() => {
     if (values.name) {
       if (isValidFields.name && isValidFields.numberOfWinners && isValidFields.nftsPerWinner) {
@@ -103,7 +103,7 @@ const Create = () => {
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
     if (event.target.id === 'numberOfWinners') {
-      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 11 || !value)) {
+      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < maxWinner || !value)) {
         setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
       }
     } else if (event.target.id === 'nftsPerWinner') {
@@ -323,20 +323,20 @@ const Create = () => {
               new Array(+values.numberOfWinners)
                 .fill(1)
                 .map((number, index) => number + index)
-                .map((elementInArray) => (
+                .map((earchWinner) => (
                   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                   <div
                     className={
-                      selectedWinner === elementInArray ? 'winner-box selected' : 'winner-box'
+                      selectedWinner === earchWinner ? 'winner-box selected' : 'winner-box'
                     }
-                    key={elementInArray}
-                    onClick={() => handleWinnerSelect(elementInArray)}
+                    key={earchWinner}
+                    onClick={() => handleWinnerSelect(earchWinner)}
                   >
                     <img src={WinnerIcon} alt="winner-icon" />
-                    <p>Winner #{elementInArray}</p>
+                    <p>Winner #{earchWinner}</p>
                     <span>
-                      {winnersSelectedNFTs && winnersSelectedNFTs[elementInArray]?.length > 0
-                        ? winnersSelectedNFTs[elementInArray]?.length
+                      {winnersSelectedNFTs && winnersSelectedNFTs[earchWinner]?.length > 0
+                        ? winnersSelectedNFTs[earchWinner]?.length
                         : ''}{' '}
                       NFTs
                     </span>
