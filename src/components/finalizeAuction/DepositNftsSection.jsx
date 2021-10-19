@@ -10,8 +10,9 @@ const DepositNftsSection = ({
   completedCollectionsStep,
   completedDepositStep,
   approvedTxCount,
-  approvedTx,
+  approvedTxs,
   handleWithdraw,
+  isCanceledAuction,
 }) => {
   console.log(transactions);
 
@@ -34,6 +35,42 @@ const DepositNftsSection = ({
     return totalCount;
   };
 
+  const getUniqueSlots = (slotArray) =>
+    slotArray.filter((item, i, ar) => ar.indexOf(item) === i).length;
+
+  const showActionButton = (txIndex) => {
+    if (!isCanceledAuction) {
+      if (approvedTxs.indexOf(txIndex) < 0) {
+        const isDisabled =
+          txIndex === 0
+            ? !(completedCollectionsStep && approvedTxCount === 0)
+            : !(completedCollectionsStep && approvedTxs.indexOf(txIndex - 1) >= 0);
+
+        return (
+          <Button
+            disabled={isDisabled}
+            className="light-button"
+            onClick={() => handleDepositTier(txIndex)}
+          >
+            Deposit
+          </Button>
+        );
+      }
+      return (
+        <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
+          Withdraw
+        </Button>
+      );
+    }
+    if (approvedTxs.indexOf(txIndex) >= 0) {
+      return (
+        <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
+          Withdraw
+        </Button>
+      );
+    }
+    return <></>;
+  };
   // TODO: Show loading
   return !transactions ? (
     <></>
@@ -41,7 +78,7 @@ const DepositNftsSection = ({
     <div className="create__auction">
       <div className="step">
         <div className="circle">
-          {completedDepositStep ? (
+          {completedCollectionsStep ? (
             <img alt="Empty mark" src={emptyMark} />
           ) : (
             <img alt="Empty white" src={emptyWhite} />
@@ -61,7 +98,7 @@ const DepositNftsSection = ({
                 <h4>Transaction {txIndex + 1}</h4>
                 <div className="head">
                   <p>
-                    Slots: <b>{transactions.finalSlotIndices[txIndex].length}</b>
+                    Slots: <b>{getUniqueSlots(transactions.finalSlotIndices[txIndex])}</b>
                   </p>
                   <p>
                     Total NFTs: <b>{getTxNftsCount(txIndex)}</b>
@@ -84,25 +121,7 @@ const DepositNftsSection = ({
                 ))}
               </div>
             </div>
-            <div className="deposit__button">
-              {approvedTx.indexOf(txIndex) < 0 ? (
-                <Button
-                  disabled={
-                    !completedCollectionsStep || txIndex === 0
-                      ? false
-                      : approvedTx.indexOf(txIndex - 1) < 0
-                  }
-                  className="light-button"
-                  onClick={() => handleDepositTier(txIndex)}
-                >
-                  Deposit
-                </Button>
-              ) : (
-                <Button className="light-border-button" onClick={() => handleWithdraw(txIndex)}>
-                  Withdraw
-                </Button>
-              )}
-            </div>
+            <div className="deposit__button">{showActionButton(txIndex)}</div>
           </div>
         ))}
       </div>
@@ -116,8 +135,9 @@ DepositNftsSection.propTypes = {
   handleWithdraw: PropTypes.func.isRequired,
   completedDepositStep: PropTypes.bool.isRequired,
   completedCollectionsStep: PropTypes.bool.isRequired,
+  isCanceledAuction: PropTypes.bool.isRequired,
   approvedTxCount: PropTypes.number.isRequired,
-  approvedTx: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  approvedTxs: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default DepositNftsSection;
