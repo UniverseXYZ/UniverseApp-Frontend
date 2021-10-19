@@ -8,15 +8,45 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import Select from '../availableNFTsEditionSelect';
 import universeIcon from '../../assets/images/universe-img.svg';
 
-const NFTCard = React.memo(({ data, onEditionClick, canSelect }) => {
+const NFTCard = React.memo(({ data, onEditionClick, canSelect, winnersData, selectedWinner }) => {
   const { nfts, collection, optimized_url: url, artworkType } = data;
+
   const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
     value: `${tokenId}||${id}||${url}||${artworkType}`,
     label: `#${tokenId}`,
   }));
 
+  const selectedWinnerData = winnersData.find((info) => info.slotIndex === selectedWinner);
+  const selectedWinnerIds = selectedWinnerData && selectedWinnerData.nftIds.map((info) => info.id);
+  const otherWinners = winnersData.filter((info) => info.slotIndex !== selectedWinner) || [];
+  const otherWinnersIds = otherWinners.reduce((res, cur) => {
+    const ids = cur.nftIds.map((i) => i.id);
+    res.push(...ids);
+    return res;
+  }, []);
+
+  // Mark the options as pre-selected or disabled
+  const updatedOptions = selectOptions.map((info) => {
+    const [edition, id, _url, artWorkType] = info.value.split('||');
+    // Preselect
+    if (selectedWinnerIds && selectedWinnerIds.includes(id)) info.isSelected = true;
+
+    // Disable
+    if (otherWinnersIds && otherWinnersIds.includes(id)) {
+      info.isDisabled = true;
+      info.isSelected = false;
+    }
+    return info;
+  });
+
+  const hasSelectedEditions = updatedOptions.find((item) => item.isSelected);
+
   return (
-    <div className={`nft--card nft__box ${canSelect ? 'can--select' : 'disabled'}`}>
+    <div
+      className={`nft--card nft__box ${canSelect ? 'can--select' : 'disabled'} ${
+        hasSelectedEditions ? 'has-selected-editions' : ''
+      }`}
+    >
       <div className="nft--card--body" aria-hidden="true">
         <div aria-hidden="true">
           {nfts.artworkType !== 'audio/mpeg' && nfts.artworkType !== 'mp4' && (
@@ -48,7 +78,7 @@ const NFTCard = React.memo(({ data, onEditionClick, canSelect }) => {
       <div className="nft--card--footer">
         <div className="name--and--price">
           <h4>{nfts.name}</h4>
-          <Select options={selectOptions} onChange={onEditionClick} isMulti />
+          <Select options={updatedOptions} onChange={onEditionClick} isMulti />
         </div>
         <div className="quantity--and--offer">
           <div className="collection__details">
@@ -84,8 +114,10 @@ const NFTCard = React.memo(({ data, onEditionClick, canSelect }) => {
 
 NFTCard.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,
   onEditionClick: PropTypes.func.isRequired,
   canSelect: PropTypes.bool.isRequired,
+  selectedWinner: PropTypes.number.isRequired,
 };
 
 export default NFTCard;
