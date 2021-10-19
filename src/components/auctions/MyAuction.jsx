@@ -159,7 +159,7 @@ const pastAuctionsMock = [
         percentAmount: 100,
       },
     ],
-    link: 'test',
+    link: null,
     promoImageUrl: null,
     backgroundImageUrl: null,
     backgroundImageBlur: false,
