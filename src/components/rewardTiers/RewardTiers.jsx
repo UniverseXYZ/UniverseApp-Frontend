@@ -43,161 +43,209 @@ const RewardTiers = () => {
           </p>
         </div>
         {auction.rewardTiers &&
-          auction.rewardTiers.map((tier) => (
-            <div className="view-tier" key={uuid()}>
-              <div className="auction-header">
-                <div className="img_head">
-                  <div className="img_head_title">
-                    <h3>{tier.name}</h3>
-                  </div>
-                  <div className="winners__edit__btn">
-                    <div className="winners">
-                      <div className="tier-winners">
-                        <h4>
-                          Winners:&nbsp;<b>{tier.winners}</b>
-                        </h4>
-                      </div>
-                      <div className="tier-perwinners">
-                        <h4>
-                          NFTs per winner:&nbsp;
-                          <b>{tier.customNFTsPerWinner ? 'custom' : tier.nftsPerWinner}</b>
-                        </h4>
-                      </div>
-                      {tier.minBidValue ? (
-                        <div className="tier-minbid">
+          auction.rewardTiers.map((tier) => {
+            const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
+              const nfts = curr.fullData.nftIds;
+              res.push(...nfts);
+              return res;
+            }, []);
+
+            const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
+              const { url, artWorkType, nftName, collectioName, collectionAddress, collectionUrl } =
+                curr;
+              res[url] = res[url] || {
+                url,
+                count: 0,
+                artWorkType: '',
+                nftName: '',
+                collectioName: '',
+                collectionAddress: '',
+                collectionUrl: '',
+              };
+
+              res[url].count += 1;
+              res[url].artWorkType = artWorkType;
+              res[url].collectioName = collectioName;
+              res[url].collectionAddress = collectionAddress;
+              res[url].collectionUrl = collectionUrl;
+              res[url].nftName = nftName;
+              return res;
+            }, {});
+            return (
+              <div className="view-tier" key={uuid()}>
+                <div className="auction-header">
+                  <div className="img_head">
+                    <div className="img_head_title">
+                      <h3>{tier.name}</h3>
+                    </div>
+                    <div className="winners__edit__btn">
+                      <div className="winners">
+                        <div className="tier-winners">
                           <h4>
-                            Minimum bid per tier:&nbsp;
-                            <b>
-                              {tier.minBidValue} <span className="bidtype">{bidtype}</span>
-                            </b>
+                            Winners:&nbsp;<b>{tier.winners}</b>
                           </h4>
                         </div>
+                        <div className="tier-perwinners">
+                          <h4>
+                            NFTs per winner:&nbsp;
+                            <b>{tier.customNFTsPerWinner ? 'custom' : tier.nftsPerWinner}</b>
+                          </h4>
+                        </div>
+                        {tier.minBidValue ? (
+                          <div className="tier-minbid">
+                            <h4>
+                              Minimum bid per tier:&nbsp;
+                              <b>
+                                {tier.minBidValue} <span className="bidtype">{bidtype}</span>
+                              </b>
+                            </h4>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                      <Button
+                        className="light-border-button"
+                        onClick={() => {
+                          history.push('/create-tiers', tier.id);
+                        }}
+                      >
+                        Edit <img src={pencil} alt="edit-icon" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="edit-show">
+                    <div className="edit-btn">
+                      <Button
+                        className="light-border-button"
+                        onClick={() => {
+                          history.push('/create-tiers', tier.id);
+                        }}
+                      >
+                        Edit <img src={pencil} alt="edit-icon" />
+                      </Button>
+                      <Popup
+                        nested
+                        handleEdit
+                        trigger={
+                          <div className="remove-image">
+                            <img
+                              src={delateIcon}
+                              alt="Delete"
+                              className="remove-img"
+                              aria-hidden="true"
+                            />
+                            <span className="tooltiptext">Remove reward tier</span>
+                          </div>
+                        }
+                      >
+                        {(close) => <RewardTierRemovePopup onClose={close} id={tier.id} />}
+                      </Popup>
+                    </div>
+                    <div className="launch-auction">
+                      {shownActionId === tier.id ? (
+                        <img
+                          src={arrowUp}
+                          alt="Arrow up"
+                          onClick={() => setShownActionId(null)}
+                          aria-hidden="true"
+                        />
                       ) : (
-                        <></>
+                        <img
+                          src={arrowDown}
+                          alt="Arrow Down"
+                          onClick={() => setShownActionId(tier.id)}
+                          aria-hidden="true"
+                        />
                       )}
                     </div>
-                    <Button
-                      className="light-border-button"
-                      onClick={() => {
-                        history.push('/create-tiers', tier.id);
-                      }}
-                    >
-                      Edit <img src={pencil} alt="edit-icon" />
-                    </Button>
                   </div>
                 </div>
-                <div className="edit-show">
-                  <div className="edit-btn">
-                    <Button
-                      className="light-border-button"
-                      onClick={() => {
-                        history.push('/create-tiers', tier.id);
-                      }}
-                    >
-                      Edit <img src={pencil} alt="edit-icon" />
-                    </Button>
-                    <Popup
-                      nested
-                      handleEdit
-                      trigger={
-                        <div className="remove-image">
-                          <img
-                            src={delateIcon}
-                            alt="Delete"
-                            className="remove-img"
-                            aria-hidden="true"
-                          />
-                          <span className="tooltiptext">Remove reward tier</span>
-                        </div>
-                      }
-                    >
-                      {(close) => <RewardTierRemovePopup onClose={close} id={tier.id} />}
-                    </Popup>
-                  </div>
-                  <div className="launch-auction">
-                    {shownActionId === tier.id ? (
-                      <img
-                        src={arrowUp}
-                        alt="Arrow up"
-                        onClick={() => setShownActionId(null)}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <img
-                        src={arrowDown}
-                        alt="Arrow Down"
-                        onClick={() => setShownActionId(tier.id)}
-                        aria-hidden="true"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div hidden={shownActionId !== tier.id} className="auctions-tier">
-                <div className="rev-reward">
-                  {tier.nftSlots.map((nft) => (
-                    <div className="rev-reward__box" key={uuid()}>
-                      <div className="rev-reward__box__image">
-                        {isVideo(nft) && (
-                          <video
-                            onMouseOver={(event) => event.target.play()}
-                            onFocus={(event) => event.target.play()}
-                            onMouseOut={(event) => event.target.pause()}
-                            onBlur={(event) => event.target.pause()}
-                          >
-                            <source src={getNftImage(nft)} type="video/mp4" />
-                            <track kind="captions" />
-                            Your browser does not support the video tag.
-                          </video>
-                        )}
-                        {isAudio(nft) && (
-                          <img className="preview-image" src={mp3Icon} alt={nft.name} />
-                        )}
-                        {isImage(nft) && (
-                          <img className="preview-image" src={getNftImage(nft)} alt={nft.name} />
-                        )}
-                        {isVideo(nft) && (
-                          <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                        )}
-                      </div>
-                      <div className="rev-reward__box__name">
-                        <h3>{nft.name}</h3>
-                      </div>
-                      <div className="rev-reward__box__footer">
-                        <div className="collection__details">
-                          {nft.collection && (
-                            <>
-                              {typeof nft.collection.coverUrl === 'string' &&
-                              nft.collection.coverUrl.startsWith('#') ? (
-                                <div
-                                  className="random__bg__color"
-                                  style={{ backgroundColor: nft.collection.coverUrl }}
-                                >
-                                  {nft.collection.name.charAt(0)}
-                                </div>
-                              ) : nft.collection.symbol === 'NFUC' ? (
-                                <img src={universeIcon} alt={nft.collection.name} />
-                              ) : (
-                                <img src={nft.collection.coverUrl} alt={nft.collection.name} />
+                <div hidden={shownActionId !== tier.id} className="auctions-tier">
+                  <div className="rev-reward">
+                    {Object.keys(onlyUniqueNFTs).map((key) => {
+                      const {
+                        artWorkType,
+                        url,
+                        count,
+                        nftName,
+                        collectioName,
+                        collectionAddress,
+                        collectionUrl,
+                      } = onlyUniqueNFTs[key];
+                      const nftIsImage =
+                        artWorkType === 'png' ||
+                        artWorkType === 'jpg' ||
+                        artWorkType === 'jpeg' ||
+                        artWorkType === 'mpeg' ||
+                        artWorkType === 'webp';
+
+                      return (
+                        <div className="rev-reward__box" key={uuid()}>
+                          <div className="rev-reward__box__image">
+                            {artWorkType === 'mp4' && (
+                              <video
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                              >
+                                <source src={url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
+                            )}
+                            {artWorkType === 'mpeg' && (
+                              <img className="preview-image" src={mp3Icon} alt={nftName} />
+                            )}
+                            {nftIsImage && (
+                              <img className="preview-image" src={url} alt={nftName} />
+                            )}
+                            {artWorkType === 'mp4' && (
+                              <img className="video__icon" src={videoIcon} alt="Video Icon" />
+                            )}
+                          </div>
+                          <div className="rev-reward__box__name">
+                            <h3>{nftName}</h3>
+                          </div>
+                          <div className="rev-reward__box__footer">
+                            <div className="collection__details">
+                              {collectioName && (
+                                <>
+                                  {typeof collectionUrl === 'string' &&
+                                  collectionUrl.startsWith('#') ? (
+                                    <div
+                                      className="random__bg__color"
+                                      style={{ backgroundColor: collectionUrl }}
+                                    >
+                                      {collectioName.charAt(0)}
+                                    </div>
+                                  ) : collectionAddress ===
+                                    process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                                    <img src={universeIcon} alt={collectioName} />
+                                  ) : (
+                                    <img src={collectionUrl} alt={collectioName} />
+                                  )}
+                                  <span>{collectioName}</span>
+                                </>
                               )}
-                              <span>{nft.collection.name}</span>
+                            </div>
+                            <span className="ed-count">{`x${count || 1}`}</span>
+                          </div>
+                          {count > 1 && (
+                            <>
+                              <div className="rev-reward__box__highlight__one" />
+                              <div className="rev-reward__box__highlight__two" />
                             </>
                           )}
                         </div>
-                        <span className="ed-count">{`x${nft?.tokenIds?.length || 1}`}</span>
-                      </div>
-                      {nft?.tokenIds?.length > 1 && (
-                        <>
-                          <div className="rev-reward__box__highlight__one" />
-                          <div className="rev-reward__box__highlight__two" />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         <div
           className="create-rew-tier"
           onClick={() => {
