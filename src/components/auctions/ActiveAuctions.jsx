@@ -54,6 +54,15 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
 
+  const handleAuctionExpand = (name) => {
+    const canExpandAuction = !name || name !== shownActionId;
+    if (canExpandAuction) {
+      setShownActionId(name);
+    } else {
+      setShownActionId(null);
+    }
+  };
+
   return (
     <div className="active-auctions">
       <div className="input-search">
@@ -159,21 +168,17 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               >
                                 <span>Go to landing page</span>
                               </Button>
-                              <div className="arrow">
+                              <div
+                                className="arrow"
+                                onClick={() => handleAuctionExpand(activeAuction.name)}
+                                role="button"
+                                tabIndex={0}
+                                aria-hidden
+                              >
                                 {shownActionId === activeAuction.name ? (
-                                  <img
-                                    src={arrowUp}
-                                    onClick={() => setShownActionId(null)}
-                                    alt="Arrow up"
-                                    aria-hidden="true"
-                                  />
+                                  <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
                                 ) : (
-                                  <img
-                                    src={arrowDown}
-                                    onClick={() => setShownActionId(activeAuction.name)}
-                                    alt="Arrow down"
-                                    aria-hidden="true"
-                                  />
+                                  <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
                                 )}
                               </div>
                             </div>
