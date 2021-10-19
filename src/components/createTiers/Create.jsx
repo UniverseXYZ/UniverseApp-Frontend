@@ -459,7 +459,6 @@ const Create = () => {
         )}
         {
           // ----- Custom distribution -----
-          // TODO:: Upon second Tier crieation we shoud disable||remove the already selected NFTs from the first tier
           // TODO:: Properly populate reward Tiers data on the next steps
           // TODO:: When an edition dropdown is opened, if you click eslwhere on the page, close the dropdown
           // TODO:: Make the whole dropdown button click to open the menu
@@ -480,6 +479,7 @@ const Create = () => {
               canSelect={canSelectNFT}
               winnersData={winnersData}
               selectedWinner={selectedWinner}
+              auction={auction}
             />
           ))}
         </div>
