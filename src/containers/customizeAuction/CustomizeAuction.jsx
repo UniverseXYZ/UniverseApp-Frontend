@@ -155,6 +155,8 @@ const CustomizeAuction = () => {
       newAuctionData = await editAuction(editedAuction);
     }
 
+    let updatedAuction = { ...editedAuction, ...newAuctionData };
+
     if (canEditAuctionImages) {
       newAuctionData = await uploadImagesForTheLandingPage(
         editedAuction.promoImage,
@@ -163,7 +165,9 @@ const CustomizeAuction = () => {
       );
     }
 
-    return newAuctionData;
+    updatedAuction = { ...updatedAuction, ...newAuctionData };
+
+    return updatedAuction;
   };
 
   // auction and profile API calls
