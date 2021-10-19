@@ -214,7 +214,7 @@ export const uploadImagesForTheLandingPage = async (
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
-    body: formData,
+    body: JSON.stringify({ ...formData }),
   };
 
   const request = await fetch(UPLAD_IMAGES_FOR_LANDING_PAGE_URL(id), requestOptions);
