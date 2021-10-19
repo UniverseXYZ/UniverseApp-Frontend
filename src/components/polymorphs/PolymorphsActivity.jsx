@@ -40,39 +40,45 @@ const PolymorphsActivity = (props) => {
   const dataKeys = Object.keys(morphEntitiesData);
 
   return (
-    <WrapperCenter className="polymorphs--activity--wrapper--center">
-      <h2>Recent Polymorphs activity</h2>
-      {!mobile && (
-        <PolymorphsActivityTable
-          className="table--polymorphs--activity"
-          tableHead={!mobile ? tableHead : []}
-          rows={getRows(morphEntitiesData, dataKeys.slice(offset, offset + 5), ethPrice)}
-        />
-      )}
-      {mobile && (
-        <div className="mobile--table--polymorphs--activity">
-          {dataKeys.slice(offset, offset + 5).map((elem, index) => {
-            const item = morphEntitiesData[elem];
-            return (
-              <PolymorphsActivityTableRowMobile
-                data={item}
-                key={index.toString()}
-                ethPrice={ethPrice}
-              />
-            );
-          })}
-        </div>
-      )}
-      <div className="pagination__container">
-        <SimplePagination
-          data={dataKeys}
-          perPage={5}
-          setOffset={setOffset}
-          page={page}
-          setPage={setPage}
-        />
-      </div>
-    </WrapperCenter>
+    <div className="polymorphs--activity--section">
+      <WrapperCenter className="polymorphs--activity--wrapper--center">
+        <h2>Polymorph activity</h2>
+        {!mobile && (
+          <PolymorphsActivityTable
+            className="table--polymorphs--activity"
+            tableHead={!mobile ? tableHead : []}
+            rows={getRows(morphEntitiesData, dataKeys.slice(offset, offset + 5), ethPrice)}
+          />
+        )}
+        {mobile && (
+          <div className="mobile--table--polymorphs--activity">
+            {dataKeys.slice(offset, offset + 5).map((elem, index) => {
+              const item = morphEntitiesData[elem];
+              return (
+                <PolymorphsActivityTableRowMobile
+                  data={item}
+                  key={index.toString()}
+                  ethPrice={ethPrice}
+                />
+              );
+            })}
+          </div>
+        )}
+        {dataKeys.length ? (
+          <div className="pagination__container">
+            <SimplePagination
+              data={dataKeys}
+              perPage={5}
+              setOffset={setOffset}
+              page={page}
+              setPage={setPage}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
+      </WrapperCenter>
+    </div>
   );
 };
 
