@@ -77,6 +77,7 @@
     .launch-auction {
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       button {
         &.hide__on__mobile {
