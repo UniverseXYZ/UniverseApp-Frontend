@@ -183,7 +183,7 @@ const AuctionSettings = () => {
       }
       history.push({
         pathname: '/setup-auction/reward-tiers',
-        state: location.state,
+        state: location.state === 'edit' ? location.state : true,
       });
     }
   };

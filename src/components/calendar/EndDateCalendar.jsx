@@ -81,15 +81,6 @@ const EndDateCalendar = React.forwardRef(
           ...prevState,
           hours: value,
         }));
-        console.log(
-          new Date(
-            endDateTemp.year,
-            monthNames.indexOf(endDateTemp.month),
-            endDateTemp.day,
-            value,
-            endDateTemp.minutes
-          )
-        );
         if (
           new Date(
             endDateTemp.year,
@@ -99,7 +90,6 @@ const EndDateCalendar = React.forwardRef(
             endDateTemp.minutes
           ) <= new Date(values.startDate)
         ) {
-          console.log('ne tuk');
           setMinDateTimeError(true);
           return;
         }

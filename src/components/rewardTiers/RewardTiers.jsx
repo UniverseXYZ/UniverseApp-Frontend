@@ -217,7 +217,10 @@ const RewardTiers = () => {
         <Button
           className="light-border-button"
           onClick={() =>
-            history.push({ pathname: '/setup-auction/auction-settings', state: location.state })
+            history.push({
+              pathname: '/setup-auction/auction-settings',
+              state: location.state === 'edit' ? location.state : true,
+            })
           }
         >
           Back
@@ -226,7 +229,10 @@ const RewardTiers = () => {
           className="light-button"
           onClick={() =>
             auction?.rewardTiers?.length &&
-            history.push({ pathname: '/setup-auction/review-auction', state: location.state })
+            history.push({
+              pathname: '/setup-auction/review-auction',
+              state: location.state === 'edit' ? location.state : true,
+            })
           }
           disabled={!auction?.rewardTiers?.length}
         >
