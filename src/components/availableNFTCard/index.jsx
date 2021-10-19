@@ -16,9 +16,9 @@ const NFTCard = React.memo(({ data, onEditionClick, canSelect, winnersData, sele
     label: `#${tokenId}`,
   }));
 
-  const selectedWinnerData = winnersData.find((info) => info.slotIndex === selectedWinner);
+  const selectedWinnerData = winnersData.find((info) => info.slot === selectedWinner);
   const selectedWinnerIds = selectedWinnerData && selectedWinnerData.nftIds.map((info) => info.id);
-  const otherWinners = winnersData.filter((info) => info.slotIndex !== selectedWinner) || [];
+  const otherWinners = winnersData.filter((info) => info.slot !== selectedWinner) || [];
   const otherWinnersIds = otherWinners.reduce((res, cur) => {
     const ids = cur.nftIds.map((i) => i.id);
     res.push(...ids);
