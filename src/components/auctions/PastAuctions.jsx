@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import searchIcon from '../../assets/images/search-gray.svg';
