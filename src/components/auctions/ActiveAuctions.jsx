@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Moment from 'react-moment';
-import moment from 'moment';
 import uuid from 'react-uuid';
+import { intervalToDuration, format } from 'date-fns';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import icon from '../../assets/images/auction_icon.svg';
@@ -16,6 +15,7 @@ import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import Button from '../button/Button';
 import searchIconGray from '../../assets/images/search-gray.svg';
+import { isAfterNow, isBeforeNow } from '../../utils/dates';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [shownActionId, setShownActionId] = useState(null);
@@ -84,20 +84,15 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
               {myAuctions
                 .slice(offset, offset + perPage)
                 .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-                .filter(
-                  (item) =>
-                    item &&
-                    moment(item.startDate).isBefore(moment.now()) &&
-                    !moment(item.endDate).isBefore(moment.now())
-                )
+                .filter((item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate))
                 .map((activeAuction, index) => {
-                  const duration = moment(activeAuction.startDate).isBefore(moment.now())
-                    ? moment.duration(moment(activeAuction.endDate).diff(moment.now()))
-                    : moment.duration(moment(activeAuction.startDate).diff(moment.now()));
-                  const days = parseInt(duration.asDays(), 10);
-                  const hours = duration.hours();
-                  const minutes = duration.minutes();
-                  const seconds = duration.seconds();
+                  const { days, hours, minutes, seconds } = intervalToDuration({
+                    start: new Date(activeAuction.endDate),
+                    end: new Date(),
+                  });
+
+                  const startDate = format(new Date(activeAuction.startDate), 'MMMM dd, HH:mm');
+                  const endDate = format(new Date(activeAuction.endDate), 'MMMM dd, HH:mm');
 
                   const auctionTotalNfts = activeAuction.rewardTiers
                     .map((tier) => tier.nfts.length)
@@ -200,7 +195,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               </p>
                             </div>
                             <div className="total-dates">
-                              {!moment(activeAuction.startDate).isBefore(moment.now()) ? (
+                              {isAfterNow(activeAuction.startDate) ? (
                                 <p>
                                   Auction starts in{' '}
                                   <b>{`${days}d : ${hours}h : ${minutes}m : ${seconds}s`}</b>
@@ -217,7 +212,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                 Launch date:{' '}
                                 <b>
                                   {' '}
-                                  <Moment format="MMMM DD, HH:mm">{activeAuction.startDate}</Moment>
+                                  <time>{startDate}</time>
                                 </b>
                               </p>
                             </div>
@@ -225,7 +220,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               <p>
                                 End date:{' '}
                                 <b>
-                                  <Moment format="MMMM DD, HH:mm">{activeAuction.endDate}</Moment>
+                                  <time>{endDate}</time>
                                 </b>
                               </p>
                             </div>

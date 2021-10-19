@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
-import moment from 'moment';
 import { Helmet } from 'react-helmet';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import FutureAuctions from './FutureAuctions.jsx';
@@ -13,6 +12,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { PLACEHOLDER_MY_BIDS } from '../../utils/fixtures/MyBidsDummyData';
 import MyBidsCard from '../auctionsCard/MyBidsCard';
 import NoAuctionsFound from './NoAuctionsFound';
+import { isAfterNow, isBeforeNow } from '../../utils/dates';
 
 const pastAuctionsMock = [
   {
@@ -149,7 +149,7 @@ const pastAuctionsMock = [
     tokenSymbol: 'XYZ',
     tokenDecimals: 18,
     startDate: '2021-10-10T09:02:31.168Z',
-    endDate: '2021-10-12T09:02:31.168Z',
+    endDate: '2021-10-14T09:02:31.168Z',
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',
@@ -358,7 +358,7 @@ const activeAuctionsMock = [
     tokenSymbol: 'XYZ',
     tokenDecimals: 18,
     startDate: '2021-10-11T09:02:31.168Z',
-    endDate: '2021-11-22T09:02:31.168Z',
+    endDate: '2021-11-22T11:02:31.168Z',
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',
@@ -483,7 +483,7 @@ const activeAuctionsMock = [
     tokenSymbol: 'XYZ',
     tokenDecimals: 18,
     startDate: '2021-10-10T09:02:31.168Z',
-    endDate: '2021-10-12T09:02:31.168Z',
+    endDate: '2021-10-21T09:02:31.168Z',
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',
@@ -578,10 +578,7 @@ const MyAuction = () => {
         if (
           selectedTabIndex === tabs.ActiveAuctions &&
           !myAuctions.filter(
-            (item) =>
-              item.launch &&
-              moment(item.startDate).isBefore(moment.now()) &&
-              !moment(item.endDate).isBefore(moment.now())
+            (item) => item.launch && isBeforeNow(item.startDate) && isAfterNow(item.endDate)
           ).length
         ) {
           setShowButton(false);
@@ -592,8 +589,7 @@ const MyAuction = () => {
           setShowButton(false);
         } else if (
           selectedTabIndex === tabs.PastAuctions &&
-          !myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
-            .length
+          !myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate)).length
         ) {
           setShowButton(false);
         } else {
@@ -685,10 +681,7 @@ const MyAuction = () => {
         {selectedTabIndex === tabs.ActiveAuctions && (
           <>
             {activeAuctionsMock.filter(
-              (item) =>
-                item &&
-                moment(item.startDate).isBefore(moment.now()) &&
-                !moment(item.endDate).isBefore(moment.now())
+              (item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate)
             ).length ? (
               <ActiveAuctions
                 myAuctions={activeAuctionsMock}
@@ -717,8 +710,7 @@ const MyAuction = () => {
 
         {selectedTabIndex === tabs.PastAuctions && (
           <>
-            {pastAuctionsMock.filter((item) => item && moment(item.endDate).isBefore(moment.now()))
-              .length ? (
+            {pastAuctionsMock.filter((item) => item && isBeforeNow(item.endDate)).length ? (
               <PastAuctions myAuctions={pastAuctionsMock} setMyAuctions={setMyAuctions} />
             ) : (
               <NoAuctionsFound title="No past auctions found" />

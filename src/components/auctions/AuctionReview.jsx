@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
-import moment from 'moment';
 import './AuctionReview.scss';
 import './Tiers.scss';
 import uuid from 'react-uuid';
+import { format } from 'date-fns';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import ethIcon from '../../assets/images/bid_icon.svg';
@@ -76,6 +76,9 @@ const AuctionReview = () => {
     setMyAuctions(futureAuctionResponse?.auctions || []);
   };
 
+  const startDate = format(new Date(auction.startDate), 'MMMM dd, yyyy, HH:mm');
+  const endDate = format(new Date(auction.endDate), 'MMMM dd, yyyy, HH:mm');
+
   return (
     <div className="container auction-reward">
       <Popup
@@ -131,7 +134,7 @@ const AuctionReview = () => {
               </div>
               <div className="startDate">
                 <p>Start date</p>
-                <span>{moment(auction.startDate).format('MMMM DD, YYYY, HH:mm')} EST</span>
+                <span>{startDate} EST</span>
               </div>
             </div>
             <div className="date-part">
@@ -150,7 +153,7 @@ const AuctionReview = () => {
               </div>
               <div className="endDate">
                 <p>End date</p>
-                <span>{moment(auction.endDate).format('MMMM DD, YYYY, HH:mm')} EST</span>
+                <span>{endDate} EST</span>
                 <span className="auction-ext">
                   Ending auction extension timer: 3 minutes
                   <img

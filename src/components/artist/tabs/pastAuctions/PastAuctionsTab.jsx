@@ -1,13 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { PLACEHOLDER_PAST_AUCTIONS } from '../../../../utils/fixtures/PastAuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import PastAuctionsCard from '../../../auctionsCard/PastAuctionsCard';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { isBeforeNow } from '../../../../utils/dates';
 
 const PastAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions, setAuction } = useAuctionContext();
@@ -16,7 +16,7 @@ const PastAuctionsTab = ({ onArtist, showCreatePrompt }) => {
 
   const artistPastAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
+      ? myAuctions.filter((item) => item.launch && isBeforeNow(item.endDate))
       : PLACEHOLDER_PAST_AUCTIONS;
 
   return artistPastAuctions.length ? (

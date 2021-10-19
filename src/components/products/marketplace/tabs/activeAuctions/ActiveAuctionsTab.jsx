@@ -1,23 +1,19 @@
-import React, { useContext } from 'react';
-import moment from 'moment';
+import React from 'react';
 import ActiveAuctionsFilters from './Filters.jsx';
 import ActiveAuctionsCard from '../../../../auctionsCard/ActiveAuctionsCard.jsx';
-import AppContext from '../../../../../ContextAPI';
 import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
+import { isAfterNow } from '../../../../../utils/dates';
 
 const ActiveAuctionsTab = () => {
   const { myAuctions } = useAuctionContext();
 
   return (
     <div className="active__auctions__tab">
-      {myAuctions.filter((item) => item.launch && !moment(item.endDate).isBefore(moment.now()))
-        .length ? (
+      {myAuctions.filter((item) => item.launch && isAfterNow(item.endDate)).length ? (
         <>
           <ActiveAuctionsFilters />
           <ActiveAuctionsCard
-            data={myAuctions.filter(
-              (item) => item.launch && !moment(item.endDate).isBefore(moment.now())
-            )}
+            data={myAuctions.filter((item) => item.launch && isAfterNow(item.endDate))}
           />
         </>
       ) : (

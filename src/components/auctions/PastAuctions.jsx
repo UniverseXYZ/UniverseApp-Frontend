@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Moment from 'react-moment';
-import moment from 'moment';
 import uuid from 'react-uuid';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
 import searchIcon from '../../assets/images/search-gray.svg';
@@ -12,6 +11,7 @@ import Input from '../input/Input.jsx';
 import copyIcon from '../../assets/images/copy1.svg';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
+import { isBeforeNow } from '../../utils/dates';
 
 const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   const [shownActionId, setShownActionId] = useState(null);
@@ -53,11 +53,14 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => item && moment(item.endDate).isBefore(moment.now()))
+        .filter((item) => item && isBeforeNow(item.endDate))
         .map((pastAuction, index) => {
           const auctionTotalNfts = pastAuction.rewardTiers
             .map((tier) => tier.nfts.length)
             .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
+
+          const startDate = format(new Date(pastAuction.startDate), 'MMMM dd, HH:mm');
+          const endDate = format(new Date(pastAuction.endDate), 'MMMM dd, HH:mm');
 
           return (
             <div className="auction past-auction" key={pastAuction.id}>
@@ -129,7 +132,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                     Launch date:{' '}
                     <b>
                       {' '}
-                      <Moment format="MMMM DD, HH:mm">{pastAuction.startDate}</Moment>
+                      <time>{startDate}</time>
                     </b>
                   </p>
                 </div>
@@ -137,7 +140,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   <p>
                     End date:{' '}
                     <b>
-                      <Moment format="MMMM DD, HH:mm">{pastAuction.endDate}</Moment>
+                      <time>{endDate}</time>
                     </b>
                   </p>
                 </div>
