@@ -396,7 +396,7 @@ Lists.propTypes = {
   customSelected: PropTypes.bool,
   selectedWinner: PropTypes.number,
   winnersSelectedNFTs: PropTypes.objectOf(PropTypes.array),
-  setWinnersSelectedNFTs: PropTypes.func.isRequired,
+  setWinnersSelectedNFTs: PropTypes.func,
   winners: PropTypes.number,
   nftsPerWinner: PropTypes.number,
 };
@@ -405,6 +405,7 @@ Lists.defaultProps = {
   winners: null,
   nftsPerWinner: null,
   customSelected: false,
+  setWinnersSelectedNFTs: () => {},
   selectedWinner: null,
   winnersSelectedNFTs: {},
 };
