@@ -67,7 +67,7 @@ const AuctionReview = () => {
       // Let Viktor know that you've reached this point so we make sure the api is already deployed
       const usedNFTsIds = [];
       auction.rewardTiers.forEach((tier) => {
-        tier.nfts.forEach((n) => {
+        tier.nftSlots.forEach((n) => {
           if (!usedNFTsIds.includes(n.id)) {
             usedNFTsIds.push(n.id);
           }
@@ -299,7 +299,7 @@ const AuctionReview = () => {
             </div>
             <div className="auctions-tier">
               <div className="auction-reward">
-                {tier.nfts.map((nft) => (
+                {tier.nftSlots.map((nft) => (
                   <div className="auction-reward__box" key={uuid()}>
                     <div className="auction-reward__box__image">
                       {isVideo(nft) && (

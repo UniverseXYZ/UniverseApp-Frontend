@@ -1,0 +1,90 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
+
+.create-tiers-sticky-bar {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background: $white;
+  box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+  z-index: 9;
+
+  .selected-body {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    @include md {
+      display: block;
+      width: 100%;
+    }
+  }
+
+.infoSelect-div {
+  // display: flex;
+  padding: 16px 0px;
+
+  span {
+    // width: 15%;
+    margin-right: 20px;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+.sel-info {
+  // display: flex;
+  padding: 16px 0;
+
+  @include sm {
+    display: grid;
+  }
+}
+
+  .continue-nft {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    margin-top: 25px;
+
+    button {
+      // position:absolute;
+      // bottom: 0;
+
+      @include md {
+        // margin-top: 37px;
+        width: 100%;
+      }
+    }
+  }
+
+  .img-div {
+    display: flex;
+    margin-top: 16px;
+
+    .imgs {
+      position: relative;
+      margin-right: 16px;
+
+      .del-img {
+        position: absolute;
+        bottom: 20px;
+        left: 30px;
+      }
+    }
+    .placeholder {
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid #ff4949;
+      box-sizing: border-box;
+      border-radius: 6px;
+      width: 60px;
+      height: 60px;
+      margin-right: 16px;
+    }
+  }
+}
