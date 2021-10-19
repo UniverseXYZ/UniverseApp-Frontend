@@ -188,6 +188,9 @@
         img {
           pointer-events: all;
         }
+        @media (max-width: 500px) {
+          display: flex;
+        }
       }
     }
 
