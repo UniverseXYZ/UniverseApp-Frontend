@@ -119,8 +119,9 @@ const Create = () => {
         setValues((prevValues) => ({ ...prevValues, [event.target.id]: v }));
       }
     } else if (event.target.id === 'nftsPerWinner') {
+      const v = (value && parseInt(value, 10)) || 0;
       if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 6 || !value)) {
-        setValues((prevValues) => ({ ...prevValues, [event.target.id]: parseInt(value, 10) }));
+        setValues((prevValues) => ({ ...prevValues, [event.target.id]: v }));
       }
     } else {
       setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
@@ -236,6 +237,8 @@ const Create = () => {
       setWinnersData(winners);
     } else setWinnersData([]);
   }, [custom]);
+
+  const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
 
   // End Custom Slots distribution logic
 
@@ -452,7 +455,12 @@ const Create = () => {
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
           {filteredNFTs.slice(offset, offset + perPage).map((data) => (
-            <AvailabilityNFTCard key={data.nfts.id} data={data} onEditionClick={onEditionClick} />
+            <AvailabilityNFTCard
+              key={data.nfts.id}
+              data={data}
+              onEditionClick={onEditionClick}
+              canSelect={canSelectNFT}
+            />
           ))}
         </div>
         <div className="pagination__container">
