@@ -19,7 +19,12 @@ const NFTCard = React.memo(
 
     const selectedWinnerData = winnersData.find((info) => info.slot === selectedWinner);
     const selectedWinnerIds =
-      selectedWinnerData && selectedWinnerData.nftIds.map((info) => info.id);
+      selectedWinnerData &&
+      selectedWinnerData.nftIds.map((info) => {
+        // When we are creating a Tier we are preparing the tier format for the final server request, so if editing a tier wi will not have an object with id and other data we will have only the id
+        const id = typeof info === 'object' ? info.id : info;
+        return id;
+      });
     const otherWinners = winnersData.filter((info) => info.slot !== selectedWinner) || [];
     const otherWinnersIds = otherWinners.reduce((res, cur) => {
       const ids = cur.nftIds.map((i) => i.id);
@@ -56,8 +61,13 @@ const NFTCard = React.memo(
       const infoCopy = { ...info };
       const [edition, id, _url, artWorkType] = infoCopy.value.split('||');
 
-      // Disable
-      if (rewardTiersUsedNFTsIds && rewardTiersUsedNFTsIds.includes(id)) {
+      // Disable if its used in other tiers but not in the same
+      const isSelectedByCurrentWinner = selectedWinnerIds && selectedWinnerIds.includes(id);
+      if (
+        rewardTiersUsedNFTsIds &&
+        rewardTiersUsedNFTsIds.includes(id) &&
+        !isSelectedByCurrentWinner
+      ) {
         infoCopy.isDisabled = true;
         infoCopy.isSelected = false;
       }
