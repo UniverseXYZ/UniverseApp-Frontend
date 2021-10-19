@@ -32,15 +32,38 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
     );
   }, [arrLength]);
 
-  const handleUploadImage = (event, tierId) => {
+  const handleUploadImage = (file, tierId) => {
     onChange((prevValues) =>
       prevValues.map((tier) => {
         if (tier.id === tierId) {
-          return { ...tier, imageUrl: event.target.files[0] };
+          return { ...tier, imageUrl: file };
         }
         return tier;
       })
     );
+  };
+
+  const validateFile = (file, tierId) => {
+    const fileValid =
+      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+    if (fileValid) {
+      handleUploadImage(file, tierId);
+    } else {
+      // TODO: set error here
+      console.error('File format must be PNG or JPEG (Max Size: 30mb)');
+    }
+  };
+
+  const onDrop = (e, tierId) => {
+    e.preventDefault();
+    const {
+      dataTransfer: { files },
+    } = e;
+    validateFile(files[0], tierId);
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -119,36 +142,42 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                 </div>
                 <div className="upload__image">
                   <h4>Upload tier image (optional)</h4>
-                  <div className="upload__image__div">
-                    <div className="upload__image__description">
-                      <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
-                      <h5>Drop your file here</h5>
-                      <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
-                      <Button
-                        className="light-border-button"
-                        onClick={() => elRefs[i].current.click()}
-                      >
-                        Choose file
-                      </Button>
-                      <input
-                        type="file"
-                        className="inp-disable"
-                        ref={elRefs[i]}
-                        onChange={(e) => handleUploadImage(e, tier.id)}
-                      />
-                    </div>
-                    <div className="upload__image__preview">
-                      <h6>Preview</h6>
-                      <div className="preview-div">
-                        {image ? (
-                          <img src={image} className="preview__image" alt="Platinum" />
-                        ) : (
-                          <img
-                            className="default__upload__image"
-                            src={defaultImage}
-                            alt="default"
-                          />
-                        )}
+                  <div
+                    className="dropzone"
+                    onDrop={(e) => onDrop(e, tier.id)}
+                    onDragOver={(e) => onDragOver(e)}
+                  >
+                    <div className="upload__image__div">
+                      <div className="upload__image__description">
+                        <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
+                        <h5>Drop your file here</h5>
+                        <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
+                        <Button
+                          className="light-border-button"
+                          onClick={() => elRefs[i].current.click()}
+                        >
+                          Choose file
+                        </Button>
+                        <input
+                          type="file"
+                          className="inp-disable"
+                          ref={elRefs[i]}
+                          onChange={(e) => validateFile(e.target.files[0], tier.id)}
+                        />
+                      </div>
+                      <div className="upload__image__preview">
+                        <h6>Preview</h6>
+                        <div className="preview-div">
+                          {image ? (
+                            <img src={image} className="preview__image" alt="Platinum" />
+                          ) : (
+                            <img
+                              className="default__upload__image"
+                              src={defaultImage}
+                              alt="default"
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
