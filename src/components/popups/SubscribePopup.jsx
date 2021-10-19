@@ -1,39 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import closeIcon from '../../assets/images/close-menu.svg';
 import subscribeIcon from '../../assets/images/subscribe.png';
 import Button from '../button/Button.jsx';
 import Input from '../input/Input';
+import { handleMailSubscribe } from '../../utils/api/mailSubscribe';
 
 const SubscribePopup = ({ close, showCongrats }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(String(email).toLowerCase())) {
-      const config = {
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        params: {
-          email,
-        },
-      };
-      axios
-        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
-        .then((response) => {
-          if (response.status === 200) {
-            setSubscribed(true);
-          } else {
-            alert('OOPS! Something went wrong.');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const handleSubscribe = async () => {
+    const response = await handleMailSubscribe(email);
+    if (response?.status === 200) {
+      setSubscribed(true);
+      document.getElementById('sub-hidden-btn').click();
     } else {
-      alert('Email address is invalid.');
+      alert(response);
     }
   };
 
