@@ -22,6 +22,7 @@ const ACTION_TYPES = {
   ADD: 'select-option',
   REMOVE_ALL: 'clear',
   REMOVE_SINGLE: 'remove-value',
+  DESELECT_SINGLE: 'deselect-option',
 };
 
 const MAX_FIELD_CHARS_LENGTH = {
@@ -168,6 +169,12 @@ const Create = () => {
           (nft) => nft.id !== removedId
         );
       }
+      if (actionMeta.action === ACTION_TYPES.DESELECT_SINGLE) {
+        const [edition, id, url, artWorkType] = actionMeta.option.value.split('||');
+        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+          (nft) => nft.id !== id
+        );
+      }
 
       setWinnersData(winnersCopy);
     }
@@ -239,6 +246,7 @@ const Create = () => {
   }, [custom]);
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
+  const canContinue = winnersData.every((data) => data.nftIds.length > 0) && custom;
 
   // End Custom Slots distribution logic
 
@@ -449,8 +457,8 @@ const Create = () => {
         )}
         {
           // TODO:  Upon changing the selected winner we should display the already selected nfts for him
-          // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
           // TODO:: User should not be allowed to continue to the next stage if all the custom winners don't have at least 1 nft attached to them
+          // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
@@ -481,6 +489,7 @@ const Create = () => {
           winnersData={winnersData}
           tierSettings={values}
           handleContinue={handleContinue}
+          disabled={canContinue}
         />
         {/* <Wallet
           filteredNFTs={filteredNFTs}

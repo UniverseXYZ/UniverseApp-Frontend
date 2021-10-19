@@ -7,7 +7,7 @@ import uuid from 'react-uuid';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import Button from '../button/Button.jsx';
 
-const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue }) => {
+const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabled }) => {
   const data = winnersData.map((info) => info.nftIds);
 
   return (
@@ -63,7 +63,11 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue }) => {
               </span>
             )} */}
           <div className="continue-nft">
-            <Button onClick={() => handleContinue(winnersData)} className="light-button">
+            <Button
+              onClick={() => handleContinue(winnersData)}
+              disabled={!disabled}
+              className="light-button"
+            >
               Continue
             </Button>
           </div>
@@ -77,6 +81,7 @@ CreatTiersStickyBar.propTypes = {
   winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,
   tierSettings: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleContinue: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default CreatTiersStickyBar;
