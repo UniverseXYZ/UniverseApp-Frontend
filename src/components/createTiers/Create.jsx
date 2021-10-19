@@ -54,8 +54,8 @@ const Create = () => {
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [values, setValues] = useState({
     name: '',
-    numberOfWinners: '',
-    nftsPerWinner: '',
+    numberOfWinners: 1,
+    nftsPerWinner: null,
   });
   const [isValidFields, setIsValidFields] = useState({
     name: true,
@@ -113,12 +113,14 @@ const Create = () => {
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
     if (event.target.id === 'numberOfWinners') {
+      // If the input is cleared reassign the value to 0 instead of empty string
+      const v = (value && parseInt(value, 10)) || 0;
       if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < maxWinner || !value)) {
-        setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
+        setValues((prevValues) => ({ ...prevValues, [event.target.id]: v }));
       }
     } else if (event.target.id === 'nftsPerWinner') {
       if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 6 || !value)) {
-        setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
+        setValues((prevValues) => ({ ...prevValues, [event.target.id]: parseInt(value, 10) }));
       }
     } else {
       setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
@@ -137,12 +139,9 @@ const Create = () => {
 
   // Custom Slots distribution logic
   const [selectedWinner, setSelectedWinner] = useState(0);
-  const [winnersData, setWinnersData] = useState([
-    {
-      slotIndex: null,
-      nftIds: [], // {slot, id, url, artWorkType}
-    },
-  ]);
+
+  // [{slotIndex: int, nftIds: array}]
+  const [winnersData, setWinnersData] = useState([]);
 
   const onEditionClick = (data, actionMeta) => {
     if (!data) return;
@@ -173,24 +172,17 @@ const Create = () => {
     }
   };
 
-  const prepareSlotsData = () => {
+  const prepareSlotsData = (n) => {
     let slot = 0;
     const winners = [];
 
-    while (slot < values.numberOfWinners) {
-      winners.push({ slot, nftIds: [] });
+    while (slot < n) {
+      winners.push({ slotIndex: slot, nftIds: [] });
       slot += 1;
     }
 
     return winners;
   };
-
-  useEffect(async () => {
-    if (custom) {
-      const winners = prepareSlotsData();
-      await setWinnersData(winners);
-    } else setWinnersData([]);
-  }, [custom]);
 
   const handleContinue = (winnersSlots) => {
     const editMode = false;
@@ -236,6 +228,13 @@ const Create = () => {
     }
     history.push('/setup-auction/reward-tiers');
   };
+
+  useEffect(() => {
+    if (custom) {
+      const winners = prepareSlotsData(values.numberOfWinners);
+      setWinnersData(winners);
+    } else setWinnersData([]);
+  }, [custom]);
 
   // End Custom Slots distribution logic
 
@@ -307,7 +306,8 @@ const Create = () => {
               hoverBoxShadowGradient
               error={isValidFields.numberOfWinners ? undefined : 'Number of winners is required!'}
               className="inp"
-              value={values.numberOfWinners ? values.numberOfWinners : auction.winners}
+              value={values.numberOfWinners}
+              disabled={custom}
               onChange={handleChange}
             />
 
@@ -444,14 +444,10 @@ const Create = () => {
           </div>
         )}
         {
-          // TODO:: Take available NFTs and list them -> DONE
-          // TODO:: Create NFT card component -> DONE -> needs css
-          // TODO:: Add filters to them - DONE
-          // TODO:: Add pagination Component -> DONE -> need tweaking
-          // TODO:: Upon custom distribution - attach selected nft & edition to the winner -> DONE (can add remove nft from slot)
+          // TODO:: NFT card component CSS
+          // TODO:: Addjust shown nfts to the pagination
           // TODO:  Upon changing the selected winner we should display the already selected nfts for him
           // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
-          // TODO:: on the last step, send the slots distribution to the BE -DONE
           // TODO:: User should not be allowed to continue to the next stage if all the custom winners don't have at least 1 nft attached to them
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
