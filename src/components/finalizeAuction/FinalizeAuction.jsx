@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
+import { utils } from 'ethers';
 import SuccessPopup from '../popups/SuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
@@ -13,30 +14,60 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { createContractInstanceFromAddress } from '../../utils/helpers/pureFunctions/minting';
+import ApproveCollection from './ApproveCollection';
+import { addDeployInfoToAuction } from '../../utils/api/auctions';
+import LoadingImage from '../general/LoadingImage';
+import LoadingPopup from '../popups/LoadingPopup';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const FinalizeAuction = () => {
   const history = useHistory();
-  const { auction, myAuctions, setMyAuctions } = useAuctionContext();
-  const { deployedCollections, setDeployedCollections } = useAuthContext();
-  const [proceed, setProceed] = useState(false);
+  const { auction, myAuctions, setMyAuctions, bidExtendTime } = useAuctionContext();
+  const { setActiveTxHashes } = useMyNftsContext();
+  const {
+    signer,
+    universeERC721CoreContract,
+    universeERC721FactoryContract,
+    address,
+    universeAuctionHouseContract,
+  } = useAuthContext();
+
+  const [hasDeployedAuction, setHasDeployedAuction] = useState(false);
   const [approvals, setApprovals] = useState(1);
   const [loadingApproval, setLoadingApproval] = useState(undefined);
   const [collections, setCollections] = useState([]);
   const [approvedCollections, setApprovedCollections] = useState([]);
-
+  const [showAuctionDeployLoading, setShowAuctionDeployLoading] = useState(false);
+  // TODO: if auction is null -> redirect to my auctions page
+  // console.log(approvals);
+  console.log(auction);
   useEffect(() => {
-    let arr = [];
-    deployedCollections.forEach((item) => {
-      auction.rewardTiers.forEach((tier) => {
-        if (tier.nfts.filter((nft) => nft.collection?.id === item.id && !item.approved).length) {
-          arr.push(item);
+    const setupPage = async () => {
+      // TODO: Check if auction is deployed
+      if (auction.collections) {
+        setCollections(auction.collections);
+        // TODO: Check if collections are already approved
+        for (let i = 0; i < auction.collections.length; i += 1) {
+          const collection = auction.collections[i];
+          const contract = createContractInstanceFromAddress(
+            collection.address,
+            universeERC721CoreContract,
+            universeERC721FactoryContract,
+            signer
+          );
+          // eslint-disable-next-line no-await-in-loop
+          const isApproved = await contract.isApprovedForAll(collection.address, address);
+          console.log(`isApproved result:`);
+          console.log(isApproved);
+          if (isApproved) {
+            setApprovedCollections([...approvedCollections, collection.address]);
+          }
         }
-      });
-    });
-    arr = arr.filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i);
-    setCollections(arr);
-    setApprovedCollections(deployedCollections);
-  }, []);
+      }
+    };
+    setupPage();
+  }, [auction]);
 
   useEffect(() => {
     if (loadingApproval !== undefined) {
@@ -46,17 +77,81 @@ const FinalizeAuction = () => {
       }, 1000);
     }
   }, [loadingApproval]);
+  console.log(universeAuctionHouseContract);
 
-  const handleProceed = () => {
-    setProceed(true);
-    setApprovals(approvals + 1);
+  const handleCreateAuction = async () => {
+    setShowAuctionDeployLoading(true);
+
+    try {
+      let numberOfSlots = 0;
+      let paymentSplits = [];
+      const minimumReserveValues = [];
+      // TODO: Order by slotIndex
+      auction.rewardTiers
+        .sort((a, b) => +a.tierPosition - +b.tierPosition)
+        .forEach((tier) => {
+          const minimumBids = Array.from(Array(tier.numberOfWinners).keys()).map((slot) =>
+            utils.parseEther(tier.minimumBid.toString()).toString()
+          );
+          minimumReserveValues.push(...minimumBids);
+          numberOfSlots += tier.numberOfWinners;
+        });
+
+      if (auction.royaltySplits) {
+        paymentSplits = auction.royaltySplits.map((royalty) => [
+          royalty.address,
+          royalty.percentAmount * 1000,
+        ]);
+      }
+      const tx = await universeAuctionHouseContract.createAuction([
+        new Date(auction.startDate).getTime(),
+        new Date(auction.endDate).getTime(),
+        bidExtendTime * 60,
+        numberOfSlots,
+        auction.tokenAddress,
+        minimumReserveValues,
+        paymentSplits,
+      ]);
+      // TODO: Show tx hash
+      setActiveTxHashes([tx.hash]);
+      const txResult = await tx.wait();
+
+      if (txResult.status === 1) {
+        console.log(txResult);
+        // TODO: Call api to save auction
+        // This will be temporary while the scraper isn't ready
+        setHasDeployedAuction(true);
+      } else {
+        // TODO: show error that tx has failed
+      }
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
+    } catch (err) {
+      console.error(err);
+      setShowAuctionDeployLoading(false);
+      setActiveTxHashes([]);
+    }
   };
 
-  const handleClick = (id) => {
-    setApprovedCollections(
-      approvedCollections.map((item) => (item.id === id ? { ...item, approved: true } : item))
-    );
-    setLoadingApproval(approvals);
+  const handleApproveCollection = async (collectionAddress, setIsApproving) => {
+    try {
+      setIsApproving(true);
+      const contract = createContractInstanceFromAddress(
+        collectionAddress,
+        universeERC721CoreContract,
+        universeERC721FactoryContract,
+        signer
+      );
+
+      const tx = await contract.setApprovalForAll(collectionAddress, true);
+      const result = await tx.wait();
+      setApprovedCollections([...approvedCollections, collectionAddress]);
+      setLoadingApproval(approvals);
+      setIsApproving(false);
+    } catch (err) {
+      console.log(err);
+      setIsApproving(false);
+    }
   };
 
   const handleDeposit = () => {
@@ -66,7 +161,7 @@ const FinalizeAuction = () => {
   const handleLastDeposit = () => {
     setApprovals(approvals + 1);
     setTimeout(() => {
-      setDeployedCollections(approvedCollections);
+      // setDeployedCollections(approvedCollections);
       setMyAuctions(
         myAuctions.map((item) => (item.id === auction.id ? { ...item, launch: true } : item))
       );
@@ -110,13 +205,13 @@ const FinalizeAuction = () => {
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                {proceed ? (
+                {hasDeployedAuction ? (
                   <img src={doneIcon} alt="Done" />
                 ) : (
                   <img src={emptyMark} alt="Empty mark" />
                 )}
               </div>
-              <div className={`line ${proceed ? 'colored' : ''}`} />
+              <div className={`line ${hasDeployedAuction ? 'colored' : ''}`} />
             </div>
             <div className="create__auction__body">
               <h2>Create auction</h2>
@@ -129,118 +224,74 @@ const FinalizeAuction = () => {
                   You will not be able to make any changes to the auction settings if you proceed
                 </p>
               </div>
-              {proceed ? (
+              {hasDeployedAuction ? (
                 <Button className="light-border-button" disabled>
                   Completed <img src={completedCheckmark} alt="completed" />
                 </Button>
               ) : (
-                <Button className="light-button" onClick={handleProceed}>
+                <Button className="light-button" onClick={handleCreateAuction}>
                   Proceed
                 </Button>
               )}
             </div>
           </div>
-          {collections.length ? (
-            <div className="create__auction">
-              <div className="step">
-                <div className="circle">
-                  {proceed && approvals - 2 !== collections.length ? (
-                    <img alt="Empty mark" src={emptyMark} />
-                  ) : proceed && approvals - 2 === collections.length ? (
-                    <img alt="Empty mark" src={doneIcon} />
-                  ) : (
-                    <img alt="Empty white" src={emptyWhite} />
-                  )}
-                </div>
-                <div
-                  className={`line ${
-                    proceed && approvals - 2 === collections.length ? 'colored' : ''
-                  }`}
-                />
-              </div>
-              <div className="create__auction__body">
-                <h2>Set approvals</h2>
-                <p className="auction__description">
-                  Approve NFTs for depositing into the auction contract
-                </p>
-                <div className="warning__div">
-                  <img src={warningIcon} alt="Warning" />
-                  <p>
-                    Depending on the gas fee cost, you may need to have a significant amount of ETH
-                    to proceed
-                  </p>
-                </div>
-                <div className="collections">
-                  {collections.length ? (
-                    collections.map((collection, index) => (
-                      <div className="collection__div" key={uuid()}>
-                        {collection.bgImage ? (
-                          <img
-                            src={URL.createObjectURL(collection.bgImage)}
-                            alt={collection.name}
-                          />
-                        ) : typeof collection.previewImage === 'string' &&
-                          collection.previewImage.startsWith('#') ? (
-                          <div
-                            className="random__bg__color"
-                            style={{ backgroundColor: collection.previewImage }}
-                          />
-                        ) : (
-                          <img
-                            className="blur"
-                            src={URL.createObjectURL(collection.previewImage)}
-                            alt={collection.name}
-                          />
-                        )}
-                        <div>
-                          <h3>{collection.name}</h3>
-                          {loadingApproval !== index + 2 ? (
-                            <Button
-                              className={`${
-                                approvals > index + 2 ? 'light-border-button' : 'light-button'
-                              } approve-btn`}
-                              disabled={approvals !== index + 2}
-                              onClick={() => handleClick(collection.id)}
-                            >
-                              {approvals > index + 2 ? (
-                                <>
-                                  Approved
-                                  <img
-                                    src={completedCheckmark}
-                                    className="checkmark"
-                                    alt="Approved"
-                                  />
-                                </>
-                              ) : (
-                                'Approve'
-                              )}
-                            </Button>
-                          ) : (
-                            <div className="loading-ring">
-                              <div />
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="empty__nfts">
-                      <h3>No Collections found</h3>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
+
           <div className="create__auction">
             <div className="step">
               <div className="circle">
-                {proceed && approvals - 2 === collections.length ? (
+                {hasDeployedAuction && approvals - 2 !== collections.length ? (
+                  <img alt="Empty mark" src={emptyMark} />
+                ) : hasDeployedAuction && approvals - 2 === collections.length ? (
+                  <img alt="Empty mark" src={doneIcon} />
+                ) : (
+                  <img alt="Empty white" src={emptyWhite} />
+                )}
+              </div>
+              <div
+                className={`line ${
+                  hasDeployedAuction && approvals - 2 === collections.length ? 'colored' : ''
+                }`}
+              />
+            </div>
+            <div className="create__auction__body">
+              <h2>Set approvals</h2>
+              <p className="auction__description">
+                Approve NFTs for depositing into the auction contract
+              </p>
+              <div className="warning__div">
+                <img src={warningIcon} alt="Warning" />
+                <p>
+                  Depending on the gas fee cost, you may need to have a significant amount of ETH to
+                  proceed
+                </p>
+              </div>
+              <div className="collections">
+                {collections.length ? (
+                  collections.map((collection, index) => (
+                    <ApproveCollection
+                      collection={collection}
+                      approveCollection={handleApproveCollection}
+                      isApproved={
+                        !!approvedCollections.find(
+                          (collAddress) => collAddress === collection.address
+                        )
+                      }
+                      hasDeployedAuction={hasDeployedAuction}
+                    />
+                  ))
+                ) : (
+                  <div className="empty__nfts">
+                    <h3>No Collections found</h3>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="create__auction">
+            <div className="step">
+              <div className="circle">
+                {hasDeployedAuction && approvals - 2 === collections.length ? (
                   <img alt="Empty mark" src={emptyMark} />
                 ) : (
                   <img alt="Empty white" src={emptyWhite} />
@@ -309,6 +360,13 @@ const FinalizeAuction = () => {
           </div>
         </div>
       </div>
+      <Popup open={showAuctionDeployLoading} closeOnDocumentClick={false}>
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          onClose={() => setShowAuctionDeployLoading(false)}
+          contractInteraction
+        />
+      </Popup>
     </div>
   );
 };
