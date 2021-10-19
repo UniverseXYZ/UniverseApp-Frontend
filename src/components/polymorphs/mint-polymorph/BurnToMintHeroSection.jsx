@@ -13,9 +13,10 @@ const BurnToMintHeroSection = (props) => {
   const history = useHistory();
   const ref = useRef();
   const [loaded, setLoaded] = useState(false);
+  const VIDEO_READY_STATE = 4;
   useEffect(() => {
     const interval = setInterval(() => {
-      if (ref.current && ref.current.readyState === 4) {
+      if (ref.current && ref.current.readyState === VIDEO_READY_STATE) {
         setLoaded(true);
         clearInterval(interval);
       }
