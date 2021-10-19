@@ -10,8 +10,7 @@
     width: 42px;
     border-radius: 50%;
     &:hover {
-      background: linear-gradient($white, $white) padding-box,
-        linear-gradient(to right, #bceb00, #00eaea) border-box;
+      background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
       border: 1px solid transparent;
     }
 
@@ -38,6 +37,8 @@
     margin: 0 10px;
   }
   .slick-list {
+    overflow: unset !important;
+    overflow-x: clip !important;
     .slick-track {
       padding-top: 30px;
     }
@@ -242,7 +243,7 @@
     white-space: nowrap;
     position: absolute;
     z-index: 1111;
-    top: -32px;
+    bottom: 103%;
     left: 50%;
     transform: translateX(-50%);
     &::after {
@@ -256,11 +257,83 @@
       border-color: black transparent transparent transparent;
     }
   }
+  .tooltiptext-big {
+    visibility: hidden;
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    background-color: $black;
+    color: $white;
+    border-radius: 12px;
+    padding: 10px 12px;
+    white-space: nowrap;
+    position: absolute;
+    z-index: 1111;
+    bottom: 103%;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 118px;
+    min-width: 152px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: black transparent transparent transparent;
+    }
+    .title {
+      margin-bottom: 6px;
+    }
+    .tooltiptext-big-body {
+      overflow-y: auto;
+      max-height: 75px;
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #6a6a6a;
+        border-radius: 5px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .txns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 4px;
+
+        > span {
+          font-size: 10px;
+          line-height: 150%;
+        }
+        > a {
+          font-weight: bold;
+          font-size: 10px;
+          line-height: 150%;
+          text-align: right;
+          text-decoration-line: underline;
+          color: #4d66eb;
+          margin-right: 3px;
+          &:hover {
+            cursor: pointer;
+            color: #8294f1;
+          }
+        }
+      }
+    }
+  }
   &:hover {
     .tooltiptext {
       visibility: visible;
     }
+    .tooltiptext-big {
+      visibility: visible;
+    }
+
   }
 }
-
-

@@ -118,9 +118,9 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const resetConnectionState = async (walletConnectEvent) => {
-    if (providerName === CONNECTORS_NAMES.WalletConnect && !walletConnectEvent) {
-      await providerObject.disconnect();
-    }
+    // if (providerName === CONNECTORS_NAMES.WalletConnect && !walletConnectEvent) {
+    //   await providerObject.disconnect();
+    // }
 
     setWeb3Provider(null);
     setAddress('');
@@ -140,7 +140,7 @@ const AuthContextProvider = ({ children }) => {
   const connectWithMetaMask = async () => {
     const { ethereum } = window;
 
-    await ethereum.request({ method: 'eth_requestAccounts' });
+    // await ethereum.request({ method: 'eth_requestAccounts' });
     const provider = new providers.Web3Provider(ethereum);
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const network = await provider.getNetwork();
@@ -180,48 +180,55 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const connectWithWalletConnect = async () => {
-    const provider = new WalletConnectProvider({
-      infuraId: '1745e014e2ed4047acdaa135e869a11b',
-    });
+    // There is an issue when user clicks close on wallet connect scan qr code step
+    // the library throws an error that the user has closed the popup and makes the app crash
+    // I've wrapped the code inside a try catch to mitigate that
+    try {
+      const provider = new WalletConnectProvider({
+        infuraId: '1745e014e2ed4047acdaa135e869a11b',
+      });
 
-    await provider.enable();
+      await provider.enable();
 
-    const web3ProviderWrapper = new providers.Web3Provider(provider);
-    const network = await web3ProviderWrapper.getNetwork();
-    const { accounts: accountsWW } = web3ProviderWrapper.provider;
+      const web3ProviderWrapper = new providers.Web3Provider(provider);
+      const network = await web3ProviderWrapper.getNetwork();
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 
-    if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
-      await provider.disconnect();
-      setShowWrongNetworkPopup(true);
-    } else {
-      web3AuthenticationProccess(web3ProviderWrapper, network, accountsWW);
+      if (network.chainId !== +process.env.REACT_APP_NETWORK_CHAIN_ID) {
+        await provider.disconnect();
+        setShowWrongNetworkPopup(true);
+      } else {
+        web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
+      }
+
+      setProviderName(() => {
+        const name = CONNECTORS_NAMES.WalletConnect;
+        localStorage.setItem('providerName', name);
+        return name;
+      });
+      // setProviderObject(provider);
+
+      // Subscribe to accounts change
+      provider.on('accountsChanged', async ([account]) => {
+        // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
+        clearStorageAuthData();
+        history.push('/');
+        web3AuthenticationProccess(web3ProviderWrapper, network, [account]);
+      });
+
+      // Subscribe to chainId change
+      provider.on('chainChanged', async (chainId) => {
+        clearStorageAuthData();
+        window.location.reload();
+      });
+
+      // Subscribe to session disconnection
+      provider.on('disconnect', (code, reason) => {
+        resetConnectionState(true);
+      });
+    } catch (err) {
+      console.error(err);
     }
-
-    setProviderName(() => {
-      const name = CONNECTORS_NAMES.WalletConnect;
-      localStorage.setItem('providerName', name);
-      return name;
-    });
-    setProviderObject(provider);
-
-    // Subscribe to accounts change
-    provider.on('accountsChanged', async (accounts) => {
-      // IF ACCOUNT CHANGES, CLEAR TOKEN AND ADDRESS FROM LOCAL STORAGE
-      clearStorageAuthData();
-      history.push('/');
-      web3AuthenticationProccess(web3ProviderWrapper, network, accounts);
-    });
-
-    // Subscribe to chainId change
-    provider.on('chainChanged', async (chainId) => {
-      clearStorageAuthData();
-      window.location.reload();
-    });
-
-    // Subscribe to session disconnection
-    provider.on('disconnect', (code, reason) => {
-      resetConnectionState(true);
-    });
   };
 
   const connectWeb3 = async () => {
@@ -287,7 +294,7 @@ const AuthContextProvider = ({ children }) => {
         closeError();
       }
     } catch (err) {
-      if (err.code === 4001) {
+      if (err?.code === 4001) {
         setShowError(true);
         setErrorTitle('Signature is required');
         setErrorBody(
@@ -296,6 +303,7 @@ const AuthContextProvider = ({ children }) => {
       }
       setIsWalletConnected(false);
       setIsAuthenticated(false);
+      console.error(err);
     }
   };
 

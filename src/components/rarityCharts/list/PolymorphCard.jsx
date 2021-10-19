@@ -53,7 +53,7 @@ const PolymorphCard = ({ item }) => {
         <h2>{item.character}</h2>
         <p>{`ID: #${item.tokenid}`}</p>
       </div>
-      <Popup open={showPopup}>
+      <Popup open={showPopup} closeOnDocumentClick={false}>
         <RarityRankPopup onClose={() => setShowPopup(false)} item={item} />
       </Popup>
     </div>

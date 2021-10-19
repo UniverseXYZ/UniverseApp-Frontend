@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 .mynfts__page {
   .empty__nfts {
@@ -131,23 +131,23 @@
   }
 
   &__gradient:before {
-    content: '';
+    content: "";
     position: absolute;
     width: 100%;
     height: 100%;
     display: block;
     z-index: -1;
-    background-image: url('../../assets/images/my-nfts-desktop.png');
+    background-image: url("../../assets/images/my-nfts-desktop.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 
     @include lg {
-      background-image: url('../../assets/images/my-nfts-tablet.png');
+      background-image: url("../../assets/images/my-nfts-tablet.png");
     }
 
     @include sm {
-      background-image: url('../../assets/images/my-nfts-mobile.png');
+      background-image: url("../../assets/images/my-nfts-mobile.png");
     }
   }
 
@@ -170,6 +170,9 @@
 
     .create__mint__btns {
       display: flex;
+      button {
+        max-height: 42px;
+      }
       @include sm {
         flex-wrap: wrap;
         flex-direction: column-reverse;
@@ -260,18 +263,6 @@
   }
 
   .empty__nfts {
-    margin-top: 100px;
-
-    h3 {
-      font-family: $spaceGroteskFont;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 22px;
-      text-align: center;
-      color: $black;
-      margin-bottom: 23px;
-    }
-
     p.desc {
       font-family: $spaceGroteskFont;
       font-style: normal;
@@ -486,7 +477,7 @@
             border: 1px solid transparent;
 
             &::after {
-              content: '\2716';
+              content: "\2716";
               background-color: $black;
               color: $white;
               position: absolute;
@@ -724,7 +715,7 @@
           border: 1px solid transparent;
 
           &::after {
-            content: '\2716';
+            content: "\2716";
             background-color: $black;
             color: $white;
             position: absolute;
@@ -934,7 +925,7 @@
             top: -32px;
             right: -63px;
             &::after {
-              content: '';
+              content: "";
               position: absolute;
               top: 100%;
               left: 50%;
@@ -980,7 +971,7 @@
             top: -32px;
             right: -63px;
             &::after {
-              content: '';
+              content: "";
               position: absolute;
               top: 100%;
               left: 50%;
@@ -1414,7 +1405,7 @@
 
       /* Create the checkmark/indicator (hidden when not checked) */
       .edition-checkmark:after {
-        content: '';
+        content: "";
         position: absolute;
         display: none;
       }
@@ -1422,7 +1413,7 @@
       /* Show the checkmark when checked */
       .edition-container input:checked ~ .checkmark:after {
         display: block;
-        content: '';
+        content: "";
       }
 
       /* Style the checkmark/indicator */
@@ -1551,6 +1542,7 @@
 
 .tab__saved__nfts {
   .custom__checkbox {
+    padding-top: 20px;
     margin-bottom: 20px;
 
     label {
@@ -1563,7 +1555,7 @@
       cursor: pointer;
 
       input {
-        @include css-checkbox(16px, $black, $white, 'middle', $white, 6px);
+        @include css-checkbox(16px, $black, $white, "middle", $white, 6px);
       }
     }
   }
@@ -1891,7 +1883,7 @@
         top: -32px;
         left: calc(50% - 93px);
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 100%;
           left: 50%;
@@ -1916,6 +1908,7 @@
 
 .tab__saved__collections {
   .saved__collections__lists {
+    padding-top: 20px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 30px;
@@ -2223,7 +2216,7 @@
             top: -35px;
             left: calc(50% - 66px);
             &::after {
-              content: '';
+              content: "";
               position: absolute;
               top: 100%;
               left: 50%;

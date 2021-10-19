@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
 
+import { useHistory } from 'react-router';
 import countIcon from '../../assets/images/slidecounts.svg';
 import priceIcon from '../../assets/images/marketplace/eth-icon.svg';
 
@@ -17,6 +18,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
+  const history = useHistory();
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { address } = useAuthContext();
   const [dropdownID, setDropdownID] = useState(0);
@@ -56,26 +58,37 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
 
     setMyNFTs(newNFTs);
   };
-
   return (
     <div className="nft--card--header">
       <div className="three--images">
         {creator &&
         (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
           <>
-            <div className="creator--details">
+            <div
+              className="creator--details"
+              onClick={() => history.push(`/${creator.universePageUrl}`)}
+              aria-hidden
+            >
               <img src={creator.profileImageUrl} alt={creator.displayName} />
               <span className="tooltiptext">{`Creator: ${creator.displayName}`}</span>
             </div>
           </>
         ) : (
-          <div className="owner--details">
+          <div
+            className="creator--details"
+            onClick={() => history.push(`/${creator?.address}`)}
+            aria-hidden
+          >
             <Blockies className="blockie--details" seed={creator?.address} size={9} scale={3} />
             <span className="tooltiptext">{`Creator: ${creator?.address}`}</span>
           </div>
         )}
         {collection && (
-          <div className="collection--details">
+          <div
+            className="collection--details"
+            onClick={() => history.push(`/collection/${collection.address}`)}
+            aria-hidden
+          >
             {collection.address === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
               <img src={universeIcon} alt={collection.name} />
             ) : !collection.coverUrl ? (
@@ -92,7 +105,11 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
           </div>
         )}
         {owner && (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
-          <div className="owner--details">
+          <div
+            className="owner--details"
+            onClick={() => history.push(`/${creator.universePageUrl}`)}
+            aria-hidden
+          >
             <img
               src={owner.avatar || owner.profileImageUrl}
               alt={owner.name || owner.displayName}
@@ -100,14 +117,18 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
             <span className="tooltiptext">{`Owner: ${owner.name || owner.displayName}`}</span>
           </div>
         ) : (
-          <div className="owner--details">
+          <div
+            className="owner--details"
+            onClick={() => history.push(`/${owner?.address || address}`)}
+            aria-hidden
+          >
             <Blockies
               className="blockie--details"
-              seed={owner.address || address}
+              seed={owner?.address || address}
               size={9}
               scale={3}
             />
-            <span className="tooltiptext">{`Owner: ${owner.address || address}`}</span>
+            <span className="tooltiptext">{`Owner: ${owner?.address || address}`}</span>
           </div>
         )}
       </div>

@@ -148,36 +148,44 @@ const ProfileForm = ({
             </p>
           </div>
           <h3 className="account-info">Account info</h3>
-          <h5>Display name</h5>
+          <h5>
+            <span>Display name</span>
+            <p className="input-max-chars">
+              {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
+            </p>
+          </h5>
           <Input
             placeholder="Enter your display name"
             className={!accountName && editProfileButtonClick ? 'error-inp' : 'inp'}
             value={accountName}
-            hoverBoxShadowGradient
+            hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
             onChange={(e) => {
               if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.name) return;
               setAccountName(e.target.value);
             }}
           />
-          <p className="input-max-chars">
-            Characters: {accountName.length}/{MAX_FIELD_CHARS_LENGTH.name}
-          </p>
+
           {!accountName && editProfileButtonClick && (
             <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
           )}
           <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
-            Universe page address
-            <div className="universe__page__address">
-              <img src={infoIcon} alt="Info Icon" />
-              {hideIcon && (
-                <div className="info-text1">
-                  <p>
-                    Universe page is your own brand landing page within the Universe ecosystem. It
-                    can contain your logo, description, and social links.
-                  </p>
-                </div>
-              )}
-            </div>
+            <span>
+              Universe page address
+              <div className="universe__page__address">
+                <img src={infoIcon} alt="Info Icon" />
+                {hideIcon && (
+                  <div className="info-text1">
+                    <p>
+                      Universe page is your own brand landing page within the Universe ecosystem. It
+                      can contain your logo, description, and social links.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </span>
+            <p className="input-max-chars">
+              {accountPage.length}/{MAX_FIELD_CHARS_LENGTH.pageAddress}
+            </p>
           </h5>
           <div className="account-grid-address">
             <Input
@@ -204,13 +212,19 @@ const ProfileForm = ({
                   &quot;Universe page address&quot; is not allowed to be empty
                 </p>
               )}
-            <div className="box--shadow--effect--block" />
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+            editProfileButtonClick ? null : (
+              <div className="box--shadow--effect--block" />
+            )}
           </div>
-          <p className="input-max-chars">
-            Characters: {accountPage.length}/{MAX_FIELD_CHARS_LENGTH.pageAddress}
-          </p>
+
           <div className="account-grid-about-editing">
-            <h5>Your bio</h5>
+            <h5>
+              <span>Your bio</span>
+              <p className="input-max-chars">
+                {about.length}/{MAX_FIELD_CHARS_LENGTH.bio}
+              </p>
+            </h5>
             <textarea
               placeholder="Please write a few lines about yourself"
               className={!about && editProfileButtonClick ? 'error-inp' : 'inp'}
@@ -220,14 +234,14 @@ const ProfileForm = ({
                 setAbout(e.target.value);
               }}
             />
-            <div className="box--shadow--effect--block" />
+            {!about && editProfileButtonClick ? null : (
+              <div className="box--shadow--effect--block" />
+            )}
             {!about && editProfileButtonClick && (
               <p className="error__text">&quot;Your bio&quot; is not allowed to be empty</p>
             )}
           </div>
-          <p className="input-max-chars">
-            Characters: {about.length}/{MAX_FIELD_CHARS_LENGTH.bio}
-          </p>
+
           <div className="display-warning">
             <img alt="" src={warningIcon} />
             <p>

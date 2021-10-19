@@ -1,22 +1,10 @@
-@import "../../../assets/scss/variables";
-@import "../../../assets/scss/_mixins";
+@import '../../../assets/scss/variables';
+@import '../../../assets/scss/_mixins';
 
 .single__nft {
   .mintNftCollection-div {
-    padding: 0 10px;
-    max-height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-
     .modal-close {
       display: none;
-    }
-
-    @include lg {
-      padding: 84px 60px;
-    }
-    @include sm {
-      padding: 34px 10px;
     }
     .single-nft-title {
       font-family: $sharpGroteskSemiBoldFont;
@@ -31,12 +19,23 @@
     margin-top: 20px;
 
     h5 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-family: $spaceGroteskFont;
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
       line-height: 22px;
       margin-bottom: 4px;
+      p.input-max-chars {
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 10px;
+        line-height: 13px;
+        color: rgba(0, 0, 0, 0.4);
+      }
     }
 
     .single-nft-upload {
@@ -62,6 +61,7 @@
           text-align: center;
 
           h5 {
+            display: block;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 500;
@@ -461,7 +461,7 @@
     .hr-div {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       margin-top: 60px;
-      margin-bottom: 20px;
+      margin-bottom: 60px;
     }
     .single-nft-properties {
       margin-top: 40px;
@@ -532,7 +532,7 @@
 
         .slider:before {
           position: absolute;
-          content: "";
+          content: '';
           height: 16px;
           width: 16px;
           left: 4px;
@@ -708,6 +708,7 @@
       .property-add {
         cursor: pointer;
         h5 {
+          display: block;
           font-family: $spaceGroteskFont;
           font-weight: 600;
           font-size: 16px;
@@ -789,7 +790,7 @@
 
           .slider:before {
             position: absolute;
-            content: "";
+            content: '';
             height: 16px;
             width: 16px;
             left: 4px;
@@ -902,7 +903,7 @@
     .single-nft-buttons {
       display: flex;
       justify-content: flex-end;
-      margin-top: 40px;
+      margin-top: 60px;
       margin-bottom: 40px;
       text-align: right;
       button {
@@ -922,12 +923,6 @@
         }
       }
     }
-  }
-
-  .input-max-chars {
-    font-family: $spaceGroteskFont;
-    font-size: 10px;
-    color: #e4b613;
   }
 
   .scroll-box {

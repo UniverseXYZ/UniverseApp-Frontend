@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import searchIcon from '../../assets/images/search-gray.svg';
 import './SearchField.scss';
 
-const SearchNFTsField = ({ searchValue, setSearchValue, dropdown, getData, ...resProps }) => {
+const SearchNFTsField = ({
+  searchValue,
+  setSearchValue,
+  dropdown,
+  getData,
+  resetPagination,
+  ...resProps
+}) => {
   const [focusField, setFocusField] = useState('');
 
   return (
@@ -12,7 +19,12 @@ const SearchNFTsField = ({ searchValue, setSearchValue, dropdown, getData, ...re
       <input
         type="text"
         className="inp"
-        onChange={(e) => setSearchValue(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length <= 32) {
+            setSearchValue(e.target.value);
+            resetPagination();
+          }
+        }}
         value={searchValue}
         onFocus={() => setFocusField('focus--field')}
         onBlur={() => setFocusField('')}
@@ -28,11 +40,13 @@ SearchNFTsField.propTypes = {
   setSearchValue: PropTypes.func.isRequired,
   dropdown: PropTypes.bool,
   getData: PropTypes.func,
+  resetPagination: PropTypes.func,
 };
 
 SearchNFTsField.defaultProps = {
   dropdown: true,
   getData: () => {},
+  resetPagination: () => {},
 };
 
 export default SearchNFTsField;

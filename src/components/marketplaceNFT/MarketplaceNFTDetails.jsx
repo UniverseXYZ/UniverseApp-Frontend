@@ -43,9 +43,11 @@ import leftArrow from '../../assets/images/marketplace/bundles-left-arrow.svg';
 import rightArrow from '../../assets/images/marketplace/bundles-right-arrow.svg';
 import likerTestImage from '../../assets/images/marketplace/users/user1.png';
 import universeIcon from '../../assets/images/universe-img.svg';
+import checkIcon from '../../assets/images/check.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
+import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -57,9 +59,10 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const customPlayerRef = useRef(null);
 
   const [selectedNFT, setSelectedNFT] = useState(onNFT.nft);
-  const { moreFromCollection, collection, owner, creator } = onNFT;
+  const { moreFromCollection, collection, owner, creator, tokenIds } = onNFT;
   const tabs = selectedNFT?.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [trackProgress, setTrackProgress] = useState('00:00');
@@ -442,6 +445,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       }, 4000);
     }
   };
+
   return (
     <>
       <div className="marketplace--nft--page">
@@ -479,7 +483,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.artworkType &&
                   !selectedNFT.artworkType.endsWith('mpeg') &&
                   !selectedNFT.artworkType.endsWith('mp4') && (
-                    <img src={selectedNFT.optimized_url} alt={selectedNFT.name} />
+                    <img src={selectedNFT.original_url} alt={selectedNFT.name} />
                   )}
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
@@ -492,9 +496,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <video ref={mediaRef}>
                         <source
                           src={
-                            typeof selectedNFT.optimized_url === 'string'
-                              ? selectedNFT.optimized_url
-                              : URL.createObjectURL(selectedNFT.optimized_url)
+                            typeof selectedNFT.original_url === 'string'
+                              ? selectedNFT.original_url
+                              : URL.createObjectURL(selectedNFT.original_url)
                           }
                           type="video/mp4"
                         />
@@ -653,7 +657,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.tokenIds[selectedNFTIndex].type !== 'audio/mpeg' &&
                   selectedNFT.tokenIds[selectedNFTIndex].type !== 'video/mp4' && (
                     <img
-                      src={selectedNFT.tokenIds[selectedNFTIndex].optimized_url}
+                      src={selectedNFT.tokenIds[selectedNFTIndex].original_url}
                       alt={selectedNFT.name}
                     />
                   )}
@@ -965,13 +969,56 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div> */}
             </div>
           </div>
-          {/* <div className="Marketplace--number">
-            <p>Edition {`${selectedNFTIndex + 1} / ${selectedNFT.numberOfEditions}`}</p>
-          </div> */}
+          <div className="Marketplace--number">
+            <p>
+              Edition&nbsp;
+              {`${selectedNFT.tokenIds ? selectedNFT.tokenIds.length : 1}/${
+                selectedNFT.numberOfEditions
+                  ? selectedNFT.numberOfEditions
+                  : selectedNFT.tokenIds
+                  ? selectedNFT.tokenIds.length
+                  : 1
+              }`}
+            </p>
+            <div className="tokenIds-dropdown">
+              <SearchTokenIdField searchValue={searchValue} setSearchValue={setSearchValue} />
+              <ul className="tokenIds">
+                {tokenIds.filter((tokenId) => tokenId.toString().includes(searchValue)).length ? (
+                  <>
+                    {tokenIds
+                      .filter((tokenId) => tokenId.toString().includes(searchValue))
+                      .map((tokenId) => (
+                        <li
+                          key={uuid()}
+                          aria-hidden="true"
+                          onClick={() => {
+                            history.push(`/nft/${collection.address}/${tokenId}`);
+                          }}
+                        >
+                          <span>{`#${tokenId}`}</span>
+                          {tokenId === selectedNFT.tokenId ? (
+                            <img src={checkIcon} alt="check" />
+                          ) : (
+                            <></>
+                          )}
+                        </li>
+                      ))}
+                  </>
+                ) : (
+                  <p>No results</p>
+                )}
+              </ul>
+              <div className="inset--bottom--shadow" />
+            </div>
+          </div>
           <div className="Marketplace--collections">
             {creator &&
             (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
-              <div className="Marketplace--creators">
+              <div
+                className="Marketplace--creators"
+                onClick={() => history.push(`/${creator.universePageUrl}`)}
+                aria-hidden
+              >
                 <img src={creator.profileImageUrl} alt="icon" />
                 <div className="creator--name">
                   <p>Creator</p>
@@ -979,7 +1026,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
             ) : (
-              <div className="Marketplace--creators">
+              <div
+                className="Marketplace--creators"
+                onClick={() => history.push(`/${creator.address}`)}
+                aria-hidden
+              >
                 <Blockies className="blockie--details" seed={creator.address} size={9} scale={4} />
                 <div className="creator--name">
                   <p>Creator</p>
@@ -1000,7 +1051,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             )}
 
             {collection && collection.coverUrl && (
-              <div className="Marketplace--creators">
+              <div
+                className="Marketplace--creators"
+                onClick={() => history.push(`/collection/${collection.address}`)}
+                aria-hidden
+              >
                 {!collection.coverUrl ? (
                   <div
                     className="random--bg--color"
@@ -1029,7 +1084,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             )}
 
             {collection && !collection.coverUrl && (
-              <div className="Marketplace--creators">
+              <div
+                className="Marketplace--creators"
+                onClick={() => history.push(`/collection/${collection.address}`)}
+                aria-hidden
+              >
                 <img src={universeIcon} alt={collection.name} />
                 <div className="creator--name">
                   <p>Collection</p>
@@ -1040,7 +1099,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
 
             {owner &&
             (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
-              <div className="Marketplace--creators">
+              <div
+                className="Marketplace--creators"
+                onClick={() => history.push(`/${owner.universePageUrl}`)}
+                aria-hidden
+              >
                 <img src={owner.avatar || owner.profileImageUrl} alt="icon2" />
                 <div className="creator--name">
                   <p>Owner</p>
@@ -1048,7 +1111,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 </div>
               </div>
             ) : (
-              <div className="Marketplace--creators">
+              <div
+                className="Marketplace--creators"
+                onClick={() => history.push(`/${owner.address}`)}
+                aria-hidden
+              >
                 <Blockies className="blockie--details" seed={owner.address} size={9} scale={4} />
                 <div className="creator--name">
                   <p>Owner</p>

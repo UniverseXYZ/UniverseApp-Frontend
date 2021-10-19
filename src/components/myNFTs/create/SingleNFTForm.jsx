@@ -97,7 +97,7 @@ const SingleNFTForm = () => {
   const [properties, setProperties] = useState([
     { name: '', value: '', errors: { name: '', value: '' } },
   ]);
-  const [royaltyAddress, setRoyaltyAddress] = useState([{ address: '', amount: '' }]);
+  const [royaltyAddress, setRoyaltyAddress] = useState([{ address, amount: '10' }]);
 
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
@@ -589,7 +589,6 @@ const SingleNFTForm = () => {
       }
     }
   }, [errors, saveForLateClick]);
-
   useEffect(() => {
     // This means it's editing an saved nft
     if (savedNFTsID) {
@@ -771,7 +770,12 @@ const SingleNFTForm = () => {
           </div>
           {errors.previewImage && <p className="error-message">{errors.previewImage}</p>}
           <div className="single-nft-name">
-            <h5>Name</h5>
+            <h5>
+              <span>Name</span>
+              <p className="input-max-chars">
+                {name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+              </p>
+            </h5>
             <Input
               className="inp"
               error={errors.name}
@@ -789,12 +793,14 @@ const SingleNFTForm = () => {
               }}
               value={name}
             />
-            <p className="input-max-chars">
-              Characters: {name.length}/{MAX_FIELD_CHARS_LENGTH.name}
-            </p>
           </div>
           <div className="single-nft-description">
-            <h5>Description (optional)</h5>
+            <h5>
+              <span>Description (optional)</span>
+              <p className="input-max-chars">
+                {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+              </p>
+            </h5>
             <textarea
               rows="5"
               placeholder="Spread some words about your NFT"
@@ -807,9 +813,6 @@ const SingleNFTForm = () => {
             />
             <div className="box--shadow--effect--block" />
           </div>
-          <p className="input-max-chars">
-            Characters: {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
-          </p>
           <div className="single-nft-editions">
             <div className="single-nft-edition-header">
               <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
@@ -891,7 +894,12 @@ const SingleNFTForm = () => {
                   // eslint-disable-next-line react/no-array-index-key
                   <div key={i} className="properties">
                     <div className="property-name">
-                      <h5>Property name</h5>
+                      <h5>
+                        <span>Property name</span>
+                        <p className="input-max-chars">
+                          {property.name.length}/{MAX_FIELD_CHARS_LENGTH.propertyName}
+                        </p>
+                      </h5>
                       <Input
                         className="inp"
                         error={property.errors?.name || hasPropError(property.name, i)}
@@ -901,13 +909,16 @@ const SingleNFTForm = () => {
                           if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.propertyName) return;
                           propertyChangesName(i, e.target.value);
                         }}
+                        hoverBoxShadowGradient
                       />
-                      <p className="input-max-chars">
-                        Characters: {property.name.length}/{MAX_FIELD_CHARS_LENGTH.propertyName}
-                      </p>
                     </div>
                     <div className="property-value">
-                      <h5>Value</h5>
+                      <h5>
+                        <span>Value</span>
+                        <p className="input-max-chars">
+                          {property.value.length}/{MAX_FIELD_CHARS_LENGTH.propertyValue}
+                        </p>
+                      </h5>
                       <Input
                         className="inp"
                         error={property.errors?.value}
@@ -917,10 +928,8 @@ const SingleNFTForm = () => {
                           if (e.target.value.length > MAX_FIELD_CHARS_LENGTH.propertyValue) return;
                           propertyChangesValue(i, e.target.value);
                         }}
+                        hoverBoxShadowGradient
                       />
-                      <p className="input-max-chars">
-                        Characters: {property.value.length}/{MAX_FIELD_CHARS_LENGTH.propertyValue}
-                      </p>
                     </div>
                     {i > 0 ? (
                       <>
@@ -965,6 +974,7 @@ const SingleNFTForm = () => {
               </h5>
             </div>
             {/* {editableNFTType !== 'collection' && ( */}
+            <div className="hr-div" />
             <div className="royalities">
               <div className="title">
                 <h4
@@ -1004,6 +1014,7 @@ const SingleNFTForm = () => {
                         value={elm.address}
                         error={elm.error || hasAddressError(elm.address, i)}
                         onChange={(e) => propertyChangesAddress(i, e.target.value)}
+                        hoverBoxShadowGradient
                       />
                     </div>
                     <div className="property-amount">
@@ -1015,6 +1026,7 @@ const SingleNFTForm = () => {
                         value={elm.amount}
                         onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
                         onWheel={(e) => e.target.blur()}
+                        hoverBoxShadowGradient
                       />
                       <span className="percent-sign">%</span>
                     </div>
@@ -1096,6 +1108,7 @@ const SingleNFTForm = () => {
                     !name ||
                     !editions ||
                     !previewImage ||
+                    !selectedCollection ||
                     (propertyCheck &&
                       properties.find(
                         (property) => property.name === '' || property.value === ''

@@ -307,14 +307,14 @@ const DesktopView = ({
               className="menu-li myAccount"
               onClick={() => setIsAccountDropdownOpened(!isAccountDropdownOpened)}
             >
-              <HeaderAvatar scale={3} />
+              <HeaderAvatar scale={4} />
               <span className="nav__link__title">My account</span>
               <img className="arrow" src={arrowUP} alt="arrow" />
             </button>
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <HeaderAvatar scale={3} />
+                  <HeaderAvatar scale={4} />
                   <div className="ethereum__address">
                     {yourEnsDomain
                       ? shortenEnsDomain(yourEnsDomain)
@@ -404,6 +404,7 @@ const DesktopView = ({
         ) : (
           <li>
             <Popup
+              closeOnDocumentClick={false}
               trigger={
                 <button type="button" className="sign__in">
                   Sign In

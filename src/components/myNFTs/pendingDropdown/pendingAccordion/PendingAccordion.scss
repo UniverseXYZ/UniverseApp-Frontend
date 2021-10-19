@@ -71,12 +71,6 @@
     .accordion__item__body {
       padding: 0 30px;
       margin-top: 0px !important;
-      animation: fadeOutDown ease-in-out forwards;
-      animation-duration: 0s;
-
-      &.open {
-        animation: fadeInDown 0.5s ease-in-out forwards;
-      }
 
       img {
         @include md {

@@ -15,6 +15,7 @@ import checkIcon from '../../assets/images/check-black.svg';
 import NFTCardHeader from './NFTCardHeader';
 import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
+import NftEditions from './NftEditions';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
@@ -22,6 +23,7 @@ const NFTCard = React.memo(
     const history = useHistory();
     const location = useLocation();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
 
     const { creator } = nft;
     const owner = location.pathname === '/my-nfts' ? loggedInArtist : nft.owner;
@@ -83,7 +85,12 @@ const NFTCard = React.memo(
               aria-hidden="true"
             >
               {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && (
-                <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
+                <LoadingImage
+                  className="nft--image"
+                  alt={nft.name}
+                  src={nft.thumbnail_url}
+                  placeholderImage={nft.thumbnail_url}
+                />
               )}
               {nft.artworkType === 'mp4' && (
                 <video
@@ -93,7 +100,7 @@ const NFTCard = React.memo(
                   onBlur={(event) => event.target.pause()}
                   muted
                 >
-                  <source src={nft.optimized_url} type="video/mp4" />
+                  <source src={nft.thumbnail_url} type="video/mp4" />
                   <track kind="captions" />
                   Your browser does not support the video tag.
                 </video>
@@ -140,7 +147,7 @@ const NFTCard = React.memo(
                           {nft.artworkType &&
                             !nft.artworkType.endsWith('mpeg') &&
                             !nft.artworkType.endsWith('mp4') && (
-                              <img className="nft--image" src={nft.optimized_url} alt={nft.name} />
+                              <img className="nft--image" src={nft.thumbnail_url} alt={nft.name} />
                             )}
                           {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                             <video
@@ -150,7 +157,7 @@ const NFTCard = React.memo(
                               onBlur={(event) => event.target.pause()}
                               muted
                             >
-                              <source src={nft.optimized_url} type="video/mp4" />
+                              <source src={nft.thumbnail_url} type="video/mp4" />
                               <track kind="captions" />
                               Your browser does not support the video tag.
                             </video>
@@ -180,8 +187,8 @@ const NFTCard = React.memo(
                       <LoadingImage
                         className="nft--image"
                         alt={nft.name}
-                        src={nft.optimized_url}
-                        placeholderImage={nft.optimized_url}
+                        src={nft.thumbnail_url}
+                        placeholderImage={nft.thumbnail_url}
                       />
                     )}
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
@@ -192,7 +199,7 @@ const NFTCard = React.memo(
                       onBlur={(event) => event.target.pause()}
                       muted
                     >
-                      <source src={nft.optimized_url} type="video/mp4" />
+                      <source src={nft.thumbnail_url} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
@@ -216,9 +223,13 @@ const NFTCard = React.memo(
           </div>
           <div className="quantity--and--offer">
             {/* // TODO:: we need a property from the BE about the total editions count */}
-            <p>{`${nft.tokenIds ? nft.tokenIds.length : 1} / ${
-              nft.numberOfEditions ? nft.numberOfEditions : nft.tokenIds ? nft.tokenIds.length : 1
-            }`}</p>
+            <NftEditions
+              push={history.push}
+              searchValue={searchValue}
+              nft={nft}
+              setSearchValue={setSearchValue}
+              collectionAddress={collectionAddress}
+            />
             {/* <div className="price--offer--div">
             <label>Offer for</label>
             <img src={priceIcon} alt="Price" />

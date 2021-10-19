@@ -434,8 +434,8 @@ export const getMyMintingCollectionsCount = async () => {
   return result.count;
 };
 
-export const getCollectionData = async (address) => {
-  const URL = `${GET_SPECIFIC_COLLECTION}/${address}`;
+export const getCollectionData = async (address, offset, perPage) => {
+  const URL = `${GET_SPECIFIC_COLLECTION}/${address}?start=${offset}&limit=${perPage}`;
 
   const requestOptions = {
     method: 'GET',

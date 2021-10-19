@@ -126,7 +126,7 @@ const SavedNFTs = () => {
                       onMouseOut={(event) => event.target.pause()}
                       onBlur={(event) => event.target.pause()}
                     >
-                      <source src={nft.optimizedUrl} type="video/mp4" />
+                      <source src={nft.thumbnailUrl} type="video/mp4" />
                       <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
@@ -140,10 +140,10 @@ const SavedNFTs = () => {
                     !nft.artworkType.endsWith('mp4') && (
                       <LoadingImage
                         className="preview-image"
-                        src={nft.optimizedUrl}
+                        src={nft.thumbnailUrl}
                         alt={nft.name}
                       />
-                      // <img className="preview-image" src={nft.optimizedUrl}  />
+                      // <img className="preview-image" src={nft.thumbnailUrl}  />
                     )}
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <img className="video__icon" src={videoIcon} alt="Video Icon" />

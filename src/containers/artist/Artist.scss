@@ -62,7 +62,8 @@
         align-items: center;
         min-width: 280px;
         min-height: 280px;
-        img {
+        img,
+        canvas {
           width: 280px;
           height: 280px;
           object-fit: cover;
@@ -98,6 +99,52 @@
           }
           @include sm {
             display: none;
+          }
+        }
+        .address__copy {
+          position: relative;
+          width: fit-content;
+          cursor: pointer;
+
+          .copied-address {
+            position: absolute;
+            min-width: fit-content;
+            height: 27px;
+            background: #000;
+            border-radius: 100px;
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 12px;
+            line-height: 150%;
+            text-align: center;
+            color: #ffffff;
+            top: -207%;
+            left: 25%;
+            padding: 4px 12px;
+            &:active {
+              background: rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+            }
+
+            span {
+              position: absolute;
+              width: 7.6px;
+              height: 7.6px;
+              left: 25px;
+              top: 23px;
+              background: #000;
+              transform: matrix(0.71, 0.7, -0.71, 0.71, 0, 0);
+            }
+          }
+          p.address {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 15px;
+            color: #4d66eb;
+            margin-top: 10px;
           }
         }
         p.desc {

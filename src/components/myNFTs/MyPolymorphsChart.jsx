@@ -5,11 +5,11 @@ import '../pagination/Pagination.scss';
 import '../../containers/rarityCharts/PolymorphRarityCharts.scss';
 import { useSearchPolymorphs } from '../../utils/hooks/useMyNftsRarityDebouncer';
 import { categoriesArray } from '../../containers/rarityCharts/categories';
-import RarityList from '../rarityCharts/list/RarityList';
 import CollectionDropdown from './CollectionDropdown';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import LobsterRarityFilters from '../rarityCharts/filters/LobsterRarityFilters';
+import MyRarityList from '../rarityCharts/list/MyRarityList';
 
 const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   const { setMyUniverseNFTsActiverPage } = useMyNftsContext();
@@ -34,10 +34,6 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
   } = useSearchPolymorphs();
   const [categories, setCategories] = useState(categoriesArray);
   const [categoriesIndexes, setCategoriesIndexes] = useState([]);
-
-  useEffect(() => {
-    setDarkMode(true);
-  }, []);
 
   const resetPagination = () => {
     setMyUniverseNFTsActiverPage(0);
@@ -86,7 +82,7 @@ const MyPolymorphsChart = ({ isDropdownOpened, setIsDropdownOpened }) => {
           />
         )}
       />
-      <RarityList
+      <MyRarityList
         data={results}
         isLastPage={isLastPage}
         perPage={perPage}

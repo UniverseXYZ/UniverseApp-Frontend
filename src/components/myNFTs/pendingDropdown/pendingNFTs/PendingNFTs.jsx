@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './PendingNFTs.scss';
 import Blockies from 'react-blockies';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
@@ -7,24 +7,41 @@ import { useAuthContext } from '../../../../contexts/AuthContext';
 import { SpinningLoader } from '../misc/SpinningLoader';
 import PendingAccordion from '../pendingAccordion/PendingAccordion';
 import universeIcon from '../../../../assets/images/universe-img.svg';
+import { formatAddress } from '../../../../utils/helpers/format';
 
 const PendingNFTs = () => {
   const { myMintingNFTs } = useMyNftsContext();
   const { loggedInArtist, address } = useAuthContext();
 
+  const generateLink = (addr) => `${process.env.REACT_APP_ETHERSCAN_URL}/tx/${addr}`;
   const renderMintingNfts = useMemo(
     () =>
       myMintingNFTs.map((nft) => (
         <div
-          onClick={() =>
-            window.open(`${process.env.REACT_APP_ETHERSCAN_URL}/tx/${nft.txHash}`, '_blank').focus()
-          }
+          onClick={() => window.open(generateLink(nft.txHashes[0]), '_blank').focus()}
           className="nft__card"
           key={nft.id}
           style={{ width: 160 }}
           aria-hidden
         >
-          <span className="tooltiptext">View on Etherscan</span>
+          {nft.txHashes.length === 1 ? (
+            <span className="tooltiptext">View on Etherscan</span>
+          ) : (
+            <span className="tooltiptext-big">
+              <p className="title"> View on Etherscan:</p>
+              <div className="tooltiptext-big-body">
+                {nft.txHashes.map((txHash, i) => (
+                  <div className="txns" key={nft.txHash}>
+                    <span>Txn{i + 1}:</span>
+                    <a target="_blank" href={generateLink(txHash)} rel="noreferrer">
+                      {formatAddress(txHash)}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </span>
+          )}
+
           <div className="nft__card__header">
             <div className="three__images">
               {loggedInArtist &&
@@ -67,10 +84,10 @@ const PendingNFTs = () => {
               <div className="image__bg__effect" />
               {nft.artworkType &&
                 !nft.artworkType.endsWith('mpeg') &&
-                !nft.artworkType.endsWith('mp4') && <img src={nft.optimizedUrl} alt={nft.name} />}
+                !nft.artworkType.endsWith('mp4') && <img src={nft.thumbnailUrl} alt={nft.name} />}
               {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                 <video>
-                  <source src={nft.optimizedUrl} type="video/mp4" />
+                  <source src={nft.thumbnailUrl} type="video/mp4" />
                   <track kind="captions" />
                   Your browser does not support the video tag.
                 </video>
