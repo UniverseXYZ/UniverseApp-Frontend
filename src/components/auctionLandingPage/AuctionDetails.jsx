@@ -21,11 +21,10 @@ import frankie from '../../assets/images/frankie.png';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
-  const { myAuctions } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
-  const getAllAuctionsForCurrentArtist = myAuctions;
+  const history = useHistory();
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
-
+  const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const [sliderSettings, setSliderSettings] = useState({
     dots: false,
     infinite: false,
@@ -43,8 +42,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
     minutes: null,
     seconds: null,
   });
-  const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
-  const history = useHistory();
 
   const convertDate = (date) => {
     const dLeft = (new Date(date) - Date.now()) / 1000;
@@ -62,7 +59,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const d = (new Date(selectedAuction.endDate) - Date.now()) / 1000;
+      const d = (new Date(selectedAuction.auction.endDate) - Date.now()) / 1000;
       const days = Math.floor(d / 86400);
       const hours = Math.floor(d / 3600) % 24;
       const minutes = Math.floor(d / 60) % 60;
@@ -137,45 +134,47 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
   }, []);
 
   const promoImageSrc =
-    selectedAuction.promoImage instanceof File
-      ? URL.createObjectURL(selectedAuction.promoImage)
-      : selectedAuction.promoImage;
+    selectedAuction.auction.promoImage instanceof File
+      ? URL.createObjectURL(selectedAuction.auction.promoImage)
+      : selectedAuction.auction.promoImage;
 
   const backgroundImage =
-    selectedAuction.backgroundImage instanceof File
-      ? URL.createObjectURL(selectedAuction.backgroundImage)
-      : selectedAuction.backgroundImage;
+    selectedAuction.auction.backgroundImage instanceof File
+      ? URL.createObjectURL(selectedAuction.auction.backgroundImage)
+      : selectedAuction.auction.backgroundImage;
 
   return (
     <div
       className={`auction__details__section ${
-        selectedAuction.backgroundImage ? 'has--background' : ''
+        selectedAuction.auction.backgroundImage ? 'has--background' : ''
       }`}
     >
       <div className="bg">
-        {selectedAuction.backgroundImage && (
+        {selectedAuction.auction.backgroundImage && (
           <img
             src={backgroundImage}
-            alt={selectedAuction.name}
-            style={{ filter: selectedAuction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)' }}
+            alt={selectedAuction.auction.headline}
+            style={{
+              filter: selectedAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
+            }}
           />
         )}
       </div>
-      {selectedAuction.backgroundImage && <div className="overlay" />}
+      {selectedAuction.auction.backgroundImage ? <div className="overlay" /> : <></>}
       <div className="auction__details__section__container">
-        {getAllAuctionsForCurrentArtist.length ? (
+        {selectedAuction.moreActiveAuctions.length ? (
           <Slider {...sliderSettings}>
-            {getAllAuctionsForCurrentArtist.map((act) => (
+            {selectedAuction.moreActiveAuctions.map((action) => (
               <div
-                key={act.id}
+                key={action.id}
                 className={`carousel__auction__container ${
-                  selectedAuction.id === act.id ? 'selected' : ''
+                  selectedAuction.id === action.id ? 'selected' : ''
                 }`}
                 onClick={() => {
-                  setSelectedAuction(act);
+                  setSelectedAuction(action);
                   setLoading(true);
-                  history.push(`/${act.link.split('/')[1]}/${act.link.split('/')[2]}`, {
-                    auction: act,
+                  history.push(`/${action.link.split('/')[1]}/${action.link.split('/')[2]}`, {
+                    auction: action,
                   });
                 }}
                 aria-hidden="true"
@@ -183,24 +182,28 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
               >
                 <div className="carousel__auction">
                   <div
-                    className={`carousel__auction__image ${act.promoImage ? '' : 'show__avatar'}`}
+                    className={`carousel__auction__image ${
+                      action.promoImage ? '' : 'show__avatar'
+                    }`}
                   >
-                    {act.promoImage ? (
-                      <img className="original" src={act.promoImage} alt={act.name} />
+                    {action.promoImage ? (
+                      <img className="original" src={action.promoImage} alt={action.headline} />
                     ) : (
                       // TODO:: here should display Artist avatar
-                      <img className="artist__image" src={frankie} alt={act.name} />
+                      <img className="artist__image" src={frankie} alt={action.headline} />
                     )}
                   </div>
                   <div className="carousel__auction__info">
-                    <h4 title={act.name}>
-                      {act.name.length > 20 ? `${act.name.substring(0, 20)}...` : act.name}
+                    <h4 title={action.headline}>
+                      {action.headline.length > 20
+                        ? `${action.headline.substring(0, 20)}...`
+                        : action.headline}
                     </h4>
                     <p>
-                      {!convertDate(act.endDate) ? (
+                      {!convertDate(action.endDate) ? (
                         <span>Auction has ended</span>
                       ) : (
-                        convertDate(act.endDate)
+                        convertDate(action.endDate)
                       )}
                     </p>
                   </div>
@@ -211,37 +214,44 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
         ) : (
           <></>
         )}
+
         {!loading ? (
-          <Animated animationIn="zoomIn" key={selectedAuction.id}>
+          <Animated animationIn="zoomIn" key={selectedAuction.auction.id}>
             <div className="auction__details__box">
               <div
                 className={`auction__details__box__image ${
-                  selectedAuction.promoImage ? '' : 'show__avatar'
+                  selectedAuction.auction.promoImage ? '' : 'show__avatar'
                 }`}
               >
-                {selectedAuction.promoImage ? (
-                  <img className="original" src={promoImageSrc} alt={selectedAuction.name} />
+                {selectedAuction.auction.promoImage ? (
+                  <img
+                    className="original"
+                    src={promoImageSrc}
+                    alt={selectedAuction.auction.headline}
+                  />
                 ) : (
-                  // TODO:: we should display auction artist avatar here
-                  <img className="artist__image" src={frankie} alt="Frankie" />
+                  <img
+                    className="artist__image"
+                    src={selectedAuction.artist.profileImageUrl}
+                    alt={selectedAuction.artist.displayName}
+                  />
                 )}
               </div>
               <div className="auction__details__box__info">
-                <h1 className="title">{selectedAuction.name}</h1>
+                <h1 className="title">{selectedAuction.auction.headline}</h1>
                 <div className="artist__details">
                   {/* // TODO:: we should display auction artist avatar here */}
-                  <img src={frankie} alt="Frankie" />
+                  <img
+                    src={selectedAuction.artist.profileImageUrl}
+                    alt={selectedAuction.artist.displayName}
+                  />
                   <span>by</span>
                   {/* // TODO:: we should push auction artist name here */}
                   <button
                     type="button"
-                    onClick={() =>
-                      history.push(`/${'selectedAuction.artist.name'.split(' ')[0]}`, {
-                        id: 'selectedAuction.artist.id',
-                      })
-                    }
+                    onClick={() => history.push(`/${selectedAuction.artist.displayName}`)}
                   >
-                    selectedAuction.artist.name
+                    {selectedAuction.artist.displayName}
                   </button>
                 </div>
                 <div className="auction__ends__in">
@@ -279,7 +289,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         }}
                       >
                         <span>
-                          {selectedAuction.backgroundImage ? (
+                          {selectedAuction.auction.backgroundImage ? (
                             <img
                               src={lightCopyIcon}
                               alt="Copy to clipboard icon"
@@ -338,7 +348,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                   </div>
                   <div className="auction__details__box__top__bidders__footer">
                     <div className="your__bid">
-                      {currentBid && currentBid.aucionId === selectedAuction.id ? (
+                      {currentBid && currentBid.aucionId === selectedAuction.auction.id ? (
                         <span className="your__current__bid">
                           <b>
                             Your bid:
@@ -366,15 +376,15 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                         {(close) => (
                           <PlaceBidPopup
                             onClose={close}
-                            onAuctionId={selectedAuction.id}
-                            onAuctionTitle={selectedAuction.name}
-                            onArtistName="selectedAuction.artist.name"
+                            onAuctionId={selectedAuction.auction.id}
+                            onAuctionTitle={selectedAuction.auction.headline}
+                            onArtistName={selectedAuction.artist.displayName}
                             onBidders={bidders}
                             onSetBidders={setBidders}
                           />
                         )}
                       </Popup>
-                      {currentBid && currentBid.aucionId === selectedAuction.id ? (
+                      {currentBid && currentBid.aucionId === selectedAuction.auction.id ? (
                         <div className="cacnel__bid">
                           <Popup
                             trigger={

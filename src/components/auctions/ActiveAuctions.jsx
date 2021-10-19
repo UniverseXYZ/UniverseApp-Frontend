@@ -102,7 +102,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       setShownActionId(null);
     }
   };
-
+  console.log(myAuctions);
   return (
     <div className="active-auctions">
       <div className="input-search">
@@ -164,7 +164,9 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                   )}
                                   {activeAuction.link ? (
                                     <CopyToClipboard
-                                      text={`${activeAuction.link.replace(
+                                      text={`${window.location.origin}/${
+                                        loggedInArtist.name
+                                      }/${activeAuction.link.replace(
                                         'universe.xyz',
                                         window.location.origin
                                       )}`}
@@ -198,7 +200,12 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               <Button
                                 className="light-border-button hide__on__mobile"
                                 onClick={() =>
-                                  history.push(activeAuction.link.replace('universe.xyz', ''))
+                                  history.push(
+                                    `/${loggedInArtist.name}/${activeAuction.link.replace(
+                                      'universe.xyz',
+                                      ''
+                                    )}`
+                                  )
                                 }
                               >
                                 <span>Go to landing page</span>
@@ -223,7 +230,12 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               <Button
                                 className="light-border-button"
                                 onClick={() =>
-                                  history.push(activeAuction.link.replace('universe.xyz', ''))
+                                  history.push(
+                                    `/${loggedInArtist.name}/${activeAuction.link.replace(
+                                      'universe.xyz',
+                                      ''
+                                    )}`
+                                  )
                                 }
                               >
                                 <span>Go to landing page</span>

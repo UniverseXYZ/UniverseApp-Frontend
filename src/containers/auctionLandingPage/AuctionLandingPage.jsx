@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
@@ -11,128 +11,55 @@ import AppContext from '../../ContextAPI';
 import NotFound from '../../components/notFound/NotFound.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { getAuctionLandingPage } from '../../utils/api/auctions';
 
 const AuctionLandingPage = () => {
-  const { auction } = useAuctionContext();
-  const { setDarkMode } = useThemeContext();
-  const location = useLocation();
-  const selectedAuction = auction || null;
-  const artist = selectedAuction?.artist;
+  // const { auction } = useAuctionContext();
+  // const { setDarkMode } = useThemeContext();
+  // const location = useLocation();
+  // const artist = selectedAuction?.artist;
+  // const selectedAuction = auction || null;
+  const { artistUsername, auctionName } = useParams();
 
+  const [auction, setAuction] = useState(null);
   const [bidders, setBidders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const getAuctionData = async () => {
+    const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
+    console.log(auctionData);
+    setAuction(auctionData);
+    setBidders(auctionData.bids);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    setDarkMode(false);
-    document.title = `Universe Minting - Auction - ${selectedAuction?.name}`;
-    if (selectedAuction) {
-      // Fake data for testing
-      setBidders([
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Whaleshark',
-          bid: 10,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'WeirdWoman',
-          bid: 24,
-          rewardTier: 'Gold',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'TopBidder',
-          bid: 13.5,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 23,
-          rewardTier: 'Gold',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 20,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 40,
-          rewardTier: 'Platinum',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'WeirdWoman',
-          bid: 5,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'TopBidder',
-          bid: 9,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Warden',
-          bid: 17,
-          rewardTier: 'Silver',
-        },
-        {
-          id: uuid(),
-          aucionId: selectedAuction.id,
-          artistId: uuid(),
-          name: 'Weird Man',
-          bid: 6.8,
-          rewardTier: 'Silver',
-        },
-      ]);
-    }
-    return () => {
-      document.title = 'Universe Minting';
-    };
-  }, [selectedAuction]);
+    getAuctionData();
+  }, []);
 
-  return selectedAuction ? (
+  return auction ? (
     <div className="auction__landing__page">
-      <AuctionDetails onAuction={selectedAuction} bidders={bidders} setBidders={setBidders} />
+      <AuctionDetails onAuction={auction} bidders={bidders} setBidders={setBidders} />
       <UniverseAuctionDetails />
-      <RewardTiers auction={selectedAuction} />
-      <AuctionOwnerDetails artist={artist} />
-      <PlaceBid auction={selectedAuction} bidders={bidders} setBidders={setBidders} />
-      {artist && artist.personalLogo ? (
+      <RewardTiers auction={auction} />
+      <AuctionOwnerDetails artist={auction.artist} />
+      <PlaceBid auction={auction} bidders={bidders} setBidders={setBidders} />
+      {auction.artist && auction.artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
-            <img src={URL.createObjectURL(artist.personalLogo)} alt="Artist personal logo" />
+            <img
+              src={URL.createObjectURL(auction.artist.personalLogo)}
+              alt="Artist personal logo"
+            />
           </div>
         </div>
       ) : (
         <></>
       )}
     </div>
-  ) : (
+  ) : !loading ? (
     <NotFound />
+  ) : (
+    <></>
   );
 };
 
