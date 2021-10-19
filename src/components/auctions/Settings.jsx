@@ -2,10 +2,10 @@ import { useLocation, useHistory } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Popup from 'reactjs-popup';
-import moment from 'moment';
 import uuid from 'react-uuid';
 import './AuctionSettings.scss';
 import EthereumAddress from 'ethereum-address';
+import { formatISO } from 'date-fns';
 import callendarIcon from '../../assets/images/calendar.svg';
 import delateIcon from '../../assets/images/RemoveBtn.svg';
 import delIcon from '../../assets/images/red-delete.svg';
@@ -161,8 +161,8 @@ const AuctionSettings = () => {
           launch: false,
           name: values.name,
           startingBid: values.startingBid,
-          startDate: moment(values.startDate).format(),
-          endDate: moment(values.endDate).format(),
+          startDate: formatISO(values.startDate),
+          endDate: formatISO(values.endDate),
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier, idx) => ({ ...tier, minBid: bidValues[idx] }))
             : prevValue.rewardTiers,
@@ -173,8 +173,8 @@ const AuctionSettings = () => {
           ...prevValue,
           name: values.name,
           startingBid: values.startingBid,
-          startDate: moment(values.startDate).format(),
-          endDate: moment(values.endDate).format(),
+          startDate: formatISO(values.startDate),
+          endDate: formatISO(values.endDate),
           properties: royalities ? properties : null,
           rewardTiers: minBid
             ? prevValue.rewardTiers.map((tier) => ({ ...tier, minBid: bidValues[tier.id] }))
