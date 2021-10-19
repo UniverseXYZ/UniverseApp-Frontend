@@ -65,15 +65,16 @@ const DigitalTools = () => {
               Sell any NFT in your collection whether you created it or bought it on the secondary
               market or another platform. You will be able to bundle an Euler beat with a Hashmask
               or a Punk then sell it to the highest bidder and the second highest gets a Hashmask
-              and a Beeple. This Auction will allow you to mix and match 100s of NFTs in tiers to be
-              bid on.
+              and a Beeple. <br />
+              <br /> This Auction will allow you to mix and match 100s of NFTs in tiers to be bid
+              on.
             </p>
-            {/* <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+            <Button
+              className="light-button"
+              onClick={() => history.push('/setup-auction/auction-settings')}
+            >
               Set up auction
-            </Button> */}
-            <button type="button" className="light-border-button" disabled>
-              Coming soon
-            </button>
+            </Button>
           </AnimatedOnScroll>
         </div>
       </div>
