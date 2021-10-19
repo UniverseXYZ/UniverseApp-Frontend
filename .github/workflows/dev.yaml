@@ -2,7 +2,7 @@ name: Dev Environment
 on:
   push:
     branches:
-    - dev
+    - develop
 
 jobs:
   build:
