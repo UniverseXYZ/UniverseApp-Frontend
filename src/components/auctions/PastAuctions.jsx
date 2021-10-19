@@ -27,6 +27,15 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
     setSearchByName(value);
   };
 
+  const handleAuctionExpand = (id) => {
+    const canExpandAuction = !id || id !== shownActionId;
+    if (canExpandAuction) {
+      setShownActionId(id);
+    } else {
+      setShownActionId(null);
+    }
+  };
+
   return (
     <div className="past-auctions">
       <div className="input-search">
@@ -94,21 +103,17 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                   </div>
                 </div>
                 <div className="launch-auction">
-                  <div className="arrow">
+                  <div
+                    className="arrow"
+                    onClick={() => handleAuctionExpand(pastAuction.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-hidden
+                  >
                     {shownActionId === pastAuction.id ? (
-                      <img
-                        src={arrowUp}
-                        onClick={() => setShownActionId(null)}
-                        alt="Arrow up"
-                        aria-hidden="true"
-                      />
+                      <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
                     ) : (
-                      <img
-                        src={arrowDown}
-                        onClick={() => setShownActionId(pastAuction.id)}
-                        alt="Arrow down"
-                        aria-hidden="true"
-                      />
+                      <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
                     )}
                   </div>
                 </div>
