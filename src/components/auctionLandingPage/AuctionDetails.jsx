@@ -136,6 +136,16 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
     }
   }, []);
 
+  const promoImageSrc =
+    selectedAuction.promoImage instanceof File
+      ? URL.createObjectURL(selectedAuction.promoImage)
+      : selectedAuction.promoImage;
+
+  const backgroundImage =
+    selectedAuction.backgroundImage instanceof File
+      ? URL.createObjectURL(selectedAuction.backgroundImage)
+      : selectedAuction.backgroundImage;
+
   return (
     <div
       className={`auction__details__section ${
@@ -145,7 +155,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
       <div className="bg">
         {selectedAuction.backgroundImage && (
           <img
-            src={URL.createObjectURL(selectedAuction.backgroundImage)}
+            src={backgroundImage}
             alt={selectedAuction.name}
             style={{ filter: selectedAuction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)' }}
           />
@@ -210,11 +220,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                 }`}
               >
                 {selectedAuction.promoImage ? (
-                  <img
-                    className="original"
-                    src={URL.createObjectURL(selectedAuction.promoImage)}
-                    alt={selectedAuction.name}
-                  />
+                  <img className="original" src={promoImageSrc} alt={selectedAuction.name} />
                 ) : (
                   // TODO:: we should display auction artist avatar here
                   <img className="artist__image" src={frankie} alt="Frankie" />
