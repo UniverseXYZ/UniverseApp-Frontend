@@ -16,9 +16,13 @@ import Pagination from '../pagination/Pagionation.jsx';
 import Button from '../button/Button';
 import searchIconGray from '../../assets/images/search-gray.svg';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
+  const { ethPrice } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
+  const [highestBid, setHighestBid] = useState(null);
+  const [lowerBid, setLowerBid] = useState(null);
   const [copied, setCopied] = useState({
     state: false,
     index: null,
@@ -48,6 +52,42 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     newAuctions.splice(destination.index, 0, draggingAuction[0]);
 
     setMyAuctions(newAuctions);
+  };
+
+  const getTotalNFTSperAuction = (auction) => {
+    let nftsCount = 0;
+    auction?.rewardTiers?.forEach((tier) => {
+      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
+    });
+    return nftsCount;
+  };
+
+  const getTotalBidsAmount = (auction) => {
+    let totalBidsAmount = 0;
+    auction.bids.forEach((bid) => {
+      totalBidsAmount += bid.amount;
+    });
+    return totalBidsAmount.toFixed(2);
+  };
+
+  const getHighestWinBid = (auction) => {
+    let highestWinBid = 0;
+    auction.bids.forEach((bid) => {
+      if (bid.amount > highestWinBid) {
+        highestWinBid = bid.amount;
+      }
+    });
+    return highestWinBid.toFixed(2);
+  };
+
+  const getLowestBid = (auction) => {
+    let lowestBid = auction.bids[0].amount;
+    auction.bids.forEach((bid) => {
+      if (bid.amount < lowestBid) {
+        lowestBid = bid.amount;
+      }
+    });
+    return lowestBid.toFixed(2);
   };
 
   useEffect(() => {
@@ -191,7 +231,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                             </div>
                             <div className="total-dates">
                               <p>
-                                Total NFTs: <b>{auctionTotalNfts}</b>
+                                Total NFTs: <b>{getTotalNFTSperAuction(activeAuction)}</b>
                               </p>
                             </div>
                             <div className="total-dates">
@@ -229,14 +269,20 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                             <div className="bids first">
                               <div className="boredred-div">
                                 <span className="head">Total bids</span>
-                                <span className="value">120</span>
+                                <span className="value">{activeAuction.bids.length}</span>
                               </div>
                               <div>
                                 <span className="head">Highest winning bid</span>
                                 <span className="value">
                                   <img src={bidIcon} alt="Highest winning bid" />
-                                  14 ETH
-                                  <span className="dollar-val"> ~$41,594</span>
+                                  {getHighestWinBid(activeAuction)} ETH
+                                  <span className="dollar-val">
+                                    ~$
+                                    {(
+                                      getHighestWinBid(activeAuction) *
+                                      ethPrice.market_data.current_price.usd
+                                    ).toFixed(2)}
+                                  </span>
                                 </span>
                               </div>
                             </div>
@@ -246,16 +292,28 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                 <span className="head">Total bids amount</span>
                                 <span className="value">
                                   <img src={bidIcon} alt="Total bids amount" />
-                                  14 ETH
-                                  <span className="dollar-val"> ~$41,594</span>
+                                  {getTotalBidsAmount(activeAuction)} ETH
+                                  <span className="dollar-val">
+                                    ~$
+                                    {(
+                                      getTotalBidsAmount(activeAuction) *
+                                      ethPrice.market_data.current_price.usd
+                                    ).toFixed(2)}
+                                  </span>
                                 </span>
                               </div>
                               <div>
                                 <span className="head">Lower winning bid</span>
                                 <span className="value">
                                   <img src={bidIcon} alt="Lower winning bid" />
-                                  14 ETH
-                                  <span className="dollar-val"> ~$41,594</span>
+                                  {getLowestBid(activeAuction)} ETH
+                                  <span className="dollar-val">
+                                    ~$
+                                    {(
+                                      getLowestBid(activeAuction) *
+                                      ethPrice.market_data.current_price.usd
+                                    ).toFixed(2)}
+                                  </span>
                                 </span>
                               </div>
                             </div>
