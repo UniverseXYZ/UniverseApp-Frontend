@@ -100,5 +100,6 @@ export const sendCreateAuctionRequest = async ({ requestObject }) => {
 
 export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
+  // TODO:: we shoul send a new request to the BE with the new reward tiers info from requestObject.
   return res;
 };
