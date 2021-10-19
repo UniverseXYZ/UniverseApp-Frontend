@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import './MyBidsCard.scss';
 import Button from '../button/Button';
+import { isBeforeNow } from '../../utils/dates';
 
 const MyBidsCard = ({ data }) => {
   const history = useHistory();
@@ -12,11 +12,7 @@ const MyBidsCard = ({ data }) => {
     <div className="my--bids--list">
       {data.map((auction) => (
         <Animated animationIn="fadeIn" key={auction.id}>
-          <div
-            className={`my--bids--item${
-              moment(auction.endDate).isBefore(moment.now()) ? ' past' : ''
-            }`}
-          >
+          <div className={`my--bids--item${isBeforeNow(auction.endDate) ? ' past' : ''}`}>
             <div
               className={`my--bids--image timeLeft ${auction.promoImageUrl ? '' : 'show--avatar'}`}
             >
@@ -31,9 +27,7 @@ const MyBidsCard = ({ data }) => {
               )}
               <div className="date">
                 <div className="date--border--div" />
-                <label>
-                  {moment(auction.endDate).isBefore(moment.now()) ? 'Ended on' : 'Time left'}
-                </label>
+                <label>{isBeforeNow(auction.endDate) ? 'Ended on' : 'Time left'}</label>
                 <span>2d 5h 20m 30s</span>
               </div>
             </div>
