@@ -20,23 +20,13 @@ import pencil from '../../assets/images/pencil.svg';
 import Button from '../button/Button.jsx';
 import CongratsAuctionPopup from '../popups/CongratsAuctionPopup.jsx';
 import LoadingPopup from '../popups/LoadingPopup.jsx';
-import {
-  isImage,
-  isVideo,
-  isAudio,
-  getNftImage,
-  getEditionsCount,
-} from '../../utils/helpers/pureFunctions/nfts';
 import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
-import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const AuctionReview = () => {
-  const { auction, setAuction, bidtype, options, myAuctions, setMyAuctions, setSelectedTabIndex } =
-    useAuctionContext();
+  const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
   const location = useLocation();
-  const { myNFTs, setMyNFTs } = useMyNftsContext();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [bidicon, setBidicon] = useState(null);
@@ -61,7 +51,6 @@ const AuctionReview = () => {
   }, []);
 
   const handleSetAuction = async () => {
-    // TODO:: after the new design changes we must add logic which prevents the user to select the same nfts for different tiers
     if (auction && auction?.rewardTiers?.length) {
       document.getElementById('loading-hidden-btn').click();
       const popupRoot = document.getElementById('popup-root');
@@ -79,25 +68,6 @@ const AuctionReview = () => {
       } else {
         console.error('an error occurred');
       }
-    }
-  };
-
-  const handleSaveAuction = () => {
-    if (auction && auction?.rewardTiers?.length) {
-      let totalNFTs = 0;
-      auction?.rewardTiers?.forEach((tier) => {
-        totalNFTs += tier.winners * tier.nftsPerWinner;
-      });
-      document.getElementById('loading-hidden-btn').click();
-      setSelectedTabIndex(1);
-      setTimeout(() => {
-        document.getElementById('popup-root').remove();
-        const newAuction = { ...auction };
-        newAuction.totalNFTs = totalNFTs;
-        setMyAuctions(myAuctions.map((item) => (item.id === newAuction.id ? newAuction : item)));
-        setAuction({ tiers: [] });
-        history.push('/my-auctions');
-      }, 2000);
     }
   };
 
@@ -250,18 +220,19 @@ const AuctionReview = () => {
         </div>
         {auction?.rewardTiers?.map((tier) => {
           const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
-            const nfts = curr.fullData.nftIds;
+            const nfts = curr.nftsData;
+
             res.push(...nfts);
             return res;
           }, []);
 
           const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
-            const { url, artWorkType, nftName, collectioName, collectionAddress, collectionUrl } =
+            const { url, artworkType, nftName, collectioName, collectionAddress, collectionUrl } =
               curr;
             res[url] = res[url] || {
               url,
               count: 0,
-              artWorkType: '',
+              artworkType: '',
               nftName: '',
               collectioName: '',
               collectionAddress: '',
@@ -269,7 +240,7 @@ const AuctionReview = () => {
             };
 
             res[url].count += 1;
-            res[url].artWorkType = artWorkType;
+            res[url].artworkType = artworkType;
             res[url].collectioName = collectioName;
             res[url].collectionAddress = collectionAddress;
             res[url].collectionUrl = collectionUrl;
@@ -289,7 +260,11 @@ const AuctionReview = () => {
                       <div className="tier-perwinners">
                         <h4>
                           NFTs per winner:&nbsp;
-                          <b>{tier.customNFTsPerWinner ? 'Custom' : tier.nftsPerWinner}</b>
+                          <b>
+                            {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
+                              ? 'custom'
+                              : tier.nftsPerWinner}
+                          </b>
                         </h4>
                       </div>
                       <div className="tier-winners">
@@ -311,7 +286,7 @@ const AuctionReview = () => {
                 <div className="auction-reward">
                   {Object.keys(onlyUniqueNFTs).map((key) => {
                     const {
-                      artWorkType,
+                      artworkType,
                       url,
                       count,
                       nftName,
@@ -320,16 +295,16 @@ const AuctionReview = () => {
                       collectionUrl,
                     } = onlyUniqueNFTs[key];
                     const nftIsImage =
-                      artWorkType === 'png' ||
-                      artWorkType === 'jpg' ||
-                      artWorkType === 'jpeg' ||
-                      artWorkType === 'mpeg' ||
-                      artWorkType === 'webp';
+                      artworkType === 'png' ||
+                      artworkType === 'jpg' ||
+                      artworkType === 'jpeg' ||
+                      artworkType === 'mpeg' ||
+                      artworkType === 'webp';
 
                     return (
                       <div className="auction-reward__box" key={uuid()}>
                         <div className="auction-reward__box__image">
-                          {artWorkType === 'mp4' && (
+                          {artworkType === 'mp4' && (
                             <video
                               onMouseOver={(event) => event.target.play()}
                               onFocus={(event) => event.target.play()}
@@ -341,11 +316,11 @@ const AuctionReview = () => {
                               Your browser does not support the video tag.
                             </video>
                           )}
-                          {artWorkType === 'mpeg' && (
+                          {artworkType === 'mpeg' && (
                             <img className="preview-image" src={mp3Icon} alt={nftName} />
                           )}
                           {nftIsImage && <img className="preview-image" src={url} alt={nftName} />}
-                          {artWorkType === 'mp4' && (
+                          {artworkType === 'mp4' && (
                             <img className="video__icon" src={videoIcon} alt="Video Icon" />
                           )}
                         </div>

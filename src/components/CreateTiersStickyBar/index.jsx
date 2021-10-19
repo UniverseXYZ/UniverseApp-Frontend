@@ -8,7 +8,7 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import Button from '../button/Button.jsx';
 
 const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabled }) => {
-  const data = winnersData.map((info) => info.nftIds);
+  const data = winnersData.map((info) => info.nftsData);
 
   return (
     <div className="selected-ntf create-tiers-sticky-bar">
