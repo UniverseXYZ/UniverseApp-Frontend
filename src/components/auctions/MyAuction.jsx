@@ -138,7 +138,7 @@ const MyAuction = () => {
               (item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate)
             ).length ? (
               <ActiveAuctions
-                myAuctions={activeAuctionsMock}
+                myAuctions={myAuctions}
                 setMyAuctions={setMyAuctions}
                 setAuction={setAuction}
               />
