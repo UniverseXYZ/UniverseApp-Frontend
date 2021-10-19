@@ -1,9 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import gradientArrow from '../../../../assets/images/gradient-arrow.svg';
 
 const CreateYourAuction = () => {
   const history = useHistory();
+  const { setAuction } = useAuctionContext();
   return (
     <div className="create__your__auction__section">
       <div className="create__your__auction__section__container">
@@ -15,6 +17,7 @@ const CreateYourAuction = () => {
           <button
             type="button"
             onClick={() => {
+              setAuction({ rewardTiers: [] });
               history.push('/setup-auction');
             }}
           >
