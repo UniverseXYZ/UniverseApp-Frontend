@@ -176,7 +176,7 @@ const MyNFTsContextProvider = ({ children }) => {
       setMyNFTs([]);
       setDeployedCollections([]);
     }
-  }, [loggedInArtist, isWalletConnected]);
+  }, [loggedInArtist && isWalletConnected]);
 
   const navigateToMyUniverseNFTsTab = (characterFilter) => {
     setCollectionFilter(characterFilter);
