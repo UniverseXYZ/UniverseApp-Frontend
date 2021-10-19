@@ -1,13 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../utils/fixtures/FutureAuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
 import FutureAuctionsCard from '../../../auctionsCard/FutureAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { isAfterNow } from '../../../../utils/dates';
 
 const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions, setAuction } = useAuctionContext();
@@ -16,7 +16,7 @@ const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
 
   const artistFutureAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
+      ? myAuctions.filter((item) => !item.launch && isAfterNow(item.endDate))
       : PLACEHOLDER_FUTURE_AUCTIONS;
 
   return artistFutureAuctions.length ? (
