@@ -27,7 +27,6 @@ const Create = () => {
   const bid = options.find((element) => element.value === bidtype);
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
-
   const [values, setValues] = useState({
     name: '',
     numberOfWinners: '',
@@ -84,7 +83,7 @@ const Create = () => {
       setWinnersSelectedNFTs((prevValue) => ({ ...prevValue, [winner]: [] }));
     }
 
-    setSelectedWinner((prevValue) => (prevValue === winner ? null : winner));
+    setSelectedWinner((prevValue) => (prevValue === winner ? 'null' : winner));
   };
 
   useEffect(() => {
@@ -240,6 +239,7 @@ const Create = () => {
               hoverBoxShadowGradient
               error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'}
               disabled={custom}
+              placeholder={custom && 'Custom'}
               className="inp"
               value={values.nftsPerWinner}
               onChange={handleChange}
@@ -334,7 +334,12 @@ const Create = () => {
                   >
                     <img src={WinnerIcon} alt="winner-icon" />
                     <p>Winner #{elementInArray}</p>
-                    <span>NFTs</span>
+                    <span>
+                      {winnersSelectedNFTs && winnersSelectedNFTs[elementInArray]?.length > 0
+                        ? winnersSelectedNFTs[elementInArray]?.length
+                        : ''}{' '}
+                      NFTs
+                    </span>
                     <div className="box--shadow--effect--block" />
                   </div>
                 ))}
