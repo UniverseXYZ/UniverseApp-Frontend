@@ -458,8 +458,17 @@ const Create = () => {
           </div>
         )}
         {
-          // TODO:: Upon second Tier crieation we shoud disable the already selected NFTs from the first tier
+          // ----- Custom distribution -----
+          // TODO:: Upon second Tier crieation we shoud disable||remove the already selected NFTs from the first tier
+          // TODO:: Properly populate reward Tiers data on the next steps
+          // TODO:: When an edition dropdown is opened, if you click eslwhere on the page, close the dropdown
+          // TODO:: Make the whole dropdown button click to open the menu
+          // ----- Stick menu -----
+          // TODO:: Sticky menu css and component dev -> Ping Dima when the time comes
+          // TODO:: Sticky menu, delete functionality
+          // ----- Default Distribution ----
           // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
+          // TODO:: Upon Default Distribution if the user enters nfts per winner number, we should fetch all user nfts applicable to this editions number
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
