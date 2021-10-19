@@ -44,19 +44,62 @@ const RewardTiers = () => {
         </div>
         {auction.rewardTiers &&
           auction.rewardTiers.map((tier) => {
-            const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
-              const nfts = curr.fullData.nftIds;
-              res.push(...nfts);
-              return res;
-            }, []);
+            let allTierNFTs = null;
+            if (tier.nftSlots) {
+              // If we have tier.nftSlots it means we have local data to work with, otherwise we are editing an existing future auction fetched from the server and the response will be different
+              allTierNFTs = tier.nftSlots.reduce((res, curr) => {
+                const nfts = [...curr.nftsData];
+                if (auction.collections) {
+                  // We need to attach the collections data in order to be used in the screen
+                  nfts.forEach((nft) => {
+                    const collection = auction.collections.find((c) => c.id === nft.collectionId);
+                    if (collection) {
+                      nft.collectioName = collection.name;
+                      nft.collectionAddress = collection.address;
+                      nft.collectionUrl = collection.coverUrl;
+                    }
+                  });
+                }
+                res.push(...nfts);
+                return res;
+              }, []);
+            } else if (tier.nfts) {
+              // we are editing an existing future auction fetched from the server and the response will be different
+              allTierNFTs = tier.nfts.reduce((res, curr) => {
+                const {
+                  optimized_url: url,
+                  numberOfEditions,
+                  artworkType,
+                  name,
+                  collectionId,
+                } = curr;
+
+                const collection = auction.collections.find((c) => c.id === collectionId);
+
+                const collectioName = collection.name;
+                const collectionAddress = collection.address;
+                const collectionUrl = collection.coverUrl;
+
+                const nft = {
+                  url,
+                  count: 0,
+                  artworkType,
+                  nftName: name,
+                  collectioName,
+                  collectionAddress,
+                  collectionUrl,
+                };
+                res.push(nft);
+                return res;
+              }, []);
+            }
 
             const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
-              const { url, artWorkType, nftName, collectioName, collectionAddress, collectionUrl } =
-                curr;
+              const { url, collectioName, collectionAddress, collectionUrl } = curr;
               res[url] = res[url] || {
                 url,
                 count: 0,
-                artWorkType: '',
+                artworkType: '',
                 nftName: '',
                 collectioName: '',
                 collectionAddress: '',
@@ -64,11 +107,11 @@ const RewardTiers = () => {
               };
 
               res[url].count += 1;
-              res[url].artWorkType = artWorkType;
+              res[url].artworkType = curr.artworkType;
               res[url].collectioName = collectioName;
               res[url].collectionAddress = collectionAddress;
               res[url].collectionUrl = collectionUrl;
-              res[url].nftName = nftName;
+              res[url].nftName = curr.nftName || curr.name;
               return res;
             }, {});
             return (
@@ -82,13 +125,17 @@ const RewardTiers = () => {
                       <div className="winners">
                         <div className="tier-winners">
                           <h4>
-                            Winners:&nbsp;<b>{tier.winners}</b>
+                            Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
                           </h4>
                         </div>
                         <div className="tier-perwinners">
                           <h4>
                             NFTs per winner:&nbsp;
-                            <b>{tier.customNFTsPerWinner ? 'custom' : tier.nftsPerWinner}</b>
+                            <b>
+                              {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
+                                ? 'custom'
+                                : tier.nftsPerWinner}
+                            </b>
                           </h4>
                         </div>
                         {tier.minBidValue ? (
@@ -165,7 +212,7 @@ const RewardTiers = () => {
                   <div className="rev-reward">
                     {Object.keys(onlyUniqueNFTs).map((key) => {
                       const {
-                        artWorkType,
+                        artworkType,
                         url,
                         count,
                         nftName,
@@ -174,16 +221,16 @@ const RewardTiers = () => {
                         collectionUrl,
                       } = onlyUniqueNFTs[key];
                       const nftIsImage =
-                        artWorkType === 'png' ||
-                        artWorkType === 'jpg' ||
-                        artWorkType === 'jpeg' ||
-                        artWorkType === 'mpeg' ||
-                        artWorkType === 'webp';
+                        artworkType === 'png' ||
+                        artworkType === 'jpg' ||
+                        artworkType === 'jpeg' ||
+                        artworkType === 'mpeg' ||
+                        artworkType === 'webp';
 
                       return (
                         <div className="rev-reward__box" key={uuid()}>
                           <div className="rev-reward__box__image">
-                            {artWorkType === 'mp4' && (
+                            {artworkType === 'mp4' && (
                               <video
                                 onMouseOver={(event) => event.target.play()}
                                 onFocus={(event) => event.target.play()}
@@ -195,13 +242,13 @@ const RewardTiers = () => {
                                 Your browser does not support the video tag.
                               </video>
                             )}
-                            {artWorkType === 'mpeg' && (
+                            {artworkType === 'mpeg' && (
                               <img className="preview-image" src={mp3Icon} alt={nftName} />
                             )}
                             {nftIsImage && (
                               <img className="preview-image" src={url} alt={nftName} />
                             )}
-                            {artWorkType === 'mp4' && (
+                            {artworkType === 'mp4' && (
                               <img className="video__icon" src={videoIcon} alt="Video Icon" />
                             )}
                           </div>

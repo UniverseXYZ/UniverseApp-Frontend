@@ -129,7 +129,7 @@ const Create = () => {
   // Custom Slots distribution logic
   const [selectedWinner, setSelectedWinner] = useState(0);
 
-  // [{slotIndex: int, nftIds: array}]
+  // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
   const [winnersData, setWinnersData] = useState([]);
 
   const onEditionClick = (data, actionMeta) => {
@@ -143,40 +143,43 @@ const Create = () => {
           edition,
           id,
           url,
-          artWorkType,
+          artworkType,
           nftName,
           collectioName,
           collectionAddress,
           collectionUrl,
         ] = actionMeta.option.value.split('||');
-        winnersCopy[selectedWinner].nftIds.push({
+
+        winnersCopy[selectedWinner].nftsData.push({
           slot: selectedWinner,
-          id,
+          id: parseInt(id, 10),
           url,
-          artWorkType,
+          artworkType,
           nftName,
           collectioName,
           collectionAddress,
           collectionUrl,
         });
+
+        winnersCopy[selectedWinner].nftIds.push(parseInt(id, 10));
       }
 
       if (actionMeta.action === ACTION_TYPES.REMOVE_ALL) {
         const removedIds = actionMeta.removedValues.map(({ value }) => value.split('||')[1]);
-        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+        winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
           (nft) => !removedIds.includes(nft.id)
         );
       }
 
       if (actionMeta.action === ACTION_TYPES.REMOVE_SINGLE) {
         const removedId = actionMeta.removedValue.value.split('||')[1];
-        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+        winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
           (nft) => nft.id !== removedId
         );
       }
       if (actionMeta.action === ACTION_TYPES.DESELECT_SINGLE) {
-        const [edition, id, url, artWorkType] = actionMeta.option.value.split('||');
-        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+        const [edition, id, url, artworkType] = actionMeta.option.value.split('||');
+        winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
           (nft) => nft.id !== id
         );
       }
@@ -190,7 +193,7 @@ const Create = () => {
     const winners = [];
 
     while (slot < n) {
-      winners.push({ slot, nftIds: [] });
+      winners.push({ slot, nftsData: [], nftIds: [] });
       slot += 1;
     }
 
@@ -198,14 +201,16 @@ const Create = () => {
   };
 
   const handleContinue = (winnersSlots) => {
-    if (!editedTier) {
-      const nftSlots = winnersSlots.map((slot) => {
-        const slotCopy = { ...slot };
-        slotCopy.fullData = slot;
-        slotCopy.nftIds = slot.nftIds.map((data) => data.id);
-        return slotCopy;
+    const nftSlots = winnersSlots.map((slot) => {
+      const slotCopy = { ...slot };
+      slotCopy.nftIds = slot.nftsData.map((data) => {
+        const id = typeof data === 'object' ? data.id : data;
+        return id;
       });
+      return slotCopy;
+    });
 
+    if (!editedTier) {
       const auctionUpdated = {
         ...auction,
         rewardTiers: [
@@ -224,24 +229,22 @@ const Create = () => {
 
       setAuction(auctionUpdated);
     } else {
-      // TODO:: check edit auction logic
-      // const newTiers = [];
-      // auction?.rewardTiers?.forEach((tier) => {
-      //   if (tier.id === editMode.id) {
-      //     tier.name = tierName;
-      //     tier.winners = winners;
-      //     tier.nftsPerWinner = nftsPerWinner;
-      //     tier.minBidValue = minBidValue;
-      //     tier.nfts = prevNFTs;
-      //     newTiers.push(tier);
-      //   } else {
-      //     newTiers.push(tier);
-      //   }
-      // });
-      // setAuction({
-      //   ...auction,
-      //   tiers: newTiers,
-      // });
+      // Create auction copy and update the reward tier
+      const auctionCopy = { ...auction };
+
+      // Mutate the edited tear
+      auctionCopy?.rewardTiers?.forEach((tier) => {
+        if (tier.id === editedTier.id) {
+          tier.name = values.name;
+          tier.winners = values.numberOfWinners;
+          tier.nftsPerWinner = values.nftsPerWinner;
+          tier.minBidValue = minBidValue;
+          tier.nftSlots = nftSlots;
+        }
+      });
+
+      // Update the auction
+      setAuction(auctionCopy);
     }
     history.push('/setup-auction/reward-tiers');
   };
@@ -256,14 +259,9 @@ const Create = () => {
   useEffect(async () => {
     // Const if we are editing Tier we will pass this if check and pre-populate the Data
     if (editedTier) {
-      const {
-        name,
-        numberOfWinners,
-        winners,
-        customNFTsPerWinner,
-        nftsPerWinner,
-        minBidValue: bidValue,
-      } = editedTier;
+      const { name, numberOfWinners, winners, customNFTsPerWinner, nftsPerWinner } = editedTier;
+
+      const minAuctionBid = editedTier.bidValue || editedTier.minimumBid;
 
       const isCustom = customNFTsPerWinner || parseInt(nftsPerWinner, 10) === 0;
       await setCustom(isCustom);
@@ -273,23 +271,27 @@ const Create = () => {
         nftsPerWinner,
       });
 
-      if (bidValue) {
-        setMinBidValue(bidValue);
+      if (minAuctionBid) {
+        setMinBidValue(minAuctionBid);
         setMinBId(true);
       }
 
-      // We must populate Winners Data based on the editedTier Data
+      // We must populate Winners Data, we have prepared nftSlots in the NewTabs.jsx component
       // We have already prepared the winnersData object to be ready to accept the data upon triggering the custom watcher useEffect
       const winnersDataCopy = [...winnersData];
-      editedTier.nftSlots.forEach((slotInfo) => {
-        winnersDataCopy[slotInfo.slot] = slotInfo;
-      });
+
+      if (editedTier.nftSlots) {
+        editedTier.nftSlots.forEach((slotInfo) => {
+          winnersDataCopy[slotInfo.slot] = slotInfo;
+        });
+      }
+
       setWinnersData([...winnersDataCopy]);
     }
   }, [editedTier]);
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
-  const canContinue = winnersData.every((data) => data.nftIds.length > 0) && custom;
+  const canContinue = winnersData.every((data) => data.nftsData.length > 0) && custom;
 
   // End Custom Slots distribution logic
 
@@ -490,7 +492,7 @@ const Create = () => {
                   <img src={WinnerIcon} alt="winner-icon" />
                   <p>Winner #{i}</p>
                   <span>
-                    {data.nftIds.length}
+                    {data.nftsData.length}
                     NFTs
                   </span>
                   <div className="box--shadow--effect--block" />
@@ -543,16 +545,6 @@ const Create = () => {
           handleContinue={handleContinue}
           disabled={canContinue}
         />
-        {/* <Wallet
-          filteredNFTs={filteredNFTs}
-          setFilteredNFTs={setFilteredNFTs}
-          selectedNFTIds={selectedNFTIds}
-          setSelectedNFTIds={setSelectedNFTIds}
-          tierName={values.name}
-          winners={Number(values.numberOfWinners)}
-          nftsPerWinner={Number(values.nftsPerWinner)}
-          minBidValue={minBidValue}
-        /> */}
       </div>
     </>
   );
