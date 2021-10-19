@@ -50,7 +50,7 @@ const DomainAndBranding = ({
   }, [values?.backgroundImage]);
 
   const handleLink = (e) => {
-    setAuctionLink(e.target.value);
+    setAuctionLink(e.target.value.split(' ').join('-'));
     onChange((prevValues) => ({
       ...prevValues,
       link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/${e.target.value}`,
