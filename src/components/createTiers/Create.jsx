@@ -25,7 +25,6 @@ const Create = () => {
   const [winnersSelectedNFTs, setWinnersSelectedNFTs] = useState({});
   const [selectedWinner, setSelectedWinner] = useState(null);
   const bid = options.find((element) => element.value === bidtype);
-
   const [selectedNFTIds, setSelectedNFTIds] = useState([]);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
 
@@ -45,6 +44,10 @@ const Create = () => {
     setMinBId(e.target.checked);
   };
   const handeClickCustom = (e) => {
+    if (e.target.checked) {
+      setValues((prevValue) => ({ ...prevValue, nftsPerWinner: '' }));
+    }
+
     setCustom(e.target.checked);
   };
   const location = useLocation();
@@ -101,7 +104,7 @@ const Create = () => {
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
     if (event.target.id === 'numberOfWinners') {
-      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 21 || !value)) {
+      if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < 11 || !value)) {
         setValues((prevValues) => ({ ...prevValues, [event.target.id]: value }));
       }
     } else if (event.target.id === 'nftsPerWinner') {
@@ -236,6 +239,7 @@ const Create = () => {
               type="text"
               hoverBoxShadowGradient
               error={isValidFields.nftsPerWinner ? undefined : 'NFTs per winner is required!'}
+              disabled={custom}
               className="inp"
               value={values.nftsPerWinner}
               onChange={handleChange}
@@ -315,9 +319,8 @@ const Create = () => {
         </p>
         {custom && (
           <div className="winner__lists">
-            {values.winners &&
-              values.nftsPerWinner &&
-              new Array(+values.winners)
+            {values.numberOfWinners &&
+              new Array(+values.numberOfWinners)
                 .fill(1)
                 .map((number, index) => number + index)
                 .map((elementInArray) => (
@@ -331,7 +334,7 @@ const Create = () => {
                   >
                     <img src={WinnerIcon} alt="winner-icon" />
                     <p>Winner #{elementInArray}</p>
-                    <span>{values.nftsPerWinner} NFTs</span>
+                    <span>NFTs</span>
                     <div className="box--shadow--effect--block" />
                   </div>
                 ))}
@@ -342,7 +345,11 @@ const Create = () => {
           setFilteredNFTs={setFilteredNFTs}
           selectedNFTIds={selectedNFTIds}
           setSelectedNFTIds={setSelectedNFTIds}
+          selectedWinner={selectedWinner}
+          winnersSelectedNFTs={winnersSelectedNFTs}
+          setWinnersSelectedNFTs={setWinnersSelectedNFTs}
           tierName={values.name}
+          customSelected={custom}
           winners={Number(values.numberOfWinners)}
           nftsPerWinner={Number(values.nftsPerWinner)}
           minBidValue={minBidValue}
