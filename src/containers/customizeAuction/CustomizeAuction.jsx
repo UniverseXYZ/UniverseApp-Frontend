@@ -70,6 +70,7 @@ const CustomizeAuction = () => {
     `universe.xyz/${loggedInArtist.universePageAddress || placeholderText}`
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
+  const [successPopup, setSuccessPopup] = useState(false);
 
   const setContext = (_loggedInArtistClone, _futureAuctions, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
@@ -82,8 +83,7 @@ const CustomizeAuction = () => {
         auction: _editedAuction,
       });
     } else {
-      document.getElementById('popup-root')?.remove();
-      document.getElementById('congrats-hidden-btn').click();
+      setSuccessPopup(true);
     }
   };
 
@@ -244,19 +244,6 @@ const CustomizeAuction = () => {
   return (
     <div className="customize__auction">
       <RouterPrompt when={showPrompt} onOK={() => true} editing={customizeAuctionState} />
-      <Popup
-        trigger={
-          <button
-            type="button"
-            id="congrats-hidden-btn"
-            aria-label="hidden"
-            style={{ display: 'none' }}
-          />
-        }
-      >
-        {(close) => <CongratsLandingPagePopup onClose={close} />}
-      </Popup>
-
       <div className="container">
         <div
           className="back-rew"
@@ -361,6 +348,9 @@ const CustomizeAuction = () => {
         )}
       </div>
       {showError && <ErrorPopup />}
+      <Popup open={successPopup} closeOnDocumentClick={false}>
+        {(close) => <CongratsLandingPagePopup onClose={close} />}
+      </Popup>
     </div>
   );
 };
