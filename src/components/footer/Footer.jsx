@@ -11,6 +11,7 @@ import youtubeIcon from '../../assets/images/youtube.svg';
 import mediumIcon from '../../assets/images/medium.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
 import { handleMailSubscribe } from '../../utils/api/mailSubscribe';
+import { whitepaperUrl } from '../../utils/helpers';
 
 const Footer = () => {
   const history = useHistory();
@@ -139,12 +140,7 @@ const Footer = () => {
                   <li onClick={() => history.push('/about')} aria-hidden="true">
                     About
                   </li>
-                  <li
-                    onClick={() =>
-                      window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
-                    }
-                    aria-hidden="true"
-                  >
+                  <li onClick={() => window.open(whitepaperUrl)} aria-hidden="true">
                     Whitepaper
                   </li>
                   <li onClick={() => history.push('/team')} aria-hidden="true">

@@ -34,6 +34,7 @@ import {
   toFixed,
 } from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { whitepaperUrl } from '../../../../utils/helpers';
 
 const DesktopView = ({
   isWalletConnected,
@@ -214,7 +215,7 @@ const DesktopView = ({
               <button
                 type="button"
                 onClick={() => {
-                  window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper');
+                  window.open(whitepaperUrl);
                   setIsAboutDropdownOpened(false);
                 }}
               >

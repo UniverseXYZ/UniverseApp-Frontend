@@ -77,3 +77,4 @@ export const mapUserData = (userInfo) => {
 };
 
 export const auctionPageImageErrorMessage = 'File format must be PNG or JPEG (Max Size: 30mb)';
+export const whitepaperUrl = 'https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper';
