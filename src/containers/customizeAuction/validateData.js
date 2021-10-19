@@ -34,8 +34,9 @@ export const validateAuctionData = (auction, domainAndBranding) => {
 export const validateAuctionImages = (editedAuction, invalidPromoImage, invalidBackgroundImage) => {
   let canEditAuction = false;
 
-  const promoImageEdited = typeof editedAuction.promoImage === 'object';
-  const backgroundImageEdited = typeof editedAuction.backgroundImage === 'object';
+  const promoImageEdited = editedAuction.promoImage && typeof editedAuction.promoImage === 'object';
+  const backgroundImageEdited =
+    editedAuction.backgroundImage && typeof editedAuction.backgroundImage === 'object';
 
   if (
     !invalidPromoImage &&
