@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './RewardTiers.scss';
 import '../auctions/Tiers.scss';
@@ -27,6 +27,7 @@ import RewardTierRemovePopup from '../popups/RewardTierRemovePopup';
 
 const RewardTiers = () => {
   const history = useHistory();
+  const location = useLocation();
   const [shownActionId, setShownActionId] = useState(null);
 
   const { auction, bidtype } = useAuctionContext();
@@ -215,14 +216,17 @@ const RewardTiers = () => {
       <div className={!auction?.rewardTiers?.length ? 'btn-div' : 'btn-div withtier'}>
         <Button
           className="light-border-button"
-          onClick={() => history.push('/setup-auction/auction-settings', auction.id)}
+          onClick={() =>
+            history.push({ pathname: '/setup-auction/auction-settings', state: location.state })
+          }
         >
           Back
         </Button>
         <Button
           className="light-button"
           onClick={() =>
-            auction?.rewardTiers?.length && history.push('/setup-auction/review-auction')
+            auction?.rewardTiers?.length &&
+            history.push({ pathname: '/setup-auction/review-auction', state: location.state })
           }
           disabled={!auction?.rewardTiers?.length}
         >
