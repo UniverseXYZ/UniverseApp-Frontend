@@ -167,7 +167,6 @@
     }
   }
   .intup-l {
-    margin-bottom: 20px;
     width: 100%;
 
     input {
@@ -363,6 +362,7 @@
     position: relative;
     display: flex;
     height: fit-content;
+    margin-top: 20px;
 
     .info-text {
       position: absolute;
@@ -382,6 +382,13 @@
       font-weight: normal;
       z-index: 10;
     }
+  }
+
+  .input-max-chars {
+    font-family: $spaceGroteskFont;
+    font-size: 10px;
+    color: #e4b613;
+    margin-top: 5px;
   }
 }
 
