@@ -227,7 +227,7 @@ const AuctionReview = () => {
         {auction.properties &&
           auction.properties.length &&
           auction.properties
-            .map((item) => item.address !== '' && item.amount !== '')
+            .map((item) => item.address !== '' && item.percentAmount !== '')
             .find((element) => element) && (
             <div className="royalty-settings-head">
               <h2 className="royalty-settings-title">Royalty splits</h2>
@@ -239,7 +239,7 @@ const AuctionReview = () => {
             {auction.properties.map(
               (item) =>
                 item.address &&
-                item.amount && (
+                item.percentAmount && (
                   <div key={item.address} className="royalty">
                     <p className="show--on--desktop">{item.address}</p>
                     <p className="hide--on--desktop">
@@ -248,7 +248,7 @@ const AuctionReview = () => {
                         item.address.length
                       )}`}
                     </p>
-                    <span>{item.amount}%</span>
+                    <span>{item.percentAmount}%</span>
                   </div>
                 )
             )}

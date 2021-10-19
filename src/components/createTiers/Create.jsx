@@ -88,7 +88,7 @@ const Create = () => {
     if (tierById) {
       setValues({
         name: tierById.name,
-        numberOfWinners: tierById.numberOfWinners,
+        numberOfWinners: tierById.numberOfWinners ? tierById.numberOfWinners : tierById.winners,
         nftsPerWinner: tierById.nftsPerWinner,
       });
       if (tierById.minBidValue) {
@@ -181,7 +181,7 @@ const Create = () => {
               hoverBoxShadowGradient
               error={isValidFields.numberOfWinners ? undefined : 'Number of winners is required!'}
               className="inp"
-              value={values.numberOfWinners}
+              value={values.numberOfWinners ? values.numberOfWinners : auction.winners}
               onChange={handleChange}
             />
 
