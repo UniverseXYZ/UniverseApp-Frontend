@@ -30,8 +30,10 @@ const PolymorphContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    setUserPolymorphs([]);
-    fetchUserPolymorphsTheGraph(address);
+    if (address) {
+      setUserPolymorphs([]);
+      fetchUserPolymorphsTheGraph(address);
+    }
   }, [address]);
 
   return (
