@@ -983,7 +983,7 @@ const SingleNFTForm = () => {
                   onMouseLeave={() => setHideRoyalitiesInfo(false)}
                   onBlur={() => setHideRoyalitiesInfo(false)}
                 >
-                  Royalty splits <img src={infoIcon} alt="Info Icon" />
+                  Revenue splits <img src={infoIcon} alt="Info Icon" />
                 </h4>
                 {hideRoyalitiesInfo && (
                   <div className="royalities-info-text">
