@@ -44,7 +44,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
       {myAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => item.launch && moment(item.endDate).isBefore(moment.now()))
+        .filter((item) => item && moment(item.endDate).isBefore(moment.now()))
         .map((pastAuction, index) => (
           <div className="auction past-auction" key={pastAuction.id}>
             <div className="auction-header">
@@ -182,15 +182,18 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                     </div>
                   </div>
                   <div className="tier-body">
-                    {tier.nfts.map((nft) => (
-                      <div className="tier-image" key={uuid()}>
-                        <div className="tier-image-second" />
-                        <div className="tier-image-first" />
-                        <div className="tier-image-main">
-                          <img src={URL.createObjectURL(nft.media)} alt={nft.name} />
+                    {tier.nfts.map((nft) => {
+                      const imageUrl = nft.media ? nft.media : '';
+                      return (
+                        <div className="tier-image" key={uuid()}>
+                          <div className="tier-image-second" />
+                          <div className="tier-image-first" />
+                          <div className="tier-image-main">
+                            <img src={imageUrl} alt={nft.name} />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ))}
