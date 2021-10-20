@@ -18,7 +18,7 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: BUILD STARTED
         color: warning
 
@@ -56,7 +56,7 @@ jobs:
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: BUILD SUCCESSFUL
         color: good
 
@@ -67,7 +67,7 @@ jobs:
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: BUILD FAILED
         color: danger
 
@@ -82,7 +82,7 @@ jobs:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: DEPLOYMENT STARTED
         color: warning
 
@@ -99,14 +99,14 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy static site to S3
-      run: ls -l && aws s3 sync . s3://prod-universexyz-origin --delete
+      run: ls -l && aws s3 sync . s3://alpha-alphauniversexyz-origin --delete
 
     - name: Invalidate CloudFront cache
       run: |
         #!/usr/bin/env bash
         set -eou pipefail
 
-        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'universe.xyz')].Id | [0]" | tr -d \")
+        CF_DIST_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items!=null] | [?contains(Aliases.Items, 'alpha.universe.xyz')].Id | [0]" | tr -d \")
         echo "Clearing cache for ${CF_DIST_ID}..."
         CF_INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${CF_DIST_ID} --paths "/*" | jq -r '.Invalidation.Id')
         while [ $(aws cloudfront get-invalidation --distribution-id ${CF_DIST_ID} --id ${CF_INVALIDATION_ID} | jq -r '.Invalidation.Status') != "Completed" ]; do
@@ -121,7 +121,7 @@ jobs:
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: DEPLOYMENT SUCCESSFUL
         color: good
 
@@ -132,6 +132,6 @@ jobs:
       uses: voxmedia/github-action-slack-notify-build@v1
       with:
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: infra-ci-kekdao
+        channel: infra-ci-kek
         status: DEPLOYMENT FAILED
         color: danger
