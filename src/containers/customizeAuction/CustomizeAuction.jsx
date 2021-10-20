@@ -22,6 +22,7 @@ import {
 } from '../../utils/api/auctions';
 import { saveProfileInfo, saveUserImage } from '../../utils/api/profile';
 import ErrorPopup from '../../components/popups/ErrorPopup';
+import LoadingPopup from '../../components/popups/LoadingPopup';
 
 const SAVE_PREVIEW_ACTION = 'save-preview';
 const PREVIEW_ACTION = 'preview';
@@ -71,6 +72,7 @@ const CustomizeAuction = () => {
   );
   const [accountImage, setAccountImage] = useState(loggedInArtist.avatar);
   const [successPopup, setSuccessPopup] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
@@ -88,6 +90,7 @@ const CustomizeAuction = () => {
   };
 
   const handleStatus = (errorMessages, loggedInArtistClone, editedAuction, action) => {
+    setLoading(false);
     if (errorMessages.length) {
       setErrorTitle('Unexpected error');
       setErrorBody(errorMessages.join(', '));
@@ -194,6 +197,7 @@ const CustomizeAuction = () => {
   };
 
   const saveOnServer = async (editedAuction, loggedInArtistClone, action) => {
+    setLoading(true);
     const newAuctionData = await saveAuction(editedAuction);
     const profileResponses = await saveProfile(loggedInArtistClone);
     const rewardTierResponses = await saveRewardTiers();
@@ -371,6 +375,9 @@ const CustomizeAuction = () => {
       {showError && <ErrorPopup />}
       <Popup open={successPopup} closeOnDocumentClick={false}>
         <CongratsLandingPagePopup onClose={() => setSuccessPopup(false)} />
+      </Popup>
+      <Popup closeOnDocumentClick={false} open={loading}>
+        <LoadingPopup text="Saving your changes" onClose={() => setLoading(false)} />
       </Popup>
     </div>
   );
