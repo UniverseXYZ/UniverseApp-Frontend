@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import './RarityList.scss';
 import uuid from 'react-uuid';
@@ -95,7 +95,7 @@ const List = ({
         <div className="selected--filters">
           {showClearALL && <div className="result">{results.length} results</div>}
           {categories.map((item, index) => (
-            <>
+            <Fragment key={item.id}>
               {item.traits.map(
                 (trait, idx) =>
                   trait.checked && (
@@ -111,7 +111,7 @@ const List = ({
                     </button>
                   )
               )}
-            </>
+            </Fragment>
           ))}
           {showClearALL && (
             <button type="button" className="clear--all" onClick={() => handleClearAll()}>
