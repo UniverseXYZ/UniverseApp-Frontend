@@ -55,6 +55,8 @@ const MIN_IMAGE_SIZE = {
   height: 800,
 };
 
+const MAX_ROYALTY_PERCENT = 20;
+
 const COLLECTIONS_PER_ROW = 4;
 
 const SingleNFTForm = () => {
@@ -229,7 +231,7 @@ const SingleNFTForm = () => {
       (accumulator, current) => accumulator + Number(current.amount),
       0
     );
-    if (result <= 99 && val >= 0) {
+    if (result <= MAX_ROYALTY_PERCENT && val >= 0) {
       setRoyaltyAddress(newProperties);
     }
   };
