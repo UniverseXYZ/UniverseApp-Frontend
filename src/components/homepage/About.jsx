@@ -170,13 +170,13 @@ const About = () => {
                 more. Collections can also hold sub-collections in them. This allows for the
                 creation of additional NFTs such as layers of art, shows, merchandise, music. etc.
                 that can evolve over time under one umbrella community structure. <br />
-                <div>
+                <span>
                   In this way the Universe Protocol allows content to grow over time with community
                   input, yet retain programmatic links back to its origins and the original
                   creators. <br />
                   <br /> In future build outs we hope to enable the ability to turn collections into
                   mini DAOs along with an integrated social network.
-                </div>
+                </span>
               </p>
               <Button
                 className="light-button"
@@ -200,12 +200,12 @@ const About = () => {
                 existing NFTs or mint new collections and create a multi-tier auction with multiple
                 winners. At its simplest, you can set up a single tier reserve price english auction
                 that is well known.
-                <div>
+                <span>
                   There will be <b>ZERO FEES</b> for initial auctions, with all revenue going to the
                   creator - we are here to empower artists at our core. However, the xyzDAO will
                   take a 2% fee on every resale on the Universe platform to support continued
                   innovation.
-                </div>
+                </span>
               </p>
               <Button
                 className="light-button"
