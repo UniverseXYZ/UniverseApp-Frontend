@@ -147,6 +147,19 @@ const EndDateCalendar = React.forwardRef(
     };
 
     const handleSaveClick = () => {
+      if (
+        new Date(
+          endDateTemp.year,
+          monthNames.indexOf(endDateTemp.month),
+          endDateTemp.day,
+          endDateTemp.hours,
+          endDateTemp.minutes
+        ) <= new Date(values.startDate)
+      ) {
+        endDateTemp.hours = new Date().getHours();
+        endDateTemp.minutes = new Date().getMinutes();
+      }
+
       if (endDateTemp.hours && endDateTemp.minutes) {
         setValues((prevValues) => ({
           ...prevValues,
