@@ -114,7 +114,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   moment(futureAuction.startDate).isBefore(moment.now()) ? 'dateError' : ''
                 }`}
               >
-                <p
+                <span
                   onMouseOver={() => setHideLaunchIcon(futureAuction.id)}
                   onFocus={() => setHideLaunchIcon(futureAuction.id)}
                   onMouseLeave={() => setHideLaunchIcon(0)}
@@ -137,14 +137,14 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       <img src={infoIconRed} alt="Info" />
                     </div>
                   )}
-                </p>
+                </span>
               </div>
               <div
                 className={`total-dates ${
                   moment(futureAuction.endDate).isBefore(moment.now()) ? 'dateError' : ''
                 }`}
               >
-                <p
+                <span
                   onMouseOver={() => setHideEndIcon(futureAuction.id)}
                   onFocus={() => setHideEndIcon(futureAuction.id)}
                   onMouseLeave={() => setHideEndIcon(0)}
@@ -167,7 +167,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                       <img src={infoIconRed} alt="Info" />
                     </div>
                   )}
-                </p>
+                </span>
               </div>
             </div>
             <div className="auctions-steps">
