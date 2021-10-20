@@ -180,7 +180,7 @@ const About = () => {
               </p>
               <Button
                 className="light-button"
-                onClick={() => history.push('/my-nfts')}
+                onClick={() => history.push('/minting')}
                 // disabled
               >
                 Go to minting

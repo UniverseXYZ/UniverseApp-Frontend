@@ -43,7 +43,7 @@ const NonFungibleUniverse = () => {
       icon: nfuMarketIcon,
       title: 'NFT Marketplace',
       description:
-        'A universe of three initial planets with 23 OG characters each to memeify (69 total OG characters).',
+        'An NFT marketplace that is completely decentralized and rigged with multiple open source tools and features.',
       loaded: false,
       action: 'Coming soon',
       link: '',
