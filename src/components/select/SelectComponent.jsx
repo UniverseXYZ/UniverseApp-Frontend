@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 
 const SelectComponent = (props) => {
-  const { options, onChange, placeholder } = props;
+  const { options, onChange, placeholder, isMulti } = props;
   const styles = {
     placeholder: (defaultStyles) => ({
       ...defaultStyles,
@@ -54,12 +54,14 @@ const SelectComponent = (props) => {
         IndicatorSeparator: () => null,
       }}
       menuPlacement="auto"
+      isMulti={isMulti}
     />
   );
 };
 
 SelectComponent.defaultProps = {
   placeholder: '',
+  isMulti: false,
 };
 
 SelectComponent.propTypes = {
@@ -71,6 +73,7 @@ SelectComponent.propTypes = {
   ).isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
+  isMulti: PropTypes.bool,
 };
 
 export default SelectComponent;

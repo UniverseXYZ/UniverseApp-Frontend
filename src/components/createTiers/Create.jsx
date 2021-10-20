@@ -12,6 +12,16 @@ import infoIcon from '../../assets/images/icon.svg';
 import WinnerIcon from '../../assets/images/winner-icon.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import CustomNftsSection from '../customNfts/CustomNftsSection';
+import AvailabilityNFTCard from '../availableNFTCard';
+import SearchFilters from '../nft/SearchFilters';
+import SimplePagination from '../pagination/SimplePaginations';
+import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
+
+const ACTION_TYPES = {
+  ADD: 'select-option',
+  REMOVE_ALL: 'clear',
+  REMOVE_SINGLE: 'remove-value',
+};
 
 const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
@@ -22,21 +32,30 @@ const Create = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
-  const { auction, setAuction, bidtype, setBidtype, options } = useAuctionContext();
+  const {
+    auction,
+    setAuction,
+    bidtype,
+    setBidtype,
+    options,
+    availableNFTs,
+    setAvailableNFTs,
+    getAvailableNFTs,
+  } = useAuctionContext();
+
   const [minBid, setMinBId] = useState(false);
   const [custom, setCustom] = useState(false);
   const [minBidValue, setMinBidValue] = useState('');
-  const [winnersSelectedNFTs, setWinnersSelectedNFTs] = useState({});
-  const [selectedWinner, setSelectedWinner] = useState(null);
   const bid = options.find((element) => element.value === bidtype);
-  const [selectedNFTIds, setSelectedNFTIds] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(8);
+  const [page, setPage] = useState(8);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [values, setValues] = useState({
     name: '',
     numberOfWinners: '',
     nftsPerWinner: '',
   });
-
   const [isValidFields, setIsValidFields] = useState({
     name: true,
     numberOfWinners: true,
@@ -76,14 +95,6 @@ const Create = () => {
     }
   }, [isValidFields]);
 
-  const handleWinnerSelect = (winner) => {
-    if (!winnersSelectedNFTs[winner]) {
-      setWinnersSelectedNFTs((prevValue) => ({ ...prevValue, [winner]: [] }));
-    }
-
-    setSelectedWinner((prevValue) => (prevValue === winner ? 'null' : winner));
-  };
-
   useEffect(() => {
     if (tierById) {
       setValues({
@@ -112,6 +123,75 @@ const Create = () => {
       setValues((prevValues) => ({ ...prevValues, [event.target.id]: event.target.value }));
     }
   };
+
+  useEffect(async () => {
+    const available = await getAvailableNFTs();
+    if (available.nfts.length) {
+      const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
+
+      setAvailableNFTs(parsedForFilters);
+      setFilteredNFTs(parsedForFilters);
+    }
+  }, []);
+
+  // Custom Slots distribution logic
+  const [selectedWinner, setSelectedWinner] = useState(0);
+  const [winnersData, setWinnersData] = useState([
+    {
+      slotIndex: null,
+      nftIds: [], // {collectionAddress, id}
+    },
+  ]);
+
+  const onEditionClick = (data, actionMeta) => {
+    if (!data) return;
+
+    if (custom) {
+      const winnersCopy = [...winnersData];
+
+      if (actionMeta.action === ACTION_TYPES.ADD) {
+        const [edition, id] = actionMeta.option.value.split('/');
+        winnersCopy[selectedWinner].nftIds.push(id);
+      }
+
+      if (actionMeta.action === ACTION_TYPES.REMOVE_ALL) {
+        const removedIds = actionMeta.removedValues.map(({ value }) => value.split('/')[1]);
+        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+          (nftID) => !removedIds.includes(nftID)
+        );
+      }
+
+      if (actionMeta.action === ACTION_TYPES.REMOVE_SINGLE) {
+        const removedId = actionMeta.removedValue.value.split('/')[1];
+        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+          (nftID) => nftID !== removedId
+        );
+      }
+
+      setWinnersData(winnersCopy);
+    }
+  };
+
+  const prepareSlotsData = () => {
+    let slot = 0;
+    const winners = [];
+
+    while (slot < values.numberOfWinners) {
+      winners.push({ slotIndex: slot, nftIds: [] });
+      slot += 1;
+    }
+
+    return winners;
+  };
+
+  useEffect(async () => {
+    if (custom) {
+      const winners = prepareSlotsData();
+      await setWinnersData(winners);
+    } else setWinnersData([]);
+  }, [custom]);
+
+  // End Custom Slots distribution logic
 
   return (
     <>
@@ -299,32 +379,55 @@ const Create = () => {
         {custom && (
           <div className="winner__lists">
             {values.numberOfWinners &&
-              new Array(+values.numberOfWinners)
-                .fill(1)
-                .map((number, index) => number + index)
-                .map((earchWinner) => (
-                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                  <div
-                    className={
-                      selectedWinner === earchWinner ? 'winner-box selected' : 'winner-box'
-                    }
-                    key={earchWinner}
-                    onClick={() => handleWinnerSelect(earchWinner)}
-                  >
-                    <img src={WinnerIcon} alt="winner-icon" />
-                    <p>Winner #{earchWinner}</p>
-                    <span>
-                      {winnersSelectedNFTs && winnersSelectedNFTs[earchWinner]?.length > 0
-                        ? winnersSelectedNFTs[earchWinner]?.length
-                        : ''}{' '}
-                      NFTs
-                    </span>
-                    <div className="box--shadow--effect--block" />
-                  </div>
-                ))}
+              winnersData.map((data, i) => (
+                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                <div
+                  className={selectedWinner === i ? 'winner-box selected' : 'winner-box'}
+                  key={uuid()}
+                  onClick={() => setSelectedWinner(i)}
+                >
+                  <img src={WinnerIcon} alt="winner-icon" />
+                  <p>Winner #{i}</p>
+                  <span>
+                    {data.nftIds.length}
+                    NFTs
+                  </span>
+                  <div className="box--shadow--effect--block" />
+                </div>
+              ))}
           </div>
         )}
-        <Wallet
+        {
+          // TODO:: Take available NFTs and list them -> DONE
+          // TODO:: Create NFT card component -> DONE -> needs css
+          // TODO:: Add filters to them - DONE
+          // TODO:: Add pagination Component -> DONE -> need tweaking
+          // TODO:: Upon custom distribution - attach selected nft & edition to the winner -> DONE (can add remove nft from slot)
+          // TODO:  Upon changing the selected winner we should display the already selected nfts for him
+          // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
+          // TODO:: on the last step, send the slots distribution to the BE
+        }
+        <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
+        <div className="nfts__lists">
+          {filteredNFTs.map((data) => (
+            <AvailabilityNFTCard key={data.nfts.id} data={data} onEditionClick={onEditionClick} />
+          ))}
+        </div>
+        <div className="pagination__container">
+          <SimplePagination
+            data={availableNFTs}
+            perPage={perPage}
+            setOffset={setOffset}
+            setPage={setPage}
+            page={page}
+          />
+          <ItemsPerPageDropdown
+            perPage={perPage}
+            setPerPage={setPerPage}
+            itemsPerPage={[8, 16, 32]}
+          />
+        </div>
+        {/* <Wallet
           filteredNFTs={filteredNFTs}
           setFilteredNFTs={setFilteredNFTs}
           selectedNFTIds={selectedNFTIds}
@@ -333,7 +436,7 @@ const Create = () => {
           winners={Number(values.numberOfWinners)}
           nftsPerWinner={Number(values.nftsPerWinner)}
           minBidValue={minBidValue}
-        />
+        /> */}
       </div>
     </>
   );

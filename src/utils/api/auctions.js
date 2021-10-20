@@ -9,6 +9,7 @@ const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
 const EDIT_REWARD_TIER_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}`;
 const EDIT_REWARD_TIER_IMAGE = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}/image`;
+const GET_AVAILABLE_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts/availability`;
 
 export const createAuction = async ({
   name,
@@ -218,6 +219,22 @@ export const uploadImagesForTheLandingPage = async (
   };
 
   const request = await fetch(UPLAD_IMAGES_FOR_LANDING_PAGE_URL(id), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+// Create Auction Tier
+export const getAvailableNFTs = async () => {
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_AVAILABLE_NFTS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
