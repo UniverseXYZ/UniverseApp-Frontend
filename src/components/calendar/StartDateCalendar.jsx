@@ -191,8 +191,6 @@ const StartDateCalendar = React.forwardRef(
     };
 
     useEffect(() => {
-      console.log(values);
-      console.log(Number(values.startDate.toString().split(' ')[3]));
       if (!values.startDate) {
         setStartDateTemp((prevState) => ({
           ...prevState,

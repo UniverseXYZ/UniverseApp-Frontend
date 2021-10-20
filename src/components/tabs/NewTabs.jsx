@@ -95,7 +95,7 @@ const NewTabs = (props) => {
                       if (className !== 'disabled') {
                         history.push({
                           pathname: route,
-                          state: location.state,
+                          state: location.state === 'edit' ? location.state : true,
                         });
                       }
                     }}

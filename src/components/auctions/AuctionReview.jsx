@@ -350,7 +350,10 @@ const AuctionReview = () => {
         <Button
           className="light-border-button"
           onClick={() =>
-            history.push({ pathname: '/setup-auction/reward-tiers', state: location.state })
+            history.push({
+              pathname: '/setup-auction/reward-tiers',
+              state: location.state === 'edit' ? location.state : true,
+            })
           }
         >
           Back
