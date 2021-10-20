@@ -41,6 +41,14 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
     }
   };
 
+  const promoImageSrc =
+    values.promoImage instanceof File ? URL.createObjectURL(values.promoImage) : values.promoImage;
+
+  const bgImageSrc =
+    values.backgroundImage instanceof File
+      ? URL.createObjectURL(values.backgroundImage)
+      : values.backgroundImage;
+
   return (
     <div>
       <div className="domain__branding">
@@ -152,11 +160,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                 <div className="preview-div">
                   {values.promoImage ? (
                     <>
-                      <img
-                        className="preview__image"
-                        src={URL.createObjectURL(values.promoImage)}
-                        alt="Promo"
-                      />
+                      <img className="preview__image" src={promoImageSrc} alt="Promo" />
                       <img
                         className="close"
                         src={closeIcon}
@@ -252,11 +256,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                   {values.hasBlur && <div className="blur" />}
                   {values.backgroundImage ? (
                     <>
-                      <img
-                        className="background__image"
-                        src={URL.createObjectURL(values.backgroundImage)}
-                        alt="background"
-                      />
+                      <img className="background__image" src={bgImageSrc} alt="background" />
                       <img
                         className="close"
                         src={closeIcon}
