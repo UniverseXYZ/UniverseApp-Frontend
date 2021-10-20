@@ -72,10 +72,11 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
     });
     const tierObject = {
       name: t.name,
-      numberOfWinners: t.winners,
+      numberOfWinners: t.winners || t.numberOfWinners,
       nftsPerWinner: t.nftsPerWinner,
       minimumBid: t.minBidValue || 0.1,
       nftSlots: updatedSlotIndexes,
+      id: t.id,
     };
 
     tiersArray.push(tierObject);

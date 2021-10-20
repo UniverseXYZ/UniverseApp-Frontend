@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory, Switch, Redirect, Route } from 'react-router-dom';
 import './NewTabs.scss';
@@ -30,13 +30,18 @@ const NewTabs = (props) => {
 
   useEffect(() => {
     const routes = tabData.map((elem) => elem.route);
-    if (location.state === 'edit') {
-      setRoutesArray(routes);
 
+    setRoutesArray(routes.splice(0, routes.indexOf(pathname) + 1));
+  }, [pathname]);
+
+  useEffect(() => {
+    if (auction.id >= 0) {
       // if we are Editing Prepare RewardTiers nftSlots property here
       const tiers = auction.rewardTiers;
       if (tiers) {
         tiers.forEach((tier) => {
+          // Enter the check if we haven't been here already
+          if (tier.nftSlots) return;
           const winnersData = [];
 
           const nFTsBySlotIndexObject = tier.nfts.reduce((res, curr) => {
@@ -65,10 +70,8 @@ const NewTabs = (props) => {
           setAuction(auctionCopy);
         });
       }
-      return;
     }
-    setRoutesArray(routes.splice(0, routes.indexOf(pathname) + 1));
-  }, [pathname]);
+  }, []);
 
   useEffect(() => {
     if (Number(window.innerWidth) <= 768) setMobile(true);

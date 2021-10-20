@@ -7,7 +7,7 @@ import {
   saveCollection,
   attachTxHashToCollection,
 } from '../../utils/api/mintNFT';
-import { createAuction, editAuction } from '../../utils/api/auctions';
+import { createAuction, editAuction, editRewardTier } from '../../utils/api/auctions';
 import { resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
 
 /**
@@ -101,5 +101,19 @@ export const sendCreateAuctionRequest = async ({ requestObject }) => {
 export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
   // TODO:: we shoul send a new request to the BE with the new reward tiers info from requestObject.
+  const editRewardTiersPromises = requestObject.rewardTiers.map(async (tier) => {
+    const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;
+    const minBid = parseFloat(minimumBid);
+    const requestTier = {
+      name,
+      numberOfWinners,
+      nftsPerWinner,
+      minimumBid: minBid,
+      nftSlots,
+    };
+    return editRewardTier(requestTier, id);
+  });
+
+  const updatedTiers = await Promise.all(editRewardTiersPromises);
   return res;
 };

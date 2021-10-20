@@ -100,7 +100,7 @@ export const editAuction = async ({
 };
 
 export const editRewardTier = async (
-  { name, numberOfWinners, nftsPerWinner, minimumBid, nftIds, color, description },
+  { name, numberOfWinners, nftsPerWinner, minimumBid, nftIds, color, description, nftSlots },
   id
 ) => {
   const requestBody = {
@@ -112,6 +112,10 @@ export const editRewardTier = async (
     color,
     description,
   };
+
+  if (nftSlots) {
+    requestBody.nftSlots = nftSlots;
+  }
 
   const requestOptions = {
     method: 'PATCH',
