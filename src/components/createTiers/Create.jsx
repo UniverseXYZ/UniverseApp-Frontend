@@ -152,8 +152,26 @@ const Create = () => {
       const winnersCopy = [...winnersData];
 
       if (actionMeta.action === ACTION_TYPES.ADD) {
-        const [edition, id, url, artWorkType] = actionMeta.option.value.split('||');
-        winnersCopy[selectedWinner].nftIds.push({ slot: selectedWinner, id, url, artWorkType });
+        const [
+          edition,
+          id,
+          url,
+          artWorkType,
+          nftName,
+          collectioName,
+          collectionAddress,
+          collectionUrl,
+        ] = actionMeta.option.value.split('||');
+        winnersCopy[selectedWinner].nftIds.push({
+          slot: selectedWinner,
+          id,
+          url,
+          artWorkType,
+          nftName,
+          collectioName,
+          collectionAddress,
+          collectionUrl,
+        });
       }
 
       if (actionMeta.action === ACTION_TYPES.REMOVE_ALL) {
@@ -196,8 +214,10 @@ const Create = () => {
     const editMode = false;
     if (!editMode) {
       const nftSlots = winnersSlots.map((slot) => {
-        slot.nftIds = slot.nftIds.map((data) => data.id);
-        return slot;
+        const slotCopy = { ...slot };
+        slotCopy.fullData = slot;
+        slotCopy.nftIds = slot.nftIds.map((data) => data.id);
+        return slotCopy;
       });
 
       const auctionUpdated = {

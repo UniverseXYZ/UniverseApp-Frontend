@@ -13,7 +13,7 @@ const NFTCard = React.memo(
     const { nfts, collection, optimized_url: url, artworkType } = data;
 
     const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
-      value: `${tokenId}||${id}||${url}||${artworkType}`,
+      value: `${tokenId}||${id}||${url}||${artworkType}||${nfts.name}||${collection.name}||${collection.address}||${collection.coverUrl}`,
       label: `#${tokenId}`,
     }));
 
