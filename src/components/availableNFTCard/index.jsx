@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import Select from '../select/SelectComponent';
-import SearchFilters from '../nft/SearchFilters';
 
 const NFTCard = React.memo(({ data, onEditionClick }) => {
   const { nfts, collection, optimized_url: url, artworkType } = data;
