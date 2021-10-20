@@ -16,6 +16,7 @@ import AvailabilityNFTCard from '../availableNFTCard';
 import SearchFilters from '../nft/SearchFilters';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
+import CreatTiersStickyBar from '../CreateTiersStickyBar';
 
 const ACTION_TYPES = {
   ADD: 'select-option',
@@ -139,7 +140,7 @@ const Create = () => {
   const [winnersData, setWinnersData] = useState([
     {
       slotIndex: null,
-      nftIds: [], // {collectionAddress, id}
+      nftIds: [], // {slot, id, url, artWorkType}
     },
   ]);
 
@@ -150,21 +151,21 @@ const Create = () => {
       const winnersCopy = [...winnersData];
 
       if (actionMeta.action === ACTION_TYPES.ADD) {
-        const [edition, id] = actionMeta.option.value.split('/');
-        winnersCopy[selectedWinner].nftIds.push(id);
+        const [edition, id, url, artWorkType] = actionMeta.option.value.split('||');
+        winnersCopy[selectedWinner].nftIds.push({ slot: selectedWinner, id, url, artWorkType });
       }
 
       if (actionMeta.action === ACTION_TYPES.REMOVE_ALL) {
-        const removedIds = actionMeta.removedValues.map(({ value }) => value.split('/')[1]);
+        const removedIds = actionMeta.removedValues.map(({ value }) => value.split('||')[1]);
         winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
-          (nftID) => !removedIds.includes(nftID)
+          (nft) => !removedIds.includes(nft.id)
         );
       }
 
       if (actionMeta.action === ACTION_TYPES.REMOVE_SINGLE) {
-        const removedId = actionMeta.removedValue.value.split('/')[1];
+        const removedId = actionMeta.removedValue.value.split('||')[1];
         winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
-          (nftID) => nftID !== removedId
+          (nft) => nft.id !== removedId
         );
       }
 
@@ -177,7 +178,7 @@ const Create = () => {
     const winners = [];
 
     while (slot < values.numberOfWinners) {
-      winners.push({ slotIndex: slot, nftIds: [] });
+      winners.push({ slot, nftIds: [] });
       slot += 1;
     }
 
@@ -190,6 +191,51 @@ const Create = () => {
       await setWinnersData(winners);
     } else setWinnersData([]);
   }, [custom]);
+
+  const handleContinue = (winnersSlots) => {
+    const editMode = false;
+    if (!editMode) {
+      const nftSlots = winnersSlots.map((slot) => {
+        slot.nftIds = slot.nftIds.map((data) => data.id);
+        return slot;
+      });
+
+      setAuction({
+        ...auction,
+        rewardTiers: [
+          ...auction?.rewardTiers,
+          {
+            id: uuid(),
+            name: values.name,
+            winners: Number(values.numberOfWinners),
+            nftsPerWinner: values.nftsPerWinner || 0,
+            minBidValue,
+            nftSlots,
+          },
+        ],
+      });
+    } else {
+      // TODO:: check edit auction logic
+      // const newTiers = [];
+      // auction?.rewardTiers?.forEach((tier) => {
+      //   if (tier.id === editMode.id) {
+      //     tier.name = tierName;
+      //     tier.winners = winners;
+      //     tier.nftsPerWinner = nftsPerWinner;
+      //     tier.minBidValue = minBidValue;
+      //     tier.nfts = prevNFTs;
+      //     newTiers.push(tier);
+      //   } else {
+      //     newTiers.push(tier);
+      //   }
+      // });
+      // setAuction({
+      //   ...auction,
+      //   tiers: newTiers,
+      // });
+    }
+    history.push('/setup-auction/reward-tiers');
+  };
 
   // End Custom Slots distribution logic
 
@@ -405,7 +451,8 @@ const Create = () => {
           // TODO:: Upon custom distribution - attach selected nft & edition to the winner -> DONE (can add remove nft from slot)
           // TODO:  Upon changing the selected winner we should display the already selected nfts for him
           // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
-          // TODO:: on the last step, send the slots distribution to the BE
+          // TODO:: on the last step, send the slots distribution to the BE -DONE
+          // TODO:: User should not be allowed to continue to the next stage if all the custom winners don't have at least 1 nft attached to them
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
@@ -427,6 +474,11 @@ const Create = () => {
             itemsPerPage={[8, 16, 32]}
           />
         </div>
+        <CreatTiersStickyBar
+          winnersData={winnersData}
+          tierSettings={values}
+          handleContinue={handleContinue}
+        />
         {/* <Wallet
           filteredNFTs={filteredNFTs}
           setFilteredNFTs={setFilteredNFTs}
