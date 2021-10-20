@@ -40,7 +40,6 @@ const Lists = ({
     setHideIcon(true);
     setActiveIndex(index);
   };
-
   const handleSavedNfts = (clickedNFT) => {
     if (isCreatingAction) {
       if (tierById && winners <= clickedNFT.tokenIds.length && !clickedNFT.isUsed) {
@@ -56,7 +55,7 @@ const Lists = ({
           } else {
             setWinnersSelectedNFTs((prevValue) => ({
               ...prevValue,
-              [selectedWinner]: [...winnersSelectedNFTs[selectedWinner], clickedNFT.id],
+              [selectedWinner]: [...(winnersSelectedNFTs[selectedWinner] || []), clickedNFT.id],
             }));
           }
         } else {
@@ -203,7 +202,8 @@ const Lists = ({
                 (tierById &&
                   !customSelected &&
                   nftsPerWinner === currentNFTIds.length &&
-                  !currentNFTIds.includes(nft.id))
+                  !currentNFTIds.includes(nft.id)) ||
+                (tierById && customSelected && !selectedWinner)
                   ? 'disabled'
                   : ''
               }`}
