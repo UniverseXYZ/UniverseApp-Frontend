@@ -158,7 +158,8 @@ table {
 input,
 textarea,
 input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
+input::-webkit-outer-spin-button
+:not(.nft__box input) {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
