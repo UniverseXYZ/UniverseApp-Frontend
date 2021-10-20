@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
@@ -10,6 +10,7 @@ import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
+import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
@@ -26,6 +27,20 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   const [validHeadline, setValidHeadline] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [inputStyle, setInputStyle] = useState('');
+  const [invalidPromoImage, setInvalidPromoImage] = useState(null);
+  const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
+
+  useEffect(() => {
+    if (!values.promoImage) {
+      setInvalidPromoImage(false);
+    }
+  }, [values?.promoImage]);
+
+  useEffect(() => {
+    if (!values.backgroundImage) {
+      setInvalidBackgroundImage(false);
+    }
+  }, [values?.backgroundImage]);
 
   const handleLink = (e) => {
     setAuctionLink(e.target.value);
@@ -44,14 +59,6 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
     }
   };
 
-  const promoImageSrc =
-    values.promoImage instanceof File ? URL.createObjectURL(values.promoImage) : values.promoImage;
-
-  const bgImageSrc =
-    values.backgroundImage instanceof File
-      ? URL.createObjectURL(values.backgroundImage)
-      : values.backgroundImage;
-
   const uploadFile = (file, imageType) => {
     if (imageType === PROMO_IMAGE) {
       onChange((prevValues) => ({ ...prevValues, promoImage: file }));
@@ -60,15 +67,29 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
     }
   };
 
+  const handleImageError = (imageType, fileValid) => {
+    if (imageType === PROMO_IMAGE) {
+      if (fileValid) {
+        setInvalidPromoImage(false);
+      } else {
+        setInvalidPromoImage(true);
+      }
+    } else if (imageType === BACKGROUND_IMAGE) {
+      if (fileValid) {
+        setInvalidBackgroundImage(false);
+      } else {
+        setInvalidBackgroundImage(true);
+      }
+    }
+  };
+
   const validateFile = (file, imageType) => {
     const fileValid =
       (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
-    if (fileValid) {
-      uploadFile(file, imageType);
-    } else {
-      // TODO: set error here
-      console.error('File format must be PNG or JPEG (Max Size: 30mb)');
-    }
+
+    handleImageError(imageType, fileValid);
+    // always show an image preview, so the user is able to remove an incorrect image
+    uploadFile(file, imageType);
   };
 
   const onDrop = (e, imageType) => {
@@ -82,6 +103,14 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   const onDragOver = (e) => {
     e.preventDefault();
   };
+
+  const promoImageSrc =
+    values.promoImage instanceof File ? URL.createObjectURL(values.promoImage) : values.promoImage;
+
+  const bgImageSrc =
+    values.backgroundImage instanceof File
+      ? URL.createObjectURL(values.backgroundImage)
+      : values.backgroundImage;
 
   return (
     <div>
@@ -179,7 +208,7 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                   </Animated>
                 )}
               </div>
-              <div className="upload__promo__body">
+              <div className={`upload__promo__body ${invalidPromoImage ? 'error-inp' : ''}`}>
                 <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                 <h5>Drop your file here</h5>
                 <p>(min 1080x1080px, 1:1 square ratio, PNG/JPEG, max 3mb)</p>
@@ -213,6 +242,9 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                     )}
                   </div>
                 </div>
+                {invalidPromoImage && (
+                  <p className="error-message">{auctionPageImageErrorMessage}</p>
+                )}
               </div>
             </div>
           </div>
@@ -267,7 +299,9 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                   </div>
                 </div>
               </div>
-              <div className="upload__background__body">
+              <div
+                className={`upload__background__body ${invalidBackgroundImage ? 'error-inp' : ''}`}
+              >
                 <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                 <h5>Drop your file here</h5>
                 <p>(min 1280x720px, 16:9 square ratio, PNG/JPEG, max 1mb)</p>
@@ -319,6 +353,9 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
                     )}
                   </div>
                 </div>
+                {invalidBackgroundImage && (
+                  <p className="error-message">{auctionPageImageErrorMessage}</p>
+                )}
               </div>
             </div>
           </div>

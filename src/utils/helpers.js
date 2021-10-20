@@ -75,3 +75,5 @@ export const mapUserData = (userInfo) => {
   };
   return map;
 };
+
+export const auctionPageImageErrorMessage = 'File format must be PNG or JPEG (Max Size: 30mb)';
