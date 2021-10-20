@@ -11,13 +11,13 @@ import Input from '../input/Input.jsx';
 import infoIcon from '../../assets/images/icon.svg';
 import WinnerIcon from '../../assets/images/winner-icon.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import CustomNftsSection from '../customNfts/CustomNftsSection';
 
 const Create = () => {
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideIcon2, setHideIcon2] = useState(false);
-  const [hideIcon3, setHideIcon3] = useState(false);
   const { auction, setAuction, bidtype, setBidtype, options } = useAuctionContext();
   const [minBid, setMinBId] = useState(false);
   const [custom, setCustom] = useState(false);
@@ -42,13 +42,7 @@ const Create = () => {
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
-  const handeClickCustom = (e) => {
-    if (e.target.checked) {
-      setValues((prevValue) => ({ ...prevValue, nftsPerWinner: '' }));
-    }
 
-    setCustom(e.target.checked);
-  };
   const location = useLocation();
   const tierId = location.state;
   const tierById = auction?.rewardTiers?.find((element) => element.id === tierId);
@@ -199,39 +193,12 @@ const Create = () => {
                   </div>
                 )}
               </span>
-
-              <div className="custom-info">
-                <span>
-                  Custom
-                  <img
-                    src={infoIcon}
-                    alt="Info Icon"
-                    onMouseOver={() => setHideIcon3(true)}
-                    onFocus={() => setHideIcon3(true)}
-                    onMouseLeave={() => setHideIcon3(false)}
-                    onBlur={() => setHideIcon3(false)}
-                  />
-                </span>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    value={custom}
-                    checked={custom}
-                    onChange={handeClickCustom}
-                  />
-                  <span className="slider round" />
-                </label>
-                {hideIcon3 && (
-                  <div className="info-text custom-info-text">
-                    <p>
-                      Use this parameter in case you want to deposit NFTs from incompatible
-                      collections, and it’s impossible to distinguish which one is more rare looking
-                      at the token ID. The other use case is when NFTs from different collections
-                      could not be distributed evenly.
-                    </p>
-                  </div>
-                )}
-              </div>
+              <CustomNftsSection
+                custom={custom}
+                setCustom={setCustom}
+                values={values}
+                setValues={setValues}
+              />
             </div>
             <Input
               id="nftsPerWinner"
@@ -350,11 +317,7 @@ const Create = () => {
           setFilteredNFTs={setFilteredNFTs}
           selectedNFTIds={selectedNFTIds}
           setSelectedNFTIds={setSelectedNFTIds}
-          selectedWinner={selectedWinner}
-          winnersSelectedNFTs={winnersSelectedNFTs}
-          setWinnersSelectedNFTs={setWinnersSelectedNFTs}
           tierName={values.name}
-          customSelected={custom}
           winners={Number(values.numberOfWinners)}
           nftsPerWinner={Number(values.nftsPerWinner)}
           minBidValue={minBidValue}
