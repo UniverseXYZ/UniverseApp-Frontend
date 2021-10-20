@@ -60,13 +60,22 @@ export const parseNumbers = ({ auction, requestObject }) => {
 
 export const attachTierNftsIds = ({ auction, requestObject }) => {
   const tiersArray = [];
+
+  // We should prepare all rewardTiers slots indexes for the BE in sequence 1,2,3,4,5 etc..
+  let slotIndex = 1;
   auction.rewardTiers.forEach((t) => {
+    const updatedSlotIndexes = t.nftSlots.map((slot) => {
+      const slotCopy = { ...slot };
+      slotCopy.slot = slotIndex;
+      slotIndex += 1;
+      return slotCopy;
+    });
     const tierObject = {
       name: t.name,
       numberOfWinners: t.winners,
       nftsPerWinner: t.nftsPerWinner,
       minimumBid: t.minBidValue || 0.1,
-      nftSlots: t.nftSlots,
+      nftSlots: updatedSlotIndexes,
     };
 
     tiersArray.push(tierObject);
