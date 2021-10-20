@@ -1,24 +1,21 @@
 import { utils } from 'ethers';
 
 const chunkSize = 5;
-const maxSlotSize = 10;
+let maxSlotSize = 0;
 
 const chunkifySlots = (nftsBySlots) => {
   const chunkedSlots = {};
-  Object.keys(nftsBySlots).forEach((key) => {
-    const slotsMap = Object.values(nftsBySlots[key]);
-    Object.keys(slotsMap).forEach((slotKey) => {
-      const slotsArray = slotsMap[slotKey];
-      let q;
-      let j;
+  Object.keys(nftsBySlots).forEach((slotKey) => {
+    const slotsMap = Object.values(nftsBySlots[slotKey]);
+    let q;
+    let j;
 
-      for (q = 0, j = slotsArray.length; q < j; q += chunkSize) {
-        const chunked = slotsArray.slice(q, q + chunkSize);
-        const group = chunkedSlots[slotKey] || [];
-        group.push(chunked);
-        chunkedSlots[slotKey] = group;
-      }
-    });
+    for (q = 0, j = slotsMap.length; q < j; q += chunkSize) {
+      const chunked = slotsMap.slice(q, q + chunkSize);
+      const group = chunkedSlots[slotKey] || [];
+      group.push(chunked);
+      chunkedSlots[slotKey] = group;
+    }
   });
 
   return chunkedSlots;
@@ -35,7 +32,7 @@ const splitSlots = (chunkedSlots, collections) => {
   const keys = Object.keys(chunkedSlots);
 
   // We make sure the indexes start from 0
-  let nonZeroIndexKeys = keys;
+  let nonZeroIndexKeys = keys.map((key) => +key);
   if (keys[0] === '0') {
     nonZeroIndexKeys = keys.map((key) => +key + 1);
   }
@@ -55,7 +52,7 @@ const splitSlots = (chunkedSlots, collections) => {
           };
         }
         const collAddress = collections.find((coll) => coll.id === nft.collectionId)?.address;
-        nftsChunke.push([nft.id, utils.getAddress(collAddress)]);
+        nftsChunke.push([nft.tokenId, utils.getAddress(collAddress)]);
       });
       slotIndices.push(nonZeroIndexKeys[i]);
       nfts.push(nftsChunke);
@@ -98,14 +95,32 @@ const groupTiersToSlots = (rewardTiers) => {
       return groups;
     }, {})
   );
-  const flatNftsBySlots = [];
-  nftsBySlots.forEach((array) => {
-    flatNftsBySlots.push(array);
+  const flatNftsBySlots = {};
+  nftsBySlots.forEach((slotMapping) => {
+    Object.keys(slotMapping).forEach((key) => {
+      flatNftsBySlots[key] = slotMapping[key];
+    });
   });
   return flatNftsBySlots;
 };
 
+const setMaxSlotSize = (rewardTiers) => {
+  let numberOfSlots = 0;
+  rewardTiers
+    .sort((a, b) => +a.tierPosition - +b.tierPosition)
+    .forEach((tier) => {
+      numberOfSlots += tier.numberOfWinners;
+    });
+
+  return numberOfSlots;
+};
+
 export const calculateTransactions = (auction) => {
+  // TODO: Filter nfts by deposited === false
+
+  // TODO: Ask Stan about this require "Incorrect auction slots"
+  maxSlotSize = setMaxSlotSize(auction.rewardTiers);
+
   const nftsBySlots = groupTiersToSlots(auction.rewardTiers);
   // console.log(nftsBySlots);
 

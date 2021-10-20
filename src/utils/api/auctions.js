@@ -11,6 +11,8 @@ const EDIT_REWARD_TIER_IMAGE = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}/image`;
 const GET_AVAILABLE_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nfts/availability`;
 const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
+const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
+const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
 
 export const createAuction = async ({
   name,
@@ -253,6 +255,40 @@ export const addDeployInfoToAuction = async (body) => {
   };
 
   const request = await fetch(ADD_DEPLOY_INFO, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const depositNfts = async (body) => {
+  const requestOptions = {
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+    body: JSON.stringify(body),
+  };
+
+  const request = await fetch(DEPOSIT_NFTS_TO_AUCTION, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const withdrawNfts = async (body) => {
+  const requestOptions = {
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+    body: JSON.stringify(body),
+  };
+
+  const request = await fetch(WITHDRAW_NFTS_FROM_AUCTION, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
