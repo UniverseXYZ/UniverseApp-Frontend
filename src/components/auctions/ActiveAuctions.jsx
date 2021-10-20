@@ -77,7 +77,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                 .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
                 .filter(
                   (item) =>
-                    item.launch &&
+                    item &&
                     moment(item.startDate).isBefore(moment.now()) &&
                     !moment(item.endDate).isBefore(moment.now())
                 )
