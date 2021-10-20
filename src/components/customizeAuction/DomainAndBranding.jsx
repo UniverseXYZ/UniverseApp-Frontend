@@ -15,7 +15,16 @@ import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
 
-const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonClick }) => {
+const DomainAndBranding = ({
+  values,
+  onChange,
+  editButtonClick,
+  setEditButtonClick,
+  invalidPromoImage,
+  invalidBackgroundImage,
+  setInvalidPromoImage,
+  setInvalidBackgroundImage,
+}) => {
   const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
@@ -27,8 +36,6 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
   const [validHeadline, setValidHeadline] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [inputStyle, setInputStyle] = useState('');
-  const [invalidPromoImage, setInvalidPromoImage] = useState(null);
-  const [invalidBackgroundImage, setInvalidBackgroundImage] = useState(null);
 
   useEffect(() => {
     if (!values.promoImage) {
@@ -370,6 +377,10 @@ DomainAndBranding.propTypes = {
   onChange: PropTypes.func.isRequired,
   editButtonClick: PropTypes.bool,
   setEditButtonClick: PropTypes.func,
+  invalidPromoImage: PropTypes.bool.isRequired,
+  invalidBackgroundImage: PropTypes.bool.isRequired,
+  setInvalidPromoImage: PropTypes.func.isRequired,
+  setInvalidBackgroundImage: PropTypes.func.isRequired,
 };
 
 DomainAndBranding.defaultProps = {
