@@ -12,7 +12,10 @@ const NFTCard = React.memo(
   ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction }) => {
     const { nfts, collection, optimized_url: url, artworkType } = data;
 
-    const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
+    const availableOptions = nfts.rewardAndTokenIds.filter(({ slot }) => slot !== 0 && !slot);
+    if (!availableOptions.length) return null;
+
+    const selectOptions = availableOptions.map(({ tokenId, id }) => ({
       value: `${tokenId}||${id}||${url}||${artworkType}||${nfts.name}||${collection.name}||${collection.address}||${collection.coverUrl}`,
       label: `#${tokenId}`,
     }));
