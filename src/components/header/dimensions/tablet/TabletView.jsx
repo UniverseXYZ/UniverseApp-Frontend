@@ -460,7 +460,7 @@ const TabletView = (props) => {
                     <img src={myNFTsIcon} alt="My NFTs" />
                     My NTFs
                   </button>
-                  {/* <button
+                  <button
                     type="button"
                     onClick={() => {
                       history.push('/my-auctions');
@@ -469,7 +469,7 @@ const TabletView = (props) => {
                   >
                     <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
-                  </button> */}
+                  </button>
                   <button
                     type="button"
                     className="signOut"
