@@ -39,7 +39,6 @@ const AuctionSettings = () => {
   const history = useHistory();
   const { auction, setAuction, bidtype, setBidtype, options, setAuctionSetupState } =
     useAuctionContext();
-
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [minBid, setMinBId] = useState(false);
