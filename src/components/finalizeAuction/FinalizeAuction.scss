@@ -247,7 +247,8 @@
           }
           .transaction__body {
             display: flex;
-
+            flex-wrap: wrap;
+            
             .transaction__image {
               position: relative;
               box-sizing: border-box;
