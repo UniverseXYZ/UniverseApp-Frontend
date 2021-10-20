@@ -292,6 +292,9 @@ const Create = () => {
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
   const canContinue = winnersData.every((data) => data.nftsData.length > 0) && custom;
+  const availableNFTsTolist = filteredNFTs.filter(
+    ({ nfts }) => nfts.rewardAndTokenIds.filter((nft) => nft.slot !== 0 && !nft.slot).length > 0
+  );
 
   // End Custom Slots distribution logic
 
@@ -513,7 +516,7 @@ const Create = () => {
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
-          {filteredNFTs.slice(offset, offset + perPage).map((data) => (
+          {availableNFTsTolist.slice(offset, offset + perPage).map((data) => (
             <AvailabilityNFTCard
               key={data.nfts.id}
               data={data}
