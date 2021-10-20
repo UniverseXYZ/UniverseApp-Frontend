@@ -11,6 +11,9 @@ import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
+const PROMO_IMAGE = 'promo-image';
+const BACKGROUND_IMAGE = 'background-image';
+
 const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonClick }) => {
   const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
@@ -48,6 +51,37 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
     values.backgroundImage instanceof File
       ? URL.createObjectURL(values.backgroundImage)
       : values.backgroundImage;
+
+  const uploadFile = (file, imageType) => {
+    if (imageType === PROMO_IMAGE) {
+      onChange((prevValues) => ({ ...prevValues, promoImage: file }));
+    } else if (imageType === BACKGROUND_IMAGE) {
+      onChange((prevValues) => ({ ...prevValues, backgroundImage: file }));
+    }
+  };
+
+  const validateFile = (file, imageType) => {
+    const fileValid =
+      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+    if (fileValid) {
+      uploadFile(file, imageType);
+    } else {
+      // TODO: set error here
+      console.error('File format must be PNG or JPEG (Max Size: 30mb)');
+    }
+  };
+
+  const onDrop = (e, imageType) => {
+    e.preventDefault();
+    const {
+      dataTransfer: { files },
+    } = e;
+    validateFile(files[0], imageType);
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div>
@@ -117,166 +151,173 @@ const DomainAndBranding = ({ values, onChange, editButtonClick, setEditButtonCli
 
         <div className="auction__uploads">
           <div className="upload__promo">
-            <div className="upload__promo__title">
-              <h4>
-                Upload promo image{' '}
-                <span>
-                  (optional){' '}
-                  <img
-                    onMouseOver={() => setPromoInfo(true)}
-                    onFocus={() => setPromoInfo(true)}
-                    onMouseLeave={() => setPromoInfo(false)}
-                    onBlur={() => setPromoInfo(false)}
-                    src={infoIcon}
-                    alt="Info"
-                  />
-                </span>
-              </h4>
-              {promoInfo && (
-                <Animated animationIn="zoomIn">
-                  <div className="promo-info">
-                    <p>The promo image is an image on hero screen</p>
+            <div
+              className="dropzone"
+              onDrop={(e) => onDrop(e, PROMO_IMAGE)}
+              onDragOver={(e) => onDragOver(e)}
+            >
+              <div className="upload__promo__title">
+                <h4>
+                  Upload promo image{' '}
+                  <span>
+                    (optional){' '}
+                    <img
+                      onMouseOver={() => setPromoInfo(true)}
+                      onFocus={() => setPromoInfo(true)}
+                      onMouseLeave={() => setPromoInfo(false)}
+                      onBlur={() => setPromoInfo(false)}
+                      src={infoIcon}
+                      alt="Info"
+                    />
+                  </span>
+                </h4>
+                {promoInfo && (
+                  <Animated animationIn="zoomIn">
+                    <div className="promo-info">
+                      <p>The promo image is an image on hero screen</p>
+                    </div>
+                  </Animated>
+                )}
+              </div>
+              <div className="upload__promo__body">
+                <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
+                <h5>Drop your file here</h5>
+                <p>(min 1080x1080px, 1:1 square ratio, PNG/JPEG, max 3mb)</p>
+                <Button className="light-border-button" onClick={() => inputPromo.current.click()}>
+                  Choose file
+                </Button>
+                <input
+                  type="file"
+                  className="inp-disable"
+                  ref={inputPromo}
+                  onChange={(e) => validateFile(e.target.files[0], PROMO_IMAGE)}
+                />
+                <div className="promo__preview">
+                  <h6>Preview</h6>
+                  <div className="preview-div">
+                    {values.promoImage ? (
+                      <>
+                        <img className="preview__image" src={promoImageSrc} alt="Promo" />
+                        <img
+                          className="close"
+                          src={closeIcon}
+                          alt="Close"
+                          aria-hidden="true"
+                          onClick={() =>
+                            onChange((prevValues) => ({ ...prevValues, promoImage: null }))
+                          }
+                        />
+                      </>
+                    ) : (
+                      <img className="default__promo__image" src={defaultImage} alt="Default" />
+                    )}
                   </div>
-                </Animated>
-              )}
-            </div>
-            <div className="upload__promo__body">
-              <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
-              <h5>Drop your file here</h5>
-              <p>(min 1080x1080px, 1:1 square ratio, PNG/JPEG, max 3mb)</p>
-              <Button className="light-border-button" onClick={() => inputPromo.current.click()}>
-                Choose file
-              </Button>
-              <input
-                type="file"
-                className="inp-disable"
-                ref={inputPromo}
-                onChange={(e) =>
-                  onChange((prevValues) => ({ ...prevValues, promoImage: e.target.files[0] }))
-                }
-              />
-              <div className="promo__preview">
-                <h6>Preview</h6>
-                <div className="preview-div">
-                  {values.promoImage ? (
-                    <>
-                      <img className="preview__image" src={promoImageSrc} alt="Promo" />
-                      <img
-                        className="close"
-                        src={closeIcon}
-                        alt="Close"
-                        aria-hidden="true"
-                        onClick={() =>
-                          onChange((prevValues) => ({ ...prevValues, promoImage: null }))
-                        }
-                      />
-                    </>
-                  ) : (
-                    <img className="default__promo__image" src={defaultImage} alt="Default" />
-                  )}
                 </div>
               </div>
             </div>
           </div>
-
           <div className="upload__background">
-            <div className="upload__background__title">
-              <h4>Upload background image (optional)</h4>
-              <div className="background__blur">
-                Blur
-                <img
-                  onMouseOver={() => setBlurInfo(true)}
-                  onFocus={() => setBlurInfo(true)}
-                  onMouseLeave={() => setBlurInfo(false)}
-                  onBlur={() => setBlurInfo(false)}
-                  src={infoIcon}
-                  alt="Info"
-                />
-                {blurInfo && (
-                  <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
-                    <div className="blur-info">
-                      <p>
-                        Background blur can help to focus user&apos;s attention on the most
-                        important elements of the page. We recommend using it when your background
-                        image has lots of small details.
-                      </p>
-                    </div>
-                  </Animated>
-                )}
-                <div className="toggle-switch">
-                  <input
-                    id="toggleSwitch"
-                    type="checkbox"
-                    className="toggle-switch-checkbox"
-                    name="toggleSwitch"
-                    value={values.backgroundImageBlur}
-                    checked={values.backgroundImageBlur}
-                    onChange={(e) =>
-                      onChange((prevValues) => ({
-                        ...prevValues,
-                        backgroundImageBlur: e.target.checked,
-                      }))
-                    }
+            <div
+              className="dropzone"
+              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE)}
+              onDragOver={(e) => onDragOver(e)}
+            >
+              <div className="upload__background__title">
+                <h4>Upload background image (optional)</h4>
+                <div className="background__blur">
+                  Blur
+                  <img
+                    onMouseOver={() => setBlurInfo(true)}
+                    onFocus={() => setBlurInfo(true)}
+                    onMouseLeave={() => setBlurInfo(false)}
+                    onBlur={() => setBlurInfo(false)}
+                    src={infoIcon}
+                    alt="Info"
                   />
-                  <label htmlFor="toggleSwitch" className="toggle-switch-label">
-                    <span className="toggle-switch-inner" />
-                    <span className="toggle-switch-switch" />
-                  </label>
+                  {blurInfo && (
+                    <Animated animationIn="zoomIn" style={{ position: 'relative' }}>
+                      <div className="blur-info">
+                        <p>
+                          Background blur can help to focus user&apos;s attention on the most
+                          important elements of the page. We recommend using it when your background
+                          image has lots of small details.
+                        </p>
+                      </div>
+                    </Animated>
+                  )}
+                  <div className="toggle-switch">
+                    <input
+                      id="toggleSwitch"
+                      type="checkbox"
+                      className="toggle-switch-checkbox"
+                      name="toggleSwitch"
+                      value={values.backgroundImageBlur}
+                      checked={values.backgroundImageBlur}
+                      onChange={(e) =>
+                        onChange((prevValues) => ({
+                          ...prevValues,
+                          backgroundImageBlur: e.target.checked,
+                        }))
+                      }
+                    />
+                    <label htmlFor="toggleSwitch" className="toggle-switch-label">
+                      <span className="toggle-switch-inner" />
+                      <span className="toggle-switch-switch" />
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="upload__background__body">
-              <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
-              <h5>Drop your file here</h5>
-              <p>(min 1280x720px, 16:9 square ratio, PNG/JPEG, max 1mb)</p>
-              <div className="upload__background__buttons">
-                <Button
-                  className="light-border-button"
-                  onClick={() => inputBackground.current.click()}
-                >
-                  Choose file
-                </Button>
-                {backgroundImage && (
+              <div className="upload__background__body">
+                <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
+                <h5>Drop your file here</h5>
+                <p>(min 1280x720px, 16:9 square ratio, PNG/JPEG, max 1mb)</p>
+                <div className="upload__background__buttons">
                   <Button
-                    className="light-border-button remove"
-                    onClick={() => setBackgroundImage(null)}
+                    className="light-border-button"
+                    onClick={() => inputBackground.current.click()}
                   >
-                    Remove
+                    Choose file
                   </Button>
-                )}
-              </div>
-              <input
-                type="file"
-                className="inp-disable"
-                ref={inputBackground}
-                onChange={(e) =>
-                  onChange((prevValues) => ({ ...prevValues, backgroundImage: e.target.files[0] }))
-                }
-              />
-              <div className="background__preview">
-                <h6>Preview</h6>
-                <div className="preview-div">
-                  {values.backgroundImageBlur && <div className="blur" />}
-                  {values.backgroundImage ? (
-                    <>
-                      <img className="background__image" src={bgImageSrc} alt="background" />
-                      <img
-                        className="close"
-                        src={closeIcon}
-                        alt="Close"
-                        aria-hidden="true"
-                        onClick={() =>
-                          onChange((prevValues) => ({ ...prevValues, backgroundImage: null }))
-                        }
-                      />
-                    </>
-                  ) : (
-                    <img
-                      className="background__default__image"
-                      src={backgroundDef}
-                      alt="background"
-                    />
+                  {backgroundImage && (
+                    <Button
+                      className="light-border-button remove"
+                      onClick={() => setBackgroundImage(null)}
+                    >
+                      Remove
+                    </Button>
                   )}
+                </div>
+                <input
+                  type="file"
+                  className="inp-disable"
+                  ref={inputBackground}
+                  onChange={(e) => validateFile(e.target.files[0], BACKGROUND_IMAGE)}
+                />
+                <div className="background__preview">
+                  <h6>Preview</h6>
+                  <div className="preview-div">
+                    {values.backgroundImageBlur && <div className="blur" />}
+                    {values.backgroundImage ? (
+                      <>
+                        <img className="background__image" src={bgImageSrc} alt="background" />
+                        <img
+                          className="close"
+                          src={closeIcon}
+                          alt="Close"
+                          aria-hidden="true"
+                          onClick={() =>
+                            onChange((prevValues) => ({ ...prevValues, backgroundImage: null }))
+                          }
+                        />
+                      </>
+                    ) : (
+                      <img
+                        className="background__default__image"
+                        src={backgroundDef}
+                        alt="background"
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
