@@ -12,7 +12,6 @@ import BiddersDropdown from '../input/biddersDropdown/BiddersDropdown';
 const PreviewNFTsPopup = ({ onClose, onTier }) => {
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(0);
   const [fullScreen, setFullScreen] = useState(false);
-  console.log('aaaaaaaaaaaa', onTier);
 
   const handleArrowClick = (direction) => {
     if (direction === 'right') {
@@ -104,7 +103,7 @@ const PreviewNFTsPopup = ({ onClose, onTier }) => {
               )}
               {onTier.minBidValue ? <span>{`Minimum bid: ${onTier.minBidValue} ETH`}</span> : <></>}
             </div>
-            {onTier.customNFTs ? <BiddersDropdown /> : <></>}
+            <BiddersDropdown />
           </div>
           <div className="tier__nfts">
             {onTier.nfts.map((nft, index) => (
