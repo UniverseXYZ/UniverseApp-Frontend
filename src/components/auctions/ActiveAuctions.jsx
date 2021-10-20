@@ -113,33 +113,35 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       <span />
                                     </div>
                                   )}
-                                  <CopyToClipboard
-                                    text={`${activeAuction.link.replace(
-                                      'universe.xyz',
-                                      window.location.origin
-                                    )}`}
-                                    onCopy={() => {
-                                      setCopied({
-                                        state: true,
-                                        index,
-                                      });
-                                      setTimeout(() => {
+                                  {activeAuction.link ? (
+                                    <CopyToClipboard
+                                      text={`${activeAuction.link.replace(
+                                        'universe.xyz',
+                                        window.location.origin
+                                      )}`}
+                                      onCopy={() => {
                                         setCopied({
-                                          state: false,
-                                          index: null,
+                                          state: true,
+                                          index,
                                         });
-                                      }, 1000);
-                                    }}
-                                  >
-                                    <span>
-                                      <img
-                                        src={copyIcon}
-                                        alt="Copy to clipboard icon"
-                                        className="copyImg"
-                                      />
-                                      Copy URL
-                                    </span>
-                                  </CopyToClipboard>
+                                        setTimeout(() => {
+                                          setCopied({
+                                            state: false,
+                                            index: null,
+                                          });
+                                        }, 1000);
+                                      }}
+                                    >
+                                      <span>
+                                        <img
+                                          src={copyIcon}
+                                          alt="Copy to clipboard icon"
+                                          className="copyImg"
+                                        />
+                                        Copy URL
+                                      </span>
+                                    </CopyToClipboard>
+                                  ) : null}
                                 </div>
                               </div>
                             </div>
