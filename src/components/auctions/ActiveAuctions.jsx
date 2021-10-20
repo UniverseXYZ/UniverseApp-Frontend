@@ -89,6 +89,11 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   const hours = duration.hours();
                   const minutes = duration.minutes();
                   const seconds = duration.seconds();
+
+                  const auctionTotalNfts = activeAuction.rewardTiers
+                    .map((tier) => tier.nfts.length)
+                    .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
+
                   return (
                     <Draggable draggableId={activeAuction.name} index={index} key={uuid()}>
                       {(prov) => (
@@ -186,7 +191,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                             </div>
                             <div className="total-dates">
                               <p>
-                                Total NFTs: <b>45</b>
+                                Total NFTs: <b>{auctionTotalNfts}</b>
                               </p>
                             </div>
                             <div className="total-dates">
@@ -268,10 +273,10 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                       NFTs per winner: <b>{tier.nftsPerWinner}</b>
                                     </p>
                                     <p>
-                                      Winners: <b>{tier.winners}</b>
+                                      Winners: <b>{tier.numberOfWinners || ''}</b>
                                     </p>
                                     <p>
-                                      Total NFTs: <b>{tier.winners * tier.nftsPerWinner}</b>
+                                      Total NFTs: <b>{tier.nfts?.length}</b>
                                     </p>
                                   </div>
                                 </div>
