@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import './MyBidsCard.scss';
 import Button from '../button/Button';
 import { isBeforeNow } from '../../utils/dates';
+import AuctionsCardSkeleton from './skeleton/AuctionsCardSkeleton.jsx';
 
 const MyBidsCard = ({ data }) => {
   const history = useHistory();
-  return (
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  });
+
+  return !loading ? (
     <div className="my--bids--list">
       {data.map((auction) => (
         <Animated animationIn="fadeIn" key={auction.id}>
@@ -86,6 +95,8 @@ const MyBidsCard = ({ data }) => {
         </Animated>
       ))}
     </div>
+  ) : (
+    <AuctionsCardSkeleton variant="active" data={data} />
   );
 };
 
