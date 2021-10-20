@@ -12,8 +12,10 @@ import copyIcon from '../../assets/images/copy1.svg';
 import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import { isBeforeNow } from '../../utils/dates';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const PastAuctions = ({ myAuctions, setMyAuctions }) => {
+  const { ethPrice } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState({
     state: false,
@@ -34,6 +36,34 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
     } else {
       setShownActionId(null);
     }
+  };
+
+  const getTotalBidsAmount = (auction) => {
+    let totalBidsAmount = 0;
+    auction.bids.forEach((bid) => {
+      totalBidsAmount += bid.amount;
+    });
+    return totalBidsAmount.toFixed(2);
+  };
+
+  const getHighestWinBid = (auction) => {
+    let highestWinBid = 0;
+    auction.bids.forEach((bid) => {
+      if (bid.amount > highestWinBid) {
+        highestWinBid = bid.amount;
+      }
+    });
+    return highestWinBid.toFixed(2);
+  };
+
+  const getLowestBid = (auction) => {
+    let lowestBid = auction.bids[0].amount;
+    auction.bids.forEach((bid) => {
+      if (bid.amount < lowestBid) {
+        lowestBid = bid.amount;
+      }
+    });
+    return lowestBid.toFixed(2);
   };
 
   return (
@@ -149,14 +179,19 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <div className="bids first">
                   <div className="boredred-div">
                     <span className="head">Total bids</span>
-                    <span className="value">120</span>
+                    <span className="value">{pastAuction.bids.length}</span>
                   </div>
                   <div>
                     <span className="head">Highest winning bid</span>
                     <span className="value">
                       <img src={bidIcon} alt="Highest winning bid" />
-                      14 ETH
-                      <span className="dollar-val"> ~$41,594</span>
+                      {getHighestWinBid(pastAuction)} ETH
+                      <span className="dollar-val">
+                        ~$
+                        {(
+                          getHighestWinBid(pastAuction) * ethPrice.market_data.current_price.usd
+                        ).toFixed(2)}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -166,16 +201,26 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                     <span className="head">Total bids amount</span>
                     <span className="value">
                       <img src={bidIcon} alt="Total bids amount" />
-                      14 ETH
-                      <span className="dollar-val"> ~$41,594</span>
+                      {getTotalBidsAmount(pastAuction)} ETH
+                      <span className="dollar-val">
+                        ~$
+                        {(
+                          getTotalBidsAmount(pastAuction) * ethPrice.market_data.current_price.usd
+                        ).toFixed(2)}
+                      </span>
                     </span>
                   </div>
                   <div>
                     <span className="head">Lower winning bid</span>
                     <span className="value">
                       <img src={bidIcon} alt="Lower winning bid" />
-                      14 ETH
-                      <span className="dollar-val"> ~$41,594</span>
+                      {getLowestBid(pastAuction)} ETH
+                      <span className="dollar-val">
+                        ~$
+                        {(
+                          getLowestBid(pastAuction) * ethPrice.market_data.current_price.usd
+                        ).toFixed(2)}
+                      </span>
                     </span>
                   </div>
                 </div>

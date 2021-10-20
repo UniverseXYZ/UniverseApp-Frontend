@@ -25,6 +25,38 @@ const pastAuctionsMock = [
     tokenDecimals: 18,
     startDate: '2021-10-10T09:02:31.168Z',
     endDate: '2021-10-12T09:02:31.168Z',
+    bids: [
+      {
+        id: 1,
+        amount: 0.15,
+        userId: 1,
+      },
+      {
+        id: 2,
+        amount: 0.01,
+        userId: 2,
+      },
+      {
+        id: 3,
+        amount: 0.4,
+        userId: 1,
+      },
+      {
+        id: 4,
+        amount: 5,
+        userId: 3,
+      },
+      {
+        id: 5,
+        amount: 0.65,
+        userId: 2,
+      },
+      {
+        id: 6,
+        amount: 0.72,
+        userId: 10,
+      },
+    ],
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',
@@ -149,7 +181,24 @@ const pastAuctionsMock = [
     tokenSymbol: 'XYZ',
     tokenDecimals: 18,
     startDate: '2021-10-10T09:02:31.168Z',
-    endDate: '2021-10-14T09:02:31.168Z',
+    endDate: '2021-10-12T09:02:31.168Z',
+    bids: [
+      {
+        id: 1,
+        amount: 3.55,
+        userId: 1,
+      },
+      {
+        id: 2,
+        amount: 2,
+        userId: 2,
+      },
+      {
+        id: 3,
+        amount: 17.5,
+        userId: 3,
+      },
+    ],
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',
@@ -358,7 +407,40 @@ const activeAuctionsMock = [
     tokenSymbol: 'XYZ',
     tokenDecimals: 18,
     startDate: '2021-10-11T09:02:31.168Z',
-    endDate: '2021-11-22T11:02:31.168Z',
+    endDate: '2021-11-22T09:02:31.168Z',
+    currency: 'ETH',
+    bids: [
+      {
+        id: 1,
+        amount: 0.15,
+        userId: 1,
+      },
+      {
+        id: 2,
+        amount: 0.01,
+        userId: 2,
+      },
+      {
+        id: 3,
+        amount: 0.4,
+        userId: 1,
+      },
+      {
+        id: 4,
+        amount: 5,
+        userId: 3,
+      },
+      {
+        id: 5,
+        amount: 0.65,
+        userId: 2,
+      },
+      {
+        id: 6,
+        amount: 0.72,
+        userId: 10,
+      },
+    ],
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',
@@ -483,7 +565,40 @@ const activeAuctionsMock = [
     tokenSymbol: 'XYZ',
     tokenDecimals: 18,
     startDate: '2021-10-10T09:02:31.168Z',
-    endDate: '2021-10-21T09:02:31.168Z',
+    endDate: '2021-10-12T09:02:31.168Z',
+    currency: 'ETH',
+    bids: [
+      {
+        id: 1,
+        amount: 0.15,
+        userId: 1,
+      },
+      {
+        id: 2,
+        amount: 0.34,
+        userId: 2,
+      },
+      {
+        id: 3,
+        amount: 0.4,
+        userId: 1,
+      },
+      {
+        id: 4,
+        amount: 0.5,
+        userId: 3,
+      },
+      {
+        id: 5,
+        amount: 0.65,
+        userId: 2,
+      },
+      {
+        id: 6,
+        amount: 0.72,
+        userId: 10,
+      },
+    ],
     royaltySplits: [
       {
         address: '0x000000000000000000000000000000',

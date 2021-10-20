@@ -2,6 +2,7 @@
 const CREATE_NEW_AUCTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auctions`;
 const GET_FUTURE_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/future`;
 const GET_ACTIVE_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/active`;
+const GET_AUCTION_DATA = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${id}`;
 const GET_PAST_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/past`;
 const EDIT_AUCTION_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
 const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
@@ -176,6 +177,21 @@ export const getActiveAuctions = async () => {
   };
 
   const request = await fetch(GET_FUTURE_AUCTIONS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getAuctionData = async (id) => {
+  const requestOptions = {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_ACTIVE_AUCTIONS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
