@@ -295,34 +295,57 @@ const SingleNFTForm = () => {
     });
   };
 
+  const uploadFileErrorMessage = (message) => {
+    setPreviewImage('');
+    setErrors({
+      ...errors,
+      previewImage: message,
+    });
+  };
+
   const validateFile = (file) => {
     setSaveForLateClick(false);
     setMintNowClick(false);
     if (!file) {
-      setPreviewImage('');
-      setErrors({
-        ...errors,
-        previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
-      });
-    } else if (
-      (file.type === 'audio/mpeg' ||
-        file.type === 'video/mp4' ||
-        file.type === 'image/jpeg' ||
-        file.type === 'image/webp' ||
-        file.type === 'audio/mpeg' ||
-        file.type === 'image/gif' ||
-        file.type === 'image/jpeg' ||
-        file.type === 'image/png') &&
-      file.size / 1048576 < 30
-    ) {
-      setPreviewImage(file);
-      setErrors({ ...errors, previewImage: '' });
+      uploadFileErrorMessage(
+        'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)'
+      );
     } else {
-      setPreviewImage('');
-      setErrors({
-        ...errors,
-        previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
-      });
+      const fileSize = file.size;
+      const fileType = file.type;
+      const MAX_FILE_SIZE = 30;
+      const MIN_IMAGE_HEIGHT = 800;
+      const MIN_IMAGE_WIDTH = 800;
+      if (fileSize / 1048576 < MAX_FILE_SIZE) {
+        if (fileType === 'video/mp4') {
+          setPreviewImage(file);
+          setErrors({ ...errors, previewImage: '' });
+        } else if (
+          fileType === 'image/jpeg' ||
+          fileType === 'image/webp' ||
+          fileType === 'image/gif' ||
+          fileType === 'image/png'
+        ) {
+          const img = new Image();
+          img.src = window.URL.createObjectURL(file);
+          img.onload = () => {
+            window.URL.revokeObjectURL(img.src);
+
+            if (img.naturalWidth >= MIN_IMAGE_WIDTH && img.naturalHeight >= MIN_IMAGE_HEIGHT) {
+              setPreviewImage(file);
+              setErrors({ ...errors, previewImage: '' });
+            } else {
+              uploadFileErrorMessage(
+                'Your image resolution is too low and needs to be at least 800x800px.'
+              );
+            }
+          };
+        }
+      } else {
+        uploadFileErrorMessage(
+          'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)'
+        );
+      }
     }
   };
 
