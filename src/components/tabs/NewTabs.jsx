@@ -14,6 +14,7 @@ import arrowWhiteMobile from '../../assets/images/arrow-tabs/arrow-white-mobile.
 import arrowHoverDesktop from '../../assets/images/arrow-tabs/arrow-hover-desktop.png';
 import arrowHoverTablet from '../../assets/images/arrow-tabs/arrow-hover-tablet.png';
 import arrowHoverMobile from '../../assets/images/arrow-tabs/arrow-hover-mobile.png';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const NewTabs = (props) => {
   const { tabData } = props;
@@ -25,11 +26,45 @@ const NewTabs = (props) => {
   const [mobile, setMobile] = useState(false);
   const [tablet, setTablet] = useState(false);
   const [hover, setHover] = useState(-1);
+  const { auction, setAuction } = useAuctionContext();
 
   useEffect(() => {
     const routes = tabData.map((elem) => elem.route);
     if (location.state === 'edit') {
       setRoutesArray(routes);
+
+      // if we are Editing Prepare RewardTiers nftSlots property here
+      const tiers = auction.rewardTiers;
+      if (tiers) {
+        tiers.forEach((tier) => {
+          const winnersData = [];
+
+          const nFTsBySlotIndexObject = tier.nfts.reduce((res, curr) => {
+            if (!res[curr.slot]) res[curr.slot] = [];
+            res[curr.slot].push(curr);
+            return res;
+          }, {});
+
+          Object.keys(nFTsBySlotIndexObject).forEach((key, index) => {
+            const slotNFTs = nFTsBySlotIndexObject[key];
+
+            const nftIds = slotNFTs.map((data) => data.id);
+
+            winnersData[index] = { slot: index, nftsData: slotNFTs, nftIds };
+          });
+
+          // Update the Auction object
+          const auctionCopy = { ...auction };
+          // Mutate the edited tear
+          auctionCopy?.rewardTiers?.forEach((t) => {
+            if (t.id === tier.id) {
+              t.nftSlots = winnersData;
+            }
+          });
+          // Update the auction
+          setAuction(auctionCopy);
+        });
+      }
       return;
     }
     setRoutesArray(routes.splice(0, routes.indexOf(pathname) + 1));

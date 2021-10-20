@@ -18,29 +18,23 @@ const NFTCard = React.memo(
     }));
 
     const selectedWinnerData = winnersData.find((info) => info.slot === selectedWinner);
-    const selectedWinnerIds =
-      selectedWinnerData &&
-      selectedWinnerData.nftIds.map((info) => {
-        // When we are creating a Tier we are preparing the tier format for the final server request, so if editing a tier wi will not have an object with id and other data we will have only the id
-        const id = typeof info === 'object' ? info.id : info;
-        return id;
-      });
+    const selectedWinnerIds = selectedWinnerData && selectedWinnerData.nftIds;
     const otherWinners = winnersData.filter((info) => info.slot !== selectedWinner) || [];
     const otherWinnersIds = otherWinners.reduce((res, cur) => {
-      const ids = cur.nftIds.map((i) => i.id);
-      res.push(...ids);
+      res.push(...cur.nftIds);
       return res;
     }, []);
 
     // Mark the options as pre-selected or disabled
     const updatedOptionsForCurrentTier = selectOptions.map((info) => {
       const infoCopy = { ...info };
-      const [edition, id, _url, artWorkType] = infoCopy.value.split('||');
+      const [edition, id, _url] = infoCopy.value.split('||');
 
-      if (selectedWinnerIds && selectedWinnerIds.includes(id)) infoCopy.isSelected = true;
+      if (selectedWinnerIds && selectedWinnerIds.includes(parseInt(id, 10)))
+        infoCopy.isSelected = true;
 
       // Disable
-      if (otherWinnersIds && otherWinnersIds.includes(id)) {
+      if (otherWinnersIds && otherWinnersIds.includes(parseInt(id, 10))) {
         infoCopy.isDisabled = true;
         infoCopy.isSelected = false;
       }
@@ -52,20 +46,26 @@ const NFTCard = React.memo(
       auction.rewardTiers &&
       auction.rewardTiers.reduce((res, curr) => {
         const ids = [];
-        curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
+
+        // We are displaying auction currently being created
+        if (curr.nftSlots) {
+          curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
+        }
+
         res.push(...ids);
         return res;
       }, []);
 
     const updateOptionsWithAllTiersData = updatedOptionsForCurrentTier.map((info) => {
       const infoCopy = { ...info };
-      const [edition, id, _url, artWorkType] = infoCopy.value.split('||');
+      const [edition, id, _url] = infoCopy.value.split('||');
 
       // Disable if its used in other tiers but not in the same
-      const isSelectedByCurrentWinner = selectedWinnerIds && selectedWinnerIds.includes(id);
+      const isSelectedByCurrentWinner =
+        selectedWinnerIds && selectedWinnerIds.includes(parseInt(id, 10));
       if (
         rewardTiersUsedNFTsIds &&
-        rewardTiersUsedNFTsIds.includes(id) &&
+        rewardTiersUsedNFTsIds.includes(parseInt(id, 10)) &&
         !isSelectedByCurrentWinner
       ) {
         infoCopy.isDisabled = true;
