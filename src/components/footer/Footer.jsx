@@ -10,36 +10,19 @@ import coinGesco from '../../assets/images/coingecko-icon.svg';
 import youtubeIcon from '../../assets/images/youtube.svg';
 import mediumIcon from '../../assets/images/medium.svg';
 import SubscribePopup from '../popups/SubscribePopup.jsx';
+import { handleMailSubscribe } from '../../utils/api/mailSubscribe';
 
 const Footer = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
 
-  const handleSubscribe = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+)")@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(String(email).toLowerCase())) {
-      const config = {
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        params: {
-          email,
-        },
-      };
-      axios
-        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
-        .then((response) => {
-          if (response.status === 200) {
-            setEmail('');
-            document.getElementById('subscribed-hidden-btn').click();
-          } else {
-            alert('OOPS! Something went wrong.');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const handleSubscribe = async () => {
+    const response = await handleMailSubscribe(email);
+    if (response?.status === 200) {
+      setEmail('');
+      document.getElementById('sub-hidden-btn').click();
     } else {
-      alert('Email address is invalid.');
+      alert(response);
     }
   };
   return (
@@ -50,7 +33,7 @@ const Footer = () => {
             type="button"
             id="subscribed-hidden-btn"
             aria-label="hidden"
-            style={{ display: 'none' }}
+            style={{ display: 'block' }}
           />
         }
       >
