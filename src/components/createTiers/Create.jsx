@@ -456,8 +456,6 @@ const Create = () => {
           </div>
         )}
         {
-          // TODO:  Upon changing the selected winner we should display the already selected nfts for him
-          // TODO:: User should not be allowed to continue to the next stage if all the custom winners don't have at least 1 nft attached to them
           // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
@@ -468,6 +466,8 @@ const Create = () => {
               data={data}
               onEditionClick={onEditionClick}
               canSelect={canSelectNFT}
+              winnersData={winnersData}
+              selectedWinner={selectedWinner}
             />
           ))}
         </div>
