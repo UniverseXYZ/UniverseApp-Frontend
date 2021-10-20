@@ -16,6 +16,7 @@ import ReviewIconActive from '../../assets/images/eye-review-disactive.svg';
 import NewTabs from '../tabs/NewTabs';
 import { RouterPrompt } from '../../utils/routerPrompt';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const newTabData = [
   {
@@ -45,11 +46,16 @@ const newTabData = [
 ];
 
 const SetupAuction = () => {
+  const { setDarkMode } = useThemeContext();
   // const { auctionSetupState } = useAuctionContext();
   const history = useHistory();
   const location = useLocation();
 
   const handleOK = useCallback(() => true, []);
+
+  useEffect(() => {
+    setDarkMode(false);
+  }, []);
 
   return (
     <div className="auction-setup">

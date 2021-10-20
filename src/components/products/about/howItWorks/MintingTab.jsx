@@ -103,9 +103,12 @@ const MintingTab = () => {
       </div>
 
       <div className="launch__app__btn">
-        {/* <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+        <Button
+          className="light-button"
+          onClick={() => history.push('/setup-auction/auction-settings')}
+        >
           Set up auction
-        </Button> */}
+        </Button>
       </div>
     </div>
   );
