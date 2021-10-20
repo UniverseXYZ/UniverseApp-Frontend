@@ -103,7 +103,7 @@ const MintingTab = () => {
       </div>
 
       <div className="launch__app__btn">
-        <Button className="light-button" onClick={() => history.push('/my-nfts')}>
+        <Button className="light-button" onClick={() => history.push('/minting')}>
           Go to Minting
         </Button>
       </div>
