@@ -4,7 +4,7 @@ import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section4LeftBackground from '../../assets/images/Section4GroupImage.png';
 import BurnPolymorphBg from '../../assets/images/BurnPolymorphBg.png';
-import Section4 from '../../components/polymorphs/Section4';
+import BurnYourPolymorphSection from '../../components/polymorphs/BurnYourPolymorphSection';
 import data from '../../utils/fixtures/newPolymorphBaseSkins';
 import './BurnToMint.scss';
 import { useThemeContext } from '../../contexts/ThemeContext';
@@ -42,10 +42,11 @@ const BurnToMint = () => {
 
   const [loaded, setLoaded] = useState(false);
   const ref = useRef();
+  const VIDEO_READY_STATE = 4;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (ref.current && ref.current.readyState === 4) {
+      if (ref.current && ref.current.readyState === VIDEO_READY_STATE) {
         setLoaded(true);
         clearInterval(interval);
       }
@@ -75,7 +76,7 @@ const BurnToMint = () => {
         mobileHeightValue={1200}
         data={data}
       />
-      <Section4
+      <BurnYourPolymorphSection
         title="Burn your polymorph"
         hintText={[
           'Let’s burn your Polymorph and create a new one! Same base skin, same traits - but a brand new 3D look.',
