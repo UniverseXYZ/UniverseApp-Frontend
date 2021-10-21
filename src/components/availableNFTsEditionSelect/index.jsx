@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './index.scss';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
+import { handleClickOutside } from '../../utils/helpers';
 
 const Option = (props) => {
   const { isSelected, label, value, isDisabled } = props;
   return (
     <div className={`available-select ${isDisabled ? 'disabled' : ''}`}>
-      <components.Option {...props}>
-        <input type="checkbox" value={value} checked={isSelected} onChange={() => null} /> <i />
-        <label>{label}</label>
+      <components.Option className="option" {...props}>
+        <input
+          className="option"
+          type="checkbox"
+          value={value}
+          checked={isSelected}
+          onChange={() => null}
+        />{' '}
+        <i className="option" />
+        <label className="option">{label}</label>
       </components.Option>
     </div>
   );
@@ -172,8 +180,9 @@ const styles = {
 
 const SelectComponent = (props) => {
   const { options, onChange, placeholder, isMulti } = props;
-
+  const [isOpen, toggleIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const ref = useRef(null);
 
   useEffect(() => {
     setSelectedOptions([]);
@@ -181,28 +190,56 @@ const SelectComponent = (props) => {
     setSelectedOptions(selected);
   }, [options]);
 
+  const handleToggle = (e) => {
+    if (e.target.classList.contains('option')) return;
+    toggleIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      'click',
+      (e) => handleClickOutside(e, 'react-select-wrapper', ref, toggleIsOpen),
+      true
+    );
+    return () => {
+      document.removeEventListener(
+        'click',
+        (e) => handleClickOutside(e, 'react-select-wrapper', ref, toggleIsOpen),
+        true
+      );
+    };
+  });
+
   return (
-    <Select
-      options={options}
-      isOptionDisabled={(option) => option.isDisabled}
-      onChange={onChange}
-      placeholder={placeholder}
-      styles={styles}
-      value={selectedOptions}
-      components={{
-        Option,
-        Placeholder,
-        MenuList,
-        IndicatorSeparator: () => null,
-      }}
-      menuPlacement="auto"
-      isMulti={isMulti}
-      controlShouldRenderValue={false}
-      closeMenuOnSelect={false}
-      hideSelectedOptions={false}
-      isClearable={false}
-      // menuIsOpen
-    />
+    <div
+      className="react-select-wrapper"
+      ref={ref}
+      aria-hidden
+      role="button"
+      onClick={handleToggle}
+    >
+      <Select
+        options={options}
+        isOptionDisabled={(option) => option.isDisabled}
+        onChange={onChange}
+        placeholder={placeholder}
+        styles={styles}
+        value={selectedOptions}
+        components={{
+          Option,
+          Placeholder,
+          MenuList,
+          IndicatorSeparator: () => null,
+        }}
+        menuPlacement="auto"
+        isMulti={isMulti}
+        controlShouldRenderValue={false}
+        closeMenuOnSelect={false}
+        hideSelectedOptions={false}
+        isClearable={false}
+        menuIsOpen={isOpen}
+      />
+    </div>
   );
 };
 
