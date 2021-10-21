@@ -9,6 +9,11 @@ import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
 
+const TIER_IMAGE_DIMENSIONS = {
+  width: 800,
+  height: 800,
+};
+
 const RewardTiersAuction = ({
   values,
   onChange,
@@ -50,8 +55,8 @@ const RewardTiersAuction = ({
     );
   };
 
-  const handleImageError = (tierId, fileValid) => {
-    if (!fileValid) {
+  const handleImageError = (tierId, fileValid, dimensionsValid) => {
+    if (!fileValid || !dimensionsValid) {
       setInvalidImageIds([...invalidImageIds, tierId]);
     } else {
       const invalidImages = invalidImageIds.filter((id) => id !== tierId);
@@ -62,8 +67,22 @@ const RewardTiersAuction = ({
   const validateFile = (file, tierId) => {
     const fileValid =
       (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function onload(e) {
+      const image = new Image();
+      image.src = e.target.result;
+      image.onload = function imageOnload() {
+        const { width, height } = this;
+        let dimensionsValid = false;
+        if (width >= TIER_IMAGE_DIMENSIONS.width && height >= TIER_IMAGE_DIMENSIONS.height) {
+          dimensionsValid = true;
+        }
+        handleImageError(tierId, fileValid, dimensionsValid);
+      };
+    };
 
-    handleImageError(tierId, fileValid);
+    // always show an image preview, so the user is able to remove an incorrect image
     handleUploadImage(file, tierId);
   };
 
