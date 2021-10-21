@@ -482,9 +482,11 @@
 }
 .loader-wrapper {
   height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+
 }
 .loading-section {
     display: flex;
