@@ -331,10 +331,10 @@ const SingleNFTForm = () => {
         const reader = new FileReader();
         // Read the contents of Image File.
         reader.readAsDataURL(file);
-        reader.onload = function (e) {
+        reader.onload = function onload(e) {
           const image = new Image();
           image.src = e.target.result;
-          image.onload = function () {
+          image.onload = function imageOnload() {
             const { height, width } = this;
             if (height < MIN_IMAGE_SIZE.height || width < MIN_IMAGE_SIZE.width) {
               setErrors({
