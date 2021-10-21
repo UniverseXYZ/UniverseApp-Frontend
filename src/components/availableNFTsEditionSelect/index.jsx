@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './index.scss';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
+import { handleClickOutside } from '../../utils/helpers';
 
 const Option = (props) => {
   const { isSelected, label, value, isDisabled } = props;
   return (
     <div className={`available-select ${isDisabled ? 'disabled' : ''}`}>
-      <components.Option {...props}>
-        <input type="checkbox" value={value} checked={isSelected} onChange={() => null} /> <i />
-        <label>{label}</label>
+      <components.Option className="option" {...props}>
+        <input
+          className="option"
+          type="checkbox"
+          value={value}
+          checked={isSelected}
+          onChange={() => null}
+        />{' '}
+        <i className="option" />
+        <label className="option">{label}</label>
       </components.Option>
     </div>
   );
@@ -19,7 +27,7 @@ Option.propTypes = {
   isSelected: PropTypes.bool,
   isDisabled: PropTypes.bool,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 Option.defaultProps = {
@@ -45,6 +53,20 @@ Placeholder.defaultProps = {
   label: '',
 };
 
+const MenuList = (props) => {
+  const { children } = props;
+  return (
+    <components.MenuList {...props}>
+      <span className="choose-edition">Choose edition number</span>
+      <div>{children}</div>
+    </components.MenuList>
+  );
+};
+
+MenuList.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
+
 const styles = {
   placeholder: (defaultStyles) => ({
     ...defaultStyles,
@@ -57,7 +79,7 @@ const styles = {
   container: (defaultStyles) => ({
     ...defaultStyles,
     // position: 'unset',
-    width: '60%',
+    minWidth: '135px',
     background:
       'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
@@ -100,7 +122,7 @@ const styles = {
     background: '#ffffff',
     borderRadius: '12px',
     flexGrow: '0',
-    padding: '2px 8px 2px 10px',
+    padding: '0 8px 2px 0',
     cursor: 'pointer',
   }),
   valueContainer: (base, state) => ({
@@ -118,49 +140,106 @@ const styles = {
     fontFamily: 'Space Grotesk, sans-serif',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    padding: '15px',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '15px',
+    cursor: 'pointer',
     opacity: state.isFocused ? '1' : '0.7',
     background: state.isSelected || state.isFocused ? '#F6FAF3' : null,
     '&:active': {
       background: '#F6FAF3',
     },
     borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+    '& label': {
+      cursor: 'pointer',
+      fontSize: '12px',
+    },
+    '&:first-of-type': {
+      borderTop: '1px solid rgba(0, 0, 0, 0.2)',
+      borderBottom: 'none',
+    },
+    '& i::after': {
+      borderColor: '#000 !important',
+    },
+  }),
+  menuList: (base) => ({
+    ...base,
+    background: '#fff',
+    '& .choose-edition': {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      fontFamily: 'Space Grotesk',
+      marginLeft: '5%',
+      display: 'flex',
+      alignItems: 'center',
+      height: '54px',
+    },
   }),
 };
 
 const SelectComponent = (props) => {
   const { options, onChange, placeholder, isMulti } = props;
-
+  const [isOpen, toggleIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const ref = useRef(null);
 
   useEffect(() => {
     setSelectedOptions([]);
-
     const selected = options.filter((op) => op.isSelected);
     setSelectedOptions(selected);
   }, [options]);
 
+  const handleToggle = (e) => {
+    if (e.target.classList.contains('option')) return;
+    toggleIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      'click',
+      (e) => handleClickOutside(e, 'react-select-wrapper', ref, toggleIsOpen),
+      true
+    );
+    return () => {
+      document.removeEventListener(
+        'click',
+        (e) => handleClickOutside(e, 'react-select-wrapper', ref, toggleIsOpen),
+        true
+      );
+    };
+  });
+
   return (
-    <Select
-      options={options}
-      isOptionDisabled={(option) => option.isDisabled}
-      onChange={onChange}
-      placeholder={placeholder}
-      styles={styles}
-      value={selectedOptions}
-      components={{
-        Option,
-        Placeholder,
-        IndicatorSeparator: () => null,
-      }}
-      menuPlacement="auto"
-      isMulti={isMulti}
-      controlShouldRenderValue={false}
-      closeMenuOnSelect={false}
-      hideSelectedOptions={false}
-      isClearable={false}
-      // menuIsOpen
-    />
+    <div
+      className="react-select-wrapper"
+      ref={ref}
+      aria-hidden
+      role="button"
+      onClick={handleToggle}
+    >
+      <Select
+        options={options}
+        isOptionDisabled={(option) => option.isDisabled}
+        onChange={onChange}
+        placeholder={placeholder}
+        styles={styles}
+        value={selectedOptions}
+        components={{
+          Option,
+          Placeholder,
+          MenuList,
+          IndicatorSeparator: () => null,
+        }}
+        menuPlacement="auto"
+        isMulti={isMulti}
+        controlShouldRenderValue={false}
+        closeMenuOnSelect={false}
+        hideSelectedOptions={false}
+        isClearable={false}
+        menuIsOpen={isOpen}
+      />
+    </div>
   );
 };
 

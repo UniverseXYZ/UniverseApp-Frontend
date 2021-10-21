@@ -63,6 +63,7 @@ const Create = () => {
     numberOfWinners: true,
     nftsPerWinner: true,
   });
+  const [selectAll, setSelectAll] = useState(false);
 
   const handeClick = (e) => {
     setMinBId(e.target.checked);
@@ -161,6 +162,11 @@ const Create = () => {
           collectionUrl,
         });
 
+        if (actionMeta.option?.value === 'select-all') {
+          setSelectAll(true);
+          return;
+        }
+
         winnersCopy[selectedWinner].nftIds.push(parseInt(id, 10));
       }
 
@@ -180,7 +186,7 @@ const Create = () => {
       if (actionMeta.action === ACTION_TYPES.DESELECT_SINGLE) {
         const [edition, id, url, artworkType] = actionMeta.option.value.split('||');
         winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
-          (nft) => nft.id !== id
+          (nft) => nft.id !== parseInt(id, 10)
         );
       }
 
@@ -485,22 +491,25 @@ const Create = () => {
         {custom && (
           <div className="winner__lists">
             {values.numberOfWinners &&
-              winnersData.map((data, i) => (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <div
-                  className={selectedWinner === i ? 'winner-box selected' : 'winner-box'}
-                  key={uuid()}
-                  onClick={() => setSelectedWinner(i)}
-                >
-                  <img src={WinnerIcon} alt="winner-icon" />
-                  <p>Winner #{i}</p>
-                  <span>
-                    {data.nftsData.length}
-                    NFTs
-                  </span>
-                  <div className="box--shadow--effect--block" />
-                </div>
-              ))}
+              winnersData.map((data, i) => {
+                const winnerNumber = i + 1;
+                return (
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                  <div
+                    className={selectedWinner === i ? 'winner-box selected' : 'winner-box'}
+                    key={uuid()}
+                    onClick={() => setSelectedWinner(i)}
+                  >
+                    <img src={WinnerIcon} alt="winner-icon" />
+                    <p>Winner #{winnerNumber}</p>
+                    <span>
+                      {data.nftsData.length}
+                      NFTs
+                    </span>
+                    <div className="box--shadow--effect--block" />
+                  </div>
+                );
+              })}
           </div>
         )}
         {
@@ -520,6 +529,7 @@ const Create = () => {
             <AvailabilityNFTCard
               key={data.nfts.id}
               data={data}
+              selectAll={selectAll}
               onEditionClick={onEditionClick}
               canSelect={canSelectNFT}
               winnersData={winnersData}
