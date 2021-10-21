@@ -88,11 +88,11 @@ const App = () => {
                 </Route>
                 {/* <Route exact path="/mint-polymorph">
                   <MintPolymorph />
-                </Route>
+                </Route> */}
                 <Route exact path="/burn-to-mint">
                   <BurnToMint />
                 </Route>
-                <Route exact path="/planets/adaka">
+                {/* <Route exact path="/planets/adaka">
                   <Planet1 />
                 </Route>
                 <Route exact path="/planets/prosopon">

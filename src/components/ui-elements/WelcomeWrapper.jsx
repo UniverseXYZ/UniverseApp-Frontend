@@ -59,7 +59,8 @@ const WelcomeWrapper = (props) => {
             <div className="links">
               {!!btnText.length && (
                 <Button className="light-button" onClick={btnOnClick}>
-                  {popupBtnText}
+                  {/* {popupBtnText} */}
+                  {btnText}
                 </Button>
               )}
               {/* {!!popupBtnText.length && !btnAnotherOnClick && (
