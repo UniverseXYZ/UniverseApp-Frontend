@@ -177,7 +177,11 @@ const Collection = () => {
                     isDropdownOpened ? 'opened' : ''
                   } light-button`}
                   onClick={() =>
-                    history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' })
+                    history.push('/my-nfts/create', {
+                      collection: collectionData.collection,
+                      tabIndex: 1,
+                      nftType: 'single',
+                    })
                   }
                   aria-hidden="true"
                 >

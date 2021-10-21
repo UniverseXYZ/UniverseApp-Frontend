@@ -352,6 +352,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             setTokenName('');
             setCollectionName('');
             setCoverImage(null);
+            setSavedCollectionID(null);
           }}
           backButtonText="Go to my Collections"
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
@@ -488,7 +489,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
           <div className="box--shadow--effect--block" />
         </div>
         <p className="input-max-chars">
-          {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+          {description ? description.length : 0}/{MAX_FIELD_CHARS_LENGTH.description}
         </p>
       </div>
       <div className="collection--nfts">

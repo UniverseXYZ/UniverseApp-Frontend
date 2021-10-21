@@ -50,6 +50,13 @@ const MAX_FIELD_CHARS_LENGTH = {
   royaltiesCount: 5,
 };
 
+const MIN_IMAGE_SIZE = {
+  width: 800,
+  height: 800,
+};
+
+const MAX_ROYALTY_PERCENT = 20;
+
 const COLLECTIONS_PER_ROW = 4;
 
 const SingleNFTForm = () => {
@@ -102,7 +109,9 @@ const SingleNFTForm = () => {
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
-  const [selectedCollection, setSelectedCollection] = useState(universeCollection);
+  const [selectedCollection, setSelectedCollection] = useState(
+    location.state.collection || universeCollection
+  );
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
   const [showCongratsPopupOnSaveForLaterClick, setShowCongratsPopupOnSaveForLaterClick] =
@@ -112,7 +121,7 @@ const SingleNFTForm = () => {
   const [border, setBorder] = useState(false);
 
   useEffect(() => {
-    setSelectedCollection(universeCollection);
+    setSelectedCollection(location.state.collection || universeCollection);
   }, [universeCollection]);
 
   const hasAddressError = (royalty, index) => {
@@ -146,7 +155,7 @@ const SingleNFTForm = () => {
     temp.splice(index, 1);
     setRoyaltyAddress(temp);
 
-    const addressErrors = temp.filter((prop) => prop.error !== '');
+    const addressErrors = temp.filter((prop) => prop.error && prop.error !== '');
     setRoyaltyValidAddress(!addressErrors.length);
   };
 
@@ -208,6 +217,7 @@ const SingleNFTForm = () => {
     } else {
       inp.classList.remove('withsign');
     }
+
     const newProperties = royaltyAddress.map((royalty, royaltyIndex) => {
       if (royaltyIndex === index) {
         return {
@@ -221,7 +231,7 @@ const SingleNFTForm = () => {
       (accumulator, current) => accumulator + Number(current.amount),
       0
     );
-    if (result <= 100 && val >= 0) {
+    if (result <= MAX_ROYALTY_PERCENT && val >= 0) {
       setRoyaltyAddress(newProperties);
     }
   };
@@ -305,18 +315,56 @@ const SingleNFTForm = () => {
         previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     } else if (
-      (file.type === 'audio/mpeg' ||
-        file.type === 'video/mp4' ||
+      (file.type === 'video/mp4' ||
         file.type === 'image/jpeg' ||
         file.type === 'image/webp' ||
-        file.type === 'audio/mpeg' ||
         file.type === 'image/gif' ||
-        file.type === 'image/jpeg' ||
         file.type === 'image/png') &&
       file.size / 1048576 < 30
     ) {
-      setPreviewImage(file);
-      setErrors({ ...errors, previewImage: '' });
+      if (
+        file.type === 'image/jpeg' ||
+        file.type === 'image/webp' ||
+        file.type === 'image/png' ||
+        file.type === 'image/gif'
+      ) {
+        const reader = new FileReader();
+        // Read the contents of Image File.
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+          const image = new Image();
+          image.src = e.target.result;
+          image.onload = function () {
+            const { height, width } = this;
+            if (height < MIN_IMAGE_SIZE.height || width < MIN_IMAGE_SIZE.width) {
+              setErrors({
+                ...errors,
+                previewImage: 'File must be at least 800x800px',
+              });
+            } else {
+              setPreviewImage(file);
+              setErrors({ ...errors, previewImage: '' });
+            }
+          };
+        };
+      } else if (file.type === 'video/mp4') {
+        const video = document.createElement('video');
+        video.addEventListener('loadedmetadata', (event) => {
+          if (
+            video.videoHeight < MIN_IMAGE_SIZE.height ||
+            video.videoWidth < MIN_IMAGE_SIZE.width
+          ) {
+            setErrors({
+              ...errors,
+              previewImage: 'File must be at least 800x800px',
+            });
+          } else {
+            setPreviewImage(file);
+            setErrors({ ...errors, previewImage: '' });
+          }
+        });
+        video.src = URL.createObjectURL(file);
+      }
     } else {
       setPreviewImage('');
       setErrors({
@@ -621,7 +669,6 @@ const SingleNFTForm = () => {
   useEffect(() => {
     setShowPrompt(true);
   }, [location.pathname]);
-
   useEffect(() => {
     if (!showLoadingPopup) setActiveTxHashes([]);
   }, [showLoadingPopup]);
@@ -798,7 +845,7 @@ const SingleNFTForm = () => {
             <h5>
               <span>Description (optional)</span>
               <p className="input-max-chars">
-                {description.length}/{MAX_FIELD_CHARS_LENGTH.description}
+                {description ? description.length : 0}/{MAX_FIELD_CHARS_LENGTH.description}
               </p>
             </h5>
             <textarea
@@ -897,7 +944,8 @@ const SingleNFTForm = () => {
                       <h5>
                         <span>Property name</span>
                         <p className="input-max-chars">
-                          {property.name.length}/{MAX_FIELD_CHARS_LENGTH.propertyName}
+                          {property.name ? property.name.length : 0}/
+                          {MAX_FIELD_CHARS_LENGTH.propertyName}
                         </p>
                       </h5>
                       <Input
@@ -916,7 +964,8 @@ const SingleNFTForm = () => {
                       <h5>
                         <span>Value</span>
                         <p className="input-max-chars">
-                          {property.value.length}/{MAX_FIELD_CHARS_LENGTH.propertyValue}
+                          {property.value ? property.value.length : 0}/
+                          {MAX_FIELD_CHARS_LENGTH.propertyValue}
                         </p>
                       </h5>
                       <Input
