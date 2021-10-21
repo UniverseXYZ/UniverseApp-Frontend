@@ -302,7 +302,7 @@ const SingleNFTForm = () => {
       setPreviewImage('');
       setErrors({
         ...errors,
-        previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
+        previewImage: 'File format must be PNG, JPEG, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     } else if (
       (file.type === 'audio/mpeg' ||
@@ -321,7 +321,7 @@ const SingleNFTForm = () => {
       setPreviewImage('');
       setErrors({
         ...errors,
-        previewImage: 'File format must be PNG, JPEG, MP3, GIF, WEBP or MP4 (Max Size: 30mb)',
+        previewImage: 'File format must be PNG, JPEG, GIF, WEBP or MP4 (Max Size: 30mb)',
       });
     }
   };
