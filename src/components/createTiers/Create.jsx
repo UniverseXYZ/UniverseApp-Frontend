@@ -63,6 +63,7 @@ const Create = () => {
     numberOfWinners: true,
     nftsPerWinner: true,
   });
+  const [selectAll, setSelectAll] = useState(false);
 
   const handeClick = (e) => {
     setMinBId(e.target.checked);
@@ -160,6 +161,11 @@ const Create = () => {
           collectionAddress,
           collectionUrl,
         });
+
+        if (actionMeta.option?.value === 'select-all') {
+          setSelectAll(true);
+          return;
+        }
 
         winnersCopy[selectedWinner].nftIds.push(parseInt(id, 10));
       }
@@ -523,6 +529,7 @@ const Create = () => {
             <AvailabilityNFTCard
               key={data.nfts.id}
               data={data}
+              selectAll={selectAll}
               onEditionClick={onEditionClick}
               canSelect={canSelectNFT}
               winnersData={winnersData}

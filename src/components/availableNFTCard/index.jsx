@@ -9,7 +9,7 @@ import Select from '../availableNFTsEditionSelect';
 import universeIcon from '../../assets/images/universe-img.svg';
 
 const NFTCard = React.memo(
-  ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction }) => {
+  ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction, selectAll }) => {
     const { nfts, collection, optimized_url: url, artworkType } = data;
 
     const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
@@ -31,8 +31,9 @@ const NFTCard = React.memo(
       const infoCopy = { ...info };
       const [edition, id, _url] = infoCopy.value.split('||');
 
-      if (selectedWinnerIds && selectedWinnerIds.includes(parseInt(id, 10)))
+      if (selectedWinnerIds && selectedWinnerIds.includes(parseInt(id, 10))) {
         infoCopy.isSelected = true;
+      }
 
       // Disable
       if (otherWinnersIds && otherWinnersIds.includes(parseInt(id, 10))) {
@@ -60,6 +61,10 @@ const NFTCard = React.memo(
     const updateOptionsWithAllTiersData = updatedOptionsForCurrentTier.map((info) => {
       const infoCopy = { ...info };
       const [edition, id, _url] = infoCopy.value.split('||');
+
+      if (selectAll) {
+        console.info('select all here');
+      }
 
       // Disable if its used in other tiers but not in the same
       const isSelectedByCurrentWinner =
@@ -156,6 +161,7 @@ NFTCard.propTypes = {
   onEditionClick: PropTypes.func.isRequired,
   canSelect: PropTypes.bool.isRequired,
   selectedWinner: PropTypes.number.isRequired,
+  selectAll: PropTypes.bool.isRequired,
 };
 
 export default NFTCard;
