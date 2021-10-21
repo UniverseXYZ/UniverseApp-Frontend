@@ -49,8 +49,8 @@ const MenuList = (props) => {
   const { children } = props;
   return (
     <components.MenuList {...props}>
-      <div className="choose-edition">Choose edition number</div>
-      <p>{children}</p>
+      <span className="choose-edition">Choose edition number</span>
+      <div>{children}</div>
     </components.MenuList>
   );
 };
@@ -147,12 +147,12 @@ const styles = {
       cursor: 'pointer',
       fontSize: '12px',
     },
-    '&:first-child': {
+    '&:first-of-type': {
       borderTop: '1px solid rgba(0, 0, 0, 0.2)',
       borderBottom: 'none',
-      '& i': {
-        borderColor: '#000',
-      },
+    },
+    '& i::after': {
+      borderColor: '#000 !important',
     },
   }),
   menuList: (base) => ({

@@ -180,7 +180,7 @@ const Create = () => {
       if (actionMeta.action === ACTION_TYPES.DESELECT_SINGLE) {
         const [edition, id, url, artworkType] = actionMeta.option.value.split('||');
         winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
-          (nft) => nft.id !== id
+          (nft) => nft.id !== parseInt(id, 10)
         );
       }
 
