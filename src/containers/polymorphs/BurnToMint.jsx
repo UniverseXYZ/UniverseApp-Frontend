@@ -80,7 +80,7 @@ const BurnToMint = () => {
         hintText={[
           'Let’s burn your Polymorph and create a new one! Same base skin, same traits - but a brand new 3D look.',
           'Although your Polymorph will be burned for a 3D version, it’s still a Polymorph. You’ll be able to scramble and battle your Polymorph and it’ll still be eligble for future cosmetic upgrades such as this.',
-          'Let’s BURN.',
+          'Let’s BURN🔥.',
         ]}
         buttonText="Burn a polymorph"
         backgroundImage={BurnPolymorphBg}
