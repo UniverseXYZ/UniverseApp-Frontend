@@ -74,6 +74,7 @@ const SearchFilters = ({ data, setData, setOffset }) => {
           onClick={() => setShowFilters(!showFilters)}
           aria-hidden="true"
         >
+          <div className="box--shadow--effect--block" />
           {saleTypeButtons.filter((item) => item.selected === true).length > 0 ||
           selectedPrice ||
           savedCollections.length > 0 ||
