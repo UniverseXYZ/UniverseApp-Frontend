@@ -78,6 +78,7 @@ const SingleNFTForm = () => {
     mintingNftsCount,
     setMintingNftsCount,
     universeCollection,
+    setMyNFTsSelectedTabIndex,
   } = useMyNftsContext();
 
   const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
@@ -713,7 +714,10 @@ const SingleNFTForm = () => {
         <Popup open={showCongratsPopup} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            onClose={() => setShowCongratsPopup(false)}
+            onClose={() => {
+              setMyNFTsSelectedTabIndex(0);
+              setShowCongratsPopup(false);
+            }}
             message="NFT was successfully created and should be displayed in your wallet shortly"
           />
         </Popup>
@@ -727,7 +731,10 @@ const SingleNFTForm = () => {
         <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            onClose={() => setShowCongratsMintedSavedForLater(false)}
+            onClose={() => {
+              setMyNFTsSelectedTabIndex(0);
+              setShowCongratsMintedSavedForLater(false);
+            }}
             message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
           />
         </Popup>
