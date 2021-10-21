@@ -469,6 +469,9 @@
           font-size: 16px;
           line-height: 120%;
           color: $black;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .price--div {
           display: flex;

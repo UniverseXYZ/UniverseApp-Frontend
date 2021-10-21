@@ -19,7 +19,7 @@ Option.propTypes = {
   isSelected: PropTypes.bool,
   isDisabled: PropTypes.bool,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 Option.defaultProps = {
@@ -71,7 +71,7 @@ const styles = {
   container: (defaultStyles) => ({
     ...defaultStyles,
     // position: 'unset',
-    width: '60%',
+    minWidth: '135px',
     background:
       'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
@@ -114,7 +114,7 @@ const styles = {
     background: '#ffffff',
     borderRadius: '12px',
     flexGrow: '0',
-    padding: '2px 8px 2px 10px',
+    padding: '0 8px 2px 0',
     cursor: 'pointer',
   }),
   valueContainer: (base, state) => ({
