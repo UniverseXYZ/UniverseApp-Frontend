@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
-import uuid from 'react-uuid';
 import checkIcon from '../../assets/images/Completed.svg';
 import editIcon from '../../assets/images/edit.svg';
 import removeIcon from '../../assets/images/remove.svg';
@@ -113,7 +112,7 @@ const SavedNFTs = () => {
 
           <div className="saved__nfts__lists">
             {savedNfts.slice(offset, offset + perPage).map((nft, index) => (
-              <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={uuid()}>
+              <div className={`saved__nft__box ${nft.selected ? 'selected' : ''}`} key={nft.id}>
                 <div
                   className="saved__nft__box__image"
                   onClick={() => handleSavedNfts(index)}
