@@ -65,6 +65,7 @@ const SortingDropdowns = () => {
           <></>
         )}
       </div> */}
+      <div className="box--shadow--effect--block" />
       <div
         className={`dropdown ${showSecondDropdown ? 'open' : ''}`}
         aria-hidden="true"
@@ -73,7 +74,6 @@ const SortingDropdowns = () => {
       >
         <span>{sortName}</span>
         <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
-        <div className="box--shadow--effect--block" />
         {showSecondDropdown ? (
           <div className="dropdown--items">
             {secondDropdownItems.map(

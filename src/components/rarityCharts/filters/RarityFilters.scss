@@ -1,5 +1,5 @@
-@import '../../../assets/scss/variables';
-@import '../../../assets/scss/_mixins';
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/_mixins";
 
 .rarity--charts--search--and--filters--container {
   .universe_filter {
@@ -26,10 +26,29 @@
     border: 1px solid #d4d4d4;
     box-sizing: border-box;
     border-radius: 12px;
-    padding: 15px 16px;
+    padding: 11px 16px;
     cursor: pointer;
-    height: 47px;
+    min-height: 50px;
     margin-bottom: 15px;
+    .box--shadow--effect--block {
+      position: absolute;
+      width: calc(100% + 7px);
+      min-height: 56px;
+      background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+      left: -4px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      z-index: -1;
+      border-radius: 12px;
+      opacity: 0;
+    }
+    &:hover {
+      .box--shadow--effect--block {
+        opacity: 0.2;
+      }
+    }
     &.opened {
       background: linear-gradient($white, $white) padding-box, linear-gradient(175deg, #bceb00, #00eaea) border-box;
       border: 1px solid transparent;

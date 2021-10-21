@@ -17,10 +17,16 @@ const LoadingPopup = ({ onClose, text, contractInteraction }) => {
   return (
     <div className="loading-div popup-div" id="loading-popup-div">
       <div className="loading-ring">
-        <div />
-        <div />
-        <div />
-        <div />
+        <div className="lds-roller">
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+          <div />
+        </div>
       </div>
       <button type="button" className="popup-close" onClick={onClose}>
         <img src={closeIcon} alt="" />

@@ -42,6 +42,7 @@ const CollectionDropdown = ({ isDropdownOpened, setIsDropdownOpened }) => {
       onClick={() => setIsDropdownOpened(!isDropdownOpened)}
       aria-hidden="true"
     >
+      <div className="box--shadow--effect--block" />
       <span className="selected__universe__item">{collectionFilter}</span>
       <img className="arrow__down" src={arrowDown} alt="Arrow" />
       {isDropdownOpened && (
