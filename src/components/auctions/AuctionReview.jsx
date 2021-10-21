@@ -272,7 +272,7 @@ const AuctionReview = () => {
                       </div>
                       <div className="tier-winners">
                         <h4>
-                          Winners:&nbsp;<b>{tier.winners}</b>
+                          Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
                         </h4>
                       </div>
                       <div className="tier-minbid">
