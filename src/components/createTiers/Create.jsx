@@ -485,22 +485,25 @@ const Create = () => {
         {custom && (
           <div className="winner__lists">
             {values.numberOfWinners &&
-              winnersData.map((data, i) => (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <div
-                  className={selectedWinner === i ? 'winner-box selected' : 'winner-box'}
-                  key={uuid()}
-                  onClick={() => setSelectedWinner(i)}
-                >
-                  <img src={WinnerIcon} alt="winner-icon" />
-                  <p>Winner #{i}</p>
-                  <span>
-                    {data.nftsData.length}
-                    NFTs
-                  </span>
-                  <div className="box--shadow--effect--block" />
-                </div>
-              ))}
+              winnersData.map((data, i) => {
+                const winnerNumber = i + 1;
+                return (
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                  <div
+                    className={selectedWinner === i ? 'winner-box selected' : 'winner-box'}
+                    key={uuid()}
+                    onClick={() => setSelectedWinner(i)}
+                  >
+                    <img src={WinnerIcon} alt="winner-icon" />
+                    <p>Winner #{winnerNumber}</p>
+                    <span>
+                      {data.nftsData.length}
+                      NFTs
+                    </span>
+                    <div className="box--shadow--effect--block" />
+                  </div>
+                );
+              })}
           </div>
         )}
         {
