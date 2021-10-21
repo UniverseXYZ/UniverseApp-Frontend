@@ -1,112 +1,101 @@
 @import "../../../assets/scss/variables";
 @import "../../../assets/scss/mixins";
 
-.active__auctions__skeleton {
+.active__auction__item {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 30px;
-  .active__auction__item {
-    display: grid;
-    background: $white;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 12px;
-    grid-gap: 18px;
+  background: $white;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  grid-gap: 18px;
 
-    .active__auction__image {
-      position: relative;
-      width: 100%;
+  .active__auction__image {
+    position: relative;
+    width: 100%;
+    height: 311px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include md {
+      height: 260px;
+    }
+    @include sm {
       height: 311px;
-      border-radius: 6px;
+    }
+  }
+
+  .active__auction__details {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      h2 {
+        margin-bottom: 6px;
+        font-family: $sharpGroteskSemiBoldFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 130%;
+        color: $black;
+      }
+    }
+    .creator {
       display: flex;
       align-items: center;
-      justify-content: center;
-      @include md {
-        height: 260px;
-      }
-      @include sm {
-        height: 311px;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 150%;
+      margin-bottom: 20px;
+      a {
+        margin-left: 10px;
       }
     }
-
-    .active__auction__details {
-      .title {
-        display: flex;
-        justify-content: space-between;
-        h2 {
-          margin-bottom: 6px;
-          font-family: $sharpGroteskSemiBoldFont;
+    .statistics {
+      display: grid;
+      grid-template-columns: auto auto;
+      grid-column-gap: 25px;
+      background: #f7f7f7;
+      border: 1px solid #f0f0f0;
+      box-sizing: border-box;
+      border-radius: 6px;
+      padding: 0 14px;
+      > div {
+        padding: 14px 0;
+        &:nth-child(3) {
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        &:nth-child(4) {
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        label {
+          display: block;
+          font-family: $spaceGroteskFont;
           font-style: normal;
-          font-weight: 600;
-          font-size: 16px;
-          line-height: 130%;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 150%;
+          color: rgba(0, 0, 0, 0.4);
+        }
+        p {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 150%;
           color: $black;
-        }
-      }
-      .creator {
-        display: flex;
-        align-items: center;
-        font-family: $spaceGroteskFont;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 150%;
-        margin-bottom: 20px;
-        a {
-          margin-left: 10px;
-        }
-      }
-      .statistics {
-        display: grid;
-        grid-template-columns: auto auto;
-        grid-column-gap: 25px;
-        background: #f7f7f7;
-        border: 1px solid #f0f0f0;
-        box-sizing: border-box;
-        border-radius: 6px;
-        padding: 0 14px;
-        > div {
-          padding: 14px 0;
-          &:nth-child(3) {
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-          }
-          &:nth-child(4) {
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-          }
-          label {
-            display: block;
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 12px;
-            line-height: 150%;
+          span {
             color: rgba(0, 0, 0, 0.4);
           }
-          p {
-            font-family: $spaceGroteskFont;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 14px;
-            line-height: 150%;
-            color: $black;
-            span {
-              color: rgba(0, 0, 0, 0.4);
-            }
-          }
         }
       }
-      .view--auction--btn {
-        margin-top: 18px;
-      }
     }
-    &:hover {
-      box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+    .view--auction--btn {
+      margin-top: 18px;
     }
   }
-  @include xl {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @include sm {
-    grid-template-columns: 1fr;
+  &:hover {
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
   }
 }
