@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
 
 .sort--by--select--parent {
   // display: grid;
@@ -122,13 +122,4 @@
   .box--shadow--effect--block {
     opacity: 0.2;
   }
-  .dropdown {
-    border-color: transparent;
-    border-radius: 10px;
-  }
 }
-// .sort--by--select--parent--active {
-//     .box--shadow--effect--block {
-//         opacity: 0.2 !important;
-//     }
-// }
