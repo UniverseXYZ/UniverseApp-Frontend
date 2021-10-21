@@ -45,6 +45,20 @@ Placeholder.defaultProps = {
   label: '',
 };
 
+const MenuList = (props) => {
+  const { children } = props;
+  return (
+    <components.MenuList {...props}>
+      <div className="choose-edition">Choose edition number</div>
+      <p>{children}</p>
+    </components.MenuList>
+  );
+};
+
+MenuList.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object]).isRequired,
+};
+
 const styles = {
   placeholder: (defaultStyles) => ({
     ...defaultStyles,
@@ -118,17 +132,41 @@ const styles = {
     fontFamily: 'Space Grotesk, sans-serif',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    padding: '15px',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '15px',
+    cursor: 'pointer',
     opacity: state.isFocused ? '1' : '0.7',
     background: state.isSelected || state.isFocused ? '#F6FAF3' : null,
     '&:active': {
       background: '#F6FAF3',
     },
     borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
+    '& label': {
+      cursor: 'pointer',
+      fontSize: '12px',
+    },
+    '&:first-child': {
+      borderTop: '1px solid rgba(0, 0, 0, 0.2)',
+      borderBottom: 'none',
+      '& i': {
+        borderColor: '#000',
+      },
+    },
   }),
   menuList: (base) => ({
     ...base,
     background: '#fff',
+    '& .choose-edition': {
+      fontWeight: 'bold',
+      fontSize: '14px',
+      fontFamily: 'Space Grotesk',
+      marginLeft: '5%',
+      display: 'flex',
+      alignItems: 'center',
+      height: '54px',
+    },
   }),
 };
 
@@ -139,7 +177,6 @@ const SelectComponent = (props) => {
 
   useEffect(() => {
     setSelectedOptions([]);
-
     const selected = options.filter((op) => op.isSelected);
     setSelectedOptions(selected);
   }, [options]);
@@ -155,6 +192,7 @@ const SelectComponent = (props) => {
       components={{
         Option,
         Placeholder,
+        MenuList,
         IndicatorSeparator: () => null,
       }}
       menuPlacement="auto"

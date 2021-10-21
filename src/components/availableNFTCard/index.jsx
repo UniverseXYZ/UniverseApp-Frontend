@@ -16,6 +16,7 @@ const NFTCard = React.memo(
       value: `${tokenId}||${id}||${url}||${artworkType}||${nfts.name}||${collection.name}||${collection.address}||${collection.coverUrl}`,
       label: `#${tokenId}`,
     }));
+    selectOptions.unshift({ label: 'Select all', value: 'select-all' });
 
     const selectedWinnerData = winnersData.find((info) => info.slot === selectedWinner);
     const selectedWinnerIds = selectedWinnerData && selectedWinnerData.nftIds;
