@@ -724,6 +724,7 @@
         text-align: left;
         color: rgba(0, 0, 0, 0.6);
         padding-bottom: 30px;
+        white-space: pre-wrap;
         > span {
           font-family: $spaceGroteskFont;
           font-size: 14px;

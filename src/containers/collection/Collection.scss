@@ -64,6 +64,7 @@
       margin-top: 170px;
       margin-left: auto;
       margin-right: auto;
+      white-space: pre-wrap;
       @include sm{
         margin-top: 35px;
       }
@@ -482,9 +483,11 @@
 }
 .loader-wrapper {
   height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+
 }
 .loading-section {
     display: flex;

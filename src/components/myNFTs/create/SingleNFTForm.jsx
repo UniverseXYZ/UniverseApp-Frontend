@@ -59,6 +59,11 @@ const MAX_ROYALTY_PERCENT = 20;
 
 const COLLECTIONS_PER_ROW = 4;
 
+const MINTING_LOADING_TEXT =
+  'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
+const SAVING_FOR_LATER_LOADING_TEXT =
+  'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the curent progress.';
+
 const SingleNFTForm = () => {
   const {
     savedNfts,
@@ -73,6 +78,7 @@ const SingleNFTForm = () => {
     mintingNftsCount,
     setMintingNftsCount,
     universeCollection,
+    setMyNFTsSelectedTabIndex,
   } = useMyNftsContext();
 
   const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
@@ -110,7 +116,7 @@ const SingleNFTForm = () => {
   const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(
-    location.state.collection || universeCollection
+    location.state?.collection || universeCollection
   );
   const [showCongratsPopup, setShowCongratsPopup] = useState(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
@@ -119,9 +125,10 @@ const SingleNFTForm = () => {
   const [showLoadingPopup, setShowLoadingPopup] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
   const [border, setBorder] = useState(false);
+  const [loadingText, setLoadingText] = useState(MINTING_LOADING_TEXT);
 
   useEffect(() => {
-    setSelectedCollection(location.state.collection || universeCollection);
+    setSelectedCollection(location.state?.collection || universeCollection);
   }, [universeCollection]);
 
   const hasAddressError = (royalty, index) => {
@@ -418,8 +425,6 @@ const SingleNFTForm = () => {
         }
       }
 
-      // Get the Token URIs from the BE
-      // TODO: Test this: We have to send collection id to get collection id appended
       const mintInfo = savedNFTsID
         ? await getMetaForSavedNft(savedNFTsID)
         : await getTokenURI(data);
@@ -447,7 +452,6 @@ const SingleNFTForm = () => {
         return mintReceipt.status;
       });
 
-      // setActiveTxHashes(txHashesArray);
       const res = await Promise.all(mintPromises);
       const mintNftPromises = [];
 
@@ -477,10 +481,10 @@ const SingleNFTForm = () => {
 
         setName('');
         setDescription('');
-        setEditions('');
+        setEditions(1);
         setPreviewImage('');
         setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-        setRoyaltyAddress([{ address: '', amount: '' }]);
+        setRoyaltyAddress([{ address, amount: '10' }]);
       } else {
         setShowLoadingPopup(false);
         console.error(e, 'Error !');
@@ -498,6 +502,7 @@ const SingleNFTForm = () => {
   };
 
   const onSaveNftForLaterMinting = async () => {
+    setLoadingText(SAVING_FOR_LATER_LOADING_TEXT);
     setShowLoadingPopup(true);
 
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
@@ -520,20 +525,20 @@ const SingleNFTForm = () => {
     // failed to upload image, but saved nft
     if (!saveImageResult) {
       console.error('server error. cant get meta data');
-      // showErrorModal(true);
     }
 
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
 
     setShowLoadingPopup(false);
+    setLoadingText(MINTING_LOADING_TEXT);
     setShowCongratsPopupOnSaveForLaterClick(true);
     setName('');
     setDescription('');
-    setEditions('');
+    setEditions(1);
     setPreviewImage('');
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    setRoyaltyAddress([{ address: '', amount: '' }]);
+    setRoyaltyAddress([{ address, amount: '10' }]);
   };
 
   const validateEdition = (e) => {
@@ -550,6 +555,7 @@ const SingleNFTForm = () => {
   };
 
   const onEditSavedNft = async () => {
+    setLoadingText(SAVING_FOR_LATER_LOADING_TEXT);
     setShowLoadingPopup(true);
     setShowCreateMoreButton(false);
     const royaltiesParsed = royalities ? parseRoyalties(royaltyAddress) : [];
@@ -583,13 +589,14 @@ const SingleNFTForm = () => {
     const savedNFTS = await getSavedNfts();
     setSavedNfts(savedNFTS || []);
     setShowLoadingPopup(false);
+    setLoadingText(MINTING_LOADING_TEXT);
     setShowCongratsPopup(true);
     setName('');
     setDescription('');
-    setEditions('');
+    setEditions(1);
     setPreviewImage('');
     setProperties([{ name: '', value: '', errors: { name: '', value: '' } }]);
-    setRoyaltyAddress([{ address: '', amount: '' }]);
+    setRoyaltyAddress([{ address, amount: '10' }]);
   };
 
   const getPreviewImageSource = useMemo(() => {
@@ -669,6 +676,7 @@ const SingleNFTForm = () => {
   useEffect(() => {
     setShowPrompt(true);
   }, [location.pathname]);
+
   useEffect(() => {
     if (!showLoadingPopup) setActiveTxHashes([]);
   }, [showLoadingPopup]);
@@ -684,21 +692,21 @@ const SingleNFTForm = () => {
           editing={
             !!(
               name ||
-              editions ||
+              editions !== 1 ||
               previewImage ||
               description ||
               properties[0]?.name ||
               properties[0]?.value ||
               properties[1] ||
-              royaltyAddress[0]?.address ||
-              royaltyAddress[0]?.amount ||
+              royaltyAddress[0]?.address !== address ||
+              royaltyAddress[0]?.amount !== '10' ||
               royaltyAddress[1]
             )
           }
         />
         <Popup open={showLoadingPopup} closeOnDocumentClick={false}>
           <LoadingPopup
-            text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+            text={loadingText}
             onClose={() => setShowLoadingPopup(false)}
             contractInteraction={mintNowClick}
           />
@@ -706,7 +714,10 @@ const SingleNFTForm = () => {
         <Popup open={showCongratsPopup} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            onClose={() => setShowCongratsPopup(false)}
+            onClose={() => {
+              setMyNFTsSelectedTabIndex(0);
+              setShowCongratsPopup(false);
+            }}
             message="NFT was successfully created and should be displayed in your wallet shortly"
           />
         </Popup>
@@ -720,7 +731,10 @@ const SingleNFTForm = () => {
         <Popup open={showCongratsMintedSavedForLater} closeOnDocumentClick={false}>
           <CongratsPopup
             showCreateMore={showCreateMoreButton}
-            onClose={() => setShowCongratsMintedSavedForLater(false)}
+            onClose={() => {
+              setMyNFTsSelectedTabIndex(0);
+              setShowCongratsMintedSavedForLater(false);
+            }}
             message="Saved for later NFT was successfully minted and should be displayed in your wallet shortly"
           />
         </Popup>

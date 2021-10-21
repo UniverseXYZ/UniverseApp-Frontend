@@ -35,16 +35,7 @@ const CongratsPopup = ({ onClose, backButtonText, title, message, showCreateMore
           {backButtonText}
         </Button>
         {showCreateMore && (
-          <Button
-            className="light-border-button"
-            onClick={() =>
-              history.push(
-                location.pathname === '/create-tiers/my-nfts/create'
-                  ? '/create-tiers/my-nfts/create'
-                  : onClose()
-              )
-            }
-          >
+          <Button className="light-border-button" onClick={onClose}>
             Create more
           </Button>
         )}

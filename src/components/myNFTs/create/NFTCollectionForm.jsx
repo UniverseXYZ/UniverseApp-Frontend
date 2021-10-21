@@ -46,6 +46,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
     setMyMintingCollections,
     mintingCollectionsCount,
     setMintingCollectionsCount,
+    setMyNFTsSelectedTabIndex,
   } = useMyNftsContext();
   const { deployedCollections, setDeployedCollections, universeERC721FactoryContract } =
     useAuthContext();
@@ -353,6 +354,7 @@ const NFTCollectionForm = ({ showCollectible, setShowCollectible }) => {
             setCollectionName('');
             setCoverImage(null);
             setSavedCollectionID(null);
+            setMyNFTsSelectedTabIndex(1);
           }}
           backButtonText="Go to my Collections"
           message="NFT collection was successfully created/updated and should be displayed in your wallet shortly"
