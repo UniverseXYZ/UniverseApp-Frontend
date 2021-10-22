@@ -1,5 +1,5 @@
-@import "../../assets/scss/variables";
-@import "../../assets/scss/mixins";
+@import '../../assets/scss/variables';
+@import '../../assets/scss/mixins';
 
 .auction__landing__page {
   .artist__personal__logo {
@@ -42,7 +42,7 @@
         .carousel__auction__container {
           &.selected {
             .carousel__auction {
-              background-image: url("../../assets/images/auction-slider-gradient-border.svg");
+              background-image: url('../../assets/images/auction-slider-gradient-border.svg');
               background-position: center;
               background-repeat: no-repeat;
               background-size: cover;
@@ -233,7 +233,7 @@
             margin-right: 16px;
             border-radius: 4px;
             &.show__avatar {
-              background-image: url("../../assets/images/artist_card_bg.png");
+              background-image: url('../../assets/images/artist_card_bg.png');
               background-position: center;
               background-size: cover;
               background-repeat: no-repeat;
@@ -291,7 +291,7 @@
           align-items: center;
           justify-content: center;
           &.show__avatar {
-            background-image: url("../../assets/images/artist_card_bg.png");
+            background-image: url('../../assets/images/artist_card_bg.png');
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -715,7 +715,7 @@
                     left: 50%;
                     transform: translateX(-50%);
                     &::after {
-                      content: "";
+                      content: '';
                       position: absolute;
                       top: 100%;
                       left: 50%;
@@ -749,7 +749,7 @@
           box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
           border-radius: 12px;
           .content {
-            padding: 40px 15px;
+            padding: 30px;
             .icon {
               display: flex;
               align-items: center;
@@ -798,6 +798,28 @@
                 background-color: $white;
               }
             }
+            .warning__div {
+              display: flex;
+              background: #fdfcf9;
+              border: 1px solid #e4b613;
+              box-sizing: border-box;
+              border-radius: 12px;
+              padding: 20px;
+              margin-top: 20px;
+              img {
+                margin-right: 10px;
+                height: fit-content;
+              }
+
+              p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 160%;
+                color: #e4b613;
+              }
+            }
             @include sm {
               padding: 40px 30px;
             }
@@ -806,6 +828,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 14px;
             padding: 15px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             button {
@@ -1240,7 +1263,7 @@
   .place__bid__section {
     position: relative;
     padding: 65px 60px;
-    background-image: url("../../assets/images/place-bid-bg-desktop.png");
+    background-image: url('../../assets/images/place-bid-bg-desktop.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -1316,11 +1339,11 @@
     }
     @include lg {
       padding: 65px 20px;
-      background-image: url("../../assets/images/place-bid-bg-tablet.png");
+      background-image: url('../../assets/images/place-bid-bg-tablet.png');
     }
     @include sm {
       padding: 65px 20px;
-      background-image: url("../../assets/images/place-bid-bg-mobile.png");
+      background-image: url('../../assets/images/place-bid-bg-mobile.png');
     }
   }
 }

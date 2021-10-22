@@ -414,7 +414,7 @@ const AuctionDetails = ({
                       </div>
                       <h2 className="title">Congratulations!</h2>
                       <p className="desc">
-                        Your bid won the <b>{currentBid.rewardTier}</b> tier. You can claim your
+                        Your bid won the <b>{currentBid?.rewardTier}</b> tier. You can claim your
                         NFTs by clicking the button below
                       </p>
                       <div className="view__rankings">
@@ -422,10 +422,29 @@ const AuctionDetails = ({
                           {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
                         </Popup>
                       </div>
+                      <div className="warning__div">
+                        <img src={warningIcon} alt="" />
+                        <p>
+                          The auctions rewards need to be released first. Without this step, the
+                          auctioneer will not be able to collect his warnings and the bidders will
+                          not be able to claim their NFTs.
+                        </p>
+                      </div>
                     </div>
                     <div className="footer">
-                      <Button className="light-button">Claim</Button>
+                      <Button
+                        className="light-button"
+                        onClick={() => history.push('/release-rewards')}
+                      >
+                        Release rewards
+                      </Button>
+                      <Button className="light-button" disabled>
+                        Claim NFTs
+                      </Button>
                     </div>
+                    {/* <div className="footer">
+                    <Button className="light-button">Claim</Button>
+                  </div> */}
                   </div>
                 </Animated>
               )}
