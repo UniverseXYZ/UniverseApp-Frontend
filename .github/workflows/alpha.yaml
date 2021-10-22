@@ -1,4 +1,4 @@
-name: CI
+name: Alpha Environment
 on:
   push:
     branches:
