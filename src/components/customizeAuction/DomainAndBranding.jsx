@@ -14,6 +14,7 @@ import {
   auctionPageBackgroundImageErrorMessage,
   auctionPagePromoImageErrorMessage,
 } from '../../utils/helpers.js';
+import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
@@ -105,28 +106,23 @@ const DomainAndBranding = ({
     const fileValid =
       (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function onload(e) {
-      const image = new Image();
-      image.src = e.target.result;
-      image.onload = function imageOnload() {
-        const { width, height } = this;
-        let dimensionsValid = false;
-        if (imageType === PROMO_IMAGE) {
-          if (width >= PROMO_IMAGE_DIMENSIONS.width && height >= PROMO_IMAGE_DIMENSIONS.height) {
-            dimensionsValid = true;
-          }
-        } else if (imageType === BACKGROUND_IMAGE) {
-          if (
-            width >= BACKGROUND_IMAGE_DIMENSIONS.width &&
-            height >= BACKGROUND_IMAGE_DIMENSIONS.height
-          ) {
-            dimensionsValid = true;
-          }
+
+    getImageDimensions(file, ({ width, height }) => {
+      let dimensionsValid = false;
+      if (imageType === PROMO_IMAGE) {
+        if (width >= PROMO_IMAGE_DIMENSIONS.width && height >= PROMO_IMAGE_DIMENSIONS.height) {
+          dimensionsValid = true;
         }
-        handleImageError(imageType, fileValid, dimensionsValid);
-      };
-    };
+      } else if (imageType === BACKGROUND_IMAGE) {
+        if (
+          width >= BACKGROUND_IMAGE_DIMENSIONS.width &&
+          height >= BACKGROUND_IMAGE_DIMENSIONS.height
+        ) {
+          dimensionsValid = true;
+        }
+      }
+      handleImageError(imageType, fileValid, dimensionsValid);
+    });
 
     // always show an image preview, so the user is able to remove an incorrect image
     uploadFile(file, imageType);
