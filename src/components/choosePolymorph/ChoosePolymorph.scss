@@ -2,7 +2,7 @@
 @import "../../assets/scss/mixins";
 
 .choose--polymorph {
-  background-image: url("../../assets/images/choosePolymorph/Flames.png");
+  // background-image: url("../../assets/images/choosePolymorph/Flames.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -12,9 +12,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 111;
+  .animation--background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 0;
+  }
   .choose--polymorph--container {
     width: 1110px;
     min-height: 730px;
+    z-index: 111;
     h1 {
       color: rgba(255, 255, 255, 1);
       font-family: $sharpGroteskSemiBoldFont;
@@ -71,6 +82,27 @@
         // margin-bottom: 30px;
         // margin: auto;
         margin: 6px auto 30px auto;
+      }
+    }
+    .animation--page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 100px;
+      .image--secion {
+        position: relative;
+        img {
+          height: 535px;
+          border-radius: 12px;
+          object-fit: cover;
+        }
+        .burn--animation {
+          position: absolute;
+          top: -145px;
+          z-index: 2;
+          left: -40px;
+          width: 120%;
+        }
       }
     }
   }
