@@ -61,8 +61,10 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
   return (
     <div className="nft--card--header">
       <div className="three--images">
-        {creator &&
-        (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
+        {!creator ? (
+          <></>
+        ) : creator &&
+          (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
           <>
             <div
               className="creator--details"
