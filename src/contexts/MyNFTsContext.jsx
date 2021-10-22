@@ -82,7 +82,9 @@ const MyNFTsContextProvider = ({ children }) => {
       setMyMintingCollections(mintingcollectionsRequest.collections || []);
 
       const universeColl = mintableCollections.collections.filter(
-        (coll) => coll.address === '0xd3ccbb9f3e5b9678c5f4fef91055704df81a104c'
+        (coll) =>
+          coll.address.toLowerCase() ===
+          process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase()
       )[0];
 
       if (!universeColl) {
