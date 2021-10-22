@@ -10,7 +10,10 @@ import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
+import {
+  auctionPageBackgroundImageErrorMessage,
+  auctionPagePromoImageErrorMessage,
+} from '../../utils/helpers.js';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
@@ -280,7 +283,7 @@ const DomainAndBranding = ({
                   </div>
                 </div>
                 {invalidPromoImage && (
-                  <p className="error-message">{auctionPageImageErrorMessage}</p>
+                  <p className="error-message">{auctionPagePromoImageErrorMessage}</p>
                 )}
               </div>
             </div>
@@ -391,7 +394,7 @@ const DomainAndBranding = ({
                   </div>
                 </div>
                 {invalidBackgroundImage && (
-                  <p className="error-message">{auctionPageImageErrorMessage}</p>
+                  <p className="error-message">{auctionPageBackgroundImageErrorMessage}</p>
                 )}
               </div>
             </div>

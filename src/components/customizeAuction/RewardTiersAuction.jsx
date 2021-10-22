@@ -7,7 +7,7 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
-import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
+import { auctionPageTierImageErrorMessage } from '../../utils/helpers.js';
 
 const TIER_IMAGE_DIMENSIONS = {
   width: 800,
@@ -221,7 +221,9 @@ const RewardTiersAuction = ({
                       </div>
                     </div>
                   </div>
-                  {errorMessage && <p className="error-message">{auctionPageImageErrorMessage}</p>}
+                  {errorMessage && (
+                    <p className="error-message">{auctionPageTierImageErrorMessage}</p>
+                  )}
                 </div>
               </div>
             </div>
