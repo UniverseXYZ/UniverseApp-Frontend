@@ -50,6 +50,7 @@ import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
+import ReleaseRewards from './components/releaseRewards/ReleaseRewards';
 
 const App = () => {
   const location = useLocation();
@@ -166,6 +167,9 @@ const App = () => {
                 </AuthenticatedRoute>
                 <AuthenticatedRoute exact path="/customize-auction-landing-page">
                   <CustomizeAuction />
+                </AuthenticatedRoute>
+                <AuthenticatedRoute exact path="/release-rewards">
+                  <ReleaseRewards />
                 </AuthenticatedRoute>
                 <AuthenticatedRoute exact path="/auction-review">
                   <AuctionReview />

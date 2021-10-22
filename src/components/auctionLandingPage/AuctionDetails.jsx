@@ -19,6 +19,7 @@ import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
+import warningIcon from '../../assets/images/Exclamation.svg';
 
 const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => {
   const { loggedInArtist } = useAuthContext();
@@ -134,14 +135,14 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
   }, []);
 
   const promoImageSrc =
-    selectedAuction.auction.promoImage instanceof File
-      ? URL.createObjectURL(selectedAuction.auction.promoImage)
-      : selectedAuction.auction.promoImage;
+    selectedAuction.auction?.promoImage instanceof File
+      ? URL.createObjectURL(selectedAuction.auction?.promoImage)
+      : selectedAuction.auction?.promoImage;
 
   const backgroundImage =
-    selectedAuction.auction.backgroundImage instanceof File
-      ? URL.createObjectURL(selectedAuction.auction.backgroundImage)
-      : selectedAuction.auction.backgroundImage;
+    selectedAuction.auction?.backgroundImage instanceof File
+      ? URL.createObjectURL(selectedAuction.auction?.backgroundImage)
+      : selectedAuction.auction?.backgroundImage;
 
   return (
     <div
@@ -153,7 +154,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
         {selectedAuction.auction.backgroundImage && (
           <img
             src={backgroundImage}
-            alt={selectedAuction.auction.headline}
+            alt={selectedAuction.auction?.headline}
             style={{
               filter: selectedAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
             }}
@@ -429,7 +430,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
                       </div>
                       <h2 className="title">Congratulations!</h2>
                       <p className="desc">
-                        Your bid won the <b>{currentBid.rewardTier}</b> tier. You can claim your
+                        Your bid won the <b>{currentBid?.rewardTier}</b> tier. You can claim your
                         NFTs by clicking the button below
                       </p>
                       <div className="view__rankings">
@@ -437,10 +438,29 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
                           {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
                         </Popup>
                       </div>
+                      <div className="warning__div">
+                        <img src={warningIcon} alt="" />
+                        <p>
+                          The auctions rewards need to be released first. Without this step, the
+                          auctioneer will not be able to collect his warnings and the bidders will
+                          not be able to claim their NFTs.
+                        </p>
+                      </div>
                     </div>
                     <div className="footer">
-                      <Button className="light-button">Claim</Button>
+                      <Button
+                        className="light-button"
+                        onClick={() => history.push('/release-rewards')}
+                      >
+                        Release rewards
+                      </Button>
+                      <Button className="light-button" disabled>
+                        Claim NFTs
+                      </Button>
                     </div>
+                    {/* <div className="footer">
+                    <Button className="light-button">Claim</Button>
+                  </div> */}
                   </div>
                 </Animated>
               )}

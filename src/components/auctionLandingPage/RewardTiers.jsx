@@ -14,7 +14,7 @@ const RewardTiers = ({ auction }) => (
       </p>
 
       <div className="tiers__section">
-        {auction.rewardTiers.map((tier) => (
+        {auction.rewardTiers?.map((tier) => (
           <div className="tier__box" key={uuid()}>
             <div className="tier__nfts__container">
               <div className="tier__nfts">

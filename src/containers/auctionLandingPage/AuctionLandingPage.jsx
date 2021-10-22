@@ -79,7 +79,7 @@ const AuctionLandingPage = () => {
           setShowLoading={setShowLoading}
           auction={auction.auction}
           rewardTiers={auction.rewardTiers}
-          artistName={auction.artist.displayName}
+          artistName={auction.artist?.displayName}
           onBidders={auction.bids}
           onSetBidders={setBidders}
         />
