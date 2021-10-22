@@ -48,6 +48,7 @@ import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
+import LoadingImage from '../general/LoadingImage';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -483,7 +484,14 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                 {selectedNFT.artworkType &&
                   !selectedNFT.artworkType.endsWith('mpeg') &&
                   !selectedNFT.artworkType.endsWith('mp4') && (
-                    <img src={selectedNFT.original_url} alt={selectedNFT.name} />
+                    <LoadingImage
+                      src={
+                        selectedNFT.original_url.startsWith('ipfs://')
+                          ? selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/')
+                          : selectedNFT.original_url
+                      }
+                      alt={selectedNFT.name}
+                    />
                   )}
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
@@ -496,9 +504,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <video ref={mediaRef}>
                         <source
                           src={
-                            typeof selectedNFT.original_url === 'string'
-                              ? selectedNFT.original_url
-                              : URL.createObjectURL(selectedNFT.original_url)
+                            selectedNFT.original_url.startsWith('ipfs://')
+                              ? selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/')
+                              : selectedNFT.original_url
                           }
                           type="video/mp4"
                         />
@@ -1012,8 +1020,11 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
             </div>
           </div>
           <div className="Marketplace--collections">
-            {creator &&
-            (creator.avatar || (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
+            {!creator ? (
+              <></>
+            ) : creator &&
+              (creator.avatar ||
+                (creator.profileImageUrl && creator.profileImageUrl.length > 48)) ? (
               <div
                 className="Marketplace--creators"
                 onClick={() => history.push(`/${creator.universePageUrl}`)}
