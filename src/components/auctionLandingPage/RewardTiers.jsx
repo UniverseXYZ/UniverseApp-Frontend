@@ -18,17 +18,14 @@ const RewardTiers = ({ auction }) => (
           <div className="tier__box" key={uuid()}>
             <div className="tier__nfts__container">
               <div className="tier__nfts">
-                {tier.nfts.map(
-                  (nft, index) =>
-                    index < 3 && (
-                      <div className="nft__image" key={nft.id}>
-                        <img src={nft.optimized_url} alt={nft.name} />
-                        {tier.nfts.length > 3 && (
-                          <span className="show__more">{`+${tier.nfts.length - 3} more`}</span>
-                        )}
-                      </div>
-                    )
-                )}
+                {tier.nfts.map((nft, index) => (
+                  <div className="nft__image" key={nft.id}>
+                    <img src={nft.thumbnail_url} alt={nft.name} />
+                    {tier.nfts.length > 3 && (
+                      <span className="show__more">{`+${tier.nfts.length - 3} more`}</span>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
             <div className="tier__details">

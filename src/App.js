@@ -176,7 +176,7 @@ const App = () => {
                 <Route exact path="/collection/:collectionAddress">
                   <Collection />
                 </Route>
-                <Route exact path="/:artist/:auction">
+                <Route exact path="/:artistUsername/:auctionName">
                   <AuctionLandingPage />
                 </Route>
                 <Route path="*">

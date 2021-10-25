@@ -14,6 +14,8 @@ const GET_AVAILABLE_NFTS = `${process.env.REACT_APP_API_BASE_URL}/api/nfts/my-nf
 const ADD_DEPLOY_INFO = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/deploy`;
 const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/depositNfts`;
 const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
+const GET_AUCTION_LANDING_PAGE = (username, auctionName) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${username}/${auctionName}`;
 
 export const createAuction = async ({
   name,
@@ -309,6 +311,19 @@ export const withdrawNfts = async (body) => {
   };
 
   const request = await fetch(WITHDRAW_NFTS_FROM_AUCTION, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getAuctionLandingPage = async (username, auctionName) => {
+  const requestOptions = {
+    method: 'get',
+  };
+
+  const url = GET_AUCTION_LANDING_PAGE(username, auctionName);
+  const request = await fetch(url, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 
