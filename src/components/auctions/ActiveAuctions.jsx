@@ -19,7 +19,7 @@ import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
-  const { ethPrice } = useAuthContext();
+  const { ethPrice, loggedInArtist } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
   const [highestBid, setHighestBid] = useState(null);
   const [lowerBid, setLowerBid] = useState(null);
@@ -102,7 +102,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
       setShownActionId(null);
     }
   };
-
+  console.log(myAuctions);
   return (
     <div className="active-auctions">
       <div className="input-search">
@@ -164,10 +164,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                                   )}
                                   {activeAuction.link ? (
                                     <CopyToClipboard
-                                      text={`${activeAuction.link.replace(
-                                        'universe.xyz',
-                                        window.location.origin
-                                      )}`}
+                                      text={`${window.location.origin}/${loggedInArtist.name}/${activeAuction.link}`}
                                       onCopy={() => {
                                         setCopied({
                                           state: true,
@@ -198,7 +195,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               <Button
                                 className="light-border-button hide__on__mobile"
                                 onClick={() =>
-                                  history.push(activeAuction.link.replace('universe.xyz', ''))
+                                  history.push(`/${loggedInArtist.name}/${activeAuction.link}`)
                                 }
                               >
                                 <span>Go to landing page</span>
@@ -223,7 +220,7 @@ const ActiveAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               <Button
                                 className="light-border-button"
                                 onClick={() =>
-                                  history.push(activeAuction.link.replace('universe.xyz', ''))
+                                  history.push(`/${loggedInArtist.name}/${activeAuction.link}`)
                                 }
                               >
                                 <span>Go to landing page</span>

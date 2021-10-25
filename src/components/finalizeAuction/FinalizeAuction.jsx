@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
-import { utils } from 'ethers';
+import { utils, Contract } from 'ethers';
 import SuccessPopup from '../popups/SuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
@@ -14,7 +14,6 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { createContractInstanceFromAddress } from '../../utils/helpers/pureFunctions/minting';
 import ApproveCollection from './ApproveCollection';
 import { addDeployInfoToAuction, depositNfts, withdrawNfts } from '../../utils/api/auctions';
 import LoadingImage from '../general/LoadingImage';
@@ -22,6 +21,7 @@ import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { calculateTransactions } from '../../utils/helpers/depositNfts';
 import DepositNftsSection from './DepositNftsSection';
+import ERC721ABI from '../../contracts/ERC721.json';
 
 const FinalizeAuction = () => {
   const history = useHistory();
@@ -78,12 +78,7 @@ const FinalizeAuction = () => {
       setCollections(auction.collections);
       for (let i = 0; i < auction.collections.length; i += 1) {
         const collection = auction.collections[i];
-        const contract = createContractInstanceFromAddress(
-          collection.address,
-          universeERC721CoreContract,
-          universeERC721FactoryContract,
-          signer
-        );
+        const contract = new Contract(collection.address, ERC721ABI, signer);
         // eslint-disable-next-line no-await-in-loop
         const isApproved = await contract.isApprovedForAll(
           address,
@@ -134,9 +129,16 @@ const FinalizeAuction = () => {
           royalty.percentAmount * 1000,
         ]);
       }
+      const startTime = (
+        new Date(new Date(auction.startDate).toUTCString()).getTime() / 1000
+      ).toFixed(0);
+
+      const endTime = (new Date(new Date(auction.endDate).toUTCString()).getTime() / 1000).toFixed(
+        0
+      );
       const tx = await universeAuctionHouseContract.createAuction([
-        new Date(auction.startDate).getTime(),
-        new Date(auction.endDate).getTime(),
+        startTime,
+        endTime,
         bidExtendTime * 60,
         numberOfSlots,
         auction.tokenAddress,
@@ -175,12 +177,8 @@ const FinalizeAuction = () => {
   const handleApproveCollection = async (collectionAddress, setIsApproving) => {
     try {
       setIsApproving(true);
-      const contract = createContractInstanceFromAddress(
-        collectionAddress,
-        universeERC721CoreContract,
-        universeERC721FactoryContract,
-        signer
-      );
+
+      const contract = new Contract(collectionAddress, ERC721ABI, signer);
 
       const tx = await contract.setApprovalForAll(
         process.env.REACT_APP_UNIVERSE_AUCTION_HOUSE_ADDRESS,

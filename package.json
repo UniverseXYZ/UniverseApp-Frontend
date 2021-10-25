@@ -57,6 +57,7 @@
     "react-scroll": "^1.8.4",
     "react-select": "^5.1.0",
     "react-slick": "^0.28.1",
+    "react-use-websocket": "^2.8.0",
     "react-uuid": "^1.0.2",
     "reactjs-popup": "^2.0.4",
     "use-constant": "^1.1.0",

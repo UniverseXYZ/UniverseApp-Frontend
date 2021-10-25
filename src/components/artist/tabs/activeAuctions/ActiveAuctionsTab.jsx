@@ -7,7 +7,7 @@ import Exclamation from '../../../../assets/images/Exclamation.svg';
 import ActiveAuctionsCard from '../../../auctionsCard/ActiveAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
-import { isAfterNow } from '../../../../utils/dates';
+import { isAfterNow, isBeforeNow } from '../../../../utils/dates';
 
 const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions, setAuction } = useAuctionContext();
@@ -16,7 +16,7 @@ const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
 
   const artistActiveAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => item.launch && isAfterNow(item.endDate))
+      ? myAuctions.filter((item) => isAfterNow(item.startDate) && isBeforeNow(item.endDate))
       : PLACEHOLDER_ACTIVE_AUCTIONS;
 
   return artistActiveAuctions.length ? (

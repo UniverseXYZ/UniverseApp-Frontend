@@ -134,11 +134,11 @@ const MyAuction = () => {
 
         {selectedTabIndex === tabs.ActiveAuctions && (
           <>
-            {activeAuctionsMock.filter(
-              (item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate)
+            {myAuctions.filter(
+              (item) => item && isAfterNow(item.startDate) && isBeforeNow(item.endDate)
             ).length ? (
               <ActiveAuctions
-                myAuctions={activeAuctionsMock}
+                myAuctions={myAuctions}
                 setMyAuctions={setMyAuctions}
                 setAuction={setAuction}
               />
