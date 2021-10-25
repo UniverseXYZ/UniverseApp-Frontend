@@ -222,7 +222,7 @@ const Create = () => {
         rewardTiers: [
           ...auction?.rewardTiers,
           {
-            id: uuid(),
+            id: null, // Tiers with no IDs attached to them indicates that those are new tiers, that needs to be added to the Auction
             name: values.name,
             winners: Number(values.numberOfWinners),
             nftsPerWinner: values.nftsPerWinner || 0,

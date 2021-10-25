@@ -23,9 +23,12 @@ import LoadingPopup from '../popups/LoadingPopup.jsx';
 import { AuctionCreate, AuctionUpdate } from '../../userFlows/AuctionCreate';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import { useAuctionContext } from '../../contexts/AuctionContext';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 const AuctionReview = () => {
   const { auction, bidtype, options, myAuctions, setMyAuctions } = useAuctionContext();
+  const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
+
   const location = useLocation();
   const history = useHistory();
   const [hideIcon, setHideIcon] = useState(false);
@@ -65,8 +68,14 @@ const AuctionReview = () => {
 
       if (res?.id) {
         document.getElementById('congrats-hidden-btn').click();
-      } else {
-        console.error('an error occurred');
+      } else if (res.error) {
+        document.getElementById('congrats-hidden-btn').click();
+        const errorMsg =
+          res?.errors[0]?.message || 'An error occured, please check the network tab !';
+
+        setShowError(true);
+        setErrorTitle('Failed to update/create auction !');
+        setErrorBody(errorMsg);
       }
     }
   };

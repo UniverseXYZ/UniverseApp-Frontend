@@ -17,6 +17,7 @@ const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/au
 const GET_AUCTION_LANDING_PAGE = (username, auctionName) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${username}/${auctionName}`;
 const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/bid`;
+const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
 
 export const createAuction = async ({
   name,
@@ -345,5 +346,20 @@ export const placeAuctionBid = async (body) => {
 
   const result = await request.text().then((data) => JSON.parse(data));
 
+  return result;
+};
+
+export const addRewardTier = async (body) => {
+  const requestOptions = {
+    method: 'post',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+    body: JSON.stringify(body),
+  };
+
+  const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
+  const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };
