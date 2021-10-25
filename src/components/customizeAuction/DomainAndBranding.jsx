@@ -27,6 +27,16 @@ const BACKGROUND_IMAGE_DIMENSIONS = {
   height: 720,
 };
 
+const MIN_PROMO_IMAGE_SIZE = {
+  width: 1080,
+  height: 1080,
+};
+
+const MIN_BACKGROUND_IMAGE_SIZE = {
+  width: 1280,
+  height: 720,
+};
+
 const DomainAndBranding = ({
   values,
   onChange,
@@ -47,6 +57,8 @@ const DomainAndBranding = ({
   const [validLink, setValidLink] = useState(true);
   const [validHeadline, setValidHeadline] = useState(true);
   const [backgroundImage, setBackgroundImage] = useState(null);
+  const [promoImageError, setPromoImageError] = useState(false);
+  const [backgroundImageError, setBackgroundImageError] = useState(false);
   const [inputStyle, setInputStyle] = useState('');
 
   useEffect(() => {
@@ -125,7 +137,36 @@ const DomainAndBranding = ({
     });
 
     // always show an image preview, so the user is able to remove an incorrect image
-    uploadFile(file, imageType);
+    handleImageError(imageType, fileValid, file);
+    if (fileValid) {
+      // Read the contents of Image File.
+      reader.readAsDataURL(file);
+      reader.onload = function onload(e) {
+        const image = new Image();
+        image.src = e.target.result;
+        image.onload = function onloade() {
+          const { height, width } = this;
+          if (imageType === PROMO_IMAGE) {
+            if (height < MIN_PROMO_IMAGE_SIZE.height || width < MIN_PROMO_IMAGE_SIZE.width) {
+              setPromoImageError(true);
+            } else {
+              setPromoImageError(false);
+              uploadFile(file, imageType);
+            }
+          } else if (imageType === BACKGROUND_IMAGE) {
+            if (
+              height < MIN_BACKGROUND_IMAGE_SIZE.height ||
+              width < MIN_BACKGROUND_IMAGE_SIZE.width
+            ) {
+              setBackgroundImageError(true);
+            } else {
+              setBackgroundImageError(false);
+              uploadFile(file, imageType);
+            }
+          }
+        };
+      };
+    }
   };
 
   const onDrop = (e, imageType) => {
@@ -244,7 +285,11 @@ const DomainAndBranding = ({
                   </Animated>
                 )}
               </div>
-              <div className={`upload__promo__body ${invalidPromoImage ? 'error-inp' : ''}`}>
+              <div
+                className={`upload__promo__body ${
+                  invalidPromoImage || promoImageError ? 'error-inp' : ''
+                }`}
+              >
                 <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                 <h5>Drop your file here</h5>
                 <p>(min 1080x1080px, 1:1 square ratio, PNG/JPEG, max 3mb)</p>
@@ -280,6 +325,9 @@ const DomainAndBranding = ({
                 </div>
                 {invalidPromoImage && (
                   <p className="error-message">{auctionPagePromoImageErrorMessage}</p>
+                )}
+                {promoImageError && (
+                  <p className="error-message">File must be at least 1080x1080px</p>
                 )}
               </div>
             </div>
@@ -336,7 +384,9 @@ const DomainAndBranding = ({
                 </div>
               </div>
               <div
-                className={`upload__background__body ${invalidBackgroundImage ? 'error-inp' : ''}`}
+                className={`upload__background__body ${
+                  invalidBackgroundImage || backgroundImageError ? 'error-inp' : ''
+                }`}
               >
                 <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
                 <h5>Drop your file here</h5>
@@ -391,6 +441,9 @@ const DomainAndBranding = ({
                 </div>
                 {invalidBackgroundImage && (
                   <p className="error-message">{auctionPageBackgroundImageErrorMessage}</p>
+                )}
+                {backgroundImageError && (
+                  <p className="error-message">File must be at least 1280x720px</p>
                 )}
               </div>
             </div>

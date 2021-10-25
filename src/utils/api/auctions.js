@@ -74,7 +74,7 @@ export const editAuction = async ({
   const requestBody = {
     id,
     name,
-    startingBid: startingBid ? parseInt(startingBid, 2) : null,
+    startingBid: Number(startingBid) || 0,
     tokenAddress,
     tokenSymbol,
     tokenDecimals,

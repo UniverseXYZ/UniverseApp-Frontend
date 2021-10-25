@@ -147,13 +147,13 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
   return (
     <div
       className={`auction__details__section ${
-        selectedAuction.auction.backgroundImage ? 'has--background' : ''
+        selectedAuction.auction.backgroundImageUrl ? 'has--background' : ''
       }`}
     >
       <div className="bg">
-        {selectedAuction.auction.backgroundImage && (
+        {selectedAuction.auction.backgroundImageUrl && (
           <img
-            src={selectedAuction.auction.backgroundImage}
+            src={selectedAuction.auction.backgroundImageUrl}
             alt={selectedAuction.auction.headline}
             style={{
               filter: selectedAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
@@ -161,7 +161,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
           />
         )}
       </div>
-      {selectedAuction.auction.backgroundImage ? <div className="overlay" /> : <></>}
+      {selectedAuction.auction.backgroundImageUrl ? <div className="overlay" /> : <></>}
       <div className="auction__details__section__container">
         {selectedAuction.moreActiveAuctions.length ? (
           <Slider {...sliderSettings}>
@@ -184,11 +184,11 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                 <div className="carousel__auction">
                   <div
                     className={`carousel__auction__image ${
-                      action.promoImage ? '' : 'show__avatar'
+                      action.promoImageUrl ? '' : 'show__avatar'
                     }`}
                   >
-                    {action.promoImage ? (
-                      <img className="original" src={action.promoImage} alt={action.headline} />
+                    {action.promoImageUrl ? (
+                      <img className="original" src={action.promoImageUrl} alt={action.headline} />
                     ) : (
                       // TODO:: here should display Artist avatar
                       <img className="artist__image" src={frankie} alt={action.headline} />
@@ -221,13 +221,13 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
             <div className="auction__details__box">
               <div
                 className={`auction__details__box__image ${
-                  selectedAuction.auction.promoImage ? '' : 'show__avatar'
+                  selectedAuction.auction.promoImageUrl ? '' : 'show__avatar'
                 }`}
               >
-                {selectedAuction.auction.promoImage ? (
+                {selectedAuction.auction.promoImageUrl ? (
                   <img
                     className="original"
-                    src={selectedAuction.auction.promoImage}
+                    src={selectedAuction.auction.promoImageUrl}
                     alt={selectedAuction.auction.headline}
                   />
                 ) : (
@@ -288,7 +288,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                         }}
                       >
                         <span>
-                          {selectedAuction.auction.backgroundImage ? (
+                          {selectedAuction.auction.backgroundImageUrl ? (
                             <img
                               src={lightCopyIcon}
                               alt="Copy to clipboard icon"
