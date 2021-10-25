@@ -39,7 +39,7 @@ const RewardTiers = ({ auction }) => (
               </div>
               <div className="tier__info">
                 <span>Bidders #10</span>
-                {!tier.customNFTs ? (
+                {tier.nftsPerWinner > 0 ? (
                   <span>{`${tier.nftsPerWinner} NFTs per winner`}</span>
                 ) : (
                   <span className="custom--nfts">Different NFTs per winner</span>
@@ -55,7 +55,7 @@ const RewardTiers = ({ auction }) => (
                     </button>
                   }
                 >
-                  {(close) => <PreviewNFTsPopup onClose={close} onTier={tier} />}
+                  {(close) => <PreviewNFTsPopup onClose={close} onTier={tier} auction={auction} />}
                 </Popup>
               </div>
             </div>
