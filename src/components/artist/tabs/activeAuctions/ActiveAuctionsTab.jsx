@@ -16,7 +16,11 @@ const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
 
   const artistActiveAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => item.launch && isAfterNow(item.endDate))
+      ? myAuctions.filter(
+          (item) =>
+            moment(item.startDate).isAfter(moment.now()) &&
+            moment(item.endDate).isBefore(moment.now())
+        )
       : PLACEHOLDER_ACTIVE_AUCTIONS;
 
   return artistActiveAuctions.length ? (

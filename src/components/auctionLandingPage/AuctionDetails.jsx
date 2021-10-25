@@ -20,7 +20,7 @@ import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 
-const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
+const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => {
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
@@ -366,24 +366,13 @@ const AuctionDetails = ({ onAuction, bidders, setBidders }) => {
                       )}
                     </div>
                     <div className="place__bid">
-                      <Popup
-                        trigger={
-                          <button type="button" className="light-button">
-                            Place a bid
-                          </button>
-                        }
+                      <button
+                        onClick={() => setShowBidPopup(true)}
+                        type="button"
+                        className="light-button"
                       >
-                        {(close) => (
-                          <PlaceBidPopup
-                            onClose={close}
-                            onAuctionId={selectedAuction.auction.id}
-                            onAuctionTitle={selectedAuction.auction.headline}
-                            onArtistName={selectedAuction.artist.displayName}
-                            onBidders={bidders}
-                            onSetBidders={setBidders}
-                          />
-                        )}
-                      </Popup>
+                        Place a bid
+                      </button>
                       {currentBid && currentBid.aucionId === selectedAuction.auction.id ? (
                         <div className="cacnel__bid">
                           <Popup
@@ -539,6 +528,7 @@ AuctionDetails.propTypes = {
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setBidders: PropTypes.func.isRequired,
+  setShowBidPopup: PropTypes.func.isRequired,
 };
 
 export default AuctionDetails;

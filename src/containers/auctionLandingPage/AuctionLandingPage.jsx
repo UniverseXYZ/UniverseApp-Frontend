@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
+import Popup from 'reactjs-popup';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
@@ -12,6 +13,8 @@ import NotFound from '../../components/notFound/NotFound.jsx';
 import { useThemeContext } from '../../contexts/ThemeContext';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { getAuctionLandingPage } from '../../utils/api/auctions';
+import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
+import LoadingPopup from '../../components/popups/LoadingPopup';
 
 const AuctionLandingPage = () => {
   // const { auction } = useAuctionContext();
@@ -19,11 +22,16 @@ const AuctionLandingPage = () => {
   // const location = useLocation();
   // const artist = selectedAuction?.artist;
   // const selectedAuction = auction || null;
+
+  // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
 
   const [auction, setAuction] = useState(null);
   const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showBidPopup, setShowBidPopup] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+
   const getAuctionData = async () => {
     const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
     console.log(auctionData);
@@ -38,11 +46,21 @@ const AuctionLandingPage = () => {
 
   return auction ? (
     <div className="auction__landing__page">
-      <AuctionDetails onAuction={auction} bidders={bidders} setBidders={setBidders} />
+      <AuctionDetails
+        onAuction={auction}
+        bidders={bidders}
+        setBidders={setBidders}
+        setShowBidPopup={setShowBidPopup}
+      />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />
       <AuctionOwnerDetails artist={auction.artist} />
-      <PlaceBid auction={auction} bidders={bidders} setBidders={setBidders} />
+      <PlaceBid
+        auction={auction}
+        bidders={bidders}
+        setBidders={setBidders}
+        setShowBidPopup={setShowBidPopup}
+      />
       {auction.artist && auction.artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
@@ -55,6 +73,24 @@ const AuctionLandingPage = () => {
       ) : (
         <></>
       )}
+      <Popup open={showBidPopup} closeOnDocumentClick={false}>
+        <PlaceBidPopup
+          onClose={() => setShowBidPopup(false)}
+          setShowLoading={setShowLoading}
+          auction={auction.auction}
+          rewardTiers={auction.rewardTiers}
+          artistName={auction.artist.displayName}
+          onBidders={auction.bids}
+          onSetBidders={setBidders}
+        />
+      </Popup>
+      <Popup open={showLoading} closeOnDocumentClick={false}>
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          onClose={() => setShowLoading(false)}
+          contractInteraction
+        />
+      </Popup>
     </div>
   ) : !loading ? (
     <NotFound />
