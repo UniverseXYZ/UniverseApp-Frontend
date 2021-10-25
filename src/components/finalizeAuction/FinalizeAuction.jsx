@@ -134,9 +134,13 @@ const FinalizeAuction = () => {
           royalty.percentAmount * 1000,
         ]);
       }
+      // const startTime = (new Date(auction.startDate).getTime() / 100).toFixed(0);
+      // TODO: We have to adjust based on time zone
+      const startTime = +(new Date().getTime() / 1000 + 11000).toFixed(0);
+      const endTime = +(new Date(auction.endDate).getTime() / 1000).toFixed(0);
       const tx = await universeAuctionHouseContract.createAuction([
-        new Date(auction.startDate).getTime(),
-        new Date(auction.endDate).getTime(),
+        startTime,
+        endTime,
         bidExtendTime * 60,
         numberOfSlots,
         auction.tokenAddress,
