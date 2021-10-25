@@ -90,3 +90,20 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
     },
   };
 };
+
+/**
+ *
+ * @param {*} file (image)
+ * @param {*} cb
+ */
+export const getImageDimensions = (file, cb) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function onload(e) {
+    const image = new Image();
+    image.src = e.target.result;
+    image.onload = function imageOnload() {
+      cb(this);
+    };
+  };
+};

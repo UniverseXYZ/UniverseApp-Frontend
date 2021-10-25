@@ -7,7 +7,13 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
-import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
+import { auctionPageTierImageErrorMessage } from '../../utils/helpers.js';
+import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
+
+const TIER_IMAGE_DIMENSIONS = {
+  width: 800,
+  height: 800,
+};
 
 const RewardTiersAuction = ({
   values,
@@ -50,8 +56,8 @@ const RewardTiersAuction = ({
     );
   };
 
-  const handleImageError = (tierId, fileValid) => {
-    if (!fileValid) {
+  const handleImageError = (tierId, fileValid, dimensionsValid) => {
+    if (!fileValid || !dimensionsValid) {
       setInvalidImageIds([...invalidImageIds, tierId]);
     } else {
       const invalidImages = invalidImageIds.filter((id) => id !== tierId);
@@ -59,11 +65,19 @@ const RewardTiersAuction = ({
     }
   };
 
-  const validateFile = (file, tierId) => {
+  const validateFile = async (file, tierId) => {
     const fileValid =
       (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
 
-    handleImageError(tierId, fileValid);
+    getImageDimensions(file, ({ width, height }) => {
+      let dimensionsValid = false;
+      if (width >= TIER_IMAGE_DIMENSIONS.width && height >= TIER_IMAGE_DIMENSIONS.height) {
+        dimensionsValid = true;
+      }
+      handleImageError(tierId, fileValid, dimensionsValid);
+    });
+
+    // always show an image preview, so the user is able to remove an incorrect image
     handleUploadImage(file, tierId);
   };
 
@@ -202,7 +216,9 @@ const RewardTiersAuction = ({
                       </div>
                     </div>
                   </div>
-                  {errorMessage && <p className="error-message">{auctionPageImageErrorMessage}</p>}
+                  {errorMessage && (
+                    <p className="error-message">{auctionPageTierImageErrorMessage}</p>
+                  )}
                 </div>
               </div>
             </div>

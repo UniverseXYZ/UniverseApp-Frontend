@@ -10,10 +10,22 @@ import backgroundDef from '../../assets/images/background.svg';
 import backgroundTransparent from '../../assets/images/background1.svg';
 import closeIcon from '../../assets/images/close-menu.svg';
 import { useAuthContext } from '../../contexts/AuthContext.jsx';
-import { auctionPageImageErrorMessage } from '../../utils/helpers.js';
+import {
+  auctionPageBackgroundImageErrorMessage,
+  auctionPagePromoImageErrorMessage,
+} from '../../utils/helpers.js';
+import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
 
 const PROMO_IMAGE = 'promo-image';
 const BACKGROUND_IMAGE = 'background-image';
+const PROMO_IMAGE_DIMENSIONS = {
+  width: 1080,
+  height: 1080,
+};
+const BACKGROUND_IMAGE_DIMENSIONS = {
+  width: 1280,
+  height: 720,
+};
 
 const DomainAndBranding = ({
   values,
@@ -74,15 +86,15 @@ const DomainAndBranding = ({
     }
   };
 
-  const handleImageError = (imageType, fileValid) => {
+  const handleImageError = (imageType, fileValid, dimensionsValid) => {
     if (imageType === PROMO_IMAGE) {
-      if (fileValid) {
+      if (fileValid && dimensionsValid) {
         setInvalidPromoImage(false);
       } else {
         setInvalidPromoImage(true);
       }
     } else if (imageType === BACKGROUND_IMAGE) {
-      if (fileValid) {
+      if (fileValid && dimensionsValid) {
         setInvalidBackgroundImage(false);
       } else {
         setInvalidBackgroundImage(true);
@@ -93,8 +105,25 @@ const DomainAndBranding = ({
   const validateFile = (file, imageType) => {
     const fileValid =
       (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+    const reader = new FileReader();
 
-    handleImageError(imageType, fileValid);
+    getImageDimensions(file, ({ width, height }) => {
+      let dimensionsValid = false;
+      if (imageType === PROMO_IMAGE) {
+        if (width >= PROMO_IMAGE_DIMENSIONS.width && height >= PROMO_IMAGE_DIMENSIONS.height) {
+          dimensionsValid = true;
+        }
+      } else if (imageType === BACKGROUND_IMAGE) {
+        if (
+          width >= BACKGROUND_IMAGE_DIMENSIONS.width &&
+          height >= BACKGROUND_IMAGE_DIMENSIONS.height
+        ) {
+          dimensionsValid = true;
+        }
+      }
+      handleImageError(imageType, fileValid, dimensionsValid);
+    });
+
     // always show an image preview, so the user is able to remove an incorrect image
     uploadFile(file, imageType);
   };
@@ -250,7 +279,7 @@ const DomainAndBranding = ({
                   </div>
                 </div>
                 {invalidPromoImage && (
-                  <p className="error-message">{auctionPageImageErrorMessage}</p>
+                  <p className="error-message">{auctionPagePromoImageErrorMessage}</p>
                 )}
               </div>
             </div>
@@ -361,7 +390,7 @@ const DomainAndBranding = ({
                   </div>
                 </div>
                 {invalidBackgroundImage && (
-                  <p className="error-message">{auctionPageImageErrorMessage}</p>
+                  <p className="error-message">{auctionPageBackgroundImageErrorMessage}</p>
                 )}
               </div>
             </div>
