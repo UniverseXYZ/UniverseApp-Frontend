@@ -13,6 +13,7 @@ import Pagination from '../pagination/SimplePaginations';
 import { isBeforeNow } from '../../utils/dates';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getPastAuctions } from '../../utils/api/auctions';
+import NoAuctionsFound from './NoAuctionsFound';
 
 const PastAuctions = () => {
   const { ethPrice } = useAuthContext();
@@ -26,11 +27,16 @@ const PastAuctions = () => {
   const [page, setPage] = useState(0);
   const [searchByName, setSearchByName] = useState('');
   const [pastAuctions, setPastAuctions] = useState([]);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(async () => {
     try {
       const response = await getPastAuctions();
-      setPastAuctions(response.auctions || []);
+      if (!response.auctions?.length) {
+        setNotFound(true);
+      } else {
+        setPastAuctions(response.auctions);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -273,15 +279,18 @@ const PastAuctions = () => {
             </div>
           );
         })}
-      <div className="pagination__container">
-        <Pagination
-          data={pastAuctions}
-          perPage={perPage}
-          setOffset={setOffset}
-          page={page}
-          setPage={setPage}
-        />
-      </div>
+      {notFound && <NoAuctionsFound title="No past auctions found" />}
+      {pastAuctions.length ? (
+        <div className="pagination__container">
+          <Pagination
+            data={pastAuctions}
+            perPage={perPage}
+            setOffset={setOffset}
+            page={page}
+            setPage={setPage}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
