@@ -16,7 +16,7 @@ const ApproveCollection = ({ collection, approveCollection, isApproved, auctionO
         <img src={universeIcon} alt={collection?.name} />
       ) : collection.bgImage ? (
         <img src={URL.createObjectURL(collection.bgImage)} alt={collection?.name} />
-      ) : typeof collection.previewImage === 'string' && collection.previewImage.startsWith('#') ? (
+      ) : !collection.previewImage ? (
         <div
           className="random__bg__color"
           style={{ backgroundColor: getCollectionBackgroundColor(collection) }}
