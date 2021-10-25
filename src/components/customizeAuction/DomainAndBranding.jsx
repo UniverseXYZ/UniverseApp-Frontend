@@ -50,7 +50,7 @@ const DomainAndBranding = ({
   const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
   const [blurInfo, setBlurInfo] = useState(false);
-  const [auctionLink, setAuctionLink] = useState(values.link.split('/')[2] || '');
+  const [auctionLink, setAuctionLink] = useState(values.link);
 
   const inputPromo = useRef(null);
   const inputBackground = useRef(null);
@@ -77,7 +77,7 @@ const DomainAndBranding = ({
     setAuctionLink(e.target.value.replace(' ', '-'));
     onChange((prevValues) => ({
       ...prevValues,
-      link: `universe.xyz/${loggedInArtist.name.split(' ')[0].toLowerCase()}/${e.target.value}`,
+      link: e.target.value,
       status: e.target.value.length > 0 ? 'filled' : 'empty',
     }));
     setValidLink(e.target.value.trim().length !== 0);

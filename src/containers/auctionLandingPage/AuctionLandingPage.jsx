@@ -15,6 +15,8 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { getAuctionLandingPage } from '../../utils/api/auctions';
 import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
+import { getEthPriceCoingecko } from '../../utils/api/etherscan';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const AuctionLandingPage = () => {
   // const { auction } = useAuctionContext();
@@ -25,19 +27,30 @@ const AuctionLandingPage = () => {
 
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
-
+  const { address } = useAuthContext();
   const [auction, setAuction] = useState(null);
   const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showBidPopup, setShowBidPopup] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [rewardTiersSlots, setRewardTiersSlots] = useState(false);
+  const [ethPrice, setEthPrice] = useState(0);
+  const [currentBid, setCurrentBid] = useState(null);
+
+  useEffect(() => {
+    const currBidder = bidders.find((bidder) => bidder.address === address);
+    if (currBidder) {
+      setCurrentBid(currBidder);
+    }
+    console.log('Bidders:');
+    console.log(bidders);
+  }, [bidders, address]);
 
   const getAuctionData = async () => {
     const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
     console.log(auctionData);
     setAuction(auctionData);
-    setBidders(auctionData.bids);
+    setBidders(auctionData.bidders);
     setLoading(false);
 
     const tierSlots = [];
@@ -49,8 +62,14 @@ const AuctionLandingPage = () => {
     setRewardTiersSlots(tierSlots);
   };
 
+  const getEthPrice = async () => {
+    const price = await getEthPriceCoingecko();
+    setEthPrice(price?.market_data?.current_price?.usd);
+  };
+
   useEffect(() => {
     getAuctionData();
+    getEthPrice();
   }, []);
 
   return auction ? (
@@ -61,6 +80,9 @@ const AuctionLandingPage = () => {
         setBidders={setBidders}
         setShowBidPopup={setShowBidPopup}
         rewardTiersSlots={rewardTiersSlots}
+        ethPrice={ethPrice}
+        currentBid={currentBid}
+        setCurrentBid={setCurrentBid}
       />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />
@@ -92,6 +114,8 @@ const AuctionLandingPage = () => {
           artistName={auction.artist.displayName}
           onBidders={bidders}
           onSetBidders={setBidders}
+          currentBid={currentBid}
+          setCurrentBid={setCurrentBid}
         />
       </Popup>
       <Popup open={showLoading} closeOnDocumentClick={false}>

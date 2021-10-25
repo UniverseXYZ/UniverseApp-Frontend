@@ -21,12 +21,14 @@ const PlaceBidPopup = ({
   onSetBidders,
   rewardTiers,
   setShowLoading,
+  currentBid,
+  setCurrentBid,
 }) => {
   const floatNumberRegex = /([0-9]*[.])?[0-9]+/;
-  const { loggedInArtist, yourBalance, setYourBalance, universeAuctionHouseContract } =
+  const { yourBalance, setYourBalance, universeAuctionHouseContract, address, loggedInArtist } =
     useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
-
+  console.log(loggedInArtist);
   const [yourBid, setYourBid] = useState('');
   const [showServiceFeeInfo, setShowServiceFeeInfo] = useState(false);
   const [showTotalBidAmountInfo, setShowTotalBidAmountInfo] = useState(false);
@@ -77,7 +79,23 @@ const PlaceBidPopup = ({
     console.log(placeBidResult);
     setShowLoading(false);
     setShowSuccess(true);
-    onSetBidders([...onBidders, placeBidResult.bid]);
+  };
+
+  const updateBids = () => {
+    const newBidders = [...onBidders];
+    const existingBidderIndex = newBidders.map((bidder) => bidder.address).indexOf(address);
+    if (existingBidderIndex >= 0) {
+      newBidders[existingBidderIndex].amount = +newBidders[existingBidderIndex].amount + +yourBid;
+    } else {
+      newBidders.push({
+        id: loggedInArtist.id,
+        amount: +yourBid,
+        displayName: loggedInArtist.name,
+        address,
+      });
+    }
+    newBidders.sort((a, b) => b.amount - a.amount);
+    onSetBidders(newBidders);
   };
 
   const handlePlaceBidClick = async () => {
@@ -100,10 +118,6 @@ const PlaceBidPopup = ({
       setError('Bid must be greater or equal to the starting bid');
       return;
     }
-    //  else if (!loggedInArtist.name) {
-    //   setError('Please first fill in your profile.');
-    // }
-
     setError('');
 
     // TODO: Check if bid is winning any slot
@@ -119,21 +133,19 @@ const PlaceBidPopup = ({
           utils.parseEther(yourBid)
         );
       }
-
       setShowLoading(true);
       setActiveTxHashes([bidTx.hash]);
       const txReceipt = await bidTx.wait();
-
       if (txReceipt.status === 1) {
+        // This is temp until the scraper handles bids
         await saveBidToBE();
+        updateBids();
         setShowSuccess(true);
         setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
-
         setShowLoading(false);
         setActiveTxHashes([]);
       }
       // await saveBidToBE();
-      // This is temp until the scraper handles bids
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
@@ -237,7 +249,7 @@ const PlaceBidPopup = ({
                 onMouseEnter={() => setShowTotalBidAmountInfo(true)}
                 onMouseLeave={() => setShowTotalBidAmountInfo(false)}
               >
-                <span>Total bid amount</span>
+                <span>Final bid amount</span>
                 <div className="total__bid__amount">
                   <img src={infoIcon} alt="Info" />
                   {showTotalBidAmountInfo ? (
@@ -254,6 +266,12 @@ const PlaceBidPopup = ({
                 </div>
               </div>
               <div className="value">{`${yourBid || 0} ETH`}</div>
+            </div>
+            <div className="total_row">
+              <div className="label">
+                <span>Total bid</span>
+              </div>
+              <div className="value">{`${+yourBid + (+currentBid?.amount || 0)} ETH`}</div>
             </div>
           </div>
           <div className="place__bid__btn">
@@ -300,6 +318,8 @@ PlaceBidPopup.propTypes = {
   onSetBidders: PropTypes.func.isRequired,
   auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
+  currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setCurrentBid: PropTypes.func.isRequired,
 };
 
 export default PlaceBidPopup;

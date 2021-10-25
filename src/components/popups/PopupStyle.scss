@@ -341,22 +341,11 @@
       grid-template-columns: 1fr;
       grid-gap: 12px;
 
-      .platinum {
-        border: 1px solid #80ccdf;
+      bid__list {
         padding: 10px 20px;
         border-radius: 12px;
       }
-      .gold {
-        border: 1px solid #ddbc45;
-        padding: 10px 20px;
-        border-radius: 12px;
-      }
-      .silver {
-        border: 1px solid #bcbcbc;
-        padding: 10px 20px;
-        border-radius: 12px;
-      }
-
+      
       .each--bid {
         padding: 5px 0;
         &:not(:last-child) {

@@ -19,9 +19,20 @@ import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
+import { shortenEthereumAddress } from '../../utils/helpers/format.js';
+import AuctionCountdown from './AuctionCountdown.jsx';
 
-const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewardTiersSlots }) => {
-  const { loggedInArtist } = useAuthContext();
+const AuctionDetails = ({
+  onAuction,
+  bidders,
+  setBidders,
+  setShowBidPopup,
+  rewardTiersSlots,
+  ethPrice,
+  currentBid,
+  setCurrentBid,
+}) => {
+  const { loggedInArtist, address } = useAuthContext();
   const history = useHistory();
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
@@ -35,13 +46,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
   });
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [currentBid, setCurrentBid] = useState(null);
-  const [countdown, setCountdown] = useState({
-    days: null,
-    hours: null,
-    minutes: null,
-    seconds: null,
-  });
 
   const convertDate = (date) => {
     const dLeft = (new Date(date) - Date.now()) / 1000;
@@ -56,36 +60,6 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
         )}m : ${parseInt(secondsLeft, 10)}s`
       : false;
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const d = (new Date(selectedAuction.auction.endDate) - Date.now()) / 1000;
-      const days = Math.floor(d / 86400);
-      const hours = Math.floor(d / 3600) % 24;
-      const minutes = Math.floor(d / 60) % 60;
-      const seconds = d % 60;
-      if (days < 0) {
-        clearInterval(interval);
-        setSelectedAuctionEnded(true);
-      } else {
-        setSelectedAuctionEnded(false);
-        setCountdown({
-          days: parseInt(days, 10),
-          hours: parseInt(hours, 10),
-          minutes: parseInt(minutes, 10),
-          seconds: parseInt(seconds, 10),
-        });
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [selectedAuction]);
-
-  useEffect(() => {
-    const res = bidders.filter((bidder) => bidder.user.id === loggedInArtist.id);
-    if (res.length) {
-      setCurrentBid(res[res.length - 1]);
-    }
-  }, [bidders]);
 
   useEffect(() => {
     // Here need to get Auction details
@@ -131,6 +105,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
       next.appendChild(nextIcon);
     }
   }, []);
+
   const getRewardTierSpanStyles = (rewardTier) => {
     if (rewardTier.color) {
       return {
@@ -144,6 +119,8 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
       border: '1px solid #bcbcbc',
     };
   };
+  console.log('Current bid:');
+  console.log(currentBid);
   return (
     <div
       className={`auction__details__section ${
@@ -255,18 +232,10 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                 </div>
                 <div className="auction__ends__in">
                   {!selectedAuctionEnded ? (
-                    <div className="auction__ends__in__label">
-                      <span>Auction ends in:&nbsp;</span>
-                      <div className="time">
-                        <div className="days">{`${countdown.days}d`}</div>
-                        <span>:</span>
-                        <div className="hours">{`${countdown.hours}h`}</div>
-                        <span>:</span>
-                        <div className="minutes">{`${countdown.minutes}m`}</div>
-                        <span>:</span>
-                        <div className="seconds">{`${countdown.seconds}s`}</div>
-                      </div>
-                    </div>
+                    <AuctionCountdown
+                      endDate={selectedAuction.auction.endDate}
+                      setSelectedAuctionEnded={setSelectedAuctionEnded}
+                    />
                   ) : (
                     <Animated animationIn="zoomIn">
                       <div className="auction__ended">Auction has ended</div>
@@ -319,7 +288,16 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                         </button>
                       }
                     >
-                      {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
+                      {(close) => (
+                        <BidRankingsPopup
+                          onClose={close}
+                          onBidders={bidders}
+                          rewardTiers={onAuction.rewardTiers}
+                          rewardTiersSlots={rewardTiersSlots}
+                          getRewardTierSpanStyles={getRewardTierSpanStyles}
+                          ethPrice={ethPrice}
+                        />
+                      )}
                     </Popup>
                   </div>
                   <div className="auction__details__box__top__bidders__content">
@@ -328,9 +306,9 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                         <div className="bidder" key={bidder.id}>
                           <div className="name">
                             <b>{`${index + 1}.`}</b>
-                            {bidder.user.displayName
-                              ? bidder.user.displayName
-                              : bidder.user.address}
+                            {bidder.displayName
+                              ? bidder.displayName
+                              : shortenEthereumAddress(bidder.address)}
 
                             {rewardTiersSlots[index] ? (
                               <span style={getRewardTierSpanStyles(rewardTiersSlots[index])}>
@@ -343,7 +321,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                           <div className="bid">
                             <img src={currencyETHIcon} alt="Currency" />
                             <b>{bidder.amount}</b>
-                            <span>~$48,580</span>
+                            <span>~${Math.round(bidder.amount * ethPrice)}</span>
                           </div>
                         </div>
                       ))}
@@ -351,21 +329,19 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                   </div>
                   <div className="auction__details__box__top__bidders__footer">
                     <div className="your__bid">
-                      {currentBid && currentBid.aucionId === selectedAuction.auction.id ? (
+                      {currentBid ? (
                         <span className="your__current__bid">
                           <b>
                             Your bid:
                             <img src={currencyETHIcon} alt="Currency" />
-                            {currentBid.bid}
+                            {currentBid.amount}
                           </b>
                           {`(#${
-                            bidders.findIndex(
-                              (x) => x.user.id === currentBid.artistId && x.bid === currentBid.bid
-                            ) + 1
+                            bidders.findIndex((x) => x.address === currentBid.address) + 1
                           } in the list)`}
                         </span>
                       ) : (
-                        <span className="no__bids">You haven’t any bids yet</span>
+                        <span className="no__bids">You haven&apos;t placed any bids yet</span>
                       )}
                     </div>
                     <div className="place__bid">
@@ -413,7 +389,13 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewar
                       </p>
                       <div className="view__rankings">
                         <Popup trigger={<button type="button">View rankings</button>}>
-                          {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
+                          {(close) => (
+                            <BidRankingsPopup
+                              onClose={close}
+                              onBidders={bidders}
+                              ethPrice={ethPrice}
+                            />
+                          )}
                         </Popup>
                       </div>
                     </div>
@@ -533,6 +515,9 @@ AuctionDetails.propTypes = {
   setBidders: PropTypes.func.isRequired,
   setShowBidPopup: PropTypes.func.isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  ethPrice: PropTypes.number.isRequired,
+  currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  setCurrentBid: PropTypes.func.isRequired,
 };
 
 export default AuctionDetails;
