@@ -51,9 +51,7 @@ const CustomizeAuction = () => {
   const [showPrompt, setShowPrompt] = useState(false);
   const [domainAndBranding, setDomainAndBranding] = useState({
     headline: auction.headline || '',
-    link:
-      auction.link ||
-      `universe.xyz/${loggedInArtist.universePageAddress.split(' ')[0].toLowerCase()}/`,
+    link: auction.link,
     promoImage: auction.promoImageUrl || null,
     backgroundImage: auction.backgroundImageUrl || null,
     backgroundImageBlur: auction.backgroundImageBlur || false,
@@ -104,9 +102,7 @@ const CustomizeAuction = () => {
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
     if (action === PREVIEW_ACTION || action === SAVE_PREVIEW_ACTION) {
-      history.push(_editedAuction.link.replace('universe.xyz', ''), {
-        auction: _editedAuction,
-      });
+      history.push(`${loggedInArtist.name}/${domainAndBranding.link}`);
     } else {
       setSuccessPopup(true);
     }
