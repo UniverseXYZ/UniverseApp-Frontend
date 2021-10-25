@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -10,11 +9,12 @@ import bidIcon from '../../assets/images/bid_icon.svg';
 import Input from '../input/Input.jsx';
 import copyIcon from '../../assets/images/copy1.svg';
 import '../pagination/Pagination.scss';
-import Pagination from '../pagination/Pagionation.jsx';
+import Pagination from '../pagination/SimplePaginations';
 import { isBeforeNow } from '../../utils/dates';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { getPastAuctions } from '../../utils/api/auctions';
 
-const PastAuctions = ({ myAuctions, setMyAuctions }) => {
+const PastAuctions = () => {
   const { ethPrice } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState({
@@ -23,7 +23,18 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   });
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   const [searchByName, setSearchByName] = useState('');
+  const [pastAuctions, setPastAuctions] = useState([]);
+
+  useEffect(async () => {
+    try {
+      const response = await getPastAuctions();
+      setPastAuctions(response.auctions || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   const handleSearch = (value) => {
     setSearchByName(value);
@@ -40,7 +51,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
 
   const getTotalBidsAmount = (auction) => {
     let totalBidsAmount = 0;
-    auction.bids.forEach((bid) => {
+    auction.bids?.forEach((bid) => {
       totalBidsAmount += bid.amount;
     });
     return totalBidsAmount.toFixed(2);
@@ -48,7 +59,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
 
   const getHighestWinBid = (auction) => {
     let highestWinBid = 0;
-    auction.bids.forEach((bid) => {
+    auction.bids?.forEach((bid) => {
       if (bid.amount > highestWinBid) {
         highestWinBid = bid.amount;
       }
@@ -57,13 +68,13 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
   };
 
   const getLowestBid = (auction) => {
-    let lowestBid = auction.bids[0].amount;
-    auction.bids.forEach((bid) => {
+    let lowestBid = auction.bids && auction.bids.length && auction.bids[0].amount;
+    auction.bids?.forEach((bid) => {
       if (bid.amount < lowestBid) {
         lowestBid = bid.amount;
       }
     });
-    return lowestBid.toFixed(2);
+    return lowestBid?.toFixed(2);
   };
 
   return (
@@ -80,7 +91,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
           <img src={searchIcon} alt="search" />
         </div>
       </div>
-      {myAuctions
+      {pastAuctions
         .slice(offset, offset + perPage)
         .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
         .filter((item) => item && isBeforeNow(item.endDate))
@@ -179,7 +190,7 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
                 <div className="bids first">
                   <div className="boredred-div">
                     <span className="head">Total bids</span>
-                    <span className="value">{pastAuction.bids.length}</span>
+                    <span className="value">{pastAuction.bids?.length}</span>
                   </div>
                   <div>
                     <span className="head">Highest winning bid</span>
@@ -263,15 +274,16 @@ const PastAuctions = ({ myAuctions, setMyAuctions }) => {
           );
         })}
       <div className="pagination__container">
-        <Pagination data={myAuctions} perPage={perPage} setOffset={setOffset} />
+        <Pagination
+          data={pastAuctions}
+          perPage={perPage}
+          setOffset={setOffset}
+          page={page}
+          setPage={setPage}
+        />
       </div>
     </div>
   );
-};
-
-PastAuctions.propTypes = {
-  myAuctions: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  setMyAuctions: PropTypes.func.isRequired,
 };
 
 export default PastAuctions;
