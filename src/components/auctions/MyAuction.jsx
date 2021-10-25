@@ -163,13 +163,7 @@ const MyAuction = () => {
         )}
 
         {selectedTabIndex === tabs.PastAuctions && (
-          <>
-            {pastAuctionsMock.filter((item) => item && isBeforeNow(item.endDate)).length ? (
-              <PastAuctions myAuctions={pastAuctionsMock} setMyAuctions={setMyAuctions} />
-            ) : (
-              <NoAuctionsFound title="No past auctions found" />
-            )}
-          </>
+          <PastAuctions myAuctions={pastAuctionsMock} setMyAuctions={setMyAuctions} />
         )}
       </div>
     </div>
