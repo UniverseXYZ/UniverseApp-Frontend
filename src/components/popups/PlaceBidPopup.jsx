@@ -11,6 +11,7 @@ import Button from '../button/Button.jsx';
 import Input from '../input/Input.jsx';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import { placeAuctionBid } from '../../utils/api/auctions';
 
 const PlaceBidPopup = ({
   onClose,
@@ -65,6 +66,20 @@ const PlaceBidPopup = ({
     }
   };
 
+  const saveBidToBE = async () => {
+    setShowLoading(true);
+
+    const placeBidResult = await placeAuctionBid({
+      auctionId: auction.id,
+      amount: parseFloat(yourBid),
+    });
+
+    console.log(placeBidResult);
+    setShowLoading(false);
+    setShowSuccess(true);
+    onSetBidders([...onBidders, placeBidResult.bid]);
+  };
+
   const handlePlaceBidClick = async () => {
     if (!yourBid) {
       setError('"Your bid" field is required.');
@@ -104,17 +119,21 @@ const PlaceBidPopup = ({
           utils.parseEther(yourBid)
         );
       }
+
       setShowLoading(true);
       setActiveTxHashes([bidTx.hash]);
       const txReceipt = await bidTx.wait();
 
       if (txReceipt.status === 1) {
+        await saveBidToBE();
         setShowSuccess(true);
         setYourBalance(parseFloat(yourBalance) - parseFloat(yourBid));
 
         setShowLoading(false);
         setActiveTxHashes([]);
       }
+      // await saveBidToBE();
+      // This is temp until the scraper handles bids
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);

@@ -20,7 +20,7 @@ import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import frankie from '../../assets/images/frankie.png';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 
-const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => {
+const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup, rewardTiersSlots }) => {
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
   const [selectedAuction, setSelectedAuction] = useState(onAuction);
@@ -81,11 +81,10 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
   }, [selectedAuction]);
 
   useEffect(() => {
-    const res = bidders.filter((bidder) => bidder.artistId === loggedInArtist.id);
+    const res = bidders.filter((bidder) => bidder.user.id === loggedInArtist.id);
     if (res.length) {
       setCurrentBid(res[res.length - 1]);
     }
-    bidders.sort((a, b) => b.bid - a.bid);
   }, [bidders]);
 
   useEffect(() => {
@@ -132,17 +131,19 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
       next.appendChild(nextIcon);
     }
   }, []);
-
-  const promoImageSrc =
-    selectedAuction.auction.promoImage instanceof File
-      ? URL.createObjectURL(selectedAuction.auction.promoImage)
-      : selectedAuction.auction.promoImage;
-
-  const backgroundImage =
-    selectedAuction.auction.backgroundImage instanceof File
-      ? URL.createObjectURL(selectedAuction.auction.backgroundImage)
-      : selectedAuction.auction.backgroundImage;
-
+  const getRewardTierSpanStyles = (rewardTier) => {
+    if (rewardTier.color) {
+      return {
+        color: rewardTier.color,
+        border: `1px solid ${rewardTier.color}`,
+      };
+    }
+    // TODO: Discuss default colors
+    return {
+      color: '#bcbcbc',
+      border: '1px solid #bcbcbc',
+    };
+  };
   return (
     <div
       className={`auction__details__section ${
@@ -152,7 +153,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
       <div className="bg">
         {selectedAuction.auction.backgroundImage && (
           <img
-            src={backgroundImage}
+            src={selectedAuction.auction.backgroundImage}
             alt={selectedAuction.auction.headline}
             style={{
               filter: selectedAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
@@ -226,7 +227,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
                 {selectedAuction.auction.promoImage ? (
                   <img
                     className="original"
-                    src={promoImageSrc}
+                    src={selectedAuction.auction.promoImage}
                     alt={selectedAuction.auction.headline}
                   />
                 ) : (
@@ -240,13 +241,11 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
               <div className="auction__details__box__info">
                 <h1 className="title">{selectedAuction.auction.headline}</h1>
                 <div className="artist__details">
-                  {/* // TODO:: we should display auction artist avatar here */}
                   <img
                     src={selectedAuction.artist.profileImageUrl}
                     alt={selectedAuction.artist.displayName}
                   />
                   <span>by</span>
-                  {/* // TODO:: we should push auction artist name here */}
                   <button
                     type="button"
                     onClick={() => history.push(`/${selectedAuction.artist.displayName}`)}
@@ -325,25 +324,29 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
                   </div>
                   <div className="auction__details__box__top__bidders__content">
                     <div className="five__bidders">
-                      {bidders.map(
-                        (bidder, index) =>
-                          index < 5 && (
-                            <div className="bidder" key={bidder.id}>
-                              <div className="name">
-                                <b>{`${index + 1}.`}</b>
-                                {bidder.name}
-                                <span className={bidder.rewardTier.toLocaleLowerCase()}>
-                                  {bidder.rewardTier}
-                                </span>
-                              </div>
-                              <div className="bid">
-                                <img src={currencyETHIcon} alt="Currency" />
-                                <b>{bidder.bid}</b>
-                                <span>~$48,580</span>
-                              </div>
-                            </div>
-                          )
-                      )}
+                      {bidders.slice(0, 5).map((bidder, index) => (
+                        <div className="bidder" key={bidder.id}>
+                          <div className="name">
+                            <b>{`${index + 1}.`}</b>
+                            {bidder.user.displayName
+                              ? bidder.user.displayName
+                              : bidder.user.address}
+
+                            {rewardTiersSlots[index] ? (
+                              <span style={getRewardTierSpanStyles(rewardTiersSlots[index])}>
+                                {rewardTiersSlots[index].name}
+                              </span>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                          <div className="bid">
+                            <img src={currencyETHIcon} alt="Currency" />
+                            <b>{bidder.amount}</b>
+                            <span>~$48,580</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div className="auction__details__box__top__bidders__footer">
@@ -357,7 +360,7 @@ const AuctionDetails = ({ onAuction, bidders, setBidders, setShowBidPopup }) => 
                           </b>
                           {`(#${
                             bidders.findIndex(
-                              (x) => x.artistId === currentBid.artistId && x.bid === currentBid.bid
+                              (x) => x.user.id === currentBid.artistId && x.bid === currentBid.bid
                             ) + 1
                           } in the list)`}
                         </span>
@@ -529,6 +532,7 @@ AuctionDetails.propTypes = {
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   setBidders: PropTypes.func.isRequired,
   setShowBidPopup: PropTypes.func.isRequired,
+  rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default AuctionDetails;

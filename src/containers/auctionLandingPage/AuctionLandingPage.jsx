@@ -31,6 +31,7 @@ const AuctionLandingPage = () => {
   const [loading, setLoading] = useState(true);
   const [showBidPopup, setShowBidPopup] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
+  const [rewardTiersSlots, setRewardTiersSlots] = useState(false);
 
   const getAuctionData = async () => {
     const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
@@ -38,6 +39,14 @@ const AuctionLandingPage = () => {
     setAuction(auctionData);
     setBidders(auctionData.bids);
     setLoading(false);
+
+    const tierSlots = [];
+    auctionData.rewardTiers.forEach((rewardTiers) => {
+      for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
+        tierSlots.push(rewardTiers);
+      }
+    });
+    setRewardTiersSlots(tierSlots);
   };
 
   useEffect(() => {
@@ -51,6 +60,7 @@ const AuctionLandingPage = () => {
         bidders={bidders}
         setBidders={setBidders}
         setShowBidPopup={setShowBidPopup}
+        rewardTiersSlots={rewardTiersSlots}
       />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />
@@ -80,7 +90,7 @@ const AuctionLandingPage = () => {
           auction={auction.auction}
           rewardTiers={auction.rewardTiers}
           artistName={auction.artist.displayName}
-          onBidders={auction.bids}
+          onBidders={bidders}
           onSetBidders={setBidders}
         />
       </Popup>
