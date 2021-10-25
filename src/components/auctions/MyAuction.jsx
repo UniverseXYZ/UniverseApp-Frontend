@@ -135,10 +135,7 @@ const MyAuction = () => {
         {selectedTabIndex === tabs.ActiveAuctions && (
           <>
             {myAuctions.filter(
-              (item) =>
-                item &&
-                moment(item.startDate).isBefore(moment.now()) &&
-                !moment(item.endDate).isBefore(moment.now())
+              (item) => item && isAfterNow(item.startDate) && isBeforeNow(item.endDate)
             ).length ? (
               <ActiveAuctions
                 myAuctions={myAuctions}
