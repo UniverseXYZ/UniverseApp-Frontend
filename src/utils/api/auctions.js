@@ -184,7 +184,7 @@ export const getActiveAuctions = async () => {
     },
   };
 
-  const request = await fetch(GET_FUTURE_AUCTIONS, requestOptions);
+  const request = await fetch(GET_ACTIVE_AUCTIONS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 

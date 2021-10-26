@@ -10,7 +10,6 @@ import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scr
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { PLACEHOLDER_MY_BIDS } from '../../utils/fixtures/MyBidsDummyData';
-import { activeAuctionsMock, pastAuctionsMock } from '../../utils/fixtures/auctionsMockData';
 import NoAuctionsFound from './NoAuctionsFound';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import MyBidsList from '../auctionsCard/myBids/MyBidsList.jsx';
@@ -132,21 +131,7 @@ const MyAuction = () => {
           </>
         )}
 
-        {selectedTabIndex === tabs.ActiveAuctions && (
-          <>
-            {myAuctions.filter(
-              (item) => item && isAfterNow(item.startDate) && isBeforeNow(item.endDate)
-            ).length ? (
-              <ActiveAuctions
-                myAuctions={myAuctions}
-                setMyAuctions={setMyAuctions}
-                setAuction={setAuction}
-              />
-            ) : (
-              <NoAuctionsFound title="No active auctions found" />
-            )}
-          </>
-        )}
+        {selectedTabIndex === tabs.ActiveAuctions && <ActiveAuctions />}
 
         {selectedTabIndex === tabs.FutureAuctions && (
           <>
@@ -162,9 +147,7 @@ const MyAuction = () => {
           </>
         )}
 
-        {selectedTabIndex === tabs.PastAuctions && (
-          <PastAuctions myAuctions={pastAuctionsMock} setMyAuctions={setMyAuctions} />
-        )}
+        {selectedTabIndex === tabs.PastAuctions && <PastAuctions />}
       </div>
     </div>
   );
