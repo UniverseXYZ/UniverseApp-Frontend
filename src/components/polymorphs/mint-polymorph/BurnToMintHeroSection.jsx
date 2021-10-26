@@ -31,7 +31,7 @@ const BurnToMintHeroSection = (props) => {
         <div className="left--section">
           <h1>Burn to mint</h1>
           <p>Same base skin, same traits but with a brand new look.</p>
-          <Button className="light-button" onClick={history.push('/choose-polymorph')}>
+          <Button className="light-button" onClick={() => history.push('/choose-polymorph')}>
             Burn a Polymorph
           </Button>
         </div>

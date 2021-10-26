@@ -47,7 +47,7 @@ const rightBlock = (title, hintText, buttonText) => {
         ) : (
           hintText.map((text) => <p key={uuid()}>{text}</p>)
         )}
-        <Button className="light-button" onClick={() => history.push('/polymorph-rarity')}>
+        <Button className="light-button" onClick={() => history.push('/choose-polymorph')}>
           {buttonText}
         </Button>
       </div>

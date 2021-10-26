@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import './ChoosePolymorph.scss';
 import { Popup } from 'reactjs-popup';
@@ -13,9 +13,11 @@ import BurnAnimation from './animations/BurnAnimation';
 import BackgroundFlamesAnimation from './animations/BackgroundFlamesAnimation';
 import rightArrow from '../../assets/images/arrow-right.svg';
 import leftArrow from '../../assets/images/Arrow-left.svg';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 const ChoosePolymorph = () => {
   const history = useHistory();
+  const { setDarkMode } = useThemeContext();
   const [burnt, setBurnt] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [hideAnimation, setHideAnimation] = useState(false);
@@ -33,6 +35,10 @@ const ChoosePolymorph = () => {
       setHideAnimation(true);
     }, 3400);
   };
+
+  useEffect(() => {
+    setDarkMode(true);
+  }, []);
 
   return (
     <div className="choose--polymorph">
