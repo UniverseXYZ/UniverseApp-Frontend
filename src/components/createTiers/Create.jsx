@@ -188,6 +188,10 @@ const Create = () => {
         winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
           (nft) => nft.id !== parseInt(id, 10)
         );
+
+        winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
+          (_id) => _id !== parseInt(id, 10)
+        );
       }
 
       setWinnersData(winnersCopy);

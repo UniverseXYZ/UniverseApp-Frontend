@@ -107,8 +107,10 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
 
   const auctionId = requestObject.id;
+  const newTiers = requestObject.rewardTiers.filter((tier) => !tier.id);
+  const updateTiers = requestObject.rewardTiers.filter((tier) => tier.id);
 
-  const editRewardTiersPromises = requestObject.rewardTiers.map(async (tier) => {
+  const updateRewardTiersPromises = updateTiers.map(async (tier) => {
     const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;
     const minBid = parseFloat(minimumBid);
     const requestTier = {
@@ -118,26 +120,46 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
       minimumBid: minBid,
       nftSlots,
     };
-
-    if (!id) {
-      const body = {
-        auctionId,
-        rewardTier: requestTier,
-      };
-      return addRewardTier(body);
-    }
-
     return editRewardTier(requestTier, id);
   });
 
-  const updatedTiers = await Promise.all(editRewardTiersPromises);
-  const hasError = updatedTiers.filter((el) => el.error);
+  const updatedTiers = await Promise.all(updateRewardTiersPromises);
+  const hasUpdateError = updatedTiers.filter((el) => el.error);
 
-  if (hasError.length) {
+  if (hasUpdateError.length) {
     return {
       error: true,
-      errors: hasError,
+      errors: hasUpdateError,
     };
   }
+
+  const addRewardTiersPromises = newTiers.map(async (tier) => {
+    const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots } = tier;
+    const minBid = parseFloat(minimumBid);
+    const requestTier = {
+      name,
+      numberOfWinners,
+      nftsPerWinner,
+      minimumBid: minBid,
+      nftSlots,
+    };
+
+    const body = {
+      auctionId,
+      rewardTier: requestTier,
+    };
+    return addRewardTier(body);
+  });
+
+  const addedTiers = await Promise.all(addRewardTiersPromises);
+  const hasAddError = addedTiers.filter((el) => el.error);
+
+  if (hasAddError.length) {
+    return {
+      error: true,
+      errors: hasAddError,
+    };
+  }
+
   return res;
 };
