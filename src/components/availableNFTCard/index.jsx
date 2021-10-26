@@ -9,14 +9,13 @@ import Select from '../availableNFTsEditionSelect';
 import universeIcon from '../../assets/images/universe-img.svg';
 
 const NFTCard = React.memo(
-  ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction, selectAll }) => {
+  ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction }) => {
     const { nfts, collection, optimized_url: url, artworkType } = data;
 
     const selectOptions = nfts.rewardAndTokenIds.map(({ tokenId, id }) => ({
       value: `${tokenId}||${id}||${url}||${artworkType}||${nfts.name}||${collection.name}||${collection.address}||${collection.coverUrl}`,
       label: `#${tokenId}`,
     }));
-    selectOptions.unshift({ label: 'Select all', value: 'select-all' });
 
     const selectedWinnerData = winnersData.find((info) => info.slot === selectedWinner);
     const selectedWinnerIds = selectedWinnerData && selectedWinnerData.nftIds;
@@ -62,10 +61,6 @@ const NFTCard = React.memo(
       const infoCopy = { ...info };
       const [edition, id, _url] = infoCopy.value.split('||');
 
-      if (selectAll) {
-        console.info('select all here');
-      }
-
       // Disable if its used in other tiers but not in the same
       const isSelectedByCurrentWinner =
         selectedWinnerIds && selectedWinnerIds.includes(parseInt(id, 10));
@@ -78,6 +73,17 @@ const NFTCard = React.memo(
         infoCopy.isSelected = false;
       }
       return infoCopy;
+    });
+
+    // Set select all option value
+    const selectAllValues = updateOptionsWithAllTiersData.filter(
+      (option) => !option.isDisabled && !option.isSelected
+    );
+    const deselectAllValues = updateOptionsWithAllTiersData.filter((option) => option.isSelected);
+    updateOptionsWithAllTiersData.unshift({
+      label: 'Select all',
+      isSelected: !selectAllValues.length,
+      value: { selectValues: selectAllValues, deselectValues: deselectAllValues },
     });
 
     const hasSelectedEditions = updatedOptionsForCurrentTier.find((item) => item.isSelected);
@@ -161,7 +167,6 @@ NFTCard.propTypes = {
   onEditionClick: PropTypes.func.isRequired,
   canSelect: PropTypes.bool.isRequired,
   selectedWinner: PropTypes.number.isRequired,
-  selectAll: PropTypes.bool.isRequired,
 };
 
 export default NFTCard;

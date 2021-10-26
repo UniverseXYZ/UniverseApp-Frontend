@@ -63,7 +63,6 @@ const Create = () => {
     numberOfWinners: true,
     nftsPerWinner: true,
   });
-  const [selectAll, setSelectAll] = useState(false);
 
   const handeClick = (e) => {
     setMinBId(e.target.checked);
@@ -140,34 +139,37 @@ const Create = () => {
       const winnersCopy = [...winnersData];
 
       if (actionMeta.action === ACTION_TYPES.ADD) {
-        const [
-          edition,
-          id,
-          url,
-          artworkType,
-          nftName,
-          collectioName,
-          collectionAddress,
-          collectionUrl,
-        ] = actionMeta.option.value.split('||');
+        // If the option is select all, we will receive all the available editions to select in array
+        const selctedValues =
+          actionMeta.option?.label === 'Select all'
+            ? actionMeta.option.value.selectValues
+            : [actionMeta.option];
 
-        winnersCopy[selectedWinner].nftsData.push({
-          slot: selectedWinner,
-          id: parseInt(id, 10),
-          url,
-          artworkType,
-          nftName,
-          collectioName,
-          collectionAddress,
-          collectionUrl,
+        selctedValues.forEach((d) => {
+          const [
+            edition,
+            id,
+            url,
+            artworkType,
+            nftName,
+            collectioName,
+            collectionAddress,
+            collectionUrl,
+          ] = d.value.split('||');
+
+          winnersCopy[selectedWinner].nftsData.push({
+            slot: selectedWinner,
+            id: parseInt(id, 10),
+            url,
+            artworkType,
+            nftName,
+            collectioName,
+            collectionAddress,
+            collectionUrl,
+          });
+
+          winnersCopy[selectedWinner].nftIds.push(parseInt(id, 10));
         });
-
-        if (actionMeta.option?.value === 'select-all') {
-          setSelectAll(true);
-          return;
-        }
-
-        winnersCopy[selectedWinner].nftIds.push(parseInt(id, 10));
       }
 
       if (actionMeta.action === ACTION_TYPES.REMOVE_ALL) {
@@ -184,13 +186,22 @@ const Create = () => {
         );
       }
       if (actionMeta.action === ACTION_TYPES.DESELECT_SINGLE) {
-        const [edition, id, url, artworkType] = actionMeta.option.value.split('||');
+        const deselctedValues =
+          actionMeta.option?.label === 'Select all'
+            ? actionMeta.option.value.deselectValues
+            : [actionMeta.option];
+
+        const delesectIds = deselctedValues.map((option) => {
+          const [edition, id, url, artworkType] = option.value.split('||');
+          return parseInt(id, 10);
+        });
+
         winnersCopy[selectedWinner].nftsData = winnersCopy[selectedWinner].nftsData.filter(
-          (nft) => nft.id !== parseInt(id, 10)
+          (nft) => !delesectIds.includes(parseInt(nft.id, 10))
         );
 
         winnersCopy[selectedWinner].nftIds = winnersCopy[selectedWinner].nftIds.filter(
-          (_id) => _id !== parseInt(id, 10)
+          (_id) => !delesectIds.includes(parseInt(_id, 10))
         );
       }
 
@@ -533,7 +544,6 @@ const Create = () => {
             <AvailabilityNFTCard
               key={data.nfts.id}
               data={data}
-              selectAll={selectAll}
               onEditionClick={onEditionClick}
               canSelect={canSelectNFT}
               winnersData={winnersData}
