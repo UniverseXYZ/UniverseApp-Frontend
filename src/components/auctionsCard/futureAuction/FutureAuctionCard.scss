@@ -1,5 +1,5 @@
-@import "../../assets/scss/variables";
-@import "../../assets/scss/mixins";
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
 
 .future__auctions__list {
   display: grid;
@@ -63,7 +63,7 @@
       align-items: center;
       justify-content: center;
       &.show__avatar {
-        background-image: url("../../assets/images/artist_card_bg.png");
+        background-image: url("../../../assets/images/artist_card_bg.png");
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { PLACEHOLDER_AUCTIONS } from '../../../../utils/fixtures/AuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
-import ActiveAuctionsCard from '../../../auctionsCard/ActiveAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { isAfterNow, isBeforeNow } from '../../../../utils/dates';
+import ActiveAuctionsList from '../../../auctionsCard/activeAuction/ActiveAuctionsList';
 
 const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
   const { myAuctions, setAuction } = useAuctionContext();
@@ -20,7 +20,7 @@ const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
       : PLACEHOLDER_AUCTIONS;
 
   return artistActiveAuctions.length ? (
-    <ActiveAuctionsCard data={artistActiveAuctions} />
+    <ActiveAuctionsList data={artistActiveAuctions} />
   ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />

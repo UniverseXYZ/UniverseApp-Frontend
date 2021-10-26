@@ -1,9 +1,9 @@
 import React from 'react';
 import FutureAuctionsFilters from './Filters.jsx';
-import FutureAuctionsCard from '../../../../auctionsCard/FutureAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
 import { isAfterNow } from '../../../../../utils/dates';
 import { PLACEHOLDER_AUCTIONS } from '../../../../../utils/fixtures/AuctionsDummyData.js';
+import FutureAuctionsList from '../../../../auctionsCard/futureAuction/FutureAuctionsList.jsx';
 
 const FutureAuctionsTab = () => {
   const { myAuctions } = useAuctionContext();
@@ -13,7 +13,7 @@ const FutureAuctionsTab = () => {
       {PLACEHOLDER_AUCTIONS.filter((item) => !item.launch && isAfterNow(item.endDate)).length ? (
         <>
           <FutureAuctionsFilters />
-          <FutureAuctionsCard
+          <FutureAuctionsList
             data={PLACEHOLDER_AUCTIONS.filter((item) => !item.launch && isAfterNow(item.endDate))}
           />
         </>
