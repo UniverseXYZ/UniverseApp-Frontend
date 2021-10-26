@@ -12,7 +12,7 @@ import Artist from './containers/artist/Artist.jsx';
 import AuctionLandingPage from './containers/auctionLandingPage/AuctionLandingPage.jsx';
 import Homepage from './containers/homepage/Homepage.jsx';
 import About from './containers/products/about/About.jsx';
-import Marketplace from './containers/products/marketplace/Marketplace.jsx';
+import AuctionHouse from './containers/products/auctionHouse/AuctionHouse.jsx';
 import MyAccount from './containers/myAccount/MyAccount.jsx';
 import CustomizeAuction from './containers/customizeAuction/CustomizeAuction.jsx';
 import Team from './containers/team/Team.jsx';
@@ -137,11 +137,8 @@ const App = () => {
                 <AuthenticatedRoute path="/setup-auction">
                   <SetupAuction />
                 </AuthenticatedRoute>
-                <Route exact path="/minting-and-auctions/marketplace/active-auctions">
-                  <Marketplace />
-                </Route>
-                <Route exact path="/minting-and-auctions/marketplace/future-auctions">
-                  <Marketplace />
+                <Route exact path="/products/auction-house">
+                  <AuctionHouse />
                 </Route>
                 <AuthenticatedRoute exact path="/my-nfts">
                   <MyNFTs />

@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import './AuctionsCardSkeleton.scss';
 
 const AuctionsCardSkeleton = ({ variant }) => (
-  <div className="active__auction__item">
+  <div className="active__auction__skeleton">
     <Skeleton className="active__auction__image" />
     <div className="active__auction__details">
       <div className="title">
@@ -18,6 +18,17 @@ const AuctionsCardSkeleton = ({ variant }) => (
           <Skeleton height={12} width={90} style={{ borderRadius: '12px' }} />
         </a>
       </div>
+      {variant === 'bid' ? (
+        <div className="my--bid--section">
+          <p>
+            <Skeleton circle height={20} width={20} />
+            <Skeleton height={20} width={43} style={{ borderRadius: '12px' }} />
+            <Skeleton height={12} width={44} style={{ borderRadius: '12px' }} />
+          </p>
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="statistics">
         <div>
           <label>
@@ -35,7 +46,7 @@ const AuctionsCardSkeleton = ({ variant }) => (
             <Skeleton height={20} width={40} style={{ borderRadius: '12px' }} />
           </p>
         </div>
-        {variant === 'active' || variant === 'past' ? (
+        {variant === 'active' || variant === 'past' || variant === 'bid' ? (
           <>
             <div>
               <label>
@@ -58,11 +69,6 @@ const AuctionsCardSkeleton = ({ variant }) => (
           <></>
         )}
       </div>
-      {variant === 'active' ? (
-        <Skeleton className="view--auction--btn" height={42} style={{ borderRadius: '12px' }} />
-      ) : (
-        <></>
-      )}
     </div>
   </div>
 );
@@ -72,7 +78,7 @@ AuctionsCardSkeleton.propTypes = {
 };
 
 AuctionsCardSkeleton.defaultProps = {
-  variant: 'active', // active, future, past
+  variant: 'active', // active, future, past, bid
 };
 
 export default AuctionsCardSkeleton;

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import './MyBidsCard.scss';
-import Button from '../button/Button';
 import { isBeforeNow } from '../../utils/dates';
 import AuctionsCardSkeleton from './skeleton/AuctionsCardSkeleton.jsx';
+import ethIcon from '../../assets/images/bid_icon.svg';
 
 const MyBidsCard = ({ data }) => {
   const history = useHistory();
@@ -14,7 +14,7 @@ const MyBidsCard = ({ data }) => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 2000);
   });
 
   return (
@@ -61,6 +61,13 @@ const MyBidsCard = ({ data }) => {
                     {auction.artist.name}
                   </a>
                 </div>
+                <div className="my--bid--section">
+                  <div className="caption">My bid</div>
+                  <p>
+                    <img src={ethIcon} alt="eth" />
+                    14,24 <span>~$41,594</span>
+                  </p>
+                </div>
                 <div className="statistics">
                   <div>
                     <label>Winners</label>
@@ -69,7 +76,8 @@ const MyBidsCard = ({ data }) => {
                   <div>
                     <label>Highest Winning Bid:</label>
                     <p>
-                      $40 ETH <span>~$120,594</span>
+                      <img src={ethIcon} alt="eth" />
+                      40 <span>~$120,594</span>
                     </p>
                   </div>
                   <div>
@@ -79,25 +87,16 @@ const MyBidsCard = ({ data }) => {
                   <div>
                     <label>Lowest Winning Bid:</label>
                     <p>
-                      14 ETH <span>~$41,594</span>
+                      <img src={ethIcon} alt="eth" />
+                      14 <span>~$41,594</span>
                     </p>
                   </div>
                 </div>
-                <Button
-                  className="light-button w-100 view--auction--btn"
-                  // onClick={() =>
-                  //   history.push(`/${auction.artist.name.split(' ')[0]}/${auction.name}`, {
-                  //     id: auction.id,
-                  //   })
-                  // }
-                >
-                  View Auction
-                </Button>
               </div>
             </div>
           </Animated>
         ) : (
-          <AuctionsCardSkeleton variant="active" />
+          <AuctionsCardSkeleton variant="bid" />
         )
       )}
     </div>

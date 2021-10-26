@@ -126,7 +126,7 @@ const MyAuction = () => {
                 title="No bids found"
                 desc="Explore the auctions by clicking the button below"
                 btnText="Auction house"
-                btnAction="/minting-and-auctions/marketplace/active-auctions"
+                btnAction="/products/auction-house"
               />
             )}
           </>

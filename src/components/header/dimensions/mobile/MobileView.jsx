@@ -577,7 +577,7 @@ const MobileView = (props) => {
                               className="disable"
                               onClick={() => {
                                 // setShowMenu(false);
-                                // history.push('/minting-and-auctions/marketplace/active-auctions');
+                                // history.push('/products/auction-house');
                               }}
                             >
                               <img src={auctionHouseIcon} alt="Auction House" />

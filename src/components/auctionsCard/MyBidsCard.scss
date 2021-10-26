@@ -12,6 +12,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 12px;
     grid-gap: 18px;
+    cursor: pointer;
     &.past {
       .my--bids--image {
         filter: grayscale(1);
@@ -160,6 +161,57 @@
           cursor: pointer;
         }
       }
+      .my--bid--section {
+        position: relative;
+        margin-bottom: 12px;
+        padding: 20px 30px;
+        background: linear-gradient($white, $white) padding-box,
+          linear-gradient(
+              135deg,
+              rgba(42, 208, 202, 1),
+              rgba(225, 246, 100, 1),
+              rgba(254, 176, 254, 1),
+              rgba(171, 179, 252, 1),
+              rgba(93, 247, 164, 1),
+              rgba(88, 196, 246, 1)
+            )
+            border-box;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        .caption {
+          position: absolute;
+          top: -8px;
+          left: 30px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 10px;
+          line-height: 140%;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: rgba(0, 0, 0, 0.4);
+          background: $white;
+          padding: 0 6px;
+        }
+        p {
+          display: flex;
+          align-items: center;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 20px;
+          line-height: 26px;
+          color: $black;
+          img {
+            margin-right: 4px;
+          }
+          span {
+            font-size: 12px;
+            margin-left: 4px;
+            color: rgba(0, 0, 0, 0.4);
+          }
+        }
+      }
       .statistics {
         display: grid;
         grid-template-columns: auto auto;
@@ -187,13 +239,21 @@
             color: rgba(0, 0, 0, 0.4);
           }
           p {
+            display: flex;
+            align-items: center;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
             font-size: 14px;
             line-height: 150%;
             color: $black;
+            img {
+              margin-right: 4px;
+              width: 16px;
+              height: 16px;
+            }
             span {
+              margin-left: 4px;
               color: rgba(0, 0, 0, 0.4);
             }
           }

@@ -1,20 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useHistory, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
 
-const Tabs = ({ location }) => {
+const Tabs = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const history = useHistory();
-
-  useEffect(() => {
-    if (location.pathname === '/minting-and-auctions/marketplace/active-auctions') {
-      setSelectedTabIndex(0);
-    } else if (location.pathname === '/minting-and-auctions/marketplace/future-auctions') {
-      setSelectedTabIndex(1);
-    }
-  }, []);
 
   return (
     <div className="tabs__section">
@@ -24,7 +14,6 @@ const Tabs = ({ location }) => {
             type="button"
             onClick={() => {
               setSelectedTabIndex(0);
-              history.push('/minting-and-auctions/marketplace/active-auctions');
             }}
             className={selectedTabIndex === 0 ? 'active' : ''}
           >
@@ -34,7 +23,6 @@ const Tabs = ({ location }) => {
             type="button"
             onClick={() => {
               setSelectedTabIndex(1);
-              history.push('/minting-and-auctions/marketplace/future-auctions');
             }}
             className={selectedTabIndex === 1 ? 'active' : ''}
           >
@@ -47,10 +35,6 @@ const Tabs = ({ location }) => {
       </div>
     </div>
   );
-};
-
-Tabs.propTypes = {
-  location: PropTypes.oneOfType([PropTypes.any]).isRequired,
 };
 
 export default withRouter(Tabs);

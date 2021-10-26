@@ -3,16 +3,18 @@ import FutureAuctionsFilters from './Filters.jsx';
 import FutureAuctionsCard from '../../../../auctionsCard/FutureAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
 import { isAfterNow } from '../../../../../utils/dates';
+import { PLACEHOLDER_AUCTIONS } from '../../../../../utils/fixtures/AuctionsDummyData.js';
 
 const FutureAuctionsTab = () => {
   const { myAuctions } = useAuctionContext();
+
   return (
     <div className="future__auctions__tab">
-      {myAuctions.filter((item) => !item.launch && isAfterNow(item.endDate)).length ? (
+      {PLACEHOLDER_AUCTIONS.filter((item) => !item.launch && isAfterNow(item.endDate)).length ? (
         <>
           <FutureAuctionsFilters />
           <FutureAuctionsCard
-            data={myAuctions.filter((item) => !item.launch && isAfterNow(item.endDate))}
+            data={PLACEHOLDER_AUCTIONS.filter((item) => !item.launch && isAfterNow(item.endDate))}
           />
         </>
       ) : (

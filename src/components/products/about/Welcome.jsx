@@ -35,7 +35,7 @@ const Welcome = () => {
               </Button>
               <Button
                 className="light-border-button"
-                onClick={() => history.push('/minting-and-auctions/marketplace/active-auctions')}
+                onClick={() => history.push('/products/auction-house')}
               >
                 Auction house
               </Button>

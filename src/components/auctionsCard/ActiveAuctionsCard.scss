@@ -19,6 +19,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 12px;
     grid-gap: 18px;
+    cursor: pointer;
 
     .active__auction__image {
       position: relative;
@@ -186,19 +187,28 @@
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 500;
-            font-size: 12px;
+            font-size: 10px;
             line-height: 150%;
             color: rgba(0, 0, 0, 0.4);
+            text-transform: uppercase;
           }
           p {
+            display: flex;
+            align-items: center;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
             font-size: 14px;
             line-height: 150%;
             color: $black;
+            img {
+              margin-right: 4px;
+              width: 16px;
+              height: 16px;
+            }
             span {
               color: rgba(0, 0, 0, 0.4);
+              margin-left: 4px;
             }
           }
         }

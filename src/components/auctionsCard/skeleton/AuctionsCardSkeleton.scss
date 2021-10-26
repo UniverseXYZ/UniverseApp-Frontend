@@ -1,7 +1,7 @@
 @import "../../../assets/scss/variables";
 @import "../../../assets/scss/mixins";
 
-.active__auction__item {
+.active__auction__skeleton {
   display: grid;
   background: $white;
   border-radius: 12px;
@@ -52,6 +52,23 @@
         margin-left: 10px;
       }
     }
+    .my--bid--section {
+      padding: 20px 30px;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      p {
+        display: flex;
+        align-items: center;
+        span {
+          display: block;
+        }
+        > span:nth-child(2) {
+          margin: 0 4px;
+        }
+      }
+    }
     .statistics {
       display: grid;
       grid-template-columns: auto auto;
@@ -69,30 +86,7 @@
         &:nth-child(4) {
           border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
-        label {
-          display: block;
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: 500;
-          font-size: 12px;
-          line-height: 150%;
-          color: rgba(0, 0, 0, 0.4);
-        }
-        p {
-          font-family: $spaceGroteskFont;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          line-height: 150%;
-          color: $black;
-          span {
-            color: rgba(0, 0, 0, 0.4);
-          }
-        }
       }
-    }
-    .view--auction--btn {
-      margin-top: 18px;
     }
   }
   &:hover {
