@@ -2,7 +2,6 @@
 @import "../../assets/scss/mixins";
 
 .choose--polymorph {
-  // background-image: url("../../assets/images/choosePolymorph/Flames.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -24,8 +23,24 @@
   }
   .choose--polymorph--container {
     width: 1110px;
-    min-height: 730px;
     z-index: 111;
+    .back--button {
+      padding-left: 30px;
+      font-family: $spaceGroteskFont;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+      color: $white;
+      background-color: black;
+      display: flex;
+      @include md {
+        padding-left: unset;
+      }
+      > img {
+        margin-right: 10px;
+      }
+    }
     h1 {
       color: rgba(255, 255, 255, 1);
       font-family: $sharpGroteskSemiBoldFont;
@@ -35,6 +50,11 @@
       line-height: 58px;
       letter-spacing: 0px;
       text-align: center;
+      margin-top: 40px;
+      @include md {
+        font-size: 26px;
+        line-height: 36px;
+      }
     }
     > p {
       font-family: $spaceGroteskFont;
@@ -57,6 +77,37 @@
       justify-content: center;
       align-items: center;
       margin-top: 60px;
+      .flipster__button__prev {
+        display: none;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        width: 42px;
+        height: 42px;
+        background-repeat: no-repeat;
+        background-size: auto;
+        background-position: center;
+        background-image: url("../../assets/images/Arrow-left.svg");
+        @include md {
+          display: block;
+        }
+      }
+      .flipster__button__next {
+        display: none;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        width: 42px;
+        height: 42px;
+        background-repeat: no-repeat;
+        background-size: auto;
+        background-position: center;
+        background-image: url("../../assets/images/arrow-right.svg");
+        @include md {
+          display: block;
+        }
+      }
+      @include md {
+        justify-content: space-between;
+      }
     }
     .no--polymorphs--found--section {
       text-align: center;
@@ -77,10 +128,7 @@
         font-weight: 400;
         line-height: 22px;
         color: rgba(255, 255, 255, 0.6);
-        // margin-top: 6px;
         max-width: 288px;
-        // margin-bottom: 30px;
-        // margin: auto;
         margin: 6px auto 30px auto;
       }
     }
@@ -95,6 +143,10 @@
           height: 535px;
           border-radius: 12px;
           object-fit: cover;
+          @include md {
+            width: 300px;
+            height: 300px;
+          }
         }
         .burn--animation {
           position: absolute;
@@ -102,8 +154,21 @@
           z-index: 2;
           left: -40px;
           width: 120%;
+          @include md {
+            top: -75px;
+            left: -25px;
+          }
         }
       }
     }
+    @include md {
+      padding: 0 20px;
+    }
+  }
+  @include md {
+    min-height: 767px;
+  }
+  @include sm {
+    min-height: 630px;
   }
 }

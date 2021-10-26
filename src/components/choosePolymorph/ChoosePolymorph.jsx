@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './ChoosePolymorph.scss';
 import { Popup } from 'reactjs-popup';
+import { Animated } from 'react-animated-css';
 import Caroussel3d from './caroussel/Caroussel3d';
 import Button from '../button/Button';
 import textImage from '../../assets/images/TextBubble.png';
@@ -10,6 +11,8 @@ import BurnPolymorphCongratPopup from '../popups/BurnPolymorphCongratPopup';
 import loadingBg from '../../assets/images/burnpolymorphbg1.png';
 import BurnAnimation from './animations/BurnAnimation';
 import BackgroundFlamesAnimation from './animations/BackgroundFlamesAnimation';
+import rightArrow from '../../assets/images/arrow-right.svg';
+import leftArrow from '../../assets/images/Arrow-left.svg';
 
 const ChoosePolymorph = () => {
   const history = useHistory();
@@ -20,7 +23,7 @@ const ChoosePolymorph = () => {
 
   const handleClick = () => {
     const getSelectedPolymorph = document.querySelector(
-      '.slider-content .active .polymorph--card--middle--section img'
+      '.flipster__item--current .flipster__item__content .polymorph--card--middle--section img'
     );
     setSelectedPolymorphImageSource(getSelectedPolymorph.src);
     setBurnt(true);
@@ -39,6 +42,16 @@ const ChoosePolymorph = () => {
       <div className="choose--polymorph--container">
         {!burnt ? (
           <>
+            <button
+              type="button"
+              className="back--button"
+              onClick={() => {
+                history.push('/burn-to-mint');
+              }}
+            >
+              <img src={leftArrow} alt="back" />
+              Back
+            </button>
             <h1>Choose a Polymorph</h1>
             <p>Select a polymorph you’d like to burn from your wallet.</p>
             {CHOOSE_POLYMORPH_CARD.length ? (
@@ -47,9 +60,23 @@ const ChoosePolymorph = () => {
                   <Caroussel3d />
                 </div>
                 <div className="button--section">
+                  <button
+                    type="button"
+                    className="flipster__button__prev"
+                    onClick={() => $('#carousel').flipster('prev')}
+                  >
+                    <img src={leftArrow} alt="left arrow" />
+                  </button>
                   <Button className="light-button" onClick={handleClick}>
                     Burn a Polymorph
                   </Button>
+                  <button
+                    type="button"
+                    className="flipster__button__next"
+                    onClick={() => $('#carousel').flipster('next')}
+                  >
+                    <img src={rightArrow} alt="right arrow" />
+                  </button>
                 </div>
               </>
             ) : (
@@ -64,12 +91,14 @@ const ChoosePolymorph = () => {
         ) : (
           <div className="animation--page">
             {!hideAnimation ? (
-              <div className="image--secion">
-                <img src={selectedPolymorphImageSource} alt="polymorph" />
-                <div className="burn--animation">
-                  <BurnAnimation />
+              <Animated animationIn="zoomIn">
+                <div className="image--secion">
+                  <img src={selectedPolymorphImageSource} alt="polymorph" />
+                  <div className="burn--animation">
+                    <BurnAnimation />
+                  </div>
                 </div>
-              </div>
+              </Animated>
             ) : (
               <></>
             )}
