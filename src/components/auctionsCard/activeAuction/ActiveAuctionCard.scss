@@ -1,17 +1,10 @@
-@import "../../assets/scss/variables";
-@import "../../assets/scss/mixins";
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
 
 .active__auctions__list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 30px;
-  &.past {
-    .active__auction__item {
-      .active__auction__image {
-        filter: grayscale(1);
-      }
-    }
-  }
   .active__auction__item {
     display: grid;
     background: $white;
@@ -19,6 +12,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 12px;
     grid-gap: 18px;
+    cursor: pointer;
 
     .active__auction__image {
       position: relative;
@@ -29,7 +23,7 @@
       align-items: center;
       justify-content: center;
       &.show__avatar {
-        background-image: url("../../assets/images/artist_card_bg.png");
+        background-image: url("../../../assets/images/artist_card_bg.png");
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -186,19 +180,28 @@
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: 500;
-            font-size: 12px;
+            font-size: 10px;
             line-height: 150%;
             color: rgba(0, 0, 0, 0.4);
+            text-transform: uppercase;
           }
           p {
+            display: flex;
+            align-items: center;
             font-family: $spaceGroteskFont;
             font-style: normal;
             font-weight: bold;
             font-size: 14px;
             line-height: 150%;
             color: $black;
+            img {
+              margin-right: 4px;
+              width: 16px;
+              height: 16px;
+            }
             span {
               color: rgba(0, 0, 0, 0.4);
+              margin-left: 4px;
             }
           }
         }

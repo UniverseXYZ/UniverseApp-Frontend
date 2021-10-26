@@ -11,9 +11,9 @@ import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { PLACEHOLDER_MY_BIDS } from '../../utils/fixtures/MyBidsDummyData';
 import { activeAuctionsMock, pastAuctionsMock } from '../../utils/fixtures/auctionsMockData';
-import MyBidsCard from '../auctionsCard/MyBidsCard';
 import NoAuctionsFound from './NoAuctionsFound';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
+import MyBidsList from '../auctionsCard/myBids/MyBidsList.jsx';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =
@@ -120,13 +120,13 @@ const MyAuction = () => {
         {selectedTabIndex === tabs.MyBids && (
           <>
             {PLACEHOLDER_MY_BIDS.length ? (
-              <MyBidsCard data={PLACEHOLDER_MY_BIDS} />
+              <MyBidsList data={PLACEHOLDER_MY_BIDS} />
             ) : (
               <NoAuctionsFound
                 title="No bids found"
                 desc="Explore the auctions by clicking the button below"
                 btnText="Auction house"
-                btnAction="/minting-and-auctions/marketplace/active-auctions"
+                btnAction="/products/auction-house"
               />
             )}
           </>

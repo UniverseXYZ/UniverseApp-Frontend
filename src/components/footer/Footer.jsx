@@ -80,7 +80,7 @@ const Footer = () => {
                   <li
                     className="disable"
                     // onClick={() =>
-                    //   history.push('/minting-and-auctions/marketplace/active-auctions')
+                    //   history.push('/products/auction-house')
                     // }
                     aria-hidden="true"
                   >
