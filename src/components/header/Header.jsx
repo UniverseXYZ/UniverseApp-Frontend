@@ -112,6 +112,8 @@ const Header = ({ location }) => {
       location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
       location.pathname === '/polymorphs' ||
       location.pathname === '/mint-polymorph' ||
+      location.pathname === '/choose-polymorph' ||
+      location.pathname === '/burn-to-mint' ||
       location.pathname === '/team'
     ) {
       document.querySelector('header').classList.add('dark');
