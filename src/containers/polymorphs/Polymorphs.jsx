@@ -4,7 +4,7 @@ import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
 import GroupPolymorphWelcome from '../../assets/images/GroupPolymorphWelcome.png';
 import About from '../../components/polymorphs/About';
 import Characters from '../../components/polymorphs/Characters';
-import Section4 from '../../components/polymorphs/Section4';
+import BurnYourPolymorphSection from '../../components/polymorphs/BurnYourPolymorphSection';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
 import Section6 from '../../components/polymorphs/Section6';
 import './Polymorphs.scss';
@@ -62,10 +62,8 @@ const Polymorphs = () => {
       <WelcomeWrapper
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
-        // popupBtnText="My Polymorphs"
         btnText="My Polymorphs"
         btnOnClick={redirectToMyPolymorphs}
-        // btnAnotherOnClick={redirectToMyPolymorphs}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}
@@ -75,8 +73,7 @@ const Polymorphs = () => {
       <div className="content">
         <About />
       </div>
-      {/* <Characters /> */}
-      <Section4 />
+      <BurnYourPolymorphSection />
       <PolymorphsActivity
         ethPrice={ethPrice?.market_data?.current_price?.usd.toString()}
         mobile={mobile}

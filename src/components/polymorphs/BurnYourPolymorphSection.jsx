@@ -11,9 +11,11 @@ import Section4LeftBackground from '../../assets/images/topmorph.png';
 import Button from '../button/Button';
 
 const getWindow = (width, changeStateFunc) => {
-  if (+width > 992) changeStateFunc('browser');
-  else if (+width <= 992 && +width > 575) changeStateFunc('tablet');
-  else if (+width <= 575) changeStateFunc('mobile');
+  const TABLET_SIZE = 992;
+  const MOBILE_SIZE = 575;
+  if (+width > TABLET_SIZE) changeStateFunc('browser');
+  else if (+width <= TABLET_SIZE && +width > MOBILE_SIZE) changeStateFunc('tablet');
+  else if (+width <= MOBILE_SIZE) changeStateFunc('mobile');
 };
 
 const leftBlock = (windows, leftBackground, leftBackgroundMobile, backgroundImage) => (
@@ -53,7 +55,7 @@ const rightBlock = (title, hintText, buttonText) => {
   );
 };
 
-const Section4 = (props) => {
+const BurnYourPolymorphSection = (props) => {
   const { title, hintText, buttonText, backgroundImage, leftBackground, leftBackgroundMobile } =
     props;
   const [windows, setWindows] = useState('browser');
@@ -93,7 +95,7 @@ const Section4 = (props) => {
   );
 };
 
-Section4.propTypes = {
+BurnYourPolymorphSection.propTypes = {
   title: PropTypes.string,
   hintText: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   buttonText: PropTypes.string,
@@ -102,7 +104,7 @@ Section4.propTypes = {
   leftBackgroundMobile: PropTypes.node,
 };
 
-Section4.defaultProps = {
+BurnYourPolymorphSection.defaultProps = {
   title: 'Polymorph Rarity Chart',
   hintText: 'Mirror, mirror on the wall, who has the rarest Polymorph of them all?',
   buttonText: 'Rarity chart',
@@ -111,4 +113,4 @@ Section4.defaultProps = {
   leftBackgroundMobile: mobilebackground,
 };
 
-export default Section4;
+export default BurnYourPolymorphSection;
