@@ -1,0 +1,90 @@
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
+
+.polymorph--card {
+  padding: 20px 15px;
+  background-color: white;
+  border-radius: 12px;
+  .polymorph--card--header--section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      font-family: $spaceGroteskFont;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 17px;
+      color: rgba(0, 0, 0, 0.4);
+    }
+    h3 {
+      font-family: $spaceGroteskFont;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 17px;
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+  .polymorph--card--middle--section {
+    margin-top: 19px;
+    position: relative;
+    > img {
+      width: 315px;
+      height: 315px;
+    }
+    .single--icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      > img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+  .polymorph--card--footer--section {
+    .title--section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      h1 {
+        font-family: $spaceGroteskFont;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 26px;
+        color: rgba(0, 0, 0, 1);
+      }
+      h2 {
+        font-family: $spaceGroteskFont;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 19px;
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+    .icon--section {
+      margin-top: 10px;
+      span {
+        display: flex;
+        p {
+          margin-left: 6px;
+          font-family: $spaceGroteskFont;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 18px;
+          color: rgba(0, 0, 0, 1);
+        }
+        img {
+          height: 20px;
+          width: 20px;
+        }
+      }
+    }
+  }
+}
