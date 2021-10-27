@@ -1,187 +1,199 @@
-@import '../../../assets/scss/variables';
-@import '../../../assets/scss/mixins';
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
 
+.polymorphs--activity--section {
+  background: radial-gradient(
+      208.62% 367% at -7.47% -21.19%,
+      rgba(42, 208, 202, 0.2) 0%,
+      rgba(225, 246, 100, 0.2) 22.92%,
+      rgba(254, 176, 254, 0.2) 46.88%,
+      rgba(171, 179, 252, 0.2) 68.23%,
+      rgba(93, 247, 164, 0.2) 87.5%,
+      rgba(88, 196, 246, 0.2) 100%
+    ),
+    #ffffff;
+}
 .polymorphs--activity--wrapper--center {
-    display: block;
-    padding: 60px 0;
-    @include xl {
-        padding: 60px;
-    }
+  display: block;
+  padding: 60px 0;
+  @include xl {
+    padding: 60px;
+  }
+  @include sm {
+    padding: 10px 20px;
+  }
+
+  h2 {
+    font-family: Sharp Grotesk;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 140%;
+    text-align: center;
+    color: #000000;
+    margin: 60px 0;
     @include sm {
-        padding: 10px 20px;
+      font-size: 20px;
     }
-    
-    h2 {
-        font-family: Sharp Grotesk;
+  }
+  .table--polymorphs--activity {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+    thead {
+      th {
+        font-family: Space Grotesk;
         font-style: normal;
-        font-weight: 600;
-        font-size: 26px;
-        line-height: 140%;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 22px;
         text-align: center;
-        color: #000000;
-        margin: 60px 0;
-        @include sm {
-            font-size: 20px;
-        }
+        color: rgba(0, 0, 0, 0.3);
+      }
     }
-    .table--polymorphs--activity {
-        border-collapse: separate;
-        border-spacing: 0 15px;
-        thead {
-            th {
-                font-family: Space Grotesk;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 14px;
-                line-height: 22px;
-                text-align: center;
-                color: rgba(0, 0, 0, 0.3);
-            }
+    tbody {
+      tr td:first-child {
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+      }
+      tr td:last-child {
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+      }
+      .row {
+        height: 70px;
+        background: #ffffff;
+        box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
+        border-radius: 12px;
+        width: 100%;
+        margin: 12px 0;
+        td {
+          text-align: center;
+          vertical-align: middle;
+          font-family: Space Grotesk;
+          font-size: 16px;
+          width: 22.5%;
+          @include lg {
+            font-size: 14px;
+          }
         }
-        tbody {
-            tr td:first-child {
-                border-top-left-radius: 15px;
-                border-bottom-left-radius: 15px;
+        .td--image {
+          width: 10% !important;
+          .polymorph--table--image--block {
+            width: 42px;
+            height: 42px;
+            background-image: url("../../../assets//images/table-image-background.png");
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            display: inline-block;
+            img {
+              width: 100%;
+              height: 100%;
             }
-            tr td:last-child {
-                border-top-right-radius: 15px;
-                border-bottom-right-radius: 15px;
-            }
-            .row {
-                height: 70px;
-                background: #FFFFFF;
-                box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
-                border-radius: 12px;
-                width: 100%;
-                margin: 12px 0;
-                td {
-                    text-align: center;
-                    vertical-align: middle;
-                    font-family: Space Grotesk;
-                    font-size: 16px;
-                    width: 22.5%;
-                    @include lg {
-                        font-size: 14px;
-                    }
-                }
-                .td--image {
-                    width: 10% !important;
-                    .polymorph--table--image--block {
-                        width: 42px;
-                        height: 42px;
-                        background-image: url("../../../assets//images/table-image-background.png");
-                        background-repeat: no-repeat;
-                        background-size: contain;
-                        background-position: center;
-                        display: inline-block;
-                        img {
-                            width: 100%;
-                            height: 100%;
-                        }
-                    }
-                }
-                .td--name {
-                    font-style: normal;
-                    font-weight: bold;
-                    font-size: 16px;
-                    line-height: 160%;
-                    color: #000000;
-                }
-                .td--skin {
-                    span {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-left: 1px solid rgba(0, 0, 0, 0.2);
-                        border-right: 1px solid rgba(0, 0, 0, 0.2);
-                        height: 30px;
-                    }
-                }
-                .td--event {
-                    text-transform: capitalize;
-                    >span {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-right: 1px solid rgba(0, 0, 0, 0.2);
-                        height: 30px;
-                    }
-                    .flex--event--block{
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        margin: 0 auto;
-                        width: 50%;
-                        @include lg {
-                            justify-content: space-around;
-                        }
-                        .event--type {
-                            width: 30px;
-                            height: 30px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            img {
-                                vertical-align: super;
-                            }
-                            &--scramble {
-                                background-color:rgba(101,50,186,0.1);
-                                border-radius: 71.4286px;
-                            }
-                            &--mint {
-                                background: rgba(66,127,245,0.1);
-                                border-radius: 71.4286px;
-                            }
-                            &--trade {
-                                background: rgba(111,221,108,0.1);
-                                border-radius: 71.4286px;
-                            }
-                            &--listed {
-                                background: rgba(255,178,62,0.1);
-                                border-radius: 71.4286px;
-                            }
-                            &--transfer {
-                                background: rgba(209,70,243,0.1);
-                                border-radius: 71.4286px;
-                            }
-                        }
-                        .text--event {
-                            width: calc(100% - 50px);
-                            text-align: left;
-                            @include lg {
-                                width: calc(100% - 40%);
-                            }
-                        }
-                    }  
-                }
-                .td--price {
-                    .price--eth {
-                        font-style: normal;
-                        font-weight: bold;
-                        font-size: 16px;
-                        line-height: 160%;
-                        text-align: right;
-                        color: #000000;
-                    }
-                    .price--usd {
-                        font-family: Space Grotesk;
-                        font-style: normal;
-                        font-weight: 500;
-                        font-size: 16px;
-                        line-height: 160%;
-                        text-align: right;
-                        color: rgba(0, 0, 0, 0.4);
-                    }
-                }
-            }
+          }
         }
-    }
-    .mobile--table--polymorphs--activity {
-        min-height: 400px;
-    }
-    .pagination__container {
-        ul {
+        .td--name {
+          font-style: normal;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 160%;
+          color: #000000;
+        }
+        .td--skin {
+          span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(0, 0, 0, 0.2);
+            height: 30px;
+          }
+        }
+        .td--event {
+          text-transform: capitalize;
+          > span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(0, 0, 0, 0.2);
+            height: 30px;
+          }
+          .flex--event--block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin: 0 auto;
+            width: 50%;
+            @include lg {
+              justify-content: space-around;
+            }
+            .event--type {
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              img {
+                vertical-align: super;
+              }
+              &--scramble {
+                background-color: rgba(101, 50, 186, 0.1);
+                border-radius: 71.4286px;
+              }
+              &--mint {
+                background: rgba(66, 127, 245, 0.1);
+                border-radius: 71.4286px;
+              }
+              &--trade {
+                background: rgba(111, 221, 108, 0.1);
+                border-radius: 71.4286px;
+              }
+              &--listed {
+                background: rgba(255, 178, 62, 0.1);
+                border-radius: 71.4286px;
+              }
+              &--transfer {
+                background: rgba(209, 70, 243, 0.1);
+                border-radius: 71.4286px;
+              }
+            }
+            .text--event {
+              width: calc(100% - 50px);
+              text-align: left;
+              @include lg {
+                width: calc(100% - 40%);
+              }
+            }
+          }
         }
+        .td--price {
+          .price--eth {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 160%;
+            text-align: right;
+            color: #000000;
+          }
+          .price--usd {
+            font-family: Space Grotesk;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 160%;
+            text-align: right;
+            color: rgba(0, 0, 0, 0.4);
+          }
+        }
+      }
     }
+  }
+  .mobile--table--polymorphs--activity {
+    min-height: 400px;
+  }
+  .pagination__container {
+    ul {
+      margin: 0 auto;
+    }
+  }
 }
