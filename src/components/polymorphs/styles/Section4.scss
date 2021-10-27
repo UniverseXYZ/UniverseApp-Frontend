@@ -30,23 +30,22 @@
       @include sm {
         width: 100%;
         min-height: 300px;
-        // display: flex;
-        // align-items: center;
       }
     }
     .section4--left--block {
       height: 400px;
-      background-image: url("../../../assets/images/topmorph.png");
       background-repeat: no-repeat;
       background-size: cover;
       display: flex;
       align-items: center;
+      zoom: 2;
       @include lg {
         height: 430px;
         background-image: none;
         margin-right: 25px;
       }
       @include md {
+        zoom: 1;
         margin-right: 0px;
       }
       .hide--on--tablet {
