@@ -34,7 +34,6 @@ const marquee = () => (
     <span className="marquee--text--universe">UNIVERSE</span>
   </p>
 );
-
 const Polymorphs = () => {
   const { setDarkMode } = useThemeContext();
   const history = useHistory();
@@ -49,15 +48,12 @@ const Polymorphs = () => {
     }
     window.addEventListener('resize', handleResize);
   });
-
   useEffect(() => {
     setDarkMode(true);
   }, []);
-
   useEffect(() => {
     if (+window.innerWidth <= 575) setMobile(true);
   }, [window.innerWidth]);
-
   const redirectToMyPolymorphs = () => {
     navigateToMyUniverseNFTsTab(polymorphsFilter);
   };
@@ -66,10 +62,10 @@ const Polymorphs = () => {
       <WelcomeWrapper
         title="Polymorph Universe"
         hintText="A universe of polymorphic creatures with the power to mutate on demand"
-        popupBtnText="My Polymorphs"
-        btnText="Mint a morph"
+        // popupBtnText="My Polymorphs"
+        btnText="My Polymorphs"
         btnOnClick={redirectToMyPolymorphs}
-        btnAnotherOnClick={redirectToMyPolymorphs}
+        // btnAnotherOnClick={redirectToMyPolymorphs}
         ellipsesLeft={false}
         ellipsesRight={false}
         marquee={marquee()}
@@ -90,5 +86,4 @@ const Polymorphs = () => {
     </div>
   );
 };
-
 export default Polymorphs;

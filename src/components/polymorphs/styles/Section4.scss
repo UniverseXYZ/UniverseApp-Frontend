@@ -1,10 +1,10 @@
-@import '../../../assets/scss/variables';
-@import '../../../assets/scss/mixins';
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
 
 .polymorph--section4 {
   background-color: $black;
   width: 100%;
-  height: 600px;
+  height: 680px;
   display: flex;
   align-items: center;
   @include lg {
@@ -30,13 +30,13 @@
       @include sm {
         width: 100%;
         min-height: 300px;
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
       }
     }
     .section4--left--block {
       height: 400px;
-      background-image: url('../../../assets/images/topmorph.png');
+      background-image: url("../../../assets/images/topmorph.png");
       background-repeat: no-repeat;
       background-size: cover;
       display: flex;
@@ -108,7 +108,7 @@
           font-size: 16px;
         }
         @include sm {
-          text-align: center;
+          // text-align: center;
         }
         white-space: nowrap;
         font-family: $sharpGroteskSemiBoldFont;
@@ -124,7 +124,8 @@
           line-height: 160%;
         }
         @include sm {
-          text-align: center;
+          // text-align: center;
+          // margin: 20px auto;
         }
         font-family: $spaceGroteskFont;
         font-style: normal;
@@ -133,7 +134,7 @@
         line-height: 27px;
         color: $white;
         font-weight: 400;
-        margin: 20px 0 40px;
+        margin: 20px 0 20px;
         max-width: 404px;
       }
       button {

@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import WelcomeWrapper from '../../components/ui-elements/WelcomeWrapper';
-import PolymorphGroupFire from '../../assets/images/PolymorphGroupFire.png';
 import Section2HorizontalScroll from '../../components/polymorphs/mint-polymorph/Section2HorizontalScroll';
 import PolymorphsActivity from '../../components/polymorphs/PolymorphsActivity';
-import BurnPolymorphLeft from '../../assets/images/bgElementLeft.png';
-import BurnPolymorphRight from '../../assets/images/bgElementRight.png';
 import Section4LeftBackground from '../../assets/images/Section4GroupImage.png';
 import BurnPolymorphBg from '../../assets/images/BurnPolymorphBg.png';
 import Section4 from '../../components/polymorphs/Section4';
 import data from '../../utils/fixtures/newPolymorphBaseSkins';
 import './BurnToMint.scss';
 import { useThemeContext } from '../../contexts/ThemeContext';
+import BurnToMintHeroSection from '../../components/polymorphs/mint-polymorph/BurnToMintHeroSection';
 
 const marquee = () => (
   <p>
@@ -43,6 +40,20 @@ const BurnToMint = () => {
     height: window.innerHeight,
   });
 
+  const [loaded, setLoaded] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (ref.current && ref.current.readyState === 4) {
+        setLoaded(true);
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [loaded]);
+
   useEffect(() => {
     setDarkMode(true);
   }, []);
@@ -55,21 +66,7 @@ const BurnToMint = () => {
 
   return (
     <div className="burn--to--mint">
-      <WelcomeWrapper
-        title="Burn To Mint"
-        hintText="Burn your v1 Polymorph & mint a new one"
-        btnText="Burn a Polymorph"
-        btnOnClick={() => history.push('/my-nfts')}
-        ellipsesLeft={false}
-        ellipsesRight={false}
-        bgTextLeft
-        bgTextRight
-        backgroundLeftImage={BurnPolymorphLeft}
-        backgroundRightImage={BurnPolymorphRight}
-        marquee={marquee()}
-      >
-        <img src={PolymorphGroupFire} alt="" />
-      </WelcomeWrapper>
+      <BurnToMintHeroSection marquee={marquee()} />
       <Section2HorizontalScroll
         width={windowSize.width}
         height={windowSize.height}
@@ -80,7 +77,11 @@ const BurnToMint = () => {
       />
       <Section4
         title="Burn your polymorph"
-        hintText="Universe if offering you the oppurtunity to burn your v1 Polymorph  and mint a new one."
+        hintText={[
+          'Let’s burn your Polymorph and create a new one! Same base skin, same traits - but a brand new 3D look.',
+          'Although your Polymorph will be burned for a 3D version, it’s still a Polymorph. You’ll be able to scramble and battle your Polymorph and it’ll still be eligble for future cosmetic upgrades such as this.',
+          'Let’s BURN.',
+        ]}
         buttonText="Burn a polymorph"
         backgroundImage={BurnPolymorphBg}
         leftBackground={Section4LeftBackground}
