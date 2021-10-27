@@ -2659,7 +2659,7 @@
     padding: 20px;
   }
 }
-// ****************************************
+
 .burn--polymorph--popup {
   position: fixed;
   left: 50%;
@@ -2669,7 +2669,8 @@
   border: 1px solid #d4d4d4;
   box-sizing: border-box;
   border-radius: 12px;
-  width: 439px;
+  max-width: 439px;
+  width: 90%;
   // min-height: 579px;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
   text-align: center;
@@ -2727,12 +2728,17 @@
   }
   img {
     border-radius: 6px;
+    width: 295px;
+    height: 295px;
   }
   .button--section {
     margin-top: 40px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 12px;
+  }
+  @include sm {
+    padding: 20px;
   }
 }
 .share--popup {

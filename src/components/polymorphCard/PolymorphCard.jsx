@@ -10,7 +10,7 @@ import { CHOOSE_POLYMORPH_CARD } from '../../utils/fixtures/ChoosePolymorphCardD
 const PolymorphCard = ({ rarity }) => {
   const history = useHistory();
   return (
-    <>
+    <li>
       <div className="polymorph--card">
         <div className="polymorph--card--header--section">
           <span>#{rarity.rarityNumber}</span>
@@ -35,7 +35,7 @@ const PolymorphCard = ({ rarity }) => {
           </div>
         </div>
       </div>
-    </>
+    </li>
   );
 };
 
