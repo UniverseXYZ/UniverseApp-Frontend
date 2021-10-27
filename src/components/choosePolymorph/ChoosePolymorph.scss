@@ -1,0 +1,174 @@
+@import "../../assets/scss/variables";
+@import "../../assets/scss/mixins";
+
+.choose--polymorph {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: black;
+  min-height: 950px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 111;
+  .animation--background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 0;
+  }
+  .choose--polymorph--container {
+    width: 1110px;
+    z-index: 111;
+    .back--button {
+      padding-left: 30px;
+      font-family: $spaceGroteskFont;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+      color: $white;
+      background-color: black;
+      display: flex;
+      @include md {
+        padding-left: unset;
+      }
+      > img {
+        margin-right: 10px;
+      }
+    }
+    > h1 {
+      color: rgba(255, 255, 255, 1);
+      font-family: $sharpGroteskSemiBoldFont;
+      font-size: 48px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 58px;
+      letter-spacing: 0px;
+      text-align: center;
+      margin-top: 40px;
+      @include md {
+        font-size: 26px;
+        line-height: 36px;
+      }
+    }
+    > p {
+      font-family: $spaceGroteskFont;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 27px;
+      letter-spacing: 0px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 20px;
+    }
+    .slider--carousel {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .button--section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 60px;
+      .flipster__button__prev {
+        display: none;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        width: 42px;
+        height: 42px;
+        background-repeat: no-repeat;
+        background-size: auto;
+        background-position: center;
+        background-image: url("../../assets/images/Arrow-left.svg");
+        @include md {
+          display: block;
+        }
+      }
+      .flipster__button__next {
+        display: none;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        width: 42px;
+        height: 42px;
+        background-repeat: no-repeat;
+        background-size: auto;
+        background-position: center;
+        background-image: url("../../assets/images/arrow-right.svg");
+        @include md {
+          display: block;
+        }
+      }
+      @include md {
+        justify-content: space-between;
+      }
+    }
+    .no--polymorphs--found--section {
+      text-align: center;
+      margin-top: 80px;
+      h1 {
+        font-family: $spaceGroteskFont;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 27px;
+        color: rgba(255, 255, 255, 1);
+        margin-top: 30px;
+      }
+      p {
+        font-family: $spaceGroteskFont;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 288px;
+        margin: 6px auto 30px auto;
+      }
+    }
+    .animation--page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 100px;
+      .image--secion {
+        position: relative;
+        img {
+          height: 535px;
+          border-radius: 12px;
+          object-fit: cover;
+          @include md {
+            width: 300px;
+            height: 300px;
+          }
+        }
+        .burn--animation {
+          position: absolute;
+          top: -145px;
+          z-index: 2;
+          left: -40px;
+          width: 120%;
+          @include md {
+            top: -75px;
+            left: -25px;
+          }
+        }
+      }
+    }
+    @include md {
+      padding: 0 20px;
+    }
+  }
+  @include md {
+    min-height: 767px;
+  }
+  @include sm {
+    min-height: 630px;
+  }
+}

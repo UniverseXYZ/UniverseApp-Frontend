@@ -1,0 +1,52 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
+.fighter__slider {
+  width: 100%;
+  height: 500px;
+  margin-top: 35px;
+  #carousel {
+    position: relative;
+    // overflow-x: visible !important;
+    > button {
+      @include md {
+        display: none;
+      }
+    }
+  }
+  .flipster__nav {
+    display: none;
+  }
+  .flipster--carousel .flipster__item--past-1,
+  .flipster--carousel .flipster__item--future-1 {
+    opacity: 1 !important;
+  }
+  .flipster__button {
+    svg {
+      display: none;
+    }
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    width: 42px;
+    height: 42px;
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: center;
+    &.flipster__button--prev {
+      background-image: url("../../../assets/images/Arrow-left.svg");
+    }
+    &.flipster__button--next {
+      background-image: url("../../../assets/images/arrow-right.svg");
+    }
+  }
+  .flipster__button--prev {
+    svg {
+      display: none;
+    }
+  }
+  @include md {
+    height: 370px;
+  }
+  @include sm {
+    height: 170px;
+  }
+}

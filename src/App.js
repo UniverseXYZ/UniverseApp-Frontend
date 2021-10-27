@@ -50,6 +50,7 @@ import { useAuthContext } from './contexts/AuthContext';
 import ErrorPopup from './components/popups/ErrorPopup';
 import { useErrorContext } from './contexts/ErrorContext';
 import Minting from './components/products/minting/Minting';
+import ChoosePolymorph from './components/choosePolymorph/ChoosePolymorph';
 
 const App = () => {
   const location = useLocation();
@@ -85,6 +86,9 @@ const App = () => {
                 </Route>
                 <Route exact path="/polymorph-universe">
                   <PolymorphUniverse />
+                </Route>
+                <Route exact path="/choose-polymorph">
+                  <ChoosePolymorph />
                 </Route>
                 {/* <Route exact path="/mint-polymorph">
                   <MintPolymorph />

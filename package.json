@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "3d-react-carousal": "^4.0.2",
     "@apollo/client": "^3.4.11",
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
@@ -59,6 +60,8 @@
     "react-scroll": "^1.8.4",
     "react-select": "^4.3.0",
     "react-slick": "^0.28.1",
+    "react-spring": "^9.3.0",
+    "react-spring-3d-carousel": "^1.2.1",
     "react-uuid": "^1.0.2",
     "reactjs-popup": "^2.0.4",
     "use-constant": "^1.1.0",
