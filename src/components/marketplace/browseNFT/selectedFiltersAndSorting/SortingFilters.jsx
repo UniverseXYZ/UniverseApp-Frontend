@@ -19,6 +19,7 @@ import closeIcon from '../../../../assets/images/close-menu.svg';
 import AppContext from '../../../../ContextAPI';
 import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const SortingFilters = ({
   saleTypeButtons,
@@ -471,7 +472,10 @@ const SortingFilters = ({
                       onClick={() => handleSelectCollection(coll)}
                       aria-hidden="true"
                     >
-                      {!coll.coverUrl ? (
+                      {coll.address ===
+                      process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                        <img className="collection__avatar" src={universeIcon} alt={coll.name} />
+                      ) : !coll.coverUrl ? (
                         <div
                           className="random--avatar--color"
                           style={{

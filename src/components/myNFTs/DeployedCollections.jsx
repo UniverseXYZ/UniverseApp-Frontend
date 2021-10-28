@@ -8,6 +8,7 @@ import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
+import universeIcon from '../../assets/images/universe-img.svg';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
@@ -70,7 +71,10 @@ const DeployedCollections = () => {
                   )}
                 </div>
                 <div className="saved__collection__box__body">
-                  {!collection.coverUrl ? (
+                  {collection.address ===
+                  process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                    <img className="collection__avatar" src={universeIcon} alt={collection.name} />
+                  ) : !collection.coverUrl ? (
                     <div
                       className="random__avatar__color"
                       style={{
