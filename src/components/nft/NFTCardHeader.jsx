@@ -106,7 +106,9 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
             <span className="tooltiptext">{`Collection: ${collection.name}`}</span>
           </div>
         )}
-        {owner && (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
+        {!owner ? (
+          <></>
+        ) : owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48) ? (
           <div
             className="owner--details"
             onClick={() => history.push(`/${owner.universePageUrl}`)}

@@ -49,6 +49,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
 import LoadingImage from '../general/LoadingImage';
+import InlineSVG from './InlineSVG';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -447,6 +448,25 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
     }
   };
 
+  const generateImage = () => {
+    if (selectedNFT.original_url) {
+      if (selectedNFT.original_url.startsWith('ipfs://')) {
+        return selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/');
+      }
+      return selectedNFT.original_url;
+    }
+
+    return selectedNFT.optimized_url || selectedNFT.thumbnail_url;
+  };
+
+  const showNftImage = () => {
+    if (!selectedNFT.optimized_url.endsWith('.svg')) {
+      return <LoadingImage showSpinner src={generateImage()} alt={selectedNFT.name} />;
+    }
+
+    return <InlineSVG svgUrl={selectedNFT.optimized_url || selectedNFT.thumbnail_url} />;
+  };
+
   return (
     <>
       <div className="marketplace--nft--page">
@@ -483,16 +503,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               <>
                 {selectedNFT.artworkType &&
                   !selectedNFT.artworkType.endsWith('mpeg') &&
-                  !selectedNFT.artworkType.endsWith('mp4') && (
-                    <LoadingImage
-                      src={
-                        selectedNFT.original_url.startsWith('ipfs://')
-                          ? selectedNFT.original_url.replace('ipfs://', 'https://ipfs.io/')
-                          : selectedNFT.original_url
-                      }
-                      alt={selectedNFT.name}
-                    />
-                  )}
+                  !selectedNFT.artworkType.endsWith('mp4') &&
+                  showNftImage()}
+
                 {selectedNFT.artworkType && selectedNFT.artworkType.endsWith('mp4') && (
                   <Draggable disabled={!miniPlayer} onMouseDown={handleDragStart} bounds="body">
                     <div
@@ -1108,8 +1121,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div>
             )}
 
-            {owner &&
-            (owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48)) ? (
+            {!owner ? (
+              <></>
+            ) : owner.avatar || (owner.profileImageUrl && owner.profileImageUrl.length > 48) ? (
               <div
                 className="Marketplace--creators"
                 onClick={() => history.push(`/${owner.universePageUrl}`)}

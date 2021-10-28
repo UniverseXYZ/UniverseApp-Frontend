@@ -16,6 +16,7 @@ import NFTCardHeader from './NFTCardHeader';
 import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import NftEditions from './NftEditions';
+import InlineSVG from '../marketplaceNFT/InlineSVG';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
@@ -62,6 +63,16 @@ const NFTCard = React.memo(
       };
     });
 
+    const showNftImage = () => {
+      if (!nft.thumbnail_url.endsWith('.svg')) {
+        return (
+          <LoadingImage showSpinner className="nft--image" alt={nft.name} src={nft.thumbnail_url} />
+        );
+      }
+
+      return <InlineSVG svgUrl={nft.thumbnail_url} />;
+    };
+
     return (
       <div
         className={`nft--card${canSelect ? ' can--select' : ''}${
@@ -84,14 +95,7 @@ const NFTCard = React.memo(
               }
               aria-hidden="true"
             >
-              {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && (
-                <LoadingImage
-                  className="nft--image"
-                  alt={nft.name}
-                  src={nft.thumbnail_url}
-                  placeholderImage={nft.thumbnail_url}
-                />
-              )}
+              {nft.artworkType !== 'audio/mpeg' && nft.artworkType !== 'mp4' && showNftImage()}
               {nft.artworkType === 'mp4' && (
                 <video
                   onMouseOver={(event) => event.target.play()}
@@ -183,14 +187,8 @@ const NFTCard = React.memo(
                 >
                   {nft.artworkType &&
                     !nft.artworkType.endsWith('mpeg') &&
-                    !nft.artworkType.endsWith('mp4') && (
-                      <LoadingImage
-                        className="nft--image"
-                        alt={nft.name}
-                        src={nft.thumbnail_url}
-                        placeholderImage={nft.thumbnail_url}
-                      />
-                    )}
+                    !nft.artworkType.endsWith('mp4') &&
+                    showNftImage()}
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <video
                       onMouseOver={(event) => event.target.play()}
