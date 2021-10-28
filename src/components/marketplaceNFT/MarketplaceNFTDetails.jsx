@@ -1107,13 +1107,25 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
               </div>
             )}
 
-            {collection && !collection.coverUrl && (
+            {collection && (
               <div
                 className="Marketplace--creators"
                 onClick={() => history.push(`/collection/${collection.address}`)}
                 aria-hidden
               >
-                <img src={universeIcon} alt={collection.name} />
+                {collection.address ===
+                process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                  <img src={universeIcon} alt={collection.name} />
+                ) : !collection.coverUrl ? (
+                  <div
+                    className="random--bg--color"
+                    style={{ backgroundColor: getCollectionBackgroundColor(collection) }}
+                  >
+                    {collection.name.charAt(0)}
+                  </div>
+                ) : (
+                  <img src={collection.coverUrl} alt={collection.name} />
+                )}
                 <div className="creator--name">
                   <p>Collection</p>
                   <h6>{collection.name}</h6>
