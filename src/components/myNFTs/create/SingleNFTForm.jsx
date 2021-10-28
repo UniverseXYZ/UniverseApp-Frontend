@@ -174,8 +174,14 @@ const SingleNFTForm = () => {
 
   const removeRoyaltyAddress = (index) => {
     const temp = [...royaltyAddress];
-    temp.splice(index, 1);
+    const removed = temp.splice(index, 1)[0];
     setRoyaltyAddress(temp);
+
+    // Clear the occuraqnce of this roaylty in the mapping
+    const tempIndexes = { ...royaltiesMapIndexes };
+    const occuranceArray = tempIndexes[removed.address];
+    if (occuranceArray) occuranceArray?.pop();
+    setRoyaltiesMapIndexes(tempIndexes);
 
     const addressErrors = temp.filter((prop) => prop.error && prop.error !== '');
     setRoyaltyValidAddress(!addressErrors.length);
@@ -1099,7 +1105,7 @@ const SingleNFTForm = () => {
                       <div className="property-address">
                         <h5>Wallet address</h5>
                         <DebounceInput
-                          debounceTimeout={300}
+                          debounceTimeout={150}
                           className={`${error ? 'error-inp inp' : 'inp'}`}
                           placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                           value={elm.address}
@@ -1223,7 +1229,7 @@ const SingleNFTForm = () => {
                   onClick={handleSaveForLater}
                   disabled={errors.name || errors.edition || errors.previewImage}
                 >
-                  Save
+                  Save for later
                 </Button>
                 <Button
                   className="light-button"
