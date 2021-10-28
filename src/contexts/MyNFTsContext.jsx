@@ -50,6 +50,7 @@ const MyNFTsContextProvider = ({ children }) => {
   const [mintingNftsCount, setMintingNftsCount] = useState(0);
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
   const [universeCollection, setUniverseCollection] = useState(null);
+  const [myNftsLoading, setMyNftsLoading] = useState(true);
 
   let nftPollInterval = null;
   let collPollInterval = null;
@@ -57,6 +58,7 @@ const MyNFTsContextProvider = ({ children }) => {
 
   const fetchNfts = async () => {
     try {
+      setMyNftsLoading(true);
       const [
         savedNFTS,
         myNfts,
@@ -76,6 +78,7 @@ const MyNFTsContextProvider = ({ children }) => {
       setSavedNfts(savedNFTS || []);
 
       setMyNFTs(myNfts || []);
+      setMyNftsLoading(false);
       setMyMintingNFTs(mintingNfts || []);
 
       setDeployedCollections(mintedCollectionsRequest.collections || []);
@@ -107,7 +110,9 @@ const MyNFTsContextProvider = ({ children }) => {
       alert(
         'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
       );
+      setMyNftsLoading(false);
     }
+    setMyNftsLoading(false);
   };
 
   useEffect(() => {
@@ -237,6 +242,7 @@ const MyNFTsContextProvider = ({ children }) => {
         mintingCollectionsCount,
         setMintingCollectionsCount,
         universeCollection,
+        myNftsLoading,
       }}
     >
       {children}
