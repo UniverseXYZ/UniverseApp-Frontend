@@ -64,7 +64,7 @@
         width: 100%;
 
         h2 {
-          font-family: $sharpGroteskMediumFont;
+          font-family: $sharpGroteskSemiBoldFont;
           font-style: normal;
           font-weight: 600;
           font-size: 20px;
@@ -73,6 +73,76 @@
           margin-bottom: 10px;
           @include sm {
             font-size: 16px;
+          }
+        }
+        h3 {
+          font-family: $sharpGroteskSemiBoldFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 130%;
+          margin-bottom: 20px;
+        }
+        .warning-div {
+          display: flex;
+          width: fit-content;
+          background: #fdfcf9;
+          border: 1px solid #e4b613;
+          box-sizing: border-box;
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 30px;
+
+          p {
+            font-family: $spaceGroteskFont;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 160%;
+            color: #e4b613;
+            margin-left: 13px;
+          }
+        }
+        .capture__slot__revenue {
+          display: flex;
+          justify-content: space-between;
+
+          .show__all__slots {
+            position: relative;
+            display: flex;
+            height: fit-content;
+
+            p {
+              font-family: $spaceGroteskFont;
+              font-weight: normal;
+              font-style: normal;
+              font-size: 14px;
+              line-height: 150%;
+              margin-right: 5px;
+            }
+            .switch {
+              margin-bottom: 0%;
+              margin-left: 7px;
+            }
+            .info-text {
+              position: absolute;
+              background: $white;
+              box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+              border-radius: 12px;
+              padding: 16px;
+              width: 201px;
+              left: 0%;
+              bottom: 30px;
+
+              p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 150%;
+                color: $black;
+              }
+            }
           }
         }
         .auction__description {
@@ -240,6 +310,259 @@
           }
           @include sm {
             padding: 22px 24px 24px;
+          }
+        }
+        .slots__list {
+          background: $white;
+          box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+          border-radius: 12px;
+          padding: 0px 30px;
+
+          .slot {
+            padding: 20px 0px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            &:last-child {
+              border-bottom: none;
+            }
+
+            .slot__content {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .slot__left__part {
+                display: flex;
+                align-items: center;
+
+                .dropdown {
+                  border: 1px solid rgba(0, 0, 0, 0.1);
+                  box-sizing: border-box;
+                  border-radius: 6px;
+                  text-align: center;
+                  height: 22px;
+                  width: 22px;
+                  margin-right: 10px;
+                }
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 14px;
+                  line-height: 22px;
+                  margin-right: 10px;
+                }
+                span {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 10px;
+                  line-height: 150%;
+                  margin-right: 4px;
+                }
+                .slot__type {
+                  box-sizing: border-box;
+                  border-radius: 20px;
+                  padding: 2px 6px;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 10px;
+                  line-height: 120%;
+                  text-transform: capitalize;
+
+                  &.platinum {
+                    border: 1px solid #80ccdf;
+                    color: #80ccdf;
+                  }
+                  &.gold {
+                    border: 1px solid #ddbc45;
+                    color: #ddbc45;
+                  }
+                  &.silver {
+                    border: 1px solid #bcbcbc;
+                    color: #bcbcbc;
+                  }
+                }
+              }
+              .slot__right__part {
+                display: flex;
+                align-items: center;
+
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 14px;
+                  line-height: 18px;
+                  color: $black;
+                  margin-right: 20px;
+                }
+              }
+              @include sm {
+                display: none;
+              }
+            }
+            .slot__content__mobile {
+              display: none;
+              .slot__first__part {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 12px;
+
+                .main {
+                  display: flex;
+                  align-items: center;
+                  p {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 22px;
+                    margin-right: 10px;
+                  }
+                  span {
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 10px;
+                    line-height: 150%;
+                    margin-right: 4px;
+                  }
+                  .slot__type {
+                    box-sizing: border-box;
+                    border-radius: 20px;
+                    padding: 2px 6px;
+                    font-family: $spaceGroteskFont;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 10px;
+                    line-height: 120%;
+                    text-transform: capitalize;
+
+                    &.platinum {
+                      border: 1px solid #80ccdf;
+                      color: #80ccdf;
+                    }
+                    &.gold {
+                      border: 1px solid #ddbc45;
+                      color: #ddbc45;
+                    }
+                    &.silver {
+                      border: 1px solid #bcbcbc;
+                      color: #bcbcbc;
+                    }
+                  }
+                }
+                p {
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 14px;
+                  line-height: 18px;
+                  color: $black;
+                  margin-right: 20px;
+                }
+              }
+              .slot__second__part {
+                display: flex;
+                gap: 12px;
+
+                .dropdown {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  border: 1px solid rgba(0, 0, 0, 0.1);
+                  box-sizing: border-box;
+                  border-radius: 10px;
+                  height: 36px;
+                  width: 36px;
+                }
+                button {
+                  width: 100%;
+                  padding: 8px 26px;
+                  font-size: 14px;
+                  line-height: 140%;
+                }
+              }
+              @include sm {
+                display: grid;
+              }
+            }
+            .slot__body {
+              display: flex;
+              gap: 13px;
+              .slot__nft__box {
+                position: relative;
+                background: $white;
+                width: fit-content;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+                border-radius: 12px;
+                padding: 6px;
+
+                img {
+                  height: 75px;
+                  width: 75px;
+                  border-radius: 5px;
+
+                  @include sm {
+                    width: 63px;
+                    height: 63px;
+                  }
+                }
+                .slot__nft__box__highlight__one {
+                  position: absolute;
+                  height: 4px;
+                  width: 75px;
+                  left: 6px;
+                  bottom: -4px;
+                  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                  border-left: 1px solid rgba(0, 0, 0, 0.1);
+                  border-right: 1px solid rgba(0, 0, 0, 0.1);
+                  border-bottom-left-radius: 150px;
+                  border-bottom-right-radius: 150px;
+
+                  @include sm {
+                    width: 63px;
+                  }
+                }
+                .slot__nft__box__highlight__two {
+                  position: absolute;
+                  height: 4px;
+                  width: 63px;
+                  left: 12px;
+                  bottom: -8px;
+                  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                  border-left: 1px solid rgba(0, 0, 0, 0.1);
+                  border-right: 1px solid rgba(0, 0, 0, 0.1);
+                  border-bottom-left-radius: 150px;
+                  border-bottom-right-radius: 150px;
+
+                  @include sm {
+                    width: 51px;
+                  }
+                }
+                .editions__number {
+                  position: absolute;
+                  background: rgba(0, 0, 0, 0.8);
+                  backdrop-filter: blur(2px);
+                  border-radius: 3px;
+                  font-family: $spaceGroteskFont;
+                  font-style: normal;
+                  font-weight: 600;
+                  font-size: 10px;
+                  line-height: 150%;
+                  text-align: center;
+                  color: $white;
+                  width: 14px;
+                  height: 15px;
+                  top: 10px;
+                  right: 10px;
+                }
+              }
+              @include sm {
+                margin-top: 20px;
+              }
+            }
           }
         }
       }

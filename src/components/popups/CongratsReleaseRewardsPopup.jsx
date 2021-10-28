@@ -27,7 +27,7 @@ const CongratsReleaseRewardsPopup = ({ onClose }) => {
         </p>
       </div>
       <div className="popup-btns">
-        <Button className="light-button" onClick={() => history.push('/my-auctions')}>
+        <Button className="light-button" onClick={() => history.goBack()}>
           Visit landing page
         </Button>
       </div>

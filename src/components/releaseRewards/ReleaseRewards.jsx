@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './ReleaseRewards.scss';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import Popup from 'reactjs-popup';
+import uuid from 'react-uuid';
 import Button from '../button/Button.jsx';
 import nft1 from '../../assets/images/marketplace/nfts/nft4.png';
 import arrow from '../../assets/images/arrow.svg';
@@ -10,14 +11,48 @@ import completedCheckmark from '../../assets/images/completedCheckmark.svg';
 import doneIcon from '../../assets/images/Completed.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
-import { ReleaseRewardsData } from '../../utils/fixtures/ReleaseRewardsDummyData';
+import infoIcon from '../../assets/images/icon.svg';
+import arrowDown from '../../assets/images/arrow-down.svg';
+import warningIcon from '../../assets/images/Exclamation.svg';
+import { ReleaseRewardsData, SlotsRewardData } from '../../utils/fixtures/ReleaseRewardsDummyData';
 import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
 
 const ReleaseRewards = () => {
   const history = useHistory();
+  const location = useLocation();
   const [auctionProceed, setAuctionProceed] = useState(false);
   const [data, setData] = useState([...ReleaseRewardsData]);
+  const [slotData, setSlotData] = useState([...SlotsRewardData]);
   const [showSuccesPopup, setShowSuccessPopup] = useState(false);
+  const [hideInfo, setHideInfo] = useState(false);
+  const [showSlots, setShowSlots] = useState(false);
+  // const view = 'Auctioneer';
+  const { view } = location.state;
+  const [yourSlot, setYourSlot] = useState({
+    number: 3,
+    name: '0x2ef8...0d8c',
+    type: 'platinum',
+    nftsQuantity: 4,
+    completed: false,
+    open: false,
+    nfts: [
+      {
+        id: uuid(),
+        image: nft1,
+        editions: 2,
+      },
+      {
+        id: uuid(),
+        image: nft1,
+        editions: 1,
+      },
+      {
+        id: uuid(),
+        image: nft1,
+        editions: 1,
+      },
+    ],
+  });
 
   const handleComplete = (id) => {
     const newData = [...data];
@@ -30,6 +65,39 @@ const ReleaseRewards = () => {
     if (data.filter((transaction) => transaction.completed === true).length === data.length) {
       setShowSuccessPopup(true);
     }
+  };
+
+  const handleSlotComplete = (id) => {
+    const newSlotData = [...slotData];
+    newSlotData.forEach((slot) => {
+      if (slot.id === id) {
+        slot.completed = true;
+      }
+    });
+    setSlotData(newSlotData);
+    setSlotData(newSlotData);
+    if (slotData.filter((slot) => slot.completed === true).length === slotData.length) {
+      setShowSuccessPopup(true);
+    }
+  };
+
+  const handleShowNFTs = (id) => {
+    const newSlotData = [...slotData];
+    newSlotData.forEach((slot) => {
+      if (slot.id === id) {
+        slot.open = !slot.open;
+      }
+    });
+    setSlotData(newSlotData);
+  };
+
+  const handleMySlotComplete = () => {
+    setYourSlot((prevYourSlot) => ({ ...prevYourSlot, completed: true }));
+    setShowSuccessPopup(true);
+  };
+
+  const handleShowMyNFTs = () => {
+    setYourSlot((prevYourSlot) => ({ ...prevYourSlot, open: !prevYourSlot.open }));
   };
 
   return (
@@ -94,19 +162,83 @@ const ReleaseRewards = () => {
               </div>
             </div>
             <div className="release__auction__body">
-              <h2>Capture slot revenue</h2>
+              <div className="capture__slot__revenue">
+                <h2>Capture slot revenue</h2>
+                <div
+                  className="show__all__slots"
+                  onMouseEnter={() => setHideInfo(true)}
+                  onMouseLeave={() => setHideInfo(false)}
+                >
+                  <p>Show all slots</p>
+                  <img src={infoIcon} alt="Info" />
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={showSlots}
+                      onChange={(e) => setShowSlots(e.target.checked)}
+                    />
+                    <span className="slider round" />
+                  </label>
+                  {hideInfo && (
+                    <div className="info-text">
+                      <p>
+                        Use this toggle if you want to pay gas fees for the specific user separately
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
               <p className="auction__description">
                 Once the auction is finalized, the revenue for each slot should be captured.
               </p>
-
-              {data.map((transaction) => (
-                <div className="transaction">
-                  <div className="transaction__header">
-                    <h3>{transaction.name}</h3>
-                    <div className="transaction__proceed">
-                      <p className="total">
-                        Total NFTs: <b>{transaction.totalNFTs}</b>
-                      </p>
+              {!showSlots &&
+                view === 'Auctioneer' &&
+                data.map((transaction) => (
+                  <div className="transaction">
+                    <div className="transaction__header">
+                      <h3>{transaction.name}</h3>
+                      <div className="transaction__proceed">
+                        <p className="total">
+                          Total NFTs: <b>{transaction.totalNFTs}</b>
+                        </p>
+                        {transaction.completed ? (
+                          <Button className="light-border-button" disabled>
+                            Completed <img src={completedCheckmark} alt="completed" />
+                          </Button>
+                        ) : (
+                          <Button
+                            className="light-button"
+                            disabled={!auctionProceed}
+                            onClick={() => handleComplete(transaction.id)}
+                          >
+                            Proceed
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    {transaction.tiers.map((tier) => (
+                      <div className="transaction__tier">
+                        <div className="tier__head">
+                          <h4>{tier.type}</h4>
+                          <p>
+                            Slots: <b>{tier.slots}</b>
+                          </p>
+                          <p>
+                            NFTs: <b>{tier.nftQuantity}</b>
+                          </p>
+                        </div>
+                        <div className="tier__body">
+                          {tier.nfts.map((nft) => (
+                            <div className="tier__nft__box">
+                              <img src={nft.image} alt="NFT" />
+                              <div className="tier__nft__box__highlight__one" />
+                              <div className="tier__nft__box__highlight__two" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                    <div className="proceed__button__mobile">
                       {transaction.completed ? (
                         <Button className="light-border-button" disabled>
                           Completed <img src={completedCheckmark} alt="completed" />
@@ -122,41 +254,209 @@ const ReleaseRewards = () => {
                       )}
                     </div>
                   </div>
-                  {transaction.tiers.map((tier) => (
-                    <div className="transaction__tier">
-                      <div className="tier__head">
-                        <h4>{tier.type}</h4>
-                        <p>
-                          Slots: <b>{tier.slots}</b>
-                        </p>
-                        <p>
-                          NFTs: <b>{tier.nftQuantity}</b>
-                        </p>
-                      </div>
-                      <div className="tier__body">
-                        {tier.nfts.map((nft) => (
-                          <div className="tier__nft__box">
-                            <img src={nft.image} alt="NFT" />
-                            <div className="tier__nft__box__highlight__one" />
-                            <div className="tier__nft__box__highlight__two" />
+                ))}
+              {view === 'Bidders' && (
+                <>
+                  {showSlots && <h3>Your slot</h3>}
+                  <div className="slots__list">
+                    <div className="slot">
+                      <div className="slot__content">
+                        <div className="slot__left__part">
+                          <div
+                            className="dropdown"
+                            aria-hidden="true"
+                            onClick={() => handleShowMyNFTs()}
+                          >
+                            <img src={arrowDown} alt="Arrow" />
                           </div>
-                        ))}
+                          <span>{yourSlot.number}.</span>
+                          <p>{yourSlot.name}</p>
+                          <div className={`slot__type ${yourSlot.type}`}>{yourSlot.type}</div>
+                        </div>
+                        <div className="slot__right__part">
+                          <p>
+                            NFTs: <b>{yourSlot.nftsQuantity}</b>
+                          </p>
+
+                          {yourSlot.completed ? (
+                            <Button className="light-border-button" disabled>
+                              Completed <img src={completedCheckmark} alt="completed" />
+                            </Button>
+                          ) : (
+                            <Button
+                              className="light-button"
+                              disabled={!auctionProceed}
+                              onClick={() => handleMySlotComplete()}
+                            >
+                              Proceed
+                            </Button>
+                          )}
+                        </div>
                       </div>
+                      <div className="slot__content__mobile">
+                        <div className="slot__first__part">
+                          <div className="main">
+                            <span>{yourSlot.number}.</span>
+                            <p>{yourSlot.name}</p>
+                            <div className={`slot__type ${yourSlot.type}`}>{yourSlot.type}</div>
+                          </div>
+                          <p>
+                            NFTs: <b>{yourSlot.nftsQuantity}</b>
+                          </p>
+                        </div>
+                        <div className="slot__second__part">
+                          <div
+                            className="dropdown"
+                            aria-hidden="true"
+                            onClick={() => handleShowMyNFTs()}
+                          >
+                            <img src={arrowDown} alt="Arrow" />
+                          </div>
+
+                          {yourSlot.completed ? (
+                            <Button className="light-border-button" disabled>
+                              Completed <img src={completedCheckmark} alt="completed" />
+                            </Button>
+                          ) : (
+                            <Button
+                              className="light-button"
+                              disabled={!auctionProceed}
+                              onClick={() => handleMySlotComplete()}
+                            >
+                              Proceed
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      {yourSlot.open && (
+                        <div className="slot__body">
+                          {yourSlot.nfts.map((nft) => (
+                            <div className="slot__nft__box">
+                              <img src={nft.image} alt="NFT" />
+                              {nft.editions > 1 && (
+                                <>
+                                  <div className="slot__nft__box__highlight__one" />
+                                  <div className="slot__nft__box__highlight__two" />
+                                  <div className="editions__number">{nft.editions}</div>
+                                </>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {showSlots && (
+                    <>
+                      <h3 style={{ marginTop: '40px' }}>Other slots</h3>
+                      <div className="warning-div">
+                        <img src={warningIcon} alt="Icon" />
+                        <p>You don’t need to proceed with the other slots to claim your NFTs. </p>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+              {showSlots && (
+                <div className="slots__list">
+                  {slotData.map((slot) => (
+                    <div className="slot">
+                      <div className="slot__content">
+                        <div className="slot__left__part">
+                          <div
+                            className="dropdown"
+                            aria-hidden="true"
+                            onClick={() => handleShowNFTs(slot.id)}
+                          >
+                            <img
+                              src={arrowDown}
+                              alt="Arrow"
+                              style={
+                                slot.open
+                                  ? { transform: 'rotate(180deg)' }
+                                  : { transform: 'rotate(0deg)' }
+                              }
+                            />
+                          </div>
+                          <span>{slot.number}.</span>
+                          <p>{slot.name}</p>
+                          <div className={`slot__type ${slot.type}`}>{slot.type}</div>
+                        </div>
+                        <div className="slot__right__part">
+                          <p>
+                            NFTs: <b>{slot.nftsQuantity}</b>
+                          </p>
+                          {slot.completed ? (
+                            <Button className="light-border-button" disabled>
+                              Completed <img src={completedCheckmark} alt="completed" />
+                            </Button>
+                          ) : (
+                            <Button
+                              className={
+                                view === 'Auctioneer' ? 'light-button' : 'light-border-button'
+                              }
+                              onClick={() => handleSlotComplete(slot.id)}
+                              disabled={!auctionProceed}
+                            >
+                              Proceed
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="slot__content__mobile">
+                        <div className="slot__first__part">
+                          <div className="main">
+                            <span>{slot.number}.</span>
+                            <p>{slot.name}</p>
+                            <div className={`slot__type ${slot.type}`}>{slot.type}</div>
+                          </div>
+                          <p>
+                            NFTs: <b>{slot.nftsQuantity}</b>
+                          </p>
+                        </div>
+                        <div className="slot__second__part">
+                          <div
+                            className="dropdown"
+                            aria-hidden="true"
+                            onClick={() => handleShowNFTs(slot.id)}
+                          >
+                            <img src={arrowDown} alt="Arrow" />
+                          </div>
+                          {slot.completed ? (
+                            <Button className="light-border-button" disabled>
+                              Completed <img src={completedCheckmark} alt="completed" />
+                            </Button>
+                          ) : (
+                            <Button
+                              className="light-button"
+                              onClick={() => handleSlotComplete(slot.id)}
+                              disabled={!auctionProceed}
+                            >
+                              Proceed
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      {slot.open && (
+                        <div className="slot__body">
+                          {slot.nfts.map((nft) => (
+                            <div className="slot__nft__box">
+                              <img src={nft.image} alt="NFT" />
+                              {nft.editions > 1 && (
+                                <>
+                                  <div className="slot__nft__box__highlight__one" />
+                                  <div className="slot__nft__box__highlight__two" />
+                                  <div className="editions__number">{nft.editions}</div>
+                                </>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
-                  <div className="proceed__button__mobile">
-                    {transaction.completed ? (
-                      <Button className="light-border-button" disabled>
-                        Completed <img src={completedCheckmark} alt="completed" />
-                      </Button>
-                    ) : (
-                      <Button className="light-button" disabled={!auctionProceed}>
-                        Proceed
-                      </Button>
-                    )}
-                  </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -168,4 +468,10 @@ const ReleaseRewards = () => {
   );
 };
 
+// ReleaseRewards.propTypes = {
+//   view: PropTypes.string,
+// };
+// ReleaseRewards.defaultProps = {
+//   view: 'Auctioneer',
+// };
 export default ReleaseRewards;
