@@ -12,7 +12,7 @@ const AuctionsTabsCountdown = ({ activeAuction }) => {
   );
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       const { days, hours, minutes, seconds } = intervalToDuration({
         start: new Date(activeAuction.endDate),
         end: new Date(),
@@ -25,21 +25,20 @@ const AuctionsTabsCountdown = ({ activeAuction }) => {
         seconds,
       });
     }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
   });
 
   return (
     <>
-      {isAfterNow(activeAuction.startDate) ? (
-        <p>
-          Auction starts in{' '}
-          <b>{`${countdown.days}d : ${countdown.hours}h : ${countdown.minutes}m : ${countdown.seconds}s`}</b>
-        </p>
-      ) : (
-        <p>
-          Auction ends in{' '}
-          <b>{`${countdown.days}d : ${countdown.hours}h : ${countdown.minutes}m : ${countdown.seconds}s`}</b>
-        </p>
-      )}
+      <p>
+        {isAfterNow(activeAuction.startDate) ? 'Auction starts in' : 'Auction ends in'}{' '}
+        <b>
+          {`${countdown.days}d : ${countdown.hours}h : ${countdown.minutes}m : ${countdown.seconds}s`}
+        </b>
+      </p>
     </>
   );
 };
