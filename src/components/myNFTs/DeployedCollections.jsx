@@ -9,15 +9,22 @@ import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import PendingCollections from './pendingDropdown/pendingCollections/PendingCollections';
 import universeIcon from '../../assets/images/universe-img.svg';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const DeployedCollections = () => {
   const { deployedCollections } = useAuthContext();
+  const { myMintableCollections } = useMyNftsContext();
   const history = useHistory();
   const ref2 = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [offset, setOffset] = useState(0);
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(8);
+  const [distinctCollections, setDisinctCollections] = useState([
+    ...new Map(
+      [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
+    ).values(),
+  ]);
 
   const handleClickOutside = (event) => {
     if (ref2.current && !ref2.current.contains(event.target)) {
@@ -31,13 +38,21 @@ const DeployedCollections = () => {
     };
   });
 
+  useEffect(() => {
+    const newDistinct = [
+      ...new Map(
+        [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
+      ).values(),
+    ];
+    setDisinctCollections(newDistinct);
+  }, [deployedCollections, myMintableCollections]);
   return (
     <div className="tab__saved__collections">
       <PendingCollections />
-      {deployedCollections.length ? (
+      {distinctCollections.length ? (
         <>
           <div className="saved__collections__lists">
-            {deployedCollections.slice(offset, offset + perPage).map((collection, index) => (
+            {distinctCollections.slice(offset, offset + perPage).map((collection, index) => (
               <div
                 className="saved__collection__box"
                 key={uuid()}
@@ -101,7 +116,7 @@ const DeployedCollections = () => {
           </div>
           <div className="pagination__container">
             <SimplePagination
-              data={deployedCollections}
+              data={distinctCollections}
               perPage={perPage}
               setOffset={setOffset}
               setPage={setPage}

@@ -80,6 +80,7 @@ const SingleNFTForm = () => {
     setMintingNftsCount,
     universeCollection,
     setMyNFTsSelectedTabIndex,
+    myMintableCollections,
   } = useMyNftsContext();
 
   const {
@@ -690,7 +691,9 @@ const SingleNFTForm = () => {
         setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
         setProperties(parsedProperties);
         if (res.collectionId) {
-          const getCollection = deployedCollections.filter((col) => col.id === res.collectionId)[0];
+          const getCollection = myMintableCollections.filter(
+            (col) => col.id === res.collectionId
+          )[0];
           if (getCollection) {
             setSelectedCollection(getCollection);
           }
@@ -928,21 +931,14 @@ const SingleNFTForm = () => {
           </div>
           <div
             className={`banner ${
-              deployedCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
+              myMintableCollections.length >= COLLECTIONS_PER_ROW ? 'scroll-box' : ''
             } single-nft-choose-collection`}
           >
             <h4>Choose collection</h4>
             <div className="choose__collection">
-              {universeCollection && (
+              {myMintableCollections.map((col) => (
                 <CollectionChoice
-                  selectedCollection={selectedCollection}
-                  setSelectedCollection={setSelectedCollection}
-                  col={universeCollection}
-                />
-              )}
-              {deployedCollections.map((col) => (
-                <CollectionChoice
-                  key={uuid()}
+                  key={col.id}
                   selectedCollection={selectedCollection}
                   setSelectedCollection={setSelectedCollection}
                   col={col}

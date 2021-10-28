@@ -51,6 +51,7 @@ const MyNFTsContextProvider = ({ children }) => {
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
   const [universeCollection, setUniverseCollection] = useState(null);
   const [myNftsLoading, setMyNftsLoading] = useState(true);
+  const [myMintableCollections, setMyMintableCollections] = useState([]);
 
   let nftPollInterval = null;
   let collPollInterval = null;
@@ -82,8 +83,8 @@ const MyNFTsContextProvider = ({ children }) => {
       setMyMintingNFTs(mintingNfts || []);
 
       setDeployedCollections(mintedCollectionsRequest.collections || []);
+      setMyMintableCollections(mintableCollections.collections || []);
       setMyMintingCollections(mintingcollectionsRequest.collections || []);
-
       const universeColl = mintableCollections.collections.filter(
         (coll) =>
           coll.address.toLowerCase() ===
@@ -153,11 +154,13 @@ const MyNFTsContextProvider = ({ children }) => {
       collPollInterval = setInterval(async () => {
         const apiMintingCount = await getMyMintingCollectionsCount();
         if (apiMintingCount !== mintingCollectionsCount) {
-          const [mintedCollections, mintingCollections] = await Promise.all([
+          const [mintedCollections, mintableCollections, mintingCollections] = await Promise.all([
             getMyMintedCollections(),
+            getMyMintableCollections(),
             getMyMintingCollections(),
           ]);
           setDeployedCollections(mintedCollections.collections);
+          setMyMintableCollections(mintableCollections.collections);
           setMyMintingCollections(mintingCollections.collections);
           setMintingCollectionsCount(mintingCollections?.collections?.length || 0);
 
@@ -243,6 +246,7 @@ const MyNFTsContextProvider = ({ children }) => {
         setMintingCollectionsCount,
         universeCollection,
         myNftsLoading,
+        myMintableCollections,
       }}
     >
       {children}

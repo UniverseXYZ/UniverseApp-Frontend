@@ -428,7 +428,10 @@ const SortingFilters = ({
               <div className="collection--dropdown--selected">
                 {selectedCollections.map((coll, index) => (
                   <button type="button" className="light-border-button" key={uuid()}>
-                    {!coll.coverUrl ? (
+                    {coll.address ===
+                    process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                      <img className="sell__collection" src={universeIcon} alt={coll.name} />
+                    ) : !coll.coverUrl ? (
                       <div
                         className="random--avatar--color"
                         style={{
@@ -468,7 +471,7 @@ const SortingFilters = ({
                   .map((coll, index) => (
                     <div
                       className="collection__item"
-                      key={uuid()}
+                      key={coll.id}
                       onClick={() => handleSelectCollection(coll)}
                       aria-hidden="true"
                     >
