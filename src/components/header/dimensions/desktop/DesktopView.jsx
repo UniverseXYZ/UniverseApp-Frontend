@@ -319,9 +319,12 @@ const DesktopView = ({
                     type="button"
                     style={{ background: 'transparent' }}
                     onClick={() => {
-                      if (!loggedInArtist.universePageAddress) return;
+                      if (!loggedInArtist.universePageAddress && !address) return;
 
-                      history.push(`/${loggedInArtist.universePageAddress}`, {
+                      const path = loggedInArtist.universePageAddress
+                        ? loggedInArtist.universePageAddress
+                        : address;
+                      history.push(`/${path}`, {
                         id: loggedInArtist.id,
                       });
 
