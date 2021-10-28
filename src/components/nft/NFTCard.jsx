@@ -65,9 +65,7 @@ const NFTCard = React.memo(
 
     const showNftImage = () => {
       if (!nft.thumbnail_url.endsWith('.svg')) {
-        return (
-          <LoadingImage showSpinner className="nft--image" alt={nft.name} src={nft.thumbnail_url} />
-        );
+        return <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} />;
       }
 
       return <InlineSVG svgUrl={nft.thumbnail_url} />;

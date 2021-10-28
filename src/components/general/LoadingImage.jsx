@@ -15,9 +15,6 @@ const LoadingImage = React.memo(({ placeholderImage, src, alt, className, showSp
     },
     []
   );
-  useEffect(() => {
-    setLoading(true);
-  }, [src]);
 
   return (
     <>
