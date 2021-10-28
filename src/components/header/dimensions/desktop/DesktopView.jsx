@@ -59,6 +59,7 @@ const DesktopView = ({
     yourEnsDomain,
     usdEthBalance,
     resetConnectionState,
+    loggedInArtist,
   } = useAuthContext();
 
   return (
@@ -314,7 +315,21 @@ const DesktopView = ({
             <div className="dropdown drop-account">
               <div className="dropdown__header">
                 <div className="copy-div">
-                  <HeaderAvatar scale={4} />
+                  <button
+                    type="button"
+                    style={{ background: 'transparent' }}
+                    onClick={() => {
+                      if (!loggedInArtist.universePageAddress) return;
+
+                      history.push(`/${loggedInArtist.universePageAddress}`, {
+                        id: loggedInArtist.id,
+                      });
+
+                      setIsAccountDropdownOpened(false);
+                    }}
+                  >
+                    <HeaderAvatar scale={4} />
+                  </button>
                   <div className="ethereum__address">
                     {yourEnsDomain
                       ? shortenEnsDomain(yourEnsDomain)

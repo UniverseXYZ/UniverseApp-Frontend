@@ -4,6 +4,7 @@ import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import { useLocation } from 'react-router-dom';
 import { Contract, utils } from 'ethers';
+import { DebounceInput } from 'react-debounce-input';
 import './CreateSingleNft.scss';
 import Button from '../../button/Button.jsx';
 import Input from '../../input/Input.jsx';
@@ -81,8 +82,14 @@ const SingleNFTForm = () => {
     setMyNFTsSelectedTabIndex,
   } = useMyNftsContext();
 
-  const { deployedCollections, universeERC721CoreContract, address, contracts, signer } =
-    useAuthContext();
+  const {
+    deployedCollections,
+    universeERC721CoreContract,
+    address,
+    contracts,
+    signer,
+    web3Provider,
+  } = useAuthContext();
 
   const { setShowError, setErrorTitle, setErrorBody } = useErrorContext();
 
@@ -105,15 +112,23 @@ const SingleNFTForm = () => {
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
   const [royalities, setRoyalities] = useState(true);
-  const [propertyCheck, setPropertyCheck] = useState(true);
+  const [propertyCheck, setPropertyCheck] = useState(false);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([
     { name: '', value: '', errors: { name: '', value: '' } },
   ]);
   const [royaltyAddress, setRoyaltyAddress] = useState([{ address, amount: '10' }]);
 
+  const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState(
+    Object.defineProperty({}, `${address}`, {
+      value: [0],
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    })
+  );
+
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
-  const [royaltiesMapIndexes, setRoyaltiesMapIndexes] = useState({});
   const [propertiesIndexes, setPropertiesMapIndexes] = useState({});
   const [selectedCollection, setSelectedCollection] = useState(
     location.state?.collection || universeCollection
@@ -134,11 +149,11 @@ const SingleNFTForm = () => {
   const hasAddressError = (royalty, index) => {
     if (royalty && royaltiesMapIndexes[royalty]) {
       const isRepeated = royaltiesMapIndexes[royalty].length > 1;
-      if (!isRepeated) return false;
+      if (!isRepeated) return '';
       const firstAppearenceIndex = royaltiesMapIndexes[royalty][0];
       if (index !== firstAppearenceIndex) return 'Duplicated address';
     }
-    return false;
+    return '';
   };
 
   const hasPropError = (value, index) => {
@@ -159,8 +174,14 @@ const SingleNFTForm = () => {
 
   const removeRoyaltyAddress = (index) => {
     const temp = [...royaltyAddress];
-    temp.splice(index, 1);
+    const removed = temp.splice(index, 1)[0];
     setRoyaltyAddress(temp);
+
+    // Clear the occuraqnce of this roaylty in the mapping
+    const tempIndexes = { ...royaltiesMapIndexes };
+    const occuranceArray = tempIndexes[removed.address];
+    if (occuranceArray) occuranceArray?.pop();
+    setRoyaltiesMapIndexes(tempIndexes);
 
     const addressErrors = temp.filter((prop) => prop.error && prop.error !== '');
     setRoyaltyValidAddress(!addressErrors.length);
@@ -180,12 +201,20 @@ const SingleNFTForm = () => {
     setRoyaltyAddress(newProperties);
   };
 
-  const propertyChangesAddress = (index, val) => {
+  const propertyChangesAddress = async (index, val) => {
     const prevProperties = [...royaltyAddress];
-    prevProperties[index].address = val;
-    prevProperties[index].error = !utils.isAddress(val) ? 'Please enter valid address' : '';
-    const addressErrors = prevProperties.filter((prop) => prop.error !== '');
 
+    try {
+      const ens = await web3Provider.resolveName(val);
+      const ensToAddress = utils.isAddress(ens);
+      prevProperties[index].address = ensToAddress ? ens.toLowerCase() : val;
+      prevProperties[index].error = !ensToAddress ? 'Please enter valid address' : '';
+    } catch (e) {
+      prevProperties[index].address = val.toLowerCase();
+      prevProperties[index].error = !utils.isAddress(val) ? 'Please enter valid address' : '';
+    }
+
+    const addressErrors = prevProperties.filter((prop) => prop.error);
     const lastAddress = prevProperties[index].address;
 
     // eslint-disable-next-line no-restricted-syntax
@@ -206,11 +235,12 @@ const SingleNFTForm = () => {
         royaltiesMapIndexes[lastAddress].splice(royaltiesMapIndexes[r].indexOf(index), 1);
       }
     }
-    if (royaltiesMapIndexes[val] && !royaltiesMapIndexes[val].includes(index)) {
-      royaltiesMapIndexes[val].push(index);
+    const value = prevProperties[index].address;
+    if (royaltiesMapIndexes[value] && !royaltiesMapIndexes[value].includes(index)) {
+      royaltiesMapIndexes[value].push(index);
     } else {
-      royaltiesMapIndexes[val] = [];
-      royaltiesMapIndexes[val].push(index);
+      royaltiesMapIndexes[value] = [];
+      royaltiesMapIndexes[value].push(index);
     }
 
     setRoyaltiesMapIndexes(royaltiesMapIndexes);
@@ -1066,58 +1096,63 @@ const SingleNFTForm = () => {
                 </label>
               </div>
               {royalities &&
-                royaltyAddress.map((elm, i) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <div key={i} className="royalty properties">
-                    <div className="property-address">
-                      <h5>Wallet address</h5>
-                      <Input
-                        className="inp"
-                        placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
-                        value={elm.address}
-                        error={elm.error || hasAddressError(elm.address, i)}
-                        onChange={(e) => propertyChangesAddress(i, e.target.value)}
-                        hoverBoxShadowGradient
-                      />
-                    </div>
-                    <div className="property-amount">
-                      <h5>Percent amount</h5>
-                      <Input
-                        className="percent-inp"
-                        type="number"
-                        placeholder="5"
-                        value={elm.amount}
-                        onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
-                        onWheel={(e) => e.target.blur()}
-                        hoverBoxShadowGradient
-                      />
-                      <span className="percent-sign">%</span>
-                    </div>
-                    {i > 0 && (
-                      <>
-                        <img
-                          src={deleteIcon}
-                          alt="Delete"
-                          className="delete-img"
-                          onClick={() => removeRoyaltyAddress(i)}
-                          aria-hidden="true"
+                royaltyAddress.map((elm, i) => {
+                  const error = elm.error || hasAddressError(elm.address, i);
+
+                  return (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={i} className="royalty properties">
+                      <div className="property-address">
+                        <h5>Wallet address</h5>
+                        <DebounceInput
+                          debounceTimeout={150}
+                          className={`${error ? 'error-inp inp' : 'inp'}`}
+                          placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                          value={elm.address}
+                          onChange={(e) => propertyChangesAddress(i, e.target.value)}
+                          hoverBoxShadowGradient
                         />
-                        <Button
-                          className="light-border-button red"
-                          onClick={() => removeRoyaltyAddress(i)}
-                        >
+                        {error && <p className="error-message">{error}</p>}
+                      </div>
+                      <div className="property-amount">
+                        <h5>Percent amount</h5>
+                        <Input
+                          className="percent-inp"
+                          type="number"
+                          placeholder="5"
+                          value={elm.amount}
+                          onChange={(e) => propertyChangesAmount(i, e.target.value, e.target)}
+                          onWheel={(e) => e.target.blur()}
+                          hoverBoxShadowGradient
+                        />
+                        <span className="percent-sign">%</span>
+                      </div>
+                      {i > 0 && (
+                        <>
                           <img
                             src={deleteIcon}
-                            className="del-icon"
                             alt="Delete"
+                            className="delete-img"
+                            onClick={() => removeRoyaltyAddress(i)}
                             aria-hidden="true"
                           />
-                          Remove
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                ))}
+                          <Button
+                            className="light-border-button red"
+                            onClick={() => removeRoyaltyAddress(i)}
+                          >
+                            <img
+                              src={deleteIcon}
+                              className="del-icon"
+                              alt="Delete"
+                              aria-hidden="true"
+                            />
+                            Remove
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
               {royalities && (
                 <div
                   className="property-add"
@@ -1194,7 +1229,7 @@ const SingleNFTForm = () => {
                   onClick={handleSaveForLater}
                   disabled={errors.name || errors.edition || errors.previewImage}
                 >
-                  Save
+                  Save for later
                 </Button>
                 <Button
                   className="light-button"
