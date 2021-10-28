@@ -8,12 +8,11 @@ import ActiveAuctions from './ActiveAuctions.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { PLACEHOLDER_MY_BIDS } from '../../utils/fixtures/MyBidsDummyData';
-import NoAuctionsFound from './NoAuctionsFound';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import MyBidsList from '../auctionsCard/myBids/MyBidsList.jsx';
 import plusIcon from '../../assets/images/plus.svg';
 import PastAuctions from './PastAuctions';
+import circle from '../../assets/images/green-circle.svg';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =
@@ -24,6 +23,7 @@ const MyAuction = () => {
   const tabs = { MyBids: 0, ActiveAuctions: 1, FutureAuctions: 2, PastAuctions: 3 };
 
   const [showButton, setShowButton] = useState(true);
+  const [greenCircle, setgreenCircle] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
@@ -60,34 +60,33 @@ const MyAuction = () => {
   }, [selectedTabIndex]);
 
   return (
-    <div className="container auction__page">
+    <div className="auction__page">
       <Helmet>
         <title>Universe Minting - My Auctions</title>
       </Helmet>
-      <div className="auction__page__header">
-        <h1 className="title">My auctions</h1>
-        {showButton && (
-          <div>
-            <button
-              type="button"
-              className="light-button set_up"
-              onClick={() => {
-                setAuction({ rewardTiers: [] });
-                return (
-                  loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
-                );
-              }}
-              disabled={!loggedInArtist.name || !loggedInArtist.avatar}
-            >
-              Set up auction
-              <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="auction__page__body">
-        <div className="tabs__wrapper">
+      <div className="auction-head">
+        <div className="container auction__page__header">
+          <h1 className="title">My auctions</h1>
+          {showButton && (
+            <div>
+              <button
+                type="button"
+                className="light-button set_up"
+                onClick={() => {
+                  setAuction({ rewardTiers: [] });
+                  return (
+                    loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
+                  );
+                }}
+                disabled={!loggedInArtist.name || !loggedInArtist.avatar}
+              >
+                Set up auction
+                <img src={plusIcon} alt="set up" />
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="container tabs__wrapper">
           <div className="tab__left__arrow">
             <img
               onClick={handleTabLeftScrolling}
@@ -105,6 +104,9 @@ const MyAuction = () => {
                 aria-hidden="true"
               >
                 {title}
+                {index === 3 && greenCircle && (
+                  <img src={circle} alt="notification-circle" className="notification-circle" />
+                )}
               </li>
             ))}
           </ul>
@@ -117,6 +119,7 @@ const MyAuction = () => {
             />
           </div>
         </div>
+      </div>
 
         {selectedTabIndex === tabs.MyBids && <MyBidsList />}
 
