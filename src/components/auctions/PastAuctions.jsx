@@ -13,6 +13,7 @@ import Pagination from '../pagination/SimplePaginations';
 import { isBeforeNow } from '../../utils/dates';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getPastAuctions } from '../../utils/api/auctions';
+import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 import NoAuctionsFound from './NoAuctionsFound';
 
 const PastAuctions = () => {
@@ -28,14 +29,27 @@ const PastAuctions = () => {
   const [searchByName, setSearchByName] = useState('');
   const [pastAuctions, setPastAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const filterAuctions = (auctions) => {
+    const filteredAuctions = auctions
+      .slice(offset, offset + perPage)
+      .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+      .filter((item) => item && isBeforeNow(item.endDate));
+
+    return filteredAuctions;
+  };
 
   useEffect(async () => {
     try {
       const response = await getPastAuctions();
       if (!response.auctions?.length) {
         setNotFound(true);
+        setLoading(false);
       } else {
-        setPastAuctions(response.auctions);
+        const auctions = filterAuctions(response.auctions);
+        setPastAuctions(auctions);
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
@@ -55,34 +69,6 @@ const PastAuctions = () => {
     }
   };
 
-  const getTotalBidsAmount = (auction) => {
-    let totalBidsAmount = 0;
-    auction.bids?.forEach((bid) => {
-      totalBidsAmount += bid.amount;
-    });
-    return totalBidsAmount.toFixed(2);
-  };
-
-  const getHighestWinBid = (auction) => {
-    let highestWinBid = 0;
-    auction.bids?.forEach((bid) => {
-      if (bid.amount > highestWinBid) {
-        highestWinBid = bid.amount;
-      }
-    });
-    return highestWinBid.toFixed(2);
-  };
-
-  const getLowestBid = (auction) => {
-    let lowestBid = auction.bids && auction.bids.length && auction.bids[0].amount;
-    auction.bids?.forEach((bid) => {
-      if (bid.amount < lowestBid) {
-        lowestBid = bid.amount;
-      }
-    });
-    return lowestBid?.toFixed(2);
-  };
-
   return (
     <div className="past-auctions">
       <div className="input-search">
@@ -97,11 +83,8 @@ const PastAuctions = () => {
           <img src={searchIcon} alt="search" />
         </div>
       </div>
-      {pastAuctions
-        .slice(offset, offset + perPage)
-        .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => item && isBeforeNow(item.endDate))
-        .map((pastAuction, index) => {
+      {!loading ? (
+        pastAuctions.map((pastAuction, index) => {
           const auctionTotalNfts = pastAuction.rewardTiers
             .map((tier) => tier.nfts.length)
             .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
@@ -196,17 +179,17 @@ const PastAuctions = () => {
                 <div className="bids first">
                   <div className="boredred-div">
                     <span className="head">Total bids</span>
-                    <span className="value">{pastAuction.bids?.length}</span>
+                    <span className="value">{pastAuction.bids.bidsCount}</span>
                   </div>
                   <div>
                     <span className="head">Highest winning bid</span>
                     <span className="value">
                       <img src={bidIcon} alt="Highest winning bid" />
-                      {getHighestWinBid(pastAuction)} ETH
+                      {pastAuction.bids.highestBid} ETH
                       <span className="dollar-val">
                         ~$
                         {(
-                          getHighestWinBid(pastAuction) * ethPrice.market_data.current_price.usd
+                          pastAuction.bids.highestBid * ethPrice.market_data.current_price.usd
                         ).toFixed(2)}
                       </span>
                     </span>
@@ -218,11 +201,11 @@ const PastAuctions = () => {
                     <span className="head">Total bids amount</span>
                     <span className="value">
                       <img src={bidIcon} alt="Total bids amount" />
-                      {getTotalBidsAmount(pastAuction)} ETH
+                      {pastAuction.bids.totalBids} ETH
                       <span className="dollar-val">
                         ~$
                         {(
-                          getTotalBidsAmount(pastAuction) * ethPrice.market_data.current_price.usd
+                          pastAuction.bids.totalBids * ethPrice.market_data.current_price.usd
                         ).toFixed(2)}
                       </span>
                     </span>
@@ -231,11 +214,11 @@ const PastAuctions = () => {
                     <span className="head">Lower winning bid</span>
                     <span className="value">
                       <img src={bidIcon} alt="Lower winning bid" />
-                      {getLowestBid(pastAuction)} ETH
+                      {pastAuction.bids.lowestBid} ETH
                       <span className="dollar-val">
                         ~$
                         {(
-                          getLowestBid(pastAuction) * ethPrice.market_data.current_price.usd
+                          pastAuction.bids.lowestBid * ethPrice.market_data.current_price.usd
                         ).toFixed(2)}
                       </span>
                     </span>
@@ -278,7 +261,10 @@ const PastAuctions = () => {
               </div>
             </div>
           );
-        })}
+        })
+      ) : (
+        <AuctionsCardSkeleton variant="active" />
+      )}
       {notFound && <NoAuctionsFound title="No past auctions found" />}
       {pastAuctions.length ? (
         <div className="pagination__container">

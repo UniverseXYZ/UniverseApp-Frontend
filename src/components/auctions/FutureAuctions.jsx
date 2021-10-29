@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -16,6 +16,7 @@ import emptyWhite from '../../assets/images/emptyWhite.svg';
 import Input from '../input/Input.jsx';
 import Pagination from '../pagination/SimplePaginations';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
+import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
@@ -24,8 +25,24 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const history = useHistory();
+
+  const filterAuctions = (auctions) => {
+    const filteredAuctions = auctions
+      .slice(offset, offset + perPage)
+      .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
+      .filter((item) => !item.launch || (item.launch && isAfterNow(item.startDate)));
+
+    return filteredAuctions;
+  };
+
+  useEffect(() => {
+    const filteredAuctions = filterAuctions(myAuctions);
+    setMyAuctions(filteredAuctions);
+    setLoading(false);
+  }, []);
 
   const handleRemove = (id) => {
     setMyAuctions((d) => d.filter((item) => item.id !== id));
@@ -66,11 +83,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
           <img src={searchIconGray} alt="search" />
         </div>
       </div>
-      {myAuctions
-        .slice(offset, offset + perPage)
-        .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
-        .filter((item) => !item.launch || (item.launch && isAfterNow(item.startDate)))
-        .map((futureAuction) => {
+      {!loading ? (
+        myAuctions.map((futureAuction) => {
           const startDate = format(new Date(futureAuction.startDate), 'MMMM dd, HH:mm');
           const endDate = format(new Date(futureAuction.endDate), 'MMMM dd, HH:mm');
           return (
@@ -378,7 +392,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
               </div>
             </div>
           );
-        })}
+        })
+      ) : (
+        <AuctionsCardSkeleton variant="active" />
+      )}
       <div className="pagination__container">
         <Pagination
           data={myAuctions}
