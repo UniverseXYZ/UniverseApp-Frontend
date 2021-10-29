@@ -70,7 +70,7 @@ const SearchFilters = ({ data, setData, setOffset }) => {
         />
         <SortingDropdowns />
         <div
-          className="filter--button"
+          className={`filter--button ${showFilters ? 'opened' : ''}`}
           onClick={() => setShowFilters(!showFilters)}
           aria-hidden="true"
         >

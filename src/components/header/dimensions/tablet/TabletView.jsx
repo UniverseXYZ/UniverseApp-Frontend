@@ -51,6 +51,7 @@ import {
 } from '../../../../utils/helpers/format';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
+import supportIcon from '../../../../assets/images/supportIcon.svg';
 
 const TabletView = (props) => {
   const {
@@ -651,6 +652,16 @@ const TabletView = (props) => {
                     <button type="button" onClick={() => window.open('https://docs.universe.xyz/')}>
                       <img src={docsIcon} alt="Docs" />
                       <span>Docs</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://universe.freshdesk.com/support/home')}
+                    >
+                      <img src={supportIcon} alt="Support" />
+
+                      <span>Support</span>
                     </button>
                   </div>
                 </div>

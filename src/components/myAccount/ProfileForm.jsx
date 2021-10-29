@@ -205,6 +205,7 @@ const ProfileForm = ({
               }}
               onFocus={handleOnFocus}
               onBlur={handleOnBlur}
+              hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
             />
             {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
               editProfileButtonClick && (
@@ -212,10 +213,10 @@ const ProfileForm = ({
                   &quot;Universe page address&quot; is not allowed to be empty
                 </p>
               )}
-            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+            {/* {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
             editProfileButtonClick ? null : (
-              <div className="box--shadow--effect--block" />
-            )}
+              // <div className="box--shadow--effect--block" />
+            )} */}
           </div>
 
           <div className="account-grid-about-editing">
