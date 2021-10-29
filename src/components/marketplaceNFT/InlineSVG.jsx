@@ -5,12 +5,16 @@ import InlineSVG from 'svg-inline-react';
 const SVGImageLoader = ({ svgUrl }) => {
   const [svg, setSvg] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [hasErrored, setHasErrored] = useState(false);
   const loadSvg = async () => {
-    const loadedSvg = await fetch(svgUrl);
-    const svgText = await loadedSvg.text();
-    setSvg(svgText);
-    setLoading(false);
+    try {
+      const loadedSvg = await fetch(svgUrl, { mode: 'no-cors' });
+      const svgText = await loadedSvg.text();
+      setSvg(svgText);
+      setLoading(false);
+    } catch (err) {
+      setHasErrored(true);
+    }
   };
   useEffect(() => {
     loadSvg();
@@ -19,7 +23,16 @@ const SVGImageLoader = ({ svgUrl }) => {
     };
   }, [svgUrl]);
 
-  return !loading ? <InlineSVG src={svg} /> : <></>;
+  return hasErrored ? (
+    <div className="error-text">
+      <p>Image couldn&apos;t be loaded.</p>
+      <p>We&apos;ll do our best to fix that soon.</p>
+    </div>
+  ) : !loading ? (
+    <InlineSVG src={svg} />
+  ) : (
+    <></>
+  );
 };
 
 SVGImageLoader.propTypes = {
