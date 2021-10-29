@@ -57,6 +57,9 @@
           background-origin: border-box;
           box-shadow: 2px 1000px 1px $white inset;
           border: 1px solid transparent;
+          + .box--shadow--effect--block {
+            opacity: 0.2;
+          }
         }
         span {
           font-family: $spaceGroteskFont;
@@ -120,6 +123,16 @@
       padding: 11px 16px;
       color: $black;
       cursor: pointer;
+
+      &.opened {
+        background-image: linear-gradient(101deg, #bceb00, #00eaea);
+        background-origin: border-box;
+        box-shadow: 2px 1000px 1px #ffffff inset;
+        border: 1px solid transparent;
+        .box--shadow--effect--block {
+          opacity: 0.2;
+        }
+      }
       img {
         margin-right: 10px;
       }
@@ -154,6 +167,7 @@
         border-radius: 12px;
         opacity: 0;
       }
+
       &:hover {
         .box--shadow--effect--block {
           opacity: 0.2 !important;
@@ -205,6 +219,9 @@
           background-origin: border-box;
           box-shadow: 2px 1000px 1px $white inset;
           border: 1px solid transparent;
+          .box--shadow--effect--block {
+            opacity: 0.2;
+          }
         }
         &:hover {
           border-radius: 10px;

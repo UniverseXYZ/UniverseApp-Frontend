@@ -52,6 +52,7 @@ const MyNFTs = () => {
     setActiveTxHashes,
     mintingNftsCount,
     setMintingNftsCount,
+    myMintableCollections,
   } = useMyNftsContext();
 
   const { userLobsters } = useLobsterContext();
@@ -67,6 +68,20 @@ const MyNFTs = () => {
   const [showloading, setShowLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [showCongratsMintedSavedForLater, setShowCongratsMintedSavedForLater] = useState(false);
+  const [distinctCollections, setDisinctCollections] = useState([
+    ...new Map(
+      [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
+    ).values(),
+  ]);
+
+  useEffect(() => {
+    const newDistinct = [
+      ...new Map(
+        [...deployedCollections, ...myMintableCollections].map((item) => [item.id, item])
+      ).values(),
+    ];
+    setDisinctCollections(newDistinct);
+  }, [deployedCollections, myMintableCollections]);
 
   const tabs = [
     'Wallet',
@@ -195,8 +210,8 @@ const MyNFTs = () => {
         length:
           index === 0 && myNFTs.filter((nft) => !nft?.hidden).length > 0
             ? myNFTs.filter((nft) => !nft?.hidden).length
-            : index === 1 && deployedCollections.length > 0
-            ? deployedCollections.length
+            : index === 1 && distinctCollections.length > 0
+            ? distinctCollections.length
             : index === 2 && savedNfts.length > 0
             ? savedNfts.length
             : index === 3 && (userLobsters.length || userPolymorphs.length)

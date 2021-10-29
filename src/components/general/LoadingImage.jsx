@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import loadingBg from '../../assets/images/loading-white-background.png';
 
@@ -8,6 +8,13 @@ const LoadingImage = React.memo(({ placeholderImage, src, alt, className, showSp
   const setLoadingFalse = () => {
     setLoading(false);
   };
+
+  useEffect(
+    () => () => {
+      setLoading(true);
+    },
+    []
+  );
 
   return (
     <>

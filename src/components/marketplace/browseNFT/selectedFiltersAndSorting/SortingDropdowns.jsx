@@ -65,7 +65,6 @@ const SortingDropdowns = () => {
           <></>
         )}
       </div> */}
-      <div className="box--shadow--effect--block" />
       <div
         className={`dropdown ${showSecondDropdown ? 'open' : ''}`}
         aria-hidden="true"
@@ -108,6 +107,7 @@ const SortingDropdowns = () => {
           <></>
         )}
       </div>
+      <div className="box--shadow--effect--block" />
     </div>
   );
 };

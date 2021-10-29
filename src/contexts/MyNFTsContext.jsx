@@ -50,6 +50,8 @@ const MyNFTsContextProvider = ({ children }) => {
   const [mintingNftsCount, setMintingNftsCount] = useState(0);
   const [mintingCollectionsCount, setMintingCollectionsCount] = useState(0);
   const [universeCollection, setUniverseCollection] = useState(null);
+  const [myNftsLoading, setMyNftsLoading] = useState(true);
+  const [myMintableCollections, setMyMintableCollections] = useState([]);
 
   let nftPollInterval = null;
   let collPollInterval = null;
@@ -57,6 +59,7 @@ const MyNFTsContextProvider = ({ children }) => {
 
   const fetchNfts = async () => {
     try {
+      setMyNftsLoading(true);
       const [
         savedNFTS,
         myNfts,
@@ -76,11 +79,12 @@ const MyNFTsContextProvider = ({ children }) => {
       setSavedNfts(savedNFTS || []);
 
       setMyNFTs(myNfts || []);
+      setMyNftsLoading(false);
       setMyMintingNFTs(mintingNfts || []);
 
       setDeployedCollections(mintedCollectionsRequest.collections || []);
+      setMyMintableCollections(mintableCollections.collections || []);
       setMyMintingCollections(mintingcollectionsRequest.collections || []);
-
       const universeColl = mintableCollections.collections.filter(
         (coll) =>
           coll.address.toLowerCase() ===
@@ -107,7 +111,9 @@ const MyNFTsContextProvider = ({ children }) => {
       alert(
         'Failed to fetch nfts. Most likely due to failed notifcation. Please sign out and sign in again.'
       );
+      setMyNftsLoading(false);
     }
+    setMyNftsLoading(false);
   };
 
   useEffect(() => {
@@ -122,6 +128,7 @@ const MyNFTsContextProvider = ({ children }) => {
     if (mintingNftsCount && !nftPollInterval) {
       setTimeout(async () => {
         // We need to wait a bit as the API isn't fast enough
+        // eslint-disable-next-line prefer-const
         let [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
         setMyNFTs(myNfts);
         setMyMintingNFTs(mintingNfts);
@@ -129,8 +136,12 @@ const MyNFTsContextProvider = ({ children }) => {
           mintingNfts = await getMyMintingNfts();
           setMyMintingNFTs(mintingNfts);
           if (mintingNfts.length !== mintingNftsCount) {
-            myNfts = await getMyNfts();
-            setMyNFTs(myNfts);
+            const [myNftss, mintedCollections] = await Promise.all([
+              getMyNfts(),
+              getMyMintedCollections(),
+            ]);
+            setMyNFTs(myNftss);
+            setDeployedCollections(mintedCollections.collections);
             setMintingNftsCount(mintingNfts?.length || 0);
             if (!mintingNfts?.length || mintingNfts.length === 0) {
               clearInterval(nftPollInterval);
@@ -148,11 +159,13 @@ const MyNFTsContextProvider = ({ children }) => {
       collPollInterval = setInterval(async () => {
         const apiMintingCount = await getMyMintingCollectionsCount();
         if (apiMintingCount !== mintingCollectionsCount) {
-          const [mintedCollections, mintingCollections] = await Promise.all([
+          const [mintedCollections, mintableCollections, mintingCollections] = await Promise.all([
             getMyMintedCollections(),
+            getMyMintableCollections(),
             getMyMintingCollections(),
           ]);
           setDeployedCollections(mintedCollections.collections);
+          setMyMintableCollections(mintableCollections.collections);
           setMyMintingCollections(mintingCollections.collections);
           setMintingCollectionsCount(mintingCollections?.collections?.length || 0);
 
@@ -237,6 +250,8 @@ const MyNFTsContextProvider = ({ children }) => {
         mintingCollectionsCount,
         setMintingCollectionsCount,
         universeCollection,
+        myNftsLoading,
+        myMintableCollections,
       }}
     >
       {children}

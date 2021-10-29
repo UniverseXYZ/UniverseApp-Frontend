@@ -2,6 +2,11 @@
 @import "../../assets/scss/mixins";
 
 .nfts__lists {
+  svg {
+    height: 230px;
+    width: 230px;
+  };
+
   display: grid;
   grid-template-columns: repeat(auto-fit, 255px);
   grid-gap: 30px;
