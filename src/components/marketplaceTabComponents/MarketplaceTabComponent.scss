@@ -14,6 +14,9 @@
     border-radius: 12px;
     background-color: rgba(0, 0, 0, 0.02);
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     > p {
       font-family: $spaceGroteskFont;
       font-size: 10px;
@@ -34,6 +37,8 @@
       text-align: center;
       margin-top: 5px;
       margin-bottom: 13px;
+      max-width: 240px;
+      overflow-wrap: break-word;
     }
     > h2 {
       font-family: $spaceGroteskFont;
