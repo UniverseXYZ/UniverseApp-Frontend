@@ -40,15 +40,8 @@ const SortingFilters = ({
   savedCreators,
   setSavedCreators,
 }) => {
-  const [showSaleDropdown, setShowSaleDropdown] = useState(false);
-  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [singleItems, setSingleItems] = useState(true);
-  const [showPriceItems, setShowPriceItems] = useState(false);
-  const [disabledMin, setDisabledMin] = useState(false);
-  const [disabledMax, setDisabledMax] = useState(false);
-  const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
-  const [showArtistsDropdown, setShowArtistsDropdown] = useState(false);
-  // const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
+  const { deployedCollections } = useAuthContext();
+  const { myNFTs } = useMyNftsContext();
 
   const bidTokens = [
     {
@@ -77,19 +70,40 @@ const SortingFilters = ({
       subtitle: 'Synthetix Network Token',
     },
   ];
-  const { deployedCollections } = useAuthContext();
-  const { myNFTs } = useMyNftsContext();
+
+  const [showSaleDropdown, setShowSaleDropdown] = useState(false);
+  const [showPriceDropdown, setShowPriceDropdown] = useState(false);
+  const [singleItems, setSingleItems] = useState(true);
+  const [showPriceItems, setShowPriceItems] = useState(false);
+  const [disabledMin, setDisabledMin] = useState(false);
+  const [disabledMax, setDisabledMax] = useState(false);
+  const [showCollectionsDropdown, setShowCollectionsDropdown] = useState(false);
+  const [showArtistsDropdown, setShowArtistsDropdown] = useState(false);
+  // const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
 
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
   const [searchByCollections, setSearchByCollections] = useState('');
-  const [collections, setCollections] = useState(deployedCollections);
   const [creators, setCreators] = useState(PLACEHOLDER_MARKETPLACE_USERS);
   const [searchByCreators, setSearchByCreators] = useState('');
+  const [collections, setCollections] = useState([]);
+  const [collectionsNFTMap, setCollectionsNFTMap] = useState([]);
 
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
   const ref4 = useRef(null);
+
+  useEffect(() => {
+    const collectionNFTsCountMap = (deployedCollections || []).reduce((res, curr) => {
+      const collectionItems = myNFTs.filter((nft) => nft.collectionId === curr.id);
+
+      if (!res[curr.id]) res[curr.id] = collectionItems.length;
+      return res;
+    }, {});
+
+    setCollectionsNFTMap(collectionNFTsCountMap);
+    setCollections(deployedCollections);
+  }, [deployedCollections, myNFTs]);
 
   const handleSelect = (idx) => {
     const newSaleTypeButtons = [...selectedButtons];
@@ -223,13 +237,6 @@ const SortingFilters = ({
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
-
-  const collectionNFTsCountMap = collections.reduce((res, curr) => {
-    const collectionItems = myNFTs.filter((nft) => nft.collectionId === curr.id);
-
-    if (!res[curr.id]) res[curr.id] = collectionItems.length;
-    return res;
-  }, {});
 
   // TODO: Uncomment for marketplace
   return (
@@ -479,7 +486,7 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
-                  .sort((a, b) => collectionNFTsCountMap[b.id] - collectionNFTsCountMap[a.id])
+                  .sort((a, b) => collectionsNFTMap[b.id] - collectionsNFTMap[a.id])
                   .map((coll, index) => (
                     <div
                       className="collection__item"
@@ -503,7 +510,7 @@ const SortingFilters = ({
                         <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
                       )}
                       <p>
-                        {coll.name} ({collectionNFTsCountMap[coll.id]})
+                        {coll.name} ({collectionsNFTMap[coll.id]})
                       </p>
                     </div>
                   ))}
