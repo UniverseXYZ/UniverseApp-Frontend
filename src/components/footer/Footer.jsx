@@ -170,6 +170,12 @@ const Footer = () => {
                   <li aria-hidden="true" onClick={() => window.open('https://docs.universe.xyz/')}>
                     Docs
                   </li>
+                  <li
+                    aria-hidden="true"
+                    onClick={() => window.open('https://universe.freshdesk.com/support/home')}
+                  >
+                    Support
+                  </li>
                 </ul>
               </div>
               <div>

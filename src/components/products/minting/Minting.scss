@@ -57,6 +57,7 @@
         text-align: center;
         background-color: $white;
         cursor: pointer;
+        min-height: 100%;
         @include sm {
           display: grid;
           grid-template-columns: 72px 1fr;

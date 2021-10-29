@@ -1,5 +1,5 @@
-@import '../../assets/scss/variables';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables";
+@import "../../assets/scss/_mixins";
 
 .universe_NFTs {
   position: relative;
@@ -56,7 +56,7 @@
           font-weight: normal;
           font-size: 16px;
           color: #cacaca;
-          background-image: url('../../assets/images/search-gray.svg');
+          background-image: url("../../assets/images/search-gray.svg");
           background-repeat: no-repeat;
           text-indent: 25px;
         }
@@ -87,6 +87,9 @@
       border: 1px solid transparent;
       .arrow__down {
         transform: rotate(180deg);
+      }
+      .box--shadow--effect--block {
+        opacity: 0.2;
       }
     }
     .selected__universe__item {

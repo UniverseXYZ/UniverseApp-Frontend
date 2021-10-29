@@ -25,6 +25,7 @@ import mintingIcon from '../../../../assets/images/Minting.svg';
 import forumIcon from '../../../../assets/images/forum.svg';
 import signalIcon from '../../../../assets/images/signal.svg';
 import docsIcon from '../../../../assets/images/docs.svg';
+import supportIcon from '../../../../assets/images/supportIcon.svg';
 import myProfileIcon from '../../../../assets/images/my-profile.svg';
 import myNFTsIcon from '../../../../assets/images/my-nfts.svg';
 import signOutIcon from '../../../../assets/images/sign-out.svg';
@@ -242,6 +243,16 @@ const DesktopView = ({
               >
                 <img src={docsIcon} alt="Docs" />
                 <span>Docs</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDAODropdownOpened(false);
+                  window.open('https://universe.freshdesk.com/support/home');
+                }}
+              >
+                <img src={supportIcon} alt="Support" />
+                <span>Support</span>
               </button>
             </div>
           </div>

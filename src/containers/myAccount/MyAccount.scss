@@ -419,29 +419,6 @@
         }
         .account-grid-address {
           position: relative;
-
-          .box--shadow--effect--block {
-            position: absolute;
-            width: calc(100% + 8px);
-            min-height: 58px;
-            z-index: -9;
-            left: -4px;
-            right: 0;
-            bottom: -4px;
-            margin: auto;
-            border-radius: 12px;
-            opacity: 0;
-            background-image: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
-            background-origin: border-box;
-            border: 4px solid transparent;
-            transition: 0.2s;
-          }
-          &:hover {
-            z-index: 9;
-            .box--shadow--effect--block {
-              opacity: 0.2;
-            }
-          }
         }
         .account-grid-about-editing {
           position: relative;
@@ -464,6 +441,9 @@
               background: linear-gradient($white, $white) padding-box,
                 linear-gradient(to right, #bceb00, #00eaea) border-box;
               border: 1px solid transparent;
+              + .box--shadow--effect--block {
+                opacity: 0.2;
+              }
             }
           }
           .box--shadow--effect--block {

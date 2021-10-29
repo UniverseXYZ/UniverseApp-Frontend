@@ -70,13 +70,9 @@
     }
   }
 
-  // &__body {
-  //   max-width: 1110px;
-  //   margin: 60px auto;
-  //   @include xl {
-  //     padding: 0 20px;
-  //   }
-  // }
+  &__body {
+    margin-top: 0 !important;
+  }
 
   .tabs-empty,
   .empty-universe {
@@ -251,6 +247,9 @@
 }
 
 .tab__wallet {
+  .search--sort--filters--section {
+    padding-top: 0 !important;
+  }
   .empty__filter__nfts {
     h3 {
       font-family: $spaceGroteskFont;
@@ -1952,7 +1951,6 @@
         position: relative;
         z-index: 2;
         padding: 0 15px 15px;
-
         .collection__avatar {
           pointer-events: none;
           height: 75px;
