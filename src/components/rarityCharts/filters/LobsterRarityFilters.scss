@@ -56,6 +56,9 @@
       .arrow__down {
         transform: rotate(180deg);
       }
+      .box--shadow--effect--block {
+        opacity: 0.2;
+      }
     }
     .selected__universe__item {
       font-family: $spaceGroteskFont;

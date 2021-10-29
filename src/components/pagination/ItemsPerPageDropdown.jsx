@@ -6,7 +6,7 @@ import AppContext from '../../ContextAPI';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import { handleClickOutside } from '../../utils/helpers';
 
-const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage }) => {
+const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage, offset, page, setPage }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const ref = useRef(null);
 
@@ -25,6 +25,12 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage }) => {
     };
   });
 
+  const changePerPage = (newPerPage) => {
+    const newPage = Math.floor(offset / newPerPage);
+    setPage(newPage);
+    setPerPage(newPerPage);
+  };
+
   return (
     <div className="items__per__page">
       <span>Items per page</span>
@@ -39,7 +45,7 @@ const ItemsPerPageDropdown = ({ perPage, setPerPage, itemsPerPage }) => {
                   <li
                     key={uuid()}
                     className={perPage === n ? 'active' : ''}
-                    onClick={() => setPerPage(n)}
+                    onClick={() => changePerPage(n)}
                     aria-hidden="true"
                   >
                     {n}
@@ -58,10 +64,16 @@ ItemsPerPageDropdown.propTypes = {
   perPage: PropTypes.number.isRequired,
   setPerPage: PropTypes.func.isRequired,
   itemsPerPage: PropTypes.arrayOf(PropTypes.number),
+  offset: PropTypes.number,
+  page: PropTypes.number,
+  setPage: PropTypes.func,
 };
 
 ItemsPerPageDropdown.defaultProps = {
   itemsPerPage: [9, 18, 36],
+  offset: 0,
+  page: 0,
+  setPage: () => {},
 };
 
 export default ItemsPerPageDropdown;

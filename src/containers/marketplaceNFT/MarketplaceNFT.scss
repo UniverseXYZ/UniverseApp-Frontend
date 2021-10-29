@@ -1,6 +1,11 @@
 @import "../../assets/scss/variables";
 @import "../../assets/scss/mixins";
 .marketplace--nft--page {
+  svg {
+    height: 600px;
+    width: 600px;
+  };
+  
   display: grid;
   grid-template-columns: 1fr 560px;
   border-bottom: 1px solid #e4e4e4;
@@ -46,7 +51,7 @@
       width: 100%;
       border-radius: 12px;
       margin: auto;
-      cursor: zoom-in;
+      // cursor: zoom-in;
       @include lg {
         max-width: unset;
       }
@@ -1359,3 +1364,4 @@
   }
   
 }
+

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getCollectionBackgroundColor } from '../../../utils/helpers';
+import universeIcon from '../../../assets/images/universe-img.svg';
 
 const CollectionChoice = ({ col, selectedCollection, setSelectedCollection }) => (
   <div className="collection-box">
@@ -15,7 +16,9 @@ const CollectionChoice = ({ col, selectedCollection, setSelectedCollection }) =>
           : setSelectedCollection(col)
       }
     >
-      {!col?.coverUrl ? (
+      {col.address === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+        <img src={universeIcon} alt={col.name} />
+      ) : !col?.coverUrl ? (
         <div
           className="random__bg__color"
           style={{

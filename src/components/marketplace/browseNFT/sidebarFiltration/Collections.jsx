@@ -8,6 +8,7 @@ import { getCollectionBackgroundColor } from '../../../../utils/helpers';
 import { useAuthContext } from '../../../../contexts/AuthContext';
 import closeIcon from '../../../../assets/images/close-menu.svg';
 import checkIcon from '../../../../assets/images/check-vector.svg';
+import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const Collections = ({
   savedCollections,
@@ -86,6 +87,8 @@ const Collections = ({
                       alt="check"
                     />
                   </div>
+                ) : col.address === process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
+                  <img className="random--avatar--color" src={universeIcon} alt={col.name} />
                 ) : !col.coverUrl ? (
                   <div
                     className="random--avatar--color"
