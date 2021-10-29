@@ -19,6 +19,7 @@ import closeIcon from '../../../../assets/images/close-menu.svg';
 import AppContext from '../../../../ContextAPI';
 import { defaultColors, getCollectionBackgroundColor } from '../../../../utils/helpers';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { useMyNftsContext } from '../../../../contexts/MyNFTsContext';
 import universeIcon from '../../../../assets/images/universe-img.svg';
 
 const SortingFilters = ({
@@ -77,6 +78,8 @@ const SortingFilters = ({
     },
   ];
   const { deployedCollections } = useAuthContext();
+  const { myNFTs } = useMyNftsContext();
+
   const [selectedButtons, setSelectedButtons] = useState([...saleTypeButtons]);
   const [searchByCollections, setSearchByCollections] = useState('');
   const [collections, setCollections] = useState(deployedCollections);
@@ -220,6 +223,14 @@ const SortingFilters = ({
       document.removeEventListener('click', handleClickOutside, true);
     };
   });
+
+  const collectionNFTsCountMap = collections.reduce((res, curr) => {
+    const collectionItems = myNFTs.filter((nft) => nft.collectionId === curr.id);
+
+    if (!res[curr.id]) res[curr.id] = collectionItems.length;
+    return res;
+  }, {});
+
   // TODO: Uncomment for marketplace
   return (
     <div className="sorting--filters--list">
@@ -468,6 +479,7 @@ const SortingFilters = ({
                   .filter((item) =>
                     item.name.toLowerCase().includes(searchByCollections.toLowerCase())
                   )
+                  .sort((a, b) => collectionNFTsCountMap[b.id] - collectionNFTsCountMap[a.id])
                   .map((coll, index) => (
                     <div
                       className="collection__item"
@@ -490,7 +502,9 @@ const SortingFilters = ({
                       ) : (
                         <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
                       )}
-                      <p>{coll.name}</p>
+                      <p>
+                        {coll.name} ({collectionNFTsCountMap[coll.id]})
+                      </p>
                     </div>
                   ))}
               </div>
