@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import InlineSVG from 'svg-inline-react';
 
-const InlineSVG = ({ svgUrl }) => {
+const SVGImageLoader = ({ svgUrl }) => {
   const [svg, setSvg] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,11 +19,11 @@ const InlineSVG = ({ svgUrl }) => {
     };
   }, [svgUrl]);
 
-  return !loading ? <div dangerouslySetInnerHTML={{ __html: svg }} /> : <></>;
+  return !loading ? <InlineSVG src={svg} /> : <></>;
 };
 
-InlineSVG.propTypes = {
+SVGImageLoader.propTypes = {
   svgUrl: PropTypes.string.isRequired,
 };
 
-export default InlineSVG;
+export default SVGImageLoader;
