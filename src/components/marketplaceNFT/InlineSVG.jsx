@@ -8,7 +8,7 @@ const SVGImageLoader = ({ svgUrl }) => {
   const [hasErrored, setHasErrored] = useState(false);
   const loadSvg = async () => {
     try {
-      const loadedSvg = await fetch(svgUrl, { mode: 'no-cors' });
+      const loadedSvg = await fetch(svgUrl);
       const svgText = await loadedSvg.text();
       setSvg(svgText);
       setLoading(false);
