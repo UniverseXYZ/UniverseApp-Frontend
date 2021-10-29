@@ -22,7 +22,7 @@ const NFTsTab = React.memo(({ nftData, showMintPrompt }) => {
   const history = useHistory();
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
-  const [page, setPage] = useState(8);
+  const [page, setPage] = useState(0);
   const [nfts, setNfts] = useState([]);
 
   useEffect(() => {
@@ -54,6 +54,9 @@ const NFTsTab = React.memo(({ nftData, showMintPrompt }) => {
               perPage={perPage}
               setPerPage={setPerPage}
               itemsPerPage={[8, 16, 32]}
+              offset={offset}
+              page={page}
+              setPage={setPage}
             />
           </div>
         </>

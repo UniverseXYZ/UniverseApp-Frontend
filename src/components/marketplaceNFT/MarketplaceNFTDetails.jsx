@@ -501,8 +501,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
           >
             {selectedNFT.type !== 'bundles' ? (
               <>
-                {selectedNFT.artworkType &&
-                  !selectedNFT.artworkType.endsWith('mpeg') &&
+                {!selectedNFT.artworkType.endsWith('mpeg') &&
                   !selectedNFT.artworkType.endsWith('mp4') &&
                   showNftImage()}
 

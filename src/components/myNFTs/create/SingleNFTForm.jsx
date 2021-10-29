@@ -64,6 +64,7 @@ const MINTING_LOADING_TEXT =
   'The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress.';
 const SAVING_FOR_LATER_LOADING_TEXT =
   'You nft is being saved for later minting. Keep this window opened. Navigating away from the page will reset the curent progress.';
+const INVALID_ADDRESS_TEXT = 'Please enter valid address or ENS';
 
 const SingleNFTForm = () => {
   const {
@@ -209,10 +210,10 @@ const SingleNFTForm = () => {
       const ens = await web3Provider.resolveName(val);
       const ensToAddress = utils.isAddress(ens);
       prevProperties[index].address = ensToAddress ? ens.toLowerCase() : val;
-      prevProperties[index].error = !ensToAddress ? 'Please enter valid address' : '';
+      prevProperties[index].error = !ensToAddress ? INVALID_ADDRESS_TEXT : '';
     } catch (e) {
       prevProperties[index].address = val.toLowerCase();
-      prevProperties[index].error = !utils.isAddress(val) ? 'Please enter valid address' : '';
+      prevProperties[index].error = !utils.isAddress(val) ? INVALID_ADDRESS_TEXT : '';
     }
 
     const addressErrors = prevProperties.filter((prop) => prop.error);

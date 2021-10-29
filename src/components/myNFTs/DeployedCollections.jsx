@@ -126,6 +126,9 @@ const DeployedCollections = () => {
               perPage={perPage}
               setPerPage={setPerPage}
               itemsPerPage={[8, 16, 32]}
+              offset={offset}
+              page={page}
+              setPage={setPage}
             />
           </div>
         </>

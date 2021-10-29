@@ -16,7 +16,7 @@ import NFTCardHeader from './NFTCardHeader';
 import PendingPrevArrow from '../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import NftEditions from './NftEditions';
-import InlineSVG from '../marketplaceNFT/InlineSVG';
+import SVGImageLoader from '../marketplaceNFT/InlineSVG';
 
 const NFTCard = React.memo(
   ({ nft, canSelect, collectionAddress, selectedNFTsIds, setSelectedNFTsIds }) => {
@@ -68,7 +68,7 @@ const NFTCard = React.memo(
         return <LoadingImage className="nft--image" alt={nft.name} src={nft.thumbnail_url} />;
       }
 
-      return <InlineSVG svgUrl={nft.thumbnail_url} />;
+      return <SVGImageLoader svgUrl={nft.thumbnail_url} />;
     };
 
     return (
@@ -79,7 +79,7 @@ const NFTCard = React.memo(
       >
         <NFTCardHeader nft={nft} owner={owner} creator={creator} collection={nft.collection} />
         <div className="nft--card--body" aria-hidden="true">
-          {nft?.artworkType && nft.artworkType !== 'bundles' ? (
+          {nft.artworkType !== 'bundles' ? (
             <div
               onClick={() =>
                 !canSelect
@@ -183,8 +183,7 @@ const NFTCard = React.memo(
                   aria-hidden="true"
                   key={uuid()}
                 >
-                  {nft.artworkType &&
-                    !nft.artworkType.endsWith('mpeg') &&
+                  {!nft.artworkType.endsWith('mpeg') &&
                     !nft.artworkType.endsWith('mp4') &&
                     showNftImage()}
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
