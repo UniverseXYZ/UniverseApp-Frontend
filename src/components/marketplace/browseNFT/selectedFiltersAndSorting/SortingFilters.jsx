@@ -503,7 +503,7 @@ const SortingFilters = ({
                         <img className="collection__avatar" src={coll.coverUrl} alt={coll.name} />
                       )}
                       <p>
-                        {coll.name}({collectionNFTsCountMap[coll.id]})
+                        {coll.name} ({collectionNFTsCountMap[coll.id]})
                       </p>
                     </div>
                   ))}
