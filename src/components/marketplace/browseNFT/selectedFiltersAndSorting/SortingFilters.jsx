@@ -39,10 +39,8 @@ const SortingFilters = ({
   setSelectedCreators,
   savedCreators,
   setSavedCreators,
+  nfts,
 }) => {
-  const { deployedCollections } = useAuthContext();
-  const { myNFTs } = useMyNftsContext();
-
   const bidTokens = [
     {
       icon: ethereumIcon,
@@ -93,17 +91,30 @@ const SortingFilters = ({
   const ref3 = useRef(null);
   const ref4 = useRef(null);
 
-  useEffect(() => {
-    const collectionNFTsCountMap = (deployedCollections || []).reduce((res, curr) => {
-      const collectionItems = myNFTs.filter((nft) => nft.collectionId === curr.id);
+  const getDistinctCollectionFromNfts = () => {
+    const newDistinct = [...new Map([...nfts].map((item) => [item.collectionId, item])).values()];
+    console.log(newDistinct);
+    const map = newDistinct.map((d) => d.collection);
+    console.log(map);
+    return map;
+  };
 
-      if (!res[curr.id]) res[curr.id] = collectionItems.length;
-      return res;
-    }, {});
+  useEffect(() => {
+    const distinctCollection = getDistinctCollectionFromNfts();
+    const collectionNFTsCountMap = distinctCollection.reduce(
+      (res, curr) => {
+        const collectionItems = nfts.filter((nft) => nft.collectionId === curr.id);
+
+        if (!res[curr.id]) res[curr.id] = collectionItems.length;
+        return res;
+      },
+      {},
+      []
+    );
 
     setCollectionsNFTMap(collectionNFTsCountMap);
-    setCollections(deployedCollections);
-  }, [deployedCollections, myNFTs]);
+    setCollections(distinctCollection);
+  }, [nfts]);
 
   const handleSelect = (idx) => {
     const newSaleTypeButtons = [...selectedButtons];
@@ -627,6 +638,7 @@ SortingFilters.propTypes = {
   setSelectedCreators: PropTypes.func,
   savedCreators: PropTypes.oneOfType([PropTypes.array]),
   setSavedCreators: PropTypes.func,
+  nfts: PropTypes.oneOfType([PropTypes.array]),
 };
 
 SortingFilters.defaultProps = {
@@ -646,6 +658,7 @@ SortingFilters.defaultProps = {
   setSelectedCreators: () => {},
   savedCreators: [],
   setSavedCreators: () => {},
+  nfts: [],
 };
 
 export default SortingFilters;

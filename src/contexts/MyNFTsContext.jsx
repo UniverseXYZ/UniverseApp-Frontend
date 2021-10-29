@@ -128,7 +128,6 @@ const MyNFTsContextProvider = ({ children }) => {
     if (mintingNftsCount && !nftPollInterval) {
       setTimeout(async () => {
         // We need to wait a bit as the API isn't fast enough
-        // eslint-disable-next-line prefer-const
         let [myNfts, mintingNfts] = await Promise.all([getMyNfts(), getMyMintingNfts()]);
         setMyNFTs(myNfts);
         setMyMintingNFTs(mintingNfts);
@@ -136,12 +135,8 @@ const MyNFTsContextProvider = ({ children }) => {
           mintingNfts = await getMyMintingNfts();
           setMyMintingNFTs(mintingNfts);
           if (mintingNfts.length !== mintingNftsCount) {
-            const [myNftss, mintedCollections] = await Promise.all([
-              getMyNfts(),
-              getMyMintedCollections(),
-            ]);
-            setMyNFTs(myNftss);
-            setDeployedCollections(mintedCollections.collections);
+            myNfts = await getMyNfts();
+            setMyNFTs(myNfts);
             setMintingNftsCount(mintingNfts?.length || 0);
             if (!mintingNfts?.length || mintingNfts.length === 0) {
               clearInterval(nftPollInterval);

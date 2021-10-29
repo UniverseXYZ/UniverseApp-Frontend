@@ -92,6 +92,7 @@ const SearchFilters = ({ data, setData, setOffset }) => {
         </div>
         {showFilters && (
           <SortingFilters
+            nfts={data}
             saleTypeButtons={saleTypeButtons}
             setSaleTypeButtons={setSaleTypeButtons}
             selectedPrice={selectedPrice}
