@@ -3,12 +3,12 @@ import './EditionsSelectRemove.scss';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 
-const EditionsSelectRemove = ({ nft, editions, removeEdition }) => {
+const EditionsSelectRemove = ({ nft, removeEdition }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEditions, setSelectedEditions] = useState({});
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
-  const sliceData = editions.slice(offset, offset + perPage);
+  // const sliceData = editions.slice(offset, offset + perPage);
 
   const handleSelectAll = (event, nftId) => {
     if (event.target.className === 'edition-container' || event.target.className === 'checkmark') {
@@ -57,8 +57,8 @@ const EditionsSelectRemove = ({ nft, editions, removeEdition }) => {
             <span className="checkmark" />
           </label>
         </li>
-        {editions?.length &&
-          editions.map((edition) => (
+        {nft.tokenIds?.length &&
+          nft.tokenIds.map((edition) => (
             <li key={edition}>
               <label
                 htmlFor={edition}
@@ -79,7 +79,7 @@ const EditionsSelectRemove = ({ nft, editions, removeEdition }) => {
       </ul>
       <Button
         className="light-border-button remove-btn"
-        onClick={() => removeEdition(selectedEditions[nft.id])}
+        onClick={() => removeEdition(selectedEditions)}
       >
         Remove
       </Button>
@@ -90,7 +90,6 @@ const EditionsSelectRemove = ({ nft, editions, removeEdition }) => {
 EditionsSelectRemove.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
   removeEdition: PropTypes.func.isRequired,
-  editions: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default EditionsSelectRemove;

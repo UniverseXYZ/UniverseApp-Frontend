@@ -54,9 +54,8 @@ const NewTabs = (props) => {
             const slotNFTs = nFTsBySlotIndexObject[key];
 
             const nftIds = slotNFTs.map((data) => data.id);
-            const editions = slotNFTs.map((data) => data.tokenId);
 
-            winnersData[index] = { slot: index, nftsData: slotNFTs, nftIds, editions };
+            winnersData[index] = { slot: index, nftsData: slotNFTs, nftIds };
           });
 
           // Update the Auction object
