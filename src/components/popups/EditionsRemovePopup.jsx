@@ -18,7 +18,7 @@ const EditionsRemovePopup = ({ onClose, nft, onRemoveEdition }) => {
         CardElement={<></>}
         enterKeyEvent={false}
       /> */}
-      <EditionsSelectRemove nft={nft} removeEdition={handleRemoveEdition} />
+      <EditionsSelectRemove nft={nft} removeEdition={handleRemoveEdition} close={onClose} />
     </div>
   );
 };

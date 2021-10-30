@@ -33,19 +33,29 @@ const WinnerNFT = ({ nft, onRemoveEdition }) => {
       {image && <img className="smallView-image" src={nft.url} alt={nft.name} />}
       {nft.count > 1 && <span className="for-editions-count">{nft.count}</span>}
       <div className="delete-hover">
-        {nft.editions > 1 ? (
+        {nft.count > 1 ? (
           <span className="upRemove-txt remove-eds">Select editions to remove</span>
         ) : (
           <span className="upRemove-txt remove">Remove</span>
         )}
         <img className="rec-img" src={RectIcon} alt="down-sideIcon" />
-        <Popup
-          trigger={<img className="del-img" src={crossSmall} alt="delete" aria-hidden="true" />}
-        >
-          {(close) => (
-            <EditionsRemovePopup onClose={close} nft={nft} onRemoveEdition={onRemoveEdition} />
-          )}
-        </Popup>
+        {nft.count > 1 ? (
+          <Popup
+            trigger={<img className="del-img" src={crossSmall} alt="delete" aria-hidden="true" />}
+          >
+            {(close) => (
+              <EditionsRemovePopup onClose={close} nft={nft} onRemoveEdition={onRemoveEdition} />
+            )}
+          </Popup>
+        ) : (
+          <img
+            onClick={() => onRemoveEdition(nft.tokenIds)}
+            className="del-img"
+            src={crossSmall}
+            alt="delete"
+            aria-hidden="true"
+          />
+        )}
         )
       </div>
     </div>

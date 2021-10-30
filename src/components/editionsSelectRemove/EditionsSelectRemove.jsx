@@ -3,22 +3,17 @@ import './EditionsSelectRemove.scss';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 
-const EditionsSelectRemove = ({ nft, removeEdition }) => {
+const EditionsSelectRemove = ({ nft, removeEdition, close }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEditions, setSelectedEditions] = useState([]);
-  const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(8);
-  // const sliceData = editions.slice(offset, offset + perPage);
 
-  const handleSelectAll = (event, nftId) => {
+  const handleSelectAll = (event) => {
     if (event.target.className === 'edition-container' || event.target.className === 'checkmark') {
-      if (selectAll === false) {
-        const changedNFT = sliceData.find((nfts) => nfts.id === nftId);
-
-        setSelectedEditions({ ...selectedEditions, [nftId]: [...changedNFT.tokenIds] });
+      if (!selectAll) {
+        setSelectedEditions(nft.tokenIds);
         setSelectAll(true);
       } else {
-        setSelectedEditions({ ...selectedEditions, [nftId]: [] });
+        setSelectedEditions([]);
         setSelectAll(false);
       }
     }
@@ -43,7 +38,7 @@ const EditionsSelectRemove = ({ nft, removeEdition }) => {
           <label
             className="edition-container"
             aria-hidden="true"
-            onClick={(event) => handleSelectAll(event, nft.id)}
+            onClick={(event) => handleSelectAll(event)}
           >
             Select All
             <input type="checkbox" checked={selectAll} />
@@ -72,7 +67,10 @@ const EditionsSelectRemove = ({ nft, removeEdition }) => {
       </ul>
       <Button
         className="light-border-button remove-btn"
-        onClick={() => removeEdition(selectedEditions)}
+        onClick={() => {
+          removeEdition(selectedEditions);
+          close();
+        }}
       >
         Remove
       </Button>
@@ -83,6 +81,7 @@ const EditionsSelectRemove = ({ nft, removeEdition }) => {
 EditionsSelectRemove.propTypes = {
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
   removeEdition: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 export default EditionsSelectRemove;
