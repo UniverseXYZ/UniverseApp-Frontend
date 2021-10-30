@@ -5,10 +5,8 @@ import Button from '../button/Button.jsx';
 import EditionsSelectRemove from '../editionsSelectRemove/EditionsSelectRemove';
 import SearchField from '../input/SearchField';
 
-const EditionsRemovePopup = ({ onClose, nft }) => {
-  const handleRemoveEdition = (selectedNft) => {
-    console.log(selectedNft);
-  };
+const EditionsRemovePopup = ({ onClose, nft, editions, onRemoveEdition }) => {
+  const handleRemoveEdition = (selectedNft) => onRemoveEdition(selectedNft);
   return (
     <div className="editionsRemove">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
@@ -20,13 +18,15 @@ const EditionsRemovePopup = ({ onClose, nft }) => {
         CardElement={<></>}
         enterKeyEvent={false}
       />
-      <EditionsSelectRemove nft={nft} removeEdition={handleRemoveEdition} />
+      <EditionsSelectRemove nft={nft} editions={editions} removeEdition={handleRemoveEdition} />
     </div>
   );
 };
 EditionsRemovePopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  editions: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  onRemoveEdition: PropTypes.func.isRequired,
 };
 
 export default EditionsRemovePopup;

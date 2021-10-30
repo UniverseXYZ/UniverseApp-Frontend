@@ -3,12 +3,12 @@ import './EditionsSelectRemove.scss';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 
-const EditionsSelectRemove = ({ data, nft, removeEdition }) => {
+const EditionsSelectRemove = ({ nft, editions, removeEdition }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEditions, setSelectedEditions] = useState({});
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
-  const sliceData = data.slice(offset, offset + perPage);
+  const sliceData = editions.slice(offset, offset + perPage);
 
   const handleSelectAll = (event, nftId) => {
     if (event.target.className === 'edition-container' || event.target.className === 'checkmark') {
@@ -57,26 +57,30 @@ const EditionsSelectRemove = ({ data, nft, removeEdition }) => {
             <span className="checkmark" />
           </label>
         </li>
-        {nft.tokenIds.map((edition) => (
-          <li key={edition}>
-            <label
-              htmlFor={edition}
-              className="edition-container"
-              aria-hidden="true"
-              onClick={(event) => handleSelectEdition(event, nft.id, edition)}
-            >
-              {`#${edition}`}
-              <input
-                type="checkbox"
-                checked={selectedEditions[nft.id]?.includes(edition) || selectAll}
-                id={edition}
-              />
-              <span className="checkmark" />
-            </label>
-          </li>
-        ))}
+        {editions?.length &&
+          editions.map((edition) => (
+            <li key={edition}>
+              <label
+                htmlFor={edition}
+                className="edition-container"
+                aria-hidden="true"
+                onClick={(event) => handleSelectEdition(event, nft.id, edition)}
+              >
+                {`#${edition}`}
+                <input
+                  type="checkbox"
+                  checked={selectedEditions[nft.id]?.includes(edition) || selectAll}
+                  id={edition}
+                />
+                <span className="checkmark" />
+              </label>
+            </li>
+          ))}
       </ul>
-      <Button className="light-border-button remove-btn" onClick={() => removeEdition(nft)}>
+      <Button
+        className="light-border-button remove-btn"
+        onClick={() => removeEdition(selectedEditions[nft.id])}
+      >
         Remove
       </Button>
     </>
@@ -84,9 +88,9 @@ const EditionsSelectRemove = ({ data, nft, removeEdition }) => {
 };
 
 EditionsSelectRemove.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
   removeEdition: PropTypes.func.isRequired,
+  editions: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default EditionsSelectRemove;

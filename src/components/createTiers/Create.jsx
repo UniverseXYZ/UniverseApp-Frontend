@@ -129,7 +129,7 @@ const Create = () => {
   // Custom Slots distribution logic
   const [selectedWinner, setSelectedWinner] = useState(0);
 
-  // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
+  // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}, editions: []]
   const [winnersData, setWinnersData] = useState([]);
 
   const onEditionClick = (data, actionMeta) => {
@@ -151,7 +151,7 @@ const Create = () => {
             id,
             url,
             artworkType,
-            nftName,
+            name,
             collectioName,
             collectionAddress,
             collectionUrl,
@@ -162,13 +162,15 @@ const Create = () => {
             id: parseInt(id, 10),
             url,
             artworkType,
-            nftName,
+            name,
             collectioName,
             collectionAddress,
             collectionUrl,
+            tokenId: parseInt(edition, 10),
           });
 
           winnersCopy[selectedWinner].nftIds.push(parseInt(id, 10));
+          winnersCopy[selectedWinner].editions.push(parseInt(edition, 10));
         });
       }
 
@@ -209,15 +211,23 @@ const Create = () => {
     }
   };
 
+  const onRemoveEdition = (editions) => {
+    const winnersCopy = [...winnersData];
+    const { nftsData } = winnersCopy[selectedWinner];
+    const updatedNftsData = nftsData.filter((nft) => editions.indexOf(nft.tokenId) === -1);
+    winnersCopy[selectedWinner].nftsData = updatedNftsData;
+
+    setWinnersData(winnersCopy);
+  };
+
   const prepareSlotsData = (n) => {
     let slot = 0;
     const winners = [];
 
     while (slot < n) {
-      winners.push({ slot, nftsData: [], nftIds: [] });
+      winners.push({ slot, nftsData: [], nftIds: [], editions: [] });
       slot += 1;
     }
-
     return winners;
   };
 
@@ -312,7 +322,7 @@ const Create = () => {
   }, [editedTier]);
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
-  const canContinue = winnersData.every((data) => data.nftsData.length > 0) && custom;
+  const canContinue = winnersData.every((data) => data.nftsData?.length > 0) && custom;
   const availableNFTsTolist = filteredNFTs.filter(
     ({ nfts }) => nfts.rewardAndTokenIds.filter((nft) => nft.slot !== 0 && !nft.slot).length > 0
   );
@@ -518,7 +528,7 @@ const Create = () => {
                     <img src={WinnerIcon} alt="winner-icon" />
                     <p>Winner #{winnerNumber}</p>
                     <span>
-                      {data.nftsData.length}
+                      {data.nftsData?.length}
                       NFTs
                     </span>
                     <div className="box--shadow--effect--block" />
@@ -567,6 +577,7 @@ const Create = () => {
           />
         </div>
         <CreatTiersStickyBar
+          onRemoveEdition={onRemoveEdition}
           winnersData={winnersData}
           tierSettings={values}
           handleContinue={handleContinue}

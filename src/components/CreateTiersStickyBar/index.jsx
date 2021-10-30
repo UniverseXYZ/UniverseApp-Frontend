@@ -12,14 +12,20 @@ import RectIcon from '../../assets/images/selectedNft-rect.svg';
 import Button from '../button/Button.jsx';
 import EditionsRemovePopup from '../popups/EditionsRemovePopup.jsx';
 
-const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabled }) => (
+const CreatTiersStickyBar = ({
+  winnersData,
+  tierSettings,
+  handleContinue,
+  disabled,
+  onRemoveEdition,
+}) => (
   <div className="selected-ntf create-tiers-sticky-bar">
     <div className="container selected-body">
       <div className="infoSelect-div">
         <span>Number of winners : {tierSettings.numberOfWinners}</span>
         <span>NFTs per winner : {tierSettings.nftsPerWinner}</span>
         {winnersData?.length ? (
-          <CarouselForNfts winnersData={winnersData} />
+          <CarouselForNfts winnersData={winnersData} onRemoveEdition={onRemoveEdition} />
         ) : (
           <div className="img-div">
             {winnersData?.nftsData?.length &&
@@ -108,6 +114,7 @@ CreatTiersStickyBar.propTypes = {
   tierSettings: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleContinue: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
+  onRemoveEdition: PropTypes.func.isRequired,
 };
 
 export default CreatTiersStickyBar;
