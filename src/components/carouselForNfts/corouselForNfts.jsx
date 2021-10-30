@@ -4,32 +4,41 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import './corouselForNfts.scss';
-import PropTypes from 'prop-types';
-import WinnerNFTs from '../winnerNFTs/WinnerNFTs';
+import './WinnerNFTs.scss';
+import uuid from 'react-uuid';
+import Slider from 'react-slick';
+import WinnerNft from '../winnerNft/WinnerNft';
 
 const CarouselForNfts = ({ winnersData }) => {
-  function SampleNextArrow(props) {
+  function SampleArrow(props) {
     const { className, style, onClick } = props;
     return <div className={className} style={{ ...style }} onClick={onClick} />;
   }
 
-  function SamplePrevArrow(props) {
-    const { className, style, onClick } = props;
-    return <div className={className} style={{ ...style }} onClick={onClick} />;
-  }
   const settings = {
     dots: true,
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
+    nextArrow: <SampleArrow />,
+    prevArrow: <SampleArrow />,
   };
-  return <WinnerNFTs sliderSettings={settings} winnersData={winnersData} />;
-};
-
-CarouselForNfts.propTypes = {
-  winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  return (
+    <div className="carousel img-div">
+      <Slider {...settings}>
+        {winnersData.map((winner) => (
+          <div className="winner-block">
+            <div className="title-winner">Winner #{winner.slot}</div>
+            {winner.nftsData?.length ? (
+              winner.nftsData?.map((nft) => <WinnerNft nft={nft} />)
+            ) : (
+              <div className="placeholder-winners" key={uuid()} />
+            )}
+          </div>
+        ))}
+      </Slider>
+    </div>
+  );
 };
 
 export default CarouselForNfts;
