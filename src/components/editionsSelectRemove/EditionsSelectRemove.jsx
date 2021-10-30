@@ -5,7 +5,7 @@ import Button from '../button/Button';
 
 const EditionsSelectRemove = ({ nft, removeEdition }) => {
   const [selectAll, setSelectAll] = useState(false);
-  const [selectedEditions, setSelectedEditions] = useState({});
+  const [selectedEditions, setSelectedEditions] = useState([]);
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(8);
   // const sliceData = editions.slice(offset, offset + perPage);
@@ -23,23 +23,16 @@ const EditionsSelectRemove = ({ nft, removeEdition }) => {
       }
     }
   };
-  const handleSelectEdition = (event, nftId, edition) => {
+  const handleSelectEdition = (event, edition) => {
     if (event.target.className === 'edition-container' || event.target.className === 'checkmark') {
-      if (!selectedEditions[nftId]?.includes(edition)) {
-        const selectedEditionsByNftId = selectedEditions[nftId] ? selectedEditions[nftId] : [];
-
-        setSelectedEditions({
-          ...selectedEditions,
-          [nftId]: [...selectedEditionsByNftId, edition],
-        });
+      if (!selectedEditions.includes(edition)) {
+        setSelectedEditions([...selectedEditions, edition]);
       } else {
         setSelectAll(false);
-        setSelectedEditions({
-          ...selectedEditions,
-          [nftId]: selectedEditions[nftId]?.filter(
-            (selectedEdition) => selectedEdition !== edition
-          ),
-        });
+        const updatedEditions = selectedEditions.filter(
+          (selectedEdition) => selectedEdition !== edition
+        );
+        setSelectedEditions(updatedEditions);
       }
     }
   };
@@ -64,12 +57,12 @@ const EditionsSelectRemove = ({ nft, removeEdition }) => {
                 htmlFor={edition}
                 className="edition-container"
                 aria-hidden="true"
-                onClick={(event) => handleSelectEdition(event, nft.id, edition)}
+                onClick={(event) => handleSelectEdition(event, edition)}
               >
                 {`#${edition}`}
                 <input
                   type="checkbox"
-                  checked={selectedEditions[nft.id]?.includes(edition) || selectAll}
+                  checked={selectedEditions?.includes(edition) || selectAll}
                   id={edition}
                 />
                 <span className="checkmark" />

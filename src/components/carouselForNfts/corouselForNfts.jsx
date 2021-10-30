@@ -29,10 +29,8 @@ const CarouselForNfts = ({ winnersData, onRemoveEdition }) => (
         const result = winner.nftsData.reduce((res, curr) => {
           if (!res[curr.name])
             res[curr.name] = {
-              id: curr.id,
               tokenIds: [],
               url: curr.url,
-              slot: curr.slot,
               artworkType: curr.artworkType,
               count: 0,
             };

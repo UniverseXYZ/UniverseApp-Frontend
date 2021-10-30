@@ -210,18 +210,17 @@ const Create = () => {
     }
   };
 
-  const onRemoveEdition = (_editions) => {
-    console.info(_editions);
-    // const winnersCopy = [...winnersData];
-    // const { nftsData, nftIds, editions } = winnersCopy[selectedWinner];
-    // const updatedNftsData = nftsData.filter((nft) => _editions.indexOf(nft.id) === -1);
-    // const updatedEditions = editions.filter((edition) => _editions.indexOf(edition) === -1);
-    // const updatedNftIds = nftIds.filter(id => _editions.indexOf())
+  const onRemoveEdition = (editions) => {
+    const winnersCopy = [...winnersData];
+    winnersCopy.forEach((winner) => {
+      const { nftsData } = winner;
+      const updatedNftsData = nftsData.filter((nft) => editions.indexOf(nft.tokenId) === -1);
+      const updatedNftIds = updatedNftsData.map((nft) => nft.id);
+      winner.nftsData = updatedNftsData;
+      winner.nftIds = updatedNftIds;
+    });
 
-    // winnersCopy[selectedWinner].nftsData = updatedNftsData;
-    // winnersCopy[selectedWinner].editions = updatedEditions;
-    // console.info(winnersCopy);
-    // setWinnersData(winnersCopy);
+    setWinnersData(winnersCopy);
   };
 
   const prepareSlotsData = (n) => {
