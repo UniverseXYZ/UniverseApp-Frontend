@@ -70,29 +70,107 @@
     display: flex;
     margin-top: 16px;
 
+    .imgs-mr {
+      margin-right: 16px;
+    }
+
     .imgs {
       position: relative;
-      margin-right: 16px;
       background: rgba(0, 0, 0, 0.02);
       // border: 1px solid #FF4949;
       box-sizing: border-box;
       border-radius: 6px;
-      width: 60px;
-      height: 60px;
+      width: 54px;
+      height: 54px;
 
-      .del-img {
+      .for-editions-count{
         position: absolute;
-        bottom: 20px;
-        left: 30px;
+        width: 15px;
+        height: 15px;
+        top: 3px;
+        left: 36px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(2px);
+        border-radius: 3px;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 10px;
+        line-height: 150%;
+        color: #ffffff;
+        align-items: center;
+        text-align: center;
       }
+      .delete-hover{
+        position: absolute;
+        width: 54px;
+        height: 54px;
+        text-align: center;
+        bottom: 0px;
+        left: 0;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+        border-radius: 5px;
+        align-items: center;
+        display: none;
+        .upRemove-txt{
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 4px 12px;
+          position: absolute;
+          height: 26px;
+          left: -8px;
+          top: -30px;
+          background: #000000;
+          border-radius: 100px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 150%;
+          text-align: center;
+          color: #FFFFFF;
+           }
+          .remove{
+            width: 70px;
+            img{
+              top: 25px;
+              right: 30px;
+            }
+          }
+          .remove-eds{
+            width: 173px;
+            left: -55px;
+          }
+          .rec-img{
+          position: absolute;
+          top: -4px;
+          right: 20px;
+        }
+      }
+      .del-img{
+        position: absolute;
+        top: 30%;
+        left: 32%;
+      }
+      &:hover{
+        .delete-hover{
+          display: unset;
+
+        }
+      }
+      // @include sm{
+      //   width: 100%;
+      // }
     }
     .placeholder {
       background: rgba(0, 0, 0, 0.02);
       border: 1px solid #ff4949;
       box-sizing: border-box;
       border-radius: 6px;
-      width: 60px;
-      height: 60px;
+      width: 54px;
+      height: 54px;
       margin-right: 16px;
     }
   }

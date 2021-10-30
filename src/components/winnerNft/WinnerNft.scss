@@ -2,16 +2,13 @@
 @import '../../assets/scss/_mixins';
 
 .imgs-winner {
-    margin: 10px;
-}
-.placeholder {
+    margin: 6px;
+    position: relative;
     background: rgba(0, 0, 0, 0.02);
-    border: 1px solid #FF4949;
     box-sizing: border-box;
     border-radius: 6px;
-    width: 60px;
-    height: 60px;
-    margin-right: 16px;
+    width: 54px;
+    height: 54px;
 }
 .smallView-image {
     width: 100%;

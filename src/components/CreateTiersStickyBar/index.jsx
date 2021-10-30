@@ -4,10 +4,13 @@ import React from 'react';
 import './index.scss';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
+import Popup from 'reactjs-popup';
 import CarouselForNfts from '../carouselForNfts/corouselForNfts';
 import mp3Icon from '../../assets/images/mp3-icon.png';
-import crossSmall from '../../assets/images/crossSmall.svg';
+import crossSmall from '../../assets/images/nft-cross.svg';
+import RectIcon from '../../assets/images/selectedNft-rect.svg';
 import Button from '../button/Button.jsx';
+import EditionsRemovePopup from '../popups/EditionsRemovePopup.jsx';
 
 const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabled }) => {
   // const data = winnersData.map((info) => info.nftsData);
@@ -75,7 +78,7 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
           address: '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7',
         },
       ],
-      numberOfEditions: 3,
+      numberOfEditions: 1,
       createdAt: '2021-10-08T13:52:14.402Z',
       updatedAt: '2021-10-08T13:52:14.402Z',
       collection: {
@@ -138,7 +141,7 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
           address: '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7',
         },
       ],
-      numberOfEditions: 5,
+      numberOfEditions: 2,
       createdAt: '2021-10-08T13:52:14.402Z',
       updatedAt: '2021-10-08T13:52:14.402Z',
       collection: {
@@ -159,10 +162,134 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
         createdAt: '2021-10-08T06:33:40.073Z',
         updatedAt: '2021-10-08T06:33:40.073Z',
       },
-      tokenIds: [1],
+      tokenIds: [7569, 7863],
     },
     {
       winner: 3,
+      id: 6552,
+      collectionId: 1,
+      txHash: '0x3c773cdf8c129939467e0a914ac00442e7fe3ad15093e56a973803951b269869',
+      creator: {
+        id: 12,
+        address: '0x72523054c174a6c8e961bd14a2cab9f059e507e8',
+        displayName: 'ygf',
+        universePageUrl: 'sf',
+        about: 'sdf',
+        instagramUser: 'fs',
+        twitterUser: '12',
+        createdAt: '2021-10-04T12:32:17.702Z',
+        profileImageUrl:
+          'https://universeapp-assets-dev.s3.amazonaws.com/profiles/86b90555127f10890212b900f207a4d15621d57a0a49915f.jpg',
+        logoImageUrl: null,
+      },
+      name: '123',
+      description: '123',
+      tokenId: 7453,
+      artworkType: 'png',
+      url: 'https://universeapp-assets-dev.s3.amazonaws.com/842c74e196f0a2d2fa4317b766feec60e4ef23ba6b23e7be.png',
+      optimized_url:
+        'https://universeapp-assets-dev.s3.amazonaws.com/842c74e196f0a2d2fa4317b766feec60e4ef23ba6b23e7be.png',
+      thumbnail_url:
+        'https://universeapp-assets-dev.s3.amazonaws.com/842c74e196f0a2d2fa4317b766feec60e4ef23ba6b23e7be.png',
+      original_url: 'https://arweave.net/M6bu4GWcDEEOonwK_PMWnXPriOYBzDJeklMfbeiPTgE',
+      tokenUri: 'https://arweave.net/pzZLgQObMsu4Ih2v7KZCsPEW1OopwlLtNfyuDfxef2I',
+      properties: [
+        {
+          12: '12',
+        },
+      ],
+      royalties: [
+        {
+          amount: 12,
+          address: '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7',
+        },
+      ],
+      numberOfEditions: 5,
+      createdAt: '2021-10-07T13:50:14.841Z',
+      updatedAt: '2021-10-07T13:50:14.841Z',
+      collection: {
+        id: 1,
+        source: 'universe',
+        txHash: null,
+        address: '0xd3ccbb9f3e5b9678c5f4fef91055704df81a104c',
+        owner: null,
+        creator: null,
+        name: 'Universe Core',
+        symbol: 'NFUC',
+        description: null,
+        shortUrl: null,
+        coverUrl: null,
+        bannerUrl: null,
+        publicCollection: true,
+        createdAt: '2021-10-03T13:43:30.532Z',
+        updatedAt: '2021-10-03T13:43:30.532Z',
+      },
+      tokenIds: [7453, 7452, 7451, 7450, 7449],
+    },
+    {
+      winner: 3,
+      id: 6552,
+      collectionId: 1,
+      txHash: '0x3c773cdf8c129939467e0a914ac00442e7fe3ad15093e56a973803951b269869',
+      creator: {
+        id: 12,
+        address: '0x72523054c174a6c8e961bd14a2cab9f059e507e8',
+        displayName: 'ygf',
+        universePageUrl: 'sf',
+        about: 'sdf',
+        instagramUser: 'fs',
+        twitterUser: '12',
+        createdAt: '2021-10-04T12:32:17.702Z',
+        profileImageUrl:
+          'https://universeapp-assets-dev.s3.amazonaws.com/profiles/86b90555127f10890212b900f207a4d15621d57a0a49915f.jpg',
+        logoImageUrl: null,
+      },
+      name: '123',
+      description: '123',
+      tokenId: 7453,
+      artworkType: 'png',
+      url: 'https://universeapp-assets-dev.s3.amazonaws.com/842c74e196f0a2d2fa4317b766feec60e4ef23ba6b23e7be.png',
+      optimized_url:
+        'https://universeapp-assets-dev.s3.amazonaws.com/842c74e196f0a2d2fa4317b766feec60e4ef23ba6b23e7be.png',
+      thumbnail_url:
+        'https://universeapp-assets-dev.s3.amazonaws.com/842c74e196f0a2d2fa4317b766feec60e4ef23ba6b23e7be.png',
+      original_url: 'https://arweave.net/M6bu4GWcDEEOonwK_PMWnXPriOYBzDJeklMfbeiPTgE',
+      tokenUri: 'https://arweave.net/pzZLgQObMsu4Ih2v7KZCsPEW1OopwlLtNfyuDfxef2I',
+      properties: [
+        {
+          12: '12',
+        },
+      ],
+      royalties: [
+        {
+          amount: 12,
+          address: '0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7',
+        },
+      ],
+      numberOfEditions: 5,
+      createdAt: '2021-10-07T13:50:14.841Z',
+      updatedAt: '2021-10-07T13:50:14.841Z',
+      collection: {
+        id: 1,
+        source: 'universe',
+        txHash: null,
+        address: '0xd3ccbb9f3e5b9678c5f4fef91055704df81a104c',
+        owner: null,
+        creator: null,
+        name: 'Universe Core',
+        symbol: 'NFUC',
+        description: null,
+        shortUrl: null,
+        coverUrl: null,
+        bannerUrl: null,
+        publicCollection: true,
+        createdAt: '2021-10-03T13:43:30.532Z',
+        updatedAt: '2021-10-03T13:43:30.532Z',
+      },
+      tokenIds: [7453, 7452, 7451, 7450, 7449],
+    },
+    {
+      winner: 1,
       id: 6552,
       collectionId: 1,
       txHash: '0x3c773cdf8c129939467e0a914ac00442e7fe3ad15093e56a973803951b269869',
@@ -235,7 +362,7 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
           ) : (
             <div className="img-div">
               {data.map((nft) => (
-                <div key={nft.id} className="imgs">
+                <div key={nft.id} className="imgs imgs-mr">
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <video
                       className="smallView-image"
@@ -257,13 +384,33 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
                     !nft.artworkType.endsWith('mp4') && (
                       <img className="smallView-image" src={nft.url} alt="" />
                     )}
-                  <img
-                    className="del-img"
-                    src={crossSmall}
-                    onClick={() => handledeleteNft(nft)}
-                    alt="delete"
-                    aria-hidden="true"
-                  />
+                  {nft.numberOfEditions && nft.numberOfEditions > 1 && (
+                    <span className="for-editions-count">{nft.numberOfEditions}</span>
+                  )}
+                  <div className="delete-hover">
+                    {nft.numberOfEditions > 1 ? (
+                      <span className="upRemove-txt remove-eds">Select editions to remove</span>
+                    ) : (
+                      <span className="upRemove-txt remove">Remove</span>
+                    )}
+                    <img className="rec-img" src={RectIcon} alt="down-sideIcon" />
+                    {nft.numberOfEditions > 1 ? (
+                      <Popup
+                        trigger={
+                          <img
+                            className="del-img"
+                            src={crossSmall}
+                            alt="delete"
+                            aria-hidden="true"
+                          />
+                        }
+                      >
+                        {(close) => <EditionsRemovePopup onClose={close} nft={nft} data={data} />}
+                      </Popup>
+                    ) : (
+                      <img className="del-img" src={crossSmall} alt="delete" aria-hidden="true" />
+                    )}
+                  </div>
                 </div>
               ))}
               {Array(5)

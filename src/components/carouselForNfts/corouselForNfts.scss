@@ -1,7 +1,52 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/_mixins';
 
-.carousel {
-    display: flex;
+.carousel.img-div {
+    display: unset;
     margin-top: 16px;
+    display: block;
+    width: 950px;
+    height: 100%;
+    .slick-slide{
+        width: unset!important;
+        margin-right: 14px;
+      }
+      .slick-dots{
+        display: none!important;
+      }
+      .slick-list{
+          padding-top: 25px;
+      }
+      .slick-arrow {
+        background: $white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        height: 42px;
+        width: 42px;
+        box-sizing: border-box;
+        box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+        border-radius: 50%;
+        &:hover {
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb00, #00eaea) border-box;
+          border: 1px solid transparent;
+        }
+
+        &::before {
+         color: rgba(0, 0, 0, 1);
+         position: absolute;
+         top: 10px;
+         right: 10px;
+        }
+
+        &.slick-prev {
+          position: absolute;
+          left: -18px;
+          z-index: 1;
+        }
+        &.slick-next {
+          position: absolute;
+          right: -18px;
+          z-index: 1;
+        }
+      }  
 }
