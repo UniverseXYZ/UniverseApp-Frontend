@@ -53,12 +53,15 @@
     margin-top: 25px;
 
     button {
-      // position:absolute;
-      // bottom: 0;
-
+      width: 112px;
+      height: 54px;
+      
       @include md {
         // margin-top: 37px;
         width: 100%;
+      }
+      @include md {
+        height: unset;
       }
     }
   }
@@ -70,6 +73,12 @@
     .imgs {
       position: relative;
       margin-right: 16px;
+      background: rgba(0, 0, 0, 0.02);
+      // border: 1px solid #FF4949;
+      box-sizing: border-box;
+      border-radius: 6px;
+      width: 60px;
+      height: 60px;
 
       .del-img {
         position: absolute;
