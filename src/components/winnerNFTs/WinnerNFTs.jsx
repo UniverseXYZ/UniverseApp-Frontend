@@ -2,42 +2,27 @@
 import React from 'react';
 import './WinnerNFTs.scss';
 import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
 import Slider from 'react-slick';
-import mp3Icon from '../../assets/images/mp3-icon.png';
 import WinnerNft from '../winnerNft/WinnerNft';
 
-const WinnerNFTs = ({ data, winnersData, winners, sliderSettings }) => (
-  <div className="carousel img-div">
-    <Slider {...sliderSettings}>
-      {winners.map((winner) => {
-        if (data.find((a) => a.winner === winner.id)) {
-          return (
-            <div className="winner-block">
-              <div className="title-winner">Winner #{winner.id}</div>
-              {data.map((nft) => {
-                if (nft.winner === winner.id) {
-                  return <WinnerNft nft={nft} data={data} />;
-                }
-                return '';
-              })}
-            </div>
-          );
-        }
-        return (
+const WinnerNFTs = ({ winnersData, sliderSettings }) => {
+  console.info(winnersData);
+  return (
+    <div className="carousel img-div">
+      <Slider {...sliderSettings}>
+        {winnersData.map((winner) => (
           <div className="winner-block">
-            <div className="title-winner">Winner #{winner.id}</div>
-            <div className="placeholder-winners" key={uuid()} />
+            <div className="title-winner">Winner #{winner.slot}</div>
+            {winner.nftsData?.length ? (
+              winner.nftsData?.map((nft) => <WinnerNft nft={nft} />)
+            ) : (
+              <div className="placeholder-winners" key={uuid()} />
+            )}
           </div>
-        );
-      })}
-    </Slider>
-  </div>
-);
-WinnerNFTs.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  winners: PropTypes.oneOfType([PropTypes.object]).isRequired,
+        ))}
+      </Slider>
+    </div>
+  );
 };
 
 export default WinnerNFTs;

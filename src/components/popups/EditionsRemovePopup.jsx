@@ -5,7 +5,7 @@ import Button from '../button/Button.jsx';
 import EditionsSelectRemove from '../editionsSelectRemove/EditionsSelectRemove';
 import SearchField from '../input/SearchField';
 
-const EditionsRemovePopup = ({ onClose, data, nft }) => {
+const EditionsRemovePopup = ({ onClose, nft }) => {
   const handleRemoveEdition = (selectedNft) => {
     console.log(selectedNft);
   };
@@ -20,13 +20,12 @@ const EditionsRemovePopup = ({ onClose, data, nft }) => {
         CardElement={<></>}
         enterKeyEvent={false}
       />
-      <EditionsSelectRemove nft={nft} data={data} removeEdition={handleRemoveEdition} />
+      <EditionsSelectRemove nft={nft} removeEdition={handleRemoveEdition} />
     </div>
   );
 };
 EditionsRemovePopup.propTypes = {
   onClose: PropTypes.func.isRequired,
-  data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 

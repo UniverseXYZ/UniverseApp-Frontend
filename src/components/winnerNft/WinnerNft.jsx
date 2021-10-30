@@ -7,7 +7,7 @@ import crossSmall from '../../assets/images/nft-cross.svg';
 import RectIcon from '../../assets/images/selectedNft-rect.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 
-const WinnerNFT = ({ data, nft }) => (
+const WinnerNFT = ({ nft }) => (
   <div key={nft.id} className="imgs imgs-winner">
     {nft.artworkType && nft.artworkType.endsWith('mp4') && (
       <video
@@ -42,7 +42,7 @@ const WinnerNFT = ({ data, nft }) => (
         <Popup
           trigger={<img className="del-img" src={crossSmall} alt="delete" aria-hidden="true" />}
         >
-          {(close) => <EditionsRemovePopup onClose={close} data={data} nft={nft} />}
+          {(close) => <EditionsRemovePopup onClose={close} nft={nft} />}
         </Popup>
       ) : (
         <img className="del-img" src={crossSmall} alt="delete" aria-hidden="true" />
@@ -52,7 +52,6 @@ const WinnerNFT = ({ data, nft }) => (
 );
 
 WinnerNFT.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 

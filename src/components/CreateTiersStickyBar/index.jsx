@@ -11,24 +11,19 @@ import crossSmall from '../../assets/images/nft-cross.svg';
 import RectIcon from '../../assets/images/selectedNft-rect.svg';
 import Button from '../button/Button.jsx';
 import EditionsRemovePopup from '../popups/EditionsRemovePopup.jsx';
-import { WinnerMockData, SelectefNFtsMockData } from '../../utils/fixtures/SelectedNftsMockData.js';
 
-const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabled }) => {
-  // const data = winnersData.map((info) => info.nftsData);
-  const winners = WinnerMockData;
-  const data = SelectefNFtsMockData;
-
-  return (
-    <div className="selected-ntf create-tiers-sticky-bar">
-      <div className="container selected-body">
-        <div className="infoSelect-div">
-          <span>Number of winners : {tierSettings.numberOfWinners}</span>
-          <span>NFTs per winner : {tierSettings.nftsPerWinner}</span>
-          {winnersData.length > 0 ? (
-            <CarouselForNfts winners={winners} data={data} winnersData={winnersData} />
-          ) : (
-            <div className="img-div">
-              {data.map((nft) => (
+const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabled }) => (
+  <div className="selected-ntf create-tiers-sticky-bar">
+    <div className="container selected-body">
+      <div className="infoSelect-div">
+        <span>Number of winners : {tierSettings.numberOfWinners}</span>
+        <span>NFTs per winner : {tierSettings.nftsPerWinner}</span>
+        {winnersData?.length ? (
+          <CarouselForNfts winnersData={winnersData} />
+        ) : (
+          <div className="img-div">
+            {winnersData?.nftsData?.length &&
+              winnersData.nftsData.map((nft) => (
                 <div key={nft.id} className="imgs imgs-mr">
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <video
@@ -72,7 +67,7 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
                           />
                         }
                       >
-                        {(close) => <EditionsRemovePopup onClose={close} nft={nft} data={data} />}
+                        {(close) => <EditionsRemovePopup onClose={close} nft={nft} />}
                       </Popup>
                     ) : (
                       <img className="del-img" src={crossSmall} alt="delete" aria-hidden="true" />
@@ -80,34 +75,33 @@ const CreatTiersStickyBar = ({ winnersData, tierSettings, handleContinue, disabl
                   </div>
                 </div>
               ))}
-              {Array(5)
-                .fill(0)
-                .map((el, i) => (
-                  <div className="placeholder" key={uuid()} />
-                ))}
-            </div>
-          )}
-        </div>
-        <div className="sel-info">
-          {/* {nftsPerWinner > previewNFTs.length && (
+            {Array(5)
+              .fill(0)
+              .map((el, i) => (
+                <div className="placeholder" key={uuid()} />
+              ))}
+          </div>
+        )}
+      </div>
+      <div className="sel-info">
+        {/* {nftsPerWinner > previewNFTs.length && (
               <span className="err-select">
                 You have not selected enough NFTs for this reward tier
               </span>
             )} */}
-          <div className="continue-nft">
-            <Button
-              onClick={() => handleContinue(winnersData)}
-              disabled={!disabled}
-              className="light-button"
-            >
-              Create
-            </Button>
-          </div>
+        <div className="continue-nft">
+          <Button
+            onClick={() => handleContinue(winnersData)}
+            disabled={!disabled}
+            className="light-button"
+          >
+            Create
+          </Button>
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 CreatTiersStickyBar.propTypes = {
   winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,

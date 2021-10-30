@@ -5,10 +5,9 @@
 import React from 'react';
 import './corouselForNfts.scss';
 import PropTypes from 'prop-types';
-import Slider from 'react-slick';
 import WinnerNFTs from '../winnerNFTs/WinnerNFTs';
 
-const CarouselForNfts = ({ data, winnersData, winners }) => {
+const CarouselForNfts = ({ winnersData }) => {
   function SampleNextArrow(props) {
     const { className, style, onClick } = props;
     return <div className={className} style={{ ...style }} onClick={onClick} />;
@@ -26,15 +25,11 @@ const CarouselForNfts = ({ data, winnersData, winners }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  return (
-    <WinnerNFTs sliderSettings={settings} winners={winners} data={data} winnersData={winnersData} />
-  );
+  return <WinnerNFTs sliderSettings={settings} winnersData={winnersData} />;
 };
 
 CarouselForNfts.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  winners: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default CarouselForNfts;
