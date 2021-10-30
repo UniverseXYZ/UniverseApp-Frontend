@@ -9,20 +9,21 @@ import uuid from 'react-uuid';
 import Slider from 'react-slick';
 import WinnerNft from '../winnerNft/WinnerNft';
 
-const CarouselForNfts = ({ winnersData }) => {
-  function SampleArrow(props) {
-    const { className, style, onClick } = props;
-    return <div className={className} style={{ ...style }} onClick={onClick} />;
-  }
+function SampleArrow(props) {
+  const { className, style, onClick } = props;
+  return <div className={className} style={{ ...style }} onClick={onClick} />;
+}
+const settings = {
+  dots: true,
+  infinite: false,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  nextArrow: <SampleArrow />,
+  prevArrow: <SampleArrow />,
+};
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    nextArrow: <SampleArrow />,
-    prevArrow: <SampleArrow />,
-  };
+const CarouselForNfts = ({ winnersData }) => {
+  console.info(winnersData);
   return (
     <div className="carousel img-div">
       <Slider {...settings}>
