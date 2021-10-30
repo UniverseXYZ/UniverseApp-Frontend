@@ -30,7 +30,7 @@ const CreatTiersStickyBar = ({
           <div className="img-div">
             {winnersData?.nftsData?.length &&
               winnersData.nftsData.map((nft) => (
-                <div key={nft.id} className="imgs imgs-mr">
+                <div key={uuid()} className="imgs imgs-mr">
                   {nft.artworkType && nft.artworkType.endsWith('mp4') && (
                     <video
                       className="smallView-image"
@@ -110,7 +110,7 @@ const CreatTiersStickyBar = ({
 );
 
 CreatTiersStickyBar.propTypes = {
-  winnersData: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  winnersData: PropTypes.oneOfType([PropTypes.array]).isRequired,
   tierSettings: PropTypes.oneOfType([PropTypes.object]).isRequired,
   handleContinue: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
