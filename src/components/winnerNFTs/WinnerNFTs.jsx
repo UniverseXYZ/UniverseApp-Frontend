@@ -8,29 +8,31 @@ import mp3Icon from '../../assets/images/mp3-icon.png';
 import WinnerNft from '../winnerNft/WinnerNft';
 
 const WinnerNFTs = ({ data, winnersData, winners, sliderSettings }) => (
-  <Slider {...sliderSettings}>
-    {winners.map((winner) => {
-      if (data.find((a) => a.winner === winner.winnerName)) {
+  <div className="carousel img-div">
+    <Slider {...sliderSettings}>
+      {winners.map((winner) => {
+        if (data.find((a) => a.winner === winner.id)) {
+          return (
+            <div className="winner-block">
+              <div className="title-winner">Winner #{winner.id}</div>
+              {data.map((nft) => {
+                if (nft.winner === winner.id) {
+                  return <WinnerNft nft={nft} data={data} />;
+                }
+                return '';
+              })}
+            </div>
+          );
+        }
         return (
           <div className="winner-block">
-            <div className="title-winner">Winner #{winner.winnerName}</div>
-            {data.map((nft) => {
-              if (nft.winner === winner.winnerName) {
-                return <WinnerNft nft={nft} data={data} />;
-              }
-              return '';
-            })}
+            <div className="title-winner">Winner #{winner.id}</div>
+            <div className="placeholder-winners" key={uuid()} />
           </div>
         );
-      }
-      return (
-        <div className="winner-block">
-          <div className="title-winner">Winner #{winner.winnerName}</div>
-          <div className="placeholder-winners" key={uuid()} />
-        </div>
-      );
-    })}
-  </Slider>
+      })}
+    </Slider>
+  </div>
 );
 WinnerNFTs.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,

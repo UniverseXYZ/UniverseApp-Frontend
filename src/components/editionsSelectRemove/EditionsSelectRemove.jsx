@@ -3,7 +3,7 @@ import './EditionsSelectRemove.scss';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
 
-const EditionsSelectRemove = ({ data, nft }) => {
+const EditionsSelectRemove = ({ data, nft, removeEdition }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedEditions, setSelectedEditions] = useState({});
   const [offset, setOffset] = useState(0);
@@ -76,7 +76,9 @@ const EditionsSelectRemove = ({ data, nft }) => {
           </li>
         ))}
       </ul>
-      <Button className="light-border-button remove-btn">Remove</Button>
+      <Button className="light-border-button remove-btn" onClick={() => removeEdition(nft)}>
+        Remove
+      </Button>
     </>
   );
 };
@@ -84,6 +86,7 @@ const EditionsSelectRemove = ({ data, nft }) => {
 EditionsSelectRemove.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   nft: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  removeEdition: PropTypes.func.isRequired,
 };
 
 export default EditionsSelectRemove;

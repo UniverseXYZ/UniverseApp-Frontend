@@ -27,14 +27,7 @@ const CarouselForNfts = ({ data, winnersData, winners }) => {
     prevArrow: <SamplePrevArrow />,
   };
   return (
-    <div className="carousel img-div">
-      <WinnerNFTs
-        sliderSettings={settings}
-        winners={winners}
-        data={data}
-        winnersData={winnersData}
-      />
-    </div>
+    <WinnerNFTs sliderSettings={settings} winners={winners} data={data} winnersData={winnersData} />
   );
 };
 

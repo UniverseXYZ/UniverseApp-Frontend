@@ -24,6 +24,7 @@
 
 .infoSelect-div {
   // display: flex;
+  width: 80%;
   padding: 16px 0px;
 
   span {
@@ -35,22 +36,39 @@
     font-size: 12px;
     line-height: 18px;
   }
-}
-
-.sel-info {
-  // display: flex;
-  padding: 16px 0;
-
-  @include sm {
-    display: grid;
+  @include md {
+    width: 100%;
   }
 }
 
+.sel-info {
+  width: 20%;
+  padding: 16px 0;
+  @include md {
+    width: unset;
+  }
+  @include sm {
+    display: grid;
+  }
+  .err-select {
+    font-family: $spaceGroteskFont;
+    font-size: 12px;
+    line-height: 150%;
+    text-align: right;
+    color: #ff4949;
+    // width: 70% !important;
+
+    @include md {
+      text-align: left;
+      margin-bottom: 12px;
+    }
+  }
+}
   .continue-nft {
     display: flex;
     justify-content: flex-end;
     position: relative;
-    margin-top: 25px;
+    margin-top: 36px;
 
     button {
       width: 112px;
@@ -64,20 +82,25 @@
         height: unset;
       }
     }
+    @include md {
+     margin-top: unset;
+    }
   }
 
   .img-div {
     display: flex;
-    margin-top: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 
     .imgs-mr {
-      margin-right: 16px;
+      margin-right: 6px;
     }
 
     .imgs {
       position: relative;
       background: rgba(0, 0, 0, 0.02);
-      // border: 1px solid #FF4949;
+      margin-top: 6px;
       box-sizing: border-box;
       border-radius: 6px;
       width: 54px;
@@ -100,6 +123,9 @@
         color: #ffffff;
         align-items: center;
         text-align: center;
+        @include sm{
+          left: 25px;
+        }
       }
       .delete-hover{
         position: absolute;
@@ -131,6 +157,9 @@
           line-height: 150%;
           text-align: center;
           color: #FFFFFF;
+          @include sm{
+            left: -12px;
+          }
            }
           .remove{
             width: 70px;
@@ -142,17 +171,31 @@
           .remove-eds{
             width: 173px;
             left: -55px;
+            @include sm{
+              right: -65px;
+            }
           }
           .rec-img{
           position: absolute;
           top: -4px;
           right: 20px;
+          @include sm{
+            right: 15px;
+          }
+        }
+        @include sm{
+          width: 42px;
+          height: 42px;
         }
       }
       .del-img{
         position: absolute;
         top: 30%;
         left: 32%;
+        @include sm{
+          top: 25%;
+          left: 28%;
+        }
       }
       &:hover{
         .delete-hover{
@@ -160,9 +203,10 @@
 
         }
       }
-      // @include sm{
-      //   width: 100%;
-      // }
+      @include sm{
+        width: 42px;
+        height: 42px;
+      }
     }
     .placeholder {
       background: rgba(0, 0, 0, 0.02);
@@ -171,7 +215,12 @@
       border-radius: 6px;
       width: 54px;
       height: 54px;
-      margin-right: 16px;
+      margin-right: 6px;
+      margin-top: 6px;
+      @include sm{
+        width: 42px;
+        height: 42px;
+      }
     }
   }
 }
