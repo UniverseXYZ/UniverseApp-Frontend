@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FutureAuctionsFilters from './Filters.jsx';
 import { useAuctionContext } from '../../../../../contexts/AuctionContext.jsx';
 import { isAfterNow } from '../../../../../utils/dates';
 import { PLACEHOLDER_AUCTIONS } from '../../../../../utils/fixtures/AuctionsDummyData.js';
 import FutureAuctionsList from '../../../../auctionsCard/futureAuction/FutureAuctionsList.jsx';
+import Pagination from '../../../../pagination/Pagionation.jsx';
+import ItemsPerPageDropdown from '../../../../pagination/ItemsPerPageDropdown.jsx';
 
 const FutureAuctionsTab = () => {
   const { myAuctions } = useAuctionContext();
+  const [offset, setOffset] = useState(0);
+  const [perPage, setPerPage] = useState(12);
 
   return (
     <div className="future__auctions__tab">
@@ -16,6 +20,18 @@ const FutureAuctionsTab = () => {
           <FutureAuctionsList
             data={PLACEHOLDER_AUCTIONS.filter((item) => !item.launch && isAfterNow(item.endDate))}
           />
+          <div className="pagination__container">
+            <Pagination
+              data={PLACEHOLDER_AUCTIONS.filter((item) => !item.launch && isAfterNow(item.endDate))}
+              perPage={perPage}
+              setOffset={setOffset}
+            />
+            <ItemsPerPageDropdown
+              perPage={perPage}
+              setPerPage={setPerPage}
+              itemsPerPage={[12, 24]}
+            />
+          </div>
         </>
       ) : (
         <div className="empty__nfts">

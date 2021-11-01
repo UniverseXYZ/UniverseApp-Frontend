@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './AuctionHouse.scss';
 import CreateYourAuction from '../../../components/products/auctionHouse/tabs/CreateYourAuction.jsx';
 import Tabs from '../../../components/products/auctionHouse/tabs/Tabs.jsx';
 import Welcome from '../../../components/products/auctionHouse/Welcome.jsx';

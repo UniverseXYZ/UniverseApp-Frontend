@@ -1,0 +1,74 @@
+@import "../../../assets/scss/variables";
+@import "../../../assets/scss/mixins";
+
+.auction__house__welcome__section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $black;
+  min-height: 420px;
+  padding: 0 60px;
+
+  .ellipse-l {
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    @include sm {
+      height: 200px;
+    }
+  }
+
+  .ellipse-r {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    transform: rotate(180deg);
+    @include sm {
+      height: 200px;
+      bottom: 20px;
+    }
+  }
+
+  &__container {
+    max-width: 1110px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    h1.title {
+      font-family: $sharpGroteskSemiBoldFont;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 120%;
+      text-align: center;
+      color: $white;
+      @include lg {
+        max-width: 530px;
+        margin: 0 auto;
+      }
+      @include md {
+        font-size: 26px;
+        max-width: 336px;
+      }
+    }
+    p.desc {
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 150%;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 20px;
+      @include md {
+        font-size: 16px;
+        max-width: 307px;
+        margin: 20px auto 0;
+      }
+    }
+  }
+  @include sm {
+    padding: 0px 20px;
+  }
+}
