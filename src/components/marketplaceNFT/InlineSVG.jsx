@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import InlineSVG from 'svg-inline-react';
+import BrokenNFT from './BrokenNFT';
 
 const SVGImageLoader = ({ svgUrl }) => {
   const [svg, setSvg] = useState(null);
@@ -23,16 +24,7 @@ const SVGImageLoader = ({ svgUrl }) => {
     };
   }, [svgUrl]);
 
-  return hasErrored ? (
-    <div className="error-text">
-      <p>Image couldn&apos;t be loaded.</p>
-      <p>We&apos;ll do our best to fix that soon.</p>
-    </div>
-  ) : !loading ? (
-    <InlineSVG src={svg} />
-  ) : (
-    <></>
-  );
+  return hasErrored ? <BrokenNFT /> : !loading ? <InlineSVG src={svg} /> : <></>;
 };
 
 SVGImageLoader.propTypes = {
