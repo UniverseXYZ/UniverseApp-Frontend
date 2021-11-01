@@ -7,7 +7,7 @@
 }
 .wrap::before {
   display: block;
-  background: radial-gradient(100% 100% at 0% 0%, #E1F664 0%, #FEB0FE 37.21%, #ABB3FC 68.23%, #5DF7A4 100%);
+  background: linear-gradient(135deg, #E1F664 0%, #FEB0FE 33.85%, #ABB3FC 68.23%, #5DF7A4 100%);
   content: '';
   position: absolute;
   top: 0;
@@ -15,6 +15,7 @@
   left: 0;
   height: 100%;
   opacity: 0.2;
+  border-radius: 6px;
 }
 
 #broken-nft-container {
@@ -36,6 +37,7 @@
   font-size: 14px;
   line-height: 140%;
   color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 4px;
 } 
 
 #cog-img {
