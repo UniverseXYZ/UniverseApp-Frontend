@@ -100,13 +100,7 @@ const BurnYourPolymorphSection = (props) => {
     <div className="polymorph--section4">
       <WrapperCenter className="polymorph--wrapper--center--section4">
         <WrapperCenterTwoColumns
-          leftBlock={leftBlock(
-            windows,
-            leftBackground,
-            leftBackgroundMobile,
-            backgroundImage,
-            leftVideo
-          )}
+          leftBlock={leftBlock(leftVideo)}
           rightBlock={rightBlock(title, hintText, buttonText, backgroundImage)}
         />
       </WrapperCenter>

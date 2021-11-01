@@ -39,6 +39,9 @@
       display: flex;
       align-items: center;
       zoom: 2;
+      video {
+        width: 100%;
+      }
       @include lg {
         height: 430px;
         background-image: none;

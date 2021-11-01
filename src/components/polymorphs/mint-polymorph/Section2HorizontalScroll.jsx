@@ -32,8 +32,11 @@ const Section2HorizontalScroll = (props) => {
       const transitionEndLimit = horizontalScrollWidth - window.innerWidth;
       setScrollSicky(parent?.offsetTop - window.scrollY);
       // setTransparentBlockHeight(transitionEndLimit);
+      console.log('scrollSticky', scrollSticky);
+      console.log('header', header?.clientHeight + 1);
+      console.log('aaa', parent?.offsetTop - window.scrollY);
       if (
-        scrollSticky === header?.clientHeight + 1 &&
+        scrollSticky <= header?.clientHeight + 1 &&
         scrollSticky === parent?.offsetTop - window.scrollY
       ) {
         if (!bool) {
