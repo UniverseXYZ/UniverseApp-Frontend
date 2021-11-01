@@ -40,8 +40,8 @@ const ProfileForm = ({
     fetchedUserData.accountPage === accountPage &&
     fetchedUserData.about === about &&
     fetchedUserData.twitterLink === twitterLink &&
-    fetchedUserData.instagramLink === instagramLink;
-  // fetchedUserData.accountImage === accountImage;
+    fetchedUserData.instagramLink === instagramLink &&
+    fetchedUserData.accountImage === accountImage;
 
   const hasError = [accountName, accountPage, about].some((e) => !e);
 
