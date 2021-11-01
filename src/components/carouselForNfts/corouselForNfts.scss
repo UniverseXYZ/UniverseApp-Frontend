@@ -8,15 +8,15 @@
     max-width: 920px;
     height: 100%;
     margin-top: unset;
-    .slick-slide{
-        width: unset!important;
-        margin-right: 14px;
-      }
+    // .slick-slide{
+    //     width: unset!important;
+    //     margin-right: 14px;
+    //   }
       .slick-dots{
         display: none!important;
       }
       .slick-list{
-          padding-top: 24px;
+          padding-top: 24px !important;
       }
       .slick-arrow {
         background: $white;

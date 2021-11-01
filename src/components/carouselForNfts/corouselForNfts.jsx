@@ -16,10 +16,33 @@ function SampleArrow(props) {
 const settings = {
   dots: true,
   infinite: false,
-  slidesToShow: 3,
+  slidesToShow: 2,
   slidesToScroll: 1,
+  variableWidth: true,
   nextArrow: <SampleArrow />,
   prevArrow: <SampleArrow />,
+  responsive: [
+    {
+      breakpoint: 1230,
+      settings: {
+        slidesToShow: 2,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+        arrows: false,
+      },
+    },
+    {
+      breakpoint: 576,
+      settings: {
+        slidesToShow: 1,
+        arrows: false,
+      },
+    },
+  ],
 };
 
 const CarouselForNfts = ({ winnersData, onRemoveEdition }) => (
@@ -40,15 +63,17 @@ const CarouselForNfts = ({ winnersData, onRemoveEdition }) => (
           return res;
         }, {});
         return (
-          <div className="winner-block">
-            <div className="title-winner">Winner #{winner.slot + 1}</div>
-            {Object.values(result).length ? (
-              Object.values(result).map((nft) => (
-                <WinnerNft key={uuid()} nft={nft} onRemoveEdition={onRemoveEdition} />
-              ))
-            ) : (
-              <div className="placeholder-winners" key={uuid()} />
-            )}
+          <div className="winner-block-container">
+            <div className="winner-block">
+              <div className="title-winner">Winner #{winner.slot + 1}</div>
+              {Object.values(result).length ? (
+                Object.values(result).map((nft) => (
+                  <WinnerNft key={uuid()} nft={nft} onRemoveEdition={onRemoveEdition} />
+                ))
+              ) : (
+                <div className="placeholder-winners" key={uuid()} />
+              )}
+            </div>
           </div>
         );
       })}

@@ -1,6 +1,8 @@
 @import '../../assets/scss/variables';
 @import '../../assets/scss/_mixins';
-
+.winner-block-container {
+  padding: 0 7px;
+}
 .winner-block {
     display: flex!important;
     height: 100%;
@@ -17,7 +19,12 @@
     border-radius: 6px;
     width: 54px;
     height: 54px;
-    margin: 6px;
+    margin: 3px;
+
+    @include sm {
+      width: 42px;
+      height: 42px;
+    }
 }
   .title-winner {
     font-family: $spaceGroteskFont;
