@@ -676,6 +676,7 @@ const SingleNFTForm = () => {
       }
     }
   }, [errors, saveForLateClick]);
+
   useEffect(() => {
     // This means it's editing an saved nft
     if (savedNFTsID) {
@@ -691,6 +692,9 @@ const SingleNFTForm = () => {
         setRoyaltyAddress(res.royalties);
         setRoyaltyAddress(res.royalties || [{ name: '', value: '' }]);
         setProperties(parsedProperties);
+        if (parsedProperties.length) {
+          setPropertyCheck(true);
+        }
         if (res.collectionId) {
           const getCollection = myMintableCollections.filter(
             (col) => col.id === res.collectionId
