@@ -18,6 +18,7 @@ const GET_AUCTION_LANDING_PAGE = (username, auctionName) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${username}/${auctionName}`;
 const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/bid`;
 const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
+const GET_MY_BIDS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids`;
 
 export const createAuction = async ({
   name,
@@ -215,6 +216,21 @@ export const getPastAuctions = async () => {
   };
 
   const request = await fetch(GET_PAST_AUCTIONS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getMyBids = async () => {
+  const requestOptions = {
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(GET_MY_BIDS, requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
 

@@ -130,7 +130,7 @@ const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
               </p>
             </div>
             <div className="total-dates">
-              <AuctionsTabsCountdown activeAuction={activeAuction} />
+              <AuctionsTabsCountdown activeAuction={activeAuction} showLabel />
             </div>
             <div className="total-dates">
               <p>

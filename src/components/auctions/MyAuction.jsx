@@ -116,20 +116,7 @@ const MyAuction = () => {
           </div>
         </div>
 
-        {selectedTabIndex === tabs.MyBids && (
-          <>
-            {PLACEHOLDER_MY_BIDS.length ? (
-              <MyBidsList data={PLACEHOLDER_MY_BIDS} />
-            ) : (
-              <NoAuctionsFound
-                title="No bids found"
-                desc="Explore the auctions by clicking the button below"
-                btnText="Auction house"
-                btnAction="/products/auction-house"
-              />
-            )}
-          </>
-        )}
+        {selectedTabIndex === tabs.MyBids && <MyBidsList />}
 
         {selectedTabIndex === tabs.ActiveAuctions && <ActiveAuctions />}
 
