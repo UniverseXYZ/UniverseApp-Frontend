@@ -41,7 +41,7 @@ const CarouselForNfts = ({ winnersData, onRemoveEdition }) => (
         }, {});
         return (
           <div className="winner-block">
-            <div className="title-winner">Winner #{winner.slot}</div>
+            <div className="title-winner">Winner #{winner.slot + 1}</div>
             {Object.values(result).length ? (
               Object.values(result).map((nft) => (
                 <WinnerNft key={uuid()} nft={nft} onRemoveEdition={onRemoveEdition} />
