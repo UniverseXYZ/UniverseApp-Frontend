@@ -19,9 +19,8 @@ const SortBySelect = (props) => {
     setSelectedTypeIndex,
   } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
-  const [showSecondDropdown, setShowSecondDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const ref = useRef(null);
-  const ref2 = useRef(null);
 
   useEffect(() => {
     onChange(sortValue);
@@ -31,23 +30,36 @@ const SortBySelect = (props) => {
     }
   }, [sortValue]);
 
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
+
   return (
     <div
       className={
-        !showSecondDropdown
+        !showDropdown
           ? `sort--by--select--parent ${className}`
           : `sort--by--select--parent sort--by--select--parent--active ${className}`
       }
     >
       <div
-        className={`dropdown ${showSecondDropdown ? 'open' : ''}`}
+        className={`dropdown ${showDropdown ? 'open' : ''}`}
         aria-hidden="true"
-        onClick={() => setShowSecondDropdown(!showSecondDropdown)}
-        ref={ref2}
+        onClick={() => setShowDropdown(!showDropdown)}
+        ref={ref}
       >
         <span>{sortValue}</span>
-        <img src={arrowDown} alt="Arrow down" className={showSecondDropdown ? 'rotate' : ''} />
-        {showSecondDropdown && (
+        <img src={arrowDown} alt="Arrow down" className={showDropdown ? 'rotate' : ''} />
+        {showDropdown && (
           <div className="dropdown--items">
             {sortData.map((item, index) => (
               <div
