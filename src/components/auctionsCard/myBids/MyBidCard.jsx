@@ -54,7 +54,9 @@ const MyBidCard = ({ bid }) => {
             {bid.bid}
             <span>
               ~$
-              {(Number(bid.bid) * ethPrice.market_data?.current_price.usd).toFixed(2)}
+              {ethPrice.market_data.current_price.usd
+                ? (Number(bid.bid) * ethPrice.market_data.current_price.usd).toFixed(2)
+                : Number(bid.bid)}
             </span>
           </p>
         </div>
@@ -70,7 +72,9 @@ const MyBidCard = ({ bid }) => {
               {bid.highestBid}{' '}
               <span>
                 ~$
-                {(bid.highestBid * ethPrice.market_data?.current_price.usd).toFixed(2)}
+                {ethPrice.market_data.current_price.usd
+                  ? (bid.highestBid * ethPrice.market_data.current_price.usd).toFixed(2)
+                  : bid.highestBid}
               </span>
             </p>
           </div>
@@ -85,7 +89,9 @@ const MyBidCard = ({ bid }) => {
               {bid.lowestBid}{' '}
               <span>
                 ~$
-                {(bid.lowestBid * ethPrice.market_data?.current_price.usd).toFixed(2)}
+                {ethPrice.market_data.current_price.usd
+                  ? (bid.lowestBid * ethPrice.market_data?.current_price.usd).toFixed(2)
+                  : bid.lowestBid}
               </span>
             </p>
           </div>
