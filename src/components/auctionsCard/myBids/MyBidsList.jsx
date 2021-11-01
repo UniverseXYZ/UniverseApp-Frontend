@@ -7,11 +7,14 @@ import AuctionsCardSkeleton from '../skeleton/AuctionsCardSkeleton.jsx';
 import MyBidCard from './MyBidCard.jsx';
 import { getMyBids } from '../../../utils/api/auctions';
 import NoAuctionsFound from '../../auctions/NoAuctionsFound';
+import { useErrorContext } from '../../../contexts/ErrorContext';
+import ErrorPopup from '../../popups/ErrorPopup';
 
 const MyBidsList = () => {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [myBids, setMyBids] = useState([]);
+  const { showError, setShowError } = useErrorContext();
 
   useEffect(async () => {
     try {
@@ -23,7 +26,7 @@ const MyBidsList = () => {
       }
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      setShowError(true);
     }
   }, []);
 
@@ -54,6 +57,7 @@ const MyBidsList = () => {
           />
         </div>
       )}
+      {showError && <ErrorPopup />}
     </>
   );
 };

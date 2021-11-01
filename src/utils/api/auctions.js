@@ -54,7 +54,7 @@ export const createAuction = async ({
 
   const request = await fetch(CREATE_NEW_AUCTION_URL, requestOptions);
 
-  const result = await request.text().then((data) => console.log(data));
+  const result = await request.text().then((data) => JSON.parse(data));
 
   return result;
 };
