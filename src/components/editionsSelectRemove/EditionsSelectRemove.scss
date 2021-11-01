@@ -1,0 +1,117 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
+
+.remove-editions-list {
+    z-index: 100;
+    overflow-x: auto;
+    height: 114px;
+    right: 0;
+    background: #ffffff;
+    margin-top: 8px;
+
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    &::-webkit-scrollbar-track {
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+
+    li {
+      padding-left: 9px;
+      display: grid;
+
+      &:hover {
+        background: #f6faf3;
+      }
+    }
+
+    .edition-container {
+      display: flex;
+      position: relative;
+      padding-left: 30px;
+      margin: 9px 0;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      font-family: $spaceGroteskFont;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: #000000;
+    }
+
+    .edition-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 20px;
+      width: 20px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 6px;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .edition-container input:checked ~ .checkmark {
+      background: $primary-bg-color;
+      border: unset;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .edition-checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .edition-container input:checked ~ .checkmark:after {
+      display: block;
+      content: "";
+    }
+
+    /* Style the checkmark/indicator */
+    .edition-container .checkmark:after {
+      left: 4px;
+      top: 6px;
+      width: 12px;
+      height: 10px;
+      position: absolute;
+      background-image: url(../../assets/images/check-vector.svg);
+      background-repeat: no-repeat;
+      background-size: 100%;
+    }
+}
+    .remove-btn {
+        width: 95%;
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid #ff4949;
+        box-sizing: border-box;
+        border-radius: 10px;
+        color: #ff4949;
+        margin: 20px 0;
+        margin-left: 8px;
+
+    }

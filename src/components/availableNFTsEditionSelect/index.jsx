@@ -64,7 +64,7 @@ const MenuList = (props) => {
 };
 
 MenuList.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 const styles = {

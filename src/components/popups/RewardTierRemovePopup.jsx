@@ -42,7 +42,7 @@ const RewardTierRemovePopup = ({ onClose, id }) => {
 
 RewardTierRemovePopup.propTypes = {
   onClose: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default RewardTierRemovePopup;

@@ -4726,3 +4726,36 @@
     height: 100%;
   }
 }
+.editionsRemove{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 277px;
+  height: 348px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  .close{
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    background: white;
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  h3{
+    font-family: $sharpGroteskSemiBoldFont;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 130%;
+    color: #000000;
+    padding-right: 35px;
+    margin-bottom: 20px;
+  }
+}

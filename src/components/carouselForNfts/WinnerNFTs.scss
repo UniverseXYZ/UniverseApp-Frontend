@@ -1,0 +1,39 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/_mixins';
+
+.winner-block {
+    display: flex!important;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 7px;
+    position: relative;
+  }
+.placeholder-winners {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid #FF4949;
+    box-sizing: border-box;
+    border-radius: 6px;
+    width: 54px;
+    height: 54px;
+    margin: 6px;
+}
+  .title-winner {
+    font-family: $spaceGroteskFont;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 130%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.3);;
+    flex: none;
+    position: absolute;
+    margin: auto;
+    right: 0;
+    left: 0;
+    top: -8px;
+    background: white;
+    width: max-content;
+    padding: 0 6px;
+  }
