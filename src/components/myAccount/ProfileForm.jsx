@@ -40,10 +40,10 @@ const ProfileForm = ({
     fetchedUserData.accountPage === accountPage &&
     fetchedUserData.about === about &&
     fetchedUserData.twitterLink === twitterLink &&
-    fetchedUserData.instagramLink === instagramLink &&
-    fetchedUserData.accountImage === accountImage;
+    fetchedUserData.instagramLink === instagramLink;
+  // fetchedUserData.accountImage === accountImage;
 
-  const hasError = [accountName, accountPage, about, accountImage].some((e) => !e);
+  const hasError = [accountName, accountPage, about].some((e) => !e);
 
   const { loggedInArtist } = useAuthContext();
   const [hideIcon, setHideIcon] = useState(false);
@@ -52,6 +52,8 @@ const ProfileForm = ({
   const [errors, setErrors] = useState({
     previewImage: '',
   });
+  const [accountNameExists, setAccountNameExist] = useState(false);
+  const [accountPageExists, setAccountPageExist] = useState(false);
 
   const validateFile = (file) => {
     if (!file) {
@@ -156,7 +158,9 @@ const ProfileForm = ({
           </h5>
           <Input
             placeholder="Enter your display name"
-            className={!accountName && editProfileButtonClick ? 'error-inp' : 'inp'}
+            className={
+              (!accountName || accountNameExists) && editProfileButtonClick ? 'error-inp' : 'inp'
+            }
             value={accountName}
             hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
             onChange={(e) => {
@@ -168,6 +172,7 @@ const ProfileForm = ({
           {!accountName && editProfileButtonClick && (
             <p className="error__text">&quot;Display name&quot; is not allowed to be empty</p>
           )}
+          {accountNameExists && <p className="error__text">Sorry this user name is taken</p>}
           <h5 onMouseEnter={() => setHideIcon(true)} onMouseLeave={() => setHideIcon(false)}>
             <span>
               Universe page address
@@ -191,7 +196,9 @@ const ProfileForm = ({
             <Input
               placeholder="Enter your universe page address"
               className={
-                (accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+                (accountPage === 'universe.xyz/' ||
+                  accountPage === 'universe.xyz/your-address' ||
+                  accountPageExists) &&
                 editProfileButtonClick
                   ? `${inputName} error-inp`
                   : inputName
@@ -207,16 +214,19 @@ const ProfileForm = ({
               onBlur={handleOnBlur}
               hoverBoxShadowGradient={!(!accountName && editProfileButtonClick)}
             />
-            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+            {(accountPage === 'universe.xyz/' ||
+              accountPage === 'universe.xyz/your-address' ||
+              accountPageExists) &&
               editProfileButtonClick && (
                 <p className="error__text">
                   &quot;Universe page address&quot; is not allowed to be empty
                 </p>
               )}
-            {/* {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
+            {accountPageExists && <p className="error__text">Sorry, this page address is taken</p>}
+            {(accountPage === 'universe.xyz/' || accountPage === 'universe.xyz/your-address') &&
             editProfileButtonClick ? null : (
-              // <div className="box--shadow--effect--block" />
-            )} */}
+              <div className="box--shadow--effect--block" />
+            )}
           </div>
 
           <div className="account-grid-about-editing">

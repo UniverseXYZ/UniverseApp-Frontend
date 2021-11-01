@@ -59,7 +59,7 @@ const MyAccount = () => {
       setShowLoading(true);
       setEditProfileButtonClick(true);
       if (
-        !accountImage ||
+        // !accountImage ||
         !accountName ||
         accountPage === 'universe.xyz/' ||
         accountPage === 'universe.xyz/your-address' ||
