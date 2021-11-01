@@ -3,7 +3,7 @@ import { intervalToDuration } from 'date-fns';
 import PropTypes from 'prop-types';
 import { isAfterNow } from '../../utils/dates';
 
-const AuctionsTabsCountdown = ({ activeAuction }) => {
+const AuctionsTabsCountdown = ({ activeAuction, showLabel }) => {
   const [countdown, setCountdown] = useState(
     intervalToDuration({
       start: new Date(activeAuction.endDate),
@@ -34,7 +34,8 @@ const AuctionsTabsCountdown = ({ activeAuction }) => {
   return (
     <>
       <p>
-        {isAfterNow(activeAuction.startDate) ? 'Auction starts in' : 'Auction ends in'}{' '}
+        {showLabel &&
+          (isAfterNow(activeAuction.startDate) ? 'Auction starts in' : 'Auction ends in')}{' '}
         <b>
           {`${countdown.days}d : ${countdown.hours}h : ${countdown.minutes}m : ${countdown.seconds}s`}
         </b>
@@ -45,6 +46,7 @@ const AuctionsTabsCountdown = ({ activeAuction }) => {
 
 AuctionsTabsCountdown.propTypes = {
   activeAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  showLabel: PropTypes.bool.isRequired,
 };
 
 export default AuctionsTabsCountdown;

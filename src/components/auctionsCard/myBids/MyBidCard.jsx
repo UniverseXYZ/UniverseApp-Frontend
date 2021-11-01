@@ -4,70 +4,89 @@ import { useHistory } from 'react-router-dom';
 import './MyBidCard.scss';
 import { isBeforeNow } from '../../../utils/dates';
 import ethIcon from '../../../assets/images/bid_icon.svg';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 
-const MyBidCard = ({ auction }) => {
+const MyBidCard = ({ bid }) => {
+  const { ethPrice, loggedInArtist } = useAuthContext();
   const history = useHistory();
 
   return (
-    <div className={`my--bids--item${isBeforeNow(auction.endDate) ? ' past' : ''}`}>
-      <div className={`my--bids--image timeLeft ${auction.promoImageUrl ? '' : 'show--avatar'}`}>
-        {auction.promoImageUrl ? (
-          <img className="original" src={auction.promoImageUrl} alt={auction.name} />
+    <div className={`my--bids--item${isBeforeNow(bid.auction.endDate) ? ' past' : ''}`}>
+      <div
+        className={`my--bids--image timeLeft ${bid.auction.promoImageUrl ? '' : 'show--avatar'}`}
+      >
+        {bid.auction.promoImageUrl ? (
+          <img className="original" src={bid.auction.promoImageUrl} alt={bid.auction.name} />
         ) : (
-          <img className="artist--image" src={auction.artist.avatar} alt={auction.artist.name} />
+          <img className="artist--image" src={loggedInArtist.avatar} alt={loggedInArtist.name} />
         )}
         <div className="date">
           <div className="date--border--div" />
-          <label>{isBeforeNow(auction.endDate) ? 'Ended on' : 'Time left'}</label>
-          <span>2d 5h 20m 30s</span>
+          <label>{isBeforeNow(bid.auction.endDate) ? 'Ended on' : 'Time left'}</label>
+          <span>
+            <AuctionsTabsCountdown activeAuction={bid.auction} showLabel={false} />
+          </span>
         </div>
       </div>
       <div className="my--bids--details">
         <div className="title">
-          <h2>{auction.name}</h2>
+          <h2>{bid.auction.name}</h2>
         </div>
         <div className="creator">
-          <img src={auction.artist.avatar} alt={auction.artist.name} />
+          <img src={loggedInArtist.avatar} alt={loggedInArtist.name} />
           <span>by</span>
           <a
             aria-hidden="true"
             onClick={() =>
-              history.push(`/${auction.artist.name.split(' ')[0]}`, {
-                id: auction.artist.id,
+              history.push(`/${loggedInArtist.name.split(' ')[0]}`, {
+                id: loggedInArtist.id,
               })
             }
           >
-            {auction.artist.name}
+            {loggedInArtist.name}
           </a>
         </div>
         <div className="my--bid--section">
           <div className="caption">My bid</div>
           <p>
             <img src={ethIcon} alt="eth" />
-            14,24 <span>~$41,594</span>
+            {bid.bid}
+            <span>
+              ~$
+              {(Number(bid.bid) * ethPrice.market_data.current_price.usd).toFixed(2)}
+            </span>
           </p>
         </div>
         <div className="statistics">
           <div>
             <label>Winners</label>
-            <p>35</p>
+            <p>{bid.numberOfWinners}</p>
           </div>
           <div>
             <label>Highest Winning Bid:</label>
             <p>
               <img src={ethIcon} alt="eth" />
-              40 <span>~$120,594</span>
+              {bid.highestBid}{' '}
+              <span>
+                ~$
+                {(bid.highestBid * ethPrice.market_data.current_price.usd).toFixed(2)}
+              </span>
             </p>
           </div>
           <div>
             <label>NFTs Per Winner:</label>
-            <p>10-7</p>
+            <p>{`${bid.maxNfts}-${bid.minNfts}`}</p>
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
             <p>
               <img src={ethIcon} alt="eth" />
-              14 <span>~$41,594</span>
+              {bid.lowestBid}{' '}
+              <span>
+                ~$
+                {(bid.lowestBid * ethPrice.market_data.current_price.usd).toFixed(2)}
+              </span>
             </p>
           </div>
         </div>
@@ -77,7 +96,7 @@ const MyBidCard = ({ auction }) => {
 };
 
 MyBidCard.propTypes = {
-  auction: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  bid: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default MyBidCard;
