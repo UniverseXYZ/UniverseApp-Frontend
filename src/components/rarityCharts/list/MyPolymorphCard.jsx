@@ -15,7 +15,6 @@ const MyPolymorphCard = ({ item }) => {
 
     setLoading(false);
   };
-
   return loading ? (
     renderLoaderWithData(item)
   ) : (
@@ -37,7 +36,7 @@ const MyPolymorphCard = ({ item }) => {
         />
       </div>
       <div className="card--footer">
-        <h2>Lobby Lobster</h2>
+        <h2>{item.character}</h2>
         <p>{`ID: #${item.tokenid}`}</p>
       </div>
     </div>
