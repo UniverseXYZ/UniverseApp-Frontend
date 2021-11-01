@@ -62,7 +62,7 @@ const Artist = () => {
 
   return loading ? (
     <div className="artist__details__section">
-      <div className="artist__page">
+      <div style={{ marginTop: 60, marginBottom: 60 }} className="artist__page">
         <div className="artist__details__section__container">
           <div className="avatar">
             <Skeleton
