@@ -513,7 +513,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                         showControls ? 'show--controls' : ''
                       } ${scalePlayer ? 'scale--player' : ''}`}
                     >
-                      <video ref={mediaRef}>
+                      <video ref={mediaRef} autoPlay playsInline>
                         <source
                           src={
                             selectedNFT.original_url.startsWith('ipfs://')
@@ -689,7 +689,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                         showControls ? 'show--controls' : ''
                       } ${scalePlayer ? 'scale--player' : ''}`}
                     >
-                      <video ref={mediaRef}>
+                      <video ref={mediaRef} autoPlay playsInline>
                         <source src={selectedNFT.tokenIds[selectedNFTIndex].url} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
@@ -860,7 +860,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <img className="nft--media" src={nft.url} alt="NFT" />
                     )}
                     {nft.type === 'video/mp4' && (
-                      <video className="nft--media">
+                      <video className="nft--media" playsInline>
                         <source src={nft.url} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
@@ -884,7 +884,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
                       <img className="nft--media" src={nft.url} alt="NFT" />
                     )}
                     {nft.type === 'video/mp4' && (
-                      <video className="nft--media">
+                      <video className="nft--media" playsInline>
                         <source src={nft.url} type="video/mp4" />
                         <track kind="captions" />
                         Your browser does not support the video tag.
