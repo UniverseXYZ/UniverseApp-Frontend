@@ -8,7 +8,12 @@ const ActiveAndPastCardSkeleton = () => (
     <div className="auction-header">
       <Skeleton className="img_head" />
       <div className="launch-auction">
-        <Skeleton width={195} height={42} className="desktop-button" />
+        <Skeleton
+          width={195}
+          height={42}
+          className="desktop-button"
+          style={{ borderRadius: '12px' }}
+        />
         <Skeleton width={42} height={42} className="arrow" style={{ border: 'none' }} />
       </div>
     </div>

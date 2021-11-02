@@ -378,17 +378,20 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
                             </p>
                           </div>
-                        </div>
-                        <div className="tier-body">
-                          {tier.nfts.map((nft) => (
-                            <div className="tier-image" key={uuid()}>
-                              <div className="tier-image-second" />
-                              <div className="tier-image-first" />
-                              <div className="tier-image-main">
-                                <img src={nft?.thumbnail_url} alt={nft.name} />
+                          <div className="tier-body">
+                            {tier.nfts.map((nft) => (
+                              <div className="tier-image" key={uuid()}>
+                                <div className="tier-image-second" />
+                                <div className="tier-image-first" />
+                                <div className="tier-image-main">
+                                  <div className="amount-of-editions">
+                                    <p>{nft.numberOfEditions}</p>
+                                  </div>
+                                  <img src={nft?.thumbnail_url} alt={nft.name} />
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
                       </div>
                     ))}

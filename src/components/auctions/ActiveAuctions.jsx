@@ -6,7 +6,6 @@ import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import searchIconGray from '../../assets/images/search-gray.svg';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
-import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 import ActiveAuctionsTabsCard from '../auctionsCard/ActiveAuctionsTabsCard.jsx';
 import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
@@ -43,6 +42,12 @@ const ActiveAuctions = () => {
     } catch (error) {
       console.error(error);
     }
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   }, []);
 
   const handleSearch = (value) => {
