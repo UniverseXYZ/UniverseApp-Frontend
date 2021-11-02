@@ -45,7 +45,6 @@ const ActiveAuctionCard = ({ mainAuction, auction }) => {
 
   return (
     <div
-      key={auction.id}
       className={`carousel__auction__container ${
         mainAuction.auction.id === auction.id ? 'selected' : ''
       }`}

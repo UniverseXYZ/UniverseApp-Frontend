@@ -21,6 +21,7 @@ const AuctionDetails = ({
   ethPrice,
   currentBid,
   setCurrentBid,
+  isWinningBid,
 }) => {
   const history = useHistory();
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
@@ -95,7 +96,7 @@ const AuctionDetails = ({
             />
             {!selectedAuctionEnded || (selectedAuctionEnded && !currentBid) ? (
               <TopBidders
-                auctionId={onAuction.auction.id}
+                auction={onAuction.auction}
                 selectedAuctionEnded={selectedAuctionEnded}
                 rewardTiersSlots={rewardTiersSlots}
                 bidders={bidders}
@@ -106,6 +107,7 @@ const AuctionDetails = ({
                 canPlaceBids={hasAuctionStarted && onAuction.auction.depositedNfts}
                 getRewardTierSpanStyles={getRewardTierSpanStyles}
                 ethPrice={ethPrice}
+                isWinningBid={isWinningBid}
               />
             ) : (
               <AuctionEndedSection
@@ -139,8 +141,13 @@ AuctionDetails.propTypes = {
   setShowBidPopup: PropTypes.func.isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
   ethPrice: PropTypes.number.isRequired,
-  currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  currentBid: PropTypes.oneOfType([PropTypes.object]),
   setCurrentBid: PropTypes.func.isRequired,
+  isWinningBid: PropTypes.bool.isRequired,
+};
+
+AuctionDetails.defaultProps = {
+  currentBid: null,
 };
 
 export default AuctionDetails;

@@ -18,11 +18,11 @@ const BidRankingsPopup = ({
   console.log(rewardTiers);
 
   const displayBidderName = (bidder) => {
-    if (bidder.displayName) {
-      return bidder.displayName;
+    if (bidder.user.displayName) {
+      return bidder.user.displayName;
     }
 
-    return shortenEthereumAddress(bidder.address);
+    return shortenEthereumAddress(bidder.user.address);
   };
   const [openedBidderID, setOpenedBidderID] = useState(0);
   return (

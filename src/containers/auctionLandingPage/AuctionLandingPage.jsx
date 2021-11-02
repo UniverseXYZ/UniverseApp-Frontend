@@ -33,23 +33,31 @@ const AuctionLandingPage = () => {
   const [rewardTiersSlots, setRewardTiersSlots] = useState([]);
   const [ethPrice, setEthPrice] = useState(0);
   const [currentBid, setCurrentBid] = useState(null);
+  const [isWinningBid, setIsWinningBid] = useState(false);
 
   useEffect(() => {
     if (bidders) {
-      const currBidder = bidders.find((bidder) => bidder.address === address);
+      const currBidder = bidders.find((bidder) => bidder.user.address === address);
       if (currBidder) {
         setCurrentBid(currBidder);
-        console.log('Current bid:');
-        console.log(currentBid);
+        console.log('Current bidder:');
+        console.log(currBidder);
+
+        const currBidderIndex = bidders.map((bidder) => bidder.user.address).indexOf(address);
+        if (currBidderIndex <= rewardTiersSlots.length - 1) {
+          setIsWinningBid(true);
+        }
+        console.log('is winning bid:');
+        console.log(currBidderIndex <= rewardTiersSlots.length - 1);
       }
       console.log('Bidders:');
       console.log(bidders);
     }
-  }, [bidders, address]);
+  }, [bidders, address, rewardTiersSlots]);
 
   const getAuctionData = async () => {
     const auctionInfo =
-      locationState?.auctionData || (await getAuctionLandingPage(artistUsername, auctionName));
+      locationState?.auction || (await getAuctionLandingPage(artistUsername, auctionName));
     if (!auctionInfo.error) {
       console.log(auctionInfo);
 
@@ -90,6 +98,7 @@ const AuctionLandingPage = () => {
         currentBid={currentBid}
         setCurrentBid={setCurrentBid}
         loading={loading}
+        isWinningBid={isWinningBid}
       />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />

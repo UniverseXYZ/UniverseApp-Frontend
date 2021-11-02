@@ -252,8 +252,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                     <div className="circle">
                       {futureAuction.headline || futureAuction.link ? (
                         <img alt="landing_page" src={emptyMark} />
-                      ) : (
+                      ) : !futureAuction.onChain && !futureAuction.depositedNfts ? (
                         <img alt="landing_page" src={emptyWhite} />
+                      ) : (
+                        <img alt="landing_page" src={doneIcon} />
                       )}
                     </div>
                     {futureAuction.headline || futureAuction.link ? (
@@ -269,9 +271,11 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                         }}
                         disabled={isBeforeNow(futureAuction.startDate)}
                       >
-                        {futureAuction.launch && isAfterNow(futureAuction.startDate)
-                          ? 'Edit'
-                          : 'Start'}
+                        {!futureAuction.onChain
+                          ? 'Start'
+                          : !futureAuction.depositedNfts
+                          ? 'Deposit NFTs'
+                          : 'Edit'}
                       </Button>
                     ) : (
                       <Button className="light-button" disabled>

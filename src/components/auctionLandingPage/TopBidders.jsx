@@ -10,7 +10,7 @@ const TopBidders = ({
   bidders,
   currentBid,
   setCurrentBid,
-  auctionId,
+  auction,
   selectedAuctionEnded,
   rewardTiersSlots,
   setShowBidPopup,
@@ -18,9 +18,8 @@ const TopBidders = ({
   canPlaceBids,
   getRewardTierSpanStyles,
   ethPrice,
+  isWinningBid,
 }) => {
-  console.log(`canPlaceBids:`);
-  console.log(canPlaceBids);
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
   return (
     <div className="auction__details__box__top__bidders">
@@ -36,7 +35,9 @@ const TopBidders = ({
             <div className="bidder" key={bidder.id}>
               <div className="name">
                 <b>{`${index + 1}.`}</b>
-                {bidder.displayName ? bidder.displayName : shortenEthereumAddress(bidder.address)}
+                {bidder.user.displayName
+                  ? bidder.user.displayName
+                  : shortenEthereumAddress(bidder.user.address)}
 
                 {rewardTiersSlots[index] ? (
                   <span style={getRewardTierSpanStyles(rewardTiersSlots[index])}>
@@ -75,9 +76,13 @@ const TopBidders = ({
             <button onClick={() => setShowBidPopup(true)} type="button" className="light-button">
               Place a bid
             </button>
-            {currentBid && currentBid.auctionId === auctionId ? (
+            {currentBid && !isWinningBid ? ( // TODO: add is winning bid //
               <div className="cacnel__bid">
-                <button type="button" className="cancel--button">
+                <button
+                  type="button"
+                  className="cancel--button"
+                  onClick={() => setShowCancelBidPopup(true)}
+                >
                   <span className="tooltiptext">Cancel my bid</span>
                   <img src={cancelIcon} alt="cancel" />
                 </button>
@@ -92,9 +97,10 @@ const TopBidders = ({
       </div>
       <Popup open={showCancelBidPopup} closeOnDocumentClick={false}>
         <CancelBidPopup
-          close={() => setShowCancelBidPopup(true)}
+          close={() => setShowCancelBidPopup(false)}
           setCurrentBid={setCurrentBid}
-          myBid={currentBid}
+          myBid={currentBid?.amount}
+          auction={auction}
         />
       </Popup>
     </div>
@@ -104,8 +110,8 @@ const TopBidders = ({
 TopBidders.propTypes = {
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
-  auctionId: PropTypes.number.isRequired,
+  currentBid: PropTypes.oneOfType([PropTypes.object]),
+  auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setCurrentBid: PropTypes.func.isRequired,
   setShowBidPopup: PropTypes.func.isRequired,
   setShowBidRankings: PropTypes.func.isRequired,
@@ -113,5 +119,9 @@ TopBidders.propTypes = {
   selectedAuctionEnded: PropTypes.bool.isRequired,
   canPlaceBids: PropTypes.bool.isRequired,
   ethPrice: PropTypes.number.isRequired,
+  isWinningBid: PropTypes.bool.isRequired,
+};
+TopBidders.defaultProps = {
+  currentBid: null,
 };
 export default TopBidders;

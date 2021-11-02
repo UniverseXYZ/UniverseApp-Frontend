@@ -34,7 +34,7 @@ const ActiveAuctions = ({ mainAuction }) => {
   return (
     <Slider {...sliderSettings}>
       {mainAuction?.moreActiveAuctions?.map((auction) => (
-        <ActiveAuctionCard auction={auction} mainAuction={mainAuction} />
+        <ActiveAuctionCard key={auction.id} auction={auction} mainAuction={mainAuction} />
       ))}
     </Slider>
   );
