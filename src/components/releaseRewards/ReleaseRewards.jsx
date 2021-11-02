@@ -61,24 +61,46 @@ const ReleaseRewards = () => {
   const [auction, setAuction] = useState(auctionData);
   const [captureRevenueTxs, setCaptureRevenueTxs] = useState([]);
   const [isBatchView, setIsBatchView] = useState(true);
+  const [auctionSlots, setAuctionSlots] = useState(0);
+  const [capturedSlots, setCapturedSlots] = useState([]);
+
+  const setupPage = async () => {
+    if (universeAuctionHouseContract) {
+      // TODO: query smart contract to check for captured slots
+      const onChainAuction = await universeAuctionHouseContract.auctions(
+        auctionData.auction.onChainId
+      );
+      const captureTxs = createCaptureRevenueTxs(auctionData.rewardTiers);
+      console.log(`capture Txs:`);
+      console.log(captureTxs);
+      setCaptureRevenueTxs(captureTxs);
+    }
+  };
 
   useEffect(() => {
-    // TODO: query smart contract to check for captured slots
-    const captureTxs = createCaptureRevenueTxs(auctionData.rewardTiers);
-    console.log(`capture Txs:`);
-    console.log(captureTxs);
-    setCaptureRevenueTxs(captureTxs);
-  }, []);
-  const handleCaptureRevenue = (id) => {
-    const newData = [...data];
-    newData.forEach((transaction) => {
-      if (transaction.id === id) {
-        transaction.completed = true;
-      }
-    });
-    setData(newData);
-    if (data.filter((transaction) => transaction.completed === true).length === data.length) {
-      setShowSuccessPopup(true);
+    setupPage();
+  }, [universeAuctionHouseContract]);
+
+  const handleCaptureRevenue = async (id) => {
+    const captureConfig = captureRevenueTxs[id];
+    let tx = null;
+    if (captureConfig.startSlot === captureConfig.endSlot) {
+      tx = await universeAuctionHouseContract.captureSlotRevenue(
+        auction.auction.onChainId,
+        captureConfig.startSlot
+      );
+    } else {
+      tx = await universeAuctionHouseContract.captureSlotRevenueRange(
+        auction.auction.onChainId,
+        captureConfig.startSlot,
+        captureConfig.endSlot
+      );
+    }
+
+    const txReceipt = await tx.wait();
+
+    if (txReceipt.status === 1) {
+      console.log('success');
     }
   };
 
@@ -289,7 +311,7 @@ const ReleaseRewards = () => {
                         <Button
                           className="light-button"
                           disabled={!auction.auction.finalised}
-                          onClick={() => handleCaptureRevenue(transaction.id)}
+                          onClick={() => handleCaptureRevenue(index)}
                         >
                           Capture Revenue
                         </Button>

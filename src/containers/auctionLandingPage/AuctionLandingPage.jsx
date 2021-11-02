@@ -34,6 +34,7 @@ const AuctionLandingPage = () => {
   const [ethPrice, setEthPrice] = useState(0);
   const [currentBid, setCurrentBid] = useState(null);
   const [isWinningBid, setIsWinningBid] = useState(false);
+  const [winningSlot, setWinningSlot] = useState(-1);
 
   useEffect(() => {
     if (bidders) {
@@ -46,6 +47,7 @@ const AuctionLandingPage = () => {
         const currBidderIndex = bidders.map((bidder) => bidder.user.address).indexOf(address);
         if (currBidderIndex <= rewardTiersSlots.length - 1) {
           setIsWinningBid(true);
+          setWinningSlot(currBidderIndex);
         }
         console.log('is winning bid:');
         console.log(currBidderIndex <= rewardTiersSlots.length - 1);
@@ -99,6 +101,7 @@ const AuctionLandingPage = () => {
         setCurrentBid={setCurrentBid}
         loading={loading}
         isWinningBid={isWinningBid}
+        winningSlot={rewardTiersSlots[winningSlot]}
       />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />

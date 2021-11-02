@@ -8,7 +8,13 @@ import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Button from '../button/Button';
 
-const AuctionEndedSection = ({ currentBid, numberOfWinners, setShowBidRankings, onAuction }) => {
+const AuctionEndedSection = ({
+  currentBid,
+  numberOfWinners,
+  setShowBidRankings,
+  onAuction,
+  winningSlot,
+}) => {
   const [winning, setWinning] = useState(false);
   const { address, universeAuctionHouseContract } = useAuthContext();
 
@@ -55,8 +61,8 @@ const AuctionEndedSection = ({ currentBid, numberOfWinners, setShowBidRankings, 
           </div>
           <h2 className="title">Congratulations!</h2>
           <p className="desc">
-            Your bid won the <b>{currentBid?.rewardTier}</b> tier. You can claim your NFTs by
-            clicking the button below
+            Your bid won the <b>{winningSlot?.name}</b> tier. You can claim your NFTs by clicking
+            the button below
           </p>
           <div className="view__rankings">
             <button type="button" onClick={() => setShowBidRankings(true)}>
@@ -92,5 +98,6 @@ AuctionEndedSection.propTypes = {
   numberOfWinners: PropTypes.number.isRequired,
   setShowBidRankings: PropTypes.func.isRequired,
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  winningSlot: PropTypes.number.isRequired,
 };
 export default AuctionEndedSection;
