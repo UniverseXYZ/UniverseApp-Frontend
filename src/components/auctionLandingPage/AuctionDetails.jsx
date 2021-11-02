@@ -30,7 +30,6 @@ const AuctionDetails = ({
   const [hasAuctionStarted, setHasAuctionStarted] = useState(
     new Date() > new Date(onAuction.auction.startDate)
   );
-
   useEffect(() => {
     // Prev Icon
     const prev = document.querySelector('.slick-prev');
@@ -113,6 +112,8 @@ const AuctionDetails = ({
             ) : (
               <AuctionEndedSection
                 currentBid={currentBid}
+                bidders={bidders}
+                rewardTiersSlots={rewardTiersSlots}
                 numberOfWinners={rewardTiersSlots.length}
                 setShowBidRankings={setShowBidRankings}
                 onAuction={onAuction}

@@ -56,7 +56,6 @@ const CancelBidPopup = ({ auction, close, setCurrentBid, myBid }) => {
         setYourBalance(parseFloat(yourBalance) - parseFloat(myBid));
         setShowLoading(false);
         setActiveTxHashes([]);
-        setYourBalance(parseFloat(yourBalance) + parseFloat(myBid.bid));
         setCurrentBid(null);
         close();
       }

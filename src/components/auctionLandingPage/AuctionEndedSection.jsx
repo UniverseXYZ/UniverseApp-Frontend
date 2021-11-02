@@ -3,20 +3,28 @@ import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { utils } from 'ethers';
+import Popup from 'reactjs-popup';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Button from '../button/Button';
+import LoadingPopup from '../popups/LoadingPopup';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const AuctionEndedSection = ({
   currentBid,
+  bidders,
   numberOfWinners,
+  rewardTiersSlots,
   setShowBidRankings,
   onAuction,
   winningSlot,
 }) => {
+  const { address, universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
+  const { setActiveTxHashes } = useMyNftsContext();
+
   const [winning, setWinning] = useState(false);
-  const { address, universeAuctionHouseContract } = useAuthContext();
+  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(async () => {
     if (universeAuctionHouseContract) {
@@ -30,6 +38,31 @@ const AuctionEndedSection = ({
       }
     }
   }, [universeAuctionHouseContract]);
+
+  const withdrawBid = async () => {
+    try {
+      let bidTx = null;
+      if (onAuction.auction.tokenSymbol === 'ETH') {
+        bidTx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
+      } else {
+        bidTx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
+      }
+      setShowLoading(true);
+      setActiveTxHashes([bidTx.hash]);
+      const txReceipt = await bidTx.wait();
+      if (txReceipt.status === 1) {
+        // This is temp until the scraper handles bids
+        setShowLoading(false);
+        setActiveTxHashes([]);
+        setYourBalance(parseFloat(yourBalance) + parseFloat(currentBid.amount));
+        setCurrentBid(null);
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+      console.log(err);
+    }
+  };
 
   const history = useHistory();
   return !winning ? (
@@ -48,9 +81,18 @@ const AuctionEndedSection = ({
           </div>
         </div>
         <div className="footer">
-          <Button className="light-button">Withdraw</Button>
+          <Button disabled={!currentBid} onClick={withdrawBid} className="light-button">
+            Withdraw
+          </Button>
         </div>
       </div>
+      <Popup open={showLoading} closeOnDocumentClick={false}>
+        <LoadingPopup
+          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
+          onClose={() => setShowLoading(false)}
+          contractInteraction
+        />
+      </Popup>
     </Animated>
   ) : (
     <Animated animationIn="zoomIn">
@@ -81,7 +123,17 @@ const AuctionEndedSection = ({
         <div className="footer">
           <Button
             className="light-button"
-            onClick={() => history.push('/release-rewards', { auctionData: onAuction })}
+            onClick={() =>
+              history.push('/release-rewards', {
+                auctionData: onAuction,
+                myBid: currentBid,
+                // view: address === onAuction.artist.address ? 'Auctioneer' : 'Bidder',
+                view: 'Bidder',
+                bidders,
+                rewardTiersSlots,
+                winningSlot,
+              })
+            }
           >
             Release rewards
           </Button>
@@ -99,5 +151,7 @@ AuctionEndedSection.propTypes = {
   setShowBidRankings: PropTypes.func.isRequired,
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   winningSlot: PropTypes.number.isRequired,
+  bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 export default AuctionEndedSection;

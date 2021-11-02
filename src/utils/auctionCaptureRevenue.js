@@ -1,7 +1,7 @@
 // TODO: Get this from smart contract nftSlotLimit
 const maxNftsPerTx = 100;
 
-export const createCaptureRevenueTxs = (rewardTiers) => {
+export const createBatchCaptureRevenueTxs = (rewardTiers) => {
   const txs = [];
   let startSlot = 1;
   let endSlot = 0;
@@ -36,5 +36,20 @@ export const createCaptureRevenueTxs = (rewardTiers) => {
   if (txObject.tiers.length) {
     txs.push(txObject);
   }
+  return txs;
+};
+
+export const createSingleCaptureRevenueTxs = (rewardTiersSlots, bidders) => {
+  const txs = [];
+
+  rewardTiersSlots.forEach((tier, index) => {
+    const bidder = bidders[index];
+    const txObj = {
+      bidder,
+      tier,
+    };
+    txs.push(txObj);
+  });
+
   return txs;
 };
