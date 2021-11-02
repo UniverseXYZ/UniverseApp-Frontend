@@ -77,9 +77,9 @@ const App = () => {
                 <Route exact path="/team">
                   <Team />
                 </Route>
-                <Route exact path="/minting">
+                <AuthenticatedRoute exact path="/minting">
                   <Minting />
-                </Route>
+                </AuthenticatedRoute>
                 <Route exact path="/polymorphs">
                   <Polymorphs />
                 </Route>

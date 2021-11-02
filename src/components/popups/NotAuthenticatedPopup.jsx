@@ -10,7 +10,7 @@ const NotAuthenticatedPopup = ({ close }) => (
     <img src={wrongNetworkIcon} alt="Wrong Network" />
     <h1 className="title">Oops</h1>
     <p className="desc">
-      Please connect your wallet to be able to use the Universe platform fratures.
+      Please connect your wallet to be able to use the Universe Platform featues.
     </p>
     <Button
       onClick={() => {
