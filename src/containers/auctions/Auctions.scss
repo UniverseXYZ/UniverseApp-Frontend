@@ -1,6 +1,6 @@
-@import '../../assets/scss/variables.scss';
-@import '../../components/auctions/AuctionsTabs.scss';
-@import '../../assets/scss/_mixins';
+@import "../../assets/scss/variables.scss";
+@import "../../components/auctions/AuctionsTabs.scss";
+@import "../../assets/scss/_mixins";
 
 .auction__page {
   background-color: $white;
@@ -19,6 +19,7 @@
     }
 
     button.set_up {
+      display: flex;
       @include sm {
         margin-left: 0px;
         margin-top: 30px;
@@ -150,7 +151,7 @@
     button.set_up {
       display: block;
       margin: 0 auto;
-
+      display: flex;
       // @include sm {
       //   width: 100%;
       // }

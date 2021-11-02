@@ -13,8 +13,10 @@ import Pagination from '../pagination/SimplePaginations';
 import { isBeforeNow } from '../../utils/dates';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getPastAuctions } from '../../utils/api/auctions';
-import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 import NoAuctionsFound from './NoAuctionsFound';
+import Button from '../button/Button';
+import infoIcon from '../../assets/images/icon.svg';
+import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 
 const PastAuctions = () => {
   const { ethPrice } = useAuthContext();
@@ -29,7 +31,6 @@ const PastAuctions = () => {
   const [searchByName, setSearchByName] = useState('');
   const [pastAuctions, setPastAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const filterAuctions = (auctions) => {
     const filteredAuctions = auctions
@@ -39,6 +40,15 @@ const PastAuctions = () => {
 
     return filteredAuctions;
   };
+  const [hideLaunchIcon1, setHideLaunchIcon1] = useState(0);
+  const [hideLaunchIcon2, setHideLaunchIcon2] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
 
   useEffect(async () => {
     try {
@@ -93,93 +103,110 @@ const PastAuctions = () => {
           const endDate = format(new Date(pastAuction.endDate), 'MMMM dd, HH:mm');
 
           return (
-            <div className="auction past-auction" key={pastAuction.id}>
-              <div className="auction-header">
-                <div className="img_head">
-                  <h3>{pastAuction.name}</h3>
-                  <div className="copy-div">
-                    <div className="copy" title="Copy to clipboard">
-                      {copied.state && copied.index === index && (
-                        <div className="copied-div">
-                          URL copied!
-                          <span />
-                        </div>
-                      )}
-                      {pastAuction.artist ? (
-                        <CopyToClipboard
-                          text={`${pastAuction.link.replace(
-                            'universe.xyz',
-                            window.location.origin
-                          )}`}
-                          onCopy={() => {
-                            setCopied({
-                              state: true,
-                              index,
-                            });
-                            setTimeout(() => {
+            <>
+              <div className="auction past-auction" key={pastAuction.id}>
+                <div className="past-left-border-effect" />
+                <div className="auction-header">
+                  <div className="img_head">
+                    <h3>{pastAuction.name}</h3>
+                    <div className="copy-div">
+                      <div className="copy" title="Copy to clipboard">
+                        {copied.state && copied.index === index && (
+                          <div className="copied-div">
+                            URL copied!
+                            <span />
+                          </div>
+                        )}
+                        {pastAuction.artist ? (
+                          <CopyToClipboard
+                            text={`${pastAuction.link.replace(
+                              'universe.xyz',
+                              window.location.origin
+                            )}`}
+                            onCopy={() => {
                               setCopied({
-                                state: false,
-                                index: null,
+                                state: true,
+                                index,
                               });
-                            }, 1000);
-                          }}
-                        >
-                          <span>
-                            <img src={copyIcon} alt="Copy to clipboard icon" className="copyImg" />
-                            Copy URL
-                          </span>
-                        </CopyToClipboard>
+                              setTimeout(() => {
+                                setCopied({
+                                  state: false,
+                                  index: null,
+                                });
+                              }, 1000);
+                            }}
+                          >
+                            <span>
+                              <img
+                                src={copyIcon}
+                                alt="Copy to clipboard icon"
+                                className="copyImg"
+                              />
+                              Copy URL
+                            </span>
+                          </CopyToClipboard>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="launch-auction">
+                    <Button
+                      className="light-border-button hide__on__mobile"
+                      // onClick={() => history.push(activeAuction.link.replace('universe.xyz', ''))}
+                    >
+                      <span>Go to landing page</span>
+                    </Button>
+                    <div
+                      className="arrow"
+                      onClick={() => handleAuctionExpand(pastAuction.id)}
+                      role="button"
+                      tabIndex={0}
+                      aria-hidden
+                    >
+                      {shownActionId === pastAuction.id ? (
+                        <>
+                          <span className="tooltiptext">Show less</span>
+                          <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
+                        </>
                       ) : (
-                        <></>
+                        <>
+                          <span className="tooltiptext">Show more</span>
+                          <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
+                        </>
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="launch-auction">
-                  <div
-                    className="arrow"
-                    onClick={() => handleAuctionExpand(pastAuction.id)}
-                    role="button"
-                    tabIndex={0}
-                    aria-hidden
-                  >
-                    {shownActionId === pastAuction.id ? (
-                      <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
-                    ) : (
-                      <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
-                    )}
+                <div className="auctions-launch-dates">
+                  <div className="total-dates">
+                    <p>
+                      Total NFTs: <b>{auctionTotalNfts}</b>
+                    </p>
+                  </div>
+                  <div className="total-dates">
+                    <p>
+                      Launch date:{' '}
+                      <b>
+                        {' '}
+                        <time>{startDate}</time>
+                      </b>
+                    </p>
+                  </div>
+                  <div className="total-dates">
+                    <p>
+                      End date:{' '}
+                      <b>
+                        <time>{endDate}</time>
+                      </b>
+                    </p>
                   </div>
                 </div>
-              </div>
-              <div className="auctions-launch-dates">
-                <div className="total-dates">
-                  <p>
-                    Total NFTs: <b>{auctionTotalNfts}</b>
-                  </p>
-                </div>
-                <div className="total-dates">
-                  <p>
-                    Launch date:{' '}
-                    <b>
-                      {' '}
-                      <time>{startDate}</time>
-                    </b>
-                  </p>
-                </div>
-                <div className="total-dates">
-                  <p>
-                    End date:{' '}
-                    <b>
-                      <time>{endDate}</time>
-                    </b>
-                  </p>
-                </div>
-              </div>
-              <div className="bid_info">
-                <div className="bids first">
+                <div className="bid_info">
                   <div className="boredred-div">
                     <span className="head">Total bids</span>
-                    <span className="value">{pastAuction.bids.bidsCount}</span>
+                    <span className="value">{pastAuction.bids?.length}</span>
                   </div>
                   <div>
                     <span className="head">Highest winning bid</span>
@@ -194,9 +221,7 @@ const PastAuctions = () => {
                       </span>
                     </span>
                   </div>
-                </div>
 
-                <div className="bids">
                   <div className="boredred-div">
                     <span className="head">Total bids amount</span>
                     <span className="value">
@@ -224,46 +249,125 @@ const PastAuctions = () => {
                     </span>
                   </div>
                 </div>
-              </div>
-              <div hidden={shownActionId !== pastAuction.id} className="auctions-tier">
-                {pastAuction.rewardTiers.map((tier) => (
-                  <div className="tier" key={uuid()}>
-                    <div className="tier-header">
-                      <h3>{tier.name}</h3>
-                      <div className="tier-header-description">
-                        <p>
-                          NFTs per winner: <b>{tier.nftsPerWinner}</b>
-                        </p>
-                        <p>
-                          Winners: <b>{tier.numberOfWinners || ''}</b>
-                        </p>
-                        <p>
-                          Total NFTs: <b>{tier.nfts?.length}</b>
-                        </p>
+
+                <div className="funds-and-balance">
+                  <div>
+                    <div className="unreleased-funds">
+                      <div className="head">
+                        <span>Unreleased funds</span>
+                        <span
+                          onMouseOver={() => setHideLaunchIcon1(pastAuction.id)}
+                          onFocus={() => setHideLaunchIcon1(pastAuction.id)}
+                          onMouseLeave={() => setHideLaunchIcon1(0)}
+                          onBlur={() => setHideLaunchIcon1(0)}
+                        >
+                          <img src={infoIcon} alt="Info Icon" />
+                        </span>
+                        {hideLaunchIcon1 === pastAuction.id && (
+                          <div className="info-text1">
+                            <p>
+                              For the auctioneer to be able to collect their winnings and for the
+                              users to be able to claim their NFTs the rewards need to be released
+                              first.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="balance-body">
+                        <span className="value-section">
+                          <img src={bidIcon} alt="unreleased funds" />
+                          <span className="value">
+                            120.42
+                            <span className="dollar-val">~$41,594</span>
+                          </span>
+                        </span>
+                        <Button className="light-button ">
+                          <span>Release rewards</span>
+                        </Button>
                       </div>
                     </div>
-                    <div className="tier-body">
-                      {tier.nfts.map((nft) => {
-                        const imageUrl = nft.thumbnail_url ? nft.thumbnail_url : '';
-                        return (
-                          <div className="tier-image" key={uuid()}>
-                            <div className="tier-image-second" />
-                            <div className="tier-image-first" />
-                            <div className="tier-image-main">
-                              <img src={imageUrl} alt={nft.name} />
-                            </div>
+                    <div className="available-balance">
+                      <div className="head">
+                        <span>Available balance</span>
+                        <span
+                          onMouseOver={() => setHideLaunchIcon2(pastAuction.id)}
+                          onFocus={() => setHideLaunchIcon2(pastAuction.id)}
+                          onMouseLeave={() => setHideLaunchIcon2(0)}
+                          onBlur={() => setHideLaunchIcon2(0)}
+                        >
+                          <img src={infoIcon} alt="Info Icon" />
+                        </span>
+                        {hideLaunchIcon2 === pastAuction.id && (
+                          <div className="info-text2">
+                            <p>This is the released reward amount availble for claiming</p>
                           </div>
-                        );
-                      })}
+                        )}
+                      </div>
+                      <div className="balance-body">
+                        <span className="value-section">
+                          <img src={bidIcon} alt="unreleased funds" />
+                          <span className="value">
+                            14.24
+                            <span className="dollar-val">~$41,594</span>
+                          </span>
+                        </span>
+                        <Button className="light-button ">
+                          <span>Claim funds</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                ))}
+                </div>
+                <div className="empty-section">
+                  <NoAuctionsFound
+                    title="The auction didn’t get bids on all the slots"
+                    desc="You can withdraw your NFTs by clicking a button below."
+                    btnText="Withdraw NFTs"
+                  />
+                </div>
+                <div hidden={shownActionId !== pastAuction.id} className="auctions-tier">
+                  {pastAuction.rewardTiers.map((tier) => (
+                    <div className="tier" key={uuid()}>
+                      <div className="tier-header">
+                        <h3>{tier.name}</h3>
+                        <div className="tier-header-description">
+                          <p>
+                            NFTs per winner: <b>{tier.nftsPerWinner}</b>
+                          </p>
+                          <p>
+                            Winners: <b>{tier.numberOfWinners || ''}</b>
+                          </p>
+                          <p>
+                            Total NFTs: <b>{tier.nfts?.length}</b>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="tier-body">
+                        {tier.nfts.map((nft) => {
+                          const imageUrl = nft.thumbnail_url ? nft.thumbnail_url : '';
+                          return (
+                            <div className="tier-image" key={uuid()}>
+                              <div className="tier-image-second" />
+                              <div className="tier-image-first" />
+                              <div className="tier-image-main">
+                                <div className="amount-of-editions">
+                                  <p>{nft.numberOfEditions}</p>
+                                </div>
+                                <img src={imageUrl} alt={nft.name} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            </>
           );
         })
       ) : (
-        <AuctionsCardSkeleton variant="active" />
+        <ActiveAndPastCardSkeleton />
       )}
       {notFound && <NoAuctionsFound title="No past auctions found" />}
       {pastAuctions.length ? (
