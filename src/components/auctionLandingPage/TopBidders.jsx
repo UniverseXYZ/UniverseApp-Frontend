@@ -16,6 +16,8 @@ const TopBidders = ({
   setShowBidPopup,
   setShowBidRankings,
   canPlaceBids,
+  getRewardTierSpanStyles,
+  ethPrice,
 }) => {
   console.log(`canPlaceBids:`);
   console.log(canPlaceBids);
@@ -107,7 +109,9 @@ TopBidders.propTypes = {
   setCurrentBid: PropTypes.func.isRequired,
   setShowBidPopup: PropTypes.func.isRequired,
   setShowBidRankings: PropTypes.func.isRequired,
+  getRewardTierSpanStyles: PropTypes.func.isRequired,
   selectedAuctionEnded: PropTypes.bool.isRequired,
   canPlaceBids: PropTypes.bool.isRequired,
+  ethPrice: PropTypes.number.isRequired,
 };
 export default TopBidders;

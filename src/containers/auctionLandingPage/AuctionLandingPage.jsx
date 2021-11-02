@@ -3,6 +3,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
+import useSocketIO, { ReadyState } from 'react-use-websocket';
 import AuctionDetails from '../../components/auctionLandingPage/AuctionDetails.jsx';
 import UniverseAuctionDetails from '../../components/auctionLandingPage/UniverseAuctionDetails.jsx';
 import RewardTiers from '../../components/auctionLandingPage/RewardTiers.jsx';
@@ -20,11 +21,6 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
 
 const AuctionLandingPage = () => {
-  // const { auction } = useAuctionContext();
-  // const { setDarkMode } = useThemeContext();
-  // const artist = selectedAuction?.artist;
-  // const selectedAuction = auction || null;
-
   const locationState = useLocation().state;
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
