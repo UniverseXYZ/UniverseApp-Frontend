@@ -11,6 +11,8 @@ const MyBidCard = ({ bid }) => {
   const { ethPrice, loggedInArtist } = useAuthContext();
   const history = useHistory();
 
+  const ethPriceUsd = ethPrice?.market_data?.current_price?.usd;
+
   return (
     <div className={`my--bids--item${isBeforeNow(bid.auction.endDate) ? ' past' : ''}`}>
       <div
@@ -51,12 +53,12 @@ const MyBidCard = ({ bid }) => {
           <div className="caption">My bid</div>
           <p>
             <img src={ethIcon} alt="eth" />
-            {bid.bid}
+            {bid.bid.amount}
             <span>
               ~$
-              {ethPrice.market_data.current_price.usd
-                ? (Number(bid.bid) * ethPrice.market_data.current_price.usd).toFixed(2)
-                : Number(bid.bid)}
+              {ethPriceUsd
+                ? (Number(bid.bid.amount) * ethPriceUsd).toFixed(2)
+                : Number(bid.bid.amount)}
             </span>
           </p>
         </div>
@@ -72,9 +74,7 @@ const MyBidCard = ({ bid }) => {
               {bid.highestBid}{' '}
               <span>
                 ~$
-                {ethPrice.market_data.current_price.usd
-                  ? (bid.highestBid * ethPrice.market_data.current_price.usd).toFixed(2)
-                  : bid.highestBid}
+                {ethPriceUsd ? (bid.highestBid * ethPriceUsd).toFixed(2) : bid.highestBid}
               </span>
             </p>
           </div>
@@ -89,9 +89,7 @@ const MyBidCard = ({ bid }) => {
               {bid.lowestBid}{' '}
               <span>
                 ~$
-                {ethPrice.market_data.current_price.usd
-                  ? (bid.lowestBid * ethPrice.market_data?.current_price.usd).toFixed(2)
-                  : bid.lowestBid}
+                {ethPriceUsd ? (bid.lowestBid * ethPriceUsd).toFixed(2) : bid.lowestBid}
               </span>
             </p>
           </div>
