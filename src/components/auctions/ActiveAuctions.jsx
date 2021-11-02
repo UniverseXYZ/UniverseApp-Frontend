@@ -19,15 +19,6 @@ const ActiveAuctions = () => {
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
 
-  const filterAuctions = (auctions) => {
-    const filteredAuctions = auctions
-      .slice(offset, offset + perPage)
-      .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-      .filter((item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate));
-
-    return filteredAuctions;
-  };
-
   useEffect(async () => {
     try {
       const response = await getActiveAuctions();
@@ -35,8 +26,7 @@ const ActiveAuctions = () => {
         setNotFound(true);
         setLoading(false);
       } else {
-        const auctions = filterAuctions(response.auctions);
-        setActiveAuctions(auctions);
+        setActiveAuctions(response.auctions);
         setLoading(false);
       }
     } catch (error) {
@@ -89,9 +79,13 @@ const ActiveAuctions = () => {
           <Droppable droppableId="droppableId">
             {(provided) => (
               <div key={uuid()} ref={provided.innerRef} {...provided.droppableProps}>
-                {activeAuctions.map((activeAuction, index) => (
-                  <ActiveAuctionsTabsCard activeAuction={activeAuction} index={index} />
-                ))}
+                {activeAuctions
+                  .slice(offset, offset + perPage)
+                  .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
+                  .filter((item) => item && isBeforeNow(item.startDate) && isAfterNow(item.endDate))
+                  .map((activeAuction, index) => (
+                    <ActiveAuctionsTabsCard activeAuction={activeAuction} index={index} />
+                  ))}
 
                 {provided.placeholder}
               </div>
