@@ -413,3 +413,14 @@ export const removeRewardTier = async (id) => {
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };
+
+export const addRewardTier = async (body) => {
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(body),
+  };
+
+  const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
