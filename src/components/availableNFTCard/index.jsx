@@ -43,19 +43,26 @@ const NFTCard = React.memo(
     });
 
     // Mark editions as used if they are being used in other tiers
-    const rewardTiersUsedNFTsIds =
-      auction.rewardTiers &&
-      auction.rewardTiers.reduce((res, curr) => {
-        const ids = [];
+    let rewardTiersUsedNFTsIds = [];
+    let canRewardTiersUsedNFTsIds = false;
+    if (winnersData.length) {
+      canRewardTiersUsedNFTsIds = winnersData.filter((winner) => winner.nftsData?.length);
+      if (canRewardTiersUsedNFTsIds.length) {
+        rewardTiersUsedNFTsIds =
+          auction.rewardTiers &&
+          auction.rewardTiers.reduce((res, curr) => {
+            const ids = [];
 
-        // We are displaying auction currently being created
-        if (curr.nftSlots) {
-          curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
-        }
+            // We are displaying auction currently being created
+            if (curr.nftSlots) {
+              curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
+            }
 
-        res.push(...ids);
-        return res;
-      }, []);
+            res.push(...ids);
+            return res;
+          }, rewardTiersUsedNFTsIds);
+      }
+    }
 
     const updateOptionsWithAllTiersData = updatedOptionsForCurrentTier.map((info) => {
       const infoCopy = { ...info };

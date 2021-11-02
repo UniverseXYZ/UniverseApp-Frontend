@@ -109,12 +109,6 @@ const Create = () => {
       // If the input is cleared reassign the value to 0 instead of empty string
       const v = (value && parseInt(value, 10)) || 0;
       if (parseInt(value, 10) !== 0 && (parseInt(value, 10) < maxWinner || !value)) {
-        const auctionCopy = { ...auction };
-        auctionCopy.rewardTiers.forEach((tier) => {
-          tier.nftSlots = [];
-          tier.nfts = [];
-        });
-        setAuction(auctionCopy);
         setValues((prevValues) => ({ ...prevValues, [event.target.id]: v }));
       }
     } else if (event.target.id === 'nftsPerWinner') {
