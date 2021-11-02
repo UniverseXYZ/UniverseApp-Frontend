@@ -123,17 +123,11 @@ const MyAuction = () => {
         {selectedTabIndex === tabs.ActiveAuctions && <ActiveAuctions />}
 
         {selectedTabIndex === tabs.FutureAuctions && (
-          <>
-            {myAuctions.filter((item) => !item.launch).length ? (
-              <FutureAuctions
-                myAuctions={myAuctions}
-                setMyAuctions={setMyAuctions}
-                setAuction={setAuction}
-              />
-            ) : (
-              <NoAuctionsFound title="No scheduled auctions found" />
-            )}
-          </>
+          <FutureAuctions
+            myAuctions={myAuctions}
+            setMyAuctions={setMyAuctions}
+            setAuction={setAuction}
+          />
         )}
 
         {selectedTabIndex === tabs.PastAuctions && <PastAuctions />}
