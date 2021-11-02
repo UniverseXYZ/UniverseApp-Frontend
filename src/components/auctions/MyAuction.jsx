@@ -13,6 +13,7 @@ import { PLACEHOLDER_MY_BIDS } from '../../utils/fixtures/MyBidsDummyData';
 import NoAuctionsFound from './NoAuctionsFound';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import MyBidsList from '../auctionsCard/myBids/MyBidsList.jsx';
+import plusIcon from '../../assets/images/plus.svg';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =
@@ -79,6 +80,7 @@ const MyAuction = () => {
               disabled={!loggedInArtist.name || !loggedInArtist.avatar}
             >
               Set up auction
+              <img src={plusIcon} alt="icon" style={{ marginLeft: '12px' }} />
             </button>
           </div>
         )}

@@ -6,10 +6,10 @@ import '../pagination/Pagination.scss';
 import Pagination from '../pagination/Pagionation.jsx';
 import searchIconGray from '../../assets/images/search-gray.svg';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
-import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 import ActiveAuctionsTabsCard from '../auctionsCard/ActiveAuctionsTabsCard.jsx';
 import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
+import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 
 const ActiveAuctions = () => {
   const [activeAuctions, setActiveAuctions] = useState([]);
@@ -99,7 +99,7 @@ const ActiveAuctions = () => {
           </Droppable>
         </DragDropContext>
       ) : (
-        <AuctionsCardSkeleton variant="active" />
+        <ActiveAndPastCardSkeleton />
       )}
       {notFound && <NoAuctionsFound title="No active auctions found" />}
       <div className="pagination__container">
