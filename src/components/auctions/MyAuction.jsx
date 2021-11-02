@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import tabArrow from '../../assets/images/tab-arrow.svg';
 import FutureAuctions from './FutureAuctions.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
-import PastAuctions from './PastAuctions.jsx';
 import { handleTabLeftScrolling, handleTabRightScrolling } from '../../utils/scrollingHandlers';
 import { useAuctionContext } from '../../contexts/AuctionContext';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -14,6 +13,7 @@ import NoAuctionsFound from './NoAuctionsFound';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import MyBidsList from '../auctionsCard/myBids/MyBidsList.jsx';
 import plusIcon from '../../assets/images/plus.svg';
+import PastAuctions from './PastAuctions';
 
 const MyAuction = () => {
   const { myAuctions, setMyAuctions, setAuction, selectedTabIndex, setSelectedTabIndex, auction } =

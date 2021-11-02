@@ -21,6 +21,9 @@ const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/bi
 const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
 const GET_MY_BIDS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids`;
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
+const CANCEL_AUCTION_BID = (id) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/auction/${id}/cancelBid`;
+const CHANGE_AUCTION_STATUS = `${process.env.REACT_APP_API_BASE_URL}/api/auction/status`;
 
 export const createAuction = async ({
   name,
@@ -181,7 +184,7 @@ export const editRewardTierImage = async (image = null, id) => {
 
 export const getFutureAuctions = async () => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -196,7 +199,7 @@ export const getFutureAuctions = async () => {
 
 export const getActiveAuctions = async () => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -211,7 +214,7 @@ export const getActiveAuctions = async () => {
 
 export const getAuctionData = async (id) => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -226,7 +229,7 @@ export const getAuctionData = async (id) => {
 
 export const getPastAuctions = async () => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -354,7 +357,7 @@ export const withdrawNfts = async (body) => {
 
 export const getAuctionLandingPage = async (username, auctionName) => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
   };
 
   const url = GET_AUCTION_LANDING_PAGE(username, auctionName);
@@ -382,9 +385,25 @@ export const placeAuctionBid = async (body) => {
   return result;
 };
 
-export const addRewardTier = async (body) => {
+export const cancelAuctionBid = async (auctionId) => {
   const requestOptions = {
     method: 'post',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(CANCEL_AUCTION_BID(auctionId), requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const changeAuctionStatus = async (body) => {
+  const requestOptions = {
+    method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
@@ -392,8 +411,10 @@ export const addRewardTier = async (body) => {
     body: JSON.stringify(body),
   };
 
-  const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
+  const request = await fetch(CHANGE_AUCTION_STATUS, requestOptions);
+
   const result = await request.text().then((data) => JSON.parse(data));
+
   return result;
 };
 
@@ -407,6 +428,17 @@ export const removeRewardTier = async (id) => {
   };
 
   const request = await fetch(`${REMOVE_REWARD_TIER_FROM_AUCTION}${id}`, requestOptions);
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const addRewardTier = async (body) => {
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(body),
+  };
+
+  const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };

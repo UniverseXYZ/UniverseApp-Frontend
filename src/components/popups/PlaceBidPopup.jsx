@@ -83,15 +83,17 @@ const PlaceBidPopup = ({
 
   const updateBids = () => {
     const newBidders = [...onBidders];
-    const existingBidderIndex = newBidders.map((bidder) => bidder.address).indexOf(address);
+    const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(address);
     if (existingBidderIndex >= 0) {
       newBidders[existingBidderIndex].amount = +newBidders[existingBidderIndex].amount + +yourBid;
     } else {
       newBidders.push({
-        id: loggedInArtist.id,
         amount: +yourBid,
-        displayName: loggedInArtist.name,
-        address,
+        user: {
+          id: loggedInArtist.id,
+          displayName: loggedInArtist.name,
+          address,
+        },
       });
     }
     newBidders.sort((a, b) => b.amount - a.amount);
@@ -318,8 +320,12 @@ PlaceBidPopup.propTypes = {
   onSetBidders: PropTypes.func.isRequired,
   auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setShowLoading: PropTypes.func.isRequired,
-  currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  currentBid: PropTypes.oneOfType([PropTypes.object]),
   setCurrentBid: PropTypes.func.isRequired,
+};
+
+PlaceBidPopup.defaultProps = {
+  currentBid: null,
 };
 
 export default PlaceBidPopup;
