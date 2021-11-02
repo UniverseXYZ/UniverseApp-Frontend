@@ -31,6 +31,7 @@ const PastAuctions = () => {
   const [searchByName, setSearchByName] = useState('');
   const [pastAuctions, setPastAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     try {
@@ -188,8 +189,9 @@ const PastAuctions = () => {
                         <span className="dollar-val">
                           ~$
                           {(
-                            pastAuction.bids.highestBid * ethPrice.market_data.current_price.usd
-                          ).toFixed(2)}
+                            pastAuction?.bids?.highestBid *
+                            ethPrice?.market_data?.current_price?.usd
+                          )?.toFixed(2)}
                         </span>
                       </span>
                     </div>
@@ -204,8 +206,8 @@ const PastAuctions = () => {
                         <span className="dollar-val">
                           ~$
                           {(
-                            pastAuction.bids.totalBids * ethPrice.market_data.current_price.usd
-                          ).toFixed(2)}
+                            pastAuction?.bids?.totalBids * ethPrice?.market_data?.current_price?.usd
+                          )?.toFixed(2)}
                         </span>
                       </span>
                     </div>
@@ -217,8 +219,8 @@ const PastAuctions = () => {
                         <span className="dollar-val">
                           ~$
                           {(
-                            pastAuction.bids.lowestBid * ethPrice.market_data.current_price.usd
-                          ).toFixed(2)}
+                            pastAuction?.bids?.lowestBid * ethPrice?.market_data?.current_price.usd
+                          )?.toFixed(2)}
                         </span>
                       </span>
                     </div>
