@@ -16,6 +16,8 @@ import arrowDown from '../../assets/images/arrow-down.svg';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import { ReleaseRewardsData, SlotsRewardData } from '../../utils/fixtures/ReleaseRewardsDummyData';
 import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { changeAuctionStatus } from '../../utils/api/auctions';
 
 const ReleaseRewards = () => {
   const history = useHistory();
@@ -51,6 +53,9 @@ const ReleaseRewards = () => {
     ],
   });
   const [auctionProceed, setAuctionProceed] = useState(false);
+  const { auctionData } = useLocation().state;
+  const { universeAuctionHouseContract } = useAuthContext();
+  const [finalisedAuction, setFinalisedAuction] = useState(false);
   const [data, setData] = useState([...ReleaseRewardsData]);
   const [showSuccesPopup, setShowSuccessPopup] = useState(false);
 
@@ -64,6 +69,23 @@ const ReleaseRewards = () => {
     setData(newData);
     if (data.filter((transaction) => transaction.completed === true).length === data.length) {
       setShowSuccessPopup(true);
+    }
+  };
+  console.log(`auctionData:`);
+  console.log(auctionData);
+  const handleFinaliseAuction = async () => {
+    try {
+      const tx = await universeAuctionHouseContract.finalizeAuction(auctionData.auction.onChainId);
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setFinalisedAuction(true);
+        const result = await changeAuctionStatus(auctionData.auction.id, {
+          name: 'finalised',
+          value: true,
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -107,11 +129,13 @@ const ReleaseRewards = () => {
           className="back-rew"
           aria-hidden="true"
           onClick={() => {
-            history.push('/my-auctions');
+            history.push(`./${auctionData.artist.displayName}/${auctionData.auction.link}`, {
+              auctionData,
+            });
           }}
         >
           <img src={arrow} alt="back" />
-          <span>Auction title two</span>
+          <span>{auctionData?.auction?.headline}</span>
           <h1 className="set-text">Release rewards</h1>
         </div>
         <p className="description">
@@ -122,13 +146,13 @@ const ReleaseRewards = () => {
           <div className="release__finalize__auction">
             <div className="step">
               <div className="circle">
-                {auctionProceed ? (
+                {finalisedAuction ? (
                   <img src={doneIcon} alt="Done" />
                 ) : (
                   <img src={emptyMark} alt="Empty mark" />
                 )}
               </div>
-              <div className={`line ${auctionProceed ? 'colored' : ''}`} />
+              <div className={`line ${finalisedAuction ? 'colored' : ''}`} />
             </div>
             <div className="release__auction__body">
               <h2>Finalize auction</h2>
@@ -137,12 +161,12 @@ const ReleaseRewards = () => {
                 ammounts
               </p>
               <div className="proceed__button">
-                {auctionProceed ? (
+                {finalisedAuction ? (
                   <Button className="light-border-button" disabled>
                     Completed <img src={completedCheckmark} alt="completed" />
                   </Button>
                 ) : (
-                  <Button className="light-button" onClick={() => setAuctionProceed(true)}>
+                  <Button className="light-button" onClick={handleFinaliseAuction}>
                     Proceed
                   </Button>
                 )}
@@ -152,9 +176,9 @@ const ReleaseRewards = () => {
           <div className="release__finalize__auction">
             <div className="step">
               <div className="circle">
-                {showSuccesPopup && auctionProceed ? (
+                {showSuccesPopup && finalisedAuction ? (
                   <img src={doneIcon} alt="Done" />
-                ) : auctionProceed ? (
+                ) : finalisedAuction ? (
                   <img src={emptyMark} alt="Empty mark" />
                 ) : (
                   <img src={emptyWhite} alt="Empty white" />
@@ -246,7 +270,7 @@ const ReleaseRewards = () => {
                       ) : (
                         <Button
                           className="light-button"
-                          disabled={!auctionProceed}
+                          disabled={!finalisedAuction}
                           onClick={() => handleComplete(transaction.id)}
                         >
                           Proceed
@@ -455,6 +479,17 @@ const ReleaseRewards = () => {
                       )}
                     </div>
                   ))}
+                  <div className="proceed__button__mobile">
+                    {transaction.completed ? (
+                      <Button className="light-border-button" disabled>
+                        Completed <img src={completedCheckmark} alt="completed" />
+                      </Button>
+                    ) : (
+                      <Button className="light-button" disabled={!finalisedAuction}>
+                        Proceed
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

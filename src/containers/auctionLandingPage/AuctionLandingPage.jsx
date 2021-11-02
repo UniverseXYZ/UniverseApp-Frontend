@@ -17,31 +17,34 @@ import PlaceBidPopup from '../../components/popups/PlaceBidPopup';
 import LoadingPopup from '../../components/popups/LoadingPopup';
 import { getEthPriceCoingecko } from '../../utils/api/etherscan';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPageLoader';
 
 const AuctionLandingPage = () => {
   // const { auction } = useAuctionContext();
   // const { setDarkMode } = useThemeContext();
-  // const location = useLocation();
   // const artist = selectedAuction?.artist;
   // const selectedAuction = auction || null;
 
+  const locationState = useLocation().state;
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
-  const history = useHistory();
   const { address } = useAuthContext();
   const [auction, setAuction] = useState(null);
-  const [bidders, setBidders] = useState([]);
+  const [bidders, setBidders] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showBidPopup, setShowBidPopup] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
-  const [rewardTiersSlots, setRewardTiersSlots] = useState(false);
+  const [rewardTiersSlots, setRewardTiersSlots] = useState([]);
   const [ethPrice, setEthPrice] = useState(0);
   const [currentBid, setCurrentBid] = useState(null);
+
   useEffect(() => {
     if (bidders) {
       const currBidder = bidders.find((bidder) => bidder.address === address);
       if (currBidder) {
         setCurrentBid(currBidder);
+        console.log('Current bid:');
+        console.log(currentBid);
       }
       console.log('Bidders:');
       console.log(bidders);
@@ -49,24 +52,23 @@ const AuctionLandingPage = () => {
   }, [bidders, address]);
 
   const getAuctionData = async () => {
-    try {
-      const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
-      if (!auctionData.error) {
-        console.log(auctionData);
-        setAuction(auctionData);
-        setBidders(auctionData.bidders);
+    const auctionInfo =
+      locationState?.auctionData || (await getAuctionLandingPage(artistUsername, auctionName));
+    if (!auctionInfo.error) {
+      console.log(auctionInfo);
 
-        const tierSlots = [];
-        auctionData.rewardTiers.forEach((rewardTiers) => {
-          for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
-            tierSlots.push(rewardTiers);
-          }
-        });
-        setRewardTiersSlots(tierSlots);
-      }
+      const tierSlots = [];
+      auctionInfo.rewardTiers.forEach((rewardTiers) => {
+        for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
+          tierSlots.push(rewardTiers);
+        }
+      });
+      setBidders(auctionInfo.bidders);
+      setRewardTiersSlots(tierSlots);
+      setAuction(auctionInfo);
       setLoading(false);
-    } catch (err) {
-      history.push('../not-found');
+    } else {
+      setLoading(false);
     }
   };
 
@@ -78,7 +80,7 @@ const AuctionLandingPage = () => {
   useEffect(() => {
     getAuctionData();
     getEthPrice();
-  }, []);
+  }, [artistUsername, auctionName]);
 
   return auction ? (
     <div className="auction__landing__page">
@@ -105,10 +107,7 @@ const AuctionLandingPage = () => {
       {auction.artist && auction.artist.personalLogo ? (
         <div className="artist__personal__logo">
           <div>
-            <img
-              src={URL.createObjectURL(auction.artist.personalLogo)}
-              alt="Artist personal logo"
-            />
+            <img src={auction.artist.personalLogo} alt="Artist personal logo" />
           </div>
         </div>
       ) : (
@@ -135,10 +134,10 @@ const AuctionLandingPage = () => {
         />
       </Popup>
     </div>
-  ) : !loading ? (
-    <NotFound />
+  ) : loading ? (
+    <LandingPageLoader />
   ) : (
-    <></>
+    <NotFound />
   );
 };
 

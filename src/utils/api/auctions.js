@@ -182,7 +182,7 @@ export const editRewardTierImage = async (image = null, id) => {
 
 export const getFutureAuctions = async () => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -197,7 +197,7 @@ export const getFutureAuctions = async () => {
 
 export const getActiveAuctions = async () => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -212,7 +212,7 @@ export const getActiveAuctions = async () => {
 
 export const getAuctionData = async (id) => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -227,7 +227,7 @@ export const getAuctionData = async (id) => {
 
 export const getPastAuctions = async () => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
@@ -355,7 +355,7 @@ export const withdrawNfts = async (body) => {
 
 export const getAuctionLandingPage = async (username, auctionName) => {
   const requestOptions = {
-    method: 'get',
+    method: 'GET',
   };
 
   const url = GET_AUCTION_LANDING_PAGE(username, auctionName);
@@ -385,7 +385,7 @@ export const placeAuctionBid = async (body) => {
 
 export const changeAuctionStatus = async (body) => {
   const requestOptions = {
-    method: 'patch',
+    method: 'PATCH',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
