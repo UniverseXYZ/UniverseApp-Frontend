@@ -52,7 +52,7 @@ const NFTCard = React.memo(
         const ids = [];
 
         // We are displaying auction currently being created
-        if (curr.nftSlots && canSetRewardTiersUsedNFTsIds) {
+        if (curr.nftSlots && canSetRewardTiersUsedNFTsIds && !curr.removed) {
           curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
         }
 
