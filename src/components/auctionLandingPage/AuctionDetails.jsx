@@ -22,6 +22,9 @@ import frankie from '../../assets/images/frankie.png';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
 import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 import AuctionCountdown from './AuctionCountdown.jsx';
+import ActiveAuctionCard from './ActiveAuctionCard.jsx';
+import { LandingPageLoader } from './LandingPageLoader.jsx';
+import ActiveAuctions from './ActiveAuctions.jsx';
 
 const AuctionDetails = ({
   onAuction,
@@ -32,60 +35,12 @@ const AuctionDetails = ({
   ethPrice,
   currentBid,
   setCurrentBid,
+  loading,
 }) => {
-  const { loggedInArtist, address } = useAuthContext();
   const history = useHistory();
-  const [selectedAuction, setSelectedAuction] = useState(onAuction);
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
-  const [sliderSettings, setSliderSettings] = useState({
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    variableWidth: true,
-  });
-  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
-
-  const convertDate = (date) => {
-    const dLeft = (new Date(date) - Date.now()) / 1000;
-    const daysLeft = Math.floor(dLeft / 86400);
-    const hoursLeft = Math.floor(dLeft / 3600) % 24;
-    const minutesLeft = Math.floor(dLeft / 60) % 60;
-    const secondsLeft = dLeft % 60;
-    return daysLeft >= 0
-      ? `Ends in ${parseInt(daysLeft, 10)}d : ${parseInt(hoursLeft, 10)}h : ${parseInt(
-          minutesLeft,
-          10
-        )}m : ${parseInt(secondsLeft, 10)}s`
-      : false;
-  };
-
-  useEffect(() => {
-    // Here need to get Auction details
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, [loading]);
-
-  useEffect(() => {
-    function handleResize() {
-      if (window.innerWidth < 1200) {
-        setSliderSettings({ ...sliderSettings, slidesToShow: 3 });
-      }
-      if (window.innerWidth < 993) {
-        setSliderSettings({ ...sliderSettings, slidesToShow: 2 });
-      }
-      if (window.innerWidth < 576) {
-        setSliderSettings({ ...sliderSettings, slidesToShow: 1 });
-      }
-    }
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const [showBidRankings, setShowBidRankings] = useState(false);
 
   useEffect(() => {
     // Prev Icon
@@ -125,116 +80,61 @@ const AuctionDetails = ({
   return (
     <div
       className={`auction__details__section ${
-        selectedAuction.auction.backgroundImageUrl ? 'has--background' : ''
+        onAuction.auction.backgroundImageUrl ? 'has--background' : ''
       }`}
     >
       <div className="bg">
-        {selectedAuction.auction.backgroundImageUrl && (
+        {onAuction.auction.backgroundImageUrl && (
           <img
-            src={selectedAuction.auction.backgroundImageUrl}
-            alt={selectedAuction.auction.headline}
+            src={onAuction.auction.backgroundImageUrl}
+            alt={onAuction.auction.headline}
             style={{
-              filter: selectedAuction.auction?.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
+              filter: onAuction.auction.backgroundImageBlur ? 'blur(10px)' : 'blur(0px)',
             }}
           />
         )}
       </div>
-      {selectedAuction.auction.backgroundImageUrl ? <div className="overlay" /> : <></>}
+      {onAuction.auction.backgroundImageUrl ? <div className="overlay" /> : <></>}
       <div className="auction__details__section__container">
-        {selectedAuction.moreActiveAuctions?.length ? (
-          <Slider {...sliderSettings}>
-            {selectedAuction.moreActiveAuctions?.map((action) => (
-              <div
-                key={action.id}
-                className={`carousel__auction__container ${
-                  selectedAuction.id === action.id ? 'selected' : ''
-                }`}
-                onClick={() => {
-                  setSelectedAuction(action);
-                  setLoading(true);
-                  history.push(`/${action?.link.split('/')[1]}/${action?.link.split('/')[2]}`, {
-                    auction: action,
-                  });
-                }}
-                aria-hidden="true"
-                style={{ width: 278 }}
-              >
-                <div className="carousel__auction">
-                  <div
-                    className={`carousel__auction__image ${
-                      action.promoImageUrl ? '' : 'show__avatar'
-                    }`}
-                  >
-                    {action.promoImageUrl ? (
-                      <img className="original" src={action.promoImageUrl} alt={action.headline} />
-                    ) : (
-                      // TODO:: here should display Artist avatar
-                      <img className="artist__image" src={frankie} alt={action.headline} />
-                    )}
-                  </div>
-                  <div className="carousel__auction__info">
-                    <h4 title={action?.headline}>
-                      {action?.headline.length > 20
-                        ? `${action?.headline.substring(0, 20)}...`
-                        : action?.headline}
-                    </h4>
-                    <p>
-                      {!convertDate(action?.endDate) ? (
-                        <span>Auction has ended</span>
-                      ) : (
-                        convertDate(action?.endDate)
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Slider>
-        ) : (
-          <></>
-        )}
-
+        <ActiveAuctions mainAuction={onAuction} />
         {!loading ? (
-          <Animated animationIn="zoomIn" key={selectedAuction.auction?.id}>
+          <Animated animationIn="zoomIn" key={onAuction.auction.id}>
             <div className="auction__details__box">
               <div
                 className={`auction__details__box__image ${
-                  selectedAuction.auction.promoImageUrl ? '' : 'show__avatar'
+                  onAuction.auction.promoImageUrl ? '' : 'show__avatar'
                 }`}
               >
-                {selectedAuction.auction.promoImageUrl ? (
+                {onAuction.auction.promoImageUrl ? (
                   <img
                     className="original"
-                    src={selectedAuction.auction.promoImageUrl}
-                    alt={selectedAuction.auction.headline}
+                    src={onAuction.auction.promoImageUrl}
+                    alt={onAuction.auction.headline}
                   />
                 ) : (
                   <img
                     className="artist__image"
-                    src={selectedAuction.artist?.profileImageUrl}
-                    alt={selectedAuction.artist?.displayName}
+                    src={onAuction.artist.profileImageUrl}
+                    alt={onAuction.artist.displayName}
                   />
                 )}
               </div>
               <div className="auction__details__box__info">
-                <h1 className="title">{selectedAuction.auction?.headline}</h1>
+                <h1 className="title">{onAuction.auction.headline}</h1>
                 <div className="artist__details">
-                  <img
-                    src={selectedAuction.artist?.profileImageUrl}
-                    alt={selectedAuction.artist?.displayName}
-                  />
+                  <img src={onAuction.artist.profileImageUrl} alt={onAuction.artist.displayName} />
                   <span>by</span>
                   <button
                     type="button"
-                    onClick={() => history.push(`/${selectedAuction.artist?.displayName}`)}
+                    onClick={() => history.push(`/${onAuction.artist.displayName}`)}
                   >
-                    {selectedAuction.artist?.displayName}
+                    {onAuction.artist.displayName}
                   </button>
                 </div>
                 <div className="auction__ends__in">
                   {!selectedAuctionEnded ? (
                     <AuctionCountdown
-                      endDate={selectedAuction.auction.endDate}
+                      endDate={onAuction.auction.endDate}
                       setSelectedAuctionEnded={setSelectedAuctionEnded}
                     />
                   ) : (
@@ -258,7 +158,7 @@ const AuctionDetails = ({
                         }}
                       >
                         <span>
-                          {selectedAuction.auction.backgroundImageUrl ? (
+                          {onAuction.auction.backgroundImageUrl ? (
                             <img
                               src={lightCopyIcon}
                               alt="Copy to clipboard icon"
@@ -282,24 +182,13 @@ const AuctionDetails = ({
                 <div className="auction__details__box__top__bidders">
                   <div className="auction__details__box__top__bidders__header">
                     <h2 className="title">Top 5 bidders</h2>
-                    <Popup
-                      trigger={
-                        <button type="button" className="view__all__bids">
-                          View all bids
-                        </button>
-                      }
+                    <button
+                      type="button"
+                      className="view__all__bids"
+                      onClick={() => setShowBidRankings(true)}
                     >
-                      {(close) => (
-                        <BidRankingsPopup
-                          onClose={close}
-                          onBidders={bidders}
-                          rewardTiers={onAuction.rewardTiers}
-                          rewardTiersSlots={rewardTiersSlots}
-                          getRewardTierSpanStyles={getRewardTierSpanStyles}
-                          ethPrice={ethPrice}
-                        />
-                      )}
-                    </Popup>
+                      View all bids
+                    </button>
                   </div>
                   <div className="auction__details__box__top__bidders__content">
                     <div className="five__bidders">
@@ -353,7 +242,7 @@ const AuctionDetails = ({
                       >
                         Place a bid
                       </button>
-                      {currentBid && currentBid.aucionId === selectedAuction.auction?.id ? (
+                      {currentBid && currentBid.auctionId === onAuction.auction.id ? (
                         <div className="cacnel__bid">
                           <Popup
                             trigger={
@@ -446,15 +335,9 @@ const AuctionDetails = ({
                         You can still buy individual NFTs from other sellers on NFT marketplaces.
                       </p>
                       <div className="view__rankings">
-                        <Popup trigger={<button type="button">View rankings</button>}>
-                          {(close) => (
-                            <BidRankingsPopup
-                              onClose={close}
-                              onBidders={bidders}
-                              ethPrice={ethPrice}
-                            />
-                          )}
-                        </Popup>
+                        <button type="button" onClick={() => setShowBidRankings(true)}>
+                          View rankings
+                        </button>
                       </div>
                     </div>
                     <div className="footer">
@@ -476,9 +359,9 @@ const AuctionDetails = ({
                         NFTs by clicking the button below
                       </p>
                       <div className="view__rankings">
-                        <Popup trigger={<button type="button">View rankings</button>}>
-                          {(close) => <BidRankingsPopup onClose={close} onBidders={bidders} />}
-                        </Popup>
+                        <button type="button" onClick={() => setShowBidRankings(true)}>
+                          View rankings
+                        </button>
                       </div>
                       <div className="warning__div">
                         <img src={warningIcon} alt="" />
@@ -509,79 +392,19 @@ const AuctionDetails = ({
             </div>
           </Animated>
         ) : (
-          <div className="auction__details__box">
-            <div className="auction__details__box__image">
-              <Skeleton height={window.innerWidth > 768 ? 445 : 335} />
-            </div>
-            <div className="auction__details__box__info">
-              <h1 className="title">
-                <Skeleton width={200} />
-              </h1>
-              <div className="artist__details">
-                <Skeleton width={30} height={30} circle />
-                <Skeleton width={150} />
-              </div>
-              <div className="auction__ends__in">
-                <div className="auction__ends__in__label">
-                  <Skeleton width={200} />
-                </div>
-                <Skeleton width={100} />
-              </div>
-            </div>
-            <div className="auction__details__box__top__bidders">
-              <div className="auction__details__box__top__bidders__header">
-                <h2 className="title">
-                  <Skeleton width={100} />
-                </h2>
-                <button type="button" className="view__all__bids">
-                  <Skeleton width={100} />
-                </button>
-              </div>
-              <div className="auction__details__box__top__bidders__content">
-                <div className="ten__bidders__left">
-                  {bidders?.map(
-                    (bidder, index) =>
-                      index < 5 && (
-                        <div className="bidder" key={bidder.id}>
-                          <div className="name">
-                            <Skeleton width={90} />
-                          </div>
-                          <div className="bid">
-                            <Skeleton width={40} />
-                          </div>
-                        </div>
-                      )
-                  )}
-                </div>
-                <div className="ten__bidders__right">
-                  {bidders?.map(
-                    (bidder, index) =>
-                      index >= 5 &&
-                      index < 10 && (
-                        <div className="bidder" key={bidder.id}>
-                          <div className="name">
-                            <Skeleton width={90} />
-                          </div>
-                          <div className="bid">
-                            <Skeleton width={40} />
-                          </div>
-                        </div>
-                      )
-                  )}
-                </div>
-              </div>
-              <div className="auction__details__box__top__bidders__footer">
-                <div className="your__bid">
-                  <Skeleton width={window.innerWidth > 576 && 100} />
-                </div>
-                <div className="place__bid">
-                  <Skeleton width={window.innerWidth > 576 && 100} height={40} />
-                </div>
-              </div>
-            </div>
-          </div>
+          <LandingPageLoader />
         )}
       </div>
+      <Popup open={showBidRankings} closeOnDocumentClick={false}>
+        <BidRankingsPopup
+          onClose={() => setShowBidRankings(false)}
+          onBidders={bidders}
+          rewardTiers={onAuction.rewardTiers}
+          rewardTiersSlots={rewardTiersSlots}
+          getRewardTierSpanStyles={getRewardTierSpanStyles}
+          ethPrice={ethPrice}
+        />
+      </Popup>
     </div>
   );
 };
@@ -595,6 +418,7 @@ AuctionDetails.propTypes = {
   ethPrice: PropTypes.number.isRequired,
   currentBid: PropTypes.oneOfType([PropTypes.object]).isRequired,
   setCurrentBid: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default AuctionDetails;

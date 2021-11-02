@@ -21,6 +21,7 @@ const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/bi
 const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
 const GET_MY_BIDS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids`;
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
+const CHANGE_AUCTION_STATUS = `${process.env.REACT_APP_API_BASE_URL}/api/auction/status`;
 
 export const createAuction = async ({
   name,
@@ -382,9 +383,9 @@ export const placeAuctionBid = async (body) => {
   return result;
 };
 
-export const addRewardTier = async (body) => {
+export const changeAuctionStatus = async (body) => {
   const requestOptions = {
-    method: 'post',
+    method: 'patch',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
@@ -392,8 +393,10 @@ export const addRewardTier = async (body) => {
     body: JSON.stringify(body),
   };
 
-  const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
+  const request = await fetch(CHANGE_AUCTION_STATUS, requestOptions);
+
   const result = await request.text().then((data) => JSON.parse(data));
+
   return result;
 };
 

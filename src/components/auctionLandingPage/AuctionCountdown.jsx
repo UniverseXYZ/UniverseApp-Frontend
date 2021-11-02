@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 const AuctionCountdown = ({ endDate, setSelectedAuctionEnded }) => {
   const [countdown, setCountdown] = useState({
-    days: null,
-    hours: null,
-    minutes: null,
-    seconds: null,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   useEffect(() => {

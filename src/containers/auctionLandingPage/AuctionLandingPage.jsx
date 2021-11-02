@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './AuctionLandingPage.scss';
 import Popup from 'reactjs-popup';
@@ -27,6 +27,7 @@ const AuctionLandingPage = () => {
 
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
+  const history = useHistory();
   const { address } = useAuthContext();
   const [auction, setAuction] = useState(null);
   const [bidders, setBidders] = useState([]);
@@ -36,30 +37,37 @@ const AuctionLandingPage = () => {
   const [rewardTiersSlots, setRewardTiersSlots] = useState(false);
   const [ethPrice, setEthPrice] = useState(0);
   const [currentBid, setCurrentBid] = useState(null);
-
   useEffect(() => {
-    const currBidder = bidders.find((bidder) => bidder.address === address);
-    if (currBidder) {
-      setCurrentBid(currBidder);
+    if (bidders) {
+      const currBidder = bidders.find((bidder) => bidder.address === address);
+      if (currBidder) {
+        setCurrentBid(currBidder);
+      }
+      console.log('Bidders:');
+      console.log(bidders);
     }
-    console.log('Bidders:');
-    console.log(bidders);
   }, [bidders, address]);
 
   const getAuctionData = async () => {
-    const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
-    console.log(auctionData);
-    setAuction(auctionData);
-    setBidders(auctionData.bidders);
-    setLoading(false);
+    try {
+      const auctionData = await getAuctionLandingPage(artistUsername, auctionName);
+      if (!auctionData.error) {
+        console.log(auctionData);
+        setAuction(auctionData);
+        setBidders(auctionData.bidders);
 
-    const tierSlots = [];
-    auctionData.rewardTiers.forEach((rewardTiers) => {
-      for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
-        tierSlots.push(rewardTiers);
+        const tierSlots = [];
+        auctionData.rewardTiers.forEach((rewardTiers) => {
+          for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
+            tierSlots.push(rewardTiers);
+          }
+        });
+        setRewardTiersSlots(tierSlots);
       }
-    });
-    setRewardTiersSlots(tierSlots);
+      setLoading(false);
+    } catch (err) {
+      history.push('../not-found');
+    }
   };
 
   const getEthPrice = async () => {
@@ -83,6 +91,7 @@ const AuctionLandingPage = () => {
         ethPrice={ethPrice}
         currentBid={currentBid}
         setCurrentBid={setCurrentBid}
+        loading={loading}
       />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />
@@ -111,7 +120,7 @@ const AuctionLandingPage = () => {
           setShowLoading={setShowLoading}
           auction={auction.auction}
           rewardTiers={auction.rewardTiers}
-          artistName={auction.artist.displayName}
+          artistName={auction.artist?.displayName}
           onBidders={bidders}
           onSetBidders={setBidders}
           currentBid={currentBid}
