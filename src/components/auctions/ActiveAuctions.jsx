@@ -44,12 +44,6 @@ const ActiveAuctions = () => {
     }
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
-
   const handleSearch = (value) => {
     setSearchByName(value);
   };
