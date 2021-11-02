@@ -42,14 +42,17 @@ const NFTCard = React.memo(
       return infoCopy;
     });
 
-    // Mark editions as used if they are being used in other tiers
+    // Mark editions as used if they are being used in other tiers only if winner object in winnersData array has nftsData added
+    // winnersData is an array of winners that is set and manipulated in Create.jsx file depending on the number of winners selected by the user in custom mode, the nfts and nft editions selected
+    const canSetRewardTiersUsedNFTsIds = winnersData.filter((winner) => winner.nftsData?.length);
+
     const rewardTiersUsedNFTsIds =
       auction.rewardTiers &&
       auction.rewardTiers.reduce((res, curr) => {
         const ids = [];
 
         // We are displaying auction currently being created
-        if (curr.nftSlots) {
+        if (curr.nftSlots && canSetRewardTiersUsedNFTsIds) {
           curr.nftSlots.forEach((slot) => ids.push(...slot.nftIds));
         }
 

@@ -65,6 +65,9 @@ const Create = () => {
     nftsPerWinner: true,
   });
 
+  // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
+  const [winnersData, setWinnersData] = useState([]);
+
   const handeClick = (e) => {
     setMinBId(e.target.checked);
   };
@@ -101,6 +104,7 @@ const Create = () => {
 
   const handleChange = (event) => {
     const value = event.target.value.replace(/[^\d]/, '');
+    // console.info(value);
     if (event.target.id === 'numberOfWinners') {
       // If the input is cleared reassign the value to 0 instead of empty string
       const v = (value && parseInt(value, 10)) || 0;
@@ -129,9 +133,6 @@ const Create = () => {
 
   // Custom Slots distribution logic
   const [selectedWinner, setSelectedWinner] = useState(0);
-
-  // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}, editions: []]
-  const [winnersData, setWinnersData] = useState([]);
 
   const onEditionClick = (data, actionMeta) => {
     if (!data) return;
@@ -229,7 +230,7 @@ const Create = () => {
     const winners = [];
 
     while (slot < n) {
-      winners.push({ slot, nftsData: [], nftIds: [], editions: [] });
+      winners.push({ slot, nftsData: [], nftIds: [] });
       slot += 1;
     }
     return winners;
