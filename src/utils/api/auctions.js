@@ -20,7 +20,7 @@ const GET_AUCTION_LANDING_PAGE = (username, auctionName) =>
 const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/bid`;
 const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
 const GET_MY_BIDS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids`;
-const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/remove-reward-tier`;
+const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
 
 export const createAuction = async ({
   name,
@@ -397,17 +397,16 @@ export const addRewardTier = async (body) => {
   return result;
 };
 
-export const removeRewardTier = async (body) => {
+export const removeRewardTier = async (id) => {
   const requestOptions = {
-    method: 'post',
+    method: 'DELETE',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
     },
-    body: JSON.stringify(body),
   };
 
-  const request = await fetch(REMOVE_REWARD_TIER_FROM_AUCTION, requestOptions);
+  const request = await fetch(`${REMOVE_REWARD_TIER_FROM_AUCTION}${id}`, requestOptions);
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };

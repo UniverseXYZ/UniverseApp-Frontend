@@ -120,10 +120,7 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
 
   const removeRewardTiersPromises = removeTiers.map(async (tier) => {
     const { id } = tier;
-    const body = {
-      tierId: id,
-    };
-    return removeRewardTier(body, id);
+    return removeRewardTier(id);
   });
 
   const removedTiers = await Promise.all(removeRewardTiersPromises);
