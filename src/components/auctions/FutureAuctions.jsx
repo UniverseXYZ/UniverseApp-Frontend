@@ -29,20 +29,11 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [page, setPage] = useState(0);
   const history = useHistory();
 
-  const filterAuctions = (auctions) => {
-    const filteredAuctions = auctions
-      .slice(offset, offset + perPage)
-      .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
-      .filter((item) => !item.launch || (item.launch && isAfterNow(item.startDate)));
-
-    return filteredAuctions;
-  };
-
   useEffect(() => {
-    const filteredAuctions = filterAuctions(myAuctions);
-    setMyAuctions(filteredAuctions);
-    setLoading(false);
-  }, []);
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  });
 
   const handleRemove = (id) => {
     setMyAuctions((d) => d.filter((item) => item.id !== id));
@@ -84,11 +75,14 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         </div>
       </div>
       {!loading ? (
-        myAuctions.map((futureAuction) => {
-          const startDate = format(new Date(futureAuction.startDate), 'MMMM dd, HH:mm');
-          const endDate = format(new Date(futureAuction.endDate), 'MMMM dd, HH:mm');
-          return (
-            <>
+        myAuctions
+          .slice(offset, offset + perPage)
+          .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
+          .filter((item) => !item.launch || (item.launch && isAfterNow(item.startDate)))
+          .map((futureAuction) => {
+            const startDate = format(new Date(futureAuction.startDate), 'MMMM dd, HH:mm');
+            const endDate = format(new Date(futureAuction.endDate), 'MMMM dd, HH:mm');
+            return (
               <div className="auction" key={uuid()}>
                 <div
                   className={`left-border-effect ${
@@ -112,15 +106,9 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   >
                     <div className="arrow">
                       {shownActionId === futureAuction.id ? (
-                        <>
-                          <span className="tooltiptext">Show less</span>
-                          <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
-                        </>
+                        <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
                       ) : (
-                        <>
-                          <span className="tooltiptext">Show more</span>
-                          <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
-                        </>
+                        <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
                       )}
                     </div>
                   </div>
@@ -378,20 +366,17 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               Total NFTs: <b>{tier.numberOfWinners * tier.nftsPerWinner}</b>
                             </p>
                           </div>
-                          <div className="tier-body">
-                            {tier.nfts.map((nft) => (
-                              <div className="tier-image" key={uuid()}>
-                                <div className="tier-image-second" />
-                                <div className="tier-image-first" />
-                                <div className="tier-image-main">
-                                  <div className="amount-of-editions">
-                                    <p>{nft.numberOfEditions}</p>
-                                  </div>
-                                  <img src={nft?.thumbnail_url} alt={nft.name} />
-                                </div>
+                        </div>
+                        <div className="tier-body">
+                          {tier.nfts.map((nft) => (
+                            <div className="tier-image" key={uuid()}>
+                              <div className="tier-image-second" />
+                              <div className="tier-image-first" />
+                              <div className="tier-image-main">
+                                <img src={nft?.thumbnail_url} alt={nft.name} />
                               </div>
-                            ))}
-                          </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     ))}
@@ -403,9 +388,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   </Button>
                 </div>
               </div>
-            </>
-          );
-        })
+            );
+          })
       ) : (
         <FutureCardSkeleton />
       )}
