@@ -20,10 +20,7 @@ import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
 const ReleaseRewards = () => {
   const history = useHistory();
   const location = useLocation();
-  const [auctionProceed, setAuctionProceed] = useState(false);
-  const [data, setData] = useState([...ReleaseRewardsData]);
   const [slotData, setSlotData] = useState([...SlotsRewardData]);
-  const [showSuccesPopup, setShowSuccessPopup] = useState(false);
   const [hideInfo, setHideInfo] = useState(false);
   const [showSlots, setShowSlots] = useState(false);
   // const view = 'Auctioneer';
@@ -53,6 +50,9 @@ const ReleaseRewards = () => {
       },
     ],
   });
+  const [auctionProceed, setAuctionProceed] = useState(false);
+  const [data, setData] = useState([...ReleaseRewardsData]);
+  const [showSuccesPopup, setShowSuccessPopup] = useState(false);
 
   const handleComplete = (id) => {
     const newData = [...data];
@@ -468,10 +468,4 @@ const ReleaseRewards = () => {
   );
 };
 
-// ReleaseRewards.propTypes = {
-//   view: PropTypes.string,
-// };
-// ReleaseRewards.defaultProps = {
-//   view: 'Auctioneer',
-// };
 export default ReleaseRewards;

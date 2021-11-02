@@ -25,6 +25,7 @@ import AuctionCountdown from './AuctionCountdown.jsx';
 import ActiveAuctionCard from './ActiveAuctionCard.jsx';
 import { LandingPageLoader } from './LandingPageLoader.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
+import warningIcon from '../../assets/images/Exclamation.svg';
 
 const AuctionDetails = ({
   onAuction,
