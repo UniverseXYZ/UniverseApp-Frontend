@@ -17,6 +17,7 @@ import SearchFilters from '../nft/SearchFilters';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
 import CreatTiersStickyBar from '../CreateTiersStickyBar';
+import AvailableNFTCardSkeleton from '../availableNFTCard/skeleton/AvailableNFTCardSkeleton';
 
 const ACTION_TYPES = {
   ADD: 'select-option',
@@ -541,9 +542,6 @@ const Create = () => {
           </div>
         )}
         {
-          // ----- Custom distribution -----
-          // TODO:: When an edition dropdown is opened, if you click eslwhere on the page, close the dropdown
-          // TODO:: Make the whole dropdown button click to open the menu
           // ----- Stick menu -----
           // TODO:: Sticky menu css and component dev -> Ping Dima when the time comes
           // TODO:: Sticky menu, delete functionality
@@ -553,17 +551,27 @@ const Create = () => {
         }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
-          {availableNFTsTolist.slice(offset, offset + perPage).map((data) => (
-            <AvailabilityNFTCard
-              key={data.nfts.id}
-              data={data}
-              onEditionClick={onEditionClick}
-              canSelect={canSelectNFT}
-              winnersData={winnersData}
-              selectedWinner={selectedWinner}
-              auction={auction}
-            />
-          ))}
+          {availableNFTsTolist.length ? (
+            availableNFTsTolist
+              .slice(offset, offset + perPage)
+              .map((data) => (
+                <AvailabilityNFTCard
+                  key={data.nfts.id}
+                  data={data}
+                  onEditionClick={onEditionClick}
+                  canSelect={canSelectNFT}
+                  winnersData={winnersData}
+                  selectedWinner={selectedWinner}
+                  auction={auction}
+                />
+              ))
+          ) : (
+            <>
+              <AvailableNFTCardSkeleton />
+              <AvailableNFTCardSkeleton />
+              <AvailableNFTCardSkeleton />
+            </>
+          )}
         </div>
         <div className="pagination__container">
           <SimplePagination
