@@ -8,9 +8,13 @@ const RewardTierRemovePopup = ({ onClose, id }) => {
   const { auction, setAuction } = useAuctionContext();
 
   const removeTier = () => {
-    const newAuction = [...auction.rewardTiers];
-    const tier = newAuction.filter((a) => a.id !== id);
-    setAuction({ ...auction, rewardTiers: tier });
+    const newTiers = [...auction.rewardTiers];
+    // const tier = newAuction.filter((a) => a.id !== id);
+    newTiers.forEach((t) => {
+      if (t.id === id) t.removed = true;
+    });
+    // We have to mark the tier as removed
+    setAuction({ ...auction, rewardTiers: newTiers });
   };
 
   return (

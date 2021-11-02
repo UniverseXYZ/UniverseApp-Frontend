@@ -13,6 +13,7 @@ export const createRequestObject = ({ auction, bidtype, options }) => {
     tokenDecimals: null,
     royaltySplits: null,
     tiers: null,
+    removed: auction.removed,
   };
 
   return {
@@ -77,6 +78,7 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
       minimumBid: t.minBidValue || 0.1,
       nftSlots: updatedSlotIndexes,
       id: t.id,
+      removed: t.removed,
     };
 
     tiersArray.push(tierObject);

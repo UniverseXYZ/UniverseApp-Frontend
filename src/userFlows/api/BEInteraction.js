@@ -12,6 +12,7 @@ import {
   editAuction,
   editRewardTier,
   addRewardTier,
+  removeRewardTier,
 } from '../../utils/api/auctions';
 import { resolveAllPromises } from '../../utils/helpers/pureFunctions/minting';
 
@@ -107,8 +108,30 @@ export const sendUpdateAuctionRequest = async ({ requestObject }) => {
   const res = await editAuction(requestObject);
 
   const auctionId = requestObject.id;
-  const newTiers = requestObject.rewardTiers.filter((tier) => !tier.id);
-  const updateTiers = requestObject.rewardTiers.filter((tier) => tier.id);
+  const newTiers = requestObject.rewardTiers.filter(
+    (tier) => typeof tier.id === 'string' && tier.id.startsWith('new-tier')
+  );
+  const updateTiers = requestObject.rewardTiers.filter(
+    (tier) =>
+      tier.id && !tier.removed && !(typeof tier.id === 'string' && tier.id.startsWith('new-tier'))
+  );
+
+  const removeTiers = requestObject.rewardTiers.filter((t) => t.removed);
+
+  const removeRewardTiersPromises = removeTiers.map(async (tier) => {
+    const { id } = tier;
+    return removeRewardTier(id);
+  });
+
+  const removedTiers = await Promise.all(removeRewardTiersPromises);
+  const hasRemoveError = removedTiers.filter((el) => el.error);
+
+  if (hasRemoveError.length) {
+    return {
+      error: true,
+      errors: hasRemoveError,
+    };
+  }
 
   const updateRewardTiersPromises = updateTiers.map(async (tier) => {
     const { name, numberOfWinners, nftsPerWinner, minimumBid, nftSlots, id } = tier;

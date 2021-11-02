@@ -252,7 +252,7 @@ const Create = () => {
         rewardTiers: [
           ...auction?.rewardTiers,
           {
-            id: null, // Tiers with no IDs attached to them indicates that those are new tiers, that needs to be added to the Auction
+            id: `new-tier-${uuid()}`, // Tiers with 'new-tier' IDs attached to them indicates that those are new tiers, that needs to be added to the Auction
             name: values.name,
             winners: Number(values.numberOfWinners),
             nftsPerWinner: values.nftsPerWinner || 0,
@@ -328,9 +328,22 @@ const Create = () => {
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
   const canContinue = winnersData.every((data) => data.nftsData?.length > 0) && custom;
-  const availableNFTsTolist = filteredNFTs.filter(
-    ({ nfts }) => nfts.rewardAndTokenIds.filter((nft) => nft.slot !== 0 && !nft.slot).length > 0
-  );
+  // const availableNFTsTolist = filteredNFTs.filter(
+  //   ({ nfts }) => nfts.rewardAndTokenIds.filter((nft) => nft.slot !== 0 && !nft.slot).length > 0
+  // );
+  // Map the rewardAndTokenIds to return only those who doesn't have slot attached to them or the rewardTiers is from this auction
+  let availableNFTsTolist = [...filteredNFTs];
+  availableNFTsTolist.forEach((data) => {
+    const updatedRewardAndTokenIds = data.nfts.rewardAndTokenIds.filter((token) => {
+      const { rewardTierId, slot } = token;
+      const inSameAuction = auction.rewardTiers.find((t) => t.id === rewardTierId);
+      const notAttachedToSlot = slot !== 0 && !slot;
+      return inSameAuction || notAttachedToSlot;
+    });
+
+    data.nfts.rewardAndTokenIds = updatedRewardAndTokenIds;
+  });
+  availableNFTsTolist = availableNFTsTolist.filter((nft) => nft.nfts.rewardAndTokenIds.length);
 
   // End Custom Slots distribution logic
 

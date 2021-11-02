@@ -230,126 +230,130 @@ const AuctionReview = () => {
             Edit <img src={pencil} alt="edit-icon" />
           </button>
         </div>
-        {auction?.rewardTiers?.map((tier) => {
-          const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
-            const nfts = curr.nftsData;
+        {auction?.rewardTiers
+          ?.filter((t) => !t.removed)
+          .map((tier) => {
+            const allTierNFTs = tier.nftSlots.reduce((res, curr) => {
+              const nfts = curr.nftsData;
 
-            res.push(...nfts);
-            return res;
-          }, []);
+              res.push(...nfts);
+              return res;
+            }, []);
 
-          const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
-            const { url, artworkType, nftName, collectioName, collectionAddress, collectionUrl } =
-              curr;
-            res[url] = res[url] || {
-              url,
-              count: 0,
-              artworkType: '',
-              nftName: '',
-              collectioName: '',
-              collectionAddress: '',
-              collectionUrl: '',
-            };
+            const onlyUniqueNFTs = allTierNFTs.reduce((res, curr) => {
+              const { url, artworkType, nftName, collectioName, collectionAddress, collectionUrl } =
+                curr;
+              res[url] = res[url] || {
+                url,
+                count: 0,
+                artworkType: '',
+                nftName: '',
+                collectioName: '',
+                collectionAddress: '',
+                collectionUrl: '',
+              };
 
-            res[url].count += 1;
-            res[url].artworkType = artworkType;
-            res[url].collectioName = collectioName;
-            res[url].collectionAddress = collectionAddress;
-            res[url].collectionUrl = collectionUrl;
-            res[url].nftName = nftName;
-            return res;
-          }, {});
+              res[url].count += 1;
+              res[url].artworkType = artworkType;
+              res[url].collectioName = collectioName;
+              res[url].collectionAddress = collectionAddress;
+              res[url].collectionUrl = collectionUrl;
+              res[url].nftName = nftName;
+              return res;
+            }, {});
 
-          return (
-            <div key={tier.id} className="view-tier">
-              <div className="auction-header">
-                <div className="img_head">
-                  <div className="img_head_title">
-                    <h3>{tier.name}</h3>
-                  </div>
-                  <div className="winners__edit__btn">
-                    <div className="winners">
-                      <div className="tier-perwinners">
-                        <h4>
-                          NFTs per winner:&nbsp;
-                          <b>
-                            {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
-                              ? 'custom'
-                              : tier.nftsPerWinner}
-                          </b>
-                        </h4>
-                      </div>
-                      <div className="tier-winners">
-                        <h4>
-                          Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
-                        </h4>
-                      </div>
-                      <div className="tier-minbid">
-                        <h4>
-                          Total NFTs:&nbsp;
-                          <b>{allTierNFTs.length}</b>
-                        </h4>
+            return (
+              <div key={tier.id} className="view-tier">
+                <div className="auction-header">
+                  <div className="img_head">
+                    <div className="img_head_title">
+                      <h3>{tier.name}</h3>
+                    </div>
+                    <div className="winners__edit__btn">
+                      <div className="winners">
+                        <div className="tier-perwinners">
+                          <h4>
+                            NFTs per winner:&nbsp;
+                            <b>
+                              {tier.customNFTsPerWinner || tier.nftsPerWinner === 0
+                                ? 'custom'
+                                : tier.nftsPerWinner}
+                            </b>
+                          </h4>
+                        </div>
+                        <div className="tier-winners">
+                          <h4>
+                            Winners:&nbsp;<b>{tier.winners || tier.numberOfWinners}</b>
+                          </h4>
+                        </div>
+                        <div className="tier-minbid">
+                          <h4>
+                            Total NFTs:&nbsp;
+                            <b>{allTierNFTs.length}</b>
+                          </h4>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="auctions-tier">
-                <div className="auction-reward">
-                  {Object.keys(onlyUniqueNFTs).map((key) => {
-                    const {
-                      artworkType,
-                      url,
-                      count,
-                      nftName,
-                      collectioName,
-                      collectionAddress,
-                      collectionUrl,
-                    } = onlyUniqueNFTs[key];
-                    const nftIsImage =
-                      artworkType === 'png' ||
-                      artworkType === 'jpg' ||
-                      artworkType === 'jpeg' ||
-                      artworkType === 'mpeg' ||
-                      artworkType === 'webp';
+                <div className="auctions-tier">
+                  <div className="auction-reward">
+                    {Object.keys(onlyUniqueNFTs).map((key) => {
+                      const {
+                        artworkType,
+                        url,
+                        count,
+                        nftName,
+                        collectioName,
+                        collectionAddress,
+                        collectionUrl,
+                      } = onlyUniqueNFTs[key];
+                      const nftIsImage =
+                        artworkType === 'png' ||
+                        artworkType === 'jpg' ||
+                        artworkType === 'jpeg' ||
+                        artworkType === 'mpeg' ||
+                        artworkType === 'webp';
 
-                    return (
-                      <div className="auction-reward__box" key={uuid()}>
-                        <div className="auction-reward__box__image">
-                          {artworkType === 'mp4' && (
-                            <video
-                              onMouseOver={(event) => event.target.play()}
-                              onFocus={(event) => event.target.play()}
-                              onMouseOut={(event) => event.target.pause()}
-                              onBlur={(event) => event.target.pause()}
-                            >
-                              <source src={url} type="video/mp4" />
-                              <track kind="captions" />
-                              Your browser does not support the video tag.
-                            </video>
-                          )}
-                          {artworkType === 'mpeg' && (
-                            <img className="preview-image" src={mp3Icon} alt={nftName} />
-                          )}
-                          {nftIsImage && <img className="preview-image" src={url} alt={nftName} />}
-                          {artworkType === 'mp4' && (
-                            <img className="video__icon" src={videoIcon} alt="Video Icon" />
+                      return (
+                        <div className="auction-reward__box" key={uuid()}>
+                          <div className="auction-reward__box__image">
+                            {artworkType === 'mp4' && (
+                              <video
+                                onMouseOver={(event) => event.target.play()}
+                                onFocus={(event) => event.target.play()}
+                                onMouseOut={(event) => event.target.pause()}
+                                onBlur={(event) => event.target.pause()}
+                              >
+                                <source src={url} type="video/mp4" />
+                                <track kind="captions" />
+                                Your browser does not support the video tag.
+                              </video>
+                            )}
+                            {artworkType === 'mpeg' && (
+                              <img className="preview-image" src={mp3Icon} alt={nftName} />
+                            )}
+                            {nftIsImage && (
+                              <img className="preview-image" src={url} alt={nftName} />
+                            )}
+                            {artworkType === 'mp4' && (
+                              <img className="video__icon" src={videoIcon} alt="Video Icon" />
+                            )}
+                          </div>
+                          {count > 1 && (
+                            <>
+                              <div className="auction-reward__box__highlight__one" />
+                              <div className="auction-reward__box__highlight__two" />
+                            </>
                           )}
                         </div>
-                        {count > 1 && (
-                          <>
-                            <div className="auction-reward__box__highlight__one" />
-                            <div className="auction-reward__box__highlight__two" />
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
       <div className="message">
         <span>
