@@ -17,7 +17,7 @@ import SearchFilters from '../nft/SearchFilters';
 import SimplePagination from '../pagination/SimplePaginations';
 import ItemsPerPageDropdown from '../pagination/ItemsPerPageDropdown.jsx';
 import CreatTiersStickyBar from '../CreateTiersStickyBar';
-import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton';
+import AvailableNFTCardSkeleton from '../availableNFTCard/skeleton/AvailableNFTCardSkeleton';
 
 const ACTION_TYPES = {
   ADD: 'select-option',
@@ -567,9 +567,9 @@ const Create = () => {
               ))
           ) : (
             <>
-              <AuctionsCardSkeleton />
-              <AuctionsCardSkeleton />
-              <AuctionsCardSkeleton />
+              <AvailableNFTCardSkeleton />
+              <AvailableNFTCardSkeleton />
+              <AvailableNFTCardSkeleton />
             </>
           )}
         </div>
