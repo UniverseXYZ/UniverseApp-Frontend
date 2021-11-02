@@ -7,14 +7,21 @@ import Pagination from '../pagination/Pagionation.jsx';
 import searchIconGray from '../../assets/images/search-gray.svg';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import ActiveAuctionsTabsCard from '../auctionsCard/ActiveAuctionsTabsCard.jsx';
+import { useAuthContext } from '../../contexts/AuthContext';
 import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
 import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 
 const ActiveAuctions = () => {
-  const [activeAuctions, setActiveAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { ethPrice, loggedInArtist } = useAuthContext();
+  const [activeAuctions, setActiveAuctions] = useState([]);
+  const [shownActionId, setShownActionId] = useState(null);
+  const [copied, setCopied] = useState({
+    state: false,
+    index: null,
+  });
   const [offset, setOffset] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [searchByName, setSearchByName] = useState('');
@@ -33,6 +40,21 @@ const ActiveAuctions = () => {
       console.error(error);
     }
   }, []);
+
+  useEffect(async () => {
+    try {
+      const response = await getActiveAuctions();
+      if (!response.auctions?.length) {
+        setNotFound(true);
+        setLoading(false);
+      } else {
+        setActiveAuctions(response.auctions);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleSearch = (value) => {
     setSearchByName(value);
@@ -56,9 +78,26 @@ const ActiveAuctions = () => {
     setActiveAuctions(newAuctions);
   };
 
+  const getTotalNFTSperAuction = (auction) => {
+    let nftsCount = 0;
+    auction?.rewardTiers?.forEach((tier) => {
+      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
+    });
+    return nftsCount;
+  };
+
   useEffect(() => {
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
+
+  const handleAuctionExpand = (name) => {
+    const canExpandAuction = !name || name !== shownActionId;
+    if (canExpandAuction) {
+      setShownActionId(name);
+    } else {
+      setShownActionId(null);
+    }
+  };
 
   return (
     <div className="active-auctions">
