@@ -1,28 +1,26 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { PLACEHOLDER_FUTURE_AUCTIONS } from '../../../../utils/fixtures/FutureAuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
-import FutureAuctionsCard from '../../../auctionsCard/FutureAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { isAfterNow } from '../../../../utils/dates';
+import FutureAuctionsList from '../../../auctionsCard/futureAuction/FutureAuctionsList.jsx';
 
 const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
-  const { myAuctions } = useAuctionContext();
+  const { myAuctions, setAuction } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
 
   const artistFutureAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => !item.launch && !moment(item.endDate).isBefore(moment.now()))
+      ? myAuctions.filter((item) => !item.launch && isAfterNow(item.endDate))
       : PLACEHOLDER_FUTURE_AUCTIONS;
 
   return artistFutureAuctions.length ? (
-    <>
-      <FutureAuctionsCard data={artistFutureAuctions} />
-    </>
+    <FutureAuctionsList data={artistFutureAuctions} />
   ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
@@ -44,9 +42,10 @@ const FutureAuctionsTab = ({ onArtist, showCreatePrompt }) => {
       <button
         type="button"
         className="light-button set_up"
-        onClick={() =>
-          loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
-        }
+        onClick={() => {
+          setAuction({ rewardTiers: [] });
+          return loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction');
+        }}
         disabled={!loggedInArtist.name || !loggedInArtist.avatar}
       >
         Set up auction

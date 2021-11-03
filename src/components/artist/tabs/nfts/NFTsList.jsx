@@ -26,7 +26,7 @@ const NFTsList = ({ data, perPage, offset }) => {
             <NFTCard nft={nft} key={nft.id} />
           </Animated>
         ) : (
-          <div className="nft__box" key={uuid()}>
+          <div className="nft__box zzz" key={uuid()}>
             <div className="nft__box__image">
               <Skeleton height={200} />
             </div>

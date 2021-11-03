@@ -108,8 +108,7 @@ const Header = ({ location }) => {
     if (
       location.pathname === '/' ||
       location.pathname === '/about' ||
-      location.pathname === '/minting-and-auctions/marketplace/active-auctions' ||
-      location.pathname === '/minting-and-auctions/marketplace/future-auctions' ||
+      location.pathname === '/products/auction-house' ||
       location.pathname === '/polymorphs' ||
       location.pathname === '/mint-polymorph' ||
       location.pathname === '/team'

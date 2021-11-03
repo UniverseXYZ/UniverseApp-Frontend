@@ -2,10 +2,12 @@
 @import "../../assets/scss/mixins";
 
 .nfts__lists {
-  svg {
-    height: 230px;
-    width: 230px;
-  };
+  .nft--card--body {
+    svg {
+      height: 230px;
+      width: 230px;
+    };
+  }
 
   display: grid;
   grid-template-columns: repeat(auto-fit, 255px);
@@ -474,6 +476,9 @@
           font-size: 16px;
           line-height: 120%;
           color: $black;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .price--div {
           display: flex;

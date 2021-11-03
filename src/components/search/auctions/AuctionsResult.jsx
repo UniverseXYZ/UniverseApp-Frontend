@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './AuctionsResult.scss';
 import uuid from 'react-uuid';
-import moment from 'moment';
+import { intervalToDuration } from 'date-fns';
 import Button from '../../button/Button.jsx';
 import Pagination from '../../pagination/Pagionation.jsx';
 import ItemsPerPageDropdown from '../../pagination/ItemsPerPageDropdown.jsx';
 import arrowDown from '../../../assets/images/browse-nft-arrow-down.svg';
+import { isAfterNow, isBeforeNow } from '../../../utils/dates';
 
 const AuctionsResult = ({ query, data }) => {
   const [offset, setOffset] = useState(0);
@@ -61,45 +62,54 @@ const AuctionsResult = ({ query, data }) => {
           .filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
           .filter((item) =>
             selectedDropdownIndex === 0
-              ? moment(item.startDate).isBefore(moment.now()) &&
-                moment(item.endDate).isAfter(moment.now())
+              ? isBeforeNow(item.startDate) && isAfterNow(item.endDate)
               : selectedDropdownIndex === 1
-              ? moment(item.startDate).isAfter(moment.now())
-              : !moment(item.endDate).isAfter(moment.now())
+              ? isAfterNow(item.startDate)
+              : isBeforeNow(item.endDate)
           )
           .slice(offset, offset + perPage)
           .map((auction) => {
-            const startsIn = moment(auction.startDate).isAfter(moment.now())
-              ? moment.duration(moment(auction.startDate).diff(moment.now()))
-              : null;
-            const timeLeft =
-              moment(auction.startDate).isBefore(moment.now()) &&
-              moment(auction.endDate).isAfter(moment.now())
-                ? moment.duration(moment(auction.startDate).diff(moment.now()))
-                : null;
-            const endedOn = !moment(auction.endDate).isAfter(moment.now())
-              ? moment.duration(moment(auction.endDate).diff(moment.now()))
-              : null;
+            let startsIn = null;
+            let timeLeft = null;
+            let endedOn = null;
+            if (isAfterNow(auction.startDate)) {
+              startsIn = intervalToDuration({
+                start: new Date(auction.startDate),
+                end: new Date(),
+              });
+            }
+
+            if (isBeforeNow(auction.startDate) && isAfterNow(auction.endDate)) {
+              timeLeft = intervalToDuration({
+                start: new Date(auction.startDate),
+                end: new Date(),
+              });
+            }
+
+            if (isBeforeNow(auction.endDate)) {
+              endedOn = intervalToDuration({
+                start: new Date(auction.endDate),
+                end: new Date(),
+              });
+            }
+
             const days = startsIn
-              ? parseInt(startsIn.asDays(), 10)
+              ? parseInt(startsIn.days, 10)
               : timeLeft
-              ? parseInt(timeLeft.asDays(), 10)
-              : parseInt(endedOn.asDays(), 10);
-            const hours = startsIn
-              ? startsIn.hours()
-              : timeLeft
-              ? timeLeft.hours()
-              : endedOn.hours();
+              ? parseInt(timeLeft.days, 10)
+              : parseInt(endedOn.days, 10);
+            const hours = startsIn ? startsIn.hours : timeLeft ? timeLeft.hours : endedOn.hours;
             const minutes = startsIn
-              ? startsIn.minutes()
+              ? startsIn.minutes
               : timeLeft
-              ? timeLeft.minutes()
-              : endedOn.minutes();
+              ? timeLeft.minutes
+              : endedOn.minutes;
             const seconds = startsIn
-              ? startsIn.seconds()
+              ? startsIn.seconds
               : timeLeft
-              ? timeLeft.seconds()
-              : endedOn.seconds();
+              ? timeLeft.seconds
+              : endedOn.seconds;
+
             return (
               <div className="auction--box" key={uuid()}>
                 <div

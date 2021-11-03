@@ -7,8 +7,21 @@ import cloudIcon from '../../assets/images/ion_cloud.svg';
 import defaultImage from '../../assets/images/default-img.svg';
 import CustomColorPicker from './CustomColorPicker.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { auctionPageTierImageErrorMessage } from '../../utils/helpers.js';
+import { getImageDimensions } from '../../utils/helpers/pureFunctions/auctions';
 
-const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
+const TIER_IMAGE_DIMENSIONS = {
+  width: 800,
+  height: 800,
+};
+
+const RewardTiersAuction = ({
+  values,
+  onChange,
+  editButtonClick,
+  invalidImageIds,
+  setInvalidImageIds,
+}) => {
   const { auction, bidtype } = useAuctionContext();
   const arrLength = auction.rewardTiers.length;
   const [elRefs, setElRefs] = useState([]);
@@ -32,15 +45,52 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
     );
   }, [arrLength]);
 
-  const handleUploadImage = (event, tierId) => {
+  const handleUploadImage = (file, tierId) => {
     onChange((prevValues) =>
       prevValues.map((tier) => {
         if (tier.id === tierId) {
-          return { ...tier, imageUrl: event.target.files[0] };
+          return { ...tier, imageUrl: file };
         }
         return tier;
       })
     );
+  };
+
+  const handleImageError = (tierId, fileValid, dimensionsValid) => {
+    if (!fileValid || !dimensionsValid) {
+      setInvalidImageIds([...invalidImageIds, tierId]);
+    } else {
+      const invalidImages = invalidImageIds.filter((id) => id !== tierId);
+      setInvalidImageIds(invalidImages);
+    }
+  };
+
+  const validateFile = async (file, tierId) => {
+    const fileValid =
+      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+
+    getImageDimensions(file, ({ width, height }) => {
+      let dimensionsValid = false;
+      if (width >= TIER_IMAGE_DIMENSIONS.width && height >= TIER_IMAGE_DIMENSIONS.height) {
+        dimensionsValid = true;
+      }
+      handleImageError(tierId, fileValid, dimensionsValid);
+    });
+
+    // always show an image preview, so the user is able to remove an incorrect image
+    handleUploadImage(file, tierId);
+  };
+
+  const onDrop = (e, tierId) => {
+    e.preventDefault();
+    const {
+      dataTransfer: { files },
+    } = e;
+    validateFile(files[0], tierId);
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -50,8 +100,19 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
         values.map((tier, i) => {
           // eslint-disable-next-line react/prop-types
           // const checkTier = values.find((valuesTier) => valuesTier.id === tier.id);
-          const image = tier.imageUrl || null;
+          let image = tier.imageUrl || null;
+          if (tier.imageUrl instanceof File) {
+            image = URL.createObjectURL(tier.imageUrl);
+          }
           const description = tier.description || '';
+
+          const imageErrorId = invalidImageIds.find((id) => id === tier.id);
+          let uploadImageContainerClasses = 'upload__image';
+          let errorMessage = false;
+          if (imageErrorId) {
+            uploadImageContainerClasses += ' error-inp';
+            errorMessage = true;
+          }
 
           return (
             <div key={tier.id} className="customize__auction__tier">
@@ -114,45 +175,50 @@ const RewardTiersAuction = ({ values, onChange, editButtonClick }) => {
                     <p className="warning-text">You have reached the max amount of symbols</p>
                   )}
                 </div>
-                <div className="upload__image">
+                <div className={uploadImageContainerClasses}>
                   <h4>Upload tier image (optional)</h4>
-                  <div className="upload__image__div">
-                    <div className="upload__image__description">
-                      <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
-                      <h5>Drop your file here</h5>
-                      <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
-                      <Button
-                        className="light-border-button"
-                        onClick={() => elRefs[i].current.click()}
-                      >
-                        Choose file
-                      </Button>
-                      <input
-                        type="file"
-                        className="inp-disable"
-                        ref={elRefs[i]}
-                        onChange={(e) => handleUploadImage(e, tier.id)}
-                      />
-                    </div>
-                    <div className="upload__image__preview">
-                      <h6>Preview</h6>
-                      <div className="preview-div">
-                        {image ? (
-                          <img
-                            src={URL.createObjectURL(image)}
-                            className="preview__image"
-                            alt="Platinum"
-                          />
-                        ) : (
-                          <img
-                            className="default__upload__image"
-                            src={defaultImage}
-                            alt="default"
-                          />
-                        )}
+                  <div
+                    className="dropzone"
+                    onDrop={(e) => onDrop(e, tier.id)}
+                    onDragOver={(e) => onDragOver(e)}
+                  >
+                    <div className="upload__image__div">
+                      <div className="upload__image__description">
+                        <img className="cloud__icon" src={cloudIcon} alt="Cloud" />
+                        <h5>Drop your file here</h5>
+                        <p>(min 800x800px, PNG/JPEG, max 3mb)</p>
+                        <Button
+                          className="light-border-button"
+                          onClick={() => elRefs[i].current.click()}
+                        >
+                          Choose file
+                        </Button>
+                        <input
+                          type="file"
+                          className="inp-disable"
+                          ref={elRefs[i]}
+                          onChange={(e) => validateFile(e.target.files[0], tier.id)}
+                        />
+                      </div>
+                      <div className="upload__image__preview">
+                        <h6>Preview</h6>
+                        <div className="preview-div">
+                          {image ? (
+                            <img src={image} className="preview__image" alt="Platinum" />
+                          ) : (
+                            <img
+                              className="default__upload__image"
+                              src={defaultImage}
+                              alt="default"
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
+                  {errorMessage && (
+                    <p className="error-message">{auctionPageTierImageErrorMessage}</p>
+                  )}
                 </div>
               </div>
             </div>

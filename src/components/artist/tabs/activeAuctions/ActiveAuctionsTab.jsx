@@ -1,28 +1,26 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { PLACEHOLDER_ACTIVE_AUCTIONS } from '../../../../utils/fixtures/ActiveAuctionsDummyData';
+import { PLACEHOLDER_AUCTIONS } from '../../../../utils/fixtures/AuctionsDummyData';
 import bubleIcon from '../../../../assets/images/text-bubble.png';
 import Exclamation from '../../../../assets/images/Exclamation.svg';
-import ActiveAuctionsCard from '../../../auctionsCard/ActiveAuctionsCard.jsx';
 import { useAuctionContext } from '../../../../contexts/AuctionContext';
 import { useAuthContext } from '../../../../contexts/AuthContext';
+import { isAfterNow, isBeforeNow } from '../../../../utils/dates';
+import ActiveAuctionsList from '../../../auctionsCard/activeAuction/ActiveAuctionsList';
 
 const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
-  const { myAuctions } = useAuctionContext();
+  const { myAuctions, setAuction } = useAuctionContext();
   const { loggedInArtist } = useAuthContext();
   const history = useHistory();
 
   const artistActiveAuctions =
     loggedInArtist.id === onArtist?.id
-      ? myAuctions.filter((item) => item.launch && !moment(item.endDate).isBefore(moment.now()))
-      : PLACEHOLDER_ACTIVE_AUCTIONS;
+      ? myAuctions.filter((item) => isAfterNow(item.startDate) && isBeforeNow(item.endDate))
+      : PLACEHOLDER_AUCTIONS;
 
   return artistActiveAuctions.length ? (
-    <>
-      <ActiveAuctionsCard data={artistActiveAuctions} />
-    </>
+    <ActiveAuctionsList data={artistActiveAuctions} />
   ) : showCreatePrompt ? (
     <div className="empty__auction">
       <img src={bubleIcon} alt="Buble" />
@@ -44,9 +42,10 @@ const ActiveAuctionsTab = ({ onArtist, showCreatePrompt }) => {
       <button
         type="button"
         className="light-button set_up"
-        onClick={() =>
-          loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction')
-        }
+        onClick={() => {
+          setAuction({ rewardTiers: [] });
+          return loggedInArtist.name && loggedInArtist.avatar && history.push('/setup-auction');
+        }}
         disabled={!loggedInArtist.name || !loggedInArtist.avatar}
       >
         Set up auction

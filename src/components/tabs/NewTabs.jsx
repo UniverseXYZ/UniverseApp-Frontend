@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useHistory, Switch, Redirect, Route } from 'react-router-dom';
 import './NewTabs.scss';
@@ -14,6 +14,7 @@ import arrowWhiteMobile from '../../assets/images/arrow-tabs/arrow-white-mobile.
 import arrowHoverDesktop from '../../assets/images/arrow-tabs/arrow-hover-desktop.png';
 import arrowHoverTablet from '../../assets/images/arrow-tabs/arrow-hover-tablet.png';
 import arrowHoverMobile from '../../assets/images/arrow-tabs/arrow-hover-mobile.png';
+import { useAuctionContext } from '../../contexts/AuctionContext';
 
 const NewTabs = (props) => {
   const { tabData } = props;
@@ -25,11 +26,52 @@ const NewTabs = (props) => {
   const [mobile, setMobile] = useState(false);
   const [tablet, setTablet] = useState(false);
   const [hover, setHover] = useState(-1);
+  const { auction, setAuction } = useAuctionContext();
 
   useEffect(() => {
     const routes = tabData.map((elem) => elem.route);
+
     setRoutesArray(routes.splice(0, routes.indexOf(pathname) + 1));
   }, [pathname]);
+
+  useEffect(() => {
+    if (auction.id >= 0) {
+      // if we are Editing Prepare RewardTiers nftSlots property here
+      const tiers = auction.rewardTiers;
+      if (tiers) {
+        tiers.forEach((tier) => {
+          // Enter the check if we haven't been here already
+          if (tier.nftSlots) return;
+          const winnersData = [];
+
+          const nFTsBySlotIndexObject = tier.nfts.reduce((res, curr) => {
+            if (!res[curr.slot]) res[curr.slot] = [];
+            res[curr.slot].push(curr);
+            return res;
+          }, {});
+
+          Object.keys(nFTsBySlotIndexObject).forEach((key, index) => {
+            const slotNFTs = nFTsBySlotIndexObject[key];
+
+            const nftIds = slotNFTs.map((data) => data.id);
+
+            winnersData[index] = { slot: index, nftsData: slotNFTs, nftIds };
+          });
+
+          // Update the Auction object
+          const auctionCopy = { ...auction };
+          // Mutate the edited tear
+          auctionCopy?.rewardTiers?.forEach((t) => {
+            if (t.id === tier.id) {
+              t.nftSlots = winnersData;
+            }
+          });
+          // Update the auction
+          setAuction(auctionCopy);
+        });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (Number(window.innerWidth) <= 768) setMobile(true);
@@ -50,7 +92,7 @@ const NewTabs = (props) => {
                 const className =
                   pathname === route
                     ? 'active'
-                    : routesArray.includes(route)
+                    : routesArray.includes(route) || location.state === 'edit'
                     ? 'verification--step--tab'
                     : 'disabled';
                 const arrowBlack = mobile
@@ -89,7 +131,10 @@ const NewTabs = (props) => {
                     aria-hidden="true"
                     onClick={() => {
                       if (className !== 'disabled') {
-                        history.push(route);
+                        history.push({
+                          pathname: route,
+                          state: location.state === 'edit' ? location.state : true,
+                        });
                       }
                     }}
                     key={index.toString()}

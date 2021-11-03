@@ -6,13 +6,24 @@
 .past-auctions {
   .auction {
     position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background: rgba(0, 0, 0, 0.02);
-    box-sizing: border-box;
+    background: linear-gradient(0deg, #ffffff, #ffffff);
+    box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
     border-radius: 10px;
+    box-sizing: border-box;
     padding: 34px 30px;
     margin-bottom: 24px;
     cursor: default;
+    .past-left-border-effect {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      width: 9px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 0px 9px 9px 0px;
+      transform: matrix(-1, 0, 0, 1, 0, 0);
+    }
     .left-border-effect {
       position: absolute;
       left: 0;
@@ -45,11 +56,14 @@
     h3 {
       font-family: $sharpGroteskMediumFont;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 20px;
       font-style: normal;
       line-height: 130%;
       letter-spacing: 0.2px;
       color: $black;
+      @include md {
+        font-size: 16px;
+      }
     }
 
     .auction-header-button {
@@ -77,6 +91,7 @@
     .launch-auction {
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       button {
         &.hide__on__mobile {
@@ -101,11 +116,50 @@
         }
       }
       .arrow {
+        position: relative;
         padding: 11px;
         border-radius: 12px;
-        margin-left: 5px;
+        margin-left: 14px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+
+        .tooltiptext {
+          visibility: hidden;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          width: 82px;
+          background-color: $black;
+          color: $white;
+          text-align: center;
+          border-radius: 100px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          top: -41px;
+          right: -21px;
+          &::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: black transparent transparent transparent;
+            @include md {
+              left: 86%;
+            }
+          }
+          @include md {
+            right: -5px;
+          }
+        }
         &:hover {
           background: rgba(0, 0, 0, 0.05);
+          .tooltiptext {
+            visibility: visible;
+          }
         }
       }
       img {
@@ -123,10 +177,11 @@
 
     .total-dates {
       background: rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
+      border-radius: 100px;
       padding: 6px 16px;
       margin-right: 12px;
 
+      span,
       p {
         display: flex;
         position: relative;
@@ -196,7 +251,7 @@
     .show__on__mobile {
       display: none;
       width: 100%;
-      margin-top: 20px;
+      margin-bottom: 20px;
       button {
         width: 100%;
       }
@@ -454,7 +509,6 @@
 
   .auctions-tier {
     width: 100%;
-
     .tier {
       margin-bottom: 12px;
       border: 1px solid rgba(0, 0, 0, 0.1);
@@ -519,7 +573,26 @@
             width: 87px;
             height: 87px;
             padding: 6px;
-
+            .amount-of-editions {
+              position: absolute;
+              right: 10px;
+              top: 10px;
+              background: rgba(0, 0, 0, 0.8);
+              backdrop-filter: blur(2px);
+              border-radius: 3px;
+              padding: 0 5px;
+              > p {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 10px;
+                line-height: 150%;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: $white;
+              }
+            }
             img {
               z-index: 9999;
               min-width: 100%;
@@ -578,9 +651,9 @@
   }
 
   .input-search {
-    position: absolute;
-    top: 0;
-    right: 0;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
     .input--section {
       position: relative;
       img {
@@ -623,7 +696,6 @@
     }
     @include lg {
       position: relative;
-      margin-bottom: 30px;
     }
   }
 
@@ -660,6 +732,7 @@
     }
   }
   .dateError {
+    span,
     p {
       color: #ff4949 !important;
     }
@@ -670,7 +743,6 @@
 .active-auctions,
 .past-auctions {
   .active-auction {
-    padding-bottom: 0;
     position: relative;
     .active-left-border-effect {
       position: absolute;
@@ -733,6 +805,7 @@
         line-height: 18px;
         color: #000000;
         opacity: 0.4;
+        cursor: pointer;
       }
       .copyImg {
         margin-right: 5px;
@@ -783,65 +856,229 @@
     }
   }
   .bid_info {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
     text-align: center;
-    margin: 30px 0 34px 0px;
-
-    .bids.first {
-      margin-right: 2%;
-
-      @include sm {
-        margin-right: 20px;
-      }
-    }
-    .bids {
-      width: 50%;
-
-      div {
-        padding: 15px 0 19px 0;
-        display: flex;
-        flex-direction: column;
-        text-align: justify;
-      }
+    padding: 30px 0 34px;
+    > div {
+      padding: 20px 0 20px 30px;
+      display: flex;
+      flex-direction: column;
+      text-align: justify;
+      gap: 10px;
+      background: $white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 10px;
       .head {
         font-family: $spaceGroteskFont;
         font-style: normal;
-        font-weight: bold;
-        font-size: 14px;
+        font-weight: normal;
+        font-size: 10px;
         line-height: 22px;
+        display: flex;
         align-items: center;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: rgba(0, 0, 0, 0.6);
       }
       .value {
         font-family: $spaceGroteskFont;
         font-style: normal;
         font-weight: normal;
-        font-size: 16px;
-        line-height: 160%;
+        font-size: 20px;
+        line-height: 26px;
         display: flex;
         align-items: center;
         flex-wrap: wrap;
+        gap: 4px;
         position: relative;
+        @include sm {
+          font-size: 16px;
+        }
 
         .dollar-val {
-          padding-left: 5px;
-          opacity: 0.4;
-          color: #000;
-          @include sm {
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 15px;
+          display: flex;
+          align-items: center;
+          color: rgba(0, 0, 0, 0.4);
+        }
+      }
+      @include md {
+        padding: 14px;
+      }
+    }
+    @include md {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .funds-and-balance {
+    padding-bottom: 30px;
+    > div {
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 40px 60px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      background: linear-gradient(#fffcfd, #fffcfd) padding-box,
+        linear-gradient(
+            135deg,
+            rgba(42, 208, 202, 1),
+            rgba(225, 246, 100, 1),
+            rgba(254, 176, 254, 1),
+            rgba(171, 179, 252, 1),
+            rgba(93, 247, 164, 1),
+            rgba(88, 196, 246, 1)
+          )
+          border-box;
+      .available-balance {
+        padding-left: 60px;
+        @include sm {
+          padding-left: 0;
+        }
+      }
+      .unreleased-funds {
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        padding-right: 60px;
+        @include sm {
+          border-right: none;
+          padding-right: 0;
+        }
+      }
+      .unreleased-funds,
+      .available-balance {
+        .head {
+          position: relative;
+          margin-bottom: 10px;
+          display: flex;
+          gap: 7px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 10px;
+          line-height: 160%;
+          display: flex;
+          align-items: center;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(0, 0, 0, 0.6);
+          .info-text1 {
             position: absolute;
-            bottom: -25px;
-            left: 20px;
+            bottom: 25px;
+            width: 253px;
+            min-height: 106px;
+            padding: 16px;
+            background: $white;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            z-index: 10;
+            text-transform: none;
+            display: flex;
+            align-items: center;
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 150%;
+              color: #000000;
+            }
+          }
+          .info-text2 {
+            position: absolute;
+            bottom: 25px;
+            width: 195px;
+            left: 30px;
+            min-height: 72px;
+            padding: 16px;
+            background: $white;
+            box-shadow: 0px 10px 20px rgba(136, 120, 172, 0.2);
+            border-radius: 12px;
+            z-index: 10;
+            text-transform: none;
+            display: flex;
+            align-items: center;
+            p {
+              font-family: $spaceGroteskFont;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 150%;
+              color: #000000;
+            }
+          }
+        }
+        .balance-body {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          .value-section {
+            display: flex;
+            align-items: center;
+            > img {
+              margin-right: 6px;
+              width: 28px;
+              height: 28px;
+            }
+            .value {
+              display: grid;
+              grid-template-columns: auto auto;
+              font-family: $spaceGroteskFont;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 24px;
+              line-height: 31px;
+              color: #1a1a1a;
+              .dollar-val {
+                font-family: $spaceGroteskFont;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 18px;
+                display: flex;
+                align-items: center;
+                color: rgba(0, 0, 0, 0.4);
+                flex: none;
+                order: 1;
+                flex-grow: 0;
+                margin: 0px 4px;
+              }
+              @include sm {
+                grid-template-columns: 1fr;
+                font-size: 20px;
+              }
+            }
+          }
+          > button {
+            @include sm {
+              width: 100%;
+            }
           }
         }
       }
-      img {
-        margin-right: 5px;
+      @include md {
+        padding: 30px;
       }
-      .boredred-div {
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
-        @include sm {
-          height: 120px;
+      @include sm {
+        grid-template-columns: 1fr;
+        grid-gap: 30px;
+      }
+    }
+  }
+  .empty-section {
+    .empty__auction {
+      margin: 0;
+      padding: 30px 0 60px;
+      > button {
+        > img {
+          display: none;
         }
       }
     }

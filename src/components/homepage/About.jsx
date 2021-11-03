@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
-import axios from 'axios';
 import { AnimatedOnScroll } from 'react-animated-css-onscroll';
 import { useHistory } from 'react-router-dom';
 import Lottie from 'react-lottie';
@@ -21,36 +20,19 @@ import squareFive from '../../assets/images/square5.png';
 import squareSix from '../../assets/images/square6.png';
 import squareSeven from '../../assets/images/square7.png';
 import arrowLeft from '../../assets/images/arrow-black.svg';
+import { handleMailSubscribe } from '../../utils/api/mailSubscribe';
 
 const About = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
 
-  const handleSubscribe = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(String(email).toLowerCase())) {
-      const config = {
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        params: {
-          email,
-        },
-      };
-      axios
-        .get('https://shielded-sands-48363.herokuapp.com/addContact', config)
-        .then((response) => {
-          if (response.status === 200) {
-            setEmail('');
-            document.getElementById('sub-hidden-btn').click();
-          } else {
-            alert('OOPS! Something went wrong.');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const handleSubscribe = async () => {
+    const response = await handleMailSubscribe(email);
+    if (response?.status === 200) {
+      setEmail('');
+      document.getElementById('sub-hidden-btn').click();
     } else {
-      alert('Email address is invalid.');
+      alert(response);
     }
   };
 
@@ -170,13 +152,13 @@ const About = () => {
                 more. Collections can also hold sub-collections in them. This allows for the
                 creation of additional NFTs such as layers of art, shows, merchandise, music. etc.
                 that can evolve over time under one umbrella community structure. <br />
-                <div>
+                <span>
                   In this way the Universe Protocol allows content to grow over time with community
                   input, yet retain programmatic links back to its origins and the original
                   creators. <br />
                   <br /> In future build outs we hope to enable the ability to turn collections into
                   mini DAOs along with an integrated social network.
-                </div>
+                </span>
               </p>
               <Button
                 className="light-button"
@@ -200,20 +182,19 @@ const About = () => {
                 existing NFTs or mint new collections and create a multi-tier auction with multiple
                 winners. At its simplest, you can set up a single tier reserve price english auction
                 that is well known.
-                <div>
+                <span>
                   There will be <b>ZERO FEES</b> for initial auctions, with all revenue going to the
                   creator - we are here to empower artists at our core. However, the xyzDAO will
                   take a 2% fee on every resale on the Universe platform to support continued
                   innovation.
-                </div>
+                </span>
               </p>
               <Button
                 className="light-button"
-                disabled
-                // onClick={() => history.push('/my-auctions')}
+                onClick={() => history.push('/my-auctions')}
                 style={{ marginBottom: '60px' }}
               >
-                Coming soon
+                Go to auctions
                 <img src={arrowLeft} alt="arrow-back" />
               </Button>
             </AnimatedOnScroll>

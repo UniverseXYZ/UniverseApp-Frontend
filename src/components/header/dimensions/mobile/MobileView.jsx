@@ -58,7 +58,7 @@ import img from '../../../../assets/images/search-gray.svg';
 import img2 from '../../../../assets/images/crossclose.svg';
 import mp3Icon from '../../../../assets/images/mp3-icon.png';
 import audioIcon from '../../../../assets/images/marketplace/audio-icon.svg';
-import { defaultColors, handleClickOutside } from '../../../../utils/helpers';
+import { defaultColors, handleClickOutside, whitepaperUrl } from '../../../../utils/helpers';
 import {
   toFixed,
   shortenEnsDomain,
@@ -511,7 +511,7 @@ const MobileView = (props) => {
                     <img src={myNFTsIcon} alt="My NFTs" />
                     My NFTs
                   </button>
-                  {/* <button
+                  <button
                     type="button"
                     onClick={() => {
                       history.push('/my-auctions');
@@ -520,7 +520,7 @@ const MobileView = (props) => {
                   >
                     <img src={auctionHouseIcon} alt="My Auctions" />
                     My auctions
-                  </button> */}
+                  </button>
                   <button
                     type="button"
                     className="signOut"
@@ -578,7 +578,7 @@ const MobileView = (props) => {
                               className="disable"
                               onClick={() => {
                                 // setShowMenu(false);
-                                // history.push('/minting-and-auctions/marketplace/active-auctions');
+                                // history.push('/products/auction-house');
                               }}
                             >
                               <img src={auctionHouseIcon} alt="Auction House" />
@@ -729,12 +729,7 @@ const MobileView = (props) => {
                             </button>
                           </div>
                           <div>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                window.open('https://github.com/UniverseXYZ/UniverseXYZ-Whitepaper')
-                              }
-                            >
+                            <button type="button" onClick={() => window.open(whitepaperUrl)}>
                               <img src={whitepaperIcon} alt="Whitepaper" />
                               Whitepaper
                             </button>
