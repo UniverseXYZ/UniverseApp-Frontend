@@ -362,6 +362,9 @@
           img {
             margin-right: 8px;
           }
+          span:not(.tooltiptext) {
+            color: $black;
+          }
         }
         @include lg {
           grid-row-gap: 40px;
