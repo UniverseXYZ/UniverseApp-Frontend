@@ -120,7 +120,7 @@ const MyAuction = () => {
           </div>
         </div>
       </div>
-
+      <div className="container">
         {selectedTabIndex === tabs.MyBids && <MyBidsList />}
 
         {selectedTabIndex === tabs.ActiveAuctions && <ActiveAuctions />}

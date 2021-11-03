@@ -21,7 +21,7 @@
 
     button.set_up {
       display: flex;
-      img{
+      img {
         width: 16px;
         height: 16px;
         margin-left: 12px;
@@ -31,8 +31,8 @@
         margin-top: 30px;
         width: 100%;
       }
-      &:disabled{
-        img{
+      &:disabled {
+        img {
           opacity: 0.2;
         }
       }
@@ -233,32 +233,33 @@
           color: $black;
           border-bottom: 1px solid $black;
         }
-        .notification-circle{
+        .notification-circle {
           position: absolute;
           width: 9px;
           height: 9px;
-          background: linear-gradient(135deg, #BCEB00 15.57%, #00EAEA 84.88%);border-radius: 50%;
+          background: linear-gradient(135deg, #bceb00 15.57%, #00eaea 84.88%);
+          border-radius: 50%;
           margin: 0px 4px;
         }
       }
     }
   }
-  .auction-head::before{
+  .auction-head::before {
     content: "";
     position: absolute;
     width: 100%;
     height: 100%;
     display: block;
     z-index: -1;
-    background-image: url('../../assets/images/auctions-bg.png');
-    background-repeat: no-repeat!important;
-    background-position: center!important;
-    background-size: cover!important;
-    @include md{
-      background: url('../../assets//images/auction-tablet-bg.png');
+    background-image: url("../../assets/images/auctions-bg.png");
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: cover !important;
+    @include md {
+      background: url("../../assets//images/auction-tablet-bg.png");
     }
-    @include sm{
-      background: url('../../assets//images/auction-mobile-bg.png');
+    @include sm {
+      background: url("../../assets//images/auction-mobile-bg.png");
     }
   }
 }

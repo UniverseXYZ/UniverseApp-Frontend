@@ -651,9 +651,9 @@
   }
 
   .input-search {
-      // position: absolute;
-      // top: 0;
-      // right: 0;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
     .input--section {
       position: relative;
       img {
@@ -696,7 +696,6 @@
     }
     @include lg {
       position: relative;
-      margin-bottom: 30px;
     }
   }
 
