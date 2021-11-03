@@ -17,6 +17,7 @@ import NoAuctionsFound from './NoAuctionsFound';
 import Button from '../button/Button';
 import infoIcon from '../../assets/images/icon.svg';
 import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
+import SortBySelect from '../input/SortBySelect';
 
 const PastAuctions = () => {
   const { ethPrice } = useAuthContext();
@@ -63,17 +64,25 @@ const PastAuctions = () => {
 
   return (
     <div className="past-auctions">
-      <div className="input-search">
-        <div className="input--section">
-          <Input
-            className="searchInp"
-            onChange={(e) => handleSearch(e.target.value)}
-            value={searchByName}
-            placeholder="Search"
-            hoverBoxShadowGradient
-          />
-          <img src={searchIcon} alt="search" />
+      <div className="search-sort-section">
+        <div className="input-search">
+          <div className="input--section">
+            <Input
+              className="searchInp"
+              onChange={(e) => handleSearch(e.target.value)}
+              value={searchByName}
+              placeholder="Search by name"
+              hoverBoxShadowGradient
+            />
+            <img src={searchIcon} alt="search" />
+          </div>
         </div>
+        <SortBySelect
+          id="sort--select"
+          defaultValue="Sort by"
+          sortData={['Sort by', 'Newest', 'Oldest']}
+          hideFirstOption
+        />
       </div>
       {!loading ? (
         pastAuctions

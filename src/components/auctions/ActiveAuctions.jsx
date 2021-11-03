@@ -11,6 +11,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import NoAuctionsFound from './NoAuctionsFound';
 import { getActiveAuctions } from '../../utils/api/auctions';
 import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
+import SortBySelect from '../input/SortBySelect';
 
 const ActiveAuctions = () => {
   const [notFound, setNotFound] = useState(false);
@@ -101,17 +102,25 @@ const ActiveAuctions = () => {
 
   return (
     <div className="active-auctions">
-      <div className="input-search">
-        <div className="input--section">
-          <Input
-            className="searchInp"
-            onChange={(e) => handleSearch(e.target.value)}
-            value={searchByName}
-            placeholder="Search by name"
-            hoverBoxShadowGradient
-          />
-          <img src={searchIconGray} alt="search" />
+      <div className="search-sort-section">
+        <div className="input-search">
+          <div className="input--section">
+            <Input
+              className="searchInp"
+              onChange={(e) => handleSearch(e.target.value)}
+              value={searchByName}
+              placeholder="Search by name"
+              hoverBoxShadowGradient
+            />
+            <img src={searchIconGray} alt="search" />
+          </div>
         </div>
+        <SortBySelect
+          id="sort--select"
+          defaultValue="Sort by"
+          sortData={['Sort by', 'Newest', 'Oldest']}
+          hideFirstOption
+        />
       </div>
       {!loading ? (
         <DragDropContext onDragEnd={onDragEnd}>

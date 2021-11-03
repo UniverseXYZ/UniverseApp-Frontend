@@ -20,6 +20,7 @@ import FutureCardSkeleton from './skeleton/FutureCardSkeleton';
 import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
 import { getFutureAuctions } from '../../utils/api/auctions';
 import NoAuctionsFound from './NoAuctionsFound';
+import SortBySelect from '../input/SortBySelect';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
@@ -76,17 +77,25 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 
   return (
     <div className="future-auctions">
-      <div className="input-search">
-        <div className="input--section">
-          <Input
-            className="searchInp"
-            onChange={(e) => handleSearch(e.target.value)}
-            value={searchByName}
-            placeholder="Search by name"
-            hoverBoxShadowGradient
-          />
-          <img src={searchIconGray} alt="search" />
+      <div className="search-sort-section">
+        <div className="input-search">
+          <div className="input--section">
+            <Input
+              className="searchInp"
+              onChange={(e) => handleSearch(e.target.value)}
+              value={searchByName}
+              placeholder="Search by name"
+              hoverBoxShadowGradient
+            />
+            <img src={searchIconGray} alt="search" />
+          </div>
         </div>
+        <SortBySelect
+          id="sort--select"
+          defaultValue="Sort by"
+          sortData={['Sort by', 'Newest', 'Oldest']}
+          hideFirstOption
+        />
       </div>
       {!loading ? (
         myAuctions
