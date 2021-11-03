@@ -129,9 +129,15 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   >
                     <div className="arrow">
                       {shownActionId === futureAuction.id ? (
-                        <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
+                        <>
+                          <span className="tooltiptext">Show less</span>
+                          <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
+                        </>
                       ) : (
-                        <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
+                        <>
+                          <span className="tooltiptext">Show more</span>
+                          <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
+                        </>
                       )}
                     </div>
                   </div>
@@ -400,7 +406,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                               <div className="tier-image-second" />
                               <div className="tier-image-first" />
                               <div className="tier-image-main">
-                                <img src={nft?.thumbnail_url} alt={nft.name} />
+                                <div className="amount-of-editions">
+                                  <p>{nft?.numberOfEditions}</p>
+                                </div>
+                                <img src={nft?.thumbnail_url} alt={nft?.name} />
                               </div>
                             </div>
                           ))}
