@@ -42,21 +42,6 @@ const ActiveAuctions = () => {
     }
   }, []);
 
-  useEffect(async () => {
-    try {
-      const response = await getActiveAuctions();
-      if (!response.auctions?.length) {
-        setNotFound(true);
-        setLoading(false);
-      } else {
-        setActiveAuctions(response.auctions);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
   const handleSearch = (value) => {
     setSearchByName(value);
   };
@@ -79,26 +64,9 @@ const ActiveAuctions = () => {
     setActiveAuctions(newAuctions);
   };
 
-  const getTotalNFTSperAuction = (auction) => {
-    let nftsCount = 0;
-    auction?.rewardTiers?.forEach((tier) => {
-      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
-    });
-    return nftsCount;
-  };
-
   useEffect(() => {
     window['__react-beautiful-dnd-disable-dev-warnings'] = true;
   }, []);
-
-  const handleAuctionExpand = (name) => {
-    const canExpandAuction = !name || name !== shownActionId;
-    if (canExpandAuction) {
-      setShownActionId(name);
-    } else {
-      setShownActionId(null);
-    }
-  };
 
   return (
     <div className="active-auctions">
