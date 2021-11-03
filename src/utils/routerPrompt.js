@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import PopupComponent from '../components/popups/Popup';
 
-export function RouterPrompt({ when, onOK, editing }) {
+export function RouterPrompt({ when, onOK, editing, handleSaveForLater }) {
   const history = useHistory();
 
   const [currentPath, setCurrentPath] = useState('');
@@ -42,11 +42,16 @@ export function RouterPrompt({ when, onOK, editing }) {
     }
   }, [currentPath, history, onOK]);
 
-  return <PopupComponent onClose={handleOK} />;
+  return <PopupComponent onClose={handleOK} handleSaveForLater={handleSaveForLater} />;
 }
 
 RouterPrompt.propTypes = {
   when: PropTypes.bool.isRequired,
   onOK: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired,
+  handleSaveForLater: PropTypes.func,
+};
+
+RouterPrompt.defaultProps = {
+  handleSaveForLater: () => {},
 };

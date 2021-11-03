@@ -5,7 +5,7 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import './PopupStyle.scss';
 
-const PopupComponent = ({ onClose }) => (
+const PopupComponent = ({ onClose, handleSaveForLater }) => (
   <Popup
     trigger={
       <button type="button" className="modal-close" id="show-popup" style={{ display: 'none' }}>
@@ -32,8 +32,14 @@ const PopupComponent = ({ onClose }) => (
           <Button onClick={onClose} className="light-button">
             Discard and close
           </Button>
-          <Button className="light-border-button" onClick={close}>
-            Continue editing
+          <Button
+            className="light-border-button"
+            onClick={() => {
+              close();
+              handleSaveForLater();
+            }}
+          >
+            Save for later
           </Button>
         </div>
       </div>
@@ -43,6 +49,11 @@ const PopupComponent = ({ onClose }) => (
 
 PopupComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
+  handleSaveForLater: PropTypes.func,
+};
+
+PopupComponent.defaultProps = {
+  handleSaveForLater: () => {},
 };
 
 export default PopupComponent;
