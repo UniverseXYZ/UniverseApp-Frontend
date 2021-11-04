@@ -76,70 +76,6 @@
       top: 180px;
     }
   }
-  // .horizontal--scroll--parent {
-  //     width: 100%;
-  //     height: 20vw;
-  //     position: relative;
-  //     @include sm {
-  //         overflow: hidden;
-  //         height: 40vw;
-  //     }
-  //     .horizontal--scroll--child {
-  //         width: 20vw !important;
-  //         transform: rotate(-90deg);
-  //         position: absolute;
-  //         left: 0;
-  //         right: 0;
-  //         top: 0;
-  //         bottom: 0;
-  //         margin: auto;
-  //         overflow-y: scroll;
-  //         @include xl {
-  //             width: 350px !important;
-  //         }
-  //         @include sm {
-  //             width: 35vw !important;
-  //         }
-  //         .child--scroll {
-  //             transform: rotate(90deg);
-  //             height: 20vw;
-  //             width: 20vw;
-  //             position: relative;
-  //             @include xl {
-  //                 height: 350px;
-  //                 width: 350px;
-  //             }
-  //             @include lg {
-  //                 height: 34vw;
-  //                 width: 34vw;
-  //             }
-  //             p {
-  //                 position: absolute;
-  //                 bottom: 0;
-  //                 text-align: center;
-  //                 width: 100%;
-  //                 text-align: center;
-  //                 font-family:$spaceGroteskFont;
-  //                 font-style: normal;
-  //                 font-weight: 600;
-  //                 font-size: 14px;
-  //                 line-height: 140%;
-  //                 color: $black;
-  //                 @include sm {
-  //                     font-size: 12px;
-  //                 }
-  //             }
-  //         }
-  //     }
-  //     .horizontal--scroll--child::-webkit-scrollbar {
-  //         display: none;
-  //         width: 0;
-  //         height: 0;
-  //     }
-  //     .horizontal--scroll--child::-moz-scrollbar {
-  //         display: none;
-  //     }
-  // }
   .horizontall--slider {
     display: flex;
     flex-wrap: nowrap;
@@ -160,15 +96,6 @@
         font-size: 14px;
         line-height: 140%;
         color: $black;
-        // @include xl {
-        //     width: 350px !important;
-        // }
-        // @include lg {
-        //     width: 34vw !important;
-        // }
-        // @include sm {
-        //     font-size: 12px !important;
-        // }
       }
       img {
         max-width: 20vw;
