@@ -23,14 +23,22 @@ const MintingPage = () => {
     if (!isAuthenticated && !isWalletConnected) {
       setShowNotAuthenticatedPopup(true);
     } else {
-      history.push('/my-nfts/create', { tabIndex: 1, nftType: 'single' });
+      history.push('/my-nfts/create', {
+        tabIndex: 1,
+        nftType: 'single',
+        backPath: 'minting',
+      });
     }
   };
   const collectionBoxHandleClick = () => {
     if (!isAuthenticated || !isWalletConnected) {
       setShowNotAuthenticatedPopup(true);
     } else {
-      history.push('/my-nfts/create', { tabIndex: 1, nftType: 'collection' });
+      history.push('/my-nfts/create', {
+        tabIndex: 1,
+        nftType: 'collection',
+        backPath: 'minting',
+      });
     }
   };
 
