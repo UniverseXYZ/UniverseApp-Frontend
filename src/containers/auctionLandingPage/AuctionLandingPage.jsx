@@ -22,6 +22,7 @@ import { LandingPageLoader } from '../../components/auctionLandingPage/LandingPa
 
 const AuctionLandingPage = () => {
   const locationState = useLocation().state;
+  const { universeAuctionHouseContract } = useAuthContext();
   // TODO: Disable bidding buttons until the auction is started or is canceled
   const { artistUsername, auctionName } = useParams();
   const { address } = useAuthContext();
@@ -35,7 +36,7 @@ const AuctionLandingPage = () => {
   const [currentBid, setCurrentBid] = useState(null);
   const [isWinningBid, setIsWinningBid] = useState(false);
   const [winningSlot, setWinningSlot] = useState(-1);
-
+  const [slotsInfo, setSlotsInfo] = useState([]);
   useEffect(() => {
     if (bidders) {
       const currBidder = bidders.find((bidder) => bidder.user.address === address);
@@ -58,15 +59,14 @@ const AuctionLandingPage = () => {
   }, [bidders, address, rewardTiersSlots]);
 
   const getAuctionData = async () => {
-    const auctionInfo =
-      locationState?.auction || (await getAuctionLandingPage(artistUsername, auctionName));
+    const auctionInfo = await getAuctionLandingPage(artistUsername, auctionName);
     if (!auctionInfo.error) {
       console.log(auctionInfo);
 
       const tierSlots = [];
       auctionInfo.rewardTiers.forEach((rewardTiers) => {
         for (let i = 0; i < rewardTiers.numberOfWinners; i += 1) {
-          tierSlots.push(rewardTiers);
+          tierSlots.push({ ...rewardTiers, winner: auctionInfo.bidders[i]?.user?.address });
         }
       });
       setBidders(auctionInfo.bidders);
@@ -87,6 +87,27 @@ const AuctionLandingPage = () => {
     getAuctionData();
     getEthPrice();
   }, [artistUsername, auctionName]);
+  const getAuctionSlotsInfo = async () => {
+    if (universeAuctionHouseContract && auction) {
+      // TODO: query smart contract to check for captured slots
+      const onChainAuction = await universeAuctionHouseContract.auctions(auction.auction.onChainId);
+
+      const auctionSlotsInfo = {};
+      for (let i = 1; i <= onChainAuction.numberOfSlots; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const slotInfo = await universeAuctionHouseContract.getSlotInfo(
+          auction.auction.onChainId,
+          i
+        );
+        console.log(slotInfo);
+        auctionSlotsInfo[i] = slotInfo;
+      }
+      setSlotsInfo(auctionSlotsInfo);
+    }
+  };
+  useEffect(() => {
+    getAuctionSlotsInfo();
+  }, [universeAuctionHouseContract, auction]);
 
   return auction ? (
     <div className="auction__landing__page">
@@ -102,6 +123,8 @@ const AuctionLandingPage = () => {
         loading={loading}
         isWinningBid={isWinningBid}
         winningSlot={rewardTiersSlots[winningSlot]}
+        slotsInfo={slotsInfo}
+        setShowLoading={setShowLoading}
       />
       <UniverseAuctionDetails />
       <RewardTiers auction={auction} />

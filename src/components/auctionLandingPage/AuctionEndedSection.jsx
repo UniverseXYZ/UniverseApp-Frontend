@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
-import { utils } from 'ethers';
-import Popup from 'reactjs-popup';
+import { utils, BigNumber } from 'ethers';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Button from '../button/Button';
-import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const AuctionEndedSection = ({
@@ -19,37 +17,68 @@ const AuctionEndedSection = ({
   setShowBidRankings,
   onAuction,
   winningSlot,
+  slotsInfo,
+  setShowLoading,
 }) => {
+  const history = useHistory();
+
   const { address, universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
 
-  const [winning, setWinning] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
+  const [mySlot, setMySlot] = useState(null);
+  const [mySlotIndex, setMySlotIndex] = useState(-1);
+  const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);
+
+  const [claimableFunds, setClaimableFunds] = useState(0);
+  const [unreleasedFunds, setUnreleasedFunds] = useState(0);
 
   useEffect(async () => {
-    if (universeAuctionHouseContract) {
-      const winners = await universeAuctionHouseContract.getTopBidders(
-        onAuction.auction.onChainId,
-        numberOfWinners
-      );
-      const checkSumAddress = utils.getAddress(address);
-      if (winners.indexOf(checkSumAddress) >= 0) {
-        setWinning(true);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+      if (slotInfo.winner === utils.getAddress(address)) {
+        setMySlot(slotInfo);
+        setMySlotIndex(slotIndex);
+        break;
       }
     }
-  }, [universeAuctionHouseContract]);
+  }, [slotsInfo]);
+
+  const getAuctionRevenue = async () => {
+    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
+      const revenue = await universeAuctionHouseContract.auctionsRevenue(
+        onAuction.auction.onChainId
+      );
+
+      const totalBids = Object.values(slotsInfo).reduce(
+        (acc, slot) => acc.add(slot.winningBidAmount),
+        BigNumber.from('0')
+      );
+
+      console.log('available funds to claim:');
+      console.log(utils.formatEther(revenue));
+      setClaimableFunds(utils.formatEther(revenue));
+
+      console.log('unreleased funds:');
+      console.log(utils.formatEther(totalBids.sub(revenue)));
+      setUnreleasedFunds(utils.formatEther(totalBids.sub(revenue)));
+    }
+  };
+
+  useEffect(() => {
+    getAuctionRevenue();
+  }, [universeAuctionHouseContract, slotsInfo]);
 
   const withdrawBid = async () => {
     try {
-      let bidTx = null;
+      let tx = null;
       if (onAuction.auction.tokenSymbol === 'ETH') {
-        bidTx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
+        tx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
       } else {
-        bidTx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
+        tx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
       }
       setShowLoading(true);
-      setActiveTxHashes([bidTx.hash]);
-      const txReceipt = await bidTx.wait();
+      setActiveTxHashes([tx.hash]);
+      const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This is temp until the scraper handles bids
         setShowLoading(false);
@@ -64,8 +93,53 @@ const AuctionEndedSection = ({
     }
   };
 
-  const history = useHistory();
-  return !winning ? (
+  const handleClaimNfts = async () => {
+    try {
+      const tx = await universeAuctionHouseContract.claimERC721Rewards(
+        onAuction.auction.onChainId,
+        +mySlotIndex,
+        mySlot.totalDepositedNfts
+      );
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setShowLoading(false);
+        setActiveTxHashes([]);
+        setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+
+      console.log(err);
+    }
+  };
+
+  const handleClaimFunds = async () => {
+    try {
+      const tx = await universeAuctionHouseContract.distributeCapturedAuctionRevenue(
+        onAuction.auction.onChainId
+      );
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setShowLoading(false);
+        setActiveTxHashes([]);
+        setClaimableFunds(0);
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+
+      console.log(err);
+    }
+  };
+
+  return !mySlot ? (
     <Animated animationIn="zoomIn">
       <div className="ended__result">
         <div className="content">
@@ -86,13 +160,6 @@ const AuctionEndedSection = ({
           </Button>
         </div>
       </div>
-      <Popup open={showLoading} closeOnDocumentClick={false}>
-        <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
-          onClose={() => setShowLoading(false)}
-          contractInteraction
-        />
-      </Popup>
     </Animated>
   ) : (
     <Animated animationIn="zoomIn">
@@ -120,26 +187,48 @@ const AuctionEndedSection = ({
             </p>
           </div>
         </div>
+        <div>Avalable balance: {claimableFunds}</div>
+        <div>Unreleased funds: {unreleasedFunds}</div>
         <div className="footer">
-          <Button
-            className="light-button"
-            onClick={() =>
-              history.push('/release-rewards', {
-                auctionData: onAuction,
-                myBid: currentBid,
-                // view: address === onAuction.artist.address ? 'Auctioneer' : 'Bidder',
-                view: 'Bidder',
-                bidders,
-                rewardTiersSlots,
-                winningSlot,
-              })
-            }
-          >
-            Release rewards
-          </Button>
-          <Button className="light-button" disabled>
-            Claim NFTs
-          </Button>
+          {Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ? (
+            <Button
+              className="light-button"
+              onClick={() =>
+                history.push('/release-rewards', {
+                  auctionData: onAuction,
+                  myBid: currentBid,
+                  view: isAuctionner ? 'Auctioneer' : 'Bidder',
+                  bidders,
+                  rewardTiersSlots,
+                  winningSlot,
+                  slotsInfo,
+                  mySlot,
+                  mySlotIndex,
+                })
+              }
+            >
+              Release rewards
+            </Button>
+          ) : (
+            <></>
+          )}
+          {isAuctionner ? (
+            <Button className="light-button" disabled={!+claimableFunds} onClick={handleClaimFunds}>
+              Claim funds
+            </Button>
+          ) : (
+            <Button
+              className="light-button"
+              disabled={
+                !mySlot ||
+                !mySlot.revenueCaptured ||
+                mySlot.totalDepositedNfts === mySlot.totalWithdrawnNfts
+              }
+              onClick={handleClaimNfts}
+            >
+              Claim NFTs
+            </Button>
+          )}
         </div>
       </div>
     </Animated>
@@ -153,5 +242,7 @@ AuctionEndedSection.propTypes = {
   winningSlot: PropTypes.number.isRequired,
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setShowLoading: PropTypes.func.isRequired,
 };
 export default AuctionEndedSection;
