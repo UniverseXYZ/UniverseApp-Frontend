@@ -82,16 +82,26 @@ const ReleaseRewards = () => {
       if (txReceipt.status === 1) {
         if (singleSlot) {
           const updatedTxs = [...singleCaptureRevenueTxs];
-          updatedTxs[configIndex].slotInfo.revenueCaptured = true;
+          updatedTxs[configIndex].slotInfo = {
+            ...updatedTxs[configIndex].slotInfo,
+            revenueCaptured: true,
+          };
           setSingleCaptureRevenueTxs(updatedTxs);
         } else {
           const updatedBatchTxs = [...batchCaptureRevenueTxs];
           const updatedSingleTxs = [...singleCaptureRevenueTxs];
 
           updatedBatchTxs[configIndex].revenueCaptured = true;
-          captureConfig.slotIndices.forEach((slotIndex) => {
-            updatedSingleTxs[+slotIndex].slotInfo.revenueCaptured = true;
-          });
+          for (
+            let slotIdx = +captureConfig.startSlot;
+            slotIdx <= +captureConfig.endSlot;
+            slotIdx += 1
+          ) {
+            updatedSingleTxs[slotIdx].slotInfo = {
+              ...updatedSingleTxs[slotIdx].slotInfo,
+              revenueCaptured: true,
+            };
+          }
           setSingleCaptureRevenueTxs(updatedSingleTxs);
           setBatchCaptureRevenueTxs(updatedBatchTxs);
         }
