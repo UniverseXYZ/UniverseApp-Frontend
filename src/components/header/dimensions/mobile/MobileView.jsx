@@ -768,7 +768,7 @@ const MobileView = (props) => {
                                 window.open('https://universe.freshdesk.com/support/home')
                               }
                             >
-                              <img src={supportIcon} alt="Support" />
+                              <img src={supportIcon} alt="Support" width="20px" height="15px" />
                               <span>Support</span>
                             </button>
                           </div>
