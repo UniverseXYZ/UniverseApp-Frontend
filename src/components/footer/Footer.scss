@@ -319,14 +319,16 @@ footer {
             justify-content: space-between;
           }
         }
+        @include sm {
+          grid-row: 1;
+        }
       }
       @include md {
         flex-wrap: wrap;
       }
       @include sm {
-        flex-wrap: wrap;
-        flex-direction: column-reverse;
-        align-items: unset;
+        display: grid;
+        grid-template-columns: 1fr;
       }
     }
     @include md {
