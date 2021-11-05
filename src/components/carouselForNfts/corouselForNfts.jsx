@@ -15,7 +15,8 @@ function SampleArrow(props) {
 }
 const settings = {
   dots: true,
-  infinite: false,
+  infinite: true,
+  variableWidth: true,
   slidesToShow: 3,
   slidesToScroll: 1,
   nextArrow: <SampleArrow />,
