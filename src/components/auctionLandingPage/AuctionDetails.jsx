@@ -23,6 +23,8 @@ const AuctionDetails = ({
   setCurrentBid,
   isWinningBid,
   winningSlot,
+  slotsInfo,
+  setShowLoading,
 }) => {
   const history = useHistory();
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
@@ -118,6 +120,8 @@ const AuctionDetails = ({
                 setShowBidRankings={setShowBidRankings}
                 onAuction={onAuction}
                 winningSlot={winningSlot}
+                slotsInfo={slotsInfo}
+                setShowLoading={setShowLoading}
               />
             )}
           </div>
@@ -148,6 +152,8 @@ AuctionDetails.propTypes = {
   setCurrentBid: PropTypes.func.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
   winningSlot: PropTypes.number.isRequired,
+  slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setShowLoading: PropTypes.func.isRequired,
 };
 
 AuctionDetails.defaultProps = {

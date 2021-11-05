@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../button/Button';
-import arrowDown from '../../assets/images/arrow-down.svg';
 import completedCheckmark from '../../assets/images/completedCheckmark.svg';
-import { getRewardTierSpanStyles } from '../../utils/helpers';
+import SingleCaptureRevenueTxs from './SingleCaptureRevenueTxs';
+import Button from '../button/Button';
 
 const AuctioneerView = ({
   auctionData,
@@ -28,26 +27,44 @@ const AuctioneerView = ({
   };
 
   return !showSlots ? (
-    batchCaptureRevenueTxs.map((transaction, txIndex) => (
+    batchCaptureRevenueTxs.map((tx, txIndex) => (
       <div className="transaction">
         <div className="transaction__header">
           <h3>Transaction {txIndex + 1}</h3>
           <div className="transaction__proceed">
             <p className="total">
-              Total NFTs: <b>{transaction.totalNfts}</b>
+              Total NFTs: <b>{tx.totalNfts}</b>
             </p>
-            {transaction.completed ? (
+            {tx.revenueCaptured ? (
               <Button className="light-border-button" disabled>
                 Completed <img src={completedCheckmark} alt="completed" />
               </Button>
             ) : (
-              <Button className="light-button" onClick={() => handleCaptureRevenue(txIndex)}>
+              <Button
+                className="light-button"
+                onClick={() => handleCaptureRevenue(tx, txIndex, false)}
+              >
                 Proceed
               </Button>
             )}
+            <div className="proceed__button__mobile">
+              {tx.revenueCaptured ? (
+                <Button className="light-border-button" disabled>
+                  Completed <img src={completedCheckmark} alt="completed" />
+                </Button>
+              ) : (
+                <Button
+                  className="light-button"
+                  disabled={!auctionData.auction.finalised}
+                  onClick={() => handleCaptureRevenue(tx, txIndex, false)}
+                >
+                  Proceed
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        {transaction.tiers.map((tier) => (
+        {tx.tiers.map((tier) => (
           <div className="transaction__tier">
             <div className="tier__head">
               <h4>{tier.name}</h4>
@@ -69,140 +86,17 @@ const AuctioneerView = ({
             </div>
           </div>
         ))}
-        <div className="proceed__button__mobile">
-          {transaction.completed ? (
-            <Button className="light-border-button" disabled>
-              Completed <img src={completedCheckmark} alt="completed" />
-            </Button>
-          ) : (
-            <Button
-              className="light-button"
-              disabled={!auctionData.auction.finalised}
-              onClick={() => handleCaptureRevenue(txIndex)}
-            >
-              Proceed
-            </Button>
-          )}
-        </div>
       </div>
     ))
   ) : (
-    <div className="slots__list">
-      {singleCaptureRevenueTxs.map((tx, txIndex) => (
-        <div className="slot">
-          <div className="slot__content">
-            <div className="slot__left__part">
-              <div
-                className="dropdown"
-                aria-hidden="true"
-                onClick={() => handleShowSlotNfts(txIndex)}
-              >
-                <img
-                  src={arrowDown}
-                  alt="Arrow"
-                  style={
-                    openSlots.indexOf(txIndex) >= 0
-                      ? { transform: 'rotate(180deg)' }
-                      : { transform: 'rotate(0deg)' }
-                  }
-                />
-              </div>
-              <span>{txIndex + 1}.</span>
-              <p>{tx.bidder.user.displayName || tx.bidder.user.address}</p>
-              <div
-                style={getRewardTierSpanStyles(rewardTiersSlots[txIndex])}
-                className="slot__type"
-              >
-                {rewardTiersSlots[txIndex].name}
-              </div>
-            </div>
-            <div className="slot__right__part">
-              <p>
-                NFTs: <b>{tx.tier.nfts.length}</b>
-              </p>
-              {tx.completed ? (
-                <Button className="light-border-button" disabled>
-                  Completed <img src={completedCheckmark} alt="completed" />
-                </Button>
-              ) : (
-                <Button
-                  className="light-button"
-                  onClick={() => handleCaptureRevenue(txIndex)}
-                  disabled={!auctionData.auction.finalised}
-                >
-                  Proceed
-                </Button>
-              )}
-            </div>
-          </div>
-          <div className="slot__content__mobile">
-            <div className="slot__first__part">
-              <div className="main">
-                <span>{txIndex + 1}.</span>
-                <p>{tx.bidder.user.displayName || tx.bidder.user.address}</p>
-                <div className={`slot__type ${tx.type}`}>{tx.type}</div>
-              </div>
-              <p>
-                NFTs: <b>{tx.tier.nfts.length}</b>
-              </p>
-            </div>
-            <div className="slot__second__part">
-              <div
-                className="dropdown"
-                aria-hidden="true"
-                onClick={() => handleShowSlotNfts(txIndex)}
-              >
-                <img src={arrowDown} alt="Arrow" />
-              </div>
-              {tx.completed ? (
-                <Button className="light-border-button" disabled>
-                  Completed <img src={completedCheckmark} alt="completed" />
-                </Button>
-              ) : (
-                <Button
-                  className="light-button"
-                  onClick={() => handleCaptureRevenue(txIndex)}
-                  disabled={!auctionData.auction.finalised}
-                >
-                  Proceed
-                </Button>
-              )}
-              <div className="proceed__button__mobile">
-                {tx.completed ? (
-                  <Button className="light-border-button" disabled>
-                    Completed <img src={completedCheckmark} alt="completed" />
-                  </Button>
-                ) : (
-                  <Button
-                    className="light-button"
-                    disabled={!auctionData.auction.finalised}
-                    onClick={() => handleCaptureRevenue(txIndex)}
-                  >
-                    Proceed
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-          {openSlots.indexOf(txIndex) >= 0 && (
-            <div className="slot__body">
-              {tx.tier.nfts.map((nft) => (
-                <div className="slot__nft__box">
-                  <img src={nft.optimized_url} alt="NFT" />
-                  {nft.editions > 1 && (
-                    <>
-                      <div className="slot__nft__box__highlight__one" />
-                      <div className="slot__nft__box__highlight__two" />
-                      <div className="editions__number">{nft.editions}</div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+    <SingleCaptureRevenueTxs
+      openSlots={openSlots}
+      handleShowSlotNfts={handleShowSlotNfts}
+      auction={auctionData.auction}
+      singleCaptureRevenueTxs={singleCaptureRevenueTxs}
+      handleCaptureRevenue={handleCaptureRevenue}
+      rewardTiersSlots={rewardTiersSlots}
+    />
   );
 };
 AuctioneerView.propTypes = {
