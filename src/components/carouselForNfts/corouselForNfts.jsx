@@ -17,9 +17,8 @@ function SampleArrow(props) {
 const CarouselForNfts = ({ winnersData, onRemoveEdition }) => {
   const settings = {
     dots: true,
-    infinite: winnersData.length && winnersData.length > 2,
+    infinite: winnersData.length && winnersData.length > 6,
     variableWidth: true,
-    slidesToShow: 3,
     slidesToScroll: 1,
     nextArrow: <SampleArrow />,
     prevArrow: <SampleArrow />,
