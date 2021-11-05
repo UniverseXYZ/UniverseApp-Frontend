@@ -145,4 +145,6 @@ if (chainId === 1) {
 
 export const getBidTypeByValue = (val, options) => options.find((bidType) => bidType.value === val);
 
+export const getBidTypeByName = (val, options) => options.find((bidType) => bidType.name === val);
+
 export default [...bidTypes];
