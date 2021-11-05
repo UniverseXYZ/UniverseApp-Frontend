@@ -1,5 +1,9 @@
 import { getBidTypeByValue } from '../../fixtures/BidOptions';
 import { parseRoyalties } from '../contractInteraction';
+import ERC20ABI from '../../../contracts/ERC20.json';
+
+export const getERC20Contract = (erc20Address, signer) =>
+  new Contract(erc20Address, ERC20ABI, signer);
 
 export const createRequestObject = ({ auction, bidtype, options }) => {
   const requestObject = {
