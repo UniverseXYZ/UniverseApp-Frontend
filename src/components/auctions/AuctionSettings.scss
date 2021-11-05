@@ -296,6 +296,10 @@
           background: rgba(0, 0, 0, 0.02);
           border-radius: 6px;
           border: 1px solid #d4d4d4;
+
+          .token-logo {
+            width: 20px;
+          }
         }
         .active {
           background: linear-gradient($white, $white) padding-box,

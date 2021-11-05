@@ -336,13 +336,15 @@ const PlaceBidPopup = ({
                   )}
                 </div>
               </div>
-              <div className="value">{`${yourBid || 0} ETH`}</div>
+              <div className="value">{`${yourBid || 0} ${auction.tokenSymbol}`}</div>
             </div>
             <div className="total_row">
               <div className="label">
                 <span>Total bid</span>
               </div>
-              <div className="value">{`${+yourBid + (+currentBid?.amount || 0)} ETH`}</div>
+              <div className="value">{`${+yourBid + (+currentBid?.amount || 0)} ${
+                auction.tokenSymbol
+              }`}</div>
             </div>
           </div>
           <div className="place__bid__btn">
