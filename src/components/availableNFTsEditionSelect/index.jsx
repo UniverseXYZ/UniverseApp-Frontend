@@ -80,7 +80,7 @@ const styles = {
   container: (defaultStyles) => ({
     ...defaultStyles,
     // position: 'unset',
-    minWidth: '120px',
+    width: '95px',
     background:
       'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
@@ -94,7 +94,7 @@ const styles = {
     width: '160%',
     position: 'absolute',
     right: '3%',
-    top: '90%',
+    top: '80%',
   }),
   indicatorsContainer: () => ({
     '& > div': {
@@ -128,6 +128,7 @@ const styles = {
     padding: '0 8px 2px 0',
     cursor: 'pointer',
     minHeight: 'initial',
+    width: '95px',
   }),
   valueContainer: (base, state) => ({
     ...base,
@@ -171,6 +172,7 @@ const styles = {
   menuList: (base) => ({
     ...base,
     background: '#fff',
+    borderRadius: '12px',
     '& .choose-edition': {
       fontWeight: 'bold',
       fontSize: '14px',
