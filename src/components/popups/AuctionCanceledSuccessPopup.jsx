@@ -6,7 +6,7 @@ import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import submitted from '../../assets/images/bid-submitted.png';
 
-const SuccessPopup = ({ onClose, onAuction, auctionRemoved }) => {
+const AuctionCanceledSuccessPopup = ({ onClose, onAuction, auctionRemoved }) => {
   const history = useHistory();
   let startDate = '';
   let startDateMarkup = null;
@@ -54,12 +54,12 @@ const SuccessPopup = ({ onClose, onAuction, auctionRemoved }) => {
     </div>
   );
 };
-SuccessPopup.propTypes = {
+AuctionCanceledSuccessPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   onAuction: PropTypes.oneOfType([PropTypes.object]).isRequired,
   auctionRemoved: PropTypes.bool,
 };
-SuccessPopup.defaultProps = {
+AuctionCanceledSuccessPopup.defaultProps = {
   auctionRemoved: PropTypes.undefined,
 };
-export default SuccessPopup;
+export default AuctionCanceledSuccessPopup;

@@ -21,7 +21,7 @@ import FutureCardSkeleton from './skeleton/FutureCardSkeleton';
 import { getFutureAuctions, deleteFutureAuction } from '../../utils/api/auctions';
 import NoAuctionsFound from './NoAuctionsFound';
 import SortBySelect from '../input/SortBySelect';
-import SuccessPopup from '../popups/SuccessPopup.jsx';
+import SuccessPopup from '../popups/AuctionCanceledSuccessPopup.jsx';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
