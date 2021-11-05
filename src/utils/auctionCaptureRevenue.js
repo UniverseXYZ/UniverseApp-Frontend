@@ -66,7 +66,6 @@ export const createBatchCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInf
         endSlot: 0,
         totalNfts: 0,
         tiers: [],
-        slotIndices: [],
         revenueCaptured: false,
       };
       return;
@@ -79,7 +78,6 @@ export const createBatchCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInf
         endSlot: 0,
         totalNfts: 0,
         tiers: [],
-        slotIndices: [],
         revenueCaptured: false,
       };
     }
@@ -89,8 +87,10 @@ export const createBatchCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInf
     }
     txObject.endSlot = tx.endSlot;
     txObject.totalNfts += tx.tier.nfts.length;
-    txObject.tiers.push(tx.tier);
-    txObject.slotIndices.push(txIndex);
+    // Avoid duplicate tiers
+    if (tx.tier.id !== txObject.tiers[txObject.tiers.length - 1]?.id || 0) {
+      txObject.tiers.push(tx.tier);
+    }
   });
 
   // Push any remaining transactions
