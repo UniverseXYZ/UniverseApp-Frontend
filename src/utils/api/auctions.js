@@ -120,7 +120,6 @@ export const deleteFutureAuction = async (id) => {
   const request = await fetch(DELETE_FUTURE_AUCTION(id), requestOptions);
 
   const result = await request.text().then((data) => JSON.parse(data));
-  console.info(result);
   return result;
 };
 

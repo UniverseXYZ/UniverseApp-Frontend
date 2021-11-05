@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import { format } from 'date-fns';
+import Popup from 'reactjs-popup';
 import Button from '../button/Button.jsx';
 import arrowUp from '../../assets/images/Arrow_Up.svg';
 import arrowDown from '../../assets/images/ArrowDown.svg';
@@ -17,10 +18,10 @@ import Input from '../input/Input.jsx';
 import Pagination from '../pagination/SimplePaginations';
 import { isAfterNow, isBeforeNow } from '../../utils/dates';
 import FutureCardSkeleton from './skeleton/FutureCardSkeleton';
-import AuctionsCardSkeleton from '../auctionsCard/skeleton/AuctionsCardSkeleton.jsx';
-import { getFutureAuctions } from '../../utils/api/auctions';
+import { getFutureAuctions, deleteFutureAuction } from '../../utils/api/auctions';
 import NoAuctionsFound from './NoAuctionsFound';
 import SortBySelect from '../input/SortBySelect';
+import SuccessPopup from '../popups/SuccessPopup.jsx';
 
 const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [hideLaunchIcon, setHideLaunchIcon] = useState(0);
@@ -33,6 +34,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const [page, setPage] = useState(0);
   const [futureAuctions, setFutureAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
+  const [removedAuction, setRemovedAuction] = useState(false);
   const history = useHistory();
 
   useEffect(async () => {
@@ -50,8 +52,26 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     }
   }, []);
 
-  const handleRemove = (id) => {
-    setMyAuctions((d) => d.filter((item) => item.id !== id));
+  useEffect(() => {
+    setFutureAuctions(myAuctions);
+  }, [myAuctions]);
+
+  const handleRemove = async (id) => {
+    const auctionToDelete = futureAuctions.find((auction) => auction.id === id);
+    const canDeleteNft = isAfterNow(auctionToDelete.startDate) && !auctionToDelete.depositedNfts;
+
+    if (canDeleteNft) {
+      try {
+        const response = await deleteFutureAuction(id);
+        if (response?.canceled) {
+          setMyAuctions((d) => d.filter((item) => item.id !== id));
+          setRemovedAuction(auctionToDelete);
+        }
+      } catch (error) {
+        // TODO: error jandling
+        console.info(error);
+      }
+    }
   };
 
   const handleSearch = (value) => {
@@ -74,7 +94,6 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
     });
     return nftsCount;
   };
-
   return (
     <div className="future-auctions">
       <div className="search-sort-section">
@@ -98,7 +117,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
         />
       </div>
       {!loading ? (
-        myAuctions
+        futureAuctions
           .slice(offset, offset + perPage)
           .filter((item) => item.name?.toLowerCase().includes(searchByName.toLowerCase()))
           .filter((item) => !item.launch || (item.launch && isAfterNow(item.startDate)))
@@ -410,6 +429,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   <Button
                     className="light-border-button"
                     onClick={() => handleRemove(futureAuction.id)}
+                    disabled={!isAfterNow(futureAuction.startDate) || futureAuction.depositedNfts}
                   >
                     Remove
                   </Button>
@@ -430,6 +450,13 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
           setPage={setPage}
         />
       </div>
+      <Popup closeOnDocumentClick={false} open={!!removedAuction}>
+        <SuccessPopup
+          onClose={() => setRemovedAuction(false)}
+          onAuction={removedAuction}
+          auctionRemoved
+        />
+      </Popup>
     </div>
   );
 };
