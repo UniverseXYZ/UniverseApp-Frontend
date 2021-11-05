@@ -122,6 +122,7 @@ const AuctionDetails = ({
                 winningSlot={winningSlot}
                 slotsInfo={slotsInfo}
                 setShowLoading={setShowLoading}
+                ethPrice={ethPrice}
               />
             )}
           </div>
