@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
-import { utils } from 'ethers';
-import Popup from 'reactjs-popup';
+import { utils, BigNumber } from 'ethers';
 import warningIcon from '../../assets/images/Exclamation.svg';
 import smallCongratsIcon from '../../assets/images/congrats-small.png';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Button from '../button/Button';
-import LoadingPopup from '../popups/LoadingPopup';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
+import infoIcon from '../../assets/images/icon.svg';
+import bidIcon from '../../assets/images/bid_icon.svg';
+import { claimAuctionFunds } from '../../utils/api/auctions';
 
 const AuctionEndedSection = ({
   currentBid,
@@ -19,37 +20,71 @@ const AuctionEndedSection = ({
   setShowBidRankings,
   onAuction,
   winningSlot,
+  slotsInfo,
+  setShowLoading,
+  ethPrice,
 }) => {
+  const history = useHistory();
+
   const { address, universeAuctionHouseContract, yourBalance, setYourBalance } = useAuthContext();
   const { setActiveTxHashes } = useMyNftsContext();
 
-  const [winning, setWinning] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
+  const [mySlot, setMySlot] = useState(null);
+  const [mySlotIndex, setMySlotIndex] = useState(-1);
+  const [isAuctionner, setIsAuctioneer] = useState(address === onAuction.artist.address);
+
+  const [claimableFunds, setClaimableFunds] = useState(0);
+  const [unreleasedFunds, setUnreleasedFunds] = useState(0);
+  const [showUnreleasedFundsTooltip, setShowUnreleasedFundsTooltip] = useState(false);
+  const [showClaimableFundsTooltip, setShowClaimableFundsTooltip] = useState(false);
 
   useEffect(async () => {
-    if (universeAuctionHouseContract) {
-      const winners = await universeAuctionHouseContract.getTopBidders(
-        onAuction.auction.onChainId,
-        numberOfWinners
-      );
-      const checkSumAddress = utils.getAddress(address);
-      if (winners.indexOf(checkSumAddress) >= 0) {
-        setWinning(true);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [slotIndex, slotInfo] of Object.entries(slotsInfo)) {
+      if (slotInfo.winner === utils.getAddress(address)) {
+        setMySlot(slotInfo);
+        setMySlotIndex(slotIndex);
+        break;
       }
     }
-  }, [universeAuctionHouseContract]);
+  }, [slotsInfo]);
+
+  const getAuctionRevenue = async () => {
+    if (universeAuctionHouseContract && Object.values(slotsInfo).length) {
+      const revenueToClaim = await universeAuctionHouseContract.auctionsRevenue(
+        onAuction.auction.onChainId
+      );
+
+      const totalBids = Object.values(slotsInfo).reduce(
+        (acc, slot) => acc.add(slot.winningBidAmount),
+        BigNumber.from('0')
+      );
+
+      console.log('available funds to claim:');
+      console.log(utils.formatEther(revenueToClaim));
+      setClaimableFunds(utils.formatEther(revenueToClaim));
+
+      console.log('unreleased funds:');
+      console.log(utils.formatEther(totalBids.sub(onAuction.auction.claimedFunds)));
+      setUnreleasedFunds(utils.formatEther(totalBids.sub(onAuction.auction.claimedFunds)));
+    }
+  };
+
+  useEffect(() => {
+    getAuctionRevenue();
+  }, [universeAuctionHouseContract, slotsInfo]);
 
   const withdrawBid = async () => {
     try {
-      let bidTx = null;
+      let tx = null;
       if (onAuction.auction.tokenSymbol === 'ETH') {
-        bidTx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
+        tx = await universeAuctionHouseContract.withdrawEthBid(onAuction.auction.onChainId);
       } else {
-        bidTx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
+        tx = await universeAuctionHouseContract.withdrawERC20Bid(onAuction.auction.onChainId);
       }
       setShowLoading(true);
-      setActiveTxHashes([bidTx.hash]);
-      const txReceipt = await bidTx.wait();
+      setActiveTxHashes([tx.hash]);
+      const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         // This is temp until the scraper handles bids
         setShowLoading(false);
@@ -64,8 +99,57 @@ const AuctionEndedSection = ({
     }
   };
 
-  const history = useHistory();
-  return !winning ? (
+  const handleClaimNfts = async () => {
+    try {
+      const tx = await universeAuctionHouseContract.claimERC721Rewards(
+        onAuction.auction.onChainId,
+        +mySlotIndex,
+        mySlot.totalDepositedNfts
+      );
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        setShowLoading(false);
+        setActiveTxHashes([]);
+        setMySlot({ ...mySlot, totalWithdrawnNfts: mySlot.totalDepositedNfts });
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+
+      console.log(err);
+    }
+  };
+
+  const handleClaimFunds = async () => {
+    try {
+      const tx = await universeAuctionHouseContract.distributeCapturedAuctionRevenue(
+        onAuction.auction.onChainId
+      );
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+
+      const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        const result = await claimAuctionFunds({
+          auctionId: onAuction.auction.id,
+          amount: claimableFunds,
+        });
+        setShowLoading(false);
+        setActiveTxHashes([]);
+        setClaimableFunds(0);
+      }
+    } catch (err) {
+      setShowLoading(false);
+      setActiveTxHashes([]);
+
+      console.log(err);
+    }
+  };
+
+  return !mySlot ? (
     <Animated animationIn="zoomIn">
       <div className="ended__result">
         <div className="content">
@@ -86,13 +170,6 @@ const AuctionEndedSection = ({
           </Button>
         </div>
       </div>
-      <Popup open={showLoading} closeOnDocumentClick={false}>
-        <LoadingPopup
-          text="The transaction is in progress. Keep this window opened. Navigating away from the page will reset the curent progress."
-          onClose={() => setShowLoading(false)}
-          contractInteraction
-        />
-      </Popup>
     </Animated>
   ) : (
     <Animated animationIn="zoomIn">
@@ -120,26 +197,110 @@ const AuctionEndedSection = ({
             </p>
           </div>
         </div>
-        <div className="footer">
-          <Button
-            className="light-button"
-            onClick={() =>
-              history.push('/release-rewards', {
-                auctionData: onAuction,
-                myBid: currentBid,
-                // view: address === onAuction.artist.address ? 'Auctioneer' : 'Bidder',
-                view: 'Bidder',
-                bidders,
-                rewardTiersSlots,
-                winningSlot,
-              })
-            }
-          >
-            Release rewards
-          </Button>
-          <Button className="light-button" disabled>
-            Claim NFTs
-          </Button>
+        {/* <div>Avalable balance: {claimableFunds}</div>
+        <div>Unreleased funds: {unreleasedFunds}</div> */}
+        <div className="funds-and-balance">
+          <div className="unreleased-funds">
+            <div className="head">
+              <span>Unreleased funds</span>
+              <span
+                onMouseOver={() => setShowUnreleasedFundsTooltip(true)}
+                onFocus={() => setShowUnreleasedFundsTooltip(true)}
+                onMouseLeave={() => setShowUnreleasedFundsTooltip(false)}
+                onBlur={() => setShowUnreleasedFundsTooltip(false)}
+              >
+                <img src={infoIcon} alt="Info Icon" />
+              </span>
+              {showUnreleasedFundsTooltip && (
+                <div className="info-text1">
+                  <p>
+                    For the auctioneer to be able to collect their winnings and for the users to be
+                    able to claim their NFTs the rewards need to be released first.
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="balance-body">
+              <span className="value-section">
+                <img src={bidIcon} alt="unreleased funds" />
+                <span className="value">
+                  {unreleasedFunds}
+                  <span className="dollar-val">~${Math.round(unreleasedFunds * ethPrice)}</span>
+                </span>
+              </span>
+              {Object.values(slotsInfo).some((slot) => !slot.revenueCaptured) ? (
+                <Button
+                  className="light-button"
+                  onClick={() =>
+                    history.push('/release-rewards', {
+                      auctionData: onAuction,
+                      myBid: currentBid,
+                      view: isAuctionner ? 'Auctioneer' : 'Bidder',
+                      bidders,
+                      rewardTiersSlots,
+                      winningSlot,
+                      slotsInfo,
+                      mySlot,
+                      mySlotIndex,
+                    })
+                  }
+                >
+                  Release rewards
+                </Button>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+
+          {isAuctionner ? (
+            <div className="available-balance">
+              <div className="head">
+                <span>Available balance</span>
+                <span
+                  onMouseOver={() => setShowClaimableFundsTooltip(true)}
+                  onFocus={() => setShowClaimableFundsTooltip(true)}
+                  onMouseLeave={() => setShowClaimableFundsTooltip(false)}
+                  onBlur={() => setShowClaimableFundsTooltip(false)}
+                >
+                  <img src={infoIcon} alt="Info Icon" />
+                </span>
+                {showClaimableFundsTooltip && (
+                  <div className="info-text2">
+                    <p>This is the released reward amount availble for claiming</p>
+                  </div>
+                )}
+              </div>
+              <div className="balance-body">
+                <span className="value-section">
+                  <img src={bidIcon} alt="unreleased funds" />
+                  <span className="value">
+                    {claimableFunds}
+                    <span className="dollar-val">~${Math.round(claimableFunds * ethPrice)}</span>
+                  </span>
+                </span>
+                <Button
+                  className="light-button"
+                  disabled={!+claimableFunds}
+                  onClick={handleClaimFunds}
+                >
+                  Claim funds
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button
+              className="light-button"
+              disabled={
+                !mySlot ||
+                !mySlot.revenueCaptured ||
+                mySlot.totalDepositedNfts === mySlot.totalWithdrawnNfts
+              }
+              onClick={handleClaimNfts}
+            >
+              Claim NFTs
+            </Button>
+          )}
         </div>
       </div>
     </Animated>
@@ -153,5 +314,8 @@ AuctionEndedSection.propTypes = {
   winningSlot: PropTypes.number.isRequired,
   bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
   rewardTiersSlots: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setShowLoading: PropTypes.func.isRequired,
+  ethPrice: PropTypes.number.isRequired,
 };
 export default AuctionEndedSection;

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import BidRankingsPopup from '../popups/BidRankingsPopup.jsx';
 import leftArrow from '../../assets/images/arrow.svg';
-import AuctionCountdown from './AuctionCountdown.jsx';
 import ActiveAuctions from './ActiveAuctions.jsx';
 import TopBidders from './TopBidders.jsx';
 import AuctionEndedSection from './AuctionEndedSection.jsx';
 import AuctionHeader from './AuctionHeader.jsx';
+import { getBidTypeByName } from '../../utils/fixtures/BidOptions.js';
+import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
 
 const AuctionDetails = ({
   onAuction,
@@ -23,10 +23,14 @@ const AuctionDetails = ({
   setCurrentBid,
   isWinningBid,
   winningSlot,
+  slotsInfo,
+  setShowLoading,
 }) => {
   const history = useHistory();
+  const { options } = useAuctionContext();
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const [showBidRankings, setShowBidRankings] = useState(false);
+  const [currencyIcon, setCurrencyIcon] = useState(null);
   const [hasAuctionStarted, setHasAuctionStarted] = useState(
     new Date() > new Date(onAuction.auction.startDate)
   );
@@ -48,6 +52,13 @@ const AuctionDetails = ({
       next.innerHTML = '';
       next.appendChild(nextIcon);
     }
+  }, []);
+
+  useEffect(() => {
+    const auctionBidType = onAuction.auction.tokenSymbol;
+    const bidTypeImg = getBidTypeByName(auctionBidType, options).img;
+
+    setCurrencyIcon(bidTypeImg);
   }, []);
 
   const getRewardTierSpanStyles = (rewardTier) => {
@@ -108,6 +119,7 @@ const AuctionDetails = ({
                 getRewardTierSpanStyles={getRewardTierSpanStyles}
                 ethPrice={ethPrice}
                 isWinningBid={isWinningBid}
+                currencyIcon={currencyIcon}
               />
             ) : (
               <AuctionEndedSection
@@ -118,6 +130,9 @@ const AuctionDetails = ({
                 setShowBidRankings={setShowBidRankings}
                 onAuction={onAuction}
                 winningSlot={winningSlot}
+                slotsInfo={slotsInfo}
+                setShowLoading={setShowLoading}
+                ethPrice={ethPrice}
               />
             )}
           </div>
@@ -131,6 +146,7 @@ const AuctionDetails = ({
           rewardTiersSlots={rewardTiersSlots}
           getRewardTierSpanStyles={getRewardTierSpanStyles}
           ethPrice={ethPrice}
+          currencyIcon={currencyIcon}
         />
       </Popup>
     </div>
@@ -148,6 +164,8 @@ AuctionDetails.propTypes = {
   setCurrentBid: PropTypes.func.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
   winningSlot: PropTypes.number.isRequired,
+  slotsInfo: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setShowLoading: PropTypes.func.isRequired,
 };
 
 AuctionDetails.defaultProps = {

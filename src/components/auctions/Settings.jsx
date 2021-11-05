@@ -308,7 +308,7 @@ const AuctionSettings = () => {
                     closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
-                        {bid.img && <img src={bid.img} alt="icon" />}
+                        {bid.img && <img src={bid.img} className="token-logo" alt="icon" />}
                         <span className="button-name">{bid.name}</span>
                         <img src={arrowDown} alt="arrow" />
                       </button>

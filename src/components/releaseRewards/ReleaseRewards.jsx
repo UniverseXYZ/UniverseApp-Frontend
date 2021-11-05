@@ -12,7 +12,6 @@ import doneIcon from '../../assets/images/Completed.svg';
 import emptyMark from '../../assets/images/emptyMark.svg';
 import emptyWhite from '../../assets/images/emptyWhite.svg';
 import infoIcon from '../../assets/images/icon.svg';
-import { ReleaseRewardsData, SlotsRewardData } from '../../utils/fixtures/ReleaseRewardsDummyData';
 import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { changeAuctionStatus } from '../../utils/api/auctions';
@@ -22,96 +21,97 @@ import {
 } from '../../utils/auctionCaptureRevenue';
 import AuctioneerView from './AuctioneerView';
 import BidderView from './BidderView';
+import LoadingPopup from '../popups/LoadingPopup';
+import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 
 const ReleaseRewards = () => {
+  const { view, auctionData, bidders, rewardTiersSlots, myBid, winningSlot, slotsInfo } =
+    useLocation().state;
+
   const history = useHistory();
-  const [slotData, setSlotData] = useState([...SlotsRewardData]);
+  const { setActiveTxHashes } = useMyNftsContext();
+
   const [hideInfo, setHideInfo] = useState(false);
   const [showSlots, setShowSlots] = useState(false);
-  // const view = 'Auctioneer';
-  const { view, auctionData, bidders, rewardTiersSlots, myBid, winningSlot } = useLocation().state;
-
-  const [yourSlot, setYourSlot] = useState({
-    number: 3,
-    name: '0x2ef8...0d8c',
-    type: 'platinum',
-    nftsQuantity: 4,
-    completed: false,
-    open: false,
-    nfts: [
-      {
-        id: uuid(),
-        image: nft1,
-        editions: 2,
-      },
-      {
-        id: uuid(),
-        image: nft1,
-        editions: 1,
-      },
-      {
-        id: uuid(),
-        image: nft1,
-        editions: 1,
-      },
-    ],
-  });
-
-  const [auctionProceed, setAuctionProceed] = useState(false);
   const { universeAuctionHouseContract } = useAuthContext();
-  const [data, setData] = useState([...ReleaseRewardsData]);
   const [showSuccesPopup, setShowSuccessPopup] = useState(false);
   const [auction, setAuction] = useState(auctionData);
   const [batchCaptureRevenueTxs, setBatchCaptureRevenueTxs] = useState([]);
   const [singleCaptureRevenueTxs, setSingleCaptureRevenueTxs] = useState([]);
-  const [auctionSlots, setAuctionSlots] = useState(0);
-  const [capturedSlots, setCapturedSlots] = useState([]);
+  const [showLoading, setShowLoading] = useState(false);
 
   const setupPage = async () => {
-    if (universeAuctionHouseContract) {
-      // TODO: query smart contract to check for captured slots
-      const onChainAuction = await universeAuctionHouseContract.auctions(
-        auctionData.auction.onChainId
-      );
+    console.log('Slots info:');
+    console.log(slotsInfo);
+    // TODO: We need to add bool if slot is captured in the algorithm
+    const batchCaptureTxs = createBatchCaptureRevenueTxs(rewardTiersSlots, bidders, slotsInfo);
+    const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bidders, slotsInfo);
+    console.log(`batchCapture Txs:`);
+    console.log(batchCaptureTxs);
+    setBatchCaptureRevenueTxs(batchCaptureTxs);
 
-      // TODO: We need to add bool if slot is captured in the algorithm
-      const batchCaptureTxs = createBatchCaptureRevenueTxs(auctionData.rewardTiers);
-      const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bidders);
-      console.log(`batchCapture Txs:`);
-      console.log(batchCaptureTxs);
-      setBatchCaptureRevenueTxs(batchCaptureTxs);
+    console.log(`singleCapture Txs:`);
+    console.log(singleCaptureTxs);
 
-      console.log(`singleCapture Txs:`);
-      console.log(singleCaptureTxs);
-
-      setSingleCaptureRevenueTxs(singleCaptureTxs);
-    }
+    setSingleCaptureRevenueTxs(singleCaptureTxs);
   };
 
   useEffect(() => {
     setupPage();
   }, [universeAuctionHouseContract]);
 
-  const handleCaptureRevenue = async (id) => {
-    const captureConfig = batchCaptureRevenueTxs[id];
-    let tx = null;
-    if (captureConfig.startSlot === captureConfig.endSlot) {
-      tx = await universeAuctionHouseContract.captureSlotRevenue(
-        auction.auction.onChainId,
-        captureConfig.startSlot
-      );
-    } else {
-      tx = await universeAuctionHouseContract.captureSlotRevenueRange(
-        auction.auction.onChainId,
-        captureConfig.startSlot,
-        captureConfig.endSlot
-      );
-    }
+  const handleCaptureRevenue = async (captureConfig, configIndex, singleSlot) => {
+    try {
+      let tx = null;
+      if (captureConfig.startSlot === captureConfig.endSlot) {
+        tx = await universeAuctionHouseContract.captureSlotRevenue(
+          auction.auction.onChainId,
+          captureConfig.startSlot
+        );
+      } else {
+        tx = await universeAuctionHouseContract.captureSlotRevenueRange(
+          auction.auction.onChainId,
+          captureConfig.startSlot,
+          captureConfig.endSlot
+        );
+      }
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
+      const txReceipt = await tx.wait();
 
-    const txReceipt = await tx.wait();
+      if (txReceipt.status === 1) {
+        if (singleSlot) {
+          const updatedTxs = [...singleCaptureRevenueTxs];
+          updatedTxs[configIndex].slotInfo = {
+            ...updatedTxs[configIndex].slotInfo,
+            revenueCaptured: true,
+          };
+          setSingleCaptureRevenueTxs(updatedTxs);
+        } else {
+          const updatedBatchTxs = [...batchCaptureRevenueTxs];
+          const updatedSingleTxs = [...singleCaptureRevenueTxs];
 
-    if (txReceipt.status === 1) {
-      console.log('success');
+          updatedBatchTxs[configIndex].revenueCaptured = true;
+          for (
+            let slotIdx = +captureConfig.startSlot;
+            slotIdx <= +captureConfig.endSlot;
+            slotIdx += 1
+          ) {
+            updatedSingleTxs[slotIdx].slotInfo = {
+              ...updatedSingleTxs[slotIdx].slotInfo,
+              revenueCaptured: true,
+            };
+          }
+          setSingleCaptureRevenueTxs(updatedSingleTxs);
+          setBatchCaptureRevenueTxs(updatedBatchTxs);
+        }
+      }
+      setActiveTxHashes([]);
+      setShowLoading(false);
+    } catch (err) {
+      setActiveTxHashes([]);
+      setShowLoading(false);
+      console.log(err);
     }
   };
 
@@ -120,6 +120,8 @@ const ReleaseRewards = () => {
   const handleFinaliseAuction = async () => {
     try {
       const tx = await universeAuctionHouseContract.finalizeAuction(auction.auction.onChainId);
+      setShowLoading(true);
+      setActiveTxHashes([tx.hash]);
       const txReceipt = await tx.wait();
       if (txReceipt.status === 1) {
         const auctionClone = { ...auction };
@@ -135,31 +137,13 @@ const ReleaseRewards = () => {
           ],
         });
       }
+      setActiveTxHashes([]);
+      setShowLoading(false);
     } catch (err) {
+      setActiveTxHashes([]);
+      setShowLoading(false);
       console.log(err);
     }
-  };
-
-  const handleSlotComplete = (id) => {
-    const newSlotData = [...slotData];
-    newSlotData.forEach((slot) => {
-      if (slot.id === id) {
-        slot.completed = true;
-      }
-    });
-    setSlotData(newSlotData);
-    if (slotData.filter((slot) => slot.completed === true).length === slotData.length) {
-      setShowSuccessPopup(true);
-    }
-  };
-
-  const handleMySlotComplete = () => {
-    setYourSlot((prevYourSlot) => ({ ...prevYourSlot, completed: true }));
-    setShowSuccessPopup(true);
-  };
-
-  const handleShowMyNFTs = () => {
-    setYourSlot((prevYourSlot) => ({ ...prevYourSlot, open: !prevYourSlot.open }));
   };
 
   return (
@@ -281,6 +265,9 @@ const ReleaseRewards = () => {
       </div>
       <Popup closeOnDocumentClick={false} open={showSuccesPopup}>
         <CongratsReleaseRewardsPopup onClose={() => setShowSuccessPopup(false)} />
+      </Popup>
+      <Popup closeOnDocumentClick={false} open={showLoading}>
+        <LoadingPopup onClose={() => setShowLoading(false)} />
       </Popup>
     </div>
   );

@@ -17,13 +17,14 @@ const DEPOSIT_NFTS_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/aucti
 const WITHDRAW_NFTS_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/withdrawNfts`;
 const GET_AUCTION_LANDING_PAGE = (username, auctionName) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${username}/${auctionName}`;
-const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auctions/bid`;
+const PLACE_AUCTION_BID = `${process.env.REACT_APP_API_BASE_URL}/api/auction/placeBid`;
 const ADD_REWARD_TIER_TO_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/add-reward-tier`;
 const GET_MY_BIDS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-bids`;
 const REMOVE_REWARD_TIER_FROM_AUCTION = `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/`;
 const CANCEL_AUCTION_BID = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/auction/${id}/cancelBid`;
 const CHANGE_AUCTION_STATUS = `${process.env.REACT_APP_API_BASE_URL}/api/auction/status`;
+const CLAIM_AUCTION_FUNDS = `${process.env.REACT_APP_API_BASE_URL}/api/auction/claimFunds`;
 
 export const createAuction = async ({
   name,
@@ -438,6 +439,17 @@ export const addRewardTier = async (body) => {
   };
 
   const request = await fetch(ADD_REWARD_TIER_TO_AUCTION, requestOptions);
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const claimAuctionFunds = async (body) => {
+  const requestOptions = {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  };
+
+  const request = await fetch(CLAIM_AUCTION_FUNDS, requestOptions);
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };

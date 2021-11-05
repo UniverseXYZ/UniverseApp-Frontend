@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import CancelBidPopup from '../popups/CancelBidPopup';
 import cancelIcon from '../../assets/images/activity-icons/cancel-bid.svg';
-import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import { shortenEthereumAddress } from '../../utils/helpers/format.js';
 
 const TopBidders = ({
@@ -19,6 +18,7 @@ const TopBidders = ({
   getRewardTierSpanStyles,
   ethPrice,
   isWinningBid,
+  currencyIcon,
 }) => {
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
   return (
@@ -48,7 +48,7 @@ const TopBidders = ({
                 )}
               </div>
               <div className="bid">
-                <img src={currencyETHIcon} alt="Currency" />
+                <img src={currencyIcon} alt="Currency" />
                 <b>{bidder.amount}</b>
                 <span>~${Math.round(bidder.amount * ethPrice)}</span>
               </div>
@@ -62,7 +62,7 @@ const TopBidders = ({
             <span className="your__current__bid">
               <b>
                 Your bid:
-                <img src={currencyETHIcon} alt="Currency" />
+                <img src={currencyIcon} alt="Currency" />
                 {currentBid.amount}
               </b>
               {`(#${bidders.findIndex((x) => x.address === currentBid.address) + 1} in the list)`}
@@ -120,6 +120,7 @@ TopBidders.propTypes = {
   canPlaceBids: PropTypes.bool.isRequired,
   ethPrice: PropTypes.number.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
+  currencyIcon: PropTypes.string.isRequired,
 };
 TopBidders.defaultProps = {
   currentBid: null,

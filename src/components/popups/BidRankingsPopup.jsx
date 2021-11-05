@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../../assets/images/close-menu.svg';
-import currencyETHIcon from '../../assets/images/currency-eth.svg';
 import arrowDownIcon from '../../assets/images/arrow-down.svg';
 import nftImage from '../../assets/images/marketplace/nfts/nft1.png';
 import { shortenEthereumAddress } from '../../utils/helpers/format';
@@ -13,6 +12,7 @@ const BidRankingsPopup = ({
   rewardTiers,
   getRewardTierSpanStyles,
   ethPrice,
+  currencyIcon,
 }) => {
   console.log(rewardTiersSlots);
   console.log(rewardTiers);
@@ -68,7 +68,7 @@ const BidRankingsPopup = ({
                       )}
                     </div>
                     <div className="bid">
-                      <img src={currencyETHIcon} alt="Currency" />
+                      <img src={currencyIcon} alt="Currency" />
                       <b>{bidder.amount}</b>
                       <span>~${Math.round(bidder.amount * ethPrice)}</span>
                     </div>
@@ -250,6 +250,7 @@ BidRankingsPopup.propTypes = {
   rewardTiers: PropTypes.oneOfType([PropTypes.array]).isRequired,
   getRewardTierSpanStyles: PropTypes.func.isRequired,
   ethPrice: PropTypes.number.isRequired,
+  currencyIcon: PropTypes.string.isRequired,
 };
 
 export default BidRankingsPopup;

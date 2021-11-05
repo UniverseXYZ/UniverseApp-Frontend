@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Popup from 'reactjs-popup';
 import gradientArrow from '../../assets/images/gradient-arrow.svg';
 import PlaceBidPopup from '../popups/PlaceBidPopup.jsx';
+import { isAfterNow, isBeforeNow } from '../../utils/dates';
 
 const PlaceBid = ({ auction, bidders, setBidders, setShowBidPopup }) => (
   <div className="place__bid__section">
@@ -11,12 +12,16 @@ const PlaceBid = ({ auction, bidders, setBidders, setShowBidPopup }) => (
         <h1 className="title">Place a bid</h1>
         <p className="desc">Bid to win 1 of {auction.totalNFTs} NFT bundles</p>
       </div>
-      <div className="place__bid__btn">
-        <button type="button" onClick={() => setShowBidPopup(true)}>
-          <span>Place a bid</span>
-          <img src={gradientArrow} alt="Arrow" />
-        </button>
-      </div>
+      {isBeforeNow(auction.auction.startDate) ? (
+        <div className="place__bid__btn">
+          <button type="button" onClick={() => setShowBidPopup(true)}>
+            <span>Place a bid</span>
+            <img src={gradientArrow} alt="Arrow" />
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   </div>
 );

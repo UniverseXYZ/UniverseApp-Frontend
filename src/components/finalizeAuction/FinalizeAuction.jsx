@@ -59,10 +59,16 @@ const FinalizeAuction = () => {
     completedCollectionsStep && approvedTxCount === transactions?.finalSlotIndices.length;
 
   const setupPage = async () => {
-    // Set nftsToWithdraw
     const transactionsConfig = calculateTransactions(auction);
     setTransactions(transactionsConfig);
-    // console.log(transactionsConfig);
+
+    transactionsConfig.displayNfts.forEach((slotNfts, index) => {
+      const areNftsDeposited = slotNfts.some((nft) => !nft.deposited);
+      if (!areNftsDeposited) {
+        setApprovedTxs([...approvedTxs, index]);
+        setApprovedTxCount(approvedTxCount + 1);
+      }
+    });
 
     if (auction.collections) {
       setCollections(auction.collections);
