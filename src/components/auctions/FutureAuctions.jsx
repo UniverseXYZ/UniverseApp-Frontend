@@ -58,9 +58,10 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
 
   const handleRemove = async (id) => {
     const auctionToDelete = futureAuctions.find((auction) => auction.id === id);
-    const canDeleteNft = isAfterNow(auctionToDelete.startDate) && !auctionToDelete.depositedNfts;
+    const canDeleteAuction =
+      isAfterNow(auctionToDelete.startDate) && !auctionToDelete.depositedNfts;
 
-    if (canDeleteNft) {
+    if (canDeleteAuction) {
       try {
         const response = await deleteFutureAuction(id);
         if (response?.canceled) {
@@ -68,7 +69,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
           setRemovedAuction(auctionToDelete);
         }
       } catch (error) {
-        // TODO: error jandling
+        // TODO: error handling
         console.info(error);
       }
     }

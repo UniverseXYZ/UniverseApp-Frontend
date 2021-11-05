@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
 import { utils, Contract } from 'ethers';
-import SuccessPopup from '../popups/SuccessPopup';
+import SuccessPopup from '../popups/AuctionCanceledSuccessPopup';
 import arrow from '../../assets/images/arrow.svg';
 import './FinalizeAuction.scss';
 import warningIcon from '../../assets/images/Exclamation.svg';
