@@ -67,6 +67,7 @@ const Create = () => {
 
   // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
   const [winnersData, setWinnersData] = useState([]);
+  const [fetchingData, setFetchingData] = useState(false);
 
   const handeClick = (e) => {
     setMinBId(e.target.checked);
@@ -122,6 +123,7 @@ const Create = () => {
   };
 
   useEffect(async () => {
+    setFetchingData(true);
     const available = await getAvailableNFTs();
     if (available.nfts.length) {
       const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
@@ -129,6 +131,8 @@ const Create = () => {
       setAvailableNFTs(parsedForFilters);
       setFilteredNFTs(parsedForFilters);
     }
+
+    setFetchingData(false);
   }, []);
 
   // Custom Slots distribution logic
@@ -304,7 +308,7 @@ const Create = () => {
       setValues({
         name,
         numberOfWinners: numberOfWinners || winners,
-        nftsPerWinner,
+        nftsPerWinner: isCustom ? 'Custom' : nftsPerWinner,
       });
 
       if (minAuctionBid) {
@@ -327,10 +331,9 @@ const Create = () => {
   }, [editedTier]);
 
   const canSelectNFT = values.numberOfWinners && (values.nftsPerWinner || custom);
-  const canContinue = winnersData.every((data) => data.nftsData?.length > 0) && custom;
-  // const availableNFTsTolist = filteredNFTs.filter(
-  //   ({ nfts }) => nfts.rewardAndTokenIds.filter((nft) => nft.slot !== 0 && !nft.slot).length > 0
-  // );
+  const canContinue =
+    winnersData.every((data) => data.nftsData?.length > 0) && custom && values.name;
+
   // Map the rewardAndTokenIds to return only those who doesn't have slot attached to them or the rewardTiers is from this auction
   let availableNFTsTolist = [...filteredNFTs];
   availableNFTsTolist.forEach((data) => {
@@ -555,17 +558,15 @@ const Create = () => {
               })}
           </div>
         )}
-        {
-          // ----- Stick menu -----
-          // TODO:: Sticky menu css and component dev -> Ping Dima when the time comes
-          // TODO:: Sticky menu, delete functionality
-          // ----- Default Distribution ----
-          // TODO:: Upon default distribution - attach selected nfts & editions to all winners based on slot sequence
-          // TODO:: Upon Default Distribution if the user enters nfts per winner number, we should fetch all user nfts applicable to this editions number
-        }
         <SearchFilters data={availableNFTs} setData={setFilteredNFTs} setOffset={() => {}} />
         <div className="nfts__lists">
-          {availableNFTsTolist.length ? (
+          {fetchingData ? (
+            <>
+              <AvailableNFTCardSkeleton />
+              <AvailableNFTCardSkeleton />
+              <AvailableNFTCardSkeleton />
+            </>
+          ) : availableNFTsTolist.length ? (
             availableNFTsTolist
               .slice(offset, offset + perPage)
               .map((data) => (
@@ -581,9 +582,7 @@ const Create = () => {
               ))
           ) : (
             <>
-              <AvailableNFTCardSkeleton />
-              <AvailableNFTCardSkeleton />
-              <AvailableNFTCardSkeleton />
+              <p>No Available NFTs found</p>
             </>
           )}
         </div>
