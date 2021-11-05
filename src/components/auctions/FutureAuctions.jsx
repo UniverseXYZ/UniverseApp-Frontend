@@ -59,12 +59,12 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
   const handleRemove = async (id) => {
     const auctionToDelete = futureAuctions.find((auction) => auction.id === id);
     const canDeleteAuction =
-      isAfterNow(auctionToDelete.startDate) && !auctionToDelete.depositedNfts;
+      (auctionToDelete.canceled && !auctionToDelete.depositedNfts) || !auctionToDelete.onChainId;
 
     if (canDeleteAuction) {
       try {
         const response = await deleteFutureAuction(id);
-        if (response?.canceled) {
+        if (response) {
           setMyAuctions((d) => d.filter((item) => item.id !== id));
           setRemovedAuction(auctionToDelete);
         }
@@ -125,6 +125,8 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
           .map((futureAuction) => {
             const startDate = format(new Date(futureAuction.startDate), 'MMMM dd, HH:mm');
             const endDate = format(new Date(futureAuction.endDate), 'MMMM dd, HH:mm');
+            const removeButtonDisabled =
+              (!futureAuction.canceled && futureAuction.depositedNfts) || futureAuction.onChainId;
             return (
               <div className="auction" key={uuid()}>
                 <div
@@ -430,7 +432,7 @@ const FutureAuctions = ({ myAuctions, setMyAuctions, setAuction }) => {
                   <Button
                     className="light-border-button"
                     onClick={() => handleRemove(futureAuction.id)}
-                    disabled={!isAfterNow(futureAuction.startDate) || futureAuction.depositedNfts}
+                    disabled={removeButtonDisabled}
                   >
                     Remove
                   </Button>
