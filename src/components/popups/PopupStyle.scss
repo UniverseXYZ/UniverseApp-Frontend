@@ -2316,13 +2316,14 @@
   box-sizing: border-box;
   border-radius: 12px;
   width: 440px;
-  min-height: 280px;
+  min-height: 285px;
+  max-height: 462px;
   box-shadow: 0px 10px 40px rgba(136, 120, 172, 0.2);
 
   .close {
     position: absolute;
-    right: -13px;
-    top: -13px;
+    right: 10px;
+    top: 10px;
     background: white;
     width: 26px;
     height: 26px;
@@ -2392,6 +2393,10 @@
         width: 100%;
         height: 100%;
         cursor: pointer;
+
+        img {
+          width: 32px;
+        }
       }
       img:not(.search) {
         padding: 20.5px 12px 0 0;
@@ -2411,6 +2416,7 @@
         color: #000000;
       }
       .subtitle {
+        cursor: pointer;
         position: absolute;
         left: 72px;
         margin-top: -26px;

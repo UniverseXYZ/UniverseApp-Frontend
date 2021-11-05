@@ -11,6 +11,19 @@ import ActiveAuctions from './ActiveAuctions.jsx';
 import TopBidders from './TopBidders.jsx';
 import AuctionEndedSection from './AuctionEndedSection.jsx';
 import AuctionHeader from './AuctionHeader.jsx';
+import ethIcon from '../../assets/images/bid_icon.svg';
+import daiIcon from '../../assets/images/dai_icon.svg';
+import usdcIcon from '../../assets/images/usdc_icon.svg';
+import bondIcon from '../../assets/images/bond_icon.svg';
+import snxIcon from '../../assets/images/snx.svg';
+import wethIcon from '../../assets/images/WETH 20x20.svg';
+import wbtcIcon from '../../assets/images/WBTC 20x20.svg';
+import aaveIcon from '../../assets/images/aave 20x20.png';
+import compIcon from '../../assets/images/COMP 20x20.svg';
+import ilvIcon from '../../assets/images/ILV 20x20.png';
+import linkIcon from '../../assets/images/LINK 20x20.svg';
+import sushiIcon from '../../assets/images/sushi 20x20.png';
+import xyzIcon from '../../assets/images/XYZ 20x20.png';
 
 const AuctionDetails = ({
   onAuction,
@@ -29,6 +42,7 @@ const AuctionDetails = ({
   const history = useHistory();
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const [showBidRankings, setShowBidRankings] = useState(false);
+  const [currencyIcon, setCurrencyIcon] = useState(null);
   const [hasAuctionStarted, setHasAuctionStarted] = useState(
     new Date() > new Date(onAuction.auction.startDate)
   );
@@ -49,6 +63,50 @@ const AuctionDetails = ({
       nextIcon.src = leftArrow;
       next.innerHTML = '';
       next.appendChild(nextIcon);
+    }
+  }, []);
+
+  useEffect(() => {
+    const bidtype = onAuction.auction.tokenSymbol;
+
+    if (bidtype === 'ETH') {
+      setCurrencyIcon(ethIcon);
+    }
+    if (bidtype === 'DAI') {
+      setCurrencyIcon(daiIcon);
+    }
+    if (bidtype === 'USDC') {
+      setCurrencyIcon(usdcIcon);
+    }
+    if (bidtype === 'BOND') {
+      setCurrencyIcon(bondIcon);
+    }
+    if (bidtype === 'SNX') {
+      setCurrencyIcon(snxIcon);
+    }
+    if (bidtype === 'WETH') {
+      setCurrencyIcon(wethIcon);
+    }
+    if (bidtype === 'WBTC') {
+      setCurrencyIcon(wbtcIcon);
+    }
+    if (bidtype === 'AAVE') {
+      setCurrencyIcon(aaveIcon);
+    }
+    if (bidtype === 'LINK') {
+      setCurrencyIcon(linkIcon);
+    }
+    if (bidtype === 'COMP') {
+      setCurrencyIcon(compIcon);
+    }
+    if (bidtype === 'ILV') {
+      setCurrencyIcon(ilvIcon);
+    }
+    if (bidtype === 'SUSHI') {
+      setCurrencyIcon(sushiIcon);
+    }
+    if (bidtype === 'XYZ') {
+      setCurrencyIcon(xyzIcon);
     }
   }, []);
 
@@ -110,6 +168,7 @@ const AuctionDetails = ({
                 getRewardTierSpanStyles={getRewardTierSpanStyles}
                 ethPrice={ethPrice}
                 isWinningBid={isWinningBid}
+                currencyIcon={currencyIcon}
               />
             ) : (
               <AuctionEndedSection
@@ -136,6 +195,7 @@ const AuctionDetails = ({
           rewardTiersSlots={rewardTiersSlots}
           getRewardTierSpanStyles={getRewardTierSpanStyles}
           ethPrice={ethPrice}
+          currencyIcon={currencyIcon}
         />
       </Popup>
     </div>
