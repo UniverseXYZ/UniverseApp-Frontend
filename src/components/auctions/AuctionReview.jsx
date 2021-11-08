@@ -7,6 +7,7 @@ import './AuctionReview.scss';
 import './Tiers.scss';
 import uuid from 'react-uuid';
 import { format } from 'date-fns';
+import Slider from 'react-slick';
 import infoIcon from '../../assets/images/icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import yellowIcon from '../../assets/images/yellowIcon.svg';
@@ -70,6 +71,12 @@ const AuctionReview = () => {
 
   const startDate = format(new Date(auction.startDate), 'MMMM dd, yyyy, HH:mm');
   const endDate = format(new Date(auction.endDate), 'MMMM dd, yyyy, HH:mm');
+  const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+  };
 
   return (
     <div className="container auction-reward">
@@ -281,57 +288,71 @@ const AuctionReview = () => {
                 </div>
                 <div className="auctions-tier">
                   <div className="auction-reward">
-                    {Object.keys(onlyUniqueNFTs).map((key) => {
-                      const {
-                        artworkType,
-                        url,
-                        count,
-                        nftName,
-                        collectioName,
-                        collectionAddress,
-                        collectionUrl,
-                      } = onlyUniqueNFTs[key];
-                      const nftIsImage =
-                        artworkType === 'png' ||
-                        artworkType === 'jpg' ||
-                        artworkType === 'jpeg' ||
-                        artworkType === 'mpeg' ||
-                        artworkType === 'webp';
+                    <Slider {...settings}>
+                      {Array(10)
+                        .fill(0)
+                        .map((winner, index) => (
+                          <div className="auction-reward-winner">
+                            <h4>Winner #{index + 1}</h4>
+                            {Object.keys(onlyUniqueNFTs).map((key) => {
+                              const {
+                                artworkType,
+                                url,
+                                count,
+                                nftName,
+                                collectioName,
+                                collectionAddress,
+                                collectionUrl,
+                              } = onlyUniqueNFTs[key];
+                              const nftIsImage =
+                                artworkType === 'png' ||
+                                artworkType === 'jpg' ||
+                                artworkType === 'jpeg' ||
+                                artworkType === 'mpeg' ||
+                                artworkType === 'webp';
 
-                      return (
-                        <div className="auction-reward__box" key={uuid()}>
-                          <div className="auction-reward__box__image">
-                            {artworkType === 'mp4' && (
-                              <video
-                                onMouseOver={(event) => event.target.play()}
-                                onFocus={(event) => event.target.play()}
-                                onMouseOut={(event) => event.target.pause()}
-                                onBlur={(event) => event.target.pause()}
-                              >
-                                <source src={url} type="video/mp4" />
-                                <track kind="captions" />
-                                Your browser does not support the video tag.
-                              </video>
-                            )}
-                            {artworkType === 'mpeg' && (
-                              <img className="preview-image" src={mp3Icon} alt={nftName} />
-                            )}
-                            {nftIsImage && (
-                              <img className="preview-image" src={url} alt={nftName} />
-                            )}
-                            {artworkType === 'mp4' && (
-                              <img className="video__icon" src={videoIcon} alt="Video Icon" />
-                            )}
+                              return (
+                                <div className="auction-reward__box" key={uuid()}>
+                                  <div className="auction-reward__box__image">
+                                    {artworkType === 'mp4' && (
+                                      <video
+                                        onMouseOver={(event) => event.target.play()}
+                                        onFocus={(event) => event.target.play()}
+                                        onMouseOut={(event) => event.target.pause()}
+                                        onBlur={(event) => event.target.pause()}
+                                      >
+                                        <source src={url} type="video/mp4" />
+                                        <track kind="captions" />
+                                        Your browser does not support the video tag.
+                                      </video>
+                                    )}
+                                    {artworkType === 'mpeg' && (
+                                      <img className="preview-image" src={mp3Icon} alt={nftName} />
+                                    )}
+                                    {nftIsImage && (
+                                      <img className="preview-image" src={url} alt={nftName} />
+                                    )}
+                                    {artworkType === 'mp4' && (
+                                      <img
+                                        className="video__icon"
+                                        src={videoIcon}
+                                        alt="Video Icon"
+                                      />
+                                    )}
+                                  </div>
+                                  {count > 1 && (
+                                    <>
+                                      <div className="auction-reward__box__highlight__one" />
+                                      <div className="auction-reward__box__highlight__two" />
+                                      <div className="editions__number">2</div>
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })}
                           </div>
-                          {count > 1 && (
-                            <>
-                              <div className="auction-reward__box__highlight__one" />
-                              <div className="auction-reward__box__highlight__two" />
-                            </>
-                          )}
-                        </div>
-                      );
-                    })}
+                        ))}
+                    </Slider>
                   </div>
                 </div>
               </div>

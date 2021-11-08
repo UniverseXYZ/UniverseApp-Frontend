@@ -25,6 +25,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     padding: 26px 30px;
+    overflow-x: scroll;
     .auction-header {
       display: flex;
       justify-content: space-between;
@@ -183,66 +184,172 @@
   }
   .auction-reward {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
+    gap: 20px;
+    .slick-slider {
+      position: relative;
+      width: 100%;
+    }
 
-    .auction-reward__box {
+    .slick-slide {
+      width: fit-content !important;
+      margin-right: 20px;
+      margin-top: 3px;
+    }
+    .slick-dots {
+      display: none !important;
+    }
+    .slick-arrow {
       background: $white;
       border: 1px solid rgba(0, 0, 0, 0.1);
+      height: 42px;
+      width: 42px;
+      box-sizing: border-box;
+      box-shadow: 0px 10px 36px rgba(136, 120, 172, 0.14);
+      border-radius: 50%;
+      top: 60px;
+      &:hover {
+        background: linear-gradient($white, $white) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box;
+        border: 1px solid transparent;
+      }
+
+      &::before {
+        color: rgba(0, 0, 0, 1);
+        position: absolute;
+      }
+
+      &.slick-prev {
+        position: absolute;
+        left: -18px;
+        z-index: 1;
+        &::before {
+          content: url("../../assets/images/slider-btn.svg");
+          opacity: 1;
+          top: 7px;
+          right: 17px;
+        }
+      }
+      &.slick-next {
+        position: absolute;
+        right: -18px;
+        // left: 1020px;
+        z-index: 1;
+        &::before {
+          content: url("../../assets/images/slider-btn.svg");
+          opacity: 1;
+          transform: rotate(180deg);
+          top: 14px;
+          right: 16px;
+        }
+      }
+    }
+
+    .auction-reward-winner {
+      position: relative;
+      display: flex !important;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 14px;
       box-sizing: border-box;
       border-radius: 12px;
-      padding: 6px;
-      position: relative;
-      margin-right: 20px;
-      margin-bottom: 16px;
+      gap: 10px;
+      width: fit-content !important;
+      .slick-slide {
+        width: fit-content !important;
+        height: fit-content !important;
+      }
+      .slick-track {
+        width: fit-content !important;
+      }
 
-      &__image {
+      h4 {
+        position: absolute;
+        font-family: $spaceGroteskFont;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 130%;
+        color: rgba(0, 0, 0, 0.3);
+        background: #faf9fa;
+        padding: 0 6px;
+        left: 50%;
+        top: 0%;
+        transform: translate(-50%, -50%);
+      }
+
+      .auction-reward__box {
+        background: $white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        border-radius: 12px;
+        padding: 6px;
         position: relative;
-        height: 75px;
-        width: 75px;
+        // margin-right: 20px;
+        margin-bottom: 8px;
 
-        video {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 5px;
+        &__image {
+          position: relative;
+          height: 75px;
+          width: 75px;
+
+          video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+          }
+          img.preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+          }
+          .video__icon {
+            position: absolute;
+            top: 9px;
+            right: 7px;
+          }
         }
-        img.preview-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 5px;
-        }
-        .video__icon {
+        &__highlight__one {
           position: absolute;
-          top: 9px;
-          right: 7px;
+          bottom: -5px;
+          background-color: #ffffff;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          border-left: 1px solid rgba(0, 0, 0, 0.1);
+          border-right: 1px solid rgba(0, 0, 0, 0.1);
+          border-bottom-left-radius: 150px;
+          border-bottom-right-radius: 150px;
+          width: 75px;
+          height: 4px;
+          left: 6px;
         }
-      }
-      &__highlight__one {
-        position: absolute;
-        bottom: -5px;
-        background-color: #ffffff;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 150px;
-        border-bottom-right-radius: 150px;
-        width: 75px;
-        height: 4px;
-        left: 6px;
-      }
-      &__highlight__two {
-        position: absolute;
-        bottom: -9px;
-        background-color: #ffffff;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-left: 1px solid rgba(0, 0, 0, 0.1);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 150px;
-        border-bottom-right-radius: 150px;
-        width: 63px;
-        height: 4px;
-        left: 12px;
+        &__highlight__two {
+          position: absolute;
+          bottom: -9px;
+          background-color: #ffffff;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          border-left: 1px solid rgba(0, 0, 0, 0.1);
+          border-right: 1px solid rgba(0, 0, 0, 0.1);
+          border-bottom-left-radius: 150px;
+          border-bottom-right-radius: 150px;
+          width: 63px;
+          height: 4px;
+          left: 12px;
+        }
+        .editions__number {
+          position: absolute;
+          background: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(2px);
+          border-radius: 3px;
+          padding: 0px 4px;
+          top: 10px;
+          right: 10px;
+          font-family: $spaceGroteskFont;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 10px;
+          line-height: 150%;
+          color: $white;
+        }
       }
     }
   }
