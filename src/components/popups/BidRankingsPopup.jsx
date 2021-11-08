@@ -13,6 +13,7 @@ const BidRankingsPopup = ({
   getRewardTierSpanStyles,
   ethPrice,
   currencyIcon,
+  collections,
 }) => {
   console.log(rewardTiersSlots);
   console.log(rewardTiers);
@@ -24,7 +25,7 @@ const BidRankingsPopup = ({
 
     return shortenEthereumAddress(bidder.user.address);
   };
-  const [openedBidderID, setOpenedBidderID] = useState(0);
+  const [openedBidderID, setOpenedBidderID] = useState(-1);
   return (
     <div className="bid__rankings__popup">
       <img
@@ -39,33 +40,34 @@ const BidRankingsPopup = ({
         <div className="reward__tiers">
           <div className="label">Reward tiers:</div>
           <div className="tiers">
-            {rewardTiers.map((tier) => (
-              <span style={getRewardTierSpanStyles(tier)}>{tier.name}</span>
-            ))}
+            {rewardTiers
+              .sort((a, b) => a.tierPosition - b.tierPosition)
+              .map((tier) => (
+                <span style={getRewardTierSpanStyles(tier)}>{tier.name}</span>
+              ))}
           </div>
         </div>
         <div className="bids__list">
-          {rewardTiers.map((tier) => (
-            <div
-              style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'};` }}
-              className="bid__list"
-            >
-              {onBidders.map((bidder, index) => (
-                <div className="each--bid" key={bidder.id}>
+          {rewardTiersSlots.map((tier, index) => {
+            const bidder = onBidders[index];
+            if (!bidder) return <></>;
+            return (
+              <div
+                style={{ border: `border: 1px solid ${tier.color ? tier.color : '#bcbcbc'};` }}
+                className="bid__list"
+                key={bidder.id}
+              >
+                <div className="each--bid">
                   <div className="header">
                     <div className="bidder">
                       <span className="index">{`${index + 1}. `}</span>
                       <span>{displayBidderName(bidder)}</span>
-                      {rewardTiersSlots[index] ? (
-                        <span
-                          className="tier"
-                          style={getRewardTierSpanStyles(rewardTiersSlots[index])}
-                        >
-                          {rewardTiersSlots[index].name}
-                        </span>
-                      ) : (
-                        <></>
-                      )}
+                      <span
+                        className="tier"
+                        style={getRewardTierSpanStyles(rewardTiersSlots[index])}
+                      >
+                        {rewardTiersSlots[index].name}
+                      </span>
                     </div>
                     <div className="bid">
                       <img src={currencyIcon} alt="Currency" />
@@ -74,12 +76,12 @@ const BidRankingsPopup = ({
                     </div>
                     {rewardTiersSlots[index] ? (
                       <div
-                        className={`arrow ${openedBidderID === bidder.id ? 'opened' : ''}`}
+                        className={`arrow ${openedBidderID === index ? 'opened' : ''}`}
                         aria-hidden="true"
                         onClick={() =>
-                          openedBidderID === bidder.id
-                            ? setOpenedBidderID(0)
-                            : setOpenedBidderID(bidder.id)
+                          openedBidderID === index
+                            ? setOpenedBidderID(-1)
+                            : setOpenedBidderID(index)
                         }
                       >
                         <img src={arrowDownIcon} alt="Arrow down" />
@@ -88,155 +90,41 @@ const BidRankingsPopup = ({
                       <></>
                     )}
                   </div>
-                  {openedBidderID === bidder.id ? (
-                    tier.nfts.map((nft) => (
-                      <div className="nfts">
-                        <div className="each--nft">
-                          <div className="tooltiptext">
-                            <div>
-                              <label>Name:</label>
-                              <p>{nft.name}</p>
+                  {openedBidderID === index ? (
+                    <div className="nfts">
+                      {tier.nfts.map((nft) => {
+                        const collection = collections.find((c) => c.id === nft.collectionId);
+                        return (
+                          <div className="each--nft">
+                            <div className="tooltiptext">
+                              <div>
+                                <label>Name:</label>
+                                <p>{nft.name}</p>
+                              </div>
+                              <div>
+                                <label>Token ID:</label>
+                                <p>#{nft.tokenId}</p>
+                              </div>
+                              <div>
+                                <label>Collection:</label>
+                                <p>
+                                  <img src={nftImage} alt="collection" />
+                                  {collection.name}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <label>Token ID:</label>
-                              <p>#{nft.tokenId}</p>
-                            </div>
-                            <div>
-                              <label>Collection:</label>
-                              <p>
-                                <img src={nftImage} alt="collection" />
-                                CryptoKitties
-                              </p>
-                            </div>
+                            <img src={nft.thumbnail_url} alt="nft" />
                           </div>
-                          <img src={nft.thumbnail_url} alt="nft" />
-                        </div>
-                      </div>
-                    ))
+                        );
+                      })}
+                    </div>
                   ) : (
                     <></>
                   )}
                 </div>
-              ))}
-            </div>
-          ))}
-
-          {/* <div className="gold">
-            {onBidders.map(
-              (bidder, index) =>
-                bidder.rewardTier === 'Gold' && (
-                  <div className="each--bid" key={bidder.id}>
-                    <div className="header">
-                      <div className="bidder">
-                        <span className="index">{`${index + 1}. `}</span>
-                        <span title={bidder.name}>{`${bidder.name.substring(0, 6)}...`}</span>
-                        <span style={{ color: '#ddbc45', borderColor: '#ddbc45' }} className="tier">
-                          {bidder.rewardTier}
-                        </span>
-                      </div>
-                      <div className="bid">
-                        <img src={currencyETHIcon} alt="Currency" />
-                        <b>{bidder.bid}</b>
-                        <span>~$48,580</span>
-                      </div>
-                      <div
-                        className={`arrow ${openedBidderID === bidder.id ? 'opened' : ''}`}
-                        aria-hidden="true"
-                        onClick={() =>
-                          openedBidderID === bidder.id
-                            ? setOpenedBidderID(null)
-                            : setOpenedBidderID(bidder.id)
-                        }
-                      >
-                        <img src={arrowDownIcon} alt="Arrow down" />
-                      </div>
-                    </div>
-                    {openedBidderID === bidder.id && (
-                      <div className="nfts">
-                        <div className="each--nft">
-                          <div className="tooltiptext">
-                            <div>
-                              <label>Name:</label>
-                              <p>Joan Jet</p>
-                            </div>
-                            <div>
-                              <label>Token ID:</label>
-                              <p>#01111</p>
-                            </div>
-                            <div>
-                              <label>Collection:</label>
-                              <p>
-                                <img src={nftImage} alt="collection" />
-                                CryptoKitties
-                              </p>
-                            </div>
-                          </div>
-                          <img src={nftImage} alt="nft" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-            )}
-          </div>
-          <div className="silver">
-            {onBidders.map(
-              (bidder, index) =>
-                bidder.rewardTier === 'Silver' && (
-                  <div className="each--bid" key={bidder.id}>
-                    <div className="header">
-                      <div className="bidder">
-                        <span className="index">{`${index + 1}. `}</span>
-                        <span title={bidder.name}>{`${bidder.name.substring(0, 6)}...`}</span>
-                        <span style={{ color: '#bcbcbc', borderColor: '#bcbcbc' }} className="tier">
-                          {bidder.rewardTier}
-                        </span>
-                      </div>
-                      <div className="bid">
-                        <img src={currencyETHIcon} alt="Currency" />
-                        <b>{bidder.bid}</b>
-                        <span>~$48,580</span>
-                      </div>
-                      <div
-                        className={`arrow ${openedBidderID === bidder.id ? 'opened' : ''}`}
-                        aria-hidden="true"
-                        onClick={() =>
-                          openedBidderID === bidder.id
-                            ? setOpenedBidderID(null)
-                            : setOpenedBidderID(bidder.id)
-                        }
-                      >
-                        <img src={arrowDownIcon} alt="Arrow down" />
-                      </div>
-                    </div>
-                    {openedBidderID === bidder.id && (
-                      <div className="nfts">
-                        <div className="each--nft">
-                          <div className="tooltiptext">
-                            <div>
-                              <label>Name:</label>
-                              <p>Joan Jet</p>
-                            </div>
-                            <div>
-                              <label>Token ID:</label>
-                              <p>#01111</p>
-                            </div>
-                            <div>
-                              <label>Collection:</label>
-                              <p>
-                                <img src={nftImage} alt="collection" />
-                                CryptoKitties
-                              </p>
-                            </div>
-                          </div>
-                          <img src={nftImage} alt="nft" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-            )}
-          </div> */}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -251,6 +139,7 @@ BidRankingsPopup.propTypes = {
   getRewardTierSpanStyles: PropTypes.func.isRequired,
   ethPrice: PropTypes.number.isRequired,
   currencyIcon: PropTypes.string.isRequired,
+  collections: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 export default BidRankingsPopup;

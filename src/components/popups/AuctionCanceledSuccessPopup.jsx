@@ -5,31 +5,33 @@ import { useHistory } from 'react-router';
 import Button from '../button/Button.jsx';
 import closeIcon from '../../assets/images/cross.svg';
 import submitted from '../../assets/images/bid-submitted.png';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const AuctionCanceledSuccessPopup = ({ onClose, onAuction, auctionRemoved }) => {
   const history = useHistory();
-  let startDate = '';
-  let startDateMarkup = null;
-  if (!auctionRemoved) {
-    startDate = format(new Date(onAuction.startDate), 'MMMM dd, yyyy');
-    startDateMarkup = <span>{startDate}</span>;
-  }
+  const { loggedInArtist } = useAuthContext();
 
-  let modalText = '';
-  if (auctionRemoved) {
-    modalText = `Your auction ${onAuction.name} was successfully removed`;
-  } else {
-    modalText = `Your auction ${onAuction.name}
-     was successfully created and scheduled for launch
-    on ${startDateMarkup}`;
-  }
+  const getModalText = () => {
+    let startDate = '';
+    if (auctionRemoved) {
+      return <>Your auction ${onAuction.name} was successfully removed</>;
+    }
+
+    startDate = format(new Date(onAuction.startDate), 'MMMM dd, yyyy');
+    return (
+      <>
+        Your auction {onAuction.name} was successfully created and scheduled for launch on{' '}
+        <span>{startDate}</span>
+      </>
+    );
+  };
 
   return (
     <div className="success__popup">
       <img className="close" src={closeIcon} alt="Close" onClick={onClose} aria-hidden="true" />
       <img className="submitted" src={submitted} alt="Submitted" />
       <h1>Success</h1>
-      <p>{modalText}</p>
+      <p>{getModalText()}</p>
       <div className="button__div">
         <Button
           className="light-button"
@@ -44,7 +46,7 @@ const AuctionCanceledSuccessPopup = ({ onClose, onAuction, auctionRemoved }) => 
           <Button
             className="light-border-button"
             onClick={() => {
-              history.push('/customize-auction-landing-page', onAuction.id);
+              history.push(`./${loggedInArtist.universePageAddress}/${onAuction.link}`);
             }}
           >
             Visit landing page
@@ -60,6 +62,6 @@ AuctionCanceledSuccessPopup.propTypes = {
   auctionRemoved: PropTypes.bool,
 };
 AuctionCanceledSuccessPopup.defaultProps = {
-  auctionRemoved: PropTypes.undefined,
+  auctionRemoved: PropTypes.false,
 };
 export default AuctionCanceledSuccessPopup;

@@ -11,6 +11,7 @@ import AuctionEndedSection from './AuctionEndedSection.jsx';
 import AuctionHeader from './AuctionHeader.jsx';
 import { getBidTypeByName } from '../../utils/fixtures/BidOptions.js';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { useAuthContext } from '../../contexts/AuthContext.jsx';
 
 const AuctionDetails = ({
   onAuction,
@@ -28,6 +29,7 @@ const AuctionDetails = ({
 }) => {
   const history = useHistory();
   const { options } = useAuctionContext();
+  const { address } = useAuthContext();
   const [selectedAuctionEnded, setSelectedAuctionEnded] = useState(false);
   const [showBidRankings, setShowBidRankings] = useState(false);
   const [currencyIcon, setCurrencyIcon] = useState(null);
@@ -76,6 +78,12 @@ const AuctionDetails = ({
   };
   console.log('Current bid:');
   console.log(currentBid);
+  console.log('reward tiers slots:');
+  console.log(rewardTiersSlots);
+  console.log(
+    !selectedAuctionEnded ||
+      (selectedAuctionEnded && !currentBid && address !== onAuction.artist.address)
+  );
   return (
     <div
       className={`auction__details__section ${
@@ -105,7 +113,8 @@ const AuctionDetails = ({
               setHasAuctionStarted={setHasAuctionStarted}
               selectedAuctionEnded={selectedAuctionEnded}
             />
-            {!selectedAuctionEnded || (selectedAuctionEnded && !currentBid) ? (
+            {!selectedAuctionEnded ||
+            (selectedAuctionEnded && !currentBid && address !== onAuction.artist.address) ? (
               <TopBidders
                 auction={onAuction.auction}
                 selectedAuctionEnded={selectedAuctionEnded}
@@ -133,6 +142,8 @@ const AuctionDetails = ({
                 slotsInfo={slotsInfo}
                 setShowLoading={setShowLoading}
                 ethPrice={ethPrice}
+                currencyIcon={currencyIcon}
+                isWinningBid={isWinningBid}
               />
             )}
           </div>
@@ -147,6 +158,7 @@ const AuctionDetails = ({
           getRewardTierSpanStyles={getRewardTierSpanStyles}
           ethPrice={ethPrice}
           currencyIcon={currencyIcon}
+          collections={onAuction.collections}
         />
       </Popup>
     </div>
