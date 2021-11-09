@@ -184,7 +184,6 @@
   }
   .auction-reward {
     display: flex;
-    // flex-wrap: wrap;
     gap: 20px;
     .slick-slider {
       position: relative;
@@ -232,7 +231,6 @@
       &.slick-next {
         position: absolute;
         right: -18px;
-        // left: 1020px;
         z-index: 1;
         &::before {
           content: url("../../assets/images/slider-btn.svg");
@@ -284,7 +282,6 @@
         border-radius: 12px;
         padding: 6px;
         position: relative;
-        // margin-right: 20px;
         margin-bottom: 8px;
 
         &__image {
@@ -491,7 +488,6 @@
     }
     .name-bid,
     .date-part {
-      //   display: flex;
       width: 100%;
       .bid-part {
         display: flex;

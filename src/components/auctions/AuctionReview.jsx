@@ -1,5 +1,3 @@
-/* eslint-disable no-debugger */
-/* eslint-disable no-cond-assign */
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
