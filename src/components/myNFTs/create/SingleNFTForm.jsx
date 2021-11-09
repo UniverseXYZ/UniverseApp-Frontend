@@ -113,7 +113,10 @@ const SingleNFTForm = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const [hideIcon1, setHideIcon1] = useState(false);
   const [hideRoyalitiesInfo, setHideRoyalitiesInfo] = useState(false);
+  const [hideMintToOtherWallet, setHideMintToOtherWallet] = useState(false);
   const [royalities, setRoyalities] = useState(true);
+  const [mintToOtherWallet, setMintToOtherWallet] = useState(true);
+  const [otherWalletValue, setOtherWalletValue] = useState('');
   const [propertyCheck, setPropertyCheck] = useState(false);
   const inputFile = useRef(null);
   const [properties, setProperties] = useState([
@@ -1166,8 +1169,50 @@ const SingleNFTForm = () => {
                 >
                   <h5>
                     <img src={addIcon} alt="Add" />
-                    Add address
+                    Add wallet
                   </h5>
+                </div>
+              )}
+            </div>
+            <div className="hr-div" />
+            <div className="royalities">
+              <div className="title">
+                <h4
+                  onMouseOver={() => setHideMintToOtherWallet(true)}
+                  onFocus={() => setHideMintToOtherWallet(true)}
+                  onMouseLeave={() => setHideMintToOtherWallet(false)}
+                  onBlur={() => setHideMintToOtherWallet(false)}
+                >
+                  Mint to other wallet <img src={infoIcon} alt="Info Icon" />
+                </h4>
+                {hideMintToOtherWallet && (
+                  <div className="royalities-info-text other-wallet">
+                    <p>
+                      You can mint the NFT to other wallet. Just specify a receiver wallet address.
+                    </p>
+                  </div>
+                )}
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={mintToOtherWallet}
+                    onChange={(e) => setMintToOtherWallet(e.target.checked)}
+                  />
+                  <span className="slider round" />
+                </label>
+              </div>
+              {mintToOtherWallet && (
+                <div className="royalty properties">
+                  <div className="property-address other-wallet">
+                    <h5>Wallet address</h5>
+                    <Input
+                      className="inp"
+                      placeholder="0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                      value={otherWalletValue}
+                      onChange={(e) => setOtherWalletValue(e.target.value)}
+                      hoverBoxShadowGradient
+                    />
+                  </div>
                 </div>
               )}
             </div>
