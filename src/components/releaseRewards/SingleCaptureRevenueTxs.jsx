@@ -39,7 +39,7 @@ const SingleCaptureRevenueTxs = ({
                 />
               </div>
               <span>{txIndex + 1}.</span>
-              <p>{tx.bidder.user.displayName || tx.bidder.user.address}</p>
+              <p>{tx.bidder?.user?.displayName || tx.bidder?.user?.address || 'No bidder'}</p>
               <div
                 style={getRewardTierSpanStyles(rewardTiersSlots[txIndex])}
                 className="slot__type"
@@ -49,9 +49,9 @@ const SingleCaptureRevenueTxs = ({
             </div>
             <div className="slot__right__part">
               <p>
-                NFTs: <b>{tx.slotInfo.totalDepositedNfts.toNumber()}</b>
+                NFTs: <b>{tx.tier.nfts.length}</b>
               </p>
-              {tx.slotInfo.revenueCaptured ? (
+              {tx.slotInfo?.revenueCaptured ? (
                 <Button className="light-border-button" disabled>
                   Completed <img src={completedCheckmark} alt="completed" />
                 </Button>
@@ -70,7 +70,7 @@ const SingleCaptureRevenueTxs = ({
             <div className="slot__first__part">
               <div className="main">
                 <span>{txIndex + 1}.</span>
-                <p>{tx.bidder.user.displayName || tx.bidder.user.address}</p>
+                <p>{tx.bidder?.user?.displayName || tx.bidder?.user?.address || 'No bidder'}</p>
                 <div className={`slot__type ${tx.type}`}>{tx.type}</div>
               </div>
               <p>
@@ -85,7 +85,7 @@ const SingleCaptureRevenueTxs = ({
               >
                 <img src={arrowDown} alt="Arrow" />
               </div>
-              {tx.slotInfo.revenueCaptured ? (
+              {tx.slotInfo?.revenueCaptured ? (
                 <Button className="light-border-button" disabled>
                   Completed <img src={completedCheckmark} alt="completed" />
                 </Button>

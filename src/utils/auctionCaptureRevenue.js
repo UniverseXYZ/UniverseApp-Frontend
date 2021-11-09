@@ -15,11 +15,16 @@ export const createSingleCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsIn
     let slotIndex = 0;
 
     slotValues.forEach((slot, i) => {
-      if (slot.winner === utils.getAddress(tier.winner)) {
+      if (bidder?.user.address && slot.winner === utils.getAddress(bidder.user.address)) {
         slotInfo = slot;
         slotIndex = slotKeys[i];
       }
     });
+
+    if (slotIndex === 0) {
+      slotIndex = tier.nfts[0].slot;
+      slotInfo = slotValues[slotIndex - 1];
+    }
 
     const txObj = {
       bidder,
@@ -34,13 +39,13 @@ export const createSingleCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsIn
   return txs;
 };
 
-export const createBatchCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInfo) => {
+export const createBatchCaptureRevenueTxsFinalised = (rewardTiersSlots, bidders, slotsInfo) => {
   const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bidders, slotsInfo).sort(
     (a, b) => a.startSlot - b.startSlot
   );
 
   singleCaptureTxs.forEach((tx, txIndex) => {
-    if (tx.slotInfo.revenueCaptured) {
+    if (tx.slotInfo?.revenueCaptured) {
       singleCaptureTxs[txIndex] = [];
     }
   });
@@ -60,14 +65,16 @@ export const createBatchCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInf
     // If we get to an already captured slot or exceed the maxNftsPerTxLimit
     // We push the current txs
     if (!tx.slotInfo) {
-      txs.push(txObject);
-      txObject = {
-        startSlot: 0,
-        endSlot: 0,
-        totalNfts: 0,
-        tiers: [],
-        revenueCaptured: false,
-      };
+      if (txs.length) {
+        txs.push(txObject);
+        txObject = {
+          startSlot: 0,
+          endSlot: 0,
+          totalNfts: 0,
+          tiers: [],
+          revenueCaptured: false,
+        };
+      }
       return;
     }
 
@@ -90,6 +97,42 @@ export const createBatchCaptureRevenueTxs = (rewardTiersSlots, bidders, slotsInf
     // Avoid duplicate tiers
     if (tx.tier.id !== txObject.tiers[txObject.tiers.length - 1]?.id || 0) {
       txObject.tiers.push(tx.tier);
+    }
+  });
+
+  // Push any remaining transactions
+  if (txObject.tiers.length) {
+    txs.push(txObject);
+  }
+  return txs;
+};
+
+export const createBatchCaptureRevenueTxsNotFinalised = (rewardTiersSlots, bidders, slotsInfo) => {
+  const txs = [];
+
+  let txObject = {
+    startSlot: 0,
+    endSlot: 0,
+    totalNfts: 0,
+    tiers: [],
+    slotIndices: [],
+    revenueCaptured: false,
+  };
+
+  rewardTiersSlots.forEach((tier, index) => {
+    if (txObject.totalNfts + tier.nfts.length > maxNftsPerTx) {
+      txs.push(txObject);
+      txObject = {
+        totalNfts: 0,
+        tiers: [],
+        revenueCaptured: false,
+      };
+    }
+
+    txObject.totalNfts += tier.nfts.length;
+    // Avoid duplicate tiers
+    if (tier.id !== txObject.tiers[txObject.tiers.length - 1]?.id || 0) {
+      txObject.tiers.push(tier);
     }
   });
 

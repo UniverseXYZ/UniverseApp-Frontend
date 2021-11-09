@@ -231,9 +231,9 @@ const FinalizeAuction = () => {
       // If last tier show success modal
       if (txReceipt.status === 1) {
         // TODO: Mark nfts as deployed on backend
-        // const result = await depositNfts({ auctionId: auction.id, nftIds });
-        const nftIds = getNftIds(transactions.finalNfts[txIndex]);
+        const nftIds = transactions.displayNfts[txIndex].map((nft) => nft.id);
         const result = await depositNfts({ auctionId: auction.id, nftIds });
+
         if (!auction.depositedNfts) {
           await changeAuctionStatus({
             auctionId: auction.id,
@@ -298,7 +298,6 @@ const FinalizeAuction = () => {
           nftsCountMap[slot] += nfts[index].length;
         }
       });
-      const nftIds = getNftIds(nfts);
       console.log(nftsCountMap);
       const txHashes = [];
       const txs = Object.keys(nftsCountMap).map(async (slot) => {
@@ -313,11 +312,12 @@ const FinalizeAuction = () => {
         const txReceipt = await tx.wait();
         return txReceipt.status;
       });
+      setActiveTxHashes(txHashes);
       const results = await Promise.all(txs);
       setShowAuctionDeployLoading(false);
       // Withdraw from backend
-      const withdrawBE = await withdrawNfts({ auction: auction.onChainId, nftIds });
-      console.log(results);
+      const nftIds = transactions.displayNfts[txIndex].map((nft) => nft.id);
+      const withdrawBE = await withdrawNfts({ auctionId: auction.id, nftIds });
       console.log(withdrawBE);
 
       // Update nfts to withdraw

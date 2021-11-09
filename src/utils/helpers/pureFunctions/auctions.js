@@ -1,3 +1,4 @@
+import { Contract } from 'ethers';
 import { getBidTypeByValue } from '../../fixtures/BidOptions';
 import { parseRoyalties } from '../contractInteraction';
 import ERC20ABI from '../../../contracts/ERC20.json';

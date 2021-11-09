@@ -16,7 +16,8 @@ import CongratsReleaseRewardsPopup from '../popups/CongratsReleaseRewardsPopup';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { changeAuctionStatus } from '../../utils/api/auctions';
 import {
-  createBatchCaptureRevenueTxs,
+  createBatchCaptureRevenueTxsFinalised,
+  createBatchCaptureRevenueTxsNotFinalised,
   createSingleCaptureRevenueTxs,
 } from '../../utils/auctionCaptureRevenue';
 import AuctioneerView from './AuctioneerView';
@@ -44,7 +45,16 @@ const ReleaseRewards = () => {
     console.log('Slots info:');
     console.log(slotsInfo);
     // TODO: We need to add bool if slot is captured in the algorithm
-    const batchCaptureTxs = createBatchCaptureRevenueTxs(rewardTiersSlots, bidders, slotsInfo);
+    let batchCaptureTxs = [];
+    if (auctionData.auction.finalised) {
+      batchCaptureTxs = createBatchCaptureRevenueTxsFinalised(rewardTiersSlots, bidders, slotsInfo);
+    } else {
+      batchCaptureTxs = createBatchCaptureRevenueTxsNotFinalised(
+        rewardTiersSlots,
+        bidders,
+        slotsInfo
+      );
+    }
     const singleCaptureTxs = createSingleCaptureRevenueTxs(rewardTiersSlots, bidders, slotsInfo);
     console.log(`batchCapture Txs:`);
     console.log(batchCaptureTxs);
@@ -117,6 +127,24 @@ const ReleaseRewards = () => {
 
   console.log(`auctionData:`);
   console.log(auction);
+  const getAuctionSlotsInfo = async () => {
+    const onChainAuction = await universeAuctionHouseContract.auctions(
+      auctionData.auction.onChainId
+    );
+
+    const auctionSlotsInfo = {};
+    for (let i = 1; i <= onChainAuction.numberOfSlots; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const slotInfo = await universeAuctionHouseContract.getSlotInfo(
+        auctionData.auction.onChainId,
+        i
+      );
+      console.log(slotInfo);
+      auctionSlotsInfo[i] = slotInfo;
+    }
+    return auctionSlotsInfo;
+  };
+
   const handleFinaliseAuction = async () => {
     try {
       const tx = await universeAuctionHouseContract.finalizeAuction(auction.auction.onChainId);
@@ -127,6 +155,13 @@ const ReleaseRewards = () => {
         const auctionClone = { ...auction };
         auctionClone.auction.finalised = true;
         setAuction(auctionClone);
+        const newSlotsInfo = getAuctionSlotsInfo();
+        const newBatchTxs = createBatchCaptureRevenueTxsFinalised(
+          rewardTiersSlots,
+          bidders,
+          newSlotsInfo
+        );
+        setBatchCaptureRevenueTxs(newBatchTxs);
         const result = await changeAuctionStatus({
           auctionId: auction.auction.id,
           statuses: [
