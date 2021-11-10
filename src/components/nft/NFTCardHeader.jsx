@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Blockies from 'react-blockies';
 
 import { useHistory } from 'react-router';
+import Popup from 'reactjs-popup';
 import countIcon from '../../assets/images/slidecounts.svg';
 import priceIcon from '../../assets/images/marketplace/eth-icon.svg';
 
@@ -16,12 +17,16 @@ import universeIcon from '../../assets/images/universe-img.svg';
 import { getCollectionBackgroundColor } from '../../utils/helpers';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
 
 const NFTCardHeader = ({ nft, creator, owner, collection }) => {
   const history = useHistory();
   const { myNFTs, setMyNFTs } = useMyNftsContext();
   const { address } = useAuthContext();
+  const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownID, setDropdownID] = useState(0);
+  const ref = useRef();
+  const [showTransferNFTPopup, setShowTransferNFTPopup] = useState(false);
 
   const hideNFT = (id) => {
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: true } : item)));
@@ -30,6 +35,19 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
   const unhideNFT = (id) => {
     setMyNFTs(myNFTs.map((item) => (item.id === id ? { ...item, hidden: false } : item)));
   };
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
 
   const handleLikeClick = (id) => {
     const newNFTs = [...myNFTs];
@@ -192,21 +210,22 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
         </div> */}
           </>
         )}
-        {/* {!canSelect ? (
-      <div
-        className="nft--card--header--right--dropdown"
-        aria-hidden="true"
-        onClick={() => {
-          setShowDropdown(!showDropdown);
-          setDropdownID(nft.id);
-        }}
-      >
-        <span />
-        <span />
-        <span />
-        {dropdownID === nft.id && showDropdown && (
-          <ul ref={ref} className="nft--card--header--right--dropdown--items">
-            <li
+        {/* {!canSelect ? ( */}
+        <div
+          className="nft--card--header--right--dropdown"
+          aria-hidden="true"
+          onClick={() => {
+            setShowDropdown(!showDropdown);
+            setDropdownID(nft.id);
+          }}
+          ref={ref}
+        >
+          <span />
+          <span />
+          <span />
+          {dropdownID === nft.id && showDropdown && (
+            <ul className="nft--card--header--right--dropdown--items">
+              {/* <li
               aria-hidden="true"
               onClick={() =>
                 history.push('/nft-marketplace/select-items', { name: nft.name })
@@ -214,12 +233,12 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
             >
               <img src={sellNFTIcon} alt="Sell" />
               <p>Sell</p>
-            </li>
-            <li aria-hidden="true">
-              <img src={transferNFTIcon} alt="Transfer" />
-              <p>Transfer</p>
-            </li>
-            <li aria-hidden="true">
+            </li> */}
+              <li aria-hidden="true" onClick={() => setShowTransferNFTPopup(true)}>
+                <img src={transferNFTIcon} alt="Transfer" />
+                <p>Transfer</p>
+              </li>
+              {/* <li aria-hidden="true">
               <img src={shareNFTIcon} alt="Share" />
               <p>Share</p>
             </li>
@@ -237,14 +256,17 @@ const NFTCardHeader = ({ nft, creator, owner, collection }) => {
             <li className="burn" aria-hidden="true">
               <img src={burnNFTIcon} alt="Burn" />
               <p>Burn</p>
-            </li>
-          </ul>
-        )}
-      </div>
-    ) : (
+            </li> */}
+            </ul>
+          )}
+        </div>
+        {/* ) : (
       <></>
     )} */}
       </div>
+      <Popup closeOnDocumentClick={false} open={showTransferNFTPopup}>
+        <TransferNFTPopup close={() => setShowTransferNFTPopup(false)} nft={nft} />
+      </Popup>
     </div>
   );
 };
