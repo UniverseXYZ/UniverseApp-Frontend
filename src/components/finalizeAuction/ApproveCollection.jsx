@@ -47,10 +47,16 @@ const ApproveCollection = ({ collection, approveCollection, isApproved, auctionO
           </Button>
         ) : (
           <div className="loading-ring">
-            <div />
-            <div />
-            <div />
-            <div />
+            <div className="lds-roller">
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
           </div>
         )}
       </div>
