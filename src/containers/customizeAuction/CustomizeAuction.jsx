@@ -288,6 +288,7 @@ const CustomizeAuction = () => {
   }, [location.pathname]);
 
   const disableSave = disableSaveChanges();
+  const blurToggleButtonDisabled = !domainAndBranding.backgroundImage;
 
   return (
     <div className="customize__auction">
@@ -310,6 +311,7 @@ const CustomizeAuction = () => {
           </Button>
         </div>
         <DomainAndBranding
+          blurToggleButtonDisabled={blurToggleButtonDisabled}
           invalidPromoImage={invalidPromoImage}
           setInvalidPromoImage={setInvalidPromoImage}
           invalidBackgroundImage={invalidBackgroundImage}
