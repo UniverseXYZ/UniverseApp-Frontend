@@ -626,6 +626,10 @@
         .property-address {
           width: 69%;
           padding-right: 16px;
+          &.other-wallet {
+            width: 100%;
+            padding-right: 0px;
+          }
 
           @include sm {
             width: 100%;
@@ -752,6 +756,10 @@
             bottom: 20px;
             left: 165px;
             transform: translateX(-50%);
+            &.other-wallet {
+              width: 185px;
+              left: 220px;
+            }
 
             p {
               font-family: $spaceGroteskFont;
