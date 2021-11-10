@@ -41,7 +41,6 @@ const CreatTiersStickyBar = ({
     });
 
     seTotalNFTsCount(nftsCount);
-
     setWinnersOptions(options);
   }, [winnersData]);
 
@@ -51,6 +50,7 @@ const CreatTiersStickyBar = ({
         <SelectComponent
           options={winnersOptions}
           onChange={(data) => setSelectedWinner(data.value)}
+          selectedWinner={selectedWinner}
         />
         <div className="infoSelect-div">
           <span>Winners : {winnersData.length}</span>
