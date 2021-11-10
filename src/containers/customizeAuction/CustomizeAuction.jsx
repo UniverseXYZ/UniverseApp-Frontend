@@ -99,7 +99,7 @@ const CustomizeAuction = () => {
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
     if (action === PREVIEW_ACTION || action === SAVE_PREVIEW_ACTION) {
-      history.push(`${loggedInArtist.name}/${domainAndBranding.link}`);
+      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`);
     } else {
       setSuccessPopup(true);
     }
