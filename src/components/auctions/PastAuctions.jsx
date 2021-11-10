@@ -33,6 +33,8 @@ const PastAuctions = () => {
   const [pastAuctions, setPastAuctions] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hideLaunchIcon1, setHideLaunchIcon1] = useState(0);
+  const [hideLaunchIcon2, setHideLaunchIcon2] = useState(0);
 
   useEffect(async () => {
     try {
@@ -71,7 +73,7 @@ const PastAuctions = () => {
               className="searchInp"
               onChange={(e) => handleSearch(e.target.value)}
               value={searchByName}
-              placeholder="Search by name"
+              placeholder="Search"
               hoverBoxShadowGradient
             />
             <img src={searchIcon} alt="search" />
@@ -85,20 +87,18 @@ const PastAuctions = () => {
         />
       </div>
       {!loading ? (
-        pastAuctions
-          .slice(offset, offset + perPage)
-          .filter((item) => item.name.toLowerCase().includes(searchByName.toLowerCase()))
-          .filter((item) => item && isBeforeNow(item.endDate))
-          .map((pastAuction, index) => {
-            const auctionTotalNfts = pastAuction.rewardTiers
-              .map((tier) => tier.nfts.length)
-              .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
+        pastAuctions.map((pastAuction, index) => {
+          const auctionTotalNfts = pastAuction.rewardTiers
+            .map((tier) => tier.nfts.length)
+            .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
 
-            const startDate = format(new Date(pastAuction.startDate), 'MMMM dd, HH:mm');
-            const endDate = format(new Date(pastAuction.endDate), 'MMMM dd, HH:mm');
+          const startDate = format(new Date(pastAuction.startDate), 'MMMM dd, HH:mm');
+          const endDate = format(new Date(pastAuction.endDate), 'MMMM dd, HH:mm');
 
-            return (
+          return (
+            <>
               <div className="auction past-auction" key={pastAuction.id}>
+                <div className="past-left-border-effect" />
                 <div className="auction-header">
                   <div className="img_head">
                     <h3>{pastAuction.name}</h3>
@@ -145,6 +145,12 @@ const PastAuctions = () => {
                     </div>
                   </div>
                   <div className="launch-auction">
+                    <Button
+                      className="light-border-button hide__on__mobile"
+                      // onClick={() => history.push(activeAuction.link.replace('universe.xyz', ''))}
+                    >
+                      <span>Go to landing page</span>
+                    </Button>
                     <div
                       className="arrow"
                       onClick={() => handleAuctionExpand(pastAuction.id)}
@@ -153,9 +159,15 @@ const PastAuctions = () => {
                       aria-hidden
                     >
                       {shownActionId === pastAuction.id ? (
-                        <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
+                        <>
+                          <span className="tooltiptext">Show less</span>
+                          <img src={arrowUp} alt="Arrow up" aria-hidden="true" />
+                        </>
                       ) : (
-                        <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
+                        <>
+                          <span className="tooltiptext">Show more</span>
+                          <img src={arrowDown} alt="Arrow down" aria-hidden="true" />
+                        </>
                       )}
                     </div>
                   </div>
@@ -185,55 +197,126 @@ const PastAuctions = () => {
                   </div>
                 </div>
                 <div className="bid_info">
-                  <div className="bids first">
-                    <div className="boredred-div">
-                      <span className="head">Total bids</span>
-                      <span className="value">{pastAuction.bids.bidsCount}</span>
-                    </div>
-                    <div>
-                      <span className="head">Highest winning bid</span>
-                      <span className="value">
-                        <img src={bidIcon} alt="Highest winning bid" />
-                        {pastAuction.bids.highestBid} ETH
-                        <span className="dollar-val">
-                          ~$
-                          {(
-                            pastAuction?.bids?.highestBid *
-                            ethPrice?.market_data?.current_price?.usd
-                          )?.toFixed(2)}
-                        </span>
+                  <div className="boredred-div">
+                    <span className="head">Total bids</span>
+                    <span className="value">{pastAuction.bids?.bidsCount}</span>
+                  </div>
+                  <div>
+                    <span className="head">Highest winning bid</span>
+                    <span className="value">
+                      <img src={bidIcon} alt="Highest winning bid" />
+                      {pastAuction.bids.highestBid} ETH
+                      <span className="dollar-val">
+                        ~$
+                        {(
+                          pastAuction?.bids?.highestBid * ethPrice?.market_data?.current_price?.usd
+                        )?.toFixed(2)}
                       </span>
-                    </div>
+                    </span>
                   </div>
 
-                  <div className="bids">
-                    <div className="boredred-div">
-                      <span className="head">Total bids amount</span>
-                      <span className="value">
-                        <img src={bidIcon} alt="Total bids amount" />
-                        {pastAuction.bids.totalBids} ETH
-                        <span className="dollar-val">
-                          ~$
-                          {(
-                            pastAuction?.bids?.totalBids * ethPrice?.market_data?.current_price?.usd
-                          )?.toFixed(2)}
-                        </span>
+                  <div className="boredred-div">
+                    <span className="head">Total bids amount</span>
+                    <span className="value">
+                      <img src={bidIcon} alt="Total bids amount" />
+                      {pastAuction.bids.totalBids} ETH
+                      <span className="dollar-val">
+                        ~$
+                        {(
+                          pastAuction?.bids?.totalBids * ethPrice?.market_data?.current_price?.usd
+                        )?.toFixed(2)}
                       </span>
+                    </span>
+                  </div>
+                  <div>
+                    <span className="head">Lower winning bid</span>
+                    <span className="value">
+                      <img src={bidIcon} alt="Lower winning bid" />
+                      {pastAuction.bids.lowestBid} ETH
+                      <span className="dollar-val">
+                        ~$
+                        {(
+                          pastAuction?.bids?.lowestBid * ethPrice?.market_data?.current_price.usd
+                        )?.toFixed(2)}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="funds-and-balance">
+                  <div>
+                    <div className="unreleased-funds">
+                      <div className="head">
+                        <span>Unreleased funds</span>
+                        <span
+                          onMouseOver={() => setHideLaunchIcon1(pastAuction.id)}
+                          onFocus={() => setHideLaunchIcon1(pastAuction.id)}
+                          onMouseLeave={() => setHideLaunchIcon1(0)}
+                          onBlur={() => setHideLaunchIcon1(0)}
+                        >
+                          <img src={infoIcon} alt="Info Icon" />
+                        </span>
+                        {hideLaunchIcon1 === pastAuction.id && (
+                          <div className="info-text1">
+                            <p>
+                              For the auctioneer to be able to collect their winnings and for the
+                              users to be able to claim their NFTs the rewards need to be released
+                              first.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="balance-body">
+                        <span className="value-section">
+                          <img src={bidIcon} alt="unreleased funds" />
+                          <span className="value">
+                            120.42
+                            <span className="dollar-val">~$41,594</span>
+                          </span>
+                        </span>
+                        <Button className="light-button ">
+                          <span>Release rewards</span>
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <span className="head">Lower winning bid</span>
-                      <span className="value">
-                        <img src={bidIcon} alt="Lower winning bid" />
-                        {pastAuction.bids.lowestBid} ETH
-                        <span className="dollar-val">
-                          ~$
-                          {(
-                            pastAuction?.bids?.lowestBid * ethPrice?.market_data?.current_price.usd
-                          )?.toFixed(2)}
+                    <div className="available-balance">
+                      <div className="head">
+                        <span>Available balance</span>
+                        <span
+                          onMouseOver={() => setHideLaunchIcon2(pastAuction.id)}
+                          onFocus={() => setHideLaunchIcon2(pastAuction.id)}
+                          onMouseLeave={() => setHideLaunchIcon2(0)}
+                          onBlur={() => setHideLaunchIcon2(0)}
+                        >
+                          <img src={infoIcon} alt="Info Icon" />
                         </span>
-                      </span>
+                        {hideLaunchIcon2 === pastAuction.id && (
+                          <div className="info-text2">
+                            <p>This is the released reward amount availble for claiming</p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="balance-body">
+                        <span className="value-section">
+                          <img src={bidIcon} alt="unreleased funds" />
+                          <span className="value">
+                            14.24
+                            <span className="dollar-val">~$41,594</span>
+                          </span>
+                        </span>
+                        <Button className="light-button ">
+                          <span>Claim funds</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
+                </div>
+                <div className="empty-section">
+                  <NoAuctionsFound
+                    title="The auction didn’t get bids on all the slots"
+                    desc="You can withdraw your NFTs by clicking a button below."
+                    btnText="Withdraw NFTs"
+                  />
                 </div>
                 <div hidden={shownActionId !== pastAuction.id} className="auctions-tier">
                   {pastAuction.rewardTiers.map((tier) => (
@@ -260,6 +343,9 @@ const PastAuctions = () => {
                               <div className="tier-image-second" />
                               <div className="tier-image-first" />
                               <div className="tier-image-main">
+                                <div className="amount-of-editions">
+                                  <p>{nft.numberOfEditions}</p>
+                                </div>
                                 <img src={imageUrl} alt={nft.name} />
                               </div>
                             </div>
@@ -270,8 +356,9 @@ const PastAuctions = () => {
                   ))}
                 </div>
               </div>
-            );
-          })
+            </>
+          );
+        })
       ) : (
         <ActiveAndPastCardSkeleton />
       )}
