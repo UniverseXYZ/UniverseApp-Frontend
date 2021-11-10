@@ -15,6 +15,8 @@ const TIER_IMAGE_DIMENSIONS = {
   height: 800,
 };
 
+const TIER_IMAGE_MAX_SIZE_MB = 3;
+const MB_IN_BYTES = 1;
 const RewardTiersAuction = ({
   values,
   onChange,
@@ -67,7 +69,8 @@ const RewardTiersAuction = ({
 
   const validateFile = async (file, tierId) => {
     const fileValid =
-      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+      (file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / MB_IN_BYTES < TIER_IMAGE_MAX_SIZE_MB;
 
     getImageDimensions(file, ({ width, height }) => {
       let dimensionsValid = false;
@@ -75,10 +78,11 @@ const RewardTiersAuction = ({
         dimensionsValid = true;
       }
       handleImageError(tierId, fileValid, dimensionsValid);
-    });
 
-    // always show an image preview, so the user is able to remove an incorrect image
-    handleUploadImage(file, tierId);
+      if (dimensionsValid) {
+        handleUploadImage(file, tierId);
+      }
+    });
   };
 
   const onDrop = (e, tierId) => {

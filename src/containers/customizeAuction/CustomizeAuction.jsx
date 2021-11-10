@@ -90,10 +90,7 @@ const CustomizeAuction = () => {
     !accountName ||
     accountPage === 'universe.xyz/' ||
     accountPage === 'universe.xyz/your-address' ||
-    !about ||
-    invalidPromoImage ||
-    invalidBackgroundImage ||
-    invalidTierImageIds.length;
+    !about;
 
   const setContext = (_loggedInArtistClone, _editedAuction, action) => {
     setLoggedInArtist(_loggedInArtistClone);
@@ -102,7 +99,7 @@ const CustomizeAuction = () => {
       myAuctions.map((item) => (item.id === _editedAuction.id ? _editedAuction : item))
     );
     if (action === PREVIEW_ACTION || action === SAVE_PREVIEW_ACTION) {
-      history.push(`${loggedInArtist.name}/${domainAndBranding.link}`);
+      history.push(`${loggedInArtist.universePageAddress}/${domainAndBranding.link}`);
     } else {
       setSuccessPopup(true);
     }
@@ -288,6 +285,7 @@ const CustomizeAuction = () => {
   }, [location.pathname]);
 
   const disableSave = disableSaveChanges();
+  const blurToggleButtonDisabled = !domainAndBranding.backgroundImage;
 
   return (
     <div className="customize__auction">
@@ -310,6 +308,7 @@ const CustomizeAuction = () => {
           </Button>
         </div>
         <DomainAndBranding
+          blurToggleButtonDisabled={blurToggleButtonDisabled}
           invalidPromoImage={invalidPromoImage}
           setInvalidPromoImage={setInvalidPromoImage}
           invalidBackgroundImage={invalidBackgroundImage}

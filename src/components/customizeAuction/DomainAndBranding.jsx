@@ -36,6 +36,9 @@ const MIN_BACKGROUND_IMAGE_SIZE = {
   width: 1280,
   height: 720,
 };
+const PROMO_IMAGE_MAX_SIZE_MB = 3;
+const BACKGROUND_IMAGE_MAX_SIZE_MB = 1;
+const MB_IN_BYTES = 1048576;
 
 const DomainAndBranding = ({
   values,
@@ -46,6 +49,7 @@ const DomainAndBranding = ({
   invalidBackgroundImage,
   setInvalidPromoImage,
   setInvalidBackgroundImage,
+  blurToggleButtonDisabled,
 }) => {
   const { loggedInArtist } = useAuthContext();
   const [promoInfo, setPromoInfo] = useState(false);
@@ -114,9 +118,10 @@ const DomainAndBranding = ({
     }
   };
 
-  const validateFile = (file, imageType) => {
+  const validateFile = (file, imageType, maxSize) => {
     const fileValid =
-      (file.type === 'image/jpeg' || file.type === 'image/png') && file.size / 1048576 < 30;
+      (file.type === 'image/jpeg' || file.type === 'image/png') &&
+      file.size / MB_IN_BYTES < maxSize;
     const reader = new FileReader();
 
     getImageDimensions(file, ({ width, height }) => {
@@ -136,8 +141,8 @@ const DomainAndBranding = ({
       handleImageError(imageType, fileValid, dimensionsValid);
     });
 
-    // always show an image preview, so the user is able to remove an incorrect image
     handleImageError(imageType, fileValid, file);
+
     if (fileValid) {
       // Read the contents of Image File.
       reader.readAsDataURL(file);
@@ -169,16 +174,20 @@ const DomainAndBranding = ({
     }
   };
 
-  const onDrop = (e, imageType) => {
+  const onDrop = (e, imageType, maxSize) => {
     e.preventDefault();
     const {
       dataTransfer: { files },
     } = e;
-    validateFile(files[0], imageType);
+    validateFile(files[0], imageType, maxSize);
   };
 
   const onDragOver = (e) => {
     e.preventDefault();
+  };
+
+  const onInputClick = (event) => {
+    event.target.value = '';
   };
 
   const promoImageSrc =
@@ -259,7 +268,7 @@ const DomainAndBranding = ({
           <div className="upload__promo">
             <div
               className="dropzone"
-              onDrop={(e) => onDrop(e, PROMO_IMAGE)}
+              onDrop={(e) => onDrop(e, PROMO_IMAGE, PROMO_IMAGE_MAX_SIZE_MB)}
               onDragOver={(e) => onDragOver(e)}
             >
               <div className="upload__promo__title">
@@ -300,7 +309,10 @@ const DomainAndBranding = ({
                   type="file"
                   className="inp-disable"
                   ref={inputPromo}
-                  onChange={(e) => validateFile(e.target.files[0], PROMO_IMAGE)}
+                  onClick={onInputClick}
+                  onChange={(e) =>
+                    validateFile(e.target.files[0], PROMO_IMAGE, PROMO_IMAGE_MAX_SIZE_MB)
+                  }
                 />
                 <div className="promo__preview">
                   <h6>Preview</h6>
@@ -313,9 +325,10 @@ const DomainAndBranding = ({
                           src={closeIcon}
                           alt="Close"
                           aria-hidden="true"
-                          onClick={() =>
-                            onChange((prevValues) => ({ ...prevValues, promoImage: null }))
-                          }
+                          onClick={() => {
+                            onChange((prevValues) => ({ ...prevValues, promoImage: null }));
+                            setPromoImageError(false);
+                          }}
                         />
                       </>
                     ) : (
@@ -335,7 +348,7 @@ const DomainAndBranding = ({
           <div className="upload__background">
             <div
               className="dropzone"
-              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE)}
+              onDrop={(e) => onDrop(e, BACKGROUND_IMAGE, BACKGROUND_IMAGE_MAX_SIZE_MB)}
               onDragOver={(e) => onDragOver(e)}
             >
               <div className="upload__background__title">
@@ -363,6 +376,7 @@ const DomainAndBranding = ({
                   )}
                   <div className="toggle-switch">
                     <input
+                      disabled={blurToggleButtonDisabled}
                       id="toggleSwitch"
                       type="checkbox"
                       className="toggle-switch-checkbox"
@@ -411,7 +425,10 @@ const DomainAndBranding = ({
                   type="file"
                   className="inp-disable"
                   ref={inputBackground}
-                  onChange={(e) => validateFile(e.target.files[0], BACKGROUND_IMAGE)}
+                  onClick={onInputClick}
+                  onChange={(e) =>
+                    validateFile(e.target.files[0], BACKGROUND_IMAGE, BACKGROUND_IMAGE_MAX_SIZE_MB)
+                  }
                 />
                 <div className="background__preview">
                   <h6>Preview</h6>
@@ -425,9 +442,13 @@ const DomainAndBranding = ({
                           src={closeIcon}
                           alt="Close"
                           aria-hidden="true"
-                          onClick={() =>
-                            onChange((prevValues) => ({ ...prevValues, backgroundImage: null }))
-                          }
+                          onClick={() => {
+                            onChange((prevValues) => ({
+                              ...prevValues,
+                              backgroundImage: null,
+                              backgroundImageBlur: false,
+                            }));
+                          }}
                         />
                       </>
                     ) : (
@@ -463,6 +484,7 @@ DomainAndBranding.propTypes = {
   invalidBackgroundImage: PropTypes.bool.isRequired,
   setInvalidPromoImage: PropTypes.func.isRequired,
   setInvalidBackgroundImage: PropTypes.func.isRequired,
+  blurToggleButtonDisabled: PropTypes.bool.isRequired,
 };
 
 DomainAndBranding.defaultProps = {
