@@ -29,9 +29,13 @@ const WinnerNFT = ({ nft, onRemoveEdition }) => {
           Your browser does not support the video tag.
         </video>
       )}
+
       {mpeg && <img className="smallView-image" src={mp3Icon} alt={nft.name} />}
+
       {image && <img className="smallView-image" src={nft.url} alt={nft.name} />}
+
       {nft.count > 1 && <span className="for-editions-count">{nft.count}</span>}
+
       <div className="delete-hover">
         {nft.count > 1 ? (
           <span className="upRemove-txt remove-eds">Select editions to remove</span>

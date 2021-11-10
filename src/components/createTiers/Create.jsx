@@ -603,6 +603,8 @@ const Create = () => {
         <CreatTiersStickyBar
           onRemoveEdition={onRemoveEdition}
           winnersData={winnersData}
+          selectedWinner={selectedWinner}
+          setSelectedWinner={setSelectedWinner}
           tierSettings={values}
           handleContinue={handleContinue}
           disabled={canContinue}
