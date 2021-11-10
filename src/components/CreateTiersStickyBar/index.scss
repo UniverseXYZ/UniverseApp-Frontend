@@ -78,21 +78,7 @@
     }
   }
   .img-div {
-    display: flex;
-    margin-top: 10px;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    .imgs-mr {
-      margin-right: 6px;
-    }
     .imgs {
-      position: relative;
-      background: rgba(0, 0, 0, 0.02);
-      margin-top: 6px;
-      box-sizing: border-box;
-      border-radius: 6px;
-      width: 54px;
-      height: 54px;
       .for-editions-count {
         position: absolute;
         width: 15px;
@@ -108,8 +94,8 @@
         font-size: 10px;
         line-height: 150%;
         color: #ffffff;
-        align-items: center;
-        text-align: center;
+        // align-items: center;
+        // text-align: center;
         @include sm {
           left: 25px;
         }
