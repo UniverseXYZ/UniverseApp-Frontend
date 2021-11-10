@@ -56,7 +56,9 @@ const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
         <div className="launch-auction">
           <Button
             className="light-border-button hide__on__mobile"
-            onClick={() => history.push(`/${loggedInArtist.name}/${activeAuction.link}`)}
+            onClick={() =>
+              history.push(`/${loggedInArtist.universePageAddress}/${activeAuction.link}`)
+            }
           >
             <span>Go to landing page</span>
           </Button>
