@@ -6,6 +6,7 @@ const GET_AUCTION_DATA = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/page
 const GET_PAST_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/past`;
 const EDIT_AUCTION_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
 const DELETE_FUTURE_AUCTION = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
+const CANCEL_AUCTION = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/cancel/${id}`;
 const UPLAD_IMAGES_FOR_LANDING_PAGE_URL = (id) =>
   `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}/landing-files`;
 const EDIT_REWARD_TIER_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/reward-tiers/${id}`;
@@ -450,6 +451,21 @@ export const claimAuctionFunds = async (body) => {
   };
 
   const request = await fetch(CLAIM_AUCTION_FUNDS, requestOptions);
+  const result = await request.text().then((data) => JSON.parse(data));
+  return result;
+};
+
+export const cancelAuction = async (id) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,
+    },
+  };
+
+  const request = await fetch(CANCEL_AUCTION(id), requestOptions);
+
   const result = await request.text().then((data) => JSON.parse(data));
   return result;
 };

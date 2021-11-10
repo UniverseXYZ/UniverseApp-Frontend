@@ -20,6 +20,7 @@ import {
   changeAuctionStatus,
   depositNfts,
   withdrawNfts,
+  cancelAuction,
 } from '../../utils/api/auctions';
 import LoadingImage from '../general/LoadingImage';
 import LoadingPopup from '../popups/LoadingPopup';
@@ -44,12 +45,6 @@ const FinalizeAuction = () => {
   const [approvedTxCount, setApprovedTxCount] = useState(0);
   const [approvedTxs, setApprovedTxs] = useState([]);
 
-  // console.log(auction);
-  // console.log(approvedTxCount);
-  // console.log(approvedTxs);
-  // console.log(collections.length);
-  // console.log(universeAuctionHouseContract);
-
   const completedAuctionCreationStep = auction.onChainId && !auction.canceled;
 
   const completedCollectionsStep =
@@ -63,6 +58,7 @@ const FinalizeAuction = () => {
     setTransactions(transactionsConfig);
 
     transactionsConfig.displayNfts.forEach((slotNfts, index) => {
+      console.info(slotNfts);
       const areNftsDeposited = slotNfts.some((nft) => !nft.deposited);
       if (!areNftsDeposited) {
         setApprovedTxs([...approvedTxs, index]);
@@ -144,7 +140,6 @@ const FinalizeAuction = () => {
       const txResult = await tx.wait();
 
       if (txResult.status === 1) {
-        console.log(txResult);
         const auctionid = txResult.events[0].args[0].toString();
 
         // TODO: Call api to change auction
@@ -218,7 +213,6 @@ const FinalizeAuction = () => {
   const handleDepositTier = async (txIndex) => {
     try {
       setShowAuctionDeployLoading(true);
-
       // Deposit tier
       const tx = await universeAuctionHouseContract.batchDepositToAuction(
         auction.onChainId,
@@ -257,7 +251,7 @@ const FinalizeAuction = () => {
       setShowAuctionDeployLoading(false);
       setActiveTxHashes([]);
 
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -338,6 +332,21 @@ const FinalizeAuction = () => {
     }
   };
 
+  const handleCancelAuction = () => {
+    try {
+      const response = cancelAuction(auction.id);
+      if (!response.error) {
+        setAuction({
+          ...auction,
+          canceled: true,
+        });
+      }
+    } catch (error) {
+      // TODO: handle error here
+      console.error(error);
+    }
+  };
+
   return !auction ? (
     <></>
   ) : (
@@ -382,9 +391,17 @@ const FinalizeAuction = () => {
                 </p>
               </div>
               {completedAuctionCreationStep ? (
-                <Button className="light-border-button" disabled>
-                  Completed <img src={completedCheckmark} alt="completed" />
-                </Button>
+                <>
+                  <Button className="light-border-button" disabled>
+                    Completed <img src={completedCheckmark} alt="completed" />
+                  </Button>
+                  <Button
+                    onClick={handleCancelAuction}
+                    className="light-border-button attention-button"
+                  >
+                    Cancel
+                  </Button>
+                </>
               ) : (
                 <Button className="light-button" onClick={handleCreateAuction}>
                   Proceed
