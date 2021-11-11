@@ -54,7 +54,6 @@ const AuctionSettings = () => {
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
-    startingBid: true,
     startDate: true,
     endDate: true,
     royalty: true,
@@ -93,7 +92,6 @@ const AuctionSettings = () => {
 
   const [values, setValues] = useState({
     name: auction && auction.name ? auction.name : '',
-    startingBid: auction && auction.startingBid ? auction.startingBid : '',
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDate ? auction.endDate : '',
   });
@@ -101,7 +99,6 @@ const AuctionSettings = () => {
   useEffect(() => {
     if (
       values.name ||
-      values.startingBid ||
       values.startDate ||
       values.endDate ||
       properties[0].address ||
@@ -118,7 +115,6 @@ const AuctionSettings = () => {
     setTimeout(() => {
       setIsValidFields((prevValues) => ({
         ...prevValues,
-        startingBid: values.startingBid.trim().length !== 0,
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
         name: values.name.trim().length !== 0,
@@ -130,8 +126,8 @@ const AuctionSettings = () => {
     let bidFieldsValid = false;
     setProperties(royalities ? properties : [{ address: '', amount: '' }]);
 
-    if (values.name && values.startingBid && values.startDate && values.endDate) {
-      if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
+    if (values.name && values.startDate && values.endDate) {
+      if (isValidFields.startDate && isValidFields.endDate) {
         auctionFieldsValid = true;
       }
     }
@@ -160,7 +156,6 @@ const AuctionSettings = () => {
           id: uuid(),
           launch: false,
           name: values.name,
-          startingBid: values.startingBid,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
           rewardTiers: minBid
@@ -172,7 +167,6 @@ const AuctionSettings = () => {
         setAuction((prevValue) => ({
           ...prevValue,
           name: values.name,
-          startingBid: values.startingBid,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
           properties: royalities ? properties : null,
@@ -239,7 +233,6 @@ const AuctionSettings = () => {
     if (isEditingAuction) {
       setValues({
         name: auction.name,
-        startingBid: auction.startingBid,
         startDate: auction.startDate ? new Date(auction.startDate) : '',
         endDate: auction.endDate ? new Date(auction.endDate) : '',
       });
@@ -520,15 +513,11 @@ const AuctionSettings = () => {
           </div>
         )}
       </div>
-      {!isValidFields.startingBid ||
-      !isValidFields.startDate ||
-      !isValidFields.endDate ||
-      errorArray.length > 0 ? (
+      {!isValidFields.startDate || !isValidFields.endDate || errorArray.length > 0 ? (
         <div className="last-error">
           Something went wrong. Please, fix the errors in the fields above and try again
         </div>
       ) : (
-        isValidFields.startingBid &&
         isValidFields.startDate &&
         isValidFields.endDate &&
         !royaltyValidAddress && (
