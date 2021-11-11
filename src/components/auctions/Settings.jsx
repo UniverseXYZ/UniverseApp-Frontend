@@ -54,7 +54,6 @@ const AuctionSettings = () => {
 
   const [isValidFields, setIsValidFields] = useState({
     name: true,
-    startingBid: true,
     startDate: true,
     endDate: true,
     royalty: true,
@@ -93,7 +92,6 @@ const AuctionSettings = () => {
 
   const [values, setValues] = useState({
     name: auction && auction.name ? auction.name : '',
-    startingBid: auction && auction.startingBid ? auction.startingBid : '',
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDate ? auction.endDate : '',
   });
@@ -101,7 +99,6 @@ const AuctionSettings = () => {
   useEffect(() => {
     if (
       values.name ||
-      values.startingBid ||
       values.startDate ||
       values.endDate ||
       properties[0].address ||
@@ -118,7 +115,6 @@ const AuctionSettings = () => {
     setTimeout(() => {
       setIsValidFields((prevValues) => ({
         ...prevValues,
-        startingBid: values.startingBid.trim().length !== 0,
         startDate: values.startDate.length !== 0,
         endDate: values.endDate.length !== 0,
         name: values.name.trim().length !== 0,
@@ -130,8 +126,8 @@ const AuctionSettings = () => {
     let bidFieldsValid = false;
     setProperties(royalities ? properties : [{ address: '', amount: '' }]);
 
-    if (values.name && values.startingBid && values.startDate && values.endDate) {
-      if (isValidFields.startingBid && isValidFields.startDate && isValidFields.endDate) {
+    if (values.name && values.startDate && values.endDate) {
+      if (isValidFields.startDate && isValidFields.endDate) {
         auctionFieldsValid = true;
       }
     }
@@ -160,7 +156,6 @@ const AuctionSettings = () => {
           id: uuid(),
           launch: false,
           name: values.name,
-          startingBid: values.startingBid,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
           rewardTiers: minBid
@@ -172,7 +167,6 @@ const AuctionSettings = () => {
         setAuction((prevValue) => ({
           ...prevValue,
           name: values.name,
-          startingBid: values.startingBid,
           startDate: formatISO(values.startDate),
           endDate: formatISO(values.endDate),
           properties: royalities ? properties : null,
@@ -239,7 +233,6 @@ const AuctionSettings = () => {
     if (isEditingAuction) {
       setValues({
         name: auction.name,
-        startingBid: auction.startingBid,
         startDate: auction.startDate ? new Date(auction.startDate) : '',
         endDate: auction.endDate ? new Date(auction.endDate) : '',
       });
@@ -288,19 +281,9 @@ const AuctionSettings = () => {
                 </p>
               </div>
               <div className="starting-bid">
-                <Input
-                  id="startingBid"
-                  type="number"
-                  onChange={(e) => {
-                    if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
-                    handleOnChange(e);
-                  }}
-                  label="Starting bid"
-                  value={values.startingBid}
-                  hoverBoxShadowGradient
-                  error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
-                />
-
+                <div className="title--section">
+                  <h1>Bid token (ERC-20)</h1>
+                </div>
                 <div className="drop-down">
                   <Popup
                     nested
@@ -308,9 +291,13 @@ const AuctionSettings = () => {
                     closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
-                        {bid.img && <img src={bid.img} className="token-logo" alt="icon" />}
-                        <span className="button-name">{bid.name}</span>
-                        <img src={arrowDown} alt="arrow" />
+                        <div className="left--section">
+                          {bid.img && <img src={bid.img} className="token-logo" alt="icon" />}
+                          <span className="button-name">{bid.name}</span>
+                        </div>
+                        <div className="right--section">
+                          <img src={arrowDown} alt="arrow" />
+                        </div>
                       </button>
                     }
                   >
@@ -526,15 +513,11 @@ const AuctionSettings = () => {
           </div>
         )}
       </div>
-      {!isValidFields.startingBid ||
-      !isValidFields.startDate ||
-      !isValidFields.endDate ||
-      errorArray.length > 0 ? (
+      {!isValidFields.startDate || !isValidFields.endDate || errorArray.length > 0 ? (
         <div className="last-error">
           Something went wrong. Please, fix the errors in the fields above and try again
         </div>
       ) : (
-        isValidFields.startingBid &&
         isValidFields.startDate &&
         isValidFields.endDate &&
         !royaltyValidAddress && (
