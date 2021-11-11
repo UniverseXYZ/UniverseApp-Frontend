@@ -288,19 +288,9 @@ const AuctionSettings = () => {
                 </p>
               </div>
               <div className="starting-bid">
-                <Input
-                  id="startingBid"
-                  type="number"
-                  onChange={(e) => {
-                    if (e.target.value && Number(e.target.value) < 0) e.target.value = '';
-                    handleOnChange(e);
-                  }}
-                  label="Starting bid"
-                  value={values.startingBid}
-                  hoverBoxShadowGradient
-                  error={isValidFields.startingBid ? undefined : '"Starting bid" is required!'}
-                />
-
+                <div className="title--section">
+                  <h1>Bid token (ERC-20)</h1>
+                </div>
                 <div className="drop-down">
                   <Popup
                     nested
@@ -308,9 +298,13 @@ const AuctionSettings = () => {
                     closeOnDocumentClick={false}
                     trigger={
                       <button type="button" className={dropDown}>
-                        {bid.img && <img src={bid.img} className="token-logo" alt="icon" />}
-                        <span className="button-name">{bid.name}</span>
-                        <img src={arrowDown} alt="arrow" />
+                        <div className="left--section">
+                          {bid.img && <img src={bid.img} className="token-logo" alt="icon" />}
+                          <span className="button-name">{bid.name}</span>
+                        </div>
+                        <div className="right--section">
+                          <img src={arrowDown} alt="arrow" />
+                        </div>
                       </button>
                     }
                   >
