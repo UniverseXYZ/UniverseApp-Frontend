@@ -2,33 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import './ActiveAuctionCard.scss';
+import { getTimeLeft, getPromoImageProps } from '../utils';
 import ethIcon from '../../../assets/images/bid_icon.svg';
 
 const ActiveAuctionCard = ({ auction }) => {
   const history = useHistory();
+
+  const promoImageProps = getPromoImageProps(auction.promoImageUrl);
+  const timeLeft = getTimeLeft(auction.endDate);
 
   return (
     <div className="active__auction__item">
       <div
         className={`active__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
-        {auction.promoImageUrl ? (
-          <img className="original" src={auction.promoImageUrl} alt={auction.name} />
-        ) : (
-          <img
-            className="artist__image"
-            src={
-              typeof auction.artist?.avatar === 'string'
-                ? auction.artist?.avatar
-                : URL.createObjectURL(auction.artist?.avatar)
-            }
-            alt={auction.name}
-          />
-        )}
+        <img className={promoImageProps.class} src={promoImageProps.src} alt={auction.name} />
         <div className="date">
           <div className="date__border__div" />
           <label>Time left</label>
-          <span>2d 5h 20m 30s</span>
+          <span>{timeLeft.length && timeLeft.join(' ')}</span>
         </div>
       </div>
       <div className="active__auction__details">
@@ -36,14 +28,7 @@ const ActiveAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img
-            src={
-              typeof auction.artist?.avatar === 'string'
-                ? auction.artist?.avatar
-                : URL.createObjectURL(auction.artist?.avatar)
-            }
-            alt={auction.artist?.name}
-          />
+          <img src="" alt={auction.artist?.name} />
           <span>by</span>
           <a
             aria-hidden="true"

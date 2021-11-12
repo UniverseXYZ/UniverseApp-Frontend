@@ -514,15 +514,14 @@ const TabletView = (props) => {
                   <div>
                     <button
                       type="button"
-                      className="disable"
                       onClick={() => {
-                        // setShowMenu(false);
-                        // history.push('/products/auction-house');
+                        setShowMenu(false);
+                        history.push('/products/auction-house');
                       }}
                     >
                       <img src={auctionHouseIcon} alt="Auction House" />
                       <span>Auction house</span>
-                      <span className="tooltiptext">Coming soon</span>
+                      {/* <span className="tooltiptext">Coming soon</span> */}
                     </button>
                   </div>
                   <div>

@@ -1,11 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import './Tabs.scss';
 import ActiveAuctionsTab from './activeAuctions/ActiveAuctionsTab.jsx';
 import FutureAuctionsTab from './futureAuctions/FutureAuctionsTab.jsx';
+import { getActiveAuctions, getFutureAuctions } from '../../../../utils/api/auctions';
 
 const Tabs = () => {
+  const [auctions, setAuctions] = useState([]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const getAuctions = async (apiCall) => {
+    setLoading(true);
+    try {
+      const response = await apiCall();
+      if (response.auctions?.length) {
+        setAuctions(response.auctions);
+        setLoading(false);
+      }
+    } catch (error) {
+      // TODO: handle errors
+      console.error(error);
+    }
+  };
+
+  useEffect(async () => {
+    if (selectedTabIndex === 0) {
+      getAuctions(getActiveAuctions);
+    } else if (selectedTabIndex === 1) {
+      getAuctions(getFutureAuctions);
+    }
+  }, [selectedTabIndex]);
 
   return (
     <div className="auction__house__tabs__section">
@@ -40,7 +65,11 @@ const Tabs = () => {
           </button>
         </div>
         <div className="tab__content">
-          {selectedTabIndex === 0 ? <ActiveAuctionsTab /> : <FutureAuctionsTab />}
+          {selectedTabIndex === 0 ? (
+            <ActiveAuctionsTab auctions={auctions} loading={loading} />
+          ) : (
+            <FutureAuctionsTab auctions={auctions} loading={loading} />
+          )}
         </div>
       </div>
     </div>
