@@ -20,6 +20,8 @@ import ActiveAndPastCardSkeleton from './skeleton/ActiveAndPastCardSkeleton';
 import SortBySelect from '../input/SortBySelect';
 
 const PastAuctions = () => {
+  const sortOptions = ['Newest', 'Oldest'];
+
   const { ethPrice } = useAuthContext();
   const [shownActionId, setShownActionId] = useState(null);
   const [copied, setCopied] = useState({
@@ -35,6 +37,8 @@ const PastAuctions = () => {
   const [loading, setLoading] = useState(true);
   const [hideLaunchIcon1, setHideLaunchIcon1] = useState(0);
   const [hideLaunchIcon2, setHideLaunchIcon2] = useState(0);
+  const [filteredAuctions, setFilteredAuctions] = useState([]);
+  const [sortOption, setSortOption] = useState(sortOptions[0]);
 
   useEffect(async () => {
     try {
@@ -44,6 +48,7 @@ const PastAuctions = () => {
         setLoading(false);
       } else {
         setPastAuctions(response.auctions);
+        setFilteredAuctions(response.auctions);
         setLoading(false);
       }
     } catch (error) {
@@ -54,6 +59,18 @@ const PastAuctions = () => {
   const handleSearch = (value) => {
     setSearchByName(value);
   };
+
+  useEffect(() => {
+    const newFilteredAuctions = [...pastAuctions].filter((auction) =>
+      auction.name.toLowerCase().includes(searchByName.toLowerCase())
+    );
+    if (sortOption === 'Newest') {
+      newFilteredAuctions.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    } else if (sortOption === 'Oldest') {
+      newFilteredAuctions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+    }
+    setFilteredAuctions(newFilteredAuctions);
+  }, [searchByName, sortOption]);
 
   const handleAuctionExpand = (id) => {
     const canExpandAuction = !id || id !== shownActionId;
@@ -81,13 +98,13 @@ const PastAuctions = () => {
         </div>
         <SortBySelect
           id="sort--select"
-          defaultValue="Sort by"
-          sortData={['Sort by', 'Newest', 'Oldest']}
-          hideFirstOption
+          defaultValue={sortOptions[0]}
+          sortData={sortOptions}
+          setSort={setSortOption}
         />
       </div>
       {!loading ? (
-        pastAuctions.map((pastAuction, index) => {
+        filteredAuctions.map((pastAuction, index) => {
           const auctionTotalNfts = pastAuction.rewardTiers
             .map((tier) => tier.nfts.length)
             .reduce((totalNfts, currentNftsCount) => totalNfts + currentNftsCount, 0);
