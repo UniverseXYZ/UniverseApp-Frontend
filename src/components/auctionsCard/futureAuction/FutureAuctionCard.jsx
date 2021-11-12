@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import './FutureAuctionCard.scss';
-import ethIcon from '../../../assets/images/bid_icon.svg';
-import { getTimeLeft } from '../utils';
+import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
+import { createNftsPerWinnerMarkup } from '../utils';
 
 const FutureAuctionCard = ({ auction }) => {
   const history = useHistory();
 
-  const timeLeft = getTimeLeft(auction.endDate);
+  const winnersCount = auction.rewardTiers.reduce(
+    (winners, tier) => winners + tier.numberOfWinners,
+    0
+  );
+  const nftsPerWinnerMarkup = createNftsPerWinnerMarkup(auction);
 
   return (
     <div className="future__auction__item">
@@ -19,7 +23,7 @@ const FutureAuctionCard = ({ auction }) => {
         <img className="artist__image" src="" alt={auction.name} />
         <div className="start__date">
           <label>STARTS IN</label>
-          <p>{timeLeft.length && timeLeft.join(' ')}</p>
+          <AuctionsTabsCountdown activeAuction={auction} showLabel={false} />
         </div>
       </div>
       <div className="title">
@@ -35,14 +39,11 @@ const FutureAuctionCard = ({ auction }) => {
       <div className="auction__details">
         <div className="auction__details__box">
           <label>Winners</label>
-          <p>35</p>
+          <p>{winnersCount}</p>
         </div>
         <div className="auction__details__box">
-          <label>Highest Winning Bid:</label>
-          <p>
-            <img src={ethIcon} alt="eth" />
-            40 <span>~$120,594</span>
-          </p>
+          <label>Nfts per winner:</label>
+          {nftsPerWinnerMarkup}
         </div>
       </div>
     </div>
