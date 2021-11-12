@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Loading = () => (
+export const Loading = () => (
   <div className="loading-ring">
     <div className="lds-roller">
       <div />
@@ -14,5 +14,3 @@ const Loading = () => (
     </div>
   </div>
 );
-
-export default Loading;

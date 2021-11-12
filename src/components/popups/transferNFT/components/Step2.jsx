@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../button/Button';
-import Loading from './Loading';
+import Button from '../../../button/Button';
+import { Loading } from './Loading';
 
-const Step2 = ({ close }) => (
+export const Step2 = ({ close }) => (
   <div className="step2">
     <Loading />
     <p className="desc">To continue send transaction with your wallet</p>
@@ -18,5 +18,3 @@ const Step2 = ({ close }) => (
 Step2.propTypes = {
   close: PropTypes.func.isRequired,
 };
-
-export default Step2;
