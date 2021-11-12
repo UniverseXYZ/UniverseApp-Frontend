@@ -3,16 +3,19 @@ import './index.scss';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { handleClickOutside } from '../../utils/helpers';
+import WinnerIcon from '../../assets/images/winner-icon.svg';
 
 const Option = (props) => {
   const { value } = props;
   return (
     <div className="available-select">
       <components.Option className="option" {...props}>
-        <label className="option">
-          label {value.label}
-          value {value.value}
-          nfts count {value.nftsCount}
+        <label className="option-items">
+          <img src={WinnerIcon} alt="winner icon" />
+          <span className="label-and-value">
+            {value.label}
+            <span className="nfts-count">{value.nftsCount} NFTs</span>
+          </span>
         </label>
       </components.Option>
     </div>
@@ -47,9 +50,11 @@ const ValueContainer = (props) => {
     <div className="value-container-custom">
       <components.ValueContainer className="value-container" {...props}>
         <label className="option">
-          label {values.label}
-          value {values.value}
-          nfts count {values.nftsCount}
+          <img src={WinnerIcon} alt="winner icon" />
+          <span className="label-and-value">
+            {values.label}
+            <span className="nfts-count">{values.nftsCount} NFTs</span>
+          </span>
         </label>
       </components.ValueContainer>
     </div>
@@ -78,12 +83,23 @@ const styles = {
   }),
   container: (defaultStyles) => ({
     ...defaultStyles,
+    '&:hover': {
+      '&+.box--shadow--effect--block': {
+        opacity: '0.2 !important',
+      },
+    },
   }),
   menu: (defaultStyles) => ({
     ...defaultStyles,
-    width: '160%',
+    width: '100%',
+    boxShadow: ' 0px 10px 36px rgba(136, 120, 172, 0.14)',
+    borderRadius: '12px',
+    padding: '8px',
+    marginBottom: '0',
   }),
   indicatorsContainer: () => ({
+    width: '14px',
+    height: '21px',
     '& > div': {
       padding: 0,
     },
@@ -96,6 +112,23 @@ const styles = {
   }),
   control: (base, state) => ({
     ...base,
+    display: 'grid',
+    gridTemplateColumns: '1fr 20px',
+    flexWrap: 'nowrap',
+    width: '100%',
+    minWidth: '100px',
+    borderRadius: '12px',
+    padding: '12px 18px',
+    border: '1px solid rgba(0, 0, 0, 0.1)',
+    borderColor: state.selectProps.menuIsOpen ? 'transparent' : 'rgba(0, 0, 0, 0.1)',
+    background: state.selectProps.menuIsOpen
+      ? 'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box !important'
+      : '',
+    '&:hover': {
+      background: state.selectProps.menuIsOpen
+        ? 'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box !important'
+        : '',
+    },
   }),
   valueContainer: (base, state) => ({
     ...base,
@@ -132,10 +165,11 @@ const SelectComponent = (props) => {
         defaultValue={options[0]}
         value={options[selectedWinner]}
         closeMenuOnSelect
-        hideSelectedOptions={false}
+        hideSelectedOptions
         isClearable={false}
         getOptionValue={(option) => option}
       />
+      <div className="box--shadow--effect--block" />
     </div>
   );
 };

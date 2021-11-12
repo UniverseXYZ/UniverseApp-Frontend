@@ -23,12 +23,11 @@ const settings = {
   prevArrow: <SampleArrow />,
 };
 
-const MAX_VALUES_SHOWN = 10;
-const MIN_VALUES_SHOWN = 1;
-
 const CarouselForNfts = ({ winnersData, onRemoveEdition, selectedWinner }) => {
   const [winnerData, setWinnerData] = useState({});
 
+  const [maxValuesShown, setMaxValuesShown] = useState(10);
+  const [minValuesShown, setMinValuesShown] = useState(2);
   useEffect(() => {
     const winner = winnersData[selectedWinner];
 
@@ -52,11 +51,32 @@ const CarouselForNfts = ({ winnersData, onRemoveEdition, selectedWinner }) => {
   }, [winnersData, selectedWinner]);
 
   const slidesToShow =
-    Object.values(winnerData).length >= MAX_VALUES_SHOWN
-      ? MAX_VALUES_SHOWN
-      : Object.values(winnerData).length < MIN_VALUES_SHOWN
-      ? MIN_VALUES_SHOWN
+    Object.values(winnerData).length >= maxValuesShown
+      ? maxValuesShown
+      : Object.values(winnerData).length < minValuesShown
+      ? minValuesShown
       : Object.values(winnerData).length;
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth >= 1230) {
+        setMaxValuesShown(10);
+      }
+      if (window.innerWidth < 1230) {
+        setMaxValuesShown(7);
+      }
+      if (window.innerWidth < 993) {
+        setMaxValuesShown(5);
+      }
+      if (window.innerWidth < 576) {
+        setMaxValuesShown(4);
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <Slider {...settings} slidesToShow={slidesToShow} className="carousel img-div">
