@@ -389,7 +389,7 @@ export const placeAuctionBid = async (body) => {
 
 export const cancelAuctionBid = async (auctionId) => {
   const requestOptions = {
-    method: 'post',
+    method: 'DELETE',
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
       Authorization: `Bearer ${localStorage.getItem('xyz_access_token')}`,

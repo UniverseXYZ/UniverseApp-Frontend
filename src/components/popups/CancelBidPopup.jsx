@@ -8,32 +8,27 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import LoadingPopup from './LoadingPopup.jsx';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext.jsx';
 import { useAuctionContext } from '../../contexts/AuctionContext.jsx';
+import { cancelAuctionBid } from '../../utils/api/auctions.js';
 
-const CancelBidPopup = ({ auction, close, setCurrentBid, myBid }) => {
-  const { yourBalance, setYourBalance } = useAuthContext();
+const CancelBidPopup = ({ auction, close, setCurrentBid, myBid, bidders, setBidders }) => {
+  const { yourBalance, setYourBalance, address } = useAuthContext();
   const [showLoading, setShowLoading] = useState(false);
-  const [showSuccess, setshowSuccess] = useState(false);
 
   const { setActiveTxHashes } = useMyNftsContext();
   const { universeAuctionHouseContract } = useAuthContext();
 
   const cancelBidOnBE = async () => {
-    setShowLoading(true);
-
     const placeBidResult = await cancelAuctionBid(auction.id);
-
     console.log(placeBidResult);
-    setShowLoading(false);
-    setShowSuccess(true);
   };
 
   const updateBids = () => {
-    let newBidders = [...onBidders];
+    const newBidders = [...bidders];
     const existingBidderIndex = newBidders.map((bidder) => bidder.user.address).indexOf(address);
     if (existingBidderIndex >= 0) {
-      newBidders = newBidders.splice(existingBidderIndex, 1);
+      newBidders.splice(existingBidderIndex, 1);
       newBidders.sort((a, b) => b.amount - a.amount);
-      onSetBidders(newBidders);
+      setBidders(newBidders);
     }
   };
 
@@ -52,14 +47,12 @@ const CancelBidPopup = ({ auction, close, setCurrentBid, myBid }) => {
         // This is temp until the scraper handles bids
         await cancelBidOnBE();
         updateBids();
-        setShowSuccess(true);
-        setYourBalance(parseFloat(yourBalance) - parseFloat(myBid));
+        setYourBalance(parseFloat(yourBalance) + parseFloat(myBid));
         setShowLoading(false);
         setActiveTxHashes([]);
         setCurrentBid(null);
         close();
       }
-      // await saveBidToBE();
     } catch (err) {
       setShowLoading(false);
       setActiveTxHashes([]);
@@ -100,6 +93,8 @@ CancelBidPopup.propTypes = {
   setCurrentBid: PropTypes.func.isRequired,
   myBid: PropTypes.string.isRequired,
   auction: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  bidders: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  setBidders: PropTypes.func.isRequired,
 };
 
 export default CancelBidPopup;

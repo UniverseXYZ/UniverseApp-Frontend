@@ -19,6 +19,7 @@ const TopBidders = ({
   ethPrice,
   isWinningBid,
   currencyIcon,
+  setBidders,
 }) => {
   const [showCancelBidPopup, setShowCancelBidPopup] = useState(false);
   return (
@@ -106,6 +107,8 @@ const TopBidders = ({
           setCurrentBid={setCurrentBid}
           myBid={currentBid?.amount}
           auction={auction}
+          bidders={bidders}
+          setBidders={setBidders}
         />
       </Popup>
     </div>
@@ -126,6 +129,7 @@ TopBidders.propTypes = {
   ethPrice: PropTypes.number.isRequired,
   isWinningBid: PropTypes.bool.isRequired,
   currencyIcon: PropTypes.string.isRequired,
+  setBidders: PropTypes.func.isRequired,
 };
 TopBidders.defaultProps = {
   currentBid: null,

@@ -14,7 +14,7 @@ const AuctionCanceledSuccessPopup = ({ onClose, onAuction, auctionRemoved }) => 
   const getModalText = () => {
     let startDate = '';
     if (auctionRemoved) {
-      return <>Your auction ${onAuction.name} was successfully removed</>;
+      return <>Your auction {onAuction.name} was successfully removed</>;
     }
 
     startDate = format(new Date(onAuction.startDate), 'MMMM dd, yyyy');

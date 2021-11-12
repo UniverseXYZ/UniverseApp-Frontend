@@ -129,6 +129,7 @@ const AuctionDetails = ({
                 ethPrice={ethPrice}
                 isWinningBid={isWinningBid}
                 currencyIcon={currencyIcon}
+                setBidders={setBidders}
               />
             ) : (
               <AuctionEndedSection

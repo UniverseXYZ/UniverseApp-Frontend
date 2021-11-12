@@ -370,6 +370,24 @@
             width: 225px;
           }
         }
+        .hz-line2 {
+          position: absolute;
+          left: 20px;
+          top: 10px;
+          height: 0px;
+          z-index: 5;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          width: 390px;
+
+          @include xl {
+            width: 306px;
+          }
+
+          @include lg {
+            width: 230px;
+          }
+        }
+
       }
       button {
         &.light-border-button {
@@ -395,6 +413,25 @@
 
           @include lg {
             width: 230px;
+          }
+        }
+        .hz-line1 {
+          position: absolute;
+          left: 20px;
+          top: 10px;
+          height: 0px;
+          z-index: 1;
+          background: linear-gradient($white, $white) padding-box,
+            linear-gradient(to right, #bceb01, #9ceb28) border-box;
+          border: 1px solid transparent;
+          width: 400px;
+
+          @include xl {
+            width: 303px;
+          }
+
+          @include lg {
+            width: 225px;
           }
         }
       }

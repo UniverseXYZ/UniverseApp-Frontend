@@ -6,29 +6,17 @@ import './SortBySelect.scss';
 
 const SortBySelect = (props) => {
   const {
-    data,
-    sortData,
     className,
-    onChange,
     defaultValue,
-    getData,
-    getDesc,
-    desc,
     hideFirstOption,
     disableOptions,
     setSelectedTypeIndex,
+    sortData,
+    setSort,
   } = props;
   const [sortValue, setSortValue] = useState(defaultValue);
   const [showDropdown, setShowDropdown] = useState(false);
   const ref = useRef(null);
-
-  useEffect(() => {
-    onChange(sortValue);
-    if (data?.length) {
-      const sortedData = desc ? data.sort((a, b) => b.id - a.id) : data.sort((a, b) => a.id - b.id);
-      getData([...sortedData]);
-    }
-  }, [sortValue]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -69,6 +57,7 @@ const SortBySelect = (props) => {
                 onClick={() => {
                   if (!disableOptions[index]) {
                     setSortValue(item);
+                    setSort(item);
                     setSelectedTypeIndex(index);
                   }
                 }}
@@ -86,21 +75,13 @@ const SortBySelect = (props) => {
 };
 
 SortBySelect.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-    })
-  ).isRequired,
   sortData: PropTypes.arrayOf(PropTypes.string),
   className: PropTypes.string,
-  onChange: PropTypes.func,
   defaultValue: PropTypes.string,
-  getData: PropTypes.func,
-  getDesc: PropTypes.func,
-  desc: PropTypes.bool,
   hideFirstOption: PropTypes.bool,
   disableOptions: PropTypes.oneOfType([PropTypes.array]),
   setSelectedTypeIndex: PropTypes.func,
+  setSort: PropTypes.func,
 };
 
 SortBySelect.defaultProps = {
@@ -114,11 +95,8 @@ SortBySelect.defaultProps = {
     'most liked',
   ],
   className: '',
-  onChange: () => {},
   defaultValue: 'Sort by',
-  getData: () => {},
-  getDesc: () => {},
-  desc: false,
+  setSort: () => {},
   hideFirstOption: false,
   disableOptions: [],
   setSelectedTypeIndex: () => {},
