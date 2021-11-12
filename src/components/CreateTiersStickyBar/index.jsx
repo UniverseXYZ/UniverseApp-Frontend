@@ -47,14 +47,18 @@ const CreatTiersStickyBar = ({
   return (
     <div className="selected-ntf create-tiers-sticky-bar">
       <div className="container selected-body">
-        <SelectComponent
-          options={winnersOptions}
-          onChange={(data) => setSelectedWinner(data.value)}
-          selectedWinner={selectedWinner}
-        />
-        <div className="infoSelect-div">
+        <div className="winners-and-totals-mobile">
           <span>Winners : {winnersData.length}</span>
           <span>Total NFTs : {totalNFTsCount}</span>
+        </div>
+        <div className="select-component-tablet">
+          <SelectComponent
+            options={winnersOptions}
+            onChange={(data) => setSelectedWinner(data.value)}
+            selectedWinner={selectedWinner}
+          />
+        </div>
+        <div className="infoSelect-div">
           <CarouselForNfts
             winnersData={winnersData}
             selectedWinner={selectedWinner}
@@ -62,7 +66,18 @@ const CreatTiersStickyBar = ({
           />
         </div>
         <div className="sel-info">
+          <div className="winners-and-totals">
+            <span>Winners : {winnersData.length}</span>
+            <span>Total NFTs : {totalNFTsCount}</span>
+          </div>
           <div className="continue-nft">
+            <div className="select-component-mobile">
+              <SelectComponent
+                options={winnersOptions}
+                onChange={(data) => setSelectedWinner(data.value)}
+                selectedWinner={selectedWinner}
+              />
+            </div>
             <Button
               onClick={() => handleContinue(winnersData)}
               disabled={!disabled}
