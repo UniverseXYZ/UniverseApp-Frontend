@@ -39,7 +39,7 @@ const ActiveAuctionsTabsCard = ({ activeAuction, index }) => {
   const getTotalNFTSperAuction = (auction) => {
     let nftsCount = 0;
     auction?.rewardTiers?.forEach((tier) => {
-      nftsCount += tier.numberOfWinners * tier.nftsPerWinner;
+      nftsCount += tier.nfts.length;
     });
     return nftsCount;
   };
