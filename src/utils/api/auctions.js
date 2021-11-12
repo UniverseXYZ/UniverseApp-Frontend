@@ -2,6 +2,10 @@
 const CREATE_NEW_AUCTION_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auctions`;
 const GET_FUTURE_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/future`;
 const GET_ACTIVE_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/active`;
+const GET_ALL_ACTIVE_AUCTIONS = (offset, limit) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/active?offset=${offset}&limit=${limit}`;
+const GET_ALL_FUTURE_AUCTIONS = (offset, limit) =>
+  `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/future?offset=${offset}&limit=${limit}`;
 const GET_AUCTION_DATA = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/pages/auctions/${id}`;
 const GET_PAST_AUCTIONS = `${process.env.REACT_APP_API_BASE_URL}/api/pages/my-auctions/past`;
 const EDIT_AUCTION_URL = (id) => `${process.env.REACT_APP_API_BASE_URL}/api/auctions/${id}`;
@@ -198,6 +202,14 @@ export const getFutureAuctions = async () => {
   return result;
 };
 
+export const getAllFutureAuctions = async (offset, limit) => {
+  const request = await fetch(GET_ALL_FUTURE_AUCTIONS(offset, limit));
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
 export const getActiveAuctions = async () => {
   const requestOptions = {
     method: 'GET',
@@ -207,6 +219,14 @@ export const getActiveAuctions = async () => {
   };
 
   const request = await fetch(GET_ACTIVE_AUCTIONS, requestOptions);
+
+  const result = await request.text().then((data) => JSON.parse(data));
+
+  return result;
+};
+
+export const getAllActiveAuctions = async (offset, limit) => {
+  const request = await fetch(GET_ALL_ACTIVE_AUCTIONS(offset, limit));
 
   const result = await request.text().then((data) => JSON.parse(data));
 

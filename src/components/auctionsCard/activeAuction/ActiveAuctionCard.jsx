@@ -2,33 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import './ActiveAuctionCard.scss';
-import ethIcon from '../../../assets/images/bid_icon.svg';
+import { getPromoImageProps, bidsInUsd, createNftsPerWinnerMarkup } from '../utils';
+import { useAuctionContext } from '../../../contexts/AuctionContext';
+import { getBidTypeByName } from '../../../utils/fixtures/BidOptions';
+import AuctionsTabsCountdown from '../../auctions/AuctionsTabsCountdown';
 
 const ActiveAuctionCard = ({ auction }) => {
   const history = useHistory();
+  const { options } = useAuctionContext();
+
+  const bids = bidsInUsd(auction);
+  const winnersCount = auction.rewardTiers.reduce(
+    (winners, tier) => winners + tier.numberOfWinners,
+    0
+  );
+  const nftsPerWinnerMarkup = createNftsPerWinnerMarkup(auction);
+
+  const { tokenSymbol } = auction;
+  const tokenLogo = getBidTypeByName(tokenSymbol, options).img;
+  const promoImageProps = getPromoImageProps(auction.promoImageUrl);
 
   return (
     <div className="active__auction__item">
       <div
         className={`active__auction__image timeLeft ${auction.promoImageUrl ? '' : 'show__avatar'}`}
       >
-        {auction.promoImageUrl ? (
-          <img className="original" src={auction.promoImageUrl} alt={auction.name} />
-        ) : (
-          <img
-            className="artist__image"
-            src={
-              typeof auction.artist?.avatar === 'string'
-                ? auction.artist?.avatar
-                : URL.createObjectURL(auction.artist?.avatar)
-            }
-            alt={auction.name}
-          />
-        )}
+        <img className={promoImageProps.class} src={promoImageProps.src} alt={auction.name} />
         <div className="date">
           <div className="date__border__div" />
           <label>Time left</label>
-          <span>2d 5h 20m 30s</span>
+          <AuctionsTabsCountdown activeAuction={auction} showLabel={false} />
         </div>
       </div>
       <div className="active__auction__details">
@@ -36,14 +39,7 @@ const ActiveAuctionCard = ({ auction }) => {
           <h2>{auction.name}</h2>
         </div>
         <div className="creator">
-          <img
-            src={
-              typeof auction.artist?.avatar === 'string'
-                ? auction.artist?.avatar
-                : URL.createObjectURL(auction.artist?.avatar)
-            }
-            alt={auction.artist?.name}
-          />
+          <img src="" alt={auction.artist?.name} />
           <span>by</span>
           <a
             aria-hidden="true"
@@ -59,25 +55,29 @@ const ActiveAuctionCard = ({ auction }) => {
         <div className="statistics">
           <div>
             <label>Winners</label>
-            <p>35</p>
+            <p>{winnersCount}</p>
           </div>
           <div>
             <label>Highest Winning Bid:</label>
-            <p>
-              <img src={ethIcon} alt="eth" />
-              40 <span>~$120,594</span>
-            </p>
+            {bids.highestBidInUsd ? (
+              <p>
+                <img src={tokenLogo} alt={tokenSymbol} />
+                {bids.highestBid} <span>{`~$${Math.round(bids.highestBidInUsd)}`}</span>
+              </p>
+            ) : null}
           </div>
           <div>
             <label>NFTs Per Winner:</label>
-            <p>10-7</p>
+            {nftsPerWinnerMarkup}
           </div>
           <div>
             <label>Lowest Winning Bid:</label>
-            <p>
-              <img src={ethIcon} alt="eth" />
-              14 <span>~$41,594</span>
-            </p>
+            {bids.lowestBidInUsd ? (
+              <p>
+                <img src={tokenLogo} alt={tokenSymbol} />
+                {bids.lowestBid} <span>{`~$${Math.round(bids.lowestBidInUsd)}`}</span>
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
