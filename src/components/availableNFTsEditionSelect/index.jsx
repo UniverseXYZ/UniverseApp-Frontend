@@ -80,9 +80,9 @@ const styles = {
   container: (defaultStyles) => ({
     ...defaultStyles,
     // position: 'unset',
-    width: '95px',
+    width: '98px',
     background:
-      'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(to right, #bceb00, #00eaea) border-box',
+      'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
     border: '1px solid transparent',
     borderRadius: '15px',
@@ -91,7 +91,7 @@ const styles = {
   }),
   menu: (defaultStyles) => ({
     ...defaultStyles,
-    width: '160%',
+    width: '225px',
     position: 'absolute',
     right: '3%',
     top: '80%',
@@ -128,17 +128,18 @@ const styles = {
     padding: '0 8px 2px 0',
     cursor: 'pointer',
     minHeight: 'initial',
-    width: '95px',
+    width: '100%',
   }),
   valueContainer: (base, state) => ({
     ...base,
-    padding: '0 8px',
+    padding: '0 0 0 8px',
   }),
   dropdownIndicator: (base, state) => ({
     ...base,
     color: '#000000',
     transform: state.selectProps.menuIsOpen ? 'rotate(-180deg)' : 'rotate(0)',
     transition: '250ms',
+    width: '14px',
   }),
   option: (base, state) => ({
     ...base,
