@@ -1,14 +1,48 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Contract } from 'ethers';
 import closeIcon from '../../../assets/images/close-menu.svg';
 import './TransferNFTPopup.scss';
-import Step1 from './Step1';
-import Step2 from './Step2';
-import Step3 from './Step3';
+import { Step1, Step2, Step3 } from './components';
+import { Steps } from './constants';
+import Contracts from '../../../contracts/contracts.json';
+import { useAuthContext } from '../../../contexts/AuthContext';
+
+const { contracts: contractsData } = Contracts[process.env.REACT_APP_NETWORK_CHAIN_ID];
 
 const TransferNFTPopup = ({ close, nft }) => {
   const [receiverAddress, setReceiverAddress] = useState('');
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(Steps.Form);
+
+  const { signer } = useAuthContext();
+
+  const contract = useMemo(
+    () => new Contract(nft.collection.address, contractsData.ERC721.abi, signer),
+    [nft, signer]
+  );
+
+  const handleSubmit = useCallback(async () => {
+    const gasLimit = await contract.estimateGas['safeTransferFrom(address,address,uint256)'](
+      nft.owner,
+      receiverAddress,
+      nft.tokenId
+    );
+    try {
+      setStep(Steps.Loading);
+      const res = await contract['safeTransferFrom(address,address,uint256)'](
+        nft.owner,
+        receiverAddress,
+        nft.tokenId,
+        {
+          gasLimit,
+        }
+      );
+      await res.wait();
+    } catch (e) {
+      console.error(e);
+    }
+    setStep(Steps.Success);
+  }, [receiverAddress, contract]);
 
   return (
     <div className="transfer--nft--popup">
@@ -25,7 +59,7 @@ const TransferNFTPopup = ({ close, nft }) => {
           nft={nft}
           receiverAddress={receiverAddress}
           setReceiverAddress={setReceiverAddress}
-          setStep={setStep}
+          onSubmit={handleSubmit}
         />
       )}
       {step === 2 && <Step2 close={close} />}

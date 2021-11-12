@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../button/Button';
-import congratsIcon from '../../../assets/images/bid-submitted.png';
+import Button from '../../../button/Button';
+import congratsIcon from '../../../../assets/images/bid-submitted.png';
 
-const Step3 = ({ close, receiverAddress }) => (
+export const Step3 = ({ close, receiverAddress }) => (
   <div className="step3">
     <div className="congrats--icon">
       <img src={congratsIcon} alt="Congrats" />
@@ -28,5 +28,3 @@ Step3.propTypes = {
   close: PropTypes.func.isRequired,
   receiverAddress: PropTypes.string.isRequired,
 };
-
-export default Step3;
