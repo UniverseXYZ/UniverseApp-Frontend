@@ -278,6 +278,7 @@ const AuctionEndedSection = ({
                     slotsInfo,
                     mySlot,
                     mySlotIndex,
+                    backButtonText: onAuction.auction.headline,
                   })
                 }
               >
@@ -336,14 +337,6 @@ const AuctionEndedSection = ({
           >
             Claim NFTs
           </Button>
-        )}
-
-        {isAuctionner && slotsToWithdraw.length ? (
-          <Button className="light-button" onClick={handleWithdrawNfts}>
-            Withdraw NFTs
-          </Button>
-        ) : (
-          <></>
         )}
       </div>
     </div>
