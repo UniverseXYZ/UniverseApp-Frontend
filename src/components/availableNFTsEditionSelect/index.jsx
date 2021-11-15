@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './index.scss';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
+import { FixedSizeList as List } from 'react-window';
 import { handleClickOutside } from '../../utils/helpers';
 
 const Option = (props) => {
@@ -54,17 +55,31 @@ Placeholder.defaultProps = {
 };
 
 const MenuList = (props) => {
-  const { children } = props;
+  const { children, maxHeight, getValue, options } = props;
+  const height = 30;
+  const [value] = getValue();
+  const initialOffset = options.indexOf(value) * height;
+
   return (
-    <components.MenuList {...props}>
+    <>
       <span className="choose-edition">Choose edition number</span>
-      <div>{children}</div>
-    </components.MenuList>
+      <List
+        height={maxHeight}
+        itemCount={children.length}
+        itemSize={height}
+        initialScrollOffset={initialOffset}
+      >
+        {({ index, style }) => <div style={style}>{children[index]}</div>}
+      </List>
+    </>
   );
 };
 
 MenuList.propTypes = {
   children: PropTypes.node.isRequired,
+  maxHeight: PropTypes.number.isRequired,
+  getValue: PropTypes.func.isRequired,
+  options: PropTypes.oneOfType([PropTypes.array]).isRequired,
 };
 
 const styles = {
@@ -79,8 +94,7 @@ const styles = {
   }),
   container: (defaultStyles) => ({
     ...defaultStyles,
-    // position: 'unset',
-    width: '98px',
+    width: '95px',
     background:
       'linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(135deg, #bceb00, #00eaea) border-box',
     boxShadow: '0px 10px 20px rgb(136 120 172 / 20%)',
@@ -168,20 +182,6 @@ const styles = {
     },
     '& i::after': {
       borderColor: '#000 !important',
-    },
-  }),
-  menuList: (base) => ({
-    ...base,
-    background: '#fff',
-    borderRadius: '12px',
-    '& .choose-edition': {
-      fontWeight: 'bold',
-      fontSize: '14px',
-      fontFamily: 'Space Grotesk',
-      marginLeft: '5%',
-      display: 'flex',
-      alignItems: 'center',
-      height: '54px',
     },
   }),
 };

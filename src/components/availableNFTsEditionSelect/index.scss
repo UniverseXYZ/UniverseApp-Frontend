@@ -87,3 +87,14 @@
   opacity: 0.2;
   pointer-events: none;
 }
+.react-select-wrapper {
+  .choose-edition {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Space Grotesk';
+    margin-left: 5%;
+    display: flex;
+    align-items: center;
+    height: 54px;
+  }
+}
