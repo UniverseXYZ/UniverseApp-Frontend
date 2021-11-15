@@ -1,0 +1,4 @@
+import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
+
+export const App = ({ children }: any) => <ChakraProvider>{children}</ChakraProvider>;
