@@ -184,6 +184,11 @@ const styles = {
       borderColor: '#000 !important',
     },
   }),
+  menuList: (base) => ({
+    ...base,
+    background: '#fff',
+    borderRadius: '12px',
+  }),
 };
 
 const SelectComponent = (props) => {
