@@ -387,7 +387,6 @@
             width: 230px;
           }
         }
-
       }
       button {
         &.light-border-button {
@@ -947,8 +946,10 @@
     }
   }
   .funds-and-balance {
+    padding: 0;
     padding-bottom: 30px;
     > div {
+      width: 100%;
       border: 2px solid transparent;
       border-radius: 10px;
       padding: 40px 60px;
