@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'react-slick';
+import uuid from 'react-uuid';
 import './WinnersList.scss';
 import PendingPrevArrow from '../../myNFTs/pendingDropdown/misc/PendingPrevArrow';
 import PendingNextArrow from '../../myNFTs/pendingDropdown/misc/PendingNextArrow';
 import WinnerCard from './WinnerCard';
+import Input from '../../input/Input.jsx';
+import ETHIcon from '../../../assets/images/bid_icon.svg';
+import { ReactComponent as ErrorIcon } from '../../../assets/images/Vector.svg';
+import { ReactComponent as WinnerIcon } from '../../../assets/images/winner-icon.svg';
 
 const MAX_WINNERS_SHOWN = 6;
 
@@ -51,22 +56,38 @@ const WinnersList = ({
     >
       {winnersData.length > maxWinnersShown ? (
         <Slider {...sliderSettings}>
-          <WinnerCard
-            winnersData={winnersData}
-            setWinnersData={setWinnersData}
-            selectedWinner={selectedWinner}
-            setSelectedWinner={setSelectedWinner}
-            showReservePrice={showReservePrice}
-          />
+          {winnersData.map((data, i) => {
+            const winnerNumber = i + 1;
+            return (
+              <WinnerCard
+                data={data}
+                setWinnersData={setWinnersData}
+                winnerNumber={winnerNumber}
+                index={i}
+                selectedWinner={selectedWinner}
+                setSelectedWinner={setSelectedWinner}
+                showReservePrice={showReservePrice}
+              />
+            );
+          })}
         </Slider>
       ) : (
-        <WinnerCard
-          winnersData={winnersData}
-          setWinnersData={setWinnersData}
-          selectedWinner={selectedWinner}
-          setSelectedWinner={setSelectedWinner}
-          showReservePrice={showReservePrice}
-        />
+        <>
+          {winnersData.map((data, i) => {
+            const winnerNumber = i + 1;
+            return (
+              <WinnerCard
+                data={data}
+                setWinnersData={setWinnersData}
+                winnerNumber={winnerNumber}
+                index={i}
+                selectedWinner={selectedWinner}
+                setSelectedWinner={setSelectedWinner}
+                showReservePrice={showReservePrice}
+              />
+            );
+          })}
+        </>
       )}
     </div>
   );
