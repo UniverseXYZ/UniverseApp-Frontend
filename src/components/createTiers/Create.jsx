@@ -27,8 +27,6 @@ const MAX_FIELD_CHARS_LENGTH = {
   name: 100,
 };
 
-const LOAD_NFTS_COUNT = 8;
-
 const Create = () => {
   const { auction, setAuction, availableNFTs, setAvailableNFTs, getAvailableNFTs } =
     useAuctionContext();
@@ -41,7 +39,6 @@ const Create = () => {
   const [showReservePrice, setShowReservePrice] = useState(false);
 
   const [offset, setOffset] = useState(0);
-  const [perPage, setPerPage] = useState(12);
   const [filteredNFTs, setFilteredNFTs] = useState([]);
   const [values, setValues] = useState({
     name: '',
@@ -52,6 +49,8 @@ const Create = () => {
   // [{slot: int, nftIds: [44,56], nftsData: [{id, slot, url, artworkType, nftName, collectionName, collectionAddress, collectionUrl}]}]
   const [winnersData, setWinnersData] = useState([]);
   const [fetchingData, setFetchingData] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (values.name) {
@@ -89,14 +88,20 @@ const Create = () => {
     }
   };
 
+  const perPage = 12;
   useEffect(async () => {
     setFetchingData(true);
-    const available = await getAvailableNFTs();
+    const available = await getAvailableNFTs(offset, perPage);
     if (available.nfts.length) {
       const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
 
       setAvailableNFTs(parsedForFilters);
       setFilteredNFTs(parsedForFilters);
+      setOffset(offset + perPage);
+    }
+
+    if (available.pagination?.hasNextPage) {
+      setLoadMore(true);
     }
 
     setFetchingData(false);
@@ -300,6 +305,26 @@ const Create = () => {
 
   // End Custom Slots distribution logic
 
+  const handleLoadMore = async () => {
+    try {
+      setLoading(true);
+      const available = await getAvailableNFTs(offset, perPage);
+      if (available.nfts.length) {
+        const parsedForFilters = available.nfts.map((data) => ({ ...data, ...data.nfts }));
+        setAvailableNFTs(parsedForFilters);
+        setFilteredNFTs(parsedForFilters);
+        setOffset(offset + perPage);
+      }
+      if (!available.pagination?.hasNextPage) {
+        setLoadMore(false);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="background-part">
@@ -377,19 +402,17 @@ const Create = () => {
               <AvailableNFTCardSkeleton />
             </>
           ) : availableNFTsTolist.length ? (
-            availableNFTsTolist
-              .slice(offset, offset + perPage)
-              .map((data, index) => (
-                <AvailabilityNFTCard
-                  key={data.nfts.id}
-                  data={data}
-                  onEditionClick={onEditionClick}
-                  canSelect={canSelectNFT}
-                  winnersData={winnersData}
-                  selectedWinner={selectedWinner}
-                  auction={auction}
-                />
-              ))
+            availableNFTsTolist.map((data) => (
+              <AvailabilityNFTCard
+                key={data.nfts.id}
+                data={data}
+                onEditionClick={onEditionClick}
+                canSelect={canSelectNFT}
+                winnersData={winnersData}
+                selectedWinner={selectedWinner}
+                auction={auction}
+              />
+            ))
           ) : (
             <>
               <p>No Available NFTs found</p>
@@ -397,9 +420,9 @@ const Create = () => {
           )}
         </div>
         <div className="pagination__container">
-          {availableNFTsTolist.length > perPage && (
-            <LoadMore quantity={perPage} setQuantity={setPerPage} perPage={LOAD_NFTS_COUNT} />
-          )}
+          {!fetchingData && loadMore ? (
+            <LoadMore disabled={loading} handleLoadMore={handleLoadMore} />
+          ) : null}
         </div>
         <CreatTiersStickyBar
           onRemoveEdition={onRemoveEdition}
