@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
-import './Inputs.scss';
+// import './Inputs.scss';
 
 const Input = ({ label, error, className, hoverBoxShadowGradient, ...restProps }) => {
   const [focusField, setFocusField] = useState('');

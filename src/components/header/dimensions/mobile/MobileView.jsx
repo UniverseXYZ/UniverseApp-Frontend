@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Animated } from 'react-animated-css';
 import Popup from 'reactjs-popup';
-import './MobileView.scss';
+// import './MobileView.scss';
 import HeaderAvatar from '../../HeaderAvatar';
 import {
   PLACEHOLDER_MARKETPLACE_AUCTIONS,

@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './CreateNFT.scss';
-import { useHistory, useLocation } from 'react-router-dom';
+// import './CreateNFT.scss';
 import arrow from '../../../assets/images/arrow.svg';
 import SingleNFTForm from './SingleNFTForm';
 import NFTCollectionForm from './NFTCollectionForm';
 import { useMyNftsContext } from '../../../contexts/MyNFTsContext';
+import { useRouter } from 'next/router';
 
 const CreateNFT = () => {
-  const history = useHistory();
-  const location = useLocation();
+  const router = useRouter();
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedNFTType, setSelectedNFTType] = useState('');
   const [backPath, setBackPath] = useState('');
@@ -23,7 +22,7 @@ const CreateNFT = () => {
 
   const goToCollectionPage = () => {
     if (location.state && location.state.collection) {
-      history.push(`/collection/${location.state.collection.address}`);
+      router.push(`/collection/${location.state.collection.address}`);
     }
   };
 
@@ -47,7 +46,7 @@ const CreateNFT = () => {
         ) : (
           <div
             className="back-btn"
-            onClick={() => history.goBack()}
+            onClick={() => router.back()}
             aria-hidden="true"
             ref={scrollContainer}
           >

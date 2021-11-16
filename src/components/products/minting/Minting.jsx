@@ -1,46 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+// import './Minting.scss';
+import { useThemeContext } from '../../../contexts/ThemeContext';
+import { useRouter } from 'next/router';
 import Popup from 'reactjs-popup';
-import './Minting.scss';
 import singleIcon from '../../../assets/images/minting-create-nft.png';
 import singleIconHover from '../../../assets/images/minting-create-nft-hover.png';
 import collectionIcon from '../../../assets/images/minting-create-collection.png';
 import collectionIconHover from '../../../assets/images/minting-create-collection-hover.png';
-import { useThemeContext } from '../../../contexts/ThemeContext';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import WrongNetworkPopup from '../../popups/WrongNetworkPopup';
 import NotAuthenticatedPopup from '../../popups/NotAuthenticatedPopup';
 
 const MintingPage = () => {
   const { isAuthenticated, isWalletConnected } = useAuthContext();
-  const history = useHistory();
+  const history = useRouter();
   const { setDarkMode } = useThemeContext();
   const [showNotAuthenticatedPopup, setShowNotAuthenticatedPopup] = useState(false);
 
-  useEffect(() => {
-    setDarkMode(false);
-  }, []);
+  useEffect(() => setDarkMode(false), []);
 
   const singleBoxHandleClick = () => {
     if (!isAuthenticated && !isWalletConnected) {
       setShowNotAuthenticatedPopup(true);
     } else {
-      history.push('/my-nfts/create', {
-        tabIndex: 1,
-        nftType: 'single',
-        backPath: 'minting',
-      });
+      history.push('/my-nfts/create?tabIndex=1&nftType=single&backPath=minting');
     }
   };
   const collectionBoxHandleClick = () => {
     if (!isAuthenticated || !isWalletConnected) {
       setShowNotAuthenticatedPopup(true);
     } else {
-      history.push('/my-nfts/create', {
-        tabIndex: 1,
-        nftType: 'collection',
-        backPath: 'minting',
-      });
+      history.push('/my-nfts/create?tabIndex=1&nftType=collection&backPath=minting');
     }
   };
 

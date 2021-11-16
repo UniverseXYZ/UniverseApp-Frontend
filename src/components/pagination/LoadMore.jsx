@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
-import './Pagination.scss';
+// import './Pagination.scss';
 
 const LoadMore = ({ quantity, setQuantity, perPage, pageAndSize, loadMore }) => {
   // this handleClick function depends if a pageAndSize param is passed as a property to the component

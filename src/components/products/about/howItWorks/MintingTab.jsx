@@ -5,12 +5,13 @@ import NFTcollection from '../../../../assets/images/NFTcollection.png';
 import Button from '../../../button/Button';
 import minting from '../../../../assets/images/howItWork/AuctionMinting.png';
 import myNFTs from '../../../../assets/images/howItWork/myNFTs.png';
+import { useRouter } from 'next/router';
 
 const MintingTab = () => {
   const [isFirstAccordionOpened, setIsFirstAccordionOpened] = useState(true);
   const [isSecondAccordionOpened, setIsSecondAccordionOpened] = useState(false);
   const [isThirdAccordionOpened, setIsThirdAccordionOpened] = useState(false);
-  const history = useHistory();
+  const history = useRouter();
 
   useEffect(() => {
     setTimeout(() => {

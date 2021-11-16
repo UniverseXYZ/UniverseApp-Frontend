@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../button/Button.jsx';
-import './PopupStyle.scss';
+// import './PopupStyle.scss';
 import closeIcon from '../../assets/images/cross.svg';
 import { useMyNftsContext } from '../../contexts/MyNFTsContext';
 import Contracts from '../../contracts/contracts.json';

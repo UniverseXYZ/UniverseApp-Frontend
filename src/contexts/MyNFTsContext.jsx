@@ -5,12 +5,13 @@ import { useHistory } from 'react-router';
 import { getNftSummary } from '../utils/api/mintNFT';
 import { nftKeys } from '../app/utils/query-keys';
 import { useAuthContext } from './AuthContext';
+import { useRouter } from 'next/router';
 
 const MyNFTsContext = createContext(null);
 
 const MyNFTsContextProvider = ({ children }) => {
   const { address, isAuthenticated, isAuthenticating } = useAuthContext();
-  const history = useHistory();
+  const history = useRouter();
 
   const allCharactersFilter = 'All Characters';
   const polymorphsFilter = 'Polymorphs';

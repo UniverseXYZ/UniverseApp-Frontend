@@ -2,7 +2,7 @@ import React from 'react';
 import Marquee from 'react-fast-marquee';
 import Lottie from 'react-lottie';
 import animationData from '../../../utils/animations/polymorph_universe_hero_section_animation.json';
-import './HeroSection.scss';
+// import './HeroSection.scss';
 
 const HeroSection = () => {
   const defaultOptions = {

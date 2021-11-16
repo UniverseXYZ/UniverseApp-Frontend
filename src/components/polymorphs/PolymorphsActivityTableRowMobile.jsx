@@ -6,7 +6,7 @@ import MintTypeImg from '../../assets/images/eventTypeMint.svg';
 import TradeTypeImg from '../../assets/images/eventTypeTrade.svg';
 import ListedTypeImg from '../../assets/images/eventTypeListed.svg';
 import TransferTypeImg from '../../assets/images/eventTypeTransfer.svg';
-import './styles/PolymorphsActivityTableRowMobile.scss';
+// import './styles/PolymorphsActivityTableRowMobile.scss';
 import imgDiamondPaws from '../../assets/images/Diamond-paws.png';
 import imgEsCrow from '../../assets/images/Escrow-small.png';
 import imgFrankie from '../../assets/images/Frankie-small.png';
