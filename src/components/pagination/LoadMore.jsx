@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Button from '../button/Button';
 import './Pagination.scss';
 
-const LoadMore = ({ handleLoadMore }) => (
+const LoadMore = ({ handleLoadMore, disabled }) => (
   <div className="load--more--btn">
-    <Button className="light-border-button" onClick={handleLoadMore}>
+    <Button disabled={disabled} className="light-border-button" onClick={handleLoadMore}>
       Load more
     </Button>
   </div>
@@ -13,6 +13,7 @@ const LoadMore = ({ handleLoadMore }) => (
 
 LoadMore.propTypes = {
   handleLoadMore: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default LoadMore;
