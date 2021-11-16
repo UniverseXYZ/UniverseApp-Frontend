@@ -35,6 +35,9 @@ import { getCollectionBackgroundColor } from '../../utils/helpers';
 import SearchTokenIdField from '../input/SearchTokenIdField.jsx';
 import LoadingImage from '../general/LoadingImage';
 import InlineSVG from './InlineSVG';
+import dots from '../../assets/images/3dots.svg';
+import transferIcon from '../../assets/images/transfericon.svg';
+import TransferNFTPopup from '../popups/transferNFT/TransferNFTPopup';
 
 const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const { myNFTs, setMyNFTs } = useMyNftsContext();
@@ -50,6 +53,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const tabs = selectedNFT?.properties ? ['Properties'] : [''];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [searchValue, setSearchValue] = useState('');
+  const [showTransferNFTPopup, setShowTransferNFTPopup] = useState(false);
 
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const [selectedNFTIndex, setSelectedNFTIndex] = useState(
@@ -58,7 +62,7 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
   const [tablet, setTablet] = useState(false);
   const [count, setCount] = useState(4);
   const mediaRef = useRef(null);
-
+  const [showDropdown, setShowDropdown] = useState(false);
   function SampleNextArrow(props) {
     // eslint-disable-next-line react/prop-types
     const { className, style, onClick } = props;
@@ -125,6 +129,9 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
       !reportPopupRef.current
     ) {
       setIsDropdownOpened(false);
+    }
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowDropdown(false);
     }
   };
 
@@ -302,7 +309,31 @@ const MarketplaceNFTDetails = ({ data, onNFT }) => {
         <div className="Marketplace--settings">
           <div className="Marketplace--name">
             <h1>{selectedNFT.name}</h1>
-            <div className="icon" />
+            <div className="nft--sorting">
+              <div
+                className={`dropdown ${showDropdown ? 'open' : ''}`}
+                aria-hidden="true"
+                onClick={() => setShowDropdown(!showDropdown)}
+                ref={ref}
+              >
+                <img src={dots} alt="dot" />
+                {showDropdown ? (
+                  <div className="dropdown--items">
+                    <div className="transfer--section">
+                      <button type="button" onClick={() => setShowTransferNFTPopup(true)}>
+                        <img src={transferIcon} alt="transfer" />
+                        Transfer
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <Popup closeOnDocumentClick={false} open={showTransferNFTPopup}>
+                  <TransferNFTPopup close={() => setShowTransferNFTPopup(false)} nft={onNFT} />
+                </Popup>
+              </div>
+            </div>
           </div>
           <div className="Marketplace--number">
             <p>
