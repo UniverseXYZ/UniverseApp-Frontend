@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import uuid from 'react-uuid';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './assets/scss/normalize.scss';
 import Header from './components/header/Header.jsx';
 import Footer from './components/footer/Footer.jsx';
@@ -110,6 +111,8 @@ const routes = {
   '*': new UniverseRoute(NotFound, false, false, { exact: false }),
 };
 
+const queryClient = new QueryClient();
+
 const App = () => {
   const location = useLocation();
   const { showWrongNetworkPopup, setShowWrongNetworkPopup } = useAuthContext();
@@ -120,44 +123,46 @@ const App = () => {
   }, [location]);
 
   return (
-    <PolymorphContextProvider>
-      <LobsterContextProvider>
-        <MyNFTsContextProvider>
-          <AuctionContextProvider>
-            <MarketplaceContextProvider>
-              <Header />
-              <Switch>
-                {Object.keys(routes).map((key) => {
-                  const { Component, isPrivate, isRewritten, routeProps, componentProps } =
-                    routes[key];
+    <QueryClientProvider client={queryClient}>
+      <PolymorphContextProvider>
+        <LobsterContextProvider>
+          <MyNFTsContextProvider>
+            <AuctionContextProvider>
+              <MarketplaceContextProvider>
+                <Header />
+                <Switch>
+                  {Object.keys(routes).map((key) => {
+                    const { Component, isPrivate, isRewritten, routeProps, componentProps } =
+                      routes[key];
 
-                  const RouteComponent = isPrivate ? AuthenticatedRoute : Route;
+                    const RouteComponent = isPrivate ? AuthenticatedRoute : Route;
 
-                  return (
-                    <RouteComponent key={uuid()} path={key} {...routeProps}>
-                      {!isRewritten ? (
-                        <Component {...componentProps} />
-                      ) : (
-                        <NewApp>
+                    return (
+                      <RouteComponent key={uuid()} path={key} {...routeProps}>
+                        {!isRewritten ? (
                           <Component {...componentProps} />
-                        </NewApp>
-                      )}
-                    </RouteComponent>
-                  );
-                })}
-              </Switch>
-              <Footer />
-              <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
-                <WrongNetworkPopup close={() => setShowWrongNetworkPopup(false)} />
-              </Popup>
-              <Popup closeOnDocumentClick={false} open={showError}>
-                <ErrorPopup close={closeError} />
-              </Popup>
-            </MarketplaceContextProvider>
-          </AuctionContextProvider>
-        </MyNFTsContextProvider>
-      </LobsterContextProvider>
-    </PolymorphContextProvider>
+                        ) : (
+                          <NewApp>
+                            <Component {...componentProps} />
+                          </NewApp>
+                        )}
+                      </RouteComponent>
+                    );
+                  })}
+                </Switch>
+                <Footer />
+                <Popup closeOnDocumentClick={false} open={showWrongNetworkPopup}>
+                  <WrongNetworkPopup close={() => setShowWrongNetworkPopup(false)} />
+                </Popup>
+                <Popup closeOnDocumentClick={false} open={showError}>
+                  <ErrorPopup close={closeError} />
+                </Popup>
+              </MarketplaceContextProvider>
+            </AuctionContextProvider>
+          </MyNFTsContextProvider>
+        </LobsterContextProvider>
+      </PolymorphContextProvider>
+    </QueryClientProvider>
   );
 };
 

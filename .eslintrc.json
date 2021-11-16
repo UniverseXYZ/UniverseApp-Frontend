@@ -2,6 +2,7 @@
     "extends": ["airbnb", "prettier"],
     "parser": "babel-eslint",
     "rules": {
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
         "import/extensions": "off",
         "no-nested-ternary": "off",
         "no-unused-vars": "off",
