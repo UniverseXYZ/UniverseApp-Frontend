@@ -42,8 +42,7 @@ const AuctionSettings = () => {
   const [hideIcon, setHideIcon] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  const { auction, setAuction, bidtype, setBidtype, options, setAuctionSetupState } =
-    useAuctionContext();
+  const { auction, setAuction, bidtype, setBidtype, options } = useAuctionContext();
   const [hideIcon1, setHideIcon1] = useState(false);
   const [royaltyValidAddress, setRoyaltyValidAddress] = useState(true);
   const [minBid, setMinBId] = useState(false);
@@ -85,7 +84,7 @@ const AuctionSettings = () => {
   const [endDateTemp, setEndDateTemp] = useState({ ...endDate });
 
   const [values, setValues] = useState({
-    name: auction && auction.name ? auction.name : '',
+    name: auction.name ? auction.name : '',
     startDate: auction.startDate ? auction.startDate : '',
     endDate: auction.endDate ? auction.endDate : '',
   });
@@ -273,7 +272,7 @@ const AuctionSettings = () => {
                   }
                 />
                 <p className="input-max-chars">
-                  Characters: {values.name && values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
+                  Characters: {values.name.length}/{MAX_FIELD_CHARS_LENGTH.name}
                 </p>
               </div>
               <div className="starting-bid">

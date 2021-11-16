@@ -7,6 +7,7 @@ import audioIcon from '../../assets/images/marketplace/audio-icon.svg';
 import mp3Icon from '../../assets/images/mp3-icon.png';
 import Select from '../availableNFTsEditionSelect';
 import universeIcon from '../../assets/images/universe-img.svg';
+import { getCollectionBackgroundColor } from '../../utils/helpers';
 
 const NFTCard = React.memo(
   ({ data, onEditionClick, canSelect, winnersData, selectedWinner, auction }) => {
@@ -134,15 +135,22 @@ const NFTCard = React.memo(
           <div className="quantity--and--offer">
             <div className="collection__details">
               {collection && (
-                <>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   {collection.address ===
                   process.env.REACT_APP_UNIVERSE_ERC_721_ADDRESS.toLowerCase() ? (
                     <img src={universeIcon} alt={collection.name} />
+                  ) : !collection.coverUrl ? (
+                    <div
+                      className="random--bg--color"
+                      style={{ backgroundColor: getCollectionBackgroundColor(collection) }}
+                    >
+                      {collection.name.charAt(0)}
+                    </div>
                   ) : (
                     <img src={collection.coverUrl} alt={collection.name} />
                   )}
-                  <span>{collection.name}</span>
-                </>
+                  <span className="tooltiptext">{collection.name}</span>
+                </div>
               )}
             </div>
             <div className="collection__count">{`x${nfts.rewardAndTokenIds.length}`}</div>
