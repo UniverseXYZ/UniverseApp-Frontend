@@ -73,6 +73,7 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
     const updatedSlotIndexes = t.nftSlots.map((slot) => {
       const slotCopy = { ...slot };
       slotCopy.slot = slotIndex;
+      slotCopy.minimumBid = Number(slotCopy.minimumBid);
       slotIndex += 1;
       return slotCopy;
     });
@@ -80,7 +81,6 @@ export const attachTierNftsIds = ({ auction, requestObject }) => {
       name: t.name,
       numberOfWinners: t.winners || t.numberOfWinners,
       nftsPerWinner: t.nftsPerWinner,
-      minimumBid: t.minBidValue || 0.1,
       nftSlots: updatedSlotIndexes,
       id: t.id,
       removed: t.removed,
